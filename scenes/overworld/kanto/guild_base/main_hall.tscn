@@ -3,8 +3,10 @@
 [ext_resource type="Script" uid="uid://cy8bn173efxfd" path="res://scripts/world/guild_base_room.gd" id="1_room"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/guild_base_main_hall/guild_base_main_hall.visual.tscn" id="2_visual"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hb83b"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_mask"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_1c676"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_hmjdt"]
 
 [sub_resource type="RectangleShape2D" id="shape_0"]
 size = Vector2(96, 24)
@@ -16,7 +18,7 @@ size = Vector2(24, 96)
 size = Vector2(24, 96)
 
 [sub_resource type="RectangleShape2D" id="shape_3"]
-size = Vector2(96, 24)
+size = Vector2(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_327pc"]
 texture = ExtResource("5_1c676")
@@ -112,7 +114,7 @@ position = Vector2(272, 816)
 position = Vector2(720, 816)
 
 [node name="FromElevator" type="Marker2D" parent="Spawns" unique_id=1398970010]
-position = Vector2(496, 240)
+position = Vector2(496, 208)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1881786030]
 
@@ -127,6 +129,11 @@ transition_facing_direction = "down"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTown" unique_id=1663011860]
 shape = SubResource("shape_0")
 
+[node name="RouteTransitionHint" parent="Exits/ToTown" unique_id=1083709127 instance=ExtResource("4_hb83b")]
+z_as_relative = false
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
+
 [node name="ToLeftRoom" type="Area2D" parent="Exits" unique_id=1305386959]
 position = Vector2(240, 816)
 script = ExtResource("3_exit")
@@ -137,6 +144,11 @@ transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToLeftRoom" unique_id=200665536]
 shape = SubResource("shape_1")
+
+[node name="RouteTransitionHint" parent="Exits/ToLeftRoom" unique_id=347287975 instance=ExtResource("4_hb83b")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 3)
+flow_direction = "left"
 
 [node name="ToRightRoom" type="Area2D" parent="Exits" unique_id=2078339076]
 position = Vector2(752, 816)
@@ -149,8 +161,13 @@ transition_facing_direction = "right"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRightRoom" unique_id=595753331]
 shape = SubResource("shape_2")
 
+[node name="RouteTransitionHint" parent="Exits/ToRightRoom" unique_id=1395910665 instance=ExtResource("4_hb83b")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 3)
+flow_direction = "right"
+
 [node name="ToElevator" type="Area2D" parent="Exits" unique_id=1020060661]
-position = Vector2(496, 208)
+position = Vector2(496, 176)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/guild_base/elevator.tscn"
 target_spawn_name = "FromMainHall"
@@ -158,7 +175,12 @@ transition_id = "guild_base_main_hall__to_elevator"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToElevator" unique_id=484520083]
+position = Vector2(0, -16)
 shape = SubResource("shape_3")
+
+[node name="DoorTransitionHint" parent="Exits/ToElevator" unique_id=1006935442 instance=ExtResource("5_hmjdt")]
+z_as_relative = false
+position = Vector2(0, -16)
 
 [node name="Entities" type="Node2D" parent="." unique_id=1548825198]
 y_sort_enabled = true
