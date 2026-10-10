@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://hn71ome4hha7"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_1_0.texture.res" id="1_mktkn"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_1025_0.texture.res" id="2_bej7f"]
