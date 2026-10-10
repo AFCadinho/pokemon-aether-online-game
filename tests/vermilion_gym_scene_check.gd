@@ -62,6 +62,13 @@ func _check_leader_podium(gym: Node, leader: Node2D, collision: TileMapLayer) ->
 				carpet_cells += 1
 				_check(podium.has_point(cell), "carpet has no extra row or column outside the centered podium")
 	_check(carpet_cells == 9, "complete three-by-three podium")
+	_check(not gym.has_node("Visual/Arena Trim"), "puzzle floor has no surrounding rails")
+	var platform := gym.get_node("Visual/Leader Platform") as TileMapLayer
+	_check(platform.get_used_rect() == Rect2i(8, 12, 7, 1), "complete raised stage front")
+	for x in range(8, 15):
+		var cell := Vector2i(x, 12)
+		_check(platform.get_cell_source_id(cell) != -1, "no gap in the stage fascia or stairs")
+		_check((collision.get_cell_source_id(cell) == -1) == (x >= 10 and x <= 12), "stage access passes through the stairs only")
 	for y in range(center.y, 18):
 		_check(collision.get_cell_source_id(Vector2i(center.x, y)) == -1, "leader tile and straight approach are walkable")
 	for x in [8, 9, 13, 14]:
