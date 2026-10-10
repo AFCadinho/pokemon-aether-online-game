@@ -60,16 +60,16 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 992,
+		"with_any_attachment": 994,
 		"with_cannons": 1,
 		"with_electric_body": 1,
 		"with_foot": 228,
 		"with_hand": 563,
 		"with_left_foot": 209,
 		"with_left_hand": 561,
-		"with_mouth": 880,
+		"with_mouth": 882,
 		"with_vines": 1,
-		"without_attachments": 208
+		"without_attachments": 206
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -4779,18 +4779,18 @@
 					{
 						"bone": "head",
 						"offset": [
-							-0.00293135643005371,
-							-0.0000000000919504472562949,
-							0.0502875149250031
+							0.0714821196967877,
+							-0.00356362460478186,
+							0.0811111147329244
 						],
 						"weight": 0.5
 					},
 					{
 						"bone": "jaw",
 						"offset": [
-							0.117558099329472,
-							-0.000000000544304157301667,
-							-0.00562608009204268
+							0.159950539137613,
+							-0.00140142022539411,
+							-0.0419953990594339
 						],
 						"weight": 0.5
 					}
@@ -11336,18 +11336,18 @@
 					{
 						"bone": "head",
 						"offset": [
-							0.00211787223815918,
-							0.00000000577180836458524,
-							0.371696174144745
+							0.534732711551235,
+							0.00412663800283013,
+							0.287076464109862
 						],
 						"weight": 0.5
 					},
 					{
 						"bone": "jaw",
 						"offset": [
-							0.25320503115654,
-							0.0000000410881106915895,
-							0.00431861588731408
+							0.464213563836602,
+							0.00412850673296986,
+							0.442339751269089
 						],
 						"weight": 0.5
 					}
@@ -11425,18 +11425,18 @@
 					{
 						"bone": "head",
 						"offset": [
-							0.0335830561816692,
-							-0.000000000517531628663193,
-							0.083842821419239
+							0.220303163589387,
+							0.0000688417021711336,
+							0.0533793437961299
 						],
 						"weight": 0.5
 					},
 					{
 						"bone": "lower_jaw",
 						"offset": [
-							0.218814834952354,
-							-0.000000000682643885863143,
-							-0.00111487507820129
+							0.374096822740173,
+							0.0000735787637063327,
+							-0.0221563328928156
 						],
 						"weight": 0.5
 					}
@@ -11577,18 +11577,18 @@
 					{
 						"bone": "head",
 						"offset": [
-							0.572855591773987,
-							0.0,
-							0.0721527561545372
+							0.603401481433151,
+							0.00115846613885977,
+							-0.0502108743881356
 						],
 						"weight": 0.5
 					},
 					{
 						"bone": "jaw",
 						"offset": [
-							0.567697703838348,
-							0.0,
-							-0.0251091495156288
+							0.563539707780677,
+							0.00101097640828666,
+							0.030263332086914
 						],
 						"weight": 0.5
 					}
@@ -12031,18 +12031,18 @@
 					{
 						"bone": "head",
 						"offset": [
-							0.0540866442024708,
-							0.0,
-							0.199163988232613
+							0.194086526948812,
+							-0.00207527759840562,
+							0.256235327803687
 						],
 						"weight": 0.5
 					},
 					{
 						"bone": "lower_jaw",
 						"offset": [
-							0.0949613377451897,
-							0.0,
-							0.00131066516041756
+							0.04094367255131,
+							0.00207484948628582,
+							-0.138459131887976
 						],
 						"weight": 0.5
 					}
@@ -14490,6 +14490,7 @@
 							-0.0022053122520447,
 							-0.004456549882889
 						],
+						"visible_mesh": "pm0623_51_00/Skeleton3D/pm0623_51_00_right_hand_mesh",
 						"weight": 0.333333333333333
 					},
 					{
@@ -14509,6 +14510,18 @@
 							-0.0034560859203335
 						],
 						"weight": 0.333333333333333
+					}
+				],
+				[
+					{
+						"bone": "right_feeler_b_02",
+						"offset": [
+							0.315788805484772,
+							-0.254804611206055,
+							0.0629850029945374
+						],
+						"visible_mesh": "pm0623_51_00/Skeleton3D/pm0623_51_00_right_rocket_mesh",
+						"weight": 1.0
 					}
 				]
 			],
@@ -14534,6 +14547,7 @@
 							0.00220529735088349,
 							-0.0044566094875335
 						],
+						"visible_mesh": "pm0623_51_00/Skeleton3D/pm0623_51_00_left_hand_mesh",
 						"weight": 0.333333333333333
 					},
 					{
@@ -14553,6 +14567,18 @@
 							-0.00345620512962349
 						],
 						"weight": 0.333333333333333
+					}
+				],
+				[
+					{
+						"bone": "left_feeler_b_02",
+						"offset": [
+							0.446112066507339,
+							-0.220681250095367,
+							0.156996726989746
+						],
+						"visible_mesh": "pm0623_51_00/Skeleton3D/pm0623_51_00_left_rocket_mesh",
+						"weight": 1.0
 					}
 				]
 			]
@@ -14617,18 +14643,18 @@
 					{
 						"bone": "head",
 						"offset": [
-							0.231710076332092,
-							-0.00000000000000000045684750961482,
-							0.122442483901978
+							0.472082233022483,
+							-0.00331558933327192,
+							0.109324278140885
 						],
 						"weight": 0.5
 					},
 					{
 						"bone": "lower_jaw",
 						"offset": [
-							0.256741642951965,
-							0.0,
-							0.0035879120696336
+							0.124436909987452,
+							-0.00167434846196434,
+							0.251391200335062
 						],
 						"weight": 0.5
 					}
@@ -20765,7 +20791,7 @@
 						"bone": "head",
 						"offset": [
 							0.0904971684863702,
-							0.0254145553429923,
+							0.0,
 							0.210211172171919
 						],
 						"weight": 0.5
@@ -20774,7 +20800,7 @@
 						"bone": "jaw_02",
 						"offset": [
 							0.0150370143470226,
-							0.0254145560446927,
+							0.0,
 							0.00242007445037051
 						],
 						"weight": 0.5
@@ -29619,18 +29645,18 @@
 					{
 						"bone": "head",
 						"offset": [
-							-0.0149907022714615,
-							0.0,
-							0.118024095892906
+							0.0222241858869401,
+							-0.00028346641614427,
+							0.130073184402204
 						],
 						"weight": 0.5
 					},
 					{
 						"bone": "lower_jaw_01",
 						"offset": [
-							0.0913730412721634,
-							0.0,
-							0.0101961493492126
+							0.0988326354659615,
+							-0.00028774897531165,
+							0.0284388263943782
 						],
 						"weight": 0.5
 					}
@@ -36510,6 +36536,157 @@
 				]
 			]
 		},
+		"tandemaus": {
+			"mouth": [
+				[
+					{
+						"bone": "center_upper_jaw_a",
+						"offset": [
+							-0.00150300899986178,
+							-0.00733046419918537,
+							-0.00582026643678546
+						],
+						"visible_mesh": "pm1049_00_00/Skeleton3D/pm1049_00_00_body_a_01_mesh",
+						"weight": 0.33301862770262
+					},
+					{
+						"bone": "head_a",
+						"offset": [
+							0.0445930622518063,
+							0.00066279189195483,
+							0.089684322476387
+						],
+						"weight": 0.66698137229738
+					}
+				],
+				[
+					{
+						"bone": "center_upper_jaw_a",
+						"offset": [
+							0.00030407539452426,
+							-0.00738091766834259,
+							-0.00450807251036167
+						],
+						"visible_mesh": "pm1049_00_00/Skeleton3D/pm1049_00_00_body_a_02_mesh",
+						"weight": 0.393003737822231
+					},
+					{
+						"bone": "head_a",
+						"offset": [
+							0.0460031926631927,
+							-0.00037882104516029,
+							0.0909464657306671
+						],
+						"weight": 0.107567891040385
+					},
+					{
+						"bone": "center_lower_jaw_a",
+						"offset": [
+							0.0006761199911125,
+							0.00703286286443472,
+							0.00012876179243903
+						],
+						"weight": 0.388002540650289
+					},
+					{
+						"bone": "spine_a_02_sub",
+						"offset": [
+							0.0185146741569042,
+							-0.00055505125783383,
+							0.0686405599117279
+						],
+						"weight": 0.0798930256614639
+					},
+					{
+						"bone": "left_lower_jaw_a",
+						"offset": [
+							-0.0116497250273824,
+							0.00396151933819056,
+							0.00574955902993679
+						],
+						"weight": 0.0306670540771899
+					},
+					{
+						"bone": "left_jaw_a",
+						"offset": [
+							-0.0268645882606506,
+							-0.018099457025528,
+							-0.00838471949100494
+						],
+						"weight": 0.00086575074844175
+					}
+				],
+				[
+					{
+						"bone": "center_upper_jaw_b",
+						"offset": [
+							-0.00113082060124725,
+							-0.00722619611769915,
+							-0.00467894040048122
+						],
+						"visible_mesh": "pm1049_00_00/Skeleton3D/pm1049_00_00_body_b_01_mesh",
+						"weight": 0.786007475644461
+					},
+					{
+						"bone": "head_b",
+						"offset": [
+							0.0463440865278244,
+							0.00113079079892486,
+							0.0908799767494202
+						],
+						"weight": 0.213992524355539
+					}
+				],
+				[
+					{
+						"bone": "center_upper_jaw_b",
+						"offset": [
+							0.00253744819201529,
+							-0.00622462155297399,
+							-0.00828230194747448
+						],
+						"visible_mesh": "pm1049_00_00/Skeleton3D/pm1049_00_00_body_b_02_mesh",
+						"weight": 0.341722120728827
+					},
+					{
+						"bone": "head_b",
+						"offset": [
+							0.0425524227321148,
+							-0.00391009589657187,
+							0.0859337002038956
+						],
+						"weight": 0.174300737287172
+					},
+					{
+						"bone": "center_lower_jaw_b",
+						"offset": [
+							-0.00083204929251223,
+							0.00660352455452085,
+							0.00227938801981509
+						],
+						"weight": 0.387868273018104
+					},
+					{
+						"bone": "spine_b_02_sub",
+						"offset": [
+							0.0181187111884356,
+							0.00070769322337582,
+							0.0706290826201439
+						],
+						"weight": 0.0586308830837594
+					},
+					{
+						"bone": "right_lower_jaw_b",
+						"offset": [
+							0.0116450488567352,
+							0.00369046628475189,
+							0.0071149542927742
+						],
+						"weight": 0.0374779858821374
+					}
+				]
+			]
+		},
 		"tangela": {
 			"mouth": [
 				[
@@ -39350,6 +39527,104 @@
 							-0.00303195416927338
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"vanilluxe": {
+			"mouth": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							0.0899170562624931,
+							0.194082096219063,
+							0.226270630955696
+						],
+						"weight": 0.561292057143913
+					},
+					{
+						"bone": "right_upper_jaw_c",
+						"offset": [
+							0.304308891296387,
+							0.00075702462345361,
+							0.00454626139253378
+						],
+						"weight": 0.161996379502763
+					},
+					{
+						"bone": "right_upper_jaw_b",
+						"offset": [
+							0.294170379638672,
+							-0.0449224561452866,
+							-0.0102449655532837
+						],
+						"weight": 0.00191287967010288
+					},
+					{
+						"bone": "right_lower_jaw_c",
+						"offset": [
+							0.323773622512817,
+							-0.00277280830778182,
+							0.00521728489547968
+						],
+						"weight": 0.195015340143306
+					},
+					{
+						"bone": "right_lower_jaw_b",
+						"offset": [
+							0.316776424646378,
+							0.00891859829425812,
+							-0.00227075815200806
+						],
+						"weight": 0.0797833435399145
+					}
+				],
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							0.0848405286669731,
+							-0.178185924887657,
+							0.225488245487213
+						],
+						"weight": 0.503133821791664
+					},
+					{
+						"bone": "left_upper_jaw_c",
+						"offset": [
+							0.302476853132248,
+							-0.0203204788267612,
+							-0.00049679039511829
+						],
+						"weight": 0.161413336193839
+					},
+					{
+						"bone": "left_upper_jaw_b",
+						"offset": [
+							0.294170439243317,
+							0.0449224524199963,
+							-0.0102447867393494
+						],
+						"weight": 0.0511617688805254
+					},
+					{
+						"bone": "left_lower_jaw_c",
+						"offset": [
+							0.323906898498535,
+							0.0000000149011611938477,
+							0.0010634595528245
+						],
+						"weight": 0.23506997510938
+					},
+					{
+						"bone": "left_lower_jaw_b",
+						"offset": [
+							0.317393720149994,
+							-0.0103396475315094,
+							0.00954353809356689
+						],
+						"weight": 0.0492210980245912
 					}
 				]
 			]
@@ -42293,7 +42568,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "78d105ddb77d9e98422619076d283344c639a9bf866becd0d05c3506e4bc5c70",
+		"data/battle_move_attachments_3d.json": "4904e2bd3879f14a86269860c8200c22ef7bab5078150b84f3c5d24c61433b85",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "68db5a9d0118bccba8e82badc9efff0611f814a05fead9d7a95acbaf4c4fa11f",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
@@ -43870,6 +44145,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "544f0bd3959c85f115df5dcab155b2d73df083c345bcabd6e15c4f4f684a7acf",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "9c04164ed2005f85f5f2b99051fe3dd62d86dc83d939fe680d3d7496d984992e",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -43893,6 +44184,7 @@
 				],
 				"method": "manual_triangulation_and_native_pose_visual_review",
 				"normal_runtime_sha256": "db9d296b81ccd867cab63a89740c46bd7bd48dce3ec951e3d12074d5d6a5e592",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "ef697f8c2a99fd6c68ea47c019d8e5421ac7f274d02e6cb1ec3f87a6d1997b52",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -44008,7 +44300,15 @@
 				"normal_runtime_sha256": "0c0ff1e58932fa1a31e08ca51586f51fda0a2da25ed956ee8773e3ba6100fc7b",
 				"preview_sha256": "ad087fa69adac40069f858781032a7370d0891150a47eee92984cf493fc27b22",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0610_00_00/Skeleton3D/pm0610_00_00_eyelid_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -44272,6 +44572,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "21fce16dd90f28b7a363d57214094b460909e9891fd2316f57d24b24bc3b16f3",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "0c9a4d71536403c9d957c9aff489135b49750fb6d3a45bbe038a5c270eefce48",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -44279,6 +44595,7 @@
 				],
 				"method": "individual_marker_pose_visual_review",
 				"normal_runtime_sha256": "c8afe3c51f2650fccb22a1a46bb84233473e4ea223a48843ae76fefadf7d74b8",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "6189ed8f1c784230cb917321d5435880cbab20bc43f9bbfc72f95cd1391f0118",
 				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
 				"side_fraction": 0.45
@@ -44769,6 +45086,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "065a5ce4d3ae9a8c72047850973e1afbaeebc0144b2f55d7ee7e852872960291",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "b67d10984153f70ff80aa88b6100e4cd483b788cfe938c3da5e3cf7f1fa84d5f",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -44790,6 +45124,7 @@
 				],
 				"method": "manual_two_view_marker_pose_visual_review",
 				"normal_runtime_sha256": "e65cf7ee39cbbda77ed8b9e90bcf178ac5f38c26aabd86367e42ab74f53eb2ff",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "12e0259ff3465cb4eacbde1f11c7b4f09251acf0b9b300b7bb631763dcafd830",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -45389,6 +45724,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "59c9b9ecddab1531f50c223f2e86288abe2d58cecf8029a86b0257375f61266d",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "0c2da3b58e24934c4c844716e5d24ae7dc982c756d0f5804ebf98689737a3603",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -45455,6 +45807,7 @@
 						"regularization": 0.00001
 					}
 				],
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "cb59c1a8c193f3dbff0b034b5732f59b05a7c4cc4b4e9f73616f6f20b8de3184",
 				"scope": "Mouth marker in visible sampled native poses; occluded surfaces and actual effects remain unapproved. Bombirdier uses the midpoint between beak tips.",
 				"side_fraction": 0.45
@@ -45563,6 +45916,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "4db46c4436f134ce98327c48de48ba94f4d77d0b393036467b3622325108cbb5",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "815ce0a9a12a22b90862a33435dcb37256b3eda1655f3ba83c051fd6313b264e",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -45570,6 +45940,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "502d330f149838819a3ee197294b8d935d7cb4471fae6e3d02d3b8e35cd84075",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "dde962de3feb0165d8cfcb9e100614b27f117d79506fbc036b3e2e796a490015",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -45792,6 +46163,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "852e35eab015cfe3a1a2225f47a9c6993dd270e81c876fa1ebe45703a4082442",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "79149675b6a65ad14d08c8dac61da1f6608c7643a11b04ebfea4adffde1c2113",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -45818,6 +46206,7 @@
 				],
 				"method": "manual_two_view_marker_pose_visual_review",
 				"normal_runtime_sha256": "e30392744cdfcd840c18e913bcac88e3757e2a4dc0081f99eab358ba2b92dd31",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "e7bb2df83848fb26ae63b41b3d4d0cd4c4c47421f824ad0bb9b27c7dbfc858d9",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -46533,10 +46922,107 @@
 					0.45,
 					0.65
 				],
-				"method": "geometry proposal visually checked",
+				"measurements": [],
+				"method": "manual_multi_pose_anatomy_fit_visual_review",
 				"normal_runtime_sha256": "d4ebdd15b1b76f29d103ff3422956eaf201c72e587744bc958e385b7f5c4b9f7",
-				"preview_sha256": "7d5dd7555067f9430f121ab24f4085e6b49d76472c4e2628ba1b6e14cd82b42e",
-				"scope": "mouth marker placement in sampled native action poses",
+				"pose_fits": [
+					{
+						"emitter": 0.0,
+						"observations": [
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/capsakid.json",
+								"capture_sha256": "bbbeee093fca0292092613f140eda24716c23878599dcf9b7cd1d23fdc2dd356",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									216.0,
+									161.0
+								]
+							},
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/capsakid.json",
+								"capture_sha256": "bbbeee093fca0292092613f140eda24716c23878599dcf9b7cd1d23fdc2dd356",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									168.0,
+									157.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/capsakid.json",
+								"capture_sha256": "bbbeee093fca0292092613f140eda24716c23878599dcf9b7cd1d23fdc2dd356",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									210.0,
+									139.0
+								]
+							},
+							{
+								"action": "physical_attack_2",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/capsakid.json",
+								"capture_sha256": "bbbeee093fca0292092613f140eda24716c23878599dcf9b7cd1d23fdc2dd356",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									221.0,
+									151.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/capsakid.json",
+								"capture_sha256": "bbbeee093fca0292092613f140eda24716c23878599dcf9b7cd1d23fdc2dd356",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									210.0,
+									144.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/capsakid.json",
+								"capture_sha256": "bbbeee093fca0292092613f140eda24716c23878599dcf9b7cd1d23fdc2dd356",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									153.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/capsakid.json",
+								"capture_sha256": "bbbeee093fca0292092613f140eda24716c23878599dcf9b7cd1d23fdc2dd356",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									202.0,
+									149.0
+								]
+							}
+						],
+						"part": "mouth",
+						"ray_residuals": [
+							0.00016626835890815,
+							0.00293887692046513,
+							0.00208361989780344,
+							0.00217034806930725,
+							0.00271867476738524,
+							0.00133455907868122,
+							0.00099740535370782
+						],
+						"regularization": 0.00001
+					}
+				],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "7fd8e8ddf0d6bfa9cf078b6d35e53373b7e1794c4b5d4e7a6b1dccc9f9f059b1",
+				"scope": "Corrected mouth origin visually reviewed in visible sampled forward native poses; occluded closed-mouth surfaces and actual move effects remain unapproved.",
 				"side_fraction": 0.45
 			},
 			"status": "configured",
@@ -46564,6 +47050,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "234cc18ff99f88f53a569e4739891ab246cb1cb794480339706145d98aa5a3a6",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "cbde8e373ea44dc1c95fdf38feffa0ceeb949a3de31ae75bdc9adab4bd28ccc8",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -46571,6 +47074,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "583543f5f879f08785e2e580ee917808693f73f860340275068751176207528e",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "4074cb01e93d5075ab735a8236ec3b24d8859dc4dfdd5702840adf711bad2ddb",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -47332,6 +47836,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "5391a6703c9e8410c4fb4e6e929e2df64cdfa27382d26d2e7bd42c270929671f",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "5a8c973ee694848ee9d4e57372096b950b4792676def7dba2cee0976e14897be",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -47339,6 +47859,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "e692f529635c04024c05e63758ac90f87bd4270798bd32a8487751d28232879e",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "53ab5b89d9822441d911b02fe726fde62ce34ba7267c497e5f8525a5599bc1f2",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -47364,6 +47885,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "1b9cc7ea2cb2acfc2502bd3201767a7e2af99cbc2ba3fd24095614a2a76efac7",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "e8cd52e716d0e7b3882881b4db9b32d61dce13ee5bd707bd6348299ccb7dd41d",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -47371,6 +47909,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "8f0d81a141991e598e1d67c90f08ffbdf3a00ebd2c245053267e84fc1431b462",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "6f9f4845cd4ed8877d9357f360a73c2511d03162645094efa2c2e226e10e36fe",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -47900,7 +48439,15 @@
 				"normal_runtime_sha256": "0454d929e2dafa319b5b665a3cfd9fe7357aa4b019ad4db8719d1931be6f920a",
 				"preview_sha256": "a12f54a90d38c525526e371098089c8a3e7a55fa2a8212337d51bded45478e14",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0036_51_00/Skeleton3D/pm0036_51_00_eyelash_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -48008,6 +48555,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "3fa14076881fb633106481f5d00a857fbd286b5ecdce8f37b145af625ecf506c",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "9baccf68cc198b00685717e40a1f564a03d0c4c48dcba166be35c0ec56cc1b34",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -48031,6 +48595,7 @@
 				],
 				"method": "manual_triangulation_and_native_pose_visual_review",
 				"normal_runtime_sha256": "e64cf1675686d4c78a696c4f870e30fec033265d81183adc2006789f9639bc55",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "f960d150c847fa8468be6182531de89ba0a89c63b0f0c7d49750a213f11677f7",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -48101,6 +48666,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "ffcede17c64aa6acc9798a1fe873d57213fe5eee5aedc4a5c694344de7c98611",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "ed116867b456584f021e79a4a033cb8e7ef82ddae38a3f80361cfb613c58c224",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -48108,6 +48690,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "cadb0b57ae700531fa317efa7279e647fded62bda5a390abe1745bf96ee3e661",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "001a8848dc069a57d1d635186a5aef374c9042983d560786c8843048d372127c",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -48473,7 +49056,16 @@
 				"normal_runtime_sha256": "ca624924d1ffc08b3317bc4fea7f571d75c6cca7de6abf88ab9347b3423aec19",
 				"preview_sha256": "36e31388c52ce408609550c2bbd7e2e95a7a115e067f9c3926e6b0a566365eac",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0919_00_00/Skeleton3D/pm0919_00_00_eye_a_mesh",
+						"pm0919_00_00/Skeleton3D/pm0919_00_00_eye_b_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -48818,6 +49410,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "443bcf12799fece4cbb8c2e3d108ee873314f4f0f1f30d41a842e59d93bf03d5",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "4dc517beea1ff26a78ed2f06e9ab72ad4db41f2fd2fe650ff32e6f14ed5c9c4a",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -48825,6 +49434,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "bf3ae731ee5a27139217ff805ce65a3afd1f1b5e3fbc203f4163a22f22f8147d",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "9f8f690b17148cba191efbf4a5f0fb4ac8723b72e23a7885325e5aac4d931bd8",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -48863,7 +49473,16 @@
 				"normal_runtime_sha256": "4363bd0518f8ffc4e0b8ca56f140619966970784909df0846832571bcc169f75",
 				"preview_sha256": "4999cc89fb043a493308235d69c893638b285cccaa1a63ed36608e3b8b9d3ce9",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm1014_00_00/Skeleton3D/pm1014_00_00_eyelid_a_mesh",
+						"pm1014_00_00/Skeleton3D/pm1014_00_00_eyelid_b_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -49044,6 +49663,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "06414b21a04c40054395c81135228b1217a8ad24a91ca5404d71aa712cb2e19f",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "ff0a2575835c2512a849d584d94b3d67c84fb56b19223a3311177b98535dde21",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -49051,6 +49687,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "ed1b8a708a279b6a3101357cd3eb85b3c63b713d168f8490c7019eac8a5bd8eb",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "1db46f9c80c8c7ffe70df1cdabf1f6162026e72fd534ca888dd0027d9ec98e33",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -49819,6 +50456,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "13c3c05e8a4d27fb3ae1c758ce18373801ebc903fca8e7d0827792af0a60c060",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "3783bd3bbc051769a8439dade75e7dce31175592c5cd157debb507e47533903a",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -49826,6 +50479,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "9c241e1a8db2531997e541ad7bb8e59ab9ac79b247ff06d5bd52eff2c898e200",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "bd584ef2ca796acd4b9e987b3cc3817224e0e746e03b0f400867791eaf54e518",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -50334,6 +50988,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "4400d9f5ea4f907062da524667d933734ba79b189eb1944c6ddf43332c299198",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "b7212886329c74818691c29a54cee656e2f21354da8e530f36e28ba4d8f8970b",
+					"scope": "Visible mouth surfaces reviewed in all sampled native actions with forward playback. Occluded views do not establish alignment; actual move effects remain pending.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -50357,6 +51027,7 @@
 				],
 				"method": "manual_triangulation_and_native_pose_visual_review",
 				"normal_runtime_sha256": "825784812fdcf52b1012530a705e90eaa8558ae067f08f54fb617b86db454ac7",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "6d835a3bf2d287fa8e5e01789adf9b61be95dd22ac5ba1af948ff3f380231f58",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -51095,6 +51766,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "3904f0e58cc978e9686450c8fe230f14c7af4cf7c8344380a5fd6f7fbaca8280",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "ba5550676530a15c2fb796091c2becf051df00c6dfe736cafe5d6001c3a18a8b",
+					"scope": "Visible mouth surfaces reviewed in all sampled native actions with forward playback. Occluded views do not establish alignment; actual move effects remain pending.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -51102,6 +51789,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "75d5010e5ce45af9f602dc37ee977b468e0b2123f21808a250c7c48b67988a8c",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "bb26094b47df815092a82279a46b671d988db2df9817cfc1af8bed0fcf4f8142",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -52046,6 +52734,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "ba8d52e10abcabe9636baa7c9923ca0ed341041f723375b842801faed8503af7",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "4f90fc844cc5df66571c8e7c67a17ebe2d61f322663081ec656f985388dc8ac1",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -52053,6 +52757,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "306fb052364c0d27f78f2f46b3b7a343f2a1d48792879bdc3ce4421d8db09aac",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "d260ea1cf10deb64e0206e130c2d289fdcf46309a0c45c8c8af1ca2c16c6b403",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -52083,10 +52788,59 @@
 					0.45,
 					0.65
 				],
-				"method": "geometry proposal visually checked",
+				"measurements": [],
+				"method": "manual_multi_pose_anatomy_fit_visual_review",
 				"normal_runtime_sha256": "9d8112c89856ac6272f6ec221df146ebed437a715962fe3b59eab354a74cd62c",
-				"preview_sha256": "da808f7fb97838ce5f508f9bcf68647f1d089592b61a83aff180b6c6bca36d3b",
-				"scope": "mouth marker placement in sampled native action poses",
+				"pose_fits": [
+					{
+						"emitter": 0.0,
+						"observations": [
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/farigiraf.json",
+								"capture_sha256": "0f8baf2277cb0e2f60642ad16e953890c3704a406627ecd73933724f2d523cfd",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									204.0,
+									158.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/farigiraf.json",
+								"capture_sha256": "0f8baf2277cb0e2f60642ad16e953890c3704a406627ecd73933724f2d523cfd",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									226.0,
+									159.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/farigiraf.json",
+								"capture_sha256": "0f8baf2277cb0e2f60642ad16e953890c3704a406627ecd73933724f2d523cfd",
+								"column": 2.0,
+								"fraction": 0.65,
+								"pixel": [
+									210.0,
+									163.0
+								]
+							}
+						],
+						"part": "mouth",
+						"ray_residuals": [
+							0.00140279467832383,
+							0.00139304336399042,
+							0.00028584329347121
+						],
+						"regularization": 0.00001
+					}
+				],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "db9130cd9ad45692a8e50d7c7df50ba727a597d47a6f677e0286bf63e3ee7626",
+				"scope": "Visible idle and special-attack mouth poses reviewed after correcting the lower-lip origin to the open-mouth center. All four supported learned mouth moves use special_attack; closed outer-hood physical poses are excluded.",
 				"side_fraction": 0.45
 			},
 			"status": "configured",
@@ -52168,10 +52922,71 @@
 					0.45,
 					0.65
 				],
-				"method": "geometry proposal visually checked",
+				"measurements": [],
+				"method": "manual_multi_pose_anatomy_fit_visual_review",
 				"normal_runtime_sha256": "8d58ac5b5df6d0837a4f8675908b00676eaa2844b44cc0fe8f5bdb879d784144",
-				"preview_sha256": "fd4b6f4dd016c027fce4cc96a4ebf1f65757d4c51241dc8408482a3264bc3d08",
-				"scope": "mouth marker placement in sampled native action poses",
+				"pose_fits": [
+					{
+						"emitter": 0.0,
+						"observations": [
+							{
+								"action": "physical_attack_2",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/fennekin.json",
+								"capture_sha256": "b16c7e6b82332521d3ce08de350df46c5e611c10d341a9845a6cdbbecac074e8",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									210.0,
+									120.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/fennekin.json",
+								"capture_sha256": "b16c7e6b82332521d3ce08de350df46c5e611c10d341a9845a6cdbbecac074e8",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									195.0,
+									112.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/fennekin.json",
+								"capture_sha256": "b16c7e6b82332521d3ce08de350df46c5e611c10d341a9845a6cdbbecac074e8",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									220.0,
+									161.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/fennekin.json",
+								"capture_sha256": "b16c7e6b82332521d3ce08de350df46c5e611c10d341a9845a6cdbbecac074e8",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									167.0,
+									158.0
+								]
+							}
+						],
+						"part": "mouth",
+						"ray_residuals": [
+							0.00656483334689369,
+							0.0002684175124523,
+							0.00304798887462381,
+							0.0044393724576109
+						],
+						"regularization": 0.00001
+					}
+				],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "17b5267ad8cb5069b0dcd09c6464be91146bf1c6510071ac56ec20615896ed18",
+				"scope": "Corrected mouth origin visually reviewed in visible sampled forward native poses; occluded closed-mouth surfaces and actual move effects remain unapproved.",
 				"side_fraction": 0.45
 			},
 			"status": "configured",
@@ -52231,10 +53046,119 @@
 					0.45,
 					0.65
 				],
-				"method": "geometry proposal visually checked",
+				"measurements": [],
+				"method": "manual_multi_pose_anatomy_fit_visual_review",
 				"normal_runtime_sha256": "b4c62a5bd1bf815fa77431e166298985861e19d1f7d0905b2ccd7f7b73d9c1ac",
-				"preview_sha256": "aca323a088b50423febc7e38f3aabbdb0230bdd18dbe8a6046a6437b658dad67",
-				"scope": "mouth marker placement in sampled native action poses",
+				"pose_fits": [
+					{
+						"emitter": 0.0,
+						"observations": [
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/feraligatr-mega.json",
+								"capture_sha256": "5efa2b7f892ff4b7c00e4880cfb332f746019337bb97b5f98aa304393535b55d",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									155.0
+								]
+							},
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/feraligatr-mega.json",
+								"capture_sha256": "5efa2b7f892ff4b7c00e4880cfb332f746019337bb97b5f98aa304393535b55d",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									159.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/feraligatr-mega.json",
+								"capture_sha256": "5efa2b7f892ff4b7c00e4880cfb332f746019337bb97b5f98aa304393535b55d",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									210.0,
+									165.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/feraligatr-mega.json",
+								"capture_sha256": "5efa2b7f892ff4b7c00e4880cfb332f746019337bb97b5f98aa304393535b55d",
+								"column": 2.0,
+								"fraction": 0.65,
+								"pixel": [
+									210.0,
+									165.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/feraligatr-mega.json",
+								"capture_sha256": "5efa2b7f892ff4b7c00e4880cfb332f746019337bb97b5f98aa304393535b55d",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									210.0,
+									143.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/feraligatr-mega.json",
+								"capture_sha256": "5efa2b7f892ff4b7c00e4880cfb332f746019337bb97b5f98aa304393535b55d",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									141.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/feraligatr-mega.json",
+								"capture_sha256": "5efa2b7f892ff4b7c00e4880cfb332f746019337bb97b5f98aa304393535b55d",
+								"column": 2.0,
+								"fraction": 0.65,
+								"pixel": [
+									210.0,
+									141.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/feraligatr-mega.json",
+								"capture_sha256": "5efa2b7f892ff4b7c00e4880cfb332f746019337bb97b5f98aa304393535b55d",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									150.0
+								]
+							}
+						],
+						"part": "mouth",
+						"ray_residuals": [
+							0.00355168508280909,
+							0.0107561686584021,
+							0.0214564259424736,
+							0.0142127240099908,
+							0.0236960186815985,
+							0.00977628089923965,
+							0.0134112958912622,
+							0.00873447333451849
+						],
+						"regularization": 0.00001
+					}
+				],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "17344f06b5c9f0e6d70d48be8d2eee308ae365c5afd6062ce3a6fe45821144ce",
+				"scope": "Corrected mouth origin visually reviewed in visible sampled forward native poses; occluded closed-mouth surfaces and actual move effects remain unapproved.",
 				"side_fraction": 0.45
 			},
 			"status": "configured",
@@ -52377,7 +53301,15 @@
 				"normal_runtime_sha256": "baa7149cf46aa74b254a9943879b324372ce2b1091dd82a5b7a8d4d6d42ec0af",
 				"preview_sha256": "a8a4f2ba461f2bacf2afe044226dd491041ef46bb8d65dce16fd0704c6caf9b5",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm1037_00_00/Skeleton3D/pm1037_00_00_lid_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -52467,6 +53399,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "c216115d775524bdb87aa4b439e33003a9e826e67af53acae0272dc888bdb3aa",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "51b5fa01b0e915b03f24c3202489bd5f030719efc7464a566ba78cb1a1bc3d7c",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -52487,6 +53436,7 @@
 				],
 				"method": "anatomy_marker_pose_visual_review",
 				"normal_runtime_sha256": "3acacd7c084d693ef22c0a8037eca30797bcbacfe2052a745f23972eceb2ee2d",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "58f518a864cb1216639a319274dd936621fc42334e680b81f3c7d33a31eb0251",
 				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
 				"side_fraction": 0.45
@@ -52573,10 +53523,83 @@
 					0.45,
 					0.65
 				],
-				"method": "geometry proposal visually checked",
+				"measurements": [],
+				"method": "manual_multi_pose_anatomy_fit_visual_review",
 				"normal_runtime_sha256": "8cba52c7304cde3f7fdcde9b29d05d8362a95ad8092a91b9971c750b9b798740",
-				"preview_sha256": "d9cbd5ffca2fd8bb06d429fe40a7844cc422943eb6ca5ca34ef74d6fe6e4dfbd",
-				"scope": "mouth marker placement in sampled native action poses",
+				"pose_fits": [
+					{
+						"emitter": 0.0,
+						"observations": [
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/fletchinder.json",
+								"capture_sha256": "8b4e78862a23d09f5babb60e78f6b61014fcde8d9461ada84a6282ad1bbdf9e3",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									180.0
+								]
+							},
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/fletchinder.json",
+								"capture_sha256": "8b4e78862a23d09f5babb60e78f6b61014fcde8d9461ada84a6282ad1bbdf9e3",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									180.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/fletchinder.json",
+								"capture_sha256": "8b4e78862a23d09f5babb60e78f6b61014fcde8d9461ada84a6282ad1bbdf9e3",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									143.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/fletchinder.json",
+								"capture_sha256": "8b4e78862a23d09f5babb60e78f6b61014fcde8d9461ada84a6282ad1bbdf9e3",
+								"column": 2.0,
+								"fraction": 0.65,
+								"pixel": [
+									210.0,
+									143.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/fletchinder.json",
+								"capture_sha256": "8b4e78862a23d09f5babb60e78f6b61014fcde8d9461ada84a6282ad1bbdf9e3",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									251.0,
+									135.0
+								]
+							}
+						],
+						"part": "mouth",
+						"ray_residuals": [
+							0.00221492078168541,
+							0.00039425757577153,
+							0.00117442532911031,
+							0.00176523745513867,
+							0.00213206878127871
+						],
+						"regularization": 0.00001
+					}
+				],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "7c81925234cb15882be69ed1357e1465a1971f96cc4b5fc1e171a30e3ec081a1",
+				"scope": "Forward sampled visible mouth review: corrected open/closed jaw tracking; occluded surfaces, shell-retracted poses, routing and effects remain unapproved.",
 				"side_fraction": 0.45
 			},
 			"status": "configured",
@@ -52596,6 +53619,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "0b2b27cef2372f4d9273d39bc4287a90652e1be9ba1183e007f8527014bc03a5",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "4e42a74f27cbce510a4ed54018b7807a42976860593135b8cb589f82ad51c05a",
+					"scope": "Visible mouth surfaces reviewed in all sampled native actions with forward playback. Occluded views do not establish alignment; actual move effects remain pending.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -52603,6 +53643,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "997277194d915fd01087cf72230d39617bf7b8b6d258f0c0fb7a410583612497",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "1d19992d987287095e7e5762aaabe8d4fa575e5bfd01e3d4cd50fa3a4c8db2ee",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -52684,6 +53725,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "788a5ded21067d1193dbf7aed259d835d891a56df9a41096caf6f16afcba1a36",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "e5a949d8d3c5833c57380a86f1ad9e4a841279a56a0662e17795e49c9f4acd85",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -52691,6 +53749,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "0855195c11d3434adf37083df8171e1e855435a29466e1cc4591098ae168ea24",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "e3ae292b6f9c0941d692671382213d770c09396c80aaa69166ae0e802f45fcb4",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -52724,6 +53783,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "fa271429d0bf8ae13dbd6897ccae7ee3760789223666f90e9686549312340292",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "b70edb760079c915868300a0b906c3149991e0f6c4ad2d7d5d0fcfecee684cd5",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -52731,6 +53807,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "67d32e062797865a2a469ced7d54ae6e368ee28fb4205bf542d9a997111dac62",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "9df57252adf9536e24dd06de0daf4dc54c377988c549ed15ec057298e275a43a",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -53646,6 +54723,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "321a05acc00e6e1608c5cb019c7b33879127bcd02bd2b21fd27638fb63c730de",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "b982cf0b23b0f4166f7e385fb15e150183e1ef58d786eeaa2a01548a0f69c246",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -53672,6 +54766,7 @@
 				],
 				"method": "manual_two_view_marker_pose_visual_review",
 				"normal_runtime_sha256": "b006a12687920c89e5184be47e8657e3966be6fb0bb9e70d68aadecc7d275058",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "b6154871e4b70e2038aa64462987b8a368715201389215c5aa5a3d5e82132560",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -53835,6 +54930,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "069f80bda6612cce97968b23885fe87fad30892d5858c8e2cd48e14faadc3cee",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "e197888c08d5307503cc4e25cc41bef030000eab04629368fc3f0b100496eb8d",
+					"scope": "Visible mouth surfaces reviewed in all sampled native actions with forward playback. Occluded views do not establish alignment; actual move effects remain pending.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -53842,6 +54954,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "0ed942c42cdb87481c36d18403e31f5e4c43ab4150ccb7ff4dfa2d45f06a45ad",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "9707dcc0684c36e8f8dbd7d8c0ae76e383dd740b4b34e26a42653aaccc84b057",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -54125,6 +55238,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "56be11c89f2f1b7659177f030fca6bddc9b553afb8e68a31ca7125f13c712038",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "864a03c99b8ac2dfb7a3adcde0620da544c79da1038c6680df57c585b01b2930",
+					"scope": "Visible mouth surfaces reviewed in all sampled native actions with forward playback. Occluded views do not establish alignment; actual move effects remain pending.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -54132,6 +55262,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "f216b471c17afa5563a33aa1ca99b9b4094e99fed17fde85d1127af0f4f98a91",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "61fddcd00443f6cd504a0baf5a198cf0abaabea60c3d7fc934bb66b4bb1e023d",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -54350,10 +55481,95 @@
 					0.45,
 					0.65
 				],
-				"method": "geometry proposal visually checked",
+				"measurements": [],
+				"method": "manual_multi_pose_anatomy_fit_visual_review",
 				"normal_runtime_sha256": "31cce34f2cf39b537ba853af0e8ae6ebd2cfbb443dabd4b75d75114c4ce6832f",
-				"preview_sha256": "6892c3d797cac44eda96dc93cb436f67a45af1dcdfb8fe01ce3a84c5e62e006f",
-				"scope": "mouth marker placement in sampled native action poses",
+				"pose_fits": [
+					{
+						"emitter": 0.0,
+						"observations": [
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/goodra-hisui.json",
+								"capture_sha256": "f809b7c1db997d0df4ab4f543c8b4e0862d00269803e0dde41eaccbb55d6ac3a",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									195.0
+								]
+							},
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/goodra-hisui.json",
+								"capture_sha256": "f809b7c1db997d0df4ab4f543c8b4e0862d00269803e0dde41eaccbb55d6ac3a",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									232.0,
+									196.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/goodra-hisui.json",
+								"capture_sha256": "f809b7c1db997d0df4ab4f543c8b4e0862d00269803e0dde41eaccbb55d6ac3a",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									210.0,
+									209.0
+								]
+							},
+							{
+								"action": "physical_attack_2",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/goodra-hisui.json",
+								"capture_sha256": "f809b7c1db997d0df4ab4f543c8b4e0862d00269803e0dde41eaccbb55d6ac3a",
+								"column": 2.0,
+								"fraction": 0.65,
+								"pixel": [
+									210.0,
+									190.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/goodra-hisui.json",
+								"capture_sha256": "f809b7c1db997d0df4ab4f543c8b4e0862d00269803e0dde41eaccbb55d6ac3a",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									174.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v24/goodra-hisui.json",
+								"capture_sha256": "f809b7c1db997d0df4ab4f543c8b4e0862d00269803e0dde41eaccbb55d6ac3a",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									231.0,
+									175.0
+								]
+							}
+						],
+						"part": "mouth",
+						"ray_residuals": [
+							0.00129608134609474,
+							0.0011817711715462,
+							0.00277526406376904,
+							0.00701671484908848,
+							0.00079146118603497,
+							0.00403572400377277
+						],
+						"regularization": 0.00001
+					}
+				],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "25fe26110bcc12bd636e23818bf57bcc4cf7283160093a35744714c37311a3d1",
+				"scope": "Forward sampled visible mouth review: corrected open/closed jaw tracking; occluded surfaces, shell-retracted poses, routing and effects remain unapproved.",
 				"side_fraction": 0.45
 			},
 			"status": "configured",
@@ -54855,6 +56071,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "3ea1984032c7ea4874a8f6b8c742cd3a1929bc0de91f0cc490ebd68422a11ee8",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "82a913be8c37062d6bd2beb211363946e7c7cd8903d51d84cd2f521e57597840",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -54875,6 +56108,7 @@
 				],
 				"method": "manual_anatomy_marker_pose_visual_review",
 				"normal_runtime_sha256": "055b597322fa798d3d0ed0d14f51153f7a08eeccb8a52164f346debc841e8cfa",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "fb3dd5609cbf820eac604e4b17b9931c039f26c5fa94688ddaaad97c241c7f72",
 				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
 				"side_fraction": 0.45
@@ -55655,7 +56889,16 @@
 				"normal_runtime_sha256": "327f8f411e9002384467a751d64a81afe4d49ba799d706ef9bd78eb67e9dd29f",
 				"preview_sha256": "b67e79147e26dca76fa7ea1bfa3728e17fff3ebd8cf3a8987340775edf53cd04",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0761_00_00/Skeleton3D/pm0761_00_00_eye_a_mesh",
+						"pm0761_00_00/Skeleton3D/pm0761_00_00_eye_b_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -55825,6 +57068,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "bf66d7bb2026143d656595bc1c20998c7298fcd2925c3e7a11d8ab62c01fd08b",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "8616fe2446d14198392244c4fc48c8f2393fcf5149e2f1339859c40d8eb0960d",
+					"scope": "Visible mouth surfaces reviewed in all sampled native actions with forward playback. Occluded views do not establish alignment; actual move effects remain pending.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -55832,6 +57091,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "89a726ae6aa2aadf9d632f2c30321fdf98ac140eba5e07a52dc16f22583b36dd",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "d5f00557310f679b0aacc7fe75757b1dac92431064884e345ea627e827c97888",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -55863,7 +57123,16 @@
 				"normal_runtime_sha256": "5d250f0b0a5cb322b001ed860732758c5ca8985ed9aaea4cf93ae3eab055c813",
 				"preview_sha256": "66475dae5ea4f389f2b2eb4fac02ae0f998e14a7aab3e7c32dd1bef2e9126d52",
 				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0731_00_00/Skeleton3D/pm0731_00_00_eye_a_mesh",
+						"pm0731_00_00/Skeleton3D/pm0731_00_00_eye_b_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -56702,6 +57971,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "1a74ec0439afc86d8c72af68d270f6b476dc18fce44aff6388fc09888ef553d2",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "0a46e7de5eefe811f56a6bd42711f73ce3192d4d975b05ad389b0803e45329c2",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -56709,6 +57995,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "b2bff07eb80b380dc62209b5660d6f7a2339e1af8f313c9775747bdf974d150f",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "ddf8c4c5caf5260aa2ede91531904faeb8cf4e667692a83bdda03a7bc15bdeb8",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -56825,6 +58112,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "cd2e4969016250bef50fc61bce59ed35c7acc2b1cbcd8743907cfc09db4911f7",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "69f626367465ef3b7d8eb33c28661a50d147902f7700e2f99f879df9dcab4bd5",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -56832,6 +58136,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "88a5a06cce4a4282573348abfcb50a99ead9c7092c0cdfb36f71f6df605af585",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "483e785d75c7bfdd711cd231ed663d8217533bf837a21bc1911be8641c50cd9f",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -57760,6 +59065,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "94830ff0a48449760fffc967fd79b60c65878cce7e1cff4c77d3c9ab620973cf",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "a9fe07503d663010e33b31d0616567bdff060b37c9a706f7eb8c994ed4e2f972",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -57767,6 +59089,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "71e718aac352e4a0657b84d5defc8871c36856f757c00ee971b2bb91be1f4115",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "d669217b379d640b97b4d8fe0d3e55aeb70fe4584231214502583025f8346d5c",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -58663,26 +59986,16 @@
 					0.45,
 					0.65
 				],
-				"manual_measurements": [
-					{
-						"action": "idle",
-						"all_mouth_bones": true,
-						"capture_sha256": "e8273b22e81b01bda0a72ac0975c7259e52d157f8b29df383d382dbde29161e4",
-						"fraction": 0.45,
-						"part": "mouth",
-						"pixels": [
-							185.0,
-							176.0,
-							188.0,
-							172.0
-						],
-						"ray_residual": 0.00180637476722111
-					}
+				"manual_adjustments": [
+					"Center both mouth bone offsets on the bilateral muzzle plane; source close review showed lateral displacement."
 				],
-				"method": "manual_triangulation_and_native_pose_visual_review",
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
 				"normal_runtime_sha256": "f38ea22528461bc6f6c556076f24823cb44bb316a64f84a12a84bf5fe67c9877",
-				"preview_sha256": "eda3d45be56110f49c1e8e00026f03e7189d73e7a235922181a6b2ada3eff6a3",
-				"scope": "mouth marker placement in sampled native action poses",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "3f20ee74579341fc08db667906b26ec95bdd5365c1d3f7c0b00e0eccb5846a71",
+				"scope": "Corrected mouth origin visually reviewed in visible sampled forward native poses; occluded closed-mouth surfaces and actual move effects remain unapproved.",
 				"side_fraction": 0.45
 			},
 			"status": "configured",
@@ -58862,7 +60175,15 @@
 				"normal_runtime_sha256": "0e59e025e7016217187149363cd70b9257e355a8fe7da7f28ba8606fd5d8e58f",
 				"preview_sha256": "54554d91b5c7655a7543b6c20a5b13bbfae7d9c86c37ad1b0e555979c83d80e5",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0428_51_00/Skeleton3D/pm0428_51_00_eyelid_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -59206,6 +60527,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "a334425cd9a3988116011009e723b9617027d0d1450cb5690ea30ad13c290fda",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "8039255eac44805e494e503dadefe1107fe36263e4f04c8bd91698b4f7e03ef4",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -59213,6 +60551,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "81d74b788379bbba344c3e993aca2da358d0a4cd2497a78d566d085f56415826",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "9b66db4a8245d8496617513d5d769b17740c02abd986a0b37c543235215feb16",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -59238,6 +60577,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "f2bdb65b4b120621c88499f80cd4f7988fe748592e249fa9007c3f33e39e701a",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "52a8545bcd7dea97638e60ca9c6cf45da013dc1291d17672e7a92fd5095cfdde",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -59245,6 +60601,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "81a97f7891f70c64e7ce4803ee77e72fc2bf76f8dbe5343f5541e1a0e0aab737",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "dad317e4410904683ab0d0014ad6c13d2fd2e7983db320c861ace1fedd458066",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -60134,6 +61491,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "8e8f3bf4378af0ef9f6d80767a10d606614acae2191fa6cc572837b2cc175391",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "39bfd3022472495b4b6e45ce293c71e0ba50d23bfa04e4e6afd420a19af16a85",
+					"scope": "Visible mouth surfaces reviewed in all sampled native actions with forward playback. Occluded views do not establish alignment; actual move effects remain pending.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -60141,6 +61514,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "860b227b3738bab2cf20f4da4110ea67c9c1f3b52fd5213c01ee0f4f50502de8",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "d7648a45b4d5d9fe54fe3fde754662b76c2ef53015d41c7e025f4501f5ae30b1",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -60609,6 +61983,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "a901bebfb65dd21de348c53c9b68f16e2b3a7dbccf15e890b726b28ed2eddc7e",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "b6bc3c17ab6cd3f360a52bf0b3b6cc1fcf4aa17ca51423af78ef75fb773c12bf",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -60632,6 +62023,7 @@
 				],
 				"method": "manual_anatomy_marker_pose_visual_review",
 				"normal_runtime_sha256": "07e62855535982c4ab00d16ac718cd94e2c20da79942662b04134a6aa050b12c",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "7b83d345b64bde019bdd98ce4509bb9ed9636ed0ce04849fae7ef7b031cc1d0b",
 				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
 				"side_fraction": 0.45
@@ -60685,6 +62077,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "6db436c30af7ce07cb952962ec66203902f006d833c2f7e82c5e525935b351c2",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "a3fe50122a3aeb680c1d31f59ecf7b58823cc19df4ce198f29c2433c99a31be5",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -60692,6 +62101,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "8340ffc93fccace60cf00b9155d2625770b5818eb4718dfcf3f6aeeb8d557900",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "9ed782ed80aa9f8c80c17a0acd650837eca4ebb9c4c5b6e3670d3109562d337b",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -61505,7 +62915,16 @@
 				"normal_runtime_sha256": "3a7242e7ef0dad8441d33051ca8c3310e6c8fff935e6b2e35e063a5c45518ed8",
 				"preview_sha256": "168f4cf9c55d392a94b1fa4ecdb1e4a653eb84aa590746e49a53b5a82716574d",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0122_00_31/Skeleton3D/pm0122_00_31_eyelid_a_mesh",
+						"pm0122_00_31/Skeleton3D/pm0122_00_31_eyelid_b_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -61591,6 +63010,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "015963b2b3252643d3f8ac6fd8f1cb3d0b8e3f1fdcf0e1ec7447c11afb7b8fd7",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "edbac1eb64ea971e1ab86c13454cd87ab24503e6a01c6bc024662c1dcbae3a5b",
+					"scope": "Visible mouth surfaces reviewed in all sampled native actions with forward playback. Occluded views do not establish alignment; actual move effects remain pending.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -61598,6 +63034,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "c18cf3e2ccfa6faff72a67ad28a915290d241883e3afe442ce7a3ee68f69906b",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "cf1070e8ee134dadf58b5b9720ec45d7d0df9bcde2d58c0423bc61f9fc170a65",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -61619,6 +63056,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "cbe56a4473926c2c2890249ee7964b063ecfb6dab8997390c418a0fe9a2f4c06",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "0a5d1297ffbc4b182e65fe963d8f665a1d331ca68c7d557a5ea10739e37caf79",
+					"scope": "Visible mouth surfaces reviewed in all sampled native actions with forward playback. Occluded views do not establish alignment; actual move effects remain pending.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -61626,6 +63080,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "7b07d7b3690e6c43f628bf498eec25916f790aaf9bcdd8d31dbc7ec6cdf8a504",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "db4f448f04a2764796aef90d5d44d2e6c2f5e3fc1b3a068378c5a5c7107382cd",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -62752,6 +64207,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "f488e20f1563fd40ef691dd32a78c0996b26ee8b4673ec2bf07d0fff522e21bc",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "48c4e3c872c9f0c7b30396522e7a96d7d484a97b2c37f9fd6c7d098bd6295c92",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -62759,6 +64231,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "c3dc7a8177f8fce4768bcbacbcd01648d415c4819f6f097ab9ef4ad39bab6377",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "857c2936a2d6c1b43aacea377c99edc96c79a8649e2aed4f5c08d6d5ab18d00d",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -62891,7 +64364,15 @@
 				"normal_runtime_sha256": "4623122d2f45e004496f44499fa9f283e43d404e79298c1990e2b293f59230a3",
 				"preview_sha256": "8204917b1e61754f5a84c3befe8856c59f5968fcf457bbb50bcd137a73b195f9",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm1038_11_00/Skeleton3D/pm1038_11_00_00_lid_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -63292,6 +64773,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "011a77f31a4c5e67e5ca6c83ed29d319f79efbf3e06ab7f500bd6645c27a761f",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "2f0a6c2d45857d77f500b58014a47cf04f6e17dd1bc9a21bf49c88d790c62bff",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -63300,6 +64798,7 @@
 				"measurements": [],
 				"method": "manual_anatomy_marker_pose_visual_review",
 				"normal_runtime_sha256": "71320ebaa6e6382389800452d422c148f204b4cd7db1cffdef1534b1044957c3",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "1a94ca6ee2a149beb2f2b122e6e7035a6d5a05ed97041a105cff574b17acb708",
 				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
 				"side_fraction": 0.45
@@ -63518,6 +65017,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "f92bcfeb95c0d1c3d2f442ef05fad9c8912eecc6859069264607ca91080d251b",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "084f39a2d059e8294132e443f6c296f8d9b67836f98963a82198d4f7ddce045a",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -63525,6 +65041,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "257ab1fca9d8cca29b29d2bdcdd966694103e64eca2fb81a51009f152a8cd02b",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "aaafc548ecf234c3454842cfb8403c052daf4e8161197db1a08152ba435b4041",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -63817,6 +65334,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "b433842f42bfa48b6dd89e5627622c343553e30eeea5477c550f1ca3ea85d349",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "8b6f2e886aa4a9c0db067f556d4fc4e11adc95c4310959574540484a5b566b9e",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -63824,6 +65357,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "28e2ba6e116933d777d76dde765afbfe723f5016997cc130d45429f259a439b8",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "d9a4dec941af655131fdef1dd00bd13b41e7d845bc1727eb78f279ba68d38a91",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -64961,10 +66495,107 @@
 					0.45,
 					0.65
 				],
-				"method": "geometry proposal visually checked",
+				"measurements": [],
+				"method": "manual_multi_pose_anatomy_fit_visual_review",
 				"normal_runtime_sha256": "2678f9a3c7492adb741b739b2f13fa03ff04dd91518fd764c4254b4aac1a1cc6",
-				"preview_sha256": "5368797a6df02a7ef8d76f8f2e460a0d2ea1cf7d07c1f4101e879811dfd0ef7a",
-				"scope": "mouth marker placement in sampled native action poses",
+				"pose_fits": [
+					{
+						"emitter": 0.0,
+						"observations": [
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/quaxly.json",
+								"capture_sha256": "7e08be393d752cb1f935c0edd6c3848ec1b3f32fe7939cfb9b961ea031659a67",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									168.0
+								]
+							},
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/quaxly.json",
+								"capture_sha256": "7e08be393d752cb1f935c0edd6c3848ec1b3f32fe7939cfb9b961ea031659a67",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									170.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/quaxly.json",
+								"capture_sha256": "7e08be393d752cb1f935c0edd6c3848ec1b3f32fe7939cfb9b961ea031659a67",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									210.0,
+									159.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/quaxly.json",
+								"capture_sha256": "7e08be393d752cb1f935c0edd6c3848ec1b3f32fe7939cfb9b961ea031659a67",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									169.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/quaxly.json",
+								"capture_sha256": "7e08be393d752cb1f935c0edd6c3848ec1b3f32fe7939cfb9b961ea031659a67",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									210.0,
+									162.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/quaxly.json",
+								"capture_sha256": "7e08be393d752cb1f935c0edd6c3848ec1b3f32fe7939cfb9b961ea031659a67",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									167.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-forward-close-v23/quaxly.json",
+								"capture_sha256": "7e08be393d752cb1f935c0edd6c3848ec1b3f32fe7939cfb9b961ea031659a67",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									204.0,
+									165.0
+								]
+							}
+						],
+						"part": "mouth",
+						"ray_residuals": [
+							0.00120957886888878,
+							0.00567973282373636,
+							0.00459578840800599,
+							0.00108929059407113,
+							0.00346213824870606,
+							0.00053509014230946,
+							0.00047585865076169
+						],
+						"regularization": 0.00001
+					}
+				],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "296714ac95b3d0ea0fc81d6fb2dffbe613f1d61c0f4d9d99aa31c69fd59dd9b2",
+				"scope": "Corrected mouth origin visually reviewed in visible sampled forward native poses; occluded closed-mouth surfaces and actual move effects remain unapproved.",
 				"side_fraction": 0.45
 			},
 			"status": "configured",
@@ -65277,6 +66908,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "6441272c729b22753545ab04610627ea353e29466f0b02b24f13502b2405c4dc",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "9b7a403797eecec570b7f269aaa4aa286afb4f8bc919309c8d5c9677b51d4e47",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -65303,6 +66950,7 @@
 				],
 				"method": "manual_two_view_marker_pose_visual_review",
 				"normal_runtime_sha256": "28c637339f6f6586f5acdc49547968151dece39ad1daaaabe9257c340ccb0202",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "95878bc44445765a93ea80516e1eda5d162a52ec155f932b8ea0a369ec731bbe",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -66248,7 +67896,16 @@
 				"normal_runtime_sha256": "899fdd739e7abe42dbb1ac4401f5ced974419b3f5cb78351b24cae6be4dd3fca",
 				"preview_sha256": "1645ab61302ddf675cc44368a8d74e4dff3752eae94e8432cb6a1c684fec6cec",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0918_00_00/Skeleton3D/pm0918_00_00_eye_a_mesh",
+						"pm0918_00_00/Skeleton3D/pm0918_00_00_eye_b_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -66322,6 +67979,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "506e9bef607a0dd8b087b04da115932b13624b0073b9cea9a93699d0ae58b234",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "10e9b6443182d8b1d039d74297460243f11eddaf00f5d0ddb7984c752febe755",
+					"scope": "Close forward-playback review of visible mouth in sampled native poses; occluded poses and actual effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -66329,6 +68003,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "6882e8155a1e018c1f32c139e6dc39700fe1b4b5bbfe7e02a0a7a151c24547b9",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "c762c5176f67e5b7aa6f037b56ffd5e4939ef9b48ae55617715ec4167b4c3f43",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -66545,6 +68220,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "0827f993e7f019fc3b0912b8c3b9f144d9d4a50e19e5f007fc22d3bb64899c79",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "7300f27eada54a62ae06dbe9b35eb836c391dce160da223bb780f56135ea1b0b",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -66552,6 +68244,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "3ee2223214265e8ccb79accc74aa3a917b03348553b70cb4f0b60ea78e93f012",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "9cdb92cd660b532326b9e3b5524a1ebaa1df26c5deec316f48aafbf4a0b3d19c",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -66575,6 +68268,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "8397dc945e68e7044492c27c20bce6f1f5b64589ae66750060a6ac5a6022e4f7",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "7d8c3f2cf9a3d00b90c850edcf2b0b317d9b2a8298ff5f04835b82954c12fd20",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -66582,6 +68292,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "f4634c4bd0f4dae9acbbc531833c4159bab0042d67f6dfad267dcffa869c715c",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "d14bbb8453f45993e513c97000fe634d746bd5548a2664865828ce5e5efbe3b0",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -66605,6 +68316,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "7460fee90792b8bdcac7d3b6d23524c1aff185b3b998ab6b9ce3e695fbaa0f79",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "81519adf6524e8e48595ae6c07248b42471d1cfbf03aef5541ad2e44a9d59738",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -66612,6 +68340,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "af137f26dc0853b344e8fe660fec4d9ec2166dd2997d29876ecec721e5547c18",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "76a44a394757a777cc9cbf1d938e2750ed850e5990f6f7b4b72b05fa7700feca",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -66816,6 +68545,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "1521a393b74571a483fa8682872a5993722c137cc56415b9731a587e66f434e3",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "1c118e7298c1728fdff426785e5c7b9587086ad5b39c638cdbb5a374cd1205bb",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -66823,6 +68569,7 @@
 				],
 				"method": "geometry_candidate_native_pose_visual_review",
 				"normal_runtime_sha256": "f771abb3dd031bf24f4a66baeb44e99d094ca32005cbc16f4ba6d0430f3a68a0",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "78fabf6361f7afab34d561390e9cc45f959aa588693fb44bd497fd2739c4ad50",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -66879,6 +68626,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "c82293eb77e1643b5a6b420381a99ecacaf8730bd17f369d50de306cae2e6c89",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "cc8884d0cb63449f9767e2b687d710ef12ac4d8dd4ab1041eaaf9eef44f4eb9c",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -66886,6 +68649,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "3fc197beded1c0dc840dad6fd298be20a4f2269eb55417ad02165a5769b38b59",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "e12586cecfebf9a99705d25b558d602700315b0ec950f95ced0c7759311e4382",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -67883,6 +69647,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "d450e762b6b91aeda65eb93cc1563f795def5add0095cc879d80867ee4e1633d",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "ec20a0a9f0dbcf5b244250610a9d999101896ff0e583334d5168a248c3236a83",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -67890,6 +69671,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "5da969d2c3b1fcf280e75a9b47a0e83db67f6e5e2b013fe6230256fbc3c0868f",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "07eba81f5fdf24c9ac272b29bc5352e78e4c1bec34ba16896733dac6fd047a54",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -68583,6 +70365,20 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"special_attack",
+						"physical_attack_2"
+					],
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "42850449b7b5b3c6937862d3e6e7e64fe452952e3262f0856261fb5315ce8970",
+					"scope": "Visible mouth poses pass. Physical attack retracts the head and is excluded; all six supported mouth moves select special_attack in the actual runtime selector."
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -68590,6 +70386,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "873e83b427676dec15fe7ec953ead0551accb96ce1fcd12dc5dc8db3fad0dd1c",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "d2c1c5edea2e36c905b4a78f3f11d01fd5654c34304658e5c7c7313300dfed61",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -69506,6 +71303,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "cc69163ac16accce314edb784fff152f5741dc2e8943c7f82952780a07a63bbf",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "70dfb7dcaa9991778848542f433dffcce782e6c078ee2446f30706718c0a3e8e",
+					"scope": "Close forward-playback review of visible mouth in sampled native poses; occluded poses and actual effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -69530,6 +71344,7 @@
 				"method": "manual_anatomy_marker_pose_visual_review",
 				"normal_runtime_sha256": "cc8ce94daa082ede60bd4f025c300614081d49471e9756a2a4b17052e9fa1adc",
 				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "93d94c457e85c32c25749391bd8066ce14961c4f53c31d6b96052201d4b4fce7",
 				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
 				"side_fraction": 0.45
@@ -70041,7 +71856,16 @@
 				"normal_runtime_sha256": "ad1b576ade8b5fc61f17f615fae7f1580dd43c787727107d114b48c3022d2d08",
 				"preview_sha256": "4211f5de5aefb91e6aa1b12d805d06d1d485193f88a87f04dee1dee295dbaf8e",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0618_00_31/Skeleton3D/pm0618_00_31_lowereyelid_mesh",
+						"pm0618_00_31/Skeleton3D/pm0618_00_31_uppereyelid_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -70170,7 +71994,15 @@
 				"normal_runtime_sha256": "981d74563fef2315552c1e126c177cecbb6b80b48714ad13bfc5c840da59b0d7",
 				"preview_sha256": "374764b980e3b7faa549a4cb522405eeae4282a0ad8e1f57d0fafd9813132647",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0191_00_00/Skeleton3D/pm0191_00_00_eyelid_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -70523,8 +72355,203 @@
 			]
 		},
 		"tandemaus": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"emitter_preview_sha256": [
+					"f521a4fb0d5169d267ee4d65cb1ae092fb5abee10bc213aaadeee21a29a41a09",
+					"139c0614e29754ddc21b80e499f63e31919a00fccdca75faa5177b7bb9a3e4c0"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "dfad25bcafb277d8f30eca92d262c8f8148d52f01c4b69efb9ea5b12a1352152",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "f521a4fb0d5169d267ee4d65cb1ae092fb5abee10bc213aaadeee21a29a41a09",
+				"scope": "Both individuals reviewed separately across idle, physical_attack, physical_attack_2 and special_attack, with independent closed/open visible body mesh bindings. Actual effects remain pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": [
+					{
+						"capture_sha256": "e0149ca01ba3bb71135bc94dce0ea65bc7d5045b04d25ce154e582f8dd871271",
+						"landmarks": [
+							{
+								"action": "idle",
+								"barycentric": [
+									0.0444886916831662,
+									0.893406075296843,
+									0.0621052330199904
+								],
+								"column": 1.0,
+								"distance": 0.438379207043025,
+								"mesh": "pm1049_00_00/Skeleton3D/pm1049_00_00_body_a_01_mesh",
+								"mesh_contains": "body_a_01_mesh",
+								"pixel": [
+									210.0,
+									161.0
+								],
+								"surface": 2.0,
+								"triangle": 165.0,
+								"vertex_indices": [
+									53.0,
+									56.0,
+									128.0
+								]
+							}
+						],
+						"method": "ray_triangle_barycentric_skin_binding"
+					},
+					{
+						"capture_sha256": "e0149ca01ba3bb71135bc94dce0ea65bc7d5045b04d25ce154e582f8dd871271",
+						"landmarks": [
+							{
+								"action": "special_attack",
+								"barycentric": [
+									0.354993196660608,
+									0.471047014648034,
+									0.173959788691358
+								],
+								"column": 1.0,
+								"distance": 0.446722235992012,
+								"mesh": "pm1049_00_00/Skeleton3D/pm1049_00_00_body_a_02_mesh",
+								"mesh_contains": "body_a_02_mesh",
+								"pixel": [
+									210.0,
+									150.0
+								],
+								"surface": 1.0,
+								"triangle": 798.0,
+								"vertex_indices": [
+									428.0,
+									417.0,
+									430.0
+								],
+								"weight": 0.5
+							},
+							{
+								"action": "special_attack",
+								"barycentric": [
+									0.893089314757709,
+									0.0524613731239352,
+									0.0544493121183554
+								],
+								"column": 1.0,
+								"distance": 0.487118978359403,
+								"mesh": "pm1049_00_00/Skeleton3D/pm1049_00_00_body_a_02_mesh",
+								"mesh_contains": "body_a_02_mesh",
+								"pixel": [
+									210.0,
+									247.0
+								],
+								"surface": 2.0,
+								"triangle": 112.0,
+								"vertex_indices": [
+									73.0,
+									74.0,
+									12.0
+								],
+								"weight": 0.5
+							}
+						],
+						"method": "ray_triangle_barycentric_skin_binding"
+					},
+					{
+						"capture_sha256": "54db621bb6fb1b8d979be40635d8407b03de5fddbf82429fb823aff1b2511f28",
+						"landmarks": [
+							{
+								"action": "idle",
+								"barycentric": [
+									0.360447952318937,
+									0.635271938661904,
+									0.00428010901915942
+								],
+								"column": 1.0,
+								"distance": 0.442029487559793,
+								"mesh": "pm1049_00_00/Skeleton3D/pm1049_00_00_body_b_01_mesh",
+								"mesh_contains": "body_b_01_mesh",
+								"pixel": [
+									203.0,
+									160.0
+								],
+								"surface": 1.0,
+								"triangle": 21.0,
+								"vertex_indices": [
+									0.0,
+									12.0,
+									2.0
+								]
+							}
+						],
+						"method": "ray_triangle_barycentric_skin_binding"
+					},
+					{
+						"capture_sha256": "54db621bb6fb1b8d979be40635d8407b03de5fddbf82429fb823aff1b2511f28",
+						"landmarks": [
+							{
+								"action": "special_attack",
+								"barycentric": [
+									0.246622816580223,
+									0.270103569255795,
+									0.483273614163982
+								],
+								"column": 1.0,
+								"distance": 0.444567692951203,
+								"mesh": "pm1049_00_00/Skeleton3D/pm1049_00_00_body_b_02_mesh",
+								"mesh_contains": "body_b_02_mesh",
+								"pixel": [
+									220.0,
+									151.0
+								],
+								"surface": 1.0,
+								"triangle": 68.0,
+								"vertex_indices": [
+									81.0,
+									82.0,
+									80.0
+								],
+								"weight": 0.5
+							},
+							{
+								"action": "special_attack",
+								"barycentric": [
+									0.172703051383265,
+									0.698948168437827,
+									0.128348780178907
+								],
+								"column": 1.0,
+								"distance": 0.474638119603728,
+								"mesh": "pm1049_00_00/Skeleton3D/pm1049_00_00_body_b_02_mesh",
+								"mesh_contains": "body_b_02_mesh",
+								"pixel": [
+									245.0,
+									248.0
+								],
+								"surface": 3.0,
+								"triangle": 88.0,
+								"vertex_indices": [
+									73.0,
+									72.0,
+									143.0
+								],
+								"weight": 0.5
+							}
+						],
+						"method": "ray_triangle_barycentric_skin_binding"
+					}
+				]
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -70694,6 +72721,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "e19a497e69e5870a8586141550b255046b24b52cca199be4cb1670523bd32c87",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "8458c97b3b98532e681a22a1327a49f308a6f0139ba8d56b614dfcbc48198381",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -70703,6 +72747,7 @@
 				"method": "manual_anatomy_marker_pose_visual_review",
 				"normal_runtime_sha256": "5a4c7512e3099f1f0cd167826b3391beadac33cb33c17c5e8aecdf17161b5151",
 				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "8458c97b3b98532e681a22a1327a49f308a6f0139ba8d56b614dfcbc48198381",
 				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
 				"side_fraction": 0.45
@@ -71829,6 +73874,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "533f3eb58688aa54e1773748b5a4da94ec3211e0c8d99570f30593473bfd4d0b",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "8cc41d49ee9677da935a6e590412716b7448d5bc13240e2d1f2c0ae8595e6ec4",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -71836,6 +73898,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "fd2af1f6cb056bdb9e2c3b498bbcd166dc09eba382cf07f7aef7cdbba6d52bd1",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "48aaa28b3bd647cdf7dc3433a5b81bd3bbaaccb445b4f93e50720d7bc9066385",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -72570,6 +74633,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "9a79d1473926e22aba90d94fe10bfb8192cbb53b491ec3cd304f30a18aa53ef1",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "5868170a8265ca64cb65b47d607a010b306114e13680a70846d53e1a2ac82bda",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -72577,6 +74657,7 @@
 				],
 				"method": "geometry proposal visually checked",
 				"normal_runtime_sha256": "66c8dd1c66a7479719a80e94b9cafc3299c513d1ae07e606c4f1bab3430dd0c9",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "2c976f80896ed2a8432d6f1d6ffd6f7773a035c0c65fbccf0d850037aeb6d9fa",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -72975,8 +75056,140 @@
 			]
 		},
 		"vanilluxe": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"emitter_preview_sha256": [
+					"d24ffbb70eda00a59505329a865ef28cb7e2a965ca9bb65b8de897dd560f489e",
+					"c6bc06a8abf555e33032de63f6bb83c0749454e676e2ab902ba99a7829b8f0d5"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "d1aa8de16e7e96955203aff4773b3057fc4a778c7180e4ade627c8f0879b6aa7",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "d24ffbb70eda00a59505329a865ef28cb7e2a965ca9bb65b8de897dd560f489e",
+				"scope": "Both mouths have independent skin-bound emitters. Each emitter was reviewed separately in idle, physical_attack and special_attack at three frontal times and one side view. Actual paired move effects remain pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": [
+					{
+						"capture_sha256": "4a616ef85f4f5b7a036a13d64d63932b5b393b9cd015f41b90b526bcdd21ce37",
+						"landmarks": [
+							{
+								"action": "idle",
+								"barycentric": [
+									0.111551059105116,
+									0.862943231756735,
+									0.0255057091381486
+								],
+								"column": 1.0,
+								"distance": 1.49912051531401,
+								"mesh": "pm0584_00_00/Skeleton3D/pm0584_00_00_body_mesh",
+								"pixel": [
+									165.0,
+									106.0
+								],
+								"surface": 3.0,
+								"triangle": 2273.0,
+								"vertex_indices": [
+									1064.0,
+									417.0,
+									1063.0
+								],
+								"weight": 0.5
+							},
+							{
+								"action": "idle",
+								"barycentric": [
+									0.402604741408409,
+									0.271747439685615,
+									0.325647818905976
+								],
+								"column": 1.0,
+								"distance": 1.49844834333106,
+								"mesh": "pm0584_00_00/Skeleton3D/pm0584_00_00_body_mesh",
+								"pixel": [
+									165.0,
+									128.0
+								],
+								"surface": 3.0,
+								"triangle": 2427.0,
+								"vertex_indices": [
+									968.0,
+									969.0,
+									967.0
+								],
+								"weight": 0.5
+							}
+						],
+						"method": "ray_triangle_barycentric_skin_binding"
+					},
+					{
+						"capture_sha256": "4a616ef85f4f5b7a036a13d64d63932b5b393b9cd015f41b90b526bcdd21ce37",
+						"landmarks": [
+							{
+								"action": "idle",
+								"barycentric": [
+									0.114189605958219,
+									0.20363617448427,
+									0.682174219557511
+								],
+								"column": 1.0,
+								"distance": 1.57162006072964,
+								"mesh": "pm0584_00_00/Skeleton3D/pm0584_00_00_body_mesh",
+								"pixel": [
+									300.0,
+									137.0
+								],
+								"surface": 3.0,
+								"triangle": 2601.0,
+								"vertex_indices": [
+									1624.0,
+									2270.0,
+									2269.0
+								],
+								"weight": 0.5
+							},
+							{
+								"action": "idle",
+								"barycentric": [
+									0.043852374536953,
+									0.328143978561908,
+									0.628003646901139
+								],
+								"column": 1.0,
+								"distance": 1.57219368138833,
+								"mesh": "pm0584_00_00/Skeleton3D/pm0584_00_00_body_mesh",
+								"pixel": [
+									300.0,
+									156.0
+								],
+								"surface": 3.0,
+								"triangle": 2519.0,
+								"vertex_indices": [
+									2172.0,
+									2174.0,
+									2173.0
+								],
+								"weight": 0.5
+							}
+						],
+						"method": "ray_triangle_barycentric_skin_binding"
+					}
+				]
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -73066,6 +75279,22 @@
 					"physical_attack",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"special_attack"
+					],
+					"capture_sha256": "74c5f2cb70e6294856fecb4244b6a5cf3fd0770259e8a1821c4d7a5118c2ebfa",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "3fe07abfefdf13431e6916ef9e9b931575a1d124810bc9b416f646f1cb0b475f",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -73073,6 +75302,7 @@
 				],
 				"method": "two-view lip triangulation",
 				"normal_runtime_sha256": "2620db60ef7a2a98289d2c606f59f79a54e3d6bd508a4c996e69c49f38c5dde7",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "00d67dd4344039601b8d6978eb7aa2f4688ba584425b41c369a43035d5270148",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -73411,6 +75641,23 @@
 					"physical_attack_2",
 					"special_attack"
 				],
+				"forward_visibility_review": {
+					"actions": [
+						"idle",
+						"physical_attack",
+						"physical_attack_2",
+						"special_attack"
+					],
+					"capture_sha256": "10965f25a1ac8861288ba82329047530add4468e825d84fef238b8475c990c3c",
+					"fractions": [
+						0.2,
+						0.45,
+						0.65
+					],
+					"preview_sha256": "88244c7cdf1a87767094a05ec022681cbce2cb12eec4fe2a98553368d0739f06",
+					"scope": "Visible mouth origin remains aligned during forward playback; occluded poses and actual move effects remain unapproved.",
+					"side_fraction": 0.45
+				},
 				"fractions": [
 					0.2,
 					0.45,
@@ -73418,6 +75665,7 @@
 				],
 				"method": "geometry_candidate_native_pose_visual_review",
 				"normal_runtime_sha256": "d38597ba7c99e85b8d3abf528e6326692a287858b6dfbec4cff86d0c5a2b31f7",
+				"pose_sampling": "forward_from_start_v1",
 				"preview_sha256": "1faa027e16631a97999625e17209e123e6314874f71a6516ed5832ce7eb70c7a",
 				"scope": "mouth marker placement in sampled native action poses",
 				"side_fraction": 0.45
@@ -73789,7 +76037,16 @@
 				"normal_runtime_sha256": "bbb78dabe59491acaaf684b9ebe5f5a23d0fe5a93ef47d50cea4fb9a4ea1933d",
 				"preview_sha256": "a8264174153ad848ed732275b779a3111c56b0c6cda8f88878094af1d347ff2e",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0461_00_00/Skeleton3D/pm0461_00_00_close_eyelashes_mesh",
+						"pm0461_00_00/Skeleton3D/pm0461_00_00_eyelashes_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -74785,7 +77042,16 @@
 				"normal_runtime_sha256": "a5e2b4bc635f1eaaa02d28ebd636b9e3b306549f66253a2a9f45f2483dfef748",
 				"preview_sha256": "a61d94cabd78ad21ec34c4f3f07f3cae3bf24ddf04d190e9bb3a1465a78de375",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0939_11_00/Skeleton3D/pm0939_11_00_eye_a_mesh",
+						"pm0939_11_00/Skeleton3D/pm0939_11_00_eye_b_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [
@@ -74815,7 +77081,16 @@
 				"normal_runtime_sha256": "7db2a3a66bb954769f5e6a631d18f5a81f08bac451efde69f039dd1c996df5a1",
 				"preview_sha256": "93827550342a5789a9a97377d2eb9058d7fe0e71792202d89d6c41e279d9caa3",
 				"scope": "mouth marker placement in sampled native action poses",
-				"side_fraction": 0.45
+				"side_fraction": 0.45,
+				"visibility_audit": {
+					"audit_sha256": "971fef80872c2a60965137d9f3f5e2b7fb255aa04e11b2703877e38d8883854c",
+					"changed_meshes": [
+						"pm0939_12_00/Skeleton3D/pm0939_12_00_eye_a_mesh",
+						"pm0939_12_00/Skeleton3D/pm0939_12_00_eye_b_mesh"
+					],
+					"reason": "Reviewed visibility differences affect only eye/eyelid meshes. They do not replace the mouth or the calibrated limb surfaces.",
+					"result": "differences_outside_attachment"
+				}
 			},
 			"status": "configured",
 			"variants": [

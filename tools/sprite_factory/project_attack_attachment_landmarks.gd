@@ -8,7 +8,7 @@ var options := {}
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
 	for i in args.size():
-		if args[i] not in ["--catalog", "--input", "--capture", "--landmarks", "--output"]: continue
+		if args[i] not in ["--catalog", "--input", "--capture", "--landmarks", "--output", "--part"]: continue
 		if i + 1 >= args.size():
 			printerr("Missing value for ", args[i])
 			quit(1)
@@ -110,6 +110,7 @@ func _run() -> void:
 				if bone.is_empty(): bone = skeleton.get_bone_name(mesh.skin.get_bind_bone(bind))
 				if capture.bones.has(bone): bindings[bind] = {"bone":bone, "pose":_transform(capture.bones[bone]), "bind":mesh.skin.get_bind_pose(bind)}
 			for surface in mesh.mesh.get_surface_count():
+				if landmark.has("surface") and int(landmark.surface) != surface: continue
 				if mesh.mesh.surface_get_primitive_type(surface) != Mesh.PRIMITIVE_TRIANGLES: continue
 				var arrays := mesh.mesh.surface_get_arrays(surface)
 				var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
@@ -181,7 +182,7 @@ func _run() -> void:
 		var value: Dictionary = combined[bone]
 		var offset: Vector3 = value.weighted_offset / float(value.weight)
 		group.append({"bone":bone, "offset":[offset.x, offset.y, offset.z], "weight":float(value.weight) / total})
-	proposal.candidate_parts["mouth"] = [group]
+	proposal.candidate_parts[str(options.get("--part", "mouth"))] = [group]
 	proposal.review_status = "unreviewed"
 	proposal["manual_surface_landmarks"] = {"capture_sha256":FileAccess.get_sha256(options["--capture"]), "landmarks":evidence, "method":"ray_triangle_barycentric_skin_binding"}
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(str(options["--output"]).get_base_dir()))

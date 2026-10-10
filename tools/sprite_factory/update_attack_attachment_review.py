@@ -31,6 +31,13 @@ def main():
             part_review_notes.setdefault(species, []).append(decision)
     profiles = json.loads(args.profiles.read_text())['profiles']
     visibility = json.loads(args.pose_visibility_audit.read_text()).get('models', {}) if args.pose_visibility_audit.exists() else {}
+    visibility_digest = hashlib.sha256(args.pose_visibility_audit.read_bytes()).hexdigest() if visibility else ''
+
+    def requires_visibility_review(review):
+        if review.get('pose_sampling') == 'forward_from_start_v1':
+            return False
+        audit = review.get('visibility_audit', {})
+        return not (audit.get('result') == 'differences_outside_attachment' and audit.get('audit_sha256') == visibility_digest)
     rows = {}
     for path in sorted(args.inspection.glob('*.json')):
         model = json.loads(path.read_text())
@@ -58,6 +65,9 @@ def main():
             for part in profile['part_reviews']:
                 row['part_status'][part] = 'sampled_marker_pose_review_pass_installed'
         row['anatomical_move_routing_review'] = 'pending'
+        if profile.get('anatomical_route_reviews'):
+            row['anatomical_move_routing_review'] = 'partially_reviewed'
+            row['anatomical_route_reviews'] = profile['anatomical_route_reviews']
         if profile.get('parts', {}).get('mouth'):
             row['mouth_status'] = 'sampled_mouth_pose_review_pass'
             row['mouth_review'] = profile['review']
@@ -66,10 +76,10 @@ def main():
         changes = visibility.get(species, {}).get('differences', [])
         if changes:
             row['previous_pose_visibility_differences'] = changes
-            if profile.get('parts', {}).get('mouth') and profile.get('review', {}).get('pose_sampling') != 'forward_from_start_v1':
+            if profile.get('parts', {}).get('mouth') and requires_visibility_review(profile.get('review', {})):
                 row['mouth_status'] = 'installed_pending_forward_visibility_review'
             for part, review in profile.get('part_reviews', {}).items():
-                if review.get('pose_sampling') != 'forward_from_start_v1':
+                if requires_visibility_review(review):
                     row['part_status'][part] = 'installed_pending_forward_visibility_review'
         rows[species] = row
     report = {'schema': 2, 'complete': False,

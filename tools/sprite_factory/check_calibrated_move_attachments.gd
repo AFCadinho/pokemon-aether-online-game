@@ -7,16 +7,18 @@ var catalog_path := ""
 var output := "res://.tmp/attack-attachments/calibrated-check.json"
 var errors: Array[String] = []
 var profile_sha256 := ""
+var selected: Array[String] = []
 
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
 	for i in args.size():
-		if args[i] in ["--catalog", "--output"] and i + 1 >= args.size():
+		if args[i] in ["--catalog", "--output", "--species"] and i + 1 >= args.size():
 			printerr("Missing value for ", args[i])
 			quit(1)
 			return
 		if args[i] == "--catalog": catalog_path = args[i+1]
 		if args[i] == "--output": output = args[i+1]
+		if args[i] == "--species": selected.assign(args[i+1].split(","))
 	_run.call_deferred()
 
 func _run() -> void:
@@ -32,7 +34,10 @@ func _run() -> void:
 	var world := Node3D.new()
 	root.add_child(world)
 	var checks := {}
+	for species: String in selected:
+		if not Attachments.CALIBRATED.data.profiles.has(species): errors.append("Missing requested calibration: " + species)
 	for species: String in Attachments.CALIBRATED.data.profiles:
+		if not selected.is_empty() and species not in selected: continue
 		var normal := {}
 		for identity: String in [species,species+"@shiny"]:
 			if not entries.has(identity):
@@ -117,6 +122,7 @@ func _run() -> void:
 	file.store_string(JSON.stringify({"schema":1,"models":checks,"errors":errors,
 		"visual_verification":false,"samples_per_action":21,
 		"profile_count": Attachments.CALIBRATED.data.profiles.size(),
+		"requested_species":selected, "checked_profile_count":checks.size()/2,
 		"profile_sha256": profile_sha256},"\t",true)+"\n")
 	file.close()
 	for error: String in errors: printerr(error)

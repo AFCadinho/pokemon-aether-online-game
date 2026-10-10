@@ -28,6 +28,8 @@ actor-relative mesh path. The group emits only while that mesh is visible.
 This supports rigs that replace a closed muzzle with a separate open muzzle;
 each surface can use its own calibrated skin influences. Missing or freed
 predicate meshes invalidate the attachment and retain the bounds fallback.
+Mega Golurk also uses separate anchors for its attached hands and detached
+rocket fists, selected by the visibility of their respective meshes.
 
 The [full catalog coverage audit](move-attachment-coverage.md) lists every
 supported species/form and distinguishes configured attachments from bounds
@@ -84,7 +86,7 @@ runtime catalog. The tools read those scenes without modifying them:
 - `calibrate_attack_attachment.py` and `fit_attack_attachment.py`: recorded
   anatomical pixel measurements to bone-local offsets; their output still
   requires rendering and visual review.
-- `project_attack_attachment_landmarks.gd`: projects selected lip pixels onto
+- `project_attack_attachment_landmarks.gd`: projects selected surface pixels onto
   captured visible skinned triangles and combines their bone influences. Use
   fresh forward-sampled captures and inspect the chosen mesh/triangle before
   approving a new marker sheet. Active blend shapes are rejected. Transparent
@@ -101,7 +103,10 @@ runtime catalog. The tools read those scenes without modifying them:
 - `check_calibrated_move_attachments.gd`: binding and finite-coordinate checks
   at 21 moments per native clip, including normal/shiny consistency.
 - `tools/audit_move_attachment_learnsets.gd`: supported move/part coverage
-  against local learnsets, including moves still using bounds fallbacks.
+  against local learnsets, including moves still using bounds fallbacks. Each
+  move also records the actual stage-selected native clip and whether that
+  clip has a configured attachment. This identifies routes that use hidden
+  body parts; the report does not visually approve those routes.
 
 Marker sheets deliberately draw markers over the model, including transparent
 surfaces. An obscured anatomical surface requires another camera view before

@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 992 species/forms.
-- No anatomical attachment profile: 208 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 880 species/forms.
+- At least one configured anatomical attachment: 994 species/forms.
+- No anatomical attachment profile: 206 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 882 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -871,6 +871,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | swoobat | mouth | Same attachment profile |
 | sylveon | foot, left_foot, mouth | Same attachment profile |
 | taillow | mouth | Same attachment profile |
+| tandemaus | mouth | Same attachment profile |
 | tangela | mouth | Same attachment profile |
 | tapu-bulu | hand, left_hand, mouth | Same attachment profile |
 | tapu-fini | hand, left_hand, mouth | Same attachment profile |
@@ -934,6 +935,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | uxie | hand, left_hand, mouth | Same attachment profile |
 | vanillish | mouth | Same attachment profile |
 | vanillite | mouth | Same attachment profile |
+| vanilluxe | mouth | Same attachment profile |
 | vaporeon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | venusaur | hand, left_hand, mouth | Same attachment profile |
 | venusaur-mega | hand, left_hand, mouth | Same attachment profile |
