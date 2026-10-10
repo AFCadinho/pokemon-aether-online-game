@@ -7,7 +7,22 @@ uses a hand. Physical hit graphics still appear at the target. Tackle, Scratch, 
 use a separate [contact approach](contact-move-effects.md) to move the attacker
 to the target and back on the same native action clock.
 
-## Initial profiles
+## Profiles and review status
+
+The expanded registry is `data/battle_move_attachments_3d.json`. Each form has
+its own `parts`; shiny variants share the matching form's rig coordinates.
+The original profiles below remain available when no calibrated replacement
+exists. The per-form [review ledger](attack-attachment-review.json) records
+sampled marker reviews, model hashes, unresolved parts and actual effect reviews.
+Its `complete: false` means the individual review of all attack animations is
+still in progress. Coverage means a point is configured, not that every move
+has been visually approved.
+
+An outer array describes separate emitters. Each emitter's inner array contains
+weighted bone-local points, allowing a mouth origin to follow both moving lips.
+`actions` can override parts for a particular native clip; `moves` selects a
+part for an individual move and `move_actions` selects its native attack clip.
+Snivy's Vine Whip uses both animated vine tips and `physical_attack_2`.
 
 The [full catalog coverage audit](move-attachment-coverage.md) lists every
 supported species/form and distinguishes configured attachments from bounds
@@ -53,7 +68,38 @@ Target impact positioning retains the existing bounds calculation.
 
 ## Offline review
 
-From the workspace root, with slot-b assigned to this task:
+For the catalog-wide review, use the assigned task slot and an approved local
+runtime catalog. The tools read those scenes without modifying them:
+
+- `tools/sprite_factory/inspect_attack_attachments.gd`: inventory of bones,
+  native attack clips and skin-bind geometry for each form.
+- `attack_attachment_candidates.gd`: unapproved attachment proposals.
+- `attack_attachment_preview.gd`: individual marker sheets for idle and every
+  native attack clip at 20%, 45% and 65%, plus a second view at 45%.
+- `calibrate_attack_attachment.py` and `fit_attack_attachment.py`: recorded
+  anatomical pixel measurements to bone-local offsets; their output still
+  requires rendering and visual review.
+- `attack_attachment_move_preview.gd`: actual stage anchors and move effects
+  with native animation and contact movement. These are offline captures;
+  they do not certify live wild or NPC battle presentation.
+- `check_calibrated_move_attachments.gd`: binding and finite-coordinate checks
+  at 21 moments per native clip, including normal/shiny consistency.
+- `tools/audit_move_attachment_learnsets.gd`: supported move/part coverage
+  against local learnsets, including moves still using bounds fallbacks.
+
+Marker sheets deliberately draw markers over the model, including transparent
+surfaces. An obscured anatomical surface requires another camera view before
+approval. Always inspect both views: a frontal overlap alone cannot establish
+the depth of an attachment. Store approved coordinates and their review evidence
+in the registry, then refresh the review ledger and coverage audit. Never install
+an entire proposal directory solely because it passes the binding checks.
+
+The calibration math checks can be run with
+`python3 tools/sprite_factory/test_attack_attachment_calibration.py`.
+All Godot commands must run through the assigned slot's `slot-env` wrapper.
+
+The original interactive preview is also available. For example, from the
+workspace root when slot-b is assigned to the task:
 
 ```bash
 ops/worktrees/slot-env slot-b -- godot \

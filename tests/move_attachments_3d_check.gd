@@ -20,6 +20,7 @@ func _run() -> void:
 	var world := Node3D.new()
 	add_child(world)
 	world.transform = Transform3D(Basis(Vector3.UP, 0.3), Vector3(5, -2, 3))
+	_check_weighted_attachments(world)
 	var actor := _rig(world, ["head", "left_feeler_b_02", "right_feeler_b_02"])
 	actor.transform = Transform3D(Basis(Vector3.UP, 0.9).scaled(Vector3(2, 3, 2)), Vector3(-4, 1, 2))
 	var skeleton: Skeleton3D = actor.get_node("Rig")
@@ -45,6 +46,15 @@ func _run() -> void:
 	assert(Attachments.part_for("charmander", "scratch") == "hand")
 	assert(Attachments.part_for("pikachu", "tackle") == "body")
 	assert(Attachments.part_for("pikachu@shiny", "thundershock") == "electric_body")
+	for move: String in ["bugbite", "peck", "lick"]:
+		assert(Attachments.part_for("charmander", move) == "mouth")
+	for move: String in ["doublekick", "highjumpkick", "lowkick", "pyroball"]:
+		assert(Attachments.part_for("cinderace", move) == "foot")
+	assert(Attachments.part_for("snivy@shiny", "vinewhip") == "vines")
+	assert(Attachments.definitions_for("snivy", "vines").size() == 2)
+	assert(Attachments.action_for("snivy@shiny", "vinewhip", {"physical_attack_2": {}}) == "physical_attack_2")
+	assert(Attachments.action_for("snivy", "vinewhip", {"physical_attack": {}}).is_empty())
+	assert(Attachments.action_for("snivy", "tackle", {"physical_attack_2": {}}).is_empty())
 	var electric_actor := _rig(world, ["spine_02"])
 	var electric_rig: Skeleton3D = electric_actor.get_node("Rig")
 	electric_rig.set_bone_pose_position(0, Vector3(0, 0.8, 0))
@@ -64,6 +74,10 @@ func _run() -> void:
 	stage.set_process(false)
 	stage.active = true
 	stage.world = world
+	stage.identities[0] = "snivy"
+	stage.entries.snivy = {"action_timing": {"physical_attack": {}, "physical_attack_2": {}}}
+	assert(stage.attack_action_for("Vine Whip", "p1") == "physical_attack_2")
+	stage.entries.erase("snivy")
 	for i in 2:
 		stage.actors[i] = _rig(world, ["head"])
 		stage.actors[i].position.x = -2 if i == 0 else 2
@@ -155,5 +169,71 @@ func _run() -> void:
 			effect.cancel()
 			await get_tree().process_frame
 			await get_tree().process_frame
-	print("MOVE_ATTACHMENTS_3D_OK transforms=true moving_bones=true forms=true lifecycle=true paired_beams=true single_impact=true")
+	var lash_counts := []
+	for count in [1, 2]:
+		seconds = 0
+		var lash := Stage.StagedMoveEffect.new()
+		world.add_child(lash)
+		var sources := [Vector3(-2,1,-0.5)]
+		if count == 2: sources.append(Vector3(-2,1,0.5))
+		var points := {"source": sources[0], "sources": sources, "target": Vector3(2,1,0), "radius": 0.8}
+		lash.start("vinewhip", {"frames": 60, "launch_frame": 10, "impact_frame": 40}, {}, func(): return seconds, func(): return points, func(): return true)
+		lash.set_process(false)
+		seconds = 0.62
+		lash._process(0)
+		lash_counts.append(lash.cursor)
+		lash.cancel()
+		await get_tree().process_frame
+	assert(lash_counts[1] - lash_counts[0] == 12, "Each vine tip must create its own twelve-segment lash")
+	var lash_widths := []
+	for part in ["hand", "vines"]:
+		seconds = 0
+		var lash := Stage.StagedMoveEffect.new()
+		world.add_child(lash)
+		var points := {"source": Vector3(-2,1,0), "sources": [Vector3(-2,1,0)], "target": Vector3(2,1,0), "radius": 0.8, "attachment_part": part}
+		lash.start("vinewhip", {"frames": 60, "launch_frame": 10, "impact_frame": 40}, {}, func(): return seconds, func(): return points, func(): return true)
+		lash.set_process(false)
+		seconds = 0.62
+		lash._process(0)
+		var widths := []
+		for i in lash.cursor:
+			if lash.pieces[i].mesh == lash.tube and lash.pieces[i].material_override == lash.edge:
+				widths.append(lash.pieces[i].basis.x.length())
+		# Eight approach trails precede the twelve vine segments.
+		assert(widths.size() == 20)
+		lash_widths.append(widths[8])
+		lash.cancel()
+		await get_tree().process_frame
+	assert(is_equal_approx(lash_widths[1] / lash_widths[0], .008 / .045), "Native vine tips must retain their narrower extension width")
+	print("MOVE_ATTACHMENTS_3D_OK transforms=true moving_bones=true forms=true lifecycle=true paired_beams=true paired_vines=true single_impact=true")
 	get_tree().quit()
+
+func _check_weighted_attachments(world: Node3D) -> void:
+	var upper := {"bone": "upper", "offset": [0, 0, 0.2], "weight": 1.0}
+	var lower := {"bone": "lower", "offset": [0, 0, 0.2], "weight": 3.0}
+	var calibrated_profiles: Dictionary = Attachments.CALIBRATED.data.profiles
+	calibrated_profiles["__weighted_test"] = {
+		"parts": {"mouth": [[upper, lower]]},
+		"actions": {"physical_attack_2": {"mouth": [[upper]]}},
+	}
+	var actor := _rig(world, ["upper", "lower"])
+	actor.transform = Transform3D(Basis(Vector3.UP, 0.4).scaled(Vector3(2, 3, 2)), Vector3(1, 2, 3))
+	var rig: Skeleton3D = actor.get_node("Rig")
+	rig.set_bone_pose_position(0, Vector3(0, 2, 0))
+	rig.set_bone_pose_position(1, Vector3(0, 1, 0))
+	var result := Attachments.sample(actor, "__weighted_test@shiny", "ember", world)
+	assert(result.sources.size() == 1, "Blended lips must emit one projectile")
+	assert(result.sources[0].is_equal_approx(actor.transform * Vector3(0, 1.25, 0.2)))
+	rig.set_bone_pose_position(1, Vector3(0, 0, 0))
+	result = Attachments.sample(actor, "__weighted_test", "ember", world)
+	assert(result.sources[0].is_equal_approx(actor.transform * Vector3(0, 0.5, 0.2)), "Jaw movement must update cached blended attachments")
+	result = Attachments.sample(actor, "__weighted_test", "ember", world, "physical_attack_2")
+	assert(result.sources[0].is_equal_approx(actor.transform * Vector3(0, 2, 0.2)), "Action overrides must have distinct cache entries")
+	var partial := _rig(world, ["upper"])
+	assert(Attachments.sample(partial, "__weighted_test", "ember", world).is_empty())
+	assert(not Attachments.sample(partial, "__weighted_test", "ember", world, "physical_attack_2").is_empty())
+	assert(Attachments._bind(actor, [[{"bone": "upper", "offset": [0, 0], "weight": 1}]]).is_empty())
+	assert(Attachments._bind(actor, [[{"bone": "upper", "offset": [0, 0, 0], "weight": 0}]]).is_empty())
+	actor.free()
+	partial.free()
+	calibrated_profiles.erase("__weighted_test")

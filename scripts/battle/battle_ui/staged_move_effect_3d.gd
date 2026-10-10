@@ -189,11 +189,15 @@ func _contact_stage(from: Vector3,center: Vector3,flight: float,after: float,alp
 		for i in 3:
 			_piece(crescent,pearl,aim+side*(i-1)*.2,Vector3.ONE*(.5+strike*.7)*weight*fade,facing*Basis(Vector3.FORWARD,-.7+i*.4))
 	elif motif=="reaching-lash":
-		var last := from
-		for i in 12:
-			var p := (i+1)/12.0
-			var point := from.lerp(aim,p)+side*sin(p*PI)*sin(elapsed*8)*.75
-			_line(last,point,.045*fade,edge);last=point
+		var native_vines: bool = anchors.call().get("attachment_part", "") == "vines"
+		for source: Vector3 in emission_sources:
+			var last := source
+			var sway := minf(.12,source.distance_to(aim)*.18) if native_vines else .75
+			var width := .008 if native_vines else .045
+			for i in 12:
+				var p := (i+1)/12.0
+				var point := source.lerp(aim,p)+side*sin(p*PI)*sin(elapsed*8)*sway
+				_line(last,point,width*fade,edge);last=point
 	elif motif=="biting-strike":
 		for i in 8:
 			var a := i*TAU/8

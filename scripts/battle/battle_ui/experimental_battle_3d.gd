@@ -590,6 +590,9 @@ func attack_action_for(move_name: String, actor: String = "") -> String:
 			move_categories = parsed
 	var key := AttackSelection.move_key(move_name)
 	var index := actor_index(actor)
+	if index >= 0 and index < identities.size() and entries.has(identities[index]):
+		var attachment_action := MoveAttachments.action_for(identities[index], MoveEffect.move_key(move_name), entries[identities[index]].get("action_timing", {}))
+		if not attachment_action.is_empty(): return attachment_action
 	if MoveRecipes.supports(move_name):
 		if not MoveRecipes.contact(move_name): return "special_attack"
 		if MoveRecipes.get_recipe(move_name).family == "z": return "physical_attack"
@@ -1155,7 +1158,7 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 	var index := actor_index(actor)
 	# A visible Substitute owns the emitter; never emit from the hidden Pokémon.
 	if _move_visual(actor) == actors[index]:
-		attachment = MoveAttachments.sample(actors[index], identities[index], MoveEffect.move_key(move), world)
+		attachment = MoveAttachments.sample(actors[index], identities[index], MoveEffect.move_key(move), world, current_actions[index])
 	var sources: Array = attachment.get("sources", [source])
 	return {"source": sources[0], "sources": sources, "target": end, "radius": b.radius,
 		"field":_move_field(),
