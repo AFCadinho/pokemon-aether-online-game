@@ -5151,6 +5151,8 @@ func _award_trainer_battle_rewards(
 				trainer_id,
 				trainer_progress
 			)
+		else:
+			_finish_trainer_battle_npc(trainer_id, false)
 		var gym_badge_award := _dictionary_from_value(reward_result.get("gymBadgeAward", {}))
 		if bool(gym_badge_award.get("awarded", false)):
 			await _refresh_fishing_progression()
@@ -5162,6 +5164,7 @@ func _award_trainer_battle_rewards(
 			"storyEffects": reward_result.get("storyEffects", []),
 		}
 	else:
+		_finish_trainer_battle_npc(trainer_id, false)
 		push_warning("World: trainer battle reward failed: %s" % str(reward_result.get("error", "Unknown error")))
 	return {"success": false}
 
