@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Refresh the Vermilion Gym interior with its Tiled floor plan, complete puzzle switches and visible electric emitters.
+- Restyle the Vermilion Gym with a steel puzzle court, matching gym walkways and lighting, complete switches and visible electric emitters.
 
 - Make Help a visible main chat tab and move System into General's channel selector, while keeping system messages in All.
 

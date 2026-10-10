@@ -1,28 +1,25 @@
 [gd_resource type="TileSet" format=3]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_1_0.texture.res" id="1_j11xq"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_1025_0.texture.res" id="2_mktkn"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_3073_0.texture.res" id="3_bej7f"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_4097_0.texture.res" id="4_ascyp"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_5121_0.texture.res" id="5_dath2"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_5865_0.texture.res" id="6_nwyqg"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_1_0.texture.res" id="1_bej7f"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_1025_0.texture.res" id="2_ascyp"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_2049_0.texture.res" id="3_dath2"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_3073_0.texture.res" id="4_nwyqg"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_4097_0.texture.res" id="5_yd8gl"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_5121_0.texture.res" id="6_pa8gu"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_5865_0.texture.res" id="7_qp5sj"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_gym/assets/vermilion_gym.visual.tileset.compact_source_5873_0.texture.res" id="8_wvw52"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yd8gl"]
-texture = ExtResource("1_j11xq")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x7h5i"]
+texture = ExtResource("1_bej7f")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pa8gu"]
-texture = ExtResource("2_mktkn")
-margins = Vector2i(2, 2)
-separation = Vector2i(4, 4)
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qp5sj"]
-texture = ExtResource("3_bej7f")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_thbqq"]
+texture = ExtResource("2_ascyp")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -33,24 +30,9 @@ texture_region_size = Vector2i(32, 32)
 4:0/0 = 0
 5:0/0 = 0
 6:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wvw52"]
-texture = ExtResource("4_ascyp")
-margins = Vector2i(2, 2)
-separation = Vector2i(4, 4)
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x7h5i"]
-texture = ExtResource("5_dath2")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ocjfq"]
+texture = ExtResource("3_dath2")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -72,12 +54,26 @@ texture_region_size = Vector2i(32, 32)
 1:2/0 = 0
 2:2/0 = 0
 3:2/0 = 0
-4:2/0 = 0
-5:2/0 = 0
-6:2/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_thbqq"]
-texture = ExtResource("6_nwyqg")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tncs0"]
+texture = ExtResource("4_nwyqg")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_flod6"]
+texture = ExtResource("5_yd8gl")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -88,13 +84,67 @@ texture_region_size = Vector2i(32, 32)
 4:0/0 = 0
 5:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2q2y1"]
+texture = ExtResource("6_pa8gu")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_44yja"]
+texture = ExtResource("7_qp5sj")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_honme"]
+texture = ExtResource("8_wvw52")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+
 [resource]
 tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_yd8gl")
-sources/1 = SubResource("TileSetAtlasSource_pa8gu")
-sources/2 = SubResource("TileSetAtlasSource_qp5sj")
-sources/3 = SubResource("TileSetAtlasSource_wvw52")
-sources/4 = SubResource("TileSetAtlasSource_x7h5i")
-sources/5 = SubResource("TileSetAtlasSource_thbqq")
+sources/0 = SubResource("TileSetAtlasSource_x7h5i")
+sources/1 = SubResource("TileSetAtlasSource_thbqq")
+sources/2 = SubResource("TileSetAtlasSource_ocjfq")
+sources/3 = SubResource("TileSetAtlasSource_tncs0")
+sources/4 = SubResource("TileSetAtlasSource_flod6")
+sources/5 = SubResource("TileSetAtlasSource_2q2y1")
+sources/6 = SubResource("TileSetAtlasSource_44yja")
+sources/7 = SubResource("TileSetAtlasSource_honme")
 metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/vermilion_city/Vermilion Gym.tmx"
 metadata/tiled_compact_atlas_version = 1
