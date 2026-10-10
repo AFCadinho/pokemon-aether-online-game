@@ -29,18 +29,20 @@ var default_fallback_font: Font
 
 func _ready() -> void:
 	default_fallback_font = ThemeDB.fallback_font
-	_add_symbol_fallback(default_fallback_font)
-	_add_symbol_fallback(SIMPLIFIED_CHINESE_FONT)
+	_add_font_fallback(default_fallback_font, SYMBOL_FALLBACK_FONT)
+	# Player-authored names, guild descriptions and chat can use Chinese in any locale.
+	_add_font_fallback(default_fallback_font, SIMPLIFIED_CHINESE_FONT)
+	_add_font_fallback(SIMPLIFIED_CHINESE_FONT, SYMBOL_FALLBACK_FONT)
 	_load_catalogs()
 	set_locale(DEFAULT_LOCALE)
 
 
-func _add_symbol_fallback(font: Font) -> void:
+func _add_font_fallback(font: Font, fallback_font: Font) -> void:
 	if font == null:
 		return
 	var fallback_fonts := font.fallbacks
-	if not fallback_fonts.has(SYMBOL_FALLBACK_FONT):
-		fallback_fonts.append(SYMBOL_FALLBACK_FONT)
+	if not fallback_fonts.has(fallback_font):
+		fallback_fonts.append(fallback_font)
 		font.fallbacks = fallback_fonts
 
 
