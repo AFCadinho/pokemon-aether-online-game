@@ -2,6 +2,7 @@ extends RefCounted
 ## Checked-in approval, not metadata supplied by a local catalog or Settings.
 const DATA = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.json")
 const SCREENED = preload("res://scripts/battle/battle_ui/screened_model_catalog.json")
+const PairPilot = preload("res://scripts/services/model_pair_pilot.gd")
 
 static func key(species: String, shiny: bool) -> String:
 	var normalized := species.to_lower().replace(" ", "-")
@@ -109,6 +110,13 @@ static func resolve(identity: String, digest: String) -> Dictionary:
 	var model: Dictionary = DATA.data.models.get(identity, {})
 	var profiles: Dictionary = DATA.data.profiles
 	var accepted := approved_digest(model, digest)
+	var source_digest := digest
+	if not accepted:
+		var pair := PairPilot.asset_for(identity, digest)
+		for appearance: Dictionary in pair.get("appearances", []):
+			if appearance.runtime_identity == identity:
+				source_digest = str(appearance.source_sha256)
+				accepted = approved_digest(model, source_digest)
 	if not accepted:
 		model = SCREENED.data.models.get(identity, {})
 		profiles = SCREENED.data.profiles
@@ -121,9 +129,9 @@ static func resolve(identity: String, digest: String) -> Dictionary:
 	var cache_bytes: Variant = model.get("cache_source_bytes", 0)
 	if (cache_bytes is int or cache_bytes is float) and is_finite(float(cache_bytes)) and cache_bytes == floor(float(cache_bytes)) and cache_bytes > 0 and cache_bytes <= 134217728:
 		profile["cache_source_bytes"] = int(cache_bytes)
-	profile = preload("res://scripts/battle/animations/gliscor_flight.gd").profile_for(identity, digest, profile)
-	profile = preload("res://scripts/battle/animations/mega_garchomp_standing.gd").profile_for(identity, digest, profile)
-	profile = preload("res://scripts/battle/animations/charmander_breath.gd").profile_for(identity, digest, profile)
+	profile = preload("res://scripts/battle/animations/gliscor_flight.gd").profile_for(identity, source_digest, profile)
+	profile = preload("res://scripts/battle/animations/mega_garchomp_standing.gd").profile_for(identity, source_digest, profile)
+	profile = preload("res://scripts/battle/animations/charmander_breath.gd").profile_for(identity, source_digest, profile)
 	# The screened cohort has source timing and placement only. It has not passed
 	# arena grounding or motion-clearance calibration, so keep those optional and
 	# let the presenter select its existing safe classic-arena fallback.

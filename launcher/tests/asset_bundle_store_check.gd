@@ -295,8 +295,13 @@ func _run() -> void:
 	assert(identities.size() == 4)
 	assert(DirAccess.dir_exists_absolute(store.root.path_join("objects").path_join(arcanine_object)))
 	var cleanup := store.garbage_collect()
-	assert(cleanup.error.is_empty() and cleanup.removed_objects >= 2)
-	assert(not DirAccess.dir_exists_absolute(store.root.path_join("objects").path_join(arcanine_object)))
+	if store._models_in_use():
+		assert(not cleanup.error.is_empty() and cleanup.removed_objects == 0)
+		assert(DirAccess.dir_exists_absolute(store.root.path_join("objects").path_join(arcanine_object)))
+		print("MODEL_GC_DEFERRED_WHILE_GAME_RUNNING")
+	else:
+		assert(cleanup.error.is_empty() and cleanup.removed_objects >= 2)
+		assert(not DirAccess.dir_exists_absolute(store.root.path_join("objects").path_join(arcanine_object)))
 	assert(_catalog_identities(store.catalog_path()).size() == 4)
 
 	# Index identity, immutability and dependency errors fail before installation.

@@ -105,6 +105,7 @@
   "ui.settings.storage.empty": "Nenhum arquivo baixado ainda.",
   "ui.settings.storage.battle_busy": "Termine a batalha antes de remover arquivos.",
   "ui.settings.storage.download_busy": "Aguarde os downloads terminarem.",
+  "ui.settings.storage.restart_models": "Reinicie o jogo para remover os modelos 3D carregados.",
   "ui.settings.storage.confirm_title": "Remover arquivos de Pokémon?",
   "ui.settings.storage.confirm_sprites": "Remover as imagens 2D de Pokémon baixadas? Elas serão baixadas novamente quando necessárias. Seus Pokémon e seu progresso serão mantidos.",
   "ui.settings.storage.confirm_models": "Remover os modelos 3D de Pokémon baixados? Eles serão baixados novamente quando necessários. Seus Pokémon e seu progresso serão mantidos.",

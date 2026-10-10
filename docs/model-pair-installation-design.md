@@ -1,6 +1,9 @@
 # Proposed shared-texture installation contract
 
 Status: local research design, **not enabled in the launcher or game**.
+Follow-up: the [local installation pilot](shared-model-pilot.md) implements this
+contract behind a disabled debug opt-in, with launcher/on-demand, presenter and
+preview checks. Production release selection remains unchanged.
 The v11 registry, index, publication receipts and exact decoded-stream gate stay
 unchanged. A shared scene has a different stream and needs new reviewed
 bindings; it cannot be silently admitted as a v11 compression variant.

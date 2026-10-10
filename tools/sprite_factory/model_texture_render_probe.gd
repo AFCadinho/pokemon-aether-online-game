@@ -7,6 +7,8 @@ class ProbeSettings:
 	var battle_animations := true
 	var terrain_effects := false
 	var weather_effects := false
+	func is_android_3d_experimental() -> bool:
+		return false # Desktop reference settings; preserve the 512x512/MSAA4 contract.
 
 const POSES = [["idle", 0.0], ["physical_attack", 0.5], ["special_attack", 0.5], ["sleep", 0.5], ["faint_loop", 0.5]]
 

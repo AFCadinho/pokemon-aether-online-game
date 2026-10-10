@@ -29,7 +29,10 @@ func _run() -> void:
 		var recipe := species + FileAccess.get_sha256("res://tools/sprite_factory/model_pair_texture_probe.gd")
 		for source: Dictionary in pairs[species]:
 			recipe += str(source.sha256)
-		var pack_root := "res://model-pair-experiment/" + recipe.sha256_text()
+		var production_namespace: bool = input.get("production_namespace", false)
+		if production_namespace:
+			recipe += str(input.get("source_index_sha256", ""))
+		var pack_root := ("res://pokemon-pairs/" if production_namespace else "res://model-pair-experiment/") + recipe.sha256_text()
 		var records := []
 		var retained: Array[PackedScene] = []
 		for row: Dictionary in pairs[species]:
@@ -52,7 +55,7 @@ func _run() -> void:
 			var path := directory.path_join("textures/" + key + ".res")
 			var localized := ProjectSettings.localize_path(path)
 			assert(ResourceSaver.save(texture, localized, ResourceSaver.FLAG_COMPRESS) == OK)
-			texture.resource_path = pack_root.path_join("shared/textures/" + key + ".res")
+			texture.resource_path = pack_root.path_join(("textures/" if production_namespace else "shared/textures/") + key + ".res")
 			assert(ResourceLoader.get_dependencies(path).is_empty())
 		for index in records.size():
 			var row: Dictionary = records[index]

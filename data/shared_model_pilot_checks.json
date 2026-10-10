@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "date": "2026-10-10",
+  "task": "shared-model-textures",
+  "pilot_only": true,
+  "production_activated": false,
+  "pairs": 16,
+  "appearances": 32,
+  "pck_bytes": 163044268,
+  "sharing_at_equal_codec_percent": 22.518224468332303,
+  "candidate_pixel_frames": 320,
+  "candidate_equals_first_source": 317,
+  "candidate_equals_repeat_source_only": 3,
+  "original_control_variation_frames": 27,
+  "host": "Linux / Godot 4.6.2 / NVIDIA RTX 3070 Laptop / Mobile Vulkan",
+  "focused_checks": {
+    "installation": "passed 16 pairs / 32 native graphs, ownership/release, resume/restart, corrupt-pack repair",
+    "real_battles": "passed 9 rounds across Pikachu, Charizard, Palkia; swaps, actor retirement, LRU reuse",
+    "previews": "passed 8 normal/shiny cases; canceled selections",
+    "launcher_release": "passed pinned descriptor, PCK/legacy planning, installation/handoff, bulk catalog tamper rejection",
+    "legacy_launcher": "asset_bundle_store_check and release_asset_bundles_v10_check passed",
+    "storage_ui": "desktop_asset_storage_check and settings_storage_responsiveness_check passed; existing asset UID fallback warnings only",
+    "pixels": "all 320 exactly match one of two unchanged-original controls; no tolerance"
+  },
+  "evidence_sha256": {
+    "data/model_pair_pilot.json": "192d95c05b336512c95ab3d5cbd1688482e4304b413963acbc91748812ef2219",
+    "scripts/services/model_pair_pack.gd": "c5aad48d7165d151a4f85010221a6669ac31a6006c02540256fc7f6ff03c08b2",
+    "scripts/services/model_pair_pilot.gd": "39351367a7f32e1eca5a2832f5595f0988fcaadf39aa0aadf621460db56f75b5",
+    ".tmp/shared-model-pilot-v1/generated/report.json": "1ebd470bf6ffdf38792365e9da7c6f4f08083e135c92bcd68af4f24782cc08b3",
+    ".tmp/shared-model-pilot-v1/render-v2/report.json": "4432bb81be97646154cad6efe69cdf2d0070c06e3a21e75437cb8c58ae572480",
+    ".tmp/shared-model-pilot-v1/render-v2/pixel-comparison.json": "8d0dd62d7bbb9c7c0ef679bdec5b87f61f8635e44e1f584a135e6bd1d27476c1"
+  },
+  "limitations": [
+    "Pilot disabled by default; all-catalog migration and native Windows/macOS installation qualification remain",
+    "No production publication, upload, promotion, deployment, or full paired certification",
+    "Pixel source controls vary at 27 frames; this is not a repeatability claim for every first-source frame",
+    "Initial render fixture failure and failed development attempts retained in task-local .tmp"
+  ]
+}
