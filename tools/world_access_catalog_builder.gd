@@ -287,6 +287,9 @@ func _load_scene_record(scene_path: String, staff_teleport_overrides: Dictionary
 				"transitionId": str(_property_value(child, "transition_id", "")),
 			})
 
+	var weather_profile := "outdoor"
+	if root.has_method("get_weather_profile"):
+		weather_profile = str(root.call("get_weather_profile"))
 	var area := {
 		"label": display_name,
 		"regionName": region_name,
@@ -295,6 +298,7 @@ func _load_scene_record(scene_path: String, staff_teleport_overrides: Dictionary
 		"locationGroupId": location_group_id,
 		"locationGroupLabel": location_group_label,
 		"areaType": area_type,
+		"weatherProfile": weather_profile,
 		"defaultMode": "open",
 		"spawnPoints": _sorted_dictionary(spawn_points),
 	}

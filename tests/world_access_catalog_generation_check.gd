@@ -26,6 +26,9 @@ func _init() -> void:
 
 	var areas := areas_value as Dictionary
 	var transitions := transitions_value as Dictionary
+	_expect((areas.get("kanto_route_1", {}) as Dictionary).get("weatherProfile") == "outdoor", "Outdoor weather eligibility is exported for evolution rules")
+	_expect((areas.get("kanto_mt_moon_1f", {}) as Dictionary).get("weatherProfile") == "disabled", "Cave weather is disabled for evolution rules")
+	_expect((areas.get("kanto_oaks_lab", {}) as Dictionary).get("weatherProfile") == "disabled", "Indoor weather is disabled for evolution rules")
 	var fishing_house := areas.get("kanto_route_12_fishing_brother_house", {}) as Dictionary
 	_expect(
 		fishing_house.get("scenePath", "")

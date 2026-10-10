@@ -41152,6 +41152,9 @@ func _on_dev_world_weather_selected(index: int) -> void:
 		return
 	if index < 0 or index >= DEV_WORLD_WEATHER_OPTIONS.size():
 		return
+	if evolution_prompt_processing or evolution_is_playing:
+		_refresh_dev_world_weather_selector()
+		return
 	var weather_controller := _get_overworld_weather_controller()
 	if weather_controller == null:
 		_add_chat_message("The overworld weather controller is not ready.")
@@ -41181,6 +41184,8 @@ func _on_dev_world_weather_selected(index: int) -> void:
 	else:
 		_add_chat_message("Map weather set to %s for everyone on this map." % selected_weather.capitalize())
 	_refresh_dev_world_weather_selector(weather_state)
+	if not evolution_prompt_processing and not evolution_is_playing:
+		_refresh_pending_developer_evolutions()
 
 
 func _refresh_dev_world_weather_selector(weather_state: Dictionary = {}) -> void:
