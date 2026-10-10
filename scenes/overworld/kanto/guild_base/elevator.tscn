@@ -1,15 +1,85 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=4 uid="uid://cxjqbmc4fy4mf"]
 
-[ext_resource type="Script" path="res://scripts/world/guild_base_room.gd" id="1_room"]
+[ext_resource type="Script" uid="uid://cy8bn173efxfd" path="res://scripts/world/guild_base_room.gd" id="1_room"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/guild_base_elevator/guild_base_elevator.visual.tscn" id="2_visual"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_mask"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_mw6x5"]
 
 [sub_resource type="RectangleShape2D" id="shape_0"]
-size = Vector2(96, 24)
+size = Vector2(96, 32)
 
-[node name="GuildBaseElevator" type="Node2D"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0mpbt"]
+texture = ExtResource("5_mw6x5")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_yr4fj"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_0mpbt")
+
+[node name="GuildBaseElevator" type="Node2D" unique_id=126375258]
 script = ExtResource("1_room")
+room_key = "elevator"
+room_size = Vector2i(30, 30)
+walkable_rects = Array[Rect2i]([Rect2i(9, 16, 11, 10), Rect2i(13, 25, 3, 1)])
+blocked_rects = Array[Rect2i]([Rect2i(9, 19, 3, 1), Rect2i(17, 19, 3, 1), Rect2i(9, 21, 3, 3), Rect2i(17, 21, 3, 3), Rect2i(9, 25, 4, 1), Rect2i(16, 25, 4, 1), Rect2i(9, 17, 1, 1), Rect2i(19, 17, 1, 1), Rect2i(10, 16, 1, 1), Rect2i(18, 16, 1, 1), Rect2i(11, 16, 1, 3), Rect2i(17, 16, 1, 3), Rect2i(12, 25, 1, 1), Rect2i(16, 25, 1, 1)])
 map_id = "guild_base_elevator"
 map_region_name = "Kanto"
 map_display_name = "Guild Base — Elevator"
@@ -20,42 +90,36 @@ region_id = "kanto"
 lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.vermilion_city"
-room_key = "elevator"
-room_size = Vector2i(30, 30)
-walkable_rects = Array[Rect2i]([Rect2i(9, 16, 11, 10), Rect2i(13, 25, 3, 1)])
-blocked_rects = Array[Rect2i]([Rect2i(9, 19, 3, 1), Rect2i(17, 19, 3, 1), Rect2i(9, 21, 3, 3), Rect2i(17, 21, 3, 3), Rect2i(9, 25, 4, 1), Rect2i(16, 25, 4, 1), Rect2i(9, 17, 1, 1), Rect2i(19, 17, 1, 1), Rect2i(10, 16, 1, 1), Rect2i(18, 16, 1, 1), Rect2i(11, 16, 1, 3), Rect2i(17, 16, 1, 3), Rect2i(12, 25, 1, 1), Rect2i(16, 25, 1, 1)])
 
-[node name="Visual" parent="." instance=ExtResource("2_visual")]
+[node name="Visual" parent="." unique_id=461243319 instance=ExtResource("2_visual")]
 
-[node name="Collision" type="TileMapLayer" parent="."]
-visible = false
+[node name="Spawns" type="Node2D" parent="." unique_id=1545040995]
 
-[node name="Spawns" type="Node2D" parent="."]
-
-[node name="FromMainHall" type="Marker2D" parent="Spawns"]
-position = Vector2(464, 784)
-
-[node name="Exits" type="Node2D" parent="."]
-
-[node name="ToMainHall" type="Area2D" parent="Exits"]
+[node name="FromMainHall" type="Marker2D" parent="Spawns" unique_id=2074433684]
 position = Vector2(464, 816)
+
+[node name="Exits" type="Node2D" parent="." unique_id=478117209]
+
+[node name="ToMainHall" type="Area2D" parent="Exits" unique_id=393204053]
+position = Vector2(464, 848)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/guild_base/main_hall.tscn"
 target_spawn_name = "FromElevator"
 transition_id = "guild_base_elevator__to_main_hall"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMainHall"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMainHall" unique_id=83148244]
+position = Vector2(0, 16)
 shape = SubResource("shape_0")
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=353259075]
 y_sort_enabled = true
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=625347461]
 
-[node name="Furniture" type="Node2D" parent="Entities"]
+[node name="Furniture" type="Node2D" parent="Entities" unique_id=361274854]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=178270886]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("4_mask")
@@ -65,12 +129,21 @@ floor_regions = {
 active_floor = &"elevator"
 constrain_camera_to_active_floor = true
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=152048547]
 
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=746672941]
 
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=625432479]
 
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=34342233]
+
+[node name="Tiles" type="Node2D" parent="." unique_id=580285584]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=86702296]
+visible = false
+z_index = 4096
+tile_map_data = PackedByteArray("AAAIAA4AAAABAAEAAAAIAA8AAAABAAEAAAAIABAAAAABAAEAAAAIABEAAAABAAEAAAAIABIAAAABAAEAAAAIABMAAAABAAEAAAAIABQAAAABAAEAAAAIABUAAAABAAEAAAAIABYAAAABAAEAAAAIABcAAAABAAEAAAAIABgAAAABAAEAAAAIABkAAAABAAEAAAAJABkAAAABAAEAAAAJABoAAAABAAEAAAAKABoAAAABAAEAAAALABoAAAABAAEAAAAMABoAAAABAAEAAAAMABsAAAABAAEAAAANABsAAAABAAEAAAAOABsAAAABAAEAAAAPABsAAAABAAEAAAAQABsAAAABAAEAAAAQABoAAAABAAEAAAARABoAAAABAAEAAAASABoAAAABAAEAAAATABoAAAABAAEAAAATABkAAAABAAEAAAAUAA4AAAABAAEAAAAUAA8AAAABAAEAAAAUABAAAAABAAEAAAAUABEAAAABAAEAAAAUABIAAAABAAEAAAAUABMAAAABAAEAAAAUABQAAAABAAEAAAAUABUAAAABAAEAAAAUABYAAAABAAEAAAAUABcAAAABAAEAAAAUABgAAAABAAEAAAAUABkAAAABAAEAAAATAA4AAAABAAEAAAAKAA0AAAABAAEAAAALAA0AAAABAAEAAAAMAA0AAAABAAEAAAANAA0AAAABAAEAAAAOAA0AAAABAAEAAAAPAA0AAAABAAEAAAAQAA0AAAABAAEAAAARAA0AAAABAAEAAAASAA0AAAABAAEAAAATAA0AAAABAAEAAAAJAA0AAAABAAEAAAAJAA4AAAABAAEAAAAMABkAAAABAAEAAAAQABkAAAABAAEAAAARABMAAAABAAEAAAASABMAAAABAAEAAAATABMAAAABAAEAAAARABAAAAABAAEAAAARABEAAAABAAEAAAARABIAAAABAAEAAAAJABMAAAABAAEAAAAKABMAAAABAAEAAAALABMAAAABAAEAAAALABAAAAABAAEAAAALABEAAAABAAEAAAALABIAAAABAAEAAAAJABIAAAABAAEAAAAKABEAAAABAAEAAAASABEAAAABAAEAAAAQABAAAAABAAEAAAAMABAAAAABAAEAAAAJABAAAAABAAEAAAAJAA8AAAABAAEAAAAKAA4AAAABAAEAAAAKAA8AAAABAAEAAAALAA4AAAABAAEAAAALAA8AAAABAAEAAAAMAA4AAAABAAEAAAAMAA8AAAABAAEAAAANAA4AAAABAAEAAAANAA8AAAABAAEAAAAPAA4AAAABAAEAAAAPAA8AAAABAAEAAAAQAA4AAAABAAEAAAAQAA8AAAABAAEAAAARAA4AAAABAAEAAAARAA8AAAABAAEAAAASAA4AAAABAAEAAAASAA8AAAABAAEAAAATAA8AAAABAAEAAAATABIAAAABAAEAAAATABAAAAABAAEAAAARABUAAAABAAEAAAARABYAAAABAAEAAAARABcAAAABAAEAAAASABUAAAABAAEAAAASABYAAAABAAEAAAASABcAAAABAAEAAAATABUAAAABAAEAAAATABYAAAABAAEAAAATABcAAAABAAEAAAAJABUAAAABAAEAAAAJABYAAAABAAEAAAAJABcAAAABAAEAAAAKABUAAAABAAEAAAAKABYAAAABAAEAAAAKABcAAAABAAEAAAALABUAAAABAAEAAAALABYAAAABAAEAAAALABcAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_yr4fj")
 
 [connection signal="body_entered" from="Exits/ToMainHall" to="Exits/ToMainHall" method="_on_body_entered"]
