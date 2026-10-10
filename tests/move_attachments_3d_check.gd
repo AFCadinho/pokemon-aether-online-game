@@ -55,6 +55,16 @@ func _run() -> void:
 	assert(Attachments.action_for("snivy@shiny", "vinewhip", {"physical_attack_2": {}}) == "physical_attack_2")
 	assert(Attachments.action_for("snivy", "vinewhip", {"physical_attack": {}}).is_empty())
 	assert(Attachments.action_for("snivy", "tackle", {"physical_attack_2": {}}).is_empty())
+	for species: String in ["scovillain", "scovillain@shiny"]:
+		for move: String in ["bite", "flamethrower"]:
+			assert(Attachments.part_for(species, move) == "mouth_red")
+			assert(Attachments.action_for(species, move, {"physical_attack": {}, "special_attack": {}}) == "physical_attack")
+		for move: String in ["hyperbeam", "solarbeam"]:
+			assert(Attachments.part_for(species, move) == "mouth")
+			assert(Attachments.action_for(species, move, {"physical_attack": {}, "special_attack": {}}) == "special_attack")
+		assert(Attachments.definitions_for(species, "mouth").size() == 1)
+		assert(Attachments.definitions_for(species, "mouth_red").size() == 1)
+	assert(Attachments.action_for("scovillain-mega", "flamethrower", {"physical_attack": {}, "special_attack": {}}).is_empty(), "Alternate forms must not inherit incompatible native action routes")
 	var electric_actor := _rig(world, ["spine_02"])
 	var electric_rig: Skeleton3D = electric_actor.get_node("Rig")
 	electric_rig.set_bone_pose_position(0, Vector3(0, 0.8, 0))
@@ -78,6 +88,11 @@ func _run() -> void:
 	stage.entries.snivy = {"action_timing": {"physical_attack": {}, "physical_attack_2": {}}}
 	assert(stage.attack_action_for("Vine Whip", "p1") == "physical_attack_2")
 	stage.entries.erase("snivy")
+	stage.identities[0] = "scovillain"
+	stage.entries.scovillain = {"action_timing": {"physical_attack": {}, "special_attack": {}}}
+	assert(stage.attack_action_for("Flamethrower", "p1") == "physical_attack")
+	assert(stage.attack_action_for("Solar Beam", "p1") == "special_attack")
+	stage.entries.erase("scovillain")
 	for i in 2:
 		stage.actors[i] = _rig(world, ["head"])
 		stage.actors[i].position.x = -2 if i == 0 else 2

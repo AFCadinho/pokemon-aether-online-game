@@ -76716,6 +76716,278 @@
         "side_fraction": 0.45
       }
     },
+    "scovillain": {
+      "anatomical_route_reviews": {
+        "mouth": {
+          "action": "special_attack",
+          "moves": [
+            "hyperbeam",
+            "solarbeam"
+          ],
+          "scope": "Green head opens for special attacks. Actual effects and closed preparation-frame origins pending.",
+          "status": "sampled_native_pose_review_pass"
+        },
+        "mouth_red": {
+          "action": "physical_attack",
+          "moves": [
+            "bite",
+            "flamethrower"
+          ],
+          "scope": "Red head opens in physical_attack; FlameThrower uses this native clip without changing its damage category. Actual effects and closed preparation-frame origins pending.",
+          "status": "sampled_native_pose_review_pass"
+        }
+      },
+      "move_actions": {
+        "bite": "physical_attack",
+        "flamethrower": "physical_attack",
+        "hyperbeam": "special_attack",
+        "solarbeam": "special_attack"
+      },
+      "move_effect_reviews": {
+        "flamethrower": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "21a3f1bfc73004e83ef6046c50827007ae915da2052677504b73c8f25fdb69a7",
+          "normal_runtime_sha256": "f9a75b86dfdf55036162b6faf806e0d1192b7ca214ab743600ee81b7ef371cee",
+          "preview_sha256": "6028722b8cc95777882443ebc41867ba5c0ccfa1c0e37890ebe140ecf26dfbd5",
+          "scope": "Normal and shiny offline stage: fire starts at the red mouth/front lip and follows its opening in the selected physical clip. Effect art/scale, Bite and live battles remain pending.",
+          "shiny_preview_sha256": "dd93ebc5d9b6df1ac4a1e0f06f7b375c027a655d5743882b7711bdc8a95a2739",
+          "shiny_runtime_sha256": "a3ade8abf8a812677f4e3c40583d06c30bc458367b0911e7e26ab7018729c238",
+          "status": "sampled_runtime_origin_review_pass",
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "21a3f1bfc73004e83ef6046c50827007ae915da2052677504b73c8f25fdb69a7",
+          "normal_runtime_sha256": "f9a75b86dfdf55036162b6faf806e0d1192b7ca214ab743600ee81b7ef371cee",
+          "preview_sha256": "b3a29249068394c577f5a70dff921dc7a4e98b9366300f8668d22911c6d71455",
+          "scope": "Normal and shiny offline stage: beam center starts at the green mouth opening. Charge light is broader than the mouth; effect art/scale, Hyper Beam and live battles remain pending.",
+          "shiny_preview_sha256": "339c901ecd7de01608d480a008bb5f87a5c163e1727271ce9ed4a1fb8435ee36",
+          "shiny_runtime_sha256": "a3ade8abf8a812677f4e3c40583d06c30bc458367b0911e7e26ab7018729c238",
+          "status": "sampled_runtime_origin_review_pass",
+          "views": 2
+        }
+      },
+      "moves": {
+        "bite": "mouth_red",
+        "flamethrower": "mouth_red"
+      },
+      "part_reviews": {
+        "mouth_red": {
+          "actions": [
+            "physical_attack"
+          ],
+          "fractions": [
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "shared_head_bind_geometry_symmetry_proposal",
+              "notes": "Both heads have matching local jaw extents. Red lip surface coordinates transferred to green rig; lateral coordinates centered. Requires both-head visual review."
+            }
+          ],
+          "method": "skinned_lip_symmetry_native_pose_visual_review",
+          "normal_runtime_sha256": "f9a75b86dfdf55036162b6faf806e0d1192b7ca214ab743600ee81b7ef371cee",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "00a3d3ddc3fde65fb67216f584c8028a1011ff6c82c4df3477c8ee6e1b0a8468",
+          "scope": "Red mouth opening reviewed during the emitting physical-attack poses (.45/.65 and side .45). Closed preparation poses and unused special/second physical poses are not approved as emitting poses.",
+          "side_fraction": 0.45,
+          "surface_landmarks": {
+            "capture_sha256": "c8ef9d4969009f16baa5b1f19b3a18d3c17d86f6ee3b47496e0495cf2af9f815",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.707290024005773,
+                  0.00627357068088727,
+                  0.28643640531334
+                ],
+                "column": 1.0,
+                "distance": 0.974313262705984,
+                "mesh": "pm1043_00_00/Skeleton3D/pm1043_00_00_head_b_mesh",
+                "mesh_contains": "head_b",
+                "pixel": [
+                  241.0,
+                  108.0
+                ],
+                "surface": 0,
+                "triangle": 308,
+                "vertex_indices": [
+                  262,
+                  258,
+                  257
+                ],
+                "weight": 0.5
+              },
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.307137697719168,
+                  0.113854007746059,
+                  0.579008294534773
+                ],
+                "column": 1.0,
+                "distance": 1.02217984941824,
+                "mesh": "pm1043_00_00/Skeleton3D/pm1043_00_00_head_b_mesh",
+                "mesh_contains": "head_b",
+                "pixel": [
+                  241.0,
+                  163.0
+                ],
+                "surface": 0,
+                "triangle": 174,
+                "vertex_indices": [
+                  276,
+                  272,
+                  271
+                ],
+                "weight": 0.5
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          }
+        }
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "head_a",
+              "offset": [
+                0.368172168731689,
+                0,
+                0.0244410000741482
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "jaw_a_02",
+              "offset": [
+                0.140046760439873,
+                0,
+                -0.00438571721315384
+              ],
+              "weight": 0.468995391041559
+            },
+            {
+              "bone": "jaw_a_01",
+              "offset": [
+                0.299112617969513,
+                0,
+                0.0826252922415733
+              ],
+              "weight": 0.0310046089584412
+            }
+          ]
+        ],
+        "mouth_red": [
+          [
+            {
+              "bone": "head_b",
+              "offset": [
+                0.368172168731689,
+                0,
+                0.0244410000741482
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "jaw_b_02",
+              "offset": [
+                0.140046760439873,
+                0,
+                -0.00438571721315384
+              ],
+              "weight": 0.468995391041559
+            },
+            {
+              "bone": "jaw_b_01",
+              "offset": [
+                0.299112617969513,
+                0,
+                0.0826252922415733
+              ],
+              "weight": 0.0310046089584412
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "special_attack"
+        ],
+        "fractions": [
+          0.45,
+          0.65
+        ],
+        "manual_adjustments": [
+          {
+            "method": "shared_head_bind_geometry_symmetry_proposal",
+            "notes": "Both heads have matching local jaw extents. Red lip surface coordinates transferred to green rig; lateral coordinates centered. Requires both-head visual review."
+          }
+        ],
+        "method": "skinned_lip_symmetry_native_pose_visual_review",
+        "normal_runtime_sha256": "f9a75b86dfdf55036162b6faf806e0d1192b7ca214ab743600ee81b7ef371cee",
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "62aea8b8b68970af866d4d3303afc339cec4dc9e21f933dfde5105c850451f70",
+        "scope": "Green mouth opening reviewed during the emitting special-attack poses (.45/.65 and side .45). Closed/preparation poses and unused physical poses are not approved as emitting poses.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "c8ef9d4969009f16baa5b1f19b3a18d3c17d86f6ee3b47496e0495cf2af9f815",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.707290024005773,
+                0.00627357068088727,
+                0.28643640531334
+              ],
+              "column": 1.0,
+              "distance": 0.974313262705984,
+              "mesh": "pm1043_00_00/Skeleton3D/pm1043_00_00_head_b_mesh",
+              "mesh_contains": "head_b",
+              "pixel": [
+                241.0,
+                108.0
+              ],
+              "surface": 0,
+              "triangle": 308,
+              "vertex_indices": [
+                262,
+                258,
+                257
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "idle",
+              "barycentric": [
+                0.307137697719168,
+                0.113854007746059,
+                0.579008294534773
+              ],
+              "column": 1.0,
+              "distance": 1.02217984941824,
+              "mesh": "pm1043_00_00/Skeleton3D/pm1043_00_00_head_b_mesh",
+              "mesh_contains": "head_b",
+              "pixel": [
+                241.0,
+                163.0
+              ],
+              "surface": 0,
+              "triangle": 174,
+              "vertex_indices": [
+                276,
+                272,
+                271
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      }
+    },
     "scrafty": {
       "part_reviews": {
         "hand": {
