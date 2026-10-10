@@ -4,6 +4,10 @@
 
 - Add a local opt-in pilot for lossless normal/shiny texture sharing, with verified launcher/on-demand installation, battle and preview loading, and protected cleanup of loaded models.
 
+- Reimport the updated Vermilion Gym visual and align its switch puzzle with all twenty bins in four rows, keeping the bins free of movement collision.
+
+- Let players walk through Vermilion Gym bins while keeping their switch interactions and the electric barriers.
+
 - Move Vermilion Gym trainer spawn points away from bin approach tiles so every bin stays reachable from all sides.
 
 - Guard both Rock Tunnel entrances until the post-Surge visit to Oak starts the Rock Tunnel main quest; guards disappear once that quest is active or completed.
