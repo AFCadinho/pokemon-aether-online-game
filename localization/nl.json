@@ -5666,6 +5666,7 @@
   "ui.chat.input.map": "Alleen trainers op deze kaart kunnen dit zien",
   "ui.chat.input.trade": "De Handel-chat heeft een cooldown van 2 minuten",
   "ui.chat.input.help": "De Help-chat heeft een cooldown van 5 minuten",
+  "ui.chat.input.help.no_cooldown": "Help andere trainers met hun vragen!",
   "ui.chat.input.guild_checking": "Guildlidmaatschap controleren...",
   "ui.chat.input.guild": "Stuur een bericht naar je guild",
   "ui.chat.input.language": "Bericht naar {language}",

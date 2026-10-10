@@ -5666,6 +5666,7 @@
   "ui.chat.input.map": "Only trainers on this map can see this",
   "ui.chat.input.trade": "Trade chat has a 2 minute cooldown",
   "ui.chat.input.help": "Help chat has a 5 minute cooldown",
+  "ui.chat.input.help.no_cooldown": "Help other trainers with their questions!",
   "ui.chat.input.guild_checking": "Checking guild membership...",
   "ui.chat.input.guild": "Message your guild",
   "ui.chat.input.language": "Message {language}",
