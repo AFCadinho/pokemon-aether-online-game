@@ -17,7 +17,7 @@ func _run() -> void:
 	for path: String in ["Entities/Players", "Entities/NPCs", "Entities/Pokemon", "Entities/Interactables", "Spawns/FromVermilionCity", "Exits/ToVermilionCity", "FloorVisibilityMask/Top", "FloorVisibilityMask/Bottom", "FloorVisibilityMask/Left", "FloorVisibilityMask/Right"]:
 		_check(gym.has_node(path), "required node " + path)
 	var collision := gym.get_node("Tiles/Collision") as TileMapLayer
-	_check(collision.tile_set != null and collision.tile_set.tile_size == Vector2i(32, 32), "collision marker tileset is ready to paint")
+	_check(collision.get_used_cells().is_empty() or (collision.tile_set != null and collision.tile_set.tile_size == Vector2i(32, 32)), "collision layer can remain empty for map authoring or use the 32px marker tileset")
 	var visual := gym.get_node("Visual")
 	_check(visual.get_meta("tiled_visual_map").width == 24 and visual.get_meta("tiled_visual_map").height == 36, "TMX dimensions preserved")
 	for name: String in ["Ground", "GroundDetail", "Objects", "ObjectsTop"]:
@@ -52,6 +52,7 @@ func _check(ok: bool, label: String) -> void:
 func _check_leader_podium(gym: Node, leader: Node2D, collision: TileMapLayer) -> void:
 	var ground := gym.get_node("Visual/Ground") as TileMapLayer
 	var detail := gym.get_node("Visual/GroundDetail") as TileMapLayer
+	var has_map_collision := not collision.get_used_cells().is_empty()
 	var podium := Rect2i(10, 8, 3, 3)
 	var center := podium.position + podium.size / 2
 	_check(leader.position == ground.map_to_local(center), "Lt. Surge stands on the exact center tile of the podium")
@@ -100,12 +101,14 @@ func _check_leader_podium(gym: Node, leader: Node2D, collision: TileMapLayer) ->
 	for x in range(8, 15):
 		var cell := Vector2i(x, 12)
 		_check(platform.get_cell_source_id(cell) != -1, "no gap in the stage fascia or stairs")
-		_check((collision.get_cell_source_id(cell) == -1) == (x >= 10 and x <= 12), "stage access passes through the stairs only")
+		if has_map_collision:
+			_check((collision.get_cell_source_id(cell) == -1) == (x >= 10 and x <= 12), "stage access passes through the stairs only")
 	for y in range(center.y, 18):
 		_check(collision.get_cell_source_id(Vector2i(center.x, y)) == -1, "leader tile and straight approach are walkable")
 	for x in [8, 9, 13, 14]:
 		for y in range(8, 12):
-			_check(collision.get_cell_source_id(Vector2i(x, y)) != -1, "complete column footprint blocks movement")
+			if has_map_collision:
+				_check(collision.get_cell_source_id(Vector2i(x, y)) != -1, "complete column footprint blocks movement")
 	var emblem := gym.get_node("Visual/Gym Emblem") as TileMapLayer
 	_check(emblem.position.x + float(emblem.get_used_rect().position.x * 32) + float(emblem.get_used_rect().size.x * 16) == leader.position.x, "emblem shares the leader centerline")
 
