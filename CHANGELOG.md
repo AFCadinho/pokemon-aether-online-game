@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Let players walk through Vermilion Gym bins while keeping their switch interactions and the electric barriers.
+
 - Move Vermilion Gym trainer spawn points away from bin approach tiles so every bin stays reachable from all sides.
 
 - Guard both Rock Tunnel entrances until the post-Surge visit to Oak starts the Rock Tunnel main quest; guards disappear once that quest is active or completed.

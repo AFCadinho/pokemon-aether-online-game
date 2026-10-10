@@ -60,7 +60,7 @@ func _is_valid_bin(bin: Vector2i) -> bool:
 
 func get_safe_restored_player_position(world_position: Vector2) -> Vector2:
 	# A new login starts a new puzzle visit. Do not trap a restored player on
-	# the leader's side, or inside a bin that was walkable before this puzzle.
+	# the leader's side, or on an occupied NPC tile.
 	if puzzle_solved:
 		return world_position
 	if to_local(world_position).y < 17 * 32 or is_position_blocked_by_character(world_position):
