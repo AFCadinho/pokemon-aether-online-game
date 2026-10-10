@@ -51,6 +51,7 @@ const SPECIES_SPRITE_ALIASES := {
 	"tatsugiri-stretchy-mega": ["Tatsugiri-Mega"],
 	"thundurus-incarnate": ["Thundurus"],
 	"tornadus-incarnate": ["Tornadus"],
+	"urshifu-rapid-strike": ["urshifu-rapidstrike"],
 	"vulpix-alola": ["Vulpix-Alola"],
 	"mimikyu": ["Mimikyu-Disguised"],
 	"oricorio": ["Oricorio"],
