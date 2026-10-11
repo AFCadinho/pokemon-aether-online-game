@@ -25,7 +25,8 @@
   },
   "strawberry-sweet": {
     "name": "草莓糖饰",
-    "shortDesc": "对Milcery使用，并选择Alcremie的九种口味之一。 仅在进化成功时消耗。"
+    "shortDesc": "对Milcery使用，并选择Alcremie的九种口味之一。 仅在进化成功时消耗。",
+    "flavorText": "草莓形状的工艺糖果。让小仙奶携带的话，会高兴地转圈圈。"
   },
   "gold-coin": {
     "name": "Gold Coin",
@@ -877,7 +878,8 @@
   },
   "auspicious-armor": {
     "name": "庆祝之铠",
-    "shortDesc": "使用后进化：Charcadet → Armarouge。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Charcadet → Armarouge。 仅在进化成功时消耗。",
+    "flavorText": "一套古老的金色铠甲，因精细的工艺而备受珍视。"
   },
   "black-augurite": {
     "name": "Black Augurite",
@@ -885,119 +887,148 @@
   },
   "chipped-pot": {
     "name": "缺损的茶壶",
-    "shortDesc": "使用后进化：Sinistea Antique → Polteageist Antique。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Sinistea Antique → Polteageist Antique。 仅在进化成功时消耗。",
+    "flavorText": "这个神奇的茶壶可以使特定的宝可梦进化。虽然有缺陷，但泡出来的茶依旧清香。"
   },
   "cracked-pot": {
     "name": "破裂的茶壶",
-    "shortDesc": "使用后进化：Sinistea → Polteageist。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Sinistea → Polteageist。 仅在进化成功时消耗。",
+    "flavorText": "这个神奇的茶壶可以使特定的宝可梦进化。虽然有破损，但泡出来的茶依旧清香。"
   },
   "dawn-stone": {
     "name": "觉醒之石",
-    "shortDesc": "对雄性的Kirlia使用可进化为Gallade，对雌性的Snorunt使用可进化为Froslass。 仅在进化成功时消耗。"
+    "shortDesc": "对雄性的Kirlia使用可进化为Gallade，对雌性的Snorunt使用可进化为Froslass。 仅在进化成功时消耗。",
+    "flavorText": "能让某些特定宝可梦进化的神奇石头。像眼眸一般光彩动人。"
   },
   "deep-sea-scale": {
     "name": "深海鳞片",
-    "shortDesc": "携带时，使Clamperl的特防翻倍。 使用后进化：Clamperl → Gorebyss。 仅在进化成功时消耗。"
+    "shortDesc": "携带时，使Clamperl的特防翻倍。 使用后进化：Clamperl → Gorebyss。 仅在进化成功时消耗。",
+    "flavorText": "让珍珠贝携带后，特防就会提高的鳞片。散发着淡淡的粉红色光芒。"
   },
   "deep-sea-tooth": {
     "name": "深海之牙",
-    "shortDesc": "携带时，使Clamperl的特攻翻倍。 使用后进化：Clamperl → Huntail。 仅在进化成功时消耗。"
+    "shortDesc": "携带时，使Clamperl的特攻翻倍。 使用后进化：Clamperl → Huntail。 仅在进化成功时消耗。",
+    "flavorText": "让珍珠贝携带后，特攻就会提高的牙齿。散发着闪亮的银光。"
   },
   "dragon-scale": {
     "name": "龙之鳞片",
-    "shortDesc": "使用后进化：Seadra → Kingdra。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Seadra → Kingdra。 仅在进化成功时消耗。",
+    "flavorText": "又硬又坚固的鳞片。龙属性宝可梦有时会携带它。"
   },
   "dubious-disc": {
     "name": "可疑补丁",
-    "shortDesc": "使用后进化：Porygon2 → Porygon-Z。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Porygon2 → Porygon-Z。 仅在进化成功时消耗。",
+    "flavorText": "内部储存了奇怪信息的透明机器。制造者不明。"
   },
   "dusk-stone": {
     "name": "暗之石",
-    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。",
+    "flavorText": "能让某些特定宝可梦进化的神奇石头。像黑夜一般漆黑。"
   },
   "electirizer": {
     "name": "电力增幅器",
-    "shortDesc": "使用后进化：Electabuzz → Electivire。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Electabuzz → Electivire。 仅在进化成功时消耗。",
+    "flavorText": "积蓄着庞大电气能量的箱子。某种宝可梦很喜欢它。"
   },
   "fire-stone": {
     "name": "火之石",
-    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。",
+    "flavorText": "能让某些特定宝可梦进化的神奇石头。看上去是橙黄色的。"
   },
   "galarica-cuff": {
     "name": "伽勒豆蔻手环",
-    "shortDesc": "使用后进化：Slowpoke Galar → Slowbro Galar。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Slowpoke Galar → Slowbro Galar。 仅在进化成功时消耗。",
+    "flavorText": "用伽勒豆蔻枝编织的手环。给伽勒尔地区的呆呆兽戴上，它就会很开心。"
   },
   "galarica-wreath": {
     "name": "伽勒豆蔻花圈",
-    "shortDesc": "使用后进化：Slowpoke Galar → Slowking Galar。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Slowpoke Galar → Slowking Galar。 仅在进化成功时消耗。",
+    "flavorText": "用伽勒豆蔻枝编织的花环头饰。给伽勒尔地区的呆呆兽戴上这种头饰，它就会很开心。"
   },
   "ice-stone": {
     "name": "冰之石",
-    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。",
+    "flavorText": "能让某些特定宝可梦进化的神奇石头。有着雪花般的花纹。"
   },
   "kings-rock": {
     "name": "王者之证",
-    "shortDesc": "携带时，为适用的伤害招式增加10%的畏缩几率。 使用后进化：Poliwhirl → Politoed; Slowpoke → Slowking。 仅在进化成功时消耗。"
+    "shortDesc": "携带时，为适用的伤害招式增加10%的畏缩几率。 使用后进化：Poliwhirl → Politoed; Slowpoke → Slowking。 仅在进化成功时消耗。",
+    "flavorText": "携带后进行攻击，在造成伤害时，有时会让对手畏缩。"
   },
   "leaf-stone": {
     "name": "叶之石",
-    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。",
+    "flavorText": "能让某些特定宝可梦进化的神奇石头。有着叶子般的花纹。"
   },
   "linking-cord": {
     "name": "联系绳",
-    "shortDesc": "对兼容的交换进化宝可梦使用。Karrablast和Shelmet需要彼此进行实际交换。 仅在进化成功时消耗。"
+    "shortDesc": "对兼容的交换进化宝可梦使用。Karrablast和Shelmet需要彼此进行实际交换。 仅在进化成功时消耗。",
+    "flavorText": "两端带有插头的线缆，用于连接设备。"
   },
   "magmarizer": {
     "name": "熔岩增幅器",
-    "shortDesc": "使用后进化：Magmar → Magmortar。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Magmar → Magmortar。 仅在进化成功时消耗。",
+    "flavorText": "积蓄着庞大熔岩能量的箱子。某种宝可梦很喜欢它。"
   },
   "malicious-armor": {
     "name": "咒术之铠",
-    "shortDesc": "使用后进化：Charcadet → Ceruledge。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Charcadet → Ceruledge。 仅在进化成功时消耗。",
+    "flavorText": "一套古老的深色铠甲，散发着神秘而不安的气息。"
   },
   "masterpiece-teacup": {
     "name": "杰作茶碗",
-    "shortDesc": "使用后进化：Poltchageist Artisan → Sinistcha Masterpiece。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Poltchageist Artisan → Sinistcha Masterpiece。 仅在进化成功时消耗。",
+    "flavorText": "一只做工精细、外观优雅的茶碗。"
   },
   "metal-alloy": {
     "name": "复合金属",
-    "shortDesc": "使用后进化：Duraludon → Archaludon。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Duraludon → Archaludon。 仅在进化成功时消耗。",
+    "flavorText": "由多种金属组合而成的坚固合金。"
   },
   "metal-coat": {
     "name": "金属膜",
-    "shortDesc": "携带时，增强钢属性招式。 使用后进化：Onix → Steelix; Scyther → Scizor。 仅在进化成功时消耗。"
+    "shortDesc": "携带时，增强钢属性招式。 使用后进化：Onix → Steelix; Scyther → Scizor。 仅在进化成功时消耗。",
+    "flavorText": "特殊的金属膜。携带后，钢属性的招式威力就会提高。"
   },
   "moon-stone": {
     "name": "月之石",
-    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。",
+    "flavorText": "能让某些特定宝可梦进化的神奇石头。像夜空一样乌黑。"
   },
   "oval-stone": {
     "name": "浑圆之石",
-    "shortDesc": "让Happiny携带此道具，在白天（游戏时间05:00–21:00）升级可进化为Chansey。 仅在进化成功时消耗。"
+    "shortDesc": "让Happiny携带此道具，在白天（游戏时间05:00–21:00）升级可进化为Chansey。 仅在进化成功时消耗。",
+    "flavorText": "能让某些特定宝可梦进化的神奇石头。像珠子一般圆润。"
   },
   "prism-scale": {
     "name": "美丽鳞片",
-    "shortDesc": "使用后进化：Feebas → Milotic。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Feebas → Milotic。 仅在进化成功时消耗。",
+    "flavorText": "能让某些特定宝可梦进化的神奇鳞片。散发着虹色光辉。"
   },
   "protector": {
     "name": "护具",
-    "shortDesc": "使用后进化：Rhydon → Rhyperior。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Rhydon → Rhyperior。 仅在进化成功时消耗。",
+    "flavorText": "某种护具。非常坚硬而且沉重。某种宝可梦很喜欢它。"
   },
   "razor-claw": {
     "name": "锐利之爪",
-    "shortDesc": "携带时，使击中要害率提高一级。 让Sneasel携带此道具并在夜间（游戏时间21:00–05:00）升级，可进化为Weavile；洗翠Sneasel须在白天（游戏时间05:00–21:00）升级，可进化为Sneasler。 仅在进化成功时消耗。"
+    "shortDesc": "携带时，使击中要害率提高一级。 让Sneasel携带此道具并在夜间（游戏时间21:00–05:00）升级，可进化为Weavile；洗翠Sneasel须在白天（游戏时间05:00–21:00）升级，可进化为Sneasler。 仅在进化成功时消耗。",
+    "flavorText": "尖锐的爪子。携带后，招式会变得容易击中要害。"
   },
   "razor-fang": {
     "name": "锐利之牙",
-    "shortDesc": "携带时，为适用的伤害招式增加10%的畏缩几率。 让Gligar携带此道具并在夜间（游戏时间21:00–05:00）升级，可进化为Gliscor。 仅在进化成功时消耗。"
+    "shortDesc": "携带时，为适用的伤害招式增加10%的畏缩几率。 让Gligar携带此道具并在夜间（游戏时间21:00–05:00）升级，可进化为Gliscor。 仅在进化成功时消耗。",
+    "flavorText": "尖锐的牙齿。携带后，在给予伤害时，有时会让对手畏缩。"
   },
   "reaper-cloth": {
     "name": "灵界之布",
-    "shortDesc": "使用后进化：Dusclops → Dusknoir。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Dusclops → Dusknoir。 仅在进化成功时消耗。",
+    "flavorText": "蕴含着惊人强大灵力的布。某种宝可梦很喜欢它。"
   },
   "sachet": {
     "name": "香袋",
-    "shortDesc": "使用后进化：Spritzee → Aromatisse。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Spritzee → Aromatisse。 仅在进化成功时消耗。",
+    "flavorText": "装着散发微浓香气的香料的袋子。某种宝可梦很喜欢它。"
   },
   "scroll-of-darkness": {
     "name": "Scroll of Darkness",
@@ -1009,43 +1040,53 @@
   },
   "shiny-stone": {
     "name": "光之石",
-    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。",
+    "flavorText": "能让某些特定宝可梦进化的神奇石头。像光芒一样耀眼。"
   },
   "sun-stone": {
     "name": "日之石",
-    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。",
+    "flavorText": "能让某些特定宝可梦进化的神奇石头。像太阳一样赤红。"
   },
   "sweet-apple": {
     "name": "甜甜苹果",
-    "shortDesc": "使用后进化：Applin → Appletun。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Applin → Appletun。 仅在进化成功时消耗。",
+    "flavorText": "这种神奇的苹果可以使特定的宝可梦进化。吃起来非常甜美。"
   },
   "syrupy-apple": {
     "name": "蜜汁苹果",
-    "shortDesc": "使用后进化：Applin → Dipplin。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Applin → Dipplin。 仅在进化成功时消耗。",
+    "flavorText": "一颗裹着厚厚一层甜蜜糖浆的苹果。"
   },
   "tart-apple": {
     "name": "酸酸苹果",
-    "shortDesc": "使用后进化：Applin → Flapple。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Applin → Flapple。 仅在进化成功时消耗。",
+    "flavorText": "这种神奇的苹果可以使特定的宝可梦进化。吃起来酸酸的。"
   },
   "thunder-stone": {
     "name": "雷之石",
-    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。",
+    "flavorText": "能让某些特定宝可梦进化的神奇石头。有着闪电般的花纹。"
   },
   "unremarkable-teacup": {
     "name": "凡作茶碗",
-    "shortDesc": "使用后进化：Poltchageist → Sinistcha。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Poltchageist → Sinistcha。 仅在进化成功时消耗。",
+    "flavorText": "一只朴素的旧茶碗，表面装饰十分简单。"
   },
   "up-grade": {
     "name": "升级数据",
-    "shortDesc": "使用后进化：Porygon → Porygon2。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Porygon → Porygon2。 仅在进化成功时消耗。",
+    "flavorText": "内部储存了各种信息的透明机器。西尔佛公司制造。"
   },
   "water-stone": {
     "name": "水之石",
-    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。",
+    "flavorText": "能让某些特定宝可梦进化的神奇石头。看上去是澄蓝色的。"
   },
   "whipped-dream": {
     "name": "泡沫奶油",
-    "shortDesc": "使用后进化：Swirlix → Slurpuff。 仅在进化成功时消耗。"
+    "shortDesc": "使用后进化：Swirlix → Slurpuff。 仅在进化成功时消耗。",
+    "flavorText": "松松软软起着泡的，稍微有点甜的奶油。某种宝可梦很喜欢它。"
   },
   "berry-sweet": {
     "name": "野莓糖饰",
