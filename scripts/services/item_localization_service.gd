@@ -41,6 +41,20 @@ func short_description(
 	return _localized_field(item_id, "shortDesc", fallback_description, _normalized_locale(locale))
 
 
+func shop_description(item: Dictionary, locale: String = "") -> String:
+	var item_id := _item_id(item)
+	var normalized_locale := _normalized_locale(locale)
+	var flavor := _localized_field(item_id, "flavorText", "", normalized_locale)
+	if not flavor.is_empty():
+		return flavor
+	# English API flavor text is usable as-is; other languages retain their
+	# existing localized summary when no flavor translation is available.
+	var source_flavor := str(item.get("flavorText", "")).strip_edges()
+	if normalized_locale == DEFAULT_LOCALE and not source_flavor.is_empty():
+		return source_flavor
+	return short_description(item_id, str(item.get("shortDesc", "")), normalized_locale)
+
+
 func localize_item(item: Dictionary, locale: String = "") -> Dictionary:
 	var localized := item.duplicate(true)
 	var item_id := _item_id(localized)
@@ -203,4 +217,7 @@ func _load_catalog(locale: String, path: String) -> Dictionary:
 			"name": name,
 			"shortDesc": short_description_value,
 		}
+		var flavor_text := str(source_entry.get("flavorText", "")).strip_edges()
+		if not flavor_text.is_empty():
+			catalog[item_id]["flavorText"] = flavor_text
 	return catalog

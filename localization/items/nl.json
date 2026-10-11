@@ -25,7 +25,8 @@
   },
   "strawberry-sweet": {
     "name": "Strawberry Sweet",
-    "shortDesc": "Gebruik op Milcery en kies een van de negen Alcremie-smaken. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik op Milcery en kies een van de negen Alcremie-smaken. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een aardbeivormig snoepje. Als Milcery het vasthoudt, draait hij vrolijk rond."
   },
   "gold-coin": {
     "name": "Gold Coin",
@@ -877,7 +878,8 @@
   },
   "auspicious-armor": {
     "name": "Gunstig pantser",
-    "shortDesc": "Gebruik om te evolueren: Charcadet → Armarouge. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Charcadet → Armarouge. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een oud gouden pantser, gewaardeerd om zijn fijne vakmanschap."
   },
   "black-augurite": {
     "name": "Black Augurite",
@@ -885,119 +887,148 @@
   },
   "chipped-pot": {
     "name": "Gechipte pot",
-    "shortDesc": "Gebruik om te evolueren: Sinistea Antique → Polteageist Antique. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Sinistea Antique → Polteageist Antique. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere theepot die een bepaalde Pokémonsoort kan laten evolueren. Ondanks het afgebroken stukje smaakt de thee eruit heerlijk."
   },
   "cracked-pot": {
     "name": "Gebarsten pot",
-    "shortDesc": "Gebruik om te evolueren: Sinistea → Polteageist. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Sinistea → Polteageist. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere theepot die een bepaalde Pokémonsoort kan laten evolueren. Ondanks de barst smaakt de thee eruit heerlijk."
   },
   "dawn-stone": {
     "name": "Dageraadsteen",
-    "shortDesc": "Gebruik op een mannelijke Kirlia voor Gallade of een vrouwelijke Snorunt voor Froslass. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik op een mannelijke Kirlia voor Gallade of een vrouwelijke Snorunt voor Froslass. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere steen die bepaalde Pokémon kan laten evolueren. Hij schittert als een glinsterend oog."
   },
   "deep-sea-scale": {
     "name": "Diepzeeschaal",
-    "shortDesc": "Verdubbelt Clamperls Sp. Def. als hij het vasthoudt. Gebruik om te evolueren: Clamperl → Gorebyss. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Verdubbelt Clamperls Sp. Def. als hij het vasthoudt. Gebruik om te evolueren: Clamperl → Gorebyss. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een schub voor Clamperl om vast te houden. Hij glanst zachtroze en verhoogt de speciale verdediging van de drager."
   },
   "deep-sea-tooth": {
     "name": "Diepzeetand",
-    "shortDesc": "Verdubbelt Clamperls Sp. Atk. als hij het vasthoudt. Gebruik om te evolueren: Clamperl → Huntail. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Verdubbelt Clamperls Sp. Atk. als hij het vasthoudt. Gebruik om te evolueren: Clamperl → Huntail. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een tand voor Clamperl om vast te houden. Hij glanst helder zilver en verhoogt de speciale aanval van de drager."
   },
   "dragon-scale": {
     "name": "Drakenschaal",
-    "shortDesc": "Gebruik om te evolueren: Seadra → Kingdra. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Seadra → Kingdra. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzonder harde, stugge schub. Gevangen Dragon-type Pokémon dragen dit item soms bij zich."
   },
   "dubious-disc": {
     "name": "Dubieuze schijf",
-    "shortDesc": "Gebruik om te evolueren: Porygon2 → Porygon-Z. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Porygon2 → Porygon-Z. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een doorzichtig apparaat vol twijfelachtige gegevens. De fabrikant is onbekend."
   },
   "dusk-stone": {
     "name": "Schemersteen",
-    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere steen die bepaalde Pokémon kan laten evolueren. Hij bevat pikdonkere schaduwen."
   },
   "electirizer": {
     "name": "Elektricisator",
-    "shortDesc": "Gebruik om te evolueren: Electabuzz → Electivire. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Electabuzz → Electivire. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een doos vol enorme elektrische energie. Een bepaalde Pokémon is er dol op."
   },
   "fire-stone": {
     "name": "Vuursteen",
-    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere steen die bepaalde Pokémon kan laten evolueren. Zijn kern is vurig oranje."
   },
   "galarica-cuff": {
     "name": "Galarica-manchet",
-    "shortDesc": "Gebruik om te evolueren: Slowpoke Galar → Slowbro Galar. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Slowpoke Galar → Slowbro Galar. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een armband van in elkaar gevlochten Galarica Twigs. Galarian Slowpoke wordt er erg blij van."
   },
   "galarica-wreath": {
     "name": "Galarica-krans",
-    "shortDesc": "Gebruik om te evolueren: Slowpoke Galar → Slowking Galar. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Slowpoke Galar → Slowking Galar. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een krans van in elkaar gevlochten Galarica Twigs. Galarian Slowpoke wordt erg blij als hij deze op zijn hoofd draagt."
   },
   "ice-stone": {
     "name": "IJssteen",
-    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere steen die bepaalde Pokémon kan laten evolueren. Hij heeft een duidelijk sneeuwvlokpatroon."
   },
   "kings-rock": {
     "name": "Koningsrots",
-    "shortDesc": "Voegt bij vasthouden 10% kans op terugdeinzen toe aan geschikte aanvallen. Gebruik om te evolueren: Poliwhirl → Politoed; Slowpoke → Slowking. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Voegt bij vasthouden 10% kans op terugdeinzen toe aan geschikte aanvallen. Gebruik om te evolueren: Poliwhirl → Politoed; Slowpoke → Slowking. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een item om door een Pokémon te laten vasthouden. Wanneer de drager schade toebrengt, kan de tegenstander terugdeinzen."
   },
   "leaf-stone": {
     "name": "Bladsteen",
-    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere steen die bepaalde Pokémon kan laten evolueren. Hij heeft een duidelijk bladpatroon."
   },
   "linking-cord": {
     "name": "Verbindingssnoer",
-    "shortDesc": "Gebruik op geschikte Pokémon die via ruilen evolueren. Karrablast en Shelmet moeten echt met elkaar worden geruild. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik op geschikte Pokémon die via ruilen evolueren. Karrablast en Shelmet moeten echt met elkaar worden geruild. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een kabel met stekkers aan beide uiteinden, bedoeld om apparaten met elkaar te verbinden."
   },
   "magmarizer": {
     "name": "Magmarizer",
-    "shortDesc": "Gebruik om te evolueren: Magmar → Magmortar. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Magmar → Magmortar. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een doos vol enorme magma-energie. Een bepaalde Pokémon is er dol op."
   },
   "malicious-armor": {
     "name": "Kwaadaardig pantser",
-    "shortDesc": "Gebruik om te evolueren: Charcadet → Ceruledge. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Charcadet → Ceruledge. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een oud donker pantser met een mysterieuze, onheilspellende uitstraling."
   },
   "masterpiece-teacup": {
     "name": "Meesterwerk Theekopje",
-    "shortDesc": "Gebruik om te evolueren: Poltchageist Artisan → Sinistcha Masterpiece. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Poltchageist Artisan → Sinistcha Masterpiece. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een zorgvuldig vervaardigd theekopje met een elegante afwerking."
   },
   "metal-alloy": {
     "name": "Metaallegering",
-    "shortDesc": "Gebruik om te evolueren: Duraludon → Archaludon. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Duraludon → Archaludon. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een stevige legering die is gemaakt door verschillende metalen te combineren."
   },
   "metal-coat": {
     "name": "Metalen jas",
-    "shortDesc": "Versterkt Steel-aanvallen als de Pokémon het vasthoudt. Gebruik om te evolueren: Onix → Steelix; Scyther → Scizor. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Versterkt Steel-aanvallen als de Pokémon het vasthoudt. Gebruik om te evolueren: Onix → Steelix; Scyther → Scizor. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een item om door een Pokémon te laten vasthouden. Deze bijzondere metalen laag kan de kracht van Steel-type aanvallen vergroten."
   },
   "moon-stone": {
     "name": "Maansteen",
-    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere steen die bepaalde Pokémon kan laten evolueren. Hij is zo zwart als de nachtelijke hemel."
   },
   "oval-stone": {
     "name": "Ovale steen",
-    "shortDesc": "Laat Happiny dit vasthouden en overdag (05:00–21:00 game time) levelen om te evolueren naar Chansey. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Laat Happiny dit vasthouden en overdag (05:00–21:00 game time) levelen om te evolueren naar Chansey. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere steen die bepaalde Pokémon kan laten evolueren. Hij is zo rond als een Pokémon-ei."
   },
   "prism-scale": {
     "name": "Prismaschaal",
-    "shortDesc": "Gebruik om te evolueren: Feebas → Milotic. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Feebas → Milotic. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een mysterieuze schub die een bepaalde Pokémon kan laten evolueren. Hij schittert in alle kleuren van de regenboog."
   },
   "protector": {
     "name": "Beschermer",
-    "shortDesc": "Gebruik om te evolueren: Rhydon → Rhyperior. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Rhydon → Rhyperior. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzonder beschermend voorwerp. Het is uitzonderlijk stijf en zwaar. Een bepaalde Pokémon is er dol op."
   },
   "razor-claw": {
     "name": "Scheermesklauw",
-    "shortDesc": "Verhoogt bij vasthouden de kans op kritieke treffers met één niveau. Laat Sneasel dit vasthouden en ’s nachts (21:00–05:00 game time) levelen voor Weavile; Hisui Sneasel moet overdag (05:00–21:00 game time) levelen voor Sneasler. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Verhoogt bij vasthouden de kans op kritieke treffers met één niveau. Laat Sneasel dit vasthouden en ’s nachts (21:00–05:00 game time) levelen voor Weavile; Hisui Sneasel moet overdag (05:00–21:00 game time) levelen voor Sneasler. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een item om door een Pokémon te laten vasthouden. Deze scherp gebogen klauw verhoogt de kans op een kritieke treffer."
   },
   "razor-fang": {
     "name": "Scheertand",
-    "shortDesc": "Voegt bij vasthouden 10% kans op terugdeinzen toe aan geschikte aanvallen. Laat Gligar dit vasthouden en ’s nachts (21:00–05:00 game time) levelen om te evolueren naar Gliscor. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Voegt bij vasthouden 10% kans op terugdeinzen toe aan geschikte aanvallen. Laat Gligar dit vasthouden en ’s nachts (21:00–05:00 game time) levelen om te evolueren naar Gliscor. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een item om door een Pokémon te laten vasthouden. Wanneer de drager schade toebrengt, kan de tegenstander terugdeinzen."
   },
   "reaper-cloth": {
     "name": "Maaimachinedoek",
-    "shortDesc": "Gebruik om te evolueren: Dusclops → Dusknoir. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Dusclops → Dusknoir. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een doek doordrenkt met angstaanjagend sterke spirituele energie. Een bepaalde Pokémon is er dol op."
   },
   "sachet": {
     "name": "Zakje",
-    "shortDesc": "Gebruik om te evolueren: Spritzee → Aromatisse. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Spritzee → Aromatisse. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een zakje gevuld met sterk geurende parfums. Toch is een bepaalde Pokémon er dol op."
   },
   "scroll-of-darkness": {
     "name": "Scroll of Darkness",
@@ -1009,43 +1040,53 @@
   },
   "shiny-stone": {
     "name": "Glanzende steen",
-    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere steen die bepaalde Pokémon kan laten evolueren. Hij straalt een oogverblindend licht uit."
   },
   "sun-stone": {
     "name": "Zonnesteen",
-    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere steen die bepaalde Pokémon kan laten evolueren. Hij gloeit zo rood als de avondzon."
   },
   "sweet-apple": {
     "name": "Zoete appel",
-    "shortDesc": "Gebruik om te evolueren: Applin → Appletun. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Applin → Appletun. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere appel die een bepaalde Pokémon kan laten evolueren. Hij is uitzonderlijk zoet."
   },
   "syrupy-apple": {
     "name": "Stroperige appel",
-    "shortDesc": "Gebruik om te evolueren: Applin → Dipplin. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Applin → Dipplin. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een appel bedekt met een dikke laag zoete siroop."
   },
   "tart-apple": {
     "name": "Taartappel",
-    "shortDesc": "Gebruik om te evolueren: Applin → Flapple. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Applin → Flapple. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere appel die een bepaalde Pokémon kan laten evolueren. Hij is uitzonderlijk zuur."
   },
   "thunder-stone": {
     "name": "Dondersteen",
-    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere steen die bepaalde Pokémon kan laten evolueren. Hij heeft een duidelijk bliksempatroon."
   },
   "unremarkable-teacup": {
     "name": "Onopvallend theekopje",
-    "shortDesc": "Gebruik om te evolueren: Poltchageist → Sinistcha. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Poltchageist → Sinistcha. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een eenvoudig, veelgebruikt theekopje met een sobere afwerking."
   },
   "up-grade": {
     "name": "Upgraden",
-    "shortDesc": "Gebruik om te evolueren: Porygon → Porygon2. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Porygon → Porygon2. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een doorzichtig apparaat dat op de een of andere manier vol gegevens zit. Het is gemaakt door Silph Co."
   },
   "water-stone": {
     "name": "Watersteen",
-    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een bijzondere steen die bepaalde Pokémon kan laten evolueren. Hij heeft de blauwe kleur van helder water."
   },
   "whipped-dream": {
     "name": "Slagroom",
-    "shortDesc": "Gebruik om te evolueren: Swirlix → Slurpuff. Wordt alleen verbruikt bij een geslaagde evolutie."
+    "shortDesc": "Gebruik om te evolueren: Swirlix → Slurpuff. Wordt alleen verbruikt bij een geslaagde evolutie.",
+    "flavorText": "Een zachte, zoete lekkernij van luchtige, opgeklopte room. Een bepaalde Pokémon is er dol op."
   },
   "berry-sweet": {
     "name": "Bes Zoet",

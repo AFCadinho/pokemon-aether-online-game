@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Organize the Guild Base lift into a compact searchable floor grid with ground-floor and personal-room shortcuts and a fixed destination footer.
+- Show localized general item descriptions in NPC shop details, rows and tooltips; retain evolution instructions in the Bag and Item Dex.
 
 - Added Guild Base reception and lift attendants, stable automatic player-room assignments, searchable room addresses, and reusable personal-room interiors with Guild-private travel.
 

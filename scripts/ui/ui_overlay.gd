@@ -23798,6 +23798,7 @@ func _normalize_market_items(items_value: Variant) -> Array[Dictionary]:
 			"name": str(item.get("name", _format_item_name_from_id(item_id))),
 			"category": str(item.get("category", "")),
 			"shortDesc": str(item.get("shortDesc", "")),
+			"flavorText": str(item.get("flavorText", "")),
 			"price": int(purchase_cost.get("amount", 0)),
 			"basePrice": int(purchase_cost.get("baseAmount", purchase_cost.get("amount", 0))),
 			"currency": str(purchase_cost.get("currency", "money")),
@@ -23944,6 +23945,7 @@ func _market_sell_items(catalog_items: Array[Dictionary], inventory_items: Array
 				"shortDesc",
 				catalog_item.get("shortDesc", "")
 			)),
+			"flavorText": str(inventory_item.get("flavorText", catalog_item.get("flavorText", ""))),
 			"sellPrice": sell_price,
 		})
 		sell_item["price"] = sell_price
@@ -24014,7 +24016,7 @@ func _filtered_market_items() -> Array[Dictionary]:
 			str(item.get("name", "")),
 			str(item.get("id", "")),
 			str(item.get("category", "")),
-			str(item.get("shortDesc", "")),
+			_market_item_description(item),
 		]).to_lower()
 		if query.is_empty() or haystack.contains(query):
 			filtered.append(item)
@@ -24069,7 +24071,7 @@ func _create_market_item_button(item: Dictionary) -> Control:
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE if disabled else Control.MOUSE_FILTER_STOP
 	row.mouse_default_cursor_shape = Control.CURSOR_ARROW if disabled else Control.CURSOR_POINTING_HAND
-	row.tooltip_text = str(item.get("shortDesc", ""))
+	row.tooltip_text = _market_item_description(item)
 	if not disabled:
 		row.gui_input.connect(_on_market_item_row_gui_input.bind(item.duplicate(true)))
 		row.mouse_entered.connect(_on_market_item_row_hovered.bind(row, selected, true, false))
@@ -24206,13 +24208,17 @@ func _apply_market_item_row_style(row: PanelContainer, selected: bool, hovered: 
 		style.shadow_offset = Vector2.ZERO
 	row.add_theme_stylebox_override("panel", style)
 
+func _market_item_description(item: Dictionary) -> String:
+	return ItemLocalization.shop_description(item).strip_edges()
+
+
 func _market_item_subtitle(item: Dictionary) -> String:
 	if market_mode == "player_sells":
 		return LocalizationManager.text("ui.market.in_bag", {
 			"category": _market_category_label(str(item.get("category", ""))),
 			"quantity": int(item.get("quantity", 0)),
 		})
-	var description := str(item.get("shortDesc", "")).strip_edges()
+	var description := _market_item_description(item)
 	if description != "":
 		return _ellipsize_text(description, 58)
 	var category := str(item.get("category", "")).strip_edges()
@@ -24343,7 +24349,7 @@ func _refresh_market_detail() -> void:
 	var item_id := str(market_selected_item.get("id", ""))
 	var item_name := str(market_selected_item.get("name", _item_name_from_id(item_id)))
 	var category := str(market_selected_item.get("category", ""))
-	var description := str(market_selected_item.get("shortDesc", "")).strip_edges()
+	var description := _market_item_description(market_selected_item)
 	var quantity: int = max(int(market_quantity_spinbox.value), 1)
 	var unit_price: int = max(int(market_selected_item.get("price", 0)), 0)
 	var currency := str(market_selected_item.get("currency", "money"))

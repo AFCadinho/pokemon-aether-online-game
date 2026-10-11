@@ -25,7 +25,8 @@
   },
   "strawberry-sweet": {
     "name": "Strawberry Sweet",
-    "shortDesc": "Use em Milcery e escolha um dos nove sabores de Alcremie. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use em Milcery e escolha um dos nove sabores de Alcremie. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um doce em forma de morango. Quando Milcery o segura, ele gira alegremente."
   },
   "gold-coin": {
     "name": "Gold Coin",
@@ -877,7 +878,8 @@
   },
   "auspicious-armor": {
     "name": "Armadura Auspiciosa",
-    "shortDesc": "Use para evoluir: Charcadet → Armarouge. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Charcadet → Armarouge. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma armadura dourada antiga, valorizada pelo seu acabamento refinado."
   },
   "black-augurite": {
     "name": "Black Augurite",
@@ -885,119 +887,148 @@
   },
   "chipped-pot": {
     "name": "Pote Lascado",
-    "shortDesc": "Use para evoluir: Sinistea Antique → Polteageist Antique. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Sinistea Antique → Polteageist Antique. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um bule peculiar que pode fazer uma espécie de Pokémon evoluir. Apesar da lasca, o chá servido nele é delicioso."
   },
   "cracked-pot": {
     "name": "Pote quebrado",
-    "shortDesc": "Use para evoluir: Sinistea → Polteageist. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Sinistea → Polteageist. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um bule peculiar que pode fazer uma espécie de Pokémon evoluir. Apesar da rachadura, o chá servido nele é delicioso."
   },
   "dawn-stone": {
     "name": "Pedra do Amanhecer",
-    "shortDesc": "Use em Kirlia macho para obter Gallade ou Snorunt fêmea para obter Froslass. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use em Kirlia macho para obter Gallade ou Snorunt fêmea para obter Froslass. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma pedra peculiar que pode fazer certos Pokémon evoluir. Ela brilha como um olho cintilante."
   },
   "deep-sea-scale": {
     "name": "Escama do Mar Profundo",
-    "shortDesc": "Quando segurado, dobra a Defesa Especial de Clamperl. Use para evoluir: Clamperl → Gorebyss. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Quando segurado, dobra a Defesa Especial de Clamperl. Use para evoluir: Clamperl → Gorebyss. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma escama para Clamperl segurar. Ela tem um brilho rosa suave e aumenta a Defesa Especial de quem a segura."
   },
   "deep-sea-tooth": {
     "name": "Dente do Mar Profundo",
-    "shortDesc": "Quando segurado, dobra o Ataque Especial de Clamperl. Use para evoluir: Clamperl → Huntail. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Quando segurado, dobra o Ataque Especial de Clamperl. Use para evoluir: Clamperl → Huntail. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma presa para Clamperl segurar. Ela tem um brilho prateado intenso e aumenta o Ataque Especial de quem a segura."
   },
   "dragon-scale": {
     "name": "Escama de Dragão",
-    "shortDesc": "Use para evoluir: Seadra → Kingdra. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Seadra → Kingdra. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma escama muito dura e rígida. Pokémon do tipo Dragão podem estar segurando este item quando são capturados."
   },
   "dubious-disc": {
     "name": "Disco Duvidoso",
-    "shortDesc": "Use para evoluir: Porygon2 → Porygon-Z. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Porygon2 → Porygon-Z. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um dispositivo transparente repleto de dados duvidosos. Seu fabricante é desconhecido."
   },
   "dusk-stone": {
     "name": "Pedra do Crepúsculo",
-    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma pedra peculiar que pode fazer certos Pokémon evoluir. Ela contém sombras profundamente escuras."
   },
   "electirizer": {
     "name": "Eletrizador",
-    "shortDesc": "Use para evoluir: Electabuzz → Electivire. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Electabuzz → Electivire. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma caixa que contém uma enorme quantidade de energia elétrica. Um certo Pokémon adora este item."
   },
   "fire-stone": {
     "name": "Pedra de Fogo",
-    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma pedra peculiar que pode fazer certos Pokémon evoluir. Seu núcleo tem uma cor laranja flamejante."
   },
   "galarica-cuff": {
     "name": "Manguito Galarica",
-    "shortDesc": "Use para evoluir: Slowpoke Galar → Slowbro Galar. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Slowpoke Galar → Slowbro Galar. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma pulseira feita de Galarica Twigs entrelaçados. Galarian Slowpoke fica muito feliz ao recebê-la."
   },
   "galarica-wreath": {
     "name": "Coroa Galarica",
-    "shortDesc": "Use para evoluir: Slowpoke Galar → Slowking Galar. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Slowpoke Galar → Slowking Galar. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma coroa feita de Galarica Twigs entrelaçados. Galarian Slowpoke fica muito feliz ao usá-la na cabeça."
   },
   "ice-stone": {
     "name": "Pedra de Gelo",
-    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma pedra peculiar que pode fazer certos Pokémon evoluir. Ela tem um desenho inconfundível de floco de neve."
   },
   "kings-rock": {
     "name": "Reis Rock",
-    "shortDesc": "Quando segurado, acrescenta 10% de chance de fazer o alvo hesitar com ataques compatíveis. Use para evoluir: Poliwhirl → Politoed; Slowpoke → Slowking. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Quando segurado, acrescenta 10% de chance de fazer o alvo hesitar com ataques compatíveis. Use para evoluir: Poliwhirl → Politoed; Slowpoke → Slowking. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um item para um Pokémon segurar. Quando quem o segura causa dano, o alvo também pode hesitar."
   },
   "leaf-stone": {
     "name": "Pedra Folha",
-    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma pedra peculiar que pode fazer certos Pokémon evoluir. Ela tem um desenho inconfundível de folha."
   },
   "linking-cord": {
     "name": "Cabo de ligação",
-    "shortDesc": "Use em Pokémon compatíveis que evoluem por troca. Karrablast e Shelmet exigem uma troca real entre si. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use em Pokémon compatíveis que evoluem por troca. Karrablast e Shelmet exigem uma troca real entre si. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um cabo com conectores nas duas pontas, usado para conectar aparelhos."
   },
   "magmarizer": {
     "name": "Magmarizador",
-    "shortDesc": "Use para evoluir: Magmar → Magmortar. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Magmar → Magmortar. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma caixa que contém uma enorme quantidade de energia magmática. Um certo Pokémon adora este item."
   },
   "malicious-armor": {
     "name": "Armadura Maliciosa",
-    "shortDesc": "Use para evoluir: Charcadet → Ceruledge. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Charcadet → Ceruledge. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma armadura escura antiga com uma presença misteriosa e inquietante."
   },
   "masterpiece-teacup": {
     "name": "Xícara de chá de obra-prima",
-    "shortDesc": "Use para evoluir: Poltchageist Artisan → Sinistcha Masterpiece. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Poltchageist Artisan → Sinistcha Masterpiece. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma xícara de chá cuidadosamente trabalhada, com um acabamento elegante."
   },
   "metal-alloy": {
     "name": "Liga metálica",
-    "shortDesc": "Use para evoluir: Duraludon → Archaludon. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Duraludon → Archaludon. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma liga resistente feita pela combinação de diferentes metais."
   },
   "metal-coat": {
     "name": "Revestimento metálico",
-    "shortDesc": "Quando segurado, fortalece golpes do tipo Aço. Use para evoluir: Onix → Steelix; Scyther → Scizor. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Quando segurado, fortalece golpes do tipo Aço. Use para evoluir: Onix → Steelix; Scyther → Scizor. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um item para um Pokémon segurar. Esta película metálica especial pode aumentar a força dos movimentos do tipo Aço."
   },
   "moon-stone": {
     "name": "Pedra da Lua",
-    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma pedra peculiar que pode fazer certos Pokémon evoluir. Ela é tão negra quanto o céu noturno."
   },
   "oval-stone": {
     "name": "Pedra Oval",
-    "shortDesc": "Faça Happiny segurá-lo e subir de nível durante o dia (05:00–21:00 no horário do jogo) para evoluir para Chansey. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Faça Happiny segurá-lo e subir de nível durante o dia (05:00–21:00 no horário do jogo) para evoluir para Chansey. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma pedra peculiar que pode fazer certos Pokémon evoluir. Ela é tão redonda quanto um Ovo de Pokémon."
   },
   "prism-scale": {
     "name": "Escala de Prisma",
-    "shortDesc": "Use para evoluir: Feebas → Milotic. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Feebas → Milotic. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma escama misteriosa que faz um certo Pokémon evoluir. Ela brilha com as cores do arco-íris."
   },
   "protector": {
     "name": "Protetor",
-    "shortDesc": "Use para evoluir: Rhydon → Rhyperior. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Rhydon → Rhyperior. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um objeto protetor de algum tipo. É extremamente rígido e pesado. Um certo Pokémon adora este item."
   },
   "razor-claw": {
     "name": "Garra Navalha",
-    "shortDesc": "Quando segurado, aumenta a taxa de acertos críticos em um estágio. Faça Sneasel segurá-lo e subir de nível à noite (21:00–05:00 no horário do jogo) para obter Weavile; Sneasel de Hisui deve subir de nível durante o dia (05:00–21:00) para obter Sneasler. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Quando segurado, aumenta a taxa de acertos críticos em um estágio. Faça Sneasel segurá-lo e subir de nível à noite (21:00–05:00 no horário do jogo) para obter Weavile; Sneasel de Hisui deve subir de nível durante o dia (05:00–21:00) para obter Sneasler. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um item para um Pokémon segurar. Esta garra afiada e curva aumenta a chance de acertos críticos de quem a segura."
   },
   "razor-fang": {
     "name": "Presa Navalha",
-    "shortDesc": "Quando segurado, acrescenta 10% de chance de fazer o alvo hesitar com ataques compatíveis. Faça Gligar segurá-lo e subir de nível à noite (21:00–05:00 no horário do jogo) para evoluir para Gliscor. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Quando segurado, acrescenta 10% de chance de fazer o alvo hesitar com ataques compatíveis. Faça Gligar segurá-lo e subir de nível à noite (21:00–05:00 no horário do jogo) para evoluir para Gliscor. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um item para um Pokémon segurar. Quando quem o segura causa dano, o alvo também pode hesitar."
   },
   "reaper-cloth": {
     "name": "Pano Ceifador",
-    "shortDesc": "Use para evoluir: Dusclops → Dusknoir. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Dusclops → Dusknoir. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um tecido imbuído de uma energia espiritual assustadoramente forte. Um certo Pokémon adora este item."
   },
   "sachet": {
     "name": "Sachê",
-    "shortDesc": "Use para evoluir: Spritzee → Aromatisse. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Spritzee → Aromatisse. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um sachê cheio de perfumes com um aroma um pouco intenso demais. Ainda assim, um certo Pokémon adora este item."
   },
   "scroll-of-darkness": {
     "name": "Scroll of Darkness",
@@ -1009,43 +1040,53 @@
   },
   "shiny-stone": {
     "name": "Pedra Brilhante",
-    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma pedra peculiar que pode fazer certos Pokémon evoluir. Ela emite uma luz deslumbrante."
   },
   "sun-stone": {
     "name": "Pedra do Sol",
-    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma pedra peculiar que pode fazer certos Pokémon evoluir. Ela tem um brilho vermelho como o sol ao entardecer."
   },
   "sweet-apple": {
     "name": "Maçã doce",
-    "shortDesc": "Use para evoluir: Applin → Appletun. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Applin → Appletun. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma maçã peculiar que pode fazer uma espécie de Pokémon evoluir. Ela é excepcionalmente doce."
   },
   "syrupy-apple": {
     "name": "Maçã Xaroposa",
-    "shortDesc": "Use para evoluir: Applin → Dipplin. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Applin → Dipplin. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma maçã coberta por uma camada espessa de calda doce."
   },
   "tart-apple": {
     "name": "Torta de Maçã",
-    "shortDesc": "Use para evoluir: Applin → Flapple. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Applin → Flapple. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma maçã peculiar que pode fazer uma espécie de Pokémon evoluir. Ela é excepcionalmente azeda."
   },
   "thunder-stone": {
     "name": "Pedra do Trovão",
-    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma pedra peculiar que pode fazer certos Pokémon evoluir. Ela tem um desenho nítido de raio."
   },
   "unremarkable-teacup": {
     "name": "Xícara de chá normal",
-    "shortDesc": "Use para evoluir: Poltchageist → Sinistcha. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Poltchageist → Sinistcha. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma xícara de chá simples e bastante usada, com um acabamento discreto."
   },
   "up-grade": {
     "name": "Atualização",
-    "shortDesc": "Use para evoluir: Porygon → Porygon2. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Porygon → Porygon2. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Um dispositivo transparente preenchido de alguma forma com todo tipo de dados. Foi produzido pela Silph Co."
   },
   "water-stone": {
     "name": "Pedra da Água",
-    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use em um Pokémon compatível para fazê-lo evoluir. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma pedra peculiar que pode fazer certos Pokémon evoluir. Ela tem o azul de uma piscina de água cristalina."
   },
   "whipped-dream": {
     "name": "Sonho chicoteado",
-    "shortDesc": "Use para evoluir: Swirlix → Slurpuff. Consumido apenas quando a evolução é bem-sucedida."
+    "shortDesc": "Use para evoluir: Swirlix → Slurpuff. Consumido apenas quando a evolução é bem-sucedida.",
+    "flavorText": "Uma guloseima macia e doce feita de creme leve, fofo e batido. Um certo Pokémon adora este item."
   },
   "berry-sweet": {
     "name": "Doce de frutas vermelhas",
