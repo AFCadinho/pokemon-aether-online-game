@@ -18,6 +18,13 @@ var sprite_materials: Array[ShaderMaterial] = []
 var sprite_keys: Array[String] = []
 var quad := QuadMesh.new()
 var beam_material: ShaderMaterial
+var water_emission_end := 0.0
+var water_stream_arc_height := 0.0
+
+func start(move: String, timing: Dictionary, options: Dictionary, native_clock: Callable, positions: Callable, guard: Callable) -> void:
+	water_emission_end = float(timing.get("emission_end_frame", float(timing.impact_frame) + float(timing.frames) * 0.18)) / 60.0
+	water_stream_arc_height = float(timing.get("water_stream_arc_height", 0.0))
+	super.start(move, timing, options, native_clock, positions, guard)
 
 func _init() -> void:
 	# Arena camera updates at priority 10; billboards must sample its final pose.
@@ -87,17 +94,17 @@ func _draw_ember(from: Vector3, to: Vector3, right: Vector3, facing: Basis) -> v
 	var travel := (elapsed - launch) / maxf(impact - launch, 0.01)
 	var after := (elapsed - impact) / maxf(duration * 0.3, 0.01)
 	if travel >= 0 and travel < 0.7:
-		_source_sprite(from, 0.75, "ember_muzzle", travel / 0.7, 1.0 - travel / 0.7, facing)
+		_source_sprite(from, 0.75 * emission_scale, "ember_muzzle", travel / 0.7, 1.0 - travel / 0.7, facing)
 	if travel >= 0 and after < 0.15:
 		for i in 3:
 			var phase := clampf(travel - i * 0.06, 0, 1)
 			var point := from.lerp(to, phase) + Vector3.UP * sin(phase * PI) * 0.25
 			point += right * (i - 1) * sin(phase * PI) * 0.11
-			_source_sprite(point, 0.52, "ember_core", 0, 0.9, facing, elapsed * 3 + i)
+			_source_sprite(point, 0.52 * emission_scale, "ember_core", 0, 0.9, facing, elapsed * 3 + i)
 			for tail in 5:
 				var p := clampf(phase - tail * 0.032, 0, 1)
 				var behind := from.lerp(to, p) + Vector3.UP * sin(p * PI) * 0.25
-				_source_sprite(behind, 0.4, "ember_tail", float(tail) / 5.0, 0.7, facing, float(i + tail))
+				_source_sprite(behind, 0.4 * emission_scale, "ember_tail", float(tail) / 5.0, 0.7, facing, float(i + tail))
 	if hit and after >= 0 and after < 1:
 		_source_sprite(to, 1.15, "ember_hit", after, 1.0 - after * 0.5, facing)
 		for i in 7:
@@ -109,14 +116,13 @@ func _draw_watergun(_from: Vector3, to: Vector3, facing: Basis) -> void:
 	var travel := (elapsed - launch) / maxf(impact - launch, 0.01)
 	var after := (elapsed - impact) / maxf(duration * 0.3, 0.01)
 	for origin: Vector3 in emission_sources:
-		if travel >= 0 and after < 0.6:
-			var fade := 1.0 - clampf(after / 0.6, 0, 1)
-			var tip := origin.lerp(to, clampf(travel, 0, 1))
-			_water_beam(origin, tip, fade)
-			_source_sprite(origin, 0.48, "water_muzzle", fmod(elapsed * 3, 1.0), fade * 0.6, facing)
+		if travel >= 0 and elapsed < water_emission_end:
+			var fade := 1.0 - clampf((elapsed - impact) / maxf(water_emission_end - impact, 0.01), 0, 1)
+			_water_stream(origin, to, clampf(travel, 0, 1), fade)
+			_source_sprite(origin, 0.48 * emission_scale, "water_muzzle", fmod(elapsed * 3, 1.0), fade * 0.6, facing)
 			for i in 5:
 				var phase := clampf(travel - i * 0.045, 0, 1)
-				_source_sprite(origin.lerp(to, phase), 0.32, "water_drop", float(i) / 8.0, 0.75 * fade, facing, float(i))
+				_source_sprite(_water_stream_point(origin, to, phase), 0.32 * emission_scale, "water_drop", float(i) / 8.0, 0.75 * fade, facing, float(i))
 	if hit and after >= 0 and after < 1:
 		_source_sprite(to, 1.35, "water_splash", after, 0.9 * (1.0 - after * 0.3), facing)
 		for i in 9:
@@ -124,6 +130,19 @@ func _draw_watergun(_from: Vector3, to: Vector3, facing: Basis) -> void:
 			var offset := Vector3(cos(angle), sin(angle), sin(angle * 2)) * after * 0.8
 			offset.y -= after * after * 0.5
 			_source_sprite(to + offset, 0.35, "water_drop", after, 0.7 * (1.0 - after), facing, angle)
+
+func _water_stream_point(from: Vector3, to: Vector3, phase: float) -> Vector3:
+	return from.lerp(to, phase) + Vector3.UP * (4.0 * phase * (1.0 - phase) * water_stream_arc_height)
+
+func _water_stream(from: Vector3, to: Vector3, phase: float, opacity: float) -> void:
+	if water_stream_arc_height <= 0:
+		_water_beam(from, from.lerp(to, phase), opacity)
+		return
+	var previous := from
+	for segment in 24:
+		var point := _water_stream_point(from, to, phase * float(segment + 1) / 24.0)
+		_water_beam(previous, point, opacity)
+		previous = point
 
 func _water_beam(from: Vector3, to: Vector3, opacity: float) -> void:
 	if beam_material == null:
@@ -145,4 +164,4 @@ void fragment() {
 		beam_material.set_shader_parameter("flow_mask", NOISE)
 	beam_material.set_shader_parameter("seconds", elapsed)
 	beam_material.set_shader_parameter("opacity", opacity)
-	_line(from, to, 0.09 * opacity, beam_material)
+	_line(from, to, 0.09 * emission_scale * opacity, beam_material)

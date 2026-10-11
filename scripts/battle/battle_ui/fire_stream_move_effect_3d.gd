@@ -62,13 +62,13 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 			var side := direction.cross(Vector3.UP if absf(direction.y)<0.95 else Vector3.RIGHT).normalized()
 			var vertical := side.cross(direction).normalized()
 			_fire_core(origin,origin.lerp(to,clampf(travel,0,1)),fade)
-			_fire_puff(origin,0.6,"flame_muzzle",fmod(elapsed*2.5,0.75),fade,facing)
+			_fire_puff(origin,0.6*emission_scale,"flame_muzzle",fmod(elapsed*2.5,0.75),fade,facing)
 			for i in 18:
 				var p := (float(i)+fmod(elapsed*8.0,1.0))/18.0
 				if p > minf(travel,1.0): continue
 				var point := origin.lerp(to,p)
-				point += (side*sin(i*2.4+elapsed*9.0)+vertical*cos(i*1.7+elapsed*7.0))*p*0.14
-				_fire_puff(point,0.34+p*0.65,"flame_stream",fmod(elapsed*1.8+i*0.13,1.0),fade*0.68,facing, sin(i*2.3)*0.6)
+				point += (side*sin(i*2.4+elapsed*9.0)+vertical*cos(i*1.7+elapsed*7.0))*p*0.14*emission_scale
+				_fire_puff(point,(0.34+p*0.65)*emission_scale,"flame_stream",fmod(elapsed*1.8+i*0.13,1.0),fade*0.68,facing, sin(i*2.3)*0.6)
 	if hit and after >= 0 and after < 1:
 		_fire_puff(to,1.2+after*0.5,"flame_hit",after,1.0-after,facing)
 		for i in 5:
@@ -105,4 +105,4 @@ void fragment() {
 	stream_material.set_shader_parameter("opacity",fade)
 	var y := delta.normalized()
 	var x := y.cross(Vector3.UP if absf(y.y)<0.95 else Vector3.RIGHT).normalized()
-	_piece(flame_cone,stream_material,(from+to)*0.5,Vector3(0.22,delta.length(),0.22),Basis(x,y,x.cross(y)),true)
+	_piece(flame_cone,stream_material,(from+to)*0.5,Vector3(0.22*emission_scale,delta.length(),0.22*emission_scale),Basis(x,y,x.cross(y)),true)
