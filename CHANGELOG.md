@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep Nugget Bridge Gary gone after any starter-variant victory; retry failed progress or starter lookups without starting an incorrect rival battle.
+
 - Add a private Guild Base elevator cabin, reachable from the lift waiting room with a return door.
 
 - Keep movement and NPC interaction blocked while a shop or other modal window is open, including the handoff from NPC dialogue; release only the window’s own input lock on close.
