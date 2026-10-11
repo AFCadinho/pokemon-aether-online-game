@@ -1,0 +1,197 @@
+extends SceneTree
+## Offline render of the real stage action selection, anchors and move effects.
+## Uses approved local models; does not connect to a battle server.
+const Stage = preload("res://scripts/battle/battle_ui/experimental_battle_3d.gd")
+const Catalog = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
+const Pose = preload("res://tools/sprite_factory/attack_attachment_pose.gd")
+var catalog_path := ""
+var output := "res://.tmp/attack-attachments/move-previews"
+var species := "snivy"
+var target_species := ""
+var move := "Vine Whip"
+var battle_kind := "trainer"
+var camera_yaw := 0.0
+var camera_scale := 1.0
+var camera_frame := "source"
+var hide_effects := false
+var neutral_reflections := false
+var requested_fractions: Array[float] = []
+var viewport: SubViewport
+var world: Node3D
+var camera: Camera3D
+var stage: Control
+
+func _init() -> void:
+	var args := OS.get_cmdline_user_args()
+	for i in args.size():
+		if args[i] in ["--catalog", "--output", "--species", "--target-species", "--move", "--battle-kind", "--camera-yaw", "--camera-scale", "--camera-frame", "--fractions"] and i + 1 >= args.size():
+			printerr("Missing argument: ", args[i]); quit(1); return
+		if args[i] == "--hide-effects": hide_effects = true
+		if args[i] == "--neutral-reflections": neutral_reflections = true
+		if args[i] == "--catalog": catalog_path = args[i+1]
+		if args[i] == "--output": output = args[i+1]
+		if args[i] == "--species": species = args[i+1]
+		if args[i] == "--target-species": target_species = args[i+1]
+		if args[i] == "--move": move = args[i+1]
+		if args[i] == "--battle-kind": battle_kind = args[i+1]
+		if args[i] == "--camera-yaw": camera_yaw = deg_to_rad(float(args[i+1]))
+		if args[i] == "--camera-scale": camera_scale = float(args[i+1])
+		if args[i] == "--camera-frame": camera_frame = args[i+1]
+		if args[i] == "--fractions":
+			for value: String in args[i+1].split(",", true):
+				if not value.is_valid_float() or not is_finite(float(value)) or float(value) < 0 or float(value) > 1:
+					printerr("Invalid pose fraction: ", value); quit(1); return
+				requested_fractions.append(float(value))
+			if requested_fractions.size() > 8:
+				printerr("At most eight pose fractions are supported"); quit(1); return
+	if camera_frame not in ["source", "both"]:
+		printerr("Invalid camera frame"); quit(1); return
+	if battle_kind not in ["wild", "trainer"]:
+		printerr("Invalid battle kind"); quit(1); return
+	if not is_finite(camera_scale) or camera_scale <= 0 or not is_finite(camera_yaw):
+		printerr("Invalid camera settings"); quit(1); return
+	_run.call_deferred()
+
+func _run() -> void:
+	var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(catalog_path))
+	var entries: Array = raw.entries if raw is Dictionary else raw
+	var model := {}
+	for entry: Dictionary in entries:
+		if Catalog.entry_key(entry) == species: model = entry; break
+	assert(not model.is_empty(), "Requested local model is missing")
+	assert(FileAccess.get_sha256(model.runtime_path) == model.runtime_sha256)
+	var profile := Catalog.resolve(species, model.runtime_sha256)
+	assert(not profile.is_empty(), "Requested model revision is not approved")
+	if target_species.is_empty(): target_species = species
+	var target_model := model
+	var target_profile := profile
+	if target_species != species:
+		target_model = {}
+		for entry: Dictionary in entries:
+			if Catalog.entry_key(entry) == target_species: target_model = entry; break
+		assert(not target_model.is_empty(), "Requested target model is missing")
+		assert(FileAccess.get_sha256(target_model.runtime_path) == target_model.runtime_sha256)
+		target_profile = Catalog.resolve(target_species, target_model.runtime_sha256)
+		assert(not target_profile.is_empty(), "Requested target revision is not approved")
+	viewport = SubViewport.new()
+	viewport.size = Vector2i(720,540)
+	viewport.own_world_3d = true
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	root.add_child(viewport)
+	world = Node3D.new(); viewport.add_child(world)
+	var environment := WorldEnvironment.new()
+	environment.environment = Environment.new()
+	environment.environment.background_mode = Environment.BG_COLOR
+	environment.environment.background_color = Color("263449")
+	environment.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	environment.environment.ambient_light_color = Color.WHITE
+	environment.environment.ambient_light_energy = .7
+	if neutral_reflections:
+		# Metallic surfaces need reflected light to expose their silhouette detail.
+		# This is review lighting; the model's authored materials remain intact.
+		var sky_material := ProceduralSkyMaterial.new()
+		sky_material.sky_top_color = Color(.6,.6,.6)
+		sky_material.sky_horizon_color = Color(.8,.8,.8)
+		sky_material.ground_horizon_color = Color(.8,.8,.8)
+		sky_material.ground_bottom_color = Color(.25,.25,.25)
+		environment.environment.sky = Sky.new()
+		environment.environment.sky.sky_material = sky_material
+		environment.environment.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
+	world.add_child(environment)
+	var light := DirectionalLight3D.new(); world.add_child(light)
+	light.rotation_degrees = Vector3(-30,-30,0)
+	camera = Camera3D.new(); world.add_child(camera); camera.fov = 40
+	stage = Stage.new(); root.add_child(stage); stage.set_process(false)
+	stage.set_battle_context(&"grass", battle_kind)
+	stage.active = true; stage.world = world; stage.camera = camera
+	stage.entries[species] = profile
+	stage.visual_bounds[species] = profile.get("bounds", {})
+	stage.entries[target_species] = target_profile
+	stage.visual_bounds[target_species] = target_profile.get("bounds", {})
+	for slot in 2:
+		var actor_species := species if slot == 0 else target_species
+		var actor_model: Dictionary = model if slot == 0 else target_model
+		var actor_profile: Dictionary = profile if slot == 0 else target_profile
+		var packed := ResourceLoader.load(actor_model.runtime_path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene
+		var actor := packed.instantiate() as Node3D; world.add_child(actor)
+		preload("res://scripts/battle/battle_ui/material_surface_order.gd").apply(actor)
+		preload("res://scripts/battle/animations/reviewed_source_visibility.gd").apply(actor,actor_species,actor_model.runtime_sha256)
+		var player: AnimationPlayer = actor.find_children("*","AnimationPlayer",true,false)[0]
+		preload("res://scripts/battle/animations/gliscor_flight.gd").apply(player,actor_species,actor_model.runtime_sha256)
+		preload("res://scripts/battle/animations/mega_garchomp_standing.gd").apply(player,actor_species,actor_model.runtime_sha256)
+		preload("res://scripts/battle/animations/charmander_breath.gd").apply(player,actor_species,actor_model.runtime_sha256)
+		actor.scale = Vector3.ONE * float(actor_profile.grounding.scale)
+		actor.position = stage._position(slot) + Vector3.UP*float(actor_profile.grounding.get("lift",0))
+		var direction: Vector3 = stage._position(1-slot) - stage._position(slot)
+		actor.rotation.y = atan2(direction.x,direction.z) + deg_to_rad(float(actor_profile.grounding.get("yaw_degrees",0)))
+		stage.actors[slot] = actor; stage.players[slot] = player
+		stage.identities[slot] = actor_species
+		stage.combatants[slot] = {"species":actor_species.trim_suffix("@shiny"),"shiny":actor_species.ends_with("@shiny")}
+		stage.actor_shown[slot] = true; stage.lifecycle[slot] = "idle"
+		Pose.sample(player, "idle", player.get_animation("idle").length*.45)
+	var requested: String = stage.attack_action_for(move,"p1")
+	var mapped: Dictionary = Stage.ActionMap.resolve(requested,stage.players[0].get_animation_list(),profile.action_timing)
+	assert(not mapped.is_empty(), "Requested move has no native action")
+	var action: String = mapped.action
+	stage.current_actions[0] = action
+	Pose.sample(stage.players[0], action, 0.0)
+	var effect: Node = stage.create_move_effect(move,"p1","p2",{"show_impact":true})
+	assert(effect != null, "Move effect is unavailable")
+	effect.set_process(false)
+	effect.visible = not hide_effects
+	var timing: Dictionary = stage.move_timing(move,"p1")
+	var fractions := [.2,.45,.65]
+	# Include the active lash/beam interval even when authored timing differs.
+	fractions.append(lerpf(float(timing.get("launch_frame",0)),float(timing.impact_frame),.9)/float(timing.frames))
+	if not requested_fractions.is_empty(): fractions = requested_fractions.duplicate()
+	fractions.sort()
+	var sheet := Image.create(720*2,540*fractions.size(),false,Image.FORMAT_RGB8)
+	var label := Label.new(); label.position = Vector2(8,8); label.add_theme_font_size_override("font_size",18); viewport.add_child(label)
+	var records := []
+	var simulated_fraction := 0.0
+	var step_fraction := 1.0 / maxf(float(timing.frames) * 2.0, 1.0)
+	for row in fractions.size():
+		var fraction: float = fractions[row]
+		# Advance VFX between screenshots so delayed projectiles capture the launch pose.
+		# A jump directly to a screenshot can incorrectly freeze a projectile at a later pose.
+		while simulated_fraction < fraction:
+			simulated_fraction = minf(simulated_fraction + step_fraction, fraction)
+			_sample_effect(action, simulated_fraction, effect)
+		_sample_effect(action, fraction, effect)
+		for frame in 2: await process_frame
+		for column in 2:
+			var points: Dictionary = stage._move_anchors("p1","p2",move)
+			var center: Vector3 = points.source
+			var height := maxf(float(stage._effect_bounds(0).height),.65)
+			if camera_frame == "both":
+				center = points.source.lerp(points.target, .5)
+				height = maxf(height, points.source.distance_to(points.target) * .65)
+			var direction := Vector3(.9,.35,1.6) if column == 0 else Vector3(-.4,.35,1.8)
+			camera.position = center + direction.rotated(Vector3.UP, camera_yaw)*height*1.7*camera_scale
+			camera.look_at(center)
+			effect._process(0)
+			label.text = "%s | %s | %s %.3f | %s" % [species,move,action,fraction,points.attachment_part]
+			await process_frame; await RenderingServer.frame_post_draw
+			sheet.blit_rect(viewport.get_texture().get_image(),Rect2i(0,0,720,540),Vector2i(column*720,row*540))
+			var source_positions := []
+			for source: Vector3 in points.sources:
+				source_positions.append([source.x,source.y,source.z])
+			records.append({"fraction":fraction,"view":column,"part":points.attachment_part,"bones":points.attachment_bones,"sources":points.sources.size(),"pieces":effect.cursor,
+				"source_position":[points.source.x,points.source.y,points.source.z],"source_positions":source_positions,"target_position":[points.target.x,points.target.y,points.target.z],"contact_yaw":stage.contact_yaws[0]})
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
+	var filename := species+"-"+Stage.MoveEffect.move_key(move)
+	if target_species != species: filename += "-vs-" + target_species
+	assert(sheet.save_png(output.path_join(filename+".png")) == OK)
+	var file := FileAccess.open(output.path_join(filename+".json"),FileAccess.WRITE)
+	file.store_string(JSON.stringify({"battle_kind":battle_kind,"species":species,"target_species":target_species,"target_runtime_sha256":target_model.runtime_sha256,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"effect_sampling":"native_clock_120hz_v1","effects_hidden":hide_effects,"neutral_reflections":neutral_reflections,"camera_frame":camera_frame,"camera_scale":camera_scale,"camera_yaw":rad_to_deg(camera_yaw),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
+	file.close()
+	effect.cancel(); await process_frame
+	stage.world = null; stage.camera = null; stage.free()
+	print("ATTACHMENT_MOVE_PREVIEW ",filename)
+	quit()
+
+func _sample_effect(action: String, fraction: float, effect: Node) -> void:
+	Pose.sample(stage.players[0], action, stage.players[0].get_animation(action).length*fraction)
+	for rig: Skeleton3D in stage.actors[0].find_children("*","Skeleton3D",true,false): rig.force_update_all_bone_transforms()
+	stage._update_move_contacts()
+	effect._process(0)

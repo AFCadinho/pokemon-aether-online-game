@@ -32,16 +32,20 @@ const PRESENTATION_SECONDS := {
 	"flashcannon": 1.9, "magicalleaf": 1.55, "waterpulse": 1.6, "dracometeor": 3.2,
 }
 const MODEL_ONLY_MAX_SECONDS := 0.65
+const EFFECT_RENDER_PRIORITY := Material.RENDER_PRIORITY_MAX
 
 static func presentation_seconds(move: String) -> float:
 	var normalized := move_key(move)
 	return float(RecipeCatalog.get_recipe(normalized).get("duration_seconds", PRESENTATION_SECONDS.get(normalized, 0.0)))
 var presentation_scale := 1.0
+# Optional anatomical stream width; endpoints and target impact retain their size.
+var emission_scale := 1.0
 var key := ""
 var elapsed := 0.0
 var duration := 1.0
 var impact := 0.45
 var launch := 0.1
+var effect_start := 0.0
 var done := false
 var cancelled := false
 var hit := false
@@ -129,10 +133,13 @@ static func launch_time(timing: Dictionary) -> float:
 
 func start(move: String, timing: Dictionary, options: Dictionary, native_clock: Callable, positions: Callable, guard: Callable) -> void:
 	key = move_key(move)
+	emission_scale = float(timing.get("emission_scale", 1.0))
 	presentation_scale = float(PRESENTATION_SCALES.get(key, RecipeCatalog.get_recipe(key).get("scale",1.0)))
 	duration = float(timing.frames) / 60.0
 	impact = float(timing.impact_frame) / 60.0
 	launch = launch_time(timing)
+	var requested_start := float(timing.get("effect_start_frame", 0.0)) / 60.0
+	effect_start = clampf(requested_start, 0.0, launch) if is_finite(requested_start) else 0.0
 	clock = native_clock
 	anchors = positions
 	valid = guard
@@ -171,6 +178,9 @@ func _material(color: Color, alpha: float) -> StandardMaterial3D:
 func seconds() -> float:
 	return elapsed
 
+func charge_progress() -> float:
+	return clampf((elapsed-effect_start)/maxf(launch-effect_start,.01),0,1)
+
 func cancel() -> void:
 	if done: return
 	cancelled = true
@@ -199,6 +209,12 @@ func _piece(mesh: Mesh, material: Material, point: Vector3, scale_value: Vector3
 	var node := pieces[cursor]
 	cursor += 1
 	node.mesh = mesh
+	# These materials belong to this effect. Draw after the model's alpha
+	# depth prepass colour pass: sorting a long beam by its centre can otherwise
+	# let the caster paint over its near end. Depth testing still hides geometry
+	# that actually lies behind the model.
+	if material.render_priority != EFFECT_RENDER_PRIORITY:
+		material.render_priority = EFFECT_RENDER_PRIORITY
 	node.material_override = material
 	var dimensions := scale_value * _geometry_scale()
 	# Beam/cone length is the measured source-to-tip distance, not an artistic
@@ -226,6 +242,10 @@ func _process(_delta: float) -> void:
 	if elapsed + 0.00001 >= duration:
 		elapsed = duration
 		_finish()
+		return
+	if elapsed < effect_start:
+		cursor = 0
+		for piece: MeshInstance3D in pieces: piece.visible = false
 		return
 	var points: Dictionary = anchors.call()
 	emission_sources = points.get("sources", [points.source])

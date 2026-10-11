@@ -7,6 +7,7 @@ const REPORT := "res://docs/3d/move-attachment-coverage.json"
 const SUMMARY := "res://docs/3d/move-attachment-coverage.md"
 const SOURCES := [
 	"res://scripts/battle/battle_ui/move_attachments_3d.gd",
+	"res://data/battle_move_attachments_3d.json",
 	"res://scripts/battle/battle_ui/reviewed_model_catalog.gd",
 	"res://scripts/battle/battle_ui/reviewed_model_catalog.json",
 	"res://scripts/battle/battle_ui/screened_model_catalog.json",
@@ -30,7 +31,7 @@ func _run() -> void:
 		var variant := "shiny" if identity.ends_with("@shiny") else "normal"
 		counts[variant] += 1
 		if not rows.has(species):
-			var parts: Array = Attachments.PROFILES.get(species, {}).keys()
+			var parts: Array = Attachments.configured_parts(species)
 			parts.sort()
 			rows[species] = {"variants": [], "attachments": parts,
 				"status": "configured" if not parts.is_empty() else "bounds_fallback_only"}
@@ -39,8 +40,8 @@ func _run() -> void:
 			if not Catalog.supports(alias) or Catalog.canonical_identity(alias) != identity:
 				_fail("Invalid catalog alias: " + alias)
 				return
-			var alias_parts: Dictionary = Attachments.PROFILES.get(alias.trim_suffix("@shiny"), {})
-			aliases[alias] = {"canonical_identity": identity, "attachments": alias_parts.keys()}
+			var alias_parts: Array = Attachments.configured_parts(alias)
+			aliases[alias] = {"canonical_identity": identity, "attachments": alias_parts}
 	counts.species_forms = rows.size()
 	for row: Dictionary in rows.values():
 		if row.attachments.is_empty(): counts.without_attachments += 1
@@ -49,26 +50,38 @@ func _run() -> void:
 			var counter := "with_" + part
 			counts[counter] = counts.get(counter, 0) + 1
 	var profiles := {}
-	for species: String in Attachments.PROFILES:
+	var configured: Dictionary = Attachments.PROFILES.duplicate()
+	configured.merge(Attachments.CALIBRATED.data.profiles, true)
+	for species: String in configured:
 		if not rows.has(species):
 			_fail("Attachment profile is absent from supported catalogs: " + species)
 			return
 		profiles[species] = {}
-		for part: String in Attachments.PROFILES[species]:
-			var definitions: Array = Attachments.PROFILES[species][part]
-			if definitions.is_empty():
-				_fail("Empty attachment: " + species + ":" + part)
+		for part: String in Attachments.configured_parts(species):
+			var definitions := Attachments.definitions_for(species, part)
+			profiles[species][part] = definitions
+			if not definitions.is_empty() and not _valid(definitions):
+				_fail("Invalid attachment definition: " + species + ":" + part)
 				return
-			profiles[species][part] = []
-			for definition: Array in definitions:
-				if definition.size() != 2 or not definition[0] is String or definition[0].is_empty() or not definition[1] is Vector3 or not definition[1].is_finite():
-					_fail("Invalid attachment definition: " + species + ":" + part)
+		var profile: Dictionary = Attachments.CALIBRATED.data.profiles.get(species, {})
+		for field: String in ["family_attachments", "attachment_overrides"]:
+			if not profile.has(field): continue
+			rows[species][field] = profile[field]
+			for part: String in profile[field].values():
+				if part not in ["body", "orb_clearance"] and part not in Attachments.configured_parts(species):
+					_fail("Unconfigured family/part override: " + species + ":" + part)
 					return
-				var offset: Vector3 = definition[1]
-				profiles[species][part].append({"bone": definition[0], "offset": [offset.x, offset.y, offset.z]})
+		if profile.has("review"): rows[species]["review"] = profile.review
+		if profile.has("actions"):
+			rows[species]["action_overrides"] = profile.actions
+			for action_parts: Dictionary in profile.actions.values():
+				for definitions: Array in action_parts.values():
+					if not _valid(definitions):
+						_fail("Invalid action attachment: " + species)
+						return
 	var hashes := {}
 	for path: String in SOURCES: hashes[path.trim_prefix("res://")] = FileAccess.get_sha256(path)
-	var report := {"schema": 1, "scope": "configured_3d_attachment_coverage",
+	var report := {"schema": 2, "scope": "configured_3d_attachment_coverage",
 		"rigs_visually_verified_by_this_audit": false,
 		"learnsets_checked": false,
 		"counts": counts, "source_sha256": hashes, "profiles": profiles,
@@ -113,8 +126,8 @@ func _summary(counts: Dictionary, profiles: Dictionary, alias_count: int) -> Str
 		"Configured parts are partial coverage: Charmander's hand does not provide a foot or tail anchor, and Pikachu's electric-body anchor is not a mouth anchor. Unconfigured parts still fall back to model bounds. Mega and other alternate forms do not inherit base-form profiles; shiny variants do.", "",
 		"This audit checks whether attachment definitions exist. It does not certify bone availability, mouth placement, or every move animation on the actual models. It does not intersect moves with learnsets, so an absent mouth anchor does not imply that a species needs or can use Flamethrower. Bounds fallback can look correct in some poses without following the anatomical part.", "",
 		"## Reproduce", "", "From the workspace root, in the assigned task slot:", "", "```bash",
-		"ops/worktrees/slot-env slot-b -- godot --headless --path .worktrees/slot-b/frontend --script res://tools/audit_move_attachments_3d.gd",
-		"ops/worktrees/slot-env slot-b -- godot --headless --path .worktrees/slot-b/frontend --script res://tools/audit_move_attachments_3d.gd -- --check",
+		"ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend --script res://tools/audit_move_attachments_3d.gd",
+		"ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend --script res://tools/audit_move_attachments_3d.gd -- --check",
 		"```", "",
 	])
 	return "\n".join(lines)
@@ -122,3 +135,16 @@ func _summary(counts: Dictionary, profiles: Dictionary, alias_count: int) -> Str
 func _fail(message: String) -> void:
 	printerr(message)
 	quit(1)
+
+func _valid(groups: Array) -> bool:
+	if groups.is_empty(): return false
+	for group: Array in groups:
+		if group.is_empty(): return false
+		for definition: Dictionary in group:
+			var offset: Array = definition.get("offset", [])
+			var weight := float(definition.get("weight", 1.0))
+			if str(definition.get("bone", "")).is_empty() or offset.size() != 3: return false
+			if not is_finite(weight) or weight <= 0: return false
+			for component in offset:
+				if not is_finite(float(component)): return false
+	return true

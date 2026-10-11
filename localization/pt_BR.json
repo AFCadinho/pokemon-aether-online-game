@@ -1282,7 +1282,7 @@
   "ui.login.error.offline": "O PokeAether está offline no momento. Tente novamente mais tarde.",
   "ui.login.error.maintenance": "O PokeAether está temporariamente fechado para manutenção. Tente novamente mais tarde.",
   "ui.login.error.enter_world": "Não foi possível entrar no mundo. Entre em contato com a equipe.",
-  "ui.login.error.invalid_credentials": "Nome de usuário ou senha inválidos.",
+  "ui.login.error.invalid_credentials": "Nome de usuário ou senha incorretos. Confira seus dados e tente novamente.",
   "ui.login.error.email_not_verified": "Confirme seu e-mail antes de entrar.",
   "ui.login.error.unavailable": "O PokeAether está indisponível no momento. Tente novamente mais tarde.",
   "ui.session.logout_countdown": "{message} Você será desconectado em {seconds} segundos.",
@@ -6735,5 +6735,6 @@
   "ui.evolution_conditions.partner_trade": "Troque este Pokémon por {partner}. Linking Cord não substitui esta troca.",
   "ui.evolution_conditions.shed_rule": "Evolua seu próprio Pokémon para {pokemon} com um espaço livre na equipe. Shedinja aparece nesse espaço.",
   "ui.evolution.result.bonus_created": "{pokemon} apareceu na sua equipe.",
-  "ui.trade.review.evolves_to": "Evolui para {pokemon} após esta troca."
+  "ui.trade.review.evolves_to": "Evolui para {pokemon} após esta troca.",
+  "ui.item_dex.shop.evolution_item_shop": "Vendedor de itens de evolução"
 }

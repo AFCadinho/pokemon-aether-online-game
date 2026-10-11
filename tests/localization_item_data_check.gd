@@ -45,6 +45,7 @@ func _run() -> void:
 	settings_manager.set("content_name_language", "localized")
 	_check_catalogs()
 	_check_resolver_fallback_and_mechanics()
+	_check_evolution_item_text()
 	_check_independent_name_language()
 	_check_overlay_integration()
 	_check_shop_and_cosmetic_integration()
@@ -159,6 +160,33 @@ func _check_catalogs() -> void:
 		var runtime_ids: Array = (item_localization.call("get_catalog", locale) as Dictionary).keys()
 		runtime_ids.sort()
 		_check(runtime_ids == expected_ids, "%s runtime includes every generated, override and virtual item ID" % locale)
+
+
+func _check_evolution_item_text() -> void:
+	var english: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(CATALOG_PATHS["en"]))
+	var consumed_ids: Array[String] = [
+		"alola-stone", "auspicious-armor", "black-augurite", "chipped-pot", "cracked-pot",
+		"dawn-stone", "deep-sea-scale", "deep-sea-tooth", "dragon-scale", "dubious-disc",
+		"dusk-stone", "electirizer", "fire-stone", "galar-stone", "galarica-cuff",
+		"galarica-wreath", "gold-coin", "hisui-stone", "ice-stone", "kings-rock",
+		"leaders-crest", "leaf-stone", "linking-cord", "magmarizer", "malicious-armor",
+		"masterpiece-teacup", "metal-alloy", "metal-coat", "moon-stone", "oval-stone",
+		"peat-block", "prism-scale", "protector", "razor-claw", "razor-fang",
+		"reaper-cloth", "sachet", "scroll-of-darkness", "scroll-of-waters", "shiny-stone",
+		"stick", "strawberry-sweet", "sun-stone", "sweet-apple", "syrupy-apple",
+		"tart-apple", "thunder-stone", "unremarkable-teacup", "up-grade", "water-stone", "whipped-dream",
+	]
+	for item_id: String in consumed_ids:
+		var description := str((english.get(item_id, {}) as Dictionary).get("shortDesc", ""))
+		_check(description.contains("Consumed"), item_id + " explains successful evolution consumption")
+		_check(not description.contains("Traded on") and not description.contains("when traded"), item_id + " uses the game evolution method")
+		for locale: String in CATALOG_PATHS:
+			_check(item_localization.call("short_description", item_id, "missing", locale) != "missing", locale + " describes " + item_id)
+	var claw := str((english["razor-claw"] as Dictionary)["shortDesc"])
+	_check(claw.contains("Hisui Sneasel") and claw.contains("05:00–21:00") and claw.contains("21:00–05:00"), "Razor Claw describes both game-time routes")
+	_check(str((english["razor-fang"] as Dictionary)["shortDesc"]).contains("21:00–05:00"), "Razor Fang explains the night requirement")
+	for item_id: String in ["berry-sweet", "clover-sweet", "flower-sweet", "love-sweet", "ribbon-sweet", "star-sweet"]:
+		_check(str((english[item_id] as Dictionary)["shortDesc"]).contains("no evolution effect"), item_id + " does not promise an unavailable evolution")
 
 
 func _check_resolver_fallback_and_mechanics() -> void:
