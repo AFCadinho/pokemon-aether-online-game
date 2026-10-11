@@ -144,6 +144,9 @@ def main():
             assert consumers["catalog_sha256"] == session["catalog_sha256"] == record["catalog_sha256"]
     artifact_names = ["input.json", "installation.json", "installation.log", "consumers.json", "consumers.log", "consumers.execution.json"]
     artifact_names += [session_name + suffix for suffix in (".json", ".log", ".execution.json")]
+    for name in ("installation.log", "consumers.log", session_name + ".log"):
+        log = (run / name).read_text()
+        assert "SCRIPT ERROR:" not in log and "\nERROR:" not in log, "Engine error in completed phase: " + name
     artifacts = {name: sha(run / name) for name in artifact_names}
     artifacts["mounts"] = sha(args.mounts)
     artifacts["crashes"] = sha(args.crashes / "receipt.json")
