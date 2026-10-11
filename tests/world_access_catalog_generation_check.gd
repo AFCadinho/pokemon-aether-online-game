@@ -141,6 +141,12 @@ func _init() -> void:
 			"guild_base_main_hall:from_left_room",
 			"guild_base_main_hall:from_right_room",
 			"guild_base_main_hall:from_town",
+			"guild_base_player_floor:from_elevator",
+			"guild_base_player_floor:from_room_1",
+			"guild_base_player_floor:from_room_2",
+			"guild_base_player_floor:from_room_3",
+			"guild_base_player_floor:from_room_4",
+			"guild_base_player_room:from_floor",
 			"guild_base_right_room:from_main_hall",
 		],
 		"Aether Clash previews and ownerless Guild Base templates are excluded from safe player teleports"

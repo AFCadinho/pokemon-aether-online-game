@@ -1078,3 +1078,13 @@ func _dictionary(value: Variant) -> Dictionary:
 
 func _array(value: Variant) -> Array:
 	return value as Array if value is Array else []
+
+
+func base_room_directory(for_lift := false) -> Dictionary:
+	return await _base_furniture_request("/lift" if for_lift else "/directory", HTTPClient.METHOD_GET, {})
+
+func base_lift_travel(floor: int) -> Dictionary:
+	var result := await _base_furniture_request("/lift/travel", HTTPClient.METHOD_POST, {"floor": floor})
+	if bool(result.get("success", false)):
+		return {"success": true, "state": _dictionary(result.state.get("state", {}))}
+	return result

@@ -377,6 +377,32 @@
           "safe": false
         }
       }
+    },
+    "guild_base_player_floor": {
+      "points": {
+        "from_elevator": {
+          "safe": false
+        },
+        "from_room_1": {
+          "safe": false
+        },
+        "from_room_2": {
+          "safe": false
+        },
+        "from_room_3": {
+          "safe": false
+        },
+        "from_room_4": {
+          "safe": false
+        }
+      }
+    },
+    "guild_base_player_room": {
+      "points": {
+        "from_floor": {
+          "safe": false
+        }
+      }
     }
   }
 }
