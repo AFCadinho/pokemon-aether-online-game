@@ -15,6 +15,22 @@ emission scale. Continuous flower/hand clearance and full-scene moon framing
 remain pending. Draco Meteor has routing regression coverage; no new anatomical
 Draco Meteor profile is approved by this checkpoint.
 
+## Remaining anatomical marker assessment
+
+The [remaining assessment](attack-attachment-remaining-assessment.md) records
+individual visual decisions for the 43 forms previously without a profile and
+226 pending part entries on 118 forms. Forty forms now have profiles; Mega
+Hawlucha, Minior and Togedemaru remain blocked by model identity or visibility.
+The pending-part pass accepts 94 palm, paw and other surface points on 47 forms.
+Every remaining proposal has a recorded correction, missing-part, anatomy or
+model decision, with preview hashes and native pose evidence.
+
+This checkpoint assesses marker placement during native idle and attack clips.
+Accepted palm or fin casting points do not automatically certify distal contact
+points. Attack-family routing, effect timing/size/clearance and live NPC/wild
+battle checks remain pending. The next calibration work follows the recorded
+corrections and anatomical families, rather than enumerating individual moves.
+
 ## Moth and insect review checkpoint
 
 Dustox and Mothim have individually projected jaw-weighted mouth points.
@@ -27,7 +43,8 @@ The effects advance with native poses at 120 Hz between captures.
 
 These are sampled origin/timing reviews. Continuous effect-radius clearance,
 contact distances, remaining routes and live NPC/wild battles are pending.
-Beautifly remains unresolved: its curled proboscis can obstruct the outlet.
+Beautifly now has a reviewed proboscis-tip point. Effect clearance around its
+curled proboscis remains unresolved.
 
 ## Shell, cannon and tongue review checkpoint
 

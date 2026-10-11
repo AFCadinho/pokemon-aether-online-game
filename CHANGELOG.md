@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add individually reviewed 3D attack attachment profiles for 40 remaining forms and 94 reviewed limb points across 47 forms; record outstanding anatomical corrections and model blockers.
+
 - Calibrate selected Exeggcute, Hippowdon, Gliscor, Wiglett, Toedscool, Chi-Yu and Grapploct attack origins and release timing; scale Sludge Bomb drips for small emitters.
 
 - Calibrate selected Beedrill, Mega Beedrill, Ceruledge and Magearna-form attack origins; fit Magearna’s Draining Kiss hearts to its mouth at release.
