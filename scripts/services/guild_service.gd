@@ -1088,3 +1088,22 @@ func base_lift_travel(floor: int) -> Dictionary:
 	if bool(result.get("success", false)):
 		return {"success": true, "state": _dictionary(result.state.get("state", {}))}
 	return result
+
+
+func base_visit_directory(registrar_id: String, query := "") -> Dictionary:
+	return await _base_furniture_request("/visits/registrars/%s?q=%s" % [registrar_id.uri_encode(), query.uri_encode()], HTTPClient.METHOD_GET, {})
+
+func base_visit_request(registrar_id: String, guild_id: int) -> Dictionary:
+	return await _base_furniture_request("/visits/request", HTTPClient.METHOD_POST, {"registrarId": registrar_id, "guildId": guild_id})
+
+func base_visit_enter(registrar_id: String, guild_id: int) -> Dictionary:
+	return await _base_furniture_request("/visits/enter", HTTPClient.METHOD_POST, {"registrarId": registrar_id, "guildId": guild_id})
+
+func base_visit_requests(guild_id: int) -> Dictionary:
+	return await _base_furniture_request("/visits/%d/requests" % guild_id, HTTPClient.METHOD_GET, {})
+
+func base_visit_answer(guild_id: int, user_id: int, accept: bool) -> Dictionary:
+	return await _base_furniture_request("/visits/%d/requests/%d" % [guild_id, user_id], HTTPClient.METHOD_PUT, {"accept": accept})
+
+func base_visit_policy(guild_id: int, policy: String) -> Dictionary:
+	return await _base_furniture_request("/visits/%d/policy" % guild_id, HTTPClient.METHOD_PUT, {"policy": policy})

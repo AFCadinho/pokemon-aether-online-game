@@ -11,6 +11,13 @@ const CATALOG_PATHS: Dictionary = {
 }
 
 const CODE_TO_KEY: Dictionary = {
+	"guild_base_visit_no_host": "ui.guild_base.visits.error_no_host",
+	"guild_base_visit_cooldown": "ui.guild_base.visits.error_cooldown",
+	"guild_base_visit_approval_required": "ui.guild_base.visits.error_approval",
+	"guild_base_visit_expired": "ui.guild_base.visits.error_expired",
+	"guild_base_visit_host_required": "ui.guild_base.visits.error_host",
+	"guild_base_visit_unavailable": "ui.guild_base.visits.error_unavailable",
+	"guild_base_visit_busy": "ui.guild_base.visits.error_busy",
 	"guild_base_furniture_invalid": "ui.guild_base.furnish.invalid.invalid",
 	"guild_base_furniture_outside": "ui.guild_base.furnish.invalid.outside",
 	"guild_base_furniture_overlap": "ui.guild_base.furnish.invalid.overlap",

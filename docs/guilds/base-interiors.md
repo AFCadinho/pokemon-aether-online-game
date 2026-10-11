@@ -160,3 +160,30 @@ Focused player-room PostgreSQL checks: `tests.test_guild_base_player_rooms_postg
 uses `GUILD_ROOM_TEST_DATABASE_URL` for a disposable database and creates/drops
 its own random test schema. It covers migration up/down and simultaneous first
 visits.
+
+
+## Guard visits
+
+The guard offers a searchable town-local Guild Base directory, direct entry to
+one's own base and the existing purchase flow. Leaders select **Open to
+visitors** or **By request** through the **Visitors** button inside their base.
+Existing bases default to **By request**. Any member inside the building can
+approve or decline a visitor. A five-second poll updates the request counter,
+in-game notifications and the open menus. Guests receive read-only furniture
+layouts and share the host's world-presence roster.
+
+A request lasts two minutes and repeated requests have a thirty-second cooldown.
+Approval lasts two minutes for entry through the guard; entering establishes a
+visit rather than permanent membership. Doors preserve the visited Guild ID.
+The lobby exit returns to the town garden, and the garden building door returns
+to the host base. Crossing the garden gate to the street saves the outside
+position and ends the visit. Other world travel also ends it. A dormant visit
+expires after 24 hours; stale access recovers the player outside the gate.
+Guests can use the lobby and the two shared side rooms. The lift, player floors,
+personal rooms, decorating rights and Guild inventory mutations require Guild
+membership.
+
+Backend migration `0326_guild_base_visits` adds the Guild access policy and one
+request/visit row per player. Focused checks: `tests/guild_base_visits_check.gd`,
+`tests.test_guild_base_visits`, and the disposable PostgreSQL
+`tests.test_guild_base_visits_postgres.PostgresGuildVisitTests`.

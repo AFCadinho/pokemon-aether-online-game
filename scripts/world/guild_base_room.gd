@@ -33,6 +33,9 @@ func _ready() -> void:
 	timer.autostart = true
 	timer.timeout.connect(_refresh_access)
 	add_child(timer)
+	var visitor_requests := preload("res://scripts/ui/guild_base_visit_requests.gd").new()
+	visitor_requests.room = self
+	add_child(visitor_requests)
 	if room_key in ["left_room", "right_room"]:
 		furnishing_editor = preload("res://scripts/ui/guild_base_furnishing_editor.gd").new()
 		furnishing_editor.room = self

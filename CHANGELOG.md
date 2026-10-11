@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Visit other Guild Bases through the guard, request entry to closed bases, and let members inside approve visitors. Keep guest access through the shared rooms and garden until departure to the street.
+
 - Expand Guild Base furnishing to 129 reusable furniture and decoration designs from the existing indoor tileset, with beds, storage, seating, rugs and laboratory displays.
 
 - Add 337 individually reviewed 3D attack points and anatomical alternatives across 290 remaining Pokémon forms, shared by normal and shiny appearances. Align Cetitan’s mouth emission and Sinistea’s hand release with their native poses, and give Scyther separate wing attack points.
