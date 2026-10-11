@@ -69,6 +69,15 @@ func _run() -> void:
 			assert(Attachments.part_for(identity, move) == "gem")
 	assert(Attachments.part_for("starmie", "hyperbeam") == "gem")
 	assert(Attachments.definitions_for("starmie-mega", "gem") != Attachments.definitions_for("starmie", "gem"))
+	for identity: String in ["sinistea", "sinistea@shiny"]:
+		assert(Attachments.part_for(identity, "shadowball") == "spirit")
+		assert(Attachments.definitions_for(identity, "spirit").is_empty())
+		assert(Attachments.definitions_for(identity, "spirit", "physical_attack").is_empty())
+		var spirit := Attachments.definitions_for(identity, "spirit", "special_attack")
+		assert(spirit.size() == 3)
+		for index in 3:
+			assert(str(spirit[index][0].visible_mesh).ends_with(["top_b_mesh", "top_c_mesh", "top_d_mesh"][index]))
+		assert(Attachments.action_for(identity, "shadowball", {"special_attack":{}}) == "special_attack")
 	for route: Array in [["beldum", "forehead", "head", ["ironhead", "tackle"]], ["unown", "eye", "waist", ["hiddenpower"]], ["chandelure-mega", "face", "spine", ["ember", "flamethrower", "hyperbeam", "shadowball", "solarbeam"]], ["runerigus", "face", "feeler_a_03", ["hyperbeam", "shadowball"]]]:
 		for identity: String in [route[0], route[0] + "@shiny"]:
 			var definition := Attachments.definitions_for(identity, route[1])

@@ -87,7 +87,7 @@ func _run() -> void:
 	assert(Attachments.choreography_for("zoroark","flamethrower","physical_attack_2").is_empty())
 	for identity: String in ["walking-wake", "watchog", "zoroark-hisui"]:
 		assert(Attachments.choreography_for(identity,"hyperbeam","special_attack").is_empty())
-	for route: Array in [["unown","Hidden Power","special_attack",.30,.52], ["chandelure-mega","Ember","special_attack",.32,.55], ["chandelure-mega","Shadow Ball","special_attack",.32,.55], ["runerigus","Shadow Ball","special_attack",.48,.62], ["starmie-mega","Bubble Beam","special_attack",.32,.55], ["starmie-mega","Water Pulse","special_attack",.32,.55], ["venonat","Sludge Bomb","special_attack",.34,.55], ["venonat","Screech","special_attack",.34,.55], ["venonat","Supersonic","special_attack",.34,.55], ["flabebe","Disarming Voice","physical_attack_2",.25,.45], ["dodrio","Growl","special_attack",.30,.50], ["dodrio","Supersonic","special_attack",.30,.50], ["doduo","Growl","special_attack",.36,.58], ["doduo","Supersonic","special_attack",.36,.58], ["gastly","Shadow Ball","special_attack",.42,.65], ["cubone","Growl","special_attack",.14,.22], ["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
+	for route: Array in [["sinistea","Shadow Ball","special_attack",.30,.52], ["unown","Hidden Power","special_attack",.30,.52], ["chandelure-mega","Ember","special_attack",.32,.55], ["chandelure-mega","Shadow Ball","special_attack",.32,.55], ["runerigus","Shadow Ball","special_attack",.48,.62], ["starmie-mega","Bubble Beam","special_attack",.32,.55], ["starmie-mega","Water Pulse","special_attack",.32,.55], ["venonat","Sludge Bomb","special_attack",.34,.55], ["venonat","Screech","special_attack",.34,.55], ["venonat","Supersonic","special_attack",.34,.55], ["flabebe","Disarming Voice","physical_attack_2",.25,.45], ["dodrio","Growl","special_attack",.30,.50], ["dodrio","Supersonic","special_attack",.30,.50], ["doduo","Growl","special_attack",.36,.58], ["doduo","Supersonic","special_attack",.36,.58], ["gastly","Shadow Ball","special_attack",.42,.65], ["cubone","Growl","special_attack",.14,.22], ["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -207,7 +207,7 @@ func _run() -> void:
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=94 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=95 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()
 
 func _check_stream_scaling() -> void:

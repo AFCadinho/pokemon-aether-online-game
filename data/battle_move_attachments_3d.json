@@ -97649,6 +97649,261 @@
         }
       }
     },
+    "sinistea": {
+      "actions": {
+        "special_attack": {
+          "spirit": [
+            [
+              {
+                "bone": "spine_02",
+                "offset": [
+                  0.00654745101928711,
+                  0.00331422709859908,
+                  0.00507398974150419
+                ],
+                "visible_mesh": "pm0972_11_00/Skeleton3D/pm0972_11_00_top_b_mesh",
+                "weight": 1.0
+              }
+            ],
+            [
+              {
+                "bone": "head",
+                "offset": [
+                  0.0143682630732656,
+                  -0.000944232218898833,
+                  0.0258630961179733
+                ],
+                "visible_mesh": "pm0972_11_00/Skeleton3D/pm0972_11_00_top_c_mesh",
+                "weight": 0.701243589663171
+              },
+              {
+                "bone": "spine_02",
+                "offset": [
+                  0.0632039830088615,
+                  -0.000828479300253093,
+                  0.0258955378085375
+                ],
+                "weight": 0.284649128650963
+              },
+              {
+                "bone": "neck",
+                "offset": [
+                  0.0357221141457558,
+                  -0.000642606930341572,
+                  0.0259476341307163
+                ],
+                "weight": 0.0141072816858659
+              }
+            ],
+            [
+              {
+                "bone": "feeler_a",
+                "offset": [
+                  0.000682450830936432,
+                  0.000372932263417169,
+                  -0.00867786444723606
+                ],
+                "visible_mesh": "pm0972_11_00/Skeleton3D/pm0972_11_00_top_d_mesh",
+                "weight": 0.837763407493704
+              },
+              {
+                "bone": "spine_02",
+                "offset": [
+                  0.00547244446352124,
+                  -0.000167463804245926,
+                  0.0106264306232333
+                ],
+                "weight": 0.162236592506295
+              }
+            ]
+          ]
+        }
+      },
+      "anatomical_route_reviews": {
+        "shadowball": {
+          "action": "special_attack",
+          "part": "spirit",
+          "scope": "Normal and shiny, two close views plus two whole-model views. Special_attack .30/.52, scale .1. At .05/.10 the small charge is on the tea spiral; .13 follows the emerging top_c surface; .20/.30 charges at the raised spirit face; .32 travels forward clear of the face and cup; .40 leaves the face clear. .72/.88 show the return to liquid with no hovering source effect. Three visibility-selected bindings are defined only for this action. Other moves, full continuous flight/clearance, other targets and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "shadowball": "special_attack"
+      },
+      "move_choreography": {
+        "shadowball": {
+          "action": "special_attack",
+          "emission_scale": 0.1,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_effect_reviews": {
+        "shadowball": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "fractions": [
+                0.05,
+                0.1,
+                0.13,
+                0.2,
+                0.3,
+                0.32,
+                0.4,
+                0.72
+              ],
+              "normal_preview_sha256": "957111ec0870ce5564665153b45973c10501841763eee3879617a30cdb26700d",
+              "shiny_preview_sha256": "d95ccc3538d50e8211dec6145adc309a2aae02ca699d412143763ff0b81020c6"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "1506e72da548579dc057b723f5a01aede2913aa6ad9fdbed4992b61d039904ce",
+          "fractions": [
+            0.1,
+            0.13,
+            0.2,
+            0.3,
+            0.32,
+            0.4,
+            0.72,
+            0.88
+          ],
+          "normal_runtime_sha256": "502b683bbb85f31583fb8aaca1fcd69ef4b04cf942d1c0f8b31fcf114b2cb6f2",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3b5bd4ba7a48820f3567f30b0a8f52e720857c9a8869fc536d733236b5b8edb1",
+          "scope": "Normal and shiny, two close views plus two whole-model views. Special_attack .30/.52, scale .1. At .05/.10 the small charge is on the tea spiral; .13 follows the emerging top_c surface; .20/.30 charges at the raised spirit face; .32 travels forward clear of the face and cup; .40 leaves the face clear. .72/.88 show the return to liquid with no hovering source effect. Three visibility-selected bindings are defined only for this action. Other moves, full continuous flight/clearance, other targets and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "04cf03fa3ad3454583880295a2ec49b98cc11ac0bb3e2fc3dce556997af342a4",
+          "shiny_runtime_sha256": "d15c4adbc99dd744f4b5326af504af4f6f229ba667ea16bc6465dff66d75dbaf",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 138.0,
+            "impact_frame": 71.76,
+            "launch_frame": 41.4,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "shadowball": "spirit"
+      },
+      "part_reviews": {
+        "spirit": {
+          "actions": [
+            "special_attack"
+          ],
+          "fractions": [
+            0.1,
+            0.45,
+            0.8
+          ],
+          "manual_surface_landmarks": {
+            "method": "three_independently_projected_visible_spirit_surfaces",
+            "projections": [
+              {
+                "capture_sha256": "6d96480160c722842cdc2bafc0210eb596da33ad4b53dfb1e480912e6594f01a",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.483124682166205,
+                      0.129373274274535,
+                      0.38750204355926
+                    ],
+                    "column": 1.0,
+                    "distance": 0.257792759878301,
+                    "mesh": "pm0972_11_00/Skeleton3D/pm0972_11_00_top_b_mesh",
+                    "mesh_contains": "top_b_mesh",
+                    "pixel": [
+                      242.0,
+                      128.0
+                    ],
+                    "surface": 0,
+                    "triangle": 239,
+                    "vertex_indices": [
+                      47,
+                      63,
+                      19
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              },
+              {
+                "capture_sha256": "74946e1fe7727fd8bf69384806d6b0fcd6062d7592fb359f69655986d6cab4b5",
+                "landmarks": [
+                  {
+                    "action": "special_attack",
+                    "barycentric": [
+                      0.410854719040527,
+                      0.470346660040679,
+                      0.118798620918794
+                    ],
+                    "column": 1.0,
+                    "distance": 0.310251144910628,
+                    "mesh": "pm0972_11_00/Skeleton3D/pm0972_11_00_top_c_mesh",
+                    "pixel": [
+                      216.0,
+                      114.0
+                    ],
+                    "surface": 0,
+                    "triangle": 879,
+                    "vertex_indices": [
+                      263,
+                      123,
+                      387
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              },
+              {
+                "capture_sha256": "6d96480160c722842cdc2bafc0210eb596da33ad4b53dfb1e480912e6594f01a",
+                "landmarks": [
+                  {
+                    "action": "special_attack",
+                    "barycentric": [
+                      0.37097269968732,
+                      0.14530275730421,
+                      0.48372454300847
+                    ],
+                    "column": 2.0,
+                    "distance": 0.243386644140822,
+                    "mesh": "pm0972_11_00/Skeleton3D/pm0972_11_00_top_d_mesh",
+                    "mesh_contains": "top_d_mesh",
+                    "pixel": [
+                      242.0,
+                      117.0
+                    ],
+                    "surface": 0,
+                    "triangle": 967,
+                    "vertex_indices": [
+                      595,
+                      596,
+                      576
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              }
+            ]
+          },
+          "method": "individual_visible_mesh_spirit_surface_review",
+          "normal_runtime_sha256": "502b683bbb85f31583fb8aaca1fcd69ef4b04cf942d1c0f8b31fcf114b2cb6f2",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f35f77f5c8c098dfbffa6583e1d0eda84e310c0fdfdad71e96472f2dae03f8e3",
+          "scope": "Three separately projected surfaces selected by native mesh visibility: flat tea spiral (top_b), emerged spirit spiral (top_c), retracting spiral (top_d). Exactly one is used by special_attack; no spirit point is defined for other actions. This replaces the rejected unconditional head point that floated over the cup. The .20/.45/.65 emerged spirit poses were also viewed separately. Shadow Ball has a separate sampled actual effect review. Remaining move routes and continuous geometry clearance are pending.",
+          "side_fraction": 0.95
+        }
+      },
+      "parts": {}
+    },
     "sirfetchd": {
       "parts": {
         "mouth": [

@@ -62,7 +62,7 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1079,
+		"with_any_attachment": 1080,
 		"with_beak_tip": 6,
 		"with_cannon": 2,
 		"with_cannons": 1,
@@ -86,8 +86,9 @@
 		"with_mouth_red": 1,
 		"with_muzzle": 5,
 		"with_olive_nozzle": 1,
+		"with_spirit": 1,
 		"with_vines": 3,
-		"without_attachments": 121
+		"without_attachments": 120
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -39088,6 +39089,9 @@
 				]
 			]
 		},
+		"sinistea": {
+			"spirit": []
+		},
 		"sirfetchd": {
 			"mouth": [
 				[
@@ -49576,7 +49580,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "1634f1fcfa9941b6011b2114d0375bfb58eae97e0be8220385cb8be0d35bb7c2",
+		"data/battle_move_attachments_3d.json": "2cfa0892ea04e5ac6de03e3f6eaa67a714c7c95cdb4e9e8a9e4ff4bc5dcd6956",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "87ca7240427a92f602f728c840eb2c7453427c70e0f74c7b02f296da7e8a2337",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
@@ -82028,8 +82032,79 @@
 			]
 		},
 		"sinistea": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"action_overrides": {
+				"special_attack": {
+					"spirit": [
+						[
+							{
+								"bone": "spine_02",
+								"offset": [
+									0.00654745101928711,
+									0.00331422709859908,
+									0.00507398974150419
+								],
+								"visible_mesh": "pm0972_11_00/Skeleton3D/pm0972_11_00_top_b_mesh",
+								"weight": 1.0
+							}
+						],
+						[
+							{
+								"bone": "head",
+								"offset": [
+									0.0143682630732656,
+									-0.00094423221889883,
+									0.0258630961179733
+								],
+								"visible_mesh": "pm0972_11_00/Skeleton3D/pm0972_11_00_top_c_mesh",
+								"weight": 0.701243589663171
+							},
+							{
+								"bone": "spine_02",
+								"offset": [
+									0.0632039830088615,
+									-0.00082847930025309,
+									0.0258955378085375
+								],
+								"weight": 0.284649128650963
+							},
+							{
+								"bone": "neck",
+								"offset": [
+									0.0357221141457558,
+									-0.00064260693034157,
+									0.0259476341307163
+								],
+								"weight": 0.0141072816858659
+							}
+						],
+						[
+							{
+								"bone": "feeler_a",
+								"offset": [
+									0.00068245083093643,
+									0.00037293226341716,
+									-0.00867786444723606
+								],
+								"visible_mesh": "pm0972_11_00/Skeleton3D/pm0972_11_00_top_d_mesh",
+								"weight": 0.837763407493704
+							},
+							{
+								"bone": "spine_02",
+								"offset": [
+									0.00547244446352124,
+									-0.00016746380424592,
+									0.0106264306232333
+								],
+								"weight": 0.162236592506295
+							}
+						]
+					]
+				}
+			},
+			"attachments": [
+				"spirit"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"

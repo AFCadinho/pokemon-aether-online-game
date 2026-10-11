@@ -86,6 +86,8 @@ func _run() -> void:
 					Pose.sample(player, action, player.get_animation(action).length*float(frame)/20.0)
 					for rig: Skeleton3D in actor.find_children("*","Skeleton3D",true,false): rig.force_update_all_bone_transforms()
 					for part: String in Attachments.configured_parts(identity):
+						# An action-only emitter has no binding in other native clips.
+						if Attachments.definitions_for(identity,part,action).is_empty(): continue
 						var result := Attachments.sample_part(actor,identity,part,world,action)
 						var key := "%s:%d:%s" % [action,frame,part]
 						if result.is_empty():

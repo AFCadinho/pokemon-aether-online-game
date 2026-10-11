@@ -7,8 +7,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1079 species/forms.
-- No anatomical attachment profile: 121 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 1080 species/forms.
+- No anatomical attachment profile: 120 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 990 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
@@ -852,6 +852,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | simisage | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | simisear | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | sinistcha | mouth | Same attachment profile |
+| sinistea | spirit | Same attachment profile |
 | sirfetchd | mouth | Same attachment profile |
 | sizzlipede | mouth | Same attachment profile |
 | skarmory | beak_tip, mouth | Same attachment profile |

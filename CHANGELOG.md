@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make Sinistea’s Shadow Ball charge follow its tea and emerging spirit during the special attack animation, with one active source at a time.
+
 - Calibrate Beldum’s forehead, Unown’s eye, Mega Chandelure’s grille and Runerigus’s eye for selected 3D attacks. Size Unown’s Hidden Power to its eye and delay Runerigus’s casts past the initial hand movement.
 
 - Give Wugtrio’s three heads and Magneton’s three eyes separate origins for selected beams. Calibrate Mega Starmie’s gem for seven casts and align their emission windows with the native animations.
