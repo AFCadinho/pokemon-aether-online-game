@@ -3486,6 +3486,53 @@
       }
     },
     "archaludon": {
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Hyper Beam launches at 0.18, impacts at 0.24 and ends at 0.29 while the head is raised and mouth tip separates from the lower tooth rim. The narrow beam at 0.28 connects to the mouth above the front plate. No beam at 0.16/0.31/0.40. Peak charge/beam obscures plate clearance, which remains pending. Other moves, physical contact and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_choreography": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.29,
+          "impact_fraction": 0.24,
+          "launch_fraction": 0.18
+        }
+      },
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "e5e138dc55931ded3f353284c4d90cd1b8e41dc0546ffbeac2a337fa1813564e",
+          "fractions": [
+            0.16,
+            0.2,
+            0.24,
+            0.28,
+            0.31,
+            0.4
+          ],
+          "normal_runtime_sha256": "0942b768425a666f69a50970e49bfe351049c27193dfa027e32d47870c546665",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f09fed781a03e986f8461a1f081eb9b5f179f5adffa2c48aaf973fcb8dedb0c0",
+          "scope": "Normal and shiny, two views: Hyper Beam launches at 0.18, impacts at 0.24 and ends at 0.29 while the head is raised and mouth tip separates from the lower tooth rim. The narrow beam at 0.28 connects to the mouth above the front plate. No beam at 0.16/0.31/0.40. Peak charge/beam obscures plate clearance, which remains pending. Other moves, physical contact and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "2d3d6047a65abce6f595df72384e98af0b0fcc13975153fcad21dc1ed0ca65df",
+          "shiny_runtime_sha256": "462ac6cc0016f89fa4c6e6acae41bc4d79bec525395560dd5b00ccef0d60f086",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 87.725,
+            "frames": 302.5,
+            "impact_frame": 72.6,
+            "launch_frame": 54.45,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
       "part_reviews": {
         "hand": {
           "actions": [
@@ -3570,7 +3617,122 @@
               "weight": 1.0
             }
           ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "feeler_a",
+              "offset": [
+                0.00536181731149554,
+                0.00474908901378512,
+                0.175775319337845
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "teeth",
+              "offset": [
+                0.00966554135084152,
+                0.0170049145817757,
+                0.0316948592662811
+              ],
+              "weight": 0.5
+            }
+          ]
         ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "99363968fd59139577f5ab402b36dafd6b2a08b4578bc15c105936b3f2ee7807",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v145/archaludon.png",
+            "sha256": "b37105417cde6cb271104ee47caf84fe3d531ab8487f416bd0a5b6cd26de405b"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [
+          {
+            "action": "idle",
+            "capture_sha256": "41e0c1cc081f01f037446d3c679ecc68972742e5389d97c9647e9419af4f07eb",
+            "fraction": 0.45,
+            "pixels": [
+              205.0,
+              303.0,
+              195.0,
+              295.0
+            ],
+            "ray_residual": 0.020889835488914
+          }
+        ],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "0942b768425a666f69a50970e49bfe351049c27193dfa027e32d47870c546665",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "6f39bad1fe86304d96c7397e139ce2afe7c916811aa2f6e5f824cb1171f234ac",
+        "scope": "Paired central black upper-mouth tip and red lower tooth-rim surface landmarks track the mouth region during sampled native actions. The front chest plate occludes side views; actual emission and plate clearance remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "2deda10ab0eaf10c2eeabf216cc84c277bb5747f804de6d2d8a4040a3f446196",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.362064804537963,
+                0.0244991465289593,
+                0.613436048933078
+              ],
+              "column": 0.0,
+              "distance": 1.02495835105629,
+              "mesh": "pm1132_00_00/Skeleton3D/pm1132_00_00_helmet_mesh",
+              "pixel": [
+                213.0,
+                180.0
+              ],
+              "surface": 0,
+              "triangle": 77,
+              "vertex_indices": [
+                8,
+                10,
+                9
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.354291518003213,
+                0.369081133805511,
+                0.276627348191275
+              ],
+              "column": 0.0,
+              "distance": 1.06839126592609,
+              "mesh": "pm1132_00_00/Skeleton3D/pm1132_00_00_teeth_mesh",
+              "pixel": [
+                214.0,
+                207.0
+              ],
+              "surface": 0,
+              "triangle": 430,
+              "vertex_indices": [
+                97,
+                71,
+                74
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "archen": {
@@ -4034,6 +4196,51 @@
       }
     },
     "ariados": {
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Hyper Beam follows the anterior mouthpart region between the white chelicerae. The late narrow beam at 0.84 connects to the lower central face, not the extensible neck. Earlier full-width emission is documented separately and obscures exact chelicera clearance. Other moves, physical contact and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        }
+      },
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "preview": ".tmp/attack-attachments/move-mouth-v143/ariados-hyperbeam.png",
+              "sha256": "df8132f724e20f0a53048c31f733169bfa2013382c8dab4883efc6d42c7ab4e3"
+            },
+            {
+              "preview": ".tmp/attack-attachments/move-mouth-v143/ariados@shiny-hyperbeam.png",
+              "sha256": "bb8f4d16519e6e2fff020aefdd0b4c29832fcc8bc9ae4d8ad728a84135d4d49f"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "47fc4f6357962e5865189b91665649c2884425dbcfca4bab74e677a6b2035714",
+          "fractions": [
+            0.7,
+            0.76,
+            0.8,
+            0.84
+          ],
+          "normal_runtime_sha256": "db3f6e6346a56560ef3e0b2ca29abd702d399f03c0165e9822ee3c181bef37c6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "43ba0c243838234af16da7045412ac220f0d12d17880e0262daa38b78db59072",
+          "scope": "Normal and shiny, two views: Hyper Beam follows the anterior mouthpart region between the white chelicerae. The late narrow beam at 0.84 connects to the lower central face, not the extensible neck. Earlier full-width emission is documented separately and obscures exact chelicera clearance. Other moves, physical contact and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "c83575e23daca5f7ce7c6f428988088509f65da6b723b2ac6af938ddf073c1da",
+          "shiny_runtime_sha256": "45c2b42a1e7d3682c4f04c0f582db28937aeaf2cb63ad9e84ba3efae7ef78094",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 302.5,
+            "impact_frame": 187.55,
+            "launch_frame": 75.625,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
       "part_reviews": {
         "hand": {
           "actions": [
@@ -4098,7 +4305,54 @@
               "weight": 1
             }
           ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.28824205402254227,
+                0.0001287340620850479,
+                0.1051702821632009
+              ],
+              "weight": 1.0
+            }
+          ]
         ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [
+          {
+            "action": "idle",
+            "capture_sha256": "b8d14e6643a3245974bdca97d70bd5b1c9e70fbda394a828499f2e53616df152",
+            "fraction": 0.45,
+            "pixels": [
+              210,
+              302,
+              157,
+              303
+            ],
+            "ray_residual": 0.0009450290892737984
+          }
+        ],
+        "method": "manual_anatomy_marker_pose_visual_review",
+        "normal_runtime_sha256": "db3f6e6346a56560ef3e0b2ca29abd702d399f03c0165e9822ee3c181bef37c6",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "28d34b4a8f08d7baa9a98b1ca3640754e3d79808e95d5ebe5891faa263cd0bb0",
+        "scope": "Front mouthpart between the two white chelicerae follows the head in the sampled native poses. The dark expandable segment below the red head is the neck, not the mouth; its rejected surface projection is not used. The concealed oral opening, chelicera clearance and actual effects remain pending.",
+        "side_fraction": 0.45
       }
     },
     "armaldo": {
@@ -5185,6 +5439,160 @@
         "preview_sha256": "615646f3a0693e367493414631d559e8899eb94cf40a96d4c59b71a6faa05a44",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "avalugg-hisui": {
+      "anatomical_route_reviews": {
+        "icebeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Ice Beam waits until 0.33, impacts at 0.42 and ends at 0.50 while the mouth is exposed between the spread ice plates. No beam at 0.31; mouth-region emission at 0.35/0.42 fades at 0.48 and is absent at 0.51/0.56 before closing. The side plate obscures one view; continuous plate clearance and peak effect scale remain pending. Other moves, physical contact and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_choreography": {
+        "icebeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.5,
+          "impact_fraction": 0.42,
+          "launch_fraction": 0.33
+        }
+      },
+      "move_effect_reviews": {
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "e5e138dc55931ded3f353284c4d90cd1b8e41dc0546ffbeac2a337fa1813564e",
+          "fractions": [
+            0.31,
+            0.35,
+            0.42,
+            0.48,
+            0.51,
+            0.56
+          ],
+          "normal_runtime_sha256": "e90f8342680e151eb5ffe56a9f3c956168f92cd5b1d7d9bae2dc59c332447d15",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "bfc664505152227c3f42e4a74b9907e0d38539aa0128ea16ff821a3e4a924270",
+          "scope": "Normal and shiny, two views: Ice Beam waits until 0.33, impacts at 0.42 and ends at 0.50 while the mouth is exposed between the spread ice plates. No beam at 0.31; mouth-region emission at 0.35/0.42 fades at 0.48 and is absent at 0.51/0.56 before closing. The side plate obscures one view; continuous plate clearance and peak effect scale remain pending. Other moves, physical contact and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "faab5230a3ce4b774800f18d241075e24aacb87108744ff9651595e48117761c",
+          "shiny_runtime_sha256": "78c8c8633e4f0c13562f9353f5c084e8117808a57dd05388559450a5eb91e7b7",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 60.0,
+            "frames": 120.0,
+            "impact_frame": 50.4,
+            "launch_frame": 39.6,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        }
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                -0.0622016079723835,
+                -0.00364705780521035,
+                0.88277280330658
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "jaw",
+              "offset": [
+                0.921784043312073,
+                0.00237517734058201,
+                0.00452331965789199
+              ],
+              "weight": 0.5
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "ea8f5db439afc10c72b7eafbb9d804a74e4649169617a58cb8faf453e67917cb",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v145/avalugg-hisui.png",
+            "sha256": "fc7de4fb6b33f278bc1f1c55076a2257620c8950e28339381801a3b9c94b2701"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "e90f8342680e151eb5ffe56a9f3c956168f92cd5b1d7d9bae2dc59c332447d15",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "ea523793b2161a60f1288190d7609ed730c3a67c047de4c9583f214a9e327401",
+        "scope": "Paired upper/lower tooth-rim points center the exposed special-attack mouth. Closed poses and side views are hidden by the large front ice plates; this is an open-mouth-pose calibration only, with plate clearance and emission timing still pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "4ffa8bcab83536b847a4fb8b03ce21e29eeee4ac31236ab15055d71a0b5f80ee",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.090954401654858,
+                0.0916062957557679,
+                0.817439302589374
+              ],
+              "column": 1.0,
+              "distance": 1.15917908777358,
+              "mesh": "pm0751_00_41/Skeleton3D/pm0751_00_41_body_01_mesh",
+              "pixel": [
+                210.0,
+                85.0
+              ],
+              "surface": 0,
+              "triangle": 268,
+              "vertex_indices": [
+                337,
+                365,
+                339
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.672912352601201,
+                0.0117070811227377,
+                0.315380566276061
+              ],
+              "column": 1.0,
+              "distance": 1.12628851357883,
+              "mesh": "pm0751_00_41/Skeleton3D/pm0751_00_41_body_01_mesh",
+              "pixel": [
+                210.0,
+                277.0
+              ],
+              "surface": 0,
+              "triangle": 301,
+              "vertex_indices": [
+                668,
+                669,
+                667
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "axew": {
@@ -37526,6 +37934,150 @@
         "preview_sha256": "8116d8b8ee03c5364d5a6e63983ea70350c4a5f962923132a420a3efb05846d6",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "glalie-mega": {
+      "anatomical_route_reviews": {
+        "icebeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Ice Beam emerges between the upper and lower tooth rims in raised-head and forward special poses at 0.20/0.405/0.45. It is gone at 0.65. This is a sampled mouth-plane origin review; peak effect scale and continuous tooth clearance remain pending. Other moves, physical contact and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        }
+      },
+      "move_effect_reviews": {
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "47fc4f6357962e5865189b91665649c2884425dbcfca4bab74e677a6b2035714",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "468f40828154c18b7684bbc83d6170b101ac4edb4e973c8d2d4f04a0e4a1d97a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d771b6a6e2ddf604a38a871b83de799914eef4c3763253651073313d537080a7",
+          "scope": "Normal and shiny, two views: Ice Beam emerges between the upper and lower tooth rims in raised-head and forward special poses at 0.20/0.405/0.45. It is gone at 0.65. This is a sampled mouth-plane origin review; peak effect scale and continuous tooth clearance remain pending. Other moves, physical contact and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "17dae397b562d5d56acee948b4426074d5feb061f36f97c67b81caa05cddc659",
+          "shiny_runtime_sha256": "53220289f292503f0267009d10e153805465927b20632a5a9f917392161ad30d",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 148.0,
+            "impact_frame": 66.6,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        }
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                -0.474621564149857,
+                -0.0242670439183712,
+                0.629371166229248
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "jaw",
+              "offset": [
+                0.992881894111633,
+                -0.0141560165211558,
+                -0.236670210957527
+              ],
+              "weight": 0.5
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [
+          {
+            "action": "idle",
+            "capture_sha256": "a21f88af19e0d4ad310fc0b19558afc9bc842eacd214fa700cb4de02f9419162",
+            "pixels": [
+              210.0,
+              81.0,
+              214.0,
+              68.0
+            ],
+            "ray_residual": 0.029347687257866
+          }
+        ],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "468f40828154c18b7684bbc83d6170b101ac4edb4e973c8d2d4f04a0e4a1d97a",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "bd00cf5906cfd736e98883eaca830acdee3a3c0815566c3519866abcdbfe7c2e",
+        "scope": "Paired upper/lower tooth-rim surface points keep the emitter in the open mouth plane during idle, raised-head physical and special poses. Actual effects, physical contact and continuous tooth clearance remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "5937ffe73c3e12adca5db084446cf230b8c500a4255a63a12c3bd259cc2d7527",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.413370685341554,
+                0.515926195629421,
+                0.0707031190290246
+              ],
+              "column": 1.0,
+              "distance": 1.42206636239987,
+              "mesh": "pm0362_51_00/Skeleton3D/pm0362_51_00_body_mesh",
+              "pixel": [
+                210.0,
+                78.0
+              ],
+              "surface": 0,
+              "triangle": 23,
+              "vertex_indices": [
+                8,
+                9,
+                7
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "idle",
+              "barycentric": [
+                0.258610650637179,
+                0.641630717917075,
+                0.0997586314457459
+              ],
+              "column": 1.0,
+              "distance": 1.6381316911554,
+              "mesh": "pm0362_51_00/Skeleton3D/pm0362_51_00_teeth_mesh",
+              "pixel": [
+                210.0,
+                299.0
+              ],
+              "surface": 0,
+              "triangle": 39,
+              "vertex_indices": [
+                16,
+                17,
+                15
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "glameow": {
@@ -84879,6 +85431,182 @@
         "preview_sha256": "b2a60cae7db2571d1e074f6580eb02231bc4431f5f00cf664b42108abf363843",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "roaring-moon": {
+      "anatomical_route_reviews": {
+        "flamethrower": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Flamethrower launches at 0.18, impacts at 0.22 and ends at 0.25. Open-mouth emission at 0.20/0.22 fades at 0.24; none remains at 0.26/0.30 during the forward wing sweep. This replaces the rejected longer stream crossing the forward wings. Continuous wing/hand clearance and peak effect scale remain pending. Other moves, physical contact and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_choreography": {
+        "flamethrower": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.25,
+          "impact_fraction": 0.22,
+          "launch_fraction": 0.18
+        }
+      },
+      "move_effect_reviews": {
+        "flamethrower": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "12d6a5b7f0f300cc773946e2ea468552b70429aed9c1a151a08c7cc855958392",
+          "fractions": [
+            0.16,
+            0.2,
+            0.22,
+            0.24,
+            0.26,
+            0.3
+          ],
+          "normal_runtime_sha256": "766dd3ea433615921fa85883b164a67764f5930c3b694f21c92d538cd271a0ae",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "006fa0ac602194d59e62b90b9d6b9f01ecb1a74673b9f3eea8c0e38b0a524eb0",
+          "scope": "Normal and shiny, two views: Flamethrower launches at 0.18, impacts at 0.22 and ends at 0.25. Open-mouth emission at 0.20/0.22 fades at 0.24; none remains at 0.26/0.30 during the forward wing sweep. This replaces the rejected longer stream crossing the forward wings. Continuous wing/hand clearance and peak effect scale remain pending. Other moves, physical contact and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "360b00bf79896ff9d12ff572168231953868b5b247dac6a05fadfed441e260ee",
+          "shiny_runtime_sha256": "baf86af8b7be71f44b539ab2a75927a85f9523a41f16d4a827d0e430c5c9e368",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 40.5000007152558,
+            "frames": 162.000002861023,
+            "impact_frame": 35.6400006294251,
+            "launch_frame": 29.1600005149841,
+            "move_key": "flamethrower"
+          },
+          "views": 2
+        }
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.734758019447327,
+                -0.0345950908958912,
+                0.0741942301392555
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "center_jaw",
+              "offset": [
+                0.496136605739594,
+                -0.025589182972908,
+                -0.0163010377436876
+              ],
+              "weight": 0.324092107435621
+            },
+            {
+              "bone": "left_jaw",
+              "offset": [
+                -0.0249777492135763,
+                0.0744063928723335,
+                -0.00978886429220438
+              ],
+              "weight": 0.175907892564379
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "992ae4cff4cf66718b89130061f70cf99f987d02d01ba29974a7a2bdb64d0903",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v145/roaring-moon.png",
+            "sha256": "4072f10a727c2f2ca26ee0cce0490d75700111dc10c90c7df04df694ffd76693"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [
+          {
+            "action": "idle",
+            "capture_sha256": "48a639bff486b406881078d636eef9a40b7134cb7640be1db6e1b2a527a32e45",
+            "fraction": 0.45,
+            "part": "mouth",
+            "pixels": [
+              214.0,
+              260.0,
+              195.0,
+              270.0
+            ],
+            "ray_residual": 0.0286423778484743
+          }
+        ],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "766dd3ea433615921fa85883b164a67764f5930c3b694f21c92d538cd271a0ae",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "108e99e8551a8cefa9a7e9138c5892caea47bab0c993f549a959d0f7dd7be244",
+        "scope": "Paired upper/lower lip-rim projection follows the open jaw plane and closing physical poses. Side raised-head views partially occlude the point behind lips; actual emission and tooth/wing clearance remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "da13a946024de49cc1ae9ba7504a2ed17f3ac26300b795414a01813bb1a55f1d",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.171065678107101,
+                0.301167519062009,
+                0.52776680283089
+              ],
+              "column": 1.0,
+              "distance": 1.8609722277214,
+              "mesh": "pm1089_00_00/Skeleton3D/pm1089_00_00_body_mesh",
+              "pixel": [
+                210.0,
+                142.0
+              ],
+              "surface": 0,
+              "triangle": 4746,
+              "vertex_indices": [
+                3020,
+                3008,
+                3009
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "idle",
+              "barycentric": [
+                0.0844689679035841,
+                0.689281819357419,
+                0.226249212738997
+              ],
+              "column": 1.0,
+              "distance": 2.06682063954502,
+              "mesh": "pm1089_00_00/Skeleton3D/pm1089_00_00_body_mesh",
+              "pixel": [
+                210.0,
+                199.0
+              ],
+              "surface": 0,
+              "triangle": 1620,
+              "vertex_indices": [
+                2874,
+                2894,
+                2875
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "rockruff": {

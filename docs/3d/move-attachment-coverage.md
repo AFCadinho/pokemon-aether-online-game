@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1049 species/forms.
-- No anatomical attachment profile: 151 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 965 species/forms.
+- At least one configured anatomical attachment: 1052 species/forms.
+- No anatomical attachment profile: 148 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 970 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -43,13 +43,13 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | arbok | mouth | Same attachment profile |
 | arcanine | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | arcanine-hisui | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| archaludon | hand, left_hand | Same attachment profile |
+| archaludon | hand, left_hand, mouth | Same attachment profile |
 | archen | hand, left_hand, mouth | Same attachment profile |
 | archeops | hand, left_hand, mouth | Same attachment profile |
 | arctibax | hand, left_hand, mouth | Same attachment profile |
 | arctovish | mouth | Same attachment profile |
 | arctozolt | foot, hand, left_hand, mouth | Same attachment profile |
-| ariados | hand, left_hand | Same attachment profile |
+| ariados | hand, left_hand, mouth | Same attachment profile |
 | armaldo | foot, mouth | Same attachment profile |
 | armarouge | hand, left_hand | Same attachment profile |
 | aromatisse | hand, left_hand, mouth | Same attachment profile |
@@ -61,6 +61,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | audino-mega | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | aurorus | hand, left_hand, mouth | Same attachment profile |
 | avalugg | hand, left_hand, mouth | Same attachment profile |
+| avalugg-hisui | mouth | Same attachment profile |
 | axew | hand, left_hand, mouth | Same attachment profile |
 | azelf | hand, left_hand, mouth | Same attachment profile |
 | azumarill | hand, left_hand, mouth | Same attachment profile |
@@ -357,6 +358,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | giratina | mouth | Same attachment profile |
 | glaceon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | glalie | mouth | Same attachment profile |
+| glalie-mega | mouth | Same attachment profile |
 | glameow | hand, left_hand, mouth | Same attachment profile |
 | glastrier | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | gligar | hand, left_hand, mouth | Same attachment profile |
@@ -764,6 +766,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | ribombee | mouth | Same attachment profile |
 | rillaboom | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | riolu | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| roaring-moon | mouth | Same attachment profile |
 | rockruff | hand, left_hand, mouth | Same attachment profile |
 | roggenrola | mouth | Same attachment profile |
 | rookidee | mouth | Same attachment profile |

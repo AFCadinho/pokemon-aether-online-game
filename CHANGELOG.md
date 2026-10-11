@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate mouth origins for Archaludon, Ariados, Hisuian Avalugg, Mega Glalie and Roaring Moon; align the reviewed Archaludon Hyper Beam, Hisuian Avalugg Ice Beam and Roaring Moon Flamethrower with their native mouth and wing movements.
+
 - Refine mouth origins for Houndstone, Minccino, Grumpig, Slaking, Sudowoodo, Wyrdeer and Slugma; align their reviewed Growl, Hyper Beam and Flamethrower animations with open-mouth poses.
 
 - Refine mouth origins for Cetoddle, Drizzile, Crabominable, Lugia and Ho-Oh; align Cetoddle’s Ice Beam, Lugia’s Hyper Beam and Ho-Oh’s Flamethrower with their open-mouth poses.

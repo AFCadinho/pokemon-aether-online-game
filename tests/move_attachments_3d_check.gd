@@ -79,11 +79,15 @@ func _run() -> void:
 	assert(Attachments.definitions_for("goodra", "mouth") != Attachments.definitions_for("goodra-hisui", "mouth"))
 	assert(Attachments.definitions_for("gengar", "mouth") != Attachments.definitions_for("gengar-mega", "mouth"))
 
-	for species: String in ["cetoddle", "drizzile", "crabominable", "lugia", "ho-oh", "houndstone", "minccino", "grumpig", "slaking", "sudowoodo", "wyrdeer", "slugma"]:
+	for species: String in ["cetoddle", "drizzile", "crabominable", "lugia", "ho-oh", "houndstone", "minccino", "grumpig", "slaking", "sudowoodo", "wyrdeer", "slugma", "archaludon", "avalugg-hisui", "glalie-mega", "roaring-moon"]:
 		for identity: String in [species, species + "@shiny"]:
 			var emitters := Attachments.definitions_for(identity, "mouth")
 			assert(emitters.size() == 1 and emitters[0].size() > 1)
 			assert(Attachments.part_for(identity, "icebeam") == "mouth")
+
+	for identity: String in ["ariados", "ariados@shiny"]:
+		assert(Attachments.definitions_for(identity, "mouth")[0][0].bone == "head")
+		assert(Attachments.part_for(identity, "hyperbeam") == "mouth")
 
 	for identity: String in ["zweilous", "zweilous@shiny"]:
 		var heads := Attachments.definitions_for(identity, "mouth")
