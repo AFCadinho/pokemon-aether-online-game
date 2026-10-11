@@ -1824,6 +1824,8 @@ func _advance_tile_movement(delta: float) -> void:
 			if not story_path_movement_active:
 				var completed_tiles := maxi(int(round(move_start_position.distance_to(target_position) / float(TILE_SIZE))), 1)
 				overworld_steps_completed.emit(completed_tiles)
+				if not surf_activity_active and not land_mount_activity_active:
+					WalkingEvolutionService.record_steps(completed_tiles)
 				if check_for_map_exit():
 					return
 

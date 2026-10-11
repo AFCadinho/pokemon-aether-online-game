@@ -1918,7 +1918,11 @@ static func completion_transfer_messages(snapshot: Dictionary, user_id: int) -> 
 		if int(transfer_value.get("fromUserId", 0)) == user_id:
 			removed.append(name)
 		if int(transfer_value.get("toUserId", 0)) == user_id:
-			received.append(name)
+			var incoming: Dictionary = transfer_value.duplicate(true)
+			if str(incoming.get("evolutionSpeciesId", "")) in ["escavalier", "accelgor"]:
+				incoming["speciesId"] = incoming.evolutionSpeciesId
+				incoming["speciesName"] = incoming.get("evolutionSpeciesName", incoming.evolutionSpeciesId)
+			received.append(_completion_pokemon_name(incoming))
 	var item_transfers: Variant = result.get("itemTransfers", [])
 	if item_transfers is Array:
 		for transfer_value: Variant in item_transfers:
@@ -2131,6 +2135,16 @@ func _add_review_pokemon(target: VBoxContainer, values: Variant) -> void:
 		level_label.add_theme_color_override("font_color", TRADE_MUTED)
 		level_label.add_theme_font_size_override("font_size", 10)
 		identity.add_child(level_label)
+		var evolution_id := str(pokemon.get("evolutionSpeciesId", ""))
+		if evolution_id in ["escavalier", "accelgor"]:
+			var evolution_label := Label.new()
+			evolution_label.text = _t("ui.trade.review.evolves_to", {
+				"pokemon": _species_display_name(evolution_id, str(pokemon.get("evolutionSpeciesName", evolution_id))),
+			})
+			evolution_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			evolution_label.add_theme_font_size_override("font_size", 10)
+			evolution_label.add_theme_color_override("font_color", TRADE_MUTED)
+			identity.add_child(evolution_label)
 
 
 func _add_review_items(target: VBoxContainer, values: Variant) -> void:

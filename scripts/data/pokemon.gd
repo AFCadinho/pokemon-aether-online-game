@@ -30,6 +30,9 @@ var moves: Array
 var types: Array
 var possible_abilities: Array
 var can_evolve: bool
+var evolution_walk_steps := 0
+var evolution_walk_ready_level := 0
+var evolution_walk_required_steps := 0
 var tradable: bool
 var experience: int
 var current_level_exp: int

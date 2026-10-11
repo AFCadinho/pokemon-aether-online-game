@@ -5,6 +5,7 @@ const SPRITE_PACK_IDS: Array[String] = [
 	"pokemon-shiny-front", "pokemon-shiny-back", "pokemon-gen5-front",
 	"pokemon-gen5-back", "pokemon-gen5-shiny-front", "pokemon-gen5-shiny-back",
 ]
+const PairPack = preload("model_pair_pack.gd")
 
 static func bytes_in(jobs: Array) -> int:
 	var total := 0
@@ -27,7 +28,10 @@ static func models_plan(service: RefCounted, descriptor: Dictionary, game_catalo
 		by_id[asset.asset_id] = asset
 	var installed := {}
 	if not game_catalog.is_empty() and FileAccess.file_exists(game_catalog):
-		var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(game_catalog))
+		var file := FileAccess.open(game_catalog, FileAccess.READ)
+		var raw: Variant = []
+		if file != null and file.get_length() <= 8 * 1024 * 1024:
+			raw = preload("model_pair_pilot.gd").expand_entries(JSON.parse_string(file.get_as_text()))
 		if raw is Array:
 			for entry: Variant in raw:
 				if entry is Dictionary:
@@ -55,6 +59,16 @@ static func models_plan(service: RefCounted, descriptor: Dictionary, game_catalo
 static func _available(asset: Dictionary, entries: Dictionary) -> bool:
 	if asset.get("appearances", []).is_empty():
 		return false
+	if asset.get("format") == PairPack.FORMAT:
+		var path := ""
+		for appearance: Dictionary in asset.appearances:
+			var entry: Dictionary = entries.get(str(appearance.runtime_identity), {})
+			if entry.get("pair_asset") != asset or entry.get("runtime_sha256") != appearance.runtime_sha256 or entry.get("runtime_schema") != 1 or entry.get("bytes") != appearance.bytes or entry.get("runtime_path") != str(asset.pair_manifest.resource_root).path_join(appearance.runtime_path):
+				return false
+			if not path.is_empty() and entry.get("pack_path") != path:
+				return false
+			path = str(entry.get("pack_path", ""))
+		return path.is_absolute_path() and str(PairPack.inspect(path, asset).error).is_empty()
 	for appearance: Dictionary in asset.appearances:
 		var entry: Dictionary = entries.get(str(appearance.runtime_identity), {})
 		var path := str(entry.get("runtime_path", ""))

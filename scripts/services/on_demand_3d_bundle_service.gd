@@ -9,6 +9,8 @@ const RELEASE_V11 = preload("res://data/approved_3d_release_v11.json")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 const DesktopAssetStorage = preload("res://scripts/services/desktop_asset_storage.gd")
 const ModelPlatform = preload("res://scripts/battle/battle_ui/model_platform.gd")
+const PairPack = preload("res://scripts/services/model_pair_pack.gd")
+const PairPilot = preload("res://scripts/services/model_pair_pilot.gd")
 const BASE_URL := "https://updates.pokeaether.com/"
 const ROOT := "user://on-demand-3d-v1"
 const MAX_INDEX_BYTES := 1024 * 1024
@@ -21,6 +23,8 @@ static func downloaded_bytes() -> int:
 
 
 static func clear_downloaded_models() -> bool:
+	if PairPack.protects(ROOT) or PairPack.protects(OS.get_environment("POKEAETHER_LAUNCHER_MODEL_DIR")):
+		return false # Mounted PCKs must remain readable until this process exits.
 	return _clear_directory(ProjectSettings.globalize_path(ROOT)) and DesktopAssetStorage.clear_legacy_models()
 
 
@@ -122,6 +126,14 @@ func _check_installed_models(identities: Array[String], source_catalog: String) 
 	return await _run_storage_work(_installed_models.bind(identities.duplicate(), source_catalog))
 
 
+func verify_shared_entry(entry: Dictionary) -> Dictionary:
+	var asset := PairPilot.entry_asset(entry)
+	if asset.is_empty():
+		return {"error": "Shared 3D model has no qualified binding."}
+	var checked: Dictionary = await _run_storage_work(PairPack.inspect.bind(str(entry.pack_path), asset))
+	return {"error": str(checked.error), "asset": asset, "checked": checked}
+
+
 func _run_storage_work(action: Callable) -> Variant:
 	# Workers only access file data; HTTPRequest and downloader state stay here.
 	var work := StorageWork.new()
@@ -138,7 +150,11 @@ func _run_storage_work(action: Callable) -> Variant:
 
 
 func can_clear_cache() -> bool:
-	return not _busy and _battle_waiters == 0 and _local_checks == 0
+	return not _busy and _battle_waiters == 0 and _local_checks == 0 and not models_held_until_restart()
+
+
+func models_held_until_restart() -> bool:
+	return PairPack.protects(ROOT) or PairPack.protects(OS.get_environment("POKEAETHER_LAUNCHER_MODEL_DIR"))
 
 
 func clear_cache() -> bool:
@@ -345,6 +361,8 @@ func _asset_id(identity: String) -> String:
 
 
 func _selected_release() -> Dictionary:
+	if PairPilot.enabled():
+		return PairPilot.release()
 	if OS.has_feature("android") and OS.has_feature("android_3d_experimental"):
 		return RELEASE_V11.data # The experimental candidate gate verifies publication.
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
@@ -432,7 +450,7 @@ func _catalog(path: String) -> Array:
 	if file == null or file.get_length() > MAX_CATALOG_BYTES:
 		return []
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
-	return parsed if parsed is Array else []
+	return PairPilot.expand_entries(parsed)
 
 
 func _merge_entries(first: Array, second: Array) -> Array:
@@ -461,12 +479,19 @@ func _verified_entry(entries: Array, identity: String, expected_digest: String) 
 		var key := str(entry.get("species", "")) + ("@shiny" if entry.get("variant") == "shiny" else "")
 		var model_path := str(entry.get("runtime_path", ""))
 		var digest := str(entry.get("runtime_sha256", ""))
+		if key == identity and digest == expected_digest and entry.has("pair_asset"):
+			var asset := PairPilot.entry_asset(entry)
+			if not asset.is_empty() and not ReviewedModels.resolve(identity, digest).is_empty() and str(PairPack.inspect(str(entry.pack_path), asset).error).is_empty():
+				return {"path": model_path, "sha256": digest, "bytes": int(entry.bytes), "pack_sha256": asset.sha256}
+			continue
 		if key == identity and digest == expected_digest and not ReviewedModels.resolve(identity, digest).is_empty() and _valid_file(model_path, int(entry.get("bytes", 0)), digest):
 			return {"path": model_path, "sha256": digest, "bytes": int(entry.bytes)}
 	return {}
 
 
 func _local_index_path(release: Dictionary) -> String:
+	if PairPilot.enabled() and release.revision == PairPilot.catalog().catalog_revision:
+		return PairPilot.data_path()
 	var pin: Dictionary = release.index
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path() and _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
@@ -485,7 +510,7 @@ func _read_local_index(path: String, release: Dictionary) -> Dictionary:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 	if not parsed is Dictionary or not parsed.get("assets") is Array or parsed.get("catalog_revision") != release.revision:
 		return {}
-	return parsed
+	return PairPilot.expand_index(parsed)
 
 
 func _approved_index() -> Dictionary:
@@ -516,9 +541,15 @@ func _install_asset(asset: Dictionary) -> Dictionary:
 	var id := str(asset.get("asset_id", ""))
 	var parts := id.split(":")
 	var size := int(asset.get("size_bytes", 0))
-	if parts.size() != 3 or not key.begins_with("optional-assets/pokemon_3d/%s/%s/" % [parts[1], parts[2]]) or not key.ends_with(".zip") or key.contains("..") or size < 1 or size > MAX_ARCHIVE_BYTES:
+	var extension := ".pck" if asset.get("format") == PairPack.FORMAT else ".zip"
+	if parts.size() != 3 or not key.begins_with("optional-assets/pokemon_3d/%s/%s/" % [parts[1], parts[2]]) or not key.ends_with(extension) or key.contains("..") or size < 1 or size > MAX_ARCHIVE_BYTES:
 		return {"error": "Approved 3D bundle metadata is invalid."}
-	var zip_path := ROOT.path_join("downloads").path_join(sha + ".zip")
+	if extension == ".pck" and PairPilot.enabled():
+		var local_root := OS.get_environment("POKEAETHER_MODEL_PAIR_PACKS")
+		if local_root.is_absolute_path():
+			var local_path := local_root.path_join(key.get_file())
+			return await _run_storage_work(_unpack_asset.bind(asset.duplicate(true), local_path))
+	var zip_path := ROOT.path_join("downloads").path_join(sha + extension)
 	var valid: bool = await _run_storage_work(_valid_file.bind(zip_path, size, sha))
 	if not valid:
 		var error := await _fetch(BASE_URL + key, zip_path, size, sha, MAX_ARCHIVE_BYTES, parts[1])
@@ -540,6 +571,20 @@ func _unpack_asset(asset: Dictionary, zip_path: String) -> Dictionary:
 	var parts := str(asset.get("asset_id", "")).split(":")
 	if parts.size() != 3 or not _valid_file(zip_path, int(asset.get("size_bytes", 0)), sha):
 		return {"error": "Approved 3D bundle failed verification."}
+	if asset.get("format") == PairPack.FORMAT:
+		for appearance: Dictionary in asset.get("appearances", []):
+			if PairPilot.asset_for(str(appearance.runtime_identity), str(appearance.runtime_sha256)) != asset or ReviewedModels.resolve(str(appearance.runtime_identity), str(appearance.runtime_sha256)).is_empty():
+				return {"error": "Shared 3D model has no qualified binding."}
+		var object_root := ProjectSettings.globalize_path(ROOT.path_join("objects").path_join(sha))
+		var parent := object_root.get_base_dir()
+		DirAccess.make_dir_recursive_absolute(parent)
+		var access := DirAccess.open(parent)
+		if access == null or access.get_space_left() < int(asset.size_bytes) + 33554432:
+			return {"error": "Not enough free space to install shared 3D models."}
+		var installed := PairPack.install(zip_path, asset, object_root)
+		if not str(installed.error).is_empty():
+			return installed
+		return {"error": "", "entries": PairPack.catalog_entries(asset, object_root)}
 	var reader := ZIPReader.new()
 	if reader.open(zip_path) != OK:
 		return {"error": "Could not open the approved 3D bundle."}
@@ -590,11 +635,14 @@ func _publish_catalog(entries: Array) -> String:
 	var path := ProjectSettings.globalize_path(ROOT.path_join("runtime-catalog.json"))
 	if DirAccess.make_dir_recursive_absolute(path.get_base_dir()) != OK:
 		return ""
+	var content := JSON.stringify(PairPilot.compact_entries(entries)) + "\n"
+	if content.to_utf8_buffer().size() > MAX_CATALOG_BYTES:
+		return ""
 	var temporary := path + ".partial"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
 	if file == null:
 		return ""
-	file.store_string(JSON.stringify(entries, "\t") + "\n")
+	file.store_string(content)
 	file.close()
 	return path if DirAccess.rename_absolute(temporary, path) == OK else ""
 
@@ -609,6 +657,8 @@ func _prune_unused_models(entries: Array, index: Dictionary, storage_root: Strin
 	# A missing index/catalog or interrupted publication must never remove files.
 	if entries.is_empty() or index.is_empty() or not index.get("assets") is Array:
 		return result
+	if not PairPilot.enabled() and entries.any(func(entry: Variant): return entry is Dictionary and entry.has("pair_asset")):
+		return result # An inactive debug catalog is not cleanup authority.
 	var catalog_path := storage_root.path_join("runtime-catalog.json")
 	if _catalog(catalog_path) != JSON.parse_string(JSON.stringify(entries)):
 		return result
@@ -623,7 +673,7 @@ func _prune_unused_models(entries: Array, index: Dictionary, storage_root: Strin
 	for entry: Variant in entries:
 		if not entry is Dictionary:
 			return result
-		var path := ProjectSettings.globalize_path(str(entry.get("runtime_path", ""))).simplify_path()
+		var path := ProjectSettings.globalize_path(str(entry.get("pack_path", entry.get("runtime_path", "")))).simplify_path()
 		if path.begins_with(objects_root + "/"):
 			referenced[path.get_base_dir().get_file()] = true
 	# Preserve completed and partial members of an interrupted current download.
@@ -635,11 +685,16 @@ func _prune_unused_models(entries: Array, index: Dictionary, storage_root: Strin
 		if digest.length() != 64 or not digest.is_valid_hex_number() or referenced.has(digest) or directory.is_link(digest):
 			continue
 		var child := DirAccess.open(objects_root.path_join(digest))
-		if child == null or not child.get_directories().is_empty():
+		if child == null or not child.get_directories().is_empty() or PairPack.protects(objects_root.path_join(digest)):
 			continue
 		var owned := true
 		for name in child.get_files():
-			if child.is_link(name) or name not in ["normal.scn", "shiny.scn", "normal.scn.partial", "shiny.scn.partial"]:
+			if child.is_link(name) or name not in ["normal.scn", "shiny.scn", "normal.scn.partial", "shiny.scn.partial", "model-pair.pck", "bundle.json"]:
+				owned = false
+		if child.file_exists("model-pair.pck") or child.file_exists("bundle.json"):
+			var metadata_file := FileAccess.open(objects_root.path_join(digest).path_join("bundle.json"), FileAccess.READ)
+			var metadata: Variant = JSON.parse_string(metadata_file.get_as_text()) if metadata_file != null and metadata_file.get_length() <= PairPack.MAX_MANIFEST else null
+			if not metadata is Dictionary or metadata.get("sha256") != digest or not str(PairPack.object_check(objects_root.path_join(digest), metadata).error).is_empty():
 				owned = false
 		if owned:
 			candidates.append(objects_root.path_join(digest))
@@ -647,6 +702,12 @@ func _prune_unused_models(entries: Array, index: Dictionary, storage_root: Strin
 		return result
 	# Independently verify the surviving local models before removing history.
 	for entry: Dictionary in entries:
+		if entry.has("pair_asset"):
+			var pair := PairPilot.entry_asset(entry)
+			if pair.is_empty() or not str(PairPack.inspect(str(entry.get("pack_path", "")), pair).error).is_empty():
+				result.error = "Current shared model failed verification; previous files kept."
+				return result
+			continue
 		var path := ProjectSettings.globalize_path(str(entry.get("runtime_path", ""))).simplify_path()
 		if path.begins_with(objects_root + "/") and not _valid_file(path, int(entry.get("bytes", 0)), str(entry.get("runtime_sha256", ""))):
 			result.error = "Current downloaded model failed verification; previous files kept."

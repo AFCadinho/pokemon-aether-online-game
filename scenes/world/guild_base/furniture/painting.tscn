@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_bmxqs"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_bm72a"]
+
+[node name="Painting" type="Node2D" unique_id=1319021574]
+texture_filter = 1
+script = ExtResource("1_bmxqs")
+furniture_id = "painting"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=2111010230]
+position = Vector2(0, -96)
+tile_map_data = PackedByteArray("AAAAAAAAAAAEAAUAAAABAAAAAAAFAAUAAAACAAAAAAAFAAUAAAADAAAAAAAGAAUAAAAAAAEAAAAHAAUAAAABAAEAAAAIAAUAAAACAAEAAAAIAAUAAAADAAEAAAAJAAUAAAA=")
+tile_set = ExtResource("2_bm72a")

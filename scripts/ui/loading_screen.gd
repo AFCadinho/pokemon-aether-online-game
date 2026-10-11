@@ -391,6 +391,7 @@ func _apply_profile_response(profile_response: Dictionary) -> bool:
 	PlayerSave.gems = max(int(wallet.get("gems", PlayerSave.gems)), 0)
 	PlayerSave.aetherite = max(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
 	PlayerSave.battle_points = max(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)
+	PlayerSave.casino_tokens = max(int(wallet.get("casino_tokens", PlayerSave.casino_tokens)), 0)
 
 	var stats_response: Dictionary = _dictionary_from_value(profile_response.get("stats", {}))
 	var stats: Dictionary = _dictionary_from_value(stats_response.get("stats", {}))

@@ -11,6 +11,20 @@ const CATALOG_PATHS: Dictionary = {
 }
 
 const CODE_TO_KEY: Dictionary = {
+	"guild_base_furniture_invalid": "ui.guild_base.furnish.invalid.invalid",
+	"guild_base_furniture_outside": "ui.guild_base.furnish.invalid.outside",
+	"guild_base_furniture_overlap": "ui.guild_base.furnish.invalid.overlap",
+	"guild_base_furniture_path_blocked": "ui.guild_base.furnish.invalid.path_blocked",
+	"guild_base_furniture_surface_required": "ui.guild_base.furnish.invalid.surface_required",
+	"guild_base_furniture_stock_required": "ui.guild_base.furnish.invalid.stock_required",
+	"guild_base_furniture_player_occupied": "ui.guild_base.furnish.invalid.player_occupied",
+	"guild_base_furniture_lease_busy": "ui.guild_base.furnish.invalid.lease_busy",
+	"guild_base_furniture_lease_expired": "ui.guild_base.furnish.invalid.lease_expired",
+	"guild_base_furniture_revision_conflict": "ui.guild_base.furnish.invalid.revision_conflict",
+	"guild_base_furniture_forbidden": "ui.guild_base.furnish.invalid.forbidden",
+	"guild_base_furniture_visit_required": "ui.guild_base.furnish.invalid.visit_required",
+	"guild_base_furniture_busy": "ui.guild_base.furnish.invalid.busy",
+	"guild_base_position_blocked": "ui.guild_base.furnish.invalid.position_blocked",
 	"pokemon_evolution_conditions_changed": "ui.evolution.error.conditions_changed",
 	"name_restore_unavailable": "ui.settings.rename.unavailable",
 	"name_inappropriate": "ui.login.rename.inappropriate",
@@ -62,6 +76,7 @@ const CODE_TO_KEY: Dictionary = {
 	"bank_interaction_required": "backend.error.bank_interaction_required",
 	"not_enough_aetherite": "backend.error.not_enough_aetherite",
 	"not_enough_battle_points": "backend.error.not_enough_battle_points",
+	"casino_tokens_balance_overflow": "backend.error.casino_tokens_balance_overflow",
 	"market_not_active": "backend.error.market_not_active",
 	"market_interaction_required": "backend.error.market_interaction_required",
 	"market_interaction_misconfigured": "backend.error.market_unavailable",

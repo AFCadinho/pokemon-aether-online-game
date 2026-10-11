@@ -534,7 +534,8 @@ func _setup_rematch_marker() -> void:
 	rematch_marker = PanelContainer.new()
 	rematch_marker.name = "RematchMarker"
 	rematch_marker.visible = false
-	rematch_marker.z_index = 514
+	rematch_marker.z_as_relative = false
+	rematch_marker.z_index = OVERHEAD_NAMEPLATE_Z - 1
 	rematch_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	rematch_marker.position = REMATCH_MARKER_BASE_POSITION
 	rematch_marker.custom_minimum_size = Vector2(48.0, 48.0)

@@ -5,6 +5,7 @@ const KIND := "pokeaether-optional-asset-index"
 const SUPPORTED_TYPES := ["pokemon_3d"]
 const MAX_ASSETS := 10000
 const MAX_ARCHIVE_BYTES := 512 * 1024 * 1024
+const PairPack = preload("model_pair_pack.gd")
 
 
 static func _hex(value: String) -> bool:
@@ -41,7 +42,7 @@ static func safe_object_key(value: String) -> bool:
 	for part in value.split("/"):
 		if part in ["", ".", ".."]:
 			return false
-	return value.ends_with(".zip")
+	return value.ends_with(".zip") or value.ends_with(".pck")
 
 
 static func validate(index: Dictionary) -> String:
@@ -50,7 +51,7 @@ static func validate(index: Dictionary) -> String:
 	if not index.get("catalog_revision") is String or str(index.catalog_revision).strip_edges().is_empty():
 		return "Asset index has no catalog revision."
 	var contract: Variant = index.get("runtime_contract")
-	if not contract is Dictionary or contract.get("pokemon_3d") != 1 or contract.get("godot") != "4.6":
+	if not contract is Dictionary or (contract.get("pokemon_3d") != 1 and contract.get("pokemon_3d") != 2) or contract.get("godot") != "4.6":
 		return "Unsupported runtime contract."
 	var assets: Variant = index.get("assets")
 	if not assets is Array or assets.is_empty() or assets.size() > MAX_ASSETS:
@@ -79,6 +80,14 @@ static func validate(index: Dictionary) -> String:
 			return "Asset archive size is invalid."
 		if not _hex(str(asset.get("sha256", ""))) or not safe_object_key(str(asset.get("object_key", ""))):
 			return "Asset archive identity is invalid."
+		if asset.get("format", "zip") == PairPack.FORMAT:
+			if contract.pokemon_3d != 2 or not str(asset.object_key).ends_with(".pck"):
+				return "Model-pair PCK requires runtime contract 2."
+			var pair_error := PairPack.metadata_error(asset)
+			if not pair_error.is_empty():
+				return pair_error
+		elif asset.get("format", "zip") != "zip" or not str(asset.object_key).ends_with(".zip"):
+			return "Unsupported asset bundle format."
 		var appearances: Variant = asset.get("appearances")
 		if not appearances is Array or appearances.is_empty() or appearances.size() > 8:
 			return "Pokémon bundle has an invalid appearance list."

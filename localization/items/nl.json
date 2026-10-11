@@ -1,8 +1,52 @@
 {
-  "gyarados-mount": {"name": "Gyarados-mount", "shortDesc": "Ontgrendelt Gyarados als surfmount."},
-  "repel": {"name": "Repel", "shortDesc": "Voegt 100 stappen toe aan je Repel-voorraad (maximaal 10.000)."},
-  "super-repel": {"name": "Super Repel", "shortDesc": "Voegt 200 stappen toe aan je Repel-voorraad (maximaal 10.000)."},
-  "max-repel": {"name": "Max Repel", "shortDesc": "Voegt 250 stappen toe aan je Repel-voorraad (maximaal 10.000)."},
+  "alola-stone": {
+    "name": "Alola Stone",
+    "shortDesc": "Laat Pikachu, Exeggcute evolueren naar hun Alola-evolutie. Wordt verbruikt bij succesvol gebruik."
+  },
+  "galar-stone": {
+    "name": "Galar Stone",
+    "shortDesc": "Laat Koffing, Mime Jr. evolueren naar hun Galar-evolutie. Wordt verbruikt bij succesvol gebruik."
+  },
+  "hisui-stone": {
+    "name": "Hisui Stone",
+    "shortDesc": "Laat Quilava, Dewott, Dartrix, Petilil, Rufflet, Goomy, Bergmite evolueren naar hun Hisui-evolutie. Wordt verbruikt bij succesvol gebruik."
+  },
+  "stick": {
+    "name": "Leek",
+    "shortDesc": "Verhoogt bij vasthouden de kans op kritieke treffers voor Farfetch’d en Sirfetch’d. Gebruik om te evolueren: Farfetchd Galar → Sirfetchd. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "leaders-crest": {
+    "name": "Leader’s Crest",
+    "shortDesc": "Gebruik om te evolueren: Bisharp → Kingambit. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "peat-block": {
+    "name": "Peat Block",
+    "shortDesc": "Gebruik ’s nachts (21:00–05:00 game time) op Ursaring om hem te laten evolueren naar Ursaluna. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "strawberry-sweet": {
+    "name": "Strawberry Sweet",
+    "shortDesc": "Gebruik op Milcery en kies een van de negen Alcremie-smaken. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "gold-coin": {
+    "name": "Gold Coin",
+    "shortDesc": "Gebruik op beide Gimmighoul-vormen om hem te laten evolueren naar Gholdengo. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "gyarados-mount": {
+    "name": "Gyarados-mount",
+    "shortDesc": "Ontgrendelt Gyarados als surfmount."
+  },
+  "repel": {
+    "name": "Repel",
+    "shortDesc": "Voegt 100 stappen toe aan je Repel-voorraad (maximaal 10.000)."
+  },
+  "super-repel": {
+    "name": "Super Repel",
+    "shortDesc": "Voegt 200 stappen toe aan je Repel-voorraad (maximaal 10.000)."
+  },
+  "max-repel": {
+    "name": "Max Repel",
+    "shortDesc": "Voegt 250 stappen toe aan je Repel-voorraad (maximaal 10.000)."
+  },
   "escape-rope-action": {
     "name": "Escape Rope · Belangrijk item",
     "shortDesc": "Keer terug naar de laatste veilige binnenlocatie die je hebt bezocht."
@@ -830,5 +874,201 @@
   "gyarados-mount-box": {
     "name": "Gyarados Surf Mount Box",
     "shortDesc": "Bevat een Gyarados-surfmount. Shiny-basiskans: 50%."
+  },
+  "auspicious-armor": {
+    "name": "Gunstig pantser",
+    "shortDesc": "Gebruik om te evolueren: Charcadet → Armarouge. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "black-augurite": {
+    "name": "Black Augurite",
+    "shortDesc": "Gebruik om te evolueren: Scyther → Kleavor. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "chipped-pot": {
+    "name": "Gechipte pot",
+    "shortDesc": "Gebruik om te evolueren: Sinistea Antique → Polteageist Antique. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "cracked-pot": {
+    "name": "Gebarsten pot",
+    "shortDesc": "Gebruik om te evolueren: Sinistea → Polteageist. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "dawn-stone": {
+    "name": "Dageraadsteen",
+    "shortDesc": "Gebruik op een mannelijke Kirlia voor Gallade of een vrouwelijke Snorunt voor Froslass. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "deep-sea-scale": {
+    "name": "Diepzeeschaal",
+    "shortDesc": "Verdubbelt Clamperls Sp. Def. als hij het vasthoudt. Gebruik om te evolueren: Clamperl → Gorebyss. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "deep-sea-tooth": {
+    "name": "Diepzeetand",
+    "shortDesc": "Verdubbelt Clamperls Sp. Atk. als hij het vasthoudt. Gebruik om te evolueren: Clamperl → Huntail. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "dragon-scale": {
+    "name": "Drakenschaal",
+    "shortDesc": "Gebruik om te evolueren: Seadra → Kingdra. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "dubious-disc": {
+    "name": "Dubieuze schijf",
+    "shortDesc": "Gebruik om te evolueren: Porygon2 → Porygon-Z. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "dusk-stone": {
+    "name": "Schemersteen",
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "electirizer": {
+    "name": "Elektricisator",
+    "shortDesc": "Gebruik om te evolueren: Electabuzz → Electivire. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "fire-stone": {
+    "name": "Vuursteen",
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "galarica-cuff": {
+    "name": "Galarica-manchet",
+    "shortDesc": "Gebruik om te evolueren: Slowpoke Galar → Slowbro Galar. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "galarica-wreath": {
+    "name": "Galarica-krans",
+    "shortDesc": "Gebruik om te evolueren: Slowpoke Galar → Slowking Galar. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "ice-stone": {
+    "name": "IJssteen",
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "kings-rock": {
+    "name": "Koningsrots",
+    "shortDesc": "Voegt bij vasthouden 10% kans op terugdeinzen toe aan geschikte aanvallen. Gebruik om te evolueren: Poliwhirl → Politoed; Slowpoke → Slowking. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "leaf-stone": {
+    "name": "Bladsteen",
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "linking-cord": {
+    "name": "Verbindingssnoer",
+    "shortDesc": "Gebruik op geschikte Pokémon die via ruilen evolueren. Karrablast en Shelmet moeten echt met elkaar worden geruild. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "magmarizer": {
+    "name": "Magmarizer",
+    "shortDesc": "Gebruik om te evolueren: Magmar → Magmortar. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "malicious-armor": {
+    "name": "Kwaadaardig pantser",
+    "shortDesc": "Gebruik om te evolueren: Charcadet → Ceruledge. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "masterpiece-teacup": {
+    "name": "Meesterwerk Theekopje",
+    "shortDesc": "Gebruik om te evolueren: Poltchageist Artisan → Sinistcha Masterpiece. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "metal-alloy": {
+    "name": "Metaallegering",
+    "shortDesc": "Gebruik om te evolueren: Duraludon → Archaludon. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "metal-coat": {
+    "name": "Metalen jas",
+    "shortDesc": "Versterkt Steel-aanvallen als de Pokémon het vasthoudt. Gebruik om te evolueren: Onix → Steelix; Scyther → Scizor. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "moon-stone": {
+    "name": "Maansteen",
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "oval-stone": {
+    "name": "Ovale steen",
+    "shortDesc": "Laat Happiny dit vasthouden en overdag (05:00–21:00 game time) levelen om te evolueren naar Chansey. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "prism-scale": {
+    "name": "Prismaschaal",
+    "shortDesc": "Gebruik om te evolueren: Feebas → Milotic. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "protector": {
+    "name": "Beschermer",
+    "shortDesc": "Gebruik om te evolueren: Rhydon → Rhyperior. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "razor-claw": {
+    "name": "Scheermesklauw",
+    "shortDesc": "Verhoogt bij vasthouden de kans op kritieke treffers met één niveau. Laat Sneasel dit vasthouden en ’s nachts (21:00–05:00 game time) levelen voor Weavile; Hisui Sneasel moet overdag (05:00–21:00 game time) levelen voor Sneasler. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "razor-fang": {
+    "name": "Scheertand",
+    "shortDesc": "Voegt bij vasthouden 10% kans op terugdeinzen toe aan geschikte aanvallen. Laat Gligar dit vasthouden en ’s nachts (21:00–05:00 game time) levelen om te evolueren naar Gliscor. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "reaper-cloth": {
+    "name": "Maaimachinedoek",
+    "shortDesc": "Gebruik om te evolueren: Dusclops → Dusknoir. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "sachet": {
+    "name": "Zakje",
+    "shortDesc": "Gebruik om te evolueren: Spritzee → Aromatisse. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "scroll-of-darkness": {
+    "name": "Scroll of Darkness",
+    "shortDesc": "Gebruik op Kubfu om hem te laten evolueren naar Urshifu Single Strike. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "scroll-of-waters": {
+    "name": "Scroll of Waters",
+    "shortDesc": "Gebruik op Kubfu om hem te laten evolueren naar Urshifu Rapid Strike. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "shiny-stone": {
+    "name": "Glanzende steen",
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "sun-stone": {
+    "name": "Zonnesteen",
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "sweet-apple": {
+    "name": "Zoete appel",
+    "shortDesc": "Gebruik om te evolueren: Applin → Appletun. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "syrupy-apple": {
+    "name": "Stroperige appel",
+    "shortDesc": "Gebruik om te evolueren: Applin → Dipplin. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "tart-apple": {
+    "name": "Taartappel",
+    "shortDesc": "Gebruik om te evolueren: Applin → Flapple. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "thunder-stone": {
+    "name": "Dondersteen",
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "unremarkable-teacup": {
+    "name": "Onopvallend theekopje",
+    "shortDesc": "Gebruik om te evolueren: Poltchageist → Sinistcha. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "up-grade": {
+    "name": "Upgraden",
+    "shortDesc": "Gebruik om te evolueren: Porygon → Porygon2. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "water-stone": {
+    "name": "Watersteen",
+    "shortDesc": "Gebruik op een geschikte Pokémon om hem te laten evolueren. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "whipped-dream": {
+    "name": "Slagroom",
+    "shortDesc": "Gebruik om te evolueren: Swirlix → Slurpuff. Wordt alleen verbruikt bij een geslaagde evolutie."
+  },
+  "berry-sweet": {
+    "name": "Bes Zoet",
+    "shortDesc": "Heeft momenteel geen evolutie-effect in PokeAether. Gebruik Strawberry Sweet voor Milcery."
+  },
+  "clover-sweet": {
+    "name": "Klaver Zoet",
+    "shortDesc": "Heeft momenteel geen evolutie-effect in PokeAether. Gebruik Strawberry Sweet voor Milcery."
+  },
+  "flower-sweet": {
+    "name": "Bloem zoet",
+    "shortDesc": "Heeft momenteel geen evolutie-effect in PokeAether. Gebruik Strawberry Sweet voor Milcery."
+  },
+  "love-sweet": {
+    "name": "Liefs lief",
+    "shortDesc": "Heeft momenteel geen evolutie-effect in PokeAether. Gebruik Strawberry Sweet voor Milcery."
+  },
+  "ribbon-sweet": {
+    "name": "Lint Zoet",
+    "shortDesc": "Heeft momenteel geen evolutie-effect in PokeAether. Gebruik Strawberry Sweet voor Milcery."
+  },
+  "star-sweet": {
+    "name": "Ster lief",
+    "shortDesc": "Heeft momenteel geen evolutie-effect in PokeAether. Gebruik Strawberry Sweet voor Milcery."
   }
 }

@@ -73,6 +73,7 @@ var controls_hidden := false
 var screenshot_in_progress := false
 var controls_panel_dragging := false
 var camera_mouse_panning := false
+var camera_touch_index := -1
 var capture_sequence := 0
 var browser_screenshot := PackedByteArray()
 var browser_screenshot_filename := ""
@@ -132,6 +133,24 @@ func _process(delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch:
+		var touch := event as InputEventScreenTouch
+		if not touch.pressed and touch.index == camera_touch_index:
+			camera_touch_index = -1
+			get_viewport().set_input_as_handled()
+		elif touch.pressed and active and not _pointer_over_controls(touch.position):
+			if not screenshot_in_progress and camera_touch_index == -1:
+				camera_touch_index = touch.index
+			get_viewport().set_input_as_handled()
+		return
+	if event is InputEventScreenDrag and event.index == camera_touch_index:
+		if active and not screenshot_in_progress and is_instance_valid(camera):
+			camera.position -= event.relative / maxf(camera.zoom.x, 0.01)
+			get_viewport().set_input_as_handled()
+		return
+	if active and event is InputEventMouse and event.device == InputEvent.DEVICE_ID_EMULATION and (camera_touch_index != -1 or not _pointer_over_controls(event.position)):
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventMouseButton:
 		var mouse_event := event as InputEventMouseButton
 		if (
@@ -184,6 +203,13 @@ func _input(event: InputEvent) -> void:
 				return
 			camera.position -= mouse_motion.relative / maxf(camera.zoom.x, 0.01)
 			get_viewport().set_input_as_handled()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_APPLICATION_PAUSED:
+		camera_touch_index = -1
+		camera_mouse_panning = false
+		controls_panel_dragging = false
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -292,6 +318,7 @@ func close_photo_mode() -> void:
 	composition_grid.visible = false
 	controls_panel_dragging = false
 	camera_mouse_panning = false
+	camera_touch_index = -1
 	_restore_runtime_state()
 	active = false
 	visible = false
@@ -315,6 +342,7 @@ func capture_screenshot() -> void:
 	screenshot_in_progress = true
 	capture_button.disabled = true
 	camera_mouse_panning = false
+	camera_touch_index = -1
 	capture_sequence += 1
 	var current_capture_sequence := capture_sequence
 	var timer_index := clampi(timer_select.selected, 0, CAPTURE_TIMER_SECONDS.size() - 1)
@@ -689,7 +717,7 @@ func _refresh_copy() -> void:
 	if title_label == null:
 		return
 	title_label.text = LocalizationManager.text("ui.creator.photo.title")
-	help_label.text = LocalizationManager.text("ui.creator.photo.help")
+	help_label.text = LocalizationManager.text("ui.creator.photo.help.touch" if WindowFit.is_touch_ui() else "ui.creator.photo.help")
 	camera_section_label.text = LocalizationManager.text("ui.creator.photo.section.camera")
 	scene_section_label.text = LocalizationManager.text("ui.creator.photo.section.scene")
 	capture_section_label.text = LocalizationManager.text("ui.creator.photo.section.capture")

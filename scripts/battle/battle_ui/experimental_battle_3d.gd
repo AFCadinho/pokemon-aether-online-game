@@ -219,11 +219,31 @@ func _models_pending() -> bool:
 	return not pending_entries.is_empty() or not loading_entry.is_empty() or not loading_path.is_empty()
 
 class IntegrityRead extends RefCounted:
+	const PairPack = preload("res://scripts/services/model_pair_pack.gd")
+	const PairPilot = preload("res://scripts/services/model_pair_pilot.gd")
 	var task := -1
 	var path: String
 	var digest := ""
 	var bytes := 0
 	var elapsed_ms := 0.0
+	var pair_asset := {}
+	var pair_check := {}
+	var pair_entry := {}
+	func start_model(entry: Dictionary) -> void:
+		if entry.has("pair_asset"):
+			pair_asset = PairPilot.entry_asset(entry)
+			pair_entry = entry.duplicate(true)
+			path = str(entry.get("pack_path", ""))
+			task = WorkerThreadPool.add_task(_read_pair)
+		else:
+			start(str(entry.runtime_path))
+	func _read_pair() -> void:
+		var started := Time.get_ticks_usec()
+		pair_check = PairPack.inspect(path, pair_asset)
+		if str(pair_check.get("error", "invalid")).is_empty():
+			digest = str(pair_entry.runtime_sha256)
+			bytes = int(pair_entry.bytes)
+		elapsed_ms = (Time.get_ticks_usec() - started) / 1000.0
 	func start(source: String) -> void:
 		path = source
 		task = WorkerThreadPool.add_task(_read)
@@ -1773,6 +1793,7 @@ func _load_catalog(path: String, preserve_actors := false) -> void:
 	var portable_pack := data is Dictionary
 	if portable_pack:
 		data = ReviewedModels.pack_entries(data, prepared_path.get_base_dir())
+	data = preload("res://scripts/services/model_pair_pilot.gd").expand_entries(data)
 	if not data is Array:
 		return
 	var seen := {}
@@ -1780,7 +1801,7 @@ func _load_catalog(path: String, preserve_actors := false) -> void:
 		if not raw is Dictionary:
 			continue
 		var entry: Dictionary = raw.duplicate(true)
-		for internal_key in ["_verified_runtime_hash", "_source_bytes", "_cache_source_bytes", "_resource_cache_key", "_reviewed_model", "_screened_model"]:
+		for internal_key in ["_verified_runtime_hash", "_source_bytes", "_cache_source_bytes", "_resource_cache_key", "_reviewed_model", "_screened_model", "_pair_asset"]:
 			entry.erase(internal_key) # Local catalogs cannot forge loader/cache state.
 		var identity := ReviewedModels.entry_key(entry)
 		if not _catalog_species_allowed(identity):
@@ -1803,10 +1824,15 @@ func _load_catalog(path: String, preserve_actors := false) -> void:
 			continue # Only the two legacy normal controls retain compatibility.
 		var model_path := str(entry.get("runtime_path", ""))
 		var timing: Variant = entry.get("action_timing", {})
-		if entry.get("runtime_schema", 0) != 1 or not timing is Dictionary or not model_path.ends_with(".scn") or not FileAccess.file_exists(model_path):
+		var pair := preload("res://scripts/services/model_pair_pilot.gd").entry_asset(entry)
+		if entry.has("pair_asset") and pair.is_empty():
 			continue
-		var model_file := FileAccess.open(model_path, FileAccess.READ)
-		if model_file == null or model_file.get_length() > 134217728:
+		if not pair.is_empty():
+			entry["_pair_asset"] = pair
+		if entry.get("runtime_schema", 0) != 1 or not timing is Dictionary or not model_path.ends_with(".scn") or (pair.is_empty() and not FileAccess.file_exists(model_path)):
+			continue
+		var model_file := FileAccess.open(model_path if pair.is_empty() else str(entry.pack_path), FileAccess.READ)
+		if model_file == null or model_file.get_length() > (134217728 if pair.is_empty() else 536870912):
 			continue
 		if portable_pack and model_file.get_length() != int(entry.bytes):
 			continue
@@ -1896,6 +1922,12 @@ func _queue_needed_models() -> void:
 
 func _finish_validation(entry: Dictionary, check: IntegrityRead) -> bool:
 	var species: String = entry.species
+	if entry.has("pair_asset"):
+		var pair := preload("res://scripts/services/model_pair_pilot.gd").entry_asset(entry)
+		if pair.is_empty() or not preload("res://scripts/services/model_pair_pack.gd").mount_checked(str(entry.pack_path), pair, check.pair_check).is_empty():
+			failed_models[species] = true
+			catalog_problem = "Shared 3D model pack failed verification: " + species
+			return false
 	var reviewed := ReviewedModels.resolve(species, check.digest)
 	if (entry.get("_reviewed_model", false) or entry.get("_screened_model", false)) and reviewed.is_empty():
 		failed_models[species] = true
@@ -1922,6 +1954,10 @@ func _finish_validation(entry: Dictionary, check: IntegrityRead) -> bool:
 	entry["_source_bytes"] = check.bytes
 	entry["_cache_source_bytes"] = maxi(check.bytes, int(reviewed.get("cache_source_bytes", 0)))
 	entry["_resource_cache_key"] = ModelCache.key(entry.runtime_path, check.digest, entry.action_timing) if ResourceLoader.get_dependencies(entry.runtime_path).is_empty() else ""
+	if entry.has("_pair_asset"):
+		var pair: Dictionary = entry._pair_asset
+		entry["_cache_source_bytes"] = maxi(int(entry._cache_source_bytes), preload("res://scripts/services/model_pair_pack.gd").budget(pair, str(entry.variant)))
+		entry["_resource_cache_key"] = ModelCache.key(entry.runtime_path, check.digest, entry.action_timing, str(pair.sha256) + ":" + str(pair.pair_manifest.resource_root))
 	validated_entries[species] = entry.duplicate(true)
 	return true
 
@@ -1945,7 +1981,7 @@ func _import_next_model() -> void:
 		if not loading_entry.has("_verified_runtime_hash"):
 			if integrity_read == null:
 				integrity_read = IntegrityRead.new()
-				integrity_read.start(loading_entry.runtime_path)
+				integrity_read.start_model(loading_entry)
 				return
 			if not integrity_read.ready():
 				return
@@ -1984,7 +2020,7 @@ func _import_next_model() -> void:
 		else:
 			if integrity_read == null:
 				integrity_read = IntegrityRead.new()
-				integrity_read.start(loading_path)
+				integrity_read.start_model(loading_entry)
 				return
 			if not integrity_read.ready():
 				return
@@ -2016,7 +2052,7 @@ func _reuse_checked_resource(entry: Dictionary) -> void:
 	# The downloader just checked the entire file. Only an already admitted,
 	# hash-bound RAM scene can reuse that result; cold loads still recheck disk
 	# before and after loading, including changes made during the load.
-	if integrity_read != null:
+	if integrity_read != null or entry.has("pair_asset"):
 		return # Finish any read that was already started before the handoff.
 	var identity := ReviewedModels.canonical_identity(str(entry.species))
 	var verified: Dictionary = download_verified_files.get(identity, {})

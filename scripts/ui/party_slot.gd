@@ -7,6 +7,7 @@ signal held_item_dropped(slot_index: int, item: Dictionary)
 signal context_requested(slot_index: int, global_position: Vector2)
 signal loan_requested
 
+const TouchContextGesture := preload("res://scripts/ui/mobile/touch_context_gesture.gd")
 const HeldItemDropTarget := preload("res://scripts/ui/held_item_drop_target_button.gd")
 
 const SLOT_BG := Color("#081522eb")
@@ -79,8 +80,8 @@ func _ready() -> void:
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	hp_bar.custom_minimum_size.x = 160.0
 	exp_bar.custom_minimum_size.x = 160.0
-	if not click_button.gui_input.is_connected(_on_click_button_gui_input):
-		click_button.gui_input.connect(_on_click_button_gui_input)
+	# Duplicated slots already contain the gesture, but need their own handler.
+	TouchContextGesture.attach(click_button, _on_click_button_gui_input)
 	if not click_button.mouse_entered.is_connected(_on_click_button_mouse_entered):
 		click_button.mouse_entered.connect(_on_click_button_mouse_entered)
 	if not click_button.mouse_exited.is_connected(_on_click_button_mouse_exited):

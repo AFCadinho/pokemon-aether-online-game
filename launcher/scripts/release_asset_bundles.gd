@@ -10,6 +10,7 @@ const V8 = preload("res://data/approved_3d_release_v8.json")
 const V9 = preload("res://data/approved_3d_release_v9.json")
 const V10 = preload("res://data/approved_3d_release_v10.json")
 const V11 = preload("res://data/approved_3d_release_v11.json")
+const PairPilot = preload("model_pair_pilot.gd")
 
 const DESCRIPTOR_SCHEMA := 1
 const DESCRIPTOR_KIND := "pokeaether-release-asset-index"
@@ -90,7 +91,10 @@ static func descriptor_error(descriptor: Dictionary) -> String:
 
 
 static func _pinned_releases() -> Array[Dictionary]:
-	return [V11.data, V10.data, V9.data, V8.data, V7.data, V6.data, V5.data]
+	var result: Array[Dictionary] = [V11.data, V10.data, V9.data, V8.data, V7.data, V6.data, V5.data]
+	if PairPilot.enabled():
+		result.append(PairPilot.release())
+	return result
 
 
 static func _release_ids(release: Dictionary) -> Array[String]:
@@ -153,6 +157,8 @@ func cached_index(descriptor: Dictionary) -> Dictionary:
 	if file == null or file.get_length() != int(descriptor.sizeBytes) or FileAccess.get_sha256(path) != str(descriptor.sha256):
 		return {}
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if parsed is Dictionary:
+		parsed = PairPilot.expand_index(parsed)
 	if not parsed is Dictionary or not _release_index_error(parsed, descriptor).is_empty():
 		return {}
 	return parsed
@@ -176,6 +182,8 @@ func accept_index(descriptor: Dictionary, downloaded_path: String, include_bundl
 	if file == null or file.get_length() != int(descriptor.sizeBytes) or FileAccess.get_sha256(downloaded_path) != str(descriptor.sha256):
 		return {"error": "Asset bundle index integrity check failed.", "jobs": []}
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if parsed is Dictionary:
+		parsed = PairPilot.expand_index(parsed)
 	if not parsed is Dictionary:
 		return {"error": "Asset bundle index is invalid.", "jobs": []}
 	error = _release_index_error(parsed, descriptor)
@@ -346,7 +354,9 @@ func _release_index_error(index: Dictionary, descriptor: Dictionary = {}) -> Str
 			if variant not in ["normal", "shiny"] or variant in variants or identity != expected_identity:
 				return "Asset bundle appearance identity is not approved."
 			if not Approval.approved_digest(approved, str(appearance.get("runtime_sha256", ""))):
-				return "Asset bundle model hash is not release-approved."
+				var pair := PairPilot.asset_for(identity, str(appearance.get("runtime_sha256", "")))
+				if pair != asset or not Approval.approved_digest(approved, str(appearance.get("source_sha256", ""))):
+					return "Asset bundle model hash is not release-approved."
 			variants.append(variant)
 		variants.sort()
 		if variants != ["normal", "shiny"]:
@@ -361,7 +371,7 @@ static func _safe_object_key(asset_id: String, key: String) -> bool:
 	if parts.size() != 3:
 		return false
 	var prefix := "optional-assets/pokemon_3d/%s/%s/" % [parts[1], parts[2]]
-	if not key.begins_with(prefix) or not key.ends_with(".zip") or key.contains("\\") or key.contains(":"):
+	if not key.begins_with(prefix) or not (key.ends_with(".zip") or key.ends_with(".pck")) or key.contains("\\") or key.contains(":"):
 		return false
 	for part in key.split("/"):
 		if part in ["", ".", ".."]:

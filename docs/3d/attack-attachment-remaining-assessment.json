@@ -1245,10 +1245,18 @@
         "log_sha256": "4c815e37f26b9f7811ee39a584c44c96393493144ec8043588f9532977d9068c",
         "result": "pass"
       },
+      "depth_order_gpu": {
+        "banner": "MOVE_EFFECT_DEPTH_ORDER_3D_OK control=true front=true occlusion=true far=true",
+        "result": "pass"
+      },
       "learnsets": {
         "banner": "ATTACHMENT_LEARNSETS {\"configured_move_pairs\":7516,\"missing_parts\":{\"foot\":1,\"hand\":231,\"mouth\":111},\"species_forms\":1200,\"supported_move_pairs\":30563} errors=0",
         "log_sha256": "1917062644d7919d6d7373873d946d8235deb960d9b925fab2cdeffa3f1fa743",
         "result": "pass"
+      },
+      "post_development_merge": {
+        "development_commit": "1abef9938c7242460d78c03693e93126eb0dcfad",
+        "scope": "Repeated focused attachment, choreography, coverage/learnset and 160-model binding checks after incorporating development. Full paired certification and live battles not run."
       },
       "regression": {
         "banner": "MOVE_ATTACHMENTS_3D_OK transforms=true moving_bones=true forms=true lifecycle=true paired_beams=true paired_vines=true paired_sound=true single_impact=true",

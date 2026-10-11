@@ -129,7 +129,10 @@ func _request_cached_model() -> bool:
 	for path in catalogs:
 		if path.is_empty() or not FileAccess.file_exists(path):
 			continue
-		var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+		var catalog_file := FileAccess.open(path, FileAccess.READ)
+		if catalog_file == null or catalog_file.get_length() > 8 * 1024 * 1024:
+			continue
+		var raw: Variant = preload("res://scripts/services/model_pair_pilot.gd").expand_entries(JSON.parse_string(catalog_file.get_as_text()))
 		if not raw is Array:
 			continue
 		for candidate: Variant in raw:
@@ -141,11 +144,31 @@ func _request_cached_model() -> bool:
 			var digest := str(candidate.get("runtime_sha256", ""))
 			var model_path := str(candidate.get("runtime_path", ""))
 			profile = ReviewedModels.resolve(requested_key, digest)
+			if candidate.has("pair_asset") and not profile.is_empty():
+				if preload("res://scripts/services/model_pair_pilot.gd").entry_asset(candidate).is_empty():
+					continue
+				download_pending = true
+				_prepare_cached_pair.call_deferred(candidate.duplicate(true), request_generation)
+				return true
 			if profile.is_empty() or not model_path.ends_with(".scn") or not FileAccess.file_exists(model_path):
 				continue
 			if FileAccess.get_sha256(model_path) == digest:
 				return _request_model(model_path)
 	return false
+
+
+func _prepare_cached_pair(entry: Dictionary, generation: int) -> void:
+	var service := get_node("/root/OnDemand3DBundleService")
+	var result: Dictionary = await service.verify_shared_entry(entry)
+	if generation != request_generation:
+		return
+	download_pending = false
+	if str(result.error).is_empty():
+		var error := preload("res://scripts/services/model_pair_pack.gd").mount_checked(str(entry.pack_path), result.asset, result.checked)
+		if error.is_empty() and _request_model(str(entry.runtime_path)):
+			return
+	status.text = "3D preview unavailable"
+	model_failed.emit()
 
 func _request_model(model_path: String) -> bool:
 	loading_path = model_path

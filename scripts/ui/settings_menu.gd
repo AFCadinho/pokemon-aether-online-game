@@ -3029,8 +3029,10 @@ func _refresh_asset_storage_controls() -> void:
 	var scanning: bool = DesktopAssetUsageService.is_scanning()
 	_update_asset_storage_row(sprite_storage_button, sprite_storage_hint, sprite_bytes,
 		_storage_block_reason(sprite_bytes, scanning, battle_open, WebPokemonSpriteService.can_clear_desktop_disk()))
-	_update_asset_storage_row(model_storage_button, model_storage_hint, model_bytes,
-		_storage_block_reason(model_bytes, scanning, battle_open, OnDemand3DBundleService.can_clear_cache()))
+	var model_reason := _storage_block_reason(model_bytes, scanning, battle_open, OnDemand3DBundleService.can_clear_cache())
+	if model_reason == "ui.settings.storage.download_busy" and OnDemand3DBundleService.models_held_until_restart():
+		model_reason = "ui.settings.storage.restart_models"
+	_update_asset_storage_row(model_storage_button, model_storage_hint, model_bytes, model_reason)
 
 
 func _battle_assets_in_use() -> bool:

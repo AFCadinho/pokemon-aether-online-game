@@ -15,14 +15,14 @@
     "body",
     "orb_clearance"
   ],
-  "learnset_audit_sha256": "6b8b05453ce6e3111068f1526391b8f6e93d92a44523c803188c14d9ba1d90eb",
+  "learnset_audit_sha256": "c21cb53acf7a682d93552b0551a8318267226fb50e783995f81c252770006fc6",
   "schema": 1,
   "scope": "Missing configured anatomical routes grouped by form and family. Existing points may need an alias; absent anatomy may need a deliberate alternative. This is not a visual approval or a count of all unfinished effects.",
   "source_sha256": {
     "data/battle_move_attachments_3d.json": "e31c8504124edc21386bed9f6d197d4e7fb3e24cb3e4d6eb62ec850a6d2b6925",
     "data/battle_move_recipes_3d.json": "4f237143c9001b7fc43f9bd0358f8361173e8f148f30d23bd8db7c7f27c90429",
     "scripts/battle/animations/model_action_map.gd": "6b09908b3b6568e7ecc8e642c155ff9f73964bbc4af0a0c8741723fedca37b67",
-    "scripts/battle/battle_ui/experimental_battle_3d.gd": "418c99211605490c1ef2c6a4c66eab66ceaee051ab362c297b9551eb5f85f3ff",
+    "scripts/battle/battle_ui/experimental_battle_3d.gd": "08960a8faa84fe02ee1b3904e1427801248982c205737478fac7e96657819ebb",
     "scripts/battle/battle_ui/move_attachments_3d.gd": "95efeac95693e7a6fd6db0b4717d9a0b661768c962a80e9f11accc6f928c97a8",
     "scripts/battle/battle_ui/move_effect_3d.gd": "ac79d3a4f07e74cf09ceb2f24100b1650e5256f47ab834bb638439a6a1d76bd4",
     "scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",

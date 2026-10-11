@@ -42,6 +42,9 @@ func refresh_party() -> Dictionary:
 
 
 func save_party(party_state: Dictionary) -> Dictionary:
+	var walking_result: Dictionary = await WalkingEvolutionService.flush()
+	if not bool(walking_result.get("success", false)):
+		return walking_result
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -100,6 +103,9 @@ func save_current_party() -> Dictionary:
 
 
 func swap_party_slots(from_slot: int, to_slot: int) -> Dictionary:
+	var walking_result: Dictionary = await WalkingEvolutionService.flush()
+	if not bool(walking_result.get("success", false)):
+		return walking_result
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -122,6 +128,9 @@ func swap_party_slots(from_slot: int, to_slot: int) -> Dictionary:
 
 
 func set_party_slot(slot: int, pokemon_id: int) -> Dictionary:
+	var walking_result: Dictionary = await WalkingEvolutionService.flush()
+	if not bool(walking_result.get("success", false)):
+		return walking_result
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -144,6 +153,9 @@ func set_party_slot(slot: int, pokemon_id: int) -> Dictionary:
 
 
 func clear_party_slot(slot: int) -> Dictionary:
+	var walking_result: Dictionary = await WalkingEvolutionService.flush()
+	if not bool(walking_result.get("success", false)):
+		return walking_result
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -720,12 +732,32 @@ func _evolution_request_payload(target_species_id: String, confirm: bool) -> Dic
 	return payload
 
 
+func sync_evolution_walking(usage_id: String, pokemon_id: int, total_steps: int) -> Dictionary:
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	return await _request_json(base_url + "/game/evolution/walking", HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(), JSON.stringify({"usageId": usage_id, "pokemonId": pokemon_id,
+			"totalSteps": total_steps, "onFoot": true}))
+
+
+func get_evolution_conditions(pokemon_id: int) -> Dictionary:
+	var payload := {}
+	var hour := get_developer_evolution_time_hour()
+	if hour >= 0:
+		payload["debugTimeHour"] = hour
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	return await _request_json(base_url + "/game/pokemon/%s/evolution-conditions" % pokemon_id,
+		HTTPClient.METHOD_POST, GatewayApiConfig.get_json_headers(), JSON.stringify(payload))
+
+
 func get_evolution_candidates(pokemon_id: int) -> Dictionary:
 	# confirm=false is the existing read-only evolution review operation.
 	return await evolve_pokemon(pokemon_id, "", false)
 
 
 func evolve_pokemon(pokemon_id: int, target_species_id: String, confirm: bool = true) -> Dictionary:
+	var walking_result: Dictionary = await WalkingEvolutionService.flush()
+	if not bool(walking_result.get("success", false)):
+		return walking_result
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,

@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_gch7v"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_riq8w"]
+
+[node name="BarHorizontal" type="Node2D" unique_id=1542129925]
+texture_filter = 1
+script = ExtResource("1_gch7v")
+furniture_id = "bar_horizontal"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1710453002]
+position = Vector2(0, -64)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 3, 0, 0, 0, 0, 0, 1, 0, 0, 0, 9, 0, 3, 0, 0, 0)
+tile_set = ExtResource("2_riq8w")

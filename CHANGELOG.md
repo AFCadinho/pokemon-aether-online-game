@@ -69,6 +69,63 @@
 - Give Zweilous separate attack origins for both mouths, use Zapdos’s upper bill tips for Peck and Mega Zygarde’s cannon for Hyper Beam, and align Walking Wake, Watchog and Hisuian Zoroark’s Flamethrower with their open-mouth poses.
 
 - Add individually reviewed mouth, hand and foot attachment profiles for more 3D Pokémon forms, including points that follow moving jaws and snouts. Connect Snivy, Servine and Serperior's Vine Whip to their animated vine tips, follow Thwackey's open/closed muzzle changes, track Mega Golurk's detached rocket fists, emit Magmortar's fire attacks from its arm cannon, and give Scovillain separate red and green mouth origins with matching attack poses. Make Hatterene launch Shadow Ball from the hand on its hat and Kadabra form it between its animated hands and use Fraxure’s open-jaw pose for Bite. Use Noivern’s open-jaw launch pose for Flamethrower and Hyper Beam, and time Salandit’s and Volcanion’s Flamethrower to their open mouths. Align Exploud’s Low Kick timing and turn Glastrier and Ice Rider Calyrex toward their opponent for rear kicks.
+- Explain direct use, successful consumption and game-time requirements for all evolution items in English, Dutch, Brazilian Portuguese and Simplified Chinese; describe the two Kubfu scrolls and Black Augurite, and mark unused Sweets as inactive.
+
+- Refresh the Guild Base lobby visual from the artist TMX, including animated fountain water.
+
+- Allow Guild Base table decorations across the full tabletop grid, preserving existing placements.
+
+- Make the Guild Base furnishing action visible below the HUD and style its catalog, category dropdown, controls and permission window to match the Guild interface.
+
+- Choose Maushold family size, Dudunsparce length, Vivillon pattern and Alcremie flavor before evolving, using a form selector in evolution prompts and the Bag.
+
+- Restore Summary clicks and context actions for every party Pokémon after duplicating the party cards.
+
+- Add distinct icons and localized Bag descriptions for Alola Stone, Galar Stone and Hisui Stone.
+
+- Let Guild Base room clicks reach the furnishing editor above the regular HUD, so players can place and move furniture while catalog controls remain usable.
+
+- Keep the shared-model test collection within existing metadata limits and let repaired model collections finish without a false concurrent-update error.
+
+- Furnish both private Guild Base side rooms from shared starter storage, with reusable furniture, movable tabletop decorations, adjustable rugs and leader-granted editing rights.
+
+- Add localized Leek, Leader's Crest, Strawberry Sweet and Peat Block evolution descriptions; preview Peat Block against game time and send authorized developer time overrides with item use.
+
+- Refresh Vermilion Gym's latest device artwork from Tiled.
+
+- Show Karrablast/Shelmet trade evolution outcomes before confirming, display their real-trade requirement in Evolution conditions, and announce Shedinja when Nincada evolves with a free party slot.
+
+- Reimport the latest Vermilion Gym device decoration edits from Tiled.
+
+- Add blue-white sparks and flickering electrical arcs to the two devices in Vermilion Gym's lower corners.
+
+- Refresh Vermilion Gym's Tiled visual with the updated lower-room decorations.
+
+- On touchscreens, hold party Pokémon, Bag items, PC slots, chat messages, hotbar shortcuts, or other players for their right-click actions. Keep short taps and dragging; pan the photo camera with one finger.
+
+- Recover interrupted shared-model pilot installations and repairs without retaining abandoned model copies; preserve live installs and loaded packs.
+
+- Keep Gym Leader badges and trainer challenge icons visible in front of gym walls and other foreground map decorations.
+
+- Play a short electrical power-down sound when either Vermilion Gym switch turns off its barrier. Already active switches stay silent.
+
+- Add a local opt-in pilot for lossless normal/shiny texture sharing, with verified launcher/on-demand installation, battle and preview loading, and protected cleanup of loaded models.
+
+- Reimport the updated Vermilion Gym visual and align its switch puzzle with all twenty bins in four rows, keeping the bins free of movement collision.
+
+- Let players walk through Vermilion Gym bins while keeping their switch interactions and the electric barriers.
+
+- Move Vermilion Gym trainer spawn points away from bin approach tiles so every bin stays reachable from all sides.
+
+- Guard both Rock Tunnel entrances until the post-Surge visit to Oak starts the Rock Tunnel main quest; guards disappear once that quest is active or completed.
+
+- Open supported Android 3D battles directly on the 3D arena, without briefly showing the 2D field while battle data loads.
+
+- Add Vermilion Gym's adjacent-bin switch puzzle and animated electric barriers. Wrong second guesses keep the switch positions for the current visit; reactivate the first switch to retry.
+
+- Show Casino Tokens in the wallet and developer currency tools; add the Gold Coin icon and localized item text for Gimmighoul evolution. Casino earning and prize shops will follow later.
+
+- Center Vermilion Gym bin rows within the puzzle room while keeping the tiles in front of every bin walkable.
 
 - Make Charmeleon's 3D Flamethrower and other mouth attacks originate at its animated mouth, including in NPC battles.
 
@@ -103,6 +160,12 @@
 - Prevent repeated interaction presses after a won trainer rematch from starting another battle before the trainer enters its sleeping state.
 
 - Add a direct forum guide link to each skill's detail view.
+
+- Resolve Urshifu Rapid Strike's existing shiny HOME sprite for evolution previews and Pokémon icons.
+
+- Resolve Gourgeist size variants to existing HOME icons in evolution previews and browser/mobile interfaces, and show the correct shiny Average form.
+
+- Add Evolution conditions to the party right-click menu for evolvable Pokémon, with a separate localized popup and personal walking progress for Pawmo, Bramblin and Rellor. Count on-foot tiles independently of Repel, save before progression and party changes, and announce walking completion once.
 
 ## 0.3.105
 

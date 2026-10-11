@@ -3,6 +3,7 @@ extends Node2D
 class_name RemotePlayerAvatar
 
 const ThorAccessoryEffect := preload("res://scripts/world/thor_accessory_effect.gd")
+const TouchContextGesture := preload("res://scripts/ui/mobile/touch_context_gesture.gd")
 const MountHoverVisual := preload("res://scripts/world/mount_hover_visual.gd")
 const MountVisualDepth := preload("res://scripts/world/mount_visual_depth.gd")
 const MountWaterContact := preload("res://scripts/world/mount_water_contact.gd")
@@ -168,6 +169,7 @@ const APPEARANCE_PART_SPRITES := {
 const RIDE_STATIC_PART_CATEGORIES := ["hair", "headgear", "facial_hair", "facegear", "eyes", "eyebrows"]
 
 var user_id := 0
+var touch_context_gesture: Node
 var username := ""
 var display_name := ""
 var roles: Array = []
@@ -1038,6 +1040,27 @@ func _create_interaction_hit_area() -> void:
 func set_interaction_enabled(enabled: bool) -> void:
 	if interaction_hit_area != null:
 		interaction_hit_area.input_pickable = enabled
+	if not enabled and touch_context_gesture != null:
+		touch_context_gesture.pending = false
+		touch_context_gesture.cancelled = true
+
+
+func try_touch_context(event: InputEventScreenTouch, on_tap: Callable) -> bool:
+	if not event.pressed or not is_visible_in_tree() or presence_state.is_empty() or interaction_hit_area == null or not interaction_hit_area.input_pickable:
+		return false
+	var local_position := get_global_transform_with_canvas().affine_inverse() * event.position
+	if not Rect2(-14, -31, 28, 42).has_point(local_position):
+		return false
+	if touch_context_gesture == null:
+		touch_context_gesture = TouchContextGesture.new()
+		add_child(touch_context_gesture)
+	touch_context_gesture.begin_touch(event, _on_touch_context, on_tap)
+	return true
+
+
+func _on_touch_context(_screen_position: Vector2) -> void:
+	if is_visible_in_tree() and interaction_hit_area.input_pickable and not presence_state.is_empty():
+		interaction_requested.emit(presence_state.duplicate(true), global_position)
 
 func _on_interaction_hit_area_input_event(_viewport: Node, event: InputEvent, _shape_index: int) -> void:
 	if not event is InputEventMouseButton:

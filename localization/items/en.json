@@ -1,8 +1,52 @@
 {
-  "gyarados-mount": {"name": "Gyarados Mount", "shortDesc": "Unlocks Gyarados as a Surf mount."},
-  "repel": {"name": "Repel", "shortDesc": "Adds 100 steps to your Repel charge (maximum 10,000)."},
-  "super-repel": {"name": "Super Repel", "shortDesc": "Adds 200 steps to your Repel charge (maximum 10,000)."},
-  "max-repel": {"name": "Max Repel", "shortDesc": "Adds 250 steps to your Repel charge (maximum 10,000)."},
+  "alola-stone": {
+    "name": "Alola Stone",
+    "shortDesc": "Evolves Pikachu, Exeggcute into their Alola evolution. Consumed on successful use."
+  },
+  "galar-stone": {
+    "name": "Galar Stone",
+    "shortDesc": "Evolves Koffing, Mime Jr. into their Galar evolution. Consumed on successful use."
+  },
+  "hisui-stone": {
+    "name": "Hisui Stone",
+    "shortDesc": "Evolves Quilava, Dewott, Dartrix, Petilil, Rufflet, Goomy, Bergmite into their Hisui evolution. Consumed on successful use."
+  },
+  "stick": {
+    "name": "Leek",
+    "shortDesc": "When held, boosts critical hits for Farfetch’d and Sirfetch’d. Use to evolve: Farfetchd Galar → Sirfetchd. Consumed only on successful evolution."
+  },
+  "leaders-crest": {
+    "name": "Leader’s Crest",
+    "shortDesc": "Use to evolve: Bisharp → Kingambit. Consumed only on successful evolution."
+  },
+  "peat-block": {
+    "name": "Peat Block",
+    "shortDesc": "Use on Ursaring at night (21:00–05:00 game time) to evolve it into Ursaluna. Consumed only on successful evolution."
+  },
+  "strawberry-sweet": {
+    "name": "Strawberry Sweet",
+    "shortDesc": "Use on Milcery and choose one of nine Alcremie flavors. Consumed only on successful evolution."
+  },
+  "gold-coin": {
+    "name": "Gold Coin",
+    "shortDesc": "Use on either Gimmighoul form to evolve it into Gholdengo. Consumed only on successful evolution."
+  },
+  "gyarados-mount": {
+    "name": "Gyarados Mount",
+    "shortDesc": "Unlocks Gyarados as a Surf mount."
+  },
+  "repel": {
+    "name": "Repel",
+    "shortDesc": "Adds 100 steps to your Repel charge (maximum 10,000)."
+  },
+  "super-repel": {
+    "name": "Super Repel",
+    "shortDesc": "Adds 200 steps to your Repel charge (maximum 10,000)."
+  },
+  "max-repel": {
+    "name": "Max Repel",
+    "shortDesc": "Adds 250 steps to your Repel charge (maximum 10,000)."
+  },
   "escape-rope-action": {
     "name": "Escape Rope · Key Item",
     "shortDesc": "Return to the last safe indoor location you visited."
@@ -830,5 +874,201 @@
   "gyarados-mount-box": {
     "name": "Gyarados Surf Mount Box",
     "shortDesc": "Contains a Gyarados Surf mount. Base shiny chance: 50%."
+  },
+  "auspicious-armor": {
+    "name": "Auspicious Armor",
+    "shortDesc": "Use to evolve: Charcadet → Armarouge. Consumed only on successful evolution."
+  },
+  "black-augurite": {
+    "name": "Black Augurite",
+    "shortDesc": "Use to evolve: Scyther → Kleavor. Consumed only on successful evolution."
+  },
+  "chipped-pot": {
+    "name": "Chipped Pot",
+    "shortDesc": "Use to evolve: Sinistea Antique → Polteageist Antique. Consumed only on successful evolution."
+  },
+  "cracked-pot": {
+    "name": "Cracked Pot",
+    "shortDesc": "Use to evolve: Sinistea → Polteageist. Consumed only on successful evolution."
+  },
+  "dawn-stone": {
+    "name": "Dawn Stone",
+    "shortDesc": "Use on male Kirlia for Gallade or female Snorunt for Froslass. Consumed only on successful evolution."
+  },
+  "deep-sea-scale": {
+    "name": "Deep Sea Scale",
+    "shortDesc": "When held, doubles Clamperl's Sp. Def. Use to evolve: Clamperl → Gorebyss. Consumed only on successful evolution."
+  },
+  "deep-sea-tooth": {
+    "name": "Deep Sea Tooth",
+    "shortDesc": "When held, doubles Clamperl's Sp. Atk. Use to evolve: Clamperl → Huntail. Consumed only on successful evolution."
+  },
+  "dragon-scale": {
+    "name": "Dragon Scale",
+    "shortDesc": "Use to evolve: Seadra → Kingdra. Consumed only on successful evolution."
+  },
+  "dubious-disc": {
+    "name": "Dubious Disc",
+    "shortDesc": "Use to evolve: Porygon2 → Porygon-Z. Consumed only on successful evolution."
+  },
+  "dusk-stone": {
+    "name": "Dusk Stone",
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+  },
+  "electirizer": {
+    "name": "Electirizer",
+    "shortDesc": "Use to evolve: Electabuzz → Electivire. Consumed only on successful evolution."
+  },
+  "fire-stone": {
+    "name": "Fire Stone",
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+  },
+  "galarica-cuff": {
+    "name": "Galarica Cuff",
+    "shortDesc": "Use to evolve: Slowpoke Galar → Slowbro Galar. Consumed only on successful evolution."
+  },
+  "galarica-wreath": {
+    "name": "Galarica Wreath",
+    "shortDesc": "Use to evolve: Slowpoke Galar → Slowking Galar. Consumed only on successful evolution."
+  },
+  "ice-stone": {
+    "name": "Ice Stone",
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+  },
+  "kings-rock": {
+    "name": "Kings Rock",
+    "shortDesc": "When held, adds a 10% flinch chance to eligible damaging moves. Use to evolve: Poliwhirl → Politoed; Slowpoke → Slowking. Consumed only on successful evolution."
+  },
+  "leaf-stone": {
+    "name": "Leaf Stone",
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+  },
+  "linking-cord": {
+    "name": "Linking Cord",
+    "shortDesc": "Use on compatible trade-evolving Pokémon. Karrablast and Shelmet require a real trade with each other. Consumed only on successful evolution."
+  },
+  "magmarizer": {
+    "name": "Magmarizer",
+    "shortDesc": "Use to evolve: Magmar → Magmortar. Consumed only on successful evolution."
+  },
+  "malicious-armor": {
+    "name": "Malicious Armor",
+    "shortDesc": "Use to evolve: Charcadet → Ceruledge. Consumed only on successful evolution."
+  },
+  "masterpiece-teacup": {
+    "name": "Masterpiece Teacup",
+    "shortDesc": "Use to evolve: Poltchageist Artisan → Sinistcha Masterpiece. Consumed only on successful evolution."
+  },
+  "metal-alloy": {
+    "name": "Metal Alloy",
+    "shortDesc": "Use to evolve: Duraludon → Archaludon. Consumed only on successful evolution."
+  },
+  "metal-coat": {
+    "name": "Metal Coat",
+    "shortDesc": "When held, boosts Steel-type moves. Use to evolve: Onix → Steelix; Scyther → Scizor. Consumed only on successful evolution."
+  },
+  "moon-stone": {
+    "name": "Moon Stone",
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+  },
+  "oval-stone": {
+    "name": "Oval Stone",
+    "shortDesc": "To be held by Happiny. Level up during daytime (05:00–21:00 game time) to evolve into Chansey. Consumed only on successful evolution."
+  },
+  "prism-scale": {
+    "name": "Prism Scale",
+    "shortDesc": "Use to evolve: Feebas → Milotic. Consumed only on successful evolution."
+  },
+  "protector": {
+    "name": "Protector",
+    "shortDesc": "Use to evolve: Rhydon → Rhyperior. Consumed only on successful evolution."
+  },
+  "razor-claw": {
+    "name": "Razor Claw",
+    "shortDesc": "When held, raises the critical-hit ratio by one stage. Have Sneasel hold it and level up at night (21:00–05:00 game time) for Weavile; Hisui Sneasel must level up during daytime (05:00–21:00 game time) for Sneasler. Consumed only on successful evolution."
+  },
+  "razor-fang": {
+    "name": "Razor Fang",
+    "shortDesc": "When held, adds a 10% flinch chance to eligible damaging moves. Have Gligar hold it and level up at night (21:00–05:00 game time) to evolve into Gliscor. Consumed only on successful evolution."
+  },
+  "reaper-cloth": {
+    "name": "Reaper Cloth",
+    "shortDesc": "Use to evolve: Dusclops → Dusknoir. Consumed only on successful evolution."
+  },
+  "sachet": {
+    "name": "Sachet",
+    "shortDesc": "Use to evolve: Spritzee → Aromatisse. Consumed only on successful evolution."
+  },
+  "scroll-of-darkness": {
+    "name": "Scroll of Darkness",
+    "shortDesc": "Use on Kubfu to evolve it into Urshifu Single Strike. Consumed only on successful evolution."
+  },
+  "scroll-of-waters": {
+    "name": "Scroll of Waters",
+    "shortDesc": "Use on Kubfu to evolve it into Urshifu Rapid Strike. Consumed only on successful evolution."
+  },
+  "shiny-stone": {
+    "name": "Shiny Stone",
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+  },
+  "sun-stone": {
+    "name": "Sun Stone",
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+  },
+  "sweet-apple": {
+    "name": "Sweet Apple",
+    "shortDesc": "Use to evolve: Applin → Appletun. Consumed only on successful evolution."
+  },
+  "syrupy-apple": {
+    "name": "Syrupy Apple",
+    "shortDesc": "Use to evolve: Applin → Dipplin. Consumed only on successful evolution."
+  },
+  "tart-apple": {
+    "name": "Tart Apple",
+    "shortDesc": "Use to evolve: Applin → Flapple. Consumed only on successful evolution."
+  },
+  "thunder-stone": {
+    "name": "Thunder Stone",
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+  },
+  "unremarkable-teacup": {
+    "name": "Unremarkable Teacup",
+    "shortDesc": "Use to evolve: Poltchageist → Sinistcha. Consumed only on successful evolution."
+  },
+  "up-grade": {
+    "name": "Upgrade",
+    "shortDesc": "Use to evolve: Porygon → Porygon2. Consumed only on successful evolution."
+  },
+  "water-stone": {
+    "name": "Water Stone",
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+  },
+  "whipped-dream": {
+    "name": "Whipped Dream",
+    "shortDesc": "Use to evolve: Swirlix → Slurpuff. Consumed only on successful evolution."
+  },
+  "berry-sweet": {
+    "name": "Berry Sweet",
+    "shortDesc": "Currently has no evolution effect in PokeAether. Use Strawberry Sweet for Milcery."
+  },
+  "clover-sweet": {
+    "name": "Clover Sweet",
+    "shortDesc": "Currently has no evolution effect in PokeAether. Use Strawberry Sweet for Milcery."
+  },
+  "flower-sweet": {
+    "name": "Flower Sweet",
+    "shortDesc": "Currently has no evolution effect in PokeAether. Use Strawberry Sweet for Milcery."
+  },
+  "love-sweet": {
+    "name": "Love Sweet",
+    "shortDesc": "Currently has no evolution effect in PokeAether. Use Strawberry Sweet for Milcery."
+  },
+  "ribbon-sweet": {
+    "name": "Ribbon Sweet",
+    "shortDesc": "Currently has no evolution effect in PokeAether. Use Strawberry Sweet for Milcery."
+  },
+  "star-sweet": {
+    "name": "Star Sweet",
+    "shortDesc": "Currently has no evolution effect in PokeAether. Use Strawberry Sweet for Milcery."
   }
 }

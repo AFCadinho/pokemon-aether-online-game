@@ -102,6 +102,42 @@ func _run() -> void:
 	_check(not transport._evolution_request_payload("lycanroc", true).has("debugTimeHour"), "ordinary accounts never forward a leftover developer clock")
 	auth.current_user = {"id": 1, "roles": [{"id": "owner"}]}
 	_check(transport._evolution_request_payload("lycanroc-midnight", true).get("debugTimeHour") == 0, "fixed Owner permission fallback agrees with the developer selector")
+	var inventory := root.get_node("InventoryService")
+	_check(inventory._pokemon_item_use_request_payload("peat-block", 1).get("debugTimeHour") == 0, "timed item use forwards authorized developer game time")
+	auth.current_user = {"id": 2, "permissions": [], "roles": []}
+	_check(not inventory._pokemon_item_use_request_payload("peat-block", 1).has("debugTimeHour"), "ordinary item use cannot forward a leftover developer clock")
+	var item_preview = load("res://scripts/ui/bag_item_effect_preview.gd")
+	var timed_item := {"effects": [{"type": "evolve_item", "time_of_day": "night"}]}
+	# Paired-slot runs exercise the real backend definition instead of a hand-written fixture.
+	for argument: String in OS.get_cmdline_user_args():
+		if not argument.begins_with("--item-effects="):
+			continue
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(argument.trim_prefix("--item-effects=")))
+		_check(parsed is Dictionary, "paired backend item effects are valid JSON")
+		if parsed is Dictionary:
+			var definitions: Dictionary = parsed.get("items", {})
+			timed_item = definitions.get("peat-block", {})
+			_check(not timed_item.is_empty(), "paired backend registers Peat Block")
+	for hour: int in [0, 4, 21, 23]:
+		_check(item_preview.unmet_evolution_time(timed_item, hour) == "", "Peat Block preview allows night hour %s" % hour)
+	for hour: int in [5, 12, 20]:
+		_check(item_preview.unmet_evolution_time(timed_item, hour) == "night", "Peat Block preview blocks day hour %s" % hour)
+	_check(item_preview.unmet_evolution_time({"effects": [{"type": "evolve_item"}]}, 12) == "", "ordinary evolution items remain usable during daytime")
+	overlay.fixture_pokemon.species = "Ursaring"
+	overlay.fixture_pokemon.owned_pokemon_id = 77
+	overlay.bag_item_use_pending_item = {"id": "peat-block", "pokemonCompatibilityKnown": true,
+		"compatiblePokemonIds": [77], "gameplay": timed_item}
+	clock.set_debug_time(12)
+	_check(not overlay._bag_item_use_preview_for_pokemon(overlay.fixture_pokemon, "peat-block", 1).get("canApply", true), "real Bag preview disables Peat Block during game daytime")
+	clock.set_debug_time(22)
+	_check(overlay._bag_item_use_preview_for_pokemon(overlay.fixture_pokemon, "peat-block", 1).get("canApply", false), "same Bag compatibility becomes usable during game nighttime")
+	overlay.bag_item_use_pending_item.clear()
+	var icon_resolver = load("res://scripts/services/item_icon_resolver.gd")
+	for item_id: String in ["stick", "leaders-crest", "peat-block", "strawberry-sweet", "black-augurite", "scroll-of-darkness", "scroll-of-waters"]:
+		var icon: Texture2D = icon_resolver.load_icon(item_id)
+		_check(icon != null and not icon.resource_path.ends_with("000.png"), "%s has its own existing item sprite" % item_id)
+		for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+			_check(root.get_node("ItemLocalization").has_translation(item_id, locale), "%s has item text for %s" % [item_id, locale])
 
 	# A replacement move can satisfy a level-up requirement for an ordinary player.
 	clock.clear_debug_time()

@@ -105,6 +105,9 @@ func _is_missing_batch_route(response: Dictionary) -> bool:
 
 func _send_position_start(request_node: HTTPRequest, path: String, battle: Dictionary, position: Dictionary) -> Dictionary:
 	var session: String = str(AuthService.session_token)
+	var walking_result: Dictionary = await WalkingEvolutionService.flush()
+	if not bool(walking_result.get("success", false)):
+		return walking_result
 	var repel_result: Dictionary = await RepelService.flush()
 	if not bool(repel_result.get("success", false)):
 		return repel_result

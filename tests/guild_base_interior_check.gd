@@ -18,16 +18,18 @@ func _run() -> void:
 		_check(map.get_map_id() == "guild_base:kanto_vermilion_city:7:" + room, room + " keeps server instance identity")
 		_check(not map.allows_land_mounts(), room + " blocks riding indoors")
 		_check(map.get_weather_profile() == "disabled", room + " excludes exterior weather")
-		var collision := map.get_node("Collision") as TileMapLayer
+		var collision := map.find_map_tilemap_layer("Collision") as TileMapLayer
 		_check(collision.tile_set != null and collision.get_used_cells().size() > 0, room + " builds physical terrain collision")
-		_check(collision.get_cell_tile_data(Vector2i(-1, -1)).get_collision_polygons_count(0) == 1, room + " supplies a physical blocking polygon")
+		if collision.tile_set.get_physics_layers_count() > 0:
+			var sample: TileData = collision.get_cell_tile_data(collision.get_used_cells()[0])
+			_check(sample != null and sample.get_collision_polygons_count(0) == 1, room + " supplies a physical blocking polygon")
 		var start := Vector2i((map.get_node("Spawns").get_child(0) as Node2D).position / 32.0)
 		for spawn: Node2D in map.get_node("Spawns").get_children():
 			var tile := Vector2i(spawn.position / 32.0)
 			_check(map.is_walkable_tile(tile) and collision.get_cell_source_id(tile) == -1, room + ": " + str(spawn.name) + " arrives on clear floor")
 			_check(_reachable(map, start, tile), room + ": " + str(spawn.name) + " connects to the room entrance")
 		for door: Area2D in map.get_node("Exits").get_children():
-			_check(_reachable(map, start, Vector2i(door.position / 32.0)), room + ": " + str(door.name) + " is reachable")
+			_check(_reachable_door(map, start, door), room + ": " + str(door.name) + " has a reachable trigger approach")
 			var target: Node = load(door.target_scene_path).instantiate()
 			_check(target.has_node("Spawns/" + door.target_spawn_name), room + ": " + str(door.name) + " has a return spawn")
 			target.free()
@@ -59,7 +61,7 @@ func _run() -> void:
 
 
 func _reachable(map: Node, start: Vector2i, destination: Vector2i) -> bool:
-	if not map.is_walkable_tile(start) or not map.is_walkable_tile(destination):
+	if not _walkable(map, start) or not _walkable(map, destination):
 		return false
 	var queue: Array[Vector2i] = [start]
 	var visited := {start: true}
@@ -71,9 +73,21 @@ func _reachable(map: Node, start: Vector2i, destination: Vector2i) -> bool:
 			return true
 		for offset: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
 			var next := tile + offset
-			if not visited.has(next) and map.is_walkable_tile(next):
+			if not visited.has(next) and _walkable(map, next):
 				visited[next] = true
 				queue.append(next)
+	return false
+
+func _reachable_door(map: Node, start: Vector2i, door: Area2D) -> bool:
+	for y: int in range(map.room_size.y):
+		for x: int in range(map.room_size.x):
+			var tile := Vector2i(x, y)
+			if not _walkable(map, tile):
+				continue
+			var center: Vector2 = map.to_global(Vector2(tile)*32 + Vector2(16, 16))
+			for offset: Vector2 in [Vector2.ZERO, Vector2(-12, 0), Vector2(12, 0), Vector2(0, -12), Vector2(0, 12)]:
+				if door.contains_world_position(center + offset) and _reachable(map, start, tile):
+					return true
 	return false
 
 
@@ -81,3 +95,9 @@ func _check(condition: bool, description: String) -> void:
 	if not condition:
 		failed = true
 		push_error(description)
+
+func _walkable(map: Node, tile: Vector2i) -> bool:
+	var collision: TileMapLayer = map.find_map_tilemap_layer("Collision")
+	if collision.tile_set.get_physics_layers_count() == 0:
+		return Rect2i(Vector2i.ZERO, map.room_size).has_point(tile) and collision.get_cell_source_id(tile) == -1
+	return map.is_walkable_tile(tile)

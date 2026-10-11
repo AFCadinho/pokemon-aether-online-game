@@ -1822,6 +1822,8 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 		float(position_data.get("y", player.global_position.y))
 	)
 	saved_position = _snap_world_position_to_map_tile_center(map, saved_position)
+	if map.has_method("get_safe_restored_player_position"):
+		saved_position = map.call("get_safe_restored_player_position", saved_position)
 
 	player.global_position = saved_position
 	player.target_position = saved_position
@@ -2057,6 +2059,7 @@ func _apply_web_demo_profile(profile_response: Dictionary) -> void:
 	PlayerSave.gems = maxi(int(wallet.get("gems", PlayerSave.gems)), 0)
 	PlayerSave.aetherite = maxi(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
 	PlayerSave.battle_points = maxi(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)
+	PlayerSave.casino_tokens = maxi(int(wallet.get("casino_tokens", PlayerSave.casino_tokens)), 0)
 	StoryService.apply_story(_dictionary_from_value(profile_response.get("story", {})))
 	var position_response := _dictionary_from_value(profile_response.get("position", {}))
 	var profile_state := _dictionary_from_value(position_response.get("state", {}))

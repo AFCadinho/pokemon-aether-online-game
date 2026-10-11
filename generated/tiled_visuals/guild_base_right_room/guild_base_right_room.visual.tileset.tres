@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://t0en11d8webj"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_right_room/assets/guild_base_right_room.visual.tileset.compact_source_1_0.texture.res" id="1_j6oen"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_right_room/assets/guild_base_right_room.visual.tileset.compact_source_1025_0.texture.res" id="2_hehhe"]
