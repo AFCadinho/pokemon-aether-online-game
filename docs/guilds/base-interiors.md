@@ -172,6 +172,14 @@ approve or decline a visitor. A five-second poll updates the request counter,
 in-game notifications and the open menus. Guests receive read-only furniture
 layouts and share the host's world-presence roster.
 
+The **Guild Base manager** stands behind the upper-left counter in the shared
+main-hall template. Interacting saves the player's position and opens visitor
+management for that instance's Guild. The Guild leader can switch between
+**Open to visitors** and **By request**; other members can approve or decline
+requests. Guests cannot manage the host's visitors. The **Visitors** HUD button
+remains a shortcut for responding from elsewhere inside the base. The room
+receptionist in the lift waiting hall continues to handle member-room searches.
+
 A request lasts two minutes and repeated requests have a thirty-second cooldown.
 Approval lasts two minutes for entry through the guard; entering establishes a
 visit rather than permanent membership. Doors preserve the visited Guild ID.
