@@ -18,7 +18,7 @@ def check(receipt, root=ROOT):
     sha = hashlib.sha256(wire).hexdigest()
     index = {'object_key': 'optional-assets/pokemon_3d/index/pilot-' + sha + '.json',
              'sha256': sha, 'size_bytes': len(wire)}
-    if receipt.get('schema') != 1 or receipt.get('revision') != 'shared-model-qualified-test-v1':
+    if receipt.get('schema') != 1 or receipt.get('revision') != json.loads(wire)['catalog_revision']:
         raise ValueError('Unexpected staged revision')
     if receipt.get('active_manifest_activated') is not False or receipt.get('production_approved') is not False:
         raise ValueError('Staging does not certify/activate production')

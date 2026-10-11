@@ -50,7 +50,7 @@ func _jaw_lip(actor: Node3D, head: String, jaw: String) -> Dictionary:
 	var jaw_samples: Array[Dictionary] = []
 	var head_samples: Array[Dictionary] = []
 	for mesh: MeshInstance3D in actor.find_children("*", "MeshInstance3D", true, false):
-		if mesh.mesh == null or mesh.skin == null: continue
+		if mesh.mesh == null or mesh.skin == null or not mesh.is_visible_in_tree(): continue
 		var skeleton := mesh.get_node_or_null(mesh.skeleton) as Skeleton3D
 		if skeleton == null: continue
 		var head_bind := -1

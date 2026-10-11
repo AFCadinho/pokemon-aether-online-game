@@ -32379,7 +32379,207 @@
       }
     },
     "cramorant": {
+      "move_effect_reviews": {
+        "furyattack": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "444c21db6074abab9f9beb1a201dd62f551074d032503d9e703d2f50865c0091",
+          "normal_runtime_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c6156281d7f23a03fb7b43283c8c18d71e3e9a2bffb8904a1d61200bbf4cffcb",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "8a18b2de519786827362df317ce5f0332a44bde178f2776f2cee71d0f3cdc0fe",
+          "shiny_preview_sha256": "b8a7e4f0495acbd898b8249bb2413cdf73f6bf3806dc004f020c260309dbfe15",
+          "shiny_runtime_sha256": "edfdb8605972a0980945c2c656c489f9b92070be48bf92fd4ba4e6b8ab4ad81e",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "physical_attack",
+            "frames": 90.0,
+            "impact_frame": 46.8,
+            "launch_frame": 12.6,
+            "move_key": "furyattack"
+          },
+          "views": 2
+        },
+        "superpower": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "8eb3ab5e695af6428f5bd940be0aed07eb955d2ab071de858cd55e1f4ecaa1b0",
+          "normal_runtime_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "38c2cae752cb5379ed2868f54b35ad532e0837881b981b9c0fb1c5ede900a513",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "1ce315950bbe54cb512469fa60fb6529d174dd4a1de89f4411170335edd3df8c",
+          "shiny_preview_sha256": "90454ab94cd9a880b030b68c41a2a5266122e5c01e56f2402c0c417e4b548173",
+          "shiny_runtime_sha256": "edfdb8605972a0980945c2c656c489f9b92070be48bf92fd4ba4e6b8ab4ad81e",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "physical_attack",
+            "frames": 90.0,
+            "impact_frame": 46.8,
+            "launch_frame": 12.6,
+            "move_key": "superpower"
+          },
+          "views": 2
+        },
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "4669844e18654f1794dd77d045931b64710a8e945a00aeea57716350ff7875f9",
+          "normal_runtime_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d918386cd0ba8b4dcd5294118e564264c7502909e1a40fa9806ba89002c66952",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "5ce3405a8077ab0d22d51f6c2b52856ea8a57e599fe681bbeec5a24cae60cc8c",
+          "shiny_preview_sha256": "f38bfe9c43732f8b5728671c0241bdd3bb6447e808027bcdc37dcb4687a41d8b",
+          "shiny_runtime_sha256": "edfdb8605972a0980945c2c656c489f9b92070be48bf92fd4ba4e6b8ab4ad81e",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "special_attack",
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "move_key": "watergun"
+          },
+          "views": 2
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "65b3df868d674f34ee727021f3b82692208e74f7d82108ec4abffdfabf7642c0",
+          "normal_runtime_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a7180644d29dd208ed179e5c9c191ee79fee38f2efbac6468ff27ab69a4c41e9",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "f032d15795209140278de59201c6560c2af524eb94960759d87565f1ebbd7bb9",
+          "shiny_preview_sha256": "44ab9312010765a0a85ef375e98681e32278d751b992878e33df459903550f8f",
+          "shiny_runtime_sha256": "edfdb8605972a0980945c2c656c489f9b92070be48bf92fd4ba4e6b8ab4ad81e",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "special_attack",
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "move_key": "waterpulse"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "furyattack": "mouth"
+      },
+      "part_reviews": {
+        "body": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4a91921ede93dc07652dda6cd45bd33ca6a87e6243473a9ed0d770df68531a44",
+          "scope": "Reviewed reconstructed bird base form. Mouth between beak tips; outer wing tips replace the hidden Pikachu hand proposals. Fury Attack uses the beak. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4a91921ede93dc07652dda6cd45bd33ca6a87e6243473a9ed0d770df68531a44",
+          "scope": "Reviewed reconstructed bird base form. Mouth between beak tips; outer wing tips replace the hidden Pikachu hand proposals. Fury Attack uses the beak. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4a91921ede93dc07652dda6cd45bd33ca6a87e6243473a9ed0d770df68531a44",
+          "scope": "Reviewed reconstructed bird base form. Mouth between beak tips; outer wing tips replace the hidden Pikachu hand proposals. Fury Attack uses the beak. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "mouth": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4a91921ede93dc07652dda6cd45bd33ca6a87e6243473a9ed0d770df68531a44",
+          "scope": "Reviewed reconstructed bird base form. Mouth between beak tips; outer wing tips replace the hidden Pikachu hand proposals. Fury Attack uses the beak. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "body": [
+          [
+            {
+              "bone": "spine_a_02",
+              "offset": [
+                0.13687945902347554,
+                0.0,
+                0.006989225745201
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "hand": [
+          [
+            {
+              "bone": "right_wing_a_05",
+              "offset": [
+                0.1490284949541095,
+                -0.003982111811637849,
+                0.00015265494585037492
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_wing_a_05",
+              "offset": [
+                0.1490283608436585,
+                0.003982052206993101,
+                0.00015315413475036534
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "mouth": [
           [
             {
@@ -32402,41 +32602,6 @@
             }
           ]
         ]
-      },
-      "review": {
-        "actions": [
-          "idle",
-          "physical_attack",
-          "special_attack"
-        ],
-        "fractions": [
-          0.2,
-          0.45,
-          0.65
-        ],
-        "measurements": [
-          {
-            "action": "idle",
-            "bones": [
-              "head_a",
-              "jaw"
-            ],
-            "capture_sha256": "78a32ff243b66bdb53d52fedbd83442ec2047d2c30f881530df6f98d48d1a7b0",
-            "part": "mouth",
-            "pixels": [
-              210,
-              119,
-              184,
-              112
-            ],
-            "ray_residual": 0.00916727116874374
-          }
-        ],
-        "method": "manual_anatomy_marker_pose_visual_review",
-        "normal_runtime_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
-        "preview_sha256": "b506319a05bab27c43677ab5a77900f316f22570966b2d5a90022060b76988cf",
-        "scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved. Uses the midpoint between beak tips.",
-        "side_fraction": 0.45
       }
     },
     "cranidos": {
@@ -38300,7 +38465,160 @@
       }
     },
     "deoxys": {
+      "attachment_overrides": {
+        "mouth": "core"
+      },
+      "move_effect_reviews": {
+        "drainpunch": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "a0549084e1598d01b1a3e5621b4c471f0a73a990c5edf1cb5e0c68250bb5022f",
+          "normal_runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "18c18bd7f4d572ffe1d5171cb406d93c2208e49b3e7557c3009a0f7b4de13895",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "6acfa65c0550c5c84aeee3e8c5ccc1de3bf3c68e13f77deda238c91b5ad3cdae",
+          "shiny_preview_sha256": "b4487ab4d12d516e6a97f539677743c358c070526f6c366829ced27485a4ce4b",
+          "shiny_runtime_sha256": "f199afea834e82396f457ce09d4c3ced365a9a26b1c185210d45d1747bf5ae8c",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "physical_attack",
+            "frames": 227.5,
+            "impact_frame": 118.3,
+            "launch_frame": 31.85,
+            "move_key": "drainpunch"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "ec36c0c885a8a0af7c4e56a6875db86dbd20784e2728deddbb125237584f29ec",
+          "normal_runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b8e385e2ab967a90e37d860ab3d12288a80b5479a4f5239289771b950e669fce",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "ef3344812dddf602179a9335c8857065028c53ab1109d9c1fb65a015d0688edd",
+          "shiny_preview_sha256": "7646262ccaa989d50e28af0539e888500c95e25e7bb1778c0d2b5bb3fa391c54",
+          "shiny_runtime_sha256": "f199afea834e82396f457ce09d4c3ced365a9a26b1c185210d45d1747bf5ae8c",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "special_attack",
+            "frames": 347.5,
+            "impact_frame": 215.45,
+            "launch_frame": 86.875,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "lowkick": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "76a5272cedf39d3378a5d7f8a697663a73ff1aec2413032ea7c226a5b543d0f8",
+          "normal_runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d8d46f493a6da4f638d37dd99cf166c71e64a2e60e996ab93826a856e4239b20",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "06d47be187b395b9f3eba23910da358f6a0ac28f81eb64b18ae2b83376870e2b",
+          "shiny_preview_sha256": "7b9eb8ceb94f0655f88e58ea6a900bd20424a1cfa28a7ebfe700142ab387308c",
+          "shiny_runtime_sha256": "f199afea834e82396f457ce09d4c3ced365a9a26b1c185210d45d1747bf5ae8c",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "physical_attack",
+            "frames": 227.5,
+            "impact_frame": 118.3,
+            "launch_frame": 31.85,
+            "move_key": "lowkick"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "6e4b4354c82ee3f486bacd5bb352b5d64d3adf42b313549a68724d86f87623a9",
+          "normal_runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d57f7fcd638ab9687c77a0ed305566bcb71c47c69088b3ca595e9ead38488882",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "e546f82dae2b2c834037c04bea6bdabd44b59ad95697b19eaee9a5e5963dc0df",
+          "shiny_preview_sha256": "ce5c83a981f58e54ccdddca5faad1f51637cd75c876186dbffa7e7ed9482a0b6",
+          "shiny_runtime_sha256": "f199afea834e82396f457ce09d4c3ced365a9a26b1c185210d45d1747bf5ae8c",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "special_attack",
+            "frames": 347.5,
+            "impact_frame": 156.375,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        }
+      },
       "part_reviews": {
+        "body": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "584ab9de5f99bf27f67eb64378eaf58c78f35eb88c6cb8f4054323350309bd49",
+          "scope": "Visible paired animated tentacles, pointed feet and projected chest jewel; no sockets from hidden humanoid arms. Mouthless emissions use the jewel. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "core": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "6dda1defe21115734cbc54cac47c852be5311c5133813b1a4c96251fc8096c04",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.236815953500235,
+                  0.566581961892235,
+                  0.19660208460753
+                ],
+                "column": 1.0,
+                "distance": 3.54088818031454,
+                "mesh": "pm0386_11_00_trmdl/Skeleton3D/pm0386_11_00_jewel_mesh",
+                "mesh_contains": "jewel",
+                "pixel": [
+                  194.0,
+                  127.0
+                ],
+                "surface": 0,
+                "triangle": 31,
+                "vertex_indices": [
+                  15,
+                  37,
+                  36
+                ]
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "584ab9de5f99bf27f67eb64378eaf58c78f35eb88c6cb8f4054323350309bd49",
+          "scope": "Visible paired animated tentacles, pointed feet and projected chest jewel; no sockets from hidden humanoid arms. Mouthless emissions use the jewel. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
         "foot": {
           "actions": [
             "idle",
@@ -38312,17 +38630,29 @@
             0.45,
             0.65
           ],
-          "manual_adjustments": [
-            {
-              "method": "native_foot_or_hoof_geometry_proposal",
-              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
-            }
-          ],
-          "method": "individual_foot_native_pose_visual_review",
+          "method": "repaired_source_individual_native_pose_review",
           "normal_runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
           "pose_sampling": "forward_from_start_v1",
-          "preview_sha256": "9e2d4e30f6e536e3ac117ccd47b233bea947d635b611c975684fdd2548f93eac",
-          "scope": "Tapered leg tip with native foot bone. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "preview_sha256": "584ab9de5f99bf27f67eb64378eaf58c78f35eb88c6cb8f4054323350309bd49",
+          "scope": "Visible paired animated tentacles, pointed feet and projected chest jewel; no sockets from hidden humanoid arms. Mouthless emissions use the jewel. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "584ab9de5f99bf27f67eb64378eaf58c78f35eb88c6cb8f4054323350309bd49",
+          "scope": "Visible paired animated tentacles, pointed feet and projected chest jewel; no sockets from hidden humanoid arms. Mouthless emissions use the jewel. Sampled visible marker placement; effect review recorded separately.",
           "side_fraction": 0.45
         },
         "left_foot": {
@@ -38336,31 +38666,91 @@
             0.45,
             0.65
           ],
-          "manual_adjustments": [
-            {
-              "method": "native_foot_or_hoof_geometry_proposal",
-              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
-            }
-          ],
-          "method": "individual_foot_native_pose_visual_review",
+          "method": "repaired_source_individual_native_pose_review",
           "normal_runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
           "pose_sampling": "forward_from_start_v1",
-          "preview_sha256": "451441e380bbc56e7e7c74f93c1da2d125e45ae665340d32faee355bd12945a2",
-          "scope": "Tapered leg tip with native foot bone. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "preview_sha256": "584ab9de5f99bf27f67eb64378eaf58c78f35eb88c6cb8f4054323350309bd49",
+          "scope": "Visible paired animated tentacles, pointed feet and projected chest jewel; no sockets from hidden humanoid arms. Mouthless emissions use the jewel. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "584ab9de5f99bf27f67eb64378eaf58c78f35eb88c6cb8f4054323350309bd49",
+          "scope": "Visible paired animated tentacles, pointed feet and projected chest jewel; no sockets from hidden humanoid arms. Mouthless emissions use the jewel. Sampled visible marker placement; effect review recorded separately.",
           "side_fraction": 0.45
         }
       },
       "parts": {
+        "body": [
+          [
+            {
+              "bone": "spine",
+              "offset": [
+                0.201178729534149,
+                0.0,
+                0.0039665624499325
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "core": [
+          [
+            {
+              "bone": "spine",
+              "offset": [
+                0.173870667815208,
+                0.0128873400390148,
+                0.0783065482974052
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
         "foot": [
           [
             {
               "bone": "right_foot",
               "offset": [
-                0,
-                0,
-                0
+                0.0,
+                0.0,
+                0.0
               ],
-              "weight": 1
+              "weight": 1.0
+            }
+          ]
+        ],
+        "hand": [
+          [
+            {
+              "bone": "right_feeler_a_10",
+              "offset": [
+                0.110846519470215,
+                0.0,
+                0.0
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "right_feeler_b_10",
+              "offset": [
+                0.110846519470215,
+                0.0,
+                0.0
+              ],
+              "weight": 0.5
             }
           ]
         ],
@@ -38369,11 +38759,33 @@
             {
               "bone": "left_foot",
               "offset": [
-                0,
-                0,
-                0
+                0.0,
+                0.0,
+                0.0
               ],
-              "weight": 1
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_feeler_a_10",
+              "offset": [
+                0.110845565795898,
+                0.0,
+                0.0
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "left_feeler_b_10",
+              "offset": [
+                0.110845565795898,
+                0.0,
+                0.0
+              ],
+              "weight": 0.5
             }
           ]
         ]
@@ -76076,6 +76488,305 @@
         }
       }
     },
+    "hawlucha-mega": {
+      "move_choreography": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "effect_start_fraction": 0.2,
+          "emission_end_fraction": 0.5,
+          "impact_fraction": 0.43,
+          "launch_fraction": 0.28
+        }
+      },
+      "move_effect_reviews": {
+        "drainpunch": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "16ded0eeb20081e66e4aee44a5c3a4c653d7c54a351760e698a6667416680b5c",
+          "normal_runtime_sha256": "12a952cf283f62b2c036a096064af91867287578184df200e17302e9a3e1ff93",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a369b1799791056bb358981afeab582880e0000e1af08406b6eb4263207e9a87",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "4d3283fee3024b9e210dacca82c1bb6197b2c85ee5daa0b88e7bc7641927dbec",
+          "shiny_preview_sha256": "a5d46f696e16bcb4de994a89fd19294cb7215f6092647ae738bacd3d227a5ea8",
+          "shiny_runtime_sha256": "44acb80a8b86780d205235310fe872c78fe460e59e39c84bfb2a3f47d32ee814",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "physical_attack",
+            "frames": 134.0,
+            "impact_frame": 69.68,
+            "launch_frame": 18.76,
+            "move_key": "drainpunch"
+          },
+          "views": 2
+        },
+        "highjumpkick": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "923a352e072524802aa7f143de3f8fa89831ae4b156beabd4ec3e7557d9c31f5",
+          "normal_runtime_sha256": "12a952cf283f62b2c036a096064af91867287578184df200e17302e9a3e1ff93",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "db14b8b906c2483e1d1e4dcc7a0b6dac05f1444f7fc0c8afab94bf3b750ec567",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "a23697ecf7090963382cd30f643cde892a2c432d39d99ad2feed20a408e13f49",
+          "shiny_preview_sha256": "ac1bf4c73f5a9d468641ab4ae29cb9d6878dc6558832d6ae39c1ab3cd468f2a4",
+          "shiny_runtime_sha256": "44acb80a8b86780d205235310fe872c78fe460e59e39c84bfb2a3f47d32ee814",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "physical_attack",
+            "frames": 134.0,
+            "impact_frame": 69.68,
+            "launch_frame": 18.76,
+            "move_key": "highjumpkick"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "18554c45231652ebaf2878ac629784a8ce595b05863e0cee8a6621827fc5f480",
+          "normal_runtime_sha256": "12a952cf283f62b2c036a096064af91867287578184df200e17302e9a3e1ff93",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5b097e7759d56fe02cbba448b13c220a982cc5d2827c5a9c96e120721169f731",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified. Beam emission ends before the native flip.",
+          "shiny_capture_sha256": "e49e1dd07090731d2e842bad6edbe950b071786f624c2ebf5a92b93fd895c72e",
+          "shiny_preview_sha256": "bea60bd7d470a95b7da6fd703b436da0e05fa3c0e2e54ae99c20a5fc577fda89",
+          "shiny_runtime_sha256": "44acb80a8b86780d205235310fe872c78fe460e59e39c84bfb2a3f47d32ee814",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "effect_start_frame": 29.6,
+            "emission_end_frame": 74.0,
+            "frames": 148.0,
+            "impact_frame": 63.64,
+            "launch_frame": 41.44,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "wingattack": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "7a2e645c88046711eb4fc8cebf325e09e910bae2d521db57ad343cf53b332f7e",
+          "normal_runtime_sha256": "12a952cf283f62b2c036a096064af91867287578184df200e17302e9a3e1ff93",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "207f1d6c5cb7a5e8fcc101c05029437606c15a3c675e76481e61b0c72e14329d",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "a093608d1bd53e6201682d254691687cef43bf3d1bb29c955dcee30a749a7de6",
+          "shiny_preview_sha256": "853bd2a2ede54d4fe0091a0e412e4d7b0dc2aec3923975a7092e2f1fb73a2fb1",
+          "shiny_runtime_sha256": "44acb80a8b86780d205235310fe872c78fe460e59e39c84bfb2a3f47d32ee814",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "physical_attack",
+            "frames": 134.0,
+            "impact_frame": 69.68,
+            "launch_frame": 18.76,
+            "move_key": "wingattack"
+          },
+          "views": 2
+        }
+      },
+      "part_reviews": {
+        "body": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "12a952cf283f62b2c036a096064af91867287578184df200e17302e9a3e1ff93",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "efc6986c35954c61d2480e4935324676fece6fad92629eca2012128ee60c25dd",
+          "scope": "Correct pm0761_51_00 bird source. Beak, palms/leading wing edge, toe tips and chest center follow native acrobatics. Beam timing is bounded before the special-attack flip. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "12a952cf283f62b2c036a096064af91867287578184df200e17302e9a3e1ff93",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "efc6986c35954c61d2480e4935324676fece6fad92629eca2012128ee60c25dd",
+          "scope": "Correct pm0761_51_00 bird source. Beak, palms/leading wing edge, toe tips and chest center follow native acrobatics. Beam timing is bounded before the special-attack flip. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "12a952cf283f62b2c036a096064af91867287578184df200e17302e9a3e1ff93",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "efc6986c35954c61d2480e4935324676fece6fad92629eca2012128ee60c25dd",
+          "scope": "Correct pm0761_51_00 bird source. Beak, palms/leading wing edge, toe tips and chest center follow native acrobatics. Beam timing is bounded before the special-attack flip. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "12a952cf283f62b2c036a096064af91867287578184df200e17302e9a3e1ff93",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "efc6986c35954c61d2480e4935324676fece6fad92629eca2012128ee60c25dd",
+          "scope": "Correct pm0761_51_00 bird source. Beak, palms/leading wing edge, toe tips and chest center follow native acrobatics. Beam timing is bounded before the special-attack flip. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "12a952cf283f62b2c036a096064af91867287578184df200e17302e9a3e1ff93",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "efc6986c35954c61d2480e4935324676fece6fad92629eca2012128ee60c25dd",
+          "scope": "Correct pm0761_51_00 bird source. Beak, palms/leading wing edge, toe tips and chest center follow native acrobatics. Beam timing is bounded before the special-attack flip. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "mouth": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "12a952cf283f62b2c036a096064af91867287578184df200e17302e9a3e1ff93",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "efc6986c35954c61d2480e4935324676fece6fad92629eca2012128ee60c25dd",
+          "scope": "Correct pm0761_51_00 bird source. Beak, palms/leading wing edge, toe tips and chest center follow native acrobatics. Beam timing is bounded before the special-attack flip. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "body": [
+          [
+            {
+              "bone": "spine_02",
+              "offset": [
+                0.14095515012741086,
+                0.0,
+                0.012498170137404993
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "foot": [
+          [
+            {
+              "bone": "right_foot_index",
+              "offset": [
+                0.026281381025910388,
+                -0.00021256506443024722,
+                0.00195543467998505
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "hand": [
+          [
+            {
+              "bone": "right_hand",
+              "offset": [
+                0.0438113212585449,
+                0.00412518158555031,
+                -0.00230278074741364
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_index",
+              "offset": [
+                0.02628137916326524,
+                0.0002126544713973999,
+                0.0019553974270820505
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_hand",
+              "offset": [
+                0.0438112020492554,
+                -0.00412530638277531,
+                -0.00230267643928528
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "upper_jaw_01",
+              "offset": [
+                0.15440160036087,
+                1.5419952012393e-19,
+                0.00163465738296509
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "lower_jaw_02",
+              "offset": [
+                0.000918582081794739,
+                -1.5419950719923e-19,
+                0.00262665748596191
+              ],
+              "weight": 0.5
+            }
+          ]
+        ]
+      }
+    },
     "haxorus": {
       "part_reviews": {
         "foot": {
@@ -111283,6 +111994,90 @@
         "preview_sha256": "21bdf7fc7d88b6d1bf9358dffab8e6a60833c8359e00b7501a52c804270ff2cc",
         "scope": "Upper/lower jaw fit follows the smile crease and open physical mouth across sampled poses. Actual move effects, timing, continuous clearance and contact moves remain pending.",
         "side_fraction": 0.45
+      }
+    },
+    "minior": {
+      "attachment_overrides": {
+        "mouth": "body"
+      },
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "9c57d81cc3f3d3f0ba1f5bd44e05cbb8d37b5044fae5d0e3d7682d09a1cca9e6",
+          "normal_runtime_sha256": "af0e49e0463d05f75c37a4259de45a603e2a7e6bb309286f60f22eacf05aeb94",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1f8c263af29cecf6375507fe62226cda019c705434087f05ea3f5cedab363d02",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "fe23ad3adacd39ebeb3ebe2b18a082ab99261389361974d65f2c8d21cdb2545b",
+          "shiny_preview_sha256": "85d79fac0bd8d4ac141e1cc8ca033097fe956515164a495129258cfcba799370",
+          "shiny_runtime_sha256": "6d640abbafaa4ec91f159958940baa9bdeb5b7f7753b0053eacedb2eb233ace9",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "special_attack",
+            "frames": 138.0,
+            "impact_frame": 85.56,
+            "launch_frame": 34.5,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "rollout": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "a5d04646aea0004aa075a555fce797997c056092f2f6f8e31817edaea443c207",
+          "normal_runtime_sha256": "af0e49e0463d05f75c37a4259de45a603e2a7e6bb309286f60f22eacf05aeb94",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e37feae6f25158373eddcd762c0a225dea92785c762b762bc4927e7c3a981f85",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "fa953d87cce7f582a341f7c1ec679419171b9f07f57defca310ca9a754280197",
+          "shiny_preview_sha256": "a8b73579b170fe7946c3fdba64d305e6b465f67c99168173399fe2053a57c452",
+          "shiny_runtime_sha256": "6d640abbafaa4ec91f159958940baa9bdeb5b7f7753b0053eacedb2eb233ace9",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "physical_attack",
+            "frames": 130.0,
+            "impact_frame": 67.6,
+            "launch_frame": 18.2,
+            "move_key": "rollout"
+          },
+          "views": 2
+        }
+      },
+      "part_reviews": {
+        "body": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "af0e49e0463d05f75c37a4259de45a603e2a7e6bb309286f60f22eacf05aeb94",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1eb1c1d6d37d7a02e1939c4af93d562adfcf2a1472f4c5081aa33e423406e706",
+          "scope": "Meteor form has no exposed mouth. Emissions use its rotating body center; detached shell fragments and hidden core face are excluded. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "body": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ]
       }
     },
     "minun": {
@@ -174223,6 +175018,255 @@
         "preview_sha256": "669d59dbd24e1a4d8b557034142e014d092ea6e5cd34f7134b2cad88c087505f",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "togedemaru": {
+      "move_actions": {
+        "hyperbeam": "physical_attack"
+      },
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "5589387de6f26b925e3491576eea7c9fb3cfe4a663f12a720ce143498228f9c3",
+          "normal_runtime_sha256": "2f317420982aefbfd2bbe3a0d88bdb81ad981ba48c7ab943f632812a96133b31",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "50dc778ba4fe8649303677d09248523e76ffb24d5c67d6b4c2a016c414be9bf7",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "bae352f3dc42b764acff40bc35d841e32a55b2b437231cc2fdeb02c42db4481b",
+          "shiny_preview_sha256": "4555cb1a2846fbc234f371120257bcfc4cb0469ce153f97c5aff87bd1c49fe89",
+          "shiny_runtime_sha256": "d2885df3708251464388bb533fa1b073641366bbf18cd8f7af522e0edadd54e1",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "physical_attack",
+            "frames": 292.0,
+            "impact_frame": 181.04,
+            "launch_frame": 73.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "voltswitch": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "a15bfafeab7ce6745a708364cdbe111e95009a17f8d8959abdcdd9bdcf6262bf",
+          "capture_sha256": "c71a84686c72f993b66e7a7d8329a1b9d487bf7457391909c0142b25d749de21",
+          "normal_runtime_sha256": "2f317420982aefbfd2bbe3a0d88bdb81ad981ba48c7ab943f632812a96133b31",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8d23bb8d506664d269e7069de37bcfdb1b533393500ec492792ceb9037e77f36",
+          "scope": "Normal/shiny sampled origin placement and native route inspected. Native marker and binding evidence are separate. Existing effect width, impact decorations and exact target contact spacing are not certified.",
+          "shiny_capture_sha256": "f5ed958339fcdea10b6ccf961c489ec25733ad69d2b6135ea576fa1a5f1a9788",
+          "shiny_preview_sha256": "e9fe9ab83092f983f96a6ba5d4f8e27edf2bedb9bda3d51ca5ef27733d8014e2",
+          "shiny_runtime_sha256": "d2885df3708251464388bb533fa1b073641366bbf18cd8f7af522e0edadd54e1",
+          "status": "representative_effect_inspected",
+          "timing": {
+            "action": "special_attack",
+            "frames": 300.0,
+            "impact_frame": 186.0,
+            "launch_frame": 75.0,
+            "move_key": "voltswitch"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "voltswitch": "body"
+      },
+      "part_reviews": {
+        "body": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "measurements": [],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "2f317420982aefbfd2bbe3a0d88bdb81ad981ba48c7ab943f632812a96133b31",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b9f9481bc84dd322df0899b5773532433ec533aab5b45dce4d0f97a83705d1f8",
+          "scope": "Complete normal body with native mouth/palm/foot sockets; body center triangulated inside sphere. Hyper Beam uses forward-facing physical attack; Volt Switch uses the rotating electric body. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "2f317420982aefbfd2bbe3a0d88bdb81ad981ba48c7ab943f632812a96133b31",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b9f9481bc84dd322df0899b5773532433ec533aab5b45dce4d0f97a83705d1f8",
+          "scope": "Complete normal body with native mouth/palm/foot sockets; body center triangulated inside sphere. Hyper Beam uses forward-facing physical attack; Volt Switch uses the rotating electric body. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "2f317420982aefbfd2bbe3a0d88bdb81ad981ba48c7ab943f632812a96133b31",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b9f9481bc84dd322df0899b5773532433ec533aab5b45dce4d0f97a83705d1f8",
+          "scope": "Complete normal body with native mouth/palm/foot sockets; body center triangulated inside sphere. Hyper Beam uses forward-facing physical attack; Volt Switch uses the rotating electric body. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "2f317420982aefbfd2bbe3a0d88bdb81ad981ba48c7ab943f632812a96133b31",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b9f9481bc84dd322df0899b5773532433ec533aab5b45dce4d0f97a83705d1f8",
+          "scope": "Complete normal body with native mouth/palm/foot sockets; body center triangulated inside sphere. Hyper Beam uses forward-facing physical attack; Volt Switch uses the rotating electric body. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "2f317420982aefbfd2bbe3a0d88bdb81ad981ba48c7ab943f632812a96133b31",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b9f9481bc84dd322df0899b5773532433ec533aab5b45dce4d0f97a83705d1f8",
+          "scope": "Complete normal body with native mouth/palm/foot sockets; body center triangulated inside sphere. Hyper Beam uses forward-facing physical attack; Volt Switch uses the rotating electric body. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        },
+        "mouth": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "repaired_source_individual_native_pose_review",
+          "normal_runtime_sha256": "2f317420982aefbfd2bbe3a0d88bdb81ad981ba48c7ab943f632812a96133b31",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b9f9481bc84dd322df0899b5773532433ec533aab5b45dce4d0f97a83705d1f8",
+          "scope": "Complete normal body with native mouth/palm/foot sockets; body center triangulated inside sphere. Hyper Beam uses forward-facing physical attack; Volt Switch uses the rotating electric body. Sampled visible marker placement; effect review recorded separately.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "body": [
+          [
+            {
+              "bone": "EffCenter01",
+              "offset": [
+                -4.37759197230449,
+                -0.5264949259895845,
+                0.2590902324712523
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "foot": [
+          [
+            {
+              "bone": "EffFoot01",
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "hand": [
+          [
+            {
+              "bone": "EffHand01",
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "EffFoot02",
+              "offset": [
+                0,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "EffHand02",
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "EffMouth01",
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
       }
     },
     "togekiss": {

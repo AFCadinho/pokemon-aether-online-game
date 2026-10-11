@@ -1,10 +1,20 @@
 # Remaining catalog attack origins
 
-Source-model follow-up: [five repaired source pairs](../source-model-repairs.md).
-The historical five attachment holds below still require attack-point calibration;
-source repair alone does not approve their emission points.
+Source-model follow-up: [five repaired pairs and attack origins](repaired-model-attack-points.md).
+The five historical source holds are resolved, including normal and shiny.
 
-All 295 remaining forms were assessed individually. Anatomical routes are installed for 290 forms; five source-model blockers remain.
+All 295 forms in the original remaining cohort were assessed individually and
+their original missing anatomical routes are resolved. The latest learnsets add
+two routes outside that cohort: Hisuian Avalugg's Rock Smash and Alolan Raichu's
+Double Kick. Those remain in the current backlog.
+
+The follow-up adds **20** part bindings and resolves **29** previously missing
+routes across the five repaired forms. **16** representative moves were inspected
+in both normal/shiny appearances (32 sheets); **3,150** bone-point samples passed.
+Current catalog totals: **8,333** configured bone-bound routes among **30,646**
+supported move/form pairs. Full per-move presentation approval remains separate.
+
+## Earlier bulk phase
 
 Added **337** part bindings and resolved **652** supported learnset routes: **552** now use reviewed bone-bound anatomy and **100** deliberately use body motion. Existing reviewed points were retained where applicable.
 
@@ -20,7 +30,7 @@ Added **337** part bindings and resolved **652** supported learnset routes: **55
 - Greninja Lick retains its native tongue scarf alongside the procedural tongue; full tongue presentation is not approved.
 - All three Mega Tatsugiri variants have overlapping native heads during their attack actions. Selected form head origins were reviewed; continuous head/effect clearance remains unresolved.
 - Masked Ogerpon club shafts overlap in the source model. Ivy Cudgel has no current supported 3D presenter.
-- Five source-model identity/visibility blockers remain: Cramorant, Deoxys, Mega Hawlucha, Minior, Togedemaru.
+- The five source identity/visibility blockers listed in the earlier phase are resolved by the linked follow-up.
 - Normal/shiny share attachment profiles. The 580-model binding check uses original native scenes; it does not claim a new full run against the optional shared-geometry packs.
 
 Seven representative offline stage cases also matched between trainer and wild modes: Cetitan Ice Beam, Sinistea Astonish, Scyther Wing Attack, Mega Mawile Bite, Mega Zygarde Dragon Breath, Oshawott Razor Shell and Iron Valiant Shadow Ball. Their sampled capture metadata matched except for the battle-kind label; images were inspected in both modes. This does not certify live server encounter setup.

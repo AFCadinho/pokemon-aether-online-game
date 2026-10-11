@@ -6,10 +6,13 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'tools'))
+from shared_source_repair_binding import historical
 
 
 def sha(path):
@@ -58,6 +61,7 @@ def frame_keys(keys):
 
 
 def reconcile(report, catalog):
+    catalog = historical(catalog, 'model_pair_catalog')
     assert report["complete"] and report["full_selected_catalog"]
     assert report["prototype_only"] and not report["production_approved"]
     expected = {a["runtime_identity"]: a for asset in catalog["assets"]
@@ -84,6 +88,7 @@ def reconcile(report, catalog):
 
 
 def retained_check(directory, report, catalog):
+    catalog = historical(catalog, 'model_pair_catalog')
     expected = {a["asset_id"]: a for a in catalog["assets"] if a.get("format") == "model-pair-pck-v1"}
     received = {}
     images = pairs = battles = previews = 0
@@ -180,6 +185,7 @@ def reference_reconciliation(report):
 
 
 def selection_summary(report, catalog, storage):
+    catalog = historical(catalog, 'model_pair_catalog')
     """A shared pack needs both appearances; unresolved pairs retain v11."""
     accepted = reference_reconciliation(report)
     selected = [a["asset_id"] for a in catalog["assets"]
@@ -226,7 +232,7 @@ def main():
         for name, digest in report["inputs"].items():
             assert sha(ROOT / name) == digest, "Frozen evidence input changed: " + name
     if "selection" in bound:
-        catalog = read(ROOT / "data/model_pair_catalog.json")
+        catalog = historical(read(ROOT / "data/model_pair_catalog.json"), 'model_pair_catalog')
         assert bound["selection"] == selection_summary(bound, catalog, read(ROOT / "tools/sprite_factory/shared_model_catalog_results.json"))
         if args.run:
             draft = read(args.run / "qualified-index.json")

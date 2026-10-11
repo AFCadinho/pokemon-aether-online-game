@@ -117,6 +117,10 @@ static func resolve(identity: String, digest: String) -> Dictionary:
 			if appearance.runtime_identity == identity:
 				source_digest = str(appearance.source_sha256)
 				accepted = approved_digest(model, source_digest)
+	# Superseded wrong-species archives remain recognizable by old installers,
+	# but may never borrow the replacement anatomy, placement or attack sockets.
+	if source_digest in model.get("revoked_runtime_sha256", []):
+		return {}
 	if not accepted:
 		model = SCREENED.data.models.get(identity, {})
 		profiles = SCREENED.data.profiles

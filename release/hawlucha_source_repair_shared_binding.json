@@ -1,0 +1,30 @@
+{
+  "asset_id": "pokemon_3d:hawlucha:mega",
+  "baseline_commit": "68fd9f573f41d9f6b119338fecd4ca2f76611d19",
+  "files": {
+    "model_pair_catalog": {
+      "baseline_sha256": "84ad3e6b6e2152ac7aae73ac27c7a4a6903b0b3658b7ab1794dd02634b0990c9",
+      "current_canonical_sha256": "e5c4264a7adb628c4bf3ab4de9aeca33bb416878f84d5413e2038b047edd7b24",
+      "current_sha256": "765c92dc4d65e3fc2db8fd0692d1a805c941d482d39acd3e9fb2675299755fe1"
+    },
+    "model_pair_geometry": {
+      "baseline_sha256": "eaafaf6d06f82bf3ecc8097d3a75623eb73f0be541c625da4636ac28e4a67195",
+      "current_canonical_sha256": "0f20dfbf098783c669fa7f57f20131c63023e7c13c99ff479daee8503b12c199",
+      "current_sha256": "2f7576bdc7d7298ebc629972d1487e533ad61bb225d355206267111946079a9f"
+    },
+    "model_pair_geometry_catalog": {
+      "baseline_sha256": "4370eedcdbf2e517a1b3117128e2b47375bb1c9b86aa05d598f1f22d4ddbd114",
+      "current_canonical_sha256": "fc9c89be306fda9a5fcf4b02f2c2d973464daace339dc2184196cabf6d75cc35",
+      "current_sha256": "686716a448f1fe18a27dda31717eef832d101df9dcf948a13f3b785b13206b9a"
+    },
+    "model_pair_qualified": {
+      "baseline_sha256": "4b31a67f27edf638710097c78537ec8b6640af56cda05bd1a6bff9497a5d3528",
+      "current_canonical_sha256": "d248dc5edcc3f1f36dc825e08c99b41cc1e4af2ca7f98c78bb9f28125da1a34a",
+      "current_sha256": "9912ff20529b48a02f694900ab639066ca93194552e2e4fa8dc28b949e81856e"
+    }
+  },
+  "publication_receipt_sha256": "e2d1e1c3a71281944e9326301dcfb22103efdc6f4b71af8c9d7b5720b76d500a",
+  "qualification_sha256": "b02a99d68385f2ab09bade2689472bd5eb21604aeeff4fce99d0162c4d433b1a",
+  "schema": 1,
+  "scope": "Preserve frozen full-cohort evidence; exactly one pair has independent repaired-source qualification and immutable publication. No new whole-cohort/platform certification."
+}

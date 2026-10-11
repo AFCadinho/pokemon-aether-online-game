@@ -151,7 +151,7 @@ def main():
     after = snapshot_manifests()
     if after != before:
         raise ValueError('Live manifests changed during staging; investigate before activation')
-    receipt = {'schema': 1, 'revision': 'shared-model-qualified-test-v1',
+    receipt = {'schema': 1, 'revision': json.loads((ROOT / 'data/model_pair_qualified.json').read_bytes())['catalog_revision'],
                'scope': 'Immutable staging only; current clients remain on their existing collection',
                'content_index': index, 'index_verification': index_result,
                'readiness_sha256': file_digest(ROOT / 'data/shared_model_readiness_checks.json')[1],

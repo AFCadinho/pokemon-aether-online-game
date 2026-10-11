@@ -30,7 +30,8 @@ class PublicationCheck(unittest.TestCase):
         wire, assets = validate_selection(ROOT)
         self.assertEqual(len(assets), 1200)
         self.assertEqual(sum(a.get('format') == 'model-pair-pck-v1' for a in assets), 1082)
-        self.assertEqual(len(wire), 236908)
+        self.assertEqual(wire, (ROOT / 'data/model_pair_qualified.json').read_bytes())
+        self.assertLessEqual(len(wire), 1048576)
         self.assertEqual(next(a for a in assets if a['asset_id'] == 'pokemon_3d:greninja:base').get('format'), None)
         self.assertEqual(next(a for a in assets if a['asset_id'] == 'pokemon_3d:inkay:base').get('format'), None)
 
@@ -81,7 +82,7 @@ class PublicationCheck(unittest.TestCase):
                  'sha256': sha, 'size_bytes': len(wire)}
         verified = lambda row: {**row, 'uploaded': False, 'public_get_sha256_verified': True,
                                 'public_head_size_verified': True}
-        receipt = {'schema': 1, 'revision': 'shared-model-qualified-test-v1',
+        receipt = {'schema': 1, 'revision': json.loads(wire)['catalog_revision'],
                    'active_manifest_activated': False, 'production_approved': False,
                    'content_index': index, 'index_verification': verified(index),
                    'readiness_sha256': hashlib.sha256((ROOT / 'data/shared_model_readiness_checks.json').read_bytes()).hexdigest(),

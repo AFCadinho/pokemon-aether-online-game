@@ -1,5 +1,11 @@
 # Five source-model repairs
 
+**Follow-up completed:** the corrected Mega Hawlucha pair is admitted and its
+immutable ZIP/shared packs are published. All five models now have reviewed
+attack origins. See [the follow-up](3d/repaired-model-attack-points.md).
+The report below records the earlier source-repair phase; its remaining-work
+list is historical. No new client build has been activated.
+
 Task: `pokemon-source-model-repairs`, 2026-10-11. Evidence and checksums:
 [`catalog_source_model_repairs_results.json`](../tools/sprite_factory/catalog_source_model_repairs_results.json).
 Local scenes, bundles, captures and detailed reports remain in

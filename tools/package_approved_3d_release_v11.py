@@ -79,8 +79,22 @@ def outputs(index, binding, registries):
             row = binding['models'][identity]
             model = registries[0]['models'][identity]
             assert row['source_sha256'] == before[identity]['runtime_sha256']
-            assert row['candidate_sha256'] == appearance['runtime_sha256'] == model['sha256']
-            assert row['cache_source_bytes'] == model['cache_source_bytes'] and row['candidate_bytes'] <= row['cache_source_bytes']
+            assert row['candidate_sha256'] == appearance['runtime_sha256']
+            if appearance['runtime_sha256'] != model['sha256']:
+                # v11 is immutable historical evidence. A separately qualified
+                # source replacement must not rewrite it or inherit its poses.
+                repair_path = ROOT / 'release/hawlucha_source_repair_qualification.json'
+                repair = json.loads(repair_path.read_bytes())
+                assert identity in ('hawlucha-mega', 'hawlucha-mega@shiny')
+                assert sha(repair_path.read_bytes()) == registries[0]['hawlucha_source_repair_qualification_sha256']
+                assert repair['runtime_approved'] and repair['battle_approved'] and repair['appearance_approved']
+                replacement = next(a for a in repair['bundle_index']['assets'][0]['appearances'] if a['runtime_identity'] == identity)
+                assert replacement['runtime_sha256'] == model['sha256']
+                assert appearance['runtime_sha256'] in model['revoked_runtime_sha256']
+                assert row['source_sha256'] in model['revoked_runtime_sha256']
+            else:
+                assert row['cache_source_bytes'] == model['cache_source_bytes']
+            assert row['candidate_bytes'] <= row['cache_source_bytes']
             assert row['source_sha256'] == model['sha256'] or row['source_sha256'] in model.get('previous_sha256', [])
             assert len(row['decoded_sha256']) == 64
     assert seen == set(binding['models']) == set(registries[0]['models'])
