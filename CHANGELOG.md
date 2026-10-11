@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refine mouth origins for Houndstone, Minccino, Grumpig, Slaking, Sudowoodo, Wyrdeer and Slugma; align their reviewed Growl, Hyper Beam and Flamethrower animations with open-mouth poses.
+
 - Refine mouth origins for Cetoddle, Drizzile, Crabominable, Lugia and Ho-Oh; align Cetoddle’s Ice Beam, Lugia’s Hyper Beam and Ho-Oh’s Flamethrower with their open-mouth poses.
 
 - Make mouth origins follow both Grimer forms, Goodra, Gengar, Crobat and Bunnelby through their attack poses, and time Goodra’s Flamethrower to its open mouth.

@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1047 species/forms.
-- No anatomical attachment profile: 153 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 958 species/forms.
+- At least one configured anatomical attachment: 1049 species/forms.
+- No anatomical attachment profile: 151 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 965 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -398,7 +398,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | growlithe | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | growlithe-hisui | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | grubbin | mouth | Same attachment profile |
-| grumpig | foot, hand, left_foot, left_hand | Same attachment profile |
+| grumpig | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | gulpin | hand, left_hand, mouth | Same attachment profile |
 | gumshoos | hand, left_hand, mouth | Same attachment profile |
 | gurdurr | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -435,6 +435,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | houndoom | hand, left_hand, mouth | Same attachment profile |
 | houndoom-mega | hand, left_hand, mouth | Same attachment profile |
 | houndour | hand, left_hand, mouth | Same attachment profile |
+| houndstone | mouth | Same attachment profile |
 | huntail | mouth | Same attachment profile |
 | hydreigon | mouth | Same attachment profile |
 | hypno | foot, hand, left_foot, left_hand | Same attachment profile |
@@ -595,7 +596,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | milotic | mouth | Same attachment profile |
 | miltank | hand, left_hand, mouth | Same attachment profile |
 | mime-jr | hand, left_hand, mouth | Same attachment profile |
-| minccino | hand, left_hand | Same attachment profile |
+| minccino | hand, left_hand, mouth | Same attachment profile |
 | minun | mouth | Same attachment profile |
 | miraidon | hand, left_hand, mouth | Same attachment profile |
 | misdreavus | mouth | Same attachment profile |
@@ -844,7 +845,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | skrelp | mouth | Same attachment profile |
 | skuntank | hand, left_hand, mouth | Same attachment profile |
 | skwovet | mouth | Same attachment profile |
-| slaking | foot, hand, left_foot, left_hand | Same attachment profile |
+| slaking | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | slakoth | hand, left_hand, mouth | Same attachment profile |
 | sliggoo | mouth | Same attachment profile |
 | sliggoo-hisui | mouth | Same attachment profile |
@@ -856,6 +857,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | slowking-galar | hand, left_hand, mouth | Same attachment profile |
 | slowpoke | mouth | Same attachment profile |
 | slowpoke-galar | mouth | Same attachment profile |
+| slugma | mouth | Same attachment profile |
 | slurpuff | mouth | Same attachment profile |
 | smeargle | mouth | Same attachment profile |
 | smoliv | mouth | Same attachment profile |
@@ -895,7 +897,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | stufful | mouth | Same attachment profile |
 | stunfisk-galar | hand, left_hand, mouth | Same attachment profile |
 | stunky | hand, left_hand, mouth | Same attachment profile |
-| sudowoodo | foot, left_foot | Same attachment profile |
+| sudowoodo | foot, left_foot, mouth | Same attachment profile |
 | suicune | hand, left_hand, mouth | Same attachment profile |
 | sunflora | hand, left_hand, mouth | Same attachment profile |
 | sunkern | mouth | Same attachment profile |
@@ -1027,7 +1029,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | wooper-paldea | foot, left_foot, mouth | Same attachment profile |
 | wormadam | mouth | Same attachment profile |
 | wynaut | mouth | Same attachment profile |
-| wyrdeer | foot, left_foot | Same attachment profile |
+| wyrdeer | foot, left_foot, mouth | Same attachment profile |
 | xatu | mouth | Same attachment profile |
 | xerneas | hand, left_hand, mouth | Same attachment profile |
 | xurkitree | hand, left_hand, mouth | Same attachment profile |

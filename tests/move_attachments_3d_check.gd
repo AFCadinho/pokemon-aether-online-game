@@ -79,7 +79,7 @@ func _run() -> void:
 	assert(Attachments.definitions_for("goodra", "mouth") != Attachments.definitions_for("goodra-hisui", "mouth"))
 	assert(Attachments.definitions_for("gengar", "mouth") != Attachments.definitions_for("gengar-mega", "mouth"))
 
-	for species: String in ["cetoddle", "drizzile", "crabominable", "lugia", "ho-oh"]:
+	for species: String in ["cetoddle", "drizzile", "crabominable", "lugia", "ho-oh", "houndstone", "minccino", "grumpig", "slaking", "sudowoodo", "wyrdeer", "slugma"]:
 		for identity: String in [species, species + "@shiny"]:
 			var emitters := Attachments.definitions_for(identity, "mouth")
 			assert(emitters.size() == 1 and emitters[0].size() > 1)
