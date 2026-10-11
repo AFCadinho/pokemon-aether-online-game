@@ -105,9 +105,47 @@ func _run() -> void:
 	lift._finish_selected()
 	await process_frame
 	_check(selections == [2] and not game.is_overworld_input_locked(), "lift selection resolves once and releases its window lock")
+	var many_data := data.duplicate(true)
+	many_data.floors = range(1, 101)
+	many_data.myRoom = {"userId": 7, "name": "Adinho", "floor": 87, "room": 3}
+	many_data.rooms = [many_data.myRoom, {"userId": 8, "name": "Misty", "floor": 63, "room": 2}]
+	var many := Menu.new()
+	root.add_child(many)
+	many.open(many_data, true)
+	await process_frame
+	await process_frame
+	_check(many._floor_grid.get_child_count() == 100 and many._floor_grid.columns > 1, "one hundred floors form a compact multi-column grid")
+	_check(many._floor_scroll.get_v_scroll_bar().max_value > many._floor_scroll.size.y, "large Guilds scroll inside a bounded floor picker")
+	many._search.text = " 87 "
+	many._filter_floors(many._search.text)
+	_check(many._floor_grid.get_child_count() == 1 and many._floor_buttons.has(87), "exact floor search avoids matching unrelated floor numbers")
+	many._submit_floor_search("87")
+	_check(many._selected_floor == 87 and many._travel.has_focus(), "enter selects an available floor and focuses the travel action")
+	many._search.text = "mIsTy"
+	many._filter_floors("mIsTy")
+	_check(many._floor_grid.get_child_count() == 1 and many._floor_buttons.has(63), "player-name search finds the assigned floor")
+	_check(many._destination.text == many._floor_label(87), "the footer retains the selected destination while filtering other floors")
+	many._search.text = "no such player"
+	many._filter_floors(many._search.text)
+	_check(many._empty_floors.visible, "unmatched searches show a clear empty state")
+	many._search.grab_focus()
+	many._submit_floor_search("9999")
+	_check(many._search.has_focus() and many._selected_floor == 87, "enter on an unavailable floor does not focus travel to a previous destination")
+	many._show_my_room()
+	await process_frame
+	await process_frame
+	await process_frame
+	_check(many._search.text.is_empty() and many._selected_floor == 87 and many._floor_scroll.scroll_vertical > 0, "find my room clears filters and reveals a distant assigned floor")
+	many._reveal_floor(0)
+	_check(many._selected_floor == 0 and many._destination.text == many._floor_label(0), "ground-floor shortcut remains available for large Guilds")
+	many._select_floor(101)
+	_check(many._selected_floor == 0, "the picker rejects unavailable destinations")
+	many._finish(-1)
+	await process_frame
+	_check(not game.is_overworld_input_locked(), "closing the scalable picker releases its input lock")
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var text: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://localization/" + locale + ".json"))
-		for key: String in ["directory_title", "lift_title", "my_room", "address", "room_title"]:
+		for key: String in ["directory_title", "lift_title", "my_room", "address", "room_title", "floor_search", "no_floors", "travel"]:
 			_check(text.has("ui.guild_base.rooms." + key), "room UI copy exists in " + locale + ": " + key)
 	# Exercise the real NPC handoff. Applying the transition destroys the source
 	# NPC, which must not leave its legacy movement lock behind.

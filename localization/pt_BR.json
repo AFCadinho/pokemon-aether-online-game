@@ -1,4 +1,7 @@
 {
+  "ui.guild_base.rooms.floor_search": "Buscar andar ou jogador…",
+  "ui.guild_base.rooms.no_floors": "Nenhum andar encontrado.",
+  "ui.guild_base.rooms.travel": "Ir",
   "ui.guild_base.rooms.directory_title": "Diretório de quartos",
   "ui.guild_base.rooms.directory_hint": "Encontre o quarto de um membro da guilda. Os quartos são numerados da esquerda para a direita em cada andar.",
   "ui.guild_base.rooms.lift_title": "Elevador da base da guilda",

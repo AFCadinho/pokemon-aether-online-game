@@ -1,4 +1,7 @@
 {
+  "ui.guild_base.rooms.floor_search": "Zoek verdieping of speler…",
+  "ui.guild_base.rooms.no_floors": "Geen verdiepingen gevonden.",
+  "ui.guild_base.rooms.travel": "Ga",
   "ui.guild_base.rooms.directory_title": "Kameroverzicht",
   "ui.guild_base.rooms.directory_hint": "Vind de kamer van een guildlid. Kamers tellen per verdieping van links naar rechts.",
   "ui.guild_base.rooms.lift_title": "Guildbase-lift",

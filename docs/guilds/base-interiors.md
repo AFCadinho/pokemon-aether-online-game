@@ -94,7 +94,12 @@ through the existing authorized teleport flow on login.
 The upper door of the waiting room enters `elevator_cabin.tscn`. A
 receptionist behind its left counter opens a searchable member directory,
 including **Find my room**. The cabin attendant lists assigned floors and the
-ground floor. Choosing a floor opens its hallway; the ground floor opens the
+ground floor in a bounded number grid. The lift search filters by an exact
+floor number or a member name; ground-floor and personal-room shortcuts stay
+above the scroll area, and the selected destination/travel action stay below
+it. **Find my room** clears filters and scrolls to the assigned floor. The grid
+adapts to the window width, with stacked shortcuts on narrow windows.
+Choosing a floor opens its hallway; the ground floor opens the
 waiting room. Entering a cabin from an upper hallway carries that floor in the
 instance ID, so leaving without selecting another destination returns there.
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Organize the Guild Base lift into a compact searchable floor grid with ground-floor and personal-room shortcuts and a fixed destination footer.
+
 - Added Guild Base reception and lift attendants, stable automatic player-room assignments, searchable room addresses, and reusable personal-room interiors with Guild-private travel.
 
 - Prepare a reusable Guild Base player-floor hallway with four room slots, a central lift, collision and a camera mask; floor allocation will follow later.
