@@ -164,6 +164,14 @@ visits.
 
 ## Guard visits
 
+The Guild interface's **Guild Base** button enables once the Guild owns a
+base. `POST /game/guild-bases/teleport` selects the member's own Guild and
+town on the server and authorizes free travel to the main-hall `FromTown`
+spawn. All member ranks can use it. It uses the usual departure effect, input
+lock and teleport acknowledgement; busy activities, pending teleports,
+detention, closed areas and above-cap parties leaving Clash block travel.
+Travelling home ends any temporary request or visit to another Guild.
+
 The guard offers a searchable town-local Guild Base directory, direct entry to
 one's own base and the existing purchase flow. Leaders select **Open to
 visitors** or **By request** at the **Guild Base manager** in the main hall.

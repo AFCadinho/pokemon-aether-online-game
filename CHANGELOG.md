@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Activate the Guild interface's free Guild Base teleport for members of Guilds that own a base, arriving in their private main hall.
 - Add the Emerald Luchador Outfit Box to the Gift Store for 450 Gems (or 450 account-binding card credits), for both player models.
 
 - Complete the Emerald Luchador mask with a visible black-and-gold back in every walking, fishing and riding frame for both player models.

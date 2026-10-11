@@ -710,7 +710,7 @@ var coop_wild_notice_at_msec: Dictionary = {}
 var guild_popup: GuildPopup
 var aether_exchange_popup: AetherExchangePopup
 var aether_exchange_pokemon_hover_card: PartyHoverCard
-var guild_lobby_teleport_in_flight := false
+var guild_teleport_in_flight := false
 var player_interaction_coordinator: PlayerInteractionCoordinator
 var quest_journal_view
 @onready var mail_popup: PanelContainer = $Control/MailPopup
@@ -45857,6 +45857,8 @@ func _open_guild_popup() -> void:
 			guild_popup.closed.connect(_on_guild_popup_closed)
 		if not guild_popup.lobby_teleport_requested.is_connected(_on_guild_lobby_teleport_requested):
 			guild_popup.lobby_teleport_requested.connect(_on_guild_lobby_teleport_requested)
+		if not guild_popup.base_teleport_requested.is_connected(_on_guild_base_teleport_requested):
+			guild_popup.base_teleport_requested.connect(_on_guild_base_teleport_requested)
 		if not guild_popup.private_message_requested.is_connected(_on_guild_private_message_requested):
 			guild_popup.private_message_requested.connect(_on_guild_private_message_requested)
 		if not guild_popup.trainer_card_requested.is_connected(_on_guild_trainer_card_requested):
@@ -45880,8 +45882,18 @@ func _on_guild_trainer_card_requested(player: Dictionary) -> void:
 
 
 func _on_guild_lobby_teleport_requested() -> void:
-	if guild_lobby_teleport_in_flight:
+	await _teleport_to_guild_destination(false)
+
+
+func _on_guild_base_teleport_requested() -> void:
+	await _teleport_to_guild_destination(true)
+
+
+func _teleport_to_guild_destination(to_base: bool) -> void:
+	if guild_teleport_in_flight:
 		return
+	guild_teleport_in_flight = true
+	var destination_key := "ui.guild.base" if to_base else "ui.guild.lobby"
 	if guild_popup != null and guild_popup.visible:
 		guild_popup.close()
 	await get_tree().process_frame
@@ -45891,13 +45903,13 @@ func _on_guild_lobby_teleport_requested() -> void:
 		or not world.has_method("begin_authorized_teleport")
 		or not world.has_method("apply_authorized_teleport_state")
 	):
+		guild_teleport_in_flight = false
 		_add_chat_message(LocalizationManager.text("ui.guild.lobby.error.world_not_ready"))
 		return
 
-	guild_lobby_teleport_in_flight = true
 	var begin_result: Dictionary = await world.call("begin_authorized_teleport")
 	if not bool(begin_result.get("success", false)):
-		guild_lobby_teleport_in_flight = false
+		guild_teleport_in_flight = false
 		_add_chat_message(str(begin_result.get(
 			"error",
 			LocalizationManager.text("ui.guild.lobby.error.unavailable")
@@ -45905,23 +45917,23 @@ func _on_guild_lobby_teleport_requested() -> void:
 		return
 
 	await _play_authorized_teleport_departure_effect(world)
-	var response: Dictionary = await GuildService.teleport_to_lobby()
+	var response: Dictionary = await GuildService.teleport_to_base() if to_base else await GuildService.teleport_to_lobby()
 	if not bool(response.get("success", false)):
 		_cancel_authorized_teleport_effect(world)
-		guild_lobby_teleport_in_flight = false
-		_add_chat_message(str(response.get(
-			"error",
-			LocalizationManager.text("ui.guild.lobby.error.failed")
-		)))
+		guild_teleport_in_flight = false
+		if to_base:
+			await GameErrorDialogService.show_response(response, destination_key + ".error.failed")
+		else:
+			_add_chat_message(str(response.get("error", LocalizationManager.text("ui.guild.lobby.error.failed"))))
 		return
 
 	var state := _staff_dictionary_from_variant(response.get("state", {}))
 	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", state)
-	guild_lobby_teleport_in_flight = false
+	guild_teleport_in_flight = false
 	if not bool(apply_result.get("success", false)):
-		_add_chat_message(LocalizationManager.text("ui.guild.lobby.error.apply_failed"))
+		_add_chat_message(LocalizationManager.text(destination_key + ".error.apply_failed"))
 		return
-	_add_chat_message(LocalizationManager.text("ui.guild.lobby.success"))
+	_add_chat_message(LocalizationManager.text(destination_key + ".success"))
 
 
 func _play_authorized_teleport_departure_effect(world: Node) -> void:
