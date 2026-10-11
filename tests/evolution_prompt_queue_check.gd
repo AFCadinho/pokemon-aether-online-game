@@ -56,6 +56,14 @@ func _check_evolution_form_sprites() -> void:
 		var shiny_name := "gourgeist" if species in ["Gourgeist", "Gourgeist Average", "gourgeist-average"] else species
 		_check(shiny != null and shiny.resource_path.ends_with("pokemon_home_shiny/%s.png" % shiny_name),
 			"%s uses its shiny form icon" % species)
+	# Form-preserving routes must preview the exact color/East/season asset.
+	for species: String in ["floette-blue", "floette-orange", "floette-white", "floette-yellow",
+		"florges-blue", "florges-orange", "florges-white", "florges-yellow", "shellos-east", "gastrodon-east",
+		"deerling-autumn", "deerling-summer", "deerling-winter", "sawsbuck-autumn", "sawsbuck-summer", "sawsbuck-winter"]:
+		for shiny: bool in [false, true]:
+			var texture := POKEMON_ASSETS.load_home_sprite(species, shiny)
+			_check(texture != null and texture.resource_path.get_file().get_basename().to_lower() == species,
+				"%s preview preserves its exact form (shiny=%s)" % [species, shiny])
 	quit(1 if failed else 0)
 
 
