@@ -68,7 +68,7 @@ func _run() -> void:
 		for move: String in ["watergun", "bubblebeam", "icebeam", "flashcannon", "scald", "waterpulse"]:
 			assert(Attachments.part_for(identity, move) == "gem")
 	assert(Attachments.part_for("starmie", "hyperbeam") == "gem")
-	assert(Attachments.part_for("starmie-mega", "watergun") == "mouth")
+	assert(Attachments.definitions_for("starmie-mega", "gem") != Attachments.definitions_for("starmie", "gem"))
 	for species: String in ["grimer", "grimer-alola", "goodra", "gengar", "crobat", "bunnelby"]:
 		for identity: String in [species, species + "@shiny"]:
 			var emitters := Attachments.definitions_for(identity, "mouth")
@@ -108,6 +108,29 @@ func _run() -> void:
 	for identity: String in ["ariados", "ariados@shiny"]:
 		assert(Attachments.definitions_for(identity, "mouth")[0][0].bone == "head")
 		assert(Attachments.part_for(identity, "hyperbeam") == "mouth")
+
+	for identity: String in ["wugtrio", "wugtrio@shiny"]:
+		var muzzles := Attachments.definitions_for(identity, "muzzle")
+		assert(muzzles.size() == 3)
+		for i in 3:
+			assert(muzzles[i][0].bone == ["nose_a", "nose_b", "nose_c"][i])
+		for move: String in ["watergun", "icebeam", "hyperbeam"]:
+			assert(Attachments.part_for(identity, move) == "muzzle")
+	for identity: String in ["magneton", "magneton@shiny"]:
+		var eyes := Attachments.definitions_for(identity, "face")
+		assert(eyes.size() == 3)
+		for i in 3:
+			assert(eyes[i][0].bone == ["waist_a", "waist_b", "waist_c"][i])
+		assert(Attachments.definitions_for(identity, "magnet_poles").size() == 12)
+		for move: String in ["flashcannon", "hyperbeam"]:
+			assert(Attachments.part_for(identity, move) == "face")
+	for identity: String in ["starmie-mega", "starmie-mega@shiny"]:
+		assert(Attachments.definitions_for(identity, "gem")[0][0].bone == "spine")
+		for move: String in ["bubblebeam", "waterpulse", "scald", "watergun", "icebeam", "hyperbeam", "flashcannon"]:
+			assert(Attachments.part_for(identity, move) == "gem")
+	assert(Attachments.definitions_for("starmie", "gem")[0][0].bone == "waist")
+	assert(Attachments.definitions_for("wiglett", "muzzle").is_empty())
+	assert(Attachments.definitions_for("magnemite", "magnet_poles").is_empty())
 
 	for species: String in ["venonat", "mamoswine"]:
 		for identity: String in [species, species + "@shiny"]:

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Wugtrio’s three heads and Magneton’s three eyes separate origins for selected beams. Calibrate Mega Starmie’s gem for seven casts and align their emission windows with the native animations.
+
 - Calibrate Mamoswine’s and Venonat’s concealed-mouth outlets and Flabébé’s lip and held-flower origins. Align selected beams and vocal moves with their native poses, and fit Venonat’s Sludge Bomb to its mouth region.
 
 - Anchor Hydrapple’s beam attacks to its exposed mouth above the tongue, fit the stream width, and match Hyper Beam, Solar Beam and Dragon Breath to the open-mouth pose.

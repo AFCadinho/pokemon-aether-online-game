@@ -62,29 +62,30 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1072,
+		"with_any_attachment": 1075,
 		"with_beak_tip": 6,
 		"with_cannon": 2,
 		"with_cannons": 1,
 		"with_casting": 2,
 		"with_electric_body": 1,
-		"with_face": 5,
+		"with_face": 6,
 		"with_flower_tip": 1,
 		"with_foot": 307,
-		"with_gem": 2,
+		"with_gem": 3,
 		"with_hand": 576,
 		"with_hand_upper": 1,
 		"with_left_foot": 288,
 		"with_left_hand": 574,
 		"with_left_hand_upper": 1,
+		"with_magnet_poles": 1,
 		"with_mandibles": 2,
 		"with_mouth": 990,
 		"with_mouth_primary": 1,
 		"with_mouth_red": 1,
-		"with_muzzle": 4,
+		"with_muzzle": 5,
 		"with_olive_nozzle": 1,
 		"with_vines": 3,
-		"without_attachments": 128
+		"without_attachments": 125
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -25629,6 +25630,177 @@
 				]
 			]
 		},
+		"magneton": {
+			"face": [
+				[
+					{
+						"bone": "waist_a",
+						"offset": [
+							-0.00192168867215514,
+							-0.00013590700109489,
+							0.133499160408974
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "waist_b",
+						"offset": [
+							0.00033429259201511,
+							0.0002845266717486,
+							0.133665025234222
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "waist_c",
+						"offset": [
+							0.0004622537526302,
+							-0.00059273478109389,
+							0.133630231022835
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"magnet_poles": [
+				[
+					{
+						"bone": "left_arm_a",
+						"offset": [
+							0.231256306171418,
+							-0.0641154199838638,
+							0.00000000279396769956031
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "left_arm_a",
+						"offset": [
+							0.23125621676445,
+							0.0641155838966369,
+							0.00000000279396769956031
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "left_arm_b",
+						"offset": [
+							0.231256619095803,
+							-0.0641145184636116,
+							0.00000000279396769956031
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "left_arm_b",
+						"offset": [
+							0.231256484985352,
+							0.0641164779663086,
+							0.00000000279396769956031
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "left_arm_c",
+						"offset": [
+							0.231262147426605,
+							-0.0641165524721145,
+							0.00000000279396769956031
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "left_arm_c",
+						"offset": [
+							0.231261968612671,
+							0.0641144514083863,
+							0.00000000279396769956031
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "right_arm_a",
+						"offset": [
+							0.231256544589997,
+							-0.0641152262687683,
+							0.00000000279396769956031
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "right_arm_a",
+						"offset": [
+							0.231256276369095,
+							0.0641157776117325,
+							0.00000000279396769956031
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "right_arm_b",
+						"offset": [
+							0.23125684261322,
+							-0.0641161128878593,
+							0.00000000279396769956031
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "right_arm_b",
+						"offset": [
+							0.231256574392319,
+							0.0641149058938027,
+							0.00000000279396769956031
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "right_arm_c",
+						"offset": [
+							0.231251254677772,
+							-0.0641180872917176,
+							0.00000000279396769956031
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "right_arm_c",
+						"offset": [
+							0.231251038610935,
+							0.0641129240393638,
+							0.00000000279396769956031
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"makuhita": {
 			"foot": [
 				[
@@ -41218,6 +41390,21 @@
 				]
 			]
 		},
+		"starmie-mega": {
+			"gem": [
+				[
+					{
+						"bone": "spine",
+						"offset": [
+							0.45281445980072,
+							0.00723879272118211,
+							0.369417071342468
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"staryu": {
 			"gem": [
 				[
@@ -47537,6 +47724,43 @@
 				]
 			]
 		},
+		"wugtrio": {
+			"muzzle": [
+				[
+					{
+						"bone": "nose_a",
+						"offset": [
+							0.025,
+							0.0,
+							0.033
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "nose_b",
+						"offset": [
+							0.025,
+							0.0,
+							0.033
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "nose_c",
+						"offset": [
+							0.025,
+							0.0,
+							0.033
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"wynaut": {
 			"mouth": [
 				[
@@ -49290,7 +49514,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "e8ad4ed5a7ed6ef2d63144ccdc473f2dc932ab6d454f8722f014a3567fd61a51",
+		"data/battle_move_attachments_3d.json": "cc50b8d6e7b288818e2168b63957b0400aa22bc99b7a2be043382be4c3dba3a3",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "9b8d5a37b8ed4037fb71399034235c8d5a64b322efcedfbd4eb0316652787c29",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
@@ -71121,8 +71345,11 @@
 			]
 		},
 		"magneton": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face",
+				"magnet_poles"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -84368,8 +84595,10 @@
 			]
 		},
 		"starmie-mega": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"gem"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -91011,8 +91240,10 @@
 			]
 		},
 		"wugtrio": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"muzzle"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"

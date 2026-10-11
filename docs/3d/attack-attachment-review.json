@@ -2,11 +2,12 @@
   "complete": false,
   "counts": {
     "mouth_status": {
-      "concealed_mouth_with_reviewed_muzzle_outlet": 4,
+      "concealed_mouth_with_reviewed_muzzle_outlet": 5,
       "hold_native_red_mouth_action": 1,
       "mouth_not_required_by_current_supported_learnset": 2,
       "mouth_not_required_by_supported_learnset": 1,
       "mouthless_species_with_reviewed_alternate_emitter": 8,
+      "mouthless_with_reviewed_casting_parts": 2,
       "pending_anatomical_casting_review": 1,
       "pending_anatomical_mouth_review": 13,
       "pending_anatomical_mouthpart_review": 3,
@@ -16,10 +17,9 @@
       "pending_animation_addon_review": 1,
       "pending_camera_framing": 2,
       "pending_corrected_mouth_pose_review": 1,
-      "pending_individual_heads_review": 1,
       "pending_manual_anatomical_calibration": 6,
       "pending_mask_casting_review": 1,
-      "pending_mouth_proposal_or_anatomical_route": 17,
+      "pending_mouth_proposal_or_anatomical_route": 15,
       "pending_mouthpart_clearance_review": 3,
       "pending_multi_pose_mouth_fit": 2,
       "pending_multipose_correction": 1,
@@ -43,12 +43,12 @@
       "pending_multipose_correction": 8,
       "pending_runtime_identity_review": 4,
       "pending_runtime_visibility_and_anatomy_review": 4,
-      "sampled_marker_pose_review_pass_installed": 1777
+      "sampled_marker_pose_review_pass_installed": 1781
     },
-    "runtime_profiles": 1072,
+    "runtime_profiles": 1075,
     "species_forms": 1200
   },
-  "profile_sha256": "e8ad4ed5a7ed6ef2d63144ccdc473f2dc932ab6d454f8722f014a3567fd61a51",
+  "profile_sha256": "cc50b8d6e7b288818e2168b63957b0400aa22bc99b7a2be043382be4c3dba3a3",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -58861,9 +58861,113 @@
       "part_status": {}
     },
     "magneton": {
-      "anatomical_move_routing_review": "pending",
-      "mouth_status": "pending_mouth_proposal_or_anatomical_route",
-      "move_effect_review": "pending",
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two views: Three separately measured eye surfaces emit during special_attack .32/.48/end .65, scale .14. Front close views and wider views show each beam centered on its own eye, including the third unit clipped in the initial close sheet. Reverse views confirm separate paths; rotating magnets occlude some views, so continuous magnet/beam clearance is not approved. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two views: Three separately measured eye surfaces emit during special_attack .32/.48/end .65, scale .14. Front close views and wider views show each beam centered on its own eye, including the third unit clipped in the initial close sheet. Reverse views confirm separate paths; rotating magnets occlude some views, so continuous magnet/beam clearance is not approved. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "latest_candidate_review": {
+        "notes": "Three individually projected eye surfaces and twelve measured magnet pole caps. Flash Cannon and Hyper Beam have sampled effect reviews; electrical routing, sound and continuous magnet clearance pending.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "camera_yaw": 340,
+              "normal_preview_sha256": "52a019f83df9a2883ca075e092dc68a9dd52dfd9b983b17fbde4bb5e33177e1d",
+              "shiny_preview_sha256": "4cc0bfc0e785378c081fa4798c1b5e2c67131e03a3b2f02751b3361cc03ef939"
+            },
+            {
+              "camera_yaw": 160,
+              "normal_preview_sha256": "c49f81f3b93017e8e835368068a8b1c2151a774e9672a3ac1c75ec36a3e96a96",
+              "shiny_preview_sha256": "6044a6204304845f8ac5dc519bfd019dc57eb0cf427182469b33a06e3d85f288"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "224793d0690545f52b848037b3c8f78d9503fb7787a0d41fcaf8af509e1787df",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.5,
+            0.65,
+            0.8
+          ],
+          "normal_runtime_sha256": "0539751e0792adf0e4b0c0cf600342948bfa170dd9e9fc7a0a2871ca5c0bb0d1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "bfc3f6e7a1e9e1c724a0c0a8543e296b47e5cff18e29f7ac0ad511249450008a",
+          "scope": "Normal and shiny, two views: Three separately measured eye surfaces emit during special_attack .32/.48/end .65, scale .14. Front close views and wider views show each beam centered on its own eye, including the third unit clipped in the initial close sheet. Reverse views confirm separate paths; rotating magnets occlude some views, so continuous magnet/beam clearance is not approved. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "538130ce50fe31d876409035d432bc527841b2ca75a5e0e93a7371da2e45255a",
+          "shiny_runtime_sha256": "f0cd02f21c31096ecdf94d521713c5cdd4cca691215cf7c03b8f2d905f0146b2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.14,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 38.4,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "camera_yaw": 340,
+              "normal_preview_sha256": "8ca0ab28d183c2dddddba7970db3ef04ef7bdd1fb66c43852f7ab8a17cf1acdf",
+              "shiny_preview_sha256": "83acf7aabec3d6b2d5952bbe3fd664c2a341b857d512bdca1bdb6c5cb85d56d6"
+            },
+            {
+              "camera_yaw": 160,
+              "normal_preview_sha256": "abf66ca1f6f33b5f2ccd2b42fdf8a59be7b235c7c881e66363a1bbad59c73550",
+              "shiny_preview_sha256": "75372d0cdd945cd1f20aa85d98c57cc45651d5b8a40a085b0321bfe6ff37f1d7"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "224793d0690545f52b848037b3c8f78d9503fb7787a0d41fcaf8af509e1787df",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.5,
+            0.65,
+            0.8
+          ],
+          "normal_runtime_sha256": "0539751e0792adf0e4b0c0cf600342948bfa170dd9e9fc7a0a2871ca5c0bb0d1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1bd22949a09cd9434a0cc3a7be6ebb57ff82a29cffe54721efcdc13aa3058736",
+          "scope": "Normal and shiny, two views: Three separately measured eye surfaces emit during special_attack .32/.48/end .65, scale .14. Front close views and wider views show each beam centered on its own eye, including the third unit clipped in the initial close sheet. Reverse views confirm separate paths; rotating magnets occlude some views, so continuous magnet/beam clearance is not approved. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3f82bc18e583e81f2879609eb21fb6f3e052763e97776ea4bbb3848b220d785e",
+          "shiny_runtime_sha256": "f0cd02f21c31096ecdf94d521713c5cdd4cca691215cf7c03b8f2d905f0146b2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.14,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 38.4,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -58872,7 +58976,358 @@
       ],
       "normal_runtime_sha256": "0539751e0792adf0e4b0c0cf600342948bfa170dd9e9fc7a0a2871ca5c0bb0d1",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass",
+            "magnet_poles": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "74d9436766683000e46c3f7e0552885559c780ee76aa068c2454804f713ef237",
+            "2dd950143712d81fb794200159db19d81ab785dd233d53be8c0c4dfa81fbb0bf"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_measurements": [
+            {
+              "capture_sha256": "7f2020508219176898dd2981734e5be221aedb1f131d7e757d9ef46b9c375186",
+              "landmarks": [
+                {
+                  "action": "special_attack",
+                  "barycentric": [
+                    0.914809943188707,
+                    0.0131389782188601,
+                    0.0720510785924324
+                  ],
+                  "column": 1.0,
+                  "distance": 0.563240951302628,
+                  "mesh": "pm0082_00_00/Skeleton3D/pm0082_00_00_body_a_mesh",
+                  "pixel": [
+                    212.0,
+                    186.0
+                  ],
+                  "surface": 1,
+                  "triangle": 25,
+                  "vertex_indices": [
+                    31,
+                    29,
+                    30
+                  ],
+                  "weight": 1.0
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            },
+            {
+              "capture_sha256": "49a9e6020f66f2a196a1739f7b1cb4ab1aa9ed7e49cff6e49157fddbe4088d27",
+              "landmarks": [
+                {
+                  "action": "special_attack",
+                  "barycentric": [
+                    0.980630618861834,
+                    0.00521242610226806,
+                    0.0141569550358984
+                  ],
+                  "column": 1.0,
+                  "distance": 0.561278485671786,
+                  "mesh": "pm0082_00_00/Skeleton3D/pm0082_00_00_body_b_mesh",
+                  "pixel": [
+                    208.0,
+                    173.0
+                  ],
+                  "surface": 1,
+                  "triangle": 27,
+                  "vertex_indices": [
+                    31,
+                    30,
+                    56
+                  ],
+                  "weight": 1.0
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            },
+            {
+              "capture_sha256": "436bbcf996ed1add569527f6943aa45aeb37c2dbdbda8e87498b719e541fa280",
+              "landmarks": [
+                {
+                  "action": "special_attack",
+                  "barycentric": [
+                    0.966784800866558,
+                    0.0102683038865438,
+                    0.0229468952468985
+                  ],
+                  "column": 1.0,
+                  "distance": 0.564255534541016,
+                  "mesh": "pm0082_00_00/Skeleton3D/pm0082_00_00_body_c_mesh",
+                  "pixel": [
+                    217.0,
+                    179.0
+                  ],
+                  "surface": 1,
+                  "triangle": 25,
+                  "vertex_indices": [
+                    31,
+                    29,
+                    30
+                  ],
+                  "weight": 1.0
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "0539751e0792adf0e4b0c0cf600342948bfa170dd9e9fc7a0a2871ca5c0bb0d1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e75b30695125c552517bd8c2e3e8272f1b97eacf99f5c0f9b06bdd2f3c82a87f",
+          "scope": "Three separately projected pupil centers on waist_a/b/c. Refined each using its own close view after v220 offsets missed the pupils. All three forward-view sheets follow the eye surfaces across idle and three attack clips. Side views occluded by magnets or screws are excluded from clearance approval. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "magnet_poles": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "d3f7610e23a98ec5be1d33d588423802e22a9ac59e9b86ece4c5bcf545072d62",
+            "823722bfd87d42f5c8b6569d07441af8c21ea27fc899ca6c36bab199c8b2e9cf",
+            "506868c74efc2e0a5ff64b79ca0cdf083ed9eecaaa929d1defeaf75a1f50c043",
+            "5c4e4dfb9f8b6fda71caea95ce79b80a1bbc923f4f13b008324caf04b3e947f9",
+            "bfe4484d35b98a6be68ae1b1e41c6077f171d4c99853e2f5c7d5666f9f4a433d"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "measurements": [
+              {
+                "bone": "left_arm_a",
+                "cap_bounds": [
+                  [
+                    0.231256186962128,
+                    -0.0933884382247925,
+                    -0.0268850177526474
+                  ],
+                  [
+                    0.231256425380707,
+                    -0.0348424017429352,
+                    0.0268850233405828
+                  ]
+                ],
+                "sign": -1
+              },
+              {
+                "bone": "left_arm_a",
+                "cap_bounds": [
+                  [
+                    0.231256186962128,
+                    0.0348423719406128,
+                    -0.0268850177526474
+                  ],
+                  [
+                    0.231256246566772,
+                    0.0933887958526611,
+                    0.0268850233405828
+                  ]
+                ],
+                "sign": 1
+              },
+              {
+                "bone": "left_arm_b",
+                "cap_bounds": [
+                  [
+                    0.231256499886513,
+                    -0.093387559056282,
+                    -0.0268850177526474
+                  ],
+                  [
+                    0.231256738305092,
+                    -0.0348414778709412,
+                    0.0268850233405828
+                  ]
+                ],
+                "sign": -1
+              },
+              {
+                "bone": "left_arm_b",
+                "cap_bounds": [
+                  [
+                    0.231256455183029,
+                    0.0348432660102844,
+                    -0.0268850177526474
+                  ],
+                  [
+                    0.231256514787674,
+                    0.0933896899223328,
+                    0.0268850233405828
+                  ]
+                ],
+                "sign": 1
+              },
+              {
+                "bone": "left_arm_c",
+                "cap_bounds": [
+                  [
+                    0.231261998414993,
+                    -0.0933895856142044,
+                    -0.0268850177526474
+                  ],
+                  [
+                    0.231262296438217,
+                    -0.0348435193300247,
+                    0.0268850233405828
+                  ]
+                ],
+                "sign": -1
+              },
+              {
+                "bone": "left_arm_c",
+                "cap_bounds": [
+                  [
+                    0.231261938810349,
+                    0.0348412394523621,
+                    -0.0268850177526474
+                  ],
+                  [
+                    0.231261998414993,
+                    0.0933876633644104,
+                    0.0268850233405828
+                  ]
+                ],
+                "sign": 1
+              },
+              {
+                "bone": "right_arm_a",
+                "cap_bounds": [
+                  [
+                    0.231256484985352,
+                    -0.0933884382247925,
+                    -0.0268850177526474
+                  ],
+                  [
+                    0.231256604194641,
+                    -0.0348420143127441,
+                    0.0268850233405828
+                  ]
+                ],
+                "sign": -1
+              },
+              {
+                "bone": "right_arm_a",
+                "cap_bounds": [
+                  [
+                    0.231256067752838,
+                    0.0348427593708038,
+                    -0.0268850177526474
+                  ],
+                  [
+                    0.231256484985352,
+                    0.0933887958526611,
+                    0.0268850233405828
+                  ]
+                ],
+                "sign": 1
+              },
+              {
+                "bone": "right_arm_b",
+                "cap_bounds": [
+                  [
+                    0.231256812810898,
+                    -0.0933893173933029,
+                    -0.0268850177526474
+                  ],
+                  [
+                    0.231256872415543,
+                    -0.0348429083824158,
+                    0.0268850233405828
+                  ]
+                ],
+                "sign": -1
+              },
+              {
+                "bone": "right_arm_b",
+                "cap_bounds": [
+                  [
+                    0.231256395578384,
+                    0.034841850399971,
+                    -0.0268850177526474
+                  ],
+                  [
+                    0.231256753206253,
+                    0.0933879613876343,
+                    0.0268850233405828
+                  ]
+                ],
+                "sign": 1
+              },
+              {
+                "bone": "right_arm_c",
+                "cap_bounds": [
+                  [
+                    0.231251209974289,
+                    -0.0933912992477417,
+                    -0.0268850177526474
+                  ],
+                  [
+                    0.231251299381256,
+                    -0.0348448753356934,
+                    0.0268850233405828
+                  ]
+                ],
+                "sign": -1
+              },
+              {
+                "bone": "right_arm_c",
+                "cap_bounds": [
+                  [
+                    0.231250837445259,
+                    0.0348398834466934,
+                    -0.0268850177526474
+                  ],
+                  [
+                    0.231251239776611,
+                    0.0933859646320343,
+                    0.0268850233405828
+                  ]
+                ],
+                "sign": 1
+              }
+            ],
+            "method": "individual_magnet_end_cap_centers",
+            "notes": "Twelve separately measured rectangular pole caps from six independently rotating horseshoe magnets. Candidate centers use cap bounds, pending marker and actual-effect review."
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "0539751e0792adf0e4b0c0cf600342948bfa170dd9e9fc7a0a2871ca5c0bb0d1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a19312bda965ea7fe8739ec6b48bfa0c212a3160329aa54bbdd7e79f99fda44f",
+          "scope": "Twelve independently measured rectangular end-cap centers, two per rotating magnet. Visible caps were inspected individually across front, side and rear overviews and close views, idle and all three native attack actions. Occluded caps are excluded from clearance approval. Electrical effect routing still requires separate review. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed",
+        "magnet_poles": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "magnezone": {
       "anatomical_move_routing_review": "pending",
@@ -94742,9 +95197,265 @@
       }
     },
     "starmie-mega": {
-      "anatomical_move_routing_review": "pending",
-      "mouth_status": "pending_mouth_proposal_or_anatomical_route",
-      "move_effect_review": "pending",
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bubblebeam": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal and shiny, two views: Bubble Beam uses the Mega form\u2019s own central gem and special_attack .32/.55. Bubbles emerge in front of the gem at .34/.40/.50/.65 and end before the .80 return pose. Default bubble size is wider than the gem; exact rim intersection and styling remain pending. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal and shiny, two views: The Mega form\u2019s own central gem supplies the stream during special_attack .32/.48/end .65 with scale .3. Forward-facing sampled poses keep the core attached to the gem center; the .65/.68 samples show emission ended before the native return turn. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal and shiny, two views: The Mega form\u2019s own central gem supplies the stream during special_attack .32/.48/end .65 with scale .3. Forward-facing sampled poses keep the core attached to the gem center; the .65/.68 samples show emission ended before the native return turn. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal and shiny, two views: The Mega form\u2019s own central gem supplies the stream during special_attack .32/.48/end .65 with scale .3. Forward-facing sampled poses keep the core attached to the gem center; the .65/.68 samples show emission ended before the native return turn. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "scald": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal and shiny, two views: The Mega form\u2019s own central gem supplies the stream during special_attack .32/.48/end .65 with scale .3. Forward-facing sampled poses keep the core attached to the gem center; the .65/.68 samples show emission ended before the native return turn. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "watergun": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal and shiny, two views: The Mega form\u2019s own central gem supplies the stream during special_attack .32/.48/end .65 with scale .3. Forward-facing sampled poses keep the core attached to the gem center; the .65/.68 samples show emission ended before the native return turn. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal and shiny, two views: Water Pulse uses the Mega form\u2019s own central gem and special_attack .32/.55. The ring travels forward from the gem axis at .34/.40 and leaves the source clear by .50. The ring is wider than the gem; exact initial rim clearance and full flight require separate review. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "latest_candidate_review": {
+        "notes": "Individually projected Mega-form chest gem supplies all seven supported mouth-default casts, with separate sampled effect reviews. Remaining body/contact/electric effects pending.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bubblebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "224793d0690545f52b848037b3c8f78d9503fb7787a0d41fcaf8af509e1787df",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.5,
+            0.65,
+            0.8
+          ],
+          "normal_runtime_sha256": "308844be9130e3e4e1e9b35c576001c5da1e5e227705d647623029bbf50ede53",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6c1326306ace767af90387b61ef0fcc9fb040a6d2352dd2510ec4a2aa5368ae0",
+          "scope": "Normal and shiny, two views: Bubble Beam uses the Mega form\u2019s own central gem and special_attack .32/.55. Bubbles emerge in front of the gem at .34/.40/.50/.65 and end before the .80 return pose. Default bubble size is wider than the gem; exact rim intersection and styling remain pending. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d5f5c2aea60f0d2ea3926bb91f3e49b5a253489b109e3c338054f5028252780f",
+          "shiny_runtime_sha256": "5f37f94513b066906695e48a03858275c34545ad96ddf5583d01eeee51ea38d9",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 38.4,
+            "move_key": "bubblebeam"
+          },
+          "views": 2
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "cd318173e480138018cb4c30a6f77416872c9fb208a5a27243ad32634b94daa7",
+          "fractions": [
+            0.3,
+            0.35,
+            0.42,
+            0.48,
+            0.6,
+            0.68
+          ],
+          "normal_runtime_sha256": "308844be9130e3e4e1e9b35c576001c5da1e5e227705d647623029bbf50ede53",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "68fb31d5599e8c8ca445497d0074b7442a81b0faba36e4acf011139ca698824c",
+          "scope": "Normal and shiny, two views: The Mega form\u2019s own central gem supplies the stream during special_attack .32/.48/end .65 with scale .3. Forward-facing sampled poses keep the core attached to the gem center; the .65/.68 samples show emission ended before the native return turn. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "61c7b64b1e22b2ea3f9195e2aecf1953d73aaf93d13a53e8d00d9066833f1a18",
+          "shiny_runtime_sha256": "5f37f94513b066906695e48a03858275c34545ad96ddf5583d01eeee51ea38d9",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.3,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 38.4,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "cd318173e480138018cb4c30a6f77416872c9fb208a5a27243ad32634b94daa7",
+          "fractions": [
+            0.3,
+            0.35,
+            0.42,
+            0.48,
+            0.6,
+            0.68
+          ],
+          "normal_runtime_sha256": "308844be9130e3e4e1e9b35c576001c5da1e5e227705d647623029bbf50ede53",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "75b35826b1c91a5ae0c3ff6a6088422149d7969780e5fc846934897e4c04d6f0",
+          "scope": "Normal and shiny, two views: The Mega form\u2019s own central gem supplies the stream during special_attack .32/.48/end .65 with scale .3. Forward-facing sampled poses keep the core attached to the gem center; the .65/.68 samples show emission ended before the native return turn. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ca2935168e24cf1b17e085125c8a04583a41018d5119a1822d1d1ba81978c505",
+          "shiny_runtime_sha256": "5f37f94513b066906695e48a03858275c34545ad96ddf5583d01eeee51ea38d9",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.3,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 38.4,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "cd318173e480138018cb4c30a6f77416872c9fb208a5a27243ad32634b94daa7",
+          "fractions": [
+            0.3,
+            0.35,
+            0.42,
+            0.48,
+            0.6,
+            0.68
+          ],
+          "normal_runtime_sha256": "308844be9130e3e4e1e9b35c576001c5da1e5e227705d647623029bbf50ede53",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "26f7ac65c3bf55ece86c99467f89f9ac2b417060f5d9a1a992f17dc1e4903722",
+          "scope": "Normal and shiny, two views: The Mega form\u2019s own central gem supplies the stream during special_attack .32/.48/end .65 with scale .3. Forward-facing sampled poses keep the core attached to the gem center; the .65/.68 samples show emission ended before the native return turn. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c4ce6eb309cc47488d6d0d47aac97a814ae1de2b202b433091e7eabe0f70da13",
+          "shiny_runtime_sha256": "5f37f94513b066906695e48a03858275c34545ad96ddf5583d01eeee51ea38d9",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.3,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 38.4,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        },
+        "scald": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "224793d0690545f52b848037b3c8f78d9503fb7787a0d41fcaf8af509e1787df",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.5,
+            0.65,
+            0.8
+          ],
+          "normal_runtime_sha256": "308844be9130e3e4e1e9b35c576001c5da1e5e227705d647623029bbf50ede53",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5a35fdb0f85a0aab6b475c6601e419e50c74ddfd9a21d3dd5438aab66aff2b2a",
+          "scope": "Normal and shiny, two views: The Mega form\u2019s own central gem supplies the stream during special_attack .32/.48/end .65 with scale .3. Forward-facing sampled poses keep the core attached to the gem center; the .65/.68 samples show emission ended before the native return turn. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "fed0c147905c9a8c72e27a0f6b4713dd6012b64d5af048918f33c59a3249a821",
+          "shiny_runtime_sha256": "5f37f94513b066906695e48a03858275c34545ad96ddf5583d01eeee51ea38d9",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.3,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 38.4,
+            "move_key": "scald"
+          },
+          "views": 2
+        },
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "cd318173e480138018cb4c30a6f77416872c9fb208a5a27243ad32634b94daa7",
+          "fractions": [
+            0.3,
+            0.35,
+            0.42,
+            0.48,
+            0.6,
+            0.68
+          ],
+          "normal_runtime_sha256": "308844be9130e3e4e1e9b35c576001c5da1e5e227705d647623029bbf50ede53",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8f17e6ec15e72fe9836f13b9579032ce3d18ae678bf2d51c2f0dc04ba45b7e36",
+          "scope": "Normal and shiny, two views: The Mega form\u2019s own central gem supplies the stream during special_attack .32/.48/end .65 with scale .3. Forward-facing sampled poses keep the core attached to the gem center; the .65/.68 samples show emission ended before the native return turn. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "40665ff5fb1e2a6182c67873c6163407ddd4a8e42380d3f95c1ee3d78d4f4812",
+          "shiny_runtime_sha256": "5f37f94513b066906695e48a03858275c34545ad96ddf5583d01eeee51ea38d9",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.3,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 38.4,
+            "move_key": "watergun"
+          },
+          "views": 2
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "224793d0690545f52b848037b3c8f78d9503fb7787a0d41fcaf8af509e1787df",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.5,
+            0.65,
+            0.8
+          ],
+          "normal_runtime_sha256": "308844be9130e3e4e1e9b35c576001c5da1e5e227705d647623029bbf50ede53",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "adb9d38ae8a311fab8861bff5104933e40628060d39d36d118effa8fc30d0934",
+          "scope": "Normal and shiny, two views: Water Pulse uses the Mega form\u2019s own central gem and special_attack .32/.55. The ring travels forward from the gem axis at .34/.40 and leaves the source clear by .50. The ring is wider than the gem; exact initial rim clearance and full flight require separate review. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "8b74a5fc4a39edfdcf688e81d4a45f55f39108f8ad796f4ac23775eae60da188",
+          "shiny_runtime_sha256": "5f37f94513b066906695e48a03858275c34545ad96ddf5583d01eeee51ea38d9",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 38.4,
+            "move_key": "waterpulse"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -94752,7 +95463,67 @@
       ],
       "normal_runtime_sha256": "308844be9130e3e4e1e9b35c576001c5da1e5e227705d647623029bbf50ede53",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "gem": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "gem": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "3cf66883e784e445d9b5c57e468b0f4256bb10af2126831a853942ccf2ea33df",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.195865355273922,
+                  0.335767398654424,
+                  0.468367246071653
+                ],
+                "column": 1.0,
+                "distance": 1.15917101234146,
+                "mesh": "pm0121_51_00/Skeleton3D/pm0121_51_00_body_c_mesh",
+                "pixel": [
+                  210.0,
+                  171.0
+                ],
+                "surface": 1,
+                "triangle": 55,
+                "vertex_indices": [
+                  63,
+                  32,
+                  21
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "308844be9130e3e4e1e9b35c576001c5da1e5e227705d647623029bbf50ede53",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "fb86c83c73409a6c1e69f03ef71f26d941042fa33a7ed7df413973dedb652bf3",
+          "scope": "Individually projected flat front face of the central chest jewel, bound to this Mega form\u2019s spine. Refined upward from the initial lower-face marker. Front and side sampled poses follow the central gem through idle and both native attack actions; special_attack .45/.65 present it forward. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "gem": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "staryu": {
       "anatomical_move_routing_review": "partially_reviewed",
@@ -110164,15 +110935,146 @@
       "part_status": {}
     },
     "wugtrio": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "No candidate emitters. Three independent red heads move strongly in native attacks; their head_a/b/c and nose bones exist. Each front-head water origin needs separate close review.",
-        "preview": "mouth-context-v91/wugtrio.png",
-        "preview_sha256": "de877426842aeeda5bd277b49576d107ac34e8468df7f6e686e57febf96c9661",
-        "status": "pending_individual_heads_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two views: Three nose-bound concealed-mouth muzzle outlets below the white nose borders. Special_attack .32/.45/end .62 and scale .12: all three streams emerge at .35, remain aligned at .42/.48, fade at .60 and end by .68. Reverse views also show three separate paths leaving the heads. No visible oral-cavity approval. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two views: Three nose-bound concealed-mouth muzzle outlets below the white nose borders. Special_attack .32/.45/end .62 and scale .12: all three streams emerge at .35, remain aligned at .42/.48, fade at .60 and end by .68. Reverse views also show three separate paths leaving the heads. No visible oral-cavity approval. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "watergun": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two views: Three nose-bound concealed-mouth muzzle outlets below the white nose borders. Special_attack .32/.45/end .62 and scale .12: all three streams emerge at .35, remain aligned at .42/.48, fade at .60 and end by .68. Reverse views also show three separate paths leaving the heads. No visible oral-cavity approval. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_individual_heads_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Three individually reviewed muzzle outlets; selected Water Gun/Ice Beam/Hyper Beam windows reviewed in normal/shiny front and reverse samples. Mud-Slap, Water Pulse, contact routes and remaining effects pending.",
+        "status": "concealed_mouth_with_reviewed_muzzle_outlet"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_muzzle_outlet",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "camera_yaw": 340,
+              "normal_preview_sha256": "a799ffef8dd4757d5eabfd9eaf57033aed8ea07b864a057fd71d5e4d6859a6a4",
+              "shiny_preview_sha256": "3a7e3870a0dfff2d7174352329be83fba88a8198f7f19f0e8425a1d131f74dd9"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "cd318173e480138018cb4c30a6f77416872c9fb208a5a27243ad32634b94daa7",
+          "fractions": [
+            0.3,
+            0.35,
+            0.42,
+            0.48,
+            0.6,
+            0.68
+          ],
+          "normal_runtime_sha256": "9294e07c5576b2a24a216c23a81308e5112bdf96ecede541cc383ace9a7eb8b9",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "295c9822c022806e7fad207c237896a025171f7d4b8960f1feebc9de18c61d86",
+          "scope": "Normal and shiny, two views: Three nose-bound concealed-mouth muzzle outlets below the white nose borders. Special_attack .32/.45/end .62 and scale .12: all three streams emerge at .35, remain aligned at .42/.48, fade at .60 and end by .68. Reverse views also show three separate paths leaving the heads. No visible oral-cavity approval. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "bf162701356947ac5ee56b30ee98756afca3fc96c19c0a3b07b03a258bf72474",
+          "shiny_runtime_sha256": "4bed15bceb5b128c8fc02f61225a015dd55af6ae406cafd0c29dc44abda1ee52",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 74.4,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 38.4,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "camera_yaw": 340,
+              "normal_preview_sha256": "692b1e1f1a22a73e5ec3b91376394c70ca976f1785e32ed3432ba10e85fe911b",
+              "shiny_preview_sha256": "3a4300bb746b73eb20e66962e8e5f7bac86c34ba9fe0513393cd944083ab4475"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "cd318173e480138018cb4c30a6f77416872c9fb208a5a27243ad32634b94daa7",
+          "fractions": [
+            0.3,
+            0.35,
+            0.42,
+            0.48,
+            0.6,
+            0.68
+          ],
+          "normal_runtime_sha256": "9294e07c5576b2a24a216c23a81308e5112bdf96ecede541cc383ace9a7eb8b9",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c042dbb24f1bf0a1a01b4b40b36103e82e493a8f0d523ddb4f7e0c0dbd5e24f4",
+          "scope": "Normal and shiny, two views: Three nose-bound concealed-mouth muzzle outlets below the white nose borders. Special_attack .32/.45/end .62 and scale .12: all three streams emerge at .35, remain aligned at .42/.48, fade at .60 and end by .68. Reverse views also show three separate paths leaving the heads. No visible oral-cavity approval. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d934b38a169fa70d9cce28b0228459ac3760df991f251b5f689dc33bb97139b5",
+          "shiny_runtime_sha256": "4bed15bceb5b128c8fc02f61225a015dd55af6ae406cafd0c29dc44abda1ee52",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 74.4,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 38.4,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        },
+        "watergun": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "camera_yaw": 340,
+              "normal_preview_sha256": "8a18b6f8df99b5567177eaf345d13d7fd1b078bb447d3a79dbbb78f54d347b0f",
+              "shiny_preview_sha256": "b93b1cebe2fe72b5d0fbf17c679ded70d38bbd8724baeaf1f60d01392a9bc640"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "cd318173e480138018cb4c30a6f77416872c9fb208a5a27243ad32634b94daa7",
+          "fractions": [
+            0.3,
+            0.35,
+            0.42,
+            0.48,
+            0.6,
+            0.68
+          ],
+          "normal_runtime_sha256": "9294e07c5576b2a24a216c23a81308e5112bdf96ecede541cc383ace9a7eb8b9",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "417ee1f9393fe6fa6906419960b4fa91033669895a856618156f8bab617db9f7",
+          "scope": "Normal and shiny, two views: Three nose-bound concealed-mouth muzzle outlets below the white nose borders. Special_attack .32/.45/end .62 and scale .12: all three streams emerge at .35, remain aligned at .42/.48, fade at .60 and end by .68. Reverse views also show three separate paths leaving the heads. No visible oral-cavity approval. Other moves, opponent sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "e175e238ad5cf180b535ea15bef4622ad3a4b1e06ad1610b8bd73e1eb8335567",
+          "shiny_runtime_sha256": "4bed15bceb5b128c8fc02f61225a015dd55af6ae406cafd0c29dc44abda1ee52",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 74.4,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 38.4,
+            "move_key": "watergun"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -110181,7 +111083,47 @@
       ],
       "normal_runtime_sha256": "9294e07c5576b2a24a216c23a81308e5112bdf96ecede541cc383ace9a7eb8b9",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "muzzle": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "muzzle": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "360d3369eb06fb342e20b3e8da691861ea866aa790d7b2ee0f336c9f561d72d8",
+            "ef6424eb8041afc918ceaf324bdcfdaca9cd7656ffc104ada0f6547c9e9bdca2"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "method": "individual_three_nose_muzzle_review",
+            "notes": "Each nose geometry and marker sheet inspected separately. Above-nose v218 proposals rejected. v220 offsets sit below the white nose border at the front red muzzle in visible idle/special poses; no visible oral cavity exists in these clips. Physical curled/occluded poses remain unapproved."
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "9294e07c5576b2a24a216c23a81308e5112bdf96ecede541cc383ace9a7eb8b9",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "325b3a1aa596a80c94cbd675fd1518b40b2831921099873b375fda847ad6c749",
+          "scope": "Three individually reviewed nose-bound muzzle outlets immediately below the white nose border. Visible idle and special-attack poses follow each head independently. No oral cavity is visible; curled physical poses and head/rock-occluded views are excluded from clearance approval. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "muzzle": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "wurmple": {
       "anatomical_move_routing_review": "pending",

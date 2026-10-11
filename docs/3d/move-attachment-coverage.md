@@ -7,8 +7,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1072 species/forms.
-- No anatomical attachment profile: 128 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 1075 species/forms.
+- No anatomical attachment profile: 125 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 990 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
@@ -556,6 +556,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | magikarp | mouth | Same attachment profile |
 | magmar | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | magmortar | cannon, foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| magneton | face, magnet_poles | Same attachment profile |
 | makuhita | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | malamar | mouth | Same attachment profile |
 | malamar-mega | mouth | Same attachment profile |
@@ -908,6 +909,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | staravia | mouth | Same attachment profile |
 | starly | mouth | Same attachment profile |
 | starmie | gem | Same attachment profile |
+| starmie-mega | gem | Same attachment profile |
 | staryu | gem | Same attachment profile |
 | steelix | mouth | Same attachment profile |
 | steenee | mouth | Same attachment profile |
@@ -1051,6 +1053,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | wooper | foot, left_foot, mouth | Same attachment profile |
 | wooper-paldea | foot, left_foot, mouth | Same attachment profile |
 | wormadam | mouth | Same attachment profile |
+| wugtrio | muzzle | Same attachment profile |
 | wynaut | mouth | Same attachment profile |
 | wyrdeer | foot, left_foot, mouth | Same attachment profile |
 | xatu | mouth | Same attachment profile |
