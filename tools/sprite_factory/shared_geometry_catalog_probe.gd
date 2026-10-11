@@ -56,8 +56,9 @@ func compare(job: Dictionary, output: String) -> Dictionary:
 					var path := output.path_join(category + "-" + key + ".res")
 					var detached: Resource = Geometry.bare_mesh(resource) if category == "meshes" else resource
 					assert(ResourceSaver.save(detached, path, ResourceSaver.FLAG_COMPRESS) == OK)
-					assert(ResourceLoader.get_dependencies(path).is_empty())
-					pools[category][key] = {"path": path, "variants": [], "shareable": not resource.resource_local_to_scene}
+					var dependencies := ResourceLoader.get_dependencies(path)
+					pools[category][key] = {"path": path, "variants": [], "dependencies": dependencies,
+						"shareable": not resource.resource_local_to_scene and dependencies.is_empty()}
 				pools[category][key].variants.append(record.variant)
 				pools[category][key].shareable = pools[category][key].shareable and not resource.resource_local_to_scene
 				if resource is AnimationLibrary:
