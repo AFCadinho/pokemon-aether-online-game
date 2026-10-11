@@ -36,7 +36,9 @@ Detailed build and GPU evidence remain in the assigned slot under
 `.tmp/shared-geometry-collection/full-v2` and `gpu-v1`, pinned by SHA-256 in that
 receipt. Build implementation commit: `52c38ec93b9fb40d634db90ff7ace68dd7bfd1aa`.
 
-This is a debug opt-in collection. No R2 objects or player release were changed.
+This is a debug opt-in collection. Its immutable R2 staging and cleanup of the
+superseded test upload are recorded in `shared-model-geometry-r2-staging.md`.
+No player release was changed.
 Native Windows, macOS and physical Android tests were unavailable. The GPU run
 covers the stated 16 pairs; the structural and sampled-motion checks cover every
 selected pair. These results do not claim exhaustive visual coverage of every

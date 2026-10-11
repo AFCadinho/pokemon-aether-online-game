@@ -117,6 +117,13 @@ func _materialize_tileset_images(map_data: Dictionary, output_scene_path: String
 	var paths: Array[String] = []
 
 	for tileset: Dictionary in map_data.get("tilesets", []):
+		if not tileset.get("tile_images", {}).is_empty():
+			var collection := _materialize_collection(tileset, map_data, assets_dir)
+			if not collection.get("success", false):
+				return collection
+			materialized_tilesets.append_array(collection.tilesets)
+			paths.append_array(collection.texture_paths)
+			continue
 		var image: Dictionary = tileset.get("image", {})
 		var image_path := PathUtils.normalize_path(str(image.get("path", "")))
 		if image_path == "" or image_path.begins_with("res://") or image_path.begins_with("user://"):
@@ -151,6 +158,57 @@ func _materialize_tileset_images(map_data: Dictionary, output_scene_path: String
 
 	map_data["tilesets"] = materialized_tilesets
 	return {"success": true, "texture_paths": paths}
+
+
+func _materialize_collection(tileset: Dictionary, map_data: Dictionary, assets_dir: String) -> Dictionary:
+	var tile_size := Vector2i(int(map_data.tile_width), int(map_data.tile_height))
+	var result_tilesets: Array = []
+	var paths: Array[String] = []
+	var images := {}
+	for local_id: int in tileset.tile_images:
+		var entry: Dictionary = tileset.tile_images[local_id]
+		var path := PathUtils.globalize(str(entry.image.path))
+		if not images.has(path):
+			var image := Image.load_from_file(path)
+			if image == null or image.is_empty():
+				return {"success": false, "error": "Cannot read collection tile image: " + path}
+			image.convert(Image.FORMAT_RGBA8)
+			images[path] = image
+		var image: Image = images[path]
+		var region := Rect2i(int(entry.x), int(entry.y), int(entry.width), int(entry.height))
+		if region.size.x <= 0 or region.size.y <= 0 or not Rect2i(Vector2i.ZERO, image.get_size()).encloses(region):
+			return {"success": false, "error": "Collection tile crop is outside its image."}
+		if region.size.x > tile_size.x or region.size.y > tile_size.y:
+			return {"success": false, "error": "Collection tiles larger than the map cell are not supported."}
+		# Tiled places collection images at the bottom left of an orthogonal
+		# cell. Pad without resizing so small controls retain their exact pixels.
+		var padded := Image.create_empty(tile_size.x, tile_size.y, false, Image.FORMAT_RGBA8)
+		padded.blit_rect(image, region, Vector2i(0, tile_size.y - region.size.y))
+		var texture := PortableCompressedTexture2D.new()
+		texture.keep_compressed_buffer = true
+		texture.create_from_image(padded, PortableCompressedTexture2D.COMPRESSION_MODE_LOSSLESS)
+		# A crop must never share a dense atlas chunk path for the same PNG:
+		# its different grid would replace pixels used by walls and lamps.
+		var identity := str(tileset.source_path) + "#collection_tile_" + str(local_id)
+		var texture_path := _unique_materialized_texture_path(assets_dir, identity, 0)
+		var error := PathUtils.ensure_resource_directory(texture_path)
+		if error == OK:
+			error = ResourceSaver.save(texture, texture_path)
+		if error != OK:
+			return {"success": false, "error": "Could not save collection tile: " + error_string(error)}
+		var normalized := tileset.duplicate(true)
+		normalized.firstgid = int(tileset.firstgid) + local_id
+		normalized.tile_width = tile_size.x
+		normalized.tile_height = tile_size.y
+		normalized.columns = 1
+		normalized.tile_count = 1
+		normalized.spacing = 0
+		normalized.margin = 0
+		normalized.image = {"path": texture_path, "width": tile_size.x, "height": tile_size.y}
+		normalized.erase("tile_images")
+		result_tilesets.append(normalized)
+		paths.append(texture_path)
+	return {"success": true, "tilesets": result_tilesets, "texture_paths": paths}
 
 
 func _materialize_tileset_image_chunks(

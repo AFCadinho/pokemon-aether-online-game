@@ -33,6 +33,7 @@ func parse_tmx(tmx_path: String, missing_tileset_paths: Dictionary = {}) -> Dict
 	var current_object: Dictionary = {}
 	var current_tileset: Dictionary = {}
 	var current_tile_id := -1
+	var current_tile_attributes := {}
 	var properties_target: Dictionary = {}
 	var property_pending_target: Dictionary = {}
 	var pending_property_name := ""
@@ -57,7 +58,10 @@ func parse_tmx(tmx_path: String, missing_tileset_paths: Dictionary = {}) -> Dict
 						current_tileset = {}
 				"image":
 					if not current_tileset.is_empty():
-						current_tileset["image"] = _parse_image(attrs, str(current_tileset.get("source_path", normalized_path)))
+						if current_tile_id >= 0:
+							current_tileset["tile_images"][current_tile_id] = _parse_tile_image(attrs, current_tile_attributes, str(current_tileset.get("source_path", normalized_path)))
+						else:
+							current_tileset["image"] = _parse_image(attrs, str(current_tileset.get("source_path", normalized_path)))
 				"layer":
 					current_layer = _parse_layer(attrs)
 					if parser.is_empty():
@@ -74,6 +78,7 @@ func parse_tmx(tmx_path: String, missing_tileset_paths: Dictionary = {}) -> Dict
 						current_layer["raw_gids"].append(int(attrs.get("gid", 0)))
 					elif not current_tileset.is_empty() and attrs.has("id"):
 						current_tile_id = int(attrs.get("id", -1))
+						current_tile_attributes = attrs
 						current_tileset["tile_properties"][int(attrs.get("id", 0))] = {}
 				"animation":
 					if not current_tileset.is_empty() and current_tile_id >= 0:
@@ -203,6 +208,7 @@ func _parse_tileset_reference(attrs: Dictionary, tmx_path: String, missing_tiles
 		"tile_count": int(attrs.get("tilecount", 0)),
 		"columns": int(attrs.get("columns", 0)),
 		"image": {},
+		"tile_images": {},
 		"properties": {},
 		"tile_properties": {},
 		"animated_tile_ids": [],
@@ -248,6 +254,7 @@ func parse_tsx(tsx_path: String) -> Dictionary:
 		"tile_count": 0,
 		"columns": 0,
 		"image": {},
+		"tile_images": {},
 		"properties": {},
 		"tile_properties": {},
 		"animated_tile_ids": [],
@@ -256,6 +263,7 @@ func parse_tsx(tsx_path: String) -> Dictionary:
 	var in_properties := false
 	var properties_target: Dictionary = {}
 	var current_tile_id := -1
+	var current_tile_attributes := {}
 
 	while parser.read() == OK:
 		var node_type := parser.get_node_type()
@@ -272,9 +280,13 @@ func parse_tsx(tsx_path: String) -> Dictionary:
 					tileset["tile_count"] = int(attrs.get("tilecount", 0))
 					tileset["columns"] = int(attrs.get("columns", 0))
 				"image":
-					tileset["image"] = _parse_image(attrs, normalized_path)
+					if current_tile_id >= 0:
+						tileset["tile_images"][current_tile_id] = _parse_tile_image(attrs, current_tile_attributes, normalized_path)
+					else:
+						tileset["image"] = _parse_image(attrs, normalized_path)
 				"tile":
 					current_tile_id = int(attrs.get("id", -1))
+					current_tile_attributes = attrs
 					if current_tile_id >= 0 and not tileset["tile_properties"].has(current_tile_id):
 						tileset["tile_properties"][current_tile_id] = {}
 				"animation":
@@ -308,6 +320,15 @@ func parse_tsx(tsx_path: String) -> Dictionary:
 	return {
 		"success": true,
 		"tileset": tileset,
+	}
+
+
+func _parse_tile_image(image_attrs: Dictionary, tile_attrs: Dictionary, base_file_path: String) -> Dictionary:
+	return {
+		"image": _parse_image(image_attrs, base_file_path),
+		"x": int(tile_attrs.get("x", 0)), "y": int(tile_attrs.get("y", 0)),
+		"width": int(tile_attrs.get("width", image_attrs.get("width", 0))),
+		"height": int(tile_attrs.get("height", image_attrs.get("height", 0))),
 	}
 
 

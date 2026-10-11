@@ -10,6 +10,7 @@ Scope:
 - tile layer property `pao_render_layer=overlay` renders that visual layer above Y-sorted characters
 - tile layer property `pao_z_index=<number>` sets an explicit Godot `z_index`
 - external TSX tilesets are parsed
+- static image collections, including per-tile source rectangles, preserve their exact pixels and bottom-left alignment when they fit within a map cell
 - CSV layer data is supported
 - Tiled flip flags are preserved through Godot alternative tiles
 - Tiled object layers and gameplay properties are ignored
@@ -31,6 +32,7 @@ Out of scope:
 - compressed CSV layer data
 - non-orthogonal maps
 - multi-cell atlas tiles
+- animated image collections and collection images larger than a map cell
 
 ## Editor Usage
 
