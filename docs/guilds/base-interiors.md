@@ -183,7 +183,7 @@ Guests can use the lobby and the two shared side rooms. The lift, player floors,
 personal rooms, decorating rights and Guild inventory mutations require Guild
 membership.
 
-Backend migration `0326_guild_base_visits` adds the Guild access policy and one
+Backend migration `0327_guild_base_visits` adds the Guild access policy and one
 request/visit row per player. Focused checks: `tests/guild_base_visits_check.gd`,
 `tests.test_guild_base_visits`, and the disposable PostgreSQL
 `tests.test_guild_base_visits_postgres.PostgresGuildVisitTests`.
