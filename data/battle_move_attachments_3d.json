@@ -20639,7 +20639,111 @@
               "weight": 1
             }
           ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "upper_jaw",
+              "offset": [
+                0.119344934821129,
+                -5.68160794500727e-05,
+                -0.033398199826479
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "lower_jaw",
+              "offset": [
+                0.0643259733915329,
+                0.000133931214804761,
+                0.00736581580713391
+              ],
+              "weight": 0.497957694523968
+            },
+            {
+              "bone": "head",
+              "offset": [
+                0.0477191209793091,
+                -2.61762744136671e-17,
+                0.178960561752319
+              ],
+              "weight": 0.00204230547603247
+            }
+          ]
         ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "a2cf932d5b0f42db9720513fa6ed09304c83f42c39d188fa75591c3b3349f912",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "607f853231d71d3dbe2bd4d63bb611481309909d6d134e2cc7455249e21270ef",
+        "scope": "Individually projected the upper beak tip and lower beak lip in the open special_attack pose. Fresh forward idle, physical_attack, physical_attack_2 and special_attack markers reviewed at 0.20/0.45/0.65 and side 0.45. The midpoint follows the narrow opening as the beak closes. Hood feathers partially obscure side views. Actual move effects and arrow routing remain unapproved.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "fc783db431e37c63a0f43e59b969eed9b2884f467a2f908d72a5719944ee748c",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.67847051835167,
+                0.0127825996221415,
+                0.308746882026189
+              ],
+              "column": 1.0,
+              "distance": 0.460106500289233,
+              "mesh": "pm0843_00_00/Skeleton3D/pm0843_00_00_beak_mesh",
+              "pixel": [
+                207.0,
+                170.0
+              ],
+              "surface": 1,
+              "triangle": 86,
+              "vertex_indices": [
+                19,
+                21,
+                20
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.136157156492755,
+                0.846356964103131,
+                0.017485879404114
+              ],
+              "column": 1.0,
+              "distance": 0.510840390068099,
+              "mesh": "pm0843_00_00/Skeleton3D/pm0843_00_00_beak_mesh",
+              "pixel": [
+                212.0,
+                192.0
+              ],
+              "surface": 0,
+              "triangle": 0,
+              "vertex_indices": [
+                32,
+                33,
+                30
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "decidueye-hisui": {
@@ -20743,7 +20847,111 @@
               "weight": 1
             }
           ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "upper_jaw",
+              "offset": [
+                0.110905803740025,
+                -0.000881160376593471,
+                -0.00450464896857738
+              ],
+              "weight": 0.49875232629987
+            },
+            {
+              "bone": "head",
+              "offset": [
+                -0.0194813534617424,
+                0.00126397563144565,
+                0.206683322787285
+              ],
+              "weight": 0.00709751805314331
+            },
+            {
+              "bone": "lower_jaw",
+              "offset": [
+                0.0621117614209652,
+                0.000468495796667412,
+                0.0036336206831038
+              ],
+              "weight": 0.494150155646986
+            }
+          ]
         ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "5a8a4800d68b3e49a2918bf22fb07b52a69d3820b2872838374a3bce0761b9ca",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "0bb6ab9765ce4ee7ab92ef485cd7f8576d81636543aa99ef85c439c53215b6b5",
+        "scope": "Individually projected the upper and lower beak tips in physical_attack 0.45; rejected two special_attack projections that hit the inner cheek instead of the upper beak. Fresh forward idle and all three native attacks reviewed at 0.20/0.45/0.65 and side 0.45. Midpoint follows the beak opening and closed tip. Hood/neck feathers obscure several views. Actual move effects remain unapproved.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "86c0ac56b6951420f55de902a31bb9cd1ec473e1af8d25189b2dc161441b103a",
+          "landmarks": [
+            {
+              "action": "physical_attack",
+              "barycentric": [
+                0.699847205322364,
+                0.124738818633961,
+                0.175413976043674
+              ],
+              "column": 1.0,
+              "distance": 0.348345902352375,
+              "mesh": "pm0843_00_41/Skeleton3D/pm0843_00_41_body_mesh",
+              "pixel": [
+                205.0,
+                170.0
+              ],
+              "surface": 0,
+              "triangle": 2412,
+              "vertex_indices": [
+                1155,
+                1364,
+                1157
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "physical_attack",
+              "barycentric": [
+                0.106358596177917,
+                0.828404119282386,
+                0.0652372845396969
+              ],
+              "column": 1.0,
+              "distance": 0.37179821124294,
+              "mesh": "pm0843_00_41/Skeleton3D/pm0843_00_41_body_mesh",
+              "pixel": [
+                213.0,
+                200.0
+              ],
+              "surface": 0,
+              "triangle": 276,
+              "vertex_indices": [
+                1400,
+                1401,
+                1399
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "dedenne": {
@@ -31497,6 +31705,140 @@
         "side_fraction": 0.45
       }
     },
+    "floette-mega": {
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "center_upper_jaw",
+              "offset": [
+                -0.000247644493356347,
+                -0.000867459108121693,
+                -0.00175460579339415
+              ],
+              "weight": 0.378184205011364
+            },
+            {
+              "bone": "head",
+              "offset": [
+                0.014300943352282,
+                0.000345791922882199,
+                0.0339895598590374
+              ],
+              "weight": 0.158115322984396
+            },
+            {
+              "bone": "right_upper_jaw",
+              "offset": [
+                0.000442571938037872,
+                0.00483115296810865,
+                -0.000571712851524353
+              ],
+              "weight": 0.0705446754377492
+            },
+            {
+              "bone": "center_lower_jaw",
+              "offset": [
+                6.74129987601191e-05,
+                -0.00106086721643806,
+                -0.000448929757112637
+              ],
+              "weight": 0.307046723509445
+            },
+            {
+              "bone": "left_lower_jaw",
+              "offset": [
+                -0.00059984577819705,
+                -0.00315876211971045,
+                -0.00227587670087814
+              ],
+              "weight": 0.0777827657187203
+            },
+            {
+              "bone": "right_lower_jaw",
+              "offset": [
+                -0.000869240611791611,
+                0.00593596696853638,
+                -0.00276844203472137
+              ],
+              "weight": 0.00832630733832558
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "a90a46b5ec7e9e28e7b1556070f52f705c21446dd3d21fcefbb9a783e587ef2d",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "4d770caeb0013fcc3d682e816633a7349a25edd810aabe62c8a5aa244c0b6f56",
+        "scope": "Individually projected the upper and lower lips of the open special_attack pose; rejected a preceding idle projection that failed to follow the lower lip. Fresh forward idle, physical_attack and special_attack marker sheets reviewed at default fractions. Marker follows the tiny mouth and its opening; flower and turns obscure some views. The model has blank white eye materials, which remain an unresolved model issue. Actual effects and flower routing remain unapproved.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "dd0a8565844b724ec779a512ea932e2ae00dcef626dcc3dd0efa5ecb6fc23fbd",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.388790213778331,
+                0.229888000422874,
+                0.381321785798796
+              ],
+              "column": 0.0,
+              "distance": 0.134290805966648,
+              "mesh": "pm0714_51_00/Skeleton3D/pm0714_51_00_body_mesh",
+              "pixel": [
+                209.0,
+                166.0
+              ],
+              "surface": 0,
+              "triangle": 1322,
+              "vertex_indices": [
+                159,
+                160,
+                158
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.524618257931272,
+                0.128099444991845,
+                0.347282297076883
+              ],
+              "column": 0.0,
+              "distance": 0.140104784231534,
+              "mesh": "pm0714_51_00/Skeleton3D/pm0714_51_00_body_mesh",
+              "pixel": [
+                212.0,
+                187.0
+              ],
+              "surface": 0,
+              "triangle": 1261,
+              "vertex_indices": [
+                171,
+                155,
+                838
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      }
+    },
     "floragato": {
       "part_reviews": {
         "foot": {
@@ -32066,6 +32408,45 @@
       }
     },
     "fraxure": {
+      "anatomical_route_reviews": {
+        "mouth": {
+          "action": "special_attack",
+          "moves": [
+            "bite"
+          ],
+          "scope": "Normal and shiny actual Bite stage previews reviewed in two views at four fractions. Use the native special_attack clip for its forward open-jaw pose; the original physical_attack swings the head sideways with a closed mouth at impact. Mouth source stays between the open jaws while approaching the target. This reviews sampled source/pose alignment, not the size of the generic teeth effect or live battles.",
+          "status": "sampled_native_pose_and_effect_review_pass"
+        }
+      },
+      "move_actions": {
+        "bite": "special_attack"
+      },
+      "move_effect_reviews": {
+        "bite": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "0a01666b43057f290567bfcdf52aba18d3527b427aec406a743561c409d5c243",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "20122f2bd68b7f73d54b222a01d2639e995937d7c91c594cd9567eb5db6b7cb3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1e41b185607f8b4fd50fb622c29d55db0ec13f1d61e8fd081403c239a33bed6c",
+          "scope": "Normal and shiny actual Bite stage previews reviewed in two views at four fractions. Use the native special_attack clip for its forward open-jaw pose; the original physical_attack swings the head sideways with a closed mouth at impact. Mouth source stays between the open jaws while approaching the target. This reviews sampled source/pose alignment, not the size of the generic teeth effect or live battles.",
+          "shiny_preview_sha256": "3824c5475ff1474a4dcd544c3d7b8b73e2ae7fa0ea9ba110dd6f37c8a5aec9b9",
+          "shiny_runtime_sha256": "210f43d05ce13646e5c8021011399de1240a55c27b6ae1efa9000baddbe96de9",
+          "status": "sampled_runtime_origin_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "move_key": "bite"
+          },
+          "views": 2
+        }
+      },
       "part_reviews": {
         "foot": {
           "actions": [
@@ -32192,7 +32573,102 @@
               "weight": 1
             }
           ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.0738120228052139,
+                0.00074492278508842,
+                0.357733935117722
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "jaw",
+              "offset": [
+                0.205968454480171,
+                -0.00244882819242775,
+                -0.00466612074524164
+              ],
+              "weight": 0.5
+            }
+          ]
         ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "20122f2bd68b7f73d54b222a01d2639e995937d7c91c594cd9567eb5db6b7cb3",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "baec3bc78a535878cbdf6b8baa8314270555ae01aa87ad1e558f31bc8e1568b4",
+        "scope": "Individually projected upper and lower central lips in the fully open special_attack pose. Fresh forward idle and all three native attack clips reviewed from front and side; the averaged point follows the closed muzzle seam and the opening between the upper snout and lowered jaw. Back-facing physical poses obscure the opening. Actual move effects remain unapproved.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "c4516dd97c10b1ca07941a4a3c2887335a878a808837ab39bbe11acfaaca8547",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.794245963943165,
+                0.0277639225074811,
+                0.177990113549354
+              ],
+              "column": 1.0,
+              "distance": 0.968353384984011,
+              "mesh": "pm0611_00_00/Skeleton3D/pm0611_00_00_body_mesh",
+              "pixel": [
+                208.0,
+                149.0
+              ],
+              "surface": 0,
+              "triangle": 943,
+              "vertex_indices": [
+                1112,
+                1105,
+                1096
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.801813961819922,
+                0.0566205443200163,
+                0.141565493860062
+              ],
+              "column": 1.0,
+              "distance": 1.13796276869933,
+              "mesh": "pm0611_00_00/Skeleton3D/pm0611_00_00_body_mesh",
+              "pixel": [
+                210.0,
+                204.0
+              ],
+              "surface": 0,
+              "triangle": 1338,
+              "vertex_indices": [
+                1193,
+                1195,
+                1194
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "frigibax": {
@@ -36362,6 +36838,130 @@
         "preview_sha256": "61fddcd00443f6cd504a0baf5a198cf0abaabea60c3d7fc934bb66b4bb1e023d",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "golbat": {
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.24090738594532,
+                -0.0349947921931744,
+                0.325534641742706
+              ],
+              "weight": 0.440172365113109
+            },
+            {
+              "bone": "left_upper_eyelid_a",
+              "offset": [
+                0.57233452796936,
+                -0.0255641937255859,
+                -0.0302150845527649
+              ],
+              "weight": 0.0598276348868913
+            },
+            {
+              "bone": "hips",
+              "offset": [
+                0.169478595256805,
+                -0.00339319300837815,
+                0.275433748960495
+              ],
+              "weight": 0.345592564370666
+            },
+            {
+              "bone": "waist",
+              "offset": [
+                -0.169209823012352,
+                0.00341210141777992,
+                0.274913728237152
+              ],
+              "weight": 0.154407435629334
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "e0fbde6ad3382a3d37f403b34bbacfafbc8dd51157f489bf78eb5b565c42e616",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": "mouth-surface-review-v64/golbat.png",
+            "sha256": "a6d330f1f2da196563c47dbe49f68ac84d8d6b08d0b87546d55729729f2618a7"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "1a05dc93dd1185b8efc5771f29c343d0cc347710383a70de8ff2fde517382483",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "cda994e2454dc63005d960ec1a1c40086ecadd9da27fc12bbe82330cbb01f44c",
+        "scope": "Individually projected the upper and lower edges of the large mouth opening, replacing the forehead fallback. Both close-up and wider forward sheets reviewed for idle, physical_attack and special_attack at 0.20/0.45/0.65 and side 0.45. The point stays within the shrinking or stretched opening. Actual move effects remain unapproved.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "9b4e578a7fbfad83f1fce4ff2bd049262e0d3d87d580ebe6d7c5cc0ddd3c7733",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.145972510787377,
+                0.106210591220581,
+                0.747816897992042
+              ],
+              "column": 1.0,
+              "distance": 4.732125749761,
+              "mesh": "pm0042_00_00/Skeleton3D/pm0042_00_00_body_mesh",
+              "pixel": [
+                207.0,
+                81.0
+              ],
+              "surface": 0,
+              "triangle": 2670,
+              "vertex_indices": [
+                463,
+                441,
+                1178
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "idle",
+              "barycentric": [
+                0.531968882760996,
+                0.0542997561445092,
+                0.413731361094495
+              ],
+              "column": 1.0,
+              "distance": 5.01196155002021,
+              "mesh": "pm0042_00_00/Skeleton3D/pm0042_00_00_body_mesh",
+              "pixel": [
+                207.0,
+                156.0
+              ],
+              "surface": 0,
+              "triangle": 717,
+              "vertex_indices": [
+                446,
+                447,
+                467
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "goldeen": {
@@ -42179,6 +42779,53 @@
         "side_fraction": 0.45
       }
     },
+    "hatterene": {
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "upper_jaw_01",
+              "offset": [
+                0.0983445644378662,
+                3.12012e-27,
+                0.00238394737243652
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "lower_jaw_01",
+              "offset": [
+                0.0942812636494637,
+                0.0,
+                0.00183349847793579
+              ],
+              "weight": 0.5
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_anatomy_marker_pose_visual_review",
+        "normal_runtime_sha256": "d4c6a7b505e173f218db1cc4ec4e3c0837d1ac98b4b3fe174155a4aeb98c7c45",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "fe55e7f49262dd57e0f07b467fe1046411e5b7c1159d5c12aad8fe37307c0b61",
+        "scope": "Individually reviewed the native upper/lower jaw midpoint in fresh close-up forward idle, physical_attack, physical_attack_2 and special_attack poses. Marker matches the closed mouth seam and the round opening in physical_attack_2 at 0.20/0.45/0.65; hair obscures the side of physical_attack_2. Hat-hand routing and actual effects remain unapproved.",
+        "side_fraction": 0.45
+      }
+    },
     "hattrem": {
       "parts": {
         "mouth": [
@@ -43991,6 +44638,113 @@
         "side_fraction": 0.45
       }
     },
+    "hippopotas": {
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "upper_jaw_a_02",
+              "offset": [
+                0.221837669610977,
+                0.0145838782191277,
+                -0.0656262934207916
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "lower_jaw_a_02",
+              "offset": [
+                0.165971547365189,
+                -0.0166781470179558,
+                -0.0610200315713882
+              ],
+              "weight": 0.5
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "033da1cb4b908eedd1f9828c79ee0138f9dc9f94ba1d8b40ff417009bf873f28",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": "mouth-under-v67/hippopotas.png",
+            "sha256": "a91fdfd05fe7f1b6fad774f7d69f3b43e7bf120c40cad74b77d535a7a402ce58"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "19cf1448389bfae966ec6d3ce5e9d810cd250e3248941796740856ca31d1e161",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "ac83ad030456e8a9d113350a4e05d280b19ff4d57eb825b2b1a953ff6260e770",
+        "scope": "Individually projected upper and lower central lips from the fully open physical_attack pose. Reviewed the fresh forward default fractions plus an additional underside/reverse view at 0.10/0.20/0.40 and side 0.20. The closed seam is beneath the large snout; the underside view confirms the point on that seam and between the lips when open. Actual move effects and launch timing remain unapproved.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "52ea2fcfd80b7c9b9f49fb52f8e24824f1ec4b9b256f0c0e64e689b51e2aaf8b",
+          "landmarks": [
+            {
+              "action": "physical_attack",
+              "barycentric": [
+                0.310975540215972,
+                0.586798361693991,
+                0.102226098090037
+              ],
+              "column": 0.0,
+              "distance": 1.95667076724696,
+              "mesh": "pm0449_00_00/Skeleton3D/pm0449_00_00_body_mesh",
+              "pixel": [
+                188.0,
+                150.0
+              ],
+              "surface": 0,
+              "triangle": 3231,
+              "vertex_indices": [
+                497,
+                498,
+                496
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "physical_attack",
+              "barycentric": [
+                0.290465250945866,
+                0.210133341664166,
+                0.499401407389969
+              ],
+              "column": 0.0,
+              "distance": 2.09509073168881,
+              "mesh": "pm0449_00_00/Skeleton3D/pm0449_00_00_body_mesh",
+              "pixel": [
+                192.0,
+                291.0
+              ],
+              "surface": 0,
+              "triangle": 1658,
+              "vertex_indices": [
+                97,
+                98,
+                96
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      }
+    },
     "hitmonchan": {
       "part_reviews": {
         "foot": {
@@ -44699,6 +45453,150 @@
         "preview_sha256": "427d304c55af1ddf5528567af3111aa71775f1ed3422d09d0c32de739e61cd53",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "horsea": {
+      "anatomical_route_reviews": {
+        "mouth": {
+          "action": "special_attack",
+          "moves": [
+            "watergun"
+          ],
+          "scope": "Normal and shiny actual Water Gun stage previews reviewed in two views at four fractions. The beam connects to the center of the animated tube opening as the head moves; water cylinder and aura are wider than the snout. This approves sampled source connection, not effect art or live battles.",
+          "status": "sampled_native_pose_and_effect_review_pass"
+        }
+      },
+      "move_effect_reviews": {
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "29970e174097e27c008cc56d2175a08b1f7ff8393ef94d4d528f7d8565ab1a20",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "56b82a617dbb8c5d5ab9ef3e4aa7af1d7f34a51d7687290e31e4c44ad29821c2",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1cf67d777f1c73987459e2d1133c051047c076db901aae9517e0b77530c82bc3",
+          "scope": "Normal and shiny actual Water Gun stage previews reviewed in two views at four fractions. The beam connects to the center of the animated tube opening as the head moves; water cylinder and aura are wider than the snout. This approves sampled source connection, not effect art or live battles.",
+          "shiny_preview_sha256": "5907c9138fa26ab9753db0d625b2dd349d14e809e9b45fcd34e2ad4884299b55",
+          "shiny_runtime_sha256": "2616f181f932ebe901b7b29b6d0ff2554176f3a0e25caabc4873f7f173bc22f1",
+          "status": "sampled_runtime_origin_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 302.5,
+            "impact_frame": 136.125,
+            "move_key": "watergun"
+          },
+          "views": 2
+        }
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "nose_02",
+              "offset": [
+                0.0373683050274849,
+                0.000137315670144744,
+                -0.00141654384788126
+              ],
+              "weight": 0.770000761523848
+            },
+            {
+              "bone": "nose_01",
+              "offset": [
+                0.0814113914966583,
+                0.000137315641040914,
+                -0.00141654442995787
+              ],
+              "weight": 0.209994660392364
+            },
+            {
+              "bone": "head",
+              "offset": [
+                0.104702956974506,
+                0.000137315597385168,
+                0.163087904453278
+              ],
+              "weight": 0.0200045780837877
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "56b82a617dbb8c5d5ab9ef3e4aa7af1d7f34a51d7687290e31e4c44ad29821c2",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "a02bf7db777c2e8b0a58abb75858d2dc854c30bc665e87af530b929a57245575",
+        "scope": "Individually projected opposing edges of the tube outlet and averaged them to locate its center. Fresh close-up forward idle and all native attack clips reviewed at 0.20/0.45/0.65 and side 0.45. Point follows the tube opening through bends and head rotations. Back-facing poses obscure the opening; actual move effects remain unapproved.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "269416e5b66af31a5e75ef0798ace45e48e88c81ea8f3baea85c3007aa3d43c2",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.353451352859747,
+                0.115500688174851,
+                0.531047958965402
+              ],
+              "column": 1.0,
+              "distance": 0.81057516573217,
+              "mesh": "pm0116_00_00_trmdl/Skeleton3D/pm0116_00_00_body_mesh_shape",
+              "pixel": [
+                207.0,
+                145.0
+              ],
+              "surface": 0,
+              "triangle": 1994,
+              "vertex_indices": [
+                1021,
+                1017,
+                1019
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "idle",
+              "barycentric": [
+                0.166160801679213,
+                0.0762982010026616,
+                0.757540997318126
+              ],
+              "column": 1.0,
+              "distance": 0.84518762304634,
+              "mesh": "pm0116_00_00_trmdl/Skeleton3D/pm0116_00_00_body_mesh_shape",
+              "pixel": [
+                207.0,
+                176.0
+              ],
+              "surface": 0,
+              "triangle": 2959,
+              "vertex_indices": [
+                2055,
+                2064,
+                2062
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "houndoom": {
@@ -46813,7 +47711,50 @@
               "weight": 1
             }
           ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.0270965900272131,
+                2.75852425346557e-08,
+                0.194672822952271
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "jaw",
+              "offset": [
+                0.127821996808052,
+                2.76622618144984e-08,
+                0.0268173348158598
+              ],
+              "weight": 0.5
+            }
+          ]
         ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_anatomy_marker_pose_visual_review",
+        "normal_runtime_sha256": "0d042b9fae19cfb14a176f3f6f96b1873507615892b2168c31f82a5b9a612732",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "08a22a7f4a5099f9a70d72c109119c89a7da6b93da0b3c814eae7e647466d7e5",
+        "scope": "Individually reviewed a close underside view of the head in fresh forward idle and all three native attacks, at 0.20/0.45/0.65 and side 0.45. The point lies on the small closed mouth seam of the white lower face, beneath the pink snout tip. The lowered head obscures the front seam in special_attack; the side view confirms placement. Actual move effects remain unapproved.",
+        "side_fraction": 0.45
       }
     },
     "iron-thorns": {
@@ -49394,6 +50335,142 @@
         ]
       }
     },
+    "kingdra": {
+      "anatomical_route_reviews": {
+        "mouth": {
+          "action": "special_attack",
+          "moves": [
+            "scald"
+          ],
+          "scope": "Normal and shiny actual Scald stage previews reviewed in two views at four fractions. The beam core starts at the tube outlet center during the forward special_attack pose, following the head as it settles after raising the snout. This approves sampled source connection, not effect art or live battles.",
+          "status": "sampled_native_pose_and_effect_review_pass"
+        }
+      },
+      "move_effect_reviews": {
+        "scald": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "29970e174097e27c008cc56d2175a08b1f7ff8393ef94d4d528f7d8565ab1a20",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "5bf9710f519b0257bf873aabca6ce78fe5f7d91a7ebda37828080511a5e0f7cc",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0d7f910d74b79cd6aeb20d861ff51410105c5ce154393de19f0bc59dec20a34e",
+          "scope": "Normal and shiny actual Scald stage previews reviewed in two views at four fractions. The beam core starts at the tube outlet center during the forward special_attack pose, following the head as it settles after raising the snout. This approves sampled source connection, not effect art or live battles.",
+          "shiny_preview_sha256": "fa888bd0a16e34a887220aceeb24828c16596d2a52e573f4e1ffc5b41a7cef0d",
+          "shiny_runtime_sha256": "bc1e60acf5f0ef4c149b8db9a6cc808089f969be3fe25d48f854c11ad6dce7f7",
+          "status": "sampled_runtime_origin_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 347.5,
+            "impact_frame": 215.45,
+            "launch_frame": 86.875,
+            "move_key": "scald"
+          },
+          "views": 2
+        }
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "nose_02",
+              "offset": [
+                0.191531106829643,
+                -0.000276409817161039,
+                0.0186656825244427
+              ],
+              "weight": 0.995132237756532
+            },
+            {
+              "bone": "nose_01",
+              "offset": [
+                0.40240678191185,
+                -0.00651646498590708,
+                -0.0249743536114693
+              ],
+              "weight": 0.0048677622434684
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "5bf9710f519b0257bf873aabca6ce78fe5f7d91a7ebda37828080511a5e0f7cc",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "aeb7aeb06da451530e2b0ff2ee52515c66b10c1a557c2eda28394607e674a491",
+        "scope": "Individually projected opposing edges of the tube outlet and averaged them to locate its center. Fresh close-up forward idle and all native attack clips reviewed at 0.20/0.45/0.65 and side 0.45. Point follows the tube opening through bends and head rotations. Back-facing poses obscure the opening; actual move effects remain unapproved.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "a46eef6036be985aa78ee7ca2996e5056a5c042a90b8eddcaa63643b52c55112",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.675474274866551,
+                0.224057539387867,
+                0.100468185745582
+              ],
+              "column": 1.0,
+              "distance": 2.93568733139406,
+              "mesh": "pm0230_00_00_trmdl/Skeleton3D/pm0230_00_00_body_mesh_shape",
+              "pixel": [
+                203.0,
+                136.0
+              ],
+              "surface": 0,
+              "triangle": 1062,
+              "vertex_indices": [
+                917,
+                899,
+                898
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "idle",
+              "barycentric": [
+                0.262367468085218,
+                0.103830520393287,
+                0.633802011521496
+              ],
+              "column": 1.0,
+              "distance": 2.99807208661203,
+              "mesh": "pm0230_00_00_trmdl/Skeleton3D/pm0230_00_00_body_mesh_shape",
+              "pixel": [
+                203.0,
+                147.0
+              ],
+              "surface": 0,
+              "triangle": 3258,
+              "vertex_indices": [
+                2518,
+                2520,
+                2877
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      }
+    },
     "kingler": {
       "parts": {
         "mouth": [
@@ -49568,6 +50645,132 @@
         "preview_sha256": "fb92047fd28cf74004914657d3246369fba76ca5c6e94dbba27b18d98afd015c",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "klawf": {
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                0.755400896072388,
+                -0.0245618876069784,
+                0.0223282184451818
+              ],
+              "weight": 0.5158229298777
+            },
+            {
+              "bone": "left_jaw_01",
+              "offset": [
+                0.325650095939636,
+                0.296881794929504,
+                -0.219762608408928
+              ],
+              "weight": 0.169338506556568
+            },
+            {
+              "bone": "right_jaw_01",
+              "offset": [
+                0.317823082208633,
+                -0.327741354703903,
+                -0.215157359838486
+              ],
+              "weight": 0.0990125830301028
+            },
+            {
+              "bone": "left_jaw_02",
+              "offset": [
+                0.231014490127563,
+                0.286789447069168,
+                -0.102059662342072
+              ],
+              "weight": 0.150987417297378
+            },
+            {
+              "bone": "right_jaw_02",
+              "offset": [
+                0.22609081864357,
+                -0.326531529426575,
+                -0.112547479569912
+              ],
+              "weight": 0.0648385632382519
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "8444b3ee4a48c12942e0bb2cb5d61a75bcc5a5bc8396d128e586745342b51389",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "25f75ac3dc064cd62d37bab01ab6d5ebbf8337888ed4db4f87c4aa5c051121bb",
+        "scope": "Individually projected upper and lower central mouth rim from a close-up of the open special_attack pose, rejecting a previous coarse projection that drifted above the closed mouth. Fresh forward idle and all native attacks reviewed at 0.20/0.45/0.65 and side 0.45: marker follows the central zigzag seam when closed and stays in the mouth opening when open. Actual move effects remain unapproved.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "9172953228a5e6cb2d5b1cd6aee71044177c973f628fe648640e5c9b95076aa2",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.53471378846835,
+                0.318069627342395,
+                0.147216584189255
+              ],
+              "column": 1.0,
+              "distance": 0.837883663861403,
+              "mesh": "pm1066_00_00/Skeleton3D/pm1066_00_00_body_mesh",
+              "pixel": [
+                210.0,
+                119.0
+              ],
+              "surface": 0,
+              "triangle": 18,
+              "vertex_indices": [
+                230,
+                495,
+                232
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.0331842706942325,
+                0.615191477770537,
+                0.35162425153523
+              ],
+              "column": 1.0,
+              "distance": 0.877064321310844,
+              "mesh": "pm1066_00_00/Skeleton3D/pm1066_00_00_face_mesh",
+              "pixel": [
+                210.0,
+                228.0
+              ],
+              "surface": 0,
+              "triangle": 87,
+              "vertex_indices": [
+                41,
+                43,
+                104
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "kleavor": {

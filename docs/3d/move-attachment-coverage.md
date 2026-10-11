@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1010 species/forms.
-- No anatomical attachment profile: 190 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 890 species/forms.
+- At least one configured anatomical attachment: 1017 species/forms.
+- No anatomical attachment profile: 183 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 901 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -208,8 +208,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | dartrix | mouth | Same attachment profile |
 | darumaka | hand, left_hand, mouth | Same attachment profile |
 | darumaka-galar | hand, left_hand, mouth | Same attachment profile |
-| decidueye | foot, left_foot | Same attachment profile |
-| decidueye-hisui | foot, left_foot | Same attachment profile |
+| decidueye | foot, left_foot, mouth | Same attachment profile |
+| decidueye-hisui | foot, left_foot, mouth | Same attachment profile |
 | dedenne | hand, left_hand, mouth | Same attachment profile |
 | deerling | foot, left_foot, mouth | Same attachment profile |
 | deino | hand, left_hand, mouth | Same attachment profile |
@@ -317,12 +317,13 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | flittle | mouth | Same attachment profile |
 | floatzel | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | floette | hand, left_hand, mouth | Same attachment profile |
+| floette-mega | mouth | Same attachment profile |
 | floragato | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | florges | hand, left_hand, mouth | Same attachment profile |
 | flutter-mane | hand, left_hand, mouth | Same attachment profile |
 | flygon | mouth | Same attachment profile |
 | foongus | mouth | Same attachment profile |
-| fraxure | foot, hand, left_foot, left_hand | Same attachment profile |
+| fraxure | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | frigibax | hand, left_hand, mouth | Same attachment profile |
 | frillish-male | mouth | Same attachment profile |
 | froakie | hand, left_hand, mouth | Same attachment profile |
@@ -359,6 +360,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | gligar | hand, left_hand, mouth | Same attachment profile |
 | gloom | hand, left_hand, mouth | Same attachment profile |
 | gogoat | mouth | Same attachment profile |
+| golbat | mouth | Same attachment profile |
 | goldeen | mouth | Same attachment profile |
 | golduck | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | golem | hand, left_hand, mouth | Same attachment profile |
@@ -405,6 +407,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | happiny | hand, left_hand, mouth | Same attachment profile |
 | hariyama | foot, hand, left_foot, left_hand | Same attachment profile |
 | hatenna | mouth | Same attachment profile |
+| hatterene | mouth | Same attachment profile |
 | hattrem | mouth | Same attachment profile |
 | haunter | hand, left_hand, mouth | Same attachment profile |
 | hawlucha | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -417,6 +420,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | heracross | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | heracross-mega | foot, hand, left_foot, left_hand | Same attachment profile |
 | herdier | mouth | Same attachment profile |
+| hippopotas | mouth | Same attachment profile |
 | hitmonchan | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | hitmonlee | foot, hand, left_foot, left_hand | Same attachment profile |
 | hitmontop | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -424,6 +428,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | hoopa | hand, left_hand, mouth | Same attachment profile |
 | hoothoot | mouth | Same attachment profile |
 | hoppip | mouth | Same attachment profile |
+| horsea | mouth | Same attachment profile |
 | houndoom | hand, left_hand, mouth | Same attachment profile |
 | houndoom-mega | hand, left_hand, mouth | Same attachment profile |
 | houndour | hand, left_hand, mouth | Same attachment profile |
@@ -443,7 +448,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | iron-crown | mouth | Same attachment profile |
 | iron-hands | foot, hand, left_foot, left_hand | Same attachment profile |
 | iron-jugulis | mouth | Same attachment profile |
-| iron-leaves | hand, left_hand | Same attachment profile |
+| iron-leaves | hand, left_hand, mouth | Same attachment profile |
 | iron-thorns | foot, left_foot, mouth | Same attachment profile |
 | iron-treads | mouth | Same attachment profile |
 | iron-valiant | foot, hand, left_foot, left_hand | Same attachment profile |
@@ -467,9 +472,11 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | keldeo-ordinary | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | kilowattrel | mouth | Same attachment profile |
 | kingambit | foot, hand, left_foot, left_hand | Same attachment profile |
+| kingdra | mouth | Same attachment profile |
 | kingler | mouth | Same attachment profile |
 | kirlia | hand, left_hand, mouth | Same attachment profile |
 | klang | mouth | Same attachment profile |
+| klawf | mouth | Same attachment profile |
 | kleavor | mouth | Same attachment profile |
 | klink | mouth | Same attachment profile |
 | klinklang | mouth | Same attachment profile |
