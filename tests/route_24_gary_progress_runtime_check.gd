@@ -41,10 +41,14 @@ func _run() -> void:
 		_check(not is_instance_valid(npc), "Automatic retry removes an already defeated Gary")
 
 	var first := _new_gary()
+	var profile: Resource = load("res://scripts/world/npcs/trainer_definition.gd").new()
+	profile.trainer_id = "kanto_route_24_gary_bulbasaur"
+	first.npc_profile = profile
 	first.starter_response = {"success": false}
 	root.add_child(first)
+	_check(not first.visible and not first.trainer_progress_loaded, "Initialization keeps the unresolved encounter hidden")
 	await _settle_requests()
-	_check(first.trainer_id.is_empty(), "Failed starter lookup never selects Bulbasaur")
+	_check(first.trainer_id.is_empty(), "Failed starter lookup never selects the scene or profile's default Bulbasaur")
 	_check(not first.visible and not first._can_auto_challenge() and not first._can_start_manual_interaction(), "Failed starter lookup keeps Gary inactive")
 	first.starter_response = {"success": true, "rivalStarterSpeciesId": "", "rivalTrainerId": "invalid"}
 	await first._load_trainer_progress()
@@ -62,6 +66,32 @@ func _run() -> void:
 	_check(not first.is_queued_for_deletion() and first.visible, "Victory keeps Gary's outro available during this map visit")
 	_check(not first._can_auto_challenge(), "Won encounter cannot automatically restart")
 	first.queue_free()
+	await process_frame
+
+	var future := _new_gary()
+	future.rival_encounter_id = "johto_future_city_gary"
+	root.add_child(future)
+	await _settle_requests()
+	_check(future.trainer_id == "johto_future_city_gary_squirtle" and future.visible, "New locations reuse starter selection without a location-specific controller")
+	future.progress_response = {"success": false}
+	await future._load_trainer_progress()
+	future._apply_story_visibility()
+	_check(not future.visible and not future._can_auto_challenge(), "Story refresh cannot reveal an encounter with unknown progress")
+	future.progress_response = {"success": true, "progress": {"state": "completed"}}
+	await future._load_trainer_progress()
+	await process_frame
+	_check(not is_instance_valid(future), "Shared completion removes Gary at a future location")
+
+	var rematch := _new_gary()
+	rematch.rival_encounter_id = "kanto_ss_anne_gary"
+	rematch.progress_response = {"success": true, "progress": {"state": "ready", "rematchEligible": true}}
+	root.add_child(rematch)
+	await _settle_requests()
+	_check(rematch.visible and rematch.supports_trainer_rematches() and rematch.trainer_progress_state == "ready", "Controller preserves server-approved rematches")
+	rematch.progress_response = {"success": true, "progress": {"state": "sleeping", "rematchEligible": true}}
+	await rematch._load_trainer_progress()
+	_check(rematch.visible and not rematch._can_auto_challenge() and rematch.next_progress_refresh_at_msec > Time.get_ticks_msec(), "Daily cooldown stays visible and schedules its next refresh")
+	rematch.queue_free()
 	await process_frame
 	quit(1 if failures else 0)
 
