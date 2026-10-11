@@ -973,7 +973,7 @@ func catch_wild_pokemon(battle_id: String, item_id: String) -> Dictionary:
 	}
 
 
-func use_pokemon_item(pokemon_id: int, item_id: String, quantity: int = 1) -> Dictionary:
+func use_pokemon_item(pokemon_id: int, item_id: String, quantity: int = 1, target_species_id: String = "") -> Dictionary:
 	var walking_result: Dictionary = await WalkingEvolutionService.flush()
 	if not bool(walking_result.get("success", false)):
 		return walking_result
@@ -995,7 +995,7 @@ func use_pokemon_item(pokemon_id: int, item_id: String, quantity: int = 1) -> Di
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var endpoint := POKEMON_ITEM_USE_ENDPOINT % str(pokemon_id).uri_encode()
-	var request_body := _pokemon_item_use_request_payload(item_id, quantity)
+	var request_body := _pokemon_item_use_request_payload(item_id, quantity, target_species_id)
 	var response: Dictionary = await _request_json(
 		base_url + endpoint,
 		HTTPClient.METHOD_POST,
@@ -1017,8 +1017,10 @@ func use_pokemon_item(pokemon_id: int, item_id: String, quantity: int = 1) -> Di
 	}
 
 
-func _pokemon_item_use_request_payload(item_id: String, quantity: int) -> Dictionary:
+func _pokemon_item_use_request_payload(item_id: String, quantity: int, target_species_id: String = "") -> Dictionary:
 	var payload := {"itemId": item_id, "quantity": max(quantity, 1)}
+	if not target_species_id.strip_edges().is_empty():
+		payload["targetSpeciesId"] = target_species_id.strip_edges()
 	var hour := PlayerPartyStateService.get_developer_evolution_time_hour()
 	if hour >= 0:
 		payload["debugTimeHour"] = hour

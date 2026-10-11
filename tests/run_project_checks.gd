@@ -197,6 +197,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/aether_clash_bot_arena_check.gd",
 	"res://tests/route_2_house_transition_check.gd",
 	"res://tests/evolution_prompt_queue_check.gd",
+	"res://tests/evolution_form_choice_check.gd",
 	"res://tests/developer_evolution_time_check.gd",
 	"res://tests/walking_evolution_check.gd",
 	"res://tests/evolution_conditions_popup_check.gd",
