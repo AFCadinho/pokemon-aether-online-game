@@ -8,6 +8,7 @@ const SOURCES := {
 	"elevator": "Guild Base Elevator Room.tmx",
 	"elevator_cabin": "Guild Base Elevator.tmx",
 	"player_floor": "Guild Base Player Floor.tmx",
+	"player_room": "Guild Base Player Room.tmx",
 }
 
 
