@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Akatsuki Outfit Box to Gift Store → Outfits for 450 Gems, with complete trainer and overworld previews for both models.
+
 - Add the Akatsuki Outfit Box for both player models, with an ankle-length robe, trousers, sandals and separate headband; includes trainer and overworld activity sprites.
 
 - Publish the official Aether training items guide with four interface screenshots, explaining both Bands, Gems/card credit, equipment, EV limits and co-op rules; clearly mark the items as upcoming.
