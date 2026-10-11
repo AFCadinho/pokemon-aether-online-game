@@ -1,0 +1,358 @@
+{
+  "all_move_presentations_approved": false,
+  "attachment_data_sha256": "214c8d23816c591ebb2e7b633a9c8eb53d4a864eefdd7c9f7fdc1bd74ed135b0",
+  "binding_check": {
+    "checked_profile_count": 2,
+    "errors": [],
+    "models": {
+      "avalugg-hisui": {
+        "pose_sha256": "98893ee5f8f99b82176f22eae068d7a1edc8cccf18e27162220ad9013132b979",
+        "runtime_sha256": "e90f8342680e151eb5ffe56a9f3c956168f92cd5b1d7d9bae2dc59c332447d15",
+        "sample_count": 168
+      },
+      "avalugg-hisui@shiny": {
+        "pose_sha256": "98893ee5f8f99b82176f22eae068d7a1edc8cccf18e27162220ad9013132b979",
+        "runtime_sha256": "78c8c8633e4f0c13562f9353f5c084e8117808a57dd05388559450a5eb91e7b7",
+        "sample_count": 168
+      },
+      "raichu-alola": {
+        "pose_sha256": "a0d0595ef50ded777d67559f83463650f85825aa99ebd71b40daf4706221ac59",
+        "runtime_sha256": "2c65d428103d734c65c15c48ae06aefcb26ec632e3f21e67a94680f00c47e2f6",
+        "sample_count": 420
+      },
+      "raichu-alola@shiny": {
+        "pose_sha256": "a0d0595ef50ded777d67559f83463650f85825aa99ebd71b40daf4706221ac59",
+        "runtime_sha256": "d948a718ee24191ec075d8c354bbe0e81b58783e2abbc7eeaee9fd54d034264d",
+        "sample_count": 420
+      }
+    },
+    "profile_count": 1200,
+    "profile_sha256": "214c8d23816c591ebb2e7b633a9c8eb53d4a864eefdd7c9f7fdc1bd74ed135b0",
+    "requested_species": [
+      "avalugg-hisui",
+      "raichu-alola"
+    ],
+    "samples_per_action": 21,
+    "schema": 1,
+    "visual_verification": false
+  },
+  "counts": {
+    "current_catalog": {
+      "configured_move_pairs": 8335,
+      "missing_parts": {},
+      "species_forms": 1200,
+      "supported_move_pairs": 30646
+    },
+    "effect_sheets": 8,
+    "forms": 2,
+    "native_point_samples": 1176,
+    "new_part_bindings": 3,
+    "normal_shiny_models_checked": 4,
+    "representative_moves": 2,
+    "resolved_learnset_routes": 2,
+    "wild_trainer_identical_pairs": 4
+  },
+  "date": "2026-10-11",
+  "evidence": {
+    ".tmp/remaining-attack-points/avalugg-landmarks.json": "6031dc2cc8b287b7d2f45a8e27e76060cdfcd57208ea911d64b77fcb5b4a9cb1",
+    ".tmp/remaining-attack-points/avalugg-projection.json": "adafd587733e785fadba3fa0075897728b6bf6fdb880cb28c07376a8cba51c75",
+    ".tmp/remaining-attack-points/effects-final/trainer/avalugg-hisui-rocksmash.json": "5f37ddf633b6db9f4aeb523752428a0ce454f74967ae190eda53715f89530c08",
+    ".tmp/remaining-attack-points/effects-final/trainer/avalugg-hisui-rocksmash.png": "8d3f37bc8091d5ceaa6c58b5881b9162628eb9544e8ff87f1b31fcdb98a86dd5",
+    ".tmp/remaining-attack-points/effects-final/trainer/avalugg-hisui.log": "6f4b18c320b35578d21cc4e1b3c6f47b764acca86a8c02a4abd2e15c5ed7be9c",
+    ".tmp/remaining-attack-points/effects-final/trainer/avalugg-hisui@shiny-rocksmash.json": "19cb3e9fc0915fff96b541b8ac1ca5a2207d1b72393f9f97f167892e85891bb4",
+    ".tmp/remaining-attack-points/effects-final/trainer/avalugg-hisui@shiny-rocksmash.png": "61c0ce19d3437d46cfc1d2d909b4b7c3d87eb99c93c229fd7c14352c9522460f",
+    ".tmp/remaining-attack-points/effects-final/trainer/avalugg-hisui@shiny.log": "754dac601d6161d02570ec292fa7d47dc5b88e3bbc7eef25e45344d85db21ca4",
+    ".tmp/remaining-attack-points/effects-final/trainer/raichu-alola-doublekick.json": "dffc734b84fcdc93e4da8586d69ed4ed996ab8e4ae8b68dd4a6bfe660dcbf7a8",
+    ".tmp/remaining-attack-points/effects-final/trainer/raichu-alola-doublekick.png": "f7a4166178e11bdc86dd4137f9180ebf2a26b8b03f9f394a7b7f582daeb85694",
+    ".tmp/remaining-attack-points/effects-final/trainer/raichu-alola.log": "9e30e0e770d3de8fb4186a02d9d68f86dcf479cc8d0e20e3b41317242120cde6",
+    ".tmp/remaining-attack-points/effects-final/trainer/raichu-alola@shiny-doublekick.json": "d6493df9ede68815ad8cdb4a9ba570dfcb025530e8f38d3a917bd2769852f594",
+    ".tmp/remaining-attack-points/effects-final/trainer/raichu-alola@shiny-doublekick.png": "fbb9883b2fc70e88a8a154cad9a42babcce762cab67dee6e0f81083f565b0ec4",
+    ".tmp/remaining-attack-points/effects-final/trainer/raichu-alola@shiny.log": "22871b259242f3e46e6a00708a4294e166d572b50241113d86d3bd6ea07f0c65",
+    ".tmp/remaining-attack-points/effects-final/wild/avalugg-hisui-rocksmash.json": "54275af78d61def45b3bcef06073c727fa57dd238979a5f64f2ae63b28eaefeb",
+    ".tmp/remaining-attack-points/effects-final/wild/avalugg-hisui-rocksmash.png": "8d3f37bc8091d5ceaa6c58b5881b9162628eb9544e8ff87f1b31fcdb98a86dd5",
+    ".tmp/remaining-attack-points/effects-final/wild/avalugg-hisui.log": "6f4b18c320b35578d21cc4e1b3c6f47b764acca86a8c02a4abd2e15c5ed7be9c",
+    ".tmp/remaining-attack-points/effects-final/wild/avalugg-hisui@shiny-rocksmash.json": "a85dfa0855e59029d51d6926af5c3294d49c81460c1d3a59fde28e69fb1194a4",
+    ".tmp/remaining-attack-points/effects-final/wild/avalugg-hisui@shiny-rocksmash.png": "61c0ce19d3437d46cfc1d2d909b4b7c3d87eb99c93c229fd7c14352c9522460f",
+    ".tmp/remaining-attack-points/effects-final/wild/avalugg-hisui@shiny.log": "754dac601d6161d02570ec292fa7d47dc5b88e3bbc7eef25e45344d85db21ca4",
+    ".tmp/remaining-attack-points/effects-final/wild/raichu-alola-doublekick.json": "d37a8d5cf7a1c14a0da4f43ac614eb2235f4d37dd3b4213362e8b880621d1613",
+    ".tmp/remaining-attack-points/effects-final/wild/raichu-alola-doublekick.png": "f7a4166178e11bdc86dd4137f9180ebf2a26b8b03f9f394a7b7f582daeb85694",
+    ".tmp/remaining-attack-points/effects-final/wild/raichu-alola.log": "9e30e0e770d3de8fb4186a02d9d68f86dcf479cc8d0e20e3b41317242120cde6",
+    ".tmp/remaining-attack-points/effects-final/wild/raichu-alola@shiny-doublekick.json": "2939d26b2f50ea5141102797e62af1ed89cf0f2e4a52d85ce858a71980d01035",
+    ".tmp/remaining-attack-points/effects-final/wild/raichu-alola@shiny-doublekick.png": "fbb9883b2fc70e88a8a154cad9a42babcce762cab67dee6e0f81083f565b0ec4",
+    ".tmp/remaining-attack-points/effects-final/wild/raichu-alola@shiny.log": "22871b259242f3e46e6a00708a4294e166d572b50241113d86d3bd6ea07f0c65",
+    ".tmp/remaining-attack-points/learnset-routing.json": "74a0088a585f107e997bee8cc6b5faa3144b031f3a7b7d70dd2a473b2abfa42d",
+    ".tmp/remaining-attack-points/markers-final/avalugg-hisui.json": "41e950214b86c6567baf07467d8ee941f919c93cf65c0e5838df74394c64a273",
+    ".tmp/remaining-attack-points/markers-final/avalugg-hisui.png": "91f7031b051c828269a781f2b7905190647a6c720c1489d253a8f8578354ccaa",
+    ".tmp/remaining-attack-points/markers-final/raichu-alola.json": "8a030244d9589f0a9a59e40690bca09501c1097893d91c776b399e47bfe83e9f",
+    ".tmp/remaining-attack-points/markers-final/raichu-alola.png": "dfd8ccc1417db50e7ca0193b818e1ddaa21ac657a88d45026629977946a9a4e6",
+    ".tmp/remaining-attack-points/runtime-check.json": "f70c42b464b8846545de8180d5a020452db68f951dbefa5fb4f7f29fe00cf166",
+    ".tmp/remaining-attack-points/wild-comparison.json": "cb01cec9c9fa2efd0b8e6b6147e99418b9297bdfc8f93dca94d21df1c0f2b1ea",
+    "docs/3d/attack-attachment-family-backlog.json": "eed9f433b480e8232fe543f93338340ed484a725d4f5a77cdb52ad8328b8aae8"
+  },
+  "focused_checks": [
+    "move_attachments_3d_check.tscn: pass",
+    "move_attachment_choreography_3d_check.tscn: pass",
+    "check_calibrated_move_attachments.gd: four appearances, 1176 samples, zero errors",
+    "audit_move_attachment_learnsets.gd: 1200 forms, zero errors, zero missing origins",
+    "summarize_attack_attachment_families.py: empty backlog complete; missing-route fixture incomplete; neither claims visual completion"
+  ],
+  "forms": {
+    "avalugg-hisui": {
+      "move": "rocksmash",
+      "move_effect_review": {
+        "action": "physical_attack_2",
+        "attachment_data_sha256_at_capture": "3920228593e859444f292bde810e77591d51f68092fe0d76d80155fd128450d2",
+        "effect_sampling": "native_clock_120hz_v1",
+        "fractions": [
+          0.25,
+          0.35,
+          0.4,
+          0.43,
+          0.46,
+          0.5,
+          0.56,
+          0.65
+        ],
+        "normal_runtime_sha256": "e90f8342680e151eb5ffe56a9f3c956168f92cd5b1d7d9bae2dc59c332447d15",
+        "part": "prow",
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "8d3f37bc8091d5ceaa6c58b5881b9162628eb9544e8ff87f1b31fcdb98a86dd5",
+        "scope": "Front ice plate supplies Rock Smash contact during the closed-plate forward thrust, not the stationary foreleg. Normal/shiny and offline trainer/wild reviewed in two views at eight fractions. Exact target spacing, oversized impact art and live encounter setup are outside this origin review.",
+        "shiny_preview_sha256": "61c0ce19d3437d46cfc1d2d909b4b7c3d87eb99c93c229fd7c14352c9522460f",
+        "shiny_runtime_sha256": "78c8c8633e4f0c13562f9353f5c084e8117808a57dd05388559450a5eb91e7b7",
+        "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+        "timing": {
+          "action": "physical_attack_2",
+          "contact_yaw_degrees": 0.0,
+          "frames": 150.0,
+          "impact_frame": 64.5,
+          "launch_frame": 37.5,
+          "move_key": "rocksmash"
+        },
+        "views": 2
+      },
+      "part_reviews": {
+        "prow": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "skinned_surface_landmark_and_native_pose_visual_review",
+          "normal_runtime_sha256": "e90f8342680e151eb5ffe56a9f3c956168f92cd5b1d7d9bae2dc59c332447d15",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "91f7031b051c828269a781f2b7905190647a6c720c1489d253a8f8578354ccaa",
+          "scope": "Front ice-plate contact point follows left_feeler_a; Rock Smash uses the closed-plate forward thrust in physical_attack_2.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "prow": [
+          [
+            {
+              "bone": "left_feeler_a",
+              "offset": [
+                0.767094314098358,
+                0.0111292405053973,
+                0.000228651682846248
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      },
+      "projection_evidence": {
+        "capture_sha256": "15a05ac4c73b0656c7c8b224a4bd5e95edaee8586c317c682ce77a0a0928a9c5",
+        "landmarks": [
+          {
+            "action": "physical_attack_2",
+            "barycentric": [
+              0.545664272922291,
+              0.354223250880972,
+              0.100112476196738
+            ],
+            "column": 1.0,
+            "distance": 7.74204172839341,
+            "mesh": "pm0751_00_41/Skeleton3D/pm0751_00_41_body_01_mesh",
+            "mesh_contains": "body_01",
+            "pixel": [
+              163.0,
+              212.0
+            ],
+            "surface": 1,
+            "triangle": 329,
+            "vertex_indices": [
+              209,
+              208,
+              217
+            ],
+            "weight": 1.0
+          }
+        ],
+        "method": "ray_triangle_barycentric_skin_binding"
+      },
+      "resolved_learnset_route": {
+        "configured": true,
+        "native_action": "physical_attack_2",
+        "part": "prow",
+        "requested_action": "physical_attack_2",
+        "visual_review": "pending"
+      }
+    },
+    "raichu-alola": {
+      "move": "doublekick",
+      "move_effect_review": {
+        "action": "physical_attack_2",
+        "attachment_data_sha256_at_capture": "3920228593e859444f292bde810e77591d51f68092fe0d76d80155fd128450d2",
+        "effect_sampling": "native_clock_120hz_v1",
+        "fractions": [
+          0.25,
+          0.35,
+          0.4,
+          0.43,
+          0.46,
+          0.5,
+          0.56,
+          0.65
+        ],
+        "normal_runtime_sha256": "2c65d428103d734c65c15c48ae06aefcb26ec632e3f21e67a94680f00c47e2f6",
+        "part": "left_foot",
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "f7a4166178e11bdc86dd4137f9180ebf2a26b8b03f9f394a7b7f582daeb85694",
+        "scope": "Double Kick follows the raised left toe during physical_attack_2, not the planted right foot or tail-spin physical_attack. Existing two strike accents retained. Normal/shiny and offline trainer/wild reviewed in two views at eight fractions. Exact target spacing, oversized impact art and live encounter setup are outside this origin review.",
+        "shiny_preview_sha256": "fbb9883b2fc70e88a8a154cad9a42babcce762cab67dee6e0f81083f565b0ec4",
+        "shiny_runtime_sha256": "d948a718ee24191ec075d8c354bbe0e81b58783e2abbc7eeaee9fd54d034264d",
+        "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+        "timing": {
+          "action": "physical_attack_2",
+          "contact_yaw_degrees": 0.0,
+          "frames": 110.0,
+          "impact_frame": 47.3,
+          "launch_frame": 30.8,
+          "move_key": "doublekick"
+        },
+        "views": 2
+      },
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "limb_geometry_marker_pose_visual_review",
+          "normal_runtime_sha256": "2c65d428103d734c65c15c48ae06aefcb26ec632e3f21e67a94680f00c47e2f6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "dfd8ccc1417db50e7ca0193b818e1ddaa21ac657a88d45026629977946a9a4e6",
+          "scope": "Toe surface follows the foot-index bone. Double Kick uses left_foot with the lifted left-leg kick in physical_attack_2; right foot remains on the tail.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "limb_geometry_marker_pose_visual_review",
+          "normal_runtime_sha256": "2c65d428103d734c65c15c48ae06aefcb26ec632e3f21e67a94680f00c47e2f6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "dfd8ccc1417db50e7ca0193b818e1ddaa21ac657a88d45026629977946a9a4e6",
+          "scope": "Toe surface follows the foot-index bone. Double Kick uses left_foot with the lifted left-leg kick in physical_attack_2; right foot remains on the tail.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_index",
+              "offset": [
+                0.053362257778644576,
+                0.0007250625640154024,
+                0.005585077218711399
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_index",
+              "offset": [
+                0.05336227267980577,
+                -0.0007250625640153989,
+                0.0055851601064205
+              ],
+              "weight": 1
+            }
+          ]
+        ]
+      },
+      "resolved_learnset_route": {
+        "configured": true,
+        "native_action": "physical_attack_2",
+        "part": "left_foot",
+        "requested_action": "physical_attack_2",
+        "visual_review": "pending"
+      }
+    }
+  },
+  "limitations": [
+    "Offline actual stage checks do not certify live server encounter setup.",
+    "Review covers sampled anatomical origins and native clip/timing selection; exact target contact spacing, oversized impact decorations and continuous clearance for every animation frame are not certified.",
+    "Double Kick retains its existing two strike accents; the native left-leg kick is not newly authored as a two-kick skeletal animation.",
+    "The original 295-form cohort remains unchanged; these two routes are a separate follow-up."
+  ],
+  "schema": 1,
+  "status": "sampled_origins_and_native_action_routing_reviewed",
+  "task": "remaining-attack-points",
+  "wild_trainer_comparison": {
+    "avalugg-hisui": {
+      "metadata_equal_except_battle_kind": true,
+      "png_byte_identical": true,
+      "png_sha256": "8d3f37bc8091d5ceaa6c58b5881b9162628eb9544e8ff87f1b31fcdb98a86dd5",
+      "trainer_capture_sha256": "5f37ddf633b6db9f4aeb523752428a0ce454f74967ae190eda53715f89530c08",
+      "wild_capture_sha256": "54275af78d61def45b3bcef06073c727fa57dd238979a5f64f2ae63b28eaefeb"
+    },
+    "avalugg-hisui@shiny": {
+      "metadata_equal_except_battle_kind": true,
+      "png_byte_identical": true,
+      "png_sha256": "61c0ce19d3437d46cfc1d2d909b4b7c3d87eb99c93c229fd7c14352c9522460f",
+      "trainer_capture_sha256": "19cb3e9fc0915fff96b541b8ac1ca5a2207d1b72393f9f97f167892e85891bb4",
+      "wild_capture_sha256": "a85dfa0855e59029d51d6926af5c3294d49c81460c1d3a59fde28e69fb1194a4"
+    },
+    "raichu-alola": {
+      "metadata_equal_except_battle_kind": true,
+      "png_byte_identical": true,
+      "png_sha256": "f7a4166178e11bdc86dd4137f9180ebf2a26b8b03f9f394a7b7f582daeb85694",
+      "trainer_capture_sha256": "dffc734b84fcdc93e4da8586d69ed4ed996ab8e4ae8b68dd4a6bfe660dcbf7a8",
+      "wild_capture_sha256": "d37a8d5cf7a1c14a0da4f43ac614eb2235f4d37dd3b4213362e8b880621d1613"
+    },
+    "raichu-alola@shiny": {
+      "metadata_equal_except_battle_kind": true,
+      "png_byte_identical": true,
+      "png_sha256": "fbb9883b2fc70e88a8a154cad9a42babcce762cab67dee6e0f81083f565b0ec4",
+      "trainer_capture_sha256": "d6493df9ede68815ad8cdb4a9ba570dfcb025530e8f38d3a917bd2769852f594",
+      "wild_capture_sha256": "2939d26b2f50ea5141102797e62af1ed89cf0f2e4a52d85ce858a71980d01035"
+    }
+  }
+}

@@ -17,10 +17,12 @@ Draco Meteor profile is approved by this checkpoint.
 
 ## Remaining anatomical marker assessment
 
-The latest [catalog origin review](attack-attachment-catalog-review.md) assesses
-all 295 remaining forms and installs routes for 290 of them. It adds 337 part
-bindings and resolves 652 supported learnset routes, including 100 intentional
-body alternatives. Normal and shiny share one profile per exact form.
+The [catalog origin review](attack-attachment-catalog-review.md) assesses all
+295 forms in its original cohort. Its bulk phase installed routes for 290 forms;
+the [source repair follow-up](repaired-model-attack-points.md) resolved the other
+five. The [final contact follow-up](remaining-contact-attack-points.md) resolves
+Hisuian Avalugg/Rock Smash and Alolan Raichu/Double Kick, added outside that
+cohort. Normal and shiny share one profile per exact form.
 
 The earlier positional follow-up corrects all 37 forms in the positional queue and installs missing
 points for 14 of the 15 forms in that queue. Mega Scrafty's hands stay concealed;
@@ -30,11 +32,10 @@ and twisted-hand bindings, Togekiss's wing tips and Enamorus's tail end.
 These figures describe the earlier bounded correction batch.
 
 The [family backlog](attack-attachment-family-backlog.json) intersects supported
-presenters with learnsets across all 1,200 forms. Five forms retain an
-unconfigured anatomical route because of source-model blockers: Cramorant,
-Deoxys, Mega Hawlucha, Minior and Togedemaru. Three request a hand, four a mouth,
-and one a foot (categories overlap). Body and orb
-origins are procedural and are excluded from these missing-part counts.
+presenters with learnsets across all 1,200 forms: 30,646 supported routes, 8,335
+configured bone-bound routes and **zero missing anatomical routes**. Body and
+orb origins are procedural and excluded from missing-part counts. This is
+origin coverage, not visual certification of every move presentation.
 
 The [family routing follow-up](attack-attachment-family-routing-review.md) links
 30 already reviewed surfaces, with 37 representative effect inspections. It

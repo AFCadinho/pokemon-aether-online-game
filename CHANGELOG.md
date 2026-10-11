@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Align Hisuian Avalugg’s Rock Smash with its front ice plate and Alolan Raichu’s Double Kick with its lifted foot, using matching native attack animations for normal and shiny.
+
 - Replace Mega Hawlucha's incorrect 3D source with its own normal/shiny model and shared packs. Calibrate attack origins for Cramorant, Deoxys, Minior, Togedemaru and Mega Hawlucha; keep Hyper Beam aligned during their native attack poses.
 
 - Visit other Guild Bases through the guard, request entry to closed bases, and let members inside approve visitors. Keep guest access through the shared rooms and garden until departure to the street.

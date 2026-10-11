@@ -8217,12 +8217,20 @@
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
         }
       },
+      "move_actions": {
+        "rocksmash": "physical_attack_2"
+      },
       "move_choreography": {
         "icebeam": {
           "action": "special_attack",
           "emission_end_fraction": 0.5,
           "impact_fraction": 0.42,
           "launch_fraction": 0.33
+        },
+        "rocksmash": {
+          "action": "physical_attack_2",
+          "impact_fraction": 0.43,
+          "launch_fraction": 0.25
         }
       },
       "move_effect_reviews": {
@@ -8254,6 +8262,62 @@
             "move_key": "icebeam"
           },
           "views": 2
+        },
+        "rocksmash": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "3920228593e859444f292bde810e77591d51f68092fe0d76d80155fd128450d2",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.25,
+            0.35,
+            0.4,
+            0.43,
+            0.46,
+            0.5,
+            0.56,
+            0.65
+          ],
+          "normal_runtime_sha256": "e90f8342680e151eb5ffe56a9f3c956168f92cd5b1d7d9bae2dc59c332447d15",
+          "part": "prow",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8d3f37bc8091d5ceaa6c58b5881b9162628eb9544e8ff87f1b31fcdb98a86dd5",
+          "scope": "Front ice plate supplies Rock Smash contact during the closed-plate forward thrust, not the stationary foreleg. Normal/shiny and offline trainer/wild reviewed in two views at eight fractions. Exact target spacing, oversized impact art and live encounter setup are outside this origin review.",
+          "shiny_preview_sha256": "61c0ce19d3437d46cfc1d2d909b4b7c3d87eb99c93c229fd7c14352c9522460f",
+          "shiny_runtime_sha256": "78c8c8633e4f0c13562f9353f5c084e8117808a57dd05388559450a5eb91e7b7",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 150.0,
+            "impact_frame": 64.5,
+            "launch_frame": 37.5,
+            "move_key": "rocksmash"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "rocksmash": "prow"
+      },
+      "part_reviews": {
+        "prow": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "skinned_surface_landmark_and_native_pose_visual_review",
+          "normal_runtime_sha256": "e90f8342680e151eb5ffe56a9f3c956168f92cd5b1d7d9bae2dc59c332447d15",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "91f7031b051c828269a781f2b7905190647a6c720c1489d253a8f8578354ccaa",
+          "scope": "Front ice-plate contact point follows left_feeler_a; Rock Smash uses the closed-plate forward thrust in physical_attack_2.",
+          "side_fraction": 0.45
         }
       },
       "parts": {
@@ -8276,6 +8340,19 @@
                 0.00452331965789199
               ],
               "weight": 0.5
+            }
+          ]
+        ],
+        "prow": [
+          [
+            {
+              "bone": "left_feeler_a",
+              "offset": [
+                0.767094314098358,
+                0.0111292405053973,
+                0.000228651682846248
+              ],
+              "weight": 1.0
             }
           ]
         ]
@@ -135482,7 +135559,73 @@
       }
     },
     "raichu-alola": {
+      "move_actions": {
+        "doublekick": "physical_attack_2"
+      },
+      "move_choreography": {
+        "doublekick": {
+          "action": "physical_attack_2",
+          "impact_fraction": 0.43,
+          "launch_fraction": 0.28
+        }
+      },
+      "move_effect_reviews": {
+        "doublekick": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "3920228593e859444f292bde810e77591d51f68092fe0d76d80155fd128450d2",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.25,
+            0.35,
+            0.4,
+            0.43,
+            0.46,
+            0.5,
+            0.56,
+            0.65
+          ],
+          "normal_runtime_sha256": "2c65d428103d734c65c15c48ae06aefcb26ec632e3f21e67a94680f00c47e2f6",
+          "part": "left_foot",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f7a4166178e11bdc86dd4137f9180ebf2a26b8b03f9f394a7b7f582daeb85694",
+          "scope": "Double Kick follows the raised left toe during physical_attack_2, not the planted right foot or tail-spin physical_attack. Existing two strike accents retained. Normal/shiny and offline trainer/wild reviewed in two views at eight fractions. Exact target spacing, oversized impact art and live encounter setup are outside this origin review.",
+          "shiny_preview_sha256": "fbb9883b2fc70e88a8a154cad9a42babcce762cab67dee6e0f81083f565b0ec4",
+          "shiny_runtime_sha256": "d948a718ee24191ec075d8c354bbe0e81b58783e2abbc7eeaee9fd54d034264d",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 47.3,
+            "launch_frame": 30.8,
+            "move_key": "doublekick"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "doublekick": "left_foot"
+      },
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "limb_geometry_marker_pose_visual_review",
+          "normal_runtime_sha256": "2c65d428103d734c65c15c48ae06aefcb26ec632e3f21e67a94680f00c47e2f6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "dfd8ccc1417db50e7ca0193b818e1ddaa21ac657a88d45026629977946a9a4e6",
+          "scope": "Toe surface follows the foot-index bone. Double Kick uses left_foot with the lifted left-leg kick in physical_attack_2; right foot remains on the tail.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -135499,6 +135642,25 @@
           "normal_runtime_sha256": "2c65d428103d734c65c15c48ae06aefcb26ec632e3f21e67a94680f00c47e2f6",
           "preview_sha256": "3a5e8de667c0fe9de0e8bcf2a2466df2c4b2876badd03f37c9e8e13c4e0a476e",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "limb_geometry_marker_pose_visual_review",
+          "normal_runtime_sha256": "2c65d428103d734c65c15c48ae06aefcb26ec632e3f21e67a94680f00c47e2f6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "dfd8ccc1417db50e7ca0193b818e1ddaa21ac657a88d45026629977946a9a4e6",
+          "scope": "Toe surface follows the foot-index bone. Double Kick uses left_foot with the lifted left-leg kick in physical_attack_2; right foot remains on the tail.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -135521,6 +135683,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_index",
+              "offset": [
+                0.053362257778644576,
+                0.0007250625640154024,
+                0.005585077218711399
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -135529,6 +135704,19 @@
                 0.03589925915002821,
                 -0.001409798860549951,
                 0.00018592178821565108
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_index",
+              "offset": [
+                0.05336227267980577,
+                -0.0007250625640153989,
+                0.0055851601064205
               ],
               "weight": 1
             }
