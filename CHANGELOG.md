@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Allow Aether Band purchases for 1,000 card credits as an alternative to 1,000 Gems, with one shared purchase limit per account and permanent binding.
+
 - Add the Emerald Luchador Outfit Box to the Gift Store for 450 Gems (or 450 account-binding card credits), for both player models.
 
 - Complete the Emerald Luchador mask with a visible black-and-gold back in every walking, fishing and riding frame for both player models.

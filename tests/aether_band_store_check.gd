@@ -33,20 +33,30 @@ func _run() -> void:
 	_check(item.get("categories") == ["held-items"], "Band is in Held Items")
 	_check(IconResolver.load_icon("aether-band") != null, "Band has a Bag and held-item icon")
 	var offer := {"itemId": "aether-band", "accountUnique": true, "accountBound": true, "owned": false,
-		"voucherEligible": false, "costs": [{"currency": "gems", "amount": 1000}]}
-	store.apply_store_state({"gems": 2000}, {"items": [offer]})
+		"voucherEligible": true, "costs": [{"currency": "gems", "amount": 1000}]}
+	store.apply_store_state({"gems": 2000, "gift_voucher_balance": 2000}, {"items": [offer]})
 	store.call("_select_category", "held-items")
 	store.call("_select_product", "aether-band")
 	_check(not store.purchase_button.disabled, "First purchase is available")
-	_check(store.payment_select.is_item_disabled(1), "Band does not accept card credit")
+	_check(not store.payment_select.is_item_disabled(1), "Band accepts card credit")
 	for locale in ["en", "nl", "pt_BR", "zh_CN"]:
 		root.get_node("LocalizationManager").set_locale(locale)
 		var expected := str(root.get_node("LocalizationManager").text("ui.store.payment.untradable"))
 		_check(store.voucher_notice_label.text == expected, "Gem purchase shows untradeable notice in " + locale)
 		_check(str(store.call("_item_description", item)).length() > 20, "Band description exists in " + locale)
+	store.payment_select.select(1)
+	store.call("_refresh_purchase_state")
+	_check(store.call("_payment_currency") == "gift_voucher", "Band supports the card-credit payment selection")
+	_check(not store.purchase_button.disabled, "1000 credits can buy the band")
+	store.set_voucher_balance(999)
+	_check(store.purchase_button.disabled, "Insufficient credit blocks purchase even with enough Gems")
+	store.set_voucher_balance(2000)
 	offer["owned"] = true
-	store.apply_store_state({"gems": 2000}, {"items": [offer]})
-	_check(store.purchase_button.disabled, "Purchased or equipped band cannot be bought again")
+	store.apply_store_state({"gems": 2000, "gift_voucher_balance": 2000}, {"items": [offer]})
+	_check(store.purchase_button.disabled, "Purchased or equipped band cannot be bought again with credit")
+	store.payment_select.select(0)
+	store.call("_refresh_purchase_state")
+	_check(store.purchase_button.disabled, "Switching back to Gems does not bypass the purchase limit")
 	host.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
