@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Let Guild Base room clicks reach the furnishing editor above the regular HUD, so players can place and move furniture while catalog controls remain usable.
+
 - Keep the shared-model test collection within existing metadata limits and let repaired model collections finish without a false concurrent-update error.
 
 - Furnish both private Guild Base side rooms from shared starter storage, with reusable furniture, movable tabletop decorations, adjustable rugs and leader-granted editing rights.

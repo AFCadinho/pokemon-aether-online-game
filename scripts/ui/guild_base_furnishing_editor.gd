@@ -22,6 +22,7 @@ var last_preview: Dictionary = {}
 var camera_state: Dictionary = {}
 var rendered_revision := -1
 var enter_button: Button
+var placement_surface: Control
 var panel: PanelContainer
 var list: ItemList
 var category: OptionButton
@@ -73,8 +74,10 @@ func _button(text: String, callback: Callable) -> Button:
 
 func _build_ui() -> void:
 	var root := Control.new()
+	placement_surface = root
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.gui_input.connect(_on_placement_surface_input)
 	add_child(root)
 	enter_button = _button(_text("open"), begin_editing)
 	enter_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
@@ -249,6 +252,7 @@ func begin_editing() -> void:
 	building = true
 	apply_state(result.state)
 	panel.visible = true
+	placement_surface.mouse_filter = Control.MOUSE_FILTER_STOP
 	enter_button.visible = false
 	_capture_camera()
 	_fit_camera()
@@ -265,6 +269,7 @@ func finish_editing() -> void:
 	lease_timer.stop()
 	_clear_selection()
 	panel.visible = false
+	placement_surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	enter_button.visible = bool(state.get("canEdit", false))
 	_restore_camera()
 	GameState.release_overworld_input_lock(INPUT_LOCK)
@@ -445,6 +450,17 @@ func _candidate_error(value: Dictionary) -> String:
 				if Catalog.footprint(value).has_point(Vector2i((room.to_local(position)/32).floor())):
 					return "player_occupied"
 	return ""
+
+func _on_placement_surface_input(event: InputEvent) -> void:
+	# The ordinary HUD consumes clicks before _unhandled_input. While editing,
+	# this surface receives room clicks above that HUD; panel controls still
+	# handle their own input without placing furniture behind the catalog.
+	if event is InputEventMouseButton or event is InputEventScreenTouch:
+		var viewport_event: InputEvent = event.duplicate()
+		viewport_event.position = placement_surface.get_global_transform_with_canvas() * event.position
+		_unhandled_input(viewport_event)
+	else:
+		_unhandled_input(event)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not building or busy:

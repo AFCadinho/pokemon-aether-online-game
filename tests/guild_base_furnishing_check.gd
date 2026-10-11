@@ -11,6 +11,7 @@ class ServiceStub extends Node:
 	var released := 0
 	var renew_fails := false
 	var save_fails := false
+	var saves := 0
 	var updates: Array = []
 	func base_furniture(_room: String) -> Dictionary:
 		return {"success": true, "state": state.duplicate(true)}
@@ -23,6 +24,7 @@ class ServiceStub extends Node:
 			return {"success": false, "status": 409, "detail": {"code": "guild_base_furniture_lease_expired"}}
 		return {"success": true, "state": state.merged({"leaseToken": "test-lease"})}
 	func save_base_furniture(_room: String, token: String, revision: int, items: Array) -> Dictionary:
+		saves += 1
 		assert(token == "test-lease" and revision == state.revision)
 		if save_fails:
 			return {"success": false, "status": 409, "detail": {"code": "guild_base_furniture_revision_conflict"}}
@@ -135,6 +137,7 @@ func _run() -> void:
 	await editor.begin_editing()
 	_check(editor.building and service.acquired == 1 and world.synced, "entering first locks movement and saves the player's position before acquiring a lease")
 	_check(editor.panel.visible and camera.zoom.x != 1, "editing opens the catalog and fits the room camera")
+	var hud: CanvasLayer = await _check_pointer_input(editor, map, service)
 	root.size_changed.emit()
 	camera.zoom = Vector2(9, 9)  # A later Player viewport listener reapplies its baseline.
 	await process_frame
@@ -167,8 +170,17 @@ func _run() -> void:
 	_check(checkboxes.get_child_count() == 2 and checkboxes.get_child(0).disabled, "rights window lists guild members and locks the leader's right")
 	await editor._change_right({"userId": 2}, true, checkboxes.get_child(1))
 	_check(service.updates == [[2, true]], "only the selected member's explicit decorating right changes")
-	await editor.finish_editing()
+	editor.rights_window.close_requested.emit()
+	await process_frame
+	var controls: Node = editor.panel.get_child(0)
+	var done_button: Button = controls.get_child(controls.get_child_count() - 1)
+	_click(done_button.get_global_rect().get_center())
+	await process_frame
 	_check(not editor.building and service.released == 1 and not game.is_overworld_input_locked() and camera.zoom == Vector2.ONE, "leaving releases the lease, input lock and camera override")
+	var hud_clicks: Array = []
+	hud.get_child(0).gui_input.connect(func(_event: InputEvent): hud_clicks.append(true))
+	_click(Vector2(40, 140))
+	_check(not hud_clicks.is_empty(), "Done returns normal mouse input to the underlying HUD")
 	await editor.begin_editing()
 	service.renew_fails = true
 	await editor._renew_lease()
@@ -192,6 +204,7 @@ func _run() -> void:
 		await editor.finish_editing()
 	game.current_map = null
 	world.free()
+	hud.free()
 	service.free()
 	await process_frame
 	print("guild_base_furnishing_check: ", "FAIL" if failed else "PASS")
@@ -201,3 +214,81 @@ func _check(value: bool, message: String) -> void:
 	if not value:
 		failed = true
 		push_error(message)
+
+func _click(position: Vector2) -> void:
+	var event := InputEventMouseButton.new()
+	event.button_index = MOUSE_BUTTON_LEFT
+	event.position = position
+	event.pressed = true
+	root.push_input(event, true)
+	event.pressed = false
+	root.push_input(event, true)
+
+func _check_pointer_input(editor: Node, map: Node2D, service: ServiceStub) -> CanvasLayer:
+	# Use the actual HUD's full-screen Control, which consumes world clicks.
+	# Its other children and bootstrap script are irrelevant to mouse routing.
+	var overlay: CanvasLayer = load("res://scenes/interface/ui_overlay.tscn").instantiate()
+	var hud_control: Control = overlay.get_node("Control")
+	overlay.remove_child(hud_control)
+	for child: Node in hud_control.get_children():
+		child.free()
+	var hud := CanvasLayer.new()
+	hud.layer = overlay.layer
+	overlay.free()
+	root.add_child(hud)
+	hud.add_child(hud_control)
+	await process_frame
+	_check(hud_control.mouse_filter == Control.MOUSE_FILTER_STOP, "regression fixture retains the real HUD's click-catching surface")
+	editor._catalog_selected(0)
+	var new_id: String = editor.pending_id
+	var before := service.saves
+	var point: Vector2 = root.canvas_transform * map.to_global(Vector2(304, 336))
+	_click(root.canvas_transform * map.to_global(Vector2(592, 272)))
+	_check(service.saves == before, "a real viewport click cannot place furniture in the reserved entrance")
+	_click(point)
+	await process_frame
+	_check(service.saves == before + 1 and not editor._placement_by_id(new_id).is_empty(), "a real viewport click places exactly one piece despite the HUD")
+	if editor._placement_by_id(new_id).is_empty():
+		editor._clear_selection()
+		return hud
+	editor._start_selecting()
+	_click(root.canvas_transform * map.to_global(Vector2(304, 300)))
+	_check(editor.selected_instance == new_id, "a real viewport click selects an existing piece")
+	_click(root.canvas_transform * map.to_global(Vector2(400, 336)))
+	await process_frame
+	_check(int(editor._placement_by_id(new_id).x) == 12 and service.saves == before + 2, "a real viewport click moves the selected piece")
+	editor._start_selecting()
+	_click(root.canvas_transform * map.to_global(Vector2(400, 300)))
+	await editor._take_back()
+	editor._catalog_selected(0)
+	before = service.saves
+	_click(editor.panel.get_global_rect().position + Vector2(15, 200))
+	_check(service.saves == before, "clicking the catalog panel never places furniture behind it")
+	var modal_layer := CanvasLayer.new()
+	modal_layer.layer = editor.layer + 1
+	var blocker := Control.new()
+	blocker.position = point - Vector2(40, 40)
+	blocker.size = Vector2(80, 80)
+	blocker.mouse_filter = Control.MOUSE_FILTER_STOP
+	root.add_child(modal_layer)
+	modal_layer.add_child(blocker)
+	await process_frame
+	_click(point)
+	_check(service.saves == before, "another modal window blocks placement through it")
+	modal_layer.free()
+	await process_frame
+	var touch := InputEventScreenTouch.new()
+	touch.position = point
+	touch.pressed = true
+	new_id = editor.pending_id
+	root.push_input(touch, true)
+	touch.pressed = false
+	root.push_input(touch, true)
+	await process_frame
+	_check(service.saves == before + 1 and not editor._placement_by_id(new_id).is_empty(), "a real viewport touch places exactly one piece")
+	if not editor._placement_by_id(new_id).is_empty():
+		editor._start_selecting()
+		_click(root.canvas_transform * map.to_global(Vector2(304, 300)))
+		await editor._take_back()
+	editor._clear_selection()
+	return hud
