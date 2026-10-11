@@ -1,4 +1,9 @@
 {
+  "ui.store.category.held-items.label": "Held Items",
+  "ui.store.category.held-items.description": "Uitrusting voor de Pokémon die het item draagt.",
+  "ui.store.category.held-items.promise": "POKÉMONUITRUSTING",
+  "ui.store.already_purchased": "Al gekocht",
+  "ui.store.once_per_account": "Dit item kun je maar één keer per account kopen.",
   "ui.guild_base.rooms.floor_search": "Zoek verdieping of speler…",
   "ui.guild_base.rooms.no_floors": "Geen verdiepingen gevonden.",
   "ui.guild_base.rooms.travel": "Ga",

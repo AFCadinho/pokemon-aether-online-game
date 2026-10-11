@@ -1,4 +1,8 @@
 {
+  "aether-band": {
+    "name": "Aether Band",
+    "shortDesc": "Held: Restores 1 PP to each of the holder's moves after winning a wild Pokémon battle. Untradeable. One purchase per account."
+  },
   "alola-stone": {
     "name": "Alola Stone",
     "shortDesc": "Evolves Pikachu, Exeggcute into their Alola evolution. Consumed on successful use."
