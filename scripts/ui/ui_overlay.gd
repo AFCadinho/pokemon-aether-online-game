@@ -26653,6 +26653,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"voucherBalance": item.get("voucherBalance", null),
 			"shortDesc": str(item.get("shortDesc", item.get("description", ""))).strip_edges(),
 			"isHoldable": false if _is_fossil_item_id(item_id) else bool(item.get("isHoldable", false)),
+			"evolutionConsumesItem": bool(item.get("evolutionConsumesItem", false)),
 			"quantity": max(int(item.get("quantity", 1)), 1),
 			"machineMove": str(item.get("machineMove", "")).strip_edges(),
 			"machineKind": str(item.get("machineKind", "")).strip_edges().to_lower(),

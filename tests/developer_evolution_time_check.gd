@@ -108,6 +108,16 @@ func _run() -> void:
 	_check(not inventory._pokemon_item_use_request_payload("peat-block", 1).has("debugTimeHour"), "ordinary item use cannot forward a leftover developer clock")
 	var item_preview = load("res://scripts/ui/bag_item_effect_preview.gd")
 	var timed_item := {"effects": [{"type": "evolve_item", "time_of_day": "night"}]}
+	# Paired-slot runs exercise the real backend definition instead of a hand-written fixture.
+	for argument: String in OS.get_cmdline_user_args():
+		if not argument.begins_with("--item-effects="):
+			continue
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(argument.trim_prefix("--item-effects=")))
+		_check(parsed is Dictionary, "paired backend item effects are valid JSON")
+		if parsed is Dictionary:
+			var definitions: Dictionary = parsed.get("items", {})
+			timed_item = definitions.get("peat-block", {})
+			_check(not timed_item.is_empty(), "paired backend registers Peat Block")
 	for hour: int in [0, 4, 21, 23]:
 		_check(item_preview.unmet_evolution_time(timed_item, hour) == "", "Peat Block preview allows night hour %s" % hour)
 	for hour: int in [5, 12, 20]:
@@ -123,7 +133,7 @@ func _run() -> void:
 	_check(overlay._bag_item_use_preview_for_pokemon(overlay.fixture_pokemon, "peat-block", 1).get("canApply", false), "same Bag compatibility becomes usable during game nighttime")
 	overlay.bag_item_use_pending_item.clear()
 	var icon_resolver = load("res://scripts/services/item_icon_resolver.gd")
-	for item_id: String in ["stick", "leaders-crest", "peat-block", "strawberry-sweet"]:
+	for item_id: String in ["stick", "leaders-crest", "peat-block", "strawberry-sweet", "black-augurite", "scroll-of-darkness", "scroll-of-waters"]:
 		var icon: Texture2D = icon_resolver.load_icon(item_id)
 		_check(icon != null and not icon.resource_path.ends_with("000.png"), "%s has its own existing item sprite" % item_id)
 		for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
