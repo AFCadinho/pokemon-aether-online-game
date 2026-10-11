@@ -6,7 +6,13 @@ func _run() -> void:
 	var fixture: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(OS.get_environment("VISIBILITY_SOURCE_FIXTURE")))
 	var checked:=0
 	for entry: Dictionary in fixture.entries:
-		if not Visibility.matches(entry.identity,entry.source_sha256):continue
+		assert(Visibility.matches(entry.identity,entry.source_sha256))
+		var registry: Dictionary = Visibility._registry(entry.identity)
+		var model: Dictionary = registry.models[entry.identity]
+		var clips: Dictionary = registry.profiles[model.profile].clips if model.has("profile") else registry.clips
+		var expected := {}
+		for track: Dictionary in clips.idle.tracks:
+			expected[track.mesh] = track.keys[0][1]
 		for candidate in [false,true]:
 			var path: String=entry.candidate_path if candidate else entry.source_path
 			var digest: String=entry.candidate_sha256 if candidate else entry.source_sha256
@@ -30,7 +36,7 @@ func _run() -> void:
 				var source:=pb.get_animation(action)
 				var corrected:=pa.get_animation(action)
 				assert(source.length==corrected.length and source.loop_mode==corrected.loop_mode)
-				assert(source.get_track_count()+6==corrected.get_track_count())
+				assert(source.get_track_count()+expected.size()==corrected.get_track_count())
 				for track in source.get_track_count():
 					assert(source.track_get_path(track)==corrected.track_get_path(track))
 					assert(source.track_get_type(track)==corrected.track_get_type(track))
@@ -45,24 +51,28 @@ func _run() -> void:
 					var mb:=b.find_children("*","MeshInstance3D",true,false)
 					for i in ma.size():
 						assert(ma[i].mesh==mb[i].mesh and ma[i].skin==mb[i].skin)
-						assert(ma[i].visible==(ma[i].name!="pm1089_00_00_wing_b_mesh"))
+						assert(ma[i].visible==expected[str(ma[i].name)])
 						assert(mb[i].visible)
 					var sa: Skeleton3D=a.find_child("Skeleton3D",true,false)
 					var sb: Skeleton3D=b.find_child("Skeleton3D",true,false)
 					for bone in sa.get_bone_count():assert(sa.get_bone_pose(bone)==sb.get_bone_pose(bone))
+			pose(a,"RESET",0.0)
+			for mesh in a.find_children("*","MeshInstance3D",true,false):
+				assert(mesh.visible==expected[str(mesh.name)])
 			assert(Components.fingerprint(packed)==fingerprint)
 			var bad: Node3D=packed.instantiate()
 			root.add_child(bad)
 			var bad_player: AnimationPlayer=bad.find_child("AnimationPlayer",true,false)
 			var bad_library:=bad_player.get_animation_library("")
-			bad.find_child("pm1089_00_00_wing_b_mesh",true,false).name="UnexpectedMesh"
+			bad.find_child(str(expected.keys()[0]),true,false).name="UnexpectedMesh"
 			assert(not Visibility.apply(bad,entry.identity,digest))
 			assert(bad_player.get_animation_library("")==bad_library and not bad.has_meta(Visibility.META))
 			await process_frame
-			await RenderingServer.frame_post_draw
+			RenderingServer.force_draw(false)
 			for actor in [a,b,bad]:actor.queue_free()
 			for frame in 3:await process_frame
 			checked+=1
-	assert(checked==4)
+			print("VISIBILITY_VARIANT_OK ",entry.identity," candidate=",candidate)
+	assert(checked==fixture.entries.size()*2 and checked>0)
 	print("REVIEWED_SOURCE_VISIBILITY_OK variants=",checked)
 	quit()

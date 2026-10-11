@@ -1,0 +1,2657 @@
+{
+  "schema": 1,
+  "policy": "reviewed_visible_geometry_reconstruction_v1",
+  "provenance": "Original Blender sources contain no visibility curves or values. These are explicit reviewed selections for the current base identities, not recovered native visibility keyframes.",
+  "models": {
+    "cramorant": {
+      "source_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
+      "glb_sha256": "caaff81c16370b6dc871d97164e9a05947611d45219f6872ca5e44a6b2074744",
+      "profile": "cramorant",
+      "container_sha256": "3eb47e83f08df090dfdf350a8a82dc62802b81260c753071eae5bd5527f62afd"
+    },
+    "cramorant@shiny": {
+      "source_sha256": "edfdb8605972a0980945c2c656c489f9b92070be48bf92fd4ba4e6b8ab4ad81e",
+      "glb_sha256": "418614ba3bdcccbe50268e43aefcf3b41ff191f5b6fe65b95f16bd92e9a8d7ef",
+      "profile": "cramorant",
+      "container_sha256": "71c72e3f8e5b4303339454c20b5e71cf09675ab7d9adb50a61675e25c4eb4021"
+    },
+    "deoxys": {
+      "source_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+      "glb_sha256": "89f533307ed4b798055016916d99fdae51a4621870430d49e16506997c42b6e2",
+      "profile": "deoxys",
+      "container_sha256": "19e18f58ffb10bddb05be10048446648f32b68b547203d48a7ecaf83a1119daf"
+    },
+    "deoxys@shiny": {
+      "source_sha256": "f199afea834e82396f457ce09d4c3ced365a9a26b1c185210d45d1747bf5ae8c",
+      "glb_sha256": "aee9f8b4fed259e7237e9f9704f2a0e6ff045eb65fb51d3802763a6314a693d9",
+      "profile": "deoxys",
+      "container_sha256": "cefd743ff7de383f7c657a4ad7fd54574df9e14cdbed550f8ed224fb2bb3a338"
+    },
+    "minior": {
+      "source_sha256": "af0e49e0463d05f75c37a4259de45a603e2a7e6bb309286f60f22eacf05aeb94",
+      "glb_sha256": "4f65762a4d8d1a89811cdf2453726dfcb916164710aa9898f119b383666589a3",
+      "profile": "minior",
+      "container_sha256": "5c797921ce4e5a87f227e0f8303c54c1a97ce23b6b2ddd87faaeb075383ad3c4"
+    },
+    "minior@shiny": {
+      "source_sha256": "6d640abbafaa4ec91f159958940baa9bdeb5b7f7753b0053eacedb2eb233ace9",
+      "glb_sha256": "8352b4ab00dd8a301c1d8480538ecc20d0751370438bf76ce9318182c77b5602",
+      "profile": "minior",
+      "container_sha256": "9544d27d0e112e10bed91aae1358500ac0121f779a68032abaef5d2e8017b146"
+    },
+    "togedemaru": {
+      "source_sha256": "2f317420982aefbfd2bbe3a0d88bdb81ad981ba48c7ab943f632812a96133b31",
+      "glb_sha256": "e488fe461dd0c90071e290d46a3983008da3772d9d93e6fefd520bfdbb5ed910",
+      "profile": "togedemaru",
+      "container_sha256": "57416467ec506423e5d92ff6fd886b0003c4c6e1e3e9e309a1d3f54f6e1da261"
+    },
+    "togedemaru@shiny": {
+      "source_sha256": "d2885df3708251464388bb533fa1b073641366bbf18cd8f7af522e0edadd54e1",
+      "glb_sha256": "ead76d499e522292c9134e35b3db5566f1e79438cde63a8d4850df053a3b800c",
+      "profile": "togedemaru",
+      "container_sha256": "f7f87b77f7e05a8dbb12d8e114ef3e9bbaf26aa155ca16bd6ec5cf5db86cb0a1"
+    }
+  },
+  "profiles": {
+    "cramorant": {
+      "clips": {
+        "damage": {
+          "duration": 0.666666686534882,
+          "loop": false,
+          "source_sha256": "8eb44902446d0e22dd42bdb55b3d5940ab7fbe7f2429bff4655847d55814546f",
+          "tracks": [
+            {
+              "mesh": "pm0917_11_00_apron_mesh",
+              "source_target": "pm0917_11_00_apron_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_body_mesh",
+              "source_target": "pm0917_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_eye_mesh",
+              "source_target": "pm0917_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_head_mesh",
+              "source_target": "pm0917_11_00_head_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_a_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_b_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachubody_mesh",
+              "source_target": "pm0917_11_00_pikachubody_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachusippo_mesh",
+              "source_target": "pm0917_11_00_pikachusippo_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "loop": true,
+          "source_sha256": "8eb44902446d0e22dd42bdb55b3d5940ab7fbe7f2429bff4655847d55814546f",
+          "tracks": [
+            {
+              "mesh": "pm0917_11_00_apron_mesh",
+              "source_target": "pm0917_11_00_apron_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_body_mesh",
+              "source_target": "pm0917_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_eye_mesh",
+              "source_target": "pm0917_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_head_mesh",
+              "source_target": "pm0917_11_00_head_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_a_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_b_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachubody_mesh",
+              "source_target": "pm0917_11_00_pikachubody_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachusippo_mesh",
+              "source_target": "pm0917_11_00_pikachusippo_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "faint_start": {
+          "duration": 1.66666662693024,
+          "loop": false,
+          "source_sha256": "8eb44902446d0e22dd42bdb55b3d5940ab7fbe7f2429bff4655847d55814546f",
+          "tracks": [
+            {
+              "mesh": "pm0917_11_00_apron_mesh",
+              "source_target": "pm0917_11_00_apron_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_body_mesh",
+              "source_target": "pm0917_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_eye_mesh",
+              "source_target": "pm0917_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_head_mesh",
+              "source_target": "pm0917_11_00_head_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_a_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_b_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachubody_mesh",
+              "source_target": "pm0917_11_00_pikachubody_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachusippo_mesh",
+              "source_target": "pm0917_11_00_pikachusippo_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "idle": {
+          "duration": 1.33333337306976,
+          "loop": true,
+          "source_sha256": "8eb44902446d0e22dd42bdb55b3d5940ab7fbe7f2429bff4655847d55814546f",
+          "tracks": [
+            {
+              "mesh": "pm0917_11_00_apron_mesh",
+              "source_target": "pm0917_11_00_apron_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_body_mesh",
+              "source_target": "pm0917_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_eye_mesh",
+              "source_target": "pm0917_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_head_mesh",
+              "source_target": "pm0917_11_00_head_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_a_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_b_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachubody_mesh",
+              "source_target": "pm0917_11_00_pikachubody_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachusippo_mesh",
+              "source_target": "pm0917_11_00_pikachusippo_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "physical_attack": {
+          "duration": 1.5,
+          "loop": false,
+          "source_sha256": "8eb44902446d0e22dd42bdb55b3d5940ab7fbe7f2429bff4655847d55814546f",
+          "tracks": [
+            {
+              "mesh": "pm0917_11_00_apron_mesh",
+              "source_target": "pm0917_11_00_apron_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_body_mesh",
+              "source_target": "pm0917_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_eye_mesh",
+              "source_target": "pm0917_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_head_mesh",
+              "source_target": "pm0917_11_00_head_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_a_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_b_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachubody_mesh",
+              "source_target": "pm0917_11_00_pikachubody_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachusippo_mesh",
+              "source_target": "pm0917_11_00_pikachusippo_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true,
+          "source_sha256": "8eb44902446d0e22dd42bdb55b3d5940ab7fbe7f2429bff4655847d55814546f",
+          "tracks": [
+            {
+              "mesh": "pm0917_11_00_apron_mesh",
+              "source_target": "pm0917_11_00_apron_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_body_mesh",
+              "source_target": "pm0917_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_eye_mesh",
+              "source_target": "pm0917_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_head_mesh",
+              "source_target": "pm0917_11_00_head_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_a_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_b_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachubody_mesh",
+              "source_target": "pm0917_11_00_pikachubody_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachusippo_mesh",
+              "source_target": "pm0917_11_00_pikachusippo_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "special_attack": {
+          "duration": 2.29999995231628,
+          "loop": false,
+          "source_sha256": "8eb44902446d0e22dd42bdb55b3d5940ab7fbe7f2429bff4655847d55814546f",
+          "tracks": [
+            {
+              "mesh": "pm0917_11_00_apron_mesh",
+              "source_target": "pm0917_11_00_apron_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_body_mesh",
+              "source_target": "pm0917_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_eye_mesh",
+              "source_target": "pm0917_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_head_mesh",
+              "source_target": "pm0917_11_00_head_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_a_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_kawamasu1body_b_mesh",
+              "source_target": "pm0917_11_00_kawamasu1body_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachubody_mesh",
+              "source_target": "pm0917_11_00_pikachubody_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0917_11_00_pikachusippo_mesh",
+              "source_target": "pm0917_11_00_pikachusippo_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "decision": "Base Cramorant excludes both fish meshes and both swallowed Pikachu meshes. All seven native clips inspected.",
+      "source_blend_sha256": "8eb44902446d0e22dd42bdb55b3d5940ab7fbe7f2429bff4655847d55814546f"
+    },
+    "deoxys": {
+      "clips": {
+        "damage": {
+          "duration": 1.70833337306976,
+          "loop": false,
+          "source_sha256": "94e7df8540c5c1ccd7a532857f7f4306f17f009cbfec0c66333d3839ba9abfbe",
+          "tracks": [
+            {
+              "mesh": "pm0386_11_00_arm1_mesh",
+              "source_target": "pm0386_11_00_arm1_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_arm2_mesh",
+              "source_target": "pm0386_11_00_arm2_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_body_mesh",
+              "source_target": "pm0386_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_eye_mesh",
+              "source_target": "pm0386_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_foot_mesh",
+              "source_target": "pm0386_11_00_foot_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_jewel_mesh",
+              "source_target": "pm0386_11_00_jewel_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_sphere_mesh",
+              "source_target": "pm0386_11_00_sphere_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "faint_loop": {
+          "duration": 5.04166650772095,
+          "loop": true,
+          "source_sha256": "94e7df8540c5c1ccd7a532857f7f4306f17f009cbfec0c66333d3839ba9abfbe",
+          "tracks": [
+            {
+              "mesh": "pm0386_11_00_arm1_mesh",
+              "source_target": "pm0386_11_00_arm1_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_arm2_mesh",
+              "source_target": "pm0386_11_00_arm2_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_body_mesh",
+              "source_target": "pm0386_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_eye_mesh",
+              "source_target": "pm0386_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_foot_mesh",
+              "source_target": "pm0386_11_00_foot_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_jewel_mesh",
+              "source_target": "pm0386_11_00_jewel_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_sphere_mesh",
+              "source_target": "pm0386_11_00_sphere_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "faint_start": {
+          "duration": 4.20833349227905,
+          "loop": false,
+          "source_sha256": "94e7df8540c5c1ccd7a532857f7f4306f17f009cbfec0c66333d3839ba9abfbe",
+          "tracks": [
+            {
+              "mesh": "pm0386_11_00_arm1_mesh",
+              "source_target": "pm0386_11_00_arm1_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_arm2_mesh",
+              "source_target": "pm0386_11_00_arm2_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_body_mesh",
+              "source_target": "pm0386_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_eye_mesh",
+              "source_target": "pm0386_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_foot_mesh",
+              "source_target": "pm0386_11_00_foot_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_jewel_mesh",
+              "source_target": "pm0386_11_00_jewel_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_sphere_mesh",
+              "source_target": "pm0386_11_00_sphere_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "idle": {
+          "duration": 5.04166650772095,
+          "loop": true,
+          "source_sha256": "94e7df8540c5c1ccd7a532857f7f4306f17f009cbfec0c66333d3839ba9abfbe",
+          "tracks": [
+            {
+              "mesh": "pm0386_11_00_arm1_mesh",
+              "source_target": "pm0386_11_00_arm1_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_arm2_mesh",
+              "source_target": "pm0386_11_00_arm2_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_body_mesh",
+              "source_target": "pm0386_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_eye_mesh",
+              "source_target": "pm0386_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_foot_mesh",
+              "source_target": "pm0386_11_00_foot_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_jewel_mesh",
+              "source_target": "pm0386_11_00_jewel_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_sphere_mesh",
+              "source_target": "pm0386_11_00_sphere_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "physical_attack": {
+          "duration": 3.79166674613953,
+          "loop": false,
+          "source_sha256": "94e7df8540c5c1ccd7a532857f7f4306f17f009cbfec0c66333d3839ba9abfbe",
+          "tracks": [
+            {
+              "mesh": "pm0386_11_00_arm1_mesh",
+              "source_target": "pm0386_11_00_arm1_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_arm2_mesh",
+              "source_target": "pm0386_11_00_arm2_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_body_mesh",
+              "source_target": "pm0386_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_eye_mesh",
+              "source_target": "pm0386_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_foot_mesh",
+              "source_target": "pm0386_11_00_foot_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_jewel_mesh",
+              "source_target": "pm0386_11_00_jewel_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_sphere_mesh",
+              "source_target": "pm0386_11_00_sphere_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "sleep": {
+          "duration": 5.04166650772095,
+          "loop": true,
+          "source_sha256": "94e7df8540c5c1ccd7a532857f7f4306f17f009cbfec0c66333d3839ba9abfbe",
+          "tracks": [
+            {
+              "mesh": "pm0386_11_00_arm1_mesh",
+              "source_target": "pm0386_11_00_arm1_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_arm2_mesh",
+              "source_target": "pm0386_11_00_arm2_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_body_mesh",
+              "source_target": "pm0386_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_eye_mesh",
+              "source_target": "pm0386_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_foot_mesh",
+              "source_target": "pm0386_11_00_foot_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_jewel_mesh",
+              "source_target": "pm0386_11_00_jewel_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_sphere_mesh",
+              "source_target": "pm0386_11_00_sphere_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "special_attack": {
+          "duration": 5.79166650772095,
+          "loop": false,
+          "source_sha256": "94e7df8540c5c1ccd7a532857f7f4306f17f009cbfec0c66333d3839ba9abfbe",
+          "tracks": [
+            {
+              "mesh": "pm0386_11_00_arm1_mesh",
+              "source_target": "pm0386_11_00_arm1_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_arm2_mesh",
+              "source_target": "pm0386_11_00_arm2_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_body_mesh",
+              "source_target": "pm0386_11_00_body_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_eye_mesh",
+              "source_target": "pm0386_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_foot_mesh",
+              "source_target": "pm0386_11_00_foot_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_jewel_mesh",
+              "source_target": "pm0386_11_00_jewel_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0386_11_00_sphere_mesh",
+              "source_target": "pm0386_11_00_sphere_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "decision": "Normal Deoxys uses animated paired tentacles (arm2); alternate humanoid hands and transient sphere are excluded. All seven native clips inspected.",
+      "source_blend_sha256": "94e7df8540c5c1ccd7a532857f7f4306f17f009cbfec0c66333d3839ba9abfbe"
+    },
+    "minior": {
+      "clips": {
+        "damage": {
+          "duration": 0.666666686534882,
+          "loop": false,
+          "source_sha256": "d486a9883e4a48f75d481094b61f3ff7ebdce29df790c322b35491fa0f30c6a9",
+          "tracks": [
+            {
+              "mesh": "pm0824_11_00_core_mesh",
+              "source_target": "pm0824_11_00_core_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_eye_mesh",
+              "source_target": "pm0824_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_a_mesh",
+              "source_target": "pm0824_11_00_feeler_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_b_mesh",
+              "source_target": "pm0824_11_00_feeler_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_c_mesh",
+              "source_target": "pm0824_11_00_feeler_c_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_d_mesh",
+              "source_target": "pm0824_11_00_feeler_d_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_e_mesh",
+              "source_target": "pm0824_11_00_feeler_e_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_f_mesh",
+              "source_target": "pm0824_11_00_feeler_f_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_g_mesh",
+              "source_target": "pm0824_11_00_feeler_g_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_h_mesh",
+              "source_target": "pm0824_11_00_feeler_h_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_mouth_mesh",
+              "source_target": "pm0824_11_00_mouth_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_a_mesh",
+              "source_target": "pm0824_11_00_shell_left_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_b_mesh",
+              "source_target": "pm0824_11_00_shell_left_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_a_mesh",
+              "source_target": "pm0824_11_00_shell_right_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_b_mesh",
+              "source_target": "pm0824_11_00_shell_right_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            }
+          ]
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "loop": true,
+          "source_sha256": "d486a9883e4a48f75d481094b61f3ff7ebdce29df790c322b35491fa0f30c6a9",
+          "tracks": [
+            {
+              "mesh": "pm0824_11_00_core_mesh",
+              "source_target": "pm0824_11_00_core_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_eye_mesh",
+              "source_target": "pm0824_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_a_mesh",
+              "source_target": "pm0824_11_00_feeler_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_b_mesh",
+              "source_target": "pm0824_11_00_feeler_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_c_mesh",
+              "source_target": "pm0824_11_00_feeler_c_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_d_mesh",
+              "source_target": "pm0824_11_00_feeler_d_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_e_mesh",
+              "source_target": "pm0824_11_00_feeler_e_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_f_mesh",
+              "source_target": "pm0824_11_00_feeler_f_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_g_mesh",
+              "source_target": "pm0824_11_00_feeler_g_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_h_mesh",
+              "source_target": "pm0824_11_00_feeler_h_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_mouth_mesh",
+              "source_target": "pm0824_11_00_mouth_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_a_mesh",
+              "source_target": "pm0824_11_00_shell_left_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_b_mesh",
+              "source_target": "pm0824_11_00_shell_left_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_a_mesh",
+              "source_target": "pm0824_11_00_shell_right_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_b_mesh",
+              "source_target": "pm0824_11_00_shell_right_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            }
+          ]
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "loop": false,
+          "source_sha256": "d486a9883e4a48f75d481094b61f3ff7ebdce29df790c322b35491fa0f30c6a9",
+          "tracks": [
+            {
+              "mesh": "pm0824_11_00_core_mesh",
+              "source_target": "pm0824_11_00_core_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_eye_mesh",
+              "source_target": "pm0824_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_a_mesh",
+              "source_target": "pm0824_11_00_feeler_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_b_mesh",
+              "source_target": "pm0824_11_00_feeler_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_c_mesh",
+              "source_target": "pm0824_11_00_feeler_c_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_d_mesh",
+              "source_target": "pm0824_11_00_feeler_d_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_e_mesh",
+              "source_target": "pm0824_11_00_feeler_e_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_f_mesh",
+              "source_target": "pm0824_11_00_feeler_f_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_g_mesh",
+              "source_target": "pm0824_11_00_feeler_g_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_h_mesh",
+              "source_target": "pm0824_11_00_feeler_h_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_mouth_mesh",
+              "source_target": "pm0824_11_00_mouth_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_a_mesh",
+              "source_target": "pm0824_11_00_shell_left_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_b_mesh",
+              "source_target": "pm0824_11_00_shell_left_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_a_mesh",
+              "source_target": "pm0824_11_00_shell_right_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_b_mesh",
+              "source_target": "pm0824_11_00_shell_right_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            }
+          ]
+        },
+        "idle": {
+          "duration": 4.16666650772095,
+          "loop": true,
+          "source_sha256": "d486a9883e4a48f75d481094b61f3ff7ebdce29df790c322b35491fa0f30c6a9",
+          "tracks": [
+            {
+              "mesh": "pm0824_11_00_core_mesh",
+              "source_target": "pm0824_11_00_core_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_eye_mesh",
+              "source_target": "pm0824_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_a_mesh",
+              "source_target": "pm0824_11_00_feeler_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_b_mesh",
+              "source_target": "pm0824_11_00_feeler_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_c_mesh",
+              "source_target": "pm0824_11_00_feeler_c_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_d_mesh",
+              "source_target": "pm0824_11_00_feeler_d_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_e_mesh",
+              "source_target": "pm0824_11_00_feeler_e_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_f_mesh",
+              "source_target": "pm0824_11_00_feeler_f_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_g_mesh",
+              "source_target": "pm0824_11_00_feeler_g_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_h_mesh",
+              "source_target": "pm0824_11_00_feeler_h_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_mouth_mesh",
+              "source_target": "pm0824_11_00_mouth_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_a_mesh",
+              "source_target": "pm0824_11_00_shell_left_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_b_mesh",
+              "source_target": "pm0824_11_00_shell_left_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_a_mesh",
+              "source_target": "pm0824_11_00_shell_right_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_b_mesh",
+              "source_target": "pm0824_11_00_shell_right_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            }
+          ]
+        },
+        "physical_attack": {
+          "duration": 2.16666674613953,
+          "loop": false,
+          "source_sha256": "d486a9883e4a48f75d481094b61f3ff7ebdce29df790c322b35491fa0f30c6a9",
+          "tracks": [
+            {
+              "mesh": "pm0824_11_00_core_mesh",
+              "source_target": "pm0824_11_00_core_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_eye_mesh",
+              "source_target": "pm0824_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_a_mesh",
+              "source_target": "pm0824_11_00_feeler_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_b_mesh",
+              "source_target": "pm0824_11_00_feeler_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_c_mesh",
+              "source_target": "pm0824_11_00_feeler_c_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_d_mesh",
+              "source_target": "pm0824_11_00_feeler_d_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_e_mesh",
+              "source_target": "pm0824_11_00_feeler_e_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_f_mesh",
+              "source_target": "pm0824_11_00_feeler_f_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_g_mesh",
+              "source_target": "pm0824_11_00_feeler_g_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_h_mesh",
+              "source_target": "pm0824_11_00_feeler_h_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_mouth_mesh",
+              "source_target": "pm0824_11_00_mouth_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_a_mesh",
+              "source_target": "pm0824_11_00_shell_left_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_b_mesh",
+              "source_target": "pm0824_11_00_shell_left_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_a_mesh",
+              "source_target": "pm0824_11_00_shell_right_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_b_mesh",
+              "source_target": "pm0824_11_00_shell_right_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            }
+          ]
+        },
+        "sleep": {
+          "duration": 3.33333325386047,
+          "loop": true,
+          "source_sha256": "d486a9883e4a48f75d481094b61f3ff7ebdce29df790c322b35491fa0f30c6a9",
+          "tracks": [
+            {
+              "mesh": "pm0824_11_00_core_mesh",
+              "source_target": "pm0824_11_00_core_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_eye_mesh",
+              "source_target": "pm0824_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_a_mesh",
+              "source_target": "pm0824_11_00_feeler_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_b_mesh",
+              "source_target": "pm0824_11_00_feeler_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_c_mesh",
+              "source_target": "pm0824_11_00_feeler_c_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_d_mesh",
+              "source_target": "pm0824_11_00_feeler_d_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_e_mesh",
+              "source_target": "pm0824_11_00_feeler_e_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_f_mesh",
+              "source_target": "pm0824_11_00_feeler_f_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_g_mesh",
+              "source_target": "pm0824_11_00_feeler_g_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_h_mesh",
+              "source_target": "pm0824_11_00_feeler_h_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_mouth_mesh",
+              "source_target": "pm0824_11_00_mouth_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_a_mesh",
+              "source_target": "pm0824_11_00_shell_left_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_b_mesh",
+              "source_target": "pm0824_11_00_shell_left_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_a_mesh",
+              "source_target": "pm0824_11_00_shell_right_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_b_mesh",
+              "source_target": "pm0824_11_00_shell_right_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            }
+          ]
+        },
+        "special_attack": {
+          "duration": 2.29999995231628,
+          "loop": false,
+          "source_sha256": "d486a9883e4a48f75d481094b61f3ff7ebdce29df790c322b35491fa0f30c6a9",
+          "tracks": [
+            {
+              "mesh": "pm0824_11_00_core_mesh",
+              "source_target": "pm0824_11_00_core_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_eye_mesh",
+              "source_target": "pm0824_11_00_eye_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_a_mesh",
+              "source_target": "pm0824_11_00_feeler_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_b_mesh",
+              "source_target": "pm0824_11_00_feeler_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_c_mesh",
+              "source_target": "pm0824_11_00_feeler_c_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_d_mesh",
+              "source_target": "pm0824_11_00_feeler_d_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_e_mesh",
+              "source_target": "pm0824_11_00_feeler_e_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_f_mesh",
+              "source_target": "pm0824_11_00_feeler_f_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_g_mesh",
+              "source_target": "pm0824_11_00_feeler_g_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_feeler_h_mesh",
+              "source_target": "pm0824_11_00_feeler_h_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_mouth_mesh",
+              "source_target": "pm0824_11_00_mouth_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_a_mesh",
+              "source_target": "pm0824_11_00_shell_left_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_left_b_mesh",
+              "source_target": "pm0824_11_00_shell_left_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_a_mesh",
+              "source_target": "pm0824_11_00_shell_right_a_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0824_11_00_shell_right_b_mesh",
+              "source_target": "pm0824_11_00_shell_right_b_mesh_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "decision": "Base identity is the meteor shell. Keep shell and its inner spike geometry; exclude exposed-core eye/mouth overlays and detached shell fragments. Combined normal/shiny meteor geometry reviewed in all seven native clips.",
+      "source_blend_sha256": "d486a9883e4a48f75d481094b61f3ff7ebdce29df790c322b35491fa0f30c6a9"
+    },
+    "togedemaru": {
+      "clips": {
+        "damage": {
+          "duration": 1.33333337306976,
+          "loop": false,
+          "source_sha256": "d637145437bd958a7a29c85181a7b6a9a8815d44c6ffec98e1e35d40a17e2223",
+          "tracks": [
+            {
+              "mesh": "EffGcloud01",
+              "source_target": "EffGcloud01_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyHuddleSkin",
+              "source_target": "pm0858_00_BodyHuddleSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyNormalSkin",
+              "source_target": "pm0858_00_BodyNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_NeedlesNormalSkin",
+              "source_target": "pm0858_00_NeedlesNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "faint_start": {
+          "duration": 3.33333325386047,
+          "loop": false,
+          "source_sha256": "d637145437bd958a7a29c85181a7b6a9a8815d44c6ffec98e1e35d40a17e2223",
+          "tracks": [
+            {
+              "mesh": "EffGcloud01",
+              "source_target": "EffGcloud01_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyHuddleSkin",
+              "source_target": "pm0858_00_BodyHuddleSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyNormalSkin",
+              "source_target": "pm0858_00_BodyNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_NeedlesNormalSkin",
+              "source_target": "pm0858_00_NeedlesNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "idle": {
+          "duration": 1.39999997615814,
+          "loop": true,
+          "source_sha256": "d637145437bd958a7a29c85181a7b6a9a8815d44c6ffec98e1e35d40a17e2223",
+          "tracks": [
+            {
+              "mesh": "EffGcloud01",
+              "source_target": "EffGcloud01_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyHuddleSkin",
+              "source_target": "pm0858_00_BodyHuddleSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyNormalSkin",
+              "source_target": "pm0858_00_BodyNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_NeedlesNormalSkin",
+              "source_target": "pm0858_00_NeedlesNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "physical_attack": {
+          "duration": 4.86666679382324,
+          "loop": false,
+          "source_sha256": "d637145437bd958a7a29c85181a7b6a9a8815d44c6ffec98e1e35d40a17e2223",
+          "tracks": [
+            {
+              "mesh": "EffGcloud01",
+              "source_target": "EffGcloud01_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyHuddleSkin",
+              "source_target": "pm0858_00_BodyHuddleSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyNormalSkin",
+              "source_target": "pm0858_00_BodyNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_NeedlesNormalSkin",
+              "source_target": "pm0858_00_NeedlesNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "physical_attack_2": {
+          "duration": 5.0,
+          "loop": false,
+          "source_sha256": "d637145437bd958a7a29c85181a7b6a9a8815d44c6ffec98e1e35d40a17e2223",
+          "tracks": [
+            {
+              "mesh": "EffGcloud01",
+              "source_target": "EffGcloud01_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyHuddleSkin",
+              "source_target": "pm0858_00_BodyHuddleSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyNormalSkin",
+              "source_target": "pm0858_00_BodyNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_NeedlesNormalSkin",
+              "source_target": "pm0858_00_NeedlesNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "sleep": {
+          "duration": 4.0,
+          "loop": true,
+          "source_sha256": "d637145437bd958a7a29c85181a7b6a9a8815d44c6ffec98e1e35d40a17e2223",
+          "tracks": [
+            {
+              "mesh": "EffGcloud01",
+              "source_target": "EffGcloud01_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyHuddleSkin",
+              "source_target": "pm0858_00_BodyHuddleSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyNormalSkin",
+              "source_target": "pm0858_00_BodyNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_NeedlesNormalSkin",
+              "source_target": "pm0858_00_NeedlesNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        },
+        "special_attack": {
+          "duration": 5.0,
+          "loop": false,
+          "source_sha256": "d637145437bd958a7a29c85181a7b6a9a8815d44c6ffec98e1e35d40a17e2223",
+          "tracks": [
+            {
+              "mesh": "EffGcloud01",
+              "source_target": "EffGcloud01_shape",
+              "keys": [
+                [
+                  0.0,
+                  true
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyHuddleSkin",
+              "source_target": "pm0858_00_BodyHuddleSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_BodyNormalSkin",
+              "source_target": "pm0858_00_BodyNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            },
+            {
+              "mesh": "pm0858_00_NeedlesNormalSkin",
+              "source_target": "pm0858_00_NeedlesNormalSkin_shape",
+              "keys": [
+                [
+                  0.0,
+                  false
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "decision": "Exact admitted scene names are misleading: EffGcloud01 contains the complete normal body, face, limbs and tail. Exclude the tucked duplicate body and two alternate needle sets. All seven native clips inspected.",
+      "source_blend_sha256": "d637145437bd958a7a29c85181a7b6a9a8815d44c6ffec98e1e35d40a17e2223"
+    }
+  }
+}

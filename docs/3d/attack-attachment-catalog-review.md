@@ -1,5 +1,9 @@
 # Remaining catalog attack origins
 
+Source-model follow-up: [five repaired source pairs](../source-model-repairs.md).
+The historical five attachment holds below still require attack-point calibration;
+source repair alone does not approve their emission points.
+
 All 295 remaining forms were assessed individually. Anatomical routes are installed for 290 forms; five source-model blockers remain.
 
 Added **337** part bindings and resolved **652** supported learnset routes: **552** now use reviewed bone-bound anatomy and **100** deliberately use body motion. Existing reviewed points were retained where applicable.

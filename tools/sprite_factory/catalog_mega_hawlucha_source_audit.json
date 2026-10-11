@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "status": "source_mapping_repaired_native_pair_and_placement_reviewed",
+  "source_archive": {
+    "filename": "LegendsZAPkmnModelDumpWithDLC.rar",
+    "sha256": "1436f8d94c390a2ceb9f60a44596023c1c79ea911f10c3eacf80e7ed02223ccc"
+  },
+  "entries": [
+    {
+      "species": "hawlucha-mega",
+      "showdown_id": "hawluchamega",
+      "pokedex_number": 701,
+      "source_resource_id": "pm0761_51_00",
+      "previous_incorrect_resource_id": "pm0701_11_00",
+      "source_mapping_status": "candidate_identity_match",
+      "mapping_method": "biochao_dev_number_table_and_source_icons",
+      "dev_number_mapping_evidence": {
+        "developer_number": 761,
+        "pokedex_name": "Hawlucha",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "701,761,Hawlucha",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70",
+        "incorrect_mapping_row": "676,701,Furfrou"
+      }
+    }
+  ],
+  "source_resources": {
+    "pm0761_51_00": {
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0761/pm0761_51_00/icon/pm0761_51_00_00_0.png",
+          "sha256": "7c258227937a995177d86e44e5356d2c3009f1910b87c75fc230cdd9da820f75"
+        },
+        {
+          "archive_member": "pm0761/pm0761_51_00/icon/pm0761_51_00_00_1.png",
+          "sha256": "a34b35136ef1d0091b7f89ad96caec14b015127a4cd056120088db9f769ca83f"
+        }
+      ]
+    }
+  }
+}
