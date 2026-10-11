@@ -22,6 +22,7 @@ func _run() -> void:
 	world.transform = Transform3D(Basis(Vector3.UP, 0.3), Vector3(5, -2, 3))
 	_check_weighted_attachments(world)
 	_check_family_routes()
+	_check_reviewed_hand_routes()
 	var actor := _rig(world, ["head", "left_feeler_b_02", "right_feeler_b_02"])
 	actor.transform = Transform3D(Basis(Vector3.UP, 0.9).scaled(Vector3(2, 3, 2)), Vector3(-4, 1, 2))
 	var skeleton: Skeleton3D = actor.get_node("Rig")
@@ -787,3 +788,19 @@ func _check_heart_scale(world: Node3D) -> void:
 			assert(small.pieces[i].scale.is_equal_approx(full.pieces[i].scale*ratio), "Heart geometry and sparkle fit the release point and grow during travel")
 			assert((small.pieces[i].position-center).is_equal_approx((full.pieces[i].position-center)*ratio))
 	for effect: Node3D in effects: effect.free()
+
+func _check_reviewed_hand_routes() -> void:
+	var bones := {"ampharos-mega":"right_arm_02", "kangaskhan":"right_hand_a", "kangaskhan-mega":"right_hand_a", "marill":"right_arm_02", "spinda":"RHand", "pichu":"right_arm", "plusle":"right_arm_02", "minun":"right_arm_02", "dusknoir":"right_hand_02"}
+	for species: String in bones:
+		for identity: String in [species, species+"@shiny"]:
+			assert(Attachments.part_for(identity, "thunderpunch") == "hand")
+			var hand := Attachments.definitions_for(identity, "hand")
+			assert(hand.size() == 1 and hand[0].size() == 1)
+			assert(hand[0][0].bone == bones[species])
+			assert(not Attachments.definitions_for(identity, "left_hand").is_empty())
+			assert(Attachments.part_for(identity, "lowkick") == "foot", "Hand calibration preserves foot routing")
+			assert(Attachments.part_for(identity, "flamethrower") == "mouth", "Hand calibration preserves mouth routing")
+	for identity: String in ["spinda", "spinda@shiny"]:
+		assert(Attachments.action_for(identity, "drainpunch", {"physical_attack_2":{}}) == "physical_attack_2")
+		assert(Attachments.action_for(identity, "firepunch", {"physical_attack":{}}).is_empty())
+		assert(Attachments.action_for(identity, "lowkick", {"physical_attack_2":{}}).is_empty(), "Hand clip choice excludes kicks")

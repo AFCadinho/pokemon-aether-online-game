@@ -4,6 +4,8 @@
 
 - Keep Nugget Bridge Gary gone after any starter-variant victory; retry failed progress or starter lookups without starting an incorrect rival battle.
 
+- Add individually reviewed left/right hand attack points for Mega Ampharos, Kangaskhan, Mega Kangaskhan, Marill, Spinda, Pichu, Plusle, Minun and Dusknoir; use Spinda’s raised-hand clip for hand strikes.
+
 - Add a private Guild Base elevator cabin, reachable from the lift waiting room with a return door.
 
 - Keep movement and NPC interaction blocked while a shop or other modal window is open, including the handoff from NPC dialogue; release only the window’s own input lock on close.

@@ -1,14 +1,14 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://c3xcjmtdk07h4"]
 
-[ext_resource type="Script" path="res://scripts/world/guild_base_room.gd" id="1_room"]
+[ext_resource type="Script" uid="uid://cy8bn173efxfd" path="res://scripts/world/guild_base_room.gd" id="1_room"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/guild_base_elevator_cabin/guild_base_elevator_cabin.visual.tscn" id="2_visual"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
-[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="4_mask"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_mask"]
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(64, 24)
 
-[node name="GuildBaseElevatorCabin" type="Node2D"]
+[node name="GuildBaseElevatorCabin" type="Node2D" unique_id=1441461472]
 script = ExtResource("1_room")
 room_key = "elevator_cabin"
 room_size = Vector2i(15, 13)
@@ -24,16 +24,16 @@ lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.vermilion_city"
 
-[node name="Visual" parent="." instance=ExtResource("2_visual")]
+[node name="Visual" parent="." unique_id=379068585 instance=ExtResource("2_visual")]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=2066659742]
 
-[node name="FromElevator" type="Marker2D" parent="Spawns"]
+[node name="FromElevator" type="Marker2D" parent="Spawns" unique_id=1176206808]
 position = Vector2(240, 240)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=1549866051]
 
-[node name="ToElevator" type="Area2D" parent="Exits"]
+[node name="ToElevator" type="Area2D" parent="Exits" unique_id=1832556873]
 position = Vector2(240, 304)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/guild_base/elevator.tscn"
@@ -41,17 +41,17 @@ target_spawn_name = "FromCabin"
 transition_id = "guild_base_elevator_cabin__to_elevator"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToElevator"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToElevator" unique_id=1913085936]
 shape = SubResource("shape_exit")
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=1627220309]
 y_sort_enabled = true
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=1065087777]
 
-[node name="Furniture" type="Node2D" parent="Entities"]
+[node name="Furniture" type="Node2D" parent="Entities" unique_id=880628523]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1301466572]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("4_mask")
@@ -61,17 +61,17 @@ floor_regions = {
 active_floor = &"elevator_cabin"
 constrain_camera_to_active_floor = true
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=321076604]
 
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=598822410]
 
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=2128957238]
 
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1434837207]
 
-[node name="Tiles" type="Node2D" parent="."]
+[node name="Tiles" type="Node2D" parent="." unique_id=1532985648]
 visible = false
 
-[node name="Collision" type="TileMapLayer" parent="Tiles"]
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=168863115]
 
 [connection signal="body_entered" from="Exits/ToElevator" to="Exits/ToElevator" method="_on_body_entered"]
