@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Choose Maushold family size, Dudunsparce length, Vivillon pattern and Alcremie flavor before evolving, using a form selector in evolution prompts and the Bag.
+
 - Restore Summary clicks and context actions for every party Pokémon after duplicating the party cards.
 
 - Add distinct icons and localized Bag descriptions for Alola Stone, Galar Stone and Hisui Stone.
