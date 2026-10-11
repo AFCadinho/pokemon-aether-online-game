@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Activate the Guild interface's free Guild Base teleport for members of Guilds that own a base, arriving in their private main hall.
+- Complete the Emerald Luchador mask with a visible black-and-gold back in every walking, fishing and riding frame for both player models.
 
 - Replace the Aether Band icon with a transparent 48×48 pixel art band in the Gift Store, Bag and held-item displays.
 

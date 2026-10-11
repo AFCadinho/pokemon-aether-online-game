@@ -18,7 +18,7 @@ The 48 equipment PNGs are copied without modification from the approved `designs
 
 The Back item drives `cape` and `cape_overlay`. Its rear sheet is behind the body; the overlay handles the view from behind. The trainer overlay is deliberately transparent. The existing layer rendering order and body animation synchronization apply unchanged. No custom cape simulation is needed.
 
-Mask revision 2 replaces the thin gold eye frame with a black-and-gold wrestling mask inspired by Mega Hawlucha. The eight mask PNGs include forehead and cheek coverage with native eye/mouth apertures, and use the same authored head offsets. The face mask remains open at the back. Other equipment, body sprites, appearance IDs and existing ownership are unchanged. Source material and its registration script are archived in the original asset package.
+Mask revision 2 replaces the thin gold eye frame with a black-and-gold wrestling mask inspired by Mega Hawlucha. The eight mask PNGs include forehead and cheek coverage with native eye/mouth apertures, and use the same authored head offsets. Revision 3 fills the formerly empty rear-facing frames with a closed black-and-gold back, following the same head offsets in all walking, fishing and riding frames. Front/side views and trainer masks remain unchanged. Other equipment, body sprites, appearance IDs and existing ownership are unchanged. Source material and its registration script are archived in the original asset package.
 
 Dedicated mask activity sheets already contain their head offsets. Local and remote appearance code skips the fallback facegear offset when an authored activity sheet exists. Existing facegear that falls back to walking sprites retains its activity offset.
 
