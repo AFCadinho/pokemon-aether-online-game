@@ -1,0 +1,2298 @@
+{
+  "abomasnow_prototype": {
+    "asset_id": "pokemon_3d:abomasnow:base",
+    "candidate_bytes": 11897936,
+    "candidate_sha256": "64573d2c0898b05592bbf3e2269f5540d3b7552dcd0a4b80857ceaf8bdf1ee84",
+    "cold_check": {
+      "cold_effective_equal": true,
+      "dependency_closure": true,
+      "pose_isolation": true,
+      "production_approved": false,
+      "prototype_only": true,
+      "separate_skeleton_nodes": true,
+      "shared_mesh_instances": 1,
+      "shared_skin_and_libraries": true
+    },
+    "note": "Actual private pack sizes; future production manifest/loader overhead can differ.",
+    "pixel_exact_frames": 20,
+    "production_approved": false,
+    "prototype_only": true,
+    "rendered_appearances": 2,
+    "saved_bytes": 969928,
+    "saved_percent": 7.537599091815083,
+    "schema": 1,
+    "source_bytes": 12867864,
+    "source_scripts": {
+      "tools/run_shared_geometry_prototype.py": "a008a089854d65f0589adfb6f5ddf55f7d7f459b55ccefd092eae96be3ab8d33",
+      "tools/sprite_factory/model_geometry_audit.gd": "26aede92b016dadba70551b81d891003679e4848e1fa185941850a02859a489f",
+      "tools/sprite_factory/model_texture_audit.gd": "b44ffe3f50c310a429e573a2d7f5c1c3be2e5123567da75aedeecc3e1673c882",
+      "tools/sprite_factory/model_texture_render_probe.gd": "623386f78ef2bc4dfc1596d6f1c4adca18c9893c82f1369c7019803dada679fb",
+      "tools/sprite_factory/native_resource_compression_probe.py": "1f468fcd344edc000040200da8ba4cf57f6fd439b831120bf499edaba3a28174",
+      "tools/sprite_factory/shared_geometry_name_probe.gd": "c0447bd12b05785f770c7d000b89f16268bcae1e20dd71222a6dec9c90a10542",
+      "tools/sprite_factory/shared_geometry_prototype.gd": "354f8ac6e5b4683721bdda31e859d2dcd14e3aa9141952df12def0d64cdedf3f"
+    },
+    "source_sha256": "dc6d58bbf7e3bf09c02ca639aadf4a1eeb0039130a20c13cc890ad0b98914ffd"
+  },
+  "baseline_groups": {
+    "retained_v11_zip": {
+      "exact_match_pairs": {
+        "same_animation_bindings": 116,
+        "same_mesh_bindings": 113,
+        "same_skeleton": 118,
+        "same_skin_bindings": 118,
+        "same_structure": 113
+      },
+      "pairs": 118,
+      "pairs_with_sensitive_animation_tracks": 50,
+      "source_bytes": 245693673,
+      "standalone_duplicate_bytes": {
+        "libraries": 53360146,
+        "meshes": 12522577,
+        "skins": 321100
+      },
+      "strict_full_nonmaterial_match_pairs": 111
+    },
+    "texture_shared_pck": {
+      "exact_match_pairs": {
+        "same_animation_bindings": 1052,
+        "same_mesh_bindings": 1046,
+        "same_skeleton": 1082,
+        "same_skin_bindings": 1082,
+        "same_structure": 1037
+      },
+      "pairs": 1082,
+      "pairs_with_sensitive_animation_tracks": 99,
+      "source_bytes": 9592362316,
+      "standalone_duplicate_bytes": {
+        "libraries": 1114553651,
+        "meshes": 128914307,
+        "skins": 4188070
+      },
+      "strict_full_nonmaterial_match_pairs": 1016
+    }
+  },
+  "evidence": {
+    ".tmp/shared-geometry/final-focused-check.log": "60c13fa433d043fbb7d1eeabd13726eea3bb1d5136e66782163356782d1b08a6",
+    ".tmp/shared-geometry/full-v2/report.json": "10fc045e40d75728c9723a6d001ef42c3deb1aa4bb406101552dda988f3f6a77",
+    ".tmp/shared-geometry/prototype-v3/cold-check.json": "c9602139ddd344fac3ac9d56115a45df336975ad4fc66af06c3f7da28f58e568",
+    ".tmp/shared-geometry/prototype-v3/mesh-name-check.json": "a936b4689d6ad5c034d21f820d8dbd8128350e3f738abf17f7e010f0044c5bdc",
+    ".tmp/shared-geometry/prototype-v3/render/report.json": "4037c8b69fa2e33e499877729aadf131d742cb13f96d38776d3e299d2668fac4",
+    ".tmp/shared-geometry/prototype-v3/report.json": "78fb0dc8c907e7e5494cbeacad85d602a897e415850a29769a3f242e2acf0a04"
+  },
+  "full_audit": {
+    "complete": true,
+    "elapsed_seconds": 472.39318112295587,
+    "exceptions": {
+      "same_animation_bindings": [
+        "pokemon_3d:barraskewda:base",
+        "pokemon_3d:buizel:base",
+        "pokemon_3d:corsola:base",
+        "pokemon_3d:cradily:base",
+        "pokemon_3d:darmanitan-galar:base",
+        "pokemon_3d:darumaka-galar:base",
+        "pokemon_3d:drednaw:base",
+        "pokemon_3d:druddigon:base",
+        "pokemon_3d:exploud:base",
+        "pokemon_3d:heatmor:base",
+        "pokemon_3d:jynx:base",
+        "pokemon_3d:kabutops:base",
+        "pokemon_3d:karrablast:base",
+        "pokemon_3d:krabby:base",
+        "pokemon_3d:lileep:base",
+        "pokemon_3d:linoone-galar:base",
+        "pokemon_3d:loudred:base",
+        "pokemon_3d:magearna:base",
+        "pokemon_3d:mantine:base",
+        "pokemon_3d:marshadow:base",
+        "pokemon_3d:nidorina:base",
+        "pokemon_3d:nidorino:base",
+        "pokemon_3d:numel:base",
+        "pokemon_3d:octillery:base",
+        "pokemon_3d:pineco:base",
+        "pokemon_3d:ponyta-galar:base",
+        "pokemon_3d:rattata:base",
+        "pokemon_3d:sealeo:base",
+        "pokemon_3d:silicobra:base",
+        "pokemon_3d:wailmer:base",
+        "pokemon_3d:walrein:base",
+        "pokemon_3d:zigzagoon-galar:base"
+      ],
+      "same_mesh_bindings": [
+        "pokemon_3d:aegislash-blade:base",
+        "pokemon_3d:arcanine-hisui:base",
+        "pokemon_3d:braviary-hisui:base",
+        "pokemon_3d:chatot:base",
+        "pokemon_3d:cursola:base",
+        "pokemon_3d:darmanitan-galar:base",
+        "pokemon_3d:darmanitan-standard:base",
+        "pokemon_3d:darumaka-galar:base",
+        "pokemon_3d:decidueye-hisui:base",
+        "pokemon_3d:dodrio:base",
+        "pokemon_3d:goodra-hisui:base",
+        "pokemon_3d:grimer-alola:base",
+        "pokemon_3d:iron-leaves:base",
+        "pokemon_3d:lickilicky:base",
+        "pokemon_3d:meowth-alola:base",
+        "pokemon_3d:meowth-galar:base",
+        "pokemon_3d:muk-alola:base",
+        "pokemon_3d:obstagoon:base",
+        "pokemon_3d:ogerpon-cornerstone:base",
+        "pokemon_3d:ogerpon-hearthflame:base",
+        "pokemon_3d:ogerpon-wellspring:base",
+        "pokemon_3d:persian-alola:base",
+        "pokemon_3d:pikachu-alola:base",
+        "pokemon_3d:qwilfish-hisui:base",
+        "pokemon_3d:samurott-hisui:base",
+        "pokemon_3d:silvally:base",
+        "pokemon_3d:slowbro-galar:base",
+        "pokemon_3d:slowking-galar:base",
+        "pokemon_3d:slowpoke-galar:base",
+        "pokemon_3d:sneasel-hisui:base",
+        "pokemon_3d:tangrowth:base",
+        "pokemon_3d:tauros-paldea-aqua:base",
+        "pokemon_3d:tauros-paldea-blaze:base",
+        "pokemon_3d:tauros-paldea-combat:base",
+        "pokemon_3d:typhlosion-hisui:base",
+        "pokemon_3d:vileplume:base",
+        "pokemon_3d:walking-wake:base",
+        "pokemon_3d:wishiwashi:base",
+        "pokemon_3d:zoroark-hisui:base",
+        "pokemon_3d:zorua-hisui:base",
+        "pokemon_3d:zygarde-50:base"
+      ],
+      "same_structure": [
+        "pokemon_3d:aegislash-blade:base",
+        "pokemon_3d:arcanine-hisui:base",
+        "pokemon_3d:barraskewda:base",
+        "pokemon_3d:braviary-hisui:base",
+        "pokemon_3d:buizel:base",
+        "pokemon_3d:chatot:base",
+        "pokemon_3d:cursola:base",
+        "pokemon_3d:darmanitan-galar:base",
+        "pokemon_3d:darmanitan-standard:base",
+        "pokemon_3d:darumaka-galar:base",
+        "pokemon_3d:decidueye-hisui:base",
+        "pokemon_3d:dodrio:base",
+        "pokemon_3d:drednaw:base",
+        "pokemon_3d:goodra-hisui:base",
+        "pokemon_3d:grimer-alola:base",
+        "pokemon_3d:iron-leaves:base",
+        "pokemon_3d:lickilicky:base",
+        "pokemon_3d:magearna:base",
+        "pokemon_3d:magikarp:base",
+        "pokemon_3d:meowth-alola:base",
+        "pokemon_3d:meowth-galar:base",
+        "pokemon_3d:muk-alola:base",
+        "pokemon_3d:numel:base",
+        "pokemon_3d:obstagoon:base",
+        "pokemon_3d:ogerpon-cornerstone:base",
+        "pokemon_3d:ogerpon-hearthflame:base",
+        "pokemon_3d:ogerpon-wellspring:base",
+        "pokemon_3d:persian-alola:base",
+        "pokemon_3d:pikachu-alola:base",
+        "pokemon_3d:pineco:base",
+        "pokemon_3d:qwilfish-hisui:base",
+        "pokemon_3d:samurott-hisui:base",
+        "pokemon_3d:silicobra:base",
+        "pokemon_3d:silvally:base",
+        "pokemon_3d:slowbro-galar:base",
+        "pokemon_3d:slowking-galar:base",
+        "pokemon_3d:slowpoke-galar:base",
+        "pokemon_3d:sneasel-hisui:base",
+        "pokemon_3d:tangrowth:base",
+        "pokemon_3d:tauros-paldea-aqua:base",
+        "pokemon_3d:tauros-paldea-blaze:base",
+        "pokemon_3d:tauros-paldea-combat:base",
+        "pokemon_3d:typhlosion-hisui:base",
+        "pokemon_3d:vileplume:base",
+        "pokemon_3d:walking-wake:base",
+        "pokemon_3d:wishiwashi:base",
+        "pokemon_3d:wo-chien:base",
+        "pokemon_3d:zoroark-hisui:base",
+        "pokemon_3d:zorua-hisui:base",
+        "pokemon_3d:zygarde-50:base"
+      ]
+    },
+    "inputs": {
+      "data/model_pair_catalog.json": "84ad3e6b6e2152ac7aae73ac27c7a4a6903b0b3658b7ab1794dd02634b0990c9",
+      "data/model_pair_qualified.json": "4b31a67f27edf638710097c78537ec8b6640af56cda05bd1a6bff9497a5d3528",
+      "release/shared_model_collection_r2_receipt.json": "ebf04df0a13deea99046fdc3f0781574d126e30c8a1d9d73a4dca8c2a1885c6c",
+      "tools/audit_shared_geometry.py": "e1e10b783f0203770491f29fc4fbaecdc29edd7729404c0a10433a6756b924af",
+      "tools/sprite_factory/model_geometry_audit.gd": "26aede92b016dadba70551b81d891003679e4848e1fa185941850a02859a489f",
+      "tools/sprite_factory/model_texture_audit.gd": "b44ffe3f50c310a429e573a2d7f5c1c3be2e5123567da75aedeecc3e1673c882",
+      "tools/sprite_factory/native_resource_compression_probe.py": "1f468fcd344edc000040200da8ba4cf57f6fd439b831120bf499edaba3a28174",
+      "tools/sprite_factory/shared_geometry_catalog_probe.gd": "91a718c48051aea9e93ff7e6cbaba00d5b9086feb89c9c030c3ecb346c99b4e0"
+    },
+    "measurement_note": "Standalone native resources, Zstd level 9/block 262144. These sizes indicate duplicate components, not exact total pack savings.",
+    "pairs": 1200,
+    "pairs_with_cross_variant_duplicates": {
+      "libraries": 1162,
+      "meshes": 1159,
+      "skins": 1200
+    },
+    "pairs_with_sensitive_animation_tracks": 149,
+    "same_animation_binding_pairs": 1168,
+    "same_mesh_binding_pairs": 1159,
+    "same_nonmaterial_model_pairs": 1127,
+    "same_skeleton_pairs": 1200,
+    "same_skin_binding_pairs": 1200,
+    "same_structure_pairs": 1150,
+    "schema": 1,
+    "scope": "Exact offline component comparison; no runtime or production approval",
+    "source_commit": "05cddf38afb39b71d1a428b017aef7b3d60b0749",
+    "standalone_duplicate_bytes": {
+      "libraries": 1167913797,
+      "meshes": 141436884,
+      "skins": 4509170
+    },
+    "standalone_duplicate_bytes_total": 1313859851,
+    "strict_matches_without_sensitive_tracks": 1031
+  },
+  "limitations": [
+    "Standalone component bytes indicate duplication, not exact total pack savings.",
+    "41 mesh pairs differ only in resource_name; preserving or explicitly handling that metadata remains implementation work.",
+    "149 pairs have material/mesh/method-sensitive animation tracks and need targeted handling before geometry/material relocation.",
+    "The private prototype keeps two small scene wrappers and separate mutable skeleton nodes.",
+    "One-pair rendering proof does not qualify the complete collection or production presenter.",
+    "Production pack contract, catalog and acceptance remain unchanged."
+  ],
+  "mesh_name_followup": {
+    "additional_mesh_pairs_differing_only_in_resource_name": 41,
+    "exceptions": [
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:aegislash-blade:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0746_12_00/Skeleton3D/pm0746_11_00_body_mesh_001",
+            "resource_names": [
+              "normal_pm0746_11_00_body_mesh_shape_001",
+              "shiny_pm0746_11_00_body_mesh_shape_001"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0746_12_00/Skeleton3D/pm0746_11_00_cloth_mesh_001",
+            "resource_names": [
+              "normal_pm0746_11_00_cloth_mesh_shape_001",
+              "shiny_pm0746_11_00_cloth_mesh_shape_001"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0746_12_00/Skeleton3D/pm0746_11_00_eye_mesh_001",
+            "resource_names": [
+              "normal_pm0746_11_00_eye_mesh_shape_001",
+              "shiny_pm0746_11_00_eye_mesh_shape_001"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0746_12_00/Skeleton3D/pm0746_11_00_eyelid_mesh_001",
+            "resource_names": [
+              "normal_pm0746_11_00_eyelid_mesh_shape_001",
+              "shiny_pm0746_11_00_eyelid_mesh_shape_001"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0746_12_00/Skeleton3D/pm0746_11_00_hole_mesh_001",
+            "resource_names": [
+              "normal_pm0746_11_00_hole_mesh_shape_001",
+              "shiny_pm0746_11_00_hole_mesh_shape_001"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0746_12_00/Skeleton3D/pm0746_11_00_shield_mesh_001",
+            "resource_names": [
+              "normal_pm0746_11_00_shield_mesh_shape_001",
+              "shiny_pm0746_11_00_shield_mesh_shape_001"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:arcanine-hisui:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0059_00_41/Skeleton3D/pm0059_00_41_body_mesh",
+            "resource_names": [
+              "arcanine-hisui_pm0059_00_41_body_mesh_shape",
+              "arcanine-hisui-shiny_pm0059_00_41_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0059_00_41/Skeleton3D/pm0059_00_41_eye_mesh",
+            "resource_names": [
+              "arcanine-hisui_pm0059_00_41_eye_mesh_shape",
+              "arcanine-hisui-shiny_pm0059_00_41_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0059_00_41/Skeleton3D/pm0059_00_41_head_mesh",
+            "resource_names": [
+              "arcanine-hisui_pm0059_00_41_head_mesh_shape",
+              "arcanine-hisui-shiny_pm0059_00_41_head_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0059_00_41/Skeleton3D/pm0059_00_41_legfeeler_mesh",
+            "resource_names": [
+              "arcanine-hisui_pm0059_00_41_legfeeler_mesh_shape",
+              "arcanine-hisui-shiny_pm0059_00_41_legfeeler_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0059_00_41/Skeleton3D/pm0059_00_41_tail_mesh",
+            "resource_names": [
+              "arcanine-hisui_pm0059_00_41_tail_mesh_shape",
+              "arcanine-hisui-shiny_pm0059_00_41_tail_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:braviary-hisui:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0628_00_41/Skeleton3D/pm0628_00_41_body_mesh",
+            "resource_names": [
+              "braviary-hisui_pm0628_00_41_body_mesh_shape",
+              "braviary-hisui-shiny_pm0628_00_41_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0628_00_41/Skeleton3D/pm0628_00_41_effect_mesh",
+            "resource_names": [
+              "braviary-hisui_pm0628_00_41_effect_mesh_shape",
+              "braviary-hisui-shiny_pm0628_00_41_effect_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0628_00_41/Skeleton3D/pm0628_00_41_left_wing_mesh",
+            "resource_names": [
+              "braviary-hisui_pm0628_00_41_left_wing_mesh_shape",
+              "braviary-hisui-shiny_pm0628_00_41_left_wing_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0628_00_41/Skeleton3D/pm0628_00_41_right_wing_mesh",
+            "resource_names": [
+              "braviary-hisui_pm0628_00_41_right_wing_mesh_shape",
+              "braviary-hisui-shiny_pm0628_00_41_right_wing_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:chatot:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0441_00_00/Skeleton3D/pm0441_00_00_body_mesh",
+            "resource_names": [
+              "chatot_pm0441_00_00_body_mesh_shape",
+              "chatot_shiny_pm0441_00_00_body_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:cursola:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/EffGcloud01",
+            "resource_names": [
+              "model-body-detail-review_EffGcloud01",
+              "cursola-shiny_EffGcloud01"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/TraGroup01",
+            "resource_names": [
+              "model-body-detail-review_TraGroup01",
+              "cursola-shiny_TraGroup01"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/TraGroup02",
+            "resource_names": [
+              "model-body-detail-review_TraGroup02",
+              "cursola-shiny_TraGroup02"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/TraGroup03",
+            "resource_names": [
+              "model-body-detail-review_TraGroup03",
+              "cursola-shiny_TraGroup03"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/TraGroup04",
+            "resource_names": [
+              "model-body-detail-review_TraGroup04",
+              "cursola-shiny_TraGroup04"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/TraGroup05",
+            "resource_names": [
+              "model-body-detail-review_TraGroup05",
+              "cursola-shiny_TraGroup05"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/TraGroup06",
+            "resource_names": [
+              "model-body-detail-review_TraGroup06",
+              "cursola-shiny_TraGroup06"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/TraGroup07",
+            "resource_names": [
+              "model-body-detail-review_TraGroup07",
+              "cursola-shiny_TraGroup07"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/TraGroup08",
+            "resource_names": [
+              "model-body-detail-review_TraGroup08",
+              "cursola-shiny_TraGroup08"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/TraGroup09",
+            "resource_names": [
+              "model-body-detail-review_TraGroup09",
+              "cursola-shiny_TraGroup09"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/TraGroup10",
+            "resource_names": [
+              "model-body-detail-review_TraGroup10",
+              "cursola-shiny_TraGroup10"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/TraGroup11",
+            "resource_names": [
+              "model-body-detail-review_TraGroup11",
+              "cursola-shiny_TraGroup11"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/TraGroup12",
+            "resource_names": [
+              "model-body-detail-review_TraGroup12",
+              "cursola-shiny_TraGroup12"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA1_01Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA1_01Skin",
+              "cursola-shiny_pm0947_00_31_BodyA1_01Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA1_02Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA1_02Skin",
+              "cursola-shiny_pm0947_00_31_BodyA1_02Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA1_03Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA1_03Skin",
+              "cursola-shiny_pm0947_00_31_BodyA1_03Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA1_04Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA1_04Skin",
+              "cursola-shiny_pm0947_00_31_BodyA1_04Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA1_05Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA1_05Skin",
+              "cursola-shiny_pm0947_00_31_BodyA1_05Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA1_06Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA1_06Skin",
+              "cursola-shiny_pm0947_00_31_BodyA1_06Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA1_07Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA1_07Skin",
+              "cursola-shiny_pm0947_00_31_BodyA1_07Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA1_08Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA1_08Skin",
+              "cursola-shiny_pm0947_00_31_BodyA1_08Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA1_09Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA1_09Skin",
+              "cursola-shiny_pm0947_00_31_BodyA1_09Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA_01Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA_01Skin",
+              "cursola-shiny_pm0947_00_31_BodyA_01Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA_02Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA_02Skin",
+              "cursola-shiny_pm0947_00_31_BodyA_02Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA_03Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA_03Skin",
+              "cursola-shiny_pm0947_00_31_BodyA_03Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA_04Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA_04Skin",
+              "cursola-shiny_pm0947_00_31_BodyA_04Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA_05Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA_05Skin",
+              "cursola-shiny_pm0947_00_31_BodyA_05Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA_06Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA_06Skin",
+              "cursola-shiny_pm0947_00_31_BodyA_06Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA_07Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA_07Skin",
+              "cursola-shiny_pm0947_00_31_BodyA_07Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA_08Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA_08Skin",
+              "cursola-shiny_pm0947_00_31_BodyA_08Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA_09Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA_09Skin",
+              "cursola-shiny_pm0947_00_31_BodyA_09Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA_10Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA_10Skin",
+              "cursola-shiny_pm0947_00_31_BodyA_10Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyA_11Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyA_11Skin",
+              "cursola-shiny_pm0947_00_31_BodyA_11Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyB1_01Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyB1_01Skin",
+              "cursola-shiny_pm0947_00_31_BodyB1_01Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyB1_03Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyB1_03Skin",
+              "cursola-shiny_pm0947_00_31_BodyB1_03Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyB1_04Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyB1_04Skin",
+              "cursola-shiny_pm0947_00_31_BodyB1_04Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyB_01Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyB_01Skin",
+              "cursola-shiny_pm0947_00_31_BodyB_01Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyB_03Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyB_03Skin",
+              "cursola-shiny_pm0947_00_31_BodyB_03Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_BodyB_04Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_BodyB_04Skin",
+              "cursola-shiny_pm0947_00_31_BodyB_04Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_Missile_02Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_Missile_02Skin",
+              "cursola-shiny_pm0947_00_31_Missile_02Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_Missile_03Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_Missile_03Skin",
+              "cursola-shiny_pm0947_00_31_Missile_03Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_Missile_04Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_Missile_04Skin",
+              "cursola-shiny_pm0947_00_31_Missile_04Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_Missile_05Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_Missile_05Skin",
+              "cursola-shiny_pm0947_00_31_Missile_05Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_Missile_06Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_Missile_06Skin",
+              "cursola-shiny_pm0947_00_31_Missile_06Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_Missile_07Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_Missile_07Skin",
+              "cursola-shiny_pm0947_00_31_Missile_07Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_Missile_08Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_Missile_08Skin",
+              "cursola-shiny_pm0947_00_31_Missile_08Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_Missile_09Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_Missile_09Skin",
+              "cursola-shiny_pm0947_00_31_Missile_09Skin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0947_00_31_gfbmdl/Skeleton3D/pm0947_00_31_Missile_12Skin",
+            "resource_names": [
+              "model-body-detail-review_pm0947_00_31_Missile_12Skin",
+              "cursola-shiny_pm0947_00_31_Missile_12Skin"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:darmanitan-galar:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0555_11_31/Skeleton3D/pm0555_11_31_BodySkin",
+            "resource_names": [
+              "darmanitan-galar_pm0555_11_31_BodySkin",
+              "darmanitan-galar-shiny_pm0555_11_31_BodySkin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0555_11_31/Skeleton3D/pm0555_11_31_HandSkin",
+            "resource_names": [
+              "darmanitan-galar_pm0555_11_31_HandSkin",
+              "darmanitan-galar-shiny_pm0555_11_31_HandSkin"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:darmanitan-standard:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0555_11/Skeleton3D/pm0555_11_BodySkin",
+            "resource_names": [
+              "darm-integrated_pm0555_11_BodySkin",
+              "darmanitan-standard-shiny_pm0555_11_BodySkin"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:darumaka-galar:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0554_00_31/Skeleton3D/pm0554_00_31_BodySkin",
+            "resource_names": [
+              "darumaka-galar_pm0554_00_31_BodySkin",
+              "darumaka-galar-shiny_pm0554_00_31_BodySkin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0554_00_31/Skeleton3D/pm0554_00_31_FootSkin",
+            "resource_names": [
+              "darumaka-galar_pm0554_00_31_FootSkin",
+              "darumaka-galar-shiny_pm0554_00_31_FootSkin"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:decidueye-hisui:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0843_00_41/Skeleton3D/pm0843_00_41_arrow_a_mesh",
+            "resource_names": [
+              "decidueye-hisui_pm0843_00_41_arrow_a_mesh_shape",
+              "decidueye-hisui-shiny_pm0843_00_41_arrow_a_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0843_00_41/Skeleton3D/pm0843_00_41_arrow_b_mesh",
+            "resource_names": [
+              "decidueye-hisui_pm0843_00_41_arrow_b_mesh_shape",
+              "decidueye-hisui-shiny_pm0843_00_41_arrow_b_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0843_00_41/Skeleton3D/pm0843_00_41_arrow_c_mesh",
+            "resource_names": [
+              "decidueye-hisui_pm0843_00_41_arrow_c_mesh_shape",
+              "decidueye-hisui-shiny_pm0843_00_41_arrow_c_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0843_00_41/Skeleton3D/pm0843_00_41_body_mesh",
+            "resource_names": [
+              "decidueye-hisui_pm0843_00_41_body_mesh_shape",
+              "decidueye-hisui-shiny_pm0843_00_41_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0843_00_41/Skeleton3D/pm0843_00_41_cloak_a_mesh",
+            "resource_names": [
+              "decidueye-hisui_pm0843_00_41_cloak_a_mesh_shape",
+              "decidueye-hisui-shiny_pm0843_00_41_cloak_a_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0843_00_41/Skeleton3D/pm0843_00_41_cloak_b_mesh",
+            "resource_names": [
+              "decidueye-hisui_pm0843_00_41_cloak_b_mesh_shape",
+              "decidueye-hisui-shiny_pm0843_00_41_cloak_b_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0843_00_41/Skeleton3D/pm0843_00_41_cloak_c_mesh",
+            "resource_names": [
+              "decidueye-hisui_pm0843_00_41_cloak_c_mesh_shape",
+              "decidueye-hisui-shiny_pm0843_00_41_cloak_c_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0843_00_41/Skeleton3D/pm0843_00_41_eye_mesh",
+            "resource_names": [
+              "decidueye-hisui_pm0843_00_41_eye_mesh_shape",
+              "decidueye-hisui-shiny_pm0843_00_41_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0843_00_41/Skeleton3D/pm0843_00_41_hair_mesh",
+            "resource_names": [
+              "decidueye-hisui_pm0843_00_41_hair_mesh_shape",
+              "decidueye-hisui-shiny_pm0843_00_41_hair_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0843_00_41/Skeleton3D/pm0843_00_41_ivy_a_mesh",
+            "resource_names": [
+              "decidueye-hisui_pm0843_00_41_ivy_a_mesh_shape",
+              "decidueye-hisui-shiny_pm0843_00_41_ivy_a_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0843_00_41/Skeleton3D/pm0843_00_41_ivy_b_mesh",
+            "resource_names": [
+              "decidueye-hisui_pm0843_00_41_ivy_b_mesh_shape",
+              "decidueye-hisui-shiny_pm0843_00_41_ivy_b_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:dodrio:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0085_00_00/Skeleton3D/pm0085_00_00_body_mesh",
+            "resource_names": [
+              "normal_pm0085_00_00_body_mesh_shape",
+              "shiny_pm0085_00_00_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0085_00_00/Skeleton3D/pm0085_00_00_eye_a_mesh",
+            "resource_names": [
+              "normal_pm0085_00_00_eye_a_mesh_shape",
+              "shiny_pm0085_00_00_eye_a_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0085_00_00/Skeleton3D/pm0085_00_00_eye_b_mesh",
+            "resource_names": [
+              "normal_pm0085_00_00_eye_b_mesh_shape",
+              "shiny_pm0085_00_00_eye_b_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0085_00_00/Skeleton3D/pm0085_00_00_eye_c_mesh",
+            "resource_names": [
+              "normal_pm0085_00_00_eye_c_mesh_shape",
+              "shiny_pm0085_00_00_eye_c_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:goodra-hisui:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0765_00_41/Skeleton3D/pm0765_00_41_body_a_mesh",
+            "resource_names": [
+              "goodra-hisui_pm0765_00_41_body_a_mesh_shape",
+              "goodra-hisui-shiny_pm0765_00_41_body_a_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0765_00_41/Skeleton3D/pm0765_00_41_body_b_mesh",
+            "resource_names": [
+              "goodra-hisui_pm0765_00_41_body_b_mesh_shape",
+              "goodra-hisui-shiny_pm0765_00_41_body_b_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0765_00_41/Skeleton3D/pm0765_00_41_body_c_mesh",
+            "resource_names": [
+              "goodra-hisui_pm0765_00_41_body_c_mesh_shape",
+              "goodra-hisui-shiny_pm0765_00_41_body_c_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0765_00_41/Skeleton3D/pm0765_00_41_eye_mesh",
+            "resource_names": [
+              "goodra-hisui_pm0765_00_41_eye_mesh_shape",
+              "goodra-hisui-shiny_pm0765_00_41_eye_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:grimer-alola:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0088_00_11/Skeleton3D/pm0088_00_11_body_mesh",
+            "resource_names": [
+              "grimer-alola_pm0088_00_11_body_mesh_shape",
+              "grimer-alola-shiny_pm0088_00_11_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0088_00_11/Skeleton3D/pm0088_00_11_eye_mesh",
+            "resource_names": [
+              "grimer-alola_pm0088_00_11_eye_mesh_shape",
+              "grimer-alola-shiny_pm0088_00_11_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0088_00_11/Skeleton3D/pm0088_00_11_left_teeth_mesh",
+            "resource_names": [
+              "grimer-alola_pm0088_00_11_left_teeth_mesh_shape",
+              "grimer-alola-shiny_pm0088_00_11_left_teeth_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0088_00_11/Skeleton3D/pm0088_00_11_liquid_a_mesh",
+            "resource_names": [
+              "grimer-alola_pm0088_00_11_liquid_a_mesh_shape",
+              "grimer-alola-shiny_pm0088_00_11_liquid_a_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0088_00_11/Skeleton3D/pm0088_00_11_liquid_b_mesh",
+            "resource_names": [
+              "grimer-alola_pm0088_00_11_liquid_b_mesh_shape",
+              "grimer-alola-shiny_pm0088_00_11_liquid_b_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0088_00_11/Skeleton3D/pm0088_00_11_right_teeth_mesh",
+            "resource_names": [
+              "grimer-alola_pm0088_00_11_right_teeth_mesh_shape",
+              "grimer-alola-shiny_pm0088_00_11_right_teeth_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:iron-leaves:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./Armature/Skeleton3D/CusAnimVis_pm1010_00_00_SaberSkin",
+            "resource_names": [
+              "iron-leaves-normal_CusAnimVis_pm1010_00_00_SaberSkin",
+              "iron-leaves-shiny_CusAnimVis_pm1010_00_00_SaberSkin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./Armature/Skeleton3D/pm1010_00_00_BodySkin",
+            "resource_names": [
+              "iron-leaves-normal_pm1010_00_00_BodySkin",
+              "iron-leaves-shiny_pm1010_00_00_BodySkin"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:lickilicky:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0463_00_00/Skeleton3D/pm0463_00_00_body_mesh",
+            "resource_names": [
+              "native-colour_pm0463_00_00_body_mesh_shape",
+              "model_pm0463_00_00_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0463_00_00/Skeleton3D/pm0463_00_00_eye_mesh",
+            "resource_names": [
+              "native-colour_pm0463_00_00_eye_mesh_shape",
+              "model_pm0463_00_00_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0463_00_00/Skeleton3D/pm0463_00_00_tonguelong_mesh",
+            "resource_names": [
+              "native-colour_pm0463_00_00_tonguelong_mesh_shape",
+              "model_pm0463_00_00_tonguelong_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0463_00_00/Skeleton3D/pm0463_00_00_tongueshort_mesh",
+            "resource_names": [
+              "native-colour_pm0463_00_00_tongueshort_mesh_shape",
+              "model_pm0463_00_00_tongueshort_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:meowth-alola:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0052_00_11/Skeleton3D/pm0052_00_11_body_mesh",
+            "resource_names": [
+              "meowth-alola_pm0052_00_11_body_mesh_shape",
+              "meowth-alola-shiny_pm0052_00_11_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0052_00_11/Skeleton3D/pm0052_00_11_eye_mesh",
+            "resource_names": [
+              "meowth-alola_pm0052_00_11_eye_mesh_shape",
+              "meowth-alola-shiny_pm0052_00_11_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0052_00_11/Skeleton3D/pm0052_00_11_tooth_mesh",
+            "resource_names": [
+              "meowth-alola_pm0052_00_11_tooth_mesh_shape",
+              "meowth-alola-shiny_pm0052_00_11_tooth_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:meowth-galar:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0052_00_31/Skeleton3D/pm0052_00_31_body_mesh",
+            "resource_names": [
+              "meowth-galar_pm0052_00_31_body_mesh_shape",
+              "meowth-galar-shiny_pm0052_00_31_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0052_00_31/Skeleton3D/pm0052_00_31_claw_l_mesh",
+            "resource_names": [
+              "meowth-galar_pm0052_00_31_claw_l_mesh_shape",
+              "meowth-galar-shiny_pm0052_00_31_claw_l_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0052_00_31/Skeleton3D/pm0052_00_31_claw_r_mesh",
+            "resource_names": [
+              "meowth-galar_pm0052_00_31_claw_r_mesh_shape",
+              "meowth-galar-shiny_pm0052_00_31_claw_r_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0052_00_31/Skeleton3D/pm0052_00_31_eye_mesh",
+            "resource_names": [
+              "meowth-galar_pm0052_00_31_eye_mesh_shape",
+              "meowth-galar-shiny_pm0052_00_31_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0052_00_31/Skeleton3D/pm0052_00_31_tooth_a_mesh",
+            "resource_names": [
+              "meowth-galar_pm0052_00_31_tooth_a_mesh_shape",
+              "meowth-galar-shiny_pm0052_00_31_tooth_a_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0052_00_31/Skeleton3D/pm0052_00_31_tooth_b_mesh",
+            "resource_names": [
+              "meowth-galar_pm0052_00_31_tooth_b_mesh_shape",
+              "meowth-galar-shiny_pm0052_00_31_tooth_b_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:muk-alola:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0089_00_11/Skeleton3D/pm0089_00_11_body_mesh",
+            "resource_names": [
+              "muk-alola_pm0089_00_11_body_mesh_shape",
+              "muk-alola-shiny_pm0089_00_11_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0089_00_11/Skeleton3D/pm0089_00_11_eye_mesh",
+            "resource_names": [
+              "muk-alola_pm0089_00_11_eye_mesh_shape",
+              "muk-alola-shiny_pm0089_00_11_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0089_00_11/Skeleton3D/pm0089_00_11_iwa_mesh",
+            "resource_names": [
+              "muk-alola_pm0089_00_11_iwa_mesh_shape",
+              "muk-alola-shiny_pm0089_00_11_iwa_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0089_00_11/Skeleton3D/pm0089_00_11_liquid_a_mesh",
+            "resource_names": [
+              "muk-alola_pm0089_00_11_liquid_a_mesh_shape",
+              "muk-alola-shiny_pm0089_00_11_liquid_a_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:obstagoon:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0928_00_31_gfbmdl/Skeleton3D/EffGcloud01",
+            "resource_names": [
+              "model-body-detail-review_EffGcloud01",
+              "obstagoon-shiny_EffGcloud01"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0928_00_31_gfbmdl/Skeleton3D/pm0928_00_31_BodySkin",
+            "resource_names": [
+              "model-body-detail-review_pm0928_00_31_BodySkin",
+              "obstagoon-shiny_pm0928_00_31_BodySkin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0928_00_31_gfbmdl/Skeleton3D/pm0928_00_31_LowerTeethSkin",
+            "resource_names": [
+              "model-body-detail-review_pm0928_00_31_LowerTeethSkin",
+              "obstagoon-shiny_pm0928_00_31_LowerTeethSkin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0928_00_31_gfbmdl/Skeleton3D/pm0928_00_31_UpperTeethSkin",
+            "resource_names": [
+              "model-body-detail-review_pm0928_00_31_UpperTeethSkin",
+              "obstagoon-shiny_pm0928_00_31_UpperTeethSkin"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:ogerpon-cornerstone:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_14_00/Skeleton3D/pm1120_11_00_body_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_body_mesh_shape",
+              "shiny_pm1120_11_00_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_14_00/Skeleton3D/pm1120_11_00_branch_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_branch_mesh_shape",
+              "shiny_pm1120_11_00_branch_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_14_00/Skeleton3D/pm1120_11_00_coat_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_coat_mesh_shape",
+              "shiny_pm1120_11_00_coat_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_14_00/Skeleton3D/pm1120_11_00_eye_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_eye_mesh_shape",
+              "shiny_pm1120_11_00_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_14_00/Skeleton3D/pm1120_11_00_face_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_face_mesh_shape",
+              "shiny_pm1120_11_00_face_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_14_00/Skeleton3D/pm1120_11_00_leftleg_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_leftleg_mesh_shape",
+              "shiny_pm1120_11_00_leftleg_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_14_00/Skeleton3D/pm1120_11_00_rightleg_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_rightleg_mesh_shape",
+              "shiny_pm1120_11_00_rightleg_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_14_00/Skeleton3D/pm1120_11_00_tentacle_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_tentacle_mesh_shape",
+              "shiny_pm1120_11_00_tentacle_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_14_00/Skeleton3D/pm1120_11_00_wepon_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_wepon_mesh_shape",
+              "shiny_pm1120_11_00_wepon_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_14_00/Skeleton3D/pm1120_14_00_body_b_mesh",
+            "resource_names": [
+              "normal_pm1120_14_00_body_b_mesh_shape",
+              "shiny_pm1120_14_00_body_b_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:ogerpon-hearthflame:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_13_00/Skeleton3D/pm1120_11_00_body_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_body_mesh_shape",
+              "shiny_pm1120_11_00_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_13_00/Skeleton3D/pm1120_11_00_branch_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_branch_mesh_shape",
+              "shiny_pm1120_11_00_branch_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_13_00/Skeleton3D/pm1120_11_00_coat_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_coat_mesh_shape",
+              "shiny_pm1120_11_00_coat_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_13_00/Skeleton3D/pm1120_11_00_eye_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_eye_mesh_shape",
+              "shiny_pm1120_11_00_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_13_00/Skeleton3D/pm1120_11_00_face_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_face_mesh_shape",
+              "shiny_pm1120_11_00_face_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_13_00/Skeleton3D/pm1120_11_00_leftleg_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_leftleg_mesh_shape",
+              "shiny_pm1120_11_00_leftleg_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_13_00/Skeleton3D/pm1120_11_00_rightleg_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_rightleg_mesh_shape",
+              "shiny_pm1120_11_00_rightleg_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_13_00/Skeleton3D/pm1120_11_00_tentacle_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_tentacle_mesh_shape",
+              "shiny_pm1120_11_00_tentacle_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_13_00/Skeleton3D/pm1120_11_00_wepon_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_wepon_mesh_shape",
+              "shiny_pm1120_11_00_wepon_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_13_00/Skeleton3D/pm1120_13_00_body_b_mesh",
+            "resource_names": [
+              "normal_pm1120_13_00_body_b_mesh_shape",
+              "shiny_pm1120_13_00_body_b_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:ogerpon-wellspring:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_12_00/Skeleton3D/pm1120_11_00_body_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_body_mesh_shape",
+              "shiny_pm1120_11_00_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_12_00/Skeleton3D/pm1120_11_00_branch_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_branch_mesh_shape",
+              "shiny_pm1120_11_00_branch_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_12_00/Skeleton3D/pm1120_11_00_coat_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_coat_mesh_shape",
+              "shiny_pm1120_11_00_coat_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_12_00/Skeleton3D/pm1120_11_00_eye_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_eye_mesh_shape",
+              "shiny_pm1120_11_00_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_12_00/Skeleton3D/pm1120_11_00_face_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_face_mesh_shape",
+              "shiny_pm1120_11_00_face_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_12_00/Skeleton3D/pm1120_11_00_leftleg_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_leftleg_mesh_shape",
+              "shiny_pm1120_11_00_leftleg_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_12_00/Skeleton3D/pm1120_11_00_rightleg_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_rightleg_mesh_shape",
+              "shiny_pm1120_11_00_rightleg_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_12_00/Skeleton3D/pm1120_11_00_tentacle_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_tentacle_mesh_shape",
+              "shiny_pm1120_11_00_tentacle_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_12_00/Skeleton3D/pm1120_11_00_wepon_mesh",
+            "resource_names": [
+              "normal_pm1120_11_00_wepon_mesh_shape",
+              "shiny_pm1120_11_00_wepon_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm1120_12_00/Skeleton3D/pm1120_12_00_body_b_mesh",
+            "resource_names": [
+              "normal_pm1120_12_00_body_b_mesh_shape",
+              "shiny_pm1120_12_00_body_b_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:persian-alola:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0053_00_11/Skeleton3D/pm0053_00_11_body_mesh",
+            "resource_names": [
+              "persian-alola_pm0053_00_11_body_mesh_shape",
+              "persian-alola-shiny_pm0053_00_11_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0053_00_11/Skeleton3D/pm0053_00_11_eye_mesh",
+            "resource_names": [
+              "persian-alola_pm0053_00_11_eye_mesh_shape",
+              "persian-alola-shiny_pm0053_00_11_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0053_00_11/Skeleton3D/pm0053_00_11_feeler_mesh",
+            "resource_names": [
+              "persian-alola_pm0053_00_11_feeler_mesh_shape",
+              "persian-alola-shiny_pm0053_00_11_feeler_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0053_00_11/Skeleton3D/pm0053_00_11_head_mesh",
+            "resource_names": [
+              "persian-alola_pm0053_00_11_head_mesh_shape",
+              "persian-alola-shiny_pm0053_00_11_head_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0053_00_11/Skeleton3D/pm0053_00_11_teeth_mesh",
+            "resource_names": [
+              "persian-alola_pm0053_00_11_teeth_mesh_shape",
+              "persian-alola-shiny_pm0053_00_11_teeth_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:pikachu-alola:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0025_16_00/Skeleton3D/pm0025_11_00_body_mesh",
+            "resource_names": [
+              "pikachu-alola_pm0025_11_00_body_mesh_shape",
+              "pikachu-alola-shiny_pm0025_11_00_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0025_16_00/Skeleton3D/pm0025_11_00_sippo_mesh",
+            "resource_names": [
+              "pikachu-alola_pm0025_11_00_sippo_mesh_shape",
+              "pikachu-alola-shiny_pm0025_11_00_sippo_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0025_16_00/Skeleton3D/pm0025_11_00_tongue_mesh",
+            "resource_names": [
+              "pikachu-alola_pm0025_11_00_tongue_mesh_shape",
+              "pikachu-alola-shiny_pm0025_11_00_tongue_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0025_16_00/Skeleton3D/pm0025_16_00_sacap_ni_mesh",
+            "resource_names": [
+              "pikachu-alola_pm0025_16_00_sacap_ni_mesh_shape",
+              "pikachu-alola-shiny_pm0025_16_00_sacap_ni_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0025_16_00/Skeleton3D/pm0026_11_00_left_eye_mesh",
+            "resource_names": [
+              "pikachu-alola_pm0026_11_00_left_eye_mesh_shape",
+              "pikachu-alola-shiny_pm0026_11_00_left_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0025_16_00/Skeleton3D/pm0026_11_00_right_eye_mesh",
+            "resource_names": [
+              "pikachu-alola_pm0026_11_00_right_eye_mesh_shape",
+              "pikachu-alola-shiny_pm0026_11_00_right_eye_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:qwilfish-hisui:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0211_00_41/Skeleton3D/pm0211_00_41_body_mesh",
+            "resource_names": [
+              "qwilfish-hisui_pm0211_00_41_body_mesh_shape",
+              "qwilfish-hisui-shiny_pm0211_00_41_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0211_00_41/Skeleton3D/pm0211_00_41_eye_mesh",
+            "resource_names": [
+              "qwilfish-hisui_pm0211_00_41_eye_mesh_shape",
+              "qwilfish-hisui-shiny_pm0211_00_41_eye_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:samurott-hisui:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0503_00_41/Skeleton3D/pm0503_00_41_body_a_mesh",
+            "resource_names": [
+              "samurott-hisui_pm0503_00_41_body_a_mesh_shape",
+              "samurott-hisui-shiny_pm0503_00_41_body_a_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0503_00_41/Skeleton3D/pm0503_00_41_body_b_mesh",
+            "resource_names": [
+              "samurott-hisui_pm0503_00_41_body_b_mesh_shape",
+              "samurott-hisui-shiny_pm0503_00_41_body_b_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0503_00_41/Skeleton3D/pm0503_00_41_body_c_mesh",
+            "resource_names": [
+              "samurott-hisui_pm0503_00_41_body_c_mesh_shape",
+              "samurott-hisui-shiny_pm0503_00_41_body_c_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0503_00_41/Skeleton3D/pm0503_00_41_eye_mesh",
+            "resource_names": [
+              "samurott-hisui_pm0503_00_41_eye_mesh_shape",
+              "samurott-hisui-shiny_pm0503_00_41_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0503_00_41/Skeleton3D/pm0503_00_41_left_sword_mesh",
+            "resource_names": [
+              "samurott-hisui_pm0503_00_41_left_sword_mesh_shape",
+              "samurott-hisui-shiny_pm0503_00_41_left_sword_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0503_00_41/Skeleton3D/pm0503_00_41_right_sword_mesh",
+            "resource_names": [
+              "samurott-hisui_pm0503_00_41_right_sword_mesh_shape",
+              "samurott-hisui-shiny_pm0503_00_41_right_sword_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0503_00_41/Skeleton3D/pm0503_00_41_sword_a_mesh",
+            "resource_names": [
+              "samurott-hisui_pm0503_00_41_sword_a_mesh_shape",
+              "samurott-hisui-shiny_pm0503_00_41_sword_a_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0503_00_41/Skeleton3D/pm0503_00_41_sword_b_mesh",
+            "resource_names": [
+              "samurott-hisui_pm0503_00_41_sword_b_mesh_shape",
+              "samurott-hisui-shiny_pm0503_00_41_sword_b_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:silvally:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0862_11_gfbmdl/Skeleton3D/EffGcloud01",
+            "resource_names": [
+              "model-body-detail-review_EffGcloud01",
+              "silvally-shiny_EffGcloud01"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0862_11_gfbmdl/Skeleton3D/VriTex11",
+            "resource_names": [
+              "model-body-detail-review_VriTex11",
+              "silvally-shiny_VriTex11"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0862_11_gfbmdl/Skeleton3D/pm0862_11_BodySkin",
+            "resource_names": [
+              "model-body-detail-review_pm0862_11_BodySkin",
+              "silvally-shiny_pm0862_11_BodySkin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0862_11_gfbmdl/Skeleton3D/pm0862_11_HeadSkin",
+            "resource_names": [
+              "model-body-detail-review_pm0862_11_HeadSkin",
+              "silvally-shiny_pm0862_11_HeadSkin"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:slowbro-galar:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0080_00_31/Skeleton3D/pm0080_00_31_body_a_mesh",
+            "resource_names": [
+              "slowbro-galar_pm0080_00_31_body_a_mesh_shape",
+              "slowbro-galar-shiny_pm0080_00_31_body_a_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0080_00_31/Skeleton3D/pm0080_00_31_body_b_mesh",
+            "resource_names": [
+              "slowbro-galar_pm0080_00_31_body_b_mesh_shape",
+              "slowbro-galar-shiny_pm0080_00_31_body_b_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0080_00_31/Skeleton3D/pm0080_00_31_eye_a_mesh",
+            "resource_names": [
+              "slowbro-galar_pm0080_00_31_eye_a_mesh_shape",
+              "slowbro-galar-shiny_pm0080_00_31_eye_a_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:slowking-galar:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0199_00_31/Skeleton3D/pm0199_00_31_body_a_mesh",
+            "resource_names": [
+              "slowking-galar_pm0199_00_31_body_a_mesh_shape",
+              "slowking-galar-shiny_pm0199_00_31_body_a_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0199_00_31/Skeleton3D/pm0199_00_31_body_b_mesh",
+            "resource_names": [
+              "slowking-galar_pm0199_00_31_body_b_mesh_shape",
+              "slowking-galar-shiny_pm0199_00_31_body_b_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0199_00_31/Skeleton3D/pm0199_00_31_c_mesh",
+            "resource_names": [
+              "slowking-galar_pm0199_00_31_c_mesh_shape",
+              "slowking-galar-shiny_pm0199_00_31_c_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0199_00_31/Skeleton3D/pm0199_00_31_d_mesh",
+            "resource_names": [
+              "slowking-galar_pm0199_00_31_d_mesh_shape",
+              "slowking-galar-shiny_pm0199_00_31_d_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0199_00_31/Skeleton3D/pm0199_00_31_eye_mesh",
+            "resource_names": [
+              "slowking-galar_pm0199_00_31_eye_mesh_shape",
+              "slowking-galar-shiny_pm0199_00_31_eye_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:slowpoke-galar:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0079_00_31/Skeleton3D/pm0079_00_31_body_mesh",
+            "resource_names": [
+              "slowpoke-galar_pm0079_00_31_body_mesh_shape",
+              "slowpoke-galar-shiny_pm0079_00_31_body_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:sneasel-hisui:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0215_00_41/Skeleton3D/pm0215_00_41_body_mesh",
+            "resource_names": [
+              "sneasel-hisui_pm0215_00_41_body_mesh_shape",
+              "sneasel-hisui-shiny_pm0215_00_41_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0215_00_41/Skeleton3D/pm0215_00_41_eye_mesh",
+            "resource_names": [
+              "sneasel-hisui_pm0215_00_41_eye_mesh_shape",
+              "sneasel-hisui-shiny_pm0215_00_41_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0215_00_41/Skeleton3D/pm0215_00_41_left_ear_mesh",
+            "resource_names": [
+              "sneasel-hisui_pm0215_00_41_left_ear_mesh_shape",
+              "sneasel-hisui-shiny_pm0215_00_41_left_ear_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:tangrowth:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0465_00_00/Skeleton3D/pm0465_00_00_body_mesh",
+            "resource_names": [
+              "native-colour_pm0465_00_00_body_mesh_shape",
+              "model_pm0465_00_00_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0465_00_00/Skeleton3D/pm0465_00_00_eye_mesh",
+            "resource_names": [
+              "native-colour_pm0465_00_00_eye_mesh_shape",
+              "model_pm0465_00_00_eye_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:tauros-paldea-aqua:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_13_51/Skeleton3D/pm0128_13_51_body_mesh",
+            "resource_names": [
+              "tauros-paldea-aqua_pm0128_13_51_body_mesh_shape",
+              "tauros-paldea-aqua-shiny_pm0128_13_51_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_13_51/Skeleton3D/pm0128_13_51_eye_mesh",
+            "resource_names": [
+              "tauros-paldea-aqua_pm0128_13_51_eye_mesh_shape",
+              "tauros-paldea-aqua-shiny_pm0128_13_51_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_13_51/Skeleton3D/pm0128_13_51_fur_mesh",
+            "resource_names": [
+              "tauros-paldea-aqua_pm0128_13_51_fur_mesh_shape",
+              "tauros-paldea-aqua-shiny_pm0128_13_51_fur_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_13_51/Skeleton3D/pm0128_13_51_head_mesh",
+            "resource_names": [
+              "tauros-paldea-aqua_pm0128_13_51_head_mesh_shape",
+              "tauros-paldea-aqua-shiny_pm0128_13_51_head_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_13_51/Skeleton3D/pm0128_13_51_tail_mesh",
+            "resource_names": [
+              "tauros-paldea-aqua_pm0128_13_51_tail_mesh_shape",
+              "tauros-paldea-aqua-shiny_pm0128_13_51_tail_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:tauros-paldea-blaze:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_12_51/Skeleton3D/pm0128_12_51_body_mesh",
+            "resource_names": [
+              "tauros-paldea-blaze_pm0128_12_51_body_mesh_shape",
+              "tauros-paldea-blaze-shiny_pm0128_12_51_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_12_51/Skeleton3D/pm0128_12_51_eye_mesh",
+            "resource_names": [
+              "tauros-paldea-blaze_pm0128_12_51_eye_mesh_shape",
+              "tauros-paldea-blaze-shiny_pm0128_12_51_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_12_51/Skeleton3D/pm0128_12_51_fur_mesh",
+            "resource_names": [
+              "tauros-paldea-blaze_pm0128_12_51_fur_mesh_shape",
+              "tauros-paldea-blaze-shiny_pm0128_12_51_fur_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_12_51/Skeleton3D/pm0128_12_51_head_mesh",
+            "resource_names": [
+              "tauros-paldea-blaze_pm0128_12_51_head_mesh_shape",
+              "tauros-paldea-blaze-shiny_pm0128_12_51_head_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_12_51/Skeleton3D/pm0128_12_51_tail_mesh",
+            "resource_names": [
+              "tauros-paldea-blaze_pm0128_12_51_tail_mesh_shape",
+              "tauros-paldea-blaze-shiny_pm0128_12_51_tail_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:tauros-paldea-combat:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_11_51/Skeleton3D/pm0128_11_51_body_mesh",
+            "resource_names": [
+              "tauros-paldea-combat_pm0128_11_51_body_mesh_shape",
+              "tauros-paldea-combat-shiny_pm0128_11_51_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_11_51/Skeleton3D/pm0128_11_51_eye_mesh",
+            "resource_names": [
+              "tauros-paldea-combat_pm0128_11_51_eye_mesh_shape",
+              "tauros-paldea-combat-shiny_pm0128_11_51_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_11_51/Skeleton3D/pm0128_11_51_fur_mesh",
+            "resource_names": [
+              "tauros-paldea-combat_pm0128_11_51_fur_mesh_shape",
+              "tauros-paldea-combat-shiny_pm0128_11_51_fur_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0128_11_51/Skeleton3D/pm0128_11_51_tail_mesh",
+            "resource_names": [
+              "tauros-paldea-combat_pm0128_11_51_tail_mesh_shape",
+              "tauros-paldea-combat-shiny_pm0128_11_51_tail_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:typhlosion-hisui:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0157_00_41/Skeleton3D/pm0157_00_41_body_mesh",
+            "resource_names": [
+              "typhlosion-hisui_pm0157_00_41_body_mesh_shape",
+              "typhlosion-hisui-shiny_pm0157_00_41_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0157_00_41/Skeleton3D/pm0157_00_41_eye_mesh",
+            "resource_names": [
+              "typhlosion-hisui_pm0157_00_41_eye_mesh_shape",
+              "typhlosion-hisui-shiny_pm0157_00_41_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0157_00_41/Skeleton3D/pm0157_00_41_flame_a_01_mesh",
+            "resource_names": [
+              "typhlosion-hisui_pm0157_00_41_flame_a_01_mesh_shape",
+              "typhlosion-hisui-shiny_pm0157_00_41_flame_a_01_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0157_00_41/Skeleton3D/pm0157_00_41_flame_a_02_mesh",
+            "resource_names": [
+              "typhlosion-hisui_pm0157_00_41_flame_a_02_mesh_shape",
+              "typhlosion-hisui-shiny_pm0157_00_41_flame_a_02_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0157_00_41/Skeleton3D/pm0157_00_41_flame_a_03_mesh",
+            "resource_names": [
+              "typhlosion-hisui_pm0157_00_41_flame_a_03_mesh_shape",
+              "typhlosion-hisui-shiny_pm0157_00_41_flame_a_03_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0157_00_41/Skeleton3D/pm0157_00_41_flame_a_04_mesh",
+            "resource_names": [
+              "typhlosion-hisui_pm0157_00_41_flame_a_04_mesh_shape",
+              "typhlosion-hisui-shiny_pm0157_00_41_flame_a_04_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0157_00_41/Skeleton3D/pm0157_00_41_flame_b_mesh",
+            "resource_names": [
+              "typhlosion-hisui_pm0157_00_41_flame_b_mesh_shape",
+              "typhlosion-hisui-shiny_pm0157_00_41_flame_b_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:vileplume:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0045_00_00/Skeleton3D/pm0045_00_00_body_mesh",
+            "resource_names": [
+              "normal_pm0045_00_00_body_mesh_shape",
+              "shiny_pm0045_00_00_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0045_00_00/Skeleton3D/pm0045_00_00_eye_mesh",
+            "resource_names": [
+              "normal_pm0045_00_00_eye_mesh_shape",
+              "shiny_pm0045_00_00_eye_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0045_00_00/Skeleton3D/pm0045_00_00_petal_mesh",
+            "resource_names": [
+              "normal_pm0045_00_00_petal_mesh_shape",
+              "shiny_pm0045_00_00_petal_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:walking-wake:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./Armature/Skeleton3D/pm1009_00_00_BodySkin",
+            "resource_names": [
+              "walking-wake-normal_pm1009_00_00_BodySkin",
+              "walking-wake-shiny_pm1009_00_00_BodySkin"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./Armature/Skeleton3D/pm1009_00_00_HairSkin",
+            "resource_names": [
+              "walking-wake-normal_pm1009_00_00_HairSkin",
+              "walking-wake-shiny_pm1009_00_00_HairSkin"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:wishiwashi:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0820_11_gfbmdl/Skeleton3D/EffGcloud01",
+            "resource_names": [
+              "model-body-detail-review_EffGcloud01",
+              "wishiwashi-shiny_EffGcloud01"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:zoroark-hisui:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0571_00_41/Skeleton3D/pm0571_00_41_body_mesh",
+            "resource_names": [
+              "zoroark-hisui_pm0571_00_41_body_mesh_shape",
+              "zoroark-hisui-shiny_pm0571_00_41_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0571_00_41/Skeleton3D/pm0571_00_41_eye_mesh",
+            "resource_names": [
+              "zoroark-hisui_pm0571_00_41_eye_mesh_shape",
+              "zoroark-hisui-shiny_pm0571_00_41_eye_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:zorua-hisui:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0570_00_41/Skeleton3D/pm0570_00_41_body_mesh",
+            "resource_names": [
+              "zorua-hisui_pm0570_00_41_body_mesh_shape",
+              "zorua-hisui-shiny_pm0570_00_41_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0570_00_41/Skeleton3D/pm0570_00_41_neck_mesh",
+            "resource_names": [
+              "zorua-hisui_pm0570_00_41_neck_mesh_shape",
+              "zorua-hisui-shiny_pm0570_00_41_neck_mesh_shape"
+            ]
+          }
+        ]
+      },
+      {
+        "all_differences_are_resource_names": true,
+        "asset_id": "pokemon_3d:zygarde-50:base",
+        "differences": [
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0770_12_00/Skeleton3D/pm0770_12_00_body_mesh",
+            "resource_names": [
+              "model_pm0770_12_00_body_mesh_shape",
+              "zygarde-model_pm0770_12_00_body_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0770_12_00/Skeleton3D/pm0770_12_00_eff_a_mesh",
+            "resource_names": [
+              "model_pm0770_12_00_eff_a_mesh_shape",
+              "zygarde-model_pm0770_12_00_eff_a_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0770_12_00/Skeleton3D/pm0770_12_00_eff_b_mesh",
+            "resource_names": [
+              "model_pm0770_12_00_eff_b_mesh_shape",
+              "zygarde-model_pm0770_12_00_eff_b_mesh_shape"
+            ]
+          },
+          {
+            "all_other_mesh_properties_exact": true,
+            "node": "./pm0770_12_00/Skeleton3D/pm0770_12_00_eye_mesh",
+            "resource_names": [
+              "model_pm0770_12_00_eye_mesh_shape",
+              "zygarde-model_pm0770_12_00_eye_mesh_shape"
+            ]
+          }
+        ]
+      }
+    ],
+    "mesh_binding_pairs_equal_excluding_resource_name": 1200,
+    "pairs": 1200.0,
+    "production_approved": false,
+    "prototype_only": true,
+    "source_report_sha256": "10fc045e40d75728c9723a6d001ef42c3deb1aa4bb406101552dda988f3f6a77",
+    "strict_mesh_binding_pairs": 1159.0
+  },
+  "production_approved": false,
+  "prototype_only": true,
+  "r2_changed": false,
+  "schema": 1,
+  "validation": {
+    "candidate_pixel_exact_frames": 20,
+    "cold_candidate_only_load": "passed",
+    "focused_invariants": "passed",
+    "full_audit_batches": 60,
+    "full_audit_pairs": 1200,
+    "gpu": "Linux Godot 4.6.2, Mobile Vulkan, NVIDIA RTX 3070 Laptop GPU",
+    "native_windows_macos_android_tested": false,
+    "source_repeat_exact_frames": 20
+  }
+}
