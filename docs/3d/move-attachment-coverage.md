@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1017 species/forms.
-- No anatomical attachment profile: 183 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 901 species/forms.
+- At least one configured anatomical attachment: 1022 species/forms.
+- No anatomical attachment profile: 178 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 913 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -290,7 +290,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | espurr | hand, left_hand, mouth | Same attachment profile |
 | excadrill | hand, left_hand, mouth | Same attachment profile |
 | excadrill-mega | mouth | Same attachment profile |
-| exeggutor | foot, left_foot | Same attachment profile |
+| exeggutor | foot, left_foot, mouth | Same attachment profile |
 | exeggutor-alola | foot, left_foot | Same attachment profile |
 | exploud | foot, left_foot, mouth | Same attachment profile |
 | falinks | hand, left_hand | Same attachment profile |
@@ -336,6 +336,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | gabite | hand, left_hand, mouth | Same attachment profile |
 | gallade | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | gallade-mega | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| galvantula | mouth | Same attachment profile |
 | garbodor | hand, mouth | Same attachment profile |
 | garchomp | hand, left_hand, mouth | Same attachment profile |
 | garchomp-mega | mouth | Same attachment profile |
@@ -399,7 +400,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | grumpig | foot, hand, left_foot, left_hand | Same attachment profile |
 | gulpin | hand, left_hand, mouth | Same attachment profile |
 | gumshoos | hand, left_hand, mouth | Same attachment profile |
-| gurdurr | foot, hand, left_foot, left_hand | Same attachment profile |
+| gurdurr | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | guzzlord | mouth | Same attachment profile |
 | gyarados | mouth | Same attachment profile |
 | gyarados-mega | mouth | Same attachment profile |
@@ -407,7 +408,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | happiny | hand, left_hand, mouth | Same attachment profile |
 | hariyama | foot, hand, left_foot, left_hand | Same attachment profile |
 | hatenna | mouth | Same attachment profile |
-| hatterene | mouth | Same attachment profile |
+| hatterene | casting, mouth | Same attachment profile |
 | hattrem | mouth | Same attachment profile |
 | haunter | hand, left_hand, mouth | Same attachment profile |
 | hawlucha | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -458,7 +459,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | jigglypuff | hand, left_hand, mouth | Same attachment profile |
 | jirachi | hand, left_hand, mouth | Same attachment profile |
 | jolteon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| joltik | hand, left_hand | Same attachment profile |
+| joltik | hand, left_hand, mouth | Same attachment profile |
 | jumpluff | mouth | Same attachment profile |
 | jynx | hand, left_hand, mouth | Same attachment profile |
 | kabuto | mouth | Same attachment profile |
@@ -502,6 +503,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | latios-mega | mouth | Same attachment profile |
 | leafeon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | leavanny | foot, left_foot, mouth | Same attachment profile |
+| lechonk | mouth | Same attachment profile |
 | ledian | mouth | Same attachment profile |
 | ledyba | mouth | Same attachment profile |
 | lickilicky | hand, left_hand, mouth | Same attachment profile |
@@ -527,6 +529,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | ludicolo | hand, left_hand, mouth | Same attachment profile |
 | lugia | hand, left_hand | Same attachment profile |
 | lumineon | hand, left_hand, mouth | Same attachment profile |
+| lunala | mouth | Same attachment profile |
 | lunatone | mouth | Same attachment profile |
 | luvdisc | mouth | Same attachment profile |
 | luxio | foot, left_foot, mouth | Same attachment profile |
@@ -583,10 +586,11 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | mewtwo | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | mewtwo-mega-x | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | mewtwo-mega-y | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| mienfoo | foot, hand, left_foot, left_hand | Same attachment profile |
-| mienshao | foot, hand, left_foot, left_hand | Same attachment profile |
+| mienfoo | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| mienshao | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | mightyena | hand, left_hand, mouth | Same attachment profile |
 | milcery | mouth | Same attachment profile |
+| milotic | mouth | Same attachment profile |
 | miltank | hand, left_hand, mouth | Same attachment profile |
 | mime-jr | hand, left_hand, mouth | Same attachment profile |
 | minccino | hand, left_hand | Same attachment profile |
@@ -603,7 +607,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | mr-mime | hand, left_hand, mouth | Same attachment profile |
 | mr-mime-galar | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | mr-rime | foot, hand, left_foot, left_hand | Same attachment profile |
-| mudbray | foot, hand, left_foot, left_hand | Same attachment profile |
+| mudbray | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | mudkip | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | mudsdale | foot, hand, left_foot, left_hand | Same attachment profile |
 | muk | mouth | Same attachment profile |
@@ -628,6 +632,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | ninjask | hand, left_hand, mouth | Same attachment profile |
 | noctowl | mouth | Same attachment profile |
 | noibat | mouth | Same attachment profile |
+| noivern | mouth | Same attachment profile |
 | numel | hand, left_hand, mouth | Same attachment profile |
 | nuzleaf | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | nymble | foot, left_foot | Same attachment profile |
@@ -837,7 +842,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | slowbro-galar | hand, mouth | Same attachment profile |
 | slowbro-mega | hand, left_hand | Same attachment profile |
 | slowking | hand, left_hand, mouth | Same attachment profile |
-| slowking-galar | hand, left_hand | Same attachment profile |
+| slowking-galar | hand, left_hand, mouth | Same attachment profile |
 | slowpoke | mouth | Same attachment profile |
 | slowpoke-galar | mouth | Same attachment profile |
 | slurpuff | mouth | Same attachment profile |
