@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reimport the enlarged Guild Base personal-room visual and align its collision, camera mask, arrival and return door with the new layout.
+
 - Organize the Guild Base lift into a compact searchable floor grid with ground-floor and personal-room shortcuts and a fixed destination footer.
 - Show localized general item descriptions in NPC shop details, rows and tooltips; retain evolution instructions in the Bag and Item Dex.
 
