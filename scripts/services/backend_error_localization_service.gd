@@ -11,6 +11,8 @@ const CATALOG_PATHS: Dictionary = {
 }
 
 const CODE_TO_KEY: Dictionary = {
+	"WORLD_TRANSITION_ACTIVITY_BLOCKED": "backend.error.action_blocked",
+	"guild_base_not_owned": "ui.guild.base.not_owned",
 	"guild_base_visit_no_host": "ui.guild_base.visits.error_no_host",
 	"guild_base_visit_cooldown": "ui.guild_base.visits.error_cooldown",
 	"guild_base_visit_approval_required": "ui.guild_base.visits.error_approval",

@@ -555,7 +555,20 @@ func _run() -> void:
 	var lobby_button := popup.find_child("GuildLobbyTeleportButton", true, false) as Button
 	_check(lobby_button != null and not lobby_button.disabled, "Aether Clash Lobby travel is available")
 	var base_button := popup.find_child("GuildBaseTeleportButton", true, false) as Button
-	_check(base_button != null and base_button.disabled, "future Guild Base travel is visible but inactive")
+	_check(base_button != null and base_button.disabled, "Guild Base travel is inactive until the Guild owns a base")
+	var travel_actions := popup._build_guild_header_travel_actions({"baseTownId": "kanto_vermilion_city"}, false)
+	popup.add_child(travel_actions)
+	var owned_base := travel_actions.find_child("GuildBaseTeleportButton", true, false) as Button
+	_check(owned_base != null and not owned_base.disabled, "Guild members can travel to their purchased base")
+	var base_requests: Array = []
+	popup.base_teleport_requested.connect(func(): base_requests.append(true))
+	owned_base.pressed.emit()
+	_check(base_requests.size() == 1, "the base button requests its own destination rather than Lobby travel")
+	travel_actions.free()
+	var no_base := popup._build_guild_header_travel_actions({"baseTownId": null}, false)
+	popup.add_child(no_base)
+	_check((no_base.find_child("GuildBaseTeleportButton", true, false) as Button).disabled, "a null base address keeps travel inactive")
+	no_base.free()
 	var overview_tab := popup.find_child("GuildOverviewTab", true, false) as Button
 	if overview_tab != null:
 		overview_tab.pressed.emit()

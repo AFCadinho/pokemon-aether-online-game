@@ -87,7 +87,7 @@ func _init() -> void:
 	_check_contains(popup_source, "guild_section_navigation.visible = true", "Guild members receive section tabs in the primary navigation")
 	_check_contains(popup_source, "browse_tab_button.custom_minimum_size = Vector2(150, 34)", "Guild discovery becomes compact for existing members")
 	_check_contains(popup_source, "GuildLobbyTeleportButton", "guild travel exposes Aether Clash Lobby travel")
-	_check_contains(popup_source, "GuildBaseTeleportButton", "guild travel previews the future Guild Base destination")
+	_check_contains(popup_source, "GuildBaseTeleportButton", "guild travel exposes the Guild Base destination")
 	_check_contains(popup_source, '"ui.guild.lobby.teleport"', "Lobby travel action is localized")
 	_check_contains(popup_source, "func _build_guild_funds_workspace", "Guild Bank provides shared-funds transactions")
 	_check_contains(popup_source, "func _build_guild_pokemon_workspace", "Guild Bank provides Guild-owned Pokémon storage")

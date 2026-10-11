@@ -4,6 +4,7 @@ class_name GuildPopup
 
 signal closed
 signal lobby_teleport_requested
+signal base_teleport_requested
 signal private_message_requested(user: Dictionary)
 signal trainer_card_requested(player: Dictionary)
 
@@ -1418,10 +1419,12 @@ func _build_guild_header_travel_actions(guild: Dictionary, is_leader: bool) -> C
 	var base_button := Button.new()
 	base_button.name = "GuildBaseTeleportButton"
 	_set_localized_property(base_button, "text", "ui.guild.base.teleport")
-	_set_localized_property(base_button, "tooltip_text", "ui.guild.base.tooltip")
+	var owns_base := not str(guild.get("baseTownId", "") if guild.get("baseTownId") != null else "").is_empty()
+	_set_localized_property(base_button, "tooltip_text", "ui.guild.base.tooltip" if owns_base else "ui.guild.base.not_owned")
 	base_button.custom_minimum_size = Vector2(128, 36)
 	base_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	base_button.disabled = true
+	base_button.disabled = not owns_base
+	base_button.pressed.connect(func(): base_teleport_requested.emit())
 	_apply_button_style(base_button)
 	secondary_row.add_child(base_button)
 	var options := MenuButton.new()
