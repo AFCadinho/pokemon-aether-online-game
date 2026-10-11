@@ -26,7 +26,7 @@ static func load_icon(
 	if REGIONAL_EVOLUTION_STONE_ICONS.has(canonical_id):
 		return _load_texture(REGIONAL_EVOLUTION_STONE_ICONS[canonical_id])
 	if canonical_id == "aether-band":
-		return _load_texture(ICON_ROOT + "AETHERBAND.svg")
+		return _load_texture(ICON_ROOT + "AETHERBAND.png")
 	if canonical_id == "gold-coin":
 		return _load_texture(ICON_ROOT + "GIMMIGHOULCOIN.png")
 	if canonical_id == "aether-gift-voucher":

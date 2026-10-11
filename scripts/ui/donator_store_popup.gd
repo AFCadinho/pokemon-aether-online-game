@@ -922,7 +922,7 @@ const CATALOG: Array[Dictionary] = [
 		"name": "Aether Band",
 		"description": "Held: Restores 1 PP to each of the holder's moves after winning a wild Pokémon battle. Untradeable. One purchase per account.",
 		"price": 1000,
-		"icon": preload("res://assets/items/icons/AETHERBAND.svg"),
+		"icon": preload("res://assets/items/icons/AETHERBAND.png"),
 		"categories": ["held-items"],
 		"badge": "HELD ITEM",
 	},
