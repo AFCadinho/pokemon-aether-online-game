@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add the Emerald Luchador outfit box for both player models, with five separately wearable cosmetics including a mask and feather-wing Back accessory. Available for item grants; no store listing.
+
+- Keep facegear with dedicated fishing and riding sprites aligned with the head by avoiding an extra activity offset, for local and remote players.
+
 - Replace Mega Hawlucha's incorrect 3D source with its own normal/shiny model and shared packs. Calibrate attack origins for Cramorant, Deoxys, Minior, Togedemaru and Mega Hawlucha; keep Hyper Beam aligned during their native attack poses.
 
 - Visit other Guild Bases through the guard, request entry to closed bases, and let members inside approve visitors. Keep guest access through the shared rooms and garden until departure to the street.

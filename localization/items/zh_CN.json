@@ -1111,5 +1111,29 @@
   "star-sweet": {
     "name": "星星糖饰",
     "shortDesc": "目前在PokeAether中没有进化效果。请对Milcery使用Strawberry Sweet。"
+  },
+  "emerald-luchador-shirt": {
+    "name": "Emerald Luchador 夹克",
+    "shortDesc": "男女训练家均可使用的固定配色外观。先在背包中激活，再在角色定制中穿戴。"
+  },
+  "emerald-luchador-trousers": {
+    "name": "Emerald Luchador 长裤",
+    "shortDesc": "男女训练家均可使用的固定配色外观。先在背包中激活，再在角色定制中穿戴。"
+  },
+  "emerald-luchador-shoes": {
+    "name": "Emerald Luchador 靴子",
+    "shortDesc": "男女训练家均可使用的固定配色外观。先在背包中激活，再在角色定制中穿戴。"
+  },
+  "emerald-luchador-mask": {
+    "name": "Emerald Luchador 面具",
+    "shortDesc": "男女训练家均可使用的固定配色外观。先在背包中激活，再在角色定制中穿戴。"
+  },
+  "emerald-luchador-wings": {
+    "name": "Emerald Luchador 羽翼",
+    "shortDesc": "将翠绿色羽翼装备在背部（Back）栏位，可搭配任意服装，适用于男女训练家。"
+  },
+  "emerald-luchador-outfit": {
+    "name": "Emerald Luchador 服装礼盒",
+    "shortDesc": "包含夹克、长裤、靴子、面具和背部羽翼五件独立外观，男女均可使用。请在背包中打开。"
   }
 }

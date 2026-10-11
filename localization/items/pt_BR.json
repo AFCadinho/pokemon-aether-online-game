@@ -1111,5 +1111,29 @@
   "star-sweet": {
     "name": "Estrela doce",
     "shortDesc": "Atualmente não tem efeito de evolução em PokeAether. Use Strawberry Sweet em Milcery."
+  },
+  "emerald-luchador-shirt": {
+    "name": "Emerald Luchador Jaqueta",
+    "shortDesc": "Cosmético de cores fixas para treinadores masculinos e femininos. Ative-o na Bolsa e equipe-o na personalização do personagem."
+  },
+  "emerald-luchador-trousers": {
+    "name": "Emerald Luchador Calça",
+    "shortDesc": "Cosmético de cores fixas para treinadores masculinos e femininos. Ative-o na Bolsa e equipe-o na personalização do personagem."
+  },
+  "emerald-luchador-shoes": {
+    "name": "Emerald Luchador Botas",
+    "shortDesc": "Cosmético de cores fixas para treinadores masculinos e femininos. Ative-o na Bolsa e equipe-o na personalização do personagem."
+  },
+  "emerald-luchador-mask": {
+    "name": "Emerald Luchador Máscara",
+    "shortDesc": "Cosmético de cores fixas para treinadores masculinos e femininos. Ative-o na Bolsa e equipe-o na personalização do personagem."
+  },
+  "emerald-luchador-wings": {
+    "name": "Emerald Luchador Asas",
+    "shortDesc": "Equipe estas asas de penas verdes no espaço Back com qualquer roupa. Para treinadores masculinos e femininos."
+  },
+  "emerald-luchador-outfit": {
+    "name": "Emerald Luchador Caixa de Roupa",
+    "shortDesc": "Contém cinco itens separados: jaqueta, calça, botas, máscara e asas para Back. Para ambos os gêneros. Abra a caixa na Bolsa."
   }
 }

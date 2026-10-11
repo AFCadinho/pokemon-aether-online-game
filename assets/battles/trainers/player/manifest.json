@@ -84,6 +84,10 @@
             "Thor_Trousers": {
               "path": "res://assets/battles/trainers/player/male/thor/bottom.png",
               "scale": 1.0
+            },
+            "EmeraldLuchador_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/emerald_luchador/Trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -154,6 +158,10 @@
             "Thor_Shoes": {
               "path": "res://assets/battles/trainers/player/male/thor/shoes.png",
               "scale": 1.0
+            },
+            "EmeraldLuchador_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/emerald_luchador/Shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -223,6 +231,10 @@
             },
             "Thor_Shirt": {
               "path": "res://assets/battles/trainers/player/male/thor/top.png",
+              "scale": 1.0
+            },
+            "EmeraldLuchador_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/emerald_luchador/Shirt.png",
               "scale": 1.0
             }
           }
@@ -320,6 +332,10 @@
             "LugiaSkyCaptain_Goggles": {
               "path": "res://assets/battles/trainers/player/male/adventure_outfits/lugia-sky-captain/facegear.png",
               "scale": 1.0
+            },
+            "EmeraldLuchador_Mask": {
+              "path": "res://assets/battles/trainers/player/male/emerald_luchador/Mask.png",
+              "scale": 1.0
             }
           }
         },
@@ -332,6 +348,10 @@
             "Thor_Hammer": {
               "path": "res://assets/battles/trainers/player/male/thor/cape.png",
               "scale": 1.0
+            },
+            "EmeraldLuchador_Wings": {
+              "path": "res://assets/battles/trainers/player/male/emerald_luchador/BackRear.png",
+              "scale": 1.0
             }
           }
         },
@@ -343,6 +363,10 @@
             },
             "Thor_Hammer": {
               "path": "res://assets/battles/trainers/player/male/thor/cape_overlay.png",
+              "scale": 1.0
+            },
+            "EmeraldLuchador_Wings": {
+              "path": "res://assets/battles/trainers/player/male/emerald_luchador/BackFront.png",
               "scale": 1.0
             }
           }
@@ -405,6 +429,10 @@
             },
             "Thor_Trousers": {
               "path": "res://assets/battles/trainers/player/female/thor/bottom.png",
+              "scale": 1.0
+            },
+            "EmeraldLuchador_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/emerald_luchador/Trousers.png",
               "scale": 1.0
             }
           }
@@ -476,6 +504,10 @@
             "Thor_Shoes": {
               "path": "res://assets/battles/trainers/player/female/thor/shoes.png",
               "scale": 1.0
+            },
+            "EmeraldLuchador_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/emerald_luchador/Shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -540,6 +572,10 @@
             },
             "Thor_Shirt": {
               "path": "res://assets/battles/trainers/player/female/thor/top.png",
+              "scale": 1.0
+            },
+            "EmeraldLuchador_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/emerald_luchador/Shirt.png",
               "scale": 1.0
             }
           }
@@ -629,6 +665,10 @@
             "LugiaSkyCaptain_Goggles": {
               "path": "res://assets/battles/trainers/player/female/adventure_outfits/lugia-sky-captain/facegear.png",
               "scale": 1.0
+            },
+            "EmeraldLuchador_Mask": {
+              "path": "res://assets/battles/trainers/player/female/emerald_luchador/Mask.png",
+              "scale": 1.0
             }
           }
         },
@@ -641,6 +681,10 @@
             "Thor_Hammer": {
               "path": "res://assets/battles/trainers/player/female/thor/cape.png",
               "scale": 1.0
+            },
+            "EmeraldLuchador_Wings": {
+              "path": "res://assets/battles/trainers/player/female/emerald_luchador/BackRear.png",
+              "scale": 1.0
             }
           }
         },
@@ -652,6 +696,10 @@
             },
             "Thor_Hammer": {
               "path": "res://assets/battles/trainers/player/female/thor/cape_overlay.png",
+              "scale": 1.0
+            },
+            "EmeraldLuchador_Wings": {
+              "path": "res://assets/battles/trainers/player/female/emerald_luchador/BackFront.png",
               "scale": 1.0
             }
           }
