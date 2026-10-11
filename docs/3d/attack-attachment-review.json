@@ -43,12 +43,12 @@
       "pending_multipose_correction": 8,
       "pending_runtime_identity_review": 4,
       "pending_runtime_visibility_and_anatomy_review": 4,
-      "sampled_marker_pose_review_pass_installed": 1792
+      "sampled_marker_pose_review_pass_installed": 1793
     },
     "runtime_profiles": 1086,
     "species_forms": 1200
   },
-  "profile_sha256": "61082d06a02fad548d697ef81891be060b86e6332eb652f4eb5f17827572b039",
+  "profile_sha256": "5ffc1f7a53042b79b78acce55765e3e71f7d98fdfb780dac1ea17dd5db1be015",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -89530,6 +89530,12 @@
           "scope": "Normal and shiny, two offline views, eight sampled fractions. Face binding and forward physical_attack .25/.45, yaw 0. The body and large impact art hide the exact contact; approach distance, body penetration and target contact must still be reviewed with both actors and unobscured geometry. Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
           "status": "sampled_native_action_and_attachment_review_contact_clearance_pending"
         },
+        "poisonsting": {
+          "action": "physical_attack_2",
+          "part": "spike",
+          "scope": "Normal and shiny, two views at .30/.34/.35/.36/.38/.42/.50/.70. The individually projected upper front spike tip turns toward the target during physical_attack_2. Poison Sting .35/.50 launches from that tip. Rejected the original dart dimensions because they covered the spike and reached the cocoon; scale .2 keeps the .35 initial dart at the tip and .36/.38 darts clear in front. Projectiles retain their captured launch position and are clear by .42. Target impact dimensions are unchanged. Other moves, full continuous clearance, other targets and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
         "stringshot": {
           "action": "physical_attack",
           "part": "face",
@@ -89538,7 +89544,7 @@
         }
       },
       "latest_candidate_review": {
-        "notes": "Front face surface projected; String Shot follows the physical attack with reduced thread width. Bug Bite native action selected, but exact contact distance/penetration pending. Remaining body/spine/powder routes pending.",
+        "notes": "No visible oral opening. String Shot uses the front face; Poison Sting uses the upper spike tip during the forward flip with reduced dart dimensions. Both sampled normal/shiny. Bug Bite exact contact and remaining body moves pending.",
         "status": "mouthless_with_reviewed_casting_parts"
       },
       "mouth_status": "mouthless_with_reviewed_casting_parts",
@@ -89571,6 +89577,37 @@
             "impact_frame": 73.125,
             "launch_frame": 40.625,
             "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "poisonsting": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "784fca6bd8b2167b13b2ff9376b58c08dacbc51a3cfe64db837137b7267859ca",
+          "fractions": [
+            0.3,
+            0.34,
+            0.35,
+            0.36,
+            0.38,
+            0.42,
+            0.5,
+            0.7
+          ],
+          "normal_runtime_sha256": "dfe47643b6aad20d5a5366de9a3547ca286284989e416e56358df617f111755c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "12b20d7b3638513d3e389684509a5bdb944ae50891b73648e28a37cca41223f7",
+          "scope": "Normal and shiny, two views at .30/.34/.35/.36/.38/.42/.50/.70. The individually projected upper front spike tip turns toward the target during physical_attack_2. Poison Sting .35/.50 launches from that tip. Rejected the original dart dimensions because they covered the spike and reached the cocoon; scale .2 keeps the .35 initial dart at the tip and .36/.38 darts clear in front. Projectiles retain their captured launch position and are clear by .42. Target impact dimensions are unchanged. Other moves, full continuous clearance, other targets and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "e9864d533ac60b7c42fdb87e6b08517462804a64339f366542a258413937c13b",
+          "shiny_runtime_sha256": "71391404b6be235a5fb2c81e4f180265bd47eeb320c5a8f91f7820ee7a51aee1",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 300.0,
+            "impact_frame": 150.0,
+            "launch_frame": 105.0,
+            "move_key": "poisonsting"
           },
           "views": 2
         },
@@ -89616,10 +89653,11 @@
       "other_parts_status": "pending_visual_and_move_routing_review",
       "part_candidate_reviews": [
         {
-          "move_routing_review": "pending",
-          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "move_routing_review": "partially_reviewed",
+          "notes": "Front face and upper spike tip individually reviewed across sampled native poses. String Shot and Poison Sting have sampled actual effect reviews. Bug Bite contact, body moves and continuous clearance remain pending.",
           "parts": {
-            "face": "sampled_marker_pose_review_pass"
+            "face": "sampled_marker_pose_review_pass",
+            "spike": "sampled_marker_pose_review_pass"
           }
         }
       ],
@@ -89671,10 +89709,60 @@
           "preview_sha256": "63732d3597ca6abf252cbe47add55248439cb7bd14d27e9ed8066382c168aa14",
           "scope": "Front cocoon surface below the two eyes, with no visible oral opening. Physical_attack preserves the front surface; physical_attack_2 turns it downward during the flip. Move routing and actual effects pending.",
           "side_fraction": 0.45
+        },
+        "spike": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "732ca64079ca51d4c033620131c0fca1ff7827284df657148c101496979c37a3",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.782069795912235,
+                  0.128743199914305,
+                  0.0891870041734593
+                ],
+                "column": 0.0,
+                "distance": 0.515878358117714,
+                "mesh": "pm0266_00_00_trmdl/Skeleton3D/pm0266_00_00_toge_mesh",
+                "mesh_contains": "toge",
+                "pixel": [
+                  212.0,
+                  148.0
+                ],
+                "surface": 0,
+                "triangle": 90,
+                "vertex_indices": [
+                  41,
+                  37,
+                  38
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "dfe47643b6aad20d5a5366de9a3547ca286284989e416e56358df617f111755c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8948d0888f8d072d257ad767b94dad6c3bafbc39158c385e4d5add5f39e266d4",
+          "scope": "Individually projected tip of the upper front cocoon spike. Rejected the earlier point down its shaft. Two weighted feeler bones keep the point at the tip through idle, both physical actions and the special action, including the forward flip. Move routing and actual effects pending.",
+          "side_fraction": 0.45
         }
       },
       "part_status": {
-        "face": "sampled_marker_pose_review_pass_installed"
+        "face": "sampled_marker_pose_review_pass_installed",
+        "spike": "sampled_marker_pose_review_pass_installed"
       }
     },
     "silicobra": {

@@ -80,6 +80,12 @@ func _run() -> void:
 				assert(Attachments.part_for(identity,move_key) == "eye")
 			if species.begins_with("aegislash"):
 				for move_key: String in ["hyperbeam","shadowball"]: assert(Attachments.part_for(identity,move_key) == "eye")
+	for identity: String in ["silcoon","silcoon@shiny"]:
+		assert(Attachments.part_for(identity,"poisonsting") == "spike")
+		var spike := Attachments.definitions_for(identity,"spike")
+		assert(spike.size() == 1 and spike[0].size() == 2)
+		assert(spike[0][0].bone == "feeler_a_02")
+		assert(is_equal_approx(Attachments.choreography_for(identity,"poisonsting","physical_attack_2").emission_scale,.2))
 	for species: String in ["silcoon","spewpa"]:
 		for identity: String in [species,species+"@shiny"]:
 			assert(Attachments.definitions_for(identity,"face").size() == 1)

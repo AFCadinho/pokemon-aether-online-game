@@ -850,7 +850,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | shuckle | mouth | Same attachment profile |
 | shuppet | mouth | Same attachment profile |
 | sigilyph | mouth | Same attachment profile |
-| silcoon | face | Same attachment profile |
+| silcoon | face, spike | Same attachment profile |
 | silicobra | mouth | Same attachment profile |
 | silvally | mouth | Same attachment profile |
 | simipour | foot, hand, left_foot, left_hand, mouth | Same attachment profile |

@@ -88,7 +88,7 @@ func _run() -> void:
 	assert(Attachments.choreography_for("zoroark","flamethrower","physical_attack_2").is_empty())
 	for identity: String in ["walking-wake", "watchog", "zoroark-hisui"]:
 		assert(Attachments.choreography_for(identity,"hyperbeam","special_attack").is_empty())
-	for route: Array in [["honedge","Screech","special_attack",.40,.58], ["doublade","Screech","special_attack",.40,.58], ["aegislash-blade","Screech","special_attack",.40,.58], ["aegislash-shield","Screech","special_attack",.40,.58], ["aegislash-blade","Shadow Ball","special_attack",.40,.58], ["aegislash-shield","Shadow Ball","special_attack",.40,.58], ["silcoon","String Shot","physical_attack",.25,.45], ["spewpa","String Shot","physical_attack",.25,.45], ["sinistea","Shadow Ball","special_attack",.30,.52], ["unown","Hidden Power","special_attack",.30,.52], ["chandelure-mega","Ember","special_attack",.32,.55], ["chandelure-mega","Shadow Ball","special_attack",.32,.55], ["runerigus","Shadow Ball","special_attack",.48,.62], ["starmie-mega","Bubble Beam","special_attack",.32,.55], ["starmie-mega","Water Pulse","special_attack",.32,.55], ["venonat","Sludge Bomb","special_attack",.34,.55], ["venonat","Screech","special_attack",.34,.55], ["venonat","Supersonic","special_attack",.34,.55], ["flabebe","Disarming Voice","physical_attack_2",.25,.45], ["dodrio","Growl","special_attack",.30,.50], ["dodrio","Supersonic","special_attack",.30,.50], ["doduo","Growl","special_attack",.36,.58], ["doduo","Supersonic","special_attack",.36,.58], ["gastly","Shadow Ball","special_attack",.42,.65], ["cubone","Growl","special_attack",.14,.22], ["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
+	for route: Array in [["silcoon","Poison Sting","physical_attack_2",.35,.50], ["honedge","Screech","special_attack",.40,.58], ["doublade","Screech","special_attack",.40,.58], ["aegislash-blade","Screech","special_attack",.40,.58], ["aegislash-shield","Screech","special_attack",.40,.58], ["aegislash-blade","Shadow Ball","special_attack",.40,.58], ["aegislash-shield","Shadow Ball","special_attack",.40,.58], ["silcoon","String Shot","physical_attack",.25,.45], ["spewpa","String Shot","physical_attack",.25,.45], ["sinistea","Shadow Ball","special_attack",.30,.52], ["unown","Hidden Power","special_attack",.30,.52], ["chandelure-mega","Ember","special_attack",.32,.55], ["chandelure-mega","Shadow Ball","special_attack",.32,.55], ["runerigus","Shadow Ball","special_attack",.48,.62], ["starmie-mega","Bubble Beam","special_attack",.32,.55], ["starmie-mega","Water Pulse","special_attack",.32,.55], ["venonat","Sludge Bomb","special_attack",.34,.55], ["venonat","Screech","special_attack",.34,.55], ["venonat","Supersonic","special_attack",.34,.55], ["flabebe","Disarming Voice","physical_attack_2",.25,.45], ["dodrio","Growl","special_attack",.30,.50], ["dodrio","Supersonic","special_attack",.30,.50], ["doduo","Growl","special_attack",.36,.58], ["doduo","Supersonic","special_attack",.36,.58], ["gastly","Shadow Ball","special_attack",.42,.65], ["cubone","Growl","special_attack",.14,.22], ["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -205,11 +205,12 @@ func _run() -> void:
 	_check_orb_scaling()
 	_check_hidden_power_scaling()
 	_check_string_source()
+	_check_sting_scaling()
 	router.release_threaded_resource_requests()
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=111 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=112 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()
 
 func _check_stream_scaling() -> void:
@@ -349,3 +350,36 @@ func _check_string_source() -> void:
 		assert(captures[0][index].is_equal_approx(captures[1][index]), "Default silk geometry is preserved")
 		assert(captures[0][index].origin.is_equal_approx(captures[2][index].origin), "Silk width scaling preserves path centers")
 		assert(is_equal_approx(captures[2][index].basis.x.length(), captures[0][index].basis.x.length()*.25))
+
+func _check_sting_scaling() -> void:
+	var captures := []
+	for scale_value: float in [-1.0, 1.0, .2]:
+		var effect := preload("res://scripts/battle/battle_ui/batch_four_move_effect_3d.gd").new()
+		stage.world.add_child(effect)
+		var timing := {"frames":60.0,"launch_frame":12.0,"impact_frame":27.0}
+		if scale_value > 0: timing.emission_scale = scale_value
+		contact_seconds = 0.0
+		effect.start("Poison Sting",timing,{"show_impact":true},func():return contact_seconds,func():return {"source":Vector3(1,1,0),"target":Vector3(4,1,0),"radius":.5},func():return true)
+		effect.set_process(false)
+		var phases := []
+		for seconds: float in [.2,.3,.5]:
+			contact_seconds = seconds
+			effect._process(0)
+			var transforms: Array[Transform3D] = []
+			for index in effect.cursor: transforms.append(effect.pieces[index].transform)
+			assert(not transforms.is_empty())
+			phases.append(transforms)
+		captures.append(phases)
+		effect.cancel()
+	for phase in 3:
+		assert(captures[0][phase].size() == captures[1][phase].size())
+		assert(captures[0][phase].size() == captures[2][phase].size())
+		for index in captures[0][phase].size():
+			var baseline: Transform3D = captures[0][phase][index]
+			var smaller: Transform3D = captures[2][phase][index]
+			assert(baseline.is_equal_approx(captures[1][phase][index]), "Default dart geometry is unchanged")
+			assert(baseline.origin.is_equal_approx(smaller.origin), "Darts and trails retain their path centres")
+			if phase == 2:
+				assert(baseline.is_equal_approx(smaller), "Poison Sting target impact retains its size")
+			else:
+				for axis in 3: assert(is_equal_approx(smaller.basis[axis].length(),baseline.basis[axis].length()*.2))

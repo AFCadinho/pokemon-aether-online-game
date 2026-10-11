@@ -193,8 +193,8 @@ func _draw_objects(from: Vector3, to: Vector3, travel: float, facing: Basis, sid
 				_piece(shape,surface_material,point,Vector3(0.12,0.42,0.12),path_basis*Basis(Vector3.UP,elapsed*5+i))
 				_source_sprite(point-(to-from).normalized()*0.22,0.35,"ice_trail",t,0.7,facing,angle)
 			"poisonsting":
-				_piece(tooth,edge,point,Vector3(0.045,0.52,0.045),path_basis)
-				_source_sprite(point,0.58,"poison_trail",minf(t*0.7,0.7),0.85,path_basis,0,Vector2(0.3,1))
+				_piece(tooth,edge,point,Vector3(0.045,0.52,0.045)*emission_scale,path_basis)
+				_source_sprite(point,0.58*emission_scale,"poison_trail",minf(t*0.7,0.7),0.85,path_basis,0,Vector2(0.3,1))
 			"swift":
 				var orientation := Basis(side,vertical,side.cross(vertical))*Basis(Vector3.FORWARD,t*6+angle)
 				orientation *= Basis(Vector3.RIGHT,sin(t*PI)*0.45)

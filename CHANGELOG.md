@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Launch Silcoon’s Poison Sting from its forward-facing spike during the flip animation, with darts sized to the spike.
+
 - Calibrate selected eye-based attacks for Honedge, Doublade and both Aegislash forms, and face-based attacks for Silcoon and Spewpa. Make String Shot follow its moving source and prevent model materials from painting over correctly positioned attack effects.
 
 - Make Sinistea’s Shadow Ball charge follow its tea and emerging spirit during the special attack animation, with one active source at a time.

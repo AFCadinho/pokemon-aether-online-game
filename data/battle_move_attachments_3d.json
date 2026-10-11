@@ -98147,6 +98147,12 @@
           "scope": "Normal and shiny, two offline views, eight sampled fractions. Face binding and forward physical_attack .25/.45, yaw 0. The body and large impact art hide the exact contact; approach distance, body penetration and target contact must still be reviewed with both actors and unobscured geometry. Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
           "status": "sampled_native_action_and_attachment_review_contact_clearance_pending"
         },
+        "poisonsting": {
+          "action": "physical_attack_2",
+          "part": "spike",
+          "scope": "Normal and shiny, two views at .30/.34/.35/.36/.38/.42/.50/.70. The individually projected upper front spike tip turns toward the target during physical_attack_2. Poison Sting .35/.50 launches from that tip. Rejected the original dart dimensions because they covered the spike and reached the cocoon; scale .2 keeps the .35 initial dart at the tip and .36/.38 darts clear in front. Projectiles retain their captured launch position and are clear by .42. Target impact dimensions are unchanged. Other moves, full continuous clearance, other targets and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
         "stringshot": {
           "action": "physical_attack",
           "part": "face",
@@ -98156,6 +98162,7 @@
       },
       "move_actions": {
         "bugbite": "physical_attack",
+        "poisonsting": "physical_attack_2",
         "stringshot": "physical_attack"
       },
       "move_choreography": {
@@ -98164,6 +98171,12 @@
           "contact_yaw_degrees": 0,
           "impact_fraction": 0.45,
           "launch_fraction": 0.25
+        },
+        "poisonsting": {
+          "action": "physical_attack_2",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.35
         },
         "stringshot": {
           "action": "physical_attack",
@@ -98203,6 +98216,37 @@
           },
           "views": 2
         },
+        "poisonsting": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "784fca6bd8b2167b13b2ff9376b58c08dacbc51a3cfe64db837137b7267859ca",
+          "fractions": [
+            0.3,
+            0.34,
+            0.35,
+            0.36,
+            0.38,
+            0.42,
+            0.5,
+            0.7
+          ],
+          "normal_runtime_sha256": "dfe47643b6aad20d5a5366de9a3547ca286284989e416e56358df617f111755c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "12b20d7b3638513d3e389684509a5bdb944ae50891b73648e28a37cca41223f7",
+          "scope": "Normal and shiny, two views at .30/.34/.35/.36/.38/.42/.50/.70. The individually projected upper front spike tip turns toward the target during physical_attack_2. Poison Sting .35/.50 launches from that tip. Rejected the original dart dimensions because they covered the spike and reached the cocoon; scale .2 keeps the .35 initial dart at the tip and .36/.38 darts clear in front. Projectiles retain their captured launch position and are clear by .42. Target impact dimensions are unchanged. Other moves, full continuous clearance, other targets and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "e9864d533ac60b7c42fdb87e6b08517462804a64339f366542a258413937c13b",
+          "shiny_runtime_sha256": "71391404b6be235a5fb2c81e4f180265bd47eeb320c5a8f91f7820ee7a51aee1",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 300.0,
+            "impact_frame": 150.0,
+            "launch_frame": 105.0,
+            "move_key": "poisonsting"
+          },
+          "views": 2
+        },
         "stringshot": {
           "action": "physical_attack",
           "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
@@ -98237,6 +98281,7 @@
       },
       "moves": {
         "bugbite": "face",
+        "poisonsting": "spike",
         "stringshot": "face"
       },
       "part_reviews": {
@@ -98287,6 +98332,55 @@
           "preview_sha256": "63732d3597ca6abf252cbe47add55248439cb7bd14d27e9ed8066382c168aa14",
           "scope": "Front cocoon surface below the two eyes, with no visible oral opening. Physical_attack preserves the front surface; physical_attack_2 turns it downward during the flip. Move routing and actual effects pending.",
           "side_fraction": 0.45
+        },
+        "spike": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "732ca64079ca51d4c033620131c0fca1ff7827284df657148c101496979c37a3",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.782069795912235,
+                  0.128743199914305,
+                  0.0891870041734593
+                ],
+                "column": 0.0,
+                "distance": 0.515878358117714,
+                "mesh": "pm0266_00_00_trmdl/Skeleton3D/pm0266_00_00_toge_mesh",
+                "mesh_contains": "toge",
+                "pixel": [
+                  212.0,
+                  148.0
+                ],
+                "surface": 0,
+                "triangle": 90,
+                "vertex_indices": [
+                  41,
+                  37,
+                  38
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "dfe47643b6aad20d5a5366de9a3547ca286284989e416e56358df617f111755c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8948d0888f8d072d257ad767b94dad6c3bafbc39158c385e4d5add5f39e266d4",
+          "scope": "Individually projected tip of the upper front cocoon spike. Rejected the earlier point down its shaft. Two weighted feeler bones keep the point at the tip through idle, both physical actions and the special action, including the forward flip. Move routing and actual effects pending.",
+          "side_fraction": 0.45
         }
       },
       "parts": {
@@ -98300,6 +98394,28 @@
                 0.276835739612579
               ],
               "weight": 1.0
+            }
+          ]
+        ],
+        "spike": [
+          [
+            {
+              "bone": "feeler_a_02",
+              "offset": [
+                0.0957820117473602,
+                0.000205570453545079,
+                0.002123853424564
+              ],
+              "weight": 0.961788890965746
+            },
+            {
+              "bone": "feeler_a_01",
+              "offset": [
+                0.203045532107353,
+                0.000214960848097689,
+                0.00221399473957717
+              ],
+              "weight": 0.0382111090342542
             }
           ]
         ]
