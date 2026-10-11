@@ -11,16 +11,15 @@
       "pending_anatomical_mouthpart_review": 4,
       "pending_anatomical_muzzle_review": 1,
       "pending_anatomical_route": 34,
-      "pending_anatomical_routing_review": 93,
+      "pending_anatomical_routing_review": 95,
       "pending_animation_addon_review": 1,
       "pending_camera_framing": 3,
       "pending_camera_review": 3,
       "pending_corrected_mouth_pose_review": 1,
       "pending_individual_heads_review": 1,
       "pending_manual_anatomical_calibration": 6,
-      "pending_manual_mouth_correction": 1,
       "pending_mask_casting_review": 1,
-      "pending_mouth_correction": 12,
+      "pending_mouth_correction": 4,
       "pending_mouth_proposal_or_anatomical_route": 18,
       "pending_mouthpart_clearance_review": 2,
       "pending_multi_pose_mouth_fit": 2,
@@ -31,7 +30,7 @@
       "pending_runtime_visibility_and_anatomy_review": 1,
       "pending_source_visibility_review": 1,
       "retain_existing_calibration": 4,
-      "sampled_mouth_pose_review_pass": 969
+      "sampled_mouth_pose_review_pass": 976
     },
     "part_status": {
       "correction_pending": 2,
@@ -46,10 +45,10 @@
       "pending_runtime_visibility_and_anatomy_review": 4,
       "sampled_marker_pose_review_pass_installed": 1766
     },
-    "runtime_profiles": 1055,
+    "runtime_profiles": 1060,
     "species_forms": 1200
   },
-  "profile_sha256": "4516eb8762e24f735832f14db6329fc7b58db6f7e10ea1291a8f08d651a53c4a",
+  "profile_sha256": "83268204500bec6d5f2b4cebeaa0b5761973975b466292935aa507597675b96f",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -2726,11 +2725,12 @@
     "arboliva": {
       "anatomical_move_routing_review": "pending",
       "latest_candidate_review": {
-        "notes": "Head-center framing proposal is not an approved mouth point.",
-        "preview": "mouth-fallback-review-v6/arboliva.png",
-        "status": "pending_mouth_correction"
+        "notes": "Full lower-face and side views show a smooth face without a visible mouth below the eyes; leaf collar partly conceals the chin. Head-center proposal rejected. Review crown/olive branch casting origins for Solar Beam and Hyper Beam.",
+        "preview": "mouth-context-v155/arboliva.png",
+        "preview_sha256": "21630acd844b489d291d3fefea87b6f48a7f12fb4f30ac8d081ba31e1b9fd566",
+        "status": "pending_anatomical_routing_review"
       },
-      "mouth_status": "pending_mouth_correction",
+      "mouth_status": "pending_anatomical_routing_review",
       "move_effect_review": "pending",
       "native_actions": [
         "idle",
@@ -18972,11 +18972,12 @@
     "cubone": {
       "anatomical_move_routing_review": "pending",
       "latest_candidate_review": {
-        "notes": "Head center is above the mouth; reframe and manually calibrate",
-        "preview": "mouth-fallback-review-v6/cubone.png",
-        "status": "pending_manual_mouth_correction"
+        "notes": "Wider underside and side views expose the skull mask and brown lower head, but no mouth opening or jaw bones. Forehead/skull-bridge proposal rejected. Need a masked-muzzle or hand/weapon casting route with verified clearance.",
+        "preview": "mouth-context-v155/cubone.png",
+        "preview_sha256": "64ab63707fef20f77449983df930a3dca30a72371fe7cecfacd3b5b5e5efd6ad",
+        "status": "pending_anatomical_routing_review"
       },
-      "mouth_status": "pending_manual_mouth_correction",
+      "mouth_status": "pending_anatomical_routing_review",
       "move_effect_review": "pending",
       "native_actions": [
         "idle",
@@ -57441,12 +57442,146 @@
       "part_status": {}
     },
     "mandibuzz": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "status": "pending_mouth_correction"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Hyper Beam launches at .42, impacts at .60 and ends at .74. Narrow .72 emission connects below the hooked bill in one view and is occluded by the wing in the other; none at .75/.82. Peak width covers the bill: hook/wing clearance and scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_mouth_correction",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Projected bill rims keep the origin in the gap beneath the hooked upper bill, including the wide special pose. The upper hook partly occludes closed poses. Sampled marker review only; exact effect clearance, all move timings and live battle review remain pending.",
+        "preview": "mouth-review-v156/mandibuzz.png",
+        "status": "mouth_pose_review_pass"
+      },
+      "mouth_review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "77129f4351c5557df001a2eecf19395bdf2e78862a7633e9bfd232470155825f",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v154/mandibuzz.png",
+            "sha256": "bccaacb990fa20fc6a0646f25f27e1a7390bb1a2f5c37ca06660b56e0453704c"
+          },
+          {
+            "capture_sha256": "5f44a87b0c985ad7169af5c96800cf814e08af33b4e64a48aba51d73b552d4cb",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v155/mandibuzz.png",
+            "sha256": "1d4db85d1a46a2aede4a00ff16b1f6ee83ec6b1d5276ebcfd1d734e35686a6c2"
+          },
+          {
+            "capture_sha256": "db3ed38bb6cdb281eb1bcc78a6f9addd5416be9f665b67ac1306b7b9060e6f88",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v158/mandibuzz.png",
+            "sha256": "9f6a31595eee0626fb5e5d53f841aaa2b59149cfff20fd649975172b1493160e"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "597b15c4b492257e56aba1cbce002ba68b426cdf5bae66916c3828c2df15910b",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "b0476b2d4ada20a1c18c1afa2c18428ac678660e530a74b7b1961b271e2a6e81",
+        "scope": "Projected bill rims keep the origin in the gap beneath the hooked upper bill, including the wide special pose. The upper hook partly occludes closed poses. Sampled marker review only; exact effect clearance, all move timings and live battle review remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "5f44a87b0c985ad7169af5c96800cf814e08af33b4e64a48aba51d73b552d4cb",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.859235865130646,
+                0.0622686591113667,
+                0.0784954757579874
+              ],
+              "column": 2.0,
+              "distance": 0.366253595429942,
+              "mesh": "pm0630_00_00/Skeleton3D/pm0630_00_00_body_a_mesh",
+              "pixel": [
+                208.0,
+                151.0
+              ],
+              "surface": 0,
+              "triangle": 3547,
+              "vertex_indices": [
+                1554,
+                1550,
+                1555
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.632795787458792,
+                0.169804989812703,
+                0.197399222728506
+              ],
+              "column": 2.0,
+              "distance": 0.442034869388816,
+              "mesh": "pm0630_00_00/Skeleton3D/pm0630_00_00_body_a_mesh",
+              "pixel": [
+                210.0,
+                231.0
+              ],
+              "surface": 0,
+              "triangle": 3998,
+              "vertex_indices": [
+                3209,
+                3203,
+                3219
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      },
+      "mouth_status": "sampled_mouth_pose_review_pass",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b0da0ed1e36dfdf85a60f6319be46540eb51244f6ff6b93d3f2493394338027c",
+          "fractions": [
+            0.4,
+            0.44,
+            0.6,
+            0.72,
+            0.75,
+            0.82
+          ],
+          "normal_runtime_sha256": "597b15c4b492257e56aba1cbce002ba68b426cdf5bae66916c3828c2df15910b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c898fc19197280d127e438178d664b4a92fb1b4e3166742dfa3a3d280accc0b2",
+          "scope": "Normal and shiny, two views: Hyper Beam launches at .42, impacts at .60 and ends at .74. Narrow .72 emission connects below the hooked bill in one view and is occluded by the wing in the other; none at .75/.82. Peak width covers the bill: hook/wing clearance and scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "3d289ba333335e8820418842a489c9107f3d674553db89c136c9f82273b6fb7b",
+          "shiny_runtime_sha256": "542758de87af76e2b0b9f9146e99d0edd729b9a0d6d7ab7d99f14a2b3b538a34",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 102.12,
+            "frames": 138.0,
+            "impact_frame": 82.8,
+            "launch_frame": 57.96,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -89479,14 +89614,139 @@
       }
     },
     "snivy": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "preview": "v5-extra-review/snivy.png",
-        "status": "pending_mouth_correction"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Solar Beam launches at .38, impacts at .48 and ends at .62. Thin .60 emission connects to the small mouth below the snout; none at .63/.70. Peak width and charge obscure the snout: exact muzzle clearance and scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_mouth_correction",
+      "latest_candidate_review": {
+        "notes": "Frontal upper/lower lip projection refines the earlier lateral point to the central seam below the long snout. Fresh underside and side native poses show it in the closed seam and small special mouth opening; the long snout occludes some frontal views. Exact effect clearance and full animation review remain pending.",
+        "preview": "mouth-review-v160/snivy.png",
+        "status": "mouth_pose_review_pass"
+      },
+      "mouth_review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "fc95ec99da2f0466a8d97ab3a02e1b1f13b67296caa222a480ec423b5d5a5ce2",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v154/snivy.png",
+            "sha256": "e80c461566d082a7e4b46d15dfd22d943426ecba094212dafb1b510e69acd2ea"
+          },
+          {
+            "capture_sha256": "7d74e94c2e640cef7566fa1f87773343882c00e8994fb8fa32db52fd1b031bec",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v159/snivy.png",
+            "sha256": "b47d19f4e5edf07baba760a9d38b5ddd2428c8c141c401be586ebff30ecccfb7"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "889ff0fee74dabeba7336625e14eedc2d71088e887dd50933a3969ee0b7dd8ea",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "c1b84f5d4ea768b9ae3643b802205a2126850047e3e840a8126aad554382165b",
+        "scope": "Frontal upper/lower lip projection refines the earlier lateral point to the central seam below the long snout. Fresh underside and side native poses show it in the closed seam and small special mouth opening; the long snout occludes some frontal views. Exact effect clearance and full animation review remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "7d74e94c2e640cef7566fa1f87773343882c00e8994fb8fa32db52fd1b031bec",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.0811304310652298,
+                0.124154075481271,
+                0.794715493453499
+              ],
+              "column": 2.0,
+              "distance": 0.304570895959015,
+              "mesh": "pm0495_00_00/Skeleton3D/pm0495_00_00_body_mesh",
+              "pixel": [
+                200.0,
+                176.0
+              ],
+              "surface": 0,
+              "triangle": 2068,
+              "vertex_indices": [
+                1762,
+                1764,
+                1719
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.514822843663934,
+                0.328125939164005,
+                0.157051217172061
+              ],
+              "column": 2.0,
+              "distance": 0.342464944921897,
+              "mesh": "pm0495_00_00/Skeleton3D/pm0495_00_00_body_mesh",
+              "pixel": [
+                200.0,
+                188.0
+              ],
+              "surface": 0,
+              "triangle": 93,
+              "vertex_indices": [
+                60,
+                61,
+                58
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      },
+      "mouth_status": "sampled_mouth_pose_review_pass",
       "move_effect_review": "partially_reviewed",
       "move_effect_reviews": {
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "cf79ccdba4525c46688832628135497175cf1c0632ed6ff750e451683f650704",
+          "fractions": [
+            0.36,
+            0.4,
+            0.48,
+            0.6,
+            0.63,
+            0.7
+          ],
+          "normal_runtime_sha256": "889ff0fee74dabeba7336625e14eedc2d71088e887dd50933a3969ee0b7dd8ea",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4aa97dbaf015b00c5e3002dca20ea94d0285edb93ed38e2f8ee51d2e59f50c00",
+          "scope": "Normal and shiny, two views: Solar Beam launches at .38, impacts at .48 and ends at .62. Thin .60 emission connects to the small mouth below the snout; none at .63/.70. Peak width and charge obscure the snout: exact muzzle clearance and scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "877c990fbc76e10b59d4fc69238ac95ed6247c5af981d3158aa5de623200f107",
+          "shiny_runtime_sha256": "11158882cfb0c3e5d26f3342c1f094a644a2926a9acae4d69464c20186a60d68",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 74.4,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 45.6,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        },
         "vinewhip": {
           "action": "physical_attack_2",
           "effect_script_sha256": "29475dc96f5401a40a9a4698853276f77153aeb1505e4ebd8297f9421ccdeece",
@@ -92417,12 +92677,139 @@
       }
     },
     "steelix": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "status": "pending_mouth_correction"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Hyper Beam launches at .42, impacts at .60 and ends at .74. The .72 fading beam connects to the open jaw region; none at .75/.82. The downward target slope may cross the lower front teeth and the peak width obscures the jaw: exact tooth clearance and scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_mouth_correction",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Projected upper/lower front tooth rims yield an origin between the open jaws; closed grin conceals it against the tooth line. Sampled marker review only; exact effect clearance, all move timings and live battle review remain pending.",
+        "preview": "mouth-review-v155/steelix.png",
+        "status": "mouth_pose_review_pass"
+      },
+      "mouth_review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "f83315442eb3e350227d2c58466b789ae9c208c64191fafa097b21bc4591afc9",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v154/steelix.png",
+            "sha256": "123a69d1971cbdf16d9d446d25c30439721123c83d85fd329d23ba07ceeb27ec"
+          },
+          {
+            "capture_sha256": "a8a8bb1bd73e0933485d062df2172c854547ee692ff59425b15c0376c573f59a",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v158/steelix.png",
+            "sha256": "a031372303f92824e3858643a7518462ad2918da5207fac620874c346ce02e5a"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "55643a8b256ae20c3ed0a72f127e3dcde2ca7f6f72cbe492278b45691a9518c1",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "0c62c514b0c275c02342cbc5d786dec7834977aff75d0eedcd50dbb1526f3a20",
+        "scope": "Projected upper/lower front tooth rims yield an origin between the open jaws; closed grin conceals it against the tooth line. Sampled marker review only; exact effect clearance, all move timings and live battle review remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "f83315442eb3e350227d2c58466b789ae9c208c64191fafa097b21bc4591afc9",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.321537173838394,
+                0.678305765774605,
+                0.000157060387001253
+              ],
+              "column": 1.0,
+              "distance": 4.74904843982037,
+              "mesh": "pm0208_00_00/Skeleton3D/pm0208_00_00_body_a_mesh",
+              "pixel": [
+                210.0,
+                134.0
+              ],
+              "surface": 0,
+              "triangle": 190,
+              "vertex_indices": [
+                1187,
+                1188,
+                1153
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.700933769172743,
+                0.289103344229319,
+                0.00996288659793814
+              ],
+              "column": 1.0,
+              "distance": 4.19209896907217,
+              "mesh": "pm0208_00_00/Skeleton3D/pm0208_00_00_body_a_mesh",
+              "pixel": [
+                210.0,
+                246.0
+              ],
+              "surface": 0,
+              "triangle": 913,
+              "vertex_indices": [
+                484,
+                485,
+                483
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      },
+      "mouth_status": "sampled_mouth_pose_review_pass",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b0da0ed1e36dfdf85a60f6319be46540eb51244f6ff6b93d3f2493394338027c",
+          "fractions": [
+            0.4,
+            0.44,
+            0.6,
+            0.72,
+            0.75,
+            0.82
+          ],
+          "normal_runtime_sha256": "55643a8b256ae20c3ed0a72f127e3dcde2ca7f6f72cbe492278b45691a9518c1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "554983c3047901987f168a64582959e34cab35bba587bb6b9d5fdcacf02d52a1",
+          "scope": "Normal and shiny, two views: Hyper Beam launches at .42, impacts at .60 and ends at .74. The .72 fading beam connects to the open jaw region; none at .75/.82. The downward target slope may cross the lower front teeth and the peak width obscures the jaw: exact tooth clearance and scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "727a73f90156ea2d3338936b56824835d84586df0e3c9f7a91781c936641f96d",
+          "shiny_runtime_sha256": "34dbbc7750aeb079ba2cb00b98284989b8710a697ba4a5aeb3677c306561eb86",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 97.68,
+            "frames": 132.0,
+            "impact_frame": 79.2,
+            "launch_frame": 55.44,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -92505,12 +92892,140 @@
       "part_status": {}
     },
     "stonjourner": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "status": "pending_mouth_correction"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Hyper Beam launches at .38, impacts at .50 and ends at .66. Fading .64 emission connects to the horizontal mouth slit; none at .67/.75. Peak width covers the face: exact slit clearance and scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_mouth_correction",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Projected lip rims keep the origin centered in the horizontal mouth slit as it opens and the stone face tilts. White mouth/eye surfaces limit material interpretation; anatomical slit geometry is visible. Sampled marker review only; exact effect clearance, all move timings and live battle review remain pending.",
+        "preview": "mouth-review-v155/stonjourner.png",
+        "status": "mouth_pose_review_pass"
+      },
+      "mouth_review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "b8d4ef864ff75aa8d7d42c5eca98aefb598c23e0d107dd1d1f49c0592d495a28",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v154/stonjourner.png",
+            "sha256": "2543a0e2f62d601c425f797994ac700aac410ecfdd81ca4753cad2587b0142e3"
+          },
+          {
+            "capture_sha256": "39d05c6256d3e33fa3dd4e595c7115796b2debb8a2160c06964e45283f7d4496",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v158/stonjourner.png",
+            "sha256": "b506179b5122dd04b7480519f9260945a8f09b8641a2b191d9251e4a8985a006"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "2a1928162741e282d16a5a2421cd8987ef3e39723b7e1c99571ee28e8d2249bb",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "43e86a85b3e3f04b6dac825a64ec6765b368e77d7c713460b63738eb15626b34",
+        "scope": "Projected lip rims keep the origin centered in the horizontal mouth slit as it opens and the stone face tilts. White mouth/eye surfaces limit material interpretation; anatomical slit geometry is visible. Sampled marker review only; exact effect clearance, all move timings and live battle review remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "b8d4ef864ff75aa8d7d42c5eca98aefb598c23e0d107dd1d1f49c0592d495a28",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.723897946032866,
+                0.229022124042037,
+                0.0470799299250971
+              ],
+              "column": 1.0,
+              "distance": 0.627113075590641,
+              "mesh": "pm0974_00_00/Skeleton3D/pm0974_00_00_body_mesh",
+              "pixel": [
+                159.0,
+                175.0
+              ],
+              "surface": 0,
+              "triangle": 2496,
+              "vertex_indices": [
+                9,
+                0,
+                35
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.447399228659897,
+                0.542757612096354,
+                0.00984315924374962
+              ],
+              "column": 1.0,
+              "distance": 0.605114097132009,
+              "mesh": "pm0974_00_00/Skeleton3D/pm0974_00_00_body_mesh",
+              "pixel": [
+                159.0,
+                203.0
+              ],
+              "surface": 0,
+              "triangle": 2464,
+              "vertex_indices": [
+                7,
+                22,
+                23
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      },
+      "mouth_status": "sampled_mouth_pose_review_pass",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b0da0ed1e36dfdf85a60f6319be46540eb51244f6ff6b93d3f2493394338027c",
+          "fractions": [
+            0.36,
+            0.4,
+            0.5,
+            0.64,
+            0.67,
+            0.75
+          ],
+          "normal_runtime_sha256": "2a1928162741e282d16a5a2421cd8987ef3e39723b7e1c99571ee28e8d2249bb",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "cbb2db944b83b1e6e1043ece5b4ec9f60aa651735a45a87176d1ac100ffa6a96",
+          "scope": "Normal and shiny, two views: Hyper Beam launches at .38, impacts at .50 and ends at .66. Fading .64 emission connects to the horizontal mouth slit; none at .67/.75. Peak width covers the face: exact slit clearance and scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "c26ea6a31029a4feb278f51cb9549d96bf8cfc24614a9f44c235d41202f91783",
+          "shiny_runtime_sha256": "619f0a8974358f93e949534c4ac9d2691558657c6b9dc812fd264098333588cf",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 79.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 45.6,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -92820,12 +93335,163 @@
       "part_status": {}
     },
     "stunfisk": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "status": "pending_mouth_correction"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "watergun": {
+          "action": "physical_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Water Gun uses physical_attack .12/.22/end .28, a stream scale of .2 and a world-space arc height of 1.0. The stream leaves the upward-facing open lips at .14/.22/.26 and is absent at .29/.40 before the folding motion. Earlier special_attack and straight physical streams crossed the body and were rejected. Sampled close-view mouth/stream geometry is improved; continuous lip clearance and other opponent sizes still require review. Other moves and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_mouth_correction",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Projected upper/lower lip surfaces replace the lateral mouth corner. The origin stays centered in the closed seam and open physical/special poses in elevated and side views. Sampled marker review only; exact effect clearance, all move timings and live battle review remain pending.",
+        "preview": "mouth-review-v156/stunfisk.png",
+        "status": "mouth_pose_review_pass"
+      },
+      "mouth_review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "dd862f594d78681c449dc618ae946c492391b7bb8bbede37280fc89284709c05",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v154/stunfisk.png",
+            "sha256": "b4188ee84a42b3be04b971d0a6f029b45bc27aa02186814c1454a52ce9f69414"
+          },
+          {
+            "capture_sha256": "51c487193f4b4d7ba90c07f41eb5a3f1de84c47f3c2975336bbb818a5ca22c71",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v155/stunfisk.png",
+            "sha256": "4aff646b7625d937bfb9201266c8719e623b36d39a3bd267740c433367447547"
+          },
+          {
+            "capture_sha256": "a6882384c111f2c8811896717a0b54b81eaf38b101ed8af53a62569b625c0c24",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v158/stunfisk.png",
+            "sha256": "3582c4d9a7aa4d03b0c399d836d21ab63e97fc27f2a932ce02926b084d44bc54"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "2eafde62a59c53579af1be9484d3607633c615f605002af91e50e4e2f091a3c3",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "d8515f4064780c24092f7b63fd0099b6933d4e5ec13e68d0ba2a21c80fa2f6ad",
+        "scope": "Projected upper/lower lip surfaces replace the lateral mouth corner. The origin stays centered in the closed seam and open physical/special poses in elevated and side views. Sampled marker review only; exact effect clearance, all move timings and live battle review remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "51c487193f4b4d7ba90c07f41eb5a3f1de84c47f3c2975336bbb818a5ca22c71",
+          "landmarks": [
+            {
+              "action": "physical_attack",
+              "barycentric": [
+                0.150340473965459,
+                0.596258246568049,
+                0.253401279466492
+              ],
+              "column": 0.0,
+              "distance": 0.295290807877883,
+              "mesh": "pm0618_00_00/Skeleton3D/pm0618_00_00_body_mesh",
+              "pixel": [
+                252.0,
+                154.0
+              ],
+              "surface": 0,
+              "triangle": 1209,
+              "vertex_indices": [
+                1454,
+                1523,
+                1521
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "physical_attack",
+              "barycentric": [
+                0.310391533619163,
+                0.552550814245884,
+                0.137057652134952
+              ],
+              "column": 0.0,
+              "distance": 0.294092051094111,
+              "mesh": "pm0618_00_00/Skeleton3D/pm0618_00_00_body_mesh",
+              "pixel": [
+                253.0,
+                210.0
+              ],
+              "surface": 0,
+              "triangle": 996,
+              "vertex_indices": [
+                1478,
+                1383,
+                1476
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      },
+      "mouth_status": "sampled_mouth_pose_review_pass",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "watergun": {
+          "action": "physical_attack",
+          "additional_previews": [
+            {
+              "capture_sha256": "d2dbac1acc55289d95b137dac4d412d17fcd1e7b94cde52a0f5abaeb82075662",
+              "pose_sampling": "forward_from_start_v1",
+              "preview_sha256": "2283632aacba8c7985184c701cd618adfdcd49e494243424db7641eb9cb5f688",
+              "runtime_sha256": "2eafde62a59c53579af1be9484d3607633c615f605002af91e50e4e2f091a3c3",
+              "scope": "Full stream trajectory reaches the same-species target and stays above the source body in the six sampled poses .12/.16/.18/.20/.24/.27; target splash remains independent. This distant view cannot establish lip clearance."
+            },
+            {
+              "capture_sha256": "7913befced4ed8d6a6dfab8ebcc83d53c2cf377af1b9ada8417787d9d9d349b8",
+              "pose_sampling": "forward_from_start_v1",
+              "preview_sha256": "acd7863892de8f0f43a8fb04762f9dd0d97ba2018d0543475357a0badb1bc4cd",
+              "runtime_sha256": "e6fb2aba3bf01dd6f604885b30557cf279f001197d66933abdcebb4db7a90b67",
+              "scope": "Full stream trajectory reaches the same-species target and stays above the source body in the six sampled poses .12/.16/.18/.20/.24/.27; target splash remains independent. This distant view cannot establish lip clearance."
+            }
+          ],
+          "attachment_data_sha256_at_capture": "c0d90b3a809212bf487174e4cb1f28a18445a4eb44b81d8043a43fd9ab10f20b",
+          "fractions": [
+            0.1,
+            0.14,
+            0.22,
+            0.26,
+            0.29,
+            0.4
+          ],
+          "normal_runtime_sha256": "2eafde62a59c53579af1be9484d3607633c615f605002af91e50e4e2f091a3c3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "010b2dad85a63a87a26c6d6e98ff1c82137cb365f0121a7a6341415346ae8a42",
+          "scope": "Normal and shiny, two views: Water Gun uses physical_attack .12/.22/end .28, a stream scale of .2 and a world-space arc height of 1.0. The stream leaves the upward-facing open lips at .14/.22/.26 and is absent at .29/.40 before the folding motion. Earlier special_attack and straight physical streams crossed the body and were rejected. Sampled close-view mouth/stream geometry is improved; continuous lip clearance and other opponent sizes still require review. Other moves and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "0e5023bbcf88dd61c9c0d6110e172f713868fae1703159bb2ecef28b264a5f01",
+          "shiny_runtime_sha256": "e6fb2aba3bf01dd6f604885b30557cf279f001197d66933abdcebb4db7a90b67",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 33.04,
+            "frames": 118.0,
+            "impact_frame": 25.96,
+            "launch_frame": 14.16,
+            "move_key": "watergun",
+            "water_stream_arc_height": 1.0,
+            "water_stream_scale": 0.2
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -94043,12 +94709,93 @@
       }
     },
     "swanna": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "status": "pending_mouth_correction"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "watergun": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Water Gun launches at .30, impacts at .45 and retains its default end at .63. The thin .60 stream connects between the open bill tips; none at .66/.76. Peak bill clearance and effect scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_mouth_correction",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Retain the paired front-bill candidate: it follows the closed slit and open upper/lower bill gap in the viewed underside and side clips. The later v156 surface projection hit the upper bill root and lower blade and is rejected. Sampled marker review only; exact effect clearance, all move timings and live battle review remain pending.",
+        "preview": "mouth-context-v155/swanna.png",
+        "status": "mouth_pose_review_pass"
+      },
+      "mouth_review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "8a99e6abeea1c2abed2bf7d3d3ee6eea78d603893666913db778786df01042cd",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v154/swanna.png",
+            "sha256": "ace37dcb21cb12734b56fffea1a1189f5ac5a04348d4eb80886d7297129b121f"
+          },
+          {
+            "capture_sha256": "30ce3bde30b6d94eaa7ab6f2eb2e5d64f3b275a6194e7886b03d79f8cffcbed5",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v155/swanna.png",
+            "sha256": "72b0417540e52f2f93b2b9a6b007e89d87371123a2e90046d551e380a581656d"
+          },
+          {
+            "capture_sha256": "1e088777a95504ac4053de7cabcf550d6f3835e9d9026d6e03c13d28717de810",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v158/swanna.png",
+            "sha256": "6f1d5b224f80c3569e1e2d7e0cb361b4284afa1fe7c420bdd0ea305d7d731a6b"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_anatomy_marker_pose_visual_review",
+        "normal_runtime_sha256": "c4c3b7fea44656ab1d29bc6831a88b13feba53b46605ed7a16072311324ad6c0",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "72b0417540e52f2f93b2b9a6b007e89d87371123a2e90046d551e380a581656d",
+        "scope": "Retain the paired front-bill candidate: it follows the closed slit and open upper/lower bill gap in the viewed underside and side clips. The later v156 surface projection hit the upper bill root and lower blade and is rejected. Sampled marker review only; exact effect clearance, all move timings and live battle review remain pending.",
+        "side_fraction": 0.45
+      },
+      "mouth_status": "sampled_mouth_pose_review_pass",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b0da0ed1e36dfdf85a60f6319be46540eb51244f6ff6b93d3f2493394338027c",
+          "fractions": [
+            0.28,
+            0.32,
+            0.45,
+            0.6,
+            0.66,
+            0.76
+          ],
+          "normal_runtime_sha256": "c4c3b7fea44656ab1d29bc6831a88b13feba53b46605ed7a16072311324ad6c0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1ccecc19a08433634f8335c44ba2f0d65ecaab87d4b92452679ba6df321b6099",
+          "scope": "Normal and shiny, two views: Water Gun launches at .30, impacts at .45 and retains its default end at .63. The thin .60 stream connects between the open bill tips; none at .66/.76. Peak bill clearance and effect scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "04d6b25790b94b3d83e2c852d81b48faa486e321ecab290943eba9cca3ac5ff9",
+          "shiny_runtime_sha256": "fc9bac4a9dc2923edd5db67c33021dbcbbcba1f39a364868dc08e4e931d81a3c",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 162.0,
+            "impact_frame": 72.9,
+            "launch_frame": 48.6,
+            "move_key": "watergun"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -94093,13 +94840,140 @@
       "part_status": {}
     },
     "swinub": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "preview": "v5-extra-review/swinub.png",
-        "status": "pending_mouth_correction"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "icebeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Ice Beam launches at .34, impacts at .45 and ends at .58. The fading .56 stream follows the mouth below the pink nose; none at .59/.65. Peak width obscures the lower face: exact lip/nose clearance and effect scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_mouth_correction",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Projected upper/lower mouth rims remain centered in the small opening below the pink nose in the viewed physical and special poses, and in the closed seam. Sampled marker review only; exact effect clearance, all move timings and live battle review remain pending.",
+        "preview": "mouth-review-v155/swinub.png",
+        "status": "mouth_pose_review_pass"
+      },
+      "mouth_review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "3eda68a1d08e5a18860a96ce30d317fa098d7b64428e149540edaa33bee94ec9",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v154/swinub.png",
+            "sha256": "37dbd4d1232d6d5f3617b32b89a15ebb463120a3a811aef7f090e3d2c8493882"
+          },
+          {
+            "capture_sha256": "18bcad33df9abbe3d1e2fe802d2ebc379f42bb4aae033ed213fe0fb40601f155",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v158/swinub.png",
+            "sha256": "da6e7e1a9eb59b57aaa06b607ee12a7e68eaa5031d436c9ce79eec746bf61079"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "d68a8622243bc854271a2ea02312dafad6728d00384b04779340e0c1bee4bc45",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "ec876efd0bc03408df29e485fd5288fec6ee27d0d255c7c795178ee75d9e773e",
+        "scope": "Projected upper/lower mouth rims remain centered in the small opening below the pink nose in the viewed physical and special poses, and in the closed seam. Sampled marker review only; exact effect clearance, all move timings and live battle review remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "3eda68a1d08e5a18860a96ce30d317fa098d7b64428e149540edaa33bee94ec9",
+          "landmarks": [
+            {
+              "action": "physical_attack",
+              "barycentric": [
+                0.0840258860769399,
+                0.360528024268395,
+                0.555446089654665
+              ],
+              "column": 1.0,
+              "distance": 0.675537155282489,
+              "mesh": "pm0220_00_00_trmdl/Skeleton3D/pm0220_00_00_body_mesh_shape",
+              "pixel": [
+                210.0,
+                117.0
+              ],
+              "surface": 0,
+              "triangle": 1965,
+              "vertex_indices": [
+                1988,
+                1979,
+                1987
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "physical_attack",
+              "barycentric": [
+                0.138916775608544,
+                0.102402627570038,
+                0.758680596821418
+              ],
+              "column": 1.0,
+              "distance": 0.670208142009789,
+              "mesh": "pm0220_00_00_trmdl/Skeleton3D/pm0220_00_00_body_mesh_shape",
+              "pixel": [
+                209.0,
+                176.0
+              ],
+              "surface": 0,
+              "triangle": 1921,
+              "vertex_indices": [
+                1994,
+                1963,
+                1992
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      },
+      "mouth_status": "sampled_mouth_pose_review_pass",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b0da0ed1e36dfdf85a60f6319be46540eb51244f6ff6b93d3f2493394338027c",
+          "fractions": [
+            0.32,
+            0.36,
+            0.45,
+            0.56,
+            0.59,
+            0.65
+          ],
+          "normal_runtime_sha256": "d68a8622243bc854271a2ea02312dafad6728d00384b04779340e0c1bee4bc45",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1b9c6c42c1a59fbf7c50c8f1cd0fed3f500825dd1e978f307caa485d726386a8",
+          "scope": "Normal and shiny, two views: Ice Beam launches at .34, impacts at .45 and ends at .58. The fading .56 stream follows the mouth below the pink nose; none at .59/.65. Peak width obscures the lower face: exact lip/nose clearance and effect scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "2cd5f52bf4a9ff4b9f93583abd85542c1f243d90617d7d1605d22c8cd8c7f788",
+          "shiny_runtime_sha256": "748aa9d8d670c4bc1bbb910712e3db5d5050e8cb83594affbbb28bf0ae8608a8",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 175.45,
+            "frames": 302.5,
+            "impact_frame": 136.125,
+            "launch_frame": 102.85,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",

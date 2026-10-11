@@ -1351,6 +1351,8 @@ func move_timing(move: String, ident: String) -> Dictionary:
 			profile["contact_yaw_degrees"] = float(choreography.contact_yaw_degrees)
 			if choreography.has("emission_end_fraction"):
 				profile["emission_end_frame"] = float(profile.frames) * float(choreography.emission_end_fraction)
+			for field in ["water_stream_scale", "water_stream_arc_height"]:
+				if choreography.has(field): profile[field] = choreography[field]
 	return profile
 
 func action_clock(ident: String, generation: int, end_seconds: float) -> float:

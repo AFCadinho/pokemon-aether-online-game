@@ -60,6 +60,14 @@ static func choreography_for(identity: String, move_key: String, action: String)
 		var emission_end := float(spec.emission_end_fraction)
 		if not is_finite(emission_end) or emission_end <= impact or emission_end > 1: return {}
 		timing["emission_end_fraction"] = emission_end
+	# Water Gun can leave an upward-facing mouth before bending toward the target.
+	for field in ["water_stream_scale", "water_stream_arc_height"]:
+		if not spec.has(field): continue
+		var value := float(spec[field])
+		if move_key != "watergun" or not is_finite(value): return {}
+		if field == "water_stream_scale" and (value <= 0 or value > 4): return {}
+		if field == "water_stream_arc_height" and (value < 0 or value > 4): return {}
+		timing[field] = value
 	return timing
 
 ## One outer element is one emitter. Its weighted bones describe a single

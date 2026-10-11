@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate mouth origins and selected beam timing for Swinub, Steelix, Stonjourner, Mandibuzz, Swanna, Snivy and Stunfisk. Give Stunfisk a narrower Water Gun stream that rises from its upward-facing mouth before curving toward the target.
+
 - Calibrate mouth origins and open-mouth Hyper Beam timing for Skarmory, Mega Skarmory and Sandaconda; give both Skarmory forms separate bill-tip origins and forward-facing Peck impact timing.
 
 - Calibrate mouth origins for Archaludon, Ariados, Hisuian Avalugg, Mega Glalie and Roaring Moon; align the reviewed Archaludon Hyper Beam, Hisuian Avalugg Ice Beam and Roaring Moon Flamethrower with their native mouth and wing movements.

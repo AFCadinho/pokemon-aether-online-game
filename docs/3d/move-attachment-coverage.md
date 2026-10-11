@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1055 species/forms.
-- No anatomical attachment profile: 145 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 973 species/forms.
+- At least one configured anatomical attachment: 1060 species/forms.
+- No anatomical attachment profile: 140 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 980 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -554,6 +554,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | malamar-mega | mouth | Same attachment profile |
 | mamoswine | hand, left_hand | Same attachment profile |
 | manaphy | mouth | Same attachment profile |
+| mandibuzz | mouth | Same attachment profile |
 | manectric | mouth | Same attachment profile |
 | manectric-mega | mouth | Same attachment profile |
 | mankey | foot, hand, left_foot, left_hand | Same attachment profile |
@@ -871,7 +872,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | sneasel | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | sneasel-hisui | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | sneasler | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| snivy | hand, left_hand, vines | Same attachment profile |
+| snivy | hand, left_hand, mouth, vines | Same attachment profile |
 | snorlax | hand, left_hand, mouth | Same attachment profile |
 | snorunt | hand, left_hand, mouth | Same attachment profile |
 | snover | hand, left_hand | Same attachment profile |
@@ -897,10 +898,12 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | starly | mouth | Same attachment profile |
 | starmie | gem | Same attachment profile |
 | staryu | gem | Same attachment profile |
+| steelix | mouth | Same attachment profile |
 | steenee | mouth | Same attachment profile |
-| stonjourner | foot, hand, left_foot, left_hand | Same attachment profile |
+| stonjourner | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | stoutland | mouth | Same attachment profile |
 | stufful | mouth | Same attachment profile |
+| stunfisk | mouth | Same attachment profile |
 | stunfisk-galar | hand, left_hand, mouth | Same attachment profile |
 | stunky | hand, left_hand, mouth | Same attachment profile |
 | sudowoodo | foot, left_foot, mouth | Same attachment profile |
@@ -912,7 +915,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | swalot | hand, left_hand, mouth | Same attachment profile |
 | swampert | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | swampert-mega | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| swanna | mouth | Same attachment profile |
 | swellow | mouth | Same attachment profile |
+| swinub | mouth | Same attachment profile |
 | swirlix | mouth | Same attachment profile |
 | swoobat | mouth | Same attachment profile |
 | sylveon | foot, left_foot, mouth | Same attachment profile |

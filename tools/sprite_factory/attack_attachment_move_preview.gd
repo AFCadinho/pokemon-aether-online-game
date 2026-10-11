@@ -10,6 +10,7 @@ var species := "snivy"
 var move := "Vine Whip"
 var camera_yaw := 0.0
 var camera_scale := 1.0
+var camera_frame := "source"
 var requested_fractions: Array[float] = []
 var viewport: SubViewport
 var world: Node3D
@@ -19,7 +20,7 @@ var stage: Control
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
 	for i in args.size():
-		if args[i] in ["--catalog", "--output", "--species", "--move", "--camera-yaw", "--camera-scale", "--fractions"] and i + 1 >= args.size():
+		if args[i] in ["--catalog", "--output", "--species", "--move", "--camera-yaw", "--camera-scale", "--camera-frame", "--fractions"] and i + 1 >= args.size():
 			printerr("Missing argument: ", args[i]); quit(1); return
 		if args[i] == "--catalog": catalog_path = args[i+1]
 		if args[i] == "--output": output = args[i+1]
@@ -27,6 +28,7 @@ func _init() -> void:
 		if args[i] == "--move": move = args[i+1]
 		if args[i] == "--camera-yaw": camera_yaw = deg_to_rad(float(args[i+1]))
 		if args[i] == "--camera-scale": camera_scale = float(args[i+1])
+		if args[i] == "--camera-frame": camera_frame = args[i+1]
 		if args[i] == "--fractions":
 			for value: String in args[i+1].split(",", true):
 				if not value.is_valid_float() or not is_finite(float(value)) or float(value) < 0 or float(value) > 1:
@@ -34,6 +36,8 @@ func _init() -> void:
 				requested_fractions.append(float(value))
 			if requested_fractions.size() > 8:
 				printerr("At most eight pose fractions are supported"); quit(1); return
+	if camera_frame not in ["source", "both"]:
+		printerr("Invalid camera frame"); quit(1); return
 	if not is_finite(camera_scale) or camera_scale <= 0 or not is_finite(camera_yaw):
 		printerr("Invalid camera settings"); quit(1); return
 	_run.call_deferred()
@@ -115,6 +119,9 @@ func _run() -> void:
 			var points: Dictionary = stage._move_anchors("p1","p2",move)
 			var center: Vector3 = points.source
 			var height := maxf(float(stage._effect_bounds(0).height),.65)
+			if camera_frame == "both":
+				center = points.source.lerp(points.target, .5)
+				height = maxf(height, points.source.distance_to(points.target) * .65)
 			var direction := Vector3(.9,.35,1.6) if column == 0 else Vector3(-.4,.35,1.8)
 			camera.position = center + direction.rotated(Vector3.UP, camera_yaw)*height*1.7*camera_scale
 			camera.look_at(center)
@@ -128,7 +135,7 @@ func _run() -> void:
 	var filename := species+"-"+Stage.MoveEffect.move_key(move)
 	assert(sheet.save_png(output.path_join(filename+".png")) == OK)
 	var file := FileAccess.open(output.path_join(filename+".json"),FileAccess.WRITE)
-	file.store_string(JSON.stringify({"species":species,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
+	file.store_string(JSON.stringify({"species":species,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"camera_frame":camera_frame,"camera_scale":camera_scale,"camera_yaw":rad_to_deg(camera_yaw),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
 	file.close()
 	effect.cancel(); await process_frame
 	stage.world = null; stage.camera = null; stage.free()

@@ -87,7 +87,7 @@ func _run() -> void:
 	assert(Attachments.choreography_for("zoroark","flamethrower","physical_attack_2").is_empty())
 	for identity: String in ["walking-wake", "watchog", "zoroark-hisui"]:
 		assert(Attachments.choreography_for(identity,"hyperbeam","special_attack").is_empty())
-	for route: Array in [["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
+	for route: Array in [["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -117,7 +117,7 @@ func _run() -> void:
 	assert(Attachments.action_for("revavroom","sludgebomb",{"physical_attack_2":{}}).is_empty())
 	assert(Attachments.choreography_for("sandslash","icebeam","special_attack").is_empty())
 	assert(Attachments.choreography_for("sandslash-alola","blizzard","special_attack").is_empty())
-	for route: Array in [["skarmory","Hyper Beam","special_attack",.30,.42,.54], ["skarmory-mega","Hyper Beam","special_attack",.18,.25,.32], ["sandaconda","Hyper Beam","physical_attack_2",.12,.22,.28], ["archaludon","Hyper Beam","special_attack",.18,.24,.29], ["avalugg-hisui","Ice Beam","special_attack",.33,.42,.50], ["grumpig","Hyper Beam","special_attack",.10,.22,.30], ["wyrdeer","Hyper Beam","special_attack",.17,.22,.26], ["houndstone","Hyper Beam","special_attack",.42,.60,.72], ["sudowoodo","Hyper Beam","special_attack",.42,.60,.80], ["cetoddle","Ice Beam","physical_attack",.10,.18,.25], ["lugia","Hyper Beam","special_attack",.27,.40,.53]]:
+	for route: Array in [["stunfisk","Water Gun","physical_attack",.12,.22,.28], ["snivy","Solar Beam","special_attack",.38,.48,.62], ["swinub","Ice Beam","special_attack",.34,.45,.58], ["steelix","Hyper Beam","special_attack",.42,.60,.74], ["stonjourner","Hyper Beam","special_attack",.38,.50,.66], ["mandibuzz","Hyper Beam","special_attack",.42,.60,.74], ["skarmory","Hyper Beam","special_attack",.30,.42,.54], ["skarmory-mega","Hyper Beam","special_attack",.18,.25,.32], ["sandaconda","Hyper Beam","physical_attack_2",.12,.22,.28], ["archaludon","Hyper Beam","special_attack",.18,.24,.29], ["avalugg-hisui","Ice Beam","special_attack",.33,.42,.50], ["grumpig","Hyper Beam","special_attack",.10,.22,.30], ["wyrdeer","Hyper Beam","special_attack",.17,.22,.26], ["houndstone","Hyper Beam","special_attack",.42,.60,.72], ["sudowoodo","Hyper Beam","special_attack",.42,.60,.80], ["cetoddle","Ice Beam","physical_attack",.10,.18,.25], ["lugia","Hyper Beam","special_attack",.27,.40,.53]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -134,12 +134,20 @@ func _run() -> void:
 			assert(is_equal_approx(timing.emission_end_frame / timing.frames,route[5]))
 			var effect: Node = stage.create_move_effect(route[1],actor,"p%d" % ((slot^1)+1),{})
 			effect.set_process(false)
-			assert(is_equal_approx(effect.emission_end,timing.emission_end_frame/60.0))
+			assert(is_equal_approx(effect.water_emission_end if route[1] == "Water Gun" else effect.emission_end,timing.emission_end_frame/60.0))
 			effect.clock = func(): return contact_seconds
+			if route[1] == "Water Gun":
+				assert(is_equal_approx(effect.water_stream_scale, .2))
+				assert(is_equal_approx(effect.water_stream_arc_height, 1.0))
+				var source := Vector3(2,1,3)
+				var target := Vector3(-2,.5,-3)
+				assert(effect._water_stream_point(source,target,0).is_equal_approx(source))
+				assert(effect._water_stream_point(source,target,1).is_equal_approx(target))
+				assert(effect._water_stream_point(source,target,.5).is_equal_approx(source.lerp(target,.5)+Vector3.UP))
 			contact_seconds = effect.impact
 			effect._process(0)
 			assert(effect.cursor > 0, "Beam must be visible during its open-mouth window")
-			contact_seconds = effect.emission_end + 0.001
+			contact_seconds = (effect.water_emission_end if route[1] == "Water Gun" else effect.emission_end) + 0.001
 			effect._process(0)
 			assert(effect.cursor == 0, "Beam and source particles must finish before the mouth closes")
 			for piece: MeshInstance3D in effect.pieces:
@@ -152,27 +160,35 @@ func _run() -> void:
 			stage.world.add_child(doll)
 			stage.substitute_models[slot] = doll
 			assert(not stage.move_timing(route[1],actor).has("emission_end_frame"))
+			assert(not stage.move_timing(route[1],actor).has("water_stream_scale"))
+			assert(not stage.move_timing(route[1],actor).has("water_stream_arc_height"))
 			doll.free()
 			stage.substitute_models[slot] = null
 	assert(Attachments.action_for("cetoddle","waterpulse",{"physical_attack":{}}).is_empty())
 	assert(Attachments.choreography_for("cetitan","icebeam","physical_attack").is_empty())
 	assert(Attachments.choreography_for("lugia","icebeam","special_attack").is_empty())
 	assert(Attachments.choreography_for("ho-oh","hyperbeam","special_attack").is_empty())
-	# Defaults preserve existing Ice Beam and staged-beam durations.
+	assert(Attachments.action_for("stunfisk-galar","watergun",{"physical_attack":{}}).is_empty())
+	assert(Attachments.choreography_for("stunfisk","waterpulse","physical_attack").is_empty())
+	# Defaults preserve existing water, ice and staged-beam durations.
 	var Ice = preload("res://scripts/battle/battle_ui/ice_beam_move_effect_3d.gd")
 	var Beam = preload("res://scripts/battle/battle_ui/staged_move_effect_3d.gd")
-	for script in [Ice, Beam]:
+	var Water = preload("res://scripts/battle/battle_ui/source_move_effect_3d.gd")
+	for script in [Ice, Beam, Water]:
 		var effect: Node3D = script.new()
 		stage.world.add_child(effect)
 		contact_seconds = 0.0
-		effect.start("Ice Beam" if script == Ice else "Hyper Beam", {"frames":60.0,"impact_frame":27.0}, {}, func(): return contact_seconds, func(): return {"source":Vector3.ZERO,"target":Vector3(4,0,0),"radius":.5}, func(): return true)
+		effect.start("Ice Beam" if script == Ice else "Water Gun" if script == Water else "Hyper Beam", {"frames":60.0,"impact_frame":27.0}, {}, func(): return contact_seconds, func(): return {"source":Vector3.ZERO,"target":Vector3(4,0,0),"radius":.5}, func(): return true)
 		effect.set_process(false)
-		assert(is_equal_approx(effect.emission_end,.618 if script == Ice else -1.0))
+		assert(is_equal_approx(effect.water_emission_end if script == Water else effect.emission_end,.63 if script == Water else .618 if script == Ice else -1.0))
+		if script == Water:
+			assert(is_equal_approx(effect.water_stream_scale, 1.0))
+			assert(is_zero_approx(effect.water_stream_arc_height))
 		effect.cancel()
 
 	router.release_threaded_resource_requests()
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=30 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=37 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()
