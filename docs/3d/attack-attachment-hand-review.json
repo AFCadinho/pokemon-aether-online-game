@@ -1,0 +1,1035 @@
+{
+  "all_effects_approved": false,
+  "all_forms_finished": false,
+  "attachment_data_sha256": "b71782eaeae2593dc477ffdbb6e64ef500ce0564e4741255a2042301c28ce7c1",
+  "focused_tests": [
+    "tests/move_attachments_3d_check.tscn",
+    "tests/move_attachment_choreography_3d_check.tscn",
+    "tools/audit_move_attachments_3d.gd --check",
+    "tools/audit_move_attachment_learnsets.gd"
+  ],
+  "forms": {
+    "ampharos-mega": {
+      "all_effects_approved": false,
+      "marker_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "capture_sha256": "db772cdfa73bae090320729be73519344aec7348a08628bcc58349e0400cb7cd",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "15741868f6d4d93d014c502023930df3eb21dc6a893617407d4323d9f1948c79",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/ampharos-mega.png",
+          "preview_sha256": "5cce22dd7811181bae9382cb4663ed544a5aec10138abbdfae6c766b768e67be",
+          "scope": "Distal yellow flipper-hand endpoints follow the twisting physical clip and lifted special poses. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "capture_sha256": "db772cdfa73bae090320729be73519344aec7348a08628bcc58349e0400cb7cd",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "15741868f6d4d93d014c502023930df3eb21dc6a893617407d4323d9f1948c79",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/ampharos-mega.png",
+          "preview_sha256": "5cce22dd7811181bae9382cb4663ed544a5aec10138abbdfae6c766b768e67be",
+          "scope": "Distal yellow flipper-hand endpoints follow the twisting physical clip and lifted special poses. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_arm_02",
+              "offset": [
+                0.255,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_arm_02",
+              "offset": [
+                0.255,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ]
+      },
+      "representative_effect": {
+        "action": "physical_attack",
+        "capture": {
+          "path": ".tmp/attack-attachments/family-moves-v455/ampharos-mega-firepunch-vs-pikachu.json",
+          "sha256": "07c13b5ce717f0a75c7692a15ebd990cd5d5ea1c94129cd0a73735b7a9a79968"
+        },
+        "family": "strikes",
+        "fractions": [
+          0.15,
+          0.3,
+          0.45,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "Fire Punch",
+        "normal_runtime_sha256": "15741868f6d4d93d014c502023930df3eb21dc6a893617407d4323d9f1948c79",
+        "notes": "Flipper endpoint follows the source glow. Impact decoration obscures exact contact; whole effect not certified.",
+        "preview": {
+          "path": ".tmp/attack-attachments/family-moves-v455/ampharos-mega-firepunch-vs-pikachu.png",
+          "sha256": "83e73c3748a8b689402164a43fd4bca8704361f25723f944244625ea763f03e3"
+        },
+        "result": "hand_binding_and_source_following_reviewed_contact_presentation_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 134.0,
+          "impact_frame": 69.68,
+          "launch_frame": 18.76,
+          "move_key": "firepunch"
+        },
+        "views": 2
+      }
+    },
+    "dusknoir": {
+      "all_effects_approved": false,
+      "marker_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "capture_sha256": "1ac28ecb1d7f3dac221477c8888da34078520e5e3ae64bbcf1145150d0196071",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "6b9ca11f0a1a179e116ba9a71a87346a1eaa08f824caa34cbd0cd8f2f1c06025",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v454/dusknoir.png",
+          "preview_sha256": "bd0c14d84d9619f8d6b4c69a06b25e914d467f5a411db9cef12f760fe569783c",
+          "scope": "Distal finger/knuckle row follows hand_02 through curled and open poses. Rejected the proximal hand_01 proposal near the wrist. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "capture_sha256": "1ac28ecb1d7f3dac221477c8888da34078520e5e3ae64bbcf1145150d0196071",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "6b9ca11f0a1a179e116ba9a71a87346a1eaa08f824caa34cbd0cd8f2f1c06025",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v454/dusknoir.png",
+          "preview_sha256": "bd0c14d84d9619f8d6b4c69a06b25e914d467f5a411db9cef12f760fe569783c",
+          "scope": "Distal finger/knuckle row follows hand_02 through curled and open poses. Rejected the proximal hand_01 proposal near the wrist. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_hand_02",
+              "offset": [
+                0.24,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_hand_02",
+              "offset": [
+                0.24,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ]
+      },
+      "representative_effect": {
+        "action": "physical_attack",
+        "capture": {
+          "path": ".tmp/attack-attachments/family-moves-v455/dusknoir-firepunch-vs-pikachu.json",
+          "sha256": "49fd44b24bd1e44616c50f09ad066450fdb63852841fb111aa7f3a3344bd7e22"
+        },
+        "family": "strikes",
+        "fractions": [
+          0.15,
+          0.3,
+          0.45,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "Fire Punch",
+        "normal_runtime_sha256": "6b9ca11f0a1a179e116ba9a71a87346a1eaa08f824caa34cbd0cd8f2f1c06025",
+        "notes": "Refined finger-row source drives the fire windup. Turning attack clip and contact distance remain pending.",
+        "preview": {
+          "path": ".tmp/attack-attachments/family-moves-v455/dusknoir-firepunch-vs-pikachu.png",
+          "sha256": "501e512bcf3a16c6722dbe550fa44ea974e43189bda8a755feb4e57762433c59"
+        },
+        "result": "hand_binding_and_source_following_reviewed_contact_presentation_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 130.0,
+          "impact_frame": 67.6,
+          "launch_frame": 18.2,
+          "move_key": "firepunch"
+        },
+        "views": 2
+      }
+    },
+    "kangaskhan": {
+      "all_effects_approved": false,
+      "marker_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "capture_sha256": "3b33d15b3e483bb79f4f3b76d47d5e64f40b70eecac1fecbf022cb6cf73219c8",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "24f478a466884a073e814df257288f628fdf557ef70fd05d7aa48b0289e2f08d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/kangaskhan.png",
+          "preview_sha256": "115e7ae68fb1c80037031f24343aff923ea020ebad41ba59130937a171e2456c",
+          "scope": "Adult claw/knuckle surfaces only; pouch child anatomy is separate. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "capture_sha256": "3b33d15b3e483bb79f4f3b76d47d5e64f40b70eecac1fecbf022cb6cf73219c8",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "24f478a466884a073e814df257288f628fdf557ef70fd05d7aa48b0289e2f08d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/kangaskhan.png",
+          "preview_sha256": "115e7ae68fb1c80037031f24343aff923ea020ebad41ba59130937a171e2456c",
+          "scope": "Adult claw/knuckle surfaces only; pouch child anatomy is separate. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_hand_a",
+              "offset": [
+                0.235,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_hand_a",
+              "offset": [
+                0.235,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ]
+      },
+      "representative_effect": {
+        "action": "physical_attack",
+        "capture": {
+          "path": ".tmp/attack-attachments/family-moves-v455/kangaskhan-firepunch-vs-pikachu.json",
+          "sha256": "681d4bc80acb34a419ddd82aa30179e0115dfcf8aee484bceb3c99cf0065987e"
+        },
+        "family": "strikes",
+        "fractions": [
+          0.15,
+          0.3,
+          0.45,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "Fire Punch",
+        "normal_runtime_sha256": "24f478a466884a073e814df257288f628fdf557ef70fd05d7aa48b0289e2f08d",
+        "notes": "Adult hand source works, but the physical clip turns the torso away during the approach. Facing/timing needs a separate contact review.",
+        "preview": {
+          "path": ".tmp/attack-attachments/family-moves-v455/kangaskhan-firepunch-vs-pikachu.png",
+          "sha256": "81c5bcd717299853ecc0f0797679e62131dc64d16abb67348e7a497757d1850e"
+        },
+        "result": "hand_binding_and_source_following_reviewed_contact_presentation_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 134.0,
+          "impact_frame": 69.68,
+          "launch_frame": 18.76,
+          "move_key": "firepunch"
+        },
+        "views": 2
+      }
+    },
+    "kangaskhan-mega": {
+      "all_effects_approved": false,
+      "marker_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "capture_sha256": "a8760e33971f4cb1b62c5e7f63d999e24d607c9f04e26260f33137fdedf5f743",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "1d313b530091b789324a99e36291becd187bd60e62655eb28778132f6363da1c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/kangaskhan-mega.png",
+          "preview_sha256": "e529cd8ee644848b8532bceaa75f39a5786322f77903e46d2aa9ffbdad8f01da",
+          "scope": "Adult claw/knuckle surfaces independently inspected in this form; jumping child and its extra strike remain separate. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "capture_sha256": "a8760e33971f4cb1b62c5e7f63d999e24d607c9f04e26260f33137fdedf5f743",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "1d313b530091b789324a99e36291becd187bd60e62655eb28778132f6363da1c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/kangaskhan-mega.png",
+          "preview_sha256": "e529cd8ee644848b8532bceaa75f39a5786322f77903e46d2aa9ffbdad8f01da",
+          "scope": "Adult claw/knuckle surfaces independently inspected in this form; jumping child and its extra strike remain separate. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_hand_a",
+              "offset": [
+                0.235,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_hand_a",
+              "offset": [
+                0.235,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ]
+      },
+      "representative_effect": {
+        "action": "physical_attack",
+        "capture": {
+          "path": ".tmp/attack-attachments/family-moves-v455/kangaskhan-mega-firepunch-vs-pikachu.json",
+          "sha256": "3fb9fef674b9667e7acd770e53a6bcd0412687c74379ab28e3d4543c438931cc"
+        },
+        "family": "strikes",
+        "fractions": [
+          0.15,
+          0.3,
+          0.45,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "Fire Punch",
+        "normal_runtime_sha256": "1d313b530091b789324a99e36291becd187bd60e62655eb28778132f6363da1c",
+        "notes": "Adult hand source works. Torso turn, jumping child and child follow-up strike are not resolved by the adult point.",
+        "preview": {
+          "path": ".tmp/attack-attachments/family-moves-v455/kangaskhan-mega-firepunch-vs-pikachu.png",
+          "sha256": "5e2f6c776fb65b1675580c188152dbfaaddd4f7f4f9e21b16653f6ee64d2bfcd"
+        },
+        "result": "hand_binding_and_source_following_reviewed_contact_presentation_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 134.0,
+          "impact_frame": 69.68,
+          "launch_frame": 18.76,
+          "move_key": "firepunch"
+        },
+        "views": 2
+      }
+    },
+    "marill": {
+      "all_effects_approved": false,
+      "marker_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "capture_sha256": "52432dc921a5f868ff2b1ebaa42f688e57607823b283a5f6b2936b41d446be4c",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "b784bad6b0c594010a035dc00029dd6113d296843ce17f62fa40685d53b731d1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/marill.png",
+          "preview_sha256": "8098a5382c5b9ac380f6f7d85eb1becb51c7a801ca219994ea9816791a907234",
+          "scope": "Small arm endpoints follow visible idle, physical_attack and special_attack poses. The flattened physical_attack_2 sample at .45 is excluded and is not selected for these hand strikes. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "capture_sha256": "52432dc921a5f868ff2b1ebaa42f688e57607823b283a5f6b2936b41d446be4c",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "b784bad6b0c594010a035dc00029dd6113d296843ce17f62fa40685d53b731d1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/marill.png",
+          "preview_sha256": "8098a5382c5b9ac380f6f7d85eb1becb51c7a801ca219994ea9816791a907234",
+          "scope": "Small arm endpoints follow visible idle, physical_attack and special_attack poses. The flattened physical_attack_2 sample at .45 is excluded and is not selected for these hand strikes. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_arm_02",
+              "offset": [
+                0.039,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_arm_02",
+              "offset": [
+                0.039,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ]
+      },
+      "representative_effect": {
+        "action": "physical_attack",
+        "capture": {
+          "path": ".tmp/attack-attachments/family-moves-v455/marill-icepunch-vs-pikachu.json",
+          "sha256": "14b6551f89783b56c0cf66d51f7a93597698fd954ec3f5f23e50c4b089b3629e"
+        },
+        "family": "strikes",
+        "fractions": [
+          0.15,
+          0.3,
+          0.45,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "Ice Punch",
+        "normal_runtime_sha256": "b784bad6b0c594010a035dc00029dd6113d296843ce17f62fa40685d53b731d1",
+        "notes": "Hand origin binds correctly. Body overlaps Pikachu during contact and target impact art is much larger than the source. physical_attack_2 flattening is excluded from marker approval.",
+        "preview": {
+          "path": ".tmp/attack-attachments/family-moves-v455/marill-icepunch-vs-pikachu.png",
+          "sha256": "1dde11ba23182c98e43427726cad5bd6f818d6f8ee73267f31b45c0e49de1664"
+        },
+        "result": "hand_binding_and_source_following_reviewed_contact_presentation_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 90.0,
+          "impact_frame": 46.8,
+          "launch_frame": 12.6,
+          "move_key": "icepunch"
+        },
+        "views": 2
+      }
+    },
+    "minun": {
+      "all_effects_approved": false,
+      "marker_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "capture_sha256": "7b21df56183e8b0fb1c04d854a04136bda775ffc4016095cc090f4a6029f9d67",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "296b5b59f07f947156516e0622a234d558680245b9a5c1dbd4e0273dd1368fca",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/minun.png",
+          "preview_sha256": "da17e9e2eed89f5f1d4e678c85a004be675f86d750355210b0dce3a8d9c39db3",
+          "scope": "Blue hand tips independently inspected for this form; head-occluded samples are excluded. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "capture_sha256": "7b21df56183e8b0fb1c04d854a04136bda775ffc4016095cc090f4a6029f9d67",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "296b5b59f07f947156516e0622a234d558680245b9a5c1dbd4e0273dd1368fca",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/minun.png",
+          "preview_sha256": "da17e9e2eed89f5f1d4e678c85a004be675f86d750355210b0dce3a8d9c39db3",
+          "scope": "Blue hand tips independently inspected for this form; head-occluded samples are excluded. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_arm_02",
+              "offset": [
+                0.03,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_arm_02",
+              "offset": [
+                0.03,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ]
+      },
+      "representative_effect": {
+        "action": "physical_attack",
+        "capture": {
+          "path": ".tmp/attack-attachments/family-moves-v455/minun-thunderpunch-vs-pikachu.json",
+          "sha256": "658bb256e7e1ee2243c4175031de8f296f489e9564308b940781e9fc786579b7"
+        },
+        "family": "strikes",
+        "fractions": [
+          0.15,
+          0.3,
+          0.45,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "Thunder Punch",
+        "normal_runtime_sha256": "296b5b59f07f947156516e0622a234d558680245b9a5c1dbd4e0273dd1368fca",
+        "notes": "Blue hand source drives the electric windup. Target spacing and impact height remain pending.",
+        "preview": {
+          "path": ".tmp/attack-attachments/family-moves-v455/minun-thunderpunch-vs-pikachu.png",
+          "sha256": "ce840c299da1afe7a8039e1dbf6a30628e93dd261c9a85e39bae4bb46ee6c55b"
+        },
+        "result": "hand_binding_and_source_following_reviewed_contact_presentation_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 227.5,
+          "impact_frame": 118.3,
+          "launch_frame": 31.85,
+          "move_key": "thunderpunch"
+        },
+        "views": 2
+      }
+    },
+    "pichu": {
+      "all_effects_approved": false,
+      "marker_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "capture_sha256": "c2ab395022c2b01c6466dcaa2ea349bcbb7aeb64853dfccb202739d9c58255de",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "a7abe4d3c41ac071569b1afe3e308566824ad48bc8dc49e61278bf1f78360799",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/pichu.png",
+          "preview_sha256": "4bf6c4a10148cff5716e73229aac4997b5f4411c709442d27e2afc7e2c34a670",
+          "scope": "Small yellow hand surfaces follow the arm bones; far-hand occlusion by the head is excluded. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "capture_sha256": "c2ab395022c2b01c6466dcaa2ea349bcbb7aeb64853dfccb202739d9c58255de",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "a7abe4d3c41ac071569b1afe3e308566824ad48bc8dc49e61278bf1f78360799",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/pichu.png",
+          "preview_sha256": "4bf6c4a10148cff5716e73229aac4997b5f4411c709442d27e2afc7e2c34a670",
+          "scope": "Small yellow hand surfaces follow the arm bones; far-hand occlusion by the head is excluded. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_arm",
+              "offset": [
+                0.04,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_arm",
+              "offset": [
+                0.04,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ]
+      },
+      "representative_effect": {
+        "action": "physical_attack",
+        "capture": {
+          "path": ".tmp/attack-attachments/family-moves-v455/pichu-thunderpunch-vs-pikachu.json",
+          "sha256": "5ab10ad6bb64660fd72554cafa87c917a171887732083d83b81fc2124e81f460"
+        },
+        "family": "strikes",
+        "fractions": [
+          0.15,
+          0.3,
+          0.45,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "Thunder Punch",
+        "normal_runtime_sha256": "a7abe4d3c41ac071569b1afe3e308566824ad48bc8dc49e61278bf1f78360799",
+        "notes": "Hand source drives the electric windup. Hand contact remains below the target face decoration; target-height/spacing needs review.",
+        "preview": {
+          "path": ".tmp/attack-attachments/family-moves-v455/pichu-thunderpunch-vs-pikachu.png",
+          "sha256": "e4eae72ff8b20510df1c1cd1e97af6914adfea44a4ede9b80c2d0b4ef9f93536"
+        },
+        "result": "hand_binding_and_source_following_reviewed_contact_presentation_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 90.0,
+          "impact_frame": 46.8,
+          "launch_frame": 12.6,
+          "move_key": "thunderpunch"
+        },
+        "views": 2
+      }
+    },
+    "plusle": {
+      "all_effects_approved": false,
+      "marker_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "capture_sha256": "4cd23144c3c19dd5f9e581859d98aa37a267ae1fbbbb44c6a1e28aaac6e18689",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "9103e36aaee22931e3dee7ce40d7317208223e0a59ae2566a2e5350ce1552e4e",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/plusle.png",
+          "preview_sha256": "f264c560b6c17fb4846b6dcd7f1e907ddf24a4e3b8578c580f0b23d27af42470",
+          "scope": "Red hand tips follow both physical clips and the raised special pose; head-occluded samples are excluded. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "capture_sha256": "4cd23144c3c19dd5f9e581859d98aa37a267ae1fbbbb44c6a1e28aaac6e18689",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "9103e36aaee22931e3dee7ce40d7317208223e0a59ae2566a2e5350ce1552e4e",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/plusle.png",
+          "preview_sha256": "f264c560b6c17fb4846b6dcd7f1e907ddf24a4e3b8578c580f0b23d27af42470",
+          "scope": "Red hand tips follow both physical clips and the raised special pose; head-occluded samples are excluded. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_arm_02",
+              "offset": [
+                0.03,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_arm_02",
+              "offset": [
+                0.03,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ]
+      },
+      "representative_effect": {
+        "action": "physical_attack",
+        "capture": {
+          "path": ".tmp/attack-attachments/family-moves-v455/plusle-thunderpunch-vs-pikachu.json",
+          "sha256": "1fb37a9e30825585b86e8fa3dff96427b463eb4b7731855cb3179fbc99c99fd5"
+        },
+        "family": "strikes",
+        "fractions": [
+          0.15,
+          0.3,
+          0.45,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "Thunder Punch",
+        "normal_runtime_sha256": "9103e36aaee22931e3dee7ce40d7317208223e0a59ae2566a2e5350ce1552e4e",
+        "notes": "Red hand source drives the electric windup. Target spacing and impact height remain pending.",
+        "preview": {
+          "path": ".tmp/attack-attachments/family-moves-v455/plusle-thunderpunch-vs-pikachu.png",
+          "sha256": "206aef4150e42b60b1924e02bd6ae9710f1bb20f69ea68926a8b91248ba408f0"
+        },
+        "result": "hand_binding_and_source_following_reviewed_contact_presentation_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 227.5,
+          "impact_frame": 118.3,
+          "launch_frame": 31.85,
+          "move_key": "thunderpunch"
+        },
+        "views": 2
+      }
+    },
+    "spinda": {
+      "all_effects_approved": false,
+      "marker_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "capture_sha256": "e5a9d1976018fbd6743ef89f3e76a78d97f4a359d219176f7ebaeb59c3f7f164",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "ff89a538a5d560f6cc40a2a3e9ef29649d3d42c43e2a7a4eca680344af1e3995",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/spinda.png",
+          "preview_sha256": "b68a658f1e494aa0ea05f70266217b45e7669d1b301d6430a8b36469bf3a180a",
+          "scope": "Distal red hand surfaces follow the wobble. Prefer physical_attack_2 for hand strikes because physical_attack bows the head over the hands. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "capture_sha256": "e5a9d1976018fbd6743ef89f3e76a78d97f4a359d219176f7ebaeb59c3f7f164",
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_hand_native_pose_visual_review",
+          "normal_runtime_sha256": "ff89a538a5d560f6cc40a2a3e9ef29649d3d42c43e2a7a4eca680344af1e3995",
+          "pose_sampling": "forward_from_start_v1",
+          "preview": ".tmp/attack-attachments/hand-markers-v451/spinda.png",
+          "preview_sha256": "b68a658f1e494aa0ea05f70266217b45e7669d1b301d6430a8b36469bf3a180a",
+          "scope": "Distal red hand surfaces follow the wobble. Prefer physical_attack_2 for hand strikes because physical_attack bows the head over the hands. Marker placement only; full contact/effect presentation is separately assessed.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "hand": [
+          [
+            {
+              "bone": "RHand",
+              "offset": [
+                5.3,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "LHand",
+              "offset": [
+                5.3,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ]
+      },
+      "representative_effect": {
+        "action": "physical_attack_2",
+        "capture": {
+          "path": ".tmp/attack-attachments/family-moves-v455/spinda-drainpunch-vs-pikachu.json",
+          "sha256": "0555f8ff65f13c7898803c9a6ceaf5fa82c8ffb9cbd428eeebf447b9d0083c98"
+        },
+        "family": "strikes",
+        "fractions": [
+          0.15,
+          0.3,
+          0.45,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "Drain Punch",
+        "normal_runtime_sha256": "ff89a538a5d560f6cc40a2a3e9ef29649d3d42c43e2a7a4eca680344af1e3995",
+        "notes": "Raised-hand physical_attack_2 keeps hands more visible than the head-first bow. Target spacing and the detached drain impact remain pending.",
+        "preview": {
+          "path": ".tmp/attack-attachments/family-moves-v455/spinda-drainpunch-vs-pikachu.png",
+          "sha256": "2d086d823edbe62e5677c075a5cb615798db6b3cf249203b4c1c449517c5689b"
+        },
+        "result": "hand_binding_and_source_following_reviewed_contact_presentation_pending",
+        "timing": {
+          "action": "physical_attack_2",
+          "frames": 147.5,
+          "impact_frame": 76.7,
+          "launch_frame": 20.65,
+          "move_key": "drainpunch"
+        },
+        "views": 2
+      }
+    }
+  },
+  "forms_reviewed": 9,
+  "global_backlog_after": {
+    "configured_move_pairs": 7626,
+    "forms_with_missing_routes": 295,
+    "missing_parts": {
+      "foot": 1,
+      "hand": 222,
+      "mouth": 81
+    },
+    "species_forms": 1200,
+    "supported_move_pairs": 30563
+  },
+  "live_npc_wild_battles_tested": false,
+  "new_configured_supported_move_pairs": 37,
+  "new_marker_points": 18,
+  "offline_battle_kind_comparison": [
+    {
+      "action_timing_sampled_anchors_identical": true,
+      "move": "Thunder Punch",
+      "species": "pichu",
+      "trainer_capture": {
+        "path": ".tmp/attack-attachments/family-moves-v455/pichu-thunderpunch-vs-pikachu.json",
+        "sha256": "5ab10ad6bb64660fd72554cafa87c917a171887732083d83b81fc2124e81f460"
+      },
+      "wild_capture": {
+        "path": ".tmp/attack-attachments/family-moves-v456/pichu-thunderpunch-vs-pikachu.json",
+        "sha256": "f7326108747c87f2c18c31ec00078d173189af1b130c54f470c1988045526099"
+      }
+    },
+    {
+      "action_timing_sampled_anchors_identical": true,
+      "move": "Fire Punch",
+      "species": "kangaskhan-mega",
+      "trainer_capture": {
+        "path": ".tmp/attack-attachments/family-moves-v455/kangaskhan-mega-firepunch-vs-pikachu.json",
+        "sha256": "3fb9fef674b9667e7acd770e53a6bcd0412687c74379ab28e3d4543c438931cc"
+      },
+      "wild_capture": {
+        "path": ".tmp/attack-attachments/family-moves-v456/kangaskhan-mega-firepunch-vs-pikachu.json",
+        "sha256": "cbd9cb6b3abdcc6285921ea076f40b5ff08af326dc65d184ae1e745599dbefb9"
+      }
+    },
+    {
+      "action_timing_sampled_anchors_identical": true,
+      "move": "Fire Punch",
+      "species": "dusknoir",
+      "trainer_capture": {
+        "path": ".tmp/attack-attachments/family-moves-v455/dusknoir-firepunch-vs-pikachu.json",
+        "sha256": "49fd44b24bd1e44616c50f09ad066450fdb63852841fb111aa7f3a3344bd7e22"
+      },
+      "wild_capture": {
+        "path": ".tmp/attack-attachments/family-moves-v456/dusknoir-firepunch-vs-pikachu.json",
+        "sha256": "278cc9d75da385c707ca19ee4529019a8c64cadcf4ae5ad563cefdd9a14fe78f"
+      }
+    }
+  ],
+  "runtime_binding_check": {
+    "errors": [],
+    "evidence": {
+      "path": ".tmp/attack-attachments/runtime-check-v455.json",
+      "sha256": "efeb7d8e6311c6aefda5608ff2f05850a427a89181366a2923acc32f9f85a7fe"
+    },
+    "fractions_per_native_action": 21,
+    "models": 18
+  },
+  "schema": 1,
+  "scope": "Nine exact-form hand calibrations and representative strike inspection. Does not certify every move or full contact presentation."
+}

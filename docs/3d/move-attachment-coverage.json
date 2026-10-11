@@ -95,10 +95,10 @@
 		"with_foot": 314,
 		"with_forehead": 1,
 		"with_gem": 4,
-		"with_hand": 696,
+		"with_hand": 705,
 		"with_hand_upper": 1,
 		"with_left_foot": 295,
-		"with_left_hand": 694,
+		"with_left_hand": 703,
 		"with_left_hand_upper": 1,
 		"with_magnet_poles": 1,
 		"with_mandibles": 2,
@@ -1348,6 +1348,19 @@
 					}
 				]
 			],
+			"hand": [
+				[
+					{
+						"bone": "right_arm_02",
+						"offset": [
+							0.255,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"left_foot": [
 				[
 					{
@@ -1356,6 +1369,19 @@
 							0.0710435956716537,
 							0.00989588350057599,
 							-0.00485418178141114
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "left_arm_02",
+						"offset": [
+							0.255,
+							0.0,
+							0.0
 						],
 						"weight": 1.0
 					}
@@ -13237,6 +13263,32 @@
 			]
 		},
 		"dusknoir": {
+			"hand": [
+				[
+					{
+						"bone": "right_hand_02",
+						"offset": [
+							0.24,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "left_hand_02",
+						"offset": [
+							0.24,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -25615,6 +25667,19 @@
 					}
 				]
 			],
+			"hand": [
+				[
+					{
+						"bone": "right_hand_a",
+						"offset": [
+							0.235,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"left_foot": [
 				[
 					{
@@ -25623,6 +25688,19 @@
 							0.12,
 							0.0,
 							-0.015
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "left_hand_a",
+						"offset": [
+							0.235,
+							0.0,
+							0.0
 						],
 						"weight": 1.0
 					}
@@ -25665,6 +25743,19 @@
 					}
 				]
 			],
+			"hand": [
+				[
+					{
+						"bone": "right_hand_a",
+						"offset": [
+							0.235,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"left_foot": [
 				[
 					{
@@ -25673,6 +25764,19 @@
 							0.12,
 							0.0,
 							-0.015
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "left_hand_a",
+						"offset": [
+							0.235,
+							0.0,
+							0.0
 						],
 						"weight": 1.0
 					}
@@ -30754,6 +30858,32 @@
 			]
 		},
 		"marill": {
+			"hand": [
+				[
+					{
+						"bone": "right_arm_02",
+						"offset": [
+							0.039,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "left_arm_02",
+						"offset": [
+							0.039,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -33159,6 +33289,32 @@
 			]
 		},
 		"minun": {
+			"hand": [
+				[
+					{
+						"bone": "right_arm_02",
+						"offset": [
+							0.03,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "left_arm_02",
+						"offset": [
+							0.03,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -37823,6 +37979,32 @@
 			]
 		},
 		"pichu": {
+			"hand": [
+				[
+					{
+						"bone": "right_arm",
+						"offset": [
+							0.04,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "left_arm",
+						"offset": [
+							0.04,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -38436,6 +38618,32 @@
 			]
 		},
 		"plusle": {
+			"hand": [
+				[
+					{
+						"bone": "right_arm_02",
+						"offset": [
+							0.03,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "left_arm_02",
+						"offset": [
+							0.03,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -47837,6 +48045,19 @@
 					}
 				]
 			],
+			"hand": [
+				[
+					{
+						"bone": "RHand",
+						"offset": [
+							5.3,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"left_foot": [
 				[
 					{
@@ -47845,6 +48066,19 @@
 							6.5,
 							0.0,
 							-1.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "LHand",
+						"offset": [
+							5.3,
+							0.0,
+							0.0
 						],
 						"weight": 1.0
 					}
@@ -57778,7 +58012,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "8417cd81b8a658c587371e146e1158d4f623071ba393ce438b1bbd1f21cf5355",
+		"data/battle_move_attachments_3d.json": "b71782eaeae2593dc477ffdbb6e64ef500ce0564e4741255a2042301c28ce7c1",
 		"data/battle_move_recipes_3d.json": "4f237143c9001b7fc43f9bd0358f8361173e8f148f30d23bd8db7c7f27c90429",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "a5cbe5f2b635a24f9b6a35f535a802631583eed97afcd2c4efcf9e038f5b3e25",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "82ee6f558c779bc8e2ca4975b6ace3b8cf90e8452ffc9cfc0cfd620af3790c6f",
@@ -58719,7 +58953,9 @@
 		"ampharos-mega": {
 			"attachments": [
 				"foot",
+				"hand",
 				"left_foot",
+				"left_hand",
 				"mouth"
 			],
 			"review": {
@@ -68402,6 +68638,8 @@
 		},
 		"dusknoir": {
 			"attachments": [
+				"hand",
+				"left_hand",
 				"mouth"
 			],
 			"review": {
@@ -77893,7 +78131,9 @@
 		"kangaskhan": {
 			"attachments": [
 				"foot",
+				"hand",
 				"left_foot",
+				"left_hand",
 				"mouth"
 			],
 			"review": {
@@ -77922,7 +78162,9 @@
 		"kangaskhan-mega": {
 			"attachments": [
 				"foot",
+				"hand",
 				"left_foot",
+				"left_hand",
 				"mouth"
 			],
 			"review": {
@@ -81589,6 +81831,8 @@
 		},
 		"marill": {
 			"attachments": [
+				"hand",
+				"left_hand",
 				"mouth"
 			],
 			"review": {
@@ -83184,6 +83428,8 @@
 		},
 		"minun": {
 			"attachments": [
+				"hand",
+				"left_hand",
 				"mouth"
 			],
 			"review": {
@@ -86581,6 +86827,8 @@
 		},
 		"pichu": {
 			"attachments": [
+				"hand",
+				"left_hand",
 				"mouth"
 			],
 			"review": {
@@ -87099,6 +87347,8 @@
 		},
 		"plusle": {
 			"attachments": [
+				"hand",
+				"left_hand",
 				"mouth"
 			],
 			"review": {
@@ -94550,7 +94800,9 @@
 		"spinda": {
 			"attachments": [
 				"foot",
+				"hand",
 				"left_foot",
+				"left_hand",
 				"mouth"
 			],
 			"review": {

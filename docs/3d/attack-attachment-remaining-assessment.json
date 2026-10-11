@@ -2195,6 +2195,24 @@
     "resolved_supported_move_pairs": 73,
     "runtime_models_checked": 60
   },
+  "hand_calibration_follow_up": {
+    "forms": 9,
+    "full_contact_effects_approved": false,
+    "global_backlog_after": {
+      "configured_move_pairs": 7626,
+      "forms_with_missing_routes": 295,
+      "missing_parts": {
+        "foot": 1,
+        "hand": 222,
+        "mouth": 81
+      },
+      "species_forms": 1200,
+      "supported_move_pairs": 30563
+    },
+    "new_configured_supported_move_pairs": 37,
+    "new_parts": 18,
+    "report": "attack-attachment-hand-review.json"
+  },
   "pending_queue_assessments": {
     "aipom": {
       "actions": [
@@ -10267,7 +10285,7 @@
       "result": "sampled_marker_profiles_installed"
     }
   },
-  "profile_sha256": "e31c8504124edc21386bed9f6d197d4e7fb3e24cb3e4d6eb62ec850a6d2b6925",
+  "profile_sha256": "b71782eaeae2593dc477ffdbb6e64ef500ce0564e4741255a2042301c28ce7c1",
   "schema": 1,
   "scope": "Initial assessment plus correction follow-up; see correction_follow_up for current work and family backlog for all-catalog gaps.",
   "technical_checks": {

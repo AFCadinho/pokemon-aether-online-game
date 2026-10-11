@@ -25,8 +25,8 @@ and twisted-hand bindings, Togekiss's wing tips and Enamorus's tail end.
 This is a bounded correction batch, not completion of the whole catalog.
 
 The [family backlog](attack-attachment-family-backlog.json) intersects supported
-presenters with learnsets across all 1,200 forms. There are still 304 forms with
-an unconfigured anatomical route: 231 request a hand, 81 a mouth, and one a
+presenters with learnsets across all 1,200 forms. There are still 295 forms with
+an unconfigured anatomical route: 222 request a hand, 81 a mouth, and one a
 foot (categories overlap). Some need a link to an already reviewed named part;
 others need anatomical calibration or a deliberate alternative. Body and orb
 origins are procedural and are excluded from these missing-part counts.
@@ -35,6 +35,11 @@ The [family routing follow-up](attack-attachment-family-routing-review.md) links
 30 already reviewed surfaces, with 37 representative effect inspections. It
 resolves 73 supported learnset routes; 19 forms leave the missing-route list,
 while 11 of the changed forms still have a missing hand route.
+
+The [hand calibration follow-up](attack-attachment-hand-review.md) adds 18 left/right
+hand points across nine forms, enabling another 37 supported learnset routes.
+Nine representative strikes were inspected; full contact presentation remains
+pending where spacing, facing or target effect height disagrees with the hand.
 
 To refresh that inventory from the assigned frontend slot, run the learnset
 audit through `slot-env`, then summarize its output from the frontend directory:
