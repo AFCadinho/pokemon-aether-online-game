@@ -51,6 +51,7 @@ func _run() -> void:
 			return
 		var actor := packed.instantiate() as Node3D
 		world.add_child(actor)
+		preload("res://scripts/battle/animations/reviewed_source_visibility.gd").apply(actor, identity, digest)
 		var players := actor.find_children("*", "AnimationPlayer", true, false)
 		var report := {"schema":1,"identity":identity,"runtime_sha256":digest,
 			"review_status":"unreviewed","bones":[],"actions":{},"geometry":{}}
@@ -68,9 +69,20 @@ func _run() -> void:
 		var file := FileAccess.open(destination, FileAccess.WRITE)
 		file.store_string(JSON.stringify(report, "\t", true) + "\n")
 		file.close()
+		# Hold materials until render instances have detached; local-to-scene
+		# material RIDs otherwise race MeshInstance teardown in offline probes.
+		var materials: Array = []
+		for mesh: MeshInstance3D in actor.find_children("*", "MeshInstance3D", true, false):
+			materials.append(mesh.material_override)
+			materials.append(mesh.material_overlay)
+			if mesh.mesh != null:
+				for surface in mesh.mesh.get_surface_count():
+					materials.append(mesh.get_surface_override_material(surface))
+					materials.append(mesh.mesh.surface_get_material(surface))
 		actor.free()
 		packed = null
 		await process_frame
+		materials.clear()
 		completed += 1
 		print("ATTACHMENT_INSPECT ",identity," bones=",report.bones.size()," actions=",report.actions.keys())
 		if limit > 0 and completed >= limit: break
@@ -82,7 +94,7 @@ func _enrich_report(_actor: Node3D, _report: Dictionary) -> void:
 
 func _measure_geometry(actor: Node3D, report: Dictionary) -> void:
 	for mesh: MeshInstance3D in actor.find_children("*", "MeshInstance3D", true, false):
-		if mesh.mesh == null or mesh.skin == null: continue
+		if mesh.mesh == null or mesh.skin == null or not mesh.is_visible_in_tree(): continue
 		var skeleton := mesh.get_node_or_null(mesh.skeleton) as Skeleton3D
 		if skeleton == null: continue
 		var bindings := {}

@@ -74,6 +74,8 @@ static func pack_entries(manifest: Dictionary, directory: String) -> Array:
 
 static func resolve(identity: String, digest: String) -> Dictionary:
 	var model: Dictionary = DATA.data.models.get(identity, {})
+	if digest in model.get("revoked_runtime_sha256", []):
+		return {}
 	var profiles: Dictionary = DATA.data.profiles
 	var accepted := approved_digest(model, digest)
 	if not accepted:

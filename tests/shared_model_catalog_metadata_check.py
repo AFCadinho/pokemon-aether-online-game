@@ -3,12 +3,16 @@
 import copy
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'tools'))
+from shared_source_repair_binding import historical
 
 
 def reconcile(catalog, audit, original, bindings):
+    catalog = historical(catalog, 'model_pair_catalog')
     assert catalog["prototype_only"] and not catalog["production_approved"]
     assert catalog["catalog_revision"] == "shared-model-catalog-test-v1"
     assert catalog["runtime_contract"] == {"godot": "4.6", "pokemon_3d": 2}

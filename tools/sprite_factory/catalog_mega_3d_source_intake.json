@@ -1739,7 +1739,7 @@
       "pokedex_number": 701,
       "forme": "Mega",
       "source_resource_id": "pm0761_51_00",
-      "source_status": "repaired_local_candidate_pending_catalog_admission_and_publication",
+      "source_status": "repaired_source_admitted_and_immutable_bundles_published",
       "approved_3d_bundle": "pokemon_3d:hawlucha:mega",
       "previous_source_resource_id": "pm0701_11_00",
       "source_mapping_audit": {
@@ -1763,7 +1763,7 @@
         "shiny_sha256": "a34b35136ef1d0091b7f89ad96caec14b015127a4cd056120088db9f769ca83f",
         "not_final_appearance_approval": false
       },
-      "source_repair_pending_publication": true,
+      "source_repair_pending_publication": false,
       "previous_source_publication": {
         "production_approved": true,
         "local_runtime_approved": true,
@@ -1773,9 +1773,12 @@
         "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
       },
       "production_approved": false,
-      "local_runtime_approved": false,
-      "published": false,
-      "repair_evidence": "catalog_source_model_repairs_results.json"
+      "local_runtime_approved": true,
+      "published": true,
+      "repair_evidence": "catalog_source_model_repairs_results.json",
+      "bundle_qualification_sha256": "b02a99d68385f2ab09bade2689472bd5eb21604aeeff4fce99d0162c4d433b1a",
+      "publication_receipt": "release/approved_3d_bundles_v12_r2_receipt.json",
+      "publication_receipt_sha256": "e2d1e1c3a71281944e9326301dcfb22103efdc6f4b71af8c9d7b5720b76d500a"
     },
     {
       "showdown_id": "zygardemega",

@@ -825,5 +825,9 @@ func _check_catalog_routes() -> void:
 			assert(Attachments.choreography_for("cetitan" + suffix,move_key,"physical_attack").launch_fraction < .25)
 	assert(Attachments.definitions_for("scyther","wing") != Attachments.definitions_for("scyther","hand"))
 	assert(Attachments.definitions_for("mawile-mega","jaw") != Attachments.definitions_for("mawile-mega","jaw_other"))
-	for species: String in ["hawlucha-mega", "minior", "togedemaru"]:
-		assert(not Attachments.CALIBRATED.data.profiles.has(species), "Unresolved source models remain excluded")
+	for suffix: String in ["", "@shiny"]:
+		for route: Array in [["cramorant", "furyattack", "mouth"], ["cramorant", "superpower", "hand"], ["deoxys", "hyperbeam", "core"], ["deoxys", "drainpunch", "hand"], ["deoxys", "lowkick", "foot"], ["minior", "hyperbeam", "body"], ["togedemaru", "hyperbeam", "mouth"], ["togedemaru", "voltswitch", "body"], ["hawlucha-mega", "hyperbeam", "mouth"], ["hawlucha-mega", "highjumpkick", "foot"]]:
+			assert(Attachments.part_for(route[0] + suffix, route[1]) == route[2])
+			assert(not Attachments.definitions_for(route[0] + suffix, route[2]).is_empty())
+		assert(Attachments.action_for("togedemaru" + suffix, "hyperbeam", {"physical_attack": {}}) == "physical_attack")
+		assert(Attachments.choreography_for("hawlucha-mega" + suffix, "hyperbeam", "special_attack").emission_end_fraction <= .5)

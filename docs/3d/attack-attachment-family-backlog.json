@@ -1,141 +1,65 @@
 {
   "complete": false,
   "counts": {
-    "configured_move_pairs": 8178,
-    "forms_with_missing_routes": 5,
+    "configured_move_pairs": 8333,
+    "forms_with_missing_routes": 2,
     "missing_parts": {
       "foot": 1,
-      "hand": 3,
-      "mouth": 4
+      "hand": 1
     },
     "species_forms": 1200,
-    "supported_move_pairs": 30563
+    "supported_move_pairs": 30646
   },
   "excluded_procedural_parts": [
     "body",
     "orb_clearance"
   ],
-  "learnset_audit_sha256": "ac9a2f1d92fd4ec501affa746f72c97c937d143c7d4f0037f45b1e8a554ef366",
+  "learnset_audit_sha256": "7c1d6a8b6fbfaf2bba329ae43dd663722308513aa583cb7d4d2d3d041a764486",
   "schema": 1,
   "scope": "Missing configured anatomical routes grouped by form and family. Existing points may need an alias; absent anatomy may need a deliberate alternative. This is not a visual approval or a count of all unfinished effects.",
   "source_sha256": {
-    "data/battle_move_attachments_3d.json": "e5ef7c1259e0f5ba1cb27532dbf6942aed3cdc2d961ed7d1d01f1fda8742d73d",
+    "data/battle_move_attachments_3d.json": "a3d8cff6dfc99b22f6e0820449d97955ccb0e68697d8db6a9593f25d64170aed",
     "data/battle_move_recipes_3d.json": "4f237143c9001b7fc43f9bd0358f8361173e8f148f30d23bd8db7c7f27c90429",
     "scripts/battle/animations/model_action_map.gd": "6b09908b3b6568e7ecc8e642c155ff9f73964bbc4af0a0c8741723fedca37b67",
     "scripts/battle/battle_ui/experimental_battle_3d.gd": "08960a8faa84fe02ee1b3904e1427801248982c205737478fac7e96657819ebb",
     "scripts/battle/battle_ui/move_attachments_3d.gd": "a5cbe5f2b635a24f9b6a35f535a802631583eed97afcd2c4efcf9e038f5b3e25",
     "scripts/battle/battle_ui/move_effect_3d.gd": "ac79d3a4f07e74cf09ceb2f24100b1650e5256f47ab834bb638439a6a1d76bd4",
-    "scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
+    "scripts/battle/battle_ui/reviewed_model_catalog.json": "4a89f879b5ade817e5d576823cfc197618bbee4ebe8e3585ba1d22b35167c505",
     "scripts/battle/battle_ui/screened_model_catalog.json": "e48e36f568932290b2b7f1f461e15391444d6e7821d48f6ef0c59ede5b36839d"
   },
   "species_forms": {
-    "cramorant": {
+    "avalugg-hisui": {
       "configured_parts": [
         "mouth"
       ],
-      "learnset_sha256": "c430e4ad43cc923eb8f928691cd5c5b8903ca16985f51e08fc7f4a99aac15a91",
+      "learnset_sha256": "cef925de9c0a668c76f94c1b64c3d9b8ff5eb8d4c3611c536da3142189cd74fe",
       "missing_routes": {
         "hand": {
-          "claws": {
-            "representative_move": "furyattack",
-            "supported_move_count": 1
-          },
           "strikes": {
-            "representative_move": "superpower",
+            "representative_move": "rocksmash",
             "supported_move_count": 1
           }
         }
       },
-      "runtime_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
+      "runtime_sha256": "e90f8342680e151eb5ffe56a9f3c956168f92cd5b1d7d9bae2dc59c332447d15",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "deoxys": {
+    "raichu-alola": {
       "configured_parts": [
-        "foot",
-        "left_foot"
+        "hand",
+        "left_hand",
+        "mouth"
       ],
-      "learnset_sha256": "95a945c4fa9c8992a664048d2e6cbf979edacb13d34b0939fddf668d5f46974b",
-      "missing_routes": {
-        "hand": {
-          "strikes": {
-            "representative_move": "drainpunch",
-            "supported_move_count": 6
-          }
-        },
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 2
-          },
-          "dedicated_presenter": {
-            "representative_move": "flashcannon",
-            "supported_move_count": 4
-          },
-          "projectiles": {
-            "representative_move": "mudslap",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "hawlucha-mega": {
-      "configured_parts": [],
-      "learnset_sha256": "ffd9dab4079ea0a1c609c2ae1c92c52d64e40735d6df71089e02b3935853f3ea",
+      "learnset_sha256": "f9e51dfd2fc5a583be347c51752a9f3eb5926d0b52823a7c93a9b4912fb685b4",
       "missing_routes": {
         "foot": {
           "strikes": {
-            "representative_move": "highjumpkick",
-            "supported_move_count": 2
-          }
-        },
-        "hand": {
-          "claws": {
-            "representative_move": "wingattack",
-            "supported_move_count": 1
-          },
-          "strikes": {
-            "representative_move": "closecombat",
-            "supported_move_count": 6
-          }
-        },
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
+            "representative_move": "doublekick",
             "supported_move_count": 1
           }
         }
       },
-      "runtime_sha256": "57dcc854f2f52335096da7fe4ade923b7b8ad165b1162341618bb21630ef3f78",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "minior": {
-      "configured_parts": [],
-      "learnset_sha256": "cadfa8988211a15235fec552c1612d61a929111964059410fee8ccd543c92e78",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 2
-          }
-        }
-      },
-      "runtime_sha256": "af0e49e0463d05f75c37a4259de45a603e2a7e6bb309286f60f22eacf05aeb94",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "togedemaru": {
-      "configured_parts": [],
-      "learnset_sha256": "50eb4651bd7a91c65747f6828cd3a07cac459a4146b3347e9db4640a892094d5",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 2
-          }
-        }
-      },
-      "runtime_sha256": "2f317420982aefbfd2bbe3a0d88bdb81ad981ba48c7ab943f632812a96133b31",
+      "runtime_sha256": "2c65d428103d734c65c15c48ae06aefcb26ec632e3f21e67a94680f00c47e2f6",
       "status": "individual_anatomy_or_routing_review_required"
     }
   }

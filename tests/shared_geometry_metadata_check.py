@@ -3,11 +3,17 @@
 import copy
 import hashlib
 import json
+import sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'tools'))
+from shared_source_repair_binding import historical, evidence_bytes
 
 
 def check(wire,catalog,baseline,proof):
+    wire=historical(wire,'model_pair_geometry')
+    catalog=historical(catalog,'model_pair_geometry_catalog')
+    baseline=historical(baseline,'model_pair_qualified')
     assert wire['catalog_revision']=='shared-geometry-test-v1'
     assert wire['prototype_only'] and not wire['production_approved']
     assert not any(k in wire for k in ('qualification_run_sha256','qualification_sha256','storage_audit_sha256'))
@@ -38,10 +44,10 @@ def main():
         assert (ROOT/'data'/name).read_bytes()==(ROOT/'launcher/data'/name).read_bytes()
     assert len((ROOT/'data/model_pair_geometry.json').read_bytes())<=1024*1024
     assert wire['geometry_build_sha256']==catalog['geometry_build_sha256']==proof['build_report_sha256']
-    assert wire['baseline_index_sha256']==hashlib.sha256((ROOT/'data/model_pair_qualified.json').read_bytes()).hexdigest()
+    assert wire['baseline_index_sha256']==hashlib.sha256(evidence_bytes(ROOT,'data/model_pair_qualified.json')).hexdigest()
     originals={a['asset_id']:a for a in read('release/approved_3d_bundles_v11_index.json')['assets']}
     bindings=read('release/approved_3d_lossless_binding.json')['models']
-    for asset in catalog['assets']:
+    for asset in historical(catalog,'model_pair_geometry_catalog')['assets']:
         for appearance,source in zip(asset['appearances'],originals[asset['asset_id']]['appearances'],strict=True):
             assert appearance['runtime_identity']==source['runtime_identity']
             assert appearance['source_sha256']==source['runtime_sha256']

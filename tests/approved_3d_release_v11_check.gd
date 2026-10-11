@@ -74,6 +74,12 @@ func _run() -> void:
 					previous_hash = entry.runtime_sha256
 			var a := Reviewed.resolve(identity, previous_hash)
 			var b := Reviewed.resolve(identity, appearance.runtime_sha256)
+			var revoked: Array = Reviewed.DATA.data.models[identity].get("revoked_runtime_sha256", [])
+			if previous_hash in revoked and appearance.runtime_sha256 in revoked:
+				assert(identity.trim_suffix("@shiny") == "hawlucha-mega")
+				assert(a.is_empty() and b.is_empty(), "Historical wrong-species archives must not inherit repaired anatomy")
+				count += 1
+				continue
 			assert(not a.is_empty() and not b.is_empty())
 			assert(Reviewed.resolve(identity, "0".repeat(64)).is_empty())
 			for profile: Dictionary in [a, b]:
@@ -86,11 +92,13 @@ func _run() -> void:
 	var service := Service.new()
 	root.add_child(service)
 	OS.set_environment("POKEAETHER_MODEL_INDEX", new_path)
-	assert(service._selected_release().revision == V11.data.revision)
+	var repaired := Service._v12_publication_verified()
+	assert(service._selected_release().revision == (Service.RELEASE_V12.data.revision if repaired else V11.data.revision))
 	var local: Dictionary = await service._approved_index()
-	assert(local.error.is_empty() and local.index == newer)
+	assert(local.error.is_empty())
+	assert(local.index.catalog_revision == (Service.RELEASE_V12.data.revision if repaired else newer.catalog_revision))
 	OS.set_environment("POKEAETHER_MODEL_INDEX", old_path)
-	assert(service._selected_release().revision == V10.data.revision)
+	assert(service._selected_release().revision == (Service.RELEASE_V12.data.revision if repaired else V10.data.revision))
 	OS.set_environment("POKEAETHER_MODEL_INDEX", new_path)
 	var report_path := OS.get_environment("LOSSLESS_PREPARATION_REPORT")
 	if report_path.is_empty():

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replace Mega Hawlucha's incorrect 3D source with its own normal/shiny model and shared packs. Calibrate attack origins for Cramorant, Deoxys, Minior, Togedemaru and Mega Hawlucha; keep Hyper Beam aligned during their native attack poses.
+
 - Correct overlapping 3D model parts for normal and shiny Cramorant, Deoxys, Minior and Togedemaru. Rebuild Mega Hawlucha from the correct source as a local replacement candidate.
 
 - Expand Guild Base furnishing to 129 reusable furniture and decoration designs from the existing indoor tileset, with beds, storage, seating, rugs and laboratory displays.

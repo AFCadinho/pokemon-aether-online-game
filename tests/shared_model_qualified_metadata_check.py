@@ -3,12 +3,17 @@
 import copy
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'tools'))
+from shared_source_repair_binding import historical
 
 
 def check(wire, catalog, original, proof):
+    wire = historical(wire, 'model_pair_qualified')
+    catalog = historical(catalog, 'model_pair_catalog')
     assert wire["prototype_only"] is True and wire["production_approved"] is False
     assert wire["catalog_revision"] == "shared-model-qualified-test-v1"
     assert wire["runtime_contract"] == {"godot": "4.6", "pokemon_3d": 2}
