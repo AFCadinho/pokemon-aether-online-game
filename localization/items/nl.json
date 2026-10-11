@@ -1,4 +1,8 @@
 {
+  "aether-band": {
+    "name": "Aether Band",
+    "shortDesc": "Herstelt na een gewonnen wild gevecht 1 PP van elke move van de drager, tot het maximum. Niet verhandelbaar. Eén aankoop per account."
+  },
   "alola-stone": {
     "name": "Alola Stone",
     "shortDesc": "Laat Pikachu, Exeggcute evolueren naar hun Alola-evolutie. Wordt verbruikt bij succesvol gebruik."

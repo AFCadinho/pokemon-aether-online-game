@@ -1,4 +1,9 @@
 {
+  "ui.store.category.held-items.label": "Itens segurados",
+  "ui.store.category.held-items.description": "Equipamento para o Pokémon que segura o item.",
+  "ui.store.category.held-items.promise": "EQUIPAMENTO POKÉMON",
+  "ui.store.already_purchased": "Já comprado",
+  "ui.store.once_per_account": "Este item só pode ser comprado uma vez por conta.",
   "ui.guild_base.rooms.floor_search": "Buscar andar ou jogador…",
   "ui.guild_base.rooms.no_floors": "Nenhum andar encontrado.",
   "ui.guild_base.rooms.travel": "Ir",

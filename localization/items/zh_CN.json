@@ -1,4 +1,8 @@
 {
+  "aether-band": {
+    "name": "Aether Band",
+    "shortDesc": "赢得野生宝可梦对战后，为携带者的每个招式恢复1点PP，不超过上限。不可交易。每个账号限购一次。"
+  },
   "alola-stone": {
     "name": "阿罗拉之石",
     "shortDesc": "使皮卡丘、蛋蛋进化为其阿罗拉地区的进化形态。仅在进化成功时消耗。"
