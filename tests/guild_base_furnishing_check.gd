@@ -172,6 +172,7 @@ func _run() -> void:
 	_check(editor.building and service.acquired == 1 and world.synced, "entering first locks movement and saves the player's position before acquiring a lease")
 	_check(editor.panel.visible and camera.zoom.x != 1, "editing opens the catalog and fits the room camera")
 	var hud: CanvasLayer = await _check_pointer_input(editor, map, service)
+	await _check_tabletop_placement(editor, map, service)
 	root.size_changed.emit()
 	camera.zoom = Vector2(9, 9)  # A later Player viewport listener reapplies its baseline.
 	await process_frame
@@ -321,3 +322,53 @@ func _check_pointer_input(editor: Node, map: Node2D, service: ServiceStub) -> Ca
 		await editor._take_back()
 	editor._clear_selection()
 	return hud
+
+func _check_tabletop_placement(editor: Node, map: Node2D, service: ServiceStub) -> void:
+	var original: Dictionary = editor.state.duplicate(true)
+	editor.selected_furniture = "plate"
+	for key: String in ["table_small", "table_large"]:
+		var table := _item("surface-table", key, 5, 10)
+		editor.state.items = [table]
+		var spec := Catalog.item(key)
+		var root_position := Vector2(5, 12) * 32
+		var decorations: Array = [table]
+		for y: int in [-64, -32]:
+			for x: int in range(0, int(spec.visualSize[0]) * 32, 32):
+				editor.pending_id = "%s-%d-%d" % [key, x, y]
+				var point := root_position + Vector2(x + 16, y - 16)
+				var candidate: Dictionary = editor._placement_at(map.to_global(point))
+				_check(not candidate.is_empty(), "every tabletop cell accepts a pointer: " + key)
+				if candidate.is_empty():
+					continue
+				var offset: Array = spec.surfaceSlots[int(candidate.slot)]
+				_check(Vector2(offset[0], offset[1]) == Vector2(x, y), "decoration snaps to the pointed-at tabletop cell: " + key)
+				decorations.append(candidate)
+				var visual: Node2D = load(str(Catalog.item("plate").scenePath)).instantiate()
+				visual.configure_surface(map, candidate, spec)
+				_check(visual.position == Vector2(x, y), "decoration artwork uses the selected tabletop position")
+				visual.free()
+		_check(Catalog.validate(map, decorations) == "", "all tabletop cells can be occupied together: " + key)
+	editor.state = original
+	editor.category.select(6)
+	editor._populate_catalog()
+	editor._catalog_selected(1)  # Plate, beside the existing flowers.
+	var point := Vector2(5, 12) * 32 + Vector2(16, -80)
+	var id: String = editor.pending_id
+	var before := service.saves
+	_click(root.canvas_transform * map.to_global(point))
+	await process_frame
+	var placed: Dictionary = editor._placement_by_id(id)
+	_check(service.saves == before + 1 and placed.get("parentId") == "table", "a real click places a decoration on a previously unavailable tabletop cell")
+	if not placed.is_empty():
+		editor._catalog_selected(1)
+		var occupied: Dictionary = editor._placement_at(map.to_global(point))
+		_check(int(occupied.slot) == int(placed.slot) and editor._candidate_error(occupied) == "overlap", "occupied tabletop cells stay red instead of jumping to another cell")
+		_click(root.canvas_transform * map.to_global(point))
+		_check(service.saves == before + 1, "clicking an occupied tabletop cell cannot save another decoration")
+		editor._start_selecting()
+		_click(root.canvas_transform * map.to_global(point))
+		_check(editor.selected_instance == id and editor._candidate_error(editor._placement_at(map.to_global(point))) == "", "a selected decoration can stay on its own tabletop cell")
+		await editor._take_back()
+	editor.category.select(0)
+	editor._populate_catalog()
+	editor._clear_selection()
