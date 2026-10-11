@@ -188,7 +188,7 @@ func _build_tracker() -> void:
 	add_child(tracker_panel)
 
 	var margin := MarginContainer.new()
-	_set_margins(margin, 8, 7, 10, 8)
+	_set_margins(margin, 8, 5, 10, 5)
 	tracker_panel.add_child(margin)
 	var content_row := HBoxContainer.new()
 	content_row.add_theme_constant_override("separation", 8)
@@ -243,7 +243,7 @@ func _build_tracker() -> void:
 	add_child(side_tracker_panel)
 
 	var side_margin := MarginContainer.new()
-	_set_margins(side_margin, 8, 7, 10, 8)
+	_set_margins(side_margin, 8, 5, 10, 6)
 	side_tracker_panel.add_child(side_margin)
 	var side_row := HBoxContainer.new()
 	side_row.add_theme_constant_override("separation", 8)

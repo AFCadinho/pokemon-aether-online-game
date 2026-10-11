@@ -32,9 +32,11 @@ static func compact_button_style(button: Button, visual_size: Vector2 = Vector2(
 		var style := button.get_theme_stylebox(state) as StyleBoxFlat
 		if style == null:
 			continue
-		if not button.has_theme_stylebox_override(state):
+		var owned_key := "touch_compact_style_owned_%s" % state
+		if not button.has_meta(owned_key):
 			style = style.duplicate() as StyleBoxFlat
 			button.add_theme_stylebox_override(state, style)
+			button.set_meta(owned_key, true)
 		if not style.has_meta("touch_original_margins"):
 			style.set_meta("touch_original_margins", Vector4(style.get_margin(SIDE_LEFT), style.get_margin(SIDE_TOP), style.get_margin(SIDE_RIGHT), style.get_margin(SIDE_BOTTOM)))
 		var margins: Vector4 = style.get_meta("touch_original_margins")

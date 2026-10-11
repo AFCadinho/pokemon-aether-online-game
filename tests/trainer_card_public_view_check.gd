@@ -201,7 +201,7 @@ func _run() -> void:
 	for field: String in ["seen", "caught", "shinyCaught"]:
 		_check(_find_label(legacy.find_child("Dex_%s" % field, true, false), "—") != null, "missing %s is not presented as zero" % field)
 	legacy.free()
-	_check(own_card.get_combined_minimum_size().x <= 720.0 and own_card.get_combined_minimum_size().y <= 500.0, "own counters fit the designed popup bounds")
+	_check(own_card.get_combined_minimum_size().x <= 720.0 and own_card.get_combined_minimum_size().y <= 500.0, "own counters fit the designed popup bounds (minimum=%s)" % own_card.get_combined_minimum_size())
 	var own_tabs := overlay.get("trainer_card_tabs") as TabContainer
 	for tab_index in range(own_tabs.get_tab_count()):
 		own_tabs.current_tab = tab_index

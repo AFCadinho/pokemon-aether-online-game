@@ -58,7 +58,7 @@ func _run() -> void:
 	_check(not iv_details.visible and not ev_details.visible, "Storage hover details stay hidden after data updates")
 	_check(
 		is_equal_approx(populated_height, PartyHoverCard.STORAGE_CARD_HEIGHT),
-		"A fully populated Storage hover card stays at the fixed height"
+		"A fully populated Storage hover card stays at the fixed height (got %s)" % populated_height
 	)
 
 	var exchange_card := PARTY_HOVER_SCENE.instantiate() as PartyHoverCard
@@ -120,7 +120,7 @@ func _run() -> void:
 	card.reset_size()
 	_check(
 		is_equal_approx(card.size.y, populated_height),
-		"Storage hover height stays fixed across different Pokémon details"
+		"Storage hover height stays fixed across different Pokémon details (got %s, populated %s)" % [card.size.y, populated_height]
 	)
 
 	host.free()

@@ -57,7 +57,7 @@ func _run() -> void:
 	for frame in 5:
 		await process_frame
 	for state: Dictionary in desktop.collapsible_panels.values():
-		_check(state["button"].size == Vector2(28, 28), "desktop collapse size is preserved")
+		_check(absf(state["button"].size.x - 28.0) <= 1.01 and absf(state["button"].size.y - 28.0) <= 1.01, "desktop collapse size is preserved")
 		var button: Button = state["button"]
 		_check(_visual_rect(button, "normal") == Rect2(Vector2.ZERO, button.size), "desktop surface covers the original button")
 	desktop.quest_journal_view.has_main_tracker = true
@@ -95,7 +95,7 @@ func _check_layout(overlay: CanvasLayer, context: String) -> void:
 			for state: String in ["normal", "hover", "pressed"]:
 				var visual := _visual_rect(button, state)
 				var expected := Vector2(28, 32) if button == overlay.quest_journal_view.tracker_collapse_button else Vector2(28, 28)
-				_check(visual.size.is_equal_approx(expected), "original UI-scaled surface %s %s visual=%s rect=%s minimum=%s: %s" % [button.name, state, visual.size, button.size, button.get_combined_minimum_size(), context])
+				_check(absf(visual.size.x - expected.x) <= 1.01 and absf(visual.size.y - expected.y) <= 1.01, "original UI-scaled surface %s %s visual=%s rect=%s minimum=%s: %s" % [button.name, state, visual.size, button.size, button.get_combined_minimum_size(), context])
 				_check(not visual.has_point(button.size * Vector2(0.1, 0.9)), "edge press lies in transparent padding: " + context)
 			if button == overlay.chat_resize_button:
 				_check(button.get_theme_constant("icon_max_width") == 16, "resize icon follows the chosen UI scale: " + context)

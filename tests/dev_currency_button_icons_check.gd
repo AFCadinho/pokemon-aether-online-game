@@ -7,6 +7,7 @@ const BUTTON_ICONS := {
 	"dev_gems_confirm_button": "res://assets/ui/donator_gem.svg",
 	"dev_aetherite_confirm_button": "res://assets/ui/aetherite.svg",
 	"dev_battle_points_confirm_button": "res://assets/ui/battle_points.svg",
+	"dev_casino_tokens_confirm_button": "res://assets/items/icons/AMULETCOIN.png",
 }
 
 var failed := false
@@ -20,7 +21,7 @@ func _run() -> void:
 	var overlay_source := FileAccess.get_file_as_string(OVERLAY_SCRIPT_PATH)
 	_check(
 		overlay_source.contains("func _current_dev_currency_amount()")
-			and overlay_source.count("var amount := _current_dev_currency_amount()") == 4,
+			and overlay_source.count("var amount := _current_dev_currency_amount()") == 5,
 		"Each developer currency action reads the unsubmitted amount field"
 	)
 	_check(

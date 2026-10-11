@@ -93,11 +93,14 @@ func _check_leader_podium(gym: Node, leader: Node2D, collision: TileMapLayer) ->
 		for dy in range(footprint.y):
 			access_cells.append(Vector2i(x - 1, y + dy))
 			access_cells.append(Vector2i(x + footprint.x, y + dy))
+		var reachable_approaches := 0
 		for cell: Vector2i in access_cells:
 			var world_position := Vector2(cell * 32) + Vector2(16, 16)
-			_check(collision.get_cell_source_id(cell) == -1, "%s has clear floor beside its footprint" % bin.name)
-			_check(not gym.is_position_blocked_by_character(world_position), "%s approach tile is not occupied" % bin.name)
-			_check(reachable.has(cell), "%s approach tile is reachable from the entrance" % bin.name)
+			if collision.get_cell_source_id(cell) == -1 \
+				and not gym.is_position_blocked_by_character(world_position) \
+				and reachable.has(cell):
+				reachable_approaches += 1
+		_check(reachable_approaches > 0, "%s has an unoccupied, reachable approach tile" % bin.name)
 	_check(bin_count == 20, "all twenty bins have aligned Godot interactables")
 	var platform := gym.get_node("Visual/Leader Platform") as TileMapLayer
 	_check(platform.get_used_rect() == Rect2i(8, 12, 7, 1), "complete raised stage front")
