@@ -11,6 +11,8 @@ const CATALOG_PATHS: Dictionary = {
 }
 
 const CODE_TO_KEY: Dictionary = {
+	"guild_base_room_name_invalid": "ui.guild_base.visits.room_name_invalid",
+	"guild_base_identity_required": "ui.guild_base.error.access",
 	"WORLD_TRANSITION_ACTIVITY_BLOCKED": "backend.error.action_blocked",
 	"guild_base_not_owned": "ui.guild.base.not_owned",
 	"guild_base_visit_no_host": "ui.guild_base.visits.error_no_host",

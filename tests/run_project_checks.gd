@@ -187,6 +187,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/guild_base_registrar_check.gd",
 	"res://tests/guild_base_interior_check.gd",
 	"res://tests/guild_base_teleport_check.gd",
+	"res://tests/guild_base_room_names_check.gd",
 	"res://tests/guild_base_player_floor_check.gd",
 	"res://tests/guild_base_furnishing_check.gd",
 	"res://tests/guild_base_door_sync_check.gd",

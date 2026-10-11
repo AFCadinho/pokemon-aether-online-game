@@ -5,6 +5,7 @@ class_name GuildServiceNode
 signal membership_changed(membership: Dictionary)
 signal guild_changed(guild: Dictionary)
 signal notification_received(notification: Dictionary)
+signal base_identity_changed(identity: Dictionary)
 
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
@@ -27,6 +28,7 @@ var pending_bot_request: Dictionary = {}
 var bot_request_in_flight := false
 var current_membership: Dictionary = {}
 var current_guild: Dictionary = {}
+var base_identities: Dictionary = {}
 var membership_loaded := false
 var notification_poll_in_flight := false
 var delivered_notification_ids: Dictionary = {}
@@ -1117,3 +1119,23 @@ func base_visit_answer(guild_id: int, user_id: int, accept: bool) -> Dictionary:
 
 func base_visit_policy(guild_id: int, policy: String) -> Dictionary:
 	return await _base_furniture_request("/visits/%d/policy" % guild_id, HTTPClient.METHOD_PUT, {"policy": policy})
+
+
+func base_identity(guild_id: int) -> Dictionary:
+	var result := await _base_furniture_request("/%d/identity" % guild_id, HTTPClient.METHOD_GET, {})
+	if bool(result.get("success", false)):
+		_cache_base_identity(result.state)
+	return result
+
+func set_base_room_name(guild_id: int, room_key: String, room_name: String) -> Dictionary:
+	var result := await _base_furniture_request("/%d/rooms/%s/name" % [guild_id, room_key], HTTPClient.METHOD_PUT, {"name": room_name})
+	if bool(result.get("success", false)):
+		_cache_base_identity(result.state)
+	return result
+
+func _cache_base_identity(identity: Dictionary) -> void:
+	var owner_id := int(identity.get("guildId", 0))
+	if owner_id <= 0:
+		return
+	base_identities[owner_id] = identity.duplicate(true)
+	base_identity_changed.emit(identity)

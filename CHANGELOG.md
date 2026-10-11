@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Show the owning Guild's name in Guild Base location labels and let leaders name the two shared side rooms through the base manager.
 - Rename the Gift Store equipment category to Training Items, with training badges and wild-battle descriptions in all supported languages.
 
 - Publish the official Overworld Abilities guide with three interface screenshots, explaining Synchronize, Compound Eyes, Super Luck and removable Pickup items; clearly mark the field effects as upcoming.
