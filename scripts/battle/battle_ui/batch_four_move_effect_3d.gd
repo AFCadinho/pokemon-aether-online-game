@@ -56,6 +56,11 @@ var leaf_materials: Array[ShaderMaterial] = []
 var launch_origin := Vector3.ZERO
 var moon_origin := Vector3.ZERO
 var launched := false
+var emission_end := -1.0
+
+func start(move: String, timing: Dictionary, options: Dictionary, native_clock: Callable, positions: Callable, guard: Callable) -> void:
+	emission_end = float(timing.emission_end_frame) / 60.0 if timing.has("emission_end_frame") else -1.0
+	super.start(move, timing, options, native_clock, positions, guard)
 
 func _sprite_values(id: String) -> Array:
 	return ART[id] if ART.has(id) else super._sprite_values(id)
@@ -202,22 +207,25 @@ func _draw_objects(from: Vector3, to: Vector3, travel: float, facing: Basis, sid
 				_source_sprite(point,0.65,"magic_glow",0,0.55,orientation,0,Vector2(0.6,1))
 
 func _draw_cannon(to: Vector3, travel: float, after: float, facing: Basis) -> void:
+	if emission_end >= 0 and elapsed >= emission_end: return
 	var fade := 1.0-clampf(after/0.65,0,1)
+	if emission_end >= 0:
+		fade = 1.0-clampf((elapsed-impact)/maxf(emission_end-impact,.01),0,1)
 	var charge := clampf(elapsed/maxf(launch,0.01),0,1)
 	for origin: Vector3 in emission_sources:
 		if travel<0:
-			_source_sprite(origin,charge*0.7,"flash_muzzle",0,charge*0.75,facing,elapsed*4)
-		elif after<0.65:
+			_source_sprite(origin,charge*0.7*emission_scale,"flash_muzzle",0,charge*0.75,facing,elapsed*4)
+		elif emission_end >= 0 or after<0.65:
 			var tip := origin.lerp(to,clampf(travel,0,1))
-			_line(origin,tip,0.095*fade,surface_material)
-			_line(origin,tip,0.025*fade,core)
-			_source_sprite(origin,0.65,"flash_muzzle",0,fade,facing,elapsed*4)
+			_line(origin,tip,0.095*emission_scale*fade,surface_material)
+			_line(origin,tip,0.025*emission_scale*fade,core)
+			_source_sprite(origin,0.65*emission_scale,"flash_muzzle",0,fade,facing,elapsed*4)
 			var direction := (to-origin).normalized()
 			var side := direction.cross(Vector3.UP if absf(direction.y)<0.95 else Vector3.RIGHT).normalized()
 			var orientation := Basis(side,direction,side.cross(direction))
 			for i in 4:
 				var t := fmod(maxf(travel,0)+i*0.25,1)*clampf(travel,0,1)
-				_piece(ring,surface_material,origin.lerp(to,t),Vector3.ONE*0.15*fade,orientation)
+				_piece(ring,surface_material,origin.lerp(to,t),Vector3.ONE*0.15*emission_scale*fade,orientation)
 
 func _draw_pulse(from: Vector3, to: Vector3, travel: float, facing: Basis, path_basis: Basis) -> void:
 	if travel<0 or travel>=1: return

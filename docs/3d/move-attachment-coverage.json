@@ -62,7 +62,7 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1061,
+		"with_any_attachment": 1069,
 		"with_beak_tip": 4,
 		"with_cannon": 2,
 		"with_cannons": 1,
@@ -76,12 +76,13 @@
 		"with_left_foot": 288,
 		"with_left_hand": 574,
 		"with_left_hand_upper": 1,
-		"with_mouth": 980,
+		"with_mandibles": 2,
+		"with_mouth": 986,
 		"with_mouth_red": 1,
-		"with_muzzle": 1,
+		"with_muzzle": 2,
 		"with_olive_nozzle": 1,
 		"with_vines": 3,
-		"without_attachments": 139
+		"without_attachments": 131
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -11492,6 +11493,30 @@
 				]
 			]
 		},
+		"electrode-hisui": {
+			"mouth": [
+				[
+					{
+						"bone": "spine",
+						"offset": [
+							-0.148704245686531,
+							0.00490090996026993,
+							0.580353915691376
+						],
+						"weight": 0.926149710806524
+					},
+					{
+						"bone": "head",
+						"offset": [
+							-0.274492740631104,
+							0.00323509494774044,
+							0.583126783370972
+						],
+						"weight": 0.0738502891934766
+					}
+				]
+			]
+		},
 		"elekid": {
 			"foot": [
 				[
@@ -14752,6 +14777,30 @@
 							-0.00132552534341849
 						],
 						"weight": 1.0
+					}
+				]
+			]
+		},
+		"gastly": {
+			"mouth": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							-0.167159527540207,
+							0.00132370926439762,
+							0.312453478574753
+						],
+						"weight": 0.524243721166702
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.459921211004257,
+							0.011620813049376,
+							0.0116580873727798
+						],
+						"weight": 0.475756278833297
 					}
 				]
 			]
@@ -21875,6 +21924,48 @@
 				]
 			]
 		},
+		"klefki": {
+			"mouth": [
+				[
+					{
+						"bone": "left_upper_jaw_02",
+						"offset": [
+							0.0,
+							0.0,
+							0.0
+						],
+						"weight": 0.4
+					},
+					{
+						"bone": "right_upper_jaw_02",
+						"offset": [
+							0.0,
+							0.0,
+							0.0
+						],
+						"weight": 0.4
+					},
+					{
+						"bone": "left_lower_jaw",
+						"offset": [
+							0.027,
+							0.0,
+							0.0
+						],
+						"weight": 0.1
+					},
+					{
+						"bone": "right_lower_jaw",
+						"offset": [
+							0.027,
+							0.0,
+							0.0
+						],
+						"weight": 0.1
+					}
+				]
+			]
+		},
 		"klink": {
 			"mouth": [
 				[
@@ -22464,6 +22555,19 @@
 						"weight": 1.0
 					}
 				]
+			],
+			"muzzle": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.54087370634079,
+							0.00445666769519448,
+							-0.0162419714033604
+						],
+						"weight": 1.0
+					}
+				]
 			]
 		},
 		"kyurem-black": {
@@ -22844,6 +22948,57 @@
 							0.0227710604667664
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"latios": {
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.16316083073616,
+							0.00082861073315143,
+							0.00019440955657046
+						],
+						"weight": 0.253328459594448
+					},
+					{
+						"bone": "head",
+						"offset": [
+							0.266379952430725,
+							0.00094060733681544,
+							0.122604317963123
+						],
+						"weight": 0.463314571241298
+					},
+					{
+						"bone": "left_jaw",
+						"offset": [
+							0.154796481132507,
+							-0.0190708637237549,
+							-0.0175075456500053
+						],
+						"weight": 0.00448198123258181
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.236104801297188,
+							0.00280446582473814,
+							-0.00218720035627484
+						],
+						"weight": 0.21805998008192
+					},
+					{
+						"bone": "lower_jaw_sub",
+						"offset": [
+							-0.00244154897518456,
+							0.00324240745976567,
+							0.0360164754092693
+						],
+						"weight": 0.0608150078497522
 					}
 				]
 			]
@@ -25648,6 +25803,66 @@
 							0.0
 						],
 						"weight": 1.0
+					}
+				]
+			]
+		},
+		"mareanie": {
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.0689475983381271,
+							0.00196907948702574,
+							-0.00252607371658087
+						],
+						"weight": 0.368498005653298
+					},
+					{
+						"bone": "feeler_g_01",
+						"offset": [
+							0.103825718164444,
+							0.00127578456886113,
+							0.0602348893880844
+						],
+						"weight": 0.272126885996254
+					},
+					{
+						"bone": "lower_jaw_02",
+						"offset": [
+							-0.00224480079486966,
+							0.0001759900333127,
+							0.00016257596143987
+						],
+						"weight": 0.228711518565446
+					},
+					{
+						"bone": "right_jaw",
+						"offset": [
+							0.0786217674612999,
+							-0.0102859809994698,
+							-0.00388157623820007
+						],
+						"weight": 0.0620805616336217
+					},
+					{
+						"bone": "lower_jaw_01",
+						"offset": [
+							0.0824660509824753,
+							-0.00184014637488872,
+							-0.00012024156603729
+						],
+						"weight": 0.00915767508506058
+					},
+					{
+						"bone": "left_jaw",
+						"offset": [
+							0.078586220741272,
+							0.0110356472432613,
+							-0.00337115628644824
+						],
+						"weight": 0.0594253530663196
 					}
 				]
 			]
@@ -39722,6 +39937,48 @@
 				]
 			]
 		},
+		"snom": {
+			"mandibles": [
+				[
+					{
+						"bone": "right_jaw_02",
+						"offset": [
+							0.0470318794250488,
+							-0.0110118445008993,
+							-0.0000536962761543691
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "left_jaw_02",
+						"offset": [
+							0.0452650785446167,
+							0.0116676045581698,
+							0.00821997132152319
+						],
+						"weight": 0.470572872003289
+					},
+					{
+						"bone": "left_jaw_01",
+						"offset": [
+							0.0377917475998402,
+							-0.0120079331099987,
+							0.0456738620996475
+						],
+						"weight": 0.0257501402348045
+					},
+					{
+						"bone": "head",
+						"offset": [
+							0.117765590548515,
+							0.0207803305238485,
+							-0.0316320732235909
+						],
+						"weight": 0.00367698776190705
+					}
+				]
+			]
+		},
 		"snorlax": {
 			"hand": [
 				[
@@ -40199,6 +40456,30 @@
 				]
 			]
 		},
+		"spinarak": {
+			"mandibles": [
+				[
+					{
+						"bone": "right_jaw",
+						"offset": [
+							0.0701375976204872,
+							-0.0230502001941204,
+							-0.00077459024032577
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "left_jaw",
+						"offset": [
+							0.069966584444046,
+							0.0242702607065439,
+							0.00000225481926463544
+						],
+						"weight": 0.5
+					}
+				]
+			]
+		},
 		"spinda": {
 			"foot": [
 				[
@@ -40236,6 +40517,30 @@
 							23.8082941153226
 						],
 						"weight": 1.0
+					}
+				]
+			]
+		},
+		"spiritomb": {
+			"mouth": [
+				[
+					{
+						"bone": "jaw_01",
+						"offset": [
+							0.0,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw_02",
+						"offset": [
+							0.0,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -48700,8 +49005,8 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "5d3ffcd23ba21fb15194ec82d141bd7726830b8c12a394274d7d75255c2964ac",
-		"scripts/battle/battle_ui/move_attachments_3d.gd": "5179efbbb7d601be29a82d15d74da5ef00f012bec4da3ecc142263855c364fdf",
+		"data/battle_move_attachments_3d.json": "10fd9798f7a447a2d8d7a9c360046bdbd45d9d9b54958863d9cf59da2aac958e",
+		"scripts/battle/battle_ui/move_attachments_3d.gd": "e1e876a615cacbda2aaadba60934db81fe133509a5ccc8af1c7556badb86ca0a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
 		"scripts/battle/battle_ui/screened_model_catalog.json": "e48e36f568932290b2b7f1f461e15391444d6e7821d48f6ef0c59ede5b36839d"
@@ -59258,8 +59563,61 @@
 			]
 		},
 		"electrode-hisui": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "eb574dd2ec4298145103c3c248db6cb424c275db9fb3888c49a693f04e409d1e",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "f000a3a4c28f2801c22bb0e4a8b8ab4e440831f6b75839baa6a75a7c9c721753",
+				"scope": "Projected center of the painted mouth on the red body surface; follows the mouth in idle and physical poses. Rolling clips face away and are unsuitable for the reviewed forward beam window. Actual effects pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "05d5b48a11a06a5dcea63940f3505686daf2d4e4abd409f8cb60e2f0254bd34d",
+					"landmarks": [
+						{
+							"action": "idle",
+							"barycentric": [
+								0.480324420466801,
+								0.0426515133740071,
+								0.477024066159192
+							],
+							"column": 1.0,
+							"distance": 1.29567139530383,
+							"mesh": "pm0101_00_41/Skeleton3D/pm0101_00_41_body_mesh",
+							"mesh_contains": "body",
+							"pixel": [
+								214.0,
+								248.0
+							],
+							"surface": 0.0,
+							"triangle": 509.0,
+							"vertex_indices": [
+								252.0,
+								242.0,
+								253.0
+							],
+							"weight": 1.0
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -61996,8 +62354,85 @@
 			]
 		},
 		"gastly": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "21a6bdfbae0a8a5002c5f017e76bda681f0ad000c27403647fb0868cc77bfd25",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "edeff6fc58774d541d7d83b954b1dd49a3ff7807e54f1508c17c85ad50de998f",
+				"scope": "Projected upper/lower lip rims move the origin from the chin to the mouth interior between the fangs. Smoke and the turned-away physical_attack_2 poses obscure some views. Sampled visible native poses only; occluded poses and actual effect clearance remain pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "97c9b3bae4bab783673af26f31bea06339aef1fe5431aa4280349281b92ab2df",
+					"landmarks": [
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.517546159877292,
+								0.00438503816204372,
+								0.478068801960664
+							],
+							"column": 1.0,
+							"distance": 1.51641112232793,
+							"mesh": "pm0092_00_00/Skeleton3D/pm0092_00_00_body_mesh",
+							"mesh_contains": "body",
+							"pixel": [
+								210.0,
+								131.0
+							],
+							"surface": 0.0,
+							"triangle": 597.0,
+							"vertex_indices": [
+								140.0,
+								141.0,
+								87.0
+							],
+							"weight": 0.5
+						},
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.124256783850203,
+								0.39393008153321,
+								0.481813134616588
+							],
+							"column": 1.0,
+							"distance": 1.70347258321963,
+							"mesh": "pm0092_00_00/Skeleton3D/pm0092_00_00_body_mesh",
+							"mesh_contains": "body",
+							"pixel": [
+								210.0,
+								181.0
+							],
+							"surface": 0.0,
+							"triangle": 504.0,
+							"vertex_indices": [
+								138.0,
+								139.0,
+								108.0
+							],
+							"weight": 0.5
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -67792,8 +68227,35 @@
 			]
 		},
 		"klefki": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"manual_adjustments": {
+					"method": "anatomical_mouth_boundary_bone_average",
+					"notes": "Average the moving keyhole bowl corners for Klefki; upper and lower central mouth vertices for Spiritomb. Surface rays hit the backing mesh rather than the deforming mouth. Lower jaw origins are inside the head; their local X offsets of .027 reach the visible front lip rim. Upper bowl corners carry .4 each and lower rim .1 each to center the origin vertically inside the changing bowl."
+				},
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "f7d82950b35e988769081e73bd116960f643778831371d8eabf0b7a655e718b9",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "463d076e22a800db14ecb28c789d869e466bb2ebc7f683d03d51735149b43e8f",
+				"scope": "Moving bowl-corner and front lower-lip bindings center the emitter in the lower keyhole mouth. Lower jaw origins require local X clearance to reach the visible front rim. Reviewed frontal/underside and side native poses; turned-away/occluded physical_attack_2 poses and effects remain pending.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -68163,7 +68625,8 @@
 		"kyurem": {
 			"attachments": [
 				"hand",
-				"left_hand"
+				"left_hand",
+				"muzzle"
 			],
 			"status": "configured",
 			"variants": [
@@ -68462,8 +68925,83 @@
 			]
 		},
 		"latios": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "508ef0a9496ef53492b42964efc46619ff3e2acaf9b936d93a96885fa9c0ceb6",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "07379f0439620022b31483370cf81dfc520ba88628501c94e96927087269342d",
+				"scope": "Projected upper/lower rims place the origin inside the small opening beneath the long snout and on its closed seam. Sampled visible native poses only; occluded poses and actual effect clearance remain pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "3d12786a106226a6ad2b2a1346dabbde642628b9c1ce5eb2c05dd1797d1dcbbe",
+					"landmarks": [
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.751040758558808,
+								0.136896032288128,
+								0.112063209153064
+							],
+							"column": 1.0,
+							"distance": 0.304956094552552,
+							"mesh": "pm0381_00_00_trmdl/Skeleton3D/pm0381_00_00_body_mesh",
+							"pixel": [
+								205.0,
+								122.0
+							],
+							"surface": 0.0,
+							"triangle": 2519.0,
+							"vertex_indices": [
+								2234.0,
+								2071.0,
+								2235.0
+							],
+							"weight": 0.5
+						},
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.597712701047547,
+								0.0146865109672546,
+								0.387600787985198
+							],
+							"column": 1.0,
+							"distance": 0.34725374757982,
+							"mesh": "pm0381_00_00_trmdl/Skeleton3D/pm0381_00_00_body_mesh",
+							"pixel": [
+								205.0,
+								210.0
+							],
+							"surface": 0.0,
+							"triangle": 2252.0,
+							"vertex_indices": [
+								1075.0,
+								1076.0,
+								1074.0
+							],
+							"weight": 0.5
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -70519,8 +71057,109 @@
 			]
 		},
 		"mareanie": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "f6d054a476c046e85f2314751bee9642510ccf2a73caec736123cebf523da5cd",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "52260e6ef605dbceba5f69b1b4f67b897d47b6b424c9db64c1ad76ee8287d626",
+				"scope": "Projected upper and paired lower rims place the origin in the opened mouth above the central lower fang. The feeler_g_01 skin contribution belongs to the sampled upper facial rim; the resulting point follows the exposed late physical opening. Fronds obscure many poses. Sampled visible native poses only; occluded poses and actual effect clearance remain pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "ec9501c1778846e2e81d9d1dd5f7173d46a8f46cad7859f8bcd39968485f34cb",
+					"landmarks": [
+						{
+							"action": "physical_attack",
+							"barycentric": [
+								0.0811948203809113,
+								0.739960870894197,
+								0.178844308724892
+							],
+							"column": 2.0,
+							"distance": 0.415127517726364,
+							"mesh": "pm0801_00_00/Skeleton3D/pm0801_00_00_body_a_mesh",
+							"mesh_contains": "body",
+							"pixel": [
+								210.0,
+								145.0
+							],
+							"surface": 0.0,
+							"triangle": 951.0,
+							"vertex_indices": [
+								702.0,
+								703.0,
+								692.0
+							],
+							"weight": 0.5
+						},
+						{
+							"action": "physical_attack",
+							"barycentric": [
+								0.411464281529674,
+								0.31934630040357,
+								0.269189418066756
+							],
+							"column": 2.0,
+							"distance": 0.40908236500614,
+							"mesh": "pm0801_00_00/Skeleton3D/pm0801_00_00_body_a_mesh",
+							"mesh_contains": "body",
+							"pixel": [
+								190.0,
+								198.0
+							],
+							"surface": 0.0,
+							"triangle": 1812.0,
+							"vertex_indices": [
+								1466.0,
+								1465.0,
+								1474.0
+							],
+							"weight": 0.25
+						},
+						{
+							"action": "physical_attack",
+							"barycentric": [
+								0.24916427733554,
+								0.0439676862124935,
+								0.706868036451967
+							],
+							"column": 2.0,
+							"distance": 0.408150493857742,
+							"mesh": "pm0801_00_00/Skeleton3D/pm0801_00_00_body_a_mesh",
+							"mesh_contains": "body",
+							"pixel": [
+								230.0,
+								198.0
+							],
+							"surface": 0.0,
+							"triangle": 1827.0,
+							"vertex_indices": [
+								685.0,
+								619.0,
+								686.0
+							],
+							"weight": 0.25
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -82265,8 +82904,10 @@
 			]
 		},
 		"snom": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mandibles"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -82659,8 +83300,10 @@
 			]
 		},
 		"spinarak": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mandibles"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -82715,8 +83358,35 @@
 			]
 		},
 		"spiritomb": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"manual_adjustments": {
+					"method": "anatomical_mouth_boundary_bone_average",
+					"notes": "Average the moving keyhole bowl corners for Klefki; upper and lower central mouth vertices for Spiritomb. Surface rays hit the backing mesh rather than the deforming mouth."
+				},
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "3fd7754cff8ea9c0980703cf97c52e972c1c0aa5c408b67fe5b9e89d17442909",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "26f01470f74a1f74945104b56a68d483b4e3b66da0b85df8a944709ca525c446",
+				"scope": "The mean of the central upper and lower mouth vertices follows the green jagged mouth through thin and expanded native poses. Surface projection was rejected because it selected the backing hair mesh. This is an emitter on the animated spirit-face graphic; actual effects pending.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"

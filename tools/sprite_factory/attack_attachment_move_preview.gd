@@ -7,6 +7,7 @@ const Pose = preload("res://tools/sprite_factory/attack_attachment_pose.gd")
 var catalog_path := ""
 var output := "res://.tmp/attack-attachments/move-previews"
 var species := "snivy"
+var target_species := ""
 var move := "Vine Whip"
 var camera_yaw := 0.0
 var camera_scale := 1.0
@@ -20,11 +21,12 @@ var stage: Control
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
 	for i in args.size():
-		if args[i] in ["--catalog", "--output", "--species", "--move", "--camera-yaw", "--camera-scale", "--camera-frame", "--fractions"] and i + 1 >= args.size():
+		if args[i] in ["--catalog", "--output", "--species", "--target-species", "--move", "--camera-yaw", "--camera-scale", "--camera-frame", "--fractions"] and i + 1 >= args.size():
 			printerr("Missing argument: ", args[i]); quit(1); return
 		if args[i] == "--catalog": catalog_path = args[i+1]
 		if args[i] == "--output": output = args[i+1]
 		if args[i] == "--species": species = args[i+1]
+		if args[i] == "--target-species": target_species = args[i+1]
 		if args[i] == "--move": move = args[i+1]
 		if args[i] == "--camera-yaw": camera_yaw = deg_to_rad(float(args[i+1]))
 		if args[i] == "--camera-scale": camera_scale = float(args[i+1])
@@ -52,6 +54,17 @@ func _run() -> void:
 	assert(FileAccess.get_sha256(model.runtime_path) == model.runtime_sha256)
 	var profile := Catalog.resolve(species, model.runtime_sha256)
 	assert(not profile.is_empty(), "Requested model revision is not approved")
+	if target_species.is_empty(): target_species = species
+	var target_model := model
+	var target_profile := profile
+	if target_species != species:
+		target_model = {}
+		for entry: Dictionary in entries:
+			if Catalog.entry_key(entry) == target_species: target_model = entry; break
+		assert(not target_model.is_empty(), "Requested target model is missing")
+		assert(FileAccess.get_sha256(target_model.runtime_path) == target_model.runtime_sha256)
+		target_profile = Catalog.resolve(target_species, target_model.runtime_sha256)
+		assert(not target_profile.is_empty(), "Requested target revision is not approved")
 	viewport = SubViewport.new()
 	viewport.size = Vector2i(720,540)
 	viewport.own_world_3d = true
@@ -73,22 +86,27 @@ func _run() -> void:
 	stage.active = true; stage.world = world; stage.camera = camera
 	stage.entries[species] = profile
 	stage.visual_bounds[species] = profile.get("bounds", {})
-	var packed := ResourceLoader.load(model.runtime_path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene
+	stage.entries[target_species] = target_profile
+	stage.visual_bounds[target_species] = target_profile.get("bounds", {})
 	for slot in 2:
+		var actor_species := species if slot == 0 else target_species
+		var actor_model: Dictionary = model if slot == 0 else target_model
+		var actor_profile: Dictionary = profile if slot == 0 else target_profile
+		var packed := ResourceLoader.load(actor_model.runtime_path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene
 		var actor := packed.instantiate() as Node3D; world.add_child(actor)
 		preload("res://scripts/battle/battle_ui/material_surface_order.gd").apply(actor)
-		preload("res://scripts/battle/animations/reviewed_source_visibility.gd").apply(actor,species,model.runtime_sha256)
+		preload("res://scripts/battle/animations/reviewed_source_visibility.gd").apply(actor,actor_species,actor_model.runtime_sha256)
 		var player: AnimationPlayer = actor.find_children("*","AnimationPlayer",true,false)[0]
-		preload("res://scripts/battle/animations/gliscor_flight.gd").apply(player,species,model.runtime_sha256)
-		preload("res://scripts/battle/animations/mega_garchomp_standing.gd").apply(player,species,model.runtime_sha256)
-		preload("res://scripts/battle/animations/charmander_breath.gd").apply(player,species,model.runtime_sha256)
-		actor.scale = Vector3.ONE * float(profile.grounding.scale)
-		actor.position = stage._position(slot) + Vector3.UP*float(profile.grounding.get("lift",0))
+		preload("res://scripts/battle/animations/gliscor_flight.gd").apply(player,actor_species,actor_model.runtime_sha256)
+		preload("res://scripts/battle/animations/mega_garchomp_standing.gd").apply(player,actor_species,actor_model.runtime_sha256)
+		preload("res://scripts/battle/animations/charmander_breath.gd").apply(player,actor_species,actor_model.runtime_sha256)
+		actor.scale = Vector3.ONE * float(actor_profile.grounding.scale)
+		actor.position = stage._position(slot) + Vector3.UP*float(actor_profile.grounding.get("lift",0))
 		var direction: Vector3 = stage._position(1-slot) - stage._position(slot)
-		actor.rotation.y = atan2(direction.x,direction.z) + deg_to_rad(float(profile.grounding.get("yaw_degrees",0)))
+		actor.rotation.y = atan2(direction.x,direction.z) + deg_to_rad(float(actor_profile.grounding.get("yaw_degrees",0)))
 		stage.actors[slot] = actor; stage.players[slot] = player
-		stage.identities[slot] = species
-		stage.combatants[slot] = {"species":species.trim_suffix("@shiny"),"shiny":species.ends_with("@shiny")}
+		stage.identities[slot] = actor_species
+		stage.combatants[slot] = {"species":actor_species.trim_suffix("@shiny"),"shiny":actor_species.ends_with("@shiny")}
 		stage.actor_shown[slot] = true; stage.lifecycle[slot] = "idle"
 		Pose.sample(player, "idle", player.get_animation("idle").length*.45)
 	var requested: String = stage.attack_action_for(move,"p1")
@@ -133,9 +151,10 @@ func _run() -> void:
 				"source_position":[points.source.x,points.source.y,points.source.z],"target_position":[points.target.x,points.target.y,points.target.z],"contact_yaw":stage.contact_yaws[0]})
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
 	var filename := species+"-"+Stage.MoveEffect.move_key(move)
+	if target_species != species: filename += "-vs-" + target_species
 	assert(sheet.save_png(output.path_join(filename+".png")) == OK)
 	var file := FileAccess.open(output.path_join(filename+".json"),FileAccess.WRITE)
-	file.store_string(JSON.stringify({"species":species,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"camera_frame":camera_frame,"camera_scale":camera_scale,"camera_yaw":rad_to_deg(camera_yaw),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
+	file.store_string(JSON.stringify({"species":species,"target_species":target_species,"target_runtime_sha256":target_model.runtime_sha256,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"camera_frame":camera_frame,"camera_scale":camera_scale,"camera_yaw":rad_to_deg(camera_yaw),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
 	file.close()
 	effect.cancel(); await process_frame
 	stage.world = null; stage.camera = null; stage.free()

@@ -63,7 +63,7 @@ static func choreography_for(identity: String, move_key: String, action: String)
 	if spec.has("emission_scale"):
 		var scale := float(spec.emission_scale)
 		if not is_finite(scale) or scale <= 0 or scale > 4: return {}
-		if move_key not in ["watergun", "icebeam", "flamethrower"] and Recipes.get_recipe(move_key).get("family", "") != "beams": return {}
+		if move_key not in ["watergun", "icebeam", "flamethrower", "flashcannon"] and Recipes.get_recipe(move_key).get("family", "") != "beams": return {}
 		timing["emission_scale"] = scale
 	# Water Gun can leave an upward-facing mouth before bending toward the target.
 	if spec.has("water_stream_arc_height"):

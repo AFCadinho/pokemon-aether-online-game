@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1061 species/forms.
-- No anatomical attachment profile: 139 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 980 species/forms.
+- At least one configured anatomical attachment: 1069 species/forms.
+- No anatomical attachment profile: 131 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 986 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -280,6 +280,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | electivire | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | electrike | mouth | Same attachment profile |
 | electrode | mouth | Same attachment profile |
+| electrode-hisui | mouth | Same attachment profile |
 | elekid | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | elgyem | hand, left_hand, mouth | Same attachment profile |
 | emboar | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -347,6 +348,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | gardevoir | hand, left_hand, mouth | Same attachment profile |
 | gardevoir-mega | hand, left_hand, mouth | Same attachment profile |
 | garganacl | hand, left_hand | Same attachment profile |
+| gastly | mouth | Same attachment profile |
 | gastrodon | mouth | Same attachment profile |
 | gengar | hand, left_hand, mouth | Same attachment profile |
 | gengar-mega | hand, left_hand, mouth | Same attachment profile |
@@ -485,6 +487,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | klang | mouth | Same attachment profile |
 | klawf | mouth | Same attachment profile |
 | kleavor | mouth | Same attachment profile |
+| klefki | mouth | Same attachment profile |
 | klink | mouth | Same attachment profile |
 | klinklang | mouth | Same attachment profile |
 | koffing | mouth | Same attachment profile |
@@ -496,7 +499,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | krookodile | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | kubfu | foot, left_foot | Same attachment profile |
 | kyogre | hand, left_hand, mouth | Same attachment profile |
-| kyurem | hand, left_hand | Same attachment profile |
+| kyurem | hand, left_hand, muzzle | Same attachment profile |
 | kyurem-black | hand, left_hand, mouth | Same attachment profile |
 | kyurem-white | hand, left_hand, mouth | Same attachment profile |
 | lairon | hand, left_hand, mouth | Same attachment profile |
@@ -506,6 +509,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | larvitar | mouth | Same attachment profile |
 | latias | mouth | Same attachment profile |
 | latias-mega | mouth | Same attachment profile |
+| latios | mouth | Same attachment profile |
 | latios-mega | mouth | Same attachment profile |
 | leafeon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | leavanny | foot, left_foot, mouth | Same attachment profile |
@@ -562,6 +566,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | mantine | mouth | Same attachment profile |
 | mantyke | hand, left_hand, mouth | Same attachment profile |
 | maractus | hand, left_hand, mouth | Same attachment profile |
+| mareanie | mouth | Same attachment profile |
 | mareep | mouth | Same attachment profile |
 | marill | mouth | Same attachment profile |
 | marowak | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -874,6 +879,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | sneasel-hisui | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | sneasler | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | snivy | hand, left_hand, mouth, vines | Same attachment profile |
+| snom | mandibles | Same attachment profile |
 | snorlax | hand, left_hand, mouth | Same attachment profile |
 | snorunt | hand, left_hand, mouth | Same attachment profile |
 | snover | hand, left_hand | Same attachment profile |
@@ -886,7 +892,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | spectrier | foot, left_foot, mouth | Same attachment profile |
 | spheal | hand, left_hand, mouth | Same attachment profile |
 | spidops | foot, left_foot | Same attachment profile |
+| spinarak | mandibles | Same attachment profile |
 | spinda | foot, left_foot, mouth | Same attachment profile |
+| spiritomb | mouth | Same attachment profile |
 | sprigatito | hand, left_hand, mouth | Same attachment profile |
 | spritzee | mouth | Same attachment profile |
 | squawkabilly | hand, left_hand, mouth | Same attachment profile |

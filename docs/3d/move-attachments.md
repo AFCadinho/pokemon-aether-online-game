@@ -38,10 +38,10 @@ Per-move `move_choreography` applies only when the selected native `action`
 matches. It supplies `launch_fraction`, `impact_fraction`, optional
 `emission_end_fraction` and optional `contact_yaw_degrees`. Emission end stops
 source streams and particles; target impact graphics retain their own lifetime.
-The fire, ice, staged-beam and Water Gun presenters consume that end marker.
+The fire, ice, Flash Cannon, staged-beam and Water Gun presenters consume that end marker.
 Unspecified values retain their existing move timing.
 
-Fire, ice, staged beams and Water Gun accept `emission_scale` (positive, at
+Fire, ice, Flash Cannon, staged beams and Water Gun accept `emission_scale` (positive, at
 most 4). It adjusts the source stream width, muzzle and traveling particles;
 endpoints and target impact sizes remain unchanged. Water Gun additionally
 accepts `water_stream_arc_height` (0–4 world units).
@@ -121,6 +121,10 @@ runtime catalog. The tools read those scenes without modifying them:
   they do not certify live wild or NPC battle presentation. `--camera-frame both`
   frames the entire source-to-target trajectory; the default remains a source
   closeup. `--fractions` selects up to eight native clip fractions.
+  `--target-species pikachu` uses a separately approved opponent model to
+  inspect a different target height or avoid the opponent obscuring the source.
+  It records both runtime revisions and adds `-vs-SPECIES` to the output name;
+  omitting it preserves the same-species comparison.
 - `check_calibrated_move_attachments.gd`: binding and finite-coordinate checks
   at 21 moments per native clip, including normal/shiny consistency.
 - `tools/audit_move_attachment_learnsets.gd`: supported move/part coverage
