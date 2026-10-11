@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reduce the optional 3D test collection by sharing identical normal/shiny geometry, skin data and animations while preserving each appearance and independent poses.
+
 - Place the Evolution Item Seller to the left of the Z-Crystal Seller in the Aether Clash Lobby, using the existing shop interface.
 
 - Explain incorrect usernames or passwords at sign-in with clear retry guidance in all four supported languages, instead of showing a session-verification error.
