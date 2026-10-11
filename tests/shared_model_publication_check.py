@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Immutable staging must fail closed before writes and never overwrite a key."""
 import json
+import copy
+import hashlib
 from pathlib import Path
 import sys
 import tempfile
@@ -71,6 +73,37 @@ class PublicationCheck(unittest.TestCase):
                            ('public_head_size_verified', False), ('uploaded', None)]:
             with self.subTest(key=key), self.assertRaises(ValueError):
                 verifier.verify_row({**valid, key: value}, self.row)
+
+    def test_full_receipt_rejects_incomplete_or_forged_collection(self):
+        wire, assets = validate_selection(ROOT)
+        sha = hashlib.sha256(wire).hexdigest()
+        index = {'object_key': 'optional-assets/pokemon_3d/index/pilot-' + sha + '.json',
+                 'sha256': sha, 'size_bytes': len(wire)}
+        verified = lambda row: {**row, 'uploaded': False, 'public_get_sha256_verified': True,
+                                'public_head_size_verified': True}
+        receipt = {'schema': 1, 'revision': 'shared-model-qualified-test-v1',
+                   'active_manifest_activated': False, 'production_approved': False,
+                   'content_index': index, 'index_verification': verified(index),
+                   'readiness_sha256': hashlib.sha256((ROOT / 'data/shared_model_readiness_checks.json').read_bytes()).hexdigest(),
+                   'active_manifests_unchanged': {key: {'sha256': 'a' * 64, 'size_bytes': 1} for key in tool.MANIFESTS},
+                   'bundles': [verified({k: a[k] for k in ('asset_id', 'object_key', 'sha256', 'size_bytes')}) for a in assets]}
+        self.assertEqual(len(verifier.check(receipt)), 1201)
+        for mutation in ('missing', 'duplicate', 'hash', 'index', 'activation', 'manifest'):
+            changed = copy.deepcopy(receipt)
+            if mutation == 'missing':
+                changed['bundles'].pop()
+            elif mutation == 'duplicate':
+                changed['bundles'][1] = changed['bundles'][0]
+            elif mutation == 'hash':
+                changed['bundles'][0]['sha256'] = '0' * 64
+            elif mutation == 'index':
+                changed['content_index']['sha256'] = '0' * 64
+            elif mutation == 'activation':
+                changed['active_manifest_activated'] = True
+            else:
+                changed['active_manifests_unchanged'].pop('manifest-linux.json')
+            with self.subTest(mutation=mutation), self.assertRaises(ValueError):
+                verifier.check(changed)
 
 
 if __name__ == '__main__':
