@@ -35,7 +35,9 @@ const CACHE_META := &"move_attachment_bindings"
 
 static func action_for(identity: String, move_key: String, available_actions: Dictionary) -> String:
 	var species := Catalog.canonical_identity(identity).trim_suffix("@shiny")
-	var action := str(CALIBRATED.data.profiles.get(species, {}).get("move_actions", {}).get(move_key, ""))
+	var profile: Dictionary = CALIBRATED.data.profiles.get(species, {})
+	var family: String = Recipes.get_recipe(move_key).get("family", "")
+	var action := str(profile.get("move_actions", {}).get(move_key, profile.get("family_actions", {}).get(family, "")))
 	return action if action in ["physical_attack", "physical_attack_2", "special_attack", "special_attack_2"] and available_actions.has(action) else ""
 
 static func part_for(identity: String, move_key: String) -> String:
@@ -52,10 +54,12 @@ static func part_for(identity: String, move_key: String) -> String:
 	var part: String = MOVE_PARTS.get(move_key, recipe.get("attachment", "body"))
 	return str(profile.get("attachment_overrides", {}).get(part, part))
 
-## Reviewed timing/orientation belongs to one exact form, move and native clip.
+## Explicit move timing wins over family timing. Both require the exact native clip.
 static func choreography_for(identity: String, move_key: String, action: String) -> Dictionary:
 	var species := Catalog.canonical_identity(identity).trim_suffix("@shiny")
-	var spec: Dictionary = CALIBRATED.data.profiles.get(species, {}).get("move_choreography", {}).get(move_key, {})
+	var profile: Dictionary = CALIBRATED.data.profiles.get(species, {})
+	var family: String = Recipes.get_recipe(move_key).get("family", "")
+	var spec: Dictionary = profile.get("move_choreography", {}).get(move_key, profile.get("family_choreography", {}).get(family, {}))
 	if spec.get("action", "") != action: return {}
 	var launch := float(spec.get("launch_fraction", -1))
 	var impact := float(spec.get("impact_fraction", -1))

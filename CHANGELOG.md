@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Connect reviewed attack origins for 30 more Pokémon forms. Share beam animation and timing by attack family, delay Brambleghast/Bramblin beams until after their spin, and use Mega Scovillain’s separate red and green mouths.
+
 - Correct remaining reviewed 3D limb attachment positions, add missing points for 14 forms, and select anatomical alternatives for handless Pokémon. Make Mega Barbaracle's attack point follow its changing hand mesh and connect reviewed muzzles to generic mouth attacks.
 
 - Add individually reviewed 3D attack attachment profiles for 40 remaining forms and 94 reviewed limb points across 47 forms; record outstanding anatomical corrections and model blockers.

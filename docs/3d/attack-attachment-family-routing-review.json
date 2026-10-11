@@ -1,0 +1,2298 @@
+{
+  "all_forms_finished": false,
+  "all_moves_visually_approved": false,
+  "attachment_data_sha256": "8417cd81b8a658c587371e146e1158d4f623071ba393ce438b1bbd1f21cf5355",
+  "focused_tests": [
+    "tests/move_attachments_3d_check.tscn",
+    "tests/move_attachment_choreography_3d_check.tscn",
+    "tools/audit_move_attachments_3d.gd --check",
+    "tools/audit_move_attachment_learnsets.gd",
+    "tools/sprite_factory/check_calibrated_move_attachments.gd (30 forms, normal and shiny)"
+  ],
+  "forms_removed_from_missing_route_backlog": 19,
+  "forms_reviewed": 30,
+  "global_backlog_after": {
+    "configured_move_pairs": 7589,
+    "forms_with_missing_routes": 304,
+    "missing_parts": {
+      "foot": 1,
+      "hand": 231,
+      "mouth": 81
+    },
+    "species_forms": 1200,
+    "supported_move_pairs": 30563
+  },
+  "new_marker_coordinates": 0,
+  "offline_battle_kind_comparison": {
+    "errors": [],
+    "pairs": [
+      {
+        "action_timing_anchors_identical": true,
+        "move": "Hyper Beam",
+        "species": "brambleghast",
+        "trainer_metadata_path": ".tmp/attack-attachments/family-moves-v448/brambleghast-hyperbeam-vs-pikachu.json",
+        "wild_metadata_path": ".tmp/attack-attachments/family-moves-v449/brambleghast-hyperbeam-vs-pikachu.json",
+        "wild_metadata_sha256": "dc6a8556bec0dab0c36e56935184d6cf119ce0b81663e6ba3e8ff80852786481"
+      },
+      {
+        "action_timing_anchors_identical": true,
+        "move": "Solar Beam",
+        "species": "bramblin",
+        "trainer_metadata_path": ".tmp/attack-attachments/family-moves-v448/bramblin-solarbeam-vs-pikachu.json",
+        "wild_metadata_path": ".tmp/attack-attachments/family-moves-v449/bramblin-solarbeam-vs-pikachu.json",
+        "wild_metadata_sha256": "fbbde76f59f13e35c996bd45c639015c7bf857f033bdd6f96b84d261868b88ae"
+      },
+      {
+        "action_timing_anchors_identical": true,
+        "move": "Volt Switch",
+        "species": "magneton",
+        "trainer_metadata_path": ".tmp/attack-attachments/family-moves-v448/magneton-voltswitch-vs-pikachu.json",
+        "wild_metadata_path": ".tmp/attack-attachments/family-moves-v449/magneton-voltswitch-vs-pikachu.json",
+        "wild_metadata_sha256": "fdd00ef90d01d081b65154c89a87c2489004341318b7ceebff5834f42bb3689b"
+      },
+      {
+        "action_timing_anchors_identical": true,
+        "move": "Volt Switch",
+        "species": "magnezone",
+        "trainer_metadata_path": ".tmp/attack-attachments/family-moves-v448/magnezone-voltswitch-vs-pikachu.json",
+        "wild_metadata_path": ".tmp/attack-attachments/family-moves-v449/magnezone-voltswitch-vs-pikachu.json",
+        "wild_metadata_sha256": "6e3218c1efa7afdebf893038d705bcd641ea4d26506ab21c269b0166d6add646"
+      },
+      {
+        "action_timing_anchors_identical": true,
+        "move": "Shadow Ball",
+        "species": "mimikyu",
+        "trainer_metadata_path": ".tmp/attack-attachments/family-moves-v448/mimikyu-shadowball-vs-pikachu.json",
+        "wild_metadata_path": ".tmp/attack-attachments/family-moves-v449/mimikyu-shadowball-vs-pikachu.json",
+        "wild_metadata_sha256": "7ec7eecd03241f2bd88d35cac912326572eaae818017f3e1531f2c6f5630c0cf"
+      },
+      {
+        "action_timing_anchors_identical": true,
+        "move": "Scald",
+        "species": "poltchageist",
+        "trainer_metadata_path": ".tmp/attack-attachments/family-moves-v448/poltchageist-scald-vs-pikachu.json",
+        "wild_metadata_path": ".tmp/attack-attachments/family-moves-v449/poltchageist-scald-vs-pikachu.json",
+        "wild_metadata_sha256": "6601a169879050dd8e0c3460b999df3506cb2abf6c648928147cf3d591599833"
+      },
+      {
+        "action_timing_anchors_identical": true,
+        "move": "Flamethrower",
+        "species": "scovillain-mega",
+        "trainer_metadata_path": ".tmp/attack-attachments/family-moves-v448/scovillain-mega-flamethrower-vs-pikachu.json",
+        "wild_metadata_path": ".tmp/attack-attachments/family-moves-v449/scovillain-mega-flamethrower-vs-pikachu.json",
+        "wild_metadata_sha256": "a29ed0f0315a7cbef70312d41d949e2a3c1cc02b2158f2e485b3632ed5b657ca"
+      },
+      {
+        "action_timing_anchors_identical": true,
+        "move": "Solar Beam",
+        "species": "scovillain-mega",
+        "trainer_metadata_path": ".tmp/attack-attachments/family-moves-v448/scovillain-mega-solarbeam-vs-pikachu.json",
+        "wild_metadata_path": ".tmp/attack-attachments/family-moves-v449/scovillain-mega-solarbeam-vs-pikachu.json",
+        "wild_metadata_sha256": "1f96cbf0d273623734e1a1c6111f20d4c8099ca187c5e2b25d3df3095cf51d89"
+      }
+    ]
+  },
+  "phase": "reviewed_surface_family_routing",
+  "remaining_limits": [
+    "Golisopod Bug Bite contact spacing still needs a target-oriented pass.",
+    "Regieleki arm strands and Necrozma windup can obscure the source; no complete mesh-clearance certification.",
+    "Mimikyu dedicated Shadow Ball retains its existing star decoration after launch.",
+    "No live NPC or wild encounter was played; battle-kind comparisons use the offline stage.",
+    "Generic mouth aliases are deliberate surface alternatives where the model has no visible oral cavity.",
+    "Existing geometry blockers and missing limb/anatomical routes remain tracked separately."
+  ],
+  "representative_effects_reviewed": 37,
+  "resolved_supported_move_pairs": 73,
+  "runtime_binding_check": {
+    "errors": 0,
+    "forms": 30,
+    "models": 60,
+    "path": ".tmp/attack-attachments/runtime-check-v450.json",
+    "profile_sha256": "8417cd81b8a658c587371e146e1158d4f623071ba393ce438b1bbd1f21cf5355",
+    "samples_per_native_action": 21,
+    "sha256": "b01b5afb3b968fc8c64fa25d1a79924c328559ca30156abaa6d7d3b4d647108e",
+    "visual_verification": false
+  },
+  "schema": 1,
+  "scope": "30 exact forms, existing individually reviewed points. 37 representative effects visually inspected in offline actual-stage previews, using native action clocks. Recipe families share configured beam timing; dedicated presenters retain explicit move exceptions. Does not approve every move, contact distance, target size or live battle environment.",
+  "source_sha256": {
+    "data/battle_move_attachments_3d.json": "8417cd81b8a658c587371e146e1158d4f623071ba393ce438b1bbd1f21cf5355",
+    "scripts/battle/battle_ui/move_attachments_3d.gd": "a5cbe5f2b635a24f9b6a35f535a802631583eed97afcd2c4efcf9e038f5b3e25",
+    "tools/sprite_factory/attack_attachment_move_preview.gd": "f55664a4acc965fc68e0ab41d717baa515f1c0d89ba451fbed4a5da7bc93a219"
+  },
+  "species_forms": {
+    "brambleghast": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/brambleghast-hyperbeam-vs-pikachu.png",
+          "image_sha256": "2fac24c5bdc915a9b7cf223b3e88a08f6ba0c000e1aff26d0c854cc052ea32e1",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/brambleghast-hyperbeam-vs-pikachu.json",
+          "metadata_sha256": "caa316077b0ad17c4805b65bec2cb95da54528bff11c7f09057cb2c68d086dfa",
+          "move": "Hyper Beam",
+          "part": "face",
+          "runtime_sha256": "82a5fab9807dc35e8954edc8cdf0ac9fa2d9a9baecb45a92f222c1d17c6998f0",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "effect_start_frame": 92.46,
+            "emission_end_frame": 121.44,
+            "emission_scale": 0.15,
+            "frames": 138.0,
+            "impact_frame": 110.4,
+            "launch_frame": 96.6,
+            "move_key": "hyperbeam"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Front twig below the eyes. Rejected emission during the spin; charge starts at .67 and beam launches at .70 after the face returns forward.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "effect_start_fraction": 0.67,
+            "emission_end_fraction": 0.88,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.8,
+            "launch_fraction": 0.7
+          }
+        }
+      }
+    },
+    "bramblin": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/bramblin-solarbeam-vs-pikachu.png",
+          "image_sha256": "14f6ec565ed1af8d28dade5f77f864e8e3fdaad88781ba0707efccc130a9630f",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/bramblin-solarbeam-vs-pikachu.json",
+          "metadata_sha256": "d6e763c4a320e8edba39fc5340375567ea4ebbf6de3df0543de71d0471d9677d",
+          "move": "Solar Beam",
+          "part": "face",
+          "runtime_sha256": "ec36870ffb45e17a7d802b302ce02e4fe86ba1da5ae8240978ae9d3ec2728152",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "effect_start_frame": 92.46,
+            "emission_end_frame": 121.44,
+            "emission_scale": 0.15,
+            "frames": 138.0,
+            "impact_frame": 110.4,
+            "launch_frame": 96.6,
+            "move_key": "solarbeam"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Lower front twig below the floating eyes. Beam starts after the roll has settled; no casting through the rotating branch cage.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "effect_start_fraction": 0.67,
+            "emission_end_fraction": 0.88,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.8,
+            "launch_fraction": 0.7
+          }
+        }
+      }
+    },
+    "cubone": {
+      "generic_mouth_alias": "muzzle",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/cubone-mudslap-vs-pikachu.png",
+          "image_sha256": "8409bd88464f26d9adb5104678836b6c73c878da837673a6e49b7b04221d3e19",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/cubone-mudslap-vs-pikachu.json",
+          "metadata_sha256": "778e1b407a76e28357b2a7962bc8bdc776391ce7c289788b18eb1e73eeab62a9",
+          "move": "Mud-Slap",
+          "part": "muzzle",
+          "runtime_sha256": "2dae78980d84fce9c10957e188c7d3e3573a0c76322a4eb039dd92b4a2c52b50",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.16,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 36.0,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.3
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Reviewed lower skull muzzle. Reduced Mud-Slap size and arc leave the skull visible at release.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "muzzle"
+        },
+        "move_choreography": {
+          "flamethrower": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.3,
+            "emission_scale": 0.28,
+            "impact_fraction": 0.22,
+            "launch_fraction": 0.14
+          },
+          "growl": {
+            "action": "special_attack",
+            "impact_fraction": 0.22,
+            "launch_fraction": 0.14
+          },
+          "mudslap": {
+            "action": "special_attack",
+            "emission_scale": 0.16,
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.3,
+            "projectile_arc_height": 0.3
+          },
+          "watergun": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.3,
+            "emission_scale": 0.25,
+            "impact_fraction": 0.22,
+            "launch_fraction": 0.14
+          }
+        },
+        "moves": {
+          "bubblebeam": "muzzle",
+          "flamethrower": "muzzle",
+          "growl": "muzzle",
+          "icebeam": "muzzle",
+          "screech": "muzzle",
+          "watergun": "muzzle"
+        }
+      }
+    },
+    "darkrai-mega": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/darkrai-mega-hyperbeam-vs-pikachu.png",
+          "image_sha256": "c276ed1002b262025a50f0543a65094cbfece50d525dd82c5dc2b4c303cc3cde",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/darkrai-mega-hyperbeam-vs-pikachu.json",
+          "metadata_sha256": "87e4fa045fd5c742d43ba6270a65d15ad6e398cbf9291121fb05c62aae5f1fc6",
+          "move": "Hyper Beam",
+          "part": "face",
+          "runtime_sha256": "38066b573b30a77803f085cd083dc09d4eaedd9d44a3c9f0ab268267a7f79b27",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 85.8,
+            "emission_scale": 0.15,
+            "frames": 132.0,
+            "impact_frame": 63.36,
+            "launch_frame": 39.6,
+            "move_key": "hyperbeam"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Lower face below the white crest, independently measured for this form. Special-attack beam exits forward; crest can hide the early charge from the rear.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        }
+      }
+    },
+    "diglett": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/diglett-mudslap-vs-pikachu.png",
+          "image_sha256": "0da71e6181bc411f3a55cf56e6c36a126d09d73b09ff6aa6f03c9781ae23b438",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/diglett-mudslap-vs-pikachu.json",
+          "metadata_sha256": "d86b618705352b3068e220dd1f9d78853b23d530279f214553f4a7fc9f409dec",
+          "move": "Mud-Slap",
+          "part": "face",
+          "runtime_sha256": "fcd78a240c6048749808c34f81d04c178b9008949ef962f781b2c04afd182b1b",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.06,
+            "frames": 120.0,
+            "impact_frame": 90.0,
+            "launch_frame": 66.0,
+            "move_key": "mudslap"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Front surface below the nose; late special-attack release reuses the reviewed sludge window. This is a surface casting point, not an exposed mouth cavity.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "move_actions": {
+          "growl": "special_attack",
+          "mudslap": "special_attack",
+          "screech": "special_attack",
+          "sludgebomb": "special_attack"
+        },
+        "move_choreography": {
+          "growl": {
+            "action": "special_attack",
+            "impact_fraction": 0.75,
+            "launch_fraction": 0.55
+          },
+          "mudslap": {
+            "action": "special_attack",
+            "emission_scale": 0.06,
+            "impact_fraction": 0.75,
+            "launch_fraction": 0.55
+          },
+          "screech": {
+            "action": "special_attack",
+            "impact_fraction": 0.75,
+            "launch_fraction": 0.55
+          },
+          "sludgebomb": {
+            "action": "special_attack",
+            "emission_scale": 0.06,
+            "impact_fraction": 0.75,
+            "launch_fraction": 0.55
+          }
+        },
+        "moves": {
+          "growl": "face",
+          "screech": "face",
+          "sludgebomb": "face"
+        }
+      }
+    },
+    "diglett-alola": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/diglett-alola-mudslap-vs-pikachu.png",
+          "image_sha256": "66ed29b38404ad43b26354928adc1791a6206e49088612421f94e59c00c1a11a",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/diglett-alola-mudslap-vs-pikachu.json",
+          "metadata_sha256": "1221eee5eef36310004f921f41258a60dfc89f5122ac5f994abdfad8a96ed8ab",
+          "move": "Mud-Slap",
+          "part": "face",
+          "runtime_sha256": "fb6d3c0a9ebdab1db5cea147819dd07c2af91aad8ed69195c3927f3dde00f345",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.06,
+            "frames": 120.0,
+            "impact_frame": 90.0,
+            "launch_frame": 66.0,
+            "move_key": "mudslap"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Own front surface below the nose; late special-attack release. Hair and rock base are excluded.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "move_actions": {
+          "flashcannon": "special_attack",
+          "growl": "special_attack",
+          "mudslap": "special_attack",
+          "screech": "special_attack",
+          "sludgebomb": "special_attack"
+        },
+        "move_choreography": {
+          "flashcannon": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.66,
+            "emission_scale": 0.06,
+            "impact_fraction": 0.6,
+            "launch_fraction": 0.55
+          },
+          "growl": {
+            "action": "special_attack",
+            "impact_fraction": 0.75,
+            "launch_fraction": 0.55
+          },
+          "mudslap": {
+            "action": "special_attack",
+            "emission_scale": 0.06,
+            "impact_fraction": 0.75,
+            "launch_fraction": 0.55
+          },
+          "screech": {
+            "action": "special_attack",
+            "impact_fraction": 0.75,
+            "launch_fraction": 0.55
+          },
+          "sludgebomb": {
+            "action": "special_attack",
+            "emission_scale": 0.06,
+            "impact_fraction": 0.75,
+            "launch_fraction": 0.55
+          }
+        },
+        "moves": {
+          "flashcannon": "face",
+          "growl": "face",
+          "screech": "face",
+          "sludgebomb": "face"
+        }
+      }
+    },
+    "dugtrio": {
+      "generic_mouth_alias": "face_primary",
+      "representative_effects": [
+        {
+          "action": "physical_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/dugtrio-mudslap-vs-pikachu.png",
+          "image_sha256": "14ac2d2f42bcf7aff531746352c8329576fdc2bddba4e0813d75589bd8e47037",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/dugtrio-mudslap-vs-pikachu.json",
+          "metadata_sha256": "e0c8275f98679442c4c8c73784c6e6fa1689f516aaeadcfb72e409d394c28a1c",
+          "move": "Mud-Slap",
+          "part": "face_primary",
+          "runtime_sha256": "73ef9bcd3bc477db0f7b4c79e8e9d1df80cfbdd2ac728fd19c29bad6625849a6",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 110.0,
+            "impact_frame": 66.0,
+            "launch_frame": 44.0,
+            "move_key": "mudslap"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Single foreground head for generic casting and Mud-Slap; physical release after the forward bow. Existing explicit multi-head sound routes stay intact.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face_primary"
+        },
+        "move_actions": {
+          "growl": "physical_attack",
+          "hyperbeam": "physical_attack",
+          "mudslap": "physical_attack",
+          "screech": "physical_attack",
+          "sludgebomb": "physical_attack"
+        },
+        "move_choreography": {
+          "growl": {
+            "action": "physical_attack",
+            "impact_fraction": 0.6,
+            "launch_fraction": 0.4
+          },
+          "hyperbeam": {
+            "action": "physical_attack",
+            "emission_end_fraction": 0.7,
+            "emission_scale": 0.1,
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.4
+          },
+          "mudslap": {
+            "action": "physical_attack",
+            "emission_scale": 0.1,
+            "impact_fraction": 0.6,
+            "launch_fraction": 0.4
+          },
+          "screech": {
+            "action": "physical_attack",
+            "impact_fraction": 0.6,
+            "launch_fraction": 0.4
+          },
+          "sludgebomb": {
+            "action": "physical_attack",
+            "emission_scale": 0.1,
+            "impact_fraction": 0.6,
+            "launch_fraction": 0.4
+          }
+        },
+        "moves": {
+          "growl": "face",
+          "hyperbeam": "face_primary",
+          "screech": "face",
+          "sludgebomb": "face_primary"
+        }
+      }
+    },
+    "dugtrio-alola": {
+      "generic_mouth_alias": "face_primary",
+      "representative_effects": [
+        {
+          "action": "physical_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/dugtrio-alola-mudslap-vs-pikachu.png",
+          "image_sha256": "710299fe1e18abce594a00c9d43d7a607b7f743a13e005258b438f7db0c8d7e5",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/dugtrio-alola-mudslap-vs-pikachu.json",
+          "metadata_sha256": "f67e2bc1207df9127b47b3d2b44d9b23fab9b17dba888e98e2ea3441b8210986",
+          "move": "Mud-Slap",
+          "part": "face_primary",
+          "runtime_sha256": "710d68c97da3ad13b83135af9423863c2e75bce6e3b0d0bdfa1079d923e9ea56",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 110.0,
+            "impact_frame": 66.0,
+            "launch_frame": 44.0,
+            "move_key": "mudslap"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Own foreground head, with hair clear of the late physical release. Existing multi-head sound choices are retained.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face_primary"
+        },
+        "move_actions": {
+          "flashcannon": "physical_attack",
+          "growl": "physical_attack",
+          "hyperbeam": "physical_attack",
+          "mudslap": "physical_attack",
+          "screech": "physical_attack",
+          "sludgebomb": "physical_attack"
+        },
+        "move_choreography": {
+          "flashcannon": {
+            "action": "physical_attack",
+            "emission_end_fraction": 0.7,
+            "emission_scale": 0.1,
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.4
+          },
+          "growl": {
+            "action": "physical_attack",
+            "impact_fraction": 0.6,
+            "launch_fraction": 0.4
+          },
+          "hyperbeam": {
+            "action": "physical_attack",
+            "emission_end_fraction": 0.7,
+            "emission_scale": 0.1,
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.4
+          },
+          "mudslap": {
+            "action": "physical_attack",
+            "emission_scale": 0.1,
+            "impact_fraction": 0.6,
+            "launch_fraction": 0.4
+          },
+          "screech": {
+            "action": "physical_attack",
+            "impact_fraction": 0.6,
+            "launch_fraction": 0.4
+          },
+          "sludgebomb": {
+            "action": "physical_attack",
+            "emission_scale": 0.1,
+            "impact_fraction": 0.6,
+            "launch_fraction": 0.4
+          }
+        },
+        "moves": {
+          "flashcannon": "face_primary",
+          "growl": "face",
+          "hyperbeam": "face_primary",
+          "screech": "face",
+          "sludgebomb": "face_primary"
+        }
+      }
+    },
+    "glimmora-mega": {
+      "generic_mouth_alias": "spike",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/glimmora-mega-hyperbeam-vs-pikachu.png",
+          "image_sha256": "e06661c0b7924de28404b9888f873a38de2eeda643e5be8989a54d64e3f80de2",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/glimmora-mega-hyperbeam-vs-pikachu.json",
+          "metadata_sha256": "0166c970ee06e352f3df6b670646c3cb5b19f43893a1e5ef575b189dbf624f99",
+          "move": "Hyper Beam",
+          "part": "spike",
+          "runtime_sha256": "0303144c8001129d753f03da3c11af97ddfa07389a6e8c8cf9466344d8473cd4",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 96.2,
+            "emission_scale": 0.15,
+            "frames": 148.0,
+            "impact_frame": 71.04,
+            "launch_frame": 44.4,
+            "move_key": "hyperbeam"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Long front central spike tip, ahead of the flower petals; narrow special-attack beam follows the tip.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "spike"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        }
+      }
+    },
+    "golisopod": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/golisopod-hyperbeam-vs-pikachu.png",
+          "image_sha256": "c172e71dcdacc4933a72262c27c6fa901708e8f69dd59644f7beefd1fc483305",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/golisopod-hyperbeam-vs-pikachu.json",
+          "metadata_sha256": "79034f45e34dcacfe40410a2d4294480c3f26146066e36a828309d6c54cf7acc",
+          "move": "Hyper Beam",
+          "part": "face",
+          "runtime_sha256": "b2482a1f48dc253fc75b07c0de802f664d6d44e40cea7d75bdc333a082193d67",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 36.0,
+            "move_key": "hyperbeam"
+          },
+          "views_per_fraction": 2
+        },
+        {
+          "action": "physical_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/golisopod-bugbite-vs-pikachu.png",
+          "image_sha256": "cfa2ae9e7da002b7fe666f70a31e0bab63b04b5be755855a26e2d2e5d6f60828",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/golisopod-bugbite-vs-pikachu.json",
+          "metadata_sha256": "41ffe3484272006d98742e5688b4e81dc31b429d9bd75853c176870262820c10",
+          "move": "Bug Bite",
+          "part": "face",
+          "runtime_sha256": "b2482a1f48dc253fc75b07c0de802f664d6d44e40cea7d75bdc333a082193d67",
+          "timing": {
+            "action": "physical_attack",
+            "frames": 134.0,
+            "impact_frame": 69.68,
+            "launch_frame": 18.76,
+            "move_key": "bugbite"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Front face between antenna roots. Special beam clears the opening as the arms spread. Bug Bite uses the face route; precise target contact spacing remains outside this approval.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        }
+      }
+    },
+    "golisopod-mega": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/golisopod-mega-hyperbeam-vs-pikachu.png",
+          "image_sha256": "970c306e2bc7b3b8bf2b9eb796adab45feacbf1fd738a46101c8a3b8bcb36324",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/golisopod-mega-hyperbeam-vs-pikachu.json",
+          "metadata_sha256": "2acd58a19a442325388b084afda973b2bfaa3e285e0271a94200829021011f40",
+          "move": "Hyper Beam",
+          "part": "face",
+          "runtime_sha256": "716752c06a6f0547cb8654181f4b6f5a9eb1be879a4cc083ee73bd96824b4870",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 36.0,
+            "move_key": "hyperbeam"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Own purple front face point; beam follows it below the upper appendages. Upper claws and possible arm nozzles are not certified here.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        }
+      }
+    },
+    "magnemite": {
+      "generic_mouth_alias": "eye",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/magnemite-voltswitch-vs-pikachu.png",
+          "image_sha256": "a6624449e139a05d8d38a26b4f33784be48c41d2795d0a898e37d1fe5012b319",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/magnemite-voltswitch-vs-pikachu.json",
+          "metadata_sha256": "5fd830dad55efff09f544da2be5b2732f9a9a66f7018562f8ce2df12231db4ff",
+          "move": "Volt Switch",
+          "part": "eye",
+          "runtime_sha256": "a71c4cedd58bf7a62169700d4a2db68aacc5354bf37a4d4459672e628ccd9631",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 74.4,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "voltswitch"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Central eye; narrow beam uses the already reviewed special clip and stays between the magnets during release.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "eye"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.62,
+            "emission_scale": 0.12,
+            "impact_fraction": 0.45,
+            "launch_fraction": 0.3
+          }
+        },
+        "move_actions": {
+          "flashcannon": "special_attack",
+          "screech": "special_attack",
+          "supersonic": "special_attack"
+        },
+        "move_choreography": {
+          "flashcannon": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.62,
+            "emission_scale": 0.12,
+            "impact_fraction": 0.45,
+            "launch_fraction": 0.3
+          },
+          "screech": {
+            "action": "special_attack",
+            "impact_fraction": 0.52,
+            "launch_fraction": 0.3
+          },
+          "supersonic": {
+            "action": "special_attack",
+            "impact_fraction": 0.52,
+            "launch_fraction": 0.3
+          }
+        },
+        "moves": {
+          "flashcannon": "eye",
+          "screech": "eye",
+          "supersonic": "eye"
+        }
+      }
+    },
+    "magneton": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/magneton-voltswitch-vs-pikachu.png",
+          "image_sha256": "567c734bfa3d450fe8769f107db93917a6ce3a4083930da3f61b670dad28f913",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/magneton-voltswitch-vs-pikachu.json",
+          "metadata_sha256": "d67636d486135e48886b449b6d05ac0aa85b843d289780528b0413b8be04555c",
+          "move": "Volt Switch",
+          "part": "face",
+          "runtime_sha256": "0539751e0792adf0e4b0c0cf600342948bfa170dd9e9fc7a0a2871ca5c0bb0d1",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.14,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 38.4,
+            "move_key": "voltswitch"
+          },
+          "views_per_fraction": 2
+        },
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/magneton-screech-vs-pikachu.png",
+          "image_sha256": "fba57cbb553d2ddc9e78906d7da1ad9ec44c33e86527da5a18e132f71b368d7b",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/magneton-screech-vs-pikachu.json",
+          "metadata_sha256": "78b243f5d7d8516855015111b052ddcb63ec5ed780d2d187475e2cc07521e66a",
+          "move": "Screech",
+          "part": "face",
+          "runtime_sha256": "0539751e0792adf0e4b0c0cf600342948bfa170dd9e9fc7a0a2871ca5c0bb0d1",
+          "timing": {
+            "action": "special_attack",
+            "frames": 120.0,
+            "impact_frame": 74.4,
+            "launch_frame": 30.0,
+            "move_key": "screech"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Three eye points remain separate. Volt Switch emits three beams and Screech uses three sound sources; front views distinguish these from the magnets.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.14,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.32
+          }
+        },
+        "move_actions": {
+          "flashcannon": "special_attack",
+          "hyperbeam": "special_attack"
+        },
+        "move_choreography": {
+          "flashcannon": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.14,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.32
+          },
+          "hyperbeam": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.14,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.32
+          }
+        },
+        "moves": {
+          "flashcannon": "face",
+          "hyperbeam": "face"
+        }
+      }
+    },
+    "magnezone": {
+      "generic_mouth_alias": "eye",
+      "representative_effects": [
+        {
+          "action": "physical_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/magnezone-voltswitch-vs-pikachu.png",
+          "image_sha256": "af885587076510ab89b5b05604e220cb974acbe400387cfdfd71d6c0bc628b90",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/magnezone-voltswitch-vs-pikachu.json",
+          "metadata_sha256": "4311369fbd7b5627b8107c7fbe780e81ffdca76fb6a7d615536b4fa8537022db",
+          "move": "Volt Switch",
+          "part": "eye",
+          "runtime_sha256": "642741f2cfbfc3d993299c3ef97e599265d0a31dbafd06a81e567bcde4db3013",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 55.8,
+            "emission_scale": 0.18,
+            "frames": 90.0,
+            "impact_frame": 40.5,
+            "launch_frame": 27.0,
+            "move_key": "voltswitch"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Central red lens. Physical clip keeps the lens facing the target; generic beams use its existing reviewed timing.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "eye"
+        },
+        "family_actions": {
+          "beams": "physical_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "physical_attack",
+            "emission_end_fraction": 0.62,
+            "emission_scale": 0.18,
+            "impact_fraction": 0.45,
+            "launch_fraction": 0.3
+          }
+        },
+        "move_actions": {
+          "flashcannon": "physical_attack",
+          "hyperbeam": "physical_attack",
+          "screech": "physical_attack",
+          "supersonic": "physical_attack"
+        },
+        "move_choreography": {
+          "flashcannon": {
+            "action": "physical_attack",
+            "emission_end_fraction": 0.62,
+            "emission_scale": 0.18,
+            "impact_fraction": 0.45,
+            "launch_fraction": 0.3
+          },
+          "hyperbeam": {
+            "action": "physical_attack",
+            "emission_end_fraction": 0.62,
+            "emission_scale": 0.18,
+            "impact_fraction": 0.45,
+            "launch_fraction": 0.3
+          },
+          "screech": {
+            "action": "physical_attack",
+            "impact_fraction": 0.52,
+            "launch_fraction": 0.3
+          },
+          "supersonic": {
+            "action": "physical_attack",
+            "impact_fraction": 0.52,
+            "launch_fraction": 0.3
+          }
+        },
+        "moves": {
+          "flashcannon": "eye",
+          "hyperbeam": "eye",
+          "screech": "eye",
+          "supersonic": "eye"
+        }
+      }
+    },
+    "mimikyu": {
+      "generic_mouth_alias": "casting",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/mimikyu-hyperbeam-vs-pikachu.png",
+          "image_sha256": "c725be6b3f7c84e02613ec4f6189e77879593ab170afe648c000c8be600285dc",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/mimikyu-hyperbeam-vs-pikachu.json",
+          "metadata_sha256": "1690863e3591fc8f15649b0869c0fbe195ec341b1e50478d5975b5f818b44b23",
+          "move": "Hyper Beam",
+          "part": "casting",
+          "runtime_sha256": "19983148f714cdab35abc64f40e6822e3e6b069f34e9f33ad999c583e2434608",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.15,
+            "frames": 138.0,
+            "impact_frame": 66.24,
+            "launch_frame": 41.4,
+            "move_key": "hyperbeam"
+          },
+          "views_per_fraction": 2
+        },
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/mimikyu-shadowball-vs-pikachu.png",
+          "image_sha256": "fa6a06186f208102faa4d1814db3ffc445fce105888dfc414e2e817fd7c36626",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/mimikyu-shadowball-vs-pikachu.json",
+          "metadata_sha256": "ac22df241c48ef1f8b8172a357d77d778ed77c4af8ea1041436909ed211de36c",
+          "move": "Shadow Ball",
+          "part": "casting",
+          "runtime_sha256": "19983148f714cdab35abc64f40e6822e3e6b069f34e9f33ad999c583e2434608",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 138.0,
+            "impact_frame": 69.0,
+            "launch_frame": 41.4,
+            "move_key": "shadowball"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "True-body casting surface below the costume head, not the painted Pikachu mouth. Beam and reduced Shadow Ball use this point.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "casting"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        },
+        "move_choreography": {
+          "shadowball": {
+            "action": "special_attack",
+            "emission_scale": 0.12,
+            "impact_fraction": 0.5,
+            "launch_fraction": 0.3
+          }
+        }
+      }
+    },
+    "mimikyu-busted": {
+      "generic_mouth_alias": "casting",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/mimikyu-busted-hyperbeam-vs-pikachu.png",
+          "image_sha256": "59fe10ddad55535b93aaf89671ee592c34d3ed11ddba449a45a6d8813044ae79",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/mimikyu-busted-hyperbeam-vs-pikachu.json",
+          "metadata_sha256": "29a729871fa1dc7fe780aaa7c0c2eff5f35ebcaf9d8d6561531d48a4d300f347",
+          "move": "Hyper Beam",
+          "part": "casting",
+          "runtime_sha256": "7be56b8fad62babf3f2ff1a49a206f9b9017eb31afc7e024f6e2c4c785e5e23f",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.6999981403351,
+            "emission_scale": 0.15,
+            "frames": 137.999997138977,
+            "impact_frame": 66.239998626709,
+            "launch_frame": 41.3999991416931,
+            "move_key": "hyperbeam"
+          },
+          "views_per_fraction": 2
+        },
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/mimikyu-busted-shadowball-vs-pikachu.png",
+          "image_sha256": "f40e884e0ebc9e4af86ee639d74dd23623c9908f4fd40d22e6d4685009c6f1a7",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/mimikyu-busted-shadowball-vs-pikachu.json",
+          "metadata_sha256": "296d4d9b9a23c163bb9fbc7b16d2589c023f58bff51226c16c8a5c8d7d7de6b4",
+          "move": "Shadow Ball",
+          "part": "casting",
+          "runtime_sha256": "7be56b8fad62babf3f2ff1a49a206f9b9017eb31afc7e024f6e2c4c785e5e23f",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 137.999997138977,
+            "impact_frame": 68.9999985694885,
+            "launch_frame": 41.3999991416931,
+            "move_key": "shadowball"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Independently reviewed true-body casting surface; native special clip lifts the costume head temporarily. Reduced Shadow Ball and beam remain below it.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "casting"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        },
+        "move_choreography": {
+          "shadowball": {
+            "action": "special_attack",
+            "emission_scale": 0.12,
+            "impact_fraction": 0.5,
+            "launch_fraction": 0.3
+          }
+        }
+      }
+    },
+    "necrozma": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "physical_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/necrozma-hyperbeam-vs-pikachu.png",
+          "image_sha256": "e6c1c121777c0f68bb499e4d2d624f3b824111d9da8a4769ea26524ca78dca8b",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/necrozma-hyperbeam-vs-pikachu.json",
+          "metadata_sha256": "ae87f187a365b2f34e44950498796e76bc86f3c3718621f4037e20ea0b7670b9",
+          "move": "Hyper Beam",
+          "part": "face",
+          "runtime_sha256": "a20e5a15930f8a94f6538aace052b52c27cb831e2a817f0b8945147aa1577462",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 84.5,
+            "emission_scale": 0.15,
+            "frames": 130.0,
+            "impact_frame": 62.4,
+            "launch_frame": 39.0,
+            "move_key": "hyperbeam"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Front prism below the colored eyes. Rejected special clip turns the front away; physical clip exposes the prism during the main beam window. Sweeping arms can occlude early windup.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "family_actions": {
+          "beams": "physical_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "physical_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        }
+      }
+    },
+    "nosepass": {
+      "generic_mouth_alias": "nose",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/nosepass-mudslap-vs-pikachu.png",
+          "image_sha256": "c3c6e961fbdc9502441bd288284b3b2f01353d40704ab7c4c202271244dcb5c2",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/nosepass-mudslap-vs-pikachu.json",
+          "metadata_sha256": "75039033f7761bbfdda7cc8ed379315821d35580ada078e0c23785f55ced89c6",
+          "move": "Mud-Slap",
+          "part": "nose",
+          "runtime_sha256": "0274f4ad40eb12a82bd6bc01a0f07f51d6a6cb938b85ed0aaea97ba4cd28beff",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 302.5,
+            "impact_frame": 166.375,
+            "launch_frame": 90.75,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.3
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Nose tip casting surface. Reduced Mud-Slap forms in front of the tip, not above the stone head.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "nose"
+        },
+        "move_actions": {
+          "flashcannon": "special_attack",
+          "voltswitch": "special_attack"
+        },
+        "move_choreography": {
+          "flashcannon": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          },
+          "mudslap": {
+            "action": "special_attack",
+            "emission_scale": 0.2,
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.3,
+            "projectile_arc_height": 0.3
+          },
+          "voltswitch": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        },
+        "moves": {
+          "flashcannon": "nose",
+          "voltswitch": "nose"
+        }
+      }
+    },
+    "poltchageist": {
+      "generic_mouth_alias": "spirit",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/poltchageist-scald-vs-pikachu.png",
+          "image_sha256": "2b65260304d8d5092663116c9a3061eea46d7a3f92e862c4f6d8427c7023df47",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/poltchageist-scald-vs-pikachu.json",
+          "metadata_sha256": "5c95992925cfe860efd4e7d92f936cecf8e1cdf4583b9b501bad4cda4606cdba",
+          "move": "Scald",
+          "part": "spoon",
+          "runtime_sha256": "e28d04c3e14b1f0e8e2ffad543413dfea27ed59fed71991cf109d23171d6eb25",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 105.3,
+            "emission_scale": 0.15,
+            "frames": 162.0,
+            "impact_frame": 77.76,
+            "launch_frame": 48.6,
+            "move_key": "scald"
+          },
+          "views_per_fraction": 2
+        },
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/poltchageist-shadowball-vs-pikachu.png",
+          "image_sha256": "6128fbe12e01b6fa046e03fa3724f21fe7bdc83ff72e4624583de34e3c60c108",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/poltchageist-shadowball-vs-pikachu.json",
+          "metadata_sha256": "4675698b8bac50679ef99dce1b112f73253e59ed084dc3860df37bff18057e4a",
+          "move": "Shadow Ball",
+          "part": "spirit",
+          "runtime_sha256": "e28d04c3e14b1f0e8e2ffad543413dfea27ed59fed71991cf109d23171d6eb25",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 162.0,
+            "impact_frame": 81.0,
+            "launch_frame": 48.6,
+            "move_key": "shadowball"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Generic beams use the extended spoon tip; dedicated Shadow Ball uses the spirit spiral above the pot. The reduced effects follow the separate native surfaces.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "spirit"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_attachments": {
+          "beams": "spoon"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        },
+        "move_choreography": {
+          "shadowball": {
+            "action": "special_attack",
+            "emission_scale": 0.12,
+            "impact_fraction": 0.5,
+            "launch_fraction": 0.3
+          }
+        }
+      }
+    },
+    "regice": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/regice-mudslap-vs-pikachu.png",
+          "image_sha256": "d25687c502612378a1c303b13b741aa01d5cc5f8d9d25e31cf8c38b5e4dd6206",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/regice-mudslap-vs-pikachu.json",
+          "metadata_sha256": "21194b1bfce13fdc4aff2c71ea1af58b8496d6c5aa3adca71473f61becc51903",
+          "move": "Mud-Slap",
+          "part": "face",
+          "runtime_sha256": "1d98b8669be58052f90698ec7a5879adef4214b3846ca8a85d8abe4c565971bb",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.22,
+            "frames": 302.5,
+            "impact_frame": 166.375,
+            "launch_frame": 90.75,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.3
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Face-dot center. Reduced Mud-Slap uses the exposed front panel while arms move to either side.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "move_choreography": {
+          "mudslap": {
+            "action": "special_attack",
+            "emission_scale": 0.22,
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.3,
+            "projectile_arc_height": 0.3
+          }
+        },
+        "moves": {
+          "flashcannon": "face",
+          "hyperbeam": "face",
+          "icebeam": "face"
+        }
+      }
+    },
+    "regieleki": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/regieleki-voltswitch-vs-pikachu.png",
+          "image_sha256": "c8799bb4e14c9cfaed5f71e5d42dca974ed1b11206f8055b12efae615e0b0bf5",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/regieleki-voltswitch-vs-pikachu.json",
+          "metadata_sha256": "5b4a1ebf9bb7eb30010740f039d83a2bfabb408aeba5ecd10e0b79dc2de1ad27",
+          "move": "Volt Switch",
+          "part": "face",
+          "runtime_sha256": "caa124fcb00478201591ffb486a94631cb6b35383cbbaa5873488513057a5f4f",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.14,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 36.0,
+            "move_key": "voltswitch"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Face-dot center with reduced beam width. Native electrical arm strands can cross the viewing line; this approves the origin, not all strand clearance.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.14,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        },
+        "moves": {
+          "hyperbeam": "face"
+        }
+      }
+    },
+    "regigigas": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/regigigas-mudslap-vs-pikachu.png",
+          "image_sha256": "22bec394e65895817b74d422746964c026a86232389d20c253b611043f0db421",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/regigigas-mudslap-vs-pikachu.json",
+          "metadata_sha256": "6ae1c07cfa83a43fbe760733c5e624df9c6cd64d86118cab56022bbe5c27aa1e",
+          "move": "Mud-Slap",
+          "part": "face",
+          "runtime_sha256": "11cbc8837445a77d6e43756d90238201522ec81ea3766e2180a5e38344fe6468",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.22,
+            "frames": 162.0,
+            "impact_frame": 89.1,
+            "launch_frame": 48.6,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.3
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Center of the yellow face strip, not either shoulder gem. Reduced Mud-Slap remains attached during the forward lean.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "move_choreography": {
+          "mudslap": {
+            "action": "special_attack",
+            "emission_scale": 0.22,
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.3,
+            "projectile_arc_height": 0.3
+          }
+        },
+        "moves": {
+          "hyperbeam": "face"
+        }
+      }
+    },
+    "regirock": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/regirock-mudslap-vs-pikachu.png",
+          "image_sha256": "95df2d34954f720e5c6d97462f301c127cacc9a5ddf49e10d65bea864f02bfed",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/regirock-mudslap-vs-pikachu.json",
+          "metadata_sha256": "4f8dfc6103c1f885664aed142e2fe042b59ff127c6e667a599d82e08dafb5e11",
+          "move": "Mud-Slap",
+          "part": "face",
+          "runtime_sha256": "7bc5c79b1f2341079d296860bb656f7fe7fe737c3d14e9858db0b590a5fdfc52",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 302.5,
+            "impact_frame": 166.375,
+            "launch_frame": 90.75,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.3
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Face-dot panel between the shoulder rocks. Reduced Mud-Slap stays on the front surface.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "move_choreography": {
+          "mudslap": {
+            "action": "special_attack",
+            "emission_scale": 0.2,
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.3,
+            "projectile_arc_height": 0.3
+          }
+        },
+        "moves": {
+          "flashcannon": "face",
+          "hyperbeam": "face"
+        }
+      }
+    },
+    "registeel": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/registeel-mudslap-vs-pikachu.png",
+          "image_sha256": "efcb0b851c207edeb449983569025e1edfdc5fe0c7ed9bc2246c17fc0863bb47",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/registeel-mudslap-vs-pikachu.json",
+          "metadata_sha256": "67796671a8f3715da3ab3b2f2184eeed979d36ba92922d070b4babc3ae877313",
+          "move": "Mud-Slap",
+          "part": "face",
+          "runtime_sha256": "46dba6339767906ea8365d9e75a86099270187351f5803594317125809f2eac3",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 347.5,
+            "impact_frame": 191.125,
+            "launch_frame": 104.25,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.3
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Face-dot center on the dark front panel. Reduced Mud-Slap follows it while the hands lift nearby.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "move_choreography": {
+          "mudslap": {
+            "action": "special_attack",
+            "emission_scale": 0.2,
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.3,
+            "projectile_arc_height": 0.3
+          }
+        },
+        "moves": {
+          "flashcannon": "face",
+          "hyperbeam": "face"
+        }
+      }
+    },
+    "sandy-shocks": {
+      "generic_mouth_alias": "eye_upper",
+      "representative_effects": [
+        {
+          "action": "physical_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/sandy-shocks-hyperbeam-vs-pikachu.png",
+          "image_sha256": "f71aae33e0fa45de69ec190cd6f0730a415766e196bd5187c229127a159d5d5f",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/sandy-shocks-hyperbeam-vs-pikachu.json",
+          "metadata_sha256": "1887092d2d0f47dcf355620abd0d2f626d14490ce364874ea46ebffeacd717a4",
+          "move": "Hyper Beam",
+          "part": "eye_upper",
+          "runtime_sha256": "3b77ea7c3a8c881c4348850b22a26a592bd5e34d2b09c2c33446a4dfb78f5acc",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 58.5,
+            "emission_scale": 0.15,
+            "frames": 90.0,
+            "impact_frame": 43.2,
+            "launch_frame": 27.0,
+            "move_key": "hyperbeam"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Upper central eye selected as one source. Physical clip exposes the eye; rejected special clip moved the magnets across the beam path.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "eye_upper"
+        },
+        "family_actions": {
+          "beams": "physical_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "physical_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        }
+      }
+    },
+    "scovillain-mega": {
+      "generic_mouth_alias": "mouth_red",
+      "representative_effects": [
+        {
+          "action": "physical_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/scovillain-mega-hyperbeam-vs-pikachu.png",
+          "image_sha256": "34f55d691cc165c61b3ffb5c4ccd4321d31c1c8a9a405dd9209a1c555694b9cd",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/scovillain-mega-hyperbeam-vs-pikachu.json",
+          "metadata_sha256": "4b0db5598481953ca8831f9d4ef20710e93ad989906778e6e58796d6573c4f94",
+          "move": "Hyper Beam",
+          "part": "mouth_red",
+          "runtime_sha256": "9741fb37d3b98eaa4788f92921e5ab690194a7d1df736dd6ae48f3151c30df1e",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 87.1,
+            "emission_scale": 0.15,
+            "frames": 134.0,
+            "impact_frame": 64.32,
+            "launch_frame": 40.2,
+            "move_key": "hyperbeam"
+          },
+          "views_per_fraction": 2
+        },
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/scovillain-mega-solarbeam-vs-pikachu.png",
+          "image_sha256": "03b5c5dab2afab5cbc12e4b0871d442168368c9b180610bfc45dd6530d826359",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/scovillain-mega-solarbeam-vs-pikachu.json",
+          "metadata_sha256": "dd5d55b3ec4336cbef7a13be360885ccd76b1a614fa81ac0d640577ee887cc95",
+          "move": "Solar Beam",
+          "part": "mouth_green",
+          "runtime_sha256": "9741fb37d3b98eaa4788f92921e5ab690194a7d1df736dd6ae48f3151c30df1e",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 85.8,
+            "emission_scale": 0.15,
+            "frames": 132.0,
+            "impact_frame": 63.36,
+            "launch_frame": 39.6,
+            "move_key": "solarbeam"
+          },
+          "views_per_fraction": 2
+        },
+        {
+          "action": "physical_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/scovillain-mega-flamethrower-vs-pikachu.png",
+          "image_sha256": "0e331ec0b01d81367e22758feb1ce9ae0e52449847419ffe29cf386bfac11cc7",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/scovillain-mega-flamethrower-vs-pikachu.json",
+          "metadata_sha256": "805e93841422e2f5c4c081d147a276b02d7ca7436e0daab86e7a3828b6f565c6",
+          "move": "Flamethrower",
+          "part": "mouth_red",
+          "runtime_sha256": "9741fb37d3b98eaa4788f92921e5ab690194a7d1df736dd6ae48f3151c30df1e",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 87.1,
+            "emission_scale": 0.18,
+            "frames": 134.0,
+            "impact_frame": 64.32,
+            "launch_frame": 40.2,
+            "move_key": "flamethrower"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Own red mouth for generic beams and Flamethrower using physical_attack; Solar Beam explicitly uses the green mouth and special_attack. Narrow effects remain within the respective open lips.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "mouth_red"
+        },
+        "family_actions": {
+          "beams": "physical_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "physical_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        },
+        "move_actions": {
+          "flamethrower": "physical_attack",
+          "solarbeam": "special_attack"
+        },
+        "move_choreography": {
+          "flamethrower": {
+            "action": "physical_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.18,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          },
+          "solarbeam": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        },
+        "moves": {
+          "solarbeam": "mouth_green"
+        }
+      }
+    },
+    "voltorb": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/voltorb-voltswitch-vs-pikachu.png",
+          "image_sha256": "c69e22b4c1fa20ffd82ede913b2c3ce76bf7f778f71ea745cacf45ce7997fb59",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/voltorb-voltswitch-vs-pikachu.json",
+          "metadata_sha256": "bfba66379f320d7adfacdd5f7d1a3fbbe2ec1fbe3d2e09a819b8375300cca0a8",
+          "move": "Volt Switch",
+          "part": "face",
+          "runtime_sha256": "efaad3701a1e1a0f5f0369434c0f22f5d9e409a858b45d9149dfe1ddd07672e1",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.12,
+            "frames": 138.0,
+            "impact_frame": 66.24,
+            "launch_frame": 41.4,
+            "move_key": "voltswitch"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Front seam below the eyes as a casting surface. Narrow generic beam follows the forward-facing special clip.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.12,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        },
+        "move_actions": {
+          "screech": "special_attack"
+        },
+        "move_choreography": {
+          "screech": {
+            "action": "special_attack",
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.35
+          }
+        },
+        "moves": {
+          "screech": "face"
+        }
+      }
+    },
+    "voltorb-hisui": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "physical_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/voltorb-hisui-voltswitch-vs-pikachu.png",
+          "image_sha256": "de55cc560a401cd3e59379c7f7b33d11bfd5601cdf23ea302561b76c8e33b5de",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/voltorb-hisui-voltswitch-vs-pikachu.json",
+          "metadata_sha256": "fe743a32fa6600f54087c647878d22cb94f631fe3088c941e88faeae5710cc96",
+          "move": "Volt Switch",
+          "part": "face",
+          "runtime_sha256": "85443417f931ff63a1b7e693317c4ebef47e8a6522b53cc1b28a1e34f64a9a29",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 58.5,
+            "emission_scale": 0.15,
+            "frames": 90.0,
+            "impact_frame": 49.5,
+            "launch_frame": 38.7,
+            "move_key": "voltswitch"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Own front seam surface; physical clip and later .43 release avoid casting during the downward roll.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "family_actions": {
+          "beams": "physical_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "physical_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.43
+          }
+        },
+        "move_actions": {
+          "screech": "physical_attack",
+          "solarbeam": "physical_attack"
+        },
+        "move_choreography": {
+          "screech": {
+            "action": "physical_attack",
+            "impact_fraction": 0.63,
+            "launch_fraction": 0.43
+          },
+          "solarbeam": {
+            "action": "physical_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.43
+          }
+        },
+        "moves": {
+          "screech": "face",
+          "solarbeam": "face"
+        }
+      }
+    },
+    "wo-chien": {
+      "generic_mouth_alias": "face",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/wo-chien-hyperbeam-vs-pikachu.png",
+          "image_sha256": "9f69d2dd2ae0902a5d0579123ea1ea55cad8bb14855993e2e329275c57df46c2",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/wo-chien-hyperbeam-vs-pikachu.json",
+          "metadata_sha256": "0050e662b026ad58c5f5ddbcdcd6059fbb06e2b2edfe5356eae6c4695826429e",
+          "move": "Hyper Beam",
+          "part": "face",
+          "runtime_sha256": "de02214c3f8fee949bef286786ea37f5a0153aea3d91db0c7738ffae59101267",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.15,
+            "frames": 138.0,
+            "impact_frame": 66.24,
+            "launch_frame": 41.4,
+            "move_key": "hyperbeam"
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Front leaf cluster beneath the eyestalks as a casting surface, not an oral cavity. Narrow beam follows the lowered face.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "face"
+        },
+        "family_actions": {
+          "beams": "special_attack"
+        },
+        "family_choreography": {
+          "beams": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.65,
+            "emission_scale": 0.15,
+            "impact_fraction": 0.48,
+            "launch_fraction": 0.3
+          }
+        }
+      }
+    },
+    "wugtrio": {
+      "generic_mouth_alias": "muzzle",
+      "representative_effects": [
+        {
+          "action": "special_attack",
+          "camera_yaw": 60.0,
+          "fractions": [
+            0.29,
+            0.31,
+            0.45,
+            0.6,
+            0.72,
+            0.81
+          ],
+          "image_path": ".tmp/attack-attachments/family-moves-v448/wugtrio-mudslap-vs-pikachu.png",
+          "image_sha256": "2e692cac4fd499d1a77aed62343f8d5fffe18ef9b6dc8d99eb89409190b49d00",
+          "metadata_path": ".tmp/attack-attachments/family-moves-v448/wugtrio-mudslap-vs-pikachu.json",
+          "metadata_sha256": "f424f235bf53a8ee397cb6423254b67b7e8a82b74c736bbfcd964dd31835dcd1",
+          "move": "Mud-Slap",
+          "part": "muzzle",
+          "runtime_sha256": "9294e07c5576b2a24a216c23a81308e5112bdf96ecede541cc383ace9a7eb8b9",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 36.0,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.3
+          },
+          "views_per_fraction": 2
+        }
+      ],
+      "review": "Reviewed three muzzle points; Mud-Slap presenter uses the primary source. Smaller projectile and lower arc expose the head at release; this does not certify three-projectile choreography.",
+      "routing": {
+        "attachment_overrides": {
+          "mouth": "muzzle"
+        },
+        "move_actions": {
+          "hyperbeam": "special_attack",
+          "icebeam": "special_attack",
+          "watergun": "special_attack"
+        },
+        "move_choreography": {
+          "hyperbeam": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.62,
+            "emission_scale": 0.12,
+            "impact_fraction": 0.45,
+            "launch_fraction": 0.32
+          },
+          "icebeam": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.62,
+            "emission_scale": 0.12,
+            "impact_fraction": 0.45,
+            "launch_fraction": 0.32
+          },
+          "mudslap": {
+            "action": "special_attack",
+            "emission_scale": 0.1,
+            "impact_fraction": 0.55,
+            "launch_fraction": 0.3,
+            "projectile_arc_height": 0.3
+          },
+          "watergun": {
+            "action": "special_attack",
+            "emission_end_fraction": 0.62,
+            "emission_scale": 0.12,
+            "impact_fraction": 0.45,
+            "launch_fraction": 0.32
+          }
+        },
+        "moves": {
+          "hyperbeam": "muzzle",
+          "icebeam": "muzzle",
+          "watergun": "muzzle"
+        }
+      }
+    }
+  }
+}

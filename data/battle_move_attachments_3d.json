@@ -14052,6 +14052,28 @@
       }
     },
     "brambleghast": {
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Front twig below the eyes. Rejected emission during the spin; charge starts at .67 and beam launches at .70 after the face returns forward.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "effect_start_fraction": 0.67,
+          "emission_end_fraction": 0.88,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.8,
+          "launch_fraction": 0.7
+        }
+      },
       "part_reviews": {
         "face": {
           "actions": [
@@ -14122,6 +14144,28 @@
       }
     },
     "bramblin": {
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Lower front twig below the floating eyes. Beam starts after the roll has settled; no casting through the rotating branch cage.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "effect_start_fraction": 0.67,
+          "emission_end_fraction": 0.88,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.8,
+          "launch_fraction": 0.7
+        }
+      },
       "part_reviews": {
         "face": {
           "actions": [
@@ -29953,6 +29997,15 @@
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "muzzle"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Reviewed lower skull muzzle. Reduced Mud-Slap size and arc leave the skull visible at release.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
       "move_choreography": {
         "flamethrower": {
           "action": "special_attack",
@@ -29965,6 +30018,13 @@
           "action": "special_attack",
           "impact_fraction": 0.22,
           "launch_fraction": 0.14
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "emission_scale": 0.16,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.3,
+          "projectile_arc_height": 0.3
         },
         "watergun": {
           "action": "special_attack",
@@ -30913,6 +30973,27 @@
       }
     },
     "darkrai-mega": {
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Lower face below the white crest, independently measured for this form. Special-attack beam exits forward; crest can hide the early charge from the rear.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "part_reviews": {
         "face": {
           "actions": [
@@ -34205,14 +34286,30 @@
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Front surface below the nose; late special-attack release reuses the reviewed sludge window. This is a surface casting point, not an exposed mouth cavity.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
       "move_actions": {
         "growl": "special_attack",
+        "mudslap": "special_attack",
         "screech": "special_attack",
         "sludgebomb": "special_attack"
       },
       "move_choreography": {
         "growl": {
           "action": "special_attack",
+          "impact_fraction": 0.75,
+          "launch_fraction": 0.55
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "emission_scale": 0.06,
           "impact_fraction": 0.75,
           "launch_fraction": 0.55
         },
@@ -34513,9 +34610,19 @@
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Own front surface below the nose; late special-attack release. Hair and rock base are excluded.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
       "move_actions": {
         "flashcannon": "special_attack",
         "growl": "special_attack",
+        "mudslap": "special_attack",
         "screech": "special_attack",
         "sludgebomb": "special_attack"
       },
@@ -34529,6 +34636,12 @@
         },
         "growl": {
           "action": "special_attack",
+          "impact_fraction": 0.75,
+          "launch_fraction": 0.55
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "emission_scale": 0.06,
           "impact_fraction": 0.75,
           "launch_fraction": 0.55
         },
@@ -39029,9 +39142,19 @@
           "status": "sampled_runtime_origin_review_charge_overlap_pending"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face_primary"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Single foreground head for generic casting and Mud-Slap; physical release after the forward bow. Existing explicit multi-head sound routes stay intact.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
       "move_actions": {
         "growl": "physical_attack",
         "hyperbeam": "physical_attack",
+        "mudslap": "physical_attack",
         "screech": "physical_attack",
         "sludgebomb": "physical_attack"
       },
@@ -39046,6 +39169,12 @@
           "emission_end_fraction": 0.7,
           "emission_scale": 0.1,
           "impact_fraction": 0.55,
+          "launch_fraction": 0.4
+        },
+        "mudslap": {
+          "action": "physical_attack",
+          "emission_scale": 0.1,
+          "impact_fraction": 0.6,
           "launch_fraction": 0.4
         },
         "screech": {
@@ -39595,10 +39724,20 @@
           "status": "sampled_runtime_origin_review_charge_overlap_pending"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face_primary"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Own foreground head, with hair clear of the late physical release. Existing multi-head sound choices are retained.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
       "move_actions": {
         "flashcannon": "physical_attack",
         "growl": "physical_attack",
         "hyperbeam": "physical_attack",
+        "mudslap": "physical_attack",
         "screech": "physical_attack",
         "sludgebomb": "physical_attack"
       },
@@ -39620,6 +39759,12 @@
           "emission_end_fraction": 0.7,
           "emission_scale": 0.1,
           "impact_fraction": 0.55,
+          "launch_fraction": 0.4
+        },
+        "mudslap": {
+          "action": "physical_attack",
+          "emission_scale": 0.1,
+          "impact_fraction": 0.6,
           "launch_fraction": 0.4
         },
         "screech": {
@@ -57553,6 +57698,27 @@
       }
     },
     "glimmora-mega": {
+      "attachment_overrides": {
+        "mouth": "spike"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Long front central spike tip, ahead of the flower petals; narrow special-attack beam follows the tip.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "part_reviews": {
         "spike": {
           "actions": [
@@ -59269,6 +59435,27 @@
       }
     },
     "golisopod": {
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Front face between antenna roots. Special beam clears the opening as the arms spread. Bug Bite uses the face route; precise target contact spacing remains outside this approval.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "part_reviews": {
         "face": {
           "actions": [
@@ -59473,6 +59660,27 @@
       }
     },
     "golisopod-mega": {
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Own purple front face point; beam follows it below the upper appendages. Upper claws and possible arm nozzles are not certified here.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "part_reviews": {
         "face": {
           "actions": [
@@ -88416,6 +88624,27 @@
           "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
         }
       },
+      "attachment_overrides": {
+        "mouth": "eye"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Central eye; narrow beam uses the already reviewed special clip and stays between the magnets during release.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.62,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        }
+      },
       "move_actions": {
         "flashcannon": "special_attack",
         "screech": "special_attack",
@@ -88618,6 +88847,27 @@
           "part": "face",
           "scope": "Normal and shiny, two views: Three separately measured eye surfaces emit during special_attack .32/.48/end .65, scale .14. Front close views and wider views show each beam centered on its own eye, including the third unit clipped in the initial close sheet. Reverse views confirm separate paths; rotating magnets occlude some views, so continuous magnet/beam clearance is not approved. Other moves, opponent sizes and live NPC/wild battles remain pending.",
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Three eye points remain separate. Volt Switch emits three beams and Screech uses three sound sources; front views distinguish these from the magnets.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.14,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.32
         }
       },
       "move_actions": {
@@ -89265,6 +89515,27 @@
           "part": "eye",
           "scope": "Normal and shiny, two offline views, eight sampled fractions. Central red lens projected independently; physical_attack keeps the lens forward, avoiding the upward tilt of special_attack. Magnetic poles need separate electrical review. Wider .8 camera review at .12/.28/.30/.31/.34/.40/.50/.65: glow follows the eye, rings progress forward after launch and vanish by .65. Broad rings cross magnet silhouettes in projection and are edge-on in the first view. Full ring orientation and geometry clearance remain pending. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
           "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        }
+      },
+      "attachment_overrides": {
+        "mouth": "eye"
+      },
+      "family_actions": {
+        "beams": "physical_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Central red lens. Physical clip keeps the lens facing the target; generic beams use its existing reviewed timing.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.62,
+          "emission_scale": 0.18,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
         }
       },
       "move_actions": {
@@ -97345,6 +97616,35 @@
       }
     },
     "mimikyu": {
+      "attachment_overrides": {
+        "mouth": "casting"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "True-body casting surface below the costume head, not the painted Pikachu mouth. Beam and reduced Shadow Ball use this point.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_choreography": {
+        "shadowball": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        }
+      },
       "part_reviews": {
         "casting": {
           "actions": [
@@ -97506,6 +97806,35 @@
       }
     },
     "mimikyu-busted": {
+      "attachment_overrides": {
+        "mouth": "casting"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Independently reviewed true-body casting surface; native special clip lifts the costume head temporarily. Reduced Shadow Ball and beam remain below it.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_choreography": {
+        "shadowball": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        }
+      },
       "part_reviews": {
         "casting": {
           "actions": [
@@ -102253,6 +102582,27 @@
       }
     },
     "necrozma": {
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "physical_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Front prism below the colored eyes. Rejected special clip turns the front away; physical clip exposes the prism during the main beam window. Sweeping arms can occlude early windup.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "part_reviews": {
         "face": {
           "actions": [
@@ -104298,6 +104648,15 @@
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "nose"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Nose tip casting surface. Reduced Mud-Slap forms in front of the tip, not above the stone head.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
       "move_actions": {
         "flashcannon": "special_attack",
         "voltswitch": "special_attack"
@@ -104309,6 +104668,13 @@
           "emission_scale": 0.15,
           "impact_fraction": 0.48,
           "launch_fraction": 0.3
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.3,
+          "projectile_arc_height": 0.3
         },
         "voltswitch": {
           "action": "special_attack",
@@ -112967,6 +113333,38 @@
       }
     },
     "poltchageist": {
+      "attachment_overrides": {
+        "mouth": "spirit"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Generic beams use the extended spoon tip; dedicated Shadow Ball uses the spirit spiral above the pot. The reduced effects follow the separate native surfaces.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {
+        "beams": "spoon"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_choreography": {
+        "shadowball": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        }
+      },
       "part_reviews": {
         "hand": {
           "actions": [
@@ -119329,6 +119727,24 @@
           "status": "sampled_runtime_origin_region_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Face-dot center. Reduced Mud-Slap uses the exposed front panel while arms move to either side.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "move_choreography": {
+        "mudslap": {
+          "action": "special_attack",
+          "emission_scale": 0.22,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.3,
+          "projectile_arc_height": 0.3
+        }
+      },
       "move_effect_reviews": {
         "flashcannon": {
           "action": "special_attack",
@@ -119657,6 +120073,27 @@
           "status": "pending_tendril_clearance_review"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Face-dot center with reduced beam width. Native electrical arm strands can cross the viewing line; this approves the origin, not all strand clearance.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.14,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "move_effect_reviews": {
         "hyperbeam": {
           "action": "special_attack",
@@ -119760,6 +120197,24 @@
           "part": "face",
           "scope": "Normal/shiny Hyper Beam starts at the center of the long faceplate while both arms spread. Faceplate bending is followed in the sampled poses. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
           "status": "sampled_runtime_origin_region_review_pass"
+        }
+      },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Center of the yellow face strip, not either shoulder gem. Reduced Mud-Slap remains attached during the forward lean.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "move_choreography": {
+        "mudslap": {
+          "action": "special_attack",
+          "emission_scale": 0.22,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.3,
+          "projectile_arc_height": 0.3
         }
       },
       "move_effect_reviews": {
@@ -119971,6 +120426,24 @@
           "status": "sampled_runtime_origin_region_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Face-dot panel between the shoulder rocks. Reduced Mud-Slap stays on the front surface.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "move_choreography": {
+        "mudslap": {
+          "action": "special_attack",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.3,
+          "projectile_arc_height": 0.3
+        }
+      },
       "move_effect_reviews": {
         "flashcannon": {
           "action": "special_attack",
@@ -120167,6 +120640,24 @@
           "part": "face",
           "scope": "Normal/shiny beam starts at the central red faceplate light. Hands frame the beam in front views and obscure the side view; the point follows the spherical head. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
           "status": "sampled_runtime_origin_region_review_pass"
+        }
+      },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Face-dot center on the dark front panel. Reduced Mud-Slap follows it while the hands lift nearby.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "move_choreography": {
+        "mudslap": {
+          "action": "special_attack",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.3,
+          "projectile_arc_height": 0.3
         }
       },
       "move_effect_reviews": {
@@ -125782,6 +126273,27 @@
       }
     },
     "sandy-shocks": {
+      "attachment_overrides": {
+        "mouth": "eye_upper"
+      },
+      "family_actions": {
+        "beams": "physical_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Upper central eye selected as one source. Physical clip exposes the eye; rejected special clip moved the magnets across the beam path.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "part_reviews": {
         "eye_left": {
           "actions": [
@@ -127907,6 +128419,50 @@
       }
     },
     "scovillain-mega": {
+      "attachment_overrides": {
+        "mouth": "mouth_red"
+      },
+      "family_actions": {
+        "beams": "physical_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Own red mouth for generic beams and Flamethrower using physical_attack; Solar Beam explicitly uses the green mouth and special_attack. Narrow effects remain within the respective open lips.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_actions": {
+        "flamethrower": "physical_attack",
+        "solarbeam": "special_attack"
+      },
+      "move_choreography": {
+        "flamethrower": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.18,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
+      "moves": {
+        "solarbeam": "mouth_green"
+      },
       "part_reviews": {
         "foot": {
           "actions": [
@@ -159958,6 +160514,27 @@
           "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Front seam below the eyes as a casting surface. Narrow generic beam follows the forward-facing special clip.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "move_actions": {
         "screech": "special_attack"
       },
@@ -160082,6 +160659,27 @@
           "part": "face",
           "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected orange front strip below the eyes; no oral opening. Rejected .35 launch while the face points down. Physical_attack .43 launch emits as the face turns forward, .55 beam impact/.65 end or .63 sound impact. Narrow beam follows the projected front surface in the sampled emission frames and ends before recovery. Early charge, full-radius clearance and intervening frames require further review. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "physical_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Own front seam surface; physical clip and later .43 release avoid casting during the downward roll.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.43
         }
       },
       "move_actions": {
@@ -163691,6 +164289,27 @@
       }
     },
     "wo-chien": {
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Front leaf cluster beneath the eyestalks as a casting surface, not an oral cavity. Narrow beam follows the lowered face.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "part_reviews": {
         "face": {
           "actions": [
@@ -164386,6 +165005,15 @@
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "muzzle"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Reviewed three muzzle points; Mud-Slap presenter uses the primary source. Smaller projectile and lower arc expose the head at release; this does not certify three-projectile choreography.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
       "move_actions": {
         "hyperbeam": "special_attack",
         "icebeam": "special_attack",
@@ -164405,6 +165033,13 @@
           "emission_scale": 0.12,
           "impact_fraction": 0.45,
           "launch_fraction": 0.32
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "emission_scale": 0.1,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.3,
+          "projectile_arc_height": 0.3
         },
         "watergun": {
           "action": "special_attack",

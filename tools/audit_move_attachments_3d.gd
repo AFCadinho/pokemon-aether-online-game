@@ -8,6 +8,7 @@ const SUMMARY := "res://docs/3d/move-attachment-coverage.md"
 const SOURCES := [
 	"res://scripts/battle/battle_ui/move_attachments_3d.gd",
 	"res://data/battle_move_attachments_3d.json",
+	"res://data/battle_move_recipes_3d.json",
 	"res://scripts/battle/battle_ui/reviewed_model_catalog.gd",
 	"res://scripts/battle/battle_ui/reviewed_model_catalog.json",
 	"res://scripts/battle/battle_ui/screened_model_catalog.json",
@@ -50,6 +51,11 @@ func _run() -> void:
 			var counter := "with_" + part
 			counts[counter] = counts.get(counter, 0) + 1
 	var profiles := {}
+	var families := {}
+	for move_key: String in Attachments.Recipes.DATA.data.moves:
+		var family: String = Attachments.Recipes.get_recipe(move_key).family
+		if not families.has(family): families[family] = []
+		families[family].append(move_key)
 	var configured: Dictionary = Attachments.PROFILES.duplicate()
 	configured.merge(Attachments.CALIBRATED.data.profiles, true)
 	for species: String in configured:
@@ -64,6 +70,24 @@ func _run() -> void:
 				_fail("Invalid attachment definition: " + species + ":" + part)
 				return
 		var profile: Dictionary = Attachments.CALIBRATED.data.profiles.get(species, {})
+		for field: String in ["family_attachments", "family_actions", "family_choreography"]:
+			if not profile.has(field): continue
+			rows[species][field] = profile[field]
+			for family: String in profile[field]:
+				if not families.has(family):
+					_fail("Unknown attack family: " + species + ":" + family)
+					return
+		for family: String in profile.get("family_actions", {}):
+			if profile.family_actions[family] not in ["physical_attack", "physical_attack_2", "special_attack", "special_attack_2"]:
+				_fail("Invalid family action: " + species + ":" + family)
+				return
+		for family: String in profile.get("family_choreography", {}):
+			var action: String = profile.family_choreography[family].get("action", "")
+			for move_key: String in families[family]:
+				if profile.get("move_choreography", {}).has(move_key): continue
+				if action not in ["physical_attack", "physical_attack_2", "special_attack", "special_attack_2"] or Attachments.choreography_for(species, move_key, action).is_empty():
+					_fail("Invalid family choreography: " + species + ":" + family + ":" + move_key)
+					return
 		for field: String in ["family_attachments", "attachment_overrides"]:
 			if not profile.has(field): continue
 			rows[species][field] = profile[field]

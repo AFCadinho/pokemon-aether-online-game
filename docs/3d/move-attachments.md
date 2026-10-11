@@ -25,11 +25,16 @@ and twisted-hand bindings, Togekiss's wing tips and Enamorus's tail end.
 This is a bounded correction batch, not completion of the whole catalog.
 
 The [family backlog](attack-attachment-family-backlog.json) intersects supported
-presenters with learnsets across all 1,200 forms. There are still 323 forms with
-an unconfigured anatomical route: 231 request a hand, 111 a mouth, and one a
+presenters with learnsets across all 1,200 forms. There are still 304 forms with
+an unconfigured anatomical route: 231 request a hand, 81 a mouth, and one a
 foot (categories overlap). Some need a link to an already reviewed named part;
 others need anatomical calibration or a deliberate alternative. Body and orb
 origins are procedural and are excluded from these missing-part counts.
+
+The [family routing follow-up](attack-attachment-family-routing-review.md) links
+30 already reviewed surfaces, with 37 representative effect inspections. It
+resolves 73 supported learnset routes; 19 forms leave the missing-route list,
+while 11 of the changed forms still have a missing hand route.
 
 To refresh that inventory from the assigned frontend slot, run the learnset
 audit through `slot-env`, then summarize its output from the frontend directory:
@@ -146,6 +151,14 @@ override, then the generic part and its anatomical alias. A family-selected part
 is final and is not aliased again. Shiny shares the exact form's configuration;
 alternate and Mega forms do not inherit it. A `body` alternative intentionally
 uses the existing procedural body origin; it is not counted as a calibrated hand.
+`family_actions` and `family_choreography` also select a native clip and timing
+for a recipe family. Explicit `move_actions` / `move_choreography` win, even
+when their clip is unavailable or incompatible: they do not fall through to
+the family override. Timing requires the exact native action. Dedicated
+presenters absent from the recipe table keep explicit move settings. The
+coverage audit validates family names and timing; the model binding check
+validates family clips against both normal and shiny runtime models.
+
 Snivy's Vine Whip uses both animated vine tips and `physical_attack_2`.
 Servine uses that same action name with its own measured tip offsets; Serperior
 uses `physical_attack`. Magmortar's Ember and Flamethrower use the right cannon
