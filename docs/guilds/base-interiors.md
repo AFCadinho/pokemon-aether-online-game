@@ -162,6 +162,30 @@ its own random test schema. It covers migration up/down and simultaneous first
 visits.
 
 
+## Guild identity and room names
+
+Location indicators use the owning Guild's name, for example
+**AFC Squad – Main Hall** or **AFC Squad – Lounge**, including for visitors.
+Lift, floor and personal-room labels retain their addresses with that same
+prefix. `GET /game/guild-bases/{guildId}/identity` is restricted to players
+with valid access inside that instance and supplies the Guild name, side-room
+names and leader edit permission. Room templates cache names per Guild and
+refresh them every 15 seconds; successful renames update local labels at once.
+
+The entrance-side manager opens **Visitors** and **Room names** pages. Only
+the Guild leader can edit the two shared side-room names; a blank name restores
+the localized default. Names use at most 40 characters on one line. The server
+validates membership, instance, activity and permission before saving an
+audited change through `PUT /game/guild-bases/{guildId}/rooms/{roomKey}/name`.
+Room names are also editable in the existing admin portal's Guild Base form.
+The manager's authored scene position is preserved independently of these
+settings.
+
+Migration **0328_guild_base_room_names** adds non-null names with empty defaults
+for existing Guilds. Focused checks: `tests/guild_base_room_names_check.gd`,
+`tests.test_guild_base_room_names`, `tests.test_guild_admin` and
+`tests.test_guild_base_room_names_postgres.PostgresGuildRoomNameTests`.
+
 ## Guard visits
 
 The Guild interface's **Guild Base** button enables once the Guild owns a
@@ -180,8 +204,8 @@ approve or decline a visitor. A five-second poll updates the request counter,
 in-game notifications and the open menus. Guests receive read-only furniture
 layouts and share the host's world-presence roster.
 
-The **Guild Base manager** stands behind the upper-left counter in the shared
-main-hall template. Interacting saves the player's position and opens visitor
+The **Guild Base manager** stands near the entrance in the shared main-hall
+template. Interacting saves the player's position and opens visitor
 management for that instance's Guild. The Guild leader can switch between
 **Open to visitors** and **By request**; other members can approve or decline
 requests. Guests cannot manage the host's visitors. A compact **Visitors**

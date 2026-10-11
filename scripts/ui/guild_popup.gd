@@ -5038,7 +5038,7 @@ func _guild_log_action_filter(category: String) -> OptionButton:
 	select.set_item_metadata(0, "")
 	var actions: Array[String] = []
 	if category == "guild":
-		actions.assign(["joined", "left", "kicked", "rank_changed", "bank_permission_changed", "base_purchased", "base_furnished", "base_editor_changed"])
+		actions.assign(["joined", "left", "kicked", "rank_changed", "bank_permission_changed", "base_purchased", "base_furnished", "base_editor_changed", "base_room_renamed"])
 	elif category == "funds":
 		actions.assign(["deposit", "withdraw", "clash_stake_hold", "clash_stake_refund", "clash_stake_payout", "base_purchase"])
 	elif category == "resources":
@@ -5303,6 +5303,15 @@ func _guild_log_icon(texture: Texture2D) -> TextureRect:
 func _guild_log_entry_text(category: String, entry: Dictionary) -> String:
 	var action := str(entry.get("action", "deposit"))
 	if category == "guild":
+		if action == "base_room_renamed":
+			var details := _dictionary(entry.get("details", {}))
+			var room_key := str(details.get("roomKey", "left_room"))
+			var room_name := str(details.get("name", ""))
+			return _t("ui.guild.log.guild.base_room_renamed", {
+				"actor": str(entry.get("actor", _t("common.unknown"))),
+				"room": _t("ui.guild_base.location." + room_key),
+				"name": room_name if not room_name.is_empty() else _t("ui.guild_base.location." + room_key),
+			})
 		if action in ["base_furnished", "base_editor_changed"]:
 			var details := _dictionary(entry.get("details", {}))
 			return _t("ui.guild.log.guild." + action, {

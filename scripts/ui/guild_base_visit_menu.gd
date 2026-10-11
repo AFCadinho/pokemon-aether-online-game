@@ -19,8 +19,14 @@ var closed := false
 var selected_id := 0
 var lock_owner: StringName
 var debounce: Timer
+var visitor_page: VBoxContainer
+var names_page: VBoxContainer
+var name_fields: Dictionary = {}
+var name_buttons: Array[Button] = []
+var room_status: Label
+var navigation: Array[Button] = []
 
-func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id := 0) -> void:
+func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id := 0, identity: Dictionary = {}) -> void:
 	service = guild_service
 	data = initial
 	registrar_id = registrar
@@ -52,10 +58,26 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 	column.add_theme_constant_override("separation", 12)
 	panel.add_child(column)
 	var title := Label.new()
-	title.text = _t("host_title" if host else "guard_title")
+	var management := host and not identity.is_empty()
+	title.text = _t("manager_title" if management else "host_title" if host else "guard_title")
 	title.add_theme_color_override("font_color", Color("#f6cf72"))
 	title.add_theme_font_size_override("font_size", 23)
 	column.add_child(title)
+	if management:
+		var tabs := HBoxContainer.new()
+		column.add_child(tabs)
+		for page: String in ["visitors", "room_names"]:
+			var tab := Button.new()
+			tab.text = _t(page)
+			tab.toggle_mode = true
+			tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			tab.pressed.connect(_show_page.bind(page))
+			tabs.add_child(tab)
+			navigation.append(tab)
+	visitor_page = VBoxContainer.new()
+	visitor_page.add_theme_constant_override("separation", 12)
+	visitor_page.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_child(visitor_page)
 	if host:
 		policy = OptionButton.new()
 		SelectorStyle.configure(policy)
@@ -64,10 +86,10 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 		policy.disabled = not bool(data.get("canManage", false))
 		policy.select(1 if str(data.get("policy", "request")) == "open" else 0)
 		policy.item_selected.connect(_set_policy)
-		column.add_child(policy)
+		visitor_page.add_child(policy)
 	else:
 		var shortcuts := HBoxContainer.new()
-		column.add_child(shortcuts)
+		visitor_page.add_child(shortcuts)
 		var own := Button.new()
 		own.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		own.text = _t("own_base")
@@ -82,7 +104,7 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 		shortcuts.add_child(buy)
 		search = LineEdit.new()
 		search.placeholder_text = _t("search")
-		column.add_child(search)
+		visitor_page.add_child(search)
 		debounce = Timer.new()
 		debounce.one_shot = true
 		debounce.wait_time = 0.3
@@ -93,12 +115,12 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 	list.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	list.custom_minimum_size.y = 120
 	list.item_selected.connect(_selected)
-	column.add_child(list)
+	visitor_page.add_child(list)
 	status = Label.new()
 	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	column.add_child(status)
+	visitor_page.add_child(status)
 	var actions := HBoxContainer.new()
-	column.add_child(actions)
+	visitor_page.add_child(actions)
 	action = Button.new()
 	action.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	action.pressed.connect(_act)
@@ -109,6 +131,9 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 	decline.disabled = true
 	decline.pressed.connect(func(): _answer(false))
 	actions.add_child(decline)
+	if management:
+		_build_room_names(column, identity)
+		_show_page("visitors")
 	var close := Button.new()
 	close.text = get_node("/root/LocalizationManager").text("common.close")
 	close.pressed.connect(func(): _finish({}))
@@ -121,7 +146,7 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 	_render()
 
 func refresh() -> void:
-	if busy or closed:
+	if busy or closed or (is_instance_valid(names_page) and names_page.visible):
 		return
 	busy = true
 	var response: Dictionary = await service.base_visit_requests(guild_id) if host else await service.base_visit_directory(registrar_id, search.text)
@@ -135,6 +160,7 @@ func refresh() -> void:
 	_render()
 
 func _render() -> void:
+	_update_room_controls()
 	if host:
 		policy.disabled = not bool(data.get("canManage", false))
 		policy.select(1 if str(data.get("policy", "request")) == "open" else 0)
@@ -150,6 +176,83 @@ func _render() -> void:
 		selected_id = 0
 	status.text = _t("no_requests" if host else "no_bases") if rows.is_empty() else _t("host_hint" if host else "guard_hint")
 	_update_action()
+
+func _build_room_names(column: VBoxContainer, identity: Dictionary) -> void:
+	names_page = VBoxContainer.new()
+	names_page.add_theme_constant_override("separation", 16)
+	names_page.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_child(names_page)
+	var hint := Label.new()
+	hint.text = _t("room_names_hint")
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	names_page.add_child(hint)
+	var room_names: Dictionary = identity.get("roomNames", {})
+	for room_key: String in ["left_room", "right_room"]:
+		var label := Label.new()
+		label.text = get_node("/root/LocalizationManager").text("ui.guild_base.location." + room_key)
+		names_page.add_child(label)
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 8)
+		names_page.add_child(row)
+		var field := LineEdit.new()
+		field.max_length = 40
+		field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		field.placeholder_text = label.text
+		field.text = str(room_names.get(room_key, ""))
+		field.text_submitted.connect(_submit_room_name.bind(room_key))
+		field.text_changed.connect(_room_name_changed)
+		row.add_child(field)
+		name_fields[room_key] = field
+		var save := Button.new()
+		save.text = _t("save_room_name")
+		save.pressed.connect(_save_room_name.bind(room_key))
+		row.add_child(save)
+		name_buttons.append(save)
+	room_status = Label.new()
+	room_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	names_page.add_child(room_status)
+	_update_room_controls()
+
+func _show_page(page: String) -> void:
+	visitor_page.visible = page == "visitors"
+	names_page.visible = page == "room_names"
+	navigation[0].set_pressed_no_signal(visitor_page.visible)
+	navigation[1].set_pressed_no_signal(names_page.visible)
+
+func _update_room_controls() -> void:
+	var can_edit := bool(data.get("canManage", false)) and not busy
+	if is_instance_valid(policy):
+		policy.disabled = not can_edit
+	for field: LineEdit in name_fields.values():
+		field.editable = can_edit
+	for save: Button in name_buttons:
+		save.disabled = not can_edit
+
+func _save_room_name(room_key: String) -> void:
+	if busy or closed or not bool(data.get("canManage", false)):
+		return
+	busy = true
+	_update_room_controls()
+	_update_action()
+	var result: Dictionary = await service.set_base_room_name(guild_id, room_key, name_fields[room_key].text)
+	busy = false
+	if closed:
+		return
+	_update_room_controls()
+	_update_action()
+	if bool(result.get("success", false)):
+		var room_names: Dictionary = result.state.get("roomNames", {})
+		name_fields[room_key].text = str(room_names.get(room_key, ""))
+		room_status.text = _t("room_name_saved")
+	else:
+		room_status.text = ErrorText.message(result)
+
+func _submit_room_name(_value: String, room_key: String) -> void:
+	await _save_room_name(room_key)
+
+func _room_name_changed(_value: String) -> void:
+	if is_instance_valid(room_status):
+		room_status.text = ""
 
 func _selected(index: int) -> void:
 	selected_id = int(list.get_item_metadata(index))
@@ -203,11 +306,13 @@ func _answer(accept: bool) -> void:
 	if busy or selected_id <= 0:
 		return
 	busy = true
+	_update_room_controls()
 	_update_action()
 	var result: Dictionary = await service.base_visit_answer(guild_id, selected_id, accept)
 	busy = false
 	if closed:
 		return
+	_update_room_controls()
 	if bool(result.get("success", false)):
 		selected_id = 0
 		await refresh()
@@ -220,11 +325,13 @@ func _set_policy(index: int) -> void:
 		policy.select(1 if str(data.policy) == "open" else 0)
 		return
 	busy = true
+	_update_room_controls()
 	policy.disabled = true
 	var result: Dictionary = await service.base_visit_policy(guild_id, "open" if index == 1 else "request")
 	busy = false
 	if closed:
 		return
+	_update_room_controls()
 	policy.disabled = not bool(data.get("canManage", false))
 	if bool(result.get("success", false)):
 		data.policy = result.state.policy

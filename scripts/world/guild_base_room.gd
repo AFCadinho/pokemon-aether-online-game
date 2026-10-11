@@ -12,6 +12,8 @@ var guild_id := 0
 var base_town_id := ""
 var access_refresh_in_flight := false
 var furnishing_editor: CanvasLayer
+var base_identity: Dictionary = {}
+var identity_refresh_in_flight := false
 
 
 func _ready() -> void:
@@ -28,10 +30,16 @@ func _ready() -> void:
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service != null:
 		guild_service.membership_changed.connect(_on_membership_changed)
+		guild_service.base_identity_changed.connect(_on_base_identity_changed)
+		guild_service.guild_changed.connect(_on_guild_changed)
+		_on_base_identity_changed(guild_service.base_identities.get(guild_id, {}))
+		_on_guild_changed(guild_service.current_guild)
+	_refresh_identity.call_deferred()
 	var timer := Timer.new()
 	timer.wait_time = 15.0
 	timer.autostart = true
 	timer.timeout.connect(_refresh_access)
+	timer.timeout.connect(_refresh_identity)
 	add_child(timer)
 	var visitor_requests := preload("res://scripts/ui/guild_base_visit_requests.gd").new()
 	visitor_requests.room = self
@@ -67,6 +75,8 @@ func configure_guild_base_instance(instance_map_id: String) -> void:
 		push_error("Invalid Guild Base room template.")
 		return
 	guild_id = int(parts[2])
+	# Reconfiguration must not retain the previous owner's names.
+	base_identity = {}
 	base_town_id = parts[1]
 	map_id = instance_map_id
 	location_id = instance_map_id
@@ -75,6 +85,39 @@ func configure_guild_base_instance(instance_map_id: String) -> void:
 		map_display_name = LocalizationManager.text("ui.guild_base.rooms.floor_title", {"floor": floor_number})
 	elif room_key == "player_room":
 		map_display_name = LocalizationManager.text("ui.guild_base.rooms.room_title", {"floor": floor_number, "room": room_number})
+	if is_inside_tree():
+		_refresh_identity.call_deferred()
+
+
+func get_map_display_name() -> String:
+	if guild_id <= 0:
+		return super.get_map_display_name()
+	var label := LocalizationManager.text("ui.guild_base.location." + room_key, {"floor": floor_number, "room": room_number})
+	var custom_names: Dictionary = base_identity.get("roomNames", {})
+	if room_key in ["left_room", "right_room"] and not str(custom_names.get(room_key, "")).is_empty():
+		label = str(custom_names[room_key])
+	var owner_name := str(base_identity.get("guildName", "")).strip_edges()
+	if owner_name.is_empty():
+		owner_name = LocalizationManager.text("ui.guild_base.location.base")
+	return LocalizationManager.text("ui.guild_base.location.title", {"guild": owner_name, "room": label})
+
+
+func _on_base_identity_changed(identity: Dictionary) -> void:
+	if int(identity.get("guildId", 0)) == guild_id and guild_id > 0:
+		base_identity = identity.duplicate(true)
+
+func _on_guild_changed(guild: Dictionary) -> void:
+	if int(guild.get("id", 0)) == guild_id and guild_id > 0 and not str(guild.get("name", "")).is_empty():
+		base_identity["guildName"] = str(guild.name)
+
+func _refresh_identity() -> void:
+	if identity_refresh_in_flight or guild_id <= 0 or not AuthService.is_authenticated() or GameState.current_map != self:
+		return
+	identity_refresh_in_flight = true
+	var result: Dictionary = await get_node("/root/GuildService").base_identity(guild_id)
+	identity_refresh_in_flight = false
+	if is_inside_tree() and bool(result.get("success", false)):
+		_on_base_identity_changed(result.state)
 
 
 func is_walkable_tile(tile: Vector2i) -> bool:

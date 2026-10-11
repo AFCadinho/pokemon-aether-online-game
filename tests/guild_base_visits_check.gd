@@ -27,6 +27,8 @@ class VisitService extends Node:
 		policies.append([guild_id, value])
 		hosts.policy = value
 		return {"success": true, "state": {"policy": value}}
+	func base_identity(guild_id: int) -> Dictionary:
+		return {"success": true, "state": {"guildId": guild_id, "guildName": "Test Guild", "roomNames": {"left_room": "", "right_room": ""}}}
 
 class WorldStub extends Node2D:
 	var synced := false
@@ -125,10 +127,11 @@ func _run() -> void:
 	world.add_child(hall)
 	var player := PlayerStub.new()
 	hall.add_child(player)
-	player.position = Vector2(368, 304)
-	_check(manager.service_kind == "management" and manager._is_player_facing_npc(player), "manager can be addressed across the main-hall counter")
+	player.position = manager.position + Vector2(0, 64)
+	_check(manager.service_kind == "management" and manager._is_player_facing_npc(player), "manager can be addressed at the authored lobby position")
 	var collision: TileMapLayer = hall.find_map_tilemap_layer("Collision")
-	_check(hall.is_walkable_tile(Vector2i(11, 9)) and collision.get_cell_source_id(Vector2i(11, 9)) == -1, "counter interaction approach is clear of terrain")
+	var approach := Vector2i(player.position / 32)
+	_check(hall.is_walkable_tile(approach) and collision.get_cell_source_id(approach) == -1, "manager interaction approach is clear of terrain")
 	_check(preload("res://scripts/world/map_character_blocking.gd").is_position_blocked_by_character(hall, manager.global_position), "manager participates in NPC movement blocking")
 	service.requested_host = 0
 	service.hosts.canManage = true

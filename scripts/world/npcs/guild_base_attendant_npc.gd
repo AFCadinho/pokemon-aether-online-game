@@ -66,9 +66,13 @@ func _manage_visitors(world: Node) -> void:
 	if not bool(result.get("success", false)):
 		await GameErrorDialogService.show_response(result)
 		return
+	var identity: Dictionary = await guild_service.base_identity(room.guild_id)
+	if not bool(identity.get("success", false)):
+		await GameErrorDialogService.show_response(identity)
+		return
 	var menu := preload("res://scripts/ui/guild_base_visit_menu.gd").new()
 	world.add_child(menu)
-	menu.open(guild_service, result.state, "", room.guild_id)
+	menu.open(guild_service, result.state, "", room.guild_id, identity.state)
 	await menu.resolved
 
 
