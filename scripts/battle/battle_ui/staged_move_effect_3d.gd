@@ -22,6 +22,7 @@ var combo_trails: Array[StandardMaterial3D] = []
 var combo_spotlight: ShaderMaterial
 var combo_beats_drawn: Array[int] = []
 var emission_end := -1.0
+var sound_launch_sources: Array[Vector3] = []
 
 func start(move: String, timing: Dictionary, options: Dictionary, native_clock: Callable, positions: Callable, guard: Callable) -> void:
 	emission_end = float(timing.emission_end_frame) / 60.0 if timing.has("emission_end_frame") else -1.0
@@ -115,6 +116,8 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 		body=clampf(float(points.get("actor_radius",.7)),.45,1.4)
 	if not launched:
 		origin=from;aim=to
+		if motif in ["sound-call", "sound-tunnel"]:
+			sound_launch_sources.assign(emission_sources)
 		if elapsed>=launch:launched=true
 	var facing := Basis(right,up,right.cross(up))
 	var direction := (aim-origin).normalized()
@@ -279,7 +282,9 @@ func _projectile_stage(flight: float,after: float,alpha: float,facing: Basis,sid
 func _wave_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
 	if motif=="heart-stream":_status_stage(flight,after,alpha,facing,side,axis);return
 	if flight<0:
-		_piece(soft_quad,soft,origin,Vector3.ONE*.9*elapsed/maxf(launch,.01),facing)
+		var charge_sources: Array = emission_sources if motif in ["sound-call", "sound-tunnel"] and recipe.target != "actor" else [origin]
+		for source: Vector3 in charge_sources:
+			_piece(soft_quad,soft,source,Vector3.ONE*.9*elapsed/maxf(launch,.01),facing)
 		return
 	var fade := 1-smoothstep(.1,1,after)
 	if motif=="sound-call" and recipe.target=="actor":
@@ -294,11 +299,27 @@ func _wave_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vec
 			var point := origin.lerp(aim,p)+(side*cos(a)+axis.z*sin(a))*sin(p*PI)*.85
 			_source_sprite(point,.65,"mist",p,alpha*fade*.4,facing,a)
 		return
+	if motif in ["sound-call", "sound-tunnel"]:
+		# Each head keeps its own release position. Head motion after launch must
+		# not pull the already traveling sound rings around.
+		for source: Vector3 in sound_launch_sources:
+			var direction := (aim-source).normalized()
+			if direction.length()<.01: direction=Vector3.FORWARD
+			var source_side := direction.cross(Vector3.UP if absf(direction.y)<.95 else Vector3.RIGHT).normalized()
+			_wave_rings(source,flight,fade,alpha,facing,source_side,Basis(source_side,direction,source_side.cross(direction)))
+	else:
+		_wave_rings(origin,flight,fade,alpha,facing,side,axis)
+	if motif=="returning-drain" and hit and after>=0:
+		for i in 9:
+			var p := clampf(after*1.5-i*.03,0,1)
+			_source_sprite(aim.lerp(initial_center,p)+Vector3.UP*sin(p*PI)*.8,.35,"spark",0,alpha*(1-p),facing)
+
+func _wave_rings(source: Vector3,flight: float,fade: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
 	for i in 7:
 		var p := flight-i*.09
 		if p<0 or p>1.3:continue
 		var travel := clampf(p,0,1)
-		var point := origin.lerp(aim,travel)
+		var point := source.lerp(aim,travel)
 		var radius := (.2+travel*(1.2 if motif=="sound-tunnel" else .9))*weight
 		var visibility := sin(clampf(p/1.3,0,1)*PI)*fade
 		_piece(ring,edge,point,Vector3.ONE*radius*visibility,axis)
@@ -307,10 +328,6 @@ func _wave_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vec
 			_source_sprite(point,radius*1.4,"mist" if motif=="dark-tunnel" else "spark",travel,alpha*visibility*.3,facing)
 		elif motif=="sound-tunnel":
 			for sign_value in [-1.,1.]:_line(point+side*radius*sign_value,point+side*radius*sign_value+Vector3.UP*.35,.02*visibility,pearl)
-	if motif=="returning-drain" and hit and after>=0:
-		for i in 9:
-			var p := clampf(after*1.5-i*.03,0,1)
-			_source_sprite(aim.lerp(initial_center,p)+Vector3.UP*sin(p*PI)*.8,.35,"spark",0,alpha*(1-p),facing)
 
 func _status_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
 	if flight<0:return

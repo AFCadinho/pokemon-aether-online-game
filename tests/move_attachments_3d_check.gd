@@ -301,7 +301,8 @@ func _run() -> void:
 		lash.cancel()
 		await get_tree().process_frame
 	assert(is_equal_approx(lash_widths[1] / lash_widths[0], .008 / .045), "Native vine tips must retain their narrower extension width")
-	print("MOVE_ATTACHMENTS_3D_OK transforms=true moving_bones=true forms=true lifecycle=true paired_beams=true paired_vines=true single_impact=true")
+	_check_paired_sound(world)
+	print("MOVE_ATTACHMENTS_3D_OK transforms=true moving_bones=true forms=true lifecycle=true paired_beams=true paired_vines=true paired_sound=true single_impact=true")
 	get_tree().quit()
 
 func _check_weighted_attachments(world: Node3D) -> void:
@@ -359,3 +360,42 @@ func _check_weighted_attachments(world: Node3D) -> void:
 	actor.free()
 	partial.free()
 	calibrated_profiles.erase("__weighted_test")
+
+func _check_paired_sound(world: Node3D) -> void:
+	for move in ["Growl", "Supersonic", "Screech", "Disarming Voice"]:
+		var impact_counts := []
+		var counts := []
+		for count in [1, 2]:
+			seconds = .1
+			var effect := Stage.StagedMoveEffect.new()
+			world.add_child(effect)
+			var sources := [Vector3(-2,1,-.5)]
+			if count == 2: sources.append(Vector3(-2,1,.5))
+			var points := {"source":sources[0],"sources":sources,"target":Vector3(2,1,0),"radius":.8}
+			effect.start(move,{"frames":60,"launch_frame":12,"impact_frame":36},{},func(): return seconds,func(): return points,func(): return true)
+			effect.set_process(false)
+			assert(effect.cursor == count, "Each mouth charges at its own point")
+			for i in count: assert(effect.pieces[i].position.is_equal_approx(sources[i]))
+			seconds = .4
+			effect._process(0)
+			counts.append(effect.cursor)
+			assert(effect.sound_launch_sources.size() == count)
+			var transforms: Array[Transform3D] = []
+			for i in effect.cursor: transforms.append(effect.pieces[i].transform)
+			points.sources = [Vector3(-1,2,-.5),Vector3(-1,2,.5)] if count == 2 else [Vector3(-1,2,-.5)]
+			points.source = points.sources[0]
+			effect._process(0)
+			for i in effect.cursor:
+				assert(effect.pieces[i].transform.is_equal_approx(transforms[i]), "Released rings must retain their own launch path")
+			assert(not effect.impact_drawn, "No target impact before the confirmed hit")
+			seconds = .65
+			effect._process(0)
+			var source_count := effect.cursor
+			effect.hit = true
+			effect._process(0)
+			impact_counts.append(effect.cursor-source_count)
+			effect.cancel()
+			assert(effect.cancelled and not effect.visible)
+		assert(counts[1] == counts[0] * 2 and counts[0] > 0, "Both heads must emit the full sound pattern")
+		assert(impact_counts[0] == impact_counts[1], "Multiple mouths keep one target impact")
+		assert(impact_counts[0] > 0 if move == "Disarming Voice" else impact_counts[0] == 0)

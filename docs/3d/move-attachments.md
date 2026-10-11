@@ -34,6 +34,13 @@ predicate meshes invalidate the attachment and retain the bounds fallback.
 Mega Golurk also uses separate anchors for its attached hands and detached
 rocket fists, selected by the visibility of their respective meshes.
 
+Sound-call and sound-tunnel effects charge at every configured mouth, then retain
+each mouth’s release position for the traveling waves. Moving a head after launch
+does not pull the released waves around; multiple mouths still produce one target
+impact. Doduo uses separately measured upper/lower bill points for its two mouths
+and upper-bill tips for Peck. Its sampled Peck approach still leaves a contact
+gap, recorded explicitly in the review ledger.
+
 Per-move `move_choreography` applies only when the selected native `action`
 matches. It supplies `launch_fraction`, `impact_fraction`, optional
 `emission_end_fraction` and optional `contact_yaw_degrees`. Emission end stops

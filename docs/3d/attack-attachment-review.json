@@ -14,7 +14,7 @@
       "pending_anatomical_route": 34,
       "pending_anatomical_routing_review": 93,
       "pending_animation_addon_review": 1,
-      "pending_camera_framing": 3,
+      "pending_camera_framing": 2,
       "pending_corrected_mouth_pose_review": 1,
       "pending_individual_heads_review": 1,
       "pending_manual_anatomical_calibration": 6,
@@ -30,7 +30,7 @@
       "pending_source_visibility_review": 1,
       "retain_existing_calibration": 4,
       "reviewed_mandibles_with_mouth_route_review_pending": 2,
-      "sampled_mouth_pose_review_pass": 982
+      "sampled_mouth_pose_review_pass": 983
     },
     "part_status": {
       "correction_pending": 2,
@@ -43,12 +43,12 @@
       "pending_multipose_correction": 8,
       "pending_runtime_identity_review": 4,
       "pending_runtime_visibility_and_anatomy_review": 4,
-      "sampled_marker_pose_review_pass_installed": 1771
+      "sampled_marker_pose_review_pass_installed": 1772
     },
     "runtime_profiles": 1069,
     "species_forms": 1200
   },
-  "profile_sha256": "10fd9798f7a447a2d8d7a9c360046bdbd45d9d9b54958863d9cf59da2aac958e",
+  "profile_sha256": "3707fddc83c5fb5648e5159f945fd1bcd4c5533aba47038bfa5b857e619b910d",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -22776,14 +22776,147 @@
       }
     },
     "doduo": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Both heads are cropped above body; reframe and calibrate two beaks separately.",
-        "preview": "mouth-fallback-review-v6/doduo.png",
-        "status": "pending_camera_framing"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "growl": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views. Each open bill has its own charge at .34 and independent rings at .37/.40/.45, using special_attack .36/.58. Both release positions remain fixed as the heads move. The two streams may overlap in projection. Ring styling, continuous clearance and other opponent heights remain pending. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "peck": {
+          "action": "physical_attack",
+          "part": "beak_tip",
+          "scope": "Normal and shiny, two wide views. Physical_attack .30/.45 and yaw 0 lower both bills toward the opponent; sources are the separately measured upper-bill tips. At .40/.45 the contact approach still leaves a visible gap. Exact target contact is NOT approved: body-bounds approach needs a separate correction. Hit art masks the gap at impact. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_native_action_review_contact_alignment_pending"
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views. Each open bill has its own charge at .34 and independent rings at .37/.40/.45, using special_attack .36/.58. Both release positions remain fixed as the heads move. The two streams may overlap in projection. Ring styling, continuous clearance and other opponent heights remain pending. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_camera_framing",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Two separately measured weighted upper/lower bill points, one per head, at 55 percent of bill length. Both emitters were individually viewed from front and side in idle, physical and special native poses; open-bill origins remain in the gap. This mouth source is distinct from the upper-bill contact tip. Actual effects and exact contact clearance pending.",
+        "preview": "mouth-review-v186/doduo.png",
+        "status": "mouth_pose_review_pass"
+      },
+      "mouth_review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "additional_preview_sha256": [
+          "0be6899710a2b48555b47ef70e43c91834eddf83fa6c8c3a06e05dc38ad525c9"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "manual_adjustments": {
+          "method": "individual_bill_anatomy_measurement",
+          "notes": "Two separate head emitters, each halfway between the upper and lower bill at 55 percent of its measured length. Distinct upper-bill tips are retained for contact."
+        },
+        "measurements": [],
+        "method": "manual_anatomy_marker_pose_visual_review",
+        "normal_runtime_sha256": "7b469643ffd84a00dffd8779a82bbe9df8ff0967cf3e2baf93e312d4686c0658",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "7bd6c4dfe9ce5c6778838e66fe0fdaf86e306158fd2fa80061eec870bbfb0730",
+        "scope": "Two separately measured weighted upper/lower bill points, one per head, at 55 percent of bill length. Both emitters were individually viewed from front and side in idle, physical and special native poses; open-bill origins remain in the gap. This mouth source is distinct from the upper-bill contact tip. Actual effects and exact contact clearance pending.",
+        "side_fraction": 0.45
+      },
+      "mouth_status": "sampled_mouth_pose_review_pass",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "growl": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "9ef8a1004283cc18314d7078e443e6f86867e1ec953d473827fa012b097a9b0d",
+          "fractions": [
+            0.34,
+            0.37,
+            0.4,
+            0.45,
+            0.58,
+            0.68
+          ],
+          "normal_runtime_sha256": "7b469643ffd84a00dffd8779a82bbe9df8ff0967cf3e2baf93e312d4686c0658",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2da5a131a2e1a812f7e239901c50a1f73026444dab1498e8dd600ff1adb1020f",
+          "scope": "Normal and shiny, two views. Each open bill has its own charge at .34 and independent rings at .37/.40/.45, using special_attack .36/.58. Both release positions remain fixed as the heads move. The two streams may overlap in projection. Ring styling, continuous clearance and other opponent heights remain pending. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "31c6e31402f591af98c69067e53ee503031253de094fed90663ea7d725b47e12",
+          "shiny_runtime_sha256": "8de274a3f5d5fdd8be9e96da376cd3fff6f8720e72c9123f64a40b34b660e579",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 138.0,
+            "impact_frame": 80.04,
+            "launch_frame": 49.68,
+            "move_key": "growl"
+          },
+          "views": 2
+        },
+        "peck": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "7975e717f281cb9a3419a30f92a568ef0f93789a7b2d65a769a32e5706816d2b",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.45,
+            0.52,
+            0.65
+          ],
+          "normal_runtime_sha256": "7b469643ffd84a00dffd8779a82bbe9df8ff0967cf3e2baf93e312d4686c0658",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8f540b91fedff1495ad2f2e3e4894cec366a6d5c8d07a234614a9d97ca480d0f",
+          "scope": "Normal and shiny, two wide views. Physical_attack .30/.45 and yaw 0 lower both bills toward the opponent; sources are the separately measured upper-bill tips. At .40/.45 the contact approach still leaves a visible gap. Exact target contact is NOT approved: body-bounds approach needs a separate correction. Hit art masks the gap at impact. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "0b61ab017c119de50919b26e39a3332d2873f5c34ecaa251cd2d8ec3ae265eb6",
+          "shiny_runtime_sha256": "8de274a3f5d5fdd8be9e96da376cd3fff6f8720e72c9123f64a40b34b660e579",
+          "status": "sampled_native_action_review_contact_alignment_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 130.0,
+            "impact_frame": 58.5,
+            "launch_frame": 39.0,
+            "move_key": "peck"
+          },
+          "views": 2
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "9ef8a1004283cc18314d7078e443e6f86867e1ec953d473827fa012b097a9b0d",
+          "fractions": [
+            0.34,
+            0.37,
+            0.4,
+            0.45,
+            0.58,
+            0.68
+          ],
+          "normal_runtime_sha256": "7b469643ffd84a00dffd8779a82bbe9df8ff0967cf3e2baf93e312d4686c0658",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8c888f4f479807191405da5694e2c22b045c479ccf52588cd8ad80ee5f6b6048",
+          "scope": "Normal and shiny, two views. Each open bill has its own charge at .34 and independent rings at .37/.40/.45, using special_attack .36/.58. Both release positions remain fixed as the heads move. The two streams may overlap in projection. Ring styling, continuous clearance and other opponent heights remain pending. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b18fbd7d5932adf9dbec884026e0bf94f639ac1347fbe7394a513c2f233b437d",
+          "shiny_runtime_sha256": "8de274a3f5d5fdd8be9e96da376cd3fff6f8720e72c9123f64a40b34b660e579",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 138.0,
+            "impact_frame": 80.04,
+            "launch_frame": 49.68,
+            "move_key": "supersonic"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -22810,9 +22943,41 @@
             "foot": "sampled_marker_pose_review_pass",
             "left_foot": "sampled_marker_pose_review_pass"
           }
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "beak_tip": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
+        "beak_tip": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "3b5acf9f226f790240f37b30a055010bad9328a1389324cc1ccb402fc6810b98"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "method": "individual_bill_anatomy_measurement",
+            "notes": "Two separate head emitters, each halfway between the upper and lower bill at 55 percent of its measured length. Distinct upper-bill tips are retained for contact."
+          },
+          "method": "individual_native_bill_tip_measurement",
+          "normal_runtime_sha256": "7b469643ffd84a00dffd8779a82bbe9df8ff0967cf3e2baf93e312d4686c0658",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1cde4b46460bb7eebb92b83dac714aa205c91694be7d397a2cb27ef63aecb9c7",
+          "scope": "Two upper-bill tips measured from the separate jaw meshes, one per head. Both marker sheets were individually reviewed in visible idle, physical and special poses; closed physical bills approach the target at their tips. Exact target distance and height remain pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "foot": {
           "actions": [
             "idle",
@@ -22863,6 +23028,7 @@
         }
       },
       "part_status": {
+        "beak_tip": "sampled_marker_pose_review_pass_installed",
         "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "pending_missing_part",
         "left_foot": "sampled_marker_pose_review_pass_installed"

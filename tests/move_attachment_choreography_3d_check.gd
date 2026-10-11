@@ -10,7 +10,7 @@ func _run() -> void:
 		var clip := Animation.new()
 		clip.length = 1.0
 		player.get_animation_library("").add_animation("physical_attack_2", clip)
-	for route: Array in [["snom","Bug Bite","physical_attack",.18,.45,0.0], ["spinarak","Bug Bite","physical_attack",.24,.45,0.0], ["skarmory","Peck","physical_attack",.12,.28,0.0], ["skarmory-mega","Peck","physical_attack",.20,.40,0.0], ["glastrier","Double Kick","physical_attack_2",.12,.45,180.0], ["calyrex-ice","Double Kick","physical_attack",.12,.45,180.0], ["exploud","Low Kick","physical_attack",.05,.22,0.0]]:
+	for route: Array in [["doduo","Peck","physical_attack",.30,.45,0.0], ["snom","Bug Bite","physical_attack",.18,.45,0.0], ["spinarak","Bug Bite","physical_attack",.24,.45,0.0], ["skarmory","Peck","physical_attack",.12,.28,0.0], ["skarmory-mega","Peck","physical_attack",.20,.40,0.0], ["glastrier","Double Kick","physical_attack_2",.12,.45,180.0], ["calyrex-ice","Double Kick","physical_attack",.12,.45,180.0], ["exploud","Low Kick","physical_attack",.05,.22,0.0]]:
 		for slot in 4:
 			var identity: String = route[0] + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -87,7 +87,7 @@ func _run() -> void:
 	assert(Attachments.choreography_for("zoroark","flamethrower","physical_attack_2").is_empty())
 	for identity: String in ["walking-wake", "watchog", "zoroark-hisui"]:
 		assert(Attachments.choreography_for(identity,"hyperbeam","special_attack").is_empty())
-	for route: Array in [["gastly","Shadow Ball","special_attack",.42,.65], ["cubone","Growl","special_attack",.14,.22], ["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
+	for route: Array in [["doduo","Growl","special_attack",.36,.58], ["doduo","Supersonic","special_attack",.36,.58], ["gastly","Shadow Ball","special_attack",.42,.65], ["cubone","Growl","special_attack",.14,.22], ["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -205,7 +205,7 @@ func _run() -> void:
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=51 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=54 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()
 
 func _check_stream_scaling() -> void:

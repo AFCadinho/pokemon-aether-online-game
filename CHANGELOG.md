@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Doduo separate animated mouth and beak-tip attack origins for both heads. Growl and Supersonic now release sound waves from both mouths, with timing matched to the open-bill pose.
+
 - Calibrate selected mouth, muzzle and mandible attack origins for Hisuian Electrode, Kyurem, Latios, Gastly, Klefki, Spiritomb, Mareanie, Snom and Spinarak. Match selected beam and bite timings to their native poses, and fit Flash Cannon and Ice Beam widths to small mouths.
 
 - Anchor Arboliva’s Solar Beam and Hyper Beam to an olive opening and Cubone’s breath and vocal moves below its skull rim. Align selected attacks with forward-facing poses and fit their streams to the departure point.

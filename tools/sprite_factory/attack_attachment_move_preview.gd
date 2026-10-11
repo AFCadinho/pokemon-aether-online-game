@@ -147,8 +147,11 @@ func _run() -> void:
 			label.text = "%s | %s | %s %.3f | %s" % [species,move,action,fraction,points.attachment_part]
 			await process_frame; await RenderingServer.frame_post_draw
 			sheet.blit_rect(viewport.get_texture().get_image(),Rect2i(0,0,720,540),Vector2i(column*720,row*540))
+			var source_positions := []
+			for source: Vector3 in points.sources:
+				source_positions.append([source.x,source.y,source.z])
 			records.append({"fraction":fraction,"view":column,"part":points.attachment_part,"bones":points.attachment_bones,"sources":points.sources.size(),"pieces":effect.cursor,
-				"source_position":[points.source.x,points.source.y,points.source.z],"target_position":[points.target.x,points.target.y,points.target.z],"contact_yaw":stage.contact_yaws[0]})
+				"source_position":[points.source.x,points.source.y,points.source.z],"source_positions":source_positions,"target_position":[points.target.x,points.target.y,points.target.z],"contact_yaw":stage.contact_yaws[0]})
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
 	var filename := species+"-"+Stage.MoveEffect.move_key(move)
 	if target_species != species: filename += "-vs-" + target_species

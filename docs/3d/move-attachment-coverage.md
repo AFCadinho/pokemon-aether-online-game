@@ -9,7 +9,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
 - At least one configured anatomical attachment: 1069 species/forms.
 - No anatomical attachment profile: 131 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 986 species/forms.
+- Mouth attachments: 987 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -232,7 +232,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | dipplin | mouth | Same attachment profile |
 | ditto | mouth | Same attachment profile |
 | dodrio | foot, left_foot | Same attachment profile |
-| doduo | foot, left_foot | Same attachment profile |
+| doduo | beak_tip, foot, left_foot, mouth | Same attachment profile |
 | dolliv | mouth | Same attachment profile |
 | dondozo | mouth | Same attachment profile |
 | donphan | hand, left_hand | Same attachment profile |

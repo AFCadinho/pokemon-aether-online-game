@@ -63,7 +63,7 @@
 		"shiny": 1200,
 		"species_forms": 1200,
 		"with_any_attachment": 1069,
-		"with_beak_tip": 4,
+		"with_beak_tip": 5,
 		"with_cannon": 2,
 		"with_cannons": 1,
 		"with_casting": 2,
@@ -77,7 +77,7 @@
 		"with_left_hand": 574,
 		"with_left_hand_upper": 1,
 		"with_mandibles": 2,
-		"with_mouth": 986,
+		"with_mouth": 987,
 		"with_mouth_red": 1,
 		"with_muzzle": 2,
 		"with_olive_nozzle": 1,
@@ -9653,6 +9653,30 @@
 			]
 		},
 		"doduo": {
+			"beak_tip": [
+				[
+					{
+						"bone": "left_upper_jaw",
+						"offset": [
+							0.318676769733429,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "right_upper_jaw",
+						"offset": [
+							0.318676739931107,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"foot": [
 				[
 					{
@@ -9676,6 +9700,48 @@
 							0.0
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "left_upper_jaw",
+						"offset": [
+							0.175272223353386,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "left_lower_jaw",
+						"offset": [
+							0.128447302430868,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					}
+				],
+				[
+					{
+						"bone": "right_upper_jaw",
+						"offset": [
+							0.175272206962109,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "right_lower_jaw",
+						"offset": [
+							0.12844747453928,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -49005,7 +49071,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "10fd9798f7a447a2d8d7a9c360046bdbd45d9d9b54958863d9cf59da2aac958e",
+		"data/battle_move_attachments_3d.json": "3707fddc83c5fb5648e5159f945fd1bcd4c5533aba47038bfa5b857e619b910d",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "e1e876a615cacbda2aaadba60934db81fe133509a5ccc8af1c7556badb86ca0a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
@@ -57784,9 +57850,38 @@
 		},
 		"doduo": {
 			"attachments": [
+				"beak_tip",
 				"foot",
-				"left_foot"
+				"left_foot",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"additional_preview_sha256": [
+					"0be6899710a2b48555b47ef70e43c91834eddf83fa6c8c3a06e05dc38ad525c9"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"manual_adjustments": {
+					"method": "individual_bill_anatomy_measurement",
+					"notes": "Two separate head emitters, each halfway between the upper and lower bill at 55 percent of its measured length. Distinct upper-bill tips are retained for contact."
+				},
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "7b469643ffd84a00dffd8779a82bbe9df8ff0967cf3e2baf93e312d4686c0658",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "7bd6c4dfe9ce5c6778838e66fe0fdaf86e306158fd2fa80061eec870bbfb0730",
+				"scope": "Two separately measured weighted upper/lower bill points, one per head, at 55 percent of bill length. Both emitters were individually viewed from front and side in idle, physical and special native poses; open-bill origins remain in the gap. This mouth source is distinct from the upper-bill contact tip. Actual effects and exact contact clearance pending.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
