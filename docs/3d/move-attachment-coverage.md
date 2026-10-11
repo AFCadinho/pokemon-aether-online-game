@@ -37,7 +37,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | ambipom | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | amoonguss | hand, left_hand, mouth | Same attachment profile |
 | ampharos | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| ampharos-mega | foot, left_foot, mouth | Same attachment profile |
+| ampharos-mega | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | annihilape | foot, hand, left_foot, left_hand | Same attachment profile |
 | anorith | hand, left_hand, mouth | Same attachment profile |
 | appletun | hand, left_hand, mouth | Same attachment profile |
@@ -300,7 +300,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | duraludon | hand, left_hand, mouth | Same attachment profile |
 | durant | mouth | Same attachment profile |
 | dusclops | hand, left_hand | Same attachment profile |
-| dusknoir | mouth | Same attachment profile |
+| dusknoir | hand, left_hand, mouth | Same attachment profile |
 | duskull | hand, left_hand, mouth | Same attachment profile |
 | dustox | mouth | Same attachment profile |
 | dwebble | hand, left_hand, mouth | Same attachment profile |
@@ -532,8 +532,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | kabutops | foot, hand, left_hand, mouth | Same attachment profile |
 | kadabra | casting, hand, left_hand, mouth | Same attachment profile |
 | kakuna | face | Same attachment profile |
-| kangaskhan | foot, left_foot, mouth | Same attachment profile |
-| kangaskhan-mega | foot, left_foot, mouth | Same attachment profile |
+| kangaskhan | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| kangaskhan-mega | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | karrablast | hand, left_hand, mouth | Same attachment profile |
 | kartana | mouth | Same attachment profile |
 | kecleon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -639,7 +639,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | maractus | hand, left_hand, mouth | Same attachment profile |
 | mareanie | mouth | Same attachment profile |
 | mareep | mouth | Same attachment profile |
-| marill | mouth | Same attachment profile |
+| marill | hand, left_hand, mouth | Same attachment profile |
 | marowak | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | marowak-alola | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | marowak-alola-totem | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -683,7 +683,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | mimikyu | casting, hand | Same attachment profile |
 | mimikyu-busted | casting, hand | Same attachment profile |
 | minccino | hand, left_hand, mouth | Same attachment profile |
-| minun | mouth | Same attachment profile |
+| minun | hand, left_hand, mouth | Same attachment profile |
 | miraidon | hand, left_hand, mouth | Same attachment profile |
 | misdreavus | mouth | Same attachment profile |
 | mismagius | hand, left_hand, mouth | Same attachment profile |
@@ -779,7 +779,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | phantump | mouth | Same attachment profile |
 | pheromosa | foot, hand, left_hand, mouth | Same attachment profile |
 | phione | mouth | Same attachment profile |
-| pichu | mouth | Same attachment profile |
+| pichu | hand, left_hand, mouth | Same attachment profile |
 | pidgeot | mouth | Same attachment profile |
 | pidgeot-mega | mouth | Same attachment profile |
 | pidgeotto | mouth | Same attachment profile |
@@ -795,7 +795,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | pinsir | hand, left_hand, mouth | Same attachment profile |
 | pinsir-mega | hand, left_hand, mouth | Same attachment profile |
 | piplup | hand, left_hand, mouth | Same attachment profile |
-| plusle | mouth | Same attachment profile |
+| plusle | hand, left_hand, mouth | Same attachment profile |
 | poipole | hand, left_hand, mouth | Same attachment profile |
 | politoed | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | poliwag | foot, left_foot, mouth | Same attachment profile |
@@ -995,7 +995,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | spheal | hand, left_hand, mouth | Same attachment profile |
 | spidops | foot, left_foot | Same attachment profile |
 | spinarak | mandibles | Same attachment profile |
-| spinda | foot, left_foot, mouth | Same attachment profile |
+| spinda | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | spiritomb | mouth | Same attachment profile |
 | spoink | face, pearl | Same attachment profile |
 | sprigatito | hand, left_hand, mouth | Same attachment profile |

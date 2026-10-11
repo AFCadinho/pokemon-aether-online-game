@@ -1,11 +1,11 @@
 {
   "complete": false,
   "counts": {
-    "configured_move_pairs": 7589,
-    "forms_with_missing_routes": 304,
+    "configured_move_pairs": 7626,
+    "forms_with_missing_routes": 295,
     "missing_parts": {
       "foot": 1,
-      "hand": 231,
+      "hand": 222,
       "mouth": 81
     },
     "species_forms": 1200,
@@ -15,11 +15,11 @@
     "body",
     "orb_clearance"
   ],
-  "learnset_audit_sha256": "3f245ae5ea41811c420a6071a1a52683a806221decef1449a0ff57b5062d2dfd",
+  "learnset_audit_sha256": "25bf70c37f71cd3028c9521bc0124d22c58df22fc043a91fa2c7520dc1b96d04",
   "schema": 1,
   "scope": "Missing configured anatomical routes grouped by form and family. Existing points may need an alias; absent anatomy may need a deliberate alternative. This is not a visual approval or a count of all unfinished effects.",
   "source_sha256": {
-    "data/battle_move_attachments_3d.json": "8417cd81b8a658c587371e146e1158d4f623071ba393ce438b1bbd1f21cf5355",
+    "data/battle_move_attachments_3d.json": "b71782eaeae2593dc477ffdbb6e64ef500ce0564e4741255a2042301c28ce7c1",
     "data/battle_move_recipes_3d.json": "4f237143c9001b7fc43f9bd0358f8361173e8f148f30d23bd8db7c7f27c90429",
     "scripts/battle/animations/model_action_map.gd": "6b09908b3b6568e7ecc8e642c155ff9f73964bbc4af0a0c8741723fedca37b67",
     "scripts/battle/battle_ui/experimental_battle_3d.gd": "08960a8faa84fe02ee1b3904e1427801248982c205737478fac7e96657819ebb",
@@ -156,24 +156,6 @@
         }
       },
       "runtime_sha256": "072e8177d348e7f7fbcc741bf419431b1f7bcb74fc1f219fa71b237cdab325ba",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "ampharos-mega": {
-      "configured_parts": [
-        "foot",
-        "left_foot",
-        "mouth"
-      ],
-      "learnset_sha256": "94c7847e9360b5248f0ea1ee91ee6e017048e4ee1eb6518e41d12f10b61b5f91",
-      "missing_routes": {
-        "hand": {
-          "strikes": {
-            "representative_move": "firepunch",
-            "supported_move_count": 4
-          }
-        }
-      },
-      "runtime_sha256": "15741868f6d4d93d014c502023930df3eb21dc6a893617407d4323d9f1948c79",
       "status": "individual_anatomy_or_routing_review_required"
     },
     "annihilape": {
@@ -1477,26 +1459,6 @@
       "runtime_sha256": "5366b48fa4d441c5b798b68d103b7df451ee50ec9fb242bc9c9d042e337f73dc",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "dusknoir": {
-      "configured_parts": [
-        "mouth"
-      ],
-      "learnset_sha256": "f62bc572dcbe21705d800aa77172959dca1268d9e29f7c33f54b70b81be00866",
-      "missing_routes": {
-        "hand": {
-          "claws": {
-            "representative_move": "astonish",
-            "supported_move_count": 1
-          },
-          "strikes": {
-            "representative_move": "firepunch",
-            "supported_move_count": 5
-          }
-        }
-      },
-      "runtime_sha256": "6b9ca11f0a1a179e116ba9a71a87346a1eaa08f824caa34cbd0cd8f2f1c06025",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
     "ekans": {
       "configured_parts": [
         "mouth"
@@ -2547,42 +2509,6 @@
       "runtime_sha256": "18586729d2cd9f8a726a50fdad2ce79319115dd39ff542e385de9267670cab37",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "kangaskhan": {
-      "configured_parts": [
-        "foot",
-        "left_foot",
-        "mouth"
-      ],
-      "learnset_sha256": "3779dd5fce3a6ee2a173b10de02031ae4821198b9fa8cd974e2fa38322d8c018",
-      "missing_routes": {
-        "hand": {
-          "strikes": {
-            "representative_move": "drainpunch",
-            "supported_move_count": 7
-          }
-        }
-      },
-      "runtime_sha256": "24f478a466884a073e814df257288f628fdf557ef70fd05d7aa48b0289e2f08d",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "kangaskhan-mega": {
-      "configured_parts": [
-        "foot",
-        "left_foot",
-        "mouth"
-      ],
-      "learnset_sha256": "d0f08fd76b9541a77a1e1743c4245a03d656d60dccacb073e948f1c216323e64",
-      "missing_routes": {
-        "hand": {
-          "strikes": {
-            "representative_move": "drainpunch",
-            "supported_move_count": 7
-          }
-        }
-      },
-      "runtime_sha256": "1d313b530091b789324a99e36291becd187bd60e62655eb28778132f6363da1c",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
     "kingambit": {
       "configured_parts": [
         "foot",
@@ -3037,22 +2963,6 @@
       "runtime_sha256": "115ead9c8be4d74818f457786b5ae2932c16d8c953259f66d309c969090c0eff",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "marill": {
-      "configured_parts": [
-        "mouth"
-      ],
-      "learnset_sha256": "cfb31865a7aa4500945cea3a2ec34e9daf08cc720e3b52ba57e6366e19ec43db",
-      "missing_routes": {
-        "hand": {
-          "strikes": {
-            "representative_move": "icepunch",
-            "supported_move_count": 3
-          }
-        }
-      },
-      "runtime_sha256": "b784bad6b0c594010a035dc00029dd6113d296843ce17f62fa40685d53b731d1",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
     "maushold": {
       "configured_parts": [
         "foot",
@@ -3220,22 +3130,6 @@
         }
       },
       "runtime_sha256": "af0e49e0463d05f75c37a4259de45a603e2a7e6bb309286f60f22eacf05aeb94",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "minun": {
-      "configured_parts": [
-        "mouth"
-      ],
-      "learnset_sha256": "7bb7fb467e8227452b298b3881991c3679d586cd3fac391f634e527e3466dbdc",
-      "missing_routes": {
-        "hand": {
-          "strikes": {
-            "representative_move": "thunderpunch",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "296b5b59f07f947156516e0622a234d558680245b9a5c1dbd4e0273dd1368fca",
       "status": "individual_anatomy_or_routing_review_required"
     },
     "misdreavus": {
@@ -3729,22 +3623,6 @@
       "runtime_sha256": "d81c6f71f1eeb2fd17b9513f8d2d5e73cc53529103d269e06994b2d7e0b2c13d",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "pichu": {
-      "configured_parts": [
-        "mouth"
-      ],
-      "learnset_sha256": "79956f9cbe252e28092c54b886dfae92a8f32c25e7c07e1cbb5b2afb50c1e71a",
-      "missing_routes": {
-        "hand": {
-          "strikes": {
-            "representative_move": "thunderpunch",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "a7abe4d3c41ac071569b1afe3e308566824ad48bc8dc49e61278bf1f78360799",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
     "pidgeot": {
       "configured_parts": [
         "mouth"
@@ -3863,22 +3741,6 @@
         }
       },
       "runtime_sha256": "9692c59250402cfd0e8363db39dd696155d8d69df238a870753bd7e9d358a06f",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "plusle": {
-      "configured_parts": [
-        "mouth"
-      ],
-      "learnset_sha256": "1d9e96ce76b1826913450007de260d6eaf8e36ee1d85dd40b8d103bf9789b7fd",
-      "missing_routes": {
-        "hand": {
-          "strikes": {
-            "representative_move": "thunderpunch",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "9103e36aaee22931e3dee7ce40d7317208223e0a59ae2566a2e5350ce1552e4e",
       "status": "individual_anatomy_or_routing_review_required"
     },
     "poliwhirl": {
@@ -4887,24 +4749,6 @@
         }
       },
       "runtime_sha256": "b7ebf1ea82aed2267afb7fb6bc520b09854a5855ca5d7f537341eefede12b608",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "spinda": {
-      "configured_parts": [
-        "foot",
-        "left_foot",
-        "mouth"
-      ],
-      "learnset_sha256": "3873cb42ad9e5abbdd0fb54ee9d83f87ac18626c183df2cec2210479f3cfa133",
-      "missing_routes": {
-        "hand": {
-          "strikes": {
-            "representative_move": "drainpunch",
-            "supported_move_count": 7
-          }
-        }
-      },
-      "runtime_sha256": "ff89a538a5d560f6cc40a2a3e9ef29649d3d42c43e2a7a4eca680344af1e3995",
       "status": "individual_anatomy_or_routing_review_required"
     },
     "spiritomb": {
