@@ -88,7 +88,7 @@ func _run() -> void:
 	assert(Attachments.choreography_for("zoroark","flamethrower","physical_attack_2").is_empty())
 	for identity: String in ["walking-wake", "watchog", "zoroark-hisui"]:
 		assert(Attachments.choreography_for(identity,"hyperbeam","special_attack").is_empty())
-	for route: Array in [["voltorb","Screech","special_attack",0.35,0.55],["voltorb-hisui","Screech","physical_attack",0.43,0.63],["diglett","Growl","special_attack",0.55,0.75],["diglett","Screech","special_attack",0.55,0.75],["diglett","Sludge Bomb","special_attack",0.55,0.75],["diglett-alola","Growl","special_attack",0.55,0.75],["diglett-alola","Screech","special_attack",0.55,0.75],["diglett-alola","Sludge Bomb","special_attack",0.55,0.75],["dugtrio","Growl","physical_attack",0.4,0.6],["dugtrio","Screech","physical_attack",0.4,0.6],["dugtrio","Sludge Bomb","physical_attack",0.4,0.6],["dugtrio-alola","Growl","physical_attack",0.4,0.6],["dugtrio-alola","Screech","physical_attack",0.4,0.6],["dugtrio-alola","Sludge Bomb","physical_attack",0.4,0.6], ["magnemite","Screech","special_attack",0.3,0.52], ["magnemite","Supersonic","special_attack",0.3,0.52], ["magnezone","Screech","physical_attack",0.3,0.52], ["magnezone","Supersonic","physical_attack",0.3,0.52], ["lampent","Shadow Ball","physical_attack_2",0.4,0.6], ["lampent","Ember","physical_attack_2",0.4,0.6], ["chandelure","Shadow Ball","physical_attack",0.42,0.60], ["chandelure","Ember","physical_attack",0.42,0.60], ["bronzor","Shadow Ball","special_attack",0.35,0.55], ["bronzong","Shadow Ball","special_attack",0.25,0.5], ["cascoon","String Shot","special_attack",0.25,0.45], ["kakuna","String Shot","special_attack",0.25,0.45], ["silcoon","Poison Sting","physical_attack_2",.35,.50], ["honedge","Screech","special_attack",.40,.58], ["doublade","Screech","special_attack",.40,.58], ["aegislash-blade","Screech","special_attack",.40,.58], ["aegislash-shield","Screech","special_attack",.40,.58], ["aegislash-blade","Shadow Ball","special_attack",.40,.58], ["aegislash-shield","Shadow Ball","special_attack",.40,.58], ["silcoon","String Shot","physical_attack",.25,.45], ["spewpa","String Shot","physical_attack",.25,.45], ["sinistea","Shadow Ball","special_attack",.30,.52], ["unown","Hidden Power","special_attack",.30,.52], ["chandelure-mega","Ember","special_attack",.32,.55], ["chandelure-mega","Shadow Ball","special_attack",.32,.55], ["runerigus","Shadow Ball","special_attack",.48,.62], ["starmie-mega","Bubble Beam","special_attack",.32,.55], ["starmie-mega","Water Pulse","special_attack",.32,.55], ["venonat","Sludge Bomb","special_attack",.34,.55], ["venonat","Screech","special_attack",.34,.55], ["venonat","Supersonic","special_attack",.34,.55], ["flabebe","Disarming Voice","physical_attack_2",.25,.45], ["dodrio","Growl","special_attack",.30,.50], ["dodrio","Supersonic","special_attack",.30,.50], ["doduo","Growl","special_attack",.36,.58], ["doduo","Supersonic","special_attack",.36,.58], ["gastly","Shadow Ball","special_attack",.42,.65], ["cubone","Growl","special_attack",.14,.22], ["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
+	for route: Array in [["gimmighoul","Shadow Ball","special_attack",0.42,0.55],["rolycoly","Mud-Slap","physical_attack_2",0.45,0.65],["voltorb","Screech","special_attack",0.35,0.55],["voltorb-hisui","Screech","physical_attack",0.43,0.63],["diglett","Growl","special_attack",0.55,0.75],["diglett","Screech","special_attack",0.55,0.75],["diglett","Sludge Bomb","special_attack",0.55,0.75],["diglett-alola","Growl","special_attack",0.55,0.75],["diglett-alola","Screech","special_attack",0.55,0.75],["diglett-alola","Sludge Bomb","special_attack",0.55,0.75],["dugtrio","Growl","physical_attack",0.4,0.6],["dugtrio","Screech","physical_attack",0.4,0.6],["dugtrio","Sludge Bomb","physical_attack",0.4,0.6],["dugtrio-alola","Growl","physical_attack",0.4,0.6],["dugtrio-alola","Screech","physical_attack",0.4,0.6],["dugtrio-alola","Sludge Bomb","physical_attack",0.4,0.6], ["magnemite","Screech","special_attack",0.3,0.52], ["magnemite","Supersonic","special_attack",0.3,0.52], ["magnezone","Screech","physical_attack",0.3,0.52], ["magnezone","Supersonic","physical_attack",0.3,0.52], ["lampent","Shadow Ball","physical_attack_2",0.4,0.6], ["lampent","Ember","physical_attack_2",0.4,0.6], ["chandelure","Shadow Ball","physical_attack",0.42,0.60], ["chandelure","Ember","physical_attack",0.42,0.60], ["bronzor","Shadow Ball","special_attack",0.35,0.55], ["bronzong","Shadow Ball","special_attack",0.25,0.5], ["cascoon","String Shot","special_attack",0.25,0.45], ["kakuna","String Shot","special_attack",0.25,0.45], ["silcoon","Poison Sting","physical_attack_2",.35,.50], ["honedge","Screech","special_attack",.40,.58], ["doublade","Screech","special_attack",.40,.58], ["aegislash-blade","Screech","special_attack",.40,.58], ["aegislash-shield","Screech","special_attack",.40,.58], ["aegislash-blade","Shadow Ball","special_attack",.40,.58], ["aegislash-shield","Shadow Ball","special_attack",.40,.58], ["silcoon","String Shot","physical_attack",.25,.45], ["spewpa","String Shot","physical_attack",.25,.45], ["sinistea","Shadow Ball","special_attack",.30,.52], ["unown","Hidden Power","special_attack",.30,.52], ["chandelure-mega","Ember","special_attack",.32,.55], ["chandelure-mega","Shadow Ball","special_attack",.32,.55], ["runerigus","Shadow Ball","special_attack",.48,.62], ["starmie-mega","Bubble Beam","special_attack",.32,.55], ["starmie-mega","Water Pulse","special_attack",.32,.55], ["venonat","Sludge Bomb","special_attack",.34,.55], ["venonat","Screech","special_attack",.34,.55], ["venonat","Supersonic","special_attack",.34,.55], ["flabebe","Disarming Voice","physical_attack_2",.25,.45], ["dodrio","Growl","special_attack",.30,.50], ["dodrio","Supersonic","special_attack",.30,.50], ["doduo","Growl","special_attack",.36,.58], ["doduo","Supersonic","special_attack",.36,.58], ["gastly","Shadow Ball","special_attack",.42,.65], ["cubone","Growl","special_attack",.14,.22], ["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -106,11 +106,15 @@ func _run() -> void:
 			effect.set_process(false)
 			assert(is_equal_approx(effect.launch,timing.launch_frame/60.0))
 			assert(is_equal_approx(effect.impact,timing.impact_frame/60.0))
+			if route[0] == "rolycoly":
+				assert(is_equal_approx(timing.projectile_arc_height,.05))
+				assert(is_equal_approx(effect.projectile_arc_height,.05))
 			effect.cancel()
 			var doll := Doll.new()
 			stage.world.add_child(doll)
 			stage.substitute_models[slot] = doll
 			assert(not stage.move_timing(route[1],actor).has("contact_yaw_degrees"))
+			assert(not stage.move_timing(route[1],actor).has("projectile_arc_height"))
 			doll.free()
 			stage.substitute_models[slot] = null
 	assert(Attachments.choreography_for("vikavolt","hyperbeam","special_attack").is_empty())
@@ -118,7 +122,7 @@ func _run() -> void:
 	assert(Attachments.action_for("revavroom","sludgebomb",{"physical_attack_2":{}}).is_empty())
 	assert(Attachments.choreography_for("sandslash","icebeam","special_attack").is_empty())
 	assert(Attachments.choreography_for("sandslash-alola","blizzard","special_attack").is_empty())
-	for route: Array in [["voltorb-hisui","Solar Beam","physical_attack",0.43,0.55,0.65],["diglett-alola","Flash Cannon","special_attack",0.55,0.6,0.66],["dugtrio","Hyper Beam","physical_attack",0.4,0.55,0.7],["dugtrio-alola","Hyper Beam","physical_attack",0.4,0.55,0.7],["dugtrio-alola","Flash Cannon","physical_attack",0.4,0.55,0.7], ["magnemite","Flash Cannon","special_attack",0.3,0.45,0.62], ["magnezone","Flash Cannon","physical_attack",0.3,0.45,0.62], ["magnezone","Hyper Beam","physical_attack",0.3,0.45,0.62], ["lampent","Flamethrower","physical_attack_2",0.4,0.55,0.7], ["lampent","Solar Beam","physical_attack_2",0.4,0.55,0.7], ["chandelure","Flamethrower","physical_attack",0.42,0.52,0.6], ["chandelure","Solar Beam","physical_attack",0.42,0.52,0.6], ["chandelure","Hyper Beam","physical_attack",0.42,0.52,0.6], ["bronzor","Flash Cannon","special_attack",0.35,0.48,0.65], ["bronzor","Solar Beam","special_attack",0.35,0.48,0.65], ["bronzong","Flash Cannon","special_attack",0.25,0.45,0.65], ["bronzong","Solar Beam","special_attack",0.25,0.45,0.65], ["bronzong","Hyper Beam","special_attack",0.25,0.45,0.65], ["honedge","Flash Cannon","special_attack",.40,.52,.65], ["doublade","Flash Cannon","special_attack",.40,.52,.65], ["aegislash-blade","Flash Cannon","special_attack",.40,.52,.65], ["aegislash-shield","Flash Cannon","special_attack",.40,.52,.65], ["aegislash-blade","Hyper Beam","special_attack",.40,.52,.65], ["aegislash-shield","Hyper Beam","special_attack",.40,.52,.65], ["chandelure-mega","Hyper Beam","special_attack",.32,.48,.65], ["chandelure-mega","Solar Beam","special_attack",.32,.48,.65], ["runerigus","Hyper Beam","special_attack",.48,.55,.65], ["wugtrio","Water Gun","special_attack",.32,.45,.62], ["wugtrio","Ice Beam","special_attack",.32,.45,.62], ["wugtrio","Hyper Beam","special_attack",.32,.45,.62], ["magneton","Hyper Beam","special_attack",.32,.48,.65], ["magneton","Flash Cannon","special_attack",.32,.48,.65], ["starmie-mega","Water Gun","special_attack",.32,.48,.65], ["starmie-mega","Ice Beam","special_attack",.32,.48,.65], ["starmie-mega","Hyper Beam","special_attack",.32,.48,.65], ["starmie-mega","Flash Cannon","special_attack",.32,.48,.65], ["starmie-mega","Scald","special_attack",.32,.48,.65], ["mamoswine","Hyper Beam","special_attack",.34,.48,.62], ["mamoswine","Ice Beam","special_attack",.34,.48,.62], ["venonat","Solar Beam","special_attack",.34,.48,.62], ["flabebe","Solar Beam","physical_attack_2",.25,.45,.60], ["hydrapple","Hyper Beam","special_attack",.38,.46,.55], ["hydrapple","Solar Beam","special_attack",.38,.46,.55], ["hydrapple","Dragon Breath","special_attack",.38,.46,.55], ["dodrio","Hyper Beam","special_attack",.30,.50,.70], ["electrode-hisui","Hyper Beam","physical_attack",.28,.42,.60], ["kyurem","Ice Beam","special_attack",.30,.45,.60], ["latios","Ice Beam","special_attack",.38,.50,.65], ["klefki","Flash Cannon","special_attack",.30,.45,.60], ["spiritomb","Hyper Beam","special_attack",.38,.50,.68], ["mareanie","Ice Beam","physical_attack",.60,.65,.72], ["arboliva","Solar Beam","physical_attack_2",.14,.22,.32], ["arboliva","Hyper Beam","physical_attack_2",.14,.22,.32], ["cubone","Water Gun","special_attack",.14,.22,.30], ["stunfisk","Water Gun","physical_attack",.12,.22,.28], ["snivy","Solar Beam","special_attack",.38,.48,.62], ["swinub","Ice Beam","special_attack",.34,.45,.58], ["steelix","Hyper Beam","special_attack",.42,.60,.74], ["stonjourner","Hyper Beam","special_attack",.38,.50,.66], ["mandibuzz","Hyper Beam","special_attack",.42,.60,.74], ["skarmory","Hyper Beam","special_attack",.30,.42,.54], ["skarmory-mega","Hyper Beam","special_attack",.18,.25,.32], ["sandaconda","Hyper Beam","physical_attack_2",.12,.22,.28], ["archaludon","Hyper Beam","special_attack",.18,.24,.29], ["avalugg-hisui","Ice Beam","special_attack",.33,.42,.50], ["grumpig","Hyper Beam","special_attack",.10,.22,.30], ["wyrdeer","Hyper Beam","special_attack",.17,.22,.26], ["houndstone","Hyper Beam","special_attack",.42,.60,.72], ["sudowoodo","Hyper Beam","special_attack",.42,.60,.80], ["cetoddle","Ice Beam","physical_attack",.10,.18,.25], ["lugia","Hyper Beam","special_attack",.27,.40,.53]]:
+	for route: Array in [["meltan","Flash Cannon","special_attack",0.32,0.48,0.65],["melmetal","Flash Cannon","special_attack",0.38,0.5,0.65],["melmetal","Hyper Beam","special_attack",0.38,0.5,0.65],["melmetal","Ice Beam","special_attack",0.38,0.5,0.65],["melmetal","Solar Beam","special_attack",0.38,0.5,0.65],["nosepass","Flash Cannon","special_attack",0.3,0.48,0.65],["nosepass","Volt Switch","special_attack",0.3,0.48,0.65],["nacli","Flash Cannon","special_attack",0.35,0.48,0.65],["naclstack","Flash Cannon","special_attack",0.35,0.48,0.65],["naclstack","Hyper Beam","special_attack",0.35,0.48,0.65],["voltorb-hisui","Solar Beam","physical_attack",0.43,0.55,0.65],["diglett-alola","Flash Cannon","special_attack",0.55,0.6,0.66],["dugtrio","Hyper Beam","physical_attack",0.4,0.55,0.7],["dugtrio-alola","Hyper Beam","physical_attack",0.4,0.55,0.7],["dugtrio-alola","Flash Cannon","physical_attack",0.4,0.55,0.7], ["magnemite","Flash Cannon","special_attack",0.3,0.45,0.62], ["magnezone","Flash Cannon","physical_attack",0.3,0.45,0.62], ["magnezone","Hyper Beam","physical_attack",0.3,0.45,0.62], ["lampent","Flamethrower","physical_attack_2",0.4,0.55,0.7], ["lampent","Solar Beam","physical_attack_2",0.4,0.55,0.7], ["chandelure","Flamethrower","physical_attack",0.42,0.52,0.6], ["chandelure","Solar Beam","physical_attack",0.42,0.52,0.6], ["chandelure","Hyper Beam","physical_attack",0.42,0.52,0.6], ["bronzor","Flash Cannon","special_attack",0.35,0.48,0.65], ["bronzor","Solar Beam","special_attack",0.35,0.48,0.65], ["bronzong","Flash Cannon","special_attack",0.25,0.45,0.65], ["bronzong","Solar Beam","special_attack",0.25,0.45,0.65], ["bronzong","Hyper Beam","special_attack",0.25,0.45,0.65], ["honedge","Flash Cannon","special_attack",.40,.52,.65], ["doublade","Flash Cannon","special_attack",.40,.52,.65], ["aegislash-blade","Flash Cannon","special_attack",.40,.52,.65], ["aegislash-shield","Flash Cannon","special_attack",.40,.52,.65], ["aegislash-blade","Hyper Beam","special_attack",.40,.52,.65], ["aegislash-shield","Hyper Beam","special_attack",.40,.52,.65], ["chandelure-mega","Hyper Beam","special_attack",.32,.48,.65], ["chandelure-mega","Solar Beam","special_attack",.32,.48,.65], ["runerigus","Hyper Beam","special_attack",.48,.55,.65], ["wugtrio","Water Gun","special_attack",.32,.45,.62], ["wugtrio","Ice Beam","special_attack",.32,.45,.62], ["wugtrio","Hyper Beam","special_attack",.32,.45,.62], ["magneton","Hyper Beam","special_attack",.32,.48,.65], ["magneton","Flash Cannon","special_attack",.32,.48,.65], ["starmie-mega","Water Gun","special_attack",.32,.48,.65], ["starmie-mega","Ice Beam","special_attack",.32,.48,.65], ["starmie-mega","Hyper Beam","special_attack",.32,.48,.65], ["starmie-mega","Flash Cannon","special_attack",.32,.48,.65], ["starmie-mega","Scald","special_attack",.32,.48,.65], ["mamoswine","Hyper Beam","special_attack",.34,.48,.62], ["mamoswine","Ice Beam","special_attack",.34,.48,.62], ["venonat","Solar Beam","special_attack",.34,.48,.62], ["flabebe","Solar Beam","physical_attack_2",.25,.45,.60], ["hydrapple","Hyper Beam","special_attack",.38,.46,.55], ["hydrapple","Solar Beam","special_attack",.38,.46,.55], ["hydrapple","Dragon Breath","special_attack",.38,.46,.55], ["dodrio","Hyper Beam","special_attack",.30,.50,.70], ["electrode-hisui","Hyper Beam","physical_attack",.28,.42,.60], ["kyurem","Ice Beam","special_attack",.30,.45,.60], ["latios","Ice Beam","special_attack",.38,.50,.65], ["klefki","Flash Cannon","special_attack",.30,.45,.60], ["spiritomb","Hyper Beam","special_attack",.38,.50,.68], ["mareanie","Ice Beam","physical_attack",.60,.65,.72], ["arboliva","Solar Beam","physical_attack_2",.14,.22,.32], ["arboliva","Hyper Beam","physical_attack_2",.14,.22,.32], ["cubone","Water Gun","special_attack",.14,.22,.30], ["stunfisk","Water Gun","physical_attack",.12,.22,.28], ["snivy","Solar Beam","special_attack",.38,.48,.62], ["swinub","Ice Beam","special_attack",.34,.45,.58], ["steelix","Hyper Beam","special_attack",.42,.60,.74], ["stonjourner","Hyper Beam","special_attack",.38,.50,.66], ["mandibuzz","Hyper Beam","special_attack",.42,.60,.74], ["skarmory","Hyper Beam","special_attack",.30,.42,.54], ["skarmory-mega","Hyper Beam","special_attack",.18,.25,.32], ["sandaconda","Hyper Beam","physical_attack_2",.12,.22,.28], ["archaludon","Hyper Beam","special_attack",.18,.24,.29], ["avalugg-hisui","Ice Beam","special_attack",.33,.42,.50], ["grumpig","Hyper Beam","special_attack",.10,.22,.30], ["wyrdeer","Hyper Beam","special_attack",.17,.22,.26], ["houndstone","Hyper Beam","special_attack",.42,.60,.72], ["sudowoodo","Hyper Beam","special_attack",.42,.60,.80], ["cetoddle","Ice Beam","physical_attack",.10,.18,.25], ["lugia","Hyper Beam","special_attack",.27,.40,.53]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -203,7 +207,9 @@ func _run() -> void:
 
 	_check_stream_scaling()
 	_check_orb_scaling()
-	_check_hidden_power_scaling()
+	_check_staged_projectile_scaling("Hidden Power")
+	_check_staged_projectile_scaling("Mud-Slap")
+	_check_projectile_arc()
 	_check_string_source()
 	_check_sting_scaling()
 	_check_ember_scaling()
@@ -211,7 +217,7 @@ func _run() -> void:
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=158 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=170 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()
 
 func _check_stream_scaling() -> void:
@@ -286,7 +292,7 @@ func _check_orb_scaling() -> void:
 				assert(baseline[index].origin.is_equal_approx(smaller[small_index].origin), "Orb charge and flight centers are unchanged")
 				for axis in 3: assert(is_equal_approx(smaller[small_index].basis[axis].length(),baseline[index].basis[axis].length()*.25))
 
-func _check_hidden_power_scaling() -> void:
+func _check_staged_projectile_scaling(move_name: String) -> void:
 	var captures := []
 	for scale_value: float in [-1.0, 1.0, .25]:
 		var effect := preload("res://scripts/battle/battle_ui/staged_move_effect_3d.gd").new()
@@ -294,7 +300,7 @@ func _check_hidden_power_scaling() -> void:
 		var timing := {"frames":60.0,"launch_frame":12.0,"impact_frame":27.0}
 		if scale_value > 0: timing.emission_scale = scale_value
 		contact_seconds = 0.0
-		effect.start("Hidden Power", timing, {"show_impact":true}, func(): return contact_seconds, func(): return {"source":Vector3(1,1,0),"target":Vector3(4,1,0),"radius":.5}, func(): return true)
+		effect.start(move_name, timing, {"show_impact":true}, func(): return contact_seconds, func(): return {"source":Vector3(1,1,0),"target":Vector3(4,1,0),"radius":.5}, func(): return true)
 		effect.set_process(false)
 		var phases := []
 		for seconds: float in [.1,.3,.75]:
@@ -417,3 +423,38 @@ func _check_ember_scaling() -> void:
 				assert(baseline.is_equal_approx(smaller), "Ember target impact retains its size")
 			else:
 				for axis in 3: assert(is_equal_approx(smaller.basis[axis].length(),baseline.basis[axis].length()*.2))
+
+func _check_projectile_arc() -> void:
+	var captures := []
+	for height: float in [-1,1.8,.05,0]:
+		var effect := preload("res://scripts/battle/battle_ui/staged_move_effect_3d.gd").new()
+		stage.world.add_child(effect)
+		var timing := {"frames":60.0,"launch_frame":12.0,"impact_frame":27.0}
+		if height >= 0: timing.projectile_arc_height = height
+		contact_seconds = 0
+		effect.start("Mud-Slap",timing,{"show_impact":true},func():return contact_seconds,func():return {"source":Vector3(1,1,0),"target":Vector3(4,1,0),"radius":.5},func():return true)
+		effect.set_process(false)
+		assert(is_zero_approx(effect._projectile_arc_offset(0)))
+		assert(is_zero_approx(effect._projectile_arc_offset(1)))
+		assert(is_equal_approx(effect._projectile_arc_offset(.5),height if height >= 0 else 1.8))
+		var phases := []
+		for seconds: float in [.1,.325,.75]:
+			contact_seconds = seconds
+			effect._process(0)
+			var transforms: Array[Transform3D] = []
+			for index in effect.cursor: transforms.append(effect.pieces[index].transform)
+			assert(not transforms.is_empty())
+			phases.append(transforms)
+		captures.append(phases)
+		effect.cancel()
+	for phase in 3:
+		assert(captures[0][phase].size() == captures[1][phase].size())
+		for index in captures[0][phase].size():
+			var baseline: Transform3D = captures[0][phase][index]
+			assert(baseline.is_equal_approx(captures[1][phase][index]),"Default projectile arc is preserved")
+			for variant in [2,3]:
+				var adjusted: Transform3D = captures[variant][phase][index]
+				assert(baseline.basis.is_equal_approx(adjusted.basis),"Arc adjustment does not resize geometry")
+				assert(is_equal_approx(baseline.origin.x,adjusted.origin.x) and is_equal_approx(baseline.origin.z,adjusted.origin.z))
+				if phase != 1: assert(baseline.is_equal_approx(adjusted),"Charge and target impact are independent of arc height")
+	assert(is_equal_approx(captures[2][1][0].origin.y-captures[3][1][0].origin.y,.05))

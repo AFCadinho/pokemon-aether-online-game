@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1100 species/forms.
-- No anatomical attachment profile: 100 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 990 species/forms.
+- At least one configured anatomical attachment: 1107 species/forms.
+- No anatomical attachment profile: 93 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 991 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -371,6 +371,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | gholdengo | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | gible | hand, left_hand, mouth | Same attachment profile |
 | gigalith | mouth | Same attachment profile |
+| gimmighoul | mouth | Same attachment profile |
 | girafarig | foot, left_foot, mouth | Same attachment profile |
 | giratina | mouth | Same attachment profile |
 | glaceon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -604,7 +605,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | meditite | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | meganium | hand, left_hand, mouth | Same attachment profile |
 | meganium-mega | hand, left_hand, mouth | Same attachment profile |
+| melmetal | eye | Same attachment profile |
 | meloetta | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| meltan | eye | Same attachment profile |
 | meowscarada | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | meowstic-m-mega | hand, left_hand, mouth | Same attachment profile |
 | meowstic-male | hand, left_hand, mouth | Same attachment profile |
@@ -649,6 +652,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | munkidori | hand, left_hand, mouth | Same attachment profile |
 | munna | mouth | Same attachment profile |
 | murkrow | hand, left_hand, mouth | Same attachment profile |
+| nacli | face | Same attachment profile |
+| naclstack | face | Same attachment profile |
 | naganadel | hand, left_hand, mouth | Same attachment profile |
 | natu | mouth | Same attachment profile |
 | nickit | mouth | Same attachment profile |
@@ -666,6 +671,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | noctowl | mouth | Same attachment profile |
 | noibat | mouth | Same attachment profile |
 | noivern | mouth | Same attachment profile |
+| nosepass | nose | Same attachment profile |
 | numel | hand, left_hand, mouth | Same attachment profile |
 | nuzleaf | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | nymble | foot, left_foot | Same attachment profile |
@@ -797,6 +803,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | roaring-moon | mouth | Same attachment profile |
 | rockruff | hand, left_hand, mouth | Same attachment profile |
 | roggenrola | mouth | Same attachment profile |
+| rolycoly | wheel_front | Same attachment profile |
 | rookidee | mouth | Same attachment profile |
 | roselia | mouth | Same attachment profile |
 | roserade | mouth | Same attachment profile |

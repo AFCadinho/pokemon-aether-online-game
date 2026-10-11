@@ -23,9 +23,11 @@ var combo_spotlight: ShaderMaterial
 var combo_beats_drawn: Array[int] = []
 var emission_end := -1.0
 var sound_launch_sources: Array[Vector3] = []
+var projectile_arc_height := 1.8
 
 func start(move: String, timing: Dictionary, options: Dictionary, native_clock: Callable, positions: Callable, guard: Callable) -> void:
 	emission_end = float(timing.emission_end_frame) / 60.0 if timing.has("emission_end_frame") else -1.0
+	projectile_arc_height = float(timing.get("projectile_arc_height", 1.8))
 	super.start(move, timing, options, native_clock, positions, guard)
 
 func _geometry_scale() -> float:return presentation_scale
@@ -264,7 +266,7 @@ func _projectile_stage(flight: float,after: float,alpha: float,facing: Basis,sid
 	for i in count:
 		var p := smoothstep(0,1,clampf(flight-i*.025,0,1))
 		var point := origin.lerp(aim,p)+side*sin(p*PI)*(i-(count-1)*.5)*.45
-		if motif=="arcing-bomb":point.y+=sin(p*PI)*1.8
+		if motif=="arcing-bomb":point.y+=_projectile_arc_offset(p)
 		if motif=="leaf-fan":_piece(feather,surface,point,Vector3(.55,.45,.4)*fade*emission_scale,axis*Basis(Vector3.UP,elapsed*7+i))
 		elif motif=="spinning-shards":
 			_piece(prism,surface,point,Vector3(.2,.5,.25)*fade*emission_scale,axis*Basis(Vector3.UP,elapsed*8+i))
@@ -276,8 +278,11 @@ func _projectile_stage(flight: float,after: float,alpha: float,facing: Basis,sid
 		for j in 5:
 			var q := maxf(0,p-j*.025)
 			var tail := origin.lerp(aim,q)+side*sin(q*PI)*(i-(count-1)*.5)*.45
-			if motif=="arcing-bomb":tail.y+=sin(q*PI)*1.8
+			if motif=="arcing-bomb":tail.y+=_projectile_arc_offset(q)
 			_source_sprite(tail,((.65-j*.09) if count==1 else .28)*emission_scale,_cast_art(),fmod(elapsed+j*.13,1),alpha*fade*(.55-j*.07),facing,i+j)
+
+func _projectile_arc_offset(fraction: float) -> float:
+	return sin(fraction*PI)*projectile_arc_height
 
 func _wave_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
 	if motif=="heart-stream":_status_stage(flight,after,alpha,facing,side,axis);return

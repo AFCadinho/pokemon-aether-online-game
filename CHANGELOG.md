@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate selected attacks for Gimmighoul, Meltan, Melmetal, Nosepass, Nacli, Naclstack and Rolycoly, using their mouth, eye, nose, face or wheel. Adjust Rolycoly’s Mud-Slap arc to leave in front of its wheel.
+
 - Calibrate selected face attack origins for Voltorb, Hisuian Voltorb, Diglett, Dugtrio and their Alolan forms, including separate bindings for Dugtrio heads and adjusted Hisuian Voltorb and Alolan Diglett beam timing.
 
 - Calibrate selected eye and face attack origins for Magnemite, Magnezone, Lampent, Chandelure, Bronzor, Bronzong, Cascoon and Kakuna. Adjust Lampent and Chandelure Ember size and delay Chandelure casts until its face turns forward.

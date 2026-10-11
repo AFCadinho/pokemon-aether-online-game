@@ -52,10 +52,16 @@ Fire, ice, Flash Cannon, staged beams and Water Gun accept `emission_scale` (pos
 most 4). It adjusts the source stream width, muzzle and traveling particles;
 endpoints and target impact sizes remain unchanged. Water Gun additionally
 accepts `water_stream_arc_height` (0–4 world units).
-The arc is a parabola with fixed source and target endpoints. Stunfisk uses
+The Water Gun arc is a parabola with fixed source and target endpoints. Stunfisk uses
 these settings with an individually selected early native pose so its upward
 mouth can emit a narrow stream clear of its body. These settings belong to the
 exact form and move; a visible Substitute does not inherit them.
+
+Mud-Slap accepts `emission_scale` and `projectile_arc_height` (0–4 world units).
+Its projectile and trail use a sinusoidal arc with fixed endpoints; the default
+height remains 1.8. Rolycoly uses .05 so the projectile leaves its low wheel
+source without immediately rising through its body. Target impact size remains
+unchanged. Other staged projectiles retain their existing arc.
 
 The [full catalog coverage audit](move-attachment-coverage.md) lists every
 supported species/form and distinguishes configured attachments from bounds
@@ -132,8 +138,18 @@ runtime catalog. The tools read those scenes without modifying them:
   inspect a different target height or avoid the opponent obscuring the source.
   It records both runtime revisions and adds `-vs-SPECIES` to the output name;
   omitting it preserves the same-species comparison.
+  `--hide-effects` preserves the native pose and contact movement while hiding
+  the effect art, so a large hit graphic cannot conceal an approach gap.
+  The capture records `effects_hidden`; this mode does not validate the VFX.
+  `--neutral-reflections` adds a neutral sky reflection for inspecting metallic
+  surfaces and records `neutral_reflections`. It preserves authored materials
+  and is an offline review option; it does not change production lighting.
 - `check_calibrated_move_attachments.gd`: binding and finite-coordinate checks
   at 21 moments per native clip, including normal/shiny consistency.
+  Inspect the engine log as well as the JSON result: the Diglett/Alolan Diglett
+  batch currently reports null-material errors while freeing a model in both
+  headless and GPU runs, despite zero binding errors. These cleanup errors
+  remain unresolved; a clean binding report is not an engine-error-free run.
 - `tools/audit_move_attachment_learnsets.gd`: supported move/part coverage
   against local learnsets, including moves still using bounds fallbacks. Each
   move also records the actual stage-selected native clip and whether that

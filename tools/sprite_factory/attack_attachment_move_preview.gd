@@ -13,6 +13,7 @@ var camera_yaw := 0.0
 var camera_scale := 1.0
 var camera_frame := "source"
 var hide_effects := false
+var neutral_reflections := false
 var requested_fractions: Array[float] = []
 var viewport: SubViewport
 var world: Node3D
@@ -25,6 +26,7 @@ func _init() -> void:
 		if args[i] in ["--catalog", "--output", "--species", "--target-species", "--move", "--camera-yaw", "--camera-scale", "--camera-frame", "--fractions"] and i + 1 >= args.size():
 			printerr("Missing argument: ", args[i]); quit(1); return
 		if args[i] == "--hide-effects": hide_effects = true
+		if args[i] == "--neutral-reflections": neutral_reflections = true
 		if args[i] == "--catalog": catalog_path = args[i+1]
 		if args[i] == "--output": output = args[i+1]
 		if args[i] == "--species": species = args[i+1]
@@ -80,6 +82,17 @@ func _run() -> void:
 	environment.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	environment.environment.ambient_light_color = Color.WHITE
 	environment.environment.ambient_light_energy = .7
+	if neutral_reflections:
+		# Metallic surfaces need reflected light to expose their silhouette detail.
+		# This is review lighting; the model's authored materials remain intact.
+		var sky_material := ProceduralSkyMaterial.new()
+		sky_material.sky_top_color = Color(.6,.6,.6)
+		sky_material.sky_horizon_color = Color(.8,.8,.8)
+		sky_material.ground_horizon_color = Color(.8,.8,.8)
+		sky_material.ground_bottom_color = Color(.25,.25,.25)
+		environment.environment.sky = Sky.new()
+		environment.environment.sky.sky_material = sky_material
+		environment.environment.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
 	world.add_child(environment)
 	var light := DirectionalLight3D.new(); world.add_child(light)
 	light.rotation_degrees = Vector3(-30,-30,0)
@@ -160,7 +173,7 @@ func _run() -> void:
 	if target_species != species: filename += "-vs-" + target_species
 	assert(sheet.save_png(output.path_join(filename+".png")) == OK)
 	var file := FileAccess.open(output.path_join(filename+".json"),FileAccess.WRITE)
-	file.store_string(JSON.stringify({"species":species,"target_species":target_species,"target_runtime_sha256":target_model.runtime_sha256,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"effects_hidden":hide_effects,"camera_frame":camera_frame,"camera_scale":camera_scale,"camera_yaw":rad_to_deg(camera_yaw),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
+	file.store_string(JSON.stringify({"species":species,"target_species":target_species,"target_runtime_sha256":target_model.runtime_sha256,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"effects_hidden":hide_effects,"neutral_reflections":neutral_reflections,"camera_frame":camera_frame,"camera_scale":camera_scale,"camera_yaw":rad_to_deg(camera_yaw),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
 	file.close()
 	effect.cancel(); await process_frame
 	stage.world = null; stage.camera = null; stage.free()

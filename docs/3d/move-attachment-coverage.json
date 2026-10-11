@@ -62,14 +62,14 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1100,
+		"with_any_attachment": 1107,
 		"with_beak_tip": 6,
 		"with_cannon": 2,
 		"with_cannons": 1,
 		"with_casting": 2,
 		"with_electric_body": 1,
-		"with_eye": 7,
-		"with_face": 22,
+		"with_eye": 9,
+		"with_face": 24,
 		"with_face_primary": 2,
 		"with_flower_tip": 1,
 		"with_foot": 307,
@@ -82,15 +82,17 @@
 		"with_left_hand_upper": 1,
 		"with_magnet_poles": 1,
 		"with_mandibles": 2,
-		"with_mouth": 990,
+		"with_mouth": 991,
 		"with_mouth_primary": 1,
 		"with_mouth_red": 1,
 		"with_muzzle": 5,
+		"with_nose": 1,
 		"with_olive_nozzle": 1,
 		"with_spike": 1,
 		"with_spirit": 1,
 		"with_vines": 3,
-		"without_attachments": 100
+		"with_wheel_front": 1,
+		"without_attachments": 93
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -15946,6 +15948,39 @@
 				]
 			]
 		},
+		"gimmighoul": {
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.0317410938441753,
+							-0.0001863789075287,
+							0.00122174178250134
+						],
+						"weight": 0.360622971341081
+					},
+					{
+						"bone": "head",
+						"offset": [
+							0.0210705418139696,
+							-0.00532400980591774,
+							0.0172048695385456
+						],
+						"weight": 0.162703770291222
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.0294364001601934,
+							0.00255724973976612,
+							-0.0010797370923683
+						],
+						"weight": 0.476673258367696
+					}
+				]
+			]
+		},
 		"girafarig": {
 			"foot": [
 				[
@@ -27799,6 +27834,21 @@
 				]
 			]
 		},
+		"melmetal": {
+			"eye": [
+				[
+					{
+						"bone": "eyeball_b",
+						"offset": [
+							0.0787684097886086,
+							-0.01256840582937,
+							0.0309778936207294
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"meloetta": {
 			"foot": [
 				[
@@ -27871,6 +27921,21 @@
 							0.00277596821679152
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"meltan": {
+			"eye": [
+				[
+					{
+						"bone": "eyeball_b",
+						"offset": [
+							0.0173314083367586,
+							0.00119407381862402,
+							0.00458536297082901
+						],
+						"weight": 1.0
 					}
 				]
 			]
@@ -30163,6 +30228,36 @@
 				]
 			]
 		},
+		"nacli": {
+			"face": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							-0.0729655027389526,
+							0.00280537526123226,
+							0.111672729253769
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
+		"naclstack": {
+			"face": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							0.451100677251816,
+							0.00321786664426327,
+							-0.0564974248409271
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"naganadel": {
 			"hand": [
 				[
@@ -30741,6 +30836,21 @@
 							0.00322689325548708
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"nosepass": {
+			"nose": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							0.250465005636215,
+							-0.0160230956971645,
+							0.611847698688507
+						],
+						"weight": 1.0
 					}
 				]
 			]
@@ -36492,6 +36602,21 @@
 							0.0,
 							0.0,
 							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
+		"rolycoly": {
+			"wheel_front": [
+				[
+					{
+						"bone": "feeler_a_01",
+						"offset": [
+							0.0630005374550819,
+							0.00324710342101753,
+							0.108500428497791
 						],
 						"weight": 1.0
 					}
@@ -50210,8 +50335,8 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "50b9ee9ea3f9165158a0145ff5b9ea7e59cc222d7666da9b271565cba48004e9",
-		"scripts/battle/battle_ui/move_attachments_3d.gd": "0c17d3df7647b60f0ac0fce2b01400b7653d74cf4dc11b962c94e683f580604d",
+		"data/battle_move_attachments_3d.json": "5128736d5ffd6672e5021588a186566cb96f26320b8e932c87c1356c1ca0f2d3",
+		"scripts/battle/battle_ui/move_attachments_3d.gd": "ad4678cfc50ac1f520b1cc5330af3292ed0b0a30ed055c8f997cdc72cc830c37",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
 		"scripts/battle/battle_ui/screened_model_catalog.json": "e48e36f568932290b2b7f1f461e15391444d6e7821d48f6ef0c59ede5b36839d"
@@ -64440,8 +64565,83 @@
 			]
 		},
 		"gimmighoul": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "6344e45ebb454547ac646bfe51ff7e4681fa8d9f827642814c7f248181037675",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "e3310c0641858bdbba353bb36e2d145a83929199807b45ea0312722d06c0c68f",
+				"scope": "Individually projected upper and lower mouth edges in the open physical_attack_2 .20 pose; combined skin influences follow the mouth opening. Replaces the rejected off-centre face proposal. Marker reviewed in visible idle, early physical and special_attack .45 poses. Chest lid, coins, arms and chest rim obscure other poses; actual casting timing and clearance remain pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "43d08ae2fa21815419699a9812d0dcdae92528809730b04b15bf223aa5725a1b",
+					"landmarks": [
+						{
+							"action": "physical_attack_2",
+							"barycentric": [
+								0.227422888931485,
+								0.450960927179483,
+								0.321616183889032
+							],
+							"column": 0.0,
+							"distance": 0.0705527096360796,
+							"mesh": "pm1080_11_00/Skeleton3D/pm1080_11_00_body_mesh",
+							"pixel": [
+								246.0,
+								156.0
+							],
+							"surface": 0.0,
+							"triangle": 881.0,
+							"vertex_indices": [
+								518.0,
+								511.0,
+								522.0
+							],
+							"weight": 0.5
+						},
+						{
+							"action": "physical_attack_2",
+							"barycentric": [
+								0.312174284827947,
+								0.620824174000175,
+								0.0670015411718782
+							],
+							"column": 0.0,
+							"distance": 0.0731188612117297,
+							"mesh": "pm1080_11_00/Skeleton3D/pm1080_11_00_body_mesh",
+							"pixel": [
+								251.0,
+								216.0
+							],
+							"surface": 0.0,
+							"triangle": 843.0,
+							"vertex_indices": [
+								517.0,
+								560.0,
+								558.0
+							],
+							"weight": 0.5
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -73286,8 +73486,10 @@
 			]
 		},
 		"melmetal": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"eye"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -73342,8 +73544,10 @@
 			]
 		},
 		"meltan": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"eye"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -75050,16 +75254,20 @@
 			]
 		},
 		"nacli": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
 			]
 		},
 		"naclstack": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -75670,8 +75878,10 @@
 			]
 		},
 		"nosepass": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"nose"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -80220,8 +80430,10 @@
 			]
 		},
 		"rolycoly": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"wheel_front"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
