@@ -30,6 +30,14 @@
   },
   "complete": true,
   "fallback_pairs": 169,
+  "integrated_presenters": {
+    "battles": 32,
+    "complete": true,
+    "pairs": 16,
+    "previews": 128,
+    "report_sha256": "832dd75ad68e2b6bf8aae12ea023a680c4c0f2b0c6a4ef3605afd176fed41943",
+    "source_commit": "d11341968"
+  },
   "limitations": [
     "Linux only; native Windows, macOS and physical Android not tested.",
     "GPU/presenter checks cover 16 selected pairs; cold structural and motion checks cover all 1031.",
@@ -9366,7 +9374,8 @@
     "build": ".tmp/shared-geometry-collection/full-v2",
     "gpu": ".tmp/shared-geometry-collection/gpu-v1",
     "installation": ".tmp/shared-geometry-collection/installation-v3",
-    "installation_input": ".tmp/shared-geometry-collection/install-input.json"
+    "installation_input": ".tmp/shared-geometry-collection/install-input.json",
+    "integrated_presenters": ".tmp/shared-geometry-collection/integrated-actors-v1"
   },
   "saved_download_bytes": 1148478717,
   "saved_percent": 11.673837984700658,

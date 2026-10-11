@@ -21,6 +21,9 @@ focused Mobile Vulkan run on Linux / Godot 4.6.2 / NVIDIA RTX 3070 Laptop passed
 16 representative pairs. All 2,062 new appearances passed compiled source and
 profile binding checks, including eight corrected appearances and concurrent
 cold catalog lookups. Existing schema-1 and texture-collection checks also pass.
+After merging current development, the real presenter checks passed again for
+all 16 pairs (32 battles and 128 previews); the geometry implementation,
+installer and render comparator were unchanged.
 
 The real launcher/game installation check passed 17 pairs (the GPU selection
 plus Mega Dragonite's required base pair), decoding all 34 scenes. It exercised
