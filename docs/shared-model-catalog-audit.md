@@ -169,8 +169,11 @@ inherit placement, motion, attack routing and the original conservative cache
 admission cost. Gliscor, Mega Garchomp and Charmander additionally have existing
 hash-bound animation corrections for both appearances that must remain active.
 
-Full-catalog render and actor qualification, larger distinct-pack mount budgets,
-native Windows/macOS install/update/repair/cleanup and physical Android runtime
-qualification remain. The [Linux session/recovery checks](shared-model-stress.md)
+The subsequent [local catalog qualification](shared-model-catalog-qualification.md)
+adds candidate bindings and the full-catalog renderer/actor workflow, including
+unchanged-source diagnostics for pixel variability. Whole-catalog metadata
+limits, larger distinct-pack mount budgets, native Windows/macOS
+install/update/repair/cleanup and physical Android runtime qualification remain.
+The [Linux session/recovery checks](shared-model-stress.md)
 qualify the 16-pair pilot, not all new candidates. Full paired certification,
 publication and release promotion retain their separate authorization requirements.

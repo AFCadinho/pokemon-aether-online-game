@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mode", choices=["audit", "render", "pair"], required=True)
+    parser.add_argument("--mode", choices=["audit", "render", "pair", "catalog-render"], required=True)
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--timeout", type=int, default=240, help="Explicit cohort run limit in seconds")
@@ -33,7 +33,8 @@ def main():
         parser.error("Fresh log required")
     project_lock = (ROOT / ".tmp/diagnostic-project.lock").open("a+")
     try:
-        fcntl.flock(project_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        access = fcntl.LOCK_SH if args.mode == "catalog-render" else fcntl.LOCK_EX
+        fcntl.flock(project_lock, access | fcntl.LOCK_NB)
     except BlockingIOError:
         raise RuntimeError("Another diagnostic owns temporary project edits; run sequentially")
     project = ROOT / "project.godot"
@@ -46,13 +47,14 @@ def main():
 
     signal.signal(signal.SIGTERM, interrupt)
     try:
-        project.write_text(config)
+        if args.mode != "catalog-render":
+            project.write_text(config)
         command = ["godot", "--path", str(ROOT)]
         if args.mode in {"audit", "pair"}:
             command.append("--headless")
         else:
             command += ["--rendering-method", "mobile", "--resolution", "512x512"]
-        script = {"audit": "model_texture_sharing_probe", "render": "model_texture_render_probe", "pair": "model_pair_texture_probe"}[args.mode]
+        script = {"audit": "model_texture_sharing_probe", "render": "model_texture_render_probe", "pair": "model_pair_texture_probe", "catalog-render": "shared_model_catalog_render"}[args.mode]
         command += ["--script", f"res://tools/sprite_factory/{script}.gd", "--", str(source), str(output)]
         with log_path.open("w") as log:
             child = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT)
@@ -69,7 +71,8 @@ def main():
                     child.wait()
                 raise
     finally:
-        project.write_bytes(original)
+        if args.mode != "catalog-render":
+            project.write_bytes(original)
         project_lock.close()
     text = log_path.read_text()
     if re.search(r"(?:SCRIPT ERROR|^ERROR:)", text, re.M) or not (output / "report.json").is_file():

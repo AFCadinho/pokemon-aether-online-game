@@ -4,6 +4,7 @@ extends RefCounted
 const DATA = preload("res://resources/battle/model_animations/lossless_model_revisions.json")
 
 static func matches(identity: String, digest: String, originals: Dictionary) -> bool:
+	digest = preload("res://scripts/services/model_pair_pilot.gd").source_digest(identity, digest)
 	var original: String = originals.get(identity, "")
 	if original.is_empty() or digest.is_empty():
 		return false
