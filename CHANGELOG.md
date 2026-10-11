@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give the Emerald Luchador mask a black-and-gold wrestling-mask silhouette with forehead and cheek coverage, on both trainer models and all overworld poses.
+
 - Move Guild Base visitor requests away from the party panel into a compact upper-right notification, shown only while requests are pending; keep access settings at the base manager.
 
 - Add Aether Band: a permanent, untradeable held item sold once per account for 1,000 Gems in the Gift Store; restores 1 PP to every move of its holder after a wild victory.
