@@ -7,8 +7,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1080 species/forms.
-- No anatomical attachment profile: 120 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 1086 species/forms.
+- No anatomical attachment profile: 114 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 990 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
@@ -20,6 +20,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | absol-mega | hand, left_hand, mouth | Same attachment profile |
 | absol-mega-z | hand, left_hand, mouth | Same attachment profile |
 | accelgor | hand, left_hand, mouth | Same attachment profile |
+| aegislash-blade | eye | Same attachment profile |
+| aegislash-shield | eye | Same attachment profile |
 | aerodactyl | hand, left_hand, mouth | Same attachment profile |
 | aerodactyl-mega | mouth | Same attachment profile |
 | aggron | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -239,6 +241,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | dondozo | mouth | Same attachment profile |
 | donphan | hand, left_hand | Same attachment profile |
 | dottler | mouth | Same attachment profile |
+| doublade | eye | Same attachment profile |
 | dracovish | foot, mouth | Same attachment profile |
 | dracozolt | foot, hand, left_hand, mouth | Same attachment profile |
 | dragalge | mouth | Same attachment profile |
@@ -436,6 +439,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | hitmontop | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | ho-oh | mouth | Same attachment profile |
 | honchkrow | mouth | Same attachment profile |
+| honedge | eye | Same attachment profile |
 | hoopa | hand, left_hand, mouth | Same attachment profile |
 | hoothoot | mouth | Same attachment profile |
 | hoppip | mouth | Same attachment profile |
@@ -846,6 +850,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | shuckle | mouth | Same attachment profile |
 | shuppet | mouth | Same attachment profile |
 | sigilyph | mouth | Same attachment profile |
+| silcoon | face | Same attachment profile |
 | silicobra | mouth | Same attachment profile |
 | silvally | mouth | Same attachment profile |
 | simipour | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -897,6 +902,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | solrock | mouth | Same attachment profile |
 | spearow | mouth | Same attachment profile |
 | spectrier | foot, left_foot, mouth | Same attachment profile |
+| spewpa | face | Same attachment profile |
 | spheal | hand, left_hand, mouth | Same attachment profile |
 | spidops | foot, left_foot | Same attachment profile |
 | spinarak | mandibles | Same attachment profile |

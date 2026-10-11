@@ -69,6 +69,25 @@ func _run() -> void:
 			assert(Attachments.part_for(identity, move) == "gem")
 	assert(Attachments.part_for("starmie", "hyperbeam") == "gem")
 	assert(Attachments.definitions_for("starmie-mega", "gem") != Attachments.definitions_for("starmie", "gem"))
+	for species: String in ["honedge", "doublade", "aegislash-blade", "aegislash-shield"]:
+		for identity: String in [species, species+"@shiny"]:
+			var count := 2 if species == "doublade" else 1
+			assert(Attachments.definitions_for(identity,"eye").size() == count)
+			assert(Attachments.definitions_for(identity,"eye","special_attack").size() == count)
+			assert(Attachments.definitions_for(identity,"eye") != Attachments.definitions_for(identity,"eye","special_attack"))
+			assert(Attachments.definitions_for(identity,"mouth").is_empty())
+			for move_key: String in ["flashcannon","screech"]:
+				assert(Attachments.part_for(identity,move_key) == "eye")
+			if species.begins_with("aegislash"):
+				for move_key: String in ["hyperbeam","shadowball"]: assert(Attachments.part_for(identity,move_key) == "eye")
+	for species: String in ["silcoon","spewpa"]:
+		for identity: String in [species,species+"@shiny"]:
+			assert(Attachments.definitions_for(identity,"face").size() == 1)
+			assert(Attachments.definitions_for(identity,"mouth").is_empty())
+			for move_key: String in ["bugbite","stringshot"]:
+				assert(Attachments.part_for(identity,move_key) == "face")
+				assert(Attachments.action_for(identity,move_key,{"physical_attack":{}}) == "physical_attack")
+			assert(is_equal_approx(Attachments.choreography_for(identity,"stringshot","physical_attack").emission_scale,.25))
 	for identity: String in ["sinistea", "sinistea@shiny"]:
 		assert(Attachments.part_for(identity, "shadowball") == "spirit")
 		assert(Attachments.definitions_for(identity, "spirit").is_empty())

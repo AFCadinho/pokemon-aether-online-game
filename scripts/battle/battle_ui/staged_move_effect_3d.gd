@@ -341,13 +341,16 @@ func _status_stage(flight: float,after: float,alpha: float,facing: Basis,side: V
 				_heart(point,(.17+i%2*.04)*fade,facing,edge)
 				_source_sprite(point,.55,"spark",q,alpha*fade*.3,facing)
 		"woven-threads", "paralysis-arcs":
+			# Spun silk stays attached while the caster's head moves.
+			var thread_origin: Vector3 = emission_sources[0] if motif=="woven-threads" and not emission_sources.is_empty() else origin
+			var thread_scale := emission_scale if motif=="woven-threads" else 1.0
 			for strand in 3:
-				var last := origin
+				var last := thread_origin
 				for i in 10:
 					var q := (i+1)/10.0*p
 					var curl := sin(q*PI)*(strand-1)*.7
-					var point := origin.lerp(aim,q)+side*curl+Vector3.UP*sin(i*3+elapsed*15)*(.16 if motif=="paralysis-arcs" else .035)
-					_line(last,point,.025*fade,pearl);last=point
+					var point := thread_origin.lerp(aim,q)+side*curl+Vector3.UP*sin(i*3+elapsed*15)*(.16 if motif=="paralysis-arcs" else .035)
+					_line(last,point,.025*thread_scale*fade,pearl);last=point
 		"taunt-glyph":
 			var point := origin.lerp(aim,p)
 			if key=="encore":

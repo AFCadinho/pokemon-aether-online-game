@@ -32,6 +32,7 @@ const PRESENTATION_SECONDS := {
 	"flashcannon": 1.9, "magicalleaf": 1.55, "waterpulse": 1.6, "dracometeor": 3.2,
 }
 const MODEL_ONLY_MAX_SECONDS := 0.65
+const EFFECT_RENDER_PRIORITY := Material.RENDER_PRIORITY_MAX
 
 static func presentation_seconds(move: String) -> float:
 	var normalized := move_key(move)
@@ -202,6 +203,12 @@ func _piece(mesh: Mesh, material: Material, point: Vector3, scale_value: Vector3
 	var node := pieces[cursor]
 	cursor += 1
 	node.mesh = mesh
+	# These materials belong to this effect. Draw after the model's alpha
+	# depth prepass colour pass: sorting a long beam by its centre can otherwise
+	# let the caster paint over its near end. Depth testing still hides geometry
+	# that actually lies behind the model.
+	if material.render_priority != EFFECT_RENDER_PRIORITY:
+		material.render_priority = EFFECT_RENDER_PRIORITY
 	node.material_override = material
 	var dimensions := scale_value * _geometry_scale()
 	# Beam/cone length is the measured source-to-tip distance, not an artistic

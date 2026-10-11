@@ -1039,6 +1039,648 @@
         "side_fraction": 0.45
       }
     },
+    "aegislash-blade": {
+      "actions": {
+        "special_attack": {
+          "eye": [
+            [
+              {
+                "bone": "feeler_c_02",
+                "offset": [
+                  -0.346155822277069,
+                  -0.00195361091755331,
+                  0.0800787359476089
+                ],
+                "weight": 1.0
+              }
+            ]
+          ]
+        }
+      },
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.52/end .65, scale .12. The .43/.52/.58 beams stay attached and disappear by .70. Earlier full-length beams were overpainted by the model colour pass despite correct endpoints. Rendering effect materials after the alpha-prepass colour pass removes that gap; Honedge cloth still occludes the eye from the first view while the second view exposes the connection.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.52/end .65, scale .12. The .43/.52/.58 beams stay attached and disappear by .70. Earlier full-length beams were overpainted by the model colour pass despite correct endpoints. Rendering effect materials after the alpha-prepass colour pass removes that gap; Honedge cloth still occludes the eye from the first view while the second view exposes the connection.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.58. Charge glow follows the eye(s) before launch; emitted sound rings keep their launch positions. Broad ring dimensions are unchanged and their full clearance remains pending.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.58, scale .12. .23/.26/.35/.40 charge at the lower eye, .43 leaves the eye with a forward trail, .52 onwards clears the source.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "flashcannon": "special_attack",
+        "hyperbeam": "special_attack",
+        "screech": "special_attack",
+        "shadowball": "special_attack"
+      },
+      "move_choreography": {
+        "flashcannon": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.4
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.4
+        },
+        "screech": {
+          "action": "special_attack",
+          "impact_fraction": 0.58,
+          "launch_fraction": 0.4
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.58,
+          "launch_fraction": 0.4
+        }
+      },
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "eb68a28f1f07af1153339449333e3a142f9bbb34c1b830275f5af687098bda8f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c9d88d049213ee73f7dc2871aab63a3074ddaabeea5f34441394b811cf62f0b5",
+          "sampled_centerline_check": {
+            "evidence_sha256": "49bef05b271186a791d1f7d6d2a4f541548efc67a696af2140b46e57c78e37d4",
+            "fractions": [
+              0.4,
+              0.43,
+              0.48,
+              0.52,
+              0.58,
+              0.64
+            ],
+            "scope": "Normal form only, zero-width forward rays against posed visible mesh triangles have no self intersections; reverse controls hit the caster. This does not cover beam radius, sprites or continuous clearance."
+          },
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.52/end .65, scale .12. The .43/.52/.58 beams stay attached and disappear by .70. Earlier full-length beams were overpainted by the model colour pass despite correct endpoints. Rendering effect materials after the alpha-prepass colour pass removes that gap; Honedge cloth still occludes the eye from the first view while the second view exposes the connection.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "1d09c7f3b7a9a595bcacb9021472d0c8b70a391f03cb3bf3d0e2d27d0471b6af",
+          "shiny_runtime_sha256": "7ad0b2c27bdca4971a87291d7c4adc628116a6d9d71d198a8e8b4deb12f7c075",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 96.2000012397769,
+            "emission_scale": 0.12,
+            "frames": 148.000001907349,
+            "impact_frame": 76.9600009918215,
+            "launch_frame": 59.2000007629396,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "eb68a28f1f07af1153339449333e3a142f9bbb34c1b830275f5af687098bda8f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b166963490a06939171908958933c25c67167b0243348e9a9f303e127cbe5acf",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.52/end .65, scale .12. The .43/.52/.58 beams stay attached and disappear by .70. Earlier full-length beams were overpainted by the model colour pass despite correct endpoints. Rendering effect materials after the alpha-prepass colour pass removes that gap; Honedge cloth still occludes the eye from the first view while the second view exposes the connection.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3d520e41c92a8cb28ca9a42c8b2874fff77e4169520de304e92683ec01f5347e",
+          "shiny_runtime_sha256": "7ad0b2c27bdca4971a87291d7c4adc628116a6d9d71d198a8e8b4deb12f7c075",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 96.2000012397769,
+            "emission_scale": 0.12,
+            "frames": 148.000001907349,
+            "impact_frame": 76.9600009918215,
+            "launch_frame": 59.2000007629396,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "eb68a28f1f07af1153339449333e3a142f9bbb34c1b830275f5af687098bda8f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5724d5e0efb6550f14f2f4a155b786a4dd9ad88e7fb0630c03f5e3c1d2e3c55f",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.58. Charge glow follows the eye(s) before launch; emitted sound rings keep their launch positions. Broad ring dimensions are unchanged and their full clearance remains pending.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "87f805b384906ebfb9402257fb6aff915d0cdf07fcdea86b4d47cde79974ed29",
+          "shiny_runtime_sha256": "7ad0b2c27bdca4971a87291d7c4adc628116a6d9d71d198a8e8b4deb12f7c075",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 148.000001907349,
+            "impact_frame": 85.8400011062624,
+            "launch_frame": 59.2000007629396,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "eb68a28f1f07af1153339449333e3a142f9bbb34c1b830275f5af687098bda8f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "167a97ff3a640db980c18975fb1d45f7b9f5836d6ab68e48ae79066a358d4620",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.58, scale .12. .23/.26/.35/.40 charge at the lower eye, .43 leaves the eye with a forward trail, .52 onwards clears the source.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "7119bed5c057037ed39ff1f11bee7d0edff8f1cef22410ad185ffb230fe2b044",
+          "shiny_runtime_sha256": "7ad0b2c27bdca4971a87291d7c4adc628116a6d9d71d198a8e8b4deb12f7c075",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 148.000001907349,
+            "impact_frame": 85.8400011062624,
+            "launch_frame": 59.2000007629396,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "flashcannon": "eye",
+        "hyperbeam": "eye",
+        "screech": "eye",
+        "shadowball": "eye"
+      },
+      "part_reviews": {
+        "eye": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "8df5501e91de00fc23d587176cf37b5646e121236e0bf8e9fbf2162b0f57124c",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.665164638102731,
+                  0.0732427075856368,
+                  0.261592654311632
+                ],
+                "column": 1.0,
+                "distance": 3.63674287344572,
+                "mesh": "pm0746_12_00/Skeleton3D/pm0746_11_00_eye_mesh_001",
+                "pixel": [
+                  207.0,
+                  129.0
+                ],
+                "surface": 0,
+                "triangle": 70,
+                "vertex_indices": [
+                  0,
+                  4,
+                  3
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "eb68a28f1f07af1153339449333e3a142f9bbb34c1b830275f5af687098bda8f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "818f745e80428768ced3c2c946e931b485e1fb3a5fc36730129a86c659a40f26",
+          "scope": "Individually projected hilt eye. Idle pupil is used as the base binding; the special attack needs a lower pupil binding and timing after the eyelid opens. Move routing and actual effects pending.",
+          "side_fraction": 0.45,
+          "special_attack_binding_review": {
+            "manual_surface_landmarks": {
+              "capture_sha256": "8b44b12a787cc528bc9ff14c66a5a82f14f4b4b2eb5f34d8df294f3a85e892e4",
+              "landmarks": [
+                {
+                  "action": "special_attack",
+                  "barycentric": [
+                    0.259854682131752,
+                    0.213386725786446,
+                    0.526758592081802
+                  ],
+                  "column": 1.0,
+                  "distance": 0.594713802876299,
+                  "mesh": "pm0746_12_00/Skeleton3D/pm0746_11_00_eye_mesh_001",
+                  "pixel": [
+                    207.0,
+                    205.0
+                  ],
+                  "surface": 0,
+                  "triangle": 53,
+                  "vertex_indices": [
+                    0,
+                    16,
+                    15
+                  ],
+                  "weight": 1.0
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            },
+            "method": "individual_lower_open_pupil_surface_projection",
+            "preview_sha256": "3a7828e15849359eed63b1edbb708defde8f6e7183fbbe63268ada95035a5ea4",
+            "scope": "Lower exposed pupil at .45 and .65 and side .45; .20 still closed. This binding is used only for special_attack."
+          }
+        }
+      },
+      "parts": {
+        "eye": [
+          [
+            {
+              "bone": "feeler_c_02",
+              "offset": [
+                -0.321760922670364,
+                -0.00523093296214938,
+                0.0948914512991905
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
+    "aegislash-shield": {
+      "actions": {
+        "special_attack": {
+          "eye": [
+            [
+              {
+                "bone": "feeler_c_02",
+                "offset": [
+                  -0.346774160861969,
+                  0.00670593604445457,
+                  0.0795914828777313
+                ],
+                "weight": 1.0
+              }
+            ]
+          ]
+        }
+      },
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.52/end .65, scale .12. The .43/.52/.58 beams stay attached and disappear by .70. Earlier full-length beams were overpainted by the model colour pass despite correct endpoints. Rendering effect materials after the alpha-prepass colour pass removes that gap; Honedge cloth still occludes the eye from the first view while the second view exposes the connection.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.52/end .65, scale .12. The .43/.52/.58 beams stay attached and disappear by .70. Earlier full-length beams were overpainted by the model colour pass despite correct endpoints. Rendering effect materials after the alpha-prepass colour pass removes that gap; Honedge cloth still occludes the eye from the first view while the second view exposes the connection.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.58. Charge glow follows the eye(s) before launch; emitted sound rings keep their launch positions. Broad ring dimensions are unchanged and their full clearance remains pending.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.58, scale .12. .23/.26/.35/.40 charge at the lower eye, .43 leaves the eye with a forward trail, .52 onwards clears the source.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "flashcannon": "special_attack",
+        "hyperbeam": "special_attack",
+        "screech": "special_attack",
+        "shadowball": "special_attack"
+      },
+      "move_choreography": {
+        "flashcannon": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.4
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.4
+        },
+        "screech": {
+          "action": "special_attack",
+          "impact_fraction": 0.58,
+          "launch_fraction": 0.4
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.58,
+          "launch_fraction": 0.4
+        }
+      },
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "8d4c74f42f3cb1dca8aca5100d8c7ae138e3a87174d41ce02b2c11683de1ce3d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6cf1ed954993b9cbe31576b5583eeb2f9d02f91b22d4f2b69b4d9f88bfba176f",
+          "sampled_centerline_check": {
+            "evidence_sha256": "66391ee8c496f6654392a70845a190f716c59c82f122645b3698be4f35b2d6b5",
+            "fractions": [
+              0.4,
+              0.43,
+              0.48,
+              0.52,
+              0.58,
+              0.64
+            ],
+            "scope": "Normal form only, zero-width forward rays against posed visible mesh triangles have no self intersections; reverse controls hit the caster. This does not cover beam radius, sprites or continuous clearance."
+          },
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.52/end .65, scale .12. The .43/.52/.58 beams stay attached and disappear by .70. Earlier full-length beams were overpainted by the model colour pass despite correct endpoints. Rendering effect materials after the alpha-prepass colour pass removes that gap; Honedge cloth still occludes the eye from the first view while the second view exposes the connection.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "61e6af626ef1656a0f4c274b732b194d8d2c34ac2ed90ad9eb49ae3344d45d75",
+          "shiny_runtime_sha256": "02b1f8549932a4ac5f731ee241013f0db596ec2adb32cac090226cd0e6ed32fa",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 62.4,
+            "launch_frame": 48.0,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "8d4c74f42f3cb1dca8aca5100d8c7ae138e3a87174d41ce02b2c11683de1ce3d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "40ed935e0914117471eb750851c40ba333180aabd7388afc47b12dd13739bb7d",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.52/end .65, scale .12. The .43/.52/.58 beams stay attached and disappear by .70. Earlier full-length beams were overpainted by the model colour pass despite correct endpoints. Rendering effect materials after the alpha-prepass colour pass removes that gap; Honedge cloth still occludes the eye from the first view while the second view exposes the connection.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "75039a1b6a8fec0f4a30948332a4fe02349699911252ce232f341fd2748c398a",
+          "shiny_runtime_sha256": "02b1f8549932a4ac5f731ee241013f0db596ec2adb32cac090226cd0e6ed32fa",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 62.4,
+            "launch_frame": 48.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "8d4c74f42f3cb1dca8aca5100d8c7ae138e3a87174d41ce02b2c11683de1ce3d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "14f01d8234825b30eaf4c2297d9636d12120665e94fe7bec7685bb62dd759a5b",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.58. Charge glow follows the eye(s) before launch; emitted sound rings keep their launch positions. Broad ring dimensions are unchanged and their full clearance remains pending.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "0aab1a5f363d87a82a956e1a01ad8df9516da63e5bbefacae8f5ceb7e8b2a54e",
+          "shiny_runtime_sha256": "02b1f8549932a4ac5f731ee241013f0db596ec2adb32cac090226cd0e6ed32fa",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 69.6,
+            "launch_frame": 48.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "8d4c74f42f3cb1dca8aca5100d8c7ae138e3a87174d41ce02b2c11683de1ce3d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8dd30d5d95d96ee7b8060b9b8fef4294f499f446ff88ccea462699b48f1150c0",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.58, scale .12. .23/.26/.35/.40 charge at the lower eye, .43 leaves the eye with a forward trail, .52 onwards clears the source.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "5b3dd08ba79586b3065a4a1a356c72f65649dc6cadeaba3645855f5192517fe1",
+          "shiny_runtime_sha256": "02b1f8549932a4ac5f731ee241013f0db596ec2adb32cac090226cd0e6ed32fa",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 69.6,
+            "launch_frame": 48.0,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "flashcannon": "eye",
+        "hyperbeam": "eye",
+        "screech": "eye",
+        "shadowball": "eye"
+      },
+      "part_reviews": {
+        "eye": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "f560e9c62e34cc6d07fea17299bb69e834a72fb717d8351db3670a89deb97525",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.722304620571124,
+                  0.177628757654881,
+                  0.100066621773995
+                ],
+                "column": 1.0,
+                "distance": 3.02761107552577,
+                "mesh": "pm0746_11_00/Skeleton3D/pm0746_11_00_eye_mesh",
+                "pixel": [
+                  209.0,
+                  138.0
+                ],
+                "surface": 0,
+                "triangle": 56,
+                "vertex_indices": [
+                  0,
+                  7,
+                  6
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "8d4c74f42f3cb1dca8aca5100d8c7ae138e3a87174d41ce02b2c11683de1ce3d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2bfbaa27f3b9ea4670e046412abaf2f55bad481be0f8b99e2b4c9ef3c6fc0913",
+          "scope": "Individually projected hilt eye. Idle pupil is used as the base binding; the special attack needs a lower pupil binding and timing after the eyelid opens. Move routing and actual effects pending.",
+          "side_fraction": 0.45,
+          "special_attack_binding_review": {
+            "manual_surface_landmarks": {
+              "capture_sha256": "e4e2ab14a234e68dcffd2aff251fe93b43b0aef479aa69e4f7ba22c8ea38039e",
+              "landmarks": [
+                {
+                  "action": "special_attack",
+                  "barycentric": [
+                    0.203904943903809,
+                    0.0636245656507475,
+                    0.732470490445444
+                  ],
+                  "column": 1.0,
+                  "distance": 0.503346361693629,
+                  "mesh": "pm0746_11_00/Skeleton3D/pm0746_11_00_eye_mesh",
+                  "pixel": [
+                    208.0,
+                    207.0
+                  ],
+                  "surface": 0,
+                  "triangle": 52,
+                  "vertex_indices": [
+                    0,
+                    15,
+                    14
+                  ],
+                  "weight": 1.0
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            },
+            "method": "individual_lower_open_pupil_surface_projection",
+            "preview_sha256": "05fdf2738c98f2c55be921013e725b7b8b191de46e901985de2e1d91f542fc93",
+            "scope": "Lower exposed pupil at .45 and .65 and side .45; .20 still closed. This binding is used only for special_attack."
+          }
+        }
+      },
+      "parts": {
+        "eye": [
+          [
+            {
+              "bone": "feeler_c_02",
+              "offset": [
+                -0.322904229164124,
+                0.00401320494711399,
+                0.0944624692201614
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "aerodactyl": {
       "part_reviews": {
         "hand": {
@@ -25706,6 +26348,331 @@
         "side_fraction": 0.45
       }
     },
+    "doublade": {
+      "actions": {
+        "special_attack": {
+          "eye": [
+            [
+              {
+                "bone": "feeler_c_02",
+                "offset": [
+                  -0.146234348416328,
+                  0.000345344073139131,
+                  0.0486809611320496
+                ],
+                "weight": 1.0
+              }
+            ],
+            [
+              {
+                "bone": "feeler_e_03",
+                "offset": [
+                  -0.150147885084152,
+                  -0.000559314619749784,
+                  0.0483993664383888
+                ],
+                "weight": 1.0
+              }
+            ]
+          ]
+        }
+      },
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Both genuine eyes are bound separately; sheath decorations are excluded. Special_attack .40/.52/end .65, scale .08. The .43/.52/.58 beams stay attached and disappear by .70. Earlier full-length beams were overpainted by the model colour pass despite correct endpoints. Rendering effect materials after the alpha-prepass colour pass removes that gap; Honedge cloth still occludes the eye from the first view while the second view exposes the connection.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Both genuine eyes are bound separately; sheath decorations are excluded. Special_attack .40/.58. Charge glow follows the eye(s) before launch; emitted sound rings keep their launch positions. Broad ring dimensions are unchanged and their full clearance remains pending.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "flashcannon": "special_attack",
+        "screech": "special_attack"
+      },
+      "move_choreography": {
+        "flashcannon": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.08,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.4
+        },
+        "screech": {
+          "action": "special_attack",
+          "impact_fraction": 0.58,
+          "launch_fraction": 0.4
+        }
+      },
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "18dbd810f65fca46147552767d51d8857b5603196c3d4a1ea632fe028c041d55",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8691d16d12ee599f4c6087cd9d15dd35342fdb533f63ce32795086f516b83621",
+          "sampled_centerline_check": {
+            "evidence_sha256": "f2dbdc35a7a6050c5238405a6864171dfbc779e3fced7d2bbf4d5aa86a3a51e5",
+            "fractions": [
+              0.4,
+              0.43,
+              0.48,
+              0.52,
+              0.58,
+              0.64
+            ],
+            "scope": "Normal form only, zero-width forward rays against posed visible mesh triangles have no self intersections; reverse controls hit the caster. This does not cover beam radius, sprites or continuous clearance."
+          },
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Both genuine eyes are bound separately; sheath decorations are excluded. Special_attack .40/.52/end .65, scale .08. The .43/.52/.58 beams stay attached and disappear by .70. Earlier full-length beams were overpainted by the model colour pass despite correct endpoints. Rendering effect materials after the alpha-prepass colour pass removes that gap; Honedge cloth still occludes the eye from the first view while the second view exposes the connection.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b7b382da22d5d8be2160733dc0ca39dfc129d375de0c02e9e04b065cf2788a2b",
+          "shiny_runtime_sha256": "5d8fd7ecc3dc53e723c6e2fc3778ff5d0a53eb6ed5de66f9d8ef7c8ea232378c",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 85.8,
+            "emission_scale": 0.08,
+            "frames": 132.0,
+            "impact_frame": 68.64,
+            "launch_frame": 52.8,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "18dbd810f65fca46147552767d51d8857b5603196c3d4a1ea632fe028c041d55",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d4d21dd556b30672fd1a56ac760ce2b12dad4ba231542e4e5d157cbc4ce94d72",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Both genuine eyes are bound separately; sheath decorations are excluded. Special_attack .40/.58. Charge glow follows the eye(s) before launch; emitted sound rings keep their launch positions. Broad ring dimensions are unchanged and their full clearance remains pending.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "a63e04417d69de989f63fa5a8bb94f97b983541ca4db9034b097da2bc1423114",
+          "shiny_runtime_sha256": "5d8fd7ecc3dc53e723c6e2fc3778ff5d0a53eb6ed5de66f9d8ef7c8ea232378c",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 132.0,
+            "impact_frame": 76.56,
+            "launch_frame": 52.8,
+            "move_key": "screech"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "flashcannon": "eye",
+        "screech": "eye"
+      },
+      "part_reviews": {
+        "eye": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "deb289be5b97e338995ccdb1e880a1d85ad01b6a8b9b5711cff9cb3ce4c7b1b8"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "method": "two_independent_eye_surface_projections",
+            "projections": [
+              {
+                "capture_sha256": "6bc6b5a03a0cbb4303bd7741a9c82fad3c895ca2738bb6c1ac85d8f9ac4bb575",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.119458882221372,
+                      0.865707196889099,
+                      0.0148339208895291
+                    ],
+                    "column": 1.0,
+                    "distance": 2.48584204345019,
+                    "mesh": "pm0745_00_00/Skeleton3D/pm0745_00_00_eye_b_02_mesh",
+                    "pixel": [
+                      148.0,
+                      166.0
+                    ],
+                    "surface": 0,
+                    "triangle": 90,
+                    "vertex_indices": [
+                      14,
+                      6,
+                      40
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              },
+              {
+                "capture_sha256": "6bc6b5a03a0cbb4303bd7741a9c82fad3c895ca2738bb6c1ac85d8f9ac4bb575",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.00653957864932342,
+                      0.121217927598704,
+                      0.872242493751973
+                    ],
+                    "column": 1.0,
+                    "distance": 2.43470828985331,
+                    "mesh": "pm0745_00_00/Skeleton3D/pm0745_00_00_eye_a_02_mesh",
+                    "pixel": [
+                      286.0,
+                      160.0
+                    ],
+                    "surface": 0,
+                    "triangle": 52,
+                    "vertex_indices": [
+                      2,
+                      7,
+                      6
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              }
+            ]
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "18dbd810f65fca46147552767d51d8857b5603196c3d4a1ea632fe028c041d55",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "dfb51bdfb24c464857149a7e8755463329faeef9c960a4548fa95ed95d5084e9",
+          "scope": "Two independently projected hilt pupils, distinct from the sheath ornament circles. Separate emitter closeups inspected in every native clip; special_attack uses separate exposed-pupil points. Move routing and actual effects pending.",
+          "side_fraction": 0.45,
+          "special_attack_binding_review": {
+            "manual_surface_landmarks": {
+              "projections": [
+                {
+                  "capture_sha256": "a3cc425f80055be73748db7b62dd64f9e98dff325dc982365f64607e1512842f",
+                  "landmarks": [
+                    {
+                      "action": "special_attack",
+                      "barycentric": [
+                        0.511287043695508,
+                        0.470075094564289,
+                        0.0186378617402029
+                      ],
+                      "column": 1.0,
+                      "distance": 0.656742414919639,
+                      "mesh": "pm0745_00_00/Skeleton3D/pm0745_00_00_eye_b_02_mesh",
+                      "pixel": [
+                        220.0,
+                        180.0
+                      ],
+                      "surface": 0,
+                      "triangle": 68,
+                      "vertex_indices": [
+                        6,
+                        7,
+                        34
+                      ],
+                      "weight": 1.0
+                    }
+                  ],
+                  "method": "ray_triangle_barycentric_skin_binding"
+                },
+                {
+                  "capture_sha256": "4a73bbb9d986f6f2802ebe51eb7e5c7fa74ff5e5fe27eb140d93e2c059f325d5",
+                  "landmarks": [
+                    {
+                      "action": "special_attack",
+                      "barycentric": [
+                        0.0301825036248389,
+                        0.665866096394577,
+                        0.303951399980584
+                      ],
+                      "column": 1.0,
+                      "distance": 0.65805196149413,
+                      "mesh": "pm0745_00_00/Skeleton3D/pm0745_00_00_eye_a_02_mesh",
+                      "pixel": [
+                        201.0,
+                        180.0
+                      ],
+                      "surface": 0,
+                      "triangle": 52,
+                      "vertex_indices": [
+                        2,
+                        7,
+                        6
+                      ],
+                      "weight": 1.0
+                    }
+                  ],
+                  "method": "ray_triangle_barycentric_skin_binding"
+                }
+              ]
+            },
+            "method": "two_individual_exposed_pupil_surface_projections",
+            "preview_sha256": [
+              "3a45963134eee9d9c9c759605811a3d9cb80b66ea07dc5093feee2ddfe6a3fa3",
+              "1c8fb507d922dfb2f64c56d227ceef6e2cbb4c439d90089c99a1ca8450f73ace"
+            ],
+            "scope": "Two independently reviewed exposed pupils in special_attack .45/.65 and side .45. Eyelids remain closed at .20. Other clips retain idle-centered pupil bindings."
+          }
+        }
+      },
+      "parts": {
+        "eye": [
+          [
+            {
+              "bone": "feeler_c_02",
+              "offset": [
+                -0.134737893939018,
+                0.000276885024504736,
+                0.0491075441241264
+              ],
+              "weight": 1.0
+            }
+          ],
+          [
+            {
+              "bone": "feeler_e_03",
+              "offset": [
+                -0.139694571495056,
+                -0.000121220873552375,
+                0.0491644442081451
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "dracovish": {
       "part_reviews": {
         "foot": {
@@ -50317,6 +51284,236 @@
         "preview_sha256": "4cf7f3ad0caa26c0d623363da3d4648da17e66164326a1819cb59dbd6e23f64d",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "honedge": {
+      "actions": {
+        "special_attack": {
+          "eye": [
+            [
+              {
+                "bone": "feeler_c_02",
+                "offset": [
+                  -0.153288930654526,
+                  0.00211983406916261,
+                  0.0497311763465405
+                ],
+                "weight": 1.0
+              }
+            ]
+          ]
+        }
+      },
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.52/end .65, scale .08. The .43/.52/.58 beams stay attached and disappear by .70. Earlier full-length beams were overpainted by the model colour pass despite correct endpoints. Rendering effect materials after the alpha-prepass colour pass removes that gap; Honedge cloth still occludes the eye from the first view while the second view exposes the connection.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.58. Charge glow follows the eye(s) before launch; emitted sound rings keep their launch positions. Broad ring dimensions are unchanged and their full clearance remains pending.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "flashcannon": "special_attack",
+        "screech": "special_attack"
+      },
+      "move_choreography": {
+        "flashcannon": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.08,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.4
+        },
+        "screech": {
+          "action": "special_attack",
+          "impact_fraction": 0.58,
+          "launch_fraction": 0.4
+        }
+      },
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "15bcf498b005508bcf4360dc11e16bc470b7471a04bd87088026c4931fa0f4f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ea7416c24350726a2d6de9ea73e7710f73c9ea3a52963162ed2e47825b095954",
+          "sampled_centerline_check": {
+            "evidence_sha256": "72e38668e1143c507e5db625e84ce2deee159f2ed31e182876a11e794ff0928e",
+            "fractions": [
+              0.4,
+              0.43,
+              0.48,
+              0.52,
+              0.58,
+              0.64
+            ],
+            "scope": "Normal form only, zero-width forward rays against posed visible mesh triangles have no self intersections; reverse controls hit the caster. This does not cover beam radius, sprites or continuous clearance."
+          },
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.52/end .65, scale .08. The .43/.52/.58 beams stay attached and disappear by .70. Earlier full-length beams were overpainted by the model colour pass despite correct endpoints. Rendering effect materials after the alpha-prepass colour pass removes that gap; Honedge cloth still occludes the eye from the first view while the second view exposes the connection.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "fcf2b156c52b35f66ab7162e1c686d0d4ddaaa4e57bb0489ffdf59b17a486ff9",
+          "shiny_runtime_sha256": "51c788318fe29f4322fc273357b43d80954473cb9ad35b247c50caa7d3af954b",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.08,
+            "frames": 120.0,
+            "impact_frame": 62.4,
+            "launch_frame": 48.0,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "15bcf498b005508bcf4360dc11e16bc470b7471a04bd87088026c4931fa0f4f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9c52c70d15e48d0d630ee6dac2442357c77a88a2f36a2bb864e66090d15eb38f",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected eye binding; special_attack override uses the exposed lower pupil instead of the eyelid. Special_attack .40/.58. Charge glow follows the eye(s) before launch; emitted sound rings keep their launch positions. Broad ring dimensions are unchanged and their full clearance remains pending.  Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "97b015a423024b6453c649bf994d082e6f748a1ad73258ca997e784e3ef4084c",
+          "shiny_runtime_sha256": "51c788318fe29f4322fc273357b43d80954473cb9ad35b247c50caa7d3af954b",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 69.6,
+            "launch_frame": 48.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "flashcannon": "eye",
+        "screech": "eye"
+      },
+      "part_reviews": {
+        "eye": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "8f86324f27e3689f799f1c0d50f3a5804f7b94cd5c8c2b86940237035529bea6",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.927281719873633,
+                  0.0589730853879572,
+                  0.0137451947384096
+                ],
+                "column": 1.0,
+                "distance": 1.74109200249589,
+                "mesh": "pm0744_00_00/Skeleton3D/pm0744_00_00_eye_b_mesh",
+                "pixel": [
+                  122.0,
+                  134.0
+                ],
+                "surface": 0,
+                "triangle": 88,
+                "vertex_indices": [
+                  6,
+                  37,
+                  40
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "15bcf498b005508bcf4360dc11e16bc470b7471a04bd87088026c4931fa0f4f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c0ae5429c270623f3cfd584c33b6f1e731001887df3f417ceb334c7d91681ca1",
+          "scope": "Individually projected hilt eye. Idle pupil is used as the base binding; the special attack needs a lower pupil binding and timing after the eyelid opens. Move routing and actual effects pending.",
+          "side_fraction": 0.45,
+          "special_attack_binding_review": {
+            "manual_surface_landmarks": {
+              "capture_sha256": "fb0132fe4c16b3af58c4103f6fd84f1869a8058107111e37f75026f1efc5a926",
+              "landmarks": [
+                {
+                  "action": "special_attack",
+                  "barycentric": [
+                    0.135643273106869,
+                    0.751016954838729,
+                    0.113339772054401
+                  ],
+                  "column": 1.0,
+                  "distance": 0.372738613304322,
+                  "mesh": "pm0744_00_00/Skeleton3D/pm0744_00_00_eye_b_mesh",
+                  "pixel": [
+                    209.0,
+                    205.0
+                  ],
+                  "surface": 0,
+                  "triangle": 83,
+                  "vertex_indices": [
+                    6,
+                    7,
+                    34
+                  ],
+                  "weight": 1.0
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            },
+            "method": "individual_lower_open_pupil_surface_projection",
+            "preview_sha256": "a847f4b72d8869615f81104e64885af1304e8a1eedf0b3da3335f161dca9cc34",
+            "scope": "Lower exposed pupil at .45 and .65 and side .45; .20 still closed. This binding is used only for special_attack."
+          }
+        }
+      },
+      "parts": {
+        "eye": [
+          [
+            {
+              "bone": "feeler_c_02",
+              "offset": [
+                -0.136938080191612,
+                0.00144623115193099,
+                0.0506511181592941
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
       }
     },
     "hoopa": {
@@ -96942,6 +98139,172 @@
         "side_fraction": 0.45
       }
     },
+    "silcoon": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Face binding and forward physical_attack .25/.45, yaw 0. The body and large impact art hide the exact contact; approach distance, body penetration and target contact must still be reviewed with both actors and unobscured geometry. Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_native_action_and_attachment_review_contact_clearance_pending"
+        },
+        "stringshot": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Physical_attack .25/.45 uses the front face above the shell/fur, avoiding the covered face in the second/special action. Scale .25 reduces thread width. At .26 the strands begin at the face; .35/.40/.43/.52/.58/.70 follow the moving head/body. Rejected the earlier frozen launch point; all three strands now resample the source. The initial zigzag and spread retain authored styling. Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack",
+        "stringshot": "physical_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.25
+        },
+        "stringshot": {
+          "action": "physical_attack",
+          "emission_scale": 0.25,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.25
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "dfe47643b6aad20d5a5366de9a3547ca286284989e416e56358df617f111755c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d4136d5ee9168a360e60b78a738d5c155f0c2eb9375662bada0d1882bddca4f3",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Face binding and forward physical_attack .25/.45, yaw 0. The body and large impact art hide the exact contact; approach distance, body penetration and target contact must still be reviewed with both actors and unobscured geometry. Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "2a67868aead7b9dd766105a9543911f2540b3139caef1669f07c7e0ab04cb84c",
+          "shiny_runtime_sha256": "71391404b6be235a5fb2c81e4f180265bd47eeb320c5a8f91f7820ee7a51aee1",
+          "status": "sampled_native_action_and_attachment_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 162.5,
+            "impact_frame": 73.125,
+            "launch_frame": 40.625,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "dfe47643b6aad20d5a5366de9a3547ca286284989e416e56358df617f111755c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ac6cd28a9849aec0ae253b494773619b26db9ce02ba34806ab123aebb10d2529",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Physical_attack .25/.45 uses the front face above the shell/fur, avoiding the covered face in the second/special action. Scale .25 reduces thread width. At .26 the strands begin at the face; .35/.40/.43/.52/.58/.70 follow the moving head/body. Rejected the earlier frozen launch point; all three strands now resample the source. The initial zigzag and spread retain authored styling. Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "2e09b0e65b1ebbabb87962cc932927bf69190c27642b25a1bb6a68a79e594b2e",
+          "shiny_runtime_sha256": "71391404b6be235a5fb2c81e4f180265bd47eeb320c5a8f91f7820ee7a51aee1",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.25,
+            "frames": 162.5,
+            "impact_frame": 73.125,
+            "launch_frame": 40.625,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "face",
+        "stringshot": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "cfb98d46a5b90c01b108a0e5e4c60a9a111d71f04750ab3c701d1556eb6740ea",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.766377199206426,
+                  0.0659148836504416,
+                  0.167707917143133
+                ],
+                "column": 1.0,
+                "distance": 1.27792044969208,
+                "mesh": "pm0266_00_00_trmdl/Skeleton3D/pm0266_00_00_body_mesh",
+                "pixel": [
+                  207.0,
+                  221.0
+                ],
+                "surface": 0,
+                "triangle": 1323,
+                "vertex_indices": [
+                  214,
+                  215,
+                  213
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "dfe47643b6aad20d5a5366de9a3547ca286284989e416e56358df617f111755c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "63732d3597ca6abf252cbe47add55248439cb7bd14d27e9ed8066382c168aa14",
+          "scope": "Front cocoon surface below the two eyes, with no visible oral opening. Physical_attack preserves the front surface; physical_attack_2 turns it downward during the flip. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                -0.076824925839901,
+                0.0082226051017642,
+                0.276835739612579
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "silicobra": {
       "parts": {
         "mouth": [
@@ -103020,6 +104383,172 @@
         "preview_sha256": "07875b4079dab7fc215bb35d9abc7dab2dda99ea78b36f4fb43c03a502a2ae3e",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "spewpa": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Face binding and forward physical_attack .25/.45, yaw 0. The body and large impact art hide the exact contact; approach distance, body penetration and target contact must still be reviewed with both actors and unobscured geometry. Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_native_action_and_attachment_review_contact_clearance_pending"
+        },
+        "stringshot": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Physical_attack .25/.45 uses the front face above the shell/fur, avoiding the covered face in the second/special action. Scale .25 reduces thread width. At .26 the strands begin at the face; .35/.40/.43/.52/.58/.70 follow the moving head/body. Rejected the earlier frozen launch point; all three strands now resample the source. The initial zigzag and spread retain authored styling. Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack",
+        "stringshot": "physical_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.25
+        },
+        "stringshot": {
+          "action": "physical_attack",
+          "emission_scale": 0.25,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.25
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "c80236cb950da3262730f062232af880d70d5e1a56356b645693654acf466dc0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "14930cc584d6e48f23c1c815a3da50edd297d8303e7ab5408ce87e699cfefef7",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Face binding and forward physical_attack .25/.45, yaw 0. The body and large impact art hide the exact contact; approach distance, body penetration and target contact must still be reviewed with both actors and unobscured geometry. Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "e1775b83a54dbde74acc9ce1ad9ddf197c4f913d271993541c50497a8ff7e5b7",
+          "shiny_runtime_sha256": "fe6a2624baabaa2b533346de8923a430ff6e909bd8a7ef7f8cf55916684dec37",
+          "status": "sampled_native_action_and_attachment_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 90.0,
+            "impact_frame": 40.5,
+            "launch_frame": 22.5,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "dfff511afbf958cbc7017b04496f4ea8cb336bec7f7bdc5896b0695b2f05150e",
+          "fractions": [
+            0.23,
+            0.26,
+            0.35,
+            0.4,
+            0.43,
+            0.52,
+            0.58,
+            0.7
+          ],
+          "normal_runtime_sha256": "c80236cb950da3262730f062232af880d70d5e1a56356b645693654acf466dc0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6fe5f3b4e1b93d7ad6c71f513bce651673999fafe23fbe77dca118b3f4489f91",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Physical_attack .25/.45 uses the front face above the shell/fur, avoiding the covered face in the second/special action. Scale .25 reduces thread width. At .26 the strands begin at the face; .35/.40/.43/.52/.58/.70 follow the moving head/body. Rejected the earlier frozen launch point; all three strands now resample the source. The initial zigzag and spread retain authored styling. Other move routes, full continuous geometry clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "21c283b3adc1226f89833a488ba0cf863f3c73ea310198d027b03f31733a5b06",
+          "shiny_runtime_sha256": "fe6a2624baabaa2b533346de8923a430ff6e909bd8a7ef7f8cf55916684dec37",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.25,
+            "frames": 90.0,
+            "impact_frame": 40.5,
+            "launch_frame": 22.5,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "face",
+        "stringshot": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "679afd0542dc89736aed26062d03bc978070b9727e688863054819283ea6ff35",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0449710485731245,
+                  0.27407302821197,
+                  0.680955923214905
+                ],
+                "column": 1.0,
+                "distance": 0.646125324103075,
+                "mesh": "pm0707_00_00/Skeleton3D/pm0707_00_00_body_mesh",
+                "pixel": [
+                  205.0,
+                  166.0
+                ],
+                "surface": 0,
+                "triangle": 274,
+                "vertex_indices": [
+                  97,
+                  658,
+                  98
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "c80236cb950da3262730f062232af880d70d5e1a56356b645693654acf466dc0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "250c4149da51fa645fb7f231b30c0c6f0573519b889f095fa86a913c9007e1ac",
+          "scope": "Lower exposed face above the fur, no visible oral opening. Physical attacks keep this surface clear in sampled poses; special_attack raises the fur over it, so oral-style routes must avoid that action. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.0542644485831261,
+                -0.00515266135334969,
+                0.116939298808575
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
       }
     },
     "spheal": {

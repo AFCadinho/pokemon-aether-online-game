@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate selected eye-based attacks for Honedge, Doublade and both Aegislash forms, and face-based attacks for Silcoon and Spewpa. Make String Shot follow its moving source and prevent model materials from painting over correctly positioned attack effects.
+
 - Make Sinistea’s Shadow Ball charge follow its tea and emerging spirit during the special attack animation, with one active source at a time.
 
 - Calibrate Beldum’s forehead, Unown’s eye, Mega Chandelure’s grille and Runerigus’s eye for selected 3D attacks. Size Unown’s Hidden Power to its eye and delay Runerigus’s casts past the initial hand movement.
