@@ -29,7 +29,8 @@ state. This is separate from the **4,167,740,277-byte** reduction in the
 potential active download collection versus the original v11 collection. The
 current game and launcher still select v11; those live objects remain in R2.
 
-This staging remains debug-only and Linux-qualified. A future player release
-must bind the exact checked index and payloads in production game and launcher
-code, run its release checks, and update public manifests through the normal
-release process. Windows, macOS and physical Android tests remain unavailable.
+The original staging index remains debug-only and Linux-qualified. Its selected
+payloads, plus the separately qualified Mega Hawlucha repair, are bound to the
+new immutable production v13 index described in
+[shared-model-geometry-production-release.md](shared-model-geometry-production-release.md).
+Windows, macOS and physical Android tests remain unavailable.

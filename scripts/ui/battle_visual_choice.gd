@@ -119,11 +119,13 @@ func refresh_locale() -> void:
 		descriptions[mode].text = LocalizationManager.text(description_key + mode)
 		choices[mode].text = LocalizationManager.text("ui.visual_choice.android.choose.3d" if experimental and mode == "3d" else "ui.visual_choice.choose." + mode)
 		var info: Dictionary = DOWNLOAD_INFO.data[mode]
-		# A pre-publication editor run or older launcher still selects v10. Show
-		# the size of that actual collection, rather than the future v11 total.
+		# Show the size of the collection actually selected by this client.
 		if mode == "3d" and DOWNLOAD_INFO.data.has("3d_v10"):
 			var downloader := get_tree().root.get_node_or_null("OnDemand3DBundleService")
-			if downloader == null or downloader._selected_release().revision != "approved-pokemon-3d-v11":
+			var revision := "" if downloader == null else str(downloader._selected_release().revision)
+			if revision in ["approved-pokemon-3d-v11", "approved-pokemon-3d-v12"]:
+				info = DOWNLOAD_INFO.data["3d_v11"]
+			elif revision != "approved-pokemon-3d-v13":
 				info = DOWNLOAD_INFO.data["3d_v10"]
 		sizes[mode].text = LocalizationManager.text("ui.visual_choice.size", {
 			"installed": _space(int(info.installed_bytes))})

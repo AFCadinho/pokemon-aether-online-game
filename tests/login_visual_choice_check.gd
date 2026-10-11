@@ -62,7 +62,7 @@ func _run() -> void:
 			dialog._cancel()
 			_check(dialog.visible and settings.needs_battle_visual_choice(), "Escape does not silently select a renderer")
 			var current_revision: String = root.get_node("OnDemand3DBundleService")._selected_release().revision
-			var model_size := "13 GB" if current_revision == "approved-pokemon-3d-v11" else "20 GB"
+			var model_size := "9 GB" if current_revision == "approved-pokemon-3d-v13" else ("13 GB" if current_revision in ["approved-pokemon-3d-v11", "approved-pokemon-3d-v12"] else "20 GB")
 			_check(dialog.sizes["3d"].text.contains(model_size) and dialog.sizes["2d"].text.contains("470 MB"), "approximate storage matches the selected immutable collection")
 			for example_mode: String in ["2d", "3d"]:
 				var example := dialog.find_child("Example" + example_mode.to_upper(), true, false) as TextureRect
