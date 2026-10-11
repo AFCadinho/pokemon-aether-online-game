@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_ilooy"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_ojri5"]
+
+[node name="DisplayPodWhite" type="Node2D" unique_id=300916666]
+texture_filter = 1
+script = ExtResource("1_ilooy")
+furniture_id = "display_pod_white"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=659364139]
+position = Vector2(-16, -64)
+tile_map_data = PackedByteArray("AAAAAAAAAAAFACcAAAABAAAAAAAGACcAAAACAAAAAAAHACcAAAAAAAEAAAAIACcAAAABAAEAAAAJACcAAAACAAEAAAAKACcAAAA=")
+tile_set = ExtResource("2_ojri5")

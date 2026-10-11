@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_isutt"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_sin5o"]
+
+[node name="SofaPink" type="Node2D" unique_id=1029285674]
+texture_filter = 1
+script = ExtResource("1_isutt")
+furniture_id = "sofa_pink"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=29560265]
+position = Vector2(0, -64)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 11, 0, 0, 0, 1, 0, 0, 0, 0, 0, 10, 0, 11, 0, 0, 0, 0, 0, 1, 0, 0, 0, 13, 0, 11, 0, 0, 0, 1, 0, 1, 0, 0, 0, 14, 0, 11, 0, 0, 0)
+tile_set = ExtResource("2_sin5o")

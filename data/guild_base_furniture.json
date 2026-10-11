@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "tileSize": 32,
   "maxRoomItems": 96,
   "rooms": {
@@ -984,6 +984,3986 @@
       "surfaceSlots": [],
       "resizable": true,
       "scenePath": "res://scenes/world/guild_base/furniture/striped_carpet.tscn"
+    },
+    {
+      "id": "sofa_blue",
+      "nameKey": "ui.guild_base.furniture.sofa_blue",
+      "category": "seating",
+      "tiles": [
+        [
+          3508,
+          3509
+        ],
+        [
+          3516,
+          3517
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 6,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/sofa_blue.tscn"
+    },
+    {
+      "id": "sofa_red",
+      "nameKey": "ui.guild_base.furniture.sofa_red",
+      "category": "seating",
+      "tiles": [
+        [
+          3524,
+          3525
+        ],
+        [
+          3532,
+          3533
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 6,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/sofa_red.tscn"
+    },
+    {
+      "id": "sofa_white",
+      "nameKey": "ui.guild_base.furniture.sofa_white",
+      "category": "seating",
+      "tiles": [
+        [
+          3548,
+          3549
+        ],
+        [
+          3556,
+          3557
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 6,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/sofa_white.tscn"
+    },
+    {
+      "id": "sofa_brown",
+      "nameKey": "ui.guild_base.furniture.sofa_brown",
+      "category": "seating",
+      "tiles": [
+        [
+          3564,
+          3565
+        ],
+        [
+          3572,
+          3573
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 6,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/sofa_brown.tscn"
+    },
+    {
+      "id": "sofa_pink",
+      "nameKey": "ui.guild_base.furniture.sofa_pink",
+      "category": "seating",
+      "tiles": [
+        [
+          3596,
+          3597
+        ],
+        [
+          3604,
+          3605
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 6,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/sofa_pink.tscn"
+    },
+    {
+      "id": "sofa_purple",
+      "nameKey": "ui.guild_base.furniture.sofa_purple",
+      "category": "seating",
+      "tiles": [
+        [
+          3612,
+          3613
+        ],
+        [
+          3620,
+          3621
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 6,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/sofa_purple.tscn"
+    },
+    {
+      "id": "armchair_blue",
+      "nameKey": "ui.guild_base.furniture.armchair_blue",
+      "category": "seating",
+      "tiles": [
+        [
+          3506
+        ],
+        [
+          3514
+        ],
+        [
+          3522
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/armchair_blue.tscn"
+    },
+    {
+      "id": "armchair_red",
+      "nameKey": "ui.guild_base.furniture.armchair_red",
+      "category": "seating",
+      "tiles": [
+        [
+          3511
+        ],
+        [
+          3519
+        ],
+        [
+          3527
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/armchair_red.tscn"
+    },
+    {
+      "id": "armchair_white",
+      "nameKey": "ui.guild_base.furniture.armchair_white",
+      "category": "seating",
+      "tiles": [
+        [
+          3546
+        ],
+        [
+          3554
+        ],
+        [
+          3562
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/armchair_white.tscn"
+    },
+    {
+      "id": "armchair_brown",
+      "nameKey": "ui.guild_base.furniture.armchair_brown",
+      "category": "seating",
+      "tiles": [
+        [
+          3551
+        ],
+        [
+          3559
+        ],
+        [
+          3567
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/armchair_brown.tscn"
+    },
+    {
+      "id": "armchair_pink",
+      "nameKey": "ui.guild_base.furniture.armchair_pink",
+      "category": "seating",
+      "tiles": [
+        [
+          3586
+        ],
+        [
+          3594
+        ],
+        [
+          3602
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/armchair_pink.tscn"
+    },
+    {
+      "id": "armchair_purple",
+      "nameKey": "ui.guild_base.furniture.armchair_purple",
+      "category": "seating",
+      "tiles": [
+        [
+          3591
+        ],
+        [
+          3599
+        ],
+        [
+          3607
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/armchair_purple.tscn"
+    },
+    {
+      "id": "chair_brown_left",
+      "nameKey": "ui.guild_base.furniture.chair_brown_left",
+      "category": "seating",
+      "tiles": [
+        [
+          3969
+        ],
+        [
+          3977
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_brown_left.tscn"
+    },
+    {
+      "id": "chair_brown_right",
+      "nameKey": "ui.guild_base.furniture.chair_brown_right",
+      "category": "seating",
+      "tiles": [
+        [
+          3970
+        ],
+        [
+          3978
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_brown_right.tscn"
+    },
+    {
+      "id": "chair_white_left",
+      "nameKey": "ui.guild_base.furniture.chair_white_left",
+      "category": "seating",
+      "tiles": [
+        [
+          3971
+        ],
+        [
+          3979
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_white_left.tscn"
+    },
+    {
+      "id": "chair_white_right",
+      "nameKey": "ui.guild_base.furniture.chair_white_right",
+      "category": "seating",
+      "tiles": [
+        [
+          3972
+        ],
+        [
+          3980
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_white_right.tscn"
+    },
+    {
+      "id": "chair_red_left",
+      "nameKey": "ui.guild_base.furniture.chair_red_left",
+      "category": "seating",
+      "tiles": [
+        [
+          3973
+        ],
+        [
+          3981
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_red_left.tscn"
+    },
+    {
+      "id": "chair_red_right",
+      "nameKey": "ui.guild_base.furniture.chair_red_right",
+      "category": "seating",
+      "tiles": [
+        [
+          3974
+        ],
+        [
+          3982
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_red_right.tscn"
+    },
+    {
+      "id": "chair_cyan_left",
+      "nameKey": "ui.guild_base.furniture.chair_cyan_left",
+      "category": "seating",
+      "tiles": [
+        [
+          3975
+        ],
+        [
+          3983
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_cyan_left.tscn"
+    },
+    {
+      "id": "chair_cyan_right",
+      "nameKey": "ui.guild_base.furniture.chair_cyan_right",
+      "category": "seating",
+      "tiles": [
+        [
+          3976
+        ],
+        [
+          3984
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_cyan_right.tscn"
+    },
+    {
+      "id": "stool_cyan",
+      "nameKey": "ui.guild_base.furniture.stool_cyan",
+      "category": "seating",
+      "tiles": [
+        [
+          3783
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 12,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/stool_cyan.tscn"
+    },
+    {
+      "id": "stool_blue",
+      "nameKey": "ui.guild_base.furniture.stool_blue",
+      "category": "seating",
+      "tiles": [
+        [
+          3784
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 12,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/stool_blue.tscn"
+    },
+    {
+      "id": "stool_green",
+      "nameKey": "ui.guild_base.furniture.stool_green",
+      "category": "seating",
+      "tiles": [
+        [
+          3791
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 12,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/stool_green.tscn"
+    },
+    {
+      "id": "stool_pink",
+      "nameKey": "ui.guild_base.furniture.stool_pink",
+      "category": "seating",
+      "tiles": [
+        [
+          3800
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 12,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/stool_pink.tscn"
+    },
+    {
+      "id": "table_round_wood",
+      "nameKey": "ui.guild_base.furniture.table_round_wood",
+      "category": "tables",
+      "tiles": [
+        [
+          3801,
+          3802,
+          3803
+        ],
+        [
+          3809,
+          3810,
+          3811
+        ],
+        [
+          3817,
+          3818,
+          3819
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -64
+        ],
+        [
+          32,
+          -64
+        ],
+        [
+          64,
+          -64
+        ],
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_round_wood.tscn"
+    },
+    {
+      "id": "table_round_white",
+      "nameKey": "ui.guild_base.furniture.table_round_white",
+      "category": "tables",
+      "tiles": [
+        [
+          3806,
+          3807,
+          3808
+        ],
+        [
+          3814,
+          3815,
+          3816
+        ],
+        [
+          3822,
+          3823,
+          3824
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -64
+        ],
+        [
+          32,
+          -64
+        ],
+        [
+          64,
+          -64
+        ],
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_round_white.tscn"
+    },
+    {
+      "id": "table_red",
+      "nameKey": "ui.guild_base.furniture.table_red",
+      "category": "tables",
+      "tiles": [
+        [
+          3830,
+          3831,
+          3832
+        ],
+        [
+          3838,
+          3839,
+          3840
+        ],
+        [
+          3846,
+          3847,
+          3848
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -64
+        ],
+        [
+          32,
+          -64
+        ],
+        [
+          64,
+          -64
+        ],
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_red.tscn"
+    },
+    {
+      "id": "table_cream",
+      "nameKey": "ui.guild_base.furniture.table_cream",
+      "category": "tables",
+      "tiles": [
+        [
+          3857,
+          3858,
+          3859
+        ],
+        [
+          3865,
+          3866,
+          3867
+        ],
+        [
+          3873,
+          3874,
+          3875
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -64
+        ],
+        [
+          32,
+          -64
+        ],
+        [
+          64,
+          -64
+        ],
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_cream.tscn"
+    },
+    {
+      "id": "table_light_wood",
+      "nameKey": "ui.guild_base.furniture.table_light_wood",
+      "category": "tables",
+      "tiles": [
+        [
+          3862,
+          3863,
+          3864
+        ],
+        [
+          3870,
+          3871,
+          3872
+        ],
+        [
+          3878,
+          3879,
+          3880
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -64
+        ],
+        [
+          32,
+          -64
+        ],
+        [
+          64,
+          -64
+        ],
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_light_wood.tscn"
+    },
+    {
+      "id": "table_glass_gray",
+      "nameKey": "ui.guild_base.furniture.table_glass_gray",
+      "category": "tables",
+      "tiles": [
+        [
+          3921,
+          3922,
+          3923
+        ],
+        [
+          3929,
+          3930,
+          3931
+        ],
+        [
+          3937,
+          3938,
+          3939
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -64
+        ],
+        [
+          32,
+          -64
+        ],
+        [
+          64,
+          -64
+        ],
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_glass_gray.tscn"
+    },
+    {
+      "id": "table_glass_blue",
+      "nameKey": "ui.guild_base.furniture.table_glass_blue",
+      "category": "tables",
+      "tiles": [
+        [
+          3926,
+          3927,
+          3928
+        ],
+        [
+          3934,
+          3935,
+          3936
+        ],
+        [
+          3942,
+          3943,
+          3944
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -64
+        ],
+        [
+          32,
+          -64
+        ],
+        [
+          64,
+          -64
+        ],
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_glass_blue.tscn"
+    },
+    {
+      "id": "table_low_wood",
+      "nameKey": "ui.guild_base.furniture.table_low_wood",
+      "category": "tables",
+      "tiles": [
+        [
+          4009,
+          4010,
+          4011
+        ],
+        [
+          4017,
+          4018,
+          4019
+        ]
+      ],
+      "footprint": [
+        3,
+        1
+      ],
+      "visualSize": [
+        3,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_low_wood.tscn"
+    },
+    {
+      "id": "table_low_orange",
+      "nameKey": "ui.guild_base.furniture.table_low_orange",
+      "category": "tables",
+      "tiles": [
+        [
+          4014,
+          4015,
+          4016
+        ],
+        [
+          4022,
+          4023,
+          4024
+        ]
+      ],
+      "footprint": [
+        3,
+        1
+      ],
+      "visualSize": [
+        3,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_low_orange.tscn"
+    },
+    {
+      "id": "table_runner_red",
+      "nameKey": "ui.guild_base.furniture.table_runner_red",
+      "category": "tables",
+      "tiles": [
+        [
+          3889,
+          3890,
+          3891
+        ],
+        [
+          3897,
+          3898,
+          3899
+        ],
+        [
+          3905,
+          3906,
+          3907
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -64
+        ],
+        [
+          32,
+          -64
+        ],
+        [
+          64,
+          -64
+        ],
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ],
+        [
+          64,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_runner_red.tscn"
+    },
+    {
+      "id": "table_side_wood",
+      "nameKey": "ui.guild_base.furniture.table_side_wood",
+      "category": "tables",
+      "tiles": [
+        [
+          3828
+        ],
+        [
+          3836
+        ],
+        [
+          3844
+        ]
+      ],
+      "footprint": [
+        1,
+        2
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -64
+        ],
+        [
+          0,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_side_wood.tscn"
+    },
+    {
+      "id": "table_side_gray",
+      "nameKey": "ui.guild_base.furniture.table_side_gray",
+      "category": "tables",
+      "tiles": [
+        [
+          3924
+        ],
+        [
+          3932
+        ],
+        [
+          3940
+        ]
+      ],
+      "footprint": [
+        1,
+        2
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -64
+        ],
+        [
+          0,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_side_gray.tscn"
+    },
+    {
+      "id": "table_side_blue",
+      "nameKey": "ui.guild_base.furniture.table_side_blue",
+      "category": "tables",
+      "tiles": [
+        [
+          3925
+        ],
+        [
+          3933
+        ],
+        [
+          3941
+        ]
+      ],
+      "footprint": [
+        1,
+        2
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -64
+        ],
+        [
+          0,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/table_side_blue.tscn"
+    },
+    {
+      "id": "bookcase_gray",
+      "nameKey": "ui.guild_base.furniture.bookcase_gray",
+      "category": "storage",
+      "tiles": [
+        [
+          4180,
+          4181
+        ],
+        [
+          4188,
+          4189
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_gray.tscn"
+    },
+    {
+      "id": "bookcase_red",
+      "nameKey": "ui.guild_base.furniture.bookcase_red",
+      "category": "storage",
+      "tiles": [
+        [
+          4244,
+          4245
+        ],
+        [
+          4252,
+          4253
+        ],
+        [
+          4260,
+          4261
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_red.tscn"
+    },
+    {
+      "id": "bookcase_colorful",
+      "nameKey": "ui.guild_base.furniture.bookcase_colorful",
+      "category": "storage",
+      "tiles": [
+        [
+          4268,
+          4269
+        ],
+        [
+          4276,
+          4277
+        ],
+        [
+          4284,
+          4285
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_colorful.tscn"
+    },
+    {
+      "id": "bookcase_teal",
+      "nameKey": "ui.guild_base.furniture.bookcase_teal",
+      "category": "storage",
+      "tiles": [
+        [
+          4315
+        ],
+        [
+          4323
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_teal.tscn"
+    },
+    {
+      "id": "bookcase_gold",
+      "nameKey": "ui.guild_base.furniture.bookcase_gold",
+      "category": "storage",
+      "tiles": [
+        [
+          4339
+        ],
+        [
+          4347
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_gold.tscn"
+    },
+    {
+      "id": "bookcase_silver",
+      "nameKey": "ui.guild_base.furniture.bookcase_silver",
+      "category": "storage",
+      "tiles": [
+        [
+          4363
+        ],
+        [
+          4371
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_silver.tscn"
+    },
+    {
+      "id": "bookcase_pink",
+      "nameKey": "ui.guild_base.furniture.bookcase_pink",
+      "category": "storage",
+      "tiles": [
+        [
+          4387
+        ],
+        [
+          4395
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_pink.tscn"
+    },
+    {
+      "id": "locker",
+      "nameKey": "ui.guild_base.furniture.locker",
+      "category": "storage",
+      "tiles": [
+        [
+          4411
+        ],
+        [
+          4419
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/locker.tscn"
+    },
+    {
+      "id": "dresser_brown",
+      "nameKey": "ui.guild_base.furniture.dresser_brown",
+      "category": "storage",
+      "tiles": [
+        [
+          4804,
+          4805
+        ],
+        [
+          4812,
+          4813
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/dresser_brown.tscn"
+    },
+    {
+      "id": "chest_brown",
+      "nameKey": "ui.guild_base.furniture.chest_brown",
+      "category": "storage",
+      "tiles": [
+        [
+          4806,
+          4807
+        ],
+        [
+          4814,
+          4815
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chest_brown.tscn"
+    },
+    {
+      "id": "dresser_pink",
+      "nameKey": "ui.guild_base.furniture.dresser_pink",
+      "category": "storage",
+      "tiles": [
+        [
+          4820,
+          4821
+        ],
+        [
+          4828,
+          4829
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/dresser_pink.tscn"
+    },
+    {
+      "id": "chest_pink",
+      "nameKey": "ui.guild_base.furniture.chest_pink",
+      "category": "storage",
+      "tiles": [
+        [
+          4822,
+          4823
+        ],
+        [
+          4830,
+          4831
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chest_pink.tscn"
+    },
+    {
+      "id": "dresser_dark_wood",
+      "nameKey": "ui.guild_base.furniture.dresser_dark_wood",
+      "category": "storage",
+      "tiles": [
+        [
+          4836,
+          4837
+        ],
+        [
+          4844,
+          4845
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/dresser_dark_wood.tscn"
+    },
+    {
+      "id": "chest_dark_wood",
+      "nameKey": "ui.guild_base.furniture.chest_dark_wood",
+      "category": "storage",
+      "tiles": [
+        [
+          4838,
+          4839
+        ],
+        [
+          4846,
+          4847
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chest_dark_wood.tscn"
+    },
+    {
+      "id": "dresser_light_wood",
+      "nameKey": "ui.guild_base.furniture.dresser_light_wood",
+      "category": "storage",
+      "tiles": [
+        [
+          4852,
+          4853
+        ],
+        [
+          4860,
+          4861
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/dresser_light_wood.tscn"
+    },
+    {
+      "id": "chest_light_wood",
+      "nameKey": "ui.guild_base.furniture.chest_light_wood",
+      "category": "storage",
+      "tiles": [
+        [
+          4854,
+          4855
+        ],
+        [
+          4862,
+          4863
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chest_light_wood.tscn"
+    },
+    {
+      "id": "dresser_white",
+      "nameKey": "ui.guild_base.furniture.dresser_white",
+      "category": "storage",
+      "tiles": [
+        [
+          4868,
+          4869
+        ],
+        [
+          4876,
+          4877
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [
+        [
+          0,
+          -32
+        ],
+        [
+          32,
+          -32
+        ]
+      ],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/dresser_white.tscn"
+    },
+    {
+      "id": "chest_white",
+      "nameKey": "ui.guild_base.furniture.chest_white",
+      "category": "storage",
+      "tiles": [
+        [
+          4870,
+          4871
+        ],
+        [
+          4878,
+          4879
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/chest_white.tscn"
+    },
+    {
+      "id": "bed_single_blue",
+      "nameKey": "ui.guild_base.furniture.bed_single_blue",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4467,
+          4468,
+          4469
+        ],
+        [
+          4475,
+          4476,
+          4477
+        ],
+        [
+          4483,
+          4484,
+          4485
+        ]
+      ],
+      "footprint": [
+        2,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_blue.tscn"
+    },
+    {
+      "id": "bed_double_blue",
+      "nameKey": "ui.guild_base.furniture.bed_double_blue",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4470,
+          4471,
+          4472
+        ],
+        [
+          4478,
+          4479,
+          4480
+        ],
+        [
+          4486,
+          4487,
+          4488
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_blue.tscn"
+    },
+    {
+      "id": "bed_single_pink",
+      "nameKey": "ui.guild_base.furniture.bed_single_pink",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4515,
+          4516,
+          4517
+        ],
+        [
+          4523,
+          4524,
+          4525
+        ],
+        [
+          4531,
+          4532,
+          4533
+        ]
+      ],
+      "footprint": [
+        2,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_pink.tscn"
+    },
+    {
+      "id": "bed_double_pink",
+      "nameKey": "ui.guild_base.furniture.bed_double_pink",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4518,
+          4519,
+          4520
+        ],
+        [
+          4526,
+          4527,
+          4528
+        ],
+        [
+          4534,
+          4535,
+          4536
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_pink.tscn"
+    },
+    {
+      "id": "bed_single_brown",
+      "nameKey": "ui.guild_base.furniture.bed_single_brown",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4563,
+          4564,
+          4565
+        ],
+        [
+          4571,
+          4572,
+          4573
+        ],
+        [
+          4579,
+          4580,
+          4581
+        ]
+      ],
+      "footprint": [
+        2,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_brown.tscn"
+    },
+    {
+      "id": "bed_double_brown",
+      "nameKey": "ui.guild_base.furniture.bed_double_brown",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4566,
+          4567,
+          4568
+        ],
+        [
+          4574,
+          4575,
+          4576
+        ],
+        [
+          4582,
+          4583,
+          4584
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_brown.tscn"
+    },
+    {
+      "id": "bed_single_plum",
+      "nameKey": "ui.guild_base.furniture.bed_single_plum",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4611,
+          4612,
+          4613
+        ],
+        [
+          4619,
+          4620,
+          4621
+        ],
+        [
+          4627,
+          4628,
+          4629
+        ]
+      ],
+      "footprint": [
+        2,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_plum.tscn"
+    },
+    {
+      "id": "bed_double_plum",
+      "nameKey": "ui.guild_base.furniture.bed_double_plum",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4614,
+          4615,
+          4616
+        ],
+        [
+          4622,
+          4623,
+          4624
+        ],
+        [
+          4630,
+          4631,
+          4632
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_plum.tscn"
+    },
+    {
+      "id": "bed_single_taupe",
+      "nameKey": "ui.guild_base.furniture.bed_single_taupe",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4659,
+          4660,
+          4661
+        ],
+        [
+          4667,
+          4668,
+          4669
+        ],
+        [
+          4675,
+          4676,
+          4677
+        ]
+      ],
+      "footprint": [
+        2,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_taupe.tscn"
+    },
+    {
+      "id": "bed_double_taupe",
+      "nameKey": "ui.guild_base.furniture.bed_double_taupe",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4662,
+          4663,
+          4664
+        ],
+        [
+          4670,
+          4671,
+          4672
+        ],
+        [
+          4678,
+          4679,
+          4680
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_taupe.tscn"
+    },
+    {
+      "id": "bed_single_green",
+      "nameKey": "ui.guild_base.furniture.bed_single_green",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4707,
+          4708,
+          4709
+        ],
+        [
+          4715,
+          4716,
+          4717
+        ],
+        [
+          4723,
+          4724,
+          4725
+        ]
+      ],
+      "footprint": [
+        2,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_green.tscn"
+    },
+    {
+      "id": "bed_double_green",
+      "nameKey": "ui.guild_base.furniture.bed_double_green",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4710,
+          4711,
+          4712
+        ],
+        [
+          4718,
+          4719,
+          4720
+        ],
+        [
+          4726,
+          4727,
+          4728
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_green.tscn"
+    },
+    {
+      "id": "bed_single_gold",
+      "nameKey": "ui.guild_base.furniture.bed_single_gold",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4755,
+          4756,
+          4757
+        ],
+        [
+          4763,
+          4764,
+          4765
+        ],
+        [
+          4771,
+          4772,
+          4773
+        ]
+      ],
+      "footprint": [
+        2,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_gold.tscn"
+    },
+    {
+      "id": "bed_double_gold",
+      "nameKey": "ui.guild_base.furniture.bed_double_gold",
+      "category": "bedroom",
+      "tiles": [
+        [
+          4758,
+          4759,
+          4760
+        ],
+        [
+          4766,
+          4767,
+          4768
+        ],
+        [
+          4774,
+          4775,
+          4776
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_gold.tscn"
+    },
+    {
+      "id": "bamboo_left",
+      "nameKey": "ui.guild_base.furniture.bamboo_left",
+      "category": "decorations",
+      "tiles": [
+        [
+          4045
+        ],
+        [
+          4053
+        ],
+        [
+          4061
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bamboo_left.tscn"
+    },
+    {
+      "id": "bamboo_right",
+      "nameKey": "ui.guild_base.furniture.bamboo_right",
+      "category": "decorations",
+      "tiles": [
+        [
+          4046
+        ],
+        [
+          4054
+        ],
+        [
+          4062
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bamboo_right.tscn"
+    },
+    {
+      "id": "palm_left",
+      "nameKey": "ui.guild_base.furniture.palm_left",
+      "category": "decorations",
+      "tiles": [
+        [
+          4047
+        ],
+        [
+          4055
+        ],
+        [
+          4063
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/palm_left.tscn"
+    },
+    {
+      "id": "flower_bush_pink",
+      "nameKey": "ui.guild_base.furniture.flower_bush_pink",
+      "category": "decorations",
+      "tiles": [
+        [
+          4097
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_bush_pink.tscn"
+    },
+    {
+      "id": "flower_bush_blue",
+      "nameKey": "ui.guild_base.furniture.flower_bush_blue",
+      "category": "decorations",
+      "tiles": [
+        [
+          4105
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_bush_blue.tscn"
+    },
+    {
+      "id": "flower_bush_purple",
+      "nameKey": "ui.guild_base.furniture.flower_bush_purple",
+      "category": "decorations",
+      "tiles": [
+        [
+          4113
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 8,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_bush_purple.tscn"
+    },
+    {
+      "id": "floor_lamp",
+      "nameKey": "ui.guild_base.furniture.floor_lamp",
+      "category": "decorations",
+      "tiles": [
+        [
+          4013
+        ],
+        [
+          4021
+        ],
+        [
+          4029
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 6,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/floor_lamp.tscn"
+    },
+    {
+      "id": "bin_empty",
+      "nameKey": "ui.guild_base.furniture.bin_empty",
+      "category": "decorations",
+      "tiles": [
+        [
+          3719
+        ],
+        [
+          3727
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bin_empty.tscn"
+    },
+    {
+      "id": "bin_full",
+      "nameKey": "ui.guild_base.furniture.bin_full",
+      "category": "decorations",
+      "tiles": [
+        [
+          3720
+        ],
+        [
+          3728
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bin_full.tscn"
+    },
+    {
+      "id": "flower_pot_orange",
+      "nameKey": "ui.guild_base.furniture.flower_pot_orange",
+      "category": "table_decor",
+      "tiles": [
+        [
+          4065
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 12,
+      "placement": "surface",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_pot_orange.tscn"
+    },
+    {
+      "id": "flower_pot_pink",
+      "nameKey": "ui.guild_base.furniture.flower_pot_pink",
+      "category": "table_decor",
+      "tiles": [
+        [
+          4067
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 12,
+      "placement": "surface",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_pot_pink.tscn"
+    },
+    {
+      "id": "flower_pot_blue",
+      "nameKey": "ui.guild_base.furniture.flower_pot_blue",
+      "category": "table_decor",
+      "tiles": [
+        [
+          4069
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 12,
+      "placement": "surface",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_pot_blue.tscn"
+    },
+    {
+      "id": "flower_pot_purple",
+      "nameKey": "ui.guild_base.furniture.flower_pot_purple",
+      "category": "table_decor",
+      "tiles": [
+        [
+          4071
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 12,
+      "placement": "surface",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_pot_purple.tscn"
+    },
+    {
+      "id": "bouquet_blue",
+      "nameKey": "ui.guild_base.furniture.bouquet_blue",
+      "category": "table_decor",
+      "tiles": [
+        [
+          4082
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 12,
+      "placement": "surface",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bouquet_blue.tscn"
+    },
+    {
+      "id": "bouquet_yellow",
+      "nameKey": "ui.guild_base.furniture.bouquet_yellow",
+      "category": "table_decor",
+      "tiles": [
+        [
+          4083
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 12,
+      "placement": "surface",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/bouquet_yellow.tscn"
+    },
+    {
+      "id": "books_paper",
+      "nameKey": "ui.guild_base.furniture.books_paper",
+      "category": "table_decor",
+      "tiles": [
+        [
+          4032
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 8,
+      "placement": "surface",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/books_paper.tscn"
+    },
+    {
+      "id": "books_blue",
+      "nameKey": "ui.guild_base.furniture.books_blue",
+      "category": "table_decor",
+      "tiles": [
+        [
+          4108
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 8,
+      "placement": "surface",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/books_blue.tscn"
+    },
+    {
+      "id": "books_green",
+      "nameKey": "ui.guild_base.furniture.books_green",
+      "category": "table_decor",
+      "tiles": [
+        [
+          4109
+        ]
+      ],
+      "footprint": [
+        1,
+        1
+      ],
+      "visualSize": [
+        1,
+        1
+      ],
+      "visualOffset": [
+        0,
+        -32
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 8,
+      "placement": "surface",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/books_green.tscn"
+    },
+    {
+      "id": "wall_screen",
+      "nameKey": "ui.guild_base.furniture.wall_screen",
+      "category": "walls",
+      "tiles": [
+        [
+          4116,
+          4117,
+          4118
+        ],
+        [
+          4124,
+          4125,
+          4126
+        ]
+      ],
+      "footprint": [
+        3,
+        1
+      ],
+      "visualSize": [
+        3,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 4,
+      "placement": "wall",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/wall_screen.tscn"
+    },
+    {
+      "id": "carpet_purple",
+      "nameKey": "ui.guild_base.furniture.carpet_purple",
+      "category": "floor",
+      "tiles": [
+        [
+          2606,
+          2607,
+          2608
+        ],
+        [
+          2614,
+          2615,
+          2616
+        ],
+        [
+          2622,
+          2623,
+          2624
+        ]
+      ],
+      "footprint": [
+        3,
+        3
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": true,
+      "scenePath": "res://scenes/world/guild_base/furniture/carpet_purple.tscn"
+    },
+    {
+      "id": "carpet_cream",
+      "nameKey": "ui.guild_base.furniture.carpet_cream",
+      "category": "floor",
+      "tiles": [
+        [
+          2638,
+          2639,
+          2640
+        ],
+        [
+          2646,
+          2647,
+          2648
+        ],
+        [
+          2654,
+          2655,
+          2656
+        ]
+      ],
+      "footprint": [
+        3,
+        3
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": true,
+      "scenePath": "res://scenes/world/guild_base/furniture/carpet_cream.tscn"
+    },
+    {
+      "id": "carpet_mint",
+      "nameKey": "ui.guild_base.furniture.carpet_mint",
+      "category": "floor",
+      "tiles": [
+        [
+          2665,
+          2666,
+          2667
+        ],
+        [
+          2673,
+          2674,
+          2675
+        ],
+        [
+          2681,
+          2682,
+          2683
+        ]
+      ],
+      "footprint": [
+        3,
+        3
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": true,
+      "scenePath": "res://scenes/world/guild_base/furniture/carpet_mint.tscn"
+    },
+    {
+      "id": "carpet_lavender",
+      "nameKey": "ui.guild_base.furniture.carpet_lavender",
+      "category": "floor",
+      "tiles": [
+        [
+          2670,
+          2671,
+          2672
+        ],
+        [
+          2678,
+          2679,
+          2680
+        ],
+        [
+          2686,
+          2687,
+          2688
+        ]
+      ],
+      "footprint": [
+        3,
+        3
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": true,
+      "scenePath": "res://scenes/world/guild_base/furniture/carpet_lavender.tscn"
+    },
+    {
+      "id": "rug_green_round",
+      "nameKey": "ui.guild_base.furniture.rug_green_round",
+      "category": "floor",
+      "tiles": [
+        [
+          2726,
+          2727,
+          2728
+        ],
+        [
+          2734,
+          2735,
+          2736
+        ],
+        [
+          2742,
+          2743,
+          2744
+        ]
+      ],
+      "footprint": [
+        3,
+        3
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/rug_green_round.tscn"
+    },
+    {
+      "id": "rug_blue_round",
+      "nameKey": "ui.guild_base.furniture.rug_blue_round",
+      "category": "floor",
+      "tiles": [
+        [
+          2750,
+          2751,
+          2752
+        ],
+        [
+          2758,
+          2759,
+          2760
+        ],
+        [
+          2766,
+          2767,
+          2768
+        ]
+      ],
+      "footprint": [
+        3,
+        3
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/rug_blue_round.tscn"
+    },
+    {
+      "id": "rug_green_ornate",
+      "nameKey": "ui.guild_base.furniture.rug_green_ornate",
+      "category": "floor",
+      "tiles": [
+        [
+          2721,
+          2722,
+          2723,
+          2724
+        ],
+        [
+          2729,
+          2730,
+          2731,
+          2732
+        ],
+        [
+          2737,
+          2738,
+          2739,
+          2740
+        ],
+        [
+          2745,
+          2746,
+          2747,
+          2748
+        ],
+        [
+          2753,
+          2754,
+          2755,
+          2756
+        ]
+      ],
+      "footprint": [
+        4,
+        5
+      ],
+      "visualSize": [
+        4,
+        5
+      ],
+      "visualOffset": [
+        0,
+        -160
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/rug_green_ornate.tscn"
+    },
+    {
+      "id": "rug_purple_ornate",
+      "nameKey": "ui.guild_base.furniture.rug_purple_ornate",
+      "category": "floor",
+      "tiles": [
+        [
+          2761,
+          2762,
+          2763,
+          2764
+        ],
+        [
+          2769,
+          2770,
+          2771,
+          2772
+        ],
+        [
+          2777,
+          2778,
+          2779,
+          2780
+        ],
+        [
+          2785,
+          2786,
+          2787,
+          2788
+        ],
+        [
+          2793,
+          2794,
+          2795,
+          2796
+        ]
+      ],
+      "footprint": [
+        4,
+        5
+      ],
+      "visualSize": [
+        4,
+        5
+      ],
+      "visualOffset": [
+        0,
+        -160
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/rug_purple_ornate.tscn"
+    },
+    {
+      "id": "rug_blue_welcome",
+      "nameKey": "ui.guild_base.furniture.rug_blue_welcome",
+      "category": "floor",
+      "tiles": [
+        [
+          2801,
+          2802,
+          2803
+        ],
+        [
+          2809,
+          2810,
+          2811
+        ]
+      ],
+      "footprint": [
+        3,
+        2
+      ],
+      "visualSize": [
+        3,
+        2
+      ],
+      "visualOffset": [
+        0,
+        -64
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/rug_blue_welcome.tscn"
+    },
+    {
+      "id": "display_pod_green",
+      "nameKey": "ui.guild_base.furniture.display_pod_green",
+      "category": "laboratory",
+      "tiles": [
+        [
+          5065,
+          5066,
+          5067
+        ],
+        [
+          5073,
+          5074,
+          5075
+        ],
+        [
+          5081,
+          5082,
+          5083
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_green.tscn"
+    },
+    {
+      "id": "display_pod_blue",
+      "nameKey": "ui.guild_base.furniture.display_pod_blue",
+      "category": "laboratory",
+      "tiles": [
+        [
+          5068,
+          5069,
+          5070
+        ],
+        [
+          5076,
+          5077,
+          5078
+        ],
+        [
+          5084,
+          5085,
+          5086
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_blue.tscn"
+    },
+    {
+      "id": "display_pod_yellow",
+      "nameKey": "ui.guild_base.furniture.display_pod_yellow",
+      "category": "laboratory",
+      "tiles": [
+        [
+          5089,
+          5090,
+          5091
+        ],
+        [
+          5097,
+          5098,
+          5099
+        ],
+        [
+          5105,
+          5106,
+          5107
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_yellow.tscn"
+    },
+    {
+      "id": "display_pod_pink",
+      "nameKey": "ui.guild_base.furniture.display_pod_pink",
+      "category": "laboratory",
+      "tiles": [
+        [
+          5092,
+          5093,
+          5094
+        ],
+        [
+          5100,
+          5101,
+          5102
+        ],
+        [
+          5108,
+          5109,
+          5110
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_pink.tscn"
+    },
+    {
+      "id": "display_pod_gray",
+      "nameKey": "ui.guild_base.furniture.display_pod_gray",
+      "category": "laboratory",
+      "tiles": [
+        [
+          5113,
+          5114,
+          5115
+        ],
+        [
+          5121,
+          5122,
+          5123
+        ],
+        [
+          5129,
+          5130,
+          5131
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_gray.tscn"
+    },
+    {
+      "id": "display_pod_purple",
+      "nameKey": "ui.guild_base.furniture.display_pod_purple",
+      "category": "laboratory",
+      "tiles": [
+        [
+          5116,
+          5117,
+          5118
+        ],
+        [
+          5124,
+          5125,
+          5126
+        ],
+        [
+          5132,
+          5133,
+          5134
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        -16,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_purple.tscn"
+    },
+    {
+      "id": "display_pod_white",
+      "nameKey": "ui.guild_base.furniture.display_pod_white",
+      "category": "laboratory",
+      "tiles": [
+        [
+          5137,
+          5138,
+          5139
+        ],
+        [
+          5145,
+          5146,
+          5147
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        3,
+        2
+      ],
+      "visualOffset": [
+        -16,
+        -64
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_white.tscn"
+    },
+    {
+      "id": "lab_console",
+      "nameKey": "ui.guild_base.furniture.lab_console",
+      "category": "laboratory",
+      "tiles": [
+        [
+          5071,
+          5072
+        ],
+        [
+          5079,
+          5080
+        ],
+        [
+          5087,
+          5088
+        ]
+      ],
+      "footprint": [
+        2,
+        1
+      ],
+      "visualSize": [
+        2,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/lab_console.tscn"
     }
-  ]
+  ],
+  "source": {
+    "tileset": "Indoors Tileset.tsx",
+    "image": "5GEN_INTERIOR_TILESET.png",
+    "credits": [
+      "Akizakura16",
+      "Shiny570",
+      "Ultimospriter"
+    ],
+    "gidConvention": "tileid + 1; source columns: 8"
+  }
 }

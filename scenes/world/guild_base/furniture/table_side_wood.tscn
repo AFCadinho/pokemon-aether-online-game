@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_xwyjt"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_ueekl"]
+
+[node name="TableSideWood" type="Node2D" unique_id=1165491676]
+texture_filter = 1
+script = ExtResource("1_xwyjt")
+furniture_id = "table_side_wood"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1175691340]
+position = Vector2(0, -96)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 1, 0, 0, 0, 7, 0, 15, 0, 0, 0, 0, 0, 2, 0, 0, 0, 14, 0, 15, 0, 0, 0)
+tile_set = ExtResource("2_ueekl")

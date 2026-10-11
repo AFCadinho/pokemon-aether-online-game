@@ -16,7 +16,16 @@ tsx_path = Path(sys.argv[1]).resolve()
 tsx = ET.parse(tsx_path).getroot()
 source = Image.open(tsx_path.parent / tsx.find("image").get("source")).convert("RGBA")
 source_columns = int(tsx.get("columns"))
+assert int(tsx.get("tilewidth")) == int(tsx.get("tileheight")) == catalog["tileSize"] == 32
+assert source.width == source_columns * 32 and source.height % 32 == 0
+assert len({item["id"] for item in catalog["items"]}) == len(catalog["items"]), "Duplicate furniture ID"
+for item in catalog["items"]:
+    width, height = item["visualSize"]
+    assert len(item["tiles"]) == height and all(len(row) == width for row in item["tiles"]), item["id"]
+    assert all(dimension > 0 for dimension in item["footprint"]), item["id"]
+    assert not item["resizable"] or (width, height) == (3, 3), "Resizable rugs require nine-slice art"
 gids = sorted({gid for item in catalog["items"] for row in item["tiles"] for gid in row if gid})
+assert all(isinstance(gid, int) and 0 < gid <= int(tsx.get("tilecount")) for gid in gids), "Source tile outside tileset"
 columns = 16
 atlas = Image.new("RGBA", (columns*32, ((len(gids)+columns-1)//columns)*32))
 images = {}

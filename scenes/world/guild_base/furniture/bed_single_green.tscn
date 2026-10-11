@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_i8x3r"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_3fltx"]
+
+[node name="BedSingleGreen" type="Node2D" unique_id=1261701083]
+texture_filter = 1
+script = ExtResource("1_i8x3r")
+furniture_id = "bed_single_green"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1792372503]
+position = Vector2(-16, -96)
+tile_map_data = PackedByteArray("AAAAAAAAAAANAB4AAAABAAAAAAAOAB4AAAACAAAAAAAPAB4AAAAAAAEAAAADAB8AAAABAAEAAAAEAB8AAAACAAEAAAAFAB8AAAAAAAIAAAAJAB8AAAABAAIAAAAKAB8AAAACAAIAAAALAB8AAAA=")
+tile_set = ExtResource("2_3fltx")

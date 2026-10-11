@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_ldkix"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_6tiu1"]
+
+[node name="BedDoubleTaupe" type="Node2D" unique_id=547571047]
+texture_filter = 1
+script = ExtResource("1_ldkix")
+furniture_id = "bed_double_taupe"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1333188514]
+position = Vector2(0, -96)
+tile_map_data = PackedByteArray("AAAAAAAAAAAOAB0AAAABAAAAAAAPAB0AAAACAAAAAAAAAB4AAAAAAAEAAAAEAB4AAAABAAEAAAAFAB4AAAACAAEAAAAGAB4AAAAAAAIAAAAKAB4AAAABAAIAAAALAB4AAAACAAIAAAAMAB4AAAA=")
+tile_set = ExtResource("2_6tiu1")
