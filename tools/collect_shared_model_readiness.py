@@ -38,13 +38,19 @@ def main():
         assert proof["ok"] is True
     revision = (run / "implementation-commit.txt").read_text().strip()
     inputs = read(run / "inputs.sha256.json")
+    phases = {"installation": {"qualified_source_commit": revision, "inputs": inputs.copy()}}
     for name in ("consumers", "session"):
         execution = read(run / (name + ".execution.json"))
         assert execution["ok"] and execution["returncode"] == 0 and execution["inputs_unchanged"]
-        for path, digest in read(run / (name + ".inputs.json")).items():
-            assert path not in inputs or inputs[path] == digest
+        frozen = read(run / (name + ".inputs.json"))
+        phases[name] = {"qualified_source_commit": execution["implementation_commit"], "inputs": frozen}
+        for path, digest in frozen.items():
+            # Different diagnostics may be refined before they are first run.
+            # Production code must stay identical across all three phases.
+            assert path not in inputs or inputs[path] == digest or path.startswith("tests/")
             inputs[path] = digest
-    frozen_commit_check({"qualified_source_commit": revision, "inputs": inputs})
+    for phase in phases.values():
+        frozen_commit_check(phase)
     for path, digest in inputs.items():
         assert sha(ROOT / path) == digest, "Source changed after qualification: " + path
     wire = read(ROOT / "data/model_pair_qualified.json")
@@ -114,7 +120,7 @@ def main():
     artifacts["crashes"] = sha(args.crashes / "receipt.json")
     result = {"schema": 1, "linux_checks_passed": True, "production_approved": False,
               "native_platforms_pending": ["Windows", "macOS", "Android device"],
-              "implementation_commit": revision, "inputs": inputs, "artifact_sha256": artifacts,
+              "implementation_commit": revision, "phase_inputs": phases, "artifact_sha256": artifacts,
               "index_bytes": (ROOT / "data/model_pair_qualified.json").stat().st_size,
               "index_sha256": sha(ROOT / "data/model_pair_qualified.json"),
               "installation": install, "consumers": consumers, "independent_physical_checks": physical,

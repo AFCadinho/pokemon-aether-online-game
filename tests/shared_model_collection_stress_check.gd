@@ -24,6 +24,7 @@ func _run() -> void:
 	settings.battle_3d_arena = "classic"
 	settings.battle_3d_camera_motion = false
 	settings.battle_3d_catalog_path = catalog # Prevent any network/fallback selection.
+	settings._manual_model_catalog_this_session = true
 	root.mode = Window.MODE_WINDOWED
 	root.show()
 	root.grab_focus()
