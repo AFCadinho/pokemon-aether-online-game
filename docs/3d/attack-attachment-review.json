@@ -2,13 +2,13 @@
   "complete": false,
   "counts": {
     "mouth_status": {
-      "concealed_mouth_with_reviewed_muzzle_outlet": 2,
+      "concealed_mouth_with_reviewed_muzzle_outlet": 4,
       "hold_native_red_mouth_action": 1,
       "mouth_not_required_by_current_supported_learnset": 2,
       "mouth_not_required_by_supported_learnset": 1,
       "mouthless_species_with_reviewed_alternate_emitter": 8,
       "pending_anatomical_casting_review": 1,
-      "pending_anatomical_mouth_review": 18,
+      "pending_anatomical_mouth_review": 13,
       "pending_anatomical_mouthpart_review": 3,
       "pending_anatomical_muzzle_review": 1,
       "pending_anatomical_route": 34,
@@ -20,17 +20,17 @@
       "pending_manual_anatomical_calibration": 6,
       "pending_mask_casting_review": 1,
       "pending_mouth_proposal_or_anatomical_route": 17,
-      "pending_mouthpart_clearance_review": 2,
+      "pending_mouthpart_clearance_review": 3,
       "pending_multi_pose_mouth_fit": 2,
       "pending_multipose_correction": 1,
       "pending_multipose_mouth_correction": 4,
       "pending_runtime_identity_review": 1,
       "pending_runtime_material_review": 5,
       "pending_runtime_visibility_and_anatomy_review": 1,
-      "pending_source_visibility_review": 1,
+      "pending_source_visibility_review": 2,
       "retain_existing_calibration": 4,
       "reviewed_mandibles_with_mouth_route_review_pending": 2,
-      "sampled_mouth_pose_review_pass": 985
+      "sampled_mouth_pose_review_pass": 986
     },
     "part_status": {
       "correction_pending": 2,
@@ -43,12 +43,12 @@
       "pending_multipose_correction": 8,
       "pending_runtime_identity_review": 4,
       "pending_runtime_visibility_and_anatomy_review": 4,
-      "sampled_marker_pose_review_pass_installed": 1774
+      "sampled_marker_pose_review_pass_installed": 1777
     },
-    "runtime_profiles": 1070,
+    "runtime_profiles": 1072,
     "species_forms": 1200
   },
-  "profile_sha256": "6adac4e9bb3ae41fc2cbb71a46c5c0b783721394063080bae61212a32e5e5cad",
+  "profile_sha256": "e8ad4ed5a7ed6ef2d63144ccdc473f2dc932ab6d454f8722f014a3567fd61a51",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -31171,14 +31171,138 @@
       }
     },
     "flabebe": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Extra forward front, underside and reverse views show the candidate on the projecting nose. A small mouth opening behind/below it is partly hidden by the flower and snout. Do not approve the nose as mouth; needs a closer lip view.",
-        "preview": "mouth-reverse-v58/flabebe.png",
-        "status": "pending_anatomical_mouth_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "disarmingvoice": {
+          "action": "physical_attack_2",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Disarming Voice uses the individually projected lip seam, physical_attack_2 .25/.45. Sampled .20 charge and .27/.35 sound rings accompany the native held-flower pose. Charge and ring art are larger than the head; their styling and exact close-range clearance remain pending. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "physical_attack_2",
+          "part": "flower_tip",
+          "scope": "Normal and shiny, two views: The separately measured held flower pistil tip supplies Solar Beam, physical_attack_2 .25/.45/end .60 with scale .05. Close views show the beam core meeting the yellow tip at .27/.35/.45, fading at .57, ending by .65. This avoids routing the beam through the held flower from the lip seam; the native pose keeps the flower presented forward. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_mouth_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Projected lip seam immediately below the small pointed nose. The point follows the seam in visible idle and physical/special poses; the held flower and turned head conceal it in selected views. No open-cavity or beam-clearance approval; flower casting is reviewed separately.",
+        "preview": "mouth-context-v206/flabebe.png",
+        "status": "mouth_pose_review_pass"
+      },
+      "mouth_review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "a745f8c6203a306765b05867383ca2e92d8163d4c4cdf29941d97f53853cddc7",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "838e34a1ad79f466267d79aa8b1958c761bf35e26844a40d28afa8e0abba3c43",
+        "scope": "Projected lip seam immediately below the small pointed nose. The point follows the seam in visible idle and physical/special poses; the held flower and turned head conceal it in selected views. No open-cavity or beam-clearance approval; flower casting is reviewed separately.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "85290fa1a11f1f87c05edfb7ac00c2614490923e2bdf305ec10ab752779051c2",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.480566610798492,
+                0.209807744365666,
+                0.309625644835842
+              ],
+              "column": 1.0,
+              "distance": 0.100842654295034,
+              "mesh": "pm0713_11_00/Skeleton3D/pm0713_11_00_body_mesh",
+              "pixel": [
+                222.0,
+                188.0
+              ],
+              "surface": 0,
+              "triangle": 530,
+              "vertex_indices": [
+                219,
+                220,
+                230
+              ],
+              "weight": 1.0
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      },
+      "mouth_status": "sampled_mouth_pose_review_pass",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "disarmingvoice": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "a20f24c5f601d9682dd39eedb75449dd747b3f1f0b91063120868141a0d9bdc9",
+          "fractions": [
+            0.2,
+            0.27,
+            0.35,
+            0.45,
+            0.57,
+            0.65
+          ],
+          "normal_runtime_sha256": "a745f8c6203a306765b05867383ca2e92d8163d4c4cdf29941d97f53853cddc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8243f9e830ba806171c00800d14f9e73aee0b0d1ae2b9ef8b54e59bf4e1be3d8",
+          "scope": "Normal and shiny, two views: Disarming Voice uses the individually projected lip seam, physical_attack_2 .25/.45. Sampled .20 charge and .27/.35 sound rings accompany the native held-flower pose. Charge and ring art are larger than the head; their styling and exact close-range clearance remain pending. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "404614470464c2efafe938573b0392e7a3205b150a6cc75e94c6d45070dbab62",
+          "shiny_runtime_sha256": "05c5ea507070d244189c156965fcfa4dd2ee569f992a59c4aa03936f0a392062",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 150.0,
+            "impact_frame": 67.5,
+            "launch_frame": 37.5,
+            "move_key": "disarmingvoice"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "db520beeb27d4104bcb1ee28099a3a1ad69799ba3dbee6dde7f67a185e11503b",
+          "fractions": [
+            0.2,
+            0.27,
+            0.35,
+            0.45,
+            0.57,
+            0.65
+          ],
+          "normal_runtime_sha256": "a745f8c6203a306765b05867383ca2e92d8163d4c4cdf29941d97f53853cddc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2c66a694e10fa3325bea988e1da31b20278a40b43f5c73612fa3768e4f67104e",
+          "scope": "Normal and shiny, two views: The separately measured held flower pistil tip supplies Solar Beam, physical_attack_2 .25/.45/end .60 with scale .05. Close views show the beam core meeting the yellow tip at .27/.35/.45, fading at .57, ending by .65. This avoids routing the beam through the held flower from the lip seam; the native pose keeps the flower presented forward. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "cf19bb2d3c2a66f535cef795d79bfdc81dfb4726c6df4fdc7db948404d71c996",
+          "shiny_runtime_sha256": "05c5ea507070d244189c156965fcfa4dd2ee569f992a59c4aa03936f0a392062",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 90.0,
+            "emission_scale": 0.05,
+            "frames": 150.0,
+            "impact_frame": 67.5,
+            "launch_frame": 37.5,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -31187,7 +31311,68 @@
       ],
       "normal_runtime_sha256": "a745f8c6203a306765b05867383ca2e92d8163d4c4cdf29941d97f53853cddc7",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "flower_tip": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "flower_tip": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "85290fa1a11f1f87c05edfb7ac00c2614490923e2bdf305ec10ab752779051c2",
+            "landmarks": [
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.678101780754428,
+                  0.0763994045322069,
+                  0.245498814713365
+                ],
+                "column": 1.0,
+                "distance": 0.0840227775091017,
+                "mesh": "pm0713_11_00/Skeleton3D/pm0713_11_00_flower_mesh",
+                "pixel": [
+                  260.0,
+                  239.0
+                ],
+                "surface": 0,
+                "triangle": 938,
+                "vertex_indices": [
+                  812,
+                  821,
+                  820
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "a745f8c6203a306765b05867383ca2e92d8163d4c4cdf29941d97f53853cddc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d7cae69d47b717293455e940ea73afe3e9028d268e6a8593496977e9052b2e55",
+          "scope": "Individually projected upper/front yellow tip of the held central flower pistil, tracked by spine_b_06/spine_b_05. Marker remains on its rounded tip through the sampled idle and three native attack actions. Selected occluded views are excluded from clearance approval. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "flower_tip": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "flamigo": {
       "anatomical_move_routing_review": "pending",
@@ -58914,14 +59099,90 @@
       "part_status": {}
     },
     "mamoswine": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Front and underside native poses reviewed; beard and tusks conceal the mouth seam. Do not approve the current beard-point proposal without resolving the mouth or a suitable move-specific source.",
-        "preview": "mouth-under-v72/mamoswine.png",
-        "status": "pending_anatomical_mouth_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two views: Concealed-mouth outlet on the front cream beard below the nose, between the tusks. Special_attack .34/.48/end .62 follows the forward-facing muzzle. Stream is visible at .36/.42/.48, fades at .59 and ends by .65. Ice Beam scale .3; Hyper Beam reduced to .18 after the .3 trial halo covered the nose. Side views hide the farther path behind a tusk; this is not a visible oral cavity approval. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two views: Concealed-mouth outlet on the front cream beard below the nose, between the tusks. Special_attack .34/.48/end .62 follows the forward-facing muzzle. Stream is visible at .36/.42/.48, fades at .59 and ends by .65. Ice Beam scale .3; Hyper Beam reduced to .18 after the .3 trial halo covered the nose. Side views hide the farther path behind a tusk; this is not a visible oral cavity approval. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_mouth_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Cream beard conceals the mouth in the sampled clips. Projected front-beard muzzle outlet supplies reviewed Hyper Beam/Ice Beam windows between the tusks. Bite, Mud-Slap, tusk contact routes and other effects remain pending.",
+        "preview": "mouth-review-v208/mamoswine.png",
+        "status": "concealed_mouth_with_reviewed_muzzle_outlet"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_muzzle_outlet",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "db520beeb27d4104bcb1ee28099a3a1ad69799ba3dbee6dde7f67a185e11503b",
+          "fractions": [
+            0.3,
+            0.36,
+            0.42,
+            0.48,
+            0.59,
+            0.65
+          ],
+          "normal_runtime_sha256": "91cb27657feb877790edbbd1a14ab1d7fd15f71f996b56d33c830bf0f530d702",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2c0eb82f090c0357f99d9586b1903f149759604901f730f7c0637352997fe6a6",
+          "scope": "Normal and shiny, two views: Concealed-mouth outlet on the front cream beard below the nose, between the tusks. Special_attack .34/.48/end .62 follows the forward-facing muzzle. Stream is visible at .36/.42/.48, fades at .59 and ends by .65. Ice Beam scale .3; Hyper Beam reduced to .18 after the .3 trial halo covered the nose. Side views hide the farther path behind a tusk; this is not a visible oral cavity approval. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "2fd2a7c12d3d681e6c12093b928db0f39a55fb6b8f974757ccab72237df9b485",
+          "shiny_runtime_sha256": "1acbc6de9d397f11dea9be3062b1827381a0c01a480bb37e73b4fb8258bd4669",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 85.56,
+            "emission_scale": 0.18,
+            "frames": 138.0,
+            "impact_frame": 66.24,
+            "launch_frame": 46.92,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "a20f24c5f601d9682dd39eedb75449dd747b3f1f0b91063120868141a0d9bdc9",
+          "fractions": [
+            0.3,
+            0.36,
+            0.42,
+            0.48,
+            0.59,
+            0.65
+          ],
+          "normal_runtime_sha256": "91cb27657feb877790edbbd1a14ab1d7fd15f71f996b56d33c830bf0f530d702",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1701fc49d972990dc0ef1a9b43136f713f2477693c5b2113eea823359da3ed96",
+          "scope": "Normal and shiny, two views: Concealed-mouth outlet on the front cream beard below the nose, between the tusks. Special_attack .34/.48/end .62 follows the forward-facing muzzle. Stream is visible at .36/.42/.48, fades at .59 and ends by .65. Ice Beam scale .3; Hyper Beam reduced to .18 after the .3 trial halo covered the nose. Side views hide the farther path behind a tusk; this is not a visible oral cavity approval. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "2761cf8cef79bf130878e80f9e85b4040414975b7decf11b4ace3310adb17b18",
+          "shiny_runtime_sha256": "1acbc6de9d397f11dea9be3062b1827381a0c01a480bb37e73b4fb8258bd4669",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 85.56,
+            "emission_scale": 0.3,
+            "frames": 138.0,
+            "impact_frame": 66.24,
+            "launch_frame": 46.92,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -58939,6 +59200,13 @@
           },
           "preview": "geometry-limb-review/mamoswine.png",
           "proposal": "candidates-limbs-v1/mamoswine.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "muzzle": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
@@ -58977,11 +59245,60 @@
           "preview_sha256": "2b8f403831aa3b0bd68879f1cd6e0849381e1eda7c416b605b96df029c4d98b8",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
           "side_fraction": 0.45
+        },
+        "muzzle": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "2d0698838087e5b35e68dad0c219ee9917ed2787eb44a86f8619a95a4d93c504",
+            "landmarks": [
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.17652445103133,
+                  0.170637243119026,
+                  0.652838305849644
+                ],
+                "column": 1.0,
+                "distance": 3.20167727455182,
+                "mesh": "pm0473_00_00/Skeleton3D/pm0473_00_00_body_mesh",
+                "pixel": [
+                  210.0,
+                  151.0
+                ],
+                "surface": 1,
+                "triangle": 1695,
+                "vertex_indices": [
+                  1777,
+                  1694,
+                  1779
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "91cb27657feb877790edbbd1a14ab1d7fd15f71f996b56d33c830bf0f530d702",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d863edcf7619b516e3ea0067250479bf10aa18c24e155b0a43054405d6700bf8",
+          "scope": "The mouth is concealed by the cream beard throughout the sampled native clips. Individually projected front beard outlet below the nose, between the two tusks, follows feeler/head skin weights. This is a concealed-mouth muzzle outlet, not a visible oral cavity. Side views are tusk-occluded; physical_attack_2 tilts the muzzle upward and needs separate timing. Move routing and actual effects pending.",
+          "side_fraction": 0.45
         }
       },
       "part_status": {
         "hand": "sampled_marker_pose_review_pass_installed",
-        "left_hand": "sampled_marker_pose_review_pass_installed"
+        "left_hand": "sampled_marker_pose_review_pass_installed",
+        "muzzle": "sampled_marker_pose_review_pass_installed"
       }
     },
     "manaphy": {
@@ -66914,11 +67231,11 @@
     "musharna": {
       "anatomical_move_routing_review": "pending",
       "latest_candidate_review": {
-        "notes": "Extra forward closeups from front, underside and reverse angles show the original candidate on the curved snout. Surface proposal v57 lands on a side mouth corner; it is not accepted as the central mouth. Need central lip calibration and an unobscured opposite view.",
-        "preview": "mouth-reverse-v58/musharna.png",
-        "status": "pending_anatomical_mouth_review"
+        "notes": "Expanded marker-free/camera reviews v204/v208/v210/v212 and projected lip trials v206/v214 locate the small mouth cleft. Zeroing bone lateral offsets (v207) moved the marker inside the snout and was rejected. v214 actual Hyper Beam/Shadow Ball trials v216 intersect the opaque native dream-smoke loop in front of the face. Trial profile was restored to its prior state; final mouth-center fit and smoke-path handling remain pending.",
+        "preview": "mouth-review-v214/musharna.png",
+        "status": "pending_mouthpart_clearance_review"
       },
-      "mouth_status": "pending_anatomical_mouth_review",
+      "mouth_status": "pending_mouthpart_clearance_review",
       "move_effect_review": "pending",
       "native_actions": [
         "idle",
@@ -77280,12 +77597,11 @@
     "raging-bolt": {
       "anatomical_move_routing_review": "pending",
       "latest_candidate_review": {
-        "notes": "Full-body, lower and higher native poses leave lower face hidden behind the cloud ring. No verified lip surface; proposal not approved.",
-        "preview": "mouth-high-v80/raging-bolt.png",
-        "preview_sha256": "3e1b50fe80cc6ed9f3620a2dfcbd123156e095ab876c6f9bdbb3d611b31ab8c3",
-        "status": "pending_anatomical_mouth_review"
+        "notes": "Expanded marker-free views v202/v204/v209, including elevated and underside angles and .10/.28/.32/.36/.45/.65/.80 poses, show the cloud collar covering the muzzle. Old mouth proposal is not installed. Native collar/mouth visibility and a clear emission window require further review.",
+        "preview": "mouth-context-v209/raging-bolt.png",
+        "status": "pending_source_visibility_review"
       },
-      "mouth_status": "pending_anatomical_mouth_review",
+      "mouth_status": "pending_source_visibility_review",
       "move_effect_review": "pending",
       "native_actions": [
         "idle",
@@ -105687,15 +106003,157 @@
       "part_status": {}
     },
     "venonat": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Surface projection still lands on the underside of the pink nose in several poses. White fangs and fur obscure the true mouth. Not installed; needs a verified source below the nose.",
-        "preview": "mouth-surface-review-v86/venonat.png",
-        "preview_sha256": "14c6f28d371c9546c8b04df5a70301bd750dcbf8afc578e05ef1c44fcf481bca",
-        "status": "pending_anatomical_mouth_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "screech": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two views: Special_attack .34/.55 charges at .30 and emits sound rings from the concealed-mouth fang region at .35/.40/.48. The hands move outward for the launch window. Broad charge/ring styling and continuous clearance remain pending. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two views: Special_attack .34/.55 and orb scale .12. Charge/launch ball fits the fang gap at .30/.34, departs at .35/.37 and leaves no ball at the source by .40. The default size was rejected because it hid the entire head. Small trailing drops descend below the outlet. Exact fur-surface intersection and continuous clearance remain pending. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two views: Concealed-mouth outlet below the nose between the fangs. Special_attack .34/.48/end .62 and scale .12. Stream exits the fang gap at .36/.42/.48, fades at .59 and ends by .65. Fur-covered cavity and hand-occluded portions are not approved as visible oral anatomy. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two views: Special_attack .34/.55 charges at .30 and emits sound rings from the concealed-mouth fang region at .35/.40/.48. The hands move outward for the launch window. Broad charge/ring styling and continuous clearance remain pending. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_mouth_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Fur conceals the oral cavity; a separately measured head-bound muzzle outlet sits below the pink nose in the fang gap. Solar Beam, Sludge Bomb, Screech and Supersonic have separate sampled effect reviews. Bug Bite/contact and other routes remain pending.",
+        "preview": "mouth-review-v207/venonat.png",
+        "status": "concealed_mouth_with_reviewed_muzzle_outlet"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_muzzle_outlet",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "a20f24c5f601d9682dd39eedb75449dd747b3f1f0b91063120868141a0d9bdc9",
+          "fractions": [
+            0.3,
+            0.35,
+            0.4,
+            0.48,
+            0.55,
+            0.65
+          ],
+          "normal_runtime_sha256": "8fe2240f173b2e4c7768f5809b3b32090bd04e042e8bc41f4d37ef621235cfc0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4b5c7142bb109feb0afacb06f8402d3a3f3dd97b48216fd8f7c7320c2722815c",
+          "scope": "Normal and shiny, two views: Special_attack .34/.55 charges at .30 and emits sound rings from the concealed-mouth fang region at .35/.40/.48. The hands move outward for the launch window. Broad charge/ring styling and continuous clearance remain pending. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f9159c84d26232291cfaab51f48a5db232bca8292ea4182de1fd5f1d49f8e44a",
+          "shiny_runtime_sha256": "38f78139166710098e3b62fbfab6542d3304320a74cadc787c3feae0509d3317",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 40.8,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dc85c9d35aa42a4d686aebf40b7f01752e2a165ddf6ee0a1627c0d2a2eef3b7f",
+          "fractions": [
+            0.3,
+            0.34,
+            0.35,
+            0.37,
+            0.4,
+            0.55
+          ],
+          "normal_runtime_sha256": "8fe2240f173b2e4c7768f5809b3b32090bd04e042e8bc41f4d37ef621235cfc0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6c51f99850e03e54d595a09a6f1e076aed9e266b5ed17d0ef0b0f34b0172a9b6",
+          "scope": "Normal and shiny, two views: Special_attack .34/.55 and orb scale .12. Charge/launch ball fits the fang gap at .30/.34, departs at .35/.37 and leaves no ball at the source by .40. The default size was rejected because it hid the entire head. Small trailing drops descend below the outlet. Exact fur-surface intersection and continuous clearance remain pending. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "0ee0a83243f55f250ef9ca1cbd1818b6b62ad1359c7aa4c50e7846e0c594e7dc",
+          "shiny_runtime_sha256": "38f78139166710098e3b62fbfab6542d3304320a74cadc787c3feae0509d3317",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 40.8,
+            "move_key": "sludgebomb"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "a20f24c5f601d9682dd39eedb75449dd747b3f1f0b91063120868141a0d9bdc9",
+          "fractions": [
+            0.3,
+            0.36,
+            0.42,
+            0.48,
+            0.59,
+            0.65
+          ],
+          "normal_runtime_sha256": "8fe2240f173b2e4c7768f5809b3b32090bd04e042e8bc41f4d37ef621235cfc0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0ba9a5adce9ca3469c73b0a2e90503fc7e6ad1d5af1cf6947cdbe1c78843a9df",
+          "scope": "Normal and shiny, two views: Concealed-mouth outlet below the nose between the fangs. Special_attack .34/.48/end .62 and scale .12. Stream exits the fang gap at .36/.42/.48, fades at .59 and ends by .65. Fur-covered cavity and hand-occluded portions are not approved as visible oral anatomy. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "54df82498fe00b49edfd09542afa9101edaff1e6d9ecf43f9e8e1207d8a58296",
+          "shiny_runtime_sha256": "38f78139166710098e3b62fbfab6542d3304320a74cadc787c3feae0509d3317",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 74.4,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 40.8,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "a20f24c5f601d9682dd39eedb75449dd747b3f1f0b91063120868141a0d9bdc9",
+          "fractions": [
+            0.3,
+            0.35,
+            0.4,
+            0.48,
+            0.55,
+            0.65
+          ],
+          "normal_runtime_sha256": "8fe2240f173b2e4c7768f5809b3b32090bd04e042e8bc41f4d37ef621235cfc0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6e7615f285b57114a3a11a2ce77cd03ee56e56c05178d5c9cbc39246df97bba1",
+          "scope": "Normal and shiny, two views: Special_attack .34/.55 charges at .30 and emits sound rings from the concealed-mouth fang region at .35/.40/.48. The hands move outward for the launch window. Broad charge/ring styling and continuous clearance remain pending. Other moves, opponent heights and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "1a1e155f038cdebf11549e2040d7ef36990382397e4316a0f4109bf72bf79d96",
+          "shiny_runtime_sha256": "38f78139166710098e3b62fbfab6542d3304320a74cadc787c3feae0509d3317",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 40.8,
+            "move_key": "supersonic"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -105704,7 +106162,103 @@
       ],
       "normal_runtime_sha256": "8fe2240f173b2e4c7768f5809b3b32090bd04e042e8bc41f4d37ef621235cfc0",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "muzzle": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "muzzle": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "bone": "head",
+              "method": "manual_visible_fang_gap_adjustment",
+              "offset": [
+                0.025,
+                0,
+                0.56
+              ],
+              "source": "mouth-surface-v206 proposal lay against the lower nose; moved down and forward on the head to the central fang gap. Re-reviewed in v207."
+            }
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "c1ff2d97eae1bddaac97d765cafa33bdc921263cd68261751898c12e5283c33e",
+            "landmarks": [
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.33418418173748,
+                  0.240231392332977,
+                  0.425584425929543
+                ],
+                "column": 1.0,
+                "distance": 0.711229884294095,
+                "mesh": "pm0048_00_00/Skeleton3D/pm0048_00_00_body_mesh",
+                "pixel": [
+                  147.0,
+                  251.0
+                ],
+                "surface": 0,
+                "triangle": 1743,
+                "vertex_indices": [
+                  484,
+                  481,
+                  482
+                ],
+                "weight": 0.5
+              },
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.803994777234704,
+                  0.0331849769875308,
+                  0.162820245777765
+                ],
+                "column": 1.0,
+                "distance": 0.740765842182076,
+                "mesh": "pm0048_00_00/Skeleton3D/pm0048_00_00_body_mesh",
+                "pixel": [
+                  264.0,
+                  251.0
+                ],
+                "surface": 0,
+                "triangle": 222,
+                "vertex_indices": [
+                  1453,
+                  1454,
+                  376
+                ],
+                "weight": 0.5
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "8fe2240f173b2e4c7768f5809b3b32090bd04e042e8bc41f4d37ef621235cfc0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "66297792c182eeaf43d977c2becd6b61bb1dbecc7699c31f520b71894fcb030a",
+          "scope": "Individually adjusted central outlet in the fang gap below the pink nose. The mouth is concealed by fur in all sampled native clips. Head-bound outlet follows the fang region in idle, physical_attack and special_attack. Physical_attack_2 curls the hands across the face and is not approved for emission clearance. This is a concealed-mouth outlet, not a visible cavity. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "muzzle": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "venusaur": {
       "anatomical_move_routing_review": "pending",

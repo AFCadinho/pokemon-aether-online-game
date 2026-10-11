@@ -147,7 +147,7 @@ func _draw_orb(from: Vector3, to: Vector3, travel: float, _after: float, facing:
 	# Let the moon appear first, build the orb, then hold it briefly at full size.
 	var orb_charge := clampf((charge-0.25)/0.65,0,1) if key=="moonblast" else charge
 	var base_radius := MOONBLAST_ORB_RADIUS if key=="moonblast" else (0.34 if key=="sludgebomb" else 0.29)
-	var radius := base_radius * (orb_charge if travel<0 else 1.0)
+	var radius := base_radius * emission_scale * (orb_charge if travel<0 else 1.0)
 	var orb_scale := Vector3.ONE * radius
 	if key=="sludgebomb": orb_scale *= Vector3(1.0+sin(elapsed*15)*0.12,0.9,1.1)
 	_piece(sphere,surface_material,point,orb_scale)
@@ -167,8 +167,8 @@ func _draw_orb(from: Vector3, to: Vector3, travel: float, _after: float, facing:
 			behind.y += sin(p*PI)*0.6 - float(i)*0.035
 			_piece(sphere,surface_material,behind,Vector3.ONE*size)
 		elif key=="moonblast":
-			behind += Vector3(sin(i*2.4),cos(i*2.4),sin(i))*0.13
-			_source_sprite(behind,0.26,"moon_spark",0,0.9-float(i)*0.13,facing,elapsed+i)
+			behind += Vector3(sin(i*2.4),cos(i*2.4),sin(i))*0.13*emission_scale
+			_source_sprite(behind,0.26*emission_scale,"moon_spark",0,0.9-float(i)*0.13,facing,elapsed+i)
 		else:
 			_piece(sphere,surface_material,behind,Vector3.ONE*size)
 

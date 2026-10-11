@@ -109,6 +109,18 @@ func _run() -> void:
 		assert(Attachments.definitions_for(identity, "mouth")[0][0].bone == "head")
 		assert(Attachments.part_for(identity, "hyperbeam") == "mouth")
 
+	for species: String in ["venonat", "mamoswine"]:
+		for identity: String in [species, species + "@shiny"]:
+			assert(Attachments.definitions_for(identity, "mouth").is_empty(), "Concealed mouth outlet is explicitly named muzzle")
+			assert(Attachments.definitions_for(identity, "muzzle").size() == 1)
+			assert(Attachments.part_for(identity, "solarbeam" if species == "venonat" else "icebeam") == "muzzle")
+	for identity: String in ["flabebe", "flabebe@shiny"]:
+		assert(Attachments.part_for(identity, "solarbeam") == "flower_tip")
+		assert(Attachments.part_for(identity, "disarmingvoice") == "mouth")
+		assert(Attachments.definitions_for(identity, "flower_tip")[0][0].bone == "spine_b_06")
+		assert(Attachments.definitions_for(identity, "mouth")[0][0].bone == "head")
+	assert(is_equal_approx(Attachments.choreography_for("venonat", "sludgebomb", "special_attack").emission_scale, .12))
+
 	for identity: String in ["hydrapple", "hydrapple@shiny"]:
 		var mouths := Attachments.definitions_for(identity, "mouth")
 		assert(mouths.size() == 1, "Only the exposed head emits; retracted heads stay inside the apple")

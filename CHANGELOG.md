@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate Mamoswine’s and Venonat’s concealed-mouth outlets and Flabébé’s lip and held-flower origins. Align selected beams and vocal moves with their native poses, and fit Venonat’s Sludge Bomb to its mouth region.
+
 - Anchor Hydrapple’s beam attacks to its exposed mouth above the tongue, fit the stream width, and match Hyper Beam, Solar Beam and Dragon Breath to the open-mouth pose.
 
 - Calibrate Dodrio’s three mouths and beak tips individually. Match Growl and Supersonic to all three open bills, give Hyper Beam a narrower central-mouth stream, and route Doduo/Dodrio’s Fury Attack to their beak tips.

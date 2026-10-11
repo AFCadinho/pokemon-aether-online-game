@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1070 species/forms.
-- No anatomical attachment profile: 130 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 989 species/forms.
+- At least one configured anatomical attachment: 1072 species/forms.
+- No anatomical attachment profile: 128 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 990 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -313,6 +313,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | finizen | mouth | Same attachment profile |
 | finneon | hand, left_hand, mouth | Same attachment profile |
 | flaaffy | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| flabebe | flower_tip, mouth | Same attachment profile |
 | flamigo | foot, left_foot, mouth | Same attachment profile |
 | flapple | mouth | Same attachment profile |
 | flareon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -558,7 +559,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | makuhita | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | malamar | mouth | Same attachment profile |
 | malamar-mega | mouth | Same attachment profile |
-| mamoswine | hand, left_hand | Same attachment profile |
+| mamoswine | hand, left_hand, muzzle | Same attachment profile |
 | manaphy | mouth | Same attachment profile |
 | mandibuzz | mouth | Same attachment profile |
 | manectric | mouth | Same attachment profile |
@@ -1007,6 +1008,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | varoom | mouth | Same attachment profile |
 | veluza | mouth | Same attachment profile |
 | venomoth | mouth | Same attachment profile |
+| venonat | muzzle | Same attachment profile |
 | venusaur | hand, left_hand, mouth | Same attachment profile |
 | venusaur-mega | hand, left_hand, mouth | Same attachment profile |
 | vespiquen | mouth | Same attachment profile |

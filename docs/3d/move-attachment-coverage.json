@@ -62,13 +62,14 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1070,
+		"with_any_attachment": 1072,
 		"with_beak_tip": 6,
 		"with_cannon": 2,
 		"with_cannons": 1,
 		"with_casting": 2,
 		"with_electric_body": 1,
 		"with_face": 5,
+		"with_flower_tip": 1,
 		"with_foot": 307,
 		"with_gem": 2,
 		"with_hand": 576,
@@ -77,13 +78,13 @@
 		"with_left_hand": 574,
 		"with_left_hand_upper": 1,
 		"with_mandibles": 2,
-		"with_mouth": 989,
+		"with_mouth": 990,
 		"with_mouth_primary": 1,
 		"with_mouth_red": 1,
-		"with_muzzle": 2,
+		"with_muzzle": 4,
 		"with_olive_nozzle": 1,
 		"with_vines": 3,
-		"without_attachments": 130
+		"without_attachments": 128
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -13295,6 +13296,43 @@
 				]
 			]
 		},
+		"flabebe": {
+			"flower_tip": [
+				[
+					{
+						"bone": "spine_b_06",
+						"offset": [
+							0.0424772500991821,
+							-0.00061271584127098,
+							0.00663485517725348
+						],
+						"weight": 0.983217596977919
+					},
+					{
+						"bone": "spine_b_05",
+						"offset": [
+							0.0564968176186085,
+							-0.00033213110873475,
+							0.00713606784120202
+						],
+						"weight": 0.0167824030220806
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.00928314402699471,
+							0.00175229669548571,
+							0.0246752835810184
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"flamigo": {
 			"foot": [
 				[
@@ -25739,6 +25777,28 @@
 							-0.016680762171745
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"muzzle": [
+				[
+					{
+						"bone": "feeler",
+						"offset": [
+							0.179896503686905,
+							0.0130226435139775,
+							0.106596536934376
+						],
+						"weight": 0.654111124970962
+					},
+					{
+						"bone": "head",
+						"offset": [
+							0.889753997325897,
+							-0.0178337879478931,
+							0.318868696689606
+						],
+						"weight": 0.345888875029038
 					}
 				]
 			]
@@ -45803,6 +45863,21 @@
 				]
 			]
 		},
+		"venonat": {
+			"muzzle": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.025,
+							0.0,
+							0.56
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"venusaur": {
 			"hand": [
 				[
@@ -49215,8 +49290,8 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "6adac4e9bb3ae41fc2cbb71a46c5c0b783721394063080bae61212a32e5e5cad",
-		"scripts/battle/battle_ui/move_attachments_3d.gd": "e1e876a615cacbda2aaadba60934db81fe133509a5ccc8af1c7556badb86ca0a",
+		"data/battle_move_attachments_3d.json": "e8ad4ed5a7ed6ef2d63144ccdc473f2dc932ab6d454f8722f014a3567fd61a51",
+		"scripts/battle/battle_ui/move_attachments_3d.gd": "9b8d5a37b8ed4037fb71399034235c8d5a64b322efcedfbd4eb0316652787c29",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
 		"scripts/battle/battle_ui/screened_model_catalog.json": "e48e36f568932290b2b7f1f461e15391444d6e7821d48f6ef0c59ede5b36839d"
@@ -61232,8 +61307,61 @@
 			]
 		},
 		"flabebe": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"flower_tip",
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "a745f8c6203a306765b05867383ca2e92d8163d4c4cdf29941d97f53853cddc7",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "838e34a1ad79f466267d79aa8b1958c761bf35e26844a40d28afa8e0abba3c43",
+				"scope": "Projected lip seam immediately below the small pointed nose. The point follows the seam in visible idle and physical/special poses; the held flower and turned head conceal it in selected views. No open-cavity or beam-clearance approval; flower casting is reviewed separately.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "85290fa1a11f1f87c05edfb7ac00c2614490923e2bdf305ec10ab752779051c2",
+					"landmarks": [
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.480566610798492,
+								0.209807744365666,
+								0.309625644835842
+							],
+							"column": 1.0,
+							"distance": 0.100842654295034,
+							"mesh": "pm0713_11_00/Skeleton3D/pm0713_11_00_body_mesh",
+							"pixel": [
+								222.0,
+								188.0
+							],
+							"surface": 0.0,
+							"triangle": 530.0,
+							"vertex_indices": [
+								219.0,
+								220.0,
+								230.0
+							],
+							"weight": 1.0
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -71098,7 +71226,8 @@
 		"mamoswine": {
 			"attachments": [
 				"hand",
-				"left_hand"
+				"left_hand",
+				"muzzle"
 			],
 			"status": "configured",
 			"variants": [
@@ -89008,8 +89137,10 @@
 			]
 		},
 		"venonat": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"muzzle"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"

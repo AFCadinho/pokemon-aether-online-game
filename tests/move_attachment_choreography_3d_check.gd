@@ -87,7 +87,7 @@ func _run() -> void:
 	assert(Attachments.choreography_for("zoroark","flamethrower","physical_attack_2").is_empty())
 	for identity: String in ["walking-wake", "watchog", "zoroark-hisui"]:
 		assert(Attachments.choreography_for(identity,"hyperbeam","special_attack").is_empty())
-	for route: Array in [["dodrio","Growl","special_attack",.30,.50], ["dodrio","Supersonic","special_attack",.30,.50], ["doduo","Growl","special_attack",.36,.58], ["doduo","Supersonic","special_attack",.36,.58], ["gastly","Shadow Ball","special_attack",.42,.65], ["cubone","Growl","special_attack",.14,.22], ["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
+	for route: Array in [["venonat","Sludge Bomb","special_attack",.34,.55], ["venonat","Screech","special_attack",.34,.55], ["venonat","Supersonic","special_attack",.34,.55], ["flabebe","Disarming Voice","physical_attack_2",.25,.45], ["dodrio","Growl","special_attack",.30,.50], ["dodrio","Supersonic","special_attack",.30,.50], ["doduo","Growl","special_attack",.36,.58], ["doduo","Supersonic","special_attack",.36,.58], ["gastly","Shadow Ball","special_attack",.42,.65], ["cubone","Growl","special_attack",.14,.22], ["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -117,7 +117,7 @@ func _run() -> void:
 	assert(Attachments.action_for("revavroom","sludgebomb",{"physical_attack_2":{}}).is_empty())
 	assert(Attachments.choreography_for("sandslash","icebeam","special_attack").is_empty())
 	assert(Attachments.choreography_for("sandslash-alola","blizzard","special_attack").is_empty())
-	for route: Array in [["hydrapple","Hyper Beam","special_attack",.38,.46,.55], ["hydrapple","Solar Beam","special_attack",.38,.46,.55], ["hydrapple","Dragon Breath","special_attack",.38,.46,.55], ["dodrio","Hyper Beam","special_attack",.30,.50,.70], ["electrode-hisui","Hyper Beam","physical_attack",.28,.42,.60], ["kyurem","Ice Beam","special_attack",.30,.45,.60], ["latios","Ice Beam","special_attack",.38,.50,.65], ["klefki","Flash Cannon","special_attack",.30,.45,.60], ["spiritomb","Hyper Beam","special_attack",.38,.50,.68], ["mareanie","Ice Beam","physical_attack",.60,.65,.72], ["arboliva","Solar Beam","physical_attack_2",.14,.22,.32], ["arboliva","Hyper Beam","physical_attack_2",.14,.22,.32], ["cubone","Water Gun","special_attack",.14,.22,.30], ["stunfisk","Water Gun","physical_attack",.12,.22,.28], ["snivy","Solar Beam","special_attack",.38,.48,.62], ["swinub","Ice Beam","special_attack",.34,.45,.58], ["steelix","Hyper Beam","special_attack",.42,.60,.74], ["stonjourner","Hyper Beam","special_attack",.38,.50,.66], ["mandibuzz","Hyper Beam","special_attack",.42,.60,.74], ["skarmory","Hyper Beam","special_attack",.30,.42,.54], ["skarmory-mega","Hyper Beam","special_attack",.18,.25,.32], ["sandaconda","Hyper Beam","physical_attack_2",.12,.22,.28], ["archaludon","Hyper Beam","special_attack",.18,.24,.29], ["avalugg-hisui","Ice Beam","special_attack",.33,.42,.50], ["grumpig","Hyper Beam","special_attack",.10,.22,.30], ["wyrdeer","Hyper Beam","special_attack",.17,.22,.26], ["houndstone","Hyper Beam","special_attack",.42,.60,.72], ["sudowoodo","Hyper Beam","special_attack",.42,.60,.80], ["cetoddle","Ice Beam","physical_attack",.10,.18,.25], ["lugia","Hyper Beam","special_attack",.27,.40,.53]]:
+	for route: Array in [["mamoswine","Hyper Beam","special_attack",.34,.48,.62], ["mamoswine","Ice Beam","special_attack",.34,.48,.62], ["venonat","Solar Beam","special_attack",.34,.48,.62], ["flabebe","Solar Beam","physical_attack_2",.25,.45,.60], ["hydrapple","Hyper Beam","special_attack",.38,.46,.55], ["hydrapple","Solar Beam","special_attack",.38,.46,.55], ["hydrapple","Dragon Breath","special_attack",.38,.46,.55], ["dodrio","Hyper Beam","special_attack",.30,.50,.70], ["electrode-hisui","Hyper Beam","physical_attack",.28,.42,.60], ["kyurem","Ice Beam","special_attack",.30,.45,.60], ["latios","Ice Beam","special_attack",.38,.50,.65], ["klefki","Flash Cannon","special_attack",.30,.45,.60], ["spiritomb","Hyper Beam","special_attack",.38,.50,.68], ["mareanie","Ice Beam","physical_attack",.60,.65,.72], ["arboliva","Solar Beam","physical_attack_2",.14,.22,.32], ["arboliva","Hyper Beam","physical_attack_2",.14,.22,.32], ["cubone","Water Gun","special_attack",.14,.22,.30], ["stunfisk","Water Gun","physical_attack",.12,.22,.28], ["snivy","Solar Beam","special_attack",.38,.48,.62], ["swinub","Ice Beam","special_attack",.34,.45,.58], ["steelix","Hyper Beam","special_attack",.42,.60,.74], ["stonjourner","Hyper Beam","special_attack",.38,.50,.66], ["mandibuzz","Hyper Beam","special_attack",.42,.60,.74], ["skarmory","Hyper Beam","special_attack",.30,.42,.54], ["skarmory-mega","Hyper Beam","special_attack",.18,.25,.32], ["sandaconda","Hyper Beam","physical_attack_2",.12,.22,.28], ["archaludon","Hyper Beam","special_attack",.18,.24,.29], ["avalugg-hisui","Ice Beam","special_attack",.33,.42,.50], ["grumpig","Hyper Beam","special_attack",.10,.22,.30], ["wyrdeer","Hyper Beam","special_attack",.17,.22,.26], ["houndstone","Hyper Beam","special_attack",.42,.60,.72], ["sudowoodo","Hyper Beam","special_attack",.42,.60,.80], ["cetoddle","Ice Beam","physical_attack",.10,.18,.25], ["lugia","Hyper Beam","special_attack",.27,.40,.53]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -136,7 +136,7 @@ func _run() -> void:
 			effect.set_process(false)
 			assert(is_equal_approx(effect.water_emission_end if route[1] == "Water Gun" else effect.emission_end,timing.emission_end_frame/60.0))
 			effect.clock = func(): return contact_seconds
-			var new_scale: float = {"hydrapple":.16,"electrode-hisui":.5,"kyurem":.35,"latios":.10,"klefki":.06,"spiritomb":.35,"mareanie":.075}.get(route[0], -1.0)
+			var new_scale: float = {"mamoswine":.18 if route[1] == "Hyper Beam" else .3,"venonat":.12,"flabebe":.05,"hydrapple":.16,"electrode-hisui":.5,"kyurem":.35,"latios":.10,"klefki":.06,"spiritomb":.35,"mareanie":.075}.get(route[0], -1.0)
 			if new_scale > 0: assert(is_equal_approx(effect.emission_scale, new_scale))
 			if route[0] == "cubone":
 				assert(is_equal_approx(effect.emission_scale, .25))
@@ -201,11 +201,12 @@ func _run() -> void:
 		effect.cancel()
 
 	_check_stream_scaling()
+	_check_orb_scaling()
 	router.release_threaded_resource_requests()
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=64 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=72 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()
 
 func _check_stream_scaling() -> void:
@@ -237,3 +238,45 @@ func _check_stream_scaling() -> void:
 		assert(is_equal_approx(source_transforms[1].basis.x.length(),source_transforms[0].basis.x.length()*.25))
 		assert(is_equal_approx(source_transforms[1].basis.z.length(),source_transforms[0].basis.z.length()*.25))
 		assert(target_transforms[0].is_equal_approx(target_transforms[1]), "Target impact retains its original position and size")
+
+func _check_orb_scaling() -> void:
+	var Orb = preload("res://scripts/battle/battle_ui/batch_four_move_effect_3d.gd")
+	for move: String in ["Shadow Ball", "Sludge Bomb", "Focus Blast", "Moonblast"]:
+		var captures := []
+		for scale_value: float in [-1.0, 1.0, .25]:
+			var effect: Node3D = Orb.new()
+			stage.world.add_child(effect)
+			var timing := {"frames":60.0,"launch_frame":12.0,"impact_frame":27.0}
+			if scale_value > 0: timing.emission_scale = scale_value
+			contact_seconds = 0.0
+			effect.start(move, timing, {"show_impact":true}, func(): return contact_seconds, func(): return {"source":Vector3(1,1,0),"target":Vector3(4,1,0),"radius":.5}, func(): return true)
+			effect.set_process(false)
+			var phases := []
+			for seconds: float in [.1,.3,.5]:
+				contact_seconds = seconds
+				effect._process(0)
+				var transforms: Array[Transform3D] = []
+				var orb_index := -1
+				for index in effect.cursor:
+					transforms.append(effect.pieces[index].transform)
+					if orb_index < 0 and effect.pieces[index].mesh == effect.sphere: orb_index = index
+				assert(not transforms.is_empty())
+				if seconds < .45: assert(orb_index >= 0)
+				phases.append({"pieces":transforms,"orb_index":orb_index})
+			captures.append(phases)
+			effect.cancel()
+		for phase in 3:
+			var baseline: Array = captures[0][phase].pieces
+			var explicit_default: Array = captures[1][phase].pieces
+			var smaller: Array = captures[2][phase].pieces
+			assert(baseline.size() == explicit_default.size())
+			for index in baseline.size():
+				assert(baseline[index].is_equal_approx(explicit_default[index]), "Default orb geometry is preserved")
+			if phase == 2:
+				assert(baseline.size() == smaller.size())
+				for index in baseline.size(): assert(baseline[index].is_equal_approx(smaller[index]), "Orb target impacts retain their position and size")
+			else:
+				var index: int = captures[0][phase].orb_index
+				var small_index: int = captures[2][phase].orb_index
+				assert(baseline[index].origin.is_equal_approx(smaller[small_index].origin), "Orb charge and flight centers are unchanged")
+				for axis in 3: assert(is_equal_approx(smaller[small_index].basis[axis].length(),baseline[index].basis[axis].length()*.25))
