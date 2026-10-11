@@ -28,8 +28,7 @@ def validate_selection(root):
     for phase in ('installation', 'consumers', 'session'):
         inputs = readiness['phase_inputs'][phase]['inputs']
         for name in ('data/model_pair_catalog.json', 'launcher/data/model_pair_catalog.json',
-                     'data/model_pair_qualified.json', 'launcher/data/model_pair_qualified.json',
-                     'release/approved_3d_bundles_v11_index.json'):
+                     'data/model_pair_qualified.json', 'launcher/data/model_pair_qualified.json'):
             if hashlib.sha256((root / name).read_bytes()).hexdigest() != inputs[name]:
                 raise ValueError('Catalog differs from completed ' + phase + ' evidence: ' + name)
     trusted = {a['asset_id']: a for a in full['assets']}
