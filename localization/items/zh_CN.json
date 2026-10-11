@@ -13,25 +13,40 @@
   },
   "stick": {
     "name": "大葱",
-    "shortDesc": "对伽勒尔大葱鸭使用可进化为葱游兵。携带时也能提高击中要害的概率。"
+    "shortDesc": "携带时，提高Farfetch’d和Sirfetch’d的击中要害率。 使用后进化：Farfetchd Galar → Sirfetchd。 仅在进化成功时消耗。"
   },
   "leaders-crest": {
     "name": "头领凭证",
-    "shortDesc": "使用后使劈斩司令进化为仆刀将军。"
+    "shortDesc": "使用后进化：Bisharp → Kingambit。 仅在进化成功时消耗。"
   },
   "peat-block": {
     "name": "泥炭块",
-    "shortDesc": "在游戏时间的夜晚使用，使圈圈熊进化为月月熊。"
+    "shortDesc": "在夜间（游戏时间21:00–05:00）对Ursaring使用，使其进化为Ursaluna。 仅在进化成功时消耗。"
   },
   "strawberry-sweet": {
     "name": "草莓糖饰",
-    "shortDesc": "使用后使小仙奶进化为你选择的霜奶仙口味。"
+    "shortDesc": "对Milcery使用，并选择Alcremie的九种口味之一。 仅在进化成功时消耗。"
   },
-  "gold-coin": {"name": "Gold Coin", "shortDesc": "使索财灵进化为赛富豪。仅在成功使用后消耗。"},
-  "gyarados-mount": {"name": "暴鲤龙坐骑", "shortDesc": "解锁暴鲤龙作为冲浪坐骑。"},
-  "repel": {"name": "驱虫喷雾", "shortDesc": "补充 100 步驱虫储量（最多 10,000 步）。"},
-  "super-repel": {"name": "白银喷雾", "shortDesc": "补充 200 步驱虫储量（最多 10,000 步）。"},
-  "max-repel": {"name": "黄金喷雾", "shortDesc": "补充 250 步驱虫储量（最多 10,000 步）。"},
+  "gold-coin": {
+    "name": "Gold Coin",
+    "shortDesc": "对任意形态的Gimmighoul使用，使其进化为Gholdengo。 仅在进化成功时消耗。"
+  },
+  "gyarados-mount": {
+    "name": "暴鲤龙坐骑",
+    "shortDesc": "解锁暴鲤龙作为冲浪坐骑。"
+  },
+  "repel": {
+    "name": "驱虫喷雾",
+    "shortDesc": "补充 100 步驱虫储量（最多 10,000 步）。"
+  },
+  "super-repel": {
+    "name": "白银喷雾",
+    "shortDesc": "补充 200 步驱虫储量（最多 10,000 步）。"
+  },
+  "max-repel": {
+    "name": "黄金喷雾",
+    "shortDesc": "补充 250 步驱虫储量（最多 10,000 步）。"
+  },
   "escape-rope-action": {
     "name": "逃生绳·关键物品",
     "shortDesc": "返回您上次访问过的安全室内位置。"
@@ -859,5 +874,201 @@
   "gyarados-mount-box": {
     "name": "暴鲤龙冲浪坐骑箱",
     "shortDesc": "包含一只暴鲤龙冲浪坐骑。初始异色概率：50%。"
+  },
+  "auspicious-armor": {
+    "name": "庆祝之铠",
+    "shortDesc": "使用后进化：Charcadet → Armarouge。 仅在进化成功时消耗。"
+  },
+  "black-augurite": {
+    "name": "Black Augurite",
+    "shortDesc": "使用后进化：Scyther → Kleavor。 仅在进化成功时消耗。"
+  },
+  "chipped-pot": {
+    "name": "缺损的茶壶",
+    "shortDesc": "使用后进化：Sinistea Antique → Polteageist Antique。 仅在进化成功时消耗。"
+  },
+  "cracked-pot": {
+    "name": "破裂的茶壶",
+    "shortDesc": "使用后进化：Sinistea → Polteageist。 仅在进化成功时消耗。"
+  },
+  "dawn-stone": {
+    "name": "觉醒之石",
+    "shortDesc": "对雄性的Kirlia使用可进化为Gallade，对雌性的Snorunt使用可进化为Froslass。 仅在进化成功时消耗。"
+  },
+  "deep-sea-scale": {
+    "name": "深海鳞片",
+    "shortDesc": "携带时，使Clamperl的特防翻倍。 使用后进化：Clamperl → Gorebyss。 仅在进化成功时消耗。"
+  },
+  "deep-sea-tooth": {
+    "name": "深海之牙",
+    "shortDesc": "携带时，使Clamperl的特攻翻倍。 使用后进化：Clamperl → Huntail。 仅在进化成功时消耗。"
+  },
+  "dragon-scale": {
+    "name": "龙之鳞片",
+    "shortDesc": "使用后进化：Seadra → Kingdra。 仅在进化成功时消耗。"
+  },
+  "dubious-disc": {
+    "name": "可疑补丁",
+    "shortDesc": "使用后进化：Porygon2 → Porygon-Z。 仅在进化成功时消耗。"
+  },
+  "dusk-stone": {
+    "name": "暗之石",
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+  },
+  "electirizer": {
+    "name": "电力增幅器",
+    "shortDesc": "使用后进化：Electabuzz → Electivire。 仅在进化成功时消耗。"
+  },
+  "fire-stone": {
+    "name": "火之石",
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+  },
+  "galarica-cuff": {
+    "name": "伽勒豆蔻手环",
+    "shortDesc": "使用后进化：Slowpoke Galar → Slowbro Galar。 仅在进化成功时消耗。"
+  },
+  "galarica-wreath": {
+    "name": "伽勒豆蔻花圈",
+    "shortDesc": "使用后进化：Slowpoke Galar → Slowking Galar。 仅在进化成功时消耗。"
+  },
+  "ice-stone": {
+    "name": "冰之石",
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+  },
+  "kings-rock": {
+    "name": "王者之证",
+    "shortDesc": "携带时，为适用的伤害招式增加10%的畏缩几率。 使用后进化：Poliwhirl → Politoed; Slowpoke → Slowking。 仅在进化成功时消耗。"
+  },
+  "leaf-stone": {
+    "name": "叶之石",
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+  },
+  "linking-cord": {
+    "name": "联系绳",
+    "shortDesc": "对兼容的交换进化宝可梦使用。Karrablast和Shelmet需要彼此进行实际交换。 仅在进化成功时消耗。"
+  },
+  "magmarizer": {
+    "name": "熔岩增幅器",
+    "shortDesc": "使用后进化：Magmar → Magmortar。 仅在进化成功时消耗。"
+  },
+  "malicious-armor": {
+    "name": "咒术之铠",
+    "shortDesc": "使用后进化：Charcadet → Ceruledge。 仅在进化成功时消耗。"
+  },
+  "masterpiece-teacup": {
+    "name": "杰作茶碗",
+    "shortDesc": "使用后进化：Poltchageist Artisan → Sinistcha Masterpiece。 仅在进化成功时消耗。"
+  },
+  "metal-alloy": {
+    "name": "复合金属",
+    "shortDesc": "使用后进化：Duraludon → Archaludon。 仅在进化成功时消耗。"
+  },
+  "metal-coat": {
+    "name": "金属膜",
+    "shortDesc": "携带时，增强钢属性招式。 使用后进化：Onix → Steelix; Scyther → Scizor。 仅在进化成功时消耗。"
+  },
+  "moon-stone": {
+    "name": "月之石",
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+  },
+  "oval-stone": {
+    "name": "浑圆之石",
+    "shortDesc": "让Happiny携带此道具，在白天（游戏时间05:00–21:00）升级可进化为Chansey。 仅在进化成功时消耗。"
+  },
+  "prism-scale": {
+    "name": "美丽鳞片",
+    "shortDesc": "使用后进化：Feebas → Milotic。 仅在进化成功时消耗。"
+  },
+  "protector": {
+    "name": "护具",
+    "shortDesc": "使用后进化：Rhydon → Rhyperior。 仅在进化成功时消耗。"
+  },
+  "razor-claw": {
+    "name": "锐利之爪",
+    "shortDesc": "携带时，使击中要害率提高一级。 让Sneasel携带此道具并在夜间（游戏时间21:00–05:00）升级，可进化为Weavile；洗翠Sneasel须在白天（游戏时间05:00–21:00）升级，可进化为Sneasler。 仅在进化成功时消耗。"
+  },
+  "razor-fang": {
+    "name": "锐利之牙",
+    "shortDesc": "携带时，为适用的伤害招式增加10%的畏缩几率。 让Gligar携带此道具并在夜间（游戏时间21:00–05:00）升级，可进化为Gliscor。 仅在进化成功时消耗。"
+  },
+  "reaper-cloth": {
+    "name": "灵界之布",
+    "shortDesc": "使用后进化：Dusclops → Dusknoir。 仅在进化成功时消耗。"
+  },
+  "sachet": {
+    "name": "香袋",
+    "shortDesc": "使用后进化：Spritzee → Aromatisse。 仅在进化成功时消耗。"
+  },
+  "scroll-of-darkness": {
+    "name": "Scroll of Darkness",
+    "shortDesc": "对Kubfu使用，使其进化为Urshifu一击流。 仅在进化成功时消耗。"
+  },
+  "scroll-of-waters": {
+    "name": "Scroll of Waters",
+    "shortDesc": "对Kubfu使用，使其进化为Urshifu连击流。 仅在进化成功时消耗。"
+  },
+  "shiny-stone": {
+    "name": "光之石",
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+  },
+  "sun-stone": {
+    "name": "日之石",
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+  },
+  "sweet-apple": {
+    "name": "甜甜苹果",
+    "shortDesc": "使用后进化：Applin → Appletun。 仅在进化成功时消耗。"
+  },
+  "syrupy-apple": {
+    "name": "蜜汁苹果",
+    "shortDesc": "使用后进化：Applin → Dipplin。 仅在进化成功时消耗。"
+  },
+  "tart-apple": {
+    "name": "酸酸苹果",
+    "shortDesc": "使用后进化：Applin → Flapple。 仅在进化成功时消耗。"
+  },
+  "thunder-stone": {
+    "name": "雷之石",
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+  },
+  "unremarkable-teacup": {
+    "name": "凡作茶碗",
+    "shortDesc": "使用后进化：Poltchageist → Sinistcha。 仅在进化成功时消耗。"
+  },
+  "up-grade": {
+    "name": "升级数据",
+    "shortDesc": "使用后进化：Porygon → Porygon2。 仅在进化成功时消耗。"
+  },
+  "water-stone": {
+    "name": "水之石",
+    "shortDesc": "对兼容的宝可梦使用，使其进化。 仅在进化成功时消耗。"
+  },
+  "whipped-dream": {
+    "name": "泡沫奶油",
+    "shortDesc": "使用后进化：Swirlix → Slurpuff。 仅在进化成功时消耗。"
+  },
+  "berry-sweet": {
+    "name": "野莓糖饰",
+    "shortDesc": "目前在PokeAether中没有进化效果。请对Milcery使用Strawberry Sweet。"
+  },
+  "clover-sweet": {
+    "name": "幸运草糖饰",
+    "shortDesc": "目前在PokeAether中没有进化效果。请对Milcery使用Strawberry Sweet。"
+  },
+  "flower-sweet": {
+    "name": "花朵糖饰",
+    "shortDesc": "目前在PokeAether中没有进化效果。请对Milcery使用Strawberry Sweet。"
+  },
+  "love-sweet": {
+    "name": "爱心糖饰",
+    "shortDesc": "目前在PokeAether中没有进化效果。请对Milcery使用Strawberry Sweet。"
+  },
+  "ribbon-sweet": {
+    "name": "蝴蝶结糖饰",
+    "shortDesc": "目前在PokeAether中没有进化效果。请对Milcery使用Strawberry Sweet。"
+  },
+  "star-sweet": {
+    "name": "星星糖饰",
+    "shortDesc": "目前在PokeAether中没有进化效果。请对Milcery使用Strawberry Sweet。"
   }
 }

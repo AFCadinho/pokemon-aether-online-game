@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Explain direct use, successful consumption and game-time requirements for all evolution items in English, Dutch, Brazilian Portuguese and Simplified Chinese; describe the two Kubfu scrolls and Black Augurite, and mark unused Sweets as inactive.
+
 - Refresh the Guild Base lobby visual from the artist TMX, including animated fountain water.
 
 - Allow Guild Base table decorations across the full tabletop grid, preserving existing placements.
