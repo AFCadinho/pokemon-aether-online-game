@@ -188,10 +188,10 @@ y_sort_enabled = true
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=117241514]
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=81605067]
 y_sort_enabled = true
 
-[node name="Manager" parent="Entities/NPCs" instance=ExtResource("6_manager")]
+[node name="Manager" parent="Entities/NPCs" unique_id=1469897079 instance=ExtResource("6_manager")]
 position = Vector2(368, 240)
 
 [node name="Furniture" type="Node2D" parent="Entities" unique_id=248750834]
