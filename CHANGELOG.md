@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate selected attack origins for Cottonee, Cherrim, Petilil, Lilligant, Fomantis, Lurantis, Morelull and Spoink, including Cherrim’s bud and Spoink’s pearl. Time Lilligant and Lurantis’s beams after their arms move aside.
+
 - Calibrate selected face, mouth, gem, cannon and flower attack origins for Seedot, Pineco, Forretress, Pupitar, Carbink, Cryogonal, Glimmet and Glimmora. Match Forretress’s beams to its rotating nozzle and Glimmora’s casts to its opened flower.
 
 - Calibrate selected attacks for Gimmighoul, Meltan, Melmetal, Nosepass, Nacli, Naclstack and Rolycoly, using their mouth, eye, nose, face or wheel. Adjust Rolycoly’s Mud-Slap arc to leave in front of its wheel.

@@ -2,19 +2,20 @@
   "complete": false,
   "counts": {
     "mouth_status": {
+      "concealed_mouth_with_reviewed_casting_parts": 4,
       "concealed_mouth_with_reviewed_face_outlet": 1,
       "concealed_mouth_with_reviewed_muzzle_outlet": 5,
       "hold_native_red_mouth_action": 1,
       "mouth_not_required_by_current_supported_learnset": 2,
       "mouthless_species_with_reviewed_alternate_emitter": 8,
       "mouthless_whole_body_move_anchor_reviewed": 1,
-      "mouthless_with_reviewed_casting_parts": 39,
+      "mouthless_with_reviewed_casting_parts": 43,
       "pending_anatomical_casting_review": 1,
       "pending_anatomical_mouth_review": 13,
       "pending_anatomical_mouthpart_review": 3,
       "pending_anatomical_muzzle_review": 1,
-      "pending_anatomical_route": 25,
-      "pending_anatomical_routing_review": 74,
+      "pending_anatomical_route": 23,
+      "pending_anatomical_routing_review": 68,
       "pending_animation_addon_review": 1,
       "pending_camera_framing": 1,
       "pending_corrected_mouth_pose_review": 1,
@@ -44,12 +45,12 @@
       "pending_multipose_correction": 8,
       "pending_runtime_identity_review": 4,
       "pending_runtime_visibility_and_anatomy_review": 4,
-      "sampled_marker_pose_review_pass_installed": 1822
+      "sampled_marker_pose_review_pass_installed": 1831
     },
-    "runtime_profiles": 1115,
+    "runtime_profiles": 1123,
     "species_forms": 1200
   },
-  "profile_sha256": "287e71fce981830a851e1ba488662ed4dda513d62fcfcdb5a142dc99a3215d58",
+  "profile_sha256": "28f07154624738cea456c5ad26523490c0f9a8e06f8dafadc9f8417a6ac1ee89",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -15598,14 +15599,93 @@
       "part_status": {}
     },
     "cherrim": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Closed flower has no exposed mouth; beam origin needs flower/body routing",
-        "preview": "mouth-fallback-review-v6/cherrim.png",
-        "status": "pending_anatomical_route"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "bud",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected top bud, weighted feeler_03/04. The closed petals conceal the face. Hyper Beam and Solar Beam special_attack .35-.65 at scale .15 follow the bud as it bows toward the target; both views show departure from its lower front surface at .37/.415/.48/.58. Continuous bud/leaf clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "bud",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected top bud, weighted feeler_03/04. The closed petals conceal the face. Hyper Beam and Solar Beam special_attack .35-.65 at scale .15 follow the bud as it bows toward the target; both views show departure from its lower front surface at .37/.415/.48/.58. Continuous bud/leaf clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_route",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected top bud, weighted feeler_03/04. The closed petals conceal the face. Hyper Beam and Solar Beam special_attack .35-.65 at scale .15 follow the bud as it bows toward the target; both views show departure from its lower front surface at .37/.415/.48/.58. Continuous bud/leaf clearance remains pending. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "concealed_mouth_with_reviewed_casting_parts"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.415,
+            0.48,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "d2a315cea367f5631827767a981cdd5c0b150c1c6966ad743d298c72c1eb0fde",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1ba458c1976cbd825355927131a34e117964233d79a59b9eb8282165af6f1d5e",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected top bud, weighted feeler_03/04. The closed petals conceal the face. Hyper Beam and Solar Beam special_attack .35-.65 at scale .15 follow the bud as it bows toward the target; both views show departure from its lower front surface at .37/.415/.48/.58. Continuous bud/leaf clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "5c041b733eb625ec82f7e2cdb4b67c7a124ebece6f4f20b4bd30ddcc48cf0795",
+          "shiny_runtime_sha256": "92561a098a9d0004c8991ad68617afe0f2646eeb1eef719bdbd3cca06a44e944",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 18.85,
+            "emission_scale": 0.15,
+            "frames": 29.0,
+            "impact_frame": 13.92,
+            "launch_frame": 10.15,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.415,
+            0.48,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "d2a315cea367f5631827767a981cdd5c0b150c1c6966ad743d298c72c1eb0fde",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ea1323e3659d4920788d47726e76dca76bf2b6e047a3fd9221baa2d75266801e",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected top bud, weighted feeler_03/04. The closed petals conceal the face. Hyper Beam and Solar Beam special_attack .35-.65 at scale .15 follow the bud as it bows toward the target; both views show departure from its lower front surface at .37/.415/.48/.58. Continuous bud/leaf clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f1d1f37d8c9a1ddf882e16c8fb8543c0548d723b942afe3ea79aea95dc9f1fbc",
+          "shiny_runtime_sha256": "92561a098a9d0004c8991ad68617afe0f2646eeb1eef719bdbd3cca06a44e944",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 18.85,
+            "emission_scale": 0.15,
+            "frames": 29.0,
+            "impact_frame": 13.92,
+            "launch_frame": 10.15,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -15613,7 +15693,67 @@
       ],
       "normal_runtime_sha256": "d2a315cea367f5631827767a981cdd5c0b150c1c6966ad743d298c72c1eb0fde",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "bud": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "bud": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "4b171f3544144bffe0bae7376943bc933c6f20b36c848a611af1eff8b616efdc",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.263334614745889,
+                  0.213222714649471,
+                  0.52344267060464
+                ],
+                "column": 0.0,
+                "distance": 0.897824551593652,
+                "mesh": "pm0421_11_00/Skeleton3D/pm0421_11_00_body_mesh",
+                "pixel": [
+                  185.0,
+                  63.0
+                ],
+                "surface": 0,
+                "triangle": 2585,
+                "vertex_indices": [
+                  111,
+                  112,
+                  121
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "d2a315cea367f5631827767a981cdd5c0b150c1c6966ad743d298c72c1eb0fde",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5b9cec7cd006530ed19620b236dc520b92f7af673d65f8b19b6a276c66487c66",
+          "scope": "Individually projected front of the top bud, weighted feeler_03/04. Closed petals conceal the face throughout the available clips. Use this exposed bud for the selected energy beams; special_attack .45/.65 bends it forward. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "bud": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "cherubi": {
       "anatomical_move_routing_review": "pending",
@@ -19462,14 +19602,55 @@
       "part_status": {}
     },
     "cottonee": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Solar Beam is the only mouth-routed supported move; use reviewed face/flower origin",
-        "preview": "mouth-fallback-review-v6/cottonee.png",
-        "status": "pending_anatomical_route"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "cotton_front",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected front cotton tuft below the recessed face, weighted feeler_a/hips. Solar Beam special_attack .35 launch/.48 impact/.65 end at scale .12 follows the forward cotton surface in .37/.415/.48/.58 samples. The physical spins are excluded. Cotton and charging-glow full-radius clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_route",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected front cotton tuft below the recessed face, weighted feeler_a/hips. Solar Beam special_attack .35 launch/.48 impact/.65 end at scale .12 follows the forward cotton surface in .37/.415/.48/.58 samples. The physical spins are excluded. Cotton and charging-glow full-radius clearance remains pending. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.415,
+            0.48,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "38bb1c1633815465f1988125d60f6e906c8ea40b4c32e3fb1c4ff15ba58a6717",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3dbc77d79293a565a64203095628bef3771485aa7943b366ae083edbad416889",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected front cotton tuft below the recessed face, weighted feeler_a/hips. Solar Beam special_attack .35 launch/.48 impact/.65 end at scale .12 follows the forward cotton surface in .37/.415/.48/.58 samples. The physical spins are excluded. Cotton and charging-glow full-radius clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "21d2dea7d658210ec05e62a9b389e2946bda03428818faae6c5c267cbd4f062a",
+          "shiny_runtime_sha256": "d6bf513d0a3aaf70275ffb760e18664484a6f6594069f64e9dfc1b0dc60b71a2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.12,
+            "frames": 138.0,
+            "impact_frame": 66.24,
+            "launch_frame": 48.3,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -19478,7 +19659,68 @@
       ],
       "normal_runtime_sha256": "38bb1c1633815465f1988125d60f6e906c8ea40b4c32e3fb1c4ff15ba58a6717",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "cotton_front": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "cotton_front": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "fd89564d9345aefbdf5bc39600ab26b03dbbeb378a109c3dfe940f60f9264548",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.702144663103759,
+                  0.223658498197709,
+                  0.0741968386985313
+                ],
+                "column": 0.0,
+                "distance": 0.843837436584011,
+                "mesh": "pm0546_00_00/Skeleton3D/pm0546_00_00_hair_mesh",
+                "pixel": [
+                  208.0,
+                  228.0
+                ],
+                "surface": 0,
+                "triangle": 2113,
+                "vertex_indices": [
+                  1168,
+                  1160,
+                  1539
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "38bb1c1633815465f1988125d60f6e906c8ea40b4c32e3fb1c4ff15ba58a6717",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2161a21acc094b1d595246f791cb78e5721a6e6c8c6c1bcbd757d57e7dbd5cff",
+          "scope": "Individually projected front cotton tuft below the recessed face. The model has no visible mouth. Bound mainly to feeler_a; idle and special_attack .20/.45/.65 remain forward. Physical spins are excluded from casts. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "cotton_front": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "crabominable": {
       "anatomical_move_routing_review": "partially_reviewed",
@@ -36634,14 +36876,91 @@
       }
     },
     "fomantis": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Fallback point is on the forehead leaf; no visible mouth opening in the sampled native actions. Leaf/arm/body attack origins require review.",
-        "preview": "mouth-context-v73/fomantis.png",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower pink face, bound to head. Solar Beam special_attack .30-.65 at scale .08 follows the raised head above the collar in .32/.375/.45/.58 samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward. Collar and charge clearance remain pending. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower pink face, bound to head. Solar Beam special_attack .30-.65 at scale .08 follows the raised head above the collar in .32/.375/.45/.58 samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward. Collar and charge clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected lower pink face, bound to head. Solar Beam special_attack .30-.65 at scale .08 follows the raised head above the collar in .32/.375/.45/.58 samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward. Collar and charge clearance remain pending. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "concealed_mouth_with_reviewed_casting_parts"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "503bb542f81c48f6cb0786146c19430dba413fd6cf18d36e71b20b87bc63aec9",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4b619be4571c472d6cd3eb846afdf7e4082f2246a9a40f386d0a63f352691274",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower pink face, bound to head. Solar Beam special_attack .30-.65 at scale .08 follows the raised head above the collar in .32/.375/.45/.58 samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward. Collar and charge clearance remain pending. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ae88595ba369359caf0b688ae6c34a7ad2ba3e7470f5bf4c17ef329a4d82b2ad",
+          "shiny_runtime_sha256": "73443386cd6580bb7ae69113033d11aae2e9290ce728409700677c502224044a",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 49.5,
+            "launch_frame": 33.0,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "503bb542f81c48f6cb0786146c19430dba413fd6cf18d36e71b20b87bc63aec9",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "82183deec0cfb33de364254d1e27e980ebd2c0ce169b010662fce52beaa28383",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower pink face, bound to head. Solar Beam special_attack .30-.65 at scale .08 follows the raised head above the collar in .32/.375/.45/.58 samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward. Collar and charge clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "0e269649b728e8bc9a5b047d65d5313e0fa8095b52353501bec6c76808a4e879",
+          "shiny_runtime_sha256": "73443386cd6580bb7ae69113033d11aae2e9290ce728409700677c502224044a",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.08,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -36659,9 +36978,67 @@
           },
           "preview": "geometry-limb-review/fomantis.png",
           "proposal": "candidates-limbs-v1/fomantis.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "ee03f5804b0d2859d777e986f8260f84629a2e0ddd1a2377dced61392705c935",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.565307212717036,
+                  0.168977672144575,
+                  0.26571511513839
+                ],
+                "column": 0.0,
+                "distance": 0.485997725576845,
+                "mesh": "pm0868_00_00/Skeleton3D/pm0868_00_00_body_mesh",
+                "pixel": [
+                  201.0,
+                  237.0
+                ],
+                "surface": 0,
+                "triangle": 1263,
+                "vertex_indices": [
+                  225,
+                  227,
+                  342
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "503bb542f81c48f6cb0786146c19430dba413fd6cf18d36e71b20b87bc63aec9",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5f2b0f78126a320cb0ac9a110a2a7863f9759fca327a77b8558c6c1b4232adcb",
+          "scope": "Individually projected pink face below the eyes, bound to head. Special_attack exposes it with head raised; physical_attack_2 keeps the face forward above the crossed arms. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed",
         "hand": "pending_distal_contact_correction",
         "left_hand": "pending_distal_contact_correction"
       }
@@ -59608,14 +59985,93 @@
       "part_status": {}
     },
     "lilligant": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "No visible mouth on eye face; flowers/hands need per-move review.",
-        "preview": "mouth-fallback-review-v6/lilligant.png",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "physical_attack_2",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the eyes, bound to head. The special clip spins hair through the casting route. Use physical_attack_2 .40-.65 at scale .10 after the arms open; .42/.45/.50/.58 beam samples depart ahead of the face above the collar. Early .12 charge is partly hidden by arms/leaves; its clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_emission_window_review_early_charge_clearance_pending"
+        },
+        "solarbeam": {
+          "action": "physical_attack_2",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the eyes, bound to head. The special clip spins hair through the casting route. Use physical_attack_2 .40-.65 at scale .10 after the arms open; .42/.45/.50/.58 beam samples depart ahead of the face above the collar. Early .12 charge is partly hidden by arms/leaves; its clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_emission_window_review_early_charge_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected face below the eyes, bound to head. The special clip spins hair through the casting route. Use physical_attack_2 .40-.65 at scale .10 after the arms open; .42/.45/.50/.58 beam samples depart ahead of the face above the collar. Early .12 charge is partly hidden by arms/leaves; its clearance remains pending. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "dfef9994c41b51d5dc29bdc84ad09b9b8e33a0a4b10c58e7572a2eee13d626e9",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "49ddaccf278b4b26c65ee1d5f65603deec7574f26cdef826fb018342dbb0d06d",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the eyes, bound to head. The special clip spins hair through the casting route. Use physical_attack_2 .40-.65 at scale .10 after the arms open; .42/.45/.50/.58 beam samples depart ahead of the face above the collar. Early .12 charge is partly hidden by arms/leaves; its clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d2fb223b932944d1d5427ee84ed22d3c2d1504760a5ea80f6a8ae54c870bc0e6",
+          "shiny_runtime_sha256": "660f1705e426d06743c10b2c5c1a16d1e0e26595b7a8af1e24faeee77c49859b",
+          "status": "sampled_emission_window_review_early_charge_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 71.5,
+            "emission_scale": 0.1,
+            "frames": 110.0,
+            "impact_frame": 55.0,
+            "launch_frame": 44.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "dfef9994c41b51d5dc29bdc84ad09b9b8e33a0a4b10c58e7572a2eee13d626e9",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "723f9caff5d3d81953faca7357cbd205b877cc5c4292a6478a1c3dbda32e9d68",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the eyes, bound to head. The special clip spins hair through the casting route. Use physical_attack_2 .40-.65 at scale .10 after the arms open; .42/.45/.50/.58 beam samples depart ahead of the face above the collar. Early .12 charge is partly hidden by arms/leaves; its clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "37c86fec7b7afa904417e8f485df2c0f58bfd96fccbbd155252ea88f2723c44a",
+          "shiny_runtime_sha256": "660f1705e426d06743c10b2c5c1a16d1e0e26595b7a8af1e24faeee77c49859b",
+          "status": "sampled_emission_window_review_early_charge_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 71.5,
+            "emission_scale": 0.1,
+            "frames": 110.0,
+            "impact_frame": 55.0,
+            "launch_frame": 44.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -59624,7 +60080,68 @@
       ],
       "normal_runtime_sha256": "dfef9994c41b51d5dc29bdc84ad09b9b8e33a0a4b10c58e7572a2eee13d626e9",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "67d513daa480dc8da2dde25e3296985d406d32471bbf1082048c99bf4d5b1a0a",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.612186261762039,
+                  0.129100360473261,
+                  0.2587133777647
+                ],
+                "column": 0.0,
+                "distance": 1.91545221171828,
+                "mesh": "pm0549_00_00/Skeleton3D/pm0549_00_00_body_mesh",
+                "pixel": [
+                  210.0,
+                  154.0
+                ],
+                "surface": 0,
+                "triangle": 680,
+                "vertex_indices": [
+                  75,
+                  335,
+                  76
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "dfef9994c41b51d5dc29bdc84ad09b9b8e33a0a4b10c58e7572a2eee13d626e9",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b0a22474eecbafa084ab51601efee1d87ae40017204a906e5fa9ce19c9bbdc25",
+          "scope": "Individually projected white face below the eyes, bound to head. Special_attack spins the face sideways and hair across the route. Physical_attack_2 opens the arms and exposes the face in .45/.65 samples; early .20 arms conceal it. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "lilligant-hisui": {
       "anatomical_move_routing_review": "pending",
@@ -61891,14 +62408,129 @@
       "part_status": {}
     },
     "lurantis": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "No clear mouth; separate blade hands and possible face source.",
-        "preview": "mouth-fallback-review-v6/lurantis.png",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower face from physical_attack .45, bound to head. Hyper Beam and Solar Beam physical_attack .38-.65 at scale .10 follow the face while the scythes are spread; both views at .40/.44/.50/.58 show the beams above the arms. Early .12 charge is obscured by the turned head/arm. Bug Bite uses physical_attack .35/.45; the long-arm body radius leaves contact distance unresolved. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower face from physical_attack .45, bound to head. Hyper Beam and Solar Beam physical_attack .38-.65 at scale .10 follow the face while the scythes are spread; both views at .40/.44/.50/.58 show the beams above the arms. Early .12 charge is obscured by the turned head/arm. Bug Bite uses physical_attack .35/.45; the long-arm body radius leaves contact distance unresolved. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_emission_window_review_early_charge_clearance_pending"
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower face from physical_attack .45, bound to head. Hyper Beam and Solar Beam physical_attack .38-.65 at scale .10 follow the face while the scythes are spread; both views at .40/.44/.50/.58 show the beams above the arms. Early .12 charge is obscured by the turned head/arm. Bug Bite uses physical_attack .35/.45; the long-arm body radius leaves contact distance unresolved. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_emission_window_review_early_charge_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected lower face from physical_attack .45, bound to head. Hyper Beam and Solar Beam physical_attack .38-.65 at scale .10 follow the face while the scythes are spread; both views at .40/.44/.50/.58 show the beams above the arms. Early .12 charge is obscured by the turned head/arm. Bug Bite uses physical_attack .35/.45; the long-arm body radius leaves contact distance unresolved. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "concealed_mouth_with_reviewed_casting_parts"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.4,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "388e11ee7b548369502a373f88b640e7efecdc27eef376bb1086797987aeab70",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "940e58ab3d7bbdc127b71626465ee1e9078e9ad7bee76c8c3438b0bbd54293d1",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower face from physical_attack .45, bound to head. Hyper Beam and Solar Beam physical_attack .38-.65 at scale .10 follow the face while the scythes are spread; both views at .40/.44/.50/.58 show the beams above the arms. Early .12 charge is obscured by the turned head/arm. Bug Bite uses physical_attack .35/.45; the long-arm body radius leaves contact distance unresolved. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c5d6b70d97f94fa780a247aacabe118563da042040a27d5b4d211911bd14f945",
+          "shiny_runtime_sha256": "68f28d1517f27303ef6b9f439ee184957a60e8231b480c7932925452ec51fbbf",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 90.0,
+            "impact_frame": 40.5,
+            "launch_frame": 31.5,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.36,
+            0.38,
+            0.4,
+            0.44,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "388e11ee7b548369502a373f88b640e7efecdc27eef376bb1086797987aeab70",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "48d8c6db40f055e6c9b7568310307cb2b026208aa74985c065046b23149111ad",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower face from physical_attack .45, bound to head. Hyper Beam and Solar Beam physical_attack .38-.65 at scale .10 follow the face while the scythes are spread; both views at .40/.44/.50/.58 show the beams above the arms. Early .12 charge is obscured by the turned head/arm. Bug Bite uses physical_attack .35/.45; the long-arm body radius leaves contact distance unresolved. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d71f842f88cddf6e7b0e02acf534c7e7a468b820bb779bc68734980e621ee87e",
+          "shiny_runtime_sha256": "68f28d1517f27303ef6b9f439ee184957a60e8231b480c7932925452ec51fbbf",
+          "status": "sampled_emission_window_review_early_charge_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 58.5,
+            "emission_scale": 0.1,
+            "frames": 90.0,
+            "impact_frame": 45.0,
+            "launch_frame": 34.2,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.36,
+            0.38,
+            0.4,
+            0.44,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "388e11ee7b548369502a373f88b640e7efecdc27eef376bb1086797987aeab70",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b51d97bd7722c2cc48c41d1ce01c2116e224e072a02f59cc5b886572933a40b3",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower face from physical_attack .45, bound to head. Hyper Beam and Solar Beam physical_attack .38-.65 at scale .10 follow the face while the scythes are spread; both views at .40/.44/.50/.58 show the beams above the arms. Early .12 charge is obscured by the turned head/arm. Bug Bite uses physical_attack .35/.45; the long-arm body radius leaves contact distance unresolved. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "70ffa200d21426b07312338e42d17ba4c04b4e857d43cef9de5d7a65977e19f8",
+          "shiny_runtime_sha256": "68f28d1517f27303ef6b9f439ee184957a60e8231b480c7932925452ec51fbbf",
+          "status": "sampled_emission_window_review_early_charge_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 58.5,
+            "emission_scale": 0.1,
+            "frames": 90.0,
+            "impact_frame": 45.0,
+            "launch_frame": 34.2,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -61907,7 +62539,68 @@
       ],
       "normal_runtime_sha256": "388e11ee7b548369502a373f88b640e7efecdc27eef376bb1086797987aeab70",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "e989700210a118fed12b2f87232b61f227ad327e7b8b559a30f648a77369d5ba",
+            "landmarks": [
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.126313725900213,
+                  0.43254537660491,
+                  0.441140897494877
+                ],
+                "column": 1.0,
+                "distance": 1.83250993266697,
+                "mesh": "pm0869_00_00/Skeleton3D/pm0869_00_00_body_mesh",
+                "pixel": [
+                  183.0,
+                  162.0
+                ],
+                "surface": 1,
+                "triangle": 981,
+                "vertex_indices": [
+                  59,
+                  60,
+                  300
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "388e11ee7b548369502a373f88b640e7efecdc27eef376bb1086797987aeab70",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f17c5c1ad26d6a698709531513f9c0aa3eb92c967b95af91501846a16106558f",
+          "scope": "Individually projected central lower face from physical_attack .45, bound to head. This is a face outlet without an articulated mouth. Physical_attack holds the scythes apart at .45/.65; other clips bring a scythe close beneath the outlet. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "luvdisc": {
       "anatomical_move_routing_review": "pending",
@@ -71543,14 +72236,92 @@
       }
     },
     "morelull": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "No visible mouth opening in native idle/physical/special samples. Existing proposal drifts under the face during forward bends. Spore/mushroom/body routes require individual review.",
-        "preview": "mouth-context-v73/morelull.png",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the eyes, bound to Head. The accepted surface 4 is the opaque curved Eye-material face (42 vertices, alpha disabled); restricting to BodyA1 surface 0 hit the rear underside and was rejected. Solar Beam special_attack .30-.65 at scale .08 departs forward below the eyes. Sludge Bomb .30/.50 at scale .05 visibly departs in front of the head at .32; droplet/foot and cap clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the eyes, bound to Head. The accepted surface 4 is the opaque curved Eye-material face (42 vertices, alpha disabled); restricting to BodyA1 surface 0 hit the rear underside and was rejected. Solar Beam special_attack .30-.65 at scale .08 departs forward below the eyes. Sludge Bomb .30/.50 at scale .05 visibly departs in front of the head at .32; droplet/foot and cap clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected face below the eyes, bound to Head. The accepted surface 4 is the opaque curved Eye-material face (42 vertices, alpha disabled); restricting to BodyA1 surface 0 hit the rear underside and was rejected. Solar Beam special_attack .30-.65 at scale .08 departs forward below the eyes. Sludge Bomb .30/.50 at scale .05 visibly departs in front of the head at .32; droplet/foot and cap clearance remain pending. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "038ce42971f8aa2ca1a46fc1d20a33c66562d2735ea96a01ba1d41c2b0906ba3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "49ac5f69d7fdbc77fa1b49f6dff82b92ddddd70d14a27cbada46db4e97f16936",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the eyes, bound to Head. The accepted surface 4 is the opaque curved Eye-material face (42 vertices, alpha disabled); restricting to BodyA1 surface 0 hit the rear underside and was rejected. Solar Beam special_attack .30-.65 at scale .08 departs forward below the eyes. Sludge Bomb .30/.50 at scale .05 visibly departs in front of the head at .32; droplet/foot and cap clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "1edbc53500fb40c5013c4046eb59ac159b87c796ac0b2893639a967a2f5e9a16",
+          "shiny_runtime_sha256": "dcf19fff8bb5e409a76ca01c770635f611c620c6eaa2957e6a33569c89ac232c",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.05,
+            "frames": 240.0,
+            "impact_frame": 120.0,
+            "launch_frame": 72.0,
+            "move_key": "sludgebomb"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "038ce42971f8aa2ca1a46fc1d20a33c66562d2735ea96a01ba1d41c2b0906ba3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "25d23b20cd35e6216bfa5e6cc50a9ef4ef52559b58718ae98b402d2587ce5893",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the eyes, bound to Head. The accepted surface 4 is the opaque curved Eye-material face (42 vertices, alpha disabled); restricting to BodyA1 surface 0 hit the rear underside and was rejected. Solar Beam special_attack .30-.65 at scale .08 departs forward below the eyes. Sludge Bomb .30/.50 at scale .05 visibly departs in front of the head at .32; droplet/foot and cap clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "dad2bc1aceb953710e4216951f719786ee4a00d7429203c813fc00520acee3cc",
+          "shiny_runtime_sha256": "dcf19fff8bb5e409a76ca01c770635f611c620c6eaa2957e6a33569c89ac232c",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 156.0,
+            "emission_scale": 0.08,
+            "frames": 240.0,
+            "impact_frame": 108.0,
+            "launch_frame": 72.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -71558,7 +72329,67 @@
       ],
       "normal_runtime_sha256": "038ce42971f8aa2ca1a46fc1d20a33c66562d2735ea96a01ba1d41c2b0906ba3",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "254af3363311fa32f07ca9b1115e71ffbc7753f322f549f0f55f4becfbb94879",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.240090083763774,
+                  0.0570717423610055,
+                  0.70283817387522
+                ],
+                "column": 0.0,
+                "distance": 59.1844881205573,
+                "mesh": "pm0803_00_gfbmdl/Skeleton3D/EffGcloud01",
+                "pixel": [
+                  224.0,
+                  287.0
+                ],
+                "surface": 4,
+                "triangle": 0,
+                "vertex_indices": [
+                  0,
+                  2,
+                  1
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "038ce42971f8aa2ca1a46fc1d20a33c66562d2735ea96a01ba1d41c2b0906ba3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "fa903afb0f20ce6da61dcf6ec98b4cf9a7fccee8f0e5680c88bfca8eefb4ba59",
+          "scope": "Individually projected front face below the eyes, bound to Head. Surface 4 is the opaque curved face with material Eye (42 vertices, transparency disabled), not an invisible effect plane. The trial restricted to BodyA1 surface 0 hit the rear/underside and was rejected. Special_attack keeps the face forward; physical_attack tips it down. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "morgrem": {
       "anatomical_move_routing_review": "pending",
@@ -79229,14 +80060,55 @@
       }
     },
     "petilil": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "No visible mouth; inspect leaf/body emission.",
-        "preview": "mouth-fallback-review-v6/petilil.png",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the eyes, bound to head. Solar Beam special_attack .35-.65 at scale .08 follows the white face after its initial bow and stays above the collar in the samples. Early bowed charge/collar clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected face below the eyes, bound to head. Solar Beam special_attack .35-.65 at scale .08 follows the white face after its initial bow and stays above the collar in the samples. Early bowed charge/collar clearance remains pending. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.415,
+            0.48,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "5de9d469c29d4bf7be5ef81fa00a3d56648c8ccdd8ef8e070af9833cc0f3f07d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "302279f54eed643279c380d5dff10c3790bc61a2470a197a53f0fc9746de8a4a",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the eyes, bound to head. Solar Beam special_attack .35-.65 at scale .08 follows the white face after its initial bow and stays above the collar in the samples. Early bowed charge/collar clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "1efe8453e4d21fca88d978055f2210e2ce893b0bc4750a60339218cf4d7c5922",
+          "shiny_runtime_sha256": "029497685522b39ed756ec02eeafca836a24f431a8b881e2f444e2ae709aaee0",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.08,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 42.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -79245,7 +80117,68 @@
       ],
       "normal_runtime_sha256": "5de9d469c29d4bf7be5ef81fa00a3d56648c8ccdd8ef8e070af9833cc0f3f07d",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "049b52d3441c488a11d977ef51d81db143caddaadf3fad481bea8304a39ec459",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0570509948574681,
+                  0.631240483970836,
+                  0.311708521171696
+                ],
+                "column": 0.0,
+                "distance": 0.794094663087971,
+                "mesh": "pm0548_00_00/Skeleton3D/pm0548_00_00_body_mesh",
+                "pixel": [
+                  218.0,
+                  260.0
+                ],
+                "surface": 0,
+                "triangle": 1082,
+                "vertex_indices": [
+                  2101,
+                  2102,
+                  2100
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "5de9d469c29d4bf7be5ef81fa00a3d56648c8ccdd8ef8e070af9833cc0f3f07d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ca3f251a96c7a4ba0f4b42f8231af4b1e83c304da3bbc841328bf73ca856807a",
+          "scope": "Individually projected white face below the eyes, bound to head. No visible mouth opening. Special_attack raises the face forward after the early bow; physical clips point it down. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "phanpy": {
       "anatomical_move_routing_review": "pending",
@@ -101269,15 +102202,128 @@
       ]
     },
     "spoink": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "No verified mouth opening below the large snout across the sampled native attacks. Pearl/body casting route needs calibration; snout proposal is not approved as a mouth.",
-        "preview": "mouth-under-v85/spoink.png",
-        "preview_sha256": "cea1583490fcace46fb99ac952ba32ac68a2564beb0a4ac7e9c095c7e0c90354",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "pearl",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected pearl bound to feeler for Flash Cannon special_attack .30-.65 at scale .12 and Shadow Ball .30/.50 at scale .12. Both views show departure from the forward pearl surface, above the head, at .32. Growl uses a separate head/hips-weighted face point below the snout. Pearl/snout and early charge clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "growl": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected pearl bound to feeler for Flash Cannon special_attack .30-.65 at scale .12 and Shadow Ball .30/.50 at scale .12. Both views show departure from the forward pearl surface, above the head, at .32. Growl uses a separate head/hips-weighted face point below the snout. Pearl/snout and early charge clearance remain pending. The early charging glow is broad over the face/body silhouette and the rings travel forward. Full geometry clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending"
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "part": "pearl",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected pearl bound to feeler for Flash Cannon special_attack .30-.65 at scale .12 and Shadow Ball .30/.50 at scale .12. Both views show departure from the forward pearl surface, above the head, at .32. Growl uses a separate head/hips-weighted face point below the snout. Pearl/snout and early charge clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected pearl bound to feeler for Flash Cannon special_attack .30-.65 at scale .12 and Shadow Ball .30/.50 at scale .12. Both views show departure from the forward pearl surface, above the head, at .32. Growl uses a separate head/hips-weighted face point below the snout. Pearl/snout and early charge clearance remain pending. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "concealed_mouth_with_reviewed_casting_parts"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "dda53e919425e5c0b16660b92671291f74261bfb0a462ee685e212a6694575b4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "eb112e4bcd0046e0c37611048b04623bacdaa434fe01816e88efa56ec9f7e6d4",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected pearl bound to feeler for Flash Cannon special_attack .30-.65 at scale .12 and Shadow Ball .30/.50 at scale .12. Both views show departure from the forward pearl surface, above the head, at .32. Growl uses a separate head/hips-weighted face point below the snout. Pearl/snout and early charge clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "512c9ec048fb77970239724539e76e3d5d7de29bf0585ae1d5e7477b8155cae5",
+          "shiny_runtime_sha256": "2c03768eaa60c1ce967a8e60ff09513bb99e0c45e51f107ba435eb267c75f6ce",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 105.3,
+            "emission_scale": 0.12,
+            "frames": 162.0,
+            "impact_frame": 72.9,
+            "launch_frame": 48.6,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "growl": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "dda53e919425e5c0b16660b92671291f74261bfb0a462ee685e212a6694575b4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "97ffa61621f79c389b58081b5f6b1e10fc02ff59c6076ac890827a046872700c",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected pearl bound to feeler for Flash Cannon special_attack .30-.65 at scale .12 and Shadow Ball .30/.50 at scale .12. Both views show departure from the forward pearl surface, above the head, at .32. Growl uses a separate head/hips-weighted face point below the snout. Pearl/snout and early charge clearance remain pending. The early charging glow is broad over the face/body silhouette and the rings travel forward. Full geometry clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "6d542ba6ed22f20679d2d07eef3b69508ca58dbd45559b6a477ff034cb1b6cf6",
+          "shiny_runtime_sha256": "2c03768eaa60c1ce967a8e60ff09513bb99e0c45e51f107ba435eb267c75f6ce",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 162.0,
+            "impact_frame": 81.0,
+            "launch_frame": 48.6,
+            "move_key": "growl"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f4682055e596df8619c43f2130dec7818217c3c6467595f549b01e93ee3174e7",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "dda53e919425e5c0b16660b92671291f74261bfb0a462ee685e212a6694575b4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8dee31a604d7068b10ffa0c0ef4805d53eb38903f5192ee4097701709237e1de",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected pearl bound to feeler for Flash Cannon special_attack .30-.65 at scale .12 and Shadow Ball .30/.50 at scale .12. Both views show departure from the forward pearl surface, above the head, at .32. Growl uses a separate head/hips-weighted face point below the snout. Pearl/snout and early charge clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "979dcd81b21d6157b379c1c469fd188bd231cd03f3180c983878429064f05250",
+          "shiny_runtime_sha256": "2c03768eaa60c1ce967a8e60ff09513bb99e0c45e51f107ba435eb267c75f6ce",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 162.0,
+            "impact_frame": 81.0,
+            "launch_frame": 48.6,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -101286,7 +102332,119 @@
       ],
       "normal_runtime_sha256": "dda53e919425e5c0b16660b92671291f74261bfb0a462ee685e212a6694575b4",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass",
+            "pearl": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "5325e2686203607c7784afc61ec09533b26f7a6340e0ed2c9858a0f6cb6f6f5d",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.458416889245734,
+                  0.465837076343552,
+                  0.0757460344107145
+                ],
+                "column": 0.0,
+                "distance": 0.986054826482299,
+                "mesh": "pm0325_00_00/Skeleton3D/pm0325_00_00_body_mesh",
+                "mesh_excludes": "__not_a_mesh__",
+                "pixel": [
+                  205.0,
+                  171.0
+                ],
+                "surface": 0,
+                "triangle": 338,
+                "vertex_indices": [
+                  261,
+                  259,
+                  809
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "dda53e919425e5c0b16660b92671291f74261bfb0a462ee685e212a6694575b4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4288c422537cc56a6d25838d84c0fe1ffcb14defa2d0e44471159c94cc895d1d",
+          "scope": "Individually projected face below the snout, weighted head/hips. No articulated mouth is visible. The sampled special_attack face remains upright; inverted physical_attack_2 is excluded from Growl. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "pearl": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "5325e2686203607c7784afc61ec09533b26f7a6340e0ed2c9858a0f6cb6f6f5d",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.533228405891921,
+                  0.0558457978058194,
+                  0.41092579630226
+                ],
+                "column": 0.0,
+                "distance": 1.08446688664687,
+                "mesh": "pm0325_00_00/Skeleton3D/pm0325_00_00_body_mesh",
+                "pixel": [
+                  208.0,
+                  55.0
+                ],
+                "surface": 1,
+                "triangle": 153,
+                "vertex_indices": [
+                  95,
+                  92,
+                  96
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "dda53e919425e5c0b16660b92671291f74261bfb0a462ee685e212a6694575b4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e5a759a298d9e9c325aa452500799c400216f18b3e68f1c581e6020855eac3ff",
+          "scope": "Individually projected forward pearl surface, bound to feeler. Special_attack keeps the pearl upright; physical_attack_2 includes an inverted pose and is excluded from energy casts. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed",
+        "pearl": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "sprigatito": {
       "anatomical_move_routing_review": "pending",

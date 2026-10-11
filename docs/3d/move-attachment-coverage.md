@@ -7,8 +7,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1115 species/forms.
-- No anatomical attachment profile: 85 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 1123 species/forms.
+- No anatomical attachment profile: 77 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 992 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
@@ -157,6 +157,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | charmander | hand, left_hand, mouth | Same attachment profile |
 | charmeleon | hand, left_hand, mouth | Same attachment profile |
 | chatot | mouth | Same attachment profile |
+| cherrim | bud | Same attachment profile |
 | cherubi | mouth | Same attachment profile |
 | chesnaught | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | chesnaught-mega | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -192,6 +193,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | corviknight | mouth | Same attachment profile |
 | corvisquire | mouth | Same attachment profile |
 | cosmog | mouth | Same attachment profile |
+| cottonee | cotton_front | Same attachment profile |
 | crabominable | hand, left_hand, mouth | Same attachment profile |
 | crabominable-mega | hand, left_hand, mouth | Same attachment profile |
 | crabrawler | hand, left_hand, mouth | Same attachment profile |
@@ -342,6 +344,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | florges | hand, left_hand, mouth | Same attachment profile |
 | flutter-mane | hand, left_hand, mouth | Same attachment profile |
 | flygon | mouth | Same attachment profile |
+| fomantis | face | Same attachment profile |
 | foongus | mouth | Same attachment profile |
 | forretress | cannon | Same attachment profile |
 | fraxure | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -544,6 +547,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | lickitung | hand, left_hand, mouth | Same attachment profile |
 | liepard | hand, left_hand, mouth | Same attachment profile |
 | lileep | mouth | Same attachment profile |
+| lilligant | face | Same attachment profile |
 | lilligant-hisui | foot, hand, left_foot, left_hand | Same attachment profile |
 | lillipup | mouth | Same attachment profile |
 | linoone | hand, left_hand, mouth | Same attachment profile |
@@ -565,6 +569,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | lumineon | hand, left_hand, mouth | Same attachment profile |
 | lunala | mouth | Same attachment profile |
 | lunatone | mouth | Same attachment profile |
+| lurantis | face | Same attachment profile |
 | luvdisc | mouth | Same attachment profile |
 | luxio | foot, left_foot, mouth | Same attachment profile |
 | luxray | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -642,6 +647,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | moltres | mouth | Same attachment profile |
 | moltres-galar | mouth | Same attachment profile |
 | monferno | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| morelull | face | Same attachment profile |
 | morgrem | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | morpeko | hand, left_hand, mouth | Same attachment profile |
 | morpeko-hangry | hand, left_hand, mouth | Same attachment profile |
@@ -722,6 +728,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | perrserker | hand, left_hand, mouth | Same attachment profile |
 | persian | hand, left_hand, mouth | Same attachment profile |
 | persian-alola | hand, left_hand, mouth | Same attachment profile |
+| petilil | face | Same attachment profile |
 | phanpy | hand, left_hand, mouth | Same attachment profile |
 | phantump | mouth | Same attachment profile |
 | pheromosa | foot, hand, left_hand, mouth | Same attachment profile |
@@ -935,6 +942,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | spinarak | mandibles | Same attachment profile |
 | spinda | foot, left_foot, mouth | Same attachment profile |
 | spiritomb | mouth | Same attachment profile |
+| spoink | face, pearl | Same attachment profile |
 | sprigatito | hand, left_hand, mouth | Same attachment profile |
 | spritzee | mouth | Same attachment profile |
 | squawkabilly | hand, left_hand, mouth | Same attachment profile |
