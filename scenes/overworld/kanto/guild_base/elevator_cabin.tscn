@@ -3,12 +3,12 @@
 [ext_resource type="Script" uid="uid://cy8bn173efxfd" path="res://scripts/world/guild_base_room.gd" id="1_room"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/guild_base_elevator_cabin/guild_base_elevator_cabin.visual.tscn" id="2_visual"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_70l4l"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_mask"]
-
 [ext_resource type="PackedScene" path="res://scenes/npcs/guild_base_lift_npc.tscn" id="6_attendant"]
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
-size = Vector2(64, 24)
+size = Vector2(32, 32)
 
 [node name="GuildBaseElevatorCabin" type="Node2D" unique_id=1441461472]
 script = ExtResource("1_room")
@@ -31,7 +31,7 @@ music_profile_id = "kanto.vermilion_city"
 [node name="Spawns" type="Node2D" parent="." unique_id=2066659742]
 
 [node name="FromElevator" type="Marker2D" parent="Spawns" unique_id=1176206808]
-position = Vector2(240, 240)
+position = Vector2(240, 272)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1549866051]
 
@@ -44,16 +44,21 @@ transition_id = "guild_base_elevator_cabin__to_elevator"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToElevator" unique_id=1913085936]
+position = Vector2(0, 16)
 shape = SubResource("shape_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToElevator" unique_id=692895098 instance=ExtResource("4_70l4l")]
+z_as_relative = false
+flow_direction = "down"
 
 [node name="Entities" type="Node2D" parent="." unique_id=1627220309]
 y_sort_enabled = true
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=1595186781]
 y_sort_enabled = true
 
-[node name="Attendant" parent="Entities/NPCs" instance=ExtResource("6_attendant")]
-position = Vector2(176, 240)
+[node name="Attendant" parent="Entities/NPCs" unique_id=1018625208 instance=ExtResource("6_attendant")]
+position = Vector2(176, 208)
 npc_id = "guild_base_lift_attendant"
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1065087777]

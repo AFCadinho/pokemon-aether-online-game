@@ -4,15 +4,16 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/guild_base_elevator/guild_base_elevator.visual.tscn" id="2_visual"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_mask"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_qpim4"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_mw6x5"]
-
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_r4g0i"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/guild_base_directory_npc.tscn" id="6_attendant"]
 
 [sub_resource type="RectangleShape2D" id="shape_0"]
 size = Vector2(96, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_cabin"]
-size = Vector2(64, 24)
+size = Vector2(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0mpbt"]
 texture = ExtResource("5_mw6x5")
@@ -103,8 +104,8 @@ music_profile_id = "kanto.vermilion_city"
 [node name="FromMainHall" type="Marker2D" parent="Spawns" unique_id=2074433684]
 position = Vector2(464, 816)
 
-[node name="FromCabin" type="Marker2D" parent="Spawns"]
-position = Vector2(464, 560)
+[node name="FromCabin" type="Marker2D" parent="Spawns" unique_id=2132697576]
+position = Vector2(464, 528)
 
 [node name="Exits" type="Node2D" parent="." unique_id=478117209]
 
@@ -120,24 +121,33 @@ transition_facing_direction = "down"
 position = Vector2(0, 16)
 shape = SubResource("shape_0")
 
-[node name="ToCabin" type="Area2D" parent="Exits"]
-position = Vector2(464, 512)
+[node name="RouteTransitionHint" parent="Exits/ToMainHall" unique_id=125377356 instance=ExtResource("4_qpim4")]
+z_as_relative = false
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
+
+[node name="ToCabin" type="Area2D" parent="Exits" unique_id=100501964]
+position = Vector2(464, 496)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/guild_base/elevator_cabin.tscn"
 target_spawn_name = "FromElevator"
 transition_id = "guild_base_elevator__to_cabin"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCabin"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCabin" unique_id=1184143235]
+position = Vector2(0, -16)
 shape = SubResource("shape_cabin")
+
+[node name="DoorTransitionHint" parent="Exits/ToCabin" unique_id=920831999 instance=ExtResource("5_r4g0i")]
+z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=353259075]
 y_sort_enabled = true
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=791014817]
 y_sort_enabled = true
 
-[node name="Attendant" parent="Entities/NPCs" instance=ExtResource("6_attendant")]
+[node name="Attendant" parent="Entities/NPCs" unique_id=681941557 instance=ExtResource("6_attendant")]
 position = Vector2(336, 592)
 npc_id = "guild_base_directory_attendant"
 

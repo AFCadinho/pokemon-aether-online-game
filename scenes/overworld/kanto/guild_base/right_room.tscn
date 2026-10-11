@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/guild_base_right_room/guild_base_right_room.visual.tscn" id="2_visual"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_mask"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_nfllg"]
 
 [sub_resource type="RectangleShape2D" id="shape_0"]
 size = Vector2(32, 96)
@@ -50,6 +51,11 @@ transition_facing_direction = "left"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMainHall" unique_id=880071544]
 position = Vector2(-16, 0)
 shape = SubResource("shape_0")
+
+[node name="RouteTransitionHint" parent="Exits/ToMainHall" unique_id=2010147823 instance=ExtResource("4_nfllg")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 3)
+flow_direction = "left"
 
 [node name="Entities" type="Node2D" parent="." unique_id=589931354]
 y_sort_enabled = true
