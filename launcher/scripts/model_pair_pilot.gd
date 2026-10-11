@@ -3,12 +3,18 @@ extends RefCounted
 const DATA = preload("res://data/model_pair_pilot.json")
 const CATALOG_PATH := "res://data/model_pair_catalog.json"
 const QUALIFIED_PATH := "res://data/model_pair_qualified.json"
+const GEOMETRY_PATH := "res://data/model_pair_geometry.json"
+const GEOMETRY_CATALOG_PATH := "res://data/model_pair_geometry_catalog.json"
 const REFERENCE_FORMAT := "model-pair-ref-v1"
 static var _catalog := {}
 static var _qualified_catalog := {}
+static var _geometry_catalog := {}
 static var _lookups := {}
 static var _catalog_mutex := Mutex.new()
 static var _lookup_mutex := Mutex.new()
+
+static func geometry_enabled() -> bool:
+	return OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_GEOMETRY_TEST") == "1"
 
 static func catalog_enabled() -> bool:
 	return OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_CATALOG_TEST") == "1"
@@ -17,15 +23,17 @@ static func qualified_enabled() -> bool:
 	return OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_QUALIFIED_TEST") == "1"
 
 static func enabled() -> bool:
-	return qualified_enabled() or catalog_enabled() or (OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_PILOT") == "1")
+	return geometry_enabled() or qualified_enabled() or catalog_enabled() or (OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_PILOT") == "1")
 
 static func data_path() -> String:
+	if geometry_enabled():
+		return GEOMETRY_PATH
 	if qualified_enabled():
 		return QUALIFIED_PATH
 	return CATALOG_PATH if catalog_enabled() else "res://data/model_pair_pilot.json"
 
 static func catalog() -> Dictionary:
-	if not catalog_enabled() and not qualified_enabled():
+	if not catalog_enabled() and not qualified_enabled() and not geometry_enabled():
 		return DATA.data
 	_catalog_mutex.lock()
 	if _catalog.is_empty():
@@ -36,6 +44,16 @@ static func catalog() -> Dictionary:
 		if _qualified_catalog.is_empty():
 			_qualified_catalog = _expand_index(load(QUALIFIED_PATH).data, _catalog)
 		result = _qualified_catalog
+	if geometry_enabled():
+		if _geometry_catalog.is_empty():
+			var merged := _catalog.duplicate(true)
+			var positions := {}
+			for i in merged.assets.size(): positions[merged.assets[i].asset_id] = i
+			for asset: Dictionary in load(GEOMETRY_CATALOG_PATH).data.assets:
+				if positions.has(asset.asset_id): merged.assets[positions[asset.asset_id]] = asset
+				else: merged.assets.append(asset)
+			_geometry_catalog = _expand_index(load(GEOMETRY_PATH).data, merged)
+		result = _geometry_catalog
 	_catalog_mutex.unlock()
 	return result
 
@@ -98,7 +116,7 @@ static func expand_index(value: Dictionary) -> Dictionary:
 	return _expand_index(value, catalog() if enabled() else {})
 
 static func compact_entries(entries: Array) -> Array:
-	if not qualified_enabled():
+	if not qualified_enabled() and not geometry_enabled():
 		return entries
 	var result := entries.duplicate(true)
 	for entry: Dictionary in result:
@@ -114,7 +132,7 @@ static func expand_entries(value: Variant) -> Array:
 	return value
 
 static func compact_state(state: Dictionary) -> Dictionary:
-	if not qualified_enabled():
+	if not qualified_enabled() and not geometry_enabled():
 		return state
 	var result := state.duplicate(true)
 	for entry: Dictionary in result.get("assets", {}).values():

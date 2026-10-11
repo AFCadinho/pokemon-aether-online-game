@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reduce the optional 3D test collection by sharing identical normal/shiny geometry, skin data and animations while preserving each appearance and independent poses.
+
 - Refresh the Guild Base lobby visual from the artist TMX, including animated fountain water.
 
 - Allow Guild Base table decorations across the full tabletop grid, preserving existing placements.
