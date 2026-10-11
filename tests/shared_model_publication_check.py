@@ -10,6 +10,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
 import publish_shared_model_collection as tool
+import verify_shared_model_publication as verifier
 from shared_model_publication_helpers import validate_selection
 
 
@@ -60,6 +61,16 @@ class PublicationCheck(unittest.TestCase):
         with patch.object(tool, 'public', side_effect=[True, False]):
             with self.assertRaises(ValueError):
                 tool.publish_immutable(None, self.path, self.row)
+
+    def test_receipt_row_requires_exact_hash_and_both_public_checks(self):
+        valid = {**self.row, 'uploaded': False, 'public_get_sha256_verified': True,
+                 'public_head_size_verified': True}
+        verifier.verify_row(valid, self.row)
+        for key, value in [('sha256', '0' * 64), ('size_bytes', 0),
+                           ('public_get_sha256_verified', False),
+                           ('public_head_size_verified', False), ('uploaded', None)]:
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                verifier.verify_row({**valid, key: value}, self.row)
 
 
 if __name__ == '__main__':

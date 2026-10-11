@@ -29,6 +29,13 @@ Interrupted staging leaves immutable additions available for a later retry;
 it does not activate players or prove that queued uploads stopped instantly.
 Use a fresh receipt path for retries so earlier preflight evidence survives.
 
+`tools/verify_shared_model_publication.py` independently reconciles the completed
+receipt's full ID set, immutable payload/index pins and public verification
+outcomes. Its default mode is offline. `--remote` repeats all full public GET
+hashes and HEAD checks without credentials or writes; it checks the manifests
+for changes during that read-only run. An older manifest snapshot in a staged
+receipt is historical evidence, not a requirement that the game never updates.
+
 ```sh
 python3 tools/publish_shared_model_collection.py \
   --sources /absolute/retained-readiness/input.json
