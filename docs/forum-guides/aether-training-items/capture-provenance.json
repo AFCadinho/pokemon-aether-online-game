@@ -1,0 +1,68 @@
+{
+  "capturedAt": "2026-10-11T19:55:46.621013+00:00",
+  "frontendRevision": "dae0f4bb7d407e867980afaa6b5fbf88982793bc",
+  "backendRevision": "069eeaa43a4f5d30e98f1213c983cf2aa2b29357",
+  "locale": "en",
+  "viewport": [
+    1920,
+    1080
+  ],
+  "engine": "Godot 4.6.2 compatibility renderer",
+  "authenticatedSession": false,
+  "data": "Local illustrative Store balances, unpurchased catalog offers and Bulbasaur with Aether Power Band and 11 Stored Speed EVs. Native UI controls; no game backend, live account or purchase used. Items are upcoming on development, absent from approved main.",
+  "images": [
+    {
+      "caption": "Example Gift Store: Aether Band, 1,000 Gems, once per account and untradeable.",
+      "control": "DonatorStorePopup",
+      "exampleData": true,
+      "filename": "01-store-aether-band.png",
+      "heading": "## Aether Band",
+      "size": [
+        1144,
+        704
+      ],
+      "topic": 0,
+      "sha256": "90e3906ac0345fbce5233406cb28a1c0586e057084c8d22e25bce89075299f2a"
+    },
+    {
+      "caption": "Example Gift Store: Aether Power Band with 1,000 Aether Credit Card credits selected.",
+      "control": "DonatorStorePopup",
+      "exampleData": true,
+      "filename": "02-store-aether-power-band.png",
+      "heading": "## Aether Power Band",
+      "size": [
+        1144,
+        704
+      ],
+      "topic": 0,
+      "sha256": "86dec4c7a47b43c94cfff4390cbeaf852a3af1fedc35cb24937a80d75c351ba2"
+    },
+    {
+      "caption": "Example Summary: the Pok\u00e9mon is carrying Aether Power Band.",
+      "control": "PokemonSummaryPopup",
+      "exampleData": true,
+      "filename": "03-equipped-power-band.png",
+      "heading": "## Getting and equipping a Band",
+      "size": [
+        646,
+        426
+      ],
+      "topic": 0,
+      "sha256": "02ca6094c781651e38b4d2b8d2e3299ed26036fbf4178278460b6cbf5c7ca4a2"
+    },
+    {
+      "caption": "Illustrative Summary: 11 Stored Speed EVs, with none allocated yet.",
+      "control": "PokemonSummaryPopup",
+      "exampleData": true,
+      "filename": "04-stored-speed-evs.png",
+      "heading": "### Stored EVs and allocation",
+      "size": [
+        646,
+        426
+      ],
+      "topic": 0,
+      "sha256": "c93cab5a6a60e06c6dc750c8258fe975798ac37845b6008d0499b08a802f407f"
+    }
+  ],
+  "captureScriptSha256": "b27164e6131629ae25b1efafad56f83c578c93e466d2a2b45babb8382a835423"
+}
