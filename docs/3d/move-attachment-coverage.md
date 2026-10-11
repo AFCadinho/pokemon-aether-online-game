@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1028 species/forms.
-- No anatomical attachment profile: 172 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 925 species/forms.
+- At least one configured anatomical attachment: 1034 species/forms.
+- No anatomical attachment profile: 166 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 932 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -819,6 +819,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | shiftry | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | shiinotic | mouth | Same attachment profile |
 | shinx | foot, left_foot, mouth | Same attachment profile |
+| shroodle | mouth | Same attachment profile |
 | shroomish | mouth | Same attachment profile |
 | shuckle | mouth | Same attachment profile |
 | shuppet | mouth | Same attachment profile |
@@ -873,6 +874,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | spidops | foot, left_foot | Same attachment profile |
 | spinda | foot, left_foot, mouth | Same attachment profile |
 | sprigatito | hand, left_hand, mouth | Same attachment profile |
+| spritzee | mouth | Same attachment profile |
 | squawkabilly | hand, left_hand, mouth | Same attachment profile |
 | squirtle | hand, left_hand, mouth | Same attachment profile |
 | stakataka | mouth | Same attachment profile |
@@ -900,6 +902,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | swirlix | mouth | Same attachment profile |
 | swoobat | mouth | Same attachment profile |
 | sylveon | foot, left_foot, mouth | Same attachment profile |
+| tadbulb | mouth | Same attachment profile |
 | taillow | mouth | Same attachment profile |
 | tandemaus | foot, left_foot, mouth | Same attachment profile |
 | tangela | mouth | Same attachment profile |
@@ -939,6 +942,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | totodile | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | toucannon | mouth | Same attachment profile |
 | toxapex | mouth | Same attachment profile |
+| toxel | mouth | Same attachment profile |
 | toxicroak | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | toxtricity | hand, left_hand, mouth | Same attachment profile |
 | tranquill | mouth | Same attachment profile |
@@ -958,6 +962,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | typhlosion-hisui | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | tyranitar | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | tyranitar-mega | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| tyrantrum | mouth | Same attachment profile |
 | tyrogue | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | tyrunt | hand, left_hand, mouth | Same attachment profile |
 | umbreon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -970,6 +975,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | vanillite | mouth | Same attachment profile |
 | vanilluxe | mouth | Same attachment profile |
 | vaporeon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| veluza | mouth | Same attachment profile |
 | venusaur | hand, left_hand, mouth | Same attachment profile |
 | venusaur-mega | hand, left_hand, mouth | Same attachment profile |
 | vespiquen | mouth | Same attachment profile |
@@ -982,7 +988,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | virizion | foot, left_foot, mouth | Same attachment profile |
 | vivillon | mouth | Same attachment profile |
 | volbeat | hand, left_hand, mouth | Same attachment profile |
-| volcanion | hand, left_hand | Same attachment profile |
+| volcanion | hand, left_hand, mouth | Same attachment profile |
 | vullaby | hand, left_hand, mouth | Same attachment profile |
 | vulpix | mouth | Same attachment profile |
 | vulpix-alola | mouth | Same attachment profile |

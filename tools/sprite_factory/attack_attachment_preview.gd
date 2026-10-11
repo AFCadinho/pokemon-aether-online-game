@@ -151,7 +151,7 @@ func _run() -> void:
 			for part: String in report.candidate_parts:
 				if native_only and report.candidate_reasons.get(part, "") != "native_effect_bone": continue
 				sources[part] = report.candidate_parts[part]
-			if sources.is_empty(): continue
+			# Overview also permits anatomy review before any emitter is proposed.
 		else:
 			if not report.candidate_parts.has(selected_part): continue
 			if native_only and report.candidate_reasons.get(selected_part, "") != "native_effect_bone": continue
