@@ -1,4 +1,8 @@
 {
+  "aether-power-band": {
+    "name": "Aether Power Band",
+    "shortDesc": "携带者无需参战也能获得每只被击败的野生宝可梦给予的努力值，并在该宝可梦给予努力值的每项能力上额外获得10点。遵守努力值上限。不分享经验。不可交易。每个账号限购一次。"
+  },
   "aether-band": {
     "name": "Aether Band",
     "shortDesc": "赢得野生宝可梦对战后，为携带者的每个招式恢复1点PP，不超过上限。不可交易。每个账号限购一次。"
