@@ -1,6 +1,6 @@
 # Akatsuki outfit box
 
-`akatsuki-outfit` (Akatsuki Outfit Box) contains four separate cosmetics for male and female players: `akatsuki-shirt`, `akatsuki-trousers`, `akatsuki-shoes` and `akatsuki-headband`. It is available through item grants/dev tools, with no Gift Store listing or role restriction. Search for `Akatsuki` in Add Item.
+`akatsuki-outfit` (Akatsuki Outfit Box) contains four separate cosmetics for male and female players: `akatsuki-shirt`, `akatsuki-trousers`, `akatsuki-shoes` and `akatsuki-headband`. It is available through item grants/dev tools and Gift Store → Cosmetics → Outfits for 450 Gems or 450 personal card credits. Both trainer and overworld previews show all four parts for either model. Card purchases and their contents are account-bound; loose parts are not sold separately. There is no role restriction. Search for `Akatsuki` in Add Item.
 
 Opening the box puts the components in the Bag. Activating each one moves it to Character Customization. The robe uses Top, the trousers Bottom, sandals Shoes and the separate headband Headgear. Normal items follow the existing tradeable wardrobe lifecycle; bound box contents retain their binding. Logical appearance IDs and ownership survive gender changes.
 

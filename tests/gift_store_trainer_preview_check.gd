@@ -39,6 +39,14 @@ func _run() -> void:
 		_check(store._selected_purchase_chroma_colors().is_empty(), "Emerald Luchador box uses fixed colours")
 		var luchador_item := store._catalog_item("emerald-luchador-outfit")
 		_check(luchador_item.get("price") == 450 and luchador_item.get("cosmetic_subcategory") == "outfits", "Emerald Luchador is offered under Outfits for 450 Gems")
+		store._select_product("akatsuki-outfit")
+		var akatsuki := store._current_character_preview_appearance()
+		var akatsuki_parts := {"top": "Akatsuki_Shirt", "bottom": "Akatsuki_Trousers", "shoes": "Akatsuki_Shoes", "headgear": "Akatsuki_Headband"}
+		for slot: String in akatsuki_parts:
+			_check(akatsuki.get(slot) == akatsuki_parts[slot], "Akatsuki preview includes %s for %s" % [slot, gender])
+		_check(store._selected_purchase_chroma_colors().is_empty(), "Akatsuki box uses fixed colours")
+		var akatsuki_item := store._catalog_item("akatsuki-outfit")
+		_check(akatsuki_item.get("price") == 450 and akatsuki_item.get("cosmetic_subcategory") == "outfits", "Akatsuki is offered under Outfits for 450 Gems")
 		for item: Dictionary in store.CATALOG:
 			if store._preview_parts_for_item(item).is_empty():
 				continue
