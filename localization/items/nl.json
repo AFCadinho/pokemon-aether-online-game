@@ -1,4 +1,8 @@
 {
+  "aether-power-band": {
+    "name": "Aether Power Band",
+    "shortDesc": "De drager krijgt de EV’s van elke verslagen wilde Pokémon, ook zonder deelname, plus 10 per stat waarvoor die Pokémon EV’s geeft. EV-limieten gelden. Deelt geen EXP. Niet verhandelbaar. Eén aankoop per account."
+  },
   "aether-band": {
     "name": "Aether Band",
     "shortDesc": "Herstelt na een gewonnen wild gevecht 1 PP van elke move van de drager, tot het maximum. Niet verhandelbaar. Eén aankoop per account."

@@ -1,4 +1,8 @@
 {
+  "aether-power-band": {
+    "name": "Aether Power Band",
+    "shortDesc": "O portador recebe os EVs de cada Pokémon selvagem derrotado, mesmo sem participar, mais 10 por atributo que esse Pokémon concede. Os limites de EVs se aplicam. Não compartilha EXP. Intransferível. Uma compra por conta."
+  },
   "aether-band": {
     "name": "Aether Band",
     "shortDesc": "Restaura 1 PP de cada movimento do portador após vencer uma batalha contra um Pokémon selvagem, até o máximo. Não negociável. Uma compra por conta."

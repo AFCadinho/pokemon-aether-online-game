@@ -937,6 +937,15 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "MOUNT BOX",
 	},
 	{
+		"id": "aether-power-band",
+		"name": "Aether Power Band",
+		"description": "Held: Receives EVs from each defeated wild Pokémon without participating, plus 10 for each stat that Pokémon yields. Untradeable. One purchase per account.",
+		"price": 1000,
+		"icon": preload("res://assets/items/icons/AETHERPOWERBAND.png"),
+		"categories": ["held-items"],
+		"badge": "HELD ITEM",
+	},
+	{
 		"id": "aether-band",
 		"name": "Aether Band",
 		"description": "Held: Restores 1 PP to each of the holder's moves after winning a wild Pokémon battle. Untradeable. One purchase per account.",
@@ -1341,7 +1350,7 @@ func set_purchase_in_progress(active: bool) -> void:
 
 func show_purchase_success(item_name: String, currency: String = "gems") -> void:
 	purchase_in_progress = false
-	if selected_item_id == "aether-band":
+	if selected_item_id in ["aether-band", "aether-power-band"]:
 		authoritative_owned_items[selected_item_id] = true
 	if status_label != null:
 		status_label.text = _t("ui.store.voucher.success" if currency == "gift_voucher" else "ui.store.status.added", {

@@ -12,6 +12,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/inventory_item_use_response_check.gd",
 	"res://tests/gift_store_popular_check.gd",
 	"res://tests/gift_store_catalog_controls_check.gd",
+	"res://tests/aether_band_store_check.gd",
 	"res://tests/gift_store_drag_check.gd",
 	"res://tests/gift_store_trainer_preview_check.gd",
 	"res://tests/mount_nameplate_check.gd",
