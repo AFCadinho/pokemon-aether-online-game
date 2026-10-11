@@ -7,6 +7,7 @@ const MARKET_BUYER_SCENE := "res://scenes/npcs/market_buyer_npc.tscn"
 const BATTLE_POINT_VENDOR_SCENE := "res://scenes/npcs/battle_point_vendor_npc.tscn"
 const Z_CRYSTAL_VENDOR_SCENE := "res://scenes/npcs/z_crystal_vendor_npc.tscn"
 const MEGA_STONE_VENDOR_SCENE := "res://scenes/npcs/mega_stone_vendor_npc.tscn"
+const EVOLUTION_ITEM_VENDOR_SCENE := "res://scenes/npcs/evolution_item_vendor_npc.tscn"
 const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
 const VIRIDIAN_POKEMON_CENTER_SCENE := "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn"
 
@@ -14,10 +15,15 @@ var failed := false
 
 
 func _init() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
 	_check_market_attendant_script()
 	_check_market_attendant_scene()
 	_check_z_crystal_vendor_localization()
 	_check_mega_stone_vendor_localization()
+	_check_evolution_item_vendor()
 
 	quit(1 if failed else 0)
 
@@ -137,6 +143,31 @@ func _check_mega_stone_vendor_localization() -> void:
 			}[locale],
 			"Mega Stone Seller has an Item Dex name in %s" % locale
 		)
+
+
+func _check_evolution_item_vendor() -> void:
+	var packed := load(EVOLUTION_ITEM_VENDOR_SCENE) as PackedScene
+	_check_true(packed != null, "Evolution Item Seller scene loads")
+	if packed == null:
+		return
+	var vendor := packed.instantiate()
+	var script := vendor.get_script() as Script
+	_check_true(script != null, "Evolution Item Seller has its market script")
+	if script == null:
+		vendor.free()
+		return
+	_check_true(script.resource_path == MARKET_ATTENDANT_SCRIPT, "Evolution Item Seller uses the existing shop interaction")
+	_check_true(vendor.get("npc_definition_id") == "evolution_item_vendor", "Evolution Item Seller resolves its shared NPC definition")
+	_check_true(vendor.get("market_id") == "evolution_item_shop", "Evolution Item Seller opens its own assortment")
+	_check_true(vendor.get("market_mode") == "player_buys", "Evolution Item Seller uses the ordinary buying interface")
+	_check_true(vendor.get_node_or_null("InteractionArea") != null, "Evolution Item Seller inherits the existing interaction area")
+	vendor.free()
+	for locale: String in {
+		"en": "Evolution Item Seller", "nl": "Evolutie-itemverkoper",
+		"pt_BR": "Vendedor de itens de evolução", "zh_CN": "进化道具商人",
+	}:
+		var catalog: Dictionary = JSON.parse_string(_read_text("res://localization/%s.json" % locale))
+		_check_true(not str(catalog.get("ui.item_dex.shop.evolution_item_shop", "")).is_empty(), locale + " names the future evolution shop")
 
 
 func _read_text(path: String) -> String:

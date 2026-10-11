@@ -6735,5 +6735,6 @@
   "ui.evolution_conditions.partner_trade": "Troque este Pokémon por {partner}. Linking Cord não substitui esta troca.",
   "ui.evolution_conditions.shed_rule": "Evolua seu próprio Pokémon para {pokemon} com um espaço livre na equipe. Shedinja aparece nesse espaço.",
   "ui.evolution.result.bonus_created": "{pokemon} apareceu na sua equipe.",
-  "ui.trade.review.evolves_to": "Evolui para {pokemon} após esta troca."
+  "ui.trade.review.evolves_to": "Evolui para {pokemon} após esta troca.",
+  "ui.item_dex.shop.evolution_item_shop": "Vendedor de itens de evolução"
 }
