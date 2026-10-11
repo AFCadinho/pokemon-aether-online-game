@@ -7,8 +7,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1086 species/forms.
-- No anatomical attachment profile: 114 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 1094 species/forms.
+- No anatomical attachment profile: 106 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 990 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
@@ -113,6 +113,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | braviary-hisui | mouth | Same attachment profile |
 | breloom | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | brionne | hand, left_hand, mouth | Same attachment profile |
+| bronzong | face | Same attachment profile |
+| bronzor | face | Same attachment profile |
 | brute-bonnet | hand, left_hand, mouth | Same attachment profile |
 | bruxish | hand, left_hand, mouth | Same attachment profile |
 | budew | mouth | Same attachment profile |
@@ -135,6 +137,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | carnivine | hand, left_hand, mouth | Same attachment profile |
 | carracosta | foot, left_foot, mouth | Same attachment profile |
 | carvanha | mouth | Same attachment profile |
+| cascoon | face | Same attachment profile |
 | castform | mouth | Same attachment profile |
 | caterpie | mouth | Same attachment profile |
 | celebi | hand, left_hand, mouth | Same attachment profile |
@@ -142,6 +145,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | centiskorch | mouth | Same attachment profile |
 | cetitan | hand, left_hand | Same attachment profile |
 | cetoddle | hand, left_hand, mouth | Same attachment profile |
+| chandelure | face | Same attachment profile |
 | chandelure-mega | face | Same attachment profile |
 | chansey | hand, left_hand, mouth | Same attachment profile |
 | charcadet | hand, left_hand | Same attachment profile |
@@ -481,6 +485,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | kabuto | mouth | Same attachment profile |
 | kabutops | foot, mouth | Same attachment profile |
 | kadabra | casting, hand, left_hand, mouth | Same attachment profile |
+| kakuna | face | Same attachment profile |
 | kangaskhan | foot, left_foot, mouth | Same attachment profile |
 | kangaskhan-mega | foot, left_foot, mouth | Same attachment profile |
 | karrablast | hand, left_hand, mouth | Same attachment profile |
@@ -511,6 +516,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | kyurem-black | hand, left_hand, mouth | Same attachment profile |
 | kyurem-white | hand, left_hand, mouth | Same attachment profile |
 | lairon | hand, left_hand, mouth | Same attachment profile |
+| lampent | face | Same attachment profile |
 | landorus | mouth | Same attachment profile |
 | lanturn | hand, left_hand, mouth | Same attachment profile |
 | lapras | hand, left_hand, mouth | Same attachment profile |
@@ -562,7 +568,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | magikarp | mouth | Same attachment profile |
 | magmar | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | magmortar | cannon, foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| magnemite | eye | Same attachment profile |
 | magneton | face, magnet_poles | Same attachment profile |
+| magnezone | eye | Same attachment profile |
 | makuhita | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | malamar | mouth | Same attachment profile |
 | malamar-mega | mouth | Same attachment profile |

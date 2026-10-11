@@ -80,6 +80,14 @@ func _run() -> void:
 				assert(Attachments.part_for(identity,move_key) == "eye")
 			if species.begins_with("aegislash"):
 				for move_key: String in ["hyperbeam","shadowball"]: assert(Attachments.part_for(identity,move_key) == "eye")
+	for route: Array in [["magnemite","flashcannon","eye","special_attack",0.12],["magnemite","screech","eye","special_attack",1],["magnemite","supersonic","eye","special_attack",1],["magnezone","flashcannon","eye","physical_attack",0.18],["magnezone","hyperbeam","eye","physical_attack",0.18],["magnezone","screech","eye","physical_attack",1],["magnezone","supersonic","eye","physical_attack",1],["lampent","flamethrower","face","physical_attack_2",0.15],["lampent","solarbeam","face","physical_attack_2",0.15],["lampent","shadowball","face","physical_attack_2",0.12],["lampent","ember","face","physical_attack_2",0.15],["chandelure","flamethrower","face","physical_attack",0.15],["chandelure","solarbeam","face","physical_attack",0.15],["chandelure","hyperbeam","face","physical_attack",0.15],["chandelure","shadowball","face","physical_attack",0.12],["chandelure","ember","face","physical_attack",0.15],["bronzor","flashcannon","face","special_attack",0.12],["bronzor","solarbeam","face","special_attack",0.12],["bronzor","shadowball","face","special_attack",0.1],["bronzong","flashcannon","face","special_attack",0.2],["bronzong","solarbeam","face","special_attack",0.2],["bronzong","hyperbeam","face","special_attack",0.2],["bronzong","shadowball","face","special_attack",0.15],["cascoon","stringshot","face","special_attack",0.25],["cascoon","bugbite","face","physical_attack_2",1],["kakuna","stringshot","face","special_attack",0.25],["kakuna","bugbite","face","physical_attack_2",1]]:
+		for suffix: String in ["","@shiny"]:
+			var identity: String = route[0]+suffix
+			assert(Attachments.part_for(identity,route[1]) == route[2])
+			assert(Attachments.definitions_for(identity,route[2]).size() == 1)
+			var choreography: Dictionary = Attachments.choreography_for(identity,route[1],route[3])
+			assert(not choreography.is_empty())
+			assert(is_equal_approx(float(choreography.get("emission_scale",1)),route[4]))
 	for identity: String in ["silcoon","silcoon@shiny"]:
 		assert(Attachments.part_for(identity,"poisonsting") == "spike")
 		var spike := Attachments.definitions_for(identity,"spike")
@@ -108,7 +116,7 @@ func _run() -> void:
 			var definition := Attachments.definitions_for(identity, route[1])
 			assert(definition.size() == 1 and definition[0][0].bone == route[2])
 			for move: String in route[3]: assert(Attachments.part_for(identity, move) == route[1])
-	assert(Attachments.definitions_for("chandelure", "face").is_empty())
+	assert(Attachments.definitions_for("chandelure", "face") != Attachments.definitions_for("chandelure-mega", "face"))
 	assert(Attachments.definitions_for("yamask-galar", "face").is_empty())
 	assert(is_equal_approx(Attachments.choreography_for("unown", "hiddenpower", "special_attack").emission_scale, .12))
 	for species: String in ["grimer", "grimer-alola", "goodra", "gengar", "crobat", "bunnelby"]:

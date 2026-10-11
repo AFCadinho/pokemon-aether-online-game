@@ -94,17 +94,17 @@ func _draw_ember(from: Vector3, to: Vector3, right: Vector3, facing: Basis) -> v
 	var travel := (elapsed - launch) / maxf(impact - launch, 0.01)
 	var after := (elapsed - impact) / maxf(duration * 0.3, 0.01)
 	if travel >= 0 and travel < 0.7:
-		_source_sprite(from, 0.75, "ember_muzzle", travel / 0.7, 1.0 - travel / 0.7, facing)
+		_source_sprite(from, 0.75 * emission_scale, "ember_muzzle", travel / 0.7, 1.0 - travel / 0.7, facing)
 	if travel >= 0 and after < 0.15:
 		for i in 3:
 			var phase := clampf(travel - i * 0.06, 0, 1)
 			var point := from.lerp(to, phase) + Vector3.UP * sin(phase * PI) * 0.25
 			point += right * (i - 1) * sin(phase * PI) * 0.11
-			_source_sprite(point, 0.52, "ember_core", 0, 0.9, facing, elapsed * 3 + i)
+			_source_sprite(point, 0.52 * emission_scale, "ember_core", 0, 0.9, facing, elapsed * 3 + i)
 			for tail in 5:
 				var p := clampf(phase - tail * 0.032, 0, 1)
 				var behind := from.lerp(to, p) + Vector3.UP * sin(p * PI) * 0.25
-				_source_sprite(behind, 0.4, "ember_tail", float(tail) / 5.0, 0.7, facing, float(i + tail))
+				_source_sprite(behind, 0.4 * emission_scale, "ember_tail", float(tail) / 5.0, 0.7, facing, float(i + tail))
 	if hit and after >= 0 and after < 1:
 		_source_sprite(to, 1.15, "ember_hit", after, 1.0 - after * 0.5, facing)
 		for i in 7:

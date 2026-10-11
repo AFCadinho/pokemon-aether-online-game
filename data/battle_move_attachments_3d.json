@@ -11406,6 +11406,485 @@
         "side_fraction": 0.45
       }
     },
+    "bronzong": {
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Middle white face panel, special_attack .25 launch while the arms are raised. Beam .45 impact/.65 end, Shadow Ball .50 impact; charge and stream follow the white panel through the sampled motion. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Middle white face panel, special_attack .25 launch while the arms are raised. Beam .45 impact/.65 end, Shadow Ball .50 impact; charge and stream follow the white panel through the sampled motion. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Middle white face panel, special_attack .25 launch while the arms are raised. Beam .45 impact/.65 end, Shadow Ball .50 impact; charge and stream follow the white panel through the sampled motion. Reduced orb size confines charge to the front attachment region; immediately after launch the ball and trail depart forward. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Middle white face panel, special_attack .25 launch while the arms are raised. Beam .45 impact/.65 end, Shadow Ball .50 impact; charge and stream follow the white panel through the sampled motion. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "flashcannon": "special_attack",
+        "hyperbeam": "special_attack",
+        "shadowball": "special_attack",
+        "solarbeam": "special_attack"
+      },
+      "move_choreography": {
+        "flashcannon": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.2,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.25
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.2,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.25
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "emission_scale": 0.15,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.25
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.2,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.25
+        }
+      },
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.23,
+            0.25,
+            0.27,
+            0.35,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "4a3582957dda0f1d7da168275dfbb3276a01cfadda9cdd92946b062ca45325b5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4ee5b5b151a05b637f79d0fdf67d29b716310a5f24af1adc22944248b45d233b",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Middle white face panel, special_attack .25 launch while the arms are raised. Beam .45 impact/.65 end, Shadow Ball .50 impact; charge and stream follow the white panel through the sampled motion. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "668fbd487a4e576ab15a2d660b9384496964cc02745a63a6f1e40c9475e699ca",
+          "shiny_runtime_sha256": "ecd17f27a12dc8cff0dd8120b668986c0647babd659db6b528da115d271ad14a",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.2,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 34.5,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.23,
+            0.25,
+            0.27,
+            0.35,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "4a3582957dda0f1d7da168275dfbb3276a01cfadda9cdd92946b062ca45325b5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3fd8529d1557e74cf32a98c12f2d3acd464ff4ffcfbc1b5907f55636b58dffd7",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Middle white face panel, special_attack .25 launch while the arms are raised. Beam .45 impact/.65 end, Shadow Ball .50 impact; charge and stream follow the white panel through the sampled motion. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "4e50f7be132d4c99d043c235ef509c64243b2a75305351607f6b2b15968fc798",
+          "shiny_runtime_sha256": "ecd17f27a12dc8cff0dd8120b668986c0647babd659db6b528da115d271ad14a",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.2,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 34.5,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.23,
+            0.25,
+            0.27,
+            0.375,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "4a3582957dda0f1d7da168275dfbb3276a01cfadda9cdd92946b062ca45325b5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c836c1a03234067c9d8519f9d45fe847f08ac6da100875534177ecf3865a4e88",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Middle white face panel, special_attack .25 launch while the arms are raised. Beam .45 impact/.65 end, Shadow Ball .50 impact; charge and stream follow the white panel through the sampled motion. Reduced orb size confines charge to the front attachment region; immediately after launch the ball and trail depart forward. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f173bdebd63c1d4b54adf8569935d43b0c0454dd89f386959905aad1c7c7a74a",
+          "shiny_runtime_sha256": "ecd17f27a12dc8cff0dd8120b668986c0647babd659db6b528da115d271ad14a",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 138.0,
+            "impact_frame": 69.0,
+            "launch_frame": 34.5,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.23,
+            0.25,
+            0.27,
+            0.35,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "4a3582957dda0f1d7da168275dfbb3276a01cfadda9cdd92946b062ca45325b5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f47bb8e4f4fc92f0f1c608d428f0e4a45f05d94dd3f368b33c82cfe8c0e95c50",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Middle white face panel, special_attack .25 launch while the arms are raised. Beam .45 impact/.65 end, Shadow Ball .50 impact; charge and stream follow the white panel through the sampled motion. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ba6df363a48f3ce0c1b90548c44d7a84efc3a43471723699e6f3b67b4dcb760f",
+          "shiny_runtime_sha256": "ecd17f27a12dc8cff0dd8120b668986c0647babd659db6b528da115d271ad14a",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.2,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 34.5,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "flashcannon": "face",
+        "hyperbeam": "face",
+        "shadowball": "face",
+        "solarbeam": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "1f0504a5d343012cc803456397dd4dc6a523a49e880fcd33cb30cabbb0447634",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.801738303278395,
+                  0.132178697299962,
+                  0.066082999421643
+                ],
+                "column": 0.0,
+                "distance": 3.26612594329331,
+                "mesh": "pm0437_00_00/Skeleton3D/pm0437_00_00_body_mesh",
+                "pixel": [
+                  201.0,
+                  257.0
+                ],
+                "surface": 0,
+                "triangle": 302,
+                "vertex_indices": [
+                  160,
+                  162,
+                  161
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "4a3582957dda0f1d7da168275dfbb3276a01cfadda9cdd92946b062ca45325b5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9d8542db28b606bb11a73bfd9bf9eb331ada3a861d776e3d240e25149ba16859",
+          "scope": "Middle white panel of the lower face, projected independently of the eye discs. Special_attack keeps this panel forward; the second physical action rotates it away. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                -0.0199342668056488,
+                0.00719545967876911,
+                0.423201233148575
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
+    "bronzor": {
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central face dome, special_attack .35 launch after the initial horizontal tilt. Beam .48 impact/.65 end, Shadow Ball .55 impact; sampled charge and travel remain centred on the dome. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central face dome, special_attack .35 launch after the initial horizontal tilt. Beam .48 impact/.65 end, Shadow Ball .55 impact; sampled charge and travel remain centred on the dome. Reduced orb size confines charge to the front attachment region; immediately after launch the ball and trail depart forward. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central face dome, special_attack .35 launch after the initial horizontal tilt. Beam .48 impact/.65 end, Shadow Ball .55 impact; sampled charge and travel remain centred on the dome. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "flashcannon": "special_attack",
+        "shadowball": "special_attack",
+        "solarbeam": "special_attack"
+      },
+      "move_choreography": {
+        "flashcannon": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.35
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "emission_scale": 0.1,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.35
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.35
+        }
+      },
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.415,
+            0.48,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "b016675acfab68512e8d36e3e38aff9a7f522c42fc0b7d99438c269ed6d113f1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c2292808f7c986f4d3c2fa861c475fc7836771d6e93602a1f0b09f9ac192f9ba",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central face dome, special_attack .35 launch after the initial horizontal tilt. Beam .48 impact/.65 end, Shadow Ball .55 impact; sampled charge and travel remain centred on the dome. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "7dc7c29c45c05d8c1837c13d16c84d756ead43d99b8aeab1cfcc3704bcbc5563",
+          "shiny_runtime_sha256": "8b56035248279368d53741fb3e196dd3f8f466ad2ec6cc66c48ba85ed4547d4f",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 42.0,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.45,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "b016675acfab68512e8d36e3e38aff9a7f522c42fc0b7d99438c269ed6d113f1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4ea540b7bebfd13ca3fc691545e036c2b766a7dd0b7cdc539fb40d2610afc4ec",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central face dome, special_attack .35 launch after the initial horizontal tilt. Beam .48 impact/.65 end, Shadow Ball .55 impact; sampled charge and travel remain centred on the dome. Reduced orb size confines charge to the front attachment region; immediately after launch the ball and trail depart forward. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3a8c2b48bc799013e5a2c2909294162381c2f9d164fb18c9f24082ae74029340",
+          "shiny_runtime_sha256": "8b56035248279368d53741fb3e196dd3f8f466ad2ec6cc66c48ba85ed4547d4f",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 42.0,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.415,
+            0.48,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "b016675acfab68512e8d36e3e38aff9a7f522c42fc0b7d99438c269ed6d113f1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "dfb2a19ff7d5fc8f607d42701a80e99ad6ea0c7912dda8a338900c2663bfc61e",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central face dome, special_attack .35 launch after the initial horizontal tilt. Beam .48 impact/.65 end, Shadow Ball .55 impact; sampled charge and travel remain centred on the dome. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "03050014be17541ef1c17a2b377aa507c922ba7798e373d6a7478eda04d5de44",
+          "shiny_runtime_sha256": "8b56035248279368d53741fb3e196dd3f8f466ad2ec6cc66c48ba85ed4547d4f",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 42.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "flashcannon": "face",
+        "shadowball": "face",
+        "solarbeam": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "122e0a336fd0469810dc29cc53693c539598d51c4f5e1739c4edf5e280e3dce2",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.117163377922419,
+                  0.804429791487645,
+                  0.0784068305899361
+                ],
+                "column": 0.0,
+                "distance": 0.849058025120098,
+                "mesh": "pm0436_00_00/Skeleton3D/pm0436_00_00_body_mesh",
+                "pixel": [
+                  207.0,
+                  184.0
+                ],
+                "surface": 0,
+                "triangle": 327,
+                "vertex_indices": [
+                  375,
+                  373,
+                  350
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "b016675acfab68512e8d36e3e38aff9a7f522c42fc0b7d99438c269ed6d113f1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "29d754907577a828c218a04c3ac0c82c74fe3f23b6cb8db5816a265a283c402d",
+          "scope": "Front of the central dome of the mirror face, individually projected. Special_attack starts with a horizontal tilt and then faces forward; physical_attack_2 remains horizontal. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                -0.000381970079615712,
+                0.00112718786112964,
+                0.0839900597929955
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "brute-bonnet": {
       "part_reviews": {
         "hand": {
@@ -14365,6 +14844,172 @@
         "side_fraction": 0.45
       }
     },
+    "cascoon": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front shell below the eyes. Special_attack .25/.45 String Shot follows the shell during the nod; physical_attack_2 keeps the front facing the target for Bug Bite. Large contact graphics obscure the exact contact distance; in approach frames some graphics are behind the caster. Full actor framing and unobscured contact geometry are required before clearance approval. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_native_action_and_attachment_review_contact_clearance_pending"
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front shell below the eyes. Special_attack .25/.45 String Shot follows the shell during the nod; physical_attack_2 keeps the front facing the target for Bug Bite. Scale .25; all three threads follow the current front surface at .27/.35/.45/.58/.74. Authored initial zigzag and spread are retained. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack_2",
+        "stringshot": "special_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.25
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "emission_scale": 0.25,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.25
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.23,
+            0.25,
+            0.27,
+            0.35,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "8a69fd4022c215e7a667899b782f4f9b16d3477e6e609b4dceb05a69c9b3fe80",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7ad62a839b87e49097801e74f91bec812f6b97018a2fcc42be2edc0e980ab000",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front shell below the eyes. Special_attack .25/.45 String Shot follows the shell during the nod; physical_attack_2 keeps the front facing the target for Bug Bite. Large contact graphics obscure the exact contact distance; in approach frames some graphics are behind the caster. Full actor framing and unobscured contact geometry are required before clearance approval. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "00c0ddc1a817857600872f41573ff34d151887179ef32b5cbf88936b9ba7c360",
+          "shiny_runtime_sha256": "4c1ece7a0c1762262650cf8d6477f794af73a8add759dcb2c7198950e4e5e985",
+          "status": "sampled_native_action_and_attachment_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 300.0,
+            "impact_frame": 135.0,
+            "launch_frame": 75.0,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.23,
+            0.25,
+            0.27,
+            0.35,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "8a69fd4022c215e7a667899b782f4f9b16d3477e6e609b4dceb05a69c9b3fe80",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "459fe377e56c85f33d046317720581f34b56ec538932d443880775d0f453ee15",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front shell below the eyes. Special_attack .25/.45 String Shot follows the shell during the nod; physical_attack_2 keeps the front facing the target for Bug Bite. Scale .25; all three threads follow the current front surface at .27/.35/.45/.58/.74. Authored initial zigzag and spread are retained. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f940f3acefec62cd4fb69c74664202aaf2e21693d4472aa55665187490908a34",
+          "shiny_runtime_sha256": "4c1ece7a0c1762262650cf8d6477f794af73a8add759dcb2c7198950e4e5e985",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.25,
+            "frames": 102.5,
+            "impact_frame": 46.125,
+            "launch_frame": 25.625,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "face",
+        "stringshot": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "d6bea0738b28a8ad81d7f5e3ffa904c3f3c4a848724709aa362d3b338ff7a344",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.534176290825526,
+                  0.171075893232166,
+                  0.294747815942308
+                ],
+                "column": 0.0,
+                "distance": 1.50217139398051,
+                "mesh": "pm0268_00_00_trmdl/Skeleton3D/pm0268_00_00_body_mesh",
+                "pixel": [
+                  187.0,
+                  216.0
+                ],
+                "surface": 0,
+                "triangle": 1365,
+                "vertex_indices": [
+                  217,
+                  224,
+                  218
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "8a69fd4022c215e7a667899b782f4f9b16d3477e6e609b4dceb05a69c9b3fe80",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "641b5afc865027ef47fd05e5d87ad477bc1e3bb42d446ac976222c29b3641ae6",
+          "scope": "Front shell surface below the eyes. No visible mouth opening; all native actions retain the surface, with a forward nod in physical_attack_2. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                -0.0828416123986244,
+                0.0152797512710094,
+                0.323829293251038
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "castform": {
       "parts": {
         "mouth": [
@@ -14976,6 +15621,314 @@
           ],
           "method": "ray_triangle_barycentric_skin_binding"
         }
+      }
+    },
+    "chandelure": {
+      "anatomical_route_reviews": {
+        "ember": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central grille crossing; physical_attack .42 launch avoids the arm crossing at the earlier rejected .35 launch. Beam .52 impact/.60 end; orb and Ember .60 impact. At .44/.47/.52/.58 streams follow the grille; the face turns away after emission ends. Spiral arms remain a full-radius clearance review item. Rejected unscaled Ember covering most of the lamp; scale .15 reduces source flare, projectiles and trails, preserving target impact. Final .40/.42 (Lampent) or .42/.44 (Chandelure) samples show a compact flare and forward embers; .50/.51 trails fade near the source. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "flamethrower": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central grille crossing; physical_attack .42 launch avoids the arm crossing at the earlier rejected .35 launch. Beam .52 impact/.60 end; orb and Ember .60 impact. At .44/.47/.52/.58 streams follow the grille; the face turns away after emission ends. Spiral arms remain a full-radius clearance review item. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central grille crossing; physical_attack .42 launch avoids the arm crossing at the earlier rejected .35 launch. Beam .52 impact/.60 end; orb and Ember .60 impact. At .44/.47/.52/.58 streams follow the grille; the face turns away after emission ends. Spiral arms remain a full-radius clearance review item. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central grille crossing; physical_attack .42 launch avoids the arm crossing at the earlier rejected .35 launch. Beam .52 impact/.60 end; orb and Ember .60 impact. At .44/.47/.52/.58 streams follow the grille; the face turns away after emission ends. Spiral arms remain a full-radius clearance review item. Reduced orb size confines charge to the front attachment region; immediately after launch the ball and trail depart forward. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central grille crossing; physical_attack .42 launch avoids the arm crossing at the earlier rejected .35 launch. Beam .52 impact/.60 end; orb and Ember .60 impact. At .44/.47/.52/.58 streams follow the grille; the face turns away after emission ends. Spiral arms remain a full-radius clearance review item. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "ember": "physical_attack",
+        "flamethrower": "physical_attack",
+        "hyperbeam": "physical_attack",
+        "shadowball": "physical_attack",
+        "solarbeam": "physical_attack"
+      },
+      "move_choreography": {
+        "ember": {
+          "action": "physical_attack",
+          "emission_scale": 0.15,
+          "impact_fraction": 0.6,
+          "launch_fraction": 0.42
+        },
+        "flamethrower": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.6,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.42
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.6,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.42
+        },
+        "shadowball": {
+          "action": "physical_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.6,
+          "launch_fraction": 0.42
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.6,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.42
+        }
+      },
+      "move_effect_reviews": {
+        "ember": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "e060f506f2b787a23518f10d3848cec615bbc772a579c39387bba577b409a886",
+          "fractions": [
+            0.12,
+            0.4,
+            0.42,
+            0.44,
+            0.51,
+            0.58,
+            0.6,
+            0.74
+          ],
+          "normal_runtime_sha256": "b0236a5e81868acd4fdf3201192464ceea8073cb1457a345dca14aed8859c98d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "bbc274b6528e7560660854e01d5e97ea51dc30fe7480cb360090af19c95d3c2a",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central grille crossing; physical_attack .42 launch avoids the arm crossing at the earlier rejected .35 launch. Beam .52 impact/.60 end; orb and Ember .60 impact. At .44/.47/.52/.58 streams follow the grille; the face turns away after emission ends. Spiral arms remain a full-radius clearance review item. Rejected unscaled Ember covering most of the lamp; scale .15 reduces source flare, projectiles and trails, preserving target impact. Final .40/.42 (Lampent) or .42/.44 (Chandelure) samples show a compact flare and forward embers; .50/.51 trails fade near the source. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "0d33db5dfa3b9015f4e419ebdfd562e3cfbf90f56253fc88c955a81a5503a5ca",
+          "shiny_runtime_sha256": "cb5475ddba1dd4804642d359e9238f5633636d3ba29ebd5cfaa036756cce674a",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 130.0,
+            "impact_frame": 78.0,
+            "launch_frame": 54.6,
+            "move_key": "ember"
+          },
+          "views": 2
+        },
+        "flamethrower": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "e060f506f2b787a23518f10d3848cec615bbc772a579c39387bba577b409a886",
+          "fractions": [
+            0.12,
+            0.4,
+            0.42,
+            0.44,
+            0.47,
+            0.52,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "b0236a5e81868acd4fdf3201192464ceea8073cb1457a345dca14aed8859c98d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "00e188c65285814954dafce880be6a2fdd8ec67d644811253af68659a24340ea",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central grille crossing; physical_attack .42 launch avoids the arm crossing at the earlier rejected .35 launch. Beam .52 impact/.60 end; orb and Ember .60 impact. At .44/.47/.52/.58 streams follow the grille; the face turns away after emission ends. Spiral arms remain a full-radius clearance review item. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "6ec00b66a769e68122c12aadd8cfa5b8d29dedfa156086620e3cab4a183d05d3",
+          "shiny_runtime_sha256": "cb5475ddba1dd4804642d359e9238f5633636d3ba29ebd5cfaa036756cce674a",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.15,
+            "frames": 130.0,
+            "impact_frame": 67.6,
+            "launch_frame": 54.6,
+            "move_key": "flamethrower"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "e060f506f2b787a23518f10d3848cec615bbc772a579c39387bba577b409a886",
+          "fractions": [
+            0.12,
+            0.4,
+            0.42,
+            0.44,
+            0.47,
+            0.52,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "b0236a5e81868acd4fdf3201192464ceea8073cb1457a345dca14aed8859c98d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "df1e2cda63a8d9f043ef395c4e439f56b68a3a5ca00343c675143bbbf32808a5",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central grille crossing; physical_attack .42 launch avoids the arm crossing at the earlier rejected .35 launch. Beam .52 impact/.60 end; orb and Ember .60 impact. At .44/.47/.52/.58 streams follow the grille; the face turns away after emission ends. Spiral arms remain a full-radius clearance review item. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b978b6d70b8f8702d51b3f6dbdf74eda54a0cf84eb242f892be5adae3d1186a8",
+          "shiny_runtime_sha256": "cb5475ddba1dd4804642d359e9238f5633636d3ba29ebd5cfaa036756cce674a",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.15,
+            "frames": 130.0,
+            "impact_frame": 67.6,
+            "launch_frame": 54.6,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "e060f506f2b787a23518f10d3848cec615bbc772a579c39387bba577b409a886",
+          "fractions": [
+            0.12,
+            0.4,
+            0.42,
+            0.44,
+            0.51,
+            0.58,
+            0.6,
+            0.74
+          ],
+          "normal_runtime_sha256": "b0236a5e81868acd4fdf3201192464ceea8073cb1457a345dca14aed8859c98d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f03c44a11af730ecc829d736613828bf22c6d37a54f06940b07bfd70135ee2e9",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central grille crossing; physical_attack .42 launch avoids the arm crossing at the earlier rejected .35 launch. Beam .52 impact/.60 end; orb and Ember .60 impact. At .44/.47/.52/.58 streams follow the grille; the face turns away after emission ends. Spiral arms remain a full-radius clearance review item. Reduced orb size confines charge to the front attachment region; immediately after launch the ball and trail depart forward. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "501fa2461e7cd5804af9b31e6da5f9ed7cf3b529b1ed909e8dbd898d04b53cb5",
+          "shiny_runtime_sha256": "cb5475ddba1dd4804642d359e9238f5633636d3ba29ebd5cfaa036756cce674a",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 130.0,
+            "impact_frame": 78.0,
+            "launch_frame": 54.6,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "e060f506f2b787a23518f10d3848cec615bbc772a579c39387bba577b409a886",
+          "fractions": [
+            0.12,
+            0.4,
+            0.42,
+            0.44,
+            0.47,
+            0.52,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "b0236a5e81868acd4fdf3201192464ceea8073cb1457a345dca14aed8859c98d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c3b8e12a34fdca1babd46586467f28e804ea95902dd73b4164f6a778276fcd27",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central grille crossing; physical_attack .42 launch avoids the arm crossing at the earlier rejected .35 launch. Beam .52 impact/.60 end; orb and Ember .60 impact. At .44/.47/.52/.58 streams follow the grille; the face turns away after emission ends. Spiral arms remain a full-radius clearance review item. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d42b266a4d62d44317aad31467b75a18cf755f929bc0ae5f303cf39f4cfa60b2",
+          "shiny_runtime_sha256": "cb5475ddba1dd4804642d359e9238f5633636d3ba29ebd5cfaa036756cce674a",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.15,
+            "frames": 130.0,
+            "impact_frame": 67.6,
+            "launch_frame": 54.6,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "ember": "face",
+        "flamethrower": "face",
+        "hyperbeam": "face",
+        "shadowball": "face",
+        "solarbeam": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "456ce40cd5740c250f7d8d20136b0a99ede2fbcf2e0c9ec2affc62ca88a21a88",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.828076521236914,
+                  0.0794400200522966,
+                  0.0924834587107898
+                ],
+                "column": 0.0,
+                "distance": 4.22160958812839,
+                "mesh": "pm0609_00_00/Skeleton3D/pm0609_00_00_body_a_mesh",
+                "pixel": [
+                  205.0,
+                  250.0
+                ],
+                "surface": 0,
+                "triangle": 473,
+                "vertex_indices": [
+                  654,
+                  241,
+                  249
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "b0236a5e81868acd4fdf3201192464ceea8073cb1457a345dca14aed8859c98d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ccce43a18e055762fa759a8e899741417417ff4263cc19c922f52c728898e477",
+          "scope": "Central front grille crossing, projected onto body_a. The special attack rotates the face away; forward casts must use a separately reviewed action/window. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                0.309645384550095,
+                -0.00292108068242669,
+                0.397189438343048
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
       }
     },
     "chandelure-mega": {
@@ -56160,6 +57113,172 @@
         }
       }
     },
+    "kakuna": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Lower head surface above the shell seam. Special_attack .25/.45 String Shot follows the nodding head; physical_attack_2 provides a forward Bug Bite pose. Large contact graphics obscure the exact contact distance; in approach frames some graphics are behind the caster. Full actor framing and unobscured contact geometry are required before clearance approval. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_native_action_and_attachment_review_contact_clearance_pending"
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Lower head surface above the shell seam. Special_attack .25/.45 String Shot follows the nodding head; physical_attack_2 provides a forward Bug Bite pose. Scale .25; all three threads follow the current front surface at .27/.35/.45/.58/.74. Authored initial zigzag and spread are retained. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack_2",
+        "stringshot": "special_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.25
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "emission_scale": 0.25,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.25
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.23,
+            0.25,
+            0.27,
+            0.35,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "18586729d2cd9f8a726a50fdad2ce79319115dd39ff542e385de9267670cab37",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2053cb2371b377b435755241e16c40ac3975d115181d5bd3cca38cd6b51cc37d",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Lower head surface above the shell seam. Special_attack .25/.45 String Shot follows the nodding head; physical_attack_2 provides a forward Bug Bite pose. Large contact graphics obscure the exact contact distance; in approach frames some graphics are behind the caster. Full actor framing and unobscured contact geometry are required before clearance approval. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "fbfc79adab9d9ead1079253a0a583de41c169bbc9a0292f72a13840e0934d315",
+          "shiny_runtime_sha256": "cee1d03ce0110fac8c7e227a258a3063664d17891427c917f04cb6959f7d13c5",
+          "status": "sampled_native_action_and_attachment_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 130.0,
+            "impact_frame": 58.5,
+            "launch_frame": 32.5,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.23,
+            0.25,
+            0.27,
+            0.35,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "18586729d2cd9f8a726a50fdad2ce79319115dd39ff542e385de9267670cab37",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ec12ddf46490ef36a92760988f2deb6412dd36fef6e7b59de641fc107f98e64f",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Lower head surface above the shell seam. Special_attack .25/.45 String Shot follows the nodding head; physical_attack_2 provides a forward Bug Bite pose. Scale .25; all three threads follow the current front surface at .27/.35/.45/.58/.74. Authored initial zigzag and spread are retained. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "7753f270f852f5348bd0b2cfe43f1620a9cdb65f0f69f2321bbf2d1fe0851154",
+          "shiny_runtime_sha256": "cee1d03ce0110fac8c7e227a258a3063664d17891427c917f04cb6959f7d13c5",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.25,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 30.0,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "face",
+        "stringshot": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "1f50948fab6d26e70102a8b0e854c0111db4c6b438e1444b8f7ae99bb631fe44",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.141842744184345,
+                  0.00669688938216575,
+                  0.851460366433489
+                ],
+                "column": 0.0,
+                "distance": 0.873444535983051,
+                "mesh": "pm0014_00_00/Skeleton3D/pm0014_00_00_body_mesh",
+                "pixel": [
+                  203.0,
+                  127.0
+                ],
+                "surface": 0,
+                "triangle": 1748,
+                "vertex_indices": [
+                  1287,
+                  1288,
+                  1236
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "18586729d2cd9f8a726a50fdad2ce79319115dd39ff542e385de9267670cab37",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3c35bba6de91e3634479812da2c37b541fcc8dbe95e2b99827412fa65f9517e4",
+          "scope": "Lower head surface immediately above the central shell seam. No visible mouth opening; follows all sampled native actions. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                0.123142883181572,
+                -0.00260261492803693,
+                0.0834596753120422
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "kangaskhan": {
       "part_reviews": {
         "foot": {
@@ -59525,6 +60644,267 @@
         "preview_sha256": "38b5eb4969b25ba470136188177468218180f178f127c9f46a8c773529823823",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "lampent": {
+      "anatomical_route_reviews": {
+        "ember": {
+          "action": "physical_attack_2",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front glass surface below the eyes; physical_attack_2 .40 launch avoids the lowered hat. Beam .55 impact/.70 end, orb and Ember .60 impact. Streams follow the front glass through the sampled .42/.475/.55/.58 poses. Rejected unscaled Ember covering most of the lamp; scale .15 reduces source flare, projectiles and trails, preserving target impact. Final .40/.42 (Lampent) or .42/.44 (Chandelure) samples show a compact flare and forward embers; .50/.51 trails fade near the source. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "flamethrower": {
+          "action": "physical_attack_2",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front glass surface below the eyes; physical_attack_2 .40 launch avoids the lowered hat. Beam .55 impact/.70 end, orb and Ember .60 impact. Streams follow the front glass through the sampled .42/.475/.55/.58 poses. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "physical_attack_2",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front glass surface below the eyes; physical_attack_2 .40 launch avoids the lowered hat. Beam .55 impact/.70 end, orb and Ember .60 impact. Streams follow the front glass through the sampled .42/.475/.55/.58 poses. Reduced orb size confines charge to the front attachment region; immediately after launch the ball and trail depart forward. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "physical_attack_2",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front glass surface below the eyes; physical_attack_2 .40 launch avoids the lowered hat. Beam .55 impact/.70 end, orb and Ember .60 impact. Streams follow the front glass through the sampled .42/.475/.55/.58 poses. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "ember": "physical_attack_2",
+        "flamethrower": "physical_attack_2",
+        "shadowball": "physical_attack_2",
+        "solarbeam": "physical_attack_2"
+      },
+      "move_choreography": {
+        "ember": {
+          "action": "physical_attack_2",
+          "emission_scale": 0.15,
+          "impact_fraction": 0.6,
+          "launch_fraction": 0.4
+        },
+        "flamethrower": {
+          "action": "physical_attack_2",
+          "emission_end_fraction": 0.7,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.4
+        },
+        "shadowball": {
+          "action": "physical_attack_2",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.6,
+          "launch_fraction": 0.4
+        },
+        "solarbeam": {
+          "action": "physical_attack_2",
+          "emission_end_fraction": 0.7,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.4
+        }
+      },
+      "move_effect_reviews": {
+        "ember": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "e060f506f2b787a23518f10d3848cec615bbc772a579c39387bba577b409a886",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.5,
+            0.58,
+            0.6,
+            0.74
+          ],
+          "normal_runtime_sha256": "a8f0372074900779bcd5030beee12b44dcd64d2d53a37e42bb391997ebc848e1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "96cae02532be69c6d4b19d4582b408a6b355b8bc6c3059df82823403097ca760",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front glass surface below the eyes; physical_attack_2 .40 launch avoids the lowered hat. Beam .55 impact/.70 end, orb and Ember .60 impact. Streams follow the front glass through the sampled .42/.475/.55/.58 poses. Rejected unscaled Ember covering most of the lamp; scale .15 reduces source flare, projectiles and trails, preserving target impact. Final .40/.42 (Lampent) or .42/.44 (Chandelure) samples show a compact flare and forward embers; .50/.51 trails fade near the source. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "43a9e1dfd1f2687782b63a885c69971b06975184f16d6a1bfc79d672277a9960",
+          "shiny_runtime_sha256": "7ef7aafb25222da4a65c83940a92b9d244b8257f360ba4c14ab75687a6a58b67",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 130.0,
+            "impact_frame": 78.0,
+            "launch_frame": 52.0,
+            "move_key": "ember"
+          },
+          "views": 2
+        },
+        "flamethrower": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.475,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "a8f0372074900779bcd5030beee12b44dcd64d2d53a37e42bb391997ebc848e1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d28d28750c4ebccb3f5ba061a2346295dd04ac23cae9c35fd8a1dd29fef25ce1",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front glass surface below the eyes; physical_attack_2 .40 launch avoids the lowered hat. Beam .55 impact/.70 end, orb and Ember .60 impact. Streams follow the front glass through the sampled .42/.475/.55/.58 poses. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ff090afc1cf10b4adb0a83841d0a013b16a76ae0725b43d8934711c855863277",
+          "shiny_runtime_sha256": "7ef7aafb25222da4a65c83940a92b9d244b8257f360ba4c14ab75687a6a58b67",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 91.0,
+            "emission_scale": 0.15,
+            "frames": 130.0,
+            "impact_frame": 71.5,
+            "launch_frame": 52.0,
+            "move_key": "flamethrower"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.5,
+            0.58,
+            0.6,
+            0.74
+          ],
+          "normal_runtime_sha256": "a8f0372074900779bcd5030beee12b44dcd64d2d53a37e42bb391997ebc848e1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "22e992c6095620d3f14188294ffa4fec38e42cfd4b24e981e66a3346c5323a30",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front glass surface below the eyes; physical_attack_2 .40 launch avoids the lowered hat. Beam .55 impact/.70 end, orb and Ember .60 impact. Streams follow the front glass through the sampled .42/.475/.55/.58 poses. Reduced orb size confines charge to the front attachment region; immediately after launch the ball and trail depart forward. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9195ab2cfb315ab38b3ff9252d38f37fbaa5afa72be04e6ab2eecb7e02688949",
+          "shiny_runtime_sha256": "7ef7aafb25222da4a65c83940a92b9d244b8257f360ba4c14ab75687a6a58b67",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 130.0,
+            "impact_frame": 78.0,
+            "launch_frame": 52.0,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.475,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "a8f0372074900779bcd5030beee12b44dcd64d2d53a37e42bb391997ebc848e1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "87d35aa55cef946f761f2790e97bfbde181d891d4586eb27cdba089f6ee1e080",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front glass surface below the eyes; physical_attack_2 .40 launch avoids the lowered hat. Beam .55 impact/.70 end, orb and Ember .60 impact. Streams follow the front glass through the sampled .42/.475/.55/.58 poses. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "5a900da0d9f2e0bd35dae93eb33ec07636a8ff59abf6673a8338351fa000c8ce",
+          "shiny_runtime_sha256": "7ef7aafb25222da4a65c83940a92b9d244b8257f360ba4c14ab75687a6a58b67",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 91.0,
+            "emission_scale": 0.15,
+            "frames": 130.0,
+            "impact_frame": 71.5,
+            "launch_frame": 52.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "ember": "face",
+        "flamethrower": "face",
+        "shadowball": "face",
+        "solarbeam": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "ee52249335f62b248358d6b125268ea66b4f166bc32246dd6f5f437d53bb0240",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.21311152014816,
+                  0.515769096067162,
+                  0.271119383784678
+                ],
+                "column": 0.0,
+                "distance": 1.58974315672076,
+                "mesh": "pm0608_00_00/Skeleton3D/pm0608_00_00_bodyb00_mesh",
+                "pixel": [
+                  225.0,
+                  181.0
+                ],
+                "surface": 0,
+                "triangle": 277,
+                "vertex_indices": [
+                  101,
+                  106,
+                  102
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "a8f0372074900779bcd5030beee12b44dcd64d2d53a37e42bb391997ebc848e1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4328e92ca8d0c3c055625e500f42e9f911dcef781a9edc1dd3bca38e35f41e0d",
+          "scope": "Front glass surface below the eyes, independently projected onto bodyb00, outside the inner flame. Hat and arms occlude this face in some actions, requiring separate timing review. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                0.123862341046333,
+                -0.0145172290503979,
+                0.142007693648338
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
       }
     },
     "landorus": {
@@ -65797,6 +67177,216 @@
         "side_fraction": 0.45
       }
     },
+    "magnemite": {
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central pupil projected independently; special_attack leaves the eye directed forward after the early tilt. Magnet surfaces are separate pending electrical origins. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central pupil projected independently; special_attack leaves the eye directed forward after the early tilt. Magnet surfaces are separate pending electrical origins. Wider .8 camera review at .12/.28/.30/.31/.34/.40/.50/.65: glow follows the eye, rings progress forward after launch and vanish by .65. Broad rings cross magnet silhouettes in projection and are edge-on in the first view. Full ring orientation and geometry clearance remain pending. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central pupil projected independently; special_attack leaves the eye directed forward after the early tilt. Magnet surfaces are separate pending electrical origins. Wider .8 camera review at .12/.28/.30/.31/.34/.40/.50/.65: glow follows the eye, rings progress forward after launch and vanish by .65. Broad rings cross magnet silhouettes in projection and are edge-on in the first view. Full ring orientation and geometry clearance remain pending. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "flashcannon": "special_attack",
+        "screech": "special_attack",
+        "supersonic": "special_attack"
+      },
+      "move_choreography": {
+        "flashcannon": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.62,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "screech": {
+          "action": "special_attack",
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.3
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "a71c4cedd58bf7a62169700d4a2db68aacc5354bf37a4d4459672e628ccd9631",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "21a7bf5187d28c0dd88f701c2939e157a109f76f1accd1c8292dde04641f00ca",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central pupil projected independently; special_attack leaves the eye directed forward after the early tilt. Magnet surfaces are separate pending electrical origins. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f98f82089e2834bf3b98e430d5232e4e111f553b5de218322efd8c3765d9646a",
+          "shiny_runtime_sha256": "dbc7e8e476f8ddc7bd3e9db82b5abce1b87fcc1531959d8da74fa10248671435",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 74.4,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "e060f506f2b787a23518f10d3848cec615bbc772a579c39387bba577b409a886",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.31,
+            0.34,
+            0.4,
+            0.5,
+            0.65
+          ],
+          "normal_runtime_sha256": "a71c4cedd58bf7a62169700d4a2db68aacc5354bf37a4d4459672e628ccd9631",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4f9ed25783ad1a8da8e52d3e43fdfe4415d42fb56b29ed7edb4c8463c3b09faa",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central pupil projected independently; special_attack leaves the eye directed forward after the early tilt. Magnet surfaces are separate pending electrical origins. Wider .8 camera review at .12/.28/.30/.31/.34/.40/.50/.65: glow follows the eye, rings progress forward after launch and vanish by .65. Broad rings cross magnet silhouettes in projection and are edge-on in the first view. Full ring orientation and geometry clearance remain pending. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "0c5c6886737aeee4ffc282874c5298a8385f63fb6f066b4031b4d1936781f932",
+          "shiny_runtime_sha256": "dbc7e8e476f8ddc7bd3e9db82b5abce1b87fcc1531959d8da74fa10248671435",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 62.4,
+            "launch_frame": 36.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "e060f506f2b787a23518f10d3848cec615bbc772a579c39387bba577b409a886",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.31,
+            0.34,
+            0.4,
+            0.5,
+            0.65
+          ],
+          "normal_runtime_sha256": "a71c4cedd58bf7a62169700d4a2db68aacc5354bf37a4d4459672e628ccd9631",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2021a34d9a191d412d41c797d7c81790b7e6facfef69327d2c52a898c4e72913",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central pupil projected independently; special_attack leaves the eye directed forward after the early tilt. Magnet surfaces are separate pending electrical origins. Wider .8 camera review at .12/.28/.30/.31/.34/.40/.50/.65: glow follows the eye, rings progress forward after launch and vanish by .65. Broad rings cross magnet silhouettes in projection and are edge-on in the first view. Full ring orientation and geometry clearance remain pending. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "8731b2a6c4134913c01bfa5196b5f2dfc8c6bbf0bd6c2b0ed31a07db659417a9",
+          "shiny_runtime_sha256": "dbc7e8e476f8ddc7bd3e9db82b5abce1b87fcc1531959d8da74fa10248671435",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 62.4,
+            "launch_frame": 36.0,
+            "move_key": "supersonic"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "flashcannon": "eye",
+        "screech": "eye",
+        "supersonic": "eye"
+      },
+      "part_reviews": {
+        "eye": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "5c97831cedd92a7f7c3c235db24ffb09ed9717c2a0022a4755683360252d0dee",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0280114964892955,
+                  0.881932419801249,
+                  0.0900560837094556
+                ],
+                "column": 0.0,
+                "distance": 0.957576306122441,
+                "mesh": "pm0081_00_00/Skeleton3D/pm0081_00_00_body_mesh",
+                "pixel": [
+                  207.0,
+                  214.0
+                ],
+                "surface": 1,
+                "triangle": 196,
+                "vertex_indices": [
+                  61,
+                  60,
+                  139
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "a71c4cedd58bf7a62169700d4a2db68aacc5354bf37a4d4459672e628ccd9631",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e811c8718b208e52c012a5a5fd674cea60255bb2e208d4702f930dacd9a8d96a",
+          "scope": "Pupil centre, individually projected from the visible eye surface; follows all four native actions. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "eye": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                0.00136351212859154,
+                -0.000917369616217911,
+                0.133619040250778
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "magneton": {
       "anatomical_route_reviews": {
         "flashcannon": {
@@ -66425,6 +68015,263 @@
                 0.231251038610935,
                 0.06411292403936385,
                 2.793967699560307e-09
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
+    "magnezone": {
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "physical_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central red lens projected independently; physical_attack keeps the lens forward, avoiding the upward tilt of special_attack. Magnetic poles need separate electrical review. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central red lens projected independently; physical_attack keeps the lens forward, avoiding the upward tilt of special_attack. Magnetic poles need separate electrical review. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "physical_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central red lens projected independently; physical_attack keeps the lens forward, avoiding the upward tilt of special_attack. Magnetic poles need separate electrical review. Wider .8 camera review at .12/.28/.30/.31/.34/.40/.50/.65: glow follows the eye, rings progress forward after launch and vanish by .65. Broad rings cross magnet silhouettes in projection and are edge-on in the first view. Full ring orientation and geometry clearance remain pending. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        },
+        "supersonic": {
+          "action": "physical_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central red lens projected independently; physical_attack keeps the lens forward, avoiding the upward tilt of special_attack. Magnetic poles need separate electrical review. Wider .8 camera review at .12/.28/.30/.31/.34/.40/.50/.65: glow follows the eye, rings progress forward after launch and vanish by .65. Broad rings cross magnet silhouettes in projection and are edge-on in the first view. Full ring orientation and geometry clearance remain pending. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "flashcannon": "physical_attack",
+        "hyperbeam": "physical_attack",
+        "screech": "physical_attack",
+        "supersonic": "physical_attack"
+      },
+      "move_choreography": {
+        "flashcannon": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.62,
+          "emission_scale": 0.18,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.62,
+          "emission_scale": 0.18,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "screech": {
+          "action": "physical_attack",
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.3
+        },
+        "supersonic": {
+          "action": "physical_attack",
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "642741f2cfbfc3d993299c3ef97e599265d0a31dbafd06a81e567bcde4db3013",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b28fc2b143cda2180e665186c3dee490823db7303f884e000c0c173112e60139",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central red lens projected independently; physical_attack keeps the lens forward, avoiding the upward tilt of special_attack. Magnetic poles need separate electrical review. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "59cbc26cb96676bd82e6962576edf3e504c6ef4c16d41257d2caac4d1a190c76",
+          "shiny_runtime_sha256": "7c8dd1a6feaff2e42089bb87ad89820a8f5ffba06e100a34d18564979fada7b4",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 55.8,
+            "emission_scale": 0.18,
+            "frames": 90.0,
+            "impact_frame": 40.5,
+            "launch_frame": 27.0,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "af4f2ee3be677c0a3319d7c89b8faf135e618e8598ba6114da186e47b40bc4e0",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "642741f2cfbfc3d993299c3ef97e599265d0a31dbafd06a81e567bcde4db3013",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a66cfbcc0081e0fea5be36d4efa5d376f5ebc34518f3ba2a92579462b0a699a9",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central red lens projected independently; physical_attack keeps the lens forward, avoiding the upward tilt of special_attack. Magnetic poles need separate electrical review. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b23afc430888152e0ce4eb46155f1c2fc6318aeff101193427c71e66a09fe6ce",
+          "shiny_runtime_sha256": "7c8dd1a6feaff2e42089bb87ad89820a8f5ffba06e100a34d18564979fada7b4",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 55.8,
+            "emission_scale": 0.18,
+            "frames": 90.0,
+            "impact_frame": 40.5,
+            "launch_frame": 27.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "e060f506f2b787a23518f10d3848cec615bbc772a579c39387bba577b409a886",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.31,
+            0.34,
+            0.4,
+            0.5,
+            0.65
+          ],
+          "normal_runtime_sha256": "642741f2cfbfc3d993299c3ef97e599265d0a31dbafd06a81e567bcde4db3013",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "04e47cf1fd00c3c16b3f873c954cf63a684e4551ca63655cf3f3c6776fe9990a",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central red lens projected independently; physical_attack keeps the lens forward, avoiding the upward tilt of special_attack. Magnetic poles need separate electrical review. Wider .8 camera review at .12/.28/.30/.31/.34/.40/.50/.65: glow follows the eye, rings progress forward after launch and vanish by .65. Broad rings cross magnet silhouettes in projection and are edge-on in the first view. Full ring orientation and geometry clearance remain pending. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "cf7b60460d8acb3fa8e8ba485a9e8aa6575c8bf19338f46f06fccc68ed9efaf8",
+          "shiny_runtime_sha256": "7c8dd1a6feaff2e42089bb87ad89820a8f5ffba06e100a34d18564979fada7b4",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 90.0,
+            "impact_frame": 46.8,
+            "launch_frame": 27.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "supersonic": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "e060f506f2b787a23518f10d3848cec615bbc772a579c39387bba577b409a886",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.31,
+            0.34,
+            0.4,
+            0.5,
+            0.65
+          ],
+          "normal_runtime_sha256": "642741f2cfbfc3d993299c3ef97e599265d0a31dbafd06a81e567bcde4db3013",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "845435028cb689bb5fefe321e6735cbbd489a52d00aa9311f2e9c302e7c9bd1b",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Central red lens projected independently; physical_attack keeps the lens forward, avoiding the upward tilt of special_attack. Magnetic poles need separate electrical review. Wider .8 camera review at .12/.28/.30/.31/.34/.40/.50/.65: glow follows the eye, rings progress forward after launch and vanish by .65. Broad rings cross magnet silhouettes in projection and are edge-on in the first view. Full ring orientation and geometry clearance remain pending. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "0e6dcad7fe9a55137d271ba159ce3f1f8abf182838055a0903413f34a065a2e0",
+          "shiny_runtime_sha256": "7c8dd1a6feaff2e42089bb87ad89820a8f5ffba06e100a34d18564979fada7b4",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 90.0,
+            "impact_frame": 46.8,
+            "launch_frame": 27.0,
+            "move_key": "supersonic"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "flashcannon": "eye",
+        "hyperbeam": "eye",
+        "screech": "eye",
+        "supersonic": "eye"
+      },
+      "part_reviews": {
+        "eye": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "36e6733df3f0d505dbca2a7aefedca8a7ddfee72d0b11c98d2fcf304a0c89de7",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0278970453850792,
+                  0.919384993743764,
+                  0.0527179608711568
+                ],
+                "column": 0.0,
+                "distance": 3.94490823990831,
+                "mesh": "pm0462_00_00/Skeleton3D/pm0462_00_00_eye_mesh",
+                "pixel": [
+                  199.0,
+                  181.0
+                ],
+                "surface": 0,
+                "triangle": 84,
+                "vertex_indices": [
+                  30,
+                  29,
+                  8
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "642741f2cfbfc3d993299c3ef97e599265d0a31dbafd06a81e567bcde4db3013",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2a27e1ddfec1d5135432c737258cf24226be084a67119827f7964f7a908462a4",
+          "scope": "Central red eye lens, individually projected. Special_attack tilts the lens upward; forward casts will use physical_attack and require actual effect review. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "eye": [
+          [
+            {
+              "bone": "eyeball",
+              "offset": [
+                0.611584603786469,
+                0.00141481508035213,
+                -0.00363143184222281
               ],
               "weight": 1.0
             }
