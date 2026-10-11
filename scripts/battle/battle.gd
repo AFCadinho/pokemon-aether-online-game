@@ -4978,7 +4978,10 @@ func _finish_battle(result: Dictionary) -> void:
 	)
 	if not skip_party_battle_sync:
 		_sync_player_save_from_battle_state()
-		PlayerPartyStateService.save_current_battle_party_state_deferred(_battle_happiness_context())
+		if battle_type == BattleType.WILD and _party_holds_aether_band():
+			await PlayerPartyStateService.save_current_battle_party_state_deferred(_battle_happiness_context())
+		else:
+			PlayerPartyStateService.save_current_battle_party_state_deferred(_battle_happiness_context())
 	if _should_present_pvp_battle_result(result):
 		_show_pvp_battle_result(result)
 		return
@@ -4991,6 +4994,13 @@ func _close_battle_drawers_for_terminal_result() -> void:
 	bag_inventory_request_token += 1
 	current_action_view = ActionView.NONE
 	_set_action_panel_mode(BattleActionsPanelMode.BATTLE)
+
+
+func _party_holds_aether_band() -> bool:
+	for pokemon: Pokemon in PlayerSave.party:
+		if pokemon != null and pokemon.item == "aether-band":
+			return true
+	return false
 
 
 func _battle_happiness_context() -> Dictionary:

@@ -1,4 +1,8 @@
 {
+  "aether-band": {
+    "name": "Aether Band",
+    "shortDesc": "Restaura 1 PP de cada movimento do portador após vencer uma batalha contra um Pokémon selvagem, até o máximo. Não negociável. Uma compra por conta."
+  },
   "alola-stone": {
     "name": "Pedra de Alola",
     "shortDesc": "Evolui Pikachu, Exeggcute para sua evolução de Alola. Consumida quando a evolução é bem-sucedida."
