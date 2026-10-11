@@ -1143,5 +1143,25 @@
   "emerald-luchador-outfit": {
     "name": "Emerald Luchador Caixa de Roupa",
     "shortDesc": "Contém cinco itens separados de cores fixas: jaqueta, calças, botas, máscara e asas para as costas. Para ambos os gêneros. Abra a caixa na Bolsa."
+  },
+  "akatsuki-shirt": {
+    "name": "Akatsuki Manto",
+    "shortDesc": "Cosmético de cores fixas para treinadores masculinos e femininos. Ative na Bolsa e equipe na Personalização de Personagem."
+  },
+  "akatsuki-trousers": {
+    "name": "Akatsuki Calças",
+    "shortDesc": "Cosmético de cores fixas para treinadores masculinos e femininos. Ative na Bolsa e equipe na Personalização de Personagem."
+  },
+  "akatsuki-shoes": {
+    "name": "Akatsuki Sandálias",
+    "shortDesc": "Cosmético de cores fixas para treinadores masculinos e femininos. Ative na Bolsa e equipe na Personalização de Personagem."
+  },
+  "akatsuki-headband": {
+    "name": "Akatsuki Bandana",
+    "shortDesc": "Cosmético de cores fixas para treinadores masculinos e femininos. Ative na Bolsa e equipe na Personalização de Personagem."
+  },
+  "akatsuki-outfit": {
+    "name": "Akatsuki Caixa de Traje",
+    "shortDesc": "Contém quatro itens separados: manto longo, calças, sandálias e bandana. Serve para ambos os gêneros. Abra a caixa na Bolsa."
   }
 }

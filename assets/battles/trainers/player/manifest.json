@@ -88,6 +88,10 @@
             "EmeraldLuchador_Trousers": {
               "path": "res://assets/battles/trainers/player/male/emerald_luchador/Trousers.png",
               "scale": 1.0
+            },
+            "Akatsuki_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/akatsuki/Trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -161,6 +165,10 @@
             },
             "EmeraldLuchador_Shoes": {
               "path": "res://assets/battles/trainers/player/male/emerald_luchador/Shoes.png",
+              "scale": 1.0
+            },
+            "Akatsuki_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/akatsuki/Shoes.png",
               "scale": 1.0
             }
           }
@@ -236,6 +244,10 @@
             "EmeraldLuchador_Shirt": {
               "path": "res://assets/battles/trainers/player/male/emerald_luchador/Shirt.png",
               "scale": 1.0
+            },
+            "Akatsuki_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/akatsuki/Shirt.png",
+              "scale": 1.0
             }
           }
         },
@@ -306,6 +318,10 @@
             },
             "AetherRoyal_Crown": {
               "path": "res://assets/battles/trainers/player/male/aether_royal_outfit/crown.png",
+              "scale": 1.0
+            },
+            "Akatsuki_Headband": {
+              "path": "res://assets/battles/trainers/player/male/akatsuki/Headband.png",
               "scale": 1.0
             }
           }
@@ -434,6 +450,10 @@
             "EmeraldLuchador_Trousers": {
               "path": "res://assets/battles/trainers/player/female/emerald_luchador/Trousers.png",
               "scale": 1.0
+            },
+            "Akatsuki_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/akatsuki/Trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -508,6 +528,10 @@
             "EmeraldLuchador_Shoes": {
               "path": "res://assets/battles/trainers/player/female/emerald_luchador/Shoes.png",
               "scale": 1.0
+            },
+            "Akatsuki_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/akatsuki/Shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -577,6 +601,10 @@
             "EmeraldLuchador_Shirt": {
               "path": "res://assets/battles/trainers/player/female/emerald_luchador/Shirt.png",
               "scale": 1.0
+            },
+            "Akatsuki_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/akatsuki/Shirt.png",
+              "scale": 1.0
             }
           }
         },
@@ -635,6 +663,10 @@
             },
             "AetherRoyal_Crown": {
               "path": "res://assets/battles/trainers/player/female/aether_royal_outfit/crown.png",
+              "scale": 1.0
+            },
+            "Akatsuki_Headband": {
+              "path": "res://assets/battles/trainers/player/female/akatsuki/Headband.png",
               "scale": 1.0
             }
           }

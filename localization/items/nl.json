@@ -1143,5 +1143,25 @@
   "emerald-luchador-outfit": {
     "name": "Emerald Luchador Outfitbox",
     "shortDesc": "Bevat vijf losse items met vaste kleuren: jas, broek, schoenen, masker en verenrug voor Back. Geschikt voor beide geslachten. Open de box in je tas."
+  },
+  "akatsuki-shirt": {
+    "name": "Akatsuki Robe",
+    "shortDesc": "Cosmetic met vaste kleuren voor male en female trainers. Activeer het in je Bag en draag het via Character Customization."
+  },
+  "akatsuki-trousers": {
+    "name": "Akatsuki Broek",
+    "shortDesc": "Cosmetic met vaste kleuren voor male en female trainers. Activeer het in je Bag en draag het via Character Customization."
+  },
+  "akatsuki-shoes": {
+    "name": "Akatsuki Sandalen",
+    "shortDesc": "Cosmetic met vaste kleuren voor male en female trainers. Activeer het in je Bag en draag het via Character Customization."
+  },
+  "akatsuki-headband": {
+    "name": "Akatsuki Hoofdband",
+    "shortDesc": "Cosmetic met vaste kleuren voor male en female trainers. Activeer het in je Bag en draag het via Character Customization."
+  },
+  "akatsuki-outfit": {
+    "name": "Akatsuki Outfitbox",
+    "shortDesc": "Bevat vier losse onderdelen: een lange robe, broek, sandalen en hoofdband. Geschikt voor beide geslachten. Open de box in je Bag."
   }
 }
