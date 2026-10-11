@@ -95,7 +95,7 @@ const CATEGORY_LABELS := {
 	"guilds": "Guilds",
 	"mounts": "Mounts",
 	"charms": "Charms",
-	"held-items": "Held Items",
+	"held-items": "Training Items",
 	"services": "Trainer Services",
 	"credits": "Credit Vouchers",
 }
@@ -106,7 +106,7 @@ const CATEGORY_DESCRIPTIONS := {
 	"guilds": "Consumable templates that permanently unlock for your Guild without affecting gameplay.",
 	"mounts": "Travel through the overworld in your own style.",
 	"charms": "Use supported field moves without carrying a Pokémon that knows them. Progression and area rules still apply.",
-	"held-items": "Equipment for the Pokémon holding it.",
+	"held-items": "Items for training your Pokémon in wild battles.",
 	"services": "Optional changes to your trainer identity and account.",
 	"credits": "Tradeable vouchers bought with Gems. Claim one to add personal card credit.",
 }
@@ -117,7 +117,7 @@ const CATEGORY_PROMISES := {
 	"guilds": "GUILD COSMETIC",
 	"mounts": "TRAVEL STYLE",
 	"charms": "FIELD CONVENIENCE",
-	"held-items": "POKÉMON EQUIPMENT",
+	"held-items": "WILD BATTLES",
 	"services": "TRAINER SERVICE",
 	"credits": "PERSONAL CREDIT",
 }
@@ -937,13 +937,22 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "MOUNT BOX",
 	},
 	{
+		"id": "aether-power-band",
+		"name": "Aether Power Band",
+		"description": "Held: Receives EVs from each defeated wild Pokémon without participating, plus 10 for each stat that Pokémon yields. Untradeable. One purchase per account.",
+		"price": 1000,
+		"icon": preload("res://assets/items/icons/AETHERPOWERBAND.png"),
+		"categories": ["held-items"],
+		"badge": "TRAINING",
+	},
+	{
 		"id": "aether-band",
 		"name": "Aether Band",
 		"description": "Held: Restores 1 PP to each of the holder's moves after winning a wild Pokémon battle. Untradeable. One purchase per account.",
 		"price": 1000,
 		"icon": preload("res://assets/items/icons/AETHERBAND.png"),
 		"categories": ["held-items"],
-		"badge": "HELD ITEM",
+		"badge": "TRAINING",
 	},
 	{
 		"id": "surf-charm",
@@ -1341,7 +1350,7 @@ func set_purchase_in_progress(active: bool) -> void:
 
 func show_purchase_success(item_name: String, currency: String = "gems") -> void:
 	purchase_in_progress = false
-	if selected_item_id == "aether-band":
+	if selected_item_id in ["aether-band", "aether-power-band"]:
 		authoritative_owned_items[selected_item_id] = true
 	if status_label != null:
 		status_label.text = _t("ui.store.voucher.success" if currency == "gift_voucher" else "ui.store.status.added", {
