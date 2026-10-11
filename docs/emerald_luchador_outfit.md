@@ -10,7 +10,7 @@ One gender-adaptive `emerald-luchador-outfit` box contains five independent cosm
 | `emerald-luchador-mask` | Facegear | `EmeraldLuchador_Mask` |
 | `emerald-luchador-wings` | Back | `EmeraldLuchador_Wings` |
 
-The box is registered for item grants and opens from the Bag. There is no Gift Store offer or price. Normal box/components use the existing tradeable wardrobe lifecycle; a bound box preserves binding on its contents. Activating each component moves it to Character Customization. Both player models share the same item/appearance IDs and retain ownership through gender changes.
+The box is sold under Gift Store → Cosmetics → Outfits for 450 Gems, with all five parts shown in the trainer and overworld previews. It also costs 450 card credits under the standard binding policy. It opens from the Bag. Normal box/components use the existing tradeable wardrobe lifecycle; a bound box preserves binding on its contents. Activating each component moves it to Character Customization. Both player models share the same item/appearance IDs and retain ownership through gender changes.
 
 ## Art and rendering
 
