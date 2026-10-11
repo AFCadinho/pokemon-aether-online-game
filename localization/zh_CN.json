@@ -1,4 +1,7 @@
 {
+  "ui.guild_base.rooms.floor_search": "搜索楼层或玩家…",
+  "ui.guild_base.rooms.no_floors": "未找到匹配的楼层。",
+  "ui.guild_base.rooms.travel": "前往",
   "ui.guild_base.rooms.directory_title": "房间目录",
   "ui.guild_base.rooms.directory_hint": "查找公会成员的房间。每层房间从左到右编号。",
   "ui.guild_base.rooms.lift_title": "公会基地电梯",

@@ -1,4 +1,7 @@
 {
+  "ui.guild_base.rooms.floor_search": "Search floor number or player…",
+  "ui.guild_base.rooms.no_floors": "No matching floors.",
+  "ui.guild_base.rooms.travel": "Go",
   "ui.guild_base.rooms.directory_title": "Room directory",
   "ui.guild_base.rooms.directory_hint": "Find a Guild member’s room. Rooms are numbered left to right on each floor.",
   "ui.guild_base.rooms.lift_title": "Guild Base elevator",
