@@ -1,0 +1,115 @@
+{
+  "topic_id": 110,
+  "post_id": 117,
+  "title": "Aether Training Items – Aether Band & Aether Power Band",
+  "url": "https://forums.pokeaether.com/t/aether-training-items-aether-band-aether-power-band/110",
+  "category_id": 13,
+  "author": "adinho",
+  "published_at": "2026-10-11T19:57:27Z",
+  "raw_sha256": "207fa78aff087e6658bb5ef068b5c1011fb3a3ce15a9bc97e9230db9bb6c443d",
+  "screenshots": [
+    {
+      "id": 211,
+      "filename": "01-store-aether-band.png",
+      "short_url": "upload://oLQk9gVPK7eGmTZ7KSc9xoHqepI.png",
+      "url": "/uploads/default/original/1X/ad9cb288040d1c90bb4dd218c2d8f640a5614112.png",
+      "width": 1144,
+      "height": 704,
+      "source_sha256": "90e3906ac0345fbce5233406cb28a1c0586e057084c8d22e25bce89075299f2a"
+    },
+    {
+      "id": 212,
+      "filename": "02-store-aether-power-band.png",
+      "short_url": "upload://nzmnDNCCMf90f4yWK9CRYEwHk4s.png",
+      "url": "/uploads/default/original/1X/a53149af7edd390d137eb384b1009c0b3b1b2a8c.png",
+      "width": 1144,
+      "height": 704,
+      "source_sha256": "86dec4c7a47b43c94cfff4390cbeaf852a3af1fedc35cb24937a80d75c351ba2"
+    },
+    {
+      "id": 213,
+      "filename": "03-equipped-power-band.png",
+      "short_url": "upload://7yAWJ6K1Pw5cMyYWv8F0dSt1kUB.png",
+      "url": "/uploads/default/original/1X/34f85d581396a8cd76921237906f0c6f1427804d.png",
+      "width": 646,
+      "height": 426,
+      "source_sha256": "02ca6094c781651e38b4d2b8d2e3299ed26036fbf4178278460b6cbf5c7ca4a2"
+    },
+    {
+      "id": 214,
+      "filename": "04-stored-speed-evs.png",
+      "short_url": "upload://pMbqTVbXbdKeDavTEs41T3iH725.png",
+      "url": "/uploads/default/original/1X/b4a8b94f79466e3319cb39d94444a5e0dba7c745.png",
+      "width": 646,
+      "height": 426,
+      "source_sha256": "c93cab5a6a60e06c6dc750c8258fe975798ac37845b6008d0499b08a802f407f"
+    }
+  ],
+  "preview": {
+    "image_count": 4,
+    "table_count": 3,
+    "headings": [
+      "Quick reference",
+      "Getting and equipping a Band",
+      "Aether Band: restore PP after wild victories",
+      "Aether Power Band: train EVs without participation",
+      "Stored EVs and allocation",
+      "Co-op wild battles",
+      "Helpful guides"
+    ]
+  },
+  "verification": {
+    "linkedUploadIds": [
+      213,
+      211,
+      212,
+      214
+    ],
+    "rawMatchesReviewedDraft": true,
+    "anonymousHtmlStatus": 200,
+    "anonymousTopicJsonStatus": 200,
+    "categoryId": 13,
+    "author": "adinho",
+    "cookedImages": 4,
+    "cookedTables": 3,
+    "upcomingNoticePresent": true,
+    "images": [
+      {
+        "filename": "01-store-aether-band.png",
+        "status": 200,
+        "size": [
+          1144,
+          704
+        ],
+        "pixelsMatchOriginal": true
+      },
+      {
+        "filename": "02-store-aether-power-band.png",
+        "status": 200,
+        "size": [
+          1144,
+          704
+        ],
+        "pixelsMatchOriginal": true
+      },
+      {
+        "filename": "03-equipped-power-band.png",
+        "status": 200,
+        "size": [
+          646,
+          426
+        ],
+        "pixelsMatchOriginal": true
+      },
+      {
+        "filename": "04-stored-speed-evs.png",
+        "status": 200,
+        "size": [
+          646,
+          426
+        ],
+        "pixelsMatchOriginal": true
+      }
+    ]
+  }
+}

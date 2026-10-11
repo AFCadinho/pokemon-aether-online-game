@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Publish the official Aether training items guide with four interface screenshots, explaining both Bands, Gems/card credit, equipment, EV limits and co-op rules; clearly mark the items as upcoming.
+
 - Show the owning Guild's name in Guild Base location labels and let leaders name the two shared side rooms through the base manager.
 - Rename the Gift Store equipment category to Training Items, with training badges and wild-battle descriptions in all supported languages.
 

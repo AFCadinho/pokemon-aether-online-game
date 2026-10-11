@@ -1,0 +1,50 @@
+[
+	{
+		"caption": "Example Gift Store: Aether Band, 1,000 Gems, once per account and untradeable.",
+		"control": "DonatorStorePopup",
+		"exampleData": true,
+		"filename": "01-store-aether-band.png",
+		"heading": "## Aether Band",
+		"size": [
+			1144,
+			704
+		],
+		"topic": 0
+	},
+	{
+		"caption": "Example Gift Store: Aether Power Band with 1,000 Aether Credit Card credits selected.",
+		"control": "DonatorStorePopup",
+		"exampleData": true,
+		"filename": "02-store-aether-power-band.png",
+		"heading": "## Aether Power Band",
+		"size": [
+			1144,
+			704
+		],
+		"topic": 0
+	},
+	{
+		"caption": "Example Summary: the Pokémon is carrying Aether Power Band.",
+		"control": "PokemonSummaryPopup",
+		"exampleData": true,
+		"filename": "03-equipped-power-band.png",
+		"heading": "## Getting and equipping a Band",
+		"size": [
+			646,
+			426
+		],
+		"topic": 0
+	},
+	{
+		"caption": "Illustrative Summary: 11 Stored Speed EVs, with none allocated yet.",
+		"control": "PokemonSummaryPopup",
+		"exampleData": true,
+		"filename": "04-stored-speed-evs.png",
+		"heading": "### Stored EVs and allocation",
+		"size": [
+			646,
+			426
+		],
+		"topic": 0
+	}
+]
