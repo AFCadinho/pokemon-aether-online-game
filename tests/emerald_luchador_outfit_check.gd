@@ -31,6 +31,10 @@ func _run() -> void:
 				for direction: String in ["down", "left", "right", "up"]:
 					var animation := StringName("walk_" + direction)
 					_check(frames.get_frame_count(animation) == 4, "%s %s has four %s frames" % [category, movement, direction])
+					if category == "facegear" and direction == "up":
+						for frame: int in range(4):
+							var rear_mask := frames.get_frame_texture(animation, frame)
+							_check(rear_mask != null and rear_mask.get_image().get_used_rect().has_area(), "%s %s rear mask visible in frame %d" % [gender, movement, frame])
 					if movement in ["walk", "fish", "ride"]:
 						var suffix := "" if movement == "walk" else movement
 						var expected := "res://assets/player/%s/%s/%s%s%s.png" % [gender, category, suffix + "/" if suffix != "" else "", part_id, "_" + suffix if suffix != "" else ""]

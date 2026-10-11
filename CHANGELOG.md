@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Complete the Emerald Luchador mask with a visible black-and-gold back in every walking, fishing and riding frame for both player models.
+
 - Give the Emerald Luchador mask a black-and-gold wrestling-mask silhouette with forehead and cheek coverage, on both trainer models and all overworld poses.
 
 - Move Guild Base visitor requests away from the party panel into a compact upper-right notification, shown only while requests are pending; keep access settings at the base manager.
