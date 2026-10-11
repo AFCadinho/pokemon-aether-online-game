@@ -19,6 +19,16 @@ func _run() -> void:
 	var draft: Dictionary = load(Pilot.GEOMETRY_CATALOG_PATH).data
 	assert(not draft.assets.is_empty())
 	OS.set_environment("POKEAETHER_SHARED_MODEL_GEOMETRY_TEST", "1")
+	var threads: Array[Thread] = []
+	for lane in 4:
+		var thread := Thread.new()
+		assert(thread.start(_cold_lookup.bind(draft.assets[lane % draft.assets.size()])) == OK)
+		threads.append(thread)
+	var deadline := Time.get_ticks_msec() + 30000
+	while threads.any(func(thread: Thread): return thread.is_alive()):
+		assert(Time.get_ticks_msec() < deadline, "Concurrent geometry catalog lookup timed out")
+		await create_timer(0.01).timeout
+	for thread in threads: assert(thread.wait_to_finish())
 	var catalog := Pilot.catalog()
 	assert(catalog.assets.size() == 1200 and catalog.prototype_only and not catalog.production_approved)
 	assert(Index.validate(catalog).is_empty())
@@ -62,3 +72,8 @@ func _run() -> void:
 	assert(Pilot.data_path() == Pilot.QUALIFIED_PATH and Pilot.catalog().assets.size() == 1200)
 	print("SHARED_GEOMETRY_CATALOG_OK appearances=", checked, " corrections=", corrections, " legacy_collection=true default_disabled=true")
 	quit()
+
+func _cold_lookup(asset: Dictionary) -> bool:
+	if Pilot.release().requiredAssetIds.size() != 1200: return false
+	var appearance: Dictionary = asset.appearances[0]
+	return Pilot.asset_for(appearance.runtime_identity, appearance.runtime_sha256) == asset
