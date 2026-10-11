@@ -3,6 +3,7 @@ extends SceneTree
 const ROUTE_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
 const CERULEAN_SCENE := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 const GARY_SCRIPT := "res://scripts/world/kanto/routes/route_24_gary.gd"
+const RIVAL_SCRIPT := "res://scripts/world/npcs/rival_trainer_npc.gd"
 
 var failed := false
 
@@ -15,6 +16,7 @@ func _run() -> void:
 	var route_source := FileAccess.get_file_as_string(ROUTE_SCENE)
 	var cerulean_source := FileAccess.get_file_as_string(CERULEAN_SCENE)
 	var script_text := FileAccess.get_file_as_string(GARY_SCRIPT)
+	var rival_text := FileAccess.get_file_as_string(RIVAL_SCRIPT)
 	var gary_start := cerulean_source.find('[node name="GaryOak"')
 	var gary_end := cerulean_source.find("\n[node ", gary_start + 1)
 	var gary_block := cerulean_source.substr(gary_start, gary_end - gary_start)
@@ -39,19 +41,19 @@ func _run() -> void:
 		"Gary's battle has a stable identity and is independent from story progress"
 	)
 	_check(
-		script_text.contains("PlayerPartyStateService.get_starter_options()")
-			and script_text.contains('TRAINER_ID_PREFIX := "kanto_route_24_gary_"'),
+		rival_text.contains("PlayerPartyStateService.get_starter_options()")
+			and script_text.contains('rival_encounter_id = "kanto_route_24_gary"'),
 		"Gary selects the Route 24 team matching his earlier starter"
 	)
 	_check(
-		script_text.contains("func supports_trainer_rematches() -> bool:")
-			and script_text.contains("return false"),
-		"Gary's mandatory encounter is completed only once"
+		script_text.contains('extends "res://scripts/world/npcs/rival_trainer_npc.gd"')
+			and rival_text.contains('progress.get("rematchEligible", false)'),
+		"Gary uses the shared controller and server-owned rematch policy"
 	)
 	_check(
-		script_text.contains("_won_in_current_map_visit")
-			and script_text.contains("queue_free()")
-			and script_text.contains("trainer_progress_state != STATE_FIRST_ENCOUNTER"),
+		rival_text.contains("_won_in_current_map_visit")
+			and rival_text.contains("queue_free()")
+			and rival_text.contains("trainer_progress_state != STATE_FIRST_ENCOUNTER"),
 		"Gary disappears on map reload after defeat"
 	)
 	quit(1 if failed else 0)
