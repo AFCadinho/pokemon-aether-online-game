@@ -1316,7 +1316,7 @@
   "ui.login.error.offline": "PokeAether is currently offline. Please try again later.",
   "ui.login.error.maintenance": "PokeAether is temporarily closed for maintenance. Please try again later.",
   "ui.login.error.enter_world": "Could not enter the world. Please contact staff.",
-  "ui.login.error.invalid_credentials": "Invalid username or password.",
+  "ui.login.error.invalid_credentials": "Username or password is incorrect. Check your details and try again.",
   "ui.login.error.email_not_verified": "Verify your email address before signing in.",
   "ui.login.error.unavailable": "PokeAether is currently unavailable. Please try again later.",
   "ui.session.logout_countdown": "{message} Logging out in {seconds} seconds.",
@@ -6735,5 +6735,6 @@
   "ui.evolution_conditions.partner_trade": "Trade this Pokémon for {partner}. Linking Cord does not replace this trade.",
   "ui.evolution_conditions.shed_rule": "Evolve your owned Pokémon into {pokemon} with a free party slot. Shedinja appears in that slot.",
   "ui.evolution.result.bonus_created": "{pokemon} appeared in your party.",
-  "ui.trade.review.evolves_to": "Evolves into {pokemon} after this trade."
+  "ui.trade.review.evolves_to": "Evolves into {pokemon} after this trade.",
+  "ui.item_dex.shop.evolution_item_shop": "Evolution Item Seller"
 }

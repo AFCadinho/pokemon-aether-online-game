@@ -27,7 +27,7 @@ static func metadata_error(asset: Dictionary) -> String:
 	if asset.get("format") != FORMAT or not hex(asset.get("sha256")) or not integer(asset.get("size_bytes"), MAX_PACK):
 		return "Invalid model-pair pack identity."
 	var manifest: Variant = asset.get("pair_manifest")
-	if not manifest is Dictionary or manifest.get("schema") != 1 or manifest.get("kind") != KIND:
+	if not manifest is Dictionary or not integer(manifest.get("schema"), 2) or manifest.get("kind") != KIND:
 		return "Invalid model-pair manifest."
 	for field in ["asset_id", "species_id", "form_id", "version", "dependencies", "appearances"]:
 		if manifest.get(field) != asset.get(field):
@@ -39,7 +39,8 @@ static func metadata_error(asset: Dictionary) -> String:
 	if not files is Array or files.size() < 2 or files.size() >= MAX_FILES:
 		return "Invalid model-pair file table."
 	var declared := {}
-	var pattern := RegEx.create_from_string("^(models/(normal|shiny)\\.scn|textures/[0-9a-f]{64}\\.res)$")
+	var folders := "textures" if manifest.schema == 1 else "textures|meshes|skins|libraries"
+	var pattern := RegEx.create_from_string("^(models/(normal|shiny)\\.scn|(" + folders + ")/[0-9a-f]{64}\\.res)$")
 	var total := 0
 	for row: Variant in files:
 		if not row is Dictionary:
@@ -367,12 +368,20 @@ static func catalog_entries(asset: Dictionary, directory: String) -> Array:
 static func budget(asset: Dictionary, variant: String) -> int:
 	var bytes := 0
 	for file: Dictionary in asset.pair_manifest.files:
-		if file.path.begins_with("textures/") or file.path == "models/" + variant + ".scn":
+		if not file.path.begins_with("models/") or file.path == "models/" + variant + ".scn":
 			bytes += int(file.bytes)
 	for appearance: Dictionary in asset.appearances:
 		if appearance.variant == variant:
 			bytes = maxi(bytes, int(appearance.cache_source_bytes))
 	return bytes
+
+static func dependency_allowed(schema: int, source: String, target: String) -> bool:
+	# Both versions are flat, bounded graphs: scenes reference data-only leaves.
+	# Libraries may not import textures/materials/other libraries implicitly.
+	if not source.begins_with("models/"):
+		return false
+	var folder := target.get_slice("/", 0)
+	return folder == "textures" if schema == 1 else schema == 2 and folder in ["textures", "meshes", "skins", "libraries"]
 
 static func mount_checked(path: String, asset: Dictionary, checked: Dictionary) -> String:
 	if not Thread.is_main_thread():
@@ -403,12 +412,12 @@ static func mount_checked(path: String, asset: Dictionary, checked: Dictionary) 
 			if not target.begins_with(resource_root + "/"):
 				return "Model-pair dependency escapes its resource_root."
 			var relative := target.trim_prefix(resource_root + "/")
-			if not row.path.begins_with("models/") or not relative.begins_with("textures/") or not checked.members.has(relative):
+			if not dependency_allowed(int(asset.pair_manifest.schema), row.path, relative) or not checked.members.has(relative):
 				return "Invalid model-pair dependency graph."
 			referenced[relative] = true
 	for name: String in checked.members:
-		if name.begins_with("textures/") and not referenced.has(name):
-			return "Unreferenced model-pair texture."
+		if name != "bundle.json" and not name.begins_with("models/") and not referenced.has(name):
+			return "Unreferenced model-pair resource."
 	closed[digest] = true
 	return ""
 
