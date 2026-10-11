@@ -244,7 +244,8 @@
         "guild_base_main_hall",
         "guild_base_left_room",
         "guild_base_right_room",
-        "guild_base_elevator"
+        "guild_base_elevator",
+        "guild_base_elevator_cabin"
       ]
     },
     "kanto_map_point_11": {

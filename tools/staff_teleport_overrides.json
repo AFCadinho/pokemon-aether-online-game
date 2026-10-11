@@ -365,6 +365,16 @@
       "points": {
         "from_main_hall": {
           "safe": false
+        },
+        "from_cabin": {
+          "safe": false
+        }
+      }
+    },
+    "guild_base_elevator_cabin": {
+      "points": {
+        "from_elevator": {
+          "safe": false
         }
       }
     }

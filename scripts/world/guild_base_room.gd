@@ -1,7 +1,7 @@
 extends "res://scripts/world/map_metadata.gd"
 
 ## Shared room template. The server supplies a guild-specific map ID on entry.
-@export_enum("main_hall", "left_room", "right_room", "elevator") var room_key := "main_hall"
+@export_enum("main_hall", "left_room", "right_room", "elevator", "elevator_cabin") var room_key := "main_hall"
 @export var room_size := Vector2i(30, 40)
 @export var walkable_rects: Array[Rect2i] = []
 @export var blocked_rects: Array[Rect2i] = []
