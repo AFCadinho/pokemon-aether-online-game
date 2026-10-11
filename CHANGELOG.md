@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refine mouth origins for Cetoddle, Drizzile, Crabominable, Lugia and Ho-Oh; align Cetoddle’s Ice Beam, Lugia’s Hyper Beam and Ho-Oh’s Flamethrower with their open-mouth poses.
+
 - Make mouth origins follow both Grimer forms, Goodra, Gengar, Crobat and Bunnelby through their attack poses, and time Goodra’s Flamethrower to its open mouth.
 
 - Anchor beam attacks to the central face lights of Regice, Regirock, Registeel, Regigigas and Regieleki, and water and beam attacks to Staryu’s and Starmie’s gems.

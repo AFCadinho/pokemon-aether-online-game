@@ -50,7 +50,7 @@ func _run() -> void:
 			await get_tree().process_frame
 	assert(Attachments.choreography_for("decidueye-hisui","lowkick","physical_attack_2").is_empty())
 	assert(Attachments.choreography_for("glastrier","tackle","physical_attack_2").is_empty())
-	for route: Array in [["goodra","special_attack",.28,.42,.56], ["salandit","special_attack",.35,.45,.64], ["volcanion","physical_attack_2",.4,.48,.55], ["walking-wake","special_attack",.3,.45,.6], ["watchog","special_attack",.35,.45,.7], ["zoroark-hisui","physical_attack_2",.2,.28,.32]]:
+	for route: Array in [["ho-oh","special_attack",.22,.36,.46], ["goodra","special_attack",.28,.42,.56], ["salandit","special_attack",.35,.45,.64], ["volcanion","physical_attack_2",.4,.48,.55], ["walking-wake","special_attack",.3,.45,.6], ["watchog","special_attack",.35,.45,.7], ["zoroark-hisui","physical_attack_2",.2,.28,.32]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -117,9 +117,62 @@ func _run() -> void:
 	assert(Attachments.action_for("revavroom","sludgebomb",{"physical_attack_2":{}}).is_empty())
 	assert(Attachments.choreography_for("sandslash","icebeam","special_attack").is_empty())
 	assert(Attachments.choreography_for("sandslash-alola","blizzard","special_attack").is_empty())
+	for route: Array in [["cetoddle","Ice Beam","physical_attack",.10,.18,.25], ["lugia","Hyper Beam","special_attack",.27,.40,.53]]:
+		for slot in 4:
+			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
+			var actor := "p%d" % (slot+1)
+			stage.identities[slot] = identity
+			stage.combatants[slot] = {"species":route[0],"shiny":bool(slot % 2)}
+			stage.entries[identity] = stage.entries.fixture.duplicate(true)
+			stage.visual_bounds[identity] = stage.visual_bounds.fixture.duplicate(true)
+			stage.start_move_action(actor,route[1])
+			stage.players[slot].pause()
+			assert(stage.current_actions[slot] == route[2])
+			var timing: Dictionary = stage.move_timing(route[1],actor)
+			assert(is_equal_approx(timing.launch_frame / timing.frames,route[3]))
+			assert(is_equal_approx(timing.impact_frame / timing.frames,route[4]))
+			assert(is_equal_approx(timing.emission_end_frame / timing.frames,route[5]))
+			var effect: Node = stage.create_move_effect(route[1],actor,"p%d" % ((slot^1)+1),{})
+			effect.set_process(false)
+			assert(is_equal_approx(effect.emission_end,timing.emission_end_frame/60.0))
+			effect.clock = func(): return contact_seconds
+			contact_seconds = effect.impact
+			effect._process(0)
+			assert(effect.cursor > 0, "Beam must be visible during its open-mouth window")
+			contact_seconds = effect.emission_end + 0.001
+			effect._process(0)
+			assert(effect.cursor == 0, "Beam and source particles must finish before the mouth closes")
+			for piece: MeshInstance3D in effect.pieces:
+				assert(not piece.visible)
+			effect.hit = true
+			effect._process(0)
+			assert(effect.cursor > 0, "Confirmed target impact continues after mouth emission ends")
+			effect.cancel()
+			var doll := Doll.new()
+			stage.world.add_child(doll)
+			stage.substitute_models[slot] = doll
+			assert(not stage.move_timing(route[1],actor).has("emission_end_frame"))
+			doll.free()
+			stage.substitute_models[slot] = null
+	assert(Attachments.action_for("cetoddle","waterpulse",{"physical_attack":{}}).is_empty())
+	assert(Attachments.choreography_for("cetitan","icebeam","physical_attack").is_empty())
+	assert(Attachments.choreography_for("lugia","icebeam","special_attack").is_empty())
+	assert(Attachments.choreography_for("ho-oh","hyperbeam","special_attack").is_empty())
+	# Defaults preserve existing Ice Beam and staged-beam durations.
+	var Ice = preload("res://scripts/battle/battle_ui/ice_beam_move_effect_3d.gd")
+	var Beam = preload("res://scripts/battle/battle_ui/staged_move_effect_3d.gd")
+	for script in [Ice, Beam]:
+		var effect: Node3D = script.new()
+		stage.world.add_child(effect)
+		contact_seconds = 0.0
+		effect.start("Ice Beam" if script == Ice else "Hyper Beam", {"frames":60.0,"impact_frame":27.0}, {}, func(): return contact_seconds, func(): return {"source":Vector3.ZERO,"target":Vector3(4,0,0),"radius":.5}, func(): return true)
+		effect.set_process(false)
+		assert(is_equal_approx(effect.emission_end,.618 if script == Ice else -1.0))
+		effect.cancel()
+
 	router.release_threaded_resource_requests()
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=12 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=15 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()

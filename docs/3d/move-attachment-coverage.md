@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1046 species/forms.
-- No anatomical attachment profile: 154 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 953 species/forms.
+- At least one configured anatomical attachment: 1047 species/forms.
+- No anatomical attachment profile: 153 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 958 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -136,7 +136,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | celesteela | hand, left_hand, mouth | Same attachment profile |
 | centiskorch | mouth | Same attachment profile |
 | cetitan | hand, left_hand | Same attachment profile |
-| cetoddle | hand, left_hand | Same attachment profile |
+| cetoddle | hand, left_hand, mouth | Same attachment profile |
 | chansey | hand, left_hand, mouth | Same attachment profile |
 | charcadet | hand, left_hand | Same attachment profile |
 | charizard | hand, left_hand, mouth | Same attachment profile |
@@ -181,7 +181,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | corviknight | mouth | Same attachment profile |
 | corvisquire | mouth | Same attachment profile |
 | cosmog | mouth | Same attachment profile |
-| crabominable | hand, left_hand | Same attachment profile |
+| crabominable | hand, left_hand, mouth | Same attachment profile |
 | crabominable-mega | hand, left_hand, mouth | Same attachment profile |
 | crabrawler | hand, left_hand, mouth | Same attachment profile |
 | cradily | mouth | Same attachment profile |
@@ -252,7 +252,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | drifblim | hand, left_hand, mouth | Same attachment profile |
 | drifloon | mouth | Same attachment profile |
 | drilbur | mouth | Same attachment profile |
-| drizzile | hand, left_hand | Same attachment profile |
+| drizzile | hand, left_hand, mouth | Same attachment profile |
 | drowzee | foot, hand, left_foot, left_hand | Same attachment profile |
 | druddigon | hand, left_hand, mouth | Same attachment profile |
 | dubwool | foot, mouth | Same attachment profile |
@@ -426,6 +426,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | hitmonchan | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | hitmonlee | foot, hand, left_foot, left_hand | Same attachment profile |
 | hitmontop | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| ho-oh | mouth | Same attachment profile |
 | honchkrow | mouth | Same attachment profile |
 | hoopa | hand, left_hand, mouth | Same attachment profile |
 | hoothoot | mouth | Same attachment profile |
@@ -528,7 +529,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | lucario-mega | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | lucario-mega-z | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | ludicolo | hand, left_hand, mouth | Same attachment profile |
-| lugia | hand, left_hand | Same attachment profile |
+| lugia | hand, left_hand, mouth | Same attachment profile |
 | lumineon | hand, left_hand, mouth | Same attachment profile |
 | lunala | mouth | Same attachment profile |
 | lunatone | mouth | Same attachment profile |

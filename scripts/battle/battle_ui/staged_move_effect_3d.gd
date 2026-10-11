@@ -21,6 +21,11 @@ var combo_knuckles: Array[StandardMaterial3D] = []
 var combo_trails: Array[StandardMaterial3D] = []
 var combo_spotlight: ShaderMaterial
 var combo_beats_drawn: Array[int] = []
+var emission_end := -1.0
+
+func start(move: String, timing: Dictionary, options: Dictionary, native_clock: Callable, positions: Callable, guard: Callable) -> void:
+	emission_end = float(timing.emission_end_frame) / 60.0 if timing.has("emission_end_frame") else -1.0
+	super.start(move, timing, options, native_clock, positions, guard)
 
 func _geometry_scale() -> float:return presentation_scale
 
@@ -217,6 +222,7 @@ func _contact_stage(from: Vector3,center: Vector3,flight: float,after: float,alp
 			_source_sprite(aim.lerp(initial_center,p)+Vector3.UP*sin(p*PI)*.5,.24,"spark",0,alpha*(1-p),facing)
 
 func _beam_stage(from: Vector3,flight: float,after: float,alpha: float,facing: Basis,axis: Basis) -> void:
+	if emission_end >= 0 and elapsed >= emission_end: return
 	var charge := clampf(elapsed/maxf(launch,.01),0,1)
 	for source: Vector3 in emission_sources:
 		if flight<0:
@@ -229,6 +235,8 @@ func _beam_stage(from: Vector3,flight: float,after: float,alpha: float,facing: B
 		var p := clampf(flight,0,1)
 		var end := source.lerp(aim,p)
 		var fade := (1-smoothstep(0,.65,after))*smoothstep(0,.12,flight)
+		if emission_end >= 0:
+			fade = (1-smoothstep(impact,emission_end,elapsed))*smoothstep(0,.12,flight)
 		var width := (.18 if motif=="breath-stream" else .25)*weight*fade
 		_line(source,end,width,surface);_line(source,end,width*.32,pearl)
 		for i in 12:
