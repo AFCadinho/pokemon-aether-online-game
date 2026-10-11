@@ -4,6 +4,8 @@
 
 - Correct the Guild Base cabin walls, lamps and lift control panel by preserving cropped Tiled collection images without overwriting their shared atlas.
 
+- Keep Nugget Bridge Gary gone after any starter-variant victory; retry failed progress or starter lookups without starting an incorrect rival battle.
+
 - Add individually reviewed left/right hand attack points for Mega Ampharos, Kangaskhan, Mega Kangaskhan, Marill, Spinda, Pichu, Plusle, Minun and Dusknoir; use Spinda’s raised-hand clip for hand strikes.
 
 - Add a private Guild Base elevator cabin, reachable from the lift waiting room with a return door.
