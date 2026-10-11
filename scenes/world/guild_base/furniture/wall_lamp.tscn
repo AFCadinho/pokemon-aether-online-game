@@ -10,5 +10,5 @@ furniture_id = "wall_lamp"
 
 [node name="Visual" type="TileMapLayer" parent="." unique_id=1977876946]
 position = Vector2(0, -96)
-tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 0, 0, 0)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0)
 tile_set = ExtResource("2_p37od")

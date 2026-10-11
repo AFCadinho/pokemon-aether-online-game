@@ -11,7 +11,7 @@ const ACCENT := Color("#60d3ff")
 const GOLD := Color("#dec58a")
 
 const INPUT_LOCK := &"guild_base_furnishing"
-const CATEGORIES := ["tables", "seating", "decorations", "kitchen", "walls", "floor", "table_decor"]
+const CATEGORIES := ["tables", "seating", "decorations", "kitchen", "walls", "floor", "table_decor", "storage", "bedroom", "laboratory"]
 
 var guild_service: Node
 var room: Node2D

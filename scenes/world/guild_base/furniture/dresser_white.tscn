@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_fuf28"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_n78gm"]
+
+[node name="DresserWhite" type="Node2D" unique_id=218899777]
+texture_filter = 1
+script = ExtResource("1_fuf28")
+furniture_id = "dresser_white"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1107235646]
+position = Vector2(0, -64)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 35, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 35, 0, 0, 0, 0, 0, 1, 0, 0, 0, 5, 0, 35, 0, 0, 0, 1, 0, 1, 0, 0, 0, 6, 0, 35, 0, 0, 0)
+tile_set = ExtResource("2_n78gm")
