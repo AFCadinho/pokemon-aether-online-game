@@ -339,6 +339,46 @@ func _run() -> void:
 				assert(charge.moon_source.dot(forward)<charge.source.dot(forward))
 		stage.actors[index].rotation.y = 0
 		stage.actors[index].scale = Vector3.ONE
+	# Orb presenters must honor an explicit anatomical route too. Their
+	# independent moon anchor and unprofiled clearance fallback stay intact.
+	var orb_test_profiles: Dictionary = Attachments.CALIBRATED.data.profiles
+	var saved_orb_profile: Dictionary = orb_test_profiles["caterpie"].duplicate(true)
+	stage.visual_bounds["caterpie"] = stage.visual_bounds.charmander.duplicate(true)
+	stage.visual_bounds["caterpie@shiny"] = stage.visual_bounds.charmander.duplicate(true)
+	orb_test_profiles["caterpie"] = {
+		"parts":{"mouth":[[{"bone":"head","offset":[0.1,0.2,0.3],"weight":1}]]},
+		"moves":{"moonblast":"mouth","dracometeor":"mouth"},
+	}
+	for index in 2:
+		var actor_id := "p%d" % (index+1)
+		var target_id := "p%d" % (2-index)
+		var rig: Skeleton3D = stage.actors[index].get_node("Rig")
+		for move_name: String in ["Moonblast","Draco Meteor"]:
+			stage.identities[index] = "charmander"
+			stage.combatants[index] = {"species":"charmander","shiny":false}
+			var fallback: Dictionary = stage._move_anchors(actor_id,target_id,move_name)
+			stage.identities[index] = "caterpie" + ("@shiny" if index else "")
+			stage.combatants[index] = {"species":"caterpie","shiny":bool(index)}
+			for head_y: float in [.5,1.3]:
+				rig.set_bone_pose_position(0,Vector3(0,head_y,0))
+				var anchored: Dictionary = stage._move_anchors(actor_id,target_id,move_name)
+				var expected_orb_origin := world.to_local(rig.to_global(rig.get_bone_global_pose(0)*Vector3(.1,.2,.3)))
+				assert(anchored.attachment_part=="mouth" and anchored.attachment_bones==["head"])
+				assert(anchored.source.is_equal_approx(expected_orb_origin))
+				assert(anchored.target.is_equal_approx(fallback.target))
+				assert(anchored.moon_source.is_equal_approx(fallback.moon_source))
+			var substitute := Doll.new()
+			world.add_child(substitute)
+			stage.substitute_models[index] = substitute
+			assert(stage._move_anchors(actor_id,target_id,move_name).attachment_part=="bounds")
+			substitute.free()
+			stage.substitute_models[index] = null
+			rig.reset_bone_pose(0)
+		stage.identities[index] = "charmander"
+		stage.combatants[index] = {"species":"charmander","shiny":false}
+	orb_test_profiles["caterpie"] = saved_orb_profile
+	stage.visual_bounds.erase("caterpie")
+	stage.visual_bounds.erase("caterpie@shiny")
 	var doll := Doll.new()
 	world.add_child(doll)
 	doll.position = Vector3(-3,0,1)

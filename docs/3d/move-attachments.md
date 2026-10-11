@@ -7,6 +7,14 @@ uses a hand. Physical hit graphics still appear at the target. Tackle, Scratch, 
 use a separate [contact approach](contact-move-effects.md) to move the attacker
 to the target and back on the same native action clock.
 
+Moonblast and Draco Meteor sample anatomical attachments before applying the
+unconfigured orb fallback. Moonblast keeps its independent moon position above
+the attacker; a visible Substitute retains its own fallback. Flabébé's sampled
+Moonblast route uses `flower_tip`, `physical_attack_2`, .25/.45 timing and .05
+emission scale. Continuous flower/hand clearance and full-scene moon framing
+remain pending. Draco Meteor has routing regression coverage; no new anatomical
+Draco Meteor profile is approved by this checkpoint.
+
 ## Moth and insect review checkpoint
 
 Dustox and Mothim have individually projected jaw-weighted mouth points.

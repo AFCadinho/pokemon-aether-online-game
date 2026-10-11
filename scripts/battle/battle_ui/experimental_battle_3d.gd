@@ -1137,6 +1137,11 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 	var direction := (end-source).normalized()
 	source += direction * minf(a.radius * 0.55, (end-source).length()*0.15)
 	end -= direction * minf(b.radius * 0.5, (end-source).length()*0.15)
+	var attachment := {}
+	var index := actor_index(actor)
+	# A visible Substitute owns the emitter; never emit from the hidden Pokémon.
+	if _move_visual(actor) == actors[index]:
+		attachment = MoveAttachments.sample(actors[index], identities[index], MoveEffect.move_key(move), world, current_actions[index])
 	if MoveEffect.move_key(move) in ["moonblast","dracometeor"]:
 		# Reserve space for the fully grown orb, not just its centre. Charge and
 		# flight share this point, while the moon stays above the attacker.
@@ -1145,9 +1150,10 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 		var orb_radius: float = (DracoMeteorEffect.CHARGE_RADIUS if MoveEffect.move_key(move)=="dracometeor" else BatchFourMoveEffect.MOONBLAST_ORB_RADIUS) * MoveEffect.PRESENTATION_SCALES[MoveEffect.move_key(move)]
 		var body_extent := forward.abs().dot(a.get("half_extents",Vector3(a.radius,0,a.radius)))
 		source = a.position + Vector3.UP * a.height * source_height + forward * (body_extent + orb_radius + 0.15)
-		return {"source":source,"sources":[source],"target":end,"radius":b.radius,
+		var orb_sources: Array = attachment.get("sources", [source])
+		return {"source":orb_sources[0],"sources":orb_sources,"target":end,"radius":b.radius,
 			"moon_source":moon_source,"target_ground":Vector3(end.x,_position(actor_index(target)).y+0.04,end.z),
-			"attachment_part":"bounds","attachment_bones":[]}
+			"attachment_part":attachment.get("part","bounds"),"attachment_bones":attachment.get("bones",[])}
 	if not recipe.is_empty() and not bool(recipe.contact) and recipe.family!="beams":
 		# Continuous beams use the near-body fallback above, without an orb gap.
 		# Unprofiled body emitters reserve room for the projectile, including its
@@ -1158,11 +1164,6 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 		if recipe.has("z_choreography"):
 			clearance = 0.9 # Room for Z charge orbs before they leave the body.
 		source = a.position + Vector3.UP*a.height*source_height + forward*(extent+clearance)
-	var attachment := {}
-	var index := actor_index(actor)
-	# A visible Substitute owns the emitter; never emit from the hidden Pokémon.
-	if _move_visual(actor) == actors[index]:
-		attachment = MoveAttachments.sample(actors[index], identities[index], MoveEffect.move_key(move), world, current_actions[index])
 	var sources: Array = attachment.get("sources", [source])
 	return {"source": sources[0], "sources": sources, "target": end, "radius": b.radius,
 		"field":_move_field(),

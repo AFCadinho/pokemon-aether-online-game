@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Let Moonblast and Draco Meteor honor configured attack points; calibrate Flabébé's Moonblast to its animated flower point. Unconfigured forms retain the existing orb clearance.
+
 - Calibrate selected attacks for Dustox, Mothim, Frosmoth, Cutiefly, Iron Moth, Larvesta and Volcarona, including individual facial/proboscis points and emission timing for Mothim's mandibles and Larvesta's moving head fur.
 
 - Calibrate selected attacks for Weedle, Wurmple, Venipede, Whirlipede, Surskit, Masquerain, Kricketot and Kricketune. Poison Sting follows separately timed spike positions; smaller water globes, an earlier silk window and a lower sludge arc fit the reviewed models.

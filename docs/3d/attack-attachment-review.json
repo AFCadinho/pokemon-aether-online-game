@@ -50,7 +50,7 @@
     "runtime_profiles": 1138,
     "species_forms": 1200
   },
-  "profile_sha256": "ac09c92731f6a0240528819a9d47324e2624db5c9242e713cd53d5e4111ec441",
+  "profile_sha256": "9603367c285779a586d72ce38a772f80ca4fe029ebb8820385a20febb29b20da",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -35529,6 +35529,12 @@
           "scope": "Normal and shiny, two views: Disarming Voice uses the individually projected lip seam, physical_attack_2 .25/.45. Sampled .20 charge and .27/.35 sound rings accompany the native held-flower pose. Charge and ring art are larger than the head; their styling and exact close-range clearance remain pending. Other moves, opponent heights and live NPC/wild battles remain pending.",
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
         },
+        "moonblast": {
+          "action": "physical_attack_2",
+          "part": "flower_tip",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Moonblast now honors the individually reviewed flower_tip on spine_b_06/spine_b_05, using physical_attack_2 .25/.45 with emission scale .05. The small charged orb sits at the raised flower point near the hands at .23/.25 and departs forward by .27, above the petals. The independent moon is outside this close crop. Continuous flower/hand and full-radius clearance, full-scene moon framing, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
         "solarbeam": {
           "action": "physical_attack_2",
           "part": "flower_tip",
@@ -35619,6 +35625,38 @@
             "impact_frame": 67.5,
             "launch_frame": 37.5,
             "move_key": "disarmingvoice"
+          },
+          "views": 2
+        },
+        "moonblast": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "202b20fb5ccca1d2f94328ddf55b7fa0419bfea6c1c0ed0c803371714ffb1c19",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.23,
+            0.25,
+            0.27,
+            0.35,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "a745f8c6203a306765b05867383ca2e92d8163d4c4cdf29941d97f53853cddc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b48ec8cee7fcbe81542490188c4402ac95da3eac9d383f3810b32b78b253c339",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Moonblast now honors the individually reviewed flower_tip on spine_b_06/spine_b_05, using physical_attack_2 .25/.45 with emission scale .05. The small charged orb sits at the raised flower point near the hands at .23/.25 and departs forward by .27, above the petals. The independent moon is outside this close crop. Continuous flower/hand and full-radius clearance, full-scene moon framing, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "bc4e64e8f097130046aff2c0dbbcd1d9d04ec5fbe519989c0aeb0be0f3ffd5da",
+          "shiny_runtime_sha256": "05c5ea507070d244189c156965fcfa4dd2ee569f992a59c4aa03936f0a392062",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.05,
+            "frames": 150.0,
+            "impact_frame": 67.5,
+            "launch_frame": 37.5,
+            "move_key": "moonblast"
           },
           "views": 2
         },
