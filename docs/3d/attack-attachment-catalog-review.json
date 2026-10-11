@@ -33212,7 +33212,7 @@
     "All three Mega Tatsugiri variants have overlapping native heads during their attack actions. Selected form head origins were reviewed; continuous head/effect clearance remains unresolved.",
     "Masked Ogerpon club shafts overlap in the source model. Ivy Cudgel has no current supported 3D presenter.",
     "Normal/shiny share attachment profiles. The 580-model binding check uses original native scenes; it does not claim a new full run against the optional shared-geometry packs.",
-    "The five historical source holds are repaired. New learnsets add Rock Smash for Hisuian Avalugg and Double Kick for Alolan Raichu outside the original 295-form cohort; these two anatomical routes remain unreviewed."
+    "The five historical source holds are repaired. The two later learnset routes outside the original 295-form cohort are resolved in docs/3d/remaining-contact-attack-points.json; its sampled origin review is separate from full move presentation certification."
   ],
   "offline_wild_trainer_comparison": {
     "cases": [
@@ -33362,5 +33362,5 @@
     "selected_pairs": 1031
   },
   "source_repair_followup": "docs/3d/repaired-model-attack-points.json",
-  "status": "original_catalog_cohort_resolved_with_new_learnset_backlog"
+  "status": "original_catalog_cohort_and_remaining_learnset_origins_resolved"
 }
