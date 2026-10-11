@@ -166,7 +166,7 @@ visits.
 
 The guard offers a searchable town-local Guild Base directory, direct entry to
 one's own base and the existing purchase flow. Leaders select **Open to
-visitors** or **By request** through the **Visitors** button inside their base.
+visitors** or **By request** at the **Guild Base manager** in the main hall.
 Existing bases default to **By request**. Any member inside the building can
 approve or decline a visitor. A five-second poll updates the request counter,
 in-game notifications and the open menus. Guests receive read-only furniture
@@ -176,8 +176,9 @@ The **Guild Base manager** stands behind the upper-left counter in the shared
 main-hall template. Interacting saves the player's position and opens visitor
 management for that instance's Guild. The Guild leader can switch between
 **Open to visitors** and **By request**; other members can approve or decline
-requests. Guests cannot manage the host's visitors. The **Visitors** HUD button
-remains a shortcut for responding from elsewhere inside the base. The room
+requests. Guests cannot manage the host's visitors. A compact **Visitors**
+notification below the upper-right actions appears only while entry requests
+are pending, providing a shortcut from elsewhere inside the base. The room
 receptionist in the lift waiting hall continues to handle member-room searches.
 
 A request lasts two minutes and repeated requests have a thirty-second cooldown.

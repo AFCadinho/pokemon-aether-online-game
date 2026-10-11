@@ -16,14 +16,24 @@ func _ready() -> void:
 	surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(surface)
 	button = Button.new()
-	button.position = Vector2(24, 164)
-	button.custom_minimum_size = Vector2(248, 44)
+	surface.add_child(button)
+	# Requests belong below the right-hand actions, away from the party HUD.
+	button.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	button.offset_left = -336
+	button.offset_right = -88
+	button.offset_top = 96
+	button.offset_bottom = 136
+	button.custom_minimum_size = Vector2(248, 40)
+	button.add_theme_font_size_override("font_size", 14)
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.visible = false
 	var skin := preload("res://scripts/ui/guild_base_room_directory.gd").new()
 	button.theme = skin._theme()
+	button.add_theme_stylebox_override("normal", skin._style(Color("#142237"), Color("#f6cf72")))
+	button.add_theme_stylebox_override("hover", skin._style(Color("#203550"), Color("#f6cf72")))
 	skin.free()
 	button.pressed.connect(_open)
-	surface.add_child(button)
 	var timer := Timer.new()
 	timer.wait_time = 5
 	timer.autostart = true
@@ -48,7 +58,9 @@ func _poll() -> void:
 		return
 	data = result.state
 	var incoming: Array = data.get("requests", [])
-	button.visible = bool(data.get("canManage", false)) or not incoming.is_empty()
+	# Permanent access settings live at the manager's counter. The HUD only
+	# needs attention while there are actual requests to answer.
+	button.visible = not incoming.is_empty()
 	button.text = LocalizationManager.text("ui.guild_base.visits.badge", {"count": incoming.size()})
 	for request: Dictionary in incoming:
 		if not seen.has(int(request.userId)):
