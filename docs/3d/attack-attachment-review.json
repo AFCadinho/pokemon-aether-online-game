@@ -39,12 +39,12 @@
       "pending_multipose_correction": 8,
       "pending_runtime_identity_review": 4,
       "pending_runtime_visibility_and_anatomy_review": 4,
-      "sampled_marker_pose_review_pass_installed": 1752
+      "sampled_marker_pose_review_pass_installed": 1753
     },
     "runtime_profiles": 1010,
     "species_forms": 1200
   },
-  "profile_sha256": "c3fd0ba3a2bda2bc69b17f6d77867cf2e3ba99ab6bb543fed470415209f540be",
+  "profile_sha256": "7e50c364642a39b9262e92bd7919c6f7d24aef814ba2c8bf842f7454fc9ea18d",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -21514,7 +21514,17 @@
       }
     },
     "dolliv": {
-      "anatomical_move_routing_review": "pending",
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "mouth": {
+          "action": "special_attack",
+          "moves": [
+            "solarbeam"
+          ],
+          "scope": "Normal and shiny actual stage beam is centered at the horizontal mouth seam beneath the eyes. Front and reverse sampled views checked; broad glow obscures the small seam in some frames. This source connection review does not approve effect art or live battles.",
+          "status": "sampled_native_pose_and_effect_review_pass"
+        }
+      },
       "latest_candidate_review": {
         "notes": "Individually corrected from chin to the center of the visible horizontal mouth seam. Skinned-surface projection re-rendered and visually checked in forward idle, both physical actions and special_attack at 0.20, 0.45, 0.65 plus side 0.45. Actual move effects remain unapproved.",
         "preview": "mouth-surface-review-v57/dolliv.png",
@@ -21570,7 +21580,35 @@
         }
       },
       "mouth_status": "sampled_mouth_pose_review_pass",
-      "move_effect_review": "pending",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "solarbeam": {
+          "action": "special_attack",
+          "additional_normal_preview_sha256": "210f694895fbbd73322e8f6303261ff2061d9a3f2a84c91f437ce9e074d8744a",
+          "attachment_data_sha256_at_capture": "c3fd0ba3a2bda2bc69b17f6d77867cf2e3ba99ab6bb543fed470415209f540be",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "64d14ad6388f34e5f430e4294dfca438ce3b0734ec50261b2853550f8c57f76b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "037bbe401eb4fe9bdf983b93f0c12f27442799d9bc35780e05137204a3d901c0",
+          "scope": "Normal and shiny actual stage beam is centered at the horizontal mouth seam beneath the eyes. Front and reverse sampled views checked; broad glow obscures the small seam in some frames. This source connection review does not approve effect art or live battles.",
+          "shiny_preview_sha256": "55a3621bbcb8c74048e6a1c3c3fa4d791a9f9a0f20df0ad8d2fed69502beddc5",
+          "shiny_runtime_sha256": "98016dd422fb54238ca5924d9ae83c30bd42b2ed1df4947de7e00a8374151748",
+          "status": "sampled_runtime_origin_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 138.0,
+            "impact_frame": 85.56,
+            "launch_frame": 34.5,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -23930,7 +23968,17 @@
       "part_status": {}
     },
     "duskull": {
-      "anatomical_move_routing_review": "pending",
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "mouth": {
+          "action": "special_attack",
+          "moves": [
+            "icebeam"
+          ],
+          "scope": "Normal and shiny actual stage beam starts beneath the central skull tooth, below the eye region, following the lower mask/mouth position through special_attack. Front and reverse sampled views checked. Beam width, shards and live battles remain outside this review.",
+          "status": "sampled_native_pose_and_effect_review_pass"
+        }
+      },
       "latest_candidate_review": {
         "notes": "Individually reviewed central mouth origin beneath the skull mask central tooth, at the dark mouth gap above the lower jaw. Forward idle, physical_attack, physical_attack_2 and special_attack samples; lower face contracts behind the mask during physical_attack. This does not approve eye-origin effects or actual move effects.",
         "preview": "mouth-close-v56/duskull.png",
@@ -23958,7 +24006,34 @@
         "side_fraction": 0.45
       },
       "mouth_status": "sampled_mouth_pose_review_pass",
-      "move_effect_review": "pending",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "icebeam": {
+          "action": "special_attack",
+          "additional_normal_preview_sha256": "d0e65fa078d0cfaff35a48eec01ead02cd1381142adf5e6083c44a3fa457017a",
+          "attachment_data_sha256_at_capture": "c3fd0ba3a2bda2bc69b17f6d77867cf2e3ba99ab6bb543fed470415209f540be",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "7aac7af7df4ee8f5ac3660f1ae7ce69b5b5db9d4104462b9fcfea2d68e93bacc",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ff258470c2090503a31b0d4711864a06417d549698b684695efb0e4279d457ad",
+          "scope": "Normal and shiny actual stage beam starts beneath the central skull tooth, below the eye region, following the lower mask/mouth position through special_attack. Front and reverse sampled views checked. Beam width, shards and live battles remain outside this review.",
+          "shiny_preview_sha256": "d7e9dd6773f0a5eab2df675c83148114ad9c1ebb81b061cc524e83121d42f43b",
+          "shiny_runtime_sha256": "3539b5f0e7404bdf366d0b14ff88faf9655ee88de4a4856bbe3b6660f2a0de86",
+          "status": "sampled_runtime_origin_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 302.5,
+            "impact_frame": 136.125,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -45701,7 +45776,17 @@
       }
     },
     "kadabra": {
-      "anatomical_move_routing_review": "pending",
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "casting": {
+          "action": "special_attack",
+          "moves": [
+            "shadowball"
+          ],
+          "scope": "Normal and shiny offline stage Shadow Ball uses one origin between the two animated palms during the raised-hand charge. Sampled side/front views show emission from the hand region and subsequent projectile travel. Physical moves retain their existing routes; projectile size/art and live battles remain outside this review.",
+          "status": "sampled_native_pose_and_effect_review_pass"
+        }
+      },
       "latest_candidate_review": {
         "notes": "Individually projected upper and lower mouth edges from the upward-facing special_attack pose, then re-rendered all native actions. Mouth origin follows the narrow opening under the long snout; idle/closed poses and side views checked where visible. Forearms and moustache occlude several physical and special views. Actual effects and spoon-origin routing remain unapproved.",
         "preview": "mouth-corrected-review-v58/kadabra.png",
@@ -45781,7 +45866,33 @@
         }
       },
       "mouth_status": "sampled_mouth_pose_review_pass",
-      "move_effect_review": "pending",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "shadowball": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "2b54e94ca23dabebaabc220dee2884371721da35cfb917b90d10bf44aa489a26",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "fd8fea5a98ce2ec424aac925b280afa12b8c27c09fed5dce4ee1c0f75b6347b5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "34cdbc9ede6caedf31c744966652a5faf2329eec01b0caec54d0a798eceff873",
+          "scope": "Normal and shiny offline stage Shadow Ball uses one origin between the two animated palms during the raised-hand charge. Sampled side/front views show emission from the hand region and subsequent projectile travel. Physical moves retain their existing routes; projectile size/art and live battles remain outside this review.",
+          "shiny_preview_sha256": "d30398dafae8e51163b66021bce33f7df7071b7f9a6032311b9b50e918e060a8",
+          "shiny_runtime_sha256": "e5a35a17504372366ee85736b14956dba3c06cf09e2f43b21e4c8ab39d080b8b",
+          "status": "sampled_runtime_origin_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 132.0,
+            "impact_frame": 59.4,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -45800,9 +45911,41 @@
           },
           "preview": "geometry-limb-review/kadabra.png",
           "proposal": "candidates-limbs-v1/kadabra.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "casting": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
+        "casting": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "part": "casting",
+              "reason": "Proposed single energy origin midway between the two reviewed hand anchors; not approved until native pose and actual Shadow Ball review."
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "fd8fea5a98ce2ec424aac925b280afa12b8c27c09fed5dce4ee1c0f75b6347b5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6d040b1cdf25e953762ac7f81211a758fd104a835827f1c9feedfedf1c0c4d67",
+          "scope": "Single energy origin midway between both hand anchors. Visually reviewed only for special_attack: between the raised palms during charge and between the forward palms on release. Idle and physical clips are not approved casting routes. Actual Shadow Ball effect review pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -45841,6 +45984,7 @@
         }
       },
       "part_status": {
+        "casting": "sampled_marker_pose_review_pass_installed",
         "hand": "sampled_marker_pose_review_pass_installed",
         "left_hand": "sampled_marker_pose_review_pass_installed"
       }
@@ -56564,7 +56708,17 @@
       }
     },
     "meowstic-m-mega": {
-      "anatomical_move_routing_review": "pending",
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "mouth": {
+          "action": "special_attack",
+          "moves": [
+            "hyperbeam"
+          ],
+          "scope": "Normal and shiny actual stage beam follows the small open mouth below the nose in special_attack. Front and reverse sampled views checked; hair and bright beam overlap the opening in some views. Effect art and live battles remain pending.",
+          "status": "sampled_native_pose_and_effect_review_pass"
+        }
+      },
       "latest_candidate_review": {
         "notes": "Individually triangulated the center of the open mouth from simultaneous front and side special_attack frames, correcting the earlier chin point and rejecting a surface projection that was too deep. New forward idle, physical_attack and special_attack markers reviewed at 0.20, 0.45, 0.65 and side 0.45; side placement now follows the open mouth. Hair can occlude the closed mouth. Actual effects remain unapproved.",
         "preview": "mouth-corrected-review-v58/meowstic-m-mega.png",
@@ -56658,7 +56812,35 @@
         }
       },
       "mouth_status": "sampled_mouth_pose_review_pass",
-      "move_effect_review": "pending",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "additional_normal_preview_sha256": "b70a18363a19eac4003da9fe148b1c86ad41877d821b9b65cdd4610654ea22c9",
+          "attachment_data_sha256_at_capture": "c3fd0ba3a2bda2bc69b17f6d77867cf2e3ba99ab6bb543fed470415209f540be",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "b3543a40b086de2942ae14cfe59045747b96f1bb5c9f63aac2a3b5169ac35383",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "80099d97bbc57903f5a0923df7763c4aa01fe683b80fd5210e8b7f14bbc8d491",
+          "scope": "Normal and shiny actual stage beam follows the small open mouth below the nose in special_attack. Front and reverse sampled views checked; hair and bright beam overlap the opening in some views. Effect art and live battles remain pending.",
+          "shiny_preview_sha256": "4c6237da72b580df4063344e94373cd2f8d6f66ad3bbcd1802a5add8cd4f100f",
+          "shiny_runtime_sha256": "ad5f804e8cf5b83e1e629e5bb0cd400a93868144fdbf88b0bb830654c6c4bb6d",
+          "status": "sampled_runtime_origin_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 148.0,
+            "impact_frame": 91.76,
+            "launch_frame": 37.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -62779,7 +62961,17 @@
       "part_status": {}
     },
     "oddish": {
-      "anatomical_move_routing_review": "pending",
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "mouth": {
+          "action": "special_attack",
+          "moves": [
+            "solarbeam"
+          ],
+          "scope": "Normal and shiny actual stage beam starts at the small open mouth in special_attack. Front and reverse sampled views checked; beam width and charge aura exceed mouth size. This reviews the source connection, not effect art or live battles.",
+          "status": "sampled_native_pose_and_effect_review_pass"
+        }
+      },
       "latest_candidate_review": {
         "notes": "Individually reviewed mouth marker: follows the center of the open circular mouth in special_attack and the central closed smile seam in idle and both physical attacks. Forward samples at 0.20, 0.45, 0.65 plus side 0.45. Actual move effects and per-move routing remain unapproved.",
         "preview": "mouth-close-v56/oddish.png",
@@ -62807,7 +62999,35 @@
         "side_fraction": 0.45
       },
       "mouth_status": "sampled_mouth_pose_review_pass",
-      "move_effect_review": "pending",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "solarbeam": {
+          "action": "special_attack",
+          "additional_normal_preview_sha256": "244b9a97307e16bf3011e1beefc225246044b16c22eaf6242eab36e6e47453d4",
+          "attachment_data_sha256_at_capture": "c3fd0ba3a2bda2bc69b17f6d77867cf2e3ba99ab6bb543fed470415209f540be",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "6be4c36be0afcc5e9c48ecce604d79694f2237013f0549b143ed6af64da10f2c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f4510b38ac73eb8fa9baea2abacdca6955fa4d47057f422fc8b8e5447089720c",
+          "scope": "Normal and shiny actual stage beam starts at the small open mouth in special_attack. Front and reverse sampled views checked; beam width and charge aura exceed mouth size. This reviews the source connection, not effect art or live battles.",
+          "shiny_preview_sha256": "1b655612a20c787b2a3e20e646202b877586227629f329b6efaae4e3330a5101",
+          "shiny_runtime_sha256": "c397b2ad8dca8eb76e478b35d986d7f7759de91733a4e9cd23829c6cb364d32f",
+          "status": "sampled_runtime_origin_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 347.5,
+            "impact_frame": 215.45,
+            "launch_frame": 86.875,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -79882,7 +80102,17 @@
       }
     },
     "sinistcha": {
-      "anatomical_move_routing_review": "pending",
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "mouth": {
+          "action": "special_attack",
+          "moves": [
+            "scald"
+          ],
+          "scope": "Normal and shiny actual stage beam follows the glowing face-mouth above the cup rim while the tea body moves. Front and reverse sampled views checked. This only reviews the mouth connection for Scald; whisk/cup routes, beam art and live battles remain pending.",
+          "status": "sampled_native_pose_and_effect_review_pass"
+        }
+      },
       "latest_candidate_review": {
         "notes": "Individually projected glowing mouth surface, corrected upward from the chin. Re-rendered forward idle, both physical actions and special_attack show the marker centered on the small vertical or curved glowing mouth. 0.20, 0.45, 0.65 plus side 0.45; this does not approve whisk-origin or cup-origin effects.",
         "preview": "mouth-surface-review-v57/sinistcha.png",
@@ -79938,7 +80168,35 @@
         }
       },
       "mouth_status": "sampled_mouth_pose_review_pass",
-      "move_effect_review": "pending",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "scald": {
+          "action": "special_attack",
+          "additional_normal_preview_sha256": "1ef8a8d96ff299817b8b97b7cc097775faac0c96215c23a77c298de36ab10f2a",
+          "attachment_data_sha256_at_capture": "c3fd0ba3a2bda2bc69b17f6d77867cf2e3ba99ab6bb543fed470415209f540be",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "3a05b044db92bbdaa8ca96af1706ee2994ad4946ee8d29ddfd15da1cd1cab3a8",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "219dfb91997227de6840c872d1af810775da32ca6e8a4c720bb0f69cd3201539",
+          "scope": "Normal and shiny actual stage beam follows the glowing face-mouth above the cup rim while the tea body moves. Front and reverse sampled views checked. This only reviews the mouth connection for Scald; whisk/cup routes, beam art and live battles remain pending.",
+          "shiny_preview_sha256": "2ce2cd6b0e9df7d38b08a0f9258b546da4b593c4254960322ea18860a9a935a9",
+          "shiny_runtime_sha256": "aec6f1db26b579d92e942c0ec4f3b999cadb725546555f88a6bb389aa227a917",
+          "status": "sampled_runtime_origin_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 302.5,
+            "impact_frame": 187.55,
+            "launch_frame": 75.625,
+            "move_key": "scald"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",

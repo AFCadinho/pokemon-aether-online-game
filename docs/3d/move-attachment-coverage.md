@@ -458,7 +458,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | jynx | hand, left_hand, mouth | Same attachment profile |
 | kabuto | mouth | Same attachment profile |
 | kabutops | foot, mouth | Same attachment profile |
-| kadabra | hand, left_hand, mouth | Same attachment profile |
+| kadabra | casting, hand, left_hand, mouth | Same attachment profile |
 | kangaskhan | foot, left_foot, mouth | Same attachment profile |
 | kangaskhan-mega | foot, left_foot, mouth | Same attachment profile |
 | karrablast | hand, left_hand, mouth | Same attachment profile |

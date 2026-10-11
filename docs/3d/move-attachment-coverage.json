@@ -65,6 +65,7 @@
 		"with_any_attachment": 1010,
 		"with_cannon": 1,
 		"with_cannons": 1,
+		"with_casting": 1,
 		"with_electric_body": 1,
 		"with_foot": 307,
 		"with_hand": 576,
@@ -20271,6 +20272,28 @@
 			]
 		},
 		"kadabra": {
+			"casting": [
+				[
+					{
+						"bone": "right_hand",
+						"offset": [
+							0.0720603466033933,
+							0.012596070766449,
+							0.00215095654129984
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "left_hand",
+						"offset": [
+							0.0720598697662354,
+							-0.0125964283943176,
+							0.002150546759367
+						],
+						"weight": 0.5
+					}
+				]
+			],
 			"hand": [
 				[
 					{
@@ -45781,7 +45804,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "c3fd0ba3a2bda2bc69b17f6d77867cf2e3ba99ab6bb543fed470415209f540be",
+		"data/battle_move_attachments_3d.json": "7e50c364642a39b9262e92bd7919c6f7d24aef814ba2c8bf842f7454fc9ea18d",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "8176a39bc14e1915921edbadfcc0e599996057c38c44894428391a1fe6e9ea11",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
@@ -61987,6 +62010,7 @@
 		},
 		"kadabra": {
 			"attachments": [
+				"casting",
 				"hand",
 				"left_hand",
 				"mouth"
