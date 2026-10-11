@@ -1,0 +1,58 @@
+{
+  "capturedAt": "2026-10-11T19:37:49.698883+00:00",
+  "frontendRevision": "63cc497076c96274b85819569fbbc523e67d2da8",
+  "backendRevision": "6ab2ee9b7035fa0bfcdf6daedae2bdc56d6a7431",
+  "locale": "en",
+  "viewport": [
+    1920,
+    1080
+  ],
+  "engine": "Godot 4.6.2 compatibility renderer",
+  "authenticatedSession": false,
+  "data": "Local illustrative Abra and Meowth fixtures rendered through native UI controls. No game backend or live player account used. Upcoming field mechanics verified against development sources.",
+  "images": [
+    {
+      "caption": "Example party: Abra is the leader in slot 1; Meowth can use Pickup from another slot.",
+      "control": "PartyPanel",
+      "exampleData": true,
+      "filename": "01-party-leader.png",
+      "heading": "## Choose your party leader",
+      "size": [
+        306,
+        181
+      ],
+      "topic": 0,
+      "sha256": "9fe1e76af36f15c707d71b3e29ef7009235e60c7fba9048d0c8c1e64073e9030",
+      "key": "01-party-leader"
+    },
+    {
+      "caption": "Example: this Abra has Synchronize and a Modest nature. Put it in slot 1 to use the nature effect.",
+      "control": "PokemonSummaryPopup",
+      "exampleData": true,
+      "filename": "02-synchronize-nature.png",
+      "heading": "## Synchronize",
+      "size": [
+        646,
+        426
+      ],
+      "topic": 0,
+      "sha256": "23c987ac2505fdc51347b5d7f0638b55e06948ca1707b100005b2900b3fcbc36",
+      "key": "02-synchronize-nature"
+    },
+    {
+      "caption": "Example: Meowth carries an Antidote. Right-click its Party slot and choose Take held item to move it to the Bag.",
+      "control": "@PanelContainer@2856",
+      "exampleData": true,
+      "filename": "03-pickup-take-item.png",
+      "heading": "## Collect your Pickup item",
+      "size": [
+        646,
+        426
+      ],
+      "topic": 0,
+      "sha256": "f0df6a8f5dea0f6f2269b0213939a596053c0cf38414639fe113596299d4aa6d",
+      "key": "03-pickup-take-item"
+    }
+  ],
+  "captureScriptSha256": "853784fe33b2922162fb6d6239e9e1d22c8986bcf7010707fbab49da7a98151a"
+}

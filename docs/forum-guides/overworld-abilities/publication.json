@@ -1,0 +1,98 @@
+{
+  "topic_id": 109,
+  "post_id": 116,
+  "title": "Overworld Abilities \u2013 Natures & Item Drops",
+  "url": "https://forums.pokeaether.com/t/overworld-abilities-natures-item-drops/109",
+  "category_id": 13,
+  "author": "adinho",
+  "published_at": "2026-10-11T19:39:42Z",
+  "raw_sha256": "67569c091072247531fbc58db6dc596101b47552e72269e604827041ce6af87f",
+  "screenshots": [
+    {
+      "id": 208,
+      "filename": "01-party-leader.png",
+      "short_url": "upload://nxggXJ03R1VlKSqCMEpCdXjwcos.png",
+      "url": "/uploads/default/original/1X/a4f48f7cbb151b1c44905dbdc98c23d71f8cf02c.png",
+      "width": 306,
+      "height": 181,
+      "source_sha256": "9fe1e76af36f15c707d71b3e29ef7009235e60c7fba9048d0c8c1e64073e9030"
+    },
+    {
+      "id": 209,
+      "filename": "02-synchronize-nature.png",
+      "short_url": "upload://rxAiieB4qw0W2dDYyNnifx0QCNf.png",
+      "url": "/uploads/default/original/1X/c10699f051acf71134862df0d7f625e12ff6e885.png",
+      "width": 646,
+      "height": 426,
+      "source_sha256": "23c987ac2505fdc51347b5d7f0638b55e06948ca1707b100005b2900b3fcbc36"
+    },
+    {
+      "id": 210,
+      "filename": "03-pickup-take-item.png",
+      "short_url": "upload://mKRShdALRb3rX4N9TMllgJsZGCx.png",
+      "url": "/uploads/default/original/1X/9f7c2284317a57c0621d98345285653371dc37b5.png",
+      "width": 646,
+      "height": 426,
+      "source_sha256": "f0df6a8f5dea0f6f2269b0213939a596053c0cf38414639fe113596299d4aa6d"
+    }
+  ],
+  "preview": {
+    "image_count": 3,
+    "table_count": 3,
+    "headings": [
+      "Quick reference",
+      "Choose your party leader",
+      "Synchronize: find a matching Nature",
+      "Compound Eyes and Super Luck: more item drops",
+      "How much does the chance increase?",
+      "Pickup: find an extra item after a wild victory",
+      "What can Pickup find?",
+      "Collect your Pickup item",
+      "Co-op encounters",
+      "Helpful guides"
+    ]
+  },
+  "verification": {
+    "anonymousHtmlStatus": 200,
+    "anonymousTopicJsonStatus": 200,
+    "categoryId": 13,
+    "author": "adinho",
+    "cookedImages": 3,
+    "cookedTables": 3,
+    "upcomingNoticePresent": true,
+    "images": [
+      {
+        "filename": "01-party-leader.png",
+        "status": 200,
+        "size": [
+          306,
+          181
+        ],
+        "pixelsMatchOriginal": true
+      },
+      {
+        "filename": "02-synchronize-nature.png",
+        "status": 200,
+        "size": [
+          646,
+          426
+        ],
+        "pixelsMatchOriginal": true
+      },
+      {
+        "filename": "03-pickup-take-item.png",
+        "status": 200,
+        "size": [
+          646,
+          426
+        ],
+        "pixelsMatchOriginal": true
+      }
+    ],
+    "linkedUploadIds": [
+      208,
+      209,
+      210
+    ]
+  }
+}
