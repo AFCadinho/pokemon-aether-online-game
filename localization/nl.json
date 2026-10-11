@@ -6735,5 +6735,6 @@
   "ui.evolution_conditions.partner_trade": "Ruil deze Pokémon voor {partner}. Linking Cord vervangt deze ruil niet.",
   "ui.evolution_conditions.shed_rule": "Laat je eigen Pokémon evolueren naar {pokemon} met een vrij party-slot. Daar verschijnt Shedinja.",
   "ui.evolution.result.bonus_created": "{pokemon} is in je party verschenen.",
-  "ui.trade.review.evolves_to": "Evolueert na deze ruil naar {pokemon}."
+  "ui.trade.review.evolves_to": "Evolueert na deze ruil naar {pokemon}.",
+  "ui.item_dex.shop.evolution_item_shop": "Evolutie-itemverkoper"
 }

@@ -6735,5 +6735,6 @@
   "ui.evolution_conditions.partner_trade": "将此宝可梦与{partner}交换。连接绳不能代替此交换。",
   "ui.evolution_conditions.shed_rule": "让自己拥有的宝可梦进化为{pokemon}，并在同行队伍中保留一个空位。脱壳忍者将出现在该空位。",
   "ui.evolution.result.bonus_created": "{pokemon}出现在你的同行队伍中。",
-  "ui.trade.review.evolves_to": "此次交换后将进化为{pokemon}。"
+  "ui.trade.review.evolves_to": "此次交换后将进化为{pokemon}。",
+  "ui.item_dex.shop.evolution_item_shop": "进化道具商人"
 }
