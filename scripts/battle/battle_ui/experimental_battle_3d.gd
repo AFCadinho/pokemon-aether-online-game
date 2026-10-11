@@ -1349,6 +1349,8 @@ func move_timing(move: String, ident: String) -> Dictionary:
 			profile["launch_frame"] = float(profile.frames) * float(choreography.launch_fraction)
 			profile["impact_frame"] = float(profile.frames) * float(choreography.impact_fraction)
 			profile["contact_yaw_degrees"] = float(choreography.contact_yaw_degrees)
+			if choreography.has("emission_end_fraction"):
+				profile["emission_end_frame"] = float(profile.frames) * float(choreography.emission_end_fraction)
 	return profile
 
 func action_clock(ident: String, generation: int, end_seconds: float) -> float:

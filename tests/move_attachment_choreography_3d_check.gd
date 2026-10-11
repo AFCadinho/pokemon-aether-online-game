@@ -50,9 +50,36 @@ func _run() -> void:
 			await get_tree().process_frame
 	assert(Attachments.choreography_for("decidueye-hisui","lowkick","physical_attack_2").is_empty())
 	assert(Attachments.choreography_for("glastrier","tackle","physical_attack_2").is_empty())
+	for slot in 4:
+		var identity := "salandit@shiny" if slot % 2 else "salandit"
+		var actor := "p%d" % (slot+1)
+		stage.identities[slot] = identity
+		stage.combatants[slot] = {"species":"salandit","shiny":bool(slot % 2)}
+		stage.entries[identity] = stage.entries.fixture.duplicate(true)
+		stage.visual_bounds[identity] = stage.visual_bounds.fixture.duplicate(true)
+		stage.start_move_action(actor,"Flamethrower")
+		stage.players[slot].pause()
+		assert(stage.current_actions[slot] == "special_attack")
+		var timing: Dictionary = stage.move_timing("Flamethrower",actor)
+		assert(is_equal_approx(timing.launch_frame / timing.frames,.35))
+		assert(is_equal_approx(timing.impact_frame / timing.frames,.45))
+		assert(is_equal_approx(timing.emission_end_frame / timing.frames,.64))
+		var effect: Node = stage.create_move_effect("Flamethrower",actor,"p%d" % ((slot^1)+1),{})
+		effect.set_process(false)
+		assert(is_equal_approx(effect.emission_end,timing.emission_end_frame/60.0))
+		effect.cancel()
+		var doll := Doll.new()
+		stage.world.add_child(doll)
+		stage.substitute_models[slot] = doll
+		assert(not stage.move_timing("Flamethrower",actor).has("emission_end_frame"))
+		doll.free()
+		stage.substitute_models[slot] = null
+	assert(Attachments.choreography_for("salandit","flamethrower","physical_attack").is_empty())
+	assert(Attachments.choreography_for("salandit","ember","special_attack").is_empty())
+	assert(Attachments.choreography_for("salazzle","flamethrower","special_attack").is_empty())
 	router.release_threaded_resource_requests()
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=3 slots=4 shiny=true cancellation=true substitute=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=4 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()

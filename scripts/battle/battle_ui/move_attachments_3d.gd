@@ -55,7 +55,12 @@ static func choreography_for(identity: String, move_key: String, action: String)
 	var yaw := float(spec.get("contact_yaw_degrees", 0))
 	if not is_finite(launch) or not is_finite(impact) or not is_finite(yaw): return {}
 	if launch < 0 or launch >= impact or impact >= 1 or absf(yaw) > 180: return {}
-	return {"launch_fraction": launch, "impact_fraction": impact, "contact_yaw_degrees": yaw}
+	var timing := {"launch_fraction": launch, "impact_fraction": impact, "contact_yaw_degrees": yaw}
+	if spec.has("emission_end_fraction"):
+		var emission_end := float(spec.emission_end_fraction)
+		if not is_finite(emission_end) or emission_end <= impact or emission_end > 1: return {}
+		timing["emission_end_fraction"] = emission_end
+	return timing
 
 ## One outer element is one emitter. Its weighted bones describe a single
 ## moving point (e.g. between two lips); paired cannons remain two emitters.
