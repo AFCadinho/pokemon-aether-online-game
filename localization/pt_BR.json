@@ -1282,7 +1282,7 @@
   "ui.login.error.offline": "O PokeAether está offline no momento. Tente novamente mais tarde.",
   "ui.login.error.maintenance": "O PokeAether está temporariamente fechado para manutenção. Tente novamente mais tarde.",
   "ui.login.error.enter_world": "Não foi possível entrar no mundo. Entre em contato com a equipe.",
-  "ui.login.error.invalid_credentials": "Nome de usuário ou senha inválidos.",
+  "ui.login.error.invalid_credentials": "Nome de usuário ou senha incorretos. Confira seus dados e tente novamente.",
   "ui.login.error.email_not_verified": "Confirme seu e-mail antes de entrar.",
   "ui.login.error.unavailable": "O PokeAether está indisponível no momento. Tente novamente mais tarde.",
   "ui.session.logout_countdown": "{message} Você será desconectado em {seconds} segundos.",

@@ -1327,10 +1327,11 @@ func _get_login_error_message(result: Dictionary) -> String:
 		var public_message := str(detail.get("message", "")).strip_edges()
 		if public_message != "":
 			return public_message
-	if code != "":
-		return BackendErrorLocalizationService.message(result, "ui.login.error.sign_in")
+	# A rejected credential submission is different from an expired saved session.
 	if status == 401:
 		return LocalizationManager.text("ui.login.error.invalid_credentials")
+	if code != "":
+		return BackendErrorLocalizationService.message(result, "ui.login.error.sign_in")
 	if status >= 500:
 		return LocalizationManager.text("ui.login.error.unavailable")
 	return LocalizationManager.text("ui.login.error.sign_in")
