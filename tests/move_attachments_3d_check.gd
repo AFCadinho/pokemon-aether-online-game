@@ -109,6 +109,19 @@ func _run() -> void:
 		assert(Attachments.definitions_for(identity, "mouth")[0][0].bone == "head")
 		assert(Attachments.part_for(identity, "hyperbeam") == "mouth")
 
+	for species: String in ["doduo", "dodrio"]:
+		for identity: String in [species, species + "@shiny"]:
+			var heads := 2 if species == "doduo" else 3
+			assert(Attachments.definitions_for(identity, "mouth").size() == heads)
+			assert(Attachments.definitions_for(identity, "beak_tip").size() == heads)
+			for move: String in ["peck", "furyattack"]:
+				assert(Attachments.part_for(identity, move) == "beak_tip")
+			for move: String in ["growl", "supersonic"]:
+				assert(Attachments.part_for(identity, move) == "mouth")
+	for identity: String in ["dodrio", "dodrio@shiny"]:
+		assert(Attachments.part_for(identity, "hyperbeam") == "mouth_primary")
+		assert(Attachments.definitions_for(identity, "mouth_primary").size() == 1)
+		assert(Attachments.definitions_for(identity, "mouth_primary")[0] == Attachments.definitions_for(identity, "mouth")[0])
 	for identity: String in ["zweilous", "zweilous@shiny"]:
 		var heads := Attachments.definitions_for(identity, "mouth")
 		assert(heads.size() == 2)
@@ -365,12 +378,13 @@ func _check_paired_sound(world: Node3D) -> void:
 	for move in ["Growl", "Supersonic", "Screech", "Disarming Voice"]:
 		var impact_counts := []
 		var counts := []
-		for count in [1, 2]:
+		for count in [1, 2, 3]:
 			seconds = .1
 			var effect := Stage.StagedMoveEffect.new()
 			world.add_child(effect)
 			var sources := [Vector3(-2,1,-.5)]
-			if count == 2: sources.append(Vector3(-2,1,.5))
+			if count >= 2: sources.append(Vector3(-2,1,.5))
+			if count == 3: sources.append(Vector3(-2,1.7,0))
 			var points := {"source":sources[0],"sources":sources,"target":Vector3(2,1,0),"radius":.8}
 			effect.start(move,{"frames":60,"launch_frame":12,"impact_frame":36},{},func(): return seconds,func(): return points,func(): return true)
 			effect.set_process(false)
@@ -382,7 +396,8 @@ func _check_paired_sound(world: Node3D) -> void:
 			assert(effect.sound_launch_sources.size() == count)
 			var transforms: Array[Transform3D] = []
 			for i in effect.cursor: transforms.append(effect.pieces[i].transform)
-			points.sources = [Vector3(-1,2,-.5),Vector3(-1,2,.5)] if count == 2 else [Vector3(-1,2,-.5)]
+			points.sources = []
+			for source: Vector3 in sources: points.sources.append(source + Vector3(1,1,0))
 			points.source = points.sources[0]
 			effect._process(0)
 			for i in effect.cursor:
@@ -397,5 +412,6 @@ func _check_paired_sound(world: Node3D) -> void:
 			effect.cancel()
 			assert(effect.cancelled and not effect.visible)
 		assert(counts[1] == counts[0] * 2 and counts[0] > 0, "Both heads must emit the full sound pattern")
-		assert(impact_counts[0] == impact_counts[1], "Multiple mouths keep one target impact")
+		assert(counts[2] == counts[0] * 3, "All three heads must emit the full sound pattern")
+		assert(impact_counts[0] == impact_counts[1] and impact_counts[1] == impact_counts[2], "Multiple mouths keep one target impact")
 		assert(impact_counts[0] > 0 if move == "Disarming Voice" else impact_counts[0] == 0)

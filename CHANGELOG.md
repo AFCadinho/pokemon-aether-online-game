@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate Dodrio’s three mouths and beak tips individually. Match Growl and Supersonic to all three open bills, give Hyper Beam a narrower central-mouth stream, and route Doduo/Dodrio’s Fury Attack to their beak tips.
+
 - Give Doduo separate animated mouth and beak-tip attack origins for both heads. Growl and Supersonic now release sound waves from both mouths, with timing matched to the open-bill pose.
 
 - Calibrate selected mouth, muzzle and mandible attack origins for Hisuian Electrode, Kyurem, Latios, Gastly, Klefki, Spiritomb, Mareanie, Snom and Spinarak. Match selected beam and bite timings to their native poses, and fit Flash Cannon and Ice Beam widths to small mouths.

@@ -63,7 +63,7 @@
 		"shiny": 1200,
 		"species_forms": 1200,
 		"with_any_attachment": 1069,
-		"with_beak_tip": 5,
+		"with_beak_tip": 6,
 		"with_cannon": 2,
 		"with_cannons": 1,
 		"with_casting": 2,
@@ -77,7 +77,8 @@
 		"with_left_hand": 574,
 		"with_left_hand_upper": 1,
 		"with_mandibles": 2,
-		"with_mouth": 987,
+		"with_mouth": 988,
+		"with_mouth_primary": 1,
 		"with_mouth_red": 1,
 		"with_muzzle": 2,
 		"with_olive_nozzle": 1,
@@ -9589,6 +9590,41 @@
 			]
 		},
 		"dodrio": {
+			"beak_tip": [
+				[
+					{
+						"bone": "upper_jaw_a",
+						"offset": [
+							0.426230251789093,
+							0.0000000000000000482015447553064,
+							-0.0190242528915405
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "upper_jaw_b",
+						"offset": [
+							0.424995124340057,
+							-0.00146119296550751,
+							-0.0211269855499268
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "upper_jaw_c",
+						"offset": [
+							0.424995720386505,
+							0.00146135687828064,
+							-0.021131157875061
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"foot": [
 				[
 					{
@@ -9648,6 +9684,90 @@
 							0.0
 						],
 						"weight": 0.333333333333333
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw_a",
+						"offset": [
+							0.234426638484001,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw_a",
+						"offset": [
+							0.194617094099522,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					}
+				],
+				[
+					{
+						"bone": "upper_jaw_b",
+						"offset": [
+							0.233747318387031,
+							-0.00146120041608809,
+							0.0
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw_b",
+						"offset": [
+							0.194617061316967,
+							0.0019683875143528,
+							0.0
+						],
+						"weight": 0.5
+					}
+				],
+				[
+					{
+						"bone": "upper_jaw_c",
+						"offset": [
+							0.233747646212578,
+							0.00146136432886119,
+							0.0
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw_c",
+						"offset": [
+							0.194616979360581,
+							-0.00196835771203045,
+							0.0
+						],
+						"weight": 0.5
+					}
+				]
+			],
+			"mouth_primary": [
+				[
+					{
+						"bone": "upper_jaw_a",
+						"offset": [
+							0.234426638484001,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw_a",
+						"offset": [
+							0.194617094099522,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -49071,7 +49191,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "3707fddc83c5fb5648e5159f945fd1bcd4c5533aba47038bfa5b857e619b910d",
+		"data/battle_move_attachments_3d.json": "cbbb83bf714f09bd92dbca59953e4f2f6a276f334e9aa1ea461a0a117200612e",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "e1e876a615cacbda2aaadba60934db81fe133509a5ccc8af1c7556badb86ca0a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
@@ -57839,9 +57959,41 @@
 		},
 		"dodrio": {
 			"attachments": [
+				"beak_tip",
 				"foot",
-				"left_foot"
+				"left_foot",
+				"mouth",
+				"mouth_primary"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"additional_preview_sha256": [
+					"bf04b6edacf6af92112ee0f5dbf7adb03452edc674f4fbdcaac15e8d435745fc",
+					"c6a4b1e0c1d2be23ce05e79595b1ab277c51fcaa05aac6a28be4ee8f338cc0bc"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"manual_adjustments": {
+					"method": "individual_bill_anatomy_measurement",
+					"notes": "Each of the three jaws measured separately; proposed midpoint at 55 percent of bill length, upper tips separate. Pending visual review."
+				},
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "1a09e35089d6de2a9307edb22bcc01c4ea82b5287816b2f5c12f8bf43e3bf1db",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "d5e2920d5229fcdf309b61133843f8994ecb8199cff229a1319fe50d0f5b077a",
+				"scope": "Three independently measured upper/lower bill midpoint emitters, one per head at 55 percent of its measured jaw length. All three marker sheets were individually reviewed in visible idle, physical_attack, physical_attack_2 and special_attack poses. Open-mouth markers stay between the two bill halves; closed-pose markers follow the seam. Exact source silhouette clearance, per-move timing and live battles remain pending.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",

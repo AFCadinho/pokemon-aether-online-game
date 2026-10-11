@@ -24020,7 +24020,265 @@
       }
     },
     "dodrio": {
+      "anatomical_route_reviews": {
+        "furyattack": {
+          "action": "physical_attack",
+          "part": "beak_tip",
+          "scope": "Normal and shiny, two views: Three independently measured upper-bill tips use physical_attack .30/.45 with yaw 0. The lowered heads accompany the contact cue. Full-body views show the native reach, but exact target alignment/height and each tip contact remain pending; impact art masks part of the contact region. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_native_action_review_contact_alignment_pending"
+        },
+        "growl": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, four views: Three separately measured open-bill emitters charge at .28 and release independent sound rings at .32/.40. Special_attack .30/.50 matches all three jaws opening. Reverse views show the previously occluded head emitting its own rings. Charge/ring styling and continuous silhouette clearance remain pending. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth_primary",
+          "scope": "Normal and shiny, four views: Hyper Beam uses only the central mouth, special_attack .30/.50/end .70 and scale .14. The .32/.40/.50 core meets its bill gap, .68 fades and .73 has no source beam. Three-head beam trial v194/v196 was rejected because a side-head path crossed the central head. The single central stream avoids this crossing in both forward and reverse sampled views. Other opponent heights and continuous silhouette clearance remain pending. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "peck": {
+          "action": "physical_attack",
+          "part": "beak_tip",
+          "scope": "Normal and shiny, two views: Three independently measured upper-bill tips use physical_attack .30/.45 with yaw 0. The lowered heads accompany the contact cue. Full-body views show the native reach, but exact target alignment/height and each tip contact remain pending; impact art masks part of the contact region. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_native_action_review_contact_alignment_pending"
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, four views: Three separately measured open-bill emitters charge at .28 and release independent sound rings at .32/.40. Special_attack .30/.50 matches all three jaws opening. Reverse views show the previously occluded head emitting its own rings. Charge/ring styling and continuous silhouette clearance remain pending. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "furyattack": "physical_attack",
+        "growl": "special_attack",
+        "hyperbeam": "special_attack",
+        "peck": "physical_attack",
+        "supersonic": "special_attack"
+      },
+      "move_choreography": {
+        "furyattack": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "growl": {
+          "action": "special_attack",
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.7,
+          "emission_scale": 0.14,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        },
+        "peck": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_effect_reviews": {
+        "furyattack": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "41a1b11a174362e06c8e2f63d5b15c975607eadca3367ccefc64cae0836a6548",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.45,
+            0.52,
+            0.65
+          ],
+          "normal_runtime_sha256": "1a09e35089d6de2a9307edb22bcc01c4ea82b5287816b2f5c12f8bf43e3bf1db",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0235f0a1b10f29d702ecbf4583d33cc5e71a58fe1a190d4a513e66b4e0c09c0a",
+          "scope": "Normal and shiny, two views: Three independently measured upper-bill tips use physical_attack .30/.45 with yaw 0. The lowered heads accompany the contact cue. Full-body views show the native reach, but exact target alignment/height and each tip contact remain pending; impact art masks part of the contact region. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3b2e5f65b8338e1c56177e6f9160e7c8f6d453f7aa608b1eeda041dd5f5bd490",
+          "shiny_runtime_sha256": "470f250f12d9ed19a9a0a8bf8b6b91a28f25466177c1107e638d75f7f926439e",
+          "status": "sampled_native_action_review_contact_alignment_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 90.0,
+            "impact_frame": 40.5,
+            "launch_frame": 27.0,
+            "move_key": "furyattack"
+          },
+          "views": 2
+        },
+        "growl": {
+          "action": "special_attack",
+          "additional_preview_sha256": [
+            "433e2bd6306b8d7956fb78adb82d143f8eac5d4eb4623fcc88ecfbb947a7016d",
+            "7f1457b3ecba36828de81e7feab1cb473c67f938d271c085c112ddf65c978a6e"
+          ],
+          "attachment_data_sha256_at_capture": "83cf945474c9d0e8e1c6846acf260b87b8e9b482a4932dcf8223cce229b2dd94",
+          "fractions": [
+            0.28,
+            0.32,
+            0.4,
+            0.5,
+            0.68,
+            0.73
+          ],
+          "normal_runtime_sha256": "1a09e35089d6de2a9307edb22bcc01c4ea82b5287816b2f5c12f8bf43e3bf1db",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "46cd321e50db456d106c85f0ececa497777347962a8ac2e3a048a138d3be2cf6",
+          "scope": "Normal and shiny, four views: Three separately measured open-bill emitters charge at .28 and release independent sound rings at .32/.40. Special_attack .30/.50 matches all three jaws opening. Reverse views show the previously occluded head emitting its own rings. Charge/ring styling and continuous silhouette clearance remain pending. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "26de5b6a0577b0ffe9f05e119755523318fb7e883ece7146661f852abb958b00",
+          "shiny_runtime_sha256": "470f250f12d9ed19a9a0a8bf8b6b91a28f25466177c1107e638d75f7f926439e",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "growl"
+          },
+          "views": 4
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "additional_preview_sha256": [
+            "ee6ea8f32d0e82b6632809759307f80945355f76512a51ef887854ccc9ec16b3",
+            "191516d465231d2abd4456fde576f2a7199e1f64a4cd85d8813d25356a4443cc"
+          ],
+          "attachment_data_sha256_at_capture": "fb3d264229bdec46233342a6ed85c73e9fc219d6df977ab512fe5be5958c456d",
+          "fractions": [
+            0.28,
+            0.32,
+            0.4,
+            0.5,
+            0.68,
+            0.73
+          ],
+          "normal_runtime_sha256": "1a09e35089d6de2a9307edb22bcc01c4ea82b5287816b2f5c12f8bf43e3bf1db",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "bfa7404a11b0668e51bd37c32cb4565089bc3a25fc7ee1d6dc1adc454c2dccbb",
+          "scope": "Normal and shiny, four views: Hyper Beam uses only the central mouth, special_attack .30/.50/end .70 and scale .14. The .32/.40/.50 core meets its bill gap, .68 fades and .73 has no source beam. Three-head beam trial v194/v196 was rejected because a side-head path crossed the central head. The single central stream avoids this crossing in both forward and reverse sampled views. Other opponent heights and continuous silhouette clearance remain pending. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "a6218e9c306de53b93aca66e7e70e972ac46f038a5c87126c7c99087ecf73cb4",
+          "shiny_runtime_sha256": "470f250f12d9ed19a9a0a8bf8b6b91a28f25466177c1107e638d75f7f926439e",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 84.0,
+            "emission_scale": 0.14,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 4
+        },
+        "peck": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "41a1b11a174362e06c8e2f63d5b15c975607eadca3367ccefc64cae0836a6548",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.45,
+            0.52,
+            0.65
+          ],
+          "normal_runtime_sha256": "1a09e35089d6de2a9307edb22bcc01c4ea82b5287816b2f5c12f8bf43e3bf1db",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1e3bda84221c22b6b4cd6b6e8d7084cbac1a5d4a060b381b32fee0fb62c3c427",
+          "scope": "Normal and shiny, two views: Three independently measured upper-bill tips use physical_attack .30/.45 with yaw 0. The lowered heads accompany the contact cue. Full-body views show the native reach, but exact target alignment/height and each tip contact remain pending; impact art masks part of the contact region. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "265511fb5e52d836a45daad34afc02e1b81d480ffe5d4f8ab8f503f5fac67792",
+          "shiny_runtime_sha256": "470f250f12d9ed19a9a0a8bf8b6b91a28f25466177c1107e638d75f7f926439e",
+          "status": "sampled_native_action_review_contact_alignment_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 90.0,
+            "impact_frame": 40.5,
+            "launch_frame": 27.0,
+            "move_key": "peck"
+          },
+          "views": 2
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "additional_preview_sha256": [
+            "356423646c947a3bbddcc289574c0718f33896c43b0aa4dbb6d3b8b8d8dc48a9",
+            "20e9b011e31bb6c2c92d6ecf183a0bb60891c2af4e86f9f21c43205c6fdc199a"
+          ],
+          "attachment_data_sha256_at_capture": "83cf945474c9d0e8e1c6846acf260b87b8e9b482a4932dcf8223cce229b2dd94",
+          "fractions": [
+            0.28,
+            0.32,
+            0.4,
+            0.5,
+            0.68,
+            0.73
+          ],
+          "normal_runtime_sha256": "1a09e35089d6de2a9307edb22bcc01c4ea82b5287816b2f5c12f8bf43e3bf1db",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5305e368861f21a6a3714517427dac8835d538efe42c9e6f31ff575e656cda2b",
+          "scope": "Normal and shiny, four views: Three separately measured open-bill emitters charge at .28 and release independent sound rings at .32/.40. Special_attack .30/.50 matches all three jaws opening. Reverse views show the previously occluded head emitting its own rings. Charge/ring styling and continuous silhouette clearance remain pending. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d71b2f189609f32c34f8fec54d29226bc86cc73323a2f38983de550eae2d499c",
+          "shiny_runtime_sha256": "470f250f12d9ed19a9a0a8bf8b6b91a28f25466177c1107e638d75f7f926439e",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "supersonic"
+          },
+          "views": 4
+        }
+      },
+      "moves": {
+        "furyattack": "beak_tip",
+        "hyperbeam": "mouth_primary",
+        "peck": "beak_tip"
+      },
       "part_reviews": {
+        "beak_tip": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "e8c77ca1dcab84003802678228c2da263465e8008bafac26d06eb33f0264a7b2",
+            "cf19454f94680e98854d1d67bf455c20a323f43510e4e4e8fe650db3c28a2b9d"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "method": "individual_bill_anatomy_measurement",
+            "notes": "Each of three jaws measured independently; mouth midpoints at 55 percent length. Contact tips use the actual furthest upper-bill vertex in bone-local skin bind space, not a bounding-box corner. Visual review required."
+          },
+          "method": "individual_upper_bill_distal_vertex_measurement",
+          "normal_runtime_sha256": "1a09e35089d6de2a9307edb22bcc01c4ea82b5287816b2f5c12f8bf43e3bf1db",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d3236424cd39c1bcbcb50eab47dd6adb6570bc3f860614b87779279a940e5851",
+          "scope": "Each of the three upper-bill tips is the actual furthest jaw-mesh vertex in bone-local bind space. All three marker sheets individually viewed across idle and three native attack clips; markers meet the cream hook tips. The first bounding-box-corner proposal lay too low and was rejected. Exact target contact distance/height remains pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "foot": {
           "actions": [
             "idle",
@@ -24070,9 +24328,69 @@
           "preview_sha256": "754cdaaf55e0f5d7678455588da3f6547f58a4b629a35993b548fec72f821539",
           "scope": "Front toe/claw contact center reviewed individually in visible sampled native clips and side view. Other-foot/body occlusion excluded. Move routing and actual effects pending.",
           "side_fraction": 0.45
+        },
+        "mouth_primary": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "method": "individual_bill_anatomy_measurement",
+            "notes": "Each of the three jaws measured separately; proposed midpoint at 55 percent of bill length, upper tips separate. Pending visual review."
+          },
+          "measurements": [],
+          "method": "manual_anatomy_marker_pose_visual_review",
+          "normal_runtime_sha256": "1a09e35089d6de2a9307edb22bcc01c4ea82b5287816b2f5c12f8bf43e3bf1db",
+          "pose_fits": [],
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d5e2920d5229fcdf309b61133843f8994ecb8199cff229a1319fe50d0f5b077a",
+          "scope": "Central head mouth uses the same individually reviewed upper/lower bill midpoint as emitter 0. This point follows the visible bill gap across the sampled idle and three native attack clips. Hyper Beam now uses this single mouth after reverse-view rejection of the side-head paths crossing the central head. Corrected effect has a separate four-view normal/shiny review.",
+          "side_fraction": 0.45
         }
       },
       "parts": {
+        "beak_tip": [
+          [
+            {
+              "bone": "upper_jaw_a",
+              "offset": [
+                0.426230251789093,
+                4.82015447553064e-17,
+                -0.0190242528915405
+              ],
+              "weight": 1
+            }
+          ],
+          [
+            {
+              "bone": "upper_jaw_b",
+              "offset": [
+                0.424995124340057,
+                -0.00146119296550751,
+                -0.0211269855499268
+              ],
+              "weight": 1
+            }
+          ],
+          [
+            {
+              "bone": "upper_jaw_c",
+              "offset": [
+                0.424995720386505,
+                0.00146135687828064,
+                -0.021131157875061
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "foot": [
           [
             {
@@ -24134,11 +24452,130 @@
               "weight": 0.3333333333333333
             }
           ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "upper_jaw_a",
+              "offset": [
+                0.23442663848400117,
+                0.0,
+                0
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "lower_jaw_a",
+              "offset": [
+                0.19461709409952152,
+                0.0,
+                0
+              ],
+              "weight": 0.5
+            }
+          ],
+          [
+            {
+              "bone": "upper_jaw_b",
+              "offset": [
+                0.23374731838703136,
+                -0.001461200416088099,
+                0
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "lower_jaw_b",
+              "offset": [
+                0.19461706131696674,
+                0.0019683875143528,
+                0
+              ],
+              "weight": 0.5
+            }
+          ],
+          [
+            {
+              "bone": "upper_jaw_c",
+              "offset": [
+                0.23374764621257776,
+                0.0014613643288611984,
+                0
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "lower_jaw_c",
+              "offset": [
+                0.1946169793605807,
+                -0.0019683577120304507,
+                0
+              ],
+              "weight": 0.5
+            }
+          ]
+        ],
+        "mouth_primary": [
+          [
+            {
+              "bone": "upper_jaw_a",
+              "offset": [
+                0.23442663848400117,
+                0.0,
+                0
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "lower_jaw_a",
+              "offset": [
+                0.19461709409952152,
+                0.0,
+                0
+              ],
+              "weight": 0.5
+            }
+          ]
         ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "additional_preview_sha256": [
+          "bf04b6edacf6af92112ee0f5dbf7adb03452edc674f4fbdcaac15e8d435745fc",
+          "c6a4b1e0c1d2be23ce05e79595b1ab277c51fcaa05aac6a28be4ee8f338cc0bc"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "manual_adjustments": {
+          "method": "individual_bill_anatomy_measurement",
+          "notes": "Each of the three jaws measured separately; proposed midpoint at 55 percent of bill length, upper tips separate. Pending visual review."
+        },
+        "measurements": [],
+        "method": "manual_anatomy_marker_pose_visual_review",
+        "normal_runtime_sha256": "1a09e35089d6de2a9307edb22bcc01c4ea82b5287816b2f5c12f8bf43e3bf1db",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "d5e2920d5229fcdf309b61133843f8994ecb8199cff229a1319fe50d0f5b077a",
+        "scope": "Three independently measured upper/lower bill midpoint emitters, one per head at 55 percent of its measured jaw length. All three marker sheets were individually reviewed in visible idle, physical_attack, physical_attack_2 and special_attack poses. Open-mouth markers stay between the two bill halves; closed-pose markers follow the seam. Exact source silhouette clearance, per-move timing and live battles remain pending.",
+        "side_fraction": 0.45
       }
     },
     "doduo": {
       "anatomical_route_reviews": {
+        "furyattack": {
+          "action": "physical_attack",
+          "part": "beak_tip",
+          "scope": "Normal and shiny, two views: Fury Attack uses the two separately measured upper-bill tips with physical_attack .30/.45 and yaw 0. The full-body .40 preview still shows the body-bounds approach leaving a gap. Exact target contact is NOT approved; impact art masks the gap at .45. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_native_action_review_contact_alignment_pending"
+        },
         "growl": {
           "action": "special_attack",
           "part": "mouth",
@@ -24159,11 +24596,18 @@
         }
       },
       "move_actions": {
+        "furyattack": "physical_attack",
         "growl": "special_attack",
         "peck": "physical_attack",
         "supersonic": "special_attack"
       },
       "move_choreography": {
+        "furyattack": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
         "growl": {
           "action": "special_attack",
           "impact_fraction": 0.58,
@@ -24182,6 +24626,34 @@
         }
       },
       "move_effect_reviews": {
+        "furyattack": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "41a1b11a174362e06c8e2f63d5b15c975607eadca3367ccefc64cae0836a6548",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.45,
+            0.52,
+            0.65
+          ],
+          "normal_runtime_sha256": "7b469643ffd84a00dffd8779a82bbe9df8ff0967cf3e2baf93e312d4686c0658",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "cf1958a897e86efd9301121584ff8db33b9785d7c0aec597d4d5565744e53c68",
+          "scope": "Normal and shiny, two views: Fury Attack uses the two separately measured upper-bill tips with physical_attack .30/.45 and yaw 0. The full-body .40 preview still shows the body-bounds approach leaving a gap. Exact target contact is NOT approved; impact art masks the gap at .45. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "5f4711c3ba38a6a960923c6f0b96c11686b4744f1ccbae0784ddbd90bf5bde69",
+          "shiny_runtime_sha256": "8de274a3f5d5fdd8be9e96da376cd3fff6f8720e72c9123f64a40b34b660e579",
+          "status": "sampled_native_action_review_contact_alignment_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 130.0,
+            "impact_frame": 58.5,
+            "launch_frame": 39.0,
+            "move_key": "furyattack"
+          },
+          "views": 2
+        },
         "growl": {
           "action": "special_attack",
           "attachment_data_sha256_at_capture": "9ef8a1004283cc18314d7078e443e6f86867e1ec953d473827fa012b097a9b0d",
@@ -24268,6 +24740,7 @@
         }
       },
       "moves": {
+        "furyattack": "beak_tip",
         "peck": "beak_tip"
       },
       "part_reviews": {
