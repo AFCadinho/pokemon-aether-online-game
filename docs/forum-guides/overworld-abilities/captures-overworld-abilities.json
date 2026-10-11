@@ -1,0 +1,38 @@
+[
+  {
+    "caption": "Example party: Abra is the leader in slot 1; Meowth can use Pickup from another slot.",
+    "control": "PartyPanel",
+    "exampleData": true,
+    "filename": "01-party-leader.png",
+    "heading": "## Choose your party leader",
+    "size": [
+      306,
+      181
+    ],
+    "topic": 0
+  },
+  {
+    "caption": "Example: this Abra has Synchronize and a Modest nature. Put it in slot 1 to use the nature effect.",
+    "control": "PokemonSummaryPopup",
+    "exampleData": true,
+    "filename": "02-synchronize-nature.png",
+    "heading": "## Synchronize",
+    "size": [
+      646,
+      426
+    ],
+    "topic": 0
+  },
+  {
+    "caption": "Example: Meowth carries an Antidote. Right-click its Party slot and choose Take held item to move it to the Bag.",
+    "control": "@PanelContainer@2856",
+    "exampleData": true,
+    "filename": "03-pickup-take-item.png",
+    "heading": "## Collect your Pickup item",
+    "size": [
+      646,
+      426
+    ],
+    "topic": 0
+  }
+]
