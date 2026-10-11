@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Add Aether Band: a permanent, untradeable held item sold once per account for 1,000 Gems in the Gift Store; restores 1 PP to every move of its holder after a wild victory.
+- Add a Guild Base manager behind the main-hall counter for leader-controlled visitor access and member approval of entry requests.
 
 - Add the Emerald Luchador outfit box for both player models, with five separately wearable cosmetics including a mask and feather-wing Back accessory. Available for item grants; no store listing.
 

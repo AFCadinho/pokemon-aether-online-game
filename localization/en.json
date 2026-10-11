@@ -24,6 +24,7 @@
   "ui.guild_base.rooms.room_title": "Guild Base — Floor {floor}, Room {room}",
   "npc.guild_base.directory": "Room receptionist",
   "npc.guild_base.lift": "Lift attendant",
+  "npc.guild_base.management": "Guild Base manager",
   "backend.error.guild_base_npc_required": "Speak to the attendant in your Guild Base.",
   "backend.error.guild_base_floor_unavailable": "That floor is not available.",
   "backend.error.guild_base_room_empty": "No Guild member is assigned to this room.",

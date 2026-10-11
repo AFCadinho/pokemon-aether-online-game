@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://bqbd0ymhku3vl"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_elevator_cabin/assets/guild_base_elevator_cabin.visual.tileset.compact_source_1_0.texture.res" id="1_yffhk"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_elevator_cabin/assets/guild_base_elevator_cabin.visual.tileset.compact_source_1025_0.texture.res" id="2_hbwex"]

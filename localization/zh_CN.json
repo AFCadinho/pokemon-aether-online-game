@@ -24,6 +24,7 @@
   "ui.guild_base.rooms.room_title": "公会基地 — {floor}层，{room}号房间",
   "npc.guild_base.directory": "房间接待员",
   "npc.guild_base.lift": "电梯服务员",
+  "npc.guild_base.management": "公会基地管理员",
   "backend.error.guild_base_npc_required": "请与公会基地的服务员交谈。",
   "backend.error.guild_base_floor_unavailable": "该楼层不可用。",
   "backend.error.guild_base_room_empty": "该房间尚未分配给公会成员。",
