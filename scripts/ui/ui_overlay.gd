@@ -1395,6 +1395,7 @@ var market_purchase_in_progress := false
 var market_mode := "player_buys"
 var movement_blocking_ui_panels: Dictionary = {}
 var owns_modal_overworld_input_lock := false
+var modal_overworld_input_lock_owner := StringName("ui_overlay_modal_%d" % get_instance_id())
 var market_context: Dictionary = {}
 var mailbox_messages: Array[Dictionary] = []
 var selected_mail_id := -1
@@ -4145,14 +4146,23 @@ func _refresh_modal_overworld_input_lock() -> void:
 			movement_blocking_ui_panels.erase(panel_id)
 
 	if not movement_blocking_ui_panels.is_empty():
-		if not GameState.is_overworld_input_locked():
-			GameState.lock_overworld_input()
-			owns_modal_overworld_input_lock = true
+		# NPCs still own their interaction lock while handing off to a window.
+		# Always acquire our own scope so their completion cannot unlock it.
+		GameState.acquire_overworld_input_lock(modal_overworld_input_lock_owner)
+		owns_modal_overworld_input_lock = true
 		return
 
+	_release_modal_overworld_input_lock()
+
+
+func _release_modal_overworld_input_lock() -> void:
 	if owns_modal_overworld_input_lock:
 		owns_modal_overworld_input_lock = false
-		GameState.unlock_overworld_input()
+		GameState.release_overworld_input_lock(modal_overworld_input_lock_owner)
+
+
+func _exit_tree() -> void:
+	_release_modal_overworld_input_lock()
 
 func _on_focusable_overlay_panel_gui_input(event: InputEvent, panel: Control) -> void:
 	if not (event is InputEventMouseButton):
@@ -37144,6 +37154,9 @@ func _can_ignore_staff_teleporter_overworld_lock() -> bool:
 		or not GameState.overworld_input_locked
 	):
 		return false
+	for owner_id: Variant in GameState.overworld_input_lock_owners:
+		if owner_id != modal_overworld_input_lock_owner:
+			return false
 	for panel_value: Variant in movement_blocking_ui_panels.values():
 		var panel_reference := panel_value as WeakRef
 		var panel := panel_reference.get_ref() as Control if panel_reference != null else null
