@@ -39,8 +39,43 @@ func interact_with_player(_player: Node2D) -> void:
 	if _interaction_active:
 		return
 	_interaction_active = true
-	await _registration_dialogue()
+	if guild_service.has_method("base_visit_directory"):
+		await _visit_dialogue()
+	else:
+		await _registration_dialogue()
 	_interaction_active = false
+
+
+func _visit_dialogue() -> void:
+	var world: Node = GameState.get_world()
+	if world == null:
+		return
+	var synced: Dictionary = await world.sync_player_position_for_world_action()
+	if not bool(synced.get("success", false)):
+		await GameErrorDialogService.show_response(synced)
+		return
+	var response: Dictionary = await guild_service.base_visit_directory(npc_id)
+	if not bool(response.get("success", false)):
+		await GameErrorDialogService.show_response(response)
+		return
+	var menu := preload("res://scripts/ui/guild_base_visit_menu.gd").new()
+	world.add_child(menu)
+	menu.open(guild_service, response.state, npc_id)
+	var chosen: Dictionary = await menu.resolved
+	if str(chosen.get("kind", "")) == "purchase":
+		await _registration_dialogue()
+	elif str(chosen.get("kind", "")) == "enter":
+		var begun: Dictionary = await world.begin_authorized_teleport(true, true)
+		if not bool(begun.get("success", false)):
+			await GameErrorDialogService.show_response(begun)
+			return
+		var travel: Dictionary = await guild_service.base_visit_enter(npc_id, int(chosen.guildId))
+		if not bool(travel.get("success", false)):
+			world.cancel_authorized_teleport()
+			await GameErrorDialogService.show_response(travel)
+			return
+		GameState.unlock_overworld_input()
+		world.call_deferred("apply_authorized_teleport_state", travel.state.state)
 
 
 func _registration_dialogue() -> void:
@@ -95,6 +130,9 @@ func _cross_garden_gate(player: Node2D) -> void:
 	if (player.global_position - anchor.global_position).dot(entry_direction) > 0.0:
 		# Leaving is always possible, including after being removed from a guild.
 		_teleport_across_gate(player, false)
+		var world: Node = GameState.get_world()
+		if world != null:
+			await world.sync_player_position_for_world_action()
 		return
 	var result: Dictionary = await guild_service.call("load_base_registrar", npc_id)
 	if GameState.current_map != current_map or not is_instance_valid(player):
