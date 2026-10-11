@@ -1,0 +1,49 @@
+{
+  "active_manifest_activated": false,
+  "completed_log_sha256": "6b570f4b896501fac60e4314d0365c19c53625ee70a178db5f4a3be52f3741ff",
+  "diagnostic_sha256": "7a6464a45eb7cb140f54f35c4308f4e892b237156c01ed4c8ccef58361f1773f",
+  "full_pinned_index_accepted": 1200,
+  "game_http_and_launcher_installation": {
+    "elapsed_ms": 20133,
+    "errors": [],
+    "godot": "4.6.2-stable (official)",
+    "index_sha256": "4b31a67f27edf638710097c78537ec8b6640af56cda05bd1a6bff9497a5d3528",
+    "ok": true,
+    "os": "Linux",
+    "samples": [
+      {
+        "asset_id": "pokemon_3d:abomasnow:base",
+        "format": "model-pair-pck-v1",
+        "sha256": "dc6d58bbf7e3bf09c02ca639aadf4a1eeb0039130a20c13cc890ad0b98914ffd",
+        "size_bytes": 12867864.0
+      },
+      {
+        "asset_id": "pokemon_3d:garchomp:mega",
+        "format": "model-pair-pck-v1",
+        "sha256": "4fd68543789a373137d5903c28d044891d292cc794cc753224de2e25b63514c1",
+        "size_bytes": 6433380.0
+      },
+      {
+        "asset_id": "pokemon_3d:greninja:base",
+        "format": "zip",
+        "sha256": "197ccac11ca1fa5374340b6b897a41062d32f010300c790118e4a60d8f297054",
+        "size_bytes": 13059161.0
+      },
+      {
+        "asset_id": "pokemon_3d:inkay:base",
+        "format": "zip",
+        "sha256": "7b569936a79a4d4dcb3bfe2925a61b8d726afb2183d20604c7497748d60059f6",
+        "size_bytes": 3674285.0
+      }
+    ],
+    "schema": 1,
+    "scope": "Linux debug opt-in; real public downloads and installed scene decoding, not release activation"
+  },
+  "game_http_probe_abomasnow": true,
+  "production_approved": false,
+  "publication_receipt_sha256": "ebf04df0a13deea99046fdc3f0781574d126e30c8a1d9d73a4dca8c2a1885c6c",
+  "raw_receipt_sha256": "88942362c1bcfdac09e22a72a9afd57e13a17fbe2dec65a81965c67564451462",
+  "scene_appearances_decoded": 8,
+  "schema": 1,
+  "source_commit": "b7a9060afb8db5572a0d879e80694e0a781c209e"
+}
