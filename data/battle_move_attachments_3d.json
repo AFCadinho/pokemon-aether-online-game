@@ -87286,6 +87286,193 @@
         "side_fraction": 0.45
       }
     },
+    "sandaconda": {
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "physical_attack_2",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Hyper Beam uses physical_attack_2 because special_attack keeps the mouth closed. Launch .12, impact .22, end .28: fading beam at .26 follows the gap below the nostrils and is absent at .29/.40. Tongue and nostril clearance at peak effect width remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "hyperbeam": "physical_attack_2"
+      },
+      "move_choreography": {
+        "hyperbeam": {
+          "action": "physical_attack_2",
+          "emission_end_fraction": 0.28,
+          "impact_fraction": 0.22,
+          "launch_fraction": 0.12
+        }
+      },
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "1872a6552d213c7eddb0e10613411f54269b3495df185d958b58227a6dce0bb4",
+          "fractions": [
+            0.1,
+            0.14,
+            0.22,
+            0.26,
+            0.29,
+            0.4
+          ],
+          "normal_runtime_sha256": "60aba4401dfc3d2014350c2a1afce116fc38e9f44d616e51a8c71c5c41e10b61",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4d05f5515f0d9e4a9636ac6482691cacdff26016e6c1269eb571b65942bd576b",
+          "scope": "Normal and shiny, two views: Hyper Beam uses physical_attack_2 because special_attack keeps the mouth closed. Launch .12, impact .22, end .28: fading beam at .26 follows the gap below the nostrils and is absent at .29/.40. Tongue and nostril clearance at peak effect width remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "cc5a97d93ab23f434d8d1ed7e3618ca73711b71818197da71c1f1a56d8d1dd5e",
+          "shiny_runtime_sha256": "0374d9e0bbf05efefdec0583899eedac4fe980f073f7011111c96b13ae9580ee",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 30.8,
+            "frames": 110.0,
+            "impact_frame": 24.2,
+            "launch_frame": 13.2,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "head_02",
+              "offset": [
+                0.256384074687958,
+                -0.000660424877423793,
+                0.0182804074138403
+              ],
+              "weight": 0.496487165036619
+            },
+            {
+              "bone": "left_nose",
+              "offset": [
+                0.00605255365371704,
+                0.041883796453476,
+                0.0256155729293823
+              ],
+              "weight": 0.00351283496338126
+            },
+            {
+              "bone": "jaw_02",
+              "offset": [
+                0.0906341075897217,
+                -0.00434867665171623,
+                0.00749171013012528
+              ],
+              "weight": 0.404257263931437
+            },
+            {
+              "bone": "jaw_01",
+              "offset": [
+                0.268239438533783,
+                -0.0132964765653014,
+                0.00691491551697254
+              ],
+              "weight": 0.0957427360685627
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "5457be0a3f4e60fd27ab03163db553cd6b13138e8abbd371a25498dc055b2155",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v148/sandaconda.png",
+            "sha256": "87d840b7f8f9dc817bcdbe1a9ac0b567755d4234f07c8c0644c2ceb01f58b9f3"
+          },
+          {
+            "capture_sha256": "9dd04a3514f5fac1c9e29babe26c535819c296ad2ebf5542fe94363472906f88",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v150/sandaconda.png",
+            "sha256": "3e05f6130b3bb86ae0c7b0fdbf1fc39eff35967621c6aec71b4ddc3f10b9d02f"
+          },
+          {
+            "capture_sha256": "916f0d3c52615f47bb2b09eaadc5638b6b5cde01613d163a92a9fe5048961ea8",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v151/sandaconda.png",
+            "sha256": "e896c9f858d1b151f2ce7fef5c5e04996d9cbf1384fbc43efa63444aa0134d3d"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "60aba4401dfc3d2014350c2a1afce116fc38e9f44d616e51a8c71c5c41e10b61",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "5ff17ad6683b24b5e64be6d9aee255accc8f6805d83a3fe188b755d471deaba4",
+        "scope": "Paired head/jaw point lies in the open physical mouth and closed lip junction beneath the twin nostril tubes in the newly viewed underside/side native poses. The upper rim is partly hidden by the nostrils. Actual casting action and nostril/coil clearance remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "281f95691d47d3e169d408f66a2c13657571cf094dd866bec118a8d58afc91bb",
+          "landmarks": [
+            {
+              "action": "physical_attack_2",
+              "barycentric": [
+                0.688469893257198,
+                0.0878175254204735,
+                0.223712581322328
+              ],
+              "column": 0.0,
+              "distance": 0.573775833543596,
+              "mesh": "pm0937_00_00/Skeleton3D/pm0937_00_00_head_mesh",
+              "pixel": [
+                208.0,
+                62.0
+              ],
+              "surface": 0,
+              "triangle": 1471,
+              "vertex_indices": [
+                880,
+                882,
+                881
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "physical_attack_2",
+              "barycentric": [
+                0.334032032327111,
+                0.640540019974009,
+                0.0254279476988803
+              ],
+              "column": 0.0,
+              "distance": 0.505807310382789,
+              "mesh": "pm0937_00_00/Skeleton3D/pm0937_00_00_head_mesh",
+              "pixel": [
+                208.0,
+                249.0
+              ],
+              "surface": 0,
+              "triangle": 1791,
+              "vertex_indices": [
+                279,
+                280,
+                276
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      }
+    },
     "sandile": {
       "parts": {
         "mouth": [
@@ -93281,6 +93468,558 @@
         "preview_sha256": "aea32f2584dce1ad970f73f7ed1858f3bf981bfcb86f3d228c0ed8a850de1109",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "skarmory": {
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Hyper Beam launches at .30, impacts at .42 and ends at .54. Narrow fading emission at .52 follows the open beak gap; none at .55/.62 as it closes. Peak emission obscures the teeth and bill, so continuous clearance and effect scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "peck": {
+          "action": "physical_attack",
+          "part": "beak_tip",
+          "scope": "Normal and shiny, two views: Upper bill tip replaces the inner mouth origin. Impact .28 with launch .12 matches the forward lowered-head pose before the backward head swing at .40-.52. The body-radius approach still leaves a gap to the target; exact tip-to-target contact and approach distance are NOT approved. Other moves and live NPC/wild battle review remain pending.",
+          "status": "sampled_native_contact_pose_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "hyperbeam": "special_attack"
+      },
+      "move_choreography": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.54,
+          "impact_fraction": 0.42,
+          "launch_fraction": 0.3
+        },
+        "peck": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.28,
+          "launch_fraction": 0.12
+        }
+      },
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "1872a6552d213c7eddb0e10613411f54269b3495df185d958b58227a6dce0bb4",
+          "fractions": [
+            0.28,
+            0.32,
+            0.42,
+            0.52,
+            0.55,
+            0.62
+          ],
+          "normal_runtime_sha256": "908bf210936b7a6bb3dd53295804992b6832fe49b877342d64c712758aba1d0b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "44f464a7479b3d1aaea4c5179f9e417218fa3842d56042cc56ac87748941b39b",
+          "scope": "Normal and shiny, two views: Hyper Beam launches at .30, impacts at .42 and ends at .54. Narrow fading emission at .52 follows the open beak gap; none at .55/.62 as it closes. Peak emission obscures the teeth and bill, so continuous clearance and effect scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "9615f7fa70640232213acdbce7f40e8b1160e4baf945d2a35fade5c3fd58394d",
+          "shiny_runtime_sha256": "58119af016d4b6a0b5bb4cf6b9ae6b6aff1257f72c6c26f730157a3541ba1f42",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 64.8,
+            "frames": 120.0,
+            "impact_frame": 50.4,
+            "launch_frame": 36.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "peck": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "734631ca0a4569ae17d0a6779c9b4ccfa1100713f41bd5097ce2ba125d429734",
+          "fractions": [
+            0.1,
+            0.2,
+            0.28,
+            0.32,
+            0.4,
+            0.52
+          ],
+          "normal_runtime_sha256": "908bf210936b7a6bb3dd53295804992b6832fe49b877342d64c712758aba1d0b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7970e55a15786f272017791c03b5291192e24f3db7a6b68850e56c4255a9ba8a",
+          "scope": "Normal and shiny, two views: Upper bill tip replaces the inner mouth origin. Impact .28 with launch .12 matches the forward lowered-head pose before the backward head swing at .40-.52. The body-radius approach still leaves a gap to the target; exact tip-to-target contact and approach distance are NOT approved. Other moves and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "8b64f3d057fc7dfd429809abc4966f5146d76b27d3b9085d6182e80a91af8506",
+          "shiny_runtime_sha256": "58119af016d4b6a0b5bb4cf6b9ae6b6aff1257f72c6c26f730157a3541ba1f42",
+          "status": "sampled_native_contact_pose_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 106.0,
+            "impact_frame": 29.68,
+            "launch_frame": 12.72,
+            "move_key": "peck"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "peck": "beak_tip"
+      },
+      "part_reviews": {
+        "beak_tip": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            "Center the individually inspected front beak tips on the lateral symmetry plane; use one midpoint between head and jaw. Mega lower beak uses the jaw front extremity, after the side projection hit the long upper beak twice."
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "f08b7fb78697b9a96f88e3ce193cb1211d4a09f70a3ab34bf14da869e4e8edac",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0265243164391735,
+                  0.118728577992487,
+                  0.854747105568339
+                ],
+                "column": 3.0,
+                "distance": 0.565354229768349,
+                "mesh": "VisualGroundOffset/model/pm0227_00_00/Skeleton3D/pm0227_00_00_body_a_mesh",
+                "pixel": [
+                  181.0,
+                  181.0
+                ],
+                "surface": 0,
+                "triangle": 1195,
+                "vertex_indices": [
+                  1371,
+                  1410,
+                  1409
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "908bf210936b7a6bb3dd53295804992b6832fe49b877342d64c712758aba1d0b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2285bc72cbf0a18963840eda181bbb2948264d69b33bf527e6ee052263fd5ece",
+          "scope": "Individually projected upper bill tip stays on the foremost visible snout surface in the newly viewed underside and side native poses. Contact trajectory still requires actual Peck review. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "beak_tip": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.145012497901917,
+                -0.00400863727554679,
+                0.381486803293228
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.144043192267418,
+                0,
+                0.380560517311096
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "jaw",
+              "offset": [
+                0.304978400468826,
+                0,
+                0.030992291867733
+              ],
+              "weight": 0.5
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "effc565823cf008debe88d390724c00719bcf08d11247a46dab93e28a15c4d63",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v148/skarmory.png",
+            "sha256": "22e6f4a4b0a7d5abeb966fe943a0e84852466c17862b321660b443d94fbffef1"
+          },
+          {
+            "capture_sha256": "bcc17bdd02f5e03b1c3212141274b356e0f037cf680d0b7fa47bca9ccee0fd9f",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v150/skarmory.png",
+            "sha256": "71c139be0c5d35339c4db7ec69fde43fc7f95e8cae44cbaed1d213fcc406d13b"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "manual_adjustments": [
+          "Center the individually inspected front beak tips on the lateral symmetry plane; use one midpoint between head and jaw. Mega lower beak uses the jaw front extremity, after the side projection hit the long upper beak twice."
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "908bf210936b7a6bb3dd53295804992b6832fe49b877342d64c712758aba1d0b",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "838b59e50554255a8f1c4a135ec5c2b86c4b05a5992854fc09b6027fe44b5217",
+        "scope": "Paired upper/lower beak-rim point lies in the mouth gap in the newly viewed underside/side native poses. Closed beak tips extend ahead of this mouth-plane origin; beak contact needs a separate tip. Actual emission timing and tooth/wing clearance remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "1cbeda7248fe09f8c237eb25015a627e9a46f6a69cb97188c732e764fd0764f8",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.361559869299869,
+                0.286030781618567,
+                0.352409349081564
+              ],
+              "column": 3.0,
+              "distance": 0.245217419615533,
+              "mesh": "VisualGroundOffset/model/pm0227_00_00/Skeleton3D/pm0227_00_00_body_a_mesh",
+              "pixel": [
+                77.0,
+                207.0
+              ],
+              "surface": 0,
+              "triangle": 488,
+              "vertex_indices": [
+                557,
+                515,
+                556
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "idle",
+              "barycentric": [
+                0.42754839687666,
+                0.134622511640897,
+                0.437829091482444
+              ],
+              "column": 3.0,
+              "distance": 0.287387157123984,
+              "mesh": "VisualGroundOffset/model/pm0227_00_00/Skeleton3D/pm0227_00_00_body_a_mesh",
+              "pixel": [
+                214.0,
+                184.0
+              ],
+              "surface": 0,
+              "triangle": 638,
+              "vertex_indices": [
+                635,
+                711,
+                636
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      }
+    },
+    "skarmory-mega": {
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Hyper Beam uses this form\u2019s earlier open-beak window .18/.25/end .32. Narrow emission at .30 lies between the tooth rims; none at .33/.38 during closing and forward wing motion. Peak bill/wing clearance and effect scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "peck": {
+          "action": "physical_attack",
+          "part": "beak_tip",
+          "scope": "Normal and shiny, two views: Upper bill tip replaces the inner mouth origin. Impact .40 with launch .20 matches this form\u2019s lowered forward bill pose. The body-radius approach still leaves a gap to the target; exact tip-to-target contact and approach distance are NOT approved. Other moves and live NPC/wild battle review remain pending.",
+          "status": "sampled_native_contact_pose_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "hyperbeam": "special_attack"
+      },
+      "move_choreography": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.32,
+          "impact_fraction": 0.25,
+          "launch_fraction": 0.18
+        },
+        "peck": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.4,
+          "launch_fraction": 0.2
+        }
+      },
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "1872a6552d213c7eddb0e10613411f54269b3495df185d958b58227a6dce0bb4",
+          "fractions": [
+            0.16,
+            0.2,
+            0.25,
+            0.3,
+            0.33,
+            0.38
+          ],
+          "normal_runtime_sha256": "4ec030374902d7155647c8e6115d558657826e7cd785e38f554f9c8a03a21f6b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d0a1f46e06022640fc1712f7df3ba50096a47407b3cbbd4ea5e003e47eb8679b",
+          "scope": "Normal and shiny, two views: Hyper Beam uses this form\u2019s earlier open-beak window .18/.25/end .32. Narrow emission at .30 lies between the tooth rims; none at .33/.38 during closing and forward wing motion. Peak bill/wing clearance and effect scale remain pending. Other moves and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "15651893ebfcfef753b1a7b6c2237ffe65ce4366641be08cccfa7070a1469a21",
+          "shiny_runtime_sha256": "67d15405ea693b3d74ba9b46f940433cef1387c48a3736ae291f28fdec192752",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 38.4,
+            "frames": 120.0,
+            "impact_frame": 30.0,
+            "launch_frame": 21.6,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "peck": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "734631ca0a4569ae17d0a6779c9b4ccfa1100713f41bd5097ce2ba125d429734",
+          "fractions": [
+            0.18,
+            0.3,
+            0.4,
+            0.44,
+            0.52,
+            0.6
+          ],
+          "normal_runtime_sha256": "4ec030374902d7155647c8e6115d558657826e7cd785e38f554f9c8a03a21f6b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "415e0d5095cd95a6d00e99287d327156f8e89dc9b88318c994b84ddd9613127e",
+          "scope": "Normal and shiny, two views: Upper bill tip replaces the inner mouth origin. Impact .40 with launch .20 matches this form\u2019s lowered forward bill pose. The body-radius approach still leaves a gap to the target; exact tip-to-target contact and approach distance are NOT approved. Other moves and live NPC/wild battle review remain pending.",
+          "shiny_preview_sha256": "3afa53f2da1e1717eb91331e12fc7e4b8aa3159ada8691a54a0dd7eb56205a73",
+          "shiny_runtime_sha256": "67d15405ea693b3d74ba9b46f940433cef1387c48a3736ae291f28fdec192752",
+          "status": "sampled_native_contact_pose_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 134.0,
+            "impact_frame": 53.6,
+            "launch_frame": 26.8,
+            "move_key": "peck"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "peck": "beak_tip"
+      },
+      "part_reviews": {
+        "beak_tip": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            "Center the individually inspected front beak tips on the lateral symmetry plane; use one midpoint between head and jaw. Mega lower beak uses the jaw front extremity, after the side projection hit the long upper beak twice."
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "a20adb23742f989ec0bef82ffbdc96e388adf8402f665db7aaa9cbaf8ae467c8",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.374997239115467,
+                  0.462552921284345,
+                  0.162449839600188
+                ],
+                "column": 3.0,
+                "distance": 0.560771421020989,
+                "mesh": "pm0227_51_00/Skeleton3D/pm0227_51_00_head_mesh",
+                "pixel": [
+                  153.0,
+                  194.0
+                ],
+                "surface": 0,
+                "triangle": 179,
+                "vertex_indices": [
+                  120,
+                  185,
+                  118
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "4ec030374902d7155647c8e6115d558657826e7cd785e38f554f9c8a03a21f6b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3e9af337732f7ecc8a54f5c6e68b0985b63a184ed59b034efd6f2e5c5198c0ae",
+          "scope": "Individually projected upper bill tip stays on the foremost visible snout surface in the newly viewed underside and side native poses. Contact trajectory still requires actual Peck review. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "beak_tip": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.14964348077774,
+                0.00172160170041025,
+                0.47852298617363
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.150166392326355,
+                0,
+                0.479067921638489
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "jaw",
+              "offset": [
+                0.326468288898468,
+                0,
+                0.00851566158235073
+              ],
+              "weight": 0.5
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "additional_previews": [
+          {
+            "capture_sha256": "ae3a63c3d10a0a3a87937876caca6f7b28594766e4e32ae22cc51e1916e407d6",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-context-v148/skarmory-mega.png",
+            "sha256": "85034281eba7f38f600c93aa38680fef7c8165678ec6bbd85a7e3b1717778771"
+          },
+          {
+            "capture_sha256": "c2336482c143635accd0b208b21a220f763b36b658a1e38bbe60c8ef96d0746b",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v150/skarmory-mega.png",
+            "sha256": "a7f91d1e4e636dc5e55162ae08e8d64a0c4ed532ab22532cded9486dd52adc45"
+          },
+          {
+            "capture_sha256": "4743ea97103d2b7283aa0a1b5c18a1b740f1b963442970d948e966886b00bc3f",
+            "pose_sampling": "forward_from_start_v1",
+            "preview": ".tmp/attack-attachments/mouth-timing-v151/skarmory-mega.png",
+            "sha256": "0ec00f74ecbd82c11d90d8e00855180e3a297022131764be18d465ee68221814"
+          }
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "manual_adjustments": [
+          "Center the individually inspected front beak tips on the lateral symmetry plane; use one midpoint between head and jaw. Mega lower beak uses the jaw front extremity, after the side projection hit the long upper beak twice."
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "4ec030374902d7155647c8e6115d558657826e7cd785e38f554f9c8a03a21f6b",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "ad145fae930e3d174564cb9650566ebdcf66cc77c0d0585dfba07fa1f51c2060",
+        "scope": "Paired upper/lower beak-rim point lies in the mouth gap in the newly viewed underside/side native poses. Closed beak tips extend ahead of this mouth-plane origin; beak contact needs a separate tip. Actual emission timing and tooth/wing clearance remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "d30e21bc321ade228a70884c60905531954d529c9e107abb1aee89cbfc07e552",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.586305177137283,
+                0.281700159260885,
+                0.131994663601831
+              ],
+              "column": 3.0,
+              "distance": 0.231399919842964,
+              "mesh": "pm0227_51_00/Skeleton3D/pm0227_51_00_head_mesh",
+              "pixel": [
+                10.0,
+                230.0
+              ],
+              "surface": 0,
+              "triangle": 276,
+              "vertex_indices": [
+                549,
+                550,
+                617
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "idle",
+              "barycentric": [
+                0.30405508788073,
+                0.0942029744009575,
+                0.601741937718313
+              ],
+              "column": 3.0,
+              "distance": 0.233161607986738,
+              "mesh": "pm0227_51_00/Skeleton3D/pm0227_51_00_head_mesh",
+              "pixel": [
+                17.0,
+                236.0
+              ],
+              "surface": 0,
+              "triangle": 276,
+              "vertex_indices": [
+                549,
+                550,
+                617
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "skeledirge": {

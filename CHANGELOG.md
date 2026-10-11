@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate mouth origins and open-mouth Hyper Beam timing for Skarmory, Mega Skarmory and Sandaconda; give both Skarmory forms separate bill-tip origins and forward-facing Peck impact timing.
+
 - Calibrate mouth origins for Archaludon, Ariados, Hisuian Avalugg, Mega Glalie and Roaring Moon; align the reviewed Archaludon Hyper Beam, Hisuian Avalugg Ice Beam and Roaring Moon Flamethrower with their native mouth and wing movements.
 
 - Refine mouth origins for Houndstone, Minccino, Grumpig, Slaking, Sudowoodo, Wyrdeer and Slugma; align their reviewed Growl, Hyper Beam and Flamethrower animations with open-mouth poses.

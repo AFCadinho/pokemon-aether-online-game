@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1052 species/forms.
-- No anatomical attachment profile: 148 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 970 species/forms.
+- At least one configured anatomical attachment: 1055 species/forms.
+- No anatomical attachment profile: 145 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 973 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -783,6 +783,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | salazzle | hand, left_hand, mouth | Same attachment profile |
 | samurott | hand, left_hand, mouth | Same attachment profile |
 | samurott-hisui | hand, left_hand, mouth | Same attachment profile |
+| sandaconda | mouth | Same attachment profile |
 | sandile | mouth | Same attachment profile |
 | sandshrew | foot, hand, left_foot, left_hand | Same attachment profile |
 | sandshrew-alola | foot, hand, left_foot, left_hand | Same attachment profile |
@@ -840,6 +841,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | sinistcha | mouth | Same attachment profile |
 | sirfetchd | mouth | Same attachment profile |
 | sizzlipede | mouth | Same attachment profile |
+| skarmory | beak_tip, mouth | Same attachment profile |
+| skarmory-mega | beak_tip, mouth | Same attachment profile |
 | skeledirge | mouth | Same attachment profile |
 | skiddo | mouth | Same attachment profile |
 | skiploom | mouth | Same attachment profile |
