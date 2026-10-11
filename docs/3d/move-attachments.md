@@ -63,6 +63,23 @@ height remains 1.8. Rolycoly uses .05 so the projectile leaves its low wheel
 source without immediately rising through its body. Target impact size remains
 unchanged. Other staged projectiles retain their existing arc.
 
+Poison Sting distributes its five darts across the configured spike emitters.
+Each delayed dart captures its own spike position when released, so a moving head
+cannot leave later darts behind or drag already flying darts. Its emission scale
+changes dart and trail size, while the target impact retains its size.
+
+Bubble, Bubble Beam and Water Pulse also accept `emission_scale`. Bubble sizes
+and Water Pulse ring/satellite sizes scale without changing their source/target
+positions or target impact. String Shot accepts `emission_end_fraction` to end
+its silk before a face turns away; this does not truncate Thunder Wave arcs.
+Sludge Bomb accepts `projectile_arc_height` with the same 0–4 range; its default
+is .6. Whirlipede uses .05 to keep the departing orb below its forward horns.
+
+The actual-effect preview advances the native action and VFX at 120 Hz between
+screenshots. This preserves delayed projectile launch poses even when the chosen
+screenshots skip the release frame. Only the rendered screenshot fractions are
+visually reviewed; this is not a continuous geometry clearance certification.
+
 The [full catalog coverage audit](move-attachment-coverage.md) lists every
 supported species/form and distinguishes configured attachments from bounds
 fallbacks. Rerun it after changing profiles or admitting additional models.

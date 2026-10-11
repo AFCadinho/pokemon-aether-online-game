@@ -54,12 +54,15 @@ var ring := TorusMesh.new()
 var shape: ArrayMesh
 var leaf_materials: Array[ShaderMaterial] = []
 var launch_origin := Vector3.ZERO
+var dart_launch_sources: Array[Vector3] = []
+var projectile_arc_height := .6
 var moon_origin := Vector3.ZERO
 var launched := false
 var emission_end := -1.0
 
 func start(move: String, timing: Dictionary, options: Dictionary, native_clock: Callable, positions: Callable, guard: Callable) -> void:
 	emission_end = float(timing.emission_end_frame) / 60.0 if timing.has("emission_end_frame") else -1.0
+	projectile_arc_height = float(timing.get("projectile_arc_height", .6))
 	super.start(move, timing, options, native_clock, positions, guard)
 
 func _sprite_values(id: String) -> Array:
@@ -143,7 +146,7 @@ func _draw_orb(from: Vector3, to: Vector3, travel: float, _after: float, facing:
 	if travel>=1: return
 	var t := maxf(travel,0)
 	var point := from.lerp(to,t)
-	if key=="sludgebomb": point.y += sin(t*PI)*0.6
+	if key=="sludgebomb": point.y += sin(t*PI)*projectile_arc_height
 	# Let the moon appear first, build the orb, then hold it briefly at full size.
 	var orb_charge := clampf((charge-0.25)/0.65,0,1) if key=="moonblast" else charge
 	var base_radius := MOONBLAST_ORB_RADIUS if key=="moonblast" else (0.34 if key=="sludgebomb" else 0.29)
@@ -164,7 +167,7 @@ func _draw_orb(from: Vector3, to: Vector3, travel: float, _after: float, facing:
 		var behind := from.lerp(to,p)
 		var size := radius*(0.52-float(i)*0.075)
 		if key=="sludgebomb":
-			behind.y += sin(p*PI)*0.6 - float(i)*0.035
+			behind.y += sin(p*PI)*projectile_arc_height - float(i)*0.035
 			_piece(sphere,surface_material,behind,Vector3.ONE*size)
 		elif key=="moonblast":
 			behind += Vector3(sin(i*2.4),cos(i*2.4),sin(i))*0.13*emission_scale
@@ -187,14 +190,27 @@ func _draw_objects(from: Vector3, to: Vector3, travel: float, facing: Basis, sid
 		var spread := 0.18 if key=="poisonsting" else (0.68 if key=="magicalleaf" else 0.4)
 		var curve := sin(t*PI)*spread
 		if key=="magicalleaf": angle += t*TAU*0.7
-		var point := from.lerp(to,t)+(side*cos(angle)+vertical*sin(angle))*curve
+		# Each delayed dart leaves the current spike pose, then flies independently.
+		# Freezing the entire volley at the first launch puts later darts inside a moving head.
+		if key=="poisonsting" and dart_launch_sources.size()<=i:
+			dart_launch_sources.append(emission_sources[i % emission_sources.size()] if not emission_sources.is_empty() else from)
+		var object_from := dart_launch_sources[i] if key=="poisonsting" else from
+		var object_basis := path_basis
+		var object_side := side
+		var object_vertical := vertical
+		if key=="poisonsting":
+			var direction := (to-object_from).normalized()
+			object_side = direction.cross(Vector3.UP if absf(direction.y)<.95 else Vector3.RIGHT).normalized()
+			object_vertical = object_side.cross(direction).normalized()
+			object_basis = Basis(object_side,direction,object_side.cross(direction))
+		var point := object_from.lerp(to,t)+(object_side*cos(angle)+object_vertical*sin(angle))*curve
 		match key:
 			"iceshard":
 				_piece(shape,surface_material,point,Vector3(0.12,0.42,0.12),path_basis*Basis(Vector3.UP,elapsed*5+i))
 				_source_sprite(point-(to-from).normalized()*0.22,0.35,"ice_trail",t,0.7,facing,angle)
 			"poisonsting":
-				_piece(tooth,edge,point,Vector3(0.045,0.52,0.045)*emission_scale,path_basis)
-				_source_sprite(point,0.58*emission_scale,"poison_trail",minf(t*0.7,0.7),0.85,path_basis,0,Vector2(0.3,1))
+				_piece(tooth,edge,point,Vector3(0.045,0.52,0.045)*emission_scale,object_basis)
+				_source_sprite(point,0.58*emission_scale,"poison_trail",minf(t*0.7,0.7),0.85,object_basis,0,Vector2(0.3,1))
 			"swift":
 				var orientation := Basis(side,vertical,side.cross(vertical))*Basis(Vector3.FORWARD,t*6+angle)
 				orientation *= Basis(Vector3.RIGHT,sin(t*PI)*0.45)
@@ -234,12 +250,12 @@ func _draw_pulse(from: Vector3, to: Vector3, travel: float, facing: Basis, path_
 		var t := (travel-delay)/(1.0-delay)
 		if t<0: continue
 		var point := from.lerp(to,t)
-		var size := 0.23+sin(t*PI)*0.28+float(i)*0.08
+		var size := (0.23+sin(t*PI)*0.28+float(i)*0.08)*emission_scale
 		_piece(ring,surface_material,point,Vector3.ONE*size,path_basis)
 		for j in 3:
 			var angle := j*TAU/3.0+elapsed*2
 			var offset := (path_basis.x*cos(angle)+path_basis.z*sin(angle))*size
-			_source_sprite(point+offset,0.12,"pulse_bubble",t,0.7,facing)
+			_source_sprite(point+offset,0.12*emission_scale,"pulse_bubble",t,0.7,facing)
 
 func _draw_hit(to: Vector3, after: float, facing: Basis, path_basis: Basis) -> void:
 	var fade := 1.0-after

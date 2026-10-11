@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate selected attacks for Weedle, Wurmple, Venipede, Whirlipede, Surskit, Masquerain, Kricketot and Kricketune. Poison Sting follows separately timed spike positions; smaller water globes, an earlier silk window and a lower sludge arc fit the reviewed models.
+
 - Calibrate selected attack origins for Cottonee, Cherrim, Petilil, Lilligant, Fomantis, Lurantis, Morelull and Spoink, including Cherrim’s bud and Spoink’s pearl. Time Lilligant and Lurantis’s beams after their arms move aside.
 
 - Calibrate selected face, mouth, gem, cannon and flower attack origins for Seedot, Pineco, Forretress, Pupitar, Carbink, Cryogonal, Glimmet and Glimmora. Match Forretress’s beams to its rotating nozzle and Glimmora’s casts to its opened flower.

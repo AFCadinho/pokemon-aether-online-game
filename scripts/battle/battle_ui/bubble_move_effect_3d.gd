@@ -56,7 +56,7 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 				point += vertical*cos(i*1.7+elapsed*2.0)*spread
 				if not beam: point.y += sin(p*PI)*0.24
 				var size := (0.07 if beam else 0.12) + fmod(i*0.037,0.065)
-				_bubble(point,size,fade)
+				_bubble(point,size*emission_scale,fade)
 	if hit and after >= 0 and after < 1:
 		if beam: _source_sprite(to,0.95,"bubble_splash",after,fade*0.7,facing)
 		for i in (6 if beam else 3):

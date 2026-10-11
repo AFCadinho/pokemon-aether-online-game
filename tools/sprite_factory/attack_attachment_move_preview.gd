@@ -143,11 +143,16 @@ func _run() -> void:
 	var sheet := Image.create(720*2,540*fractions.size(),false,Image.FORMAT_RGB8)
 	var label := Label.new(); label.position = Vector2(8,8); label.add_theme_font_size_override("font_size",18); viewport.add_child(label)
 	var records := []
+	var simulated_fraction := 0.0
+	var step_fraction := 1.0 / maxf(float(timing.frames) * 2.0, 1.0)
 	for row in fractions.size():
 		var fraction: float = fractions[row]
-		Pose.sample(stage.players[0], action, stage.players[0].get_animation(action).length*fraction)
-		for rig: Skeleton3D in stage.actors[0].find_children("*","Skeleton3D",true,false): rig.force_update_all_bone_transforms()
-		stage._update_move_contacts()
+		# Advance VFX between screenshots so delayed projectiles capture the launch pose.
+		# A jump directly to a screenshot can incorrectly freeze a projectile at a later pose.
+		while simulated_fraction < fraction:
+			simulated_fraction = minf(simulated_fraction + step_fraction, fraction)
+			_sample_effect(action, simulated_fraction, effect)
+		_sample_effect(action, fraction, effect)
 		for frame in 2: await process_frame
 		for column in 2:
 			var points: Dictionary = stage._move_anchors("p1","p2",move)
@@ -173,9 +178,15 @@ func _run() -> void:
 	if target_species != species: filename += "-vs-" + target_species
 	assert(sheet.save_png(output.path_join(filename+".png")) == OK)
 	var file := FileAccess.open(output.path_join(filename+".json"),FileAccess.WRITE)
-	file.store_string(JSON.stringify({"species":species,"target_species":target_species,"target_runtime_sha256":target_model.runtime_sha256,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"effects_hidden":hide_effects,"neutral_reflections":neutral_reflections,"camera_frame":camera_frame,"camera_scale":camera_scale,"camera_yaw":rad_to_deg(camera_yaw),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
+	file.store_string(JSON.stringify({"species":species,"target_species":target_species,"target_runtime_sha256":target_model.runtime_sha256,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"effect_sampling":"native_clock_120hz_v1","effects_hidden":hide_effects,"neutral_reflections":neutral_reflections,"camera_frame":camera_frame,"camera_scale":camera_scale,"camera_yaw":rad_to_deg(camera_yaw),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
 	file.close()
 	effect.cancel(); await process_frame
 	stage.world = null; stage.camera = null; stage.free()
 	print("ATTACHMENT_MOVE_PREVIEW ",filename)
 	quit()
+
+func _sample_effect(action: String, fraction: float, effect: Node) -> void:
+	Pose.sample(stage.players[0], action, stage.players[0].get_animation(action).length*fraction)
+	for rig: Skeleton3D in stage.actors[0].find_children("*","Skeleton3D",true,false): rig.force_update_all_bone_transforms()
+	stage._update_move_contacts()
+	effect._process(0)

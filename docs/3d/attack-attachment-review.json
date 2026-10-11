@@ -2,7 +2,7 @@
   "complete": false,
   "counts": {
     "mouth_status": {
-      "concealed_mouth_with_reviewed_casting_parts": 4,
+      "concealed_mouth_with_reviewed_casting_parts": 12,
       "concealed_mouth_with_reviewed_face_outlet": 1,
       "concealed_mouth_with_reviewed_muzzle_outlet": 5,
       "hold_native_red_mouth_action": 1,
@@ -12,17 +12,16 @@
       "mouthless_with_reviewed_casting_parts": 43,
       "pending_anatomical_casting_review": 1,
       "pending_anatomical_mouth_review": 13,
-      "pending_anatomical_mouthpart_review": 3,
+      "pending_anatomical_mouthpart_review": 2,
       "pending_anatomical_muzzle_review": 1,
       "pending_anatomical_route": 23,
-      "pending_anatomical_routing_review": 68,
+      "pending_anatomical_routing_review": 63,
       "pending_animation_addon_review": 1,
       "pending_camera_framing": 1,
       "pending_corrected_mouth_pose_review": 1,
-      "pending_manual_anatomical_calibration": 1,
       "pending_mask_casting_review": 1,
       "pending_mouth_proposal_or_anatomical_route": 8,
-      "pending_mouthpart_clearance_review": 3,
+      "pending_mouthpart_clearance_review": 2,
       "pending_multi_pose_mouth_fit": 2,
       "pending_multipose_correction": 1,
       "pending_multipose_mouth_correction": 4,
@@ -45,12 +44,12 @@
       "pending_multipose_correction": 8,
       "pending_runtime_identity_review": 4,
       "pending_runtime_visibility_and_anatomy_review": 4,
-      "sampled_marker_pose_review_pass_installed": 1831
+      "sampled_marker_pose_review_pass_installed": 1843
     },
-    "runtime_profiles": 1123,
+    "runtime_profiles": 1131,
     "species_forms": 1200
   },
-  "profile_sha256": "28f07154624738cea456c5ad26523490c0f9a8e06f8dafadc9f8417a6ac1ee89",
+  "profile_sha256": "ae8388bfccd577a1a138d97a5851a149fbda2b33782b50edecc722ba369fbdef",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -57520,13 +57519,168 @@
       }
     },
     "kricketot": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "preview": "v5-extra-review/kricketot.png",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle, jaw/head weighted above the yellow collar. Special_attack Growl/String Shot/Mud-Slap use .35/.55, with silk scale .2 and mud scale .05/arc .10. Bug Bite physical_attack_2 .55/.65 follows the face through a deep bow but leaves target contact unresolved. The sound charging glow covers the head/collar; full-radius ring and silk/collar clearance remain pending. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "growl": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle, jaw/head weighted above the yellow collar. Special_attack Growl/String Shot/Mud-Slap use .35/.55, with silk scale .2 and mud scale .05/arc .10. Bug Bite physical_attack_2 .55/.65 follows the face through a deep bow but leaves target contact unresolved. The sound charging glow covers the head/collar; full-radius ring and silk/collar clearance remain pending. The early charging glow is broad over the face/body silhouette and the rings travel forward. Full geometry clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending"
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle, jaw/head weighted above the yellow collar. Special_attack Growl/String Shot/Mud-Slap use .35/.55, with silk scale .2 and mud scale .05/arc .10. Bug Bite physical_attack_2 .55/.65 follows the face through a deep bow but leaves target contact unresolved. The sound charging glow covers the head/collar; full-radius ring and silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle, jaw/head weighted above the yellow collar. Special_attack Growl/String Shot/Mud-Slap use .35/.55, with silk scale .2 and mud scale .05/arc .10. Bug Bite physical_attack_2 .55/.65 follows the face through a deep bow but leaves target contact unresolved. The sound charging glow covers the head/collar; full-radius ring and silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected brown front muzzle, jaw/head weighted above the yellow collar. Special_attack Growl/String Shot/Mud-Slap use .35/.55, with silk scale .2 and mud scale .05/arc .10. Bug Bite physical_attack_2 .55/.65 follows the face through a deep bow but leaves target contact unresolved. The sound charging glow covers the head/collar; full-radius ring and silk/collar clearance remain pending. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "concealed_mouth_with_reviewed_casting_parts"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.53,
+            0.55,
+            0.57,
+            0.58,
+            0.6,
+            0.65,
+            0.74
+          ],
+          "normal_runtime_sha256": "106cb581dcb949802b4a5f11edf9d6eaa316c7d30a10d72ecf81c79e57689f88",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8b2d2c4aedd421e4862a6892a8eb30cdedcaae581b1ccb3e39817b6d94824038",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle, jaw/head weighted above the yellow collar. Special_attack Growl/String Shot/Mud-Slap use .35/.55, with silk scale .2 and mud scale .05/arc .10. Bug Bite physical_attack_2 .55/.65 follows the face through a deep bow but leaves target contact unresolved. The sound charging glow covers the head/collar; full-radius ring and silk/collar clearance remain pending. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "a6c808d024fbb0e1e2cfc084d89cb03dc3a1decd8e5dae4b9393817e17e09298",
+          "shiny_runtime_sha256": "f58ea1cf382e5763667d18895eb09b2951b2893ee72f697c1a65af725ed21cba",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 71.5,
+            "launch_frame": 60.5,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "growl": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.45,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "106cb581dcb949802b4a5f11edf9d6eaa316c7d30a10d72ecf81c79e57689f88",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f1daed74cdcbe6fc3bc2c641857ec434d14abc9755446ebf9c86112bca06653d",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle, jaw/head weighted above the yellow collar. Special_attack Growl/String Shot/Mud-Slap use .35/.55, with silk scale .2 and mud scale .05/arc .10. Bug Bite physical_attack_2 .55/.65 follows the face through a deep bow but leaves target contact unresolved. The sound charging glow covers the head/collar; full-radius ring and silk/collar clearance remain pending. The early charging glow is broad over the face/body silhouette and the rings travel forward. Full geometry clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9fa174d23452d88ab2b3dba5d7066afca8f24f7633fc5d679639d401a97986bc",
+          "shiny_runtime_sha256": "f58ea1cf382e5763667d18895eb09b2951b2893ee72f697c1a65af725ed21cba",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 42.0,
+            "move_key": "growl"
+          },
+          "views": 2
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.45,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "106cb581dcb949802b4a5f11edf9d6eaa316c7d30a10d72ecf81c79e57689f88",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "48112c3b6b18c57f8c62d66d028c7f21a7d0ecd634ef8e9bfa53130f1ec69dba",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle, jaw/head weighted above the yellow collar. Special_attack Growl/String Shot/Mud-Slap use .35/.55, with silk scale .2 and mud scale .05/arc .10. Bug Bite physical_attack_2 .55/.65 follows the face through a deep bow but leaves target contact unresolved. The sound charging glow covers the head/collar; full-radius ring and silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "1b10a86db78bd8f206d6b812d03aaa2340638781b9d7aedef868f737f98e32eb",
+          "shiny_runtime_sha256": "f58ea1cf382e5763667d18895eb09b2951b2893ee72f697c1a65af725ed21cba",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.05,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 42.0,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.45,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "106cb581dcb949802b4a5f11edf9d6eaa316c7d30a10d72ecf81c79e57689f88",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9f60072fa3144bb4553911c0a61cb078f4099af71ebb5fe9a50e0b78b6875c7a",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle, jaw/head weighted above the yellow collar. Special_attack Growl/String Shot/Mud-Slap use .35/.55, with silk scale .2 and mud scale .05/arc .10. Bug Bite physical_attack_2 .55/.65 follows the face through a deep bow but leaves target contact unresolved. The sound charging glow covers the head/collar; full-radius ring and silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "569b8580e319665592cdd8e8a239f09e69e5c3c47cf365f17b31e1971ef3dc13",
+          "shiny_runtime_sha256": "f58ea1cf382e5763667d18895eb09b2951b2893ee72f697c1a65af725ed21cba",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 42.0,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -57535,16 +57689,308 @@
       ],
       "normal_runtime_sha256": "106cb581dcb949802b4a5f11edf9d6eaa316c7d30a10d72ecf81c79e57689f88",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "muzzle": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "muzzle": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "1156f297fa1ad6e536eeab7af00304db1add8c20a5edc7ea01ed5f4bf5e02471",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.801593057070349,
+                  0.193524514613434,
+                  0.00488242831621661
+                ],
+                "column": 0.0,
+                "distance": 0.534904806584289,
+                "mesh": "pm0401_00_00/Skeleton3D/pm0401_00_00_body_mesh",
+                "pixel": [
+                  215.0,
+                  168.0
+                ],
+                "surface": 0,
+                "triangle": 974,
+                "vertex_indices": [
+                  44,
+                  46,
+                  45
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "106cb581dcb949802b4a5f11edf9d6eaa316c7d30a10d72ecf81c79e57689f88",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c0bf7e66a61d4f06a4510395a2814349c588264fb17f55c9488e4b231d98439d",
+          "scope": "Brown oval muzzle front, mainly jaw weighted with a small head contribution. No open mouth is visible. Special_attack returns the face forward at .45/.65 above the protruding collar. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "muzzle": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "kricketune": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "preview": "v5-extra-review/kricketune.png",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "growl": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. The early charging glow is broad over the face/body silhouette and the rings travel forward. Full geometry clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. The early charging glow is broad over the face/body silhouette and the rings travel forward. Full geometry clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending"
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "concealed_mouth_with_reviewed_casting_parts"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "e692cb684a986535469f19c19bef22be67a7ddfc9334ab04b9c03295cf478f75",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "23808f4d62019da30033130f20d2d06da4af285dad29ee2471d70a160f0b33a0",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "441722b502dfeef8fffe233935e627d0bdf06a817b082722a65a1372b08e06f2",
+          "shiny_runtime_sha256": "0247c4d5f87e8563e2dc528088790f750ae49d29a8c879083f67007429e2e660",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 49.5,
+            "launch_frame": 33.0,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "growl": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.45,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "e692cb684a986535469f19c19bef22be67a7ddfc9334ab04b9c03295cf478f75",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0d2968281e0ba6cbfde0ed923b39682a289f55379afc7e07877e974eeea97cce",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. The early charging glow is broad over the face/body silhouette and the rings travel forward. Full geometry clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9ad56c7fce955542d98560f26e3581211e698b3476137e3ec63df15fed4f32c0",
+          "shiny_runtime_sha256": "0247c4d5f87e8563e2dc528088790f750ae49d29a8c879083f67007429e2e660",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 138.0,
+            "impact_frame": 75.9,
+            "launch_frame": 48.3,
+            "move_key": "growl"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.415,
+            0.48,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "e692cb684a986535469f19c19bef22be67a7ddfc9334ab04b9c03295cf478f75",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "75481012cd508aa90801becaa4931b3a33a379679b6eb2ea8aa9c9f3d5581991",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "cda4b69e4e105d918050aa27a5940a80054c735d7f14726516970144c0d9a56c",
+          "shiny_runtime_sha256": "0247c4d5f87e8563e2dc528088790f750ae49d29a8c879083f67007429e2e660",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.1,
+            "frames": 138.0,
+            "impact_frame": 66.24,
+            "launch_frame": 48.3,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.45,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "e692cb684a986535469f19c19bef22be67a7ddfc9334ab04b9c03295cf478f75",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6f66cc96425dec554ee12e5518d87e240f9f1af87807deaad1783e31d65be871",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9b4780059b172d87e0672bee96854725f1ed25b024237879482e2d3adb6f809c",
+          "shiny_runtime_sha256": "0247c4d5f87e8563e2dc528088790f750ae49d29a8c879083f67007429e2e660",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 138.0,
+            "impact_frame": 75.9,
+            "launch_frame": 48.3,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.45,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "e692cb684a986535469f19c19bef22be67a7ddfc9334ab04b9c03295cf478f75",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e84c1dac6f23a93b466fec8721bc1414f5e9fc0124c8a363ee01b3cd0b284fc6",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. The early charging glow is broad over the face/body silhouette and the rings travel forward. Full geometry clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "bc5d3e1b6bed4448661902c87697335040901b18a0f70122881cf45aa6ef43b8",
+          "shiny_runtime_sha256": "0247c4d5f87e8563e2dc528088790f750ae49d29a8c879083f67007429e2e660",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 138.0,
+            "impact_frame": 75.9,
+            "launch_frame": 48.3,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.45,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "e692cb684a986535469f19c19bef22be67a7ddfc9334ab04b9c03295cf478f75",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "087cf32890008759b133794b637da866daac4ee9d12337cfa318689b929f93ca",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected brown front muzzle between the two black moustaches, bound to jaw. Special_attack Growl/Screech/String Shot/Mud-Slap use .35/.55; silk scale .2 and mud scale .10/arc .10. Hyper Beam .35/.48/.65 at scale .10 departs between the moustaches in the samples. Bug Bite physical_attack_2 .30/.45 keeps the face forward, but impact art hides contact. Sound charge is broad over the face; continuous moustache and ring clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "abaff284e0b79216dd3e37d740c39a9c444dc25e531a9692c2c1ac5c98a6bed5",
+          "shiny_runtime_sha256": "0247c4d5f87e8563e2dc528088790f750ae49d29a8c879083f67007429e2e660",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 138.0,
+            "impact_frame": 75.9,
+            "launch_frame": 48.3,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -57562,11 +58008,69 @@
           },
           "preview": "geometry-limb-review/kricketune.png",
           "proposal": "candidates-limbs-v1/kricketune.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "muzzle": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "muzzle": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "226e360d86a41e751b2acfa7a1254bde0d4ff510d15aab774eb3a3dd7a73c6a9",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.528903584573083,
+                  0.049662665017423,
+                  0.421433750409494
+                ],
+                "column": 0.0,
+                "distance": 1.64669703603109,
+                "mesh": "pm0402_00_00/Skeleton3D/pm0402_00_00_body_mesh",
+                "pixel": [
+                  206.0,
+                  142.0
+                ],
+                "surface": 0,
+                "triangle": 3591,
+                "vertex_indices": [
+                  577,
+                  601,
+                  1760
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "e692cb684a986535469f19c19bef22be67a7ddfc9334ab04b9c03295cf478f75",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c7612152c11313e9d976da9e748684d74259bd5dc15382ffc8794b85113cbe53",
+          "scope": "Brown front muzzle between the moustaches, bound to jaw. Special_attack raises the jaw while the moustaches remain beside the front outlet. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
         "hand": "pending_distal_contact_correction",
-        "left_hand": "pending_distal_contact_correction"
+        "left_hand": "pending_distal_contact_correction",
+        "muzzle": "sampled_marker_pose_review_pass_installed"
       }
     },
     "krokorok": {
@@ -67514,13 +68018,478 @@
       "part_status": {}
     },
     "masquerain": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "No mouth opening visible in sampled native animations; require anatomical move-specific origin.",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bubble": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        },
+        "bubblebeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        },
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "scald": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        },
+        "watergun": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "concealed_mouth_with_reviewed_casting_parts"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bubble": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dc3034e413472f72a1bfea3601d38f722c1a25b68bcb919bc55a3c6601442ba0",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2d4ad2c0e0ea3d2b31d9d50460f86af62fc6fe2418ec9c82fdc856520617935e",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "70a9e38b941c2b2a33207a37c5b553f9a7ba54b02354792370ce0ff61c87364b",
+          "shiny_runtime_sha256": "35f5bd63a8194456b5dd4ef72e2263446302c0875e149e93f830341b70b10982",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "bubble"
+          },
+          "views": 2
+        },
+        "bubblebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dc3034e413472f72a1bfea3601d38f722c1a25b68bcb919bc55a3c6601442ba0",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a1d1f7de8273ea16abc20dfa7d6524b99d8c8fb9ad3bdeef45200ce1b5daac5f",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "18969ac7a64c95e41e0034d18f27161f976b5835e531848fc4ce7e4e19313049",
+          "shiny_runtime_sha256": "35f5bd63a8194456b5dd4ef72e2263446302c0875e149e93f830341b70b10982",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "bubblebeam"
+          },
+          "views": 2
+        },
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "fad9caf0cd4dc39300a9c5969e81ef4c28eebcd7a73f919c32228fc9c7213f88",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "83cd8966d1f45fca88602c2ae9b7f4220c5e1dc963cbda9209e2bb1f4c2e9d7e",
+          "shiny_runtime_sha256": "35f5bd63a8194456b5dd4ef72e2263446302c0875e149e93f830341b70b10982",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 49.5,
+            "launch_frame": 33.0,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "283ebd8e245590742db2c8cbe3eadb504cca1103041a1ae635e8ac24dace33b3",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "65658bd6cd8fc1ad5a38042c3c11b510e458bb2a62746392ac291c88c0b45c46",
+          "shiny_runtime_sha256": "35f5bd63a8194456b5dd4ef72e2263446302c0875e149e93f830341b70b10982",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "fd3e75bc01e1e2c1a50980c9ce56951ef51a10d3ee13bf79533b3b2a021627d2",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "16e2d8cfe671784a167b297c5a5c37bd6ad21be5b4ffdbafb6902a79bc6ec93e",
+          "shiny_runtime_sha256": "35f5bd63a8194456b5dd4ef72e2263446302c0875e149e93f830341b70b10982",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "081166270fbfea6b32aac22b3ca1532c3ed5aa1367a3ca17bc29b86e908a399c",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "47ef05edff8f54cd120629bd7fe8a3fcf9f6ef173a4b57f51f6a5cc965a966b3",
+          "shiny_runtime_sha256": "35f5bd63a8194456b5dd4ef72e2263446302c0875e149e93f830341b70b10982",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "scald": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "24d8db3fd78b25cde0afc32bcf4854e8c27e4117cf113681c26476e27e13236d",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "29ab0aae02599b1c3faa863c543924b78e5df4bd386ff4120339b25f14474547",
+          "shiny_runtime_sha256": "35f5bd63a8194456b5dd4ef72e2263446302c0875e149e93f830341b70b10982",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "scald"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "94f1cc6f55eed84641ed2f51fd3d8166ccd7ea66118620b27902e44b2d0a76f9",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9d27e3c44a304b2a111c2b387bc5765a02a8b6c797db4d5c0ffa589078720f44",
+          "shiny_runtime_sha256": "35f5bd63a8194456b5dd4ef72e2263446302c0875e149e93f830341b70b10982",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "39aee8b3e46a76e69590d417c534bb85fa68ff9359654c09f8fa8610172f0044",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "1d5be2ce430e4780691a37fadb29758451eced2f3c49c42e53ab22e0046c5f3f",
+          "shiny_runtime_sha256": "35f5bd63a8194456b5dd4ef72e2263446302c0875e149e93f830341b70b10982",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8ac096dddb19b4398335fef7703c37f8c3a0be206d6c53e79d9c62ad47f8adcc",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "fba4206f041b96e4d032ff09f7194d1955961a6f03f8ed05d06acd58ab696b24",
+          "shiny_runtime_sha256": "35f5bd63a8194456b5dd4ef72e2263446302c0875e149e93f830341b70b10982",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        },
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "79dbab4d4dc77a1e62b927f2831cdb8750c3aaecc7c63e1ba5fc26dd67cffdcf",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b295aedfff78a8515c073fdc6dab54bdb67590563622b035326f9d2bc4448b70",
+          "shiny_runtime_sha256": "35f5bd63a8194456b5dd4ef72e2263446302c0875e149e93f830341b70b10982",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "watergun"
+          },
+          "views": 2
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dc3034e413472f72a1bfea3601d38f722c1a25b68bcb919bc55a3c6601442ba0",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "25329989a43d011a2809d5a4e8e147aff4a942457983ebca454774bba42e904a",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected lower orange face between the real eyes, bound to head. Special_attack beams .30/.45/.65 at scale .12 follow the bowed face below the antennae. Shadow Ball .30/.50 is .12, Mud-Slap .30/.50 is .10 with arc .10 and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .15 after unscaled globes covered the head and antennae. Bug Bite physical_attack .30/.45 leaves contact distance unresolved because of the wide antenna silhouette. Continuous antenna clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9142ea4f8944f18ae838d3425a5c6e751d88dff6f2628566959d9367c8ad5b29",
+          "shiny_runtime_sha256": "35f5bd63a8194456b5dd4ef72e2263446302c0875e149e93f830341b70b10982",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "waterpulse"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -67529,7 +68498,68 @@
       ],
       "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "7d9bd28f8e7243271c6a69e2ae3904cd29a7adde605d5222d0f177e08a779263",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.00505835378615871,
+                  0.0186488939232777,
+                  0.976292752290564
+                ],
+                "column": 0.0,
+                "distance": 1.7994081662743,
+                "mesh": "pm0284_00_00/Skeleton3D/pm0284_00_00_body_mesh",
+                "pixel": [
+                  204.0,
+                  242.0
+                ],
+                "surface": 0,
+                "triangle": 701,
+                "vertex_indices": [
+                  273,
+                  271,
+                  267
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "c4285b5fdc13c0ac891ae072ac4508a23676f79767f12b4f882b228e2dc3d5f4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1b22dc10eb4fa740ad0f18ece22930d25a3600e25ab9d727c337634c7a2abe1a",
+          "scope": "Orange lower front face between the real eyes, bound to head. No visible mouth opening. Special_attack keeps it forward below the large eye-patterned antennae. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "maushold": {
       "anatomical_move_routing_review": "pending",
@@ -105809,15 +106839,439 @@
       ]
     },
     "surskit": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Pink patches under the eyes are cheeks. No distinct mouth opening is visible across native attacks. Original upper-body point is not approved as a mouth; needs front/body water route review.",
-        "preview": "mouth-context-v91/surskit.png",
-        "preview_sha256": "930ed7b0a6b6dce9dbcfe10314199f0d5105777009329dbda87059ff276d7508",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bubble": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        },
+        "bubblebeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        },
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "scald": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        },
+        "watergun": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "concealed_mouth_with_reviewed_casting_parts"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bubble": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dc3034e413472f72a1bfea3601d38f722c1a25b68bcb919bc55a3c6601442ba0",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4267419aa8d1d10ca174d4da0744dbbf1c6dbc0e991484dae073bb464060ff1c",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b0d3f964a454f7d192eb7b0a415b554e3e0f168d2c7380ccf5762240ff626fbe",
+          "shiny_runtime_sha256": "6612dd707e14aa56920b30dabee165db9bbe23c72f17e6f08cfd62c72abb508c",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 138.0,
+            "impact_frame": 69.0,
+            "launch_frame": 41.4,
+            "move_key": "bubble"
+          },
+          "views": 2
+        },
+        "bubblebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dc3034e413472f72a1bfea3601d38f722c1a25b68bcb919bc55a3c6601442ba0",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9c9fffd42cb60f0d5d2992a02fea45e0c431e17addc5c51ca59e1f067ccdc410",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f5ab0f0ee4afbd3ffc0c9997feeb2c61707f033b3d17ffb05a982d3bf21d2152",
+          "shiny_runtime_sha256": "6612dd707e14aa56920b30dabee165db9bbe23c72f17e6f08cfd62c72abb508c",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 138.0,
+            "impact_frame": 69.0,
+            "launch_frame": 41.4,
+            "move_key": "bubblebeam"
+          },
+          "views": 2
+        },
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3f52dd8b1c5dc9c6b07d8e1521824fa960ff0c305862d80b613c46ab5be97ae4",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "a7684938f9b96c4096f1e57608a85326a12f3bb534861a728930edeeca26cb62",
+          "shiny_runtime_sha256": "6612dd707e14aa56920b30dabee165db9bbe23c72f17e6f08cfd62c72abb508c",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 130.0,
+            "impact_frame": 58.5,
+            "launch_frame": 39.0,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b1bf99bbc6c600d2af20d98398b3d7f44791cc9f4d874c735bdc10bd4f349243",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f227d27024c6d807685dc9b091c87ed83e4b3f51652cac348f5a5c195475a9fa",
+          "shiny_runtime_sha256": "6612dd707e14aa56920b30dabee165db9bbe23c72f17e6f08cfd62c72abb508c",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.1,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 41.4,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "88a5fe94d8aa7ea5ac26037adbf3dcada564b0b342b721cb5c5738299e57923e",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f67a300c248cdbfe05f7274564ee9d81442786b6b684567fdda2ed7771354a70",
+          "shiny_runtime_sha256": "6612dd707e14aa56920b30dabee165db9bbe23c72f17e6f08cfd62c72abb508c",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.05,
+            "frames": 138.0,
+            "impact_frame": 69.0,
+            "launch_frame": 41.4,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "scald": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "47b00350695521f0b07b065aa8566c9e36e321ebc8b198080017d5828a60c31d",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "dbf4040c47f049b6c46420d867a5605d7c716c9e97e0fd1c4e03eb8f7a20bc16",
+          "shiny_runtime_sha256": "6612dd707e14aa56920b30dabee165db9bbe23c72f17e6f08cfd62c72abb508c",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.1,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 41.4,
+            "move_key": "scald"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "104d2b9cb49e5649e4e5c94c0248ab605653824637b7e58bcce8b5da382ffd8a",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "21d10686b82f88c5f4cf586db279b6819728255da0b81a4b3fa8dec775abb5d3",
+          "shiny_runtime_sha256": "6612dd707e14aa56920b30dabee165db9bbe23c72f17e6f08cfd62c72abb508c",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.07,
+            "frames": 138.0,
+            "impact_frame": 69.0,
+            "launch_frame": 41.4,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "92fd78ab9105ffe90eab356c59ac56c04a194e3c21901b5a47d3940f21ebbf41",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ada0a936b00b6b3c9d190ba8ed766812a7264d284f64f2eb125d966a23157255",
+          "shiny_runtime_sha256": "6612dd707e14aa56920b30dabee165db9bbe23c72f17e6f08cfd62c72abb508c",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.1,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 41.4,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1c5da3dbe2bccfb9b3b8e60dfbb3aeccc5143040b8e32c9bdaf41b761a0a3c92",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "21d61223e9ea63c29a43030b7aeb71dca6c9ae0dbf5de8569240f8d3e4a71480",
+          "shiny_runtime_sha256": "6612dd707e14aa56920b30dabee165db9bbe23c72f17e6f08cfd62c72abb508c",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 138.0,
+            "impact_frame": 69.0,
+            "launch_frame": 41.4,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        },
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5082062dd1ab1e38c7c02252fe8fdf9f54c06e7f401b292f7d986db26498b4d6",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "516daa3d6718c5feaa3b68007b069bd4b403f5f263e31b2f58971a181df5e41d",
+          "shiny_runtime_sha256": "6612dd707e14aa56920b30dabee165db9bbe23c72f17e6f08cfd62c72abb508c",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.1,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 41.4,
+            "move_key": "watergun"
+          },
+          "views": 2
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dc3034e413472f72a1bfea3601d38f722c1a25b68bcb919bc55a3c6601442ba0",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f48d4603ff36417e50f83d3505ded18a15bef094cb63111a1da792f831e460f6",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected blue face between the cheeks, bound to waist. Special_attack beams .30/.45/.65 at scale .10 depart above the legs; Shadow Ball .30/.50 is .07, Mud-Slap .30/.50 is .05 with arc .10, and String Shot .30/.50 is .2. Bubble/Bubble Beam/Water Pulse .30/.50 use scale .12 after unscaled globes covered the head and legs. Bug Bite uses physical_attack .30/.45; impact art and the opponent hide contact. Bubble paths and silk still need continuous leg clearance review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "31ec4efe25c5273294315ba987aba7275cc1fcdffdda154de951bbb3cf88104b",
+          "shiny_runtime_sha256": "6612dd707e14aa56920b30dabee165db9bbe23c72f17e6f08cfd62c72abb508c",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 138.0,
+            "impact_frame": 69.0,
+            "launch_frame": 41.4,
+            "move_key": "waterpulse"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -105826,7 +107280,68 @@
       ],
       "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "cf23bdfd42d154bd2edb8243c8ea366c9d923c7a46312cf89f1b9fa08f9b079b",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.810355722178334,
+                  0.166654166025482,
+                  0.0229901117961837
+                ],
+                "column": 0.0,
+                "distance": 1.1398168625166,
+                "mesh": "pm0283_00_00/Skeleton3D/pm0283_00_00_body_mesh",
+                "pixel": [
+                  197.0,
+                  182.0
+                ],
+                "surface": 0,
+                "triangle": 2077,
+                "vertex_indices": [
+                  1342,
+                  1196,
+                  1340
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "cf8dec44d5f388b394e84c9064ee4ba1a7b9a63d06b5d4d7e7f44f03d593f2a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0a8234af81c82f001c9c084d964ccfafb631274553e395640f0d1cd97eb50914",
+          "scope": "Blue front face between pink cheeks, bound to waist. No visible mouth opening. Special_attack keeps the face forward while the legs move outward. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "swablu": {
       "anatomical_move_routing_review": "pending",
@@ -115179,15 +116694,243 @@
       ]
     },
     "venipede": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Dark lower face has no resolved mouth opening in the lower-angle poses. Forehead proposal rejected; mouthpart and horn routes need independent review.",
-        "preview": "mouth-under-v103/venipede.png",
-        "preview_sha256": "0c87a986a7f1128eacde042a0bab7e3a9d92e5ef981e69776a40cf883e5c98ad",
-        "status": "pending_anatomical_mouthpart_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bite": {
+          "action": "physical_attack_2",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "bugbite": {
+          "action": "physical_attack_2",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "poisonsting": {
+          "action": "physical_attack_2",
+          "part": "spikes",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "physical_attack_2",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. The early charging glow is broad over the face/body silhouette and the rings travel forward. Full geometry clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending"
+        },
+        "sludgebomb": {
+          "action": "physical_attack_2",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "physical_attack_2",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_mouthpart_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "concealed_mouth_with_reviewed_casting_parts"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bite": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "ef3c0c3b96413d1e371994983a66899e72682c539ebe05175837f5fbb20d25fa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ceb3124212e52f8ece2709fbeb6c56ec526e61f1df4e25e691c171a10052ad1d",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c3a5e2a24e602522f5590997eaf1cb33f0815bf2f5409e4f9754dd60498f0dff",
+          "shiny_runtime_sha256": "406473c4e984d4616d429db62e75b1c9f7dce9050ddb0de46babe7d9a48bba47",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 130.0,
+            "impact_frame": 58.5,
+            "launch_frame": 39.0,
+            "move_key": "bite"
+          },
+          "views": 2
+        },
+        "bugbite": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "ef3c0c3b96413d1e371994983a66899e72682c539ebe05175837f5fbb20d25fa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f4afcd2dcc74cf234574f0a72ee0fc3738239f7183611c4f78271ab257cb0651",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b16852ae4b1a71d4ffeaf00ec339afbc6a64e4636ce79f5ad526916dec98db15",
+          "shiny_runtime_sha256": "406473c4e984d4616d429db62e75b1c9f7dce9050ddb0de46babe7d9a48bba47",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 130.0,
+            "impact_frame": 58.5,
+            "launch_frame": 39.0,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "poisonsting": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "dc3034e413472f72a1bfea3601d38f722c1a25b68bcb919bc55a3c6601442ba0",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "ef3c0c3b96413d1e371994983a66899e72682c539ebe05175837f5fbb20d25fa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0d19cd61ddee3b4247210b9e14b9ffefd05502a043042f5a611f672bdc1f4ad5",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "198bebd69b4c490b7cf84881b76a9008ebdd8ce4641ef9fe29a97d576e5f7e3a",
+          "shiny_runtime_sha256": "406473c4e984d4616d429db62e75b1c9f7dce9050ddb0de46babe7d9a48bba47",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 130.0,
+            "impact_frame": 65.0,
+            "launch_frame": 45.5,
+            "move_key": "poisonsting"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.415,
+            0.48,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "ef3c0c3b96413d1e371994983a66899e72682c539ebe05175837f5fbb20d25fa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c64052a2e8ce71daed1eaebe6d6533f7c0872e82736f1d1f28b2700f6703a787",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. The early charging glow is broad over the face/body silhouette and the rings travel forward. Full geometry clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "8c13d166acff931cbc95f60569eb2b14e408ee8955a05c9f3c42b44066084da1",
+          "shiny_runtime_sha256": "406473c4e984d4616d429db62e75b1c9f7dce9050ddb0de46babe7d9a48bba47",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 130.0,
+            "impact_frame": 62.4,
+            "launch_frame": 45.5,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.415,
+            0.48,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "ef3c0c3b96413d1e371994983a66899e72682c539ebe05175837f5fbb20d25fa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4774fb4387385eded6bc14b0b124e5c285904cd17c1123d81b9cb5b2ff065995",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "254112a301f5c96918d3e87aff5a6c26999d24a979cfa0ea31f64a7d51af7c4e",
+          "shiny_runtime_sha256": "406473c4e984d4616d429db62e75b1c9f7dce9050ddb0de46babe7d9a48bba47",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 130.0,
+            "impact_frame": 62.4,
+            "launch_frame": 45.5,
+            "move_key": "sludgebomb"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.36,
+            0.38,
+            0.4,
+            0.415,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "ef3c0c3b96413d1e371994983a66899e72682c539ebe05175837f5fbb20d25fa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6e39856bc669791257b2dc4aa31dc99de32d4dcdf6eb66bbcbf1f9845838fd91",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Black face below the pink tip uses a head-bound muzzle. Poison Sting uses two separately projected pink feeler tips on right_feeler_a and left_feeler_a, physical_attack_2 .35/.50 at scale .15. Five delayed darts alternate between the tips, each retaining its own release pose. Bite/Bug Bite .30/.45, Screech/Sludge Bomb .35/.48 and Solar Beam .38/.45/.52 all use physical_attack_2. Sludge Bomb/Solar Beam scale .10 keeps the source smaller; early charge and full-radius feeler clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "8820252177bd52217501192765205179538546c8b2941dbbc276d267fdf213f3",
+          "shiny_runtime_sha256": "406473c4e984d4616d429db62e75b1c9f7dce9050ddb0de46babe7d9a48bba47",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 67.6,
+            "emission_scale": 0.1,
+            "frames": 130.0,
+            "impact_frame": 58.5,
+            "launch_frame": 49.4,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -115196,7 +116939,173 @@
       ],
       "normal_runtime_sha256": "ef3c0c3b96413d1e371994983a66899e72682c539ebe05175837f5fbb20d25fa",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "muzzle": "sampled_marker_pose_review_pass",
+            "spikes": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "muzzle": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "921391d42e37a87bc2d4421b486b413d95d78dbfdb136f32da71790ba1049319",
+            "landmarks": [
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.740440519241966,
+                  0.253762563518031,
+                  0.00579691724000317
+                ],
+                "column": 0.0,
+                "distance": 1.11120567063287,
+                "mesh": "pm0543_00_00/Skeleton3D/pm0543_00_00_body_mesh",
+                "pixel": [
+                  202.0,
+                  160.0
+                ],
+                "surface": 0,
+                "triangle": 574,
+                "vertex_indices": [
+                  159,
+                  148,
+                  150
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "ef3c0c3b96413d1e371994983a66899e72682c539ebe05175837f5fbb20d25fa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6e797bab64e5f3b73ba2f37628ea53c40292b8e26cae6078e045a75183a24aef",
+          "scope": "Black lower face between yellow eyes, head bound. Physical_attack_2 exposes this muzzle at .45; the pink upper head conceals it in idle and bowed poses. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "spikes": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "00354cbafc4a5e0f800fb6cd9b096e8b8d972ce50d6cb14d086b3db65138b837"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "921391d42e37a87bc2d4421b486b413d95d78dbfdb136f32da71790ba1049319",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.28818694866653,
+                  0.181323189041999,
+                  0.530489862291471
+                ],
+                "column": 0.0,
+                "distance": 0.94081843926572,
+                "mesh": "pm0543_00_00/Skeleton3D/pm0543_00_00_feeler1_mesh",
+                "pixel": [
+                  93.0,
+                  101.0
+                ],
+                "surface": 0,
+                "triangle": 106,
+                "vertex_indices": [
+                  29,
+                  35,
+                  33
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding",
+            "separate_emitter_landmarks": [
+              [
+                {
+                  "action": "idle",
+                  "barycentric": [
+                    0.28818694866653,
+                    0.181323189041999,
+                    0.530489862291471
+                  ],
+                  "column": 0.0,
+                  "distance": 0.94081843926572,
+                  "mesh": "pm0543_00_00/Skeleton3D/pm0543_00_00_feeler1_mesh",
+                  "pixel": [
+                    93.0,
+                    101.0
+                  ],
+                  "surface": 0,
+                  "triangle": 106,
+                  "vertex_indices": [
+                    29,
+                    35,
+                    33
+                  ],
+                  "weight": 1.0
+                }
+              ],
+              [
+                {
+                  "action": "idle",
+                  "barycentric": [
+                    0.153928603124219,
+                    0.741830529229887,
+                    0.104240867645894
+                  ],
+                  "column": 0.0,
+                  "distance": 0.908039882449568,
+                  "mesh": "pm0543_00_00/Skeleton3D/pm0543_00_00_feeler1_mesh",
+                  "pixel": [
+                    315.0,
+                    104.0
+                  ],
+                  "surface": 0,
+                  "triangle": 209,
+                  "vertex_indices": [
+                    127,
+                    107,
+                    125
+                  ],
+                  "weight": 1.0
+                }
+              ]
+            ]
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "ef3c0c3b96413d1e371994983a66899e72682c539ebe05175837f5fbb20d25fa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "97c0988eba385dc8e7e47cf19a09b14341b48f7b85beaf3a5cdf9ebde7039627",
+          "scope": "Two separately projected pink front feeler tips, bound independently to right_feeler_a and left_feeler_a. Both emitters were inspected separately throughout all sampled actions. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "muzzle": "sampled_marker_pose_review_pass_installed",
+        "spikes": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "venomoth": {
       "anatomical_move_routing_review": "pending",
@@ -118547,15 +120456,131 @@
       ]
     },
     "weedle": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Large pink nose and head/tail horns are visible, without a mouth opening. Forehead proposal rejected; String Shot and Poison Sting need independently chosen anatomical routes.",
-        "preview": "mouth-context-v91/weedle.png",
-        "preview_sha256": "cbbf89707068e77fb5803a2eced38b7599f2a07c8a22b1299c8be63edf9c5248",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front face below the pink nose and separate white head horn were individually projected and head-bound. String Shot uses physical_attack_2 .10/.18/.22 at scale .2, ending before the bowed nose crosses its path; the later .20/.40 attempt was rejected. Poison Sting uses the head horn .35/.50 at scale .15. Bug Bite uses the front face .25/.45; target impact art obscures contact. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "poisonsting": {
+          "action": "physical_attack_2",
+          "part": "spike",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front face below the pink nose and separate white head horn were individually projected and head-bound. String Shot uses physical_attack_2 .10/.18/.22 at scale .2, ending before the bowed nose crosses its path; the later .20/.40 attempt was rejected. Poison Sting uses the head horn .35/.50 at scale .15. Bug Bite uses the front face .25/.45; target impact art obscures contact. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "stringshot": {
+          "action": "physical_attack_2",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front face below the pink nose and separate white head horn were individually projected and head-bound. String Shot uses physical_attack_2 .10/.18/.22 at scale .2, ending before the bowed nose crosses its path; the later .20/.40 attempt was rejected. Poison Sting uses the head horn .35/.50 at scale .15. Bug Bite uses the front face .25/.45; target impact art obscures contact. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Front face below the pink nose and separate white head horn were individually projected and head-bound. String Shot uses physical_attack_2 .10/.18/.22 at scale .2, ending before the bowed nose crosses its path; the later .20/.40 attempt was rejected. Poison Sting uses the head horn .35/.50 at scale .15. Bug Bite uses the front face .25/.45; target impact art obscures contact. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "concealed_mouth_with_reviewed_casting_parts"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.23,
+            0.25,
+            0.27,
+            0.35,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "8245d8342166eb95be24826cf8288c13cb70703b3af6fa074a55ec8760141591",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ce109c71b22822779938d0d0a8ff694467458faa984d3cdb6fbf413d4fcb955d",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front face below the pink nose and separate white head horn were individually projected and head-bound. String Shot uses physical_attack_2 .10/.18/.22 at scale .2, ending before the bowed nose crosses its path; the later .20/.40 attempt was rejected. Poison Sting uses the head horn .35/.50 at scale .15. Bug Bite uses the front face .25/.45; target impact art obscures contact. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "e51d0d96f479cd701273a7fb790be3757b6bb057960ac84db00949fff665c7a8",
+          "shiny_runtime_sha256": "b5f9c29ebdf2fdf7439aee3601f98f49fe9c5c069953611726aa44efa4f9287c",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 49.5,
+            "launch_frame": 27.5,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "poisonsting": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "dc3034e413472f72a1bfea3601d38f722c1a25b68bcb919bc55a3c6601442ba0",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "8245d8342166eb95be24826cf8288c13cb70703b3af6fa074a55ec8760141591",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0e9df59d818ff78cb7c953fcf31907dff84da005b444ae0a7d987e73f80eb3e2",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front face below the pink nose and separate white head horn were individually projected and head-bound. String Shot uses physical_attack_2 .10/.18/.22 at scale .2, ending before the bowed nose crosses its path; the later .20/.40 attempt was rejected. Poison Sting uses the head horn .35/.50 at scale .15. Bug Bite uses the front face .25/.45; target impact art obscures contact. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ce0b71d6906af1c6a4a50447da50cccc91ab01a79fe8dc9a7aa9b580a454ff60",
+          "shiny_runtime_sha256": "b5f9c29ebdf2fdf7439aee3601f98f49fe9c5c069953611726aa44efa4f9287c",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 110.0,
+            "impact_frame": 55.0,
+            "launch_frame": 38.5,
+            "move_key": "poisonsting"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "dc3034e413472f72a1bfea3601d38f722c1a25b68bcb919bc55a3c6601442ba0",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.08,
+            0.1,
+            0.12,
+            0.14,
+            0.18,
+            0.21,
+            0.22,
+            0.3
+          ],
+          "normal_runtime_sha256": "8245d8342166eb95be24826cf8288c13cb70703b3af6fa074a55ec8760141591",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ccc832a13940f304a0dd0218f86323f03957c47dbeca674a7b04b0733b9cf086",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Front face below the pink nose and separate white head horn were individually projected and head-bound. String Shot uses physical_attack_2 .10/.18/.22 at scale .2, ending before the bowed nose crosses its path; the later .20/.40 attempt was rejected. Poison Sting uses the head horn .35/.50 at scale .15. Bug Bite uses the front face .25/.45; target impact art obscures contact. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3a55d27765f8c1304b2769ab8e7dd83b7c3224439bef9f19a74b61deb775c8a6",
+          "shiny_runtime_sha256": "b5f9c29ebdf2fdf7439aee3601f98f49fe9c5c069953611726aa44efa4f9287c",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 24.2,
+            "emission_scale": 0.2,
+            "frames": 110.0,
+            "impact_frame": 19.8,
+            "launch_frame": 11.0,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -118564,7 +120589,118 @@
       ],
       "normal_runtime_sha256": "8245d8342166eb95be24826cf8288c13cb70703b3af6fa074a55ec8760141591",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass",
+            "spike": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "f8da2874716a5c47d2fc1322c58320eaa905d9523984b8cc2f1fc36855b07add",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.609645142880236,
+                  0.000181366378813253,
+                  0.390173490740951
+                ],
+                "column": 0.0,
+                "distance": 0.315880039282906,
+                "mesh": "pm0013_00_00/Skeleton3D/pm0013_00_00_body_mesh",
+                "pixel": [
+                  202.0,
+                  174.0
+                ],
+                "surface": 0,
+                "triangle": 292,
+                "vertex_indices": [
+                  1924,
+                  1922,
+                  2156
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "8245d8342166eb95be24826cf8288c13cb70703b3af6fa074a55ec8760141591",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b24a77800cced13b5f69513280be06709207b4126bbae65722eba1fceea3026e",
+          "scope": "Exposed tan face below the pink nose, head bound. No visible mouth opening. Physical_attack_2 keeps the face forward before the late bow; physical_attack spins away. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "spike": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "f8da2874716a5c47d2fc1322c58320eaa905d9523984b8cc2f1fc36855b07add",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.355072768328212,
+                  0.632660926630616,
+                  0.012266305041172
+                ],
+                "column": 0.0,
+                "distance": 0.356346032750862,
+                "mesh": "pm0013_00_00/Skeleton3D/pm0013_00_00_body_mesh",
+                "pixel": [
+                  229.0,
+                  45.0
+                ],
+                "surface": 0,
+                "triangle": 876,
+                "vertex_indices": [
+                  2220,
+                  2221,
+                  2222
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "8245d8342166eb95be24826cf8288c13cb70703b3af6fa074a55ec8760141591",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4e35c51173b0301f8b1de67324418ffd5054fa6ffceb9d4a1f51712317b12091",
+          "scope": "White head horn near the tip, bound to head. Physical_attack_2 turns it forward by .45. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed",
+        "spike": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "weepinbell": {
       "anatomical_move_routing_review": "pending",
@@ -118811,14 +120947,244 @@
       "part_status": {}
     },
     "whirlipede": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Marker beside eye; no ordinary mouth visible. Supported move anatomy needs review.",
-        "preview": "mouth-fallback-review-v6/whirlipede.png",
-        "status": "pending_manual_anatomical_calibration"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bite": {
+          "action": "physical_attack_2",
+          "part": "carapace_front",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "bugbite": {
+          "action": "physical_attack_2",
+          "part": "carapace_front",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "poisonsting": {
+          "action": "special_attack",
+          "part": "spikes",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "carapace_front",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. The early charging glow is broad over the face/body silhouette and the rings travel forward. Full geometry clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending"
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "carapace_front",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "carapace_front",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_manual_anatomical_calibration",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "concealed_mouth_with_reviewed_casting_parts"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bite": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c0613d842f4f5839cba21dd230f3e30fed6a4fd28ed005ab59346c546735a54f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "946a4a570ab1f03c7d4b0ceb58061fe328503cb0aa5cfa505e5c5132560c3a75",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "8fe03d6983700032141008d89acdcac9b21c6c1568535b8b2053fdc9d2098fdb",
+          "shiny_runtime_sha256": "521e83d7df8cb14f22b842a01154a019bcf3c32e5c42f7c0806930ec0cc82dab",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 49.5,
+            "launch_frame": 33.0,
+            "move_key": "bite"
+          },
+          "views": 2
+        },
+        "bugbite": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c0613d842f4f5839cba21dd230f3e30fed6a4fd28ed005ab59346c546735a54f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3a198b6172d27f8a6611c242114aa715ffc40e2f2b394020d645b074ac9fe903",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "0183b904bc1274df186f01b4f7a326f72fac58f4bd66ad5b5d6dfd0bdb57f604",
+          "shiny_runtime_sha256": "521e83d7df8cb14f22b842a01154a019bcf3c32e5c42f7c0806930ec0cc82dab",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 49.5,
+            "launch_frame": 33.0,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "poisonsting": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dc3034e413472f72a1bfea3601d38f722c1a25b68bcb919bc55a3c6601442ba0",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c0613d842f4f5839cba21dd230f3e30fed6a4fd28ed005ab59346c546735a54f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b88709706cf21863842083fafb33c1e5c1b75c63b210f97ee43e9d2d4db72faf",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9357ac8341e72f24b03972af051e65b23a9e3e46e13be266392050dce883be7d",
+          "shiny_runtime_sha256": "521e83d7df8cb14f22b842a01154a019bcf3c32e5c42f7c0806930ec0cc82dab",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 42.0,
+            "move_key": "poisonsting"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.415,
+            0.48,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c0613d842f4f5839cba21dd230f3e30fed6a4fd28ed005ab59346c546735a54f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6792001566feb9a13816e5a9f7a52aeb25746e612ba8077063f45f15bd2304f8",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. The early charging glow is broad over the face/body silhouette and the rings travel forward. Full geometry clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9ee55ee3a3abd758cf8e3c2634617770d75f2f8b0efe27ee4aaf9e09e75544f1",
+          "shiny_runtime_sha256": "521e83d7df8cb14f22b842a01154a019bcf3c32e5c42f7c0806930ec0cc82dab",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 42.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "dc3034e413472f72a1bfea3601d38f722c1a25b68bcb919bc55a3c6601442ba0",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.415,
+            0.48,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c0613d842f4f5839cba21dd230f3e30fed6a4fd28ed005ab59346c546735a54f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0d8953b2fccd6a51be44f3ef1cc3c1b168d6656f2f3d9e12b19ee84f5b115037",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d04743d3a75c66c82e02aa3b2ae7b1dff543530df88d0387f7244f6d9c8e00c7",
+          "shiny_runtime_sha256": "521e83d7df8cb14f22b842a01154a019bcf3c32e5c42f7c0806930ec0cc82dab",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 42.0,
+            "move_key": "sludgebomb",
+            "projectile_arc_height": 0.05
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.415,
+            0.48,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "c0613d842f4f5839cba21dd230f3e30fed6a4fd28ed005ab59346c546735a54f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "cba341bce52db05b4ae4beb354d533a9507c3bbae1852025e0831b815cf6a622",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. The front red-ring shell below the horns is carapace_front, not an exposed mouth. Separate forward feeler tips supply Poison Sting, special_attack .35/.50 at scale .20, with five delayed darts alternating between both tips. Shell-front Screech/Sludge Bomb use .35/.48 and Solar Beam .35/.48/.65, with the latter two scaled .15. Sludge Bomb arc .05 replaces the rejected .6 arc that rose into the horns. Bite/Bug Bite physical_attack_2 .30/.45 retain an explicit unresolved oral/contact exception. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "7f31a127223ea9ee923989b42cdc5844a45b3ac9a2a49b5371ec5d1f7bac0d5a",
+          "shiny_runtime_sha256": "521e83d7df8cb14f22b842a01154a019bcf3c32e5c42f7c0806930ec0cc82dab",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 42.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -118827,7 +121193,173 @@
       ],
       "normal_runtime_sha256": "c0613d842f4f5839cba21dd230f3e30fed6a4fd28ed005ab59346c546735a54f",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "carapace_front": "sampled_marker_pose_review_pass",
+            "spikes": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "carapace_front": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "0b11b46f2cbeb21768ad90d731bb6a45500cfc39375dd2c855cb0fb3dce40dc5",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0365408745922499,
+                  0.212670617318759,
+                  0.750788508088991
+                ],
+                "column": 0.0,
+                "distance": 3.20298307239002,
+                "mesh": "pm0544_00_00/Skeleton3D/pm0544_00_00_body_mesh",
+                "pixel": [
+                  154.0,
+                  202.0
+                ],
+                "surface": 0,
+                "triangle": 2276,
+                "vertex_indices": [
+                  142,
+                  893,
+                  140
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "c0613d842f4f5839cba21dd230f3e30fed6a4fd28ed005ab59346c546735a54f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b7d6bcf6a9043df88ea68aa7769105392d7c92306c6c44a86cea80799c89e88f",
+          "scope": "Front purple shell on the red ring between the two forward feelers, bound to feeler. This is an exposed casting surface, not a visible mouth. It follows the rolling shell through sampled poses. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "spikes": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "0660b472fac8a372ac341875edff7c561cfbe6923100721ba58bae53a22a205e"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "0b11b46f2cbeb21768ad90d731bb6a45500cfc39375dd2c855cb0fb3dce40dc5",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.170461385085424,
+                  0.758660652828209,
+                  0.0708779620863668
+                ],
+                "column": 0.0,
+                "distance": 3.03558951385052,
+                "mesh": "pm0544_00_00/Skeleton3D/pm0544_00_00_body_mesh",
+                "pixel": [
+                  76.0,
+                  157.0
+                ],
+                "surface": 0,
+                "triangle": 1273,
+                "vertex_indices": [
+                  1476,
+                  1490,
+                  1468
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding",
+            "separate_emitter_landmarks": [
+              [
+                {
+                  "action": "idle",
+                  "barycentric": [
+                    0.170461385085424,
+                    0.758660652828209,
+                    0.0708779620863668
+                  ],
+                  "column": 0.0,
+                  "distance": 3.03558951385052,
+                  "mesh": "pm0544_00_00/Skeleton3D/pm0544_00_00_body_mesh",
+                  "pixel": [
+                    76.0,
+                    157.0
+                  ],
+                  "surface": 0,
+                  "triangle": 1273,
+                  "vertex_indices": [
+                    1476,
+                    1490,
+                    1468
+                  ],
+                  "weight": 1.0
+                }
+              ],
+              [
+                {
+                  "action": "idle",
+                  "barycentric": [
+                    0.0208091857448732,
+                    0.159483589954674,
+                    0.819707224300452
+                  ],
+                  "column": 0.0,
+                  "distance": 2.74992154951468,
+                  "mesh": "pm0544_00_00/Skeleton3D/pm0544_00_00_body_mesh",
+                  "pixel": [
+                    139.0,
+                    149.0
+                  ],
+                  "surface": 0,
+                  "triangle": 565,
+                  "vertex_indices": [
+                    679,
+                    687,
+                    701
+                  ],
+                  "weight": 1.0
+                }
+              ]
+            ]
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "c0613d842f4f5839cba21dd230f3e30fed6a4fd28ed005ab59346c546735a54f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "03faf169d88eabce544d50f4514234ee0949b7e3a5b5d6b35af592697fd67713",
+          "scope": "Two separately projected striped forward feeler tips, independently placed on feeler. Both emitters were inspected separately throughout all sampled actions. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "carapace_front": "sampled_marker_pose_review_pass_installed",
+        "spikes": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "whiscash": {
       "anatomical_move_routing_review": "pending",
@@ -119900,15 +122432,130 @@
       }
     },
     "wurmple": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Projected central seam between the cream mouthparts tracks the head; multi-pose fitting moved the point behind the surface in side views. Neither proposal is installed. Needs front-surface clearance plus separate horn/tail versus mouth move routing.",
-        "preview": "mouth-under-v95/wurmple.png",
-        "preview_sha256": "ff4caee29a6903baa2ba53745f9ccf40507abfe4cf33511194b6bc154205ee0e",
-        "status": "pending_mouthpart_clearance_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Cream front muzzle seam and yellow front head horn were individually projected and head-bound. String Shot uses special_attack .30/.50 at scale .2. Bug Bite uses physical_attack .30/.45. Poison Sting uses the horn and physical_attack .42/.57 at scale .2 after the head bows; the earlier .30 launch from the backward tilted horn was rejected. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "poisonsting": {
+          "action": "physical_attack",
+          "part": "spike",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Cream front muzzle seam and yellow front head horn were individually projected and head-bound. String Shot uses special_attack .30/.50 at scale .2. Bug Bite uses physical_attack .30/.45. Poison Sting uses the horn and physical_attack .42/.57 at scale .2 after the head bows; the earlier .30 launch from the backward tilted horn was rejected. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Cream front muzzle seam and yellow front head horn were individually projected and head-bound. String Shot uses special_attack .30/.50 at scale .2. Bug Bite uses physical_attack .30/.45. Poison Sting uses the horn and physical_attack .42/.57 at scale .2 after the head bows; the earlier .30 launch from the backward tilted horn was rejected. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        }
       },
-      "mouth_status": "pending_mouthpart_clearance_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Cream front muzzle seam and yellow front head horn were individually projected and head-bound. String Shot uses special_attack .30/.50 at scale .2. Bug Bite uses physical_attack .30/.45. Poison Sting uses the horn and physical_attack .42/.57 at scale .2 after the head bows; the earlier .30 launch from the backward tilted horn was rejected. Selected routes only; remaining moves and clearance need individual review.",
+        "status": "concealed_mouth_with_reviewed_casting_parts"
+      },
+      "mouth_status": "concealed_mouth_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cb9d2e90feeca753991ad8f3aa8d98e367721b73f20a28615f90ae823e2acd1b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "23e207c43dbcba2e67299908c893064c11af9c2f796abb40756697cee645ba94",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Cream front muzzle seam and yellow front head horn were individually projected and head-bound. String Shot uses special_attack .30/.50 at scale .2. Bug Bite uses physical_attack .30/.45. Poison Sting uses the horn and physical_attack .42/.57 at scale .2 after the head bows; the earlier .30 launch from the backward tilted horn was rejected. Impact art/opponent occlusion or the offscreen target prevents approval of the contact surface. Actual surface contact distance and body overlap remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "225337d1c3fad3a0e26792eababc8b9c128da36ad412ab1470a6c493793b628e",
+          "shiny_runtime_sha256": "cc307c1bc6988b410a6b45fc8f0c313aac698e70db5ea2e5b994ae91172482eb",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 162.5,
+            "impact_frame": 73.125,
+            "launch_frame": 48.75,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "poisonsting": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "dc3034e413472f72a1bfea3601d38f722c1a25b68bcb919bc55a3c6601442ba0",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.4,
+            0.42,
+            0.44,
+            0.495,
+            0.57,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cb9d2e90feeca753991ad8f3aa8d98e367721b73f20a28615f90ae823e2acd1b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f0256d7228eb4ab00ef13b89a611e6864ca405e9b9e5a9e56ac368d1c495aa3d",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Cream front muzzle seam and yellow front head horn were individually projected and head-bound. String Shot uses special_attack .30/.50 at scale .2. Bug Bite uses physical_attack .30/.45. Poison Sting uses the horn and physical_attack .42/.57 at scale .2 after the head bows; the earlier .30 launch from the backward tilted horn was rejected. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "60c00bf83356e4462f6fba0dcbbc021e9cf836fc79cb90bc831fe790bd6eeb7f",
+          "shiny_runtime_sha256": "cc307c1bc6988b410a6b45fc8f0c313aac698e70db5ea2e5b994ae91172482eb",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 162.5,
+            "impact_frame": 92.625,
+            "launch_frame": 68.25,
+            "move_key": "poisonsting"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bf97eafded99cc803a480edbabc51e4dfaf8954b423ca01f70a23d1663060740",
+          "effect_sampling": "screenshot_fractions_only",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "cb9d2e90feeca753991ad8f3aa8d98e367721b73f20a28615f90ae823e2acd1b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9bc31b0384fb7c5f63fd6f5df77c4ddaa86bacf46668f9b95d7cef6c88db4c11",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Cream front muzzle seam and yellow front head horn were individually projected and head-bound. String Shot uses special_attack .30/.50 at scale .2. Bug Bite uses physical_attack .30/.45. Poison Sting uses the horn and physical_attack .42/.57 at scale .2 after the head bows; the earlier .30 launch from the backward tilted horn was rejected. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "6a52753cb2c826bd2894be94133c2f3173a726e46904c0879f67867258f73d8a",
+          "shiny_runtime_sha256": "cc307c1bc6988b410a6b45fc8f0c313aac698e70db5ea2e5b994ae91172482eb",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 75.0,
+            "impact_frame": 37.5,
+            "launch_frame": 22.5,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -119917,7 +122564,118 @@
       ],
       "normal_runtime_sha256": "cb9d2e90feeca753991ad8f3aa8d98e367721b73f20a28615f90ae823e2acd1b",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "muzzle": "sampled_marker_pose_review_pass",
+            "spike": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "muzzle": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "99ef55c074539eda6ca782baf42a13dadae108015c8605cb0ab884f6d0097965",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.565724007394601,
+                  0.418752583986455,
+                  0.0155234086189443
+                ],
+                "column": 0.0,
+                "distance": 0.372093340288755,
+                "mesh": "pm0265_00_00_trmdl/Skeleton3D/pm0265_00_00_body_mesh",
+                "pixel": [
+                  190.0,
+                  182.0
+                ],
+                "surface": 0,
+                "triangle": 1391,
+                "vertex_indices": [
+                  588,
+                  583,
+                  587
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "cb9d2e90feeca753991ad8f3aa8d98e367721b73f20a28615f90ae823e2acd1b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9cf75068a8951cb4b1f46bc6e0a2adb1dd672ea40e0d17d2a0628330a4617f95",
+          "scope": "Cream muzzle front centre, head bound. This front surface replaces the rejected rearward multi-pose fit. Physical_attack bows the muzzle forward; special_attack tips it up late. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "spike": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "99ef55c074539eda6ca782baf42a13dadae108015c8605cb0ab884f6d0097965",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.874567190426993,
+                  0.011243109187577,
+                  0.11418970038543
+                ],
+                "column": 0.0,
+                "distance": 0.390970521987504,
+                "mesh": "pm0265_00_00_trmdl/Skeleton3D/pm0265_00_00_body_mesh",
+                "pixel": [
+                  190.0,
+                  83.0
+                ],
+                "surface": 1,
+                "triangle": 313,
+                "vertex_indices": [
+                  447,
+                  446,
+                  442
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "cb9d2e90feeca753991ad8f3aa8d98e367721b73f20a28615f90ae823e2acd1b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9d62a5cff13f9bc4b5df5838855aed318cf444af4f21da7a3840445ddc29823a",
+          "scope": "Yellow forward head horn near the tip, bound to head. Physical_attack bows the horn forward. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "muzzle": "sampled_marker_pose_review_pass_installed",
+        "spike": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "wynaut": {
       "anatomical_move_routing_review": "pending",

@@ -7,8 +7,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1123 species/forms.
-- No anatomical attachment profile: 77 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 1131 species/forms.
+- No anatomical attachment profile: 69 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 992 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
@@ -521,6 +521,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | kommo-o | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | koraidon | foot, left_foot, mouth | Same attachment profile |
 | krabby | hand, left_hand, mouth | Same attachment profile |
+| kricketot | muzzle | Same attachment profile |
+| kricketune | muzzle | Same attachment profile |
 | krokorok | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | krookodile | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | kubfu | foot, left_foot | Same attachment profile |
@@ -607,6 +609,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | marshadow | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | marshtomp | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | maschiff | mouth | Same attachment profile |
+| masquerain | face | Same attachment profile |
 | maushold | foot, left_foot | Same attachment profile |
 | mawile | hand, left_hand | Same attachment profile |
 | mawile-mega | hand, left_hand | Same attachment profile |
@@ -968,6 +971,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | suicune | hand, left_hand, mouth | Same attachment profile |
 | sunflora | hand, left_hand, mouth | Same attachment profile |
 | sunkern | mouth | Same attachment profile |
+| surskit | face | Same attachment profile |
 | swablu | mouth | Same attachment profile |
 | swadloon | mouth | Same attachment profile |
 | swalot | hand, left_hand, mouth | Same attachment profile |
@@ -1055,6 +1059,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | vaporeon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | varoom | mouth | Same attachment profile |
 | veluza | mouth | Same attachment profile |
+| venipede | muzzle, spikes | Same attachment profile |
 | venomoth | mouth | Same attachment profile |
 | venonat | muzzle | Same attachment profile |
 | venusaur | hand, left_hand, mouth | Same attachment profile |
@@ -1084,10 +1089,12 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | watchog | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | wattrel | mouth | Same attachment profile |
 | weavile | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| weedle | face, spike | Same attachment profile |
 | weepinbell | hand, left_hand, mouth | Same attachment profile |
 | weezing | mouth | Same attachment profile |
 | weezing-galar | mouth | Same attachment profile |
 | whimsicott | mouth | Same attachment profile |
+| whirlipede | carapace_front, spikes | Same attachment profile |
 | whiscash | hand, left_hand, mouth | Same attachment profile |
 | whismur | hand, left_hand, mouth | Same attachment profile |
 | wigglytuff | hand, left_hand, mouth | Same attachment profile |
@@ -1102,6 +1109,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | wooper-paldea | foot, left_foot, mouth | Same attachment profile |
 | wormadam | mouth | Same attachment profile |
 | wugtrio | muzzle | Same attachment profile |
+| wurmple | muzzle, spike | Same attachment profile |
 | wynaut | mouth | Same attachment profile |
 | wyrdeer | foot, left_foot, mouth | Same attachment profile |
 | xatu | mouth | Same attachment profile |

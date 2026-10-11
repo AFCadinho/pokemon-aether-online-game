@@ -62,16 +62,17 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1123,
+		"with_any_attachment": 1131,
 		"with_beak_tip": 6,
 		"with_bud": 1,
 		"with_cannon": 3,
 		"with_cannons": 1,
+		"with_carapace_front": 1,
 		"with_casting": 2,
 		"with_cotton_front": 1,
 		"with_electric_body": 1,
 		"with_eye": 9,
-		"with_face": 34,
+		"with_face": 37,
 		"with_face_primary": 2,
 		"with_flower_core": 1,
 		"with_flower_tip": 1,
@@ -88,15 +89,16 @@
 		"with_mouth": 992,
 		"with_mouth_primary": 1,
 		"with_mouth_red": 1,
-		"with_muzzle": 5,
+		"with_muzzle": 9,
 		"with_nose": 1,
 		"with_olive_nozzle": 1,
 		"with_pearl": 1,
-		"with_spike": 1,
+		"with_spike": 3,
+		"with_spikes": 2,
 		"with_spirit": 1,
 		"with_vines": 3,
 		"with_wheel_front": 1,
-		"without_attachments": 77
+		"without_attachments": 69
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -23288,6 +23290,45 @@
 				]
 			]
 		},
+		"kricketot": {
+			"muzzle": [
+				[
+					{
+						"bone": "jaw",
+						"offset": [
+							0.0215529166162014,
+							-0.0000362819555448368,
+							-0.00751455733552575
+						],
+						"weight": 0.934846587038642
+					},
+					{
+						"bone": "head",
+						"offset": [
+							-0.0022639399394393,
+							0.0000216828429984162,
+							0.0731541886925697
+						],
+						"weight": 0.0651534129613577
+					}
+				]
+			]
+		},
+		"kricketune": {
+			"muzzle": [
+				[
+					{
+						"bone": "jaw",
+						"offset": [
+							0.0666114836931229,
+							0.00528951780870557,
+							0.00838257744908333
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"krokorok": {
 			"foot": [
 				[
@@ -27608,6 +27649,21 @@
 							0.023557964797765
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"masquerain": {
+			"face": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.00073951634112745,
+							-0.00061881524743512,
+							0.210715144872665
+						],
+						"weight": 1.0
 					}
 				]
 			]
@@ -43040,6 +43096,21 @@
 				]
 			]
 		},
+		"surskit": {
+			"face": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							-0.0356728956103325,
+							0.00300705013796687,
+							0.117648772895336
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"swablu": {
 			"mouth": [
 				[
@@ -47146,6 +47217,45 @@
 				]
 			]
 		},
+		"venipede": {
+			"muzzle": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0216152966022491,
+							-0.00026267929933965,
+							0.076902948319912
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"spikes": [
+				[
+					{
+						"bone": "right_feeler_a",
+						"offset": [
+							0.246680170297623,
+							-0.00377629464492202,
+							-0.0156434681266546
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "left_feeler_a",
+						"offset": [
+							0.242863833904266,
+							0.00279661826789379,
+							-0.0123688587918878
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"venomoth": {
 			"mouth": [
 				[
@@ -48355,6 +48465,34 @@
 				]
 			]
 		},
+		"weedle": {
+			"face": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0166155509650707,
+							-0.00304284295998514,
+							0.0399722084403038
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"spike": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0959277376532555,
+							-0.0000081869620771613,
+							0.00701000308617949
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"weepinbell": {
 			"hand": [
 				[
@@ -48473,6 +48611,45 @@
 							0.00113425508607179
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"whirlipede": {
+			"carapace_front": [
+				[
+					{
+						"bone": "feeler",
+						"offset": [
+							-0.0356007255613804,
+							0.0274901259690523,
+							0.557408332824707
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"spikes": [
+				[
+					{
+						"bone": "feeler",
+						"offset": [
+							0.277504354715347,
+							0.204196020960808,
+							0.915272176265717
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "feeler",
+						"offset": [
+							0.278035312891006,
+							-0.218101114034653,
+							0.914159417152405
+						],
+						"weight": 1.0
 					}
 				]
 			]
@@ -48905,6 +49082,34 @@
 							0.025,
 							0.0,
 							0.033
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
+		"wurmple": {
+			"muzzle": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.00968521554023027,
+							0.00012694782344624,
+							0.0727909654378891
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"spike": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0763865932822227,
+							0.0000199904879991664,
+							0.0591630302369595
 						],
 						"weight": 1.0
 					}
@@ -50664,8 +50869,8 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "28f07154624738cea456c5ad26523490c0f9a8e06f8dafadc9f8417a6ac1ee89",
-		"scripts/battle/battle_ui/move_attachments_3d.gd": "ad4678cfc50ac1f520b1cc5330af3292ed0b0a30ed055c8f997cdc72cc830c37",
+		"data/battle_move_attachments_3d.json": "ae8388bfccd577a1a138d97a5851a149fbda2b33782b50edecc722ba369fbdef",
+		"scripts/battle/battle_ui/move_attachments_3d.gd": "6680d78a47c878651d2c29f5d7cc83d4b4148eb455ea91c4631d6a8fb552d6f3",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
 		"scripts/battle/battle_ui/screened_model_catalog.json": "e48e36f568932290b2b7f1f461e15391444d6e7821d48f6ef0c59ede5b36839d"
@@ -70718,16 +70923,20 @@
 			]
 		},
 		"kricketot": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"muzzle"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
 			]
 		},
 		"kricketune": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"muzzle"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -73684,8 +73893,10 @@
 			]
 		},
 		"masquerain": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -86906,8 +87117,10 @@
 			]
 		},
 		"surskit": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -90911,8 +91124,11 @@
 			]
 		},
 		"venipede": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"muzzle",
+				"spikes"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -92246,8 +92462,11 @@
 			]
 		},
 		"weedle": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face",
+				"spike"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -92415,8 +92634,11 @@
 			]
 		},
 		"whirlipede": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"carapace_front",
+				"spikes"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -92882,8 +93104,11 @@
 			]
 		},
 		"wurmple": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"muzzle",
+				"spike"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"

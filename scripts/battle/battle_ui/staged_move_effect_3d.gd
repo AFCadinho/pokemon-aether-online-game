@@ -346,6 +346,10 @@ func _status_stage(flight: float,after: float,alpha: float,facing: Basis,side: V
 				_heart(point,(.17+i%2*.04)*fade,facing,edge)
 				_source_sprite(point,.55,"spark",q,alpha*fade*.3,facing)
 		"woven-threads", "paralysis-arcs":
+			# A reviewed silk window ends before a later pose closes the outlet.
+			if motif=="woven-threads" and emission_end >= 0:
+				if elapsed >= emission_end: return
+				fade *= 1-smoothstep(impact,emission_end,elapsed)
 			# Spun silk stays attached while the caster's head moves.
 			var thread_origin: Vector3 = emission_sources[0] if motif=="woven-threads" and not emission_sources.is_empty() else origin
 			var thread_scale := emission_scale if motif=="woven-threads" else 1.0
