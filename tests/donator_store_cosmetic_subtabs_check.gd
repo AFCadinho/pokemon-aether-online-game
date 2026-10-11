@@ -400,6 +400,7 @@ func _run() -> void:
 		"aether-blessing-voucher-14-days": 275,
 		"aether-blessing-voucher-30-days": 500,
 		"thor-outfit": 550,
+		"emerald-luchador-outfit": 450,
 		"aether-voyager-outfit": 350,
 		"rotom-engineer-outfit": 350,
 		"celebi-forest-ranger-outfit": 350,
