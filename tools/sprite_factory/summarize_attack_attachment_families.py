@@ -44,7 +44,7 @@ def main():
                          'learnset_sha256': row['learnset_sha256'],
                          'status': 'individual_anatomy_or_routing_review_required'}
     report = {
-        'schema': 1, 'complete': False,
+        'schema': 1, 'complete': not rows, 'complete_visual_review': False,
         'scope': 'Missing configured anatomical routes grouped by form and family. '
                  'Existing points may need an alias; absent anatomy may need a deliberate '
                  'alternative. This is not a visual approval or a count of all unfinished effects.',

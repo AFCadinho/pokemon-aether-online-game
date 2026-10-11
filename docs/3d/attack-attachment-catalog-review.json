@@ -2,18 +2,15 @@
   "all_move_presentations_approved": false,
   "counts": {
     "assessed_forms": 295,
-    "configured_supported_move_pairs": 8333,
+    "configured_supported_move_pairs": 8335,
     "forms_with_marker_pose_reviews": 214,
     "forms_with_resolved_routes": 295,
     "intentional_body_alternative_routes": 100,
     "new_part_bindings": 357,
     "newly_bone_bound_routes": 581,
     "normal_shiny_models_checked": 590,
-    "remaining_missing_parts": {
-      "foot": 1,
-      "hand": 1
-    },
-    "remaining_missing_route_forms": 2,
+    "remaining_missing_parts": {},
+    "remaining_missing_route_forms": 0,
     "representative_effects_inspected": 489,
     "resolved_supported_learnset_routes": 681,
     "source_model_blockers": 0,
@@ -31,6 +28,7 @@
     ".tmp/attack-attachments/move_attachment_choreography_3d_check-v464.log": "cc2f07caff7ed8cd1d80af119c780a6662ed077c825dd55136cb00465b9b7ead",
     ".tmp/attack-attachments/move_attachments_3d_check-v464.log": "10c145d88153e3a58297ff314d7ebb87ed54aebcc876e32f23a39f80bf619c7a",
     ".tmp/attack-attachments/runtime-check-v462.json": "4d2ef50a401652cf1f9a9b655b58efa0e0385fcaa7e88976897f3509f5868b0c",
+    ".tmp/remaining-attack-points/learnset-routing.json": "74a0088a585f107e997bee8cc6b5faa3144b031f3a7b7d70dd2a473b2abfa42d",
     ".tmp/repaired-model-attachments/learnset-routing-final.json": "7c1d6a8b6fbfaf2bba329ae43dd663722308513aa583cb7d4d2d3d041a764486",
     ".tmp/repaired-model-attachments/runtime-attachments-final.json": "1943919086041b18f9582fdd06127990648d553189639e2f93396e77511d019b",
     ".tmp/repaired-model-attachments/wild-comparison.json": "453893eb7686f04125f2630f8798af75b57600b91254731b2ec2a510ce63df3e",
@@ -33345,6 +33343,15 @@
     "scope": "Offline battle stage trainer/wild comparison; not live server battle preparation, arena entry or NPC encounter certification."
   },
   "profile_sha256": "a3d8cff6dfc99b22f6e0820449d97955ccb0e68697d8db6a9593f25d64170aed",
+  "remaining_contact_followup": {
+    "forms": [
+      "avalugg-hisui",
+      "raichu-alola"
+    ],
+    "outside_original_cohort": true,
+    "report": "docs/3d/remaining-contact-attack-points.json",
+    "resolved_routes": 2
+  },
   "schema": 1,
   "scope": "remaining_catalog_anatomical_origins_by_form_and_attack_family",
   "shared_geometry_compatibility": {
