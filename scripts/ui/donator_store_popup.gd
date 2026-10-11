@@ -76,6 +76,7 @@ const CATEGORY_ORDER: Array[String] = [
 	"guilds",
 	"mounts",
 	"charms",
+	"held-items",
 	"services",
 	"credits",
 ]
@@ -94,6 +95,7 @@ const CATEGORY_LABELS := {
 	"guilds": "Guilds",
 	"mounts": "Mounts",
 	"charms": "Charms",
+	"held-items": "Held Items",
 	"services": "Trainer Services",
 	"credits": "Credit Vouchers",
 }
@@ -104,6 +106,7 @@ const CATEGORY_DESCRIPTIONS := {
 	"guilds": "Consumable templates that permanently unlock for your Guild without affecting gameplay.",
 	"mounts": "Travel through the overworld in your own style.",
 	"charms": "Use supported field moves without carrying a Pokémon that knows them. Progression and area rules still apply.",
+	"held-items": "Equipment for the Pokémon holding it.",
 	"services": "Optional changes to your trainer identity and account.",
 	"credits": "Tradeable vouchers bought with Gems. Claim one to add personal card credit.",
 }
@@ -114,6 +117,7 @@ const CATEGORY_PROMISES := {
 	"guilds": "GUILD COSMETIC",
 	"mounts": "TRAVEL STYLE",
 	"charms": "FIELD CONVENIENCE",
+	"held-items": "POKÉMON EQUIPMENT",
 	"services": "TRAINER SERVICE",
 	"credits": "PERSONAL CREDIT",
 }
@@ -914,6 +918,15 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "MOUNT BOX",
 	},
 	{
+		"id": "aether-band",
+		"name": "Aether Band",
+		"description": "Held: Restores 1 PP to each of the holder's moves after winning a wild Pokémon battle. Untradeable. One purchase per account.",
+		"price": 1000,
+		"icon": preload("res://assets/items/icons/AETHERBAND.svg"),
+		"categories": ["held-items"],
+		"badge": "HELD ITEM",
+	},
+	{
 		"id": "surf-charm",
 		"name": "Surf Charm",
 		"description": "Use Surf without an HM Pokémon. Badge and story requirements still apply.",
@@ -1025,6 +1038,8 @@ var voucher_confirm_dialog: AetherConfirmationDialog
 var pending_voucher_purchase: Dictionary = {}
 var gem_balance := 0
 var authoritative_gem_prices: Dictionary = {}
+var authoritative_owned_items: Dictionary = {}
+var authoritative_bound_items: Dictionary = {}
 var authoritative_item_genders: Dictionary = {}
 var store_catalog_loaded := false
 var featured_item_ids: Array[String] = []
@@ -1227,6 +1242,8 @@ func apply_store_state(wallet: Dictionary, store: Dictionary) -> void:
 	set_voucher_balance(int(wallet.get("gift_voucher_balance", 0)))
 	voucher_eligible_items.clear()
 	authoritative_gem_prices.clear()
+	authoritative_owned_items.clear()
+	authoritative_bound_items.clear()
 	authoritative_item_genders.clear()
 	var items_value: Variant = store.get("items", [])
 	if items_value is Array:
@@ -1236,6 +1253,8 @@ func apply_store_state(wallet: Dictionary, store: Dictionary) -> void:
 			var offer := item_value as Dictionary
 			var item_id := str(offer.get("itemId", "")).strip_edges()
 			voucher_eligible_items[item_id] = bool(offer.get("voucherEligible", false))
+			authoritative_owned_items[item_id] = bool(offer.get("accountUnique", false)) and bool(offer.get("owned", false))
+			authoritative_bound_items[item_id] = bool(offer.get("accountBound", false))
 			var costs_value: Variant = offer.get("costs", [])
 			if item_id == "":
 				continue
@@ -1303,6 +1322,8 @@ func set_purchase_in_progress(active: bool) -> void:
 
 func show_purchase_success(item_name: String, currency: String = "gems") -> void:
 	purchase_in_progress = false
+	if selected_item_id == "aether-band":
+		authoritative_owned_items[selected_item_id] = true
 	if status_label != null:
 		status_label.text = _t("ui.store.voucher.success" if currency == "gift_voucher" else "ui.store.status.added", {
 			"item": item_name, "amount": _format_number(voucher_balance)
@@ -3381,7 +3402,7 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 		payment_select.visible = not selected_item_id.is_empty() and selected_item_id != "patreon-supporter-preview"
 	if voucher_notice_label != null:
 		voucher_notice_label.visible = payment_select.visible
-		var using_card := _payment_currency() == "gift_voucher"
+		var using_card := _payment_currency() == "gift_voucher" or bool(authoritative_bound_items.get(selected_item_id, false))
 		voucher_notice_label.text = _t(
 			"ui.store.payment.untradable" if using_card else "ui.store.payment.tradable"
 		)
@@ -3426,6 +3447,13 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 		purchase_button.tooltip_text = _t("ui.store.status.loading_short")
 		if update_status:
 			status_label.text = _t("ui.store.status.loading")
+		return
+	if bool(authoritative_owned_items.get(selected_item_id, false)):
+		purchase_button.disabled = true
+		purchase_button.text = _t("ui.store.already_purchased")
+		purchase_button.tooltip_text = _t("ui.store.once_per_account")
+		if update_status:
+			status_label.text = _t("ui.store.once_per_account")
 		return
 	var price := _gem_price(selected_item_id)
 	if price >= 0:

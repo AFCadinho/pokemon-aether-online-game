@@ -1,4 +1,9 @@
 {
+  "ui.store.category.held-items.label": "Held Items",
+  "ui.store.category.held-items.description": "Equipment for the Pokémon holding it.",
+  "ui.store.category.held-items.promise": "POKÉMON EQUIPMENT",
+  "ui.store.already_purchased": "Already purchased",
+  "ui.store.once_per_account": "This item can only be purchased once per account.",
   "ui.guild_base.rooms.floor_search": "Search floor number or player…",
   "ui.guild_base.rooms.no_floors": "No matching floors.",
   "ui.guild_base.rooms.travel": "Go",
