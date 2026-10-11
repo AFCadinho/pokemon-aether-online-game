@@ -9,6 +9,9 @@
 [sub_resource type="RectangleShape2D" id="shape_0"]
 size = Vector2(96, 32)
 
+[sub_resource type="RectangleShape2D" id="shape_cabin"]
+size = Vector2(64, 24)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0mpbt"]
 texture = ExtResource("5_mw6x5")
 texture_region_size = Vector2i(32, 32)
@@ -98,6 +101,9 @@ music_profile_id = "kanto.vermilion_city"
 [node name="FromMainHall" type="Marker2D" parent="Spawns" unique_id=2074433684]
 position = Vector2(464, 816)
 
+[node name="FromCabin" type="Marker2D" parent="Spawns"]
+position = Vector2(464, 560)
+
 [node name="Exits" type="Node2D" parent="." unique_id=478117209]
 
 [node name="ToMainHall" type="Area2D" parent="Exits" unique_id=393204053]
@@ -111,6 +117,17 @@ transition_facing_direction = "down"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMainHall" unique_id=83148244]
 position = Vector2(0, 16)
 shape = SubResource("shape_0")
+
+[node name="ToCabin" type="Area2D" parent="Exits"]
+position = Vector2(464, 512)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/guild_base/elevator_cabin.tscn"
+target_spawn_name = "FromElevator"
+transition_id = "guild_base_elevator__to_cabin"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCabin"]
+shape = SubResource("shape_cabin")
 
 [node name="Entities" type="Node2D" parent="." unique_id=353259075]
 y_sort_enabled = true
@@ -147,3 +164,4 @@ tile_map_data = PackedByteArray("AAAIAA4AAAABAAEAAAAIAA8AAAABAAEAAAAIABAAAAABAAE
 tile_set = SubResource("TileSet_yr4fj")
 
 [connection signal="body_entered" from="Exits/ToMainHall" to="Exits/ToMainHall" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToCabin" to="Exits/ToCabin" method="_on_body_entered"]

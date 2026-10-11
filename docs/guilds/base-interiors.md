@@ -1,14 +1,15 @@
 # Guild Base interiors
 
 The first playable base is Vermilion City. Its fixed main hall, two initially
-empty side rooms and lift waiting room are separate reusable scenes under
-`scenes/overworld/kanto/guild_base/`. The garden remains on the city map.
+empty side rooms, lift waiting room and lift cabin are separate reusable scenes
+under `scenes/overworld/kanto/guild_base/`. The garden remains on the city map.
 
 The ordinary MapExit / WorldTransitionService / authorized teleport flow owns
 all doors. The account service resolves each template into a private map ID:
 `guild_base:<townId>:<guildId>:<roomKey>`. Room keys are `main_hall`, `left_room`,
-`right_room`, and `elevator`. A room scene is shared by every Guild; no per-Guild
-scene files or extra purchase rows are required. Base ownership stays on Guild.
+`right_room`, `elevator`, and `elevator_cabin`. A room scene is shared by every
+Guild; no per-Guild scene files or extra purchase rows are required. Base
+ownership stays on Guild.
 
 Guild Base access requires current membership in an active Guild based in that
 city. All ranks can enter. The purchase requirements remain level 10 and a
@@ -91,8 +92,12 @@ Offline player positions covered by new furniture recover to nearby clear floor
 through the existing authorized teleport flow on login.
 
 Personal rooms are not included in this feature.
-The lift waiting room is reachable; its upper lift door stays closed until a
-personal-room selector and server-authorized player room instances are added.
+The upper door of the lift waiting room enters `elevator_cabin.tscn`, built
+from `Guild Base Elevator.tmx`. Its mask and collision cover the cabin floor
+and lower exit threshold. The lower exit returns to `FromCabin` in the waiting
+room; both arrival points are clear of their exit triggers. The control panel
+keeps its authored offset. Floor selection and personal-room destinations
+remain a separate next step.
 
 For Celadon/Saffron, add their actual city entrance/return points and registrars
 before enabling purchases. Reuse the room scenes; extend the server door/return

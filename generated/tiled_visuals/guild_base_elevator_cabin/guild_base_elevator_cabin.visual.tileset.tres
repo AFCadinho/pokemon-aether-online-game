@@ -1,0 +1,65 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_elevator_cabin/assets/guild_base_elevator_cabin.visual.tileset.compact_source_1_0.texture.res" id="1_yffhk"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_elevator_cabin/assets/guild_base_elevator_cabin.visual.tileset.compact_source_1025_0.texture.res" id="2_hbwex"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_elevator_cabin/assets/guild_base_elevator_cabin.visual.tileset.compact_source_2049_0.texture.res" id="3_t5g5o"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_elevator_cabin/assets/guild_base_elevator_cabin.visual.tileset.compact_source_3073_0.texture.res" id="4_chxea"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_elevator_cabin/assets/guild_base_elevator_cabin.visual.tileset.compact_source_5865_0.texture.res" id="5_5spk8"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ibdrp"]
+texture = ExtResource("1_yffhk")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_abuhb"]
+texture = ExtResource("2_hbwex")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1l7g5"]
+texture = ExtResource("3_t5g5o")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rc8ip"]
+texture = ExtResource("4_chxea")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lbs03"]
+texture = ExtResource("5_5spk8")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(13, 22)
+0:0/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_ibdrp")
+sources/1 = SubResource("TileSetAtlasSource_abuhb")
+sources/2 = SubResource("TileSetAtlasSource_1l7g5")
+sources/3 = SubResource("TileSetAtlasSource_rc8ip")
+sources/4 = SubResource("TileSetAtlasSource_lbs03")
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/guild_base/Guild Base Elevator.tmx"
+metadata/tiled_compact_atlas_version = 1

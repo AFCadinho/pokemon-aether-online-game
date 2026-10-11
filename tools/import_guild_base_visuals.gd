@@ -6,6 +6,7 @@ const SOURCES := {
 	"left_room": "Guild Base Room 1 - Empty.tmx",
 	"right_room": "Guild Base Room 2 - Empty.tmx",
 	"elevator": "Guild Base Elevator Room.tmx",
+	"elevator_cabin": "Guild Base Elevator.tmx",
 }
 
 
