@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rename the Gift Store equipment category to Training Items, with training badges and wild-battle descriptions in all supported languages.
+
 - Publish the official Overworld Abilities guide with three interface screenshots, explaining Synchronize, Compound Eyes, Super Luck and removable Pickup items; clearly mark the field effects as upcoming.
 
 - Add Aether Power Band: a permanent, untradeable held item sold once per account for 1,000 Gems or card credits; grants its holder full wild-defeat EVs without participation, plus 10 per yielded stat for each defeated Pokémon.

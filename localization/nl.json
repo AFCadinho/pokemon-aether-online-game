@@ -1,7 +1,8 @@
 {
-  "ui.store.category.held-items.label": "Held Items",
-  "ui.store.category.held-items.description": "Uitrusting voor de Pokémon die het item draagt.",
-  "ui.store.category.held-items.promise": "POKÉMONUITRUSTING",
+  "ui.store.badge.training": "TRAINING",
+  "ui.store.category.held-items.label": "Training Items",
+  "ui.store.category.held-items.description": "Items voor het trainen van je Pokémon tijdens wilde gevechten.",
+  "ui.store.category.held-items.promise": "WILDE GEVECHTEN",
   "ui.store.already_purchased": "Al gekocht",
   "ui.store.once_per_account": "Dit item kun je maar één keer per account kopen.",
   "ui.guild_base.rooms.floor_search": "Zoek verdieping of speler…",
