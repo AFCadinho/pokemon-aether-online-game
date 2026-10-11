@@ -1,4 +1,16 @@
 {
+  "alola-stone": {
+    "name": "Alola Stone",
+    "shortDesc": "Evolves Pikachu, Exeggcute into their Alola evolution. Consumed on successful use."
+  },
+  "galar-stone": {
+    "name": "Galar Stone",
+    "shortDesc": "Evolves Koffing, Mime Jr. into their Galar evolution. Consumed on successful use."
+  },
+  "hisui-stone": {
+    "name": "Hisui Stone",
+    "shortDesc": "Evolves Quilava, Dewott, Dartrix, Petilil, Rufflet, Goomy, Bergmite into their Hisui evolution. Consumed on successful use."
+  },
   "stick": {
     "name": "Leek",
     "shortDesc": "Use on Galarian Farfetch’d to evolve into Sirfetch’d. Also boosts critical hits when held."
@@ -13,7 +25,7 @@
   },
   "strawberry-sweet": {
     "name": "Strawberry Sweet",
-    "shortDesc": "Evolves Milcery into Alcremie when used."
+    "shortDesc": "Evolves Milcery into your chosen Alcremie flavor when used."
   },
   "gold-coin": {"name": "Gold Coin", "shortDesc": "Evolves Gimmighoul into Gholdengo. Consumed on successful use."},
   "gyarados-mount": {"name": "Gyarados Mount", "shortDesc": "Unlocks Gyarados as a Surf mount."},

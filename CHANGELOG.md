@@ -4,6 +4,12 @@
 
 - Make the Guild Base furnishing action visible below the HUD and style its catalog, category dropdown, controls and permission window to match the Guild interface.
 
+- Choose Maushold family size, Dudunsparce length, Vivillon pattern and Alcremie flavor before evolving, using a form selector in evolution prompts and the Bag.
+
+- Restore Summary clicks and context actions for every party Pokémon after duplicating the party cards.
+
+- Add distinct icons and localized Bag descriptions for Alola Stone, Galar Stone and Hisui Stone.
+
 - Let Guild Base room clicks reach the furnishing editor above the regular HUD, so players can place and move furniture while catalog controls remain usable.
 
 - Keep the shared-model test collection within existing metadata limits and let repaired model collections finish without a false concurrent-update error.

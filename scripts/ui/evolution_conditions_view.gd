@@ -72,6 +72,8 @@ static func requirement_lines(entry: Dictionary) -> Array[String]:
 		lines.append(LocalizationManager.text("ui.evolution_conditions.shed_rule", {
 			"pokemon": ContentLocalization.display_name("species", target, _display_id(target)),
 		}))
+	if rule.get("choose_form", false):
+		lines.append(LocalizationManager.text("ui.evolution.form_choice_hint"))
 	if rule.has("level"):
 		lines.append(LocalizationManager.text("ui.evolution_conditions.level", {"level": int(rule.level)}))
 	if rule.has("min_walk_steps"):

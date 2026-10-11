@@ -1,4 +1,16 @@
 {
+  "alola-stone": {
+    "name": "阿罗拉之石",
+    "shortDesc": "使皮卡丘、蛋蛋进化为其阿罗拉地区的进化形态。仅在进化成功时消耗。"
+  },
+  "galar-stone": {
+    "name": "伽勒尔之石",
+    "shortDesc": "使瓦斯弹、魔尼尼进化为其伽勒尔地区的进化形态。仅在进化成功时消耗。"
+  },
+  "hisui-stone": {
+    "name": "洗翠之石",
+    "shortDesc": "使火岩鼠、双刃丸、投羽枭、百合根娃娃、毛头小鹰、黏黏宝、冰宝进化为其洗翠地区的进化形态。仅在进化成功时消耗。"
+  },
   "stick": {
     "name": "大葱",
     "shortDesc": "对伽勒尔大葱鸭使用可进化为葱游兵。携带时也能提高击中要害的概率。"
@@ -13,7 +25,7 @@
   },
   "strawberry-sweet": {
     "name": "草莓糖饰",
-    "shortDesc": "使用后使小仙奶进化为霜奶仙。"
+    "shortDesc": "使用后使小仙奶进化为你选择的霜奶仙口味。"
   },
   "gold-coin": {"name": "Gold Coin", "shortDesc": "使索财灵进化为赛富豪。仅在成功使用后消耗。"},
   "gyarados-mount": {"name": "暴鲤龙坐骑", "shortDesc": "解锁暴鲤龙作为冲浪坐骑。"},

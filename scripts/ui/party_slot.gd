@@ -80,8 +80,8 @@ func _ready() -> void:
 	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	hp_bar.custom_minimum_size.x = 160.0
 	exp_bar.custom_minimum_size.x = 160.0
-	if not click_button.has_node("TouchContextGesture"):
-		TouchContextGesture.attach(click_button, _on_click_button_gui_input)
+	# Duplicated slots already contain the gesture, but need their own handler.
+	TouchContextGesture.attach(click_button, _on_click_button_gui_input)
 	if not click_button.mouse_entered.is_connected(_on_click_button_mouse_entered):
 		click_button.mouse_entered.connect(_on_click_button_mouse_entered)
 	if not click_button.mouse_exited.is_connected(_on_click_button_mouse_exited):

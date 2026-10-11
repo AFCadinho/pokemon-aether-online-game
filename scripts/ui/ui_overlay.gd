@@ -869,6 +869,8 @@ var evolution_prompt_title_label: Label
 var evolution_prompt_progress_label: Label
 var evolution_prompt_message_label: Label
 var evolution_prompt_level_label: Label
+var evolution_prompt_form_row: HBoxContainer
+var evolution_prompt_form_selector: OptionButton
 var evolution_prompt_status_label: Label
 var evolution_prompt_old_sprite: TextureRect
 var evolution_prompt_new_sprite: TextureRect
@@ -1342,6 +1344,8 @@ var bag_inventory_loading := false
 var bag_item_use_popup: PanelContainer
 var bag_item_use_title_label: Label
 var bag_item_use_item_label: Label
+var bag_item_use_form_row: HBoxContainer
+var bag_item_use_form_selector: OptionButton
 var bag_item_use_quantity_spinbox: SpinBox
 var bag_item_use_party_list: VBoxContainer
 var bag_item_use_status_label: Label
@@ -4596,6 +4600,11 @@ func _setup_evolution_prompt_popup() -> void:
 	evolution_prompt_level_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	stack.add_child(evolution_prompt_level_label)
 
+	evolution_prompt_form_selector = OptionButton.new()
+	evolution_prompt_form_selector.item_selected.connect(_on_evolution_form_selected)
+	evolution_prompt_form_row = _create_evolution_form_row(evolution_prompt_form_selector)
+	stack.add_child(evolution_prompt_form_row)
+
 	evolution_prompt_status_label = Label.new()
 	evolution_prompt_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	evolution_prompt_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -4628,6 +4637,64 @@ func _setup_evolution_prompt_popup() -> void:
 	evolution_prompt_confirm_button.pressed.connect(_on_evolution_confirmed)
 	_apply_button_style(evolution_prompt_confirm_button, "primary")
 	button_row.add_child(evolution_prompt_confirm_button)
+
+func _create_evolution_form_row(selector: OptionButton) -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.visible = false
+	row.add_theme_constant_override("separation", 8)
+	var label := Label.new()
+	_set_localized_control_property(label, "text", "ui.evolution.choose_form")
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(label)
+	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	selector.custom_minimum_size = Vector2(0, 36)
+	selector.fit_to_longest_item = false
+	selector.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	var viewport_size := get_viewport().get_visible_rect().size
+	selector.get_popup().max_size = Vector2i(int(minf(480, viewport_size.x - 32)), int(minf(360, viewport_size.y - 32)))
+	row.add_child(selector)
+	return row
+
+func _evolution_form_display_name(choice: Dictionary) -> String:
+	var species_id := _evolution_prompt_target_species_id(choice)
+	var name_text := _localized_species_name(species_id, _evolution_prompt_to_species(choice))
+	if species_id in ["maushold", "dudunsparce", "vivillon", "alcremie"]:
+		return LocalizationManager.text("ui.evolution.form." + species_id, {"pokemon": name_text})
+	return name_text
+
+func _populate_evolution_form_selector(selector: OptionButton, choices: Array, selected_target: String = "") -> void:
+	selector.clear()
+	for value: Variant in choices:
+		if not value is Dictionary:
+			continue
+		var choice: Dictionary = value
+		selector.add_item(_evolution_form_display_name(choice))
+		var index := selector.item_count - 1
+		selector.set_item_metadata(index, choice)
+		if _evolution_prompt_target_species_id(choice) == selected_target:
+			selector.select(index)
+
+func _merge_evolution_form_prompt(existing: Dictionary, incoming: Dictionary) -> bool:
+	if not bool(existing.get("choose_form", false)) or int(existing.get("pokemonId", 0)) != int(incoming.get("pokemonId", 0)):
+		return false
+	if _evolution_prompt_from_species(existing) != _evolution_prompt_from_species(incoming):
+		return false
+	var choices: Array = existing.get("formChoices", [])
+	for choice: Dictionary in choices:
+		if _evolution_prompt_target_species_id(choice) == _evolution_prompt_target_species_id(incoming):
+			return true
+	choices.append(incoming.duplicate(true))
+	existing["formChoices"] = choices
+	return true
+
+func _on_evolution_form_selected(index: int) -> void:
+	if evolution_prompt_processing or evolution_active_prompt.is_empty():
+		return
+	var choices: Array = evolution_active_prompt.get("formChoices", [])
+	if index < 0 or index >= choices.size():
+		return
+	evolution_active_prompt.merge(choices[index], true)
+	_render_evolution_prompt(evolution_active_prompt)
 
 func _create_evolution_prompt_sprite(sprite_name: String) -> TextureRect:
 	var sprite := TextureRect.new()
@@ -5223,6 +5290,15 @@ func _queue_evolution_prompt(prompt_value: Dictionary) -> bool:
 	var target_species_id := _evolution_prompt_target_species_id(prompt)
 	if pokemon_id <= 0 or target_species_id == "":
 		return false
+	if bool(prompt.get("choose_form", false)):
+		if _merge_evolution_form_prompt(evolution_active_prompt, prompt):
+			if not evolution_prompt_processing:
+				_render_evolution_prompt(evolution_active_prompt)
+			return false
+		for queued: Dictionary in evolution_prompt_queue:
+			if _merge_evolution_form_prompt(queued, prompt):
+				return false
+		prompt["formChoices"] = [prompt.duplicate(true)]
 	if _has_pending_evolution_prompt(pokemon_id, target_species_id):
 		return false
 
@@ -5342,6 +5418,10 @@ func _render_evolution_prompt(prompt: Dictionary) -> void:
 		if level > 0
 		else ""
 	)
+	if evolution_prompt_form_selector != null:
+		var choices: Array = prompt.get("formChoices", [])
+		evolution_prompt_form_row.visible = choices.size() > 1
+		_populate_evolution_form_selector(evolution_prompt_form_selector, choices, _evolution_prompt_target_species_id(prompt))
 	evolution_prompt_status_label.text = ""
 	evolution_prompt_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	_set_evolution_prompt_controls_disabled(false)
@@ -5351,7 +5431,7 @@ func _render_evolution_prompt(prompt: Dictionary) -> void:
 	evolution_prompt_new_sprite.texture = PokemonAssets.load_home_sprite(to_species, shiny)
 
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var popup_size := Vector2(min(440.0, viewport_size.x - 32.0), min(336.0, viewport_size.y - 32.0))
+	var popup_size := Vector2(min(440.0, viewport_size.x - 32.0), min(380.0 if prompt.get("formChoices", []).size() > 1 else 336.0, viewport_size.y - 32.0))
 	var popup_position := Vector2(
 		max((viewport_size.x - popup_size.x) * 0.5, 16.0),
 		max((viewport_size.y - popup_size.y) * 0.5, 16.0)
@@ -5385,7 +5465,7 @@ func _submit_evolution_choice(confirm: bool) -> void:
 	var from_species := _evolution_prompt_from_species(prompt)
 	evolution_prompt_status_label.text = LocalizationManager.text("common.saving")
 	evolution_prompt_status_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
-	var result: Dictionary = await PlayerPartyStateService.evolve_pokemon(pokemon_id, target_species_id, confirm)
+	var result: Dictionary = await _request_evolution_choice(pokemon_id, target_species_id, confirm)
 	evolution_prompt_processing = false
 
 	if not bool(result.get("success", false)):
@@ -5436,6 +5516,9 @@ func _submit_evolution_choice(confirm: bool) -> void:
 	_show_next_move_learn_prompt()
 	_show_next_evolution_prompt()
 
+func _request_evolution_choice(pokemon_id: int, target_species_id: String, confirm: bool) -> Dictionary:
+	return await PlayerPartyStateService.evolve_pokemon(pokemon_id, target_species_id, confirm)
+
 func _announce_evolution_moves(
 	result: Dictionary,
 	pokemon_id: int,
@@ -5476,6 +5559,8 @@ func _announce_evolution_moves(
 	_extend_move_learn_review_count(queued_count, queued_before)
 
 func _set_evolution_prompt_controls_disabled(disabled: bool) -> void:
+	if evolution_prompt_form_selector != null:
+		evolution_prompt_form_selector.disabled = disabled
 	if evolution_prompt_confirm_button != null:
 		evolution_prompt_confirm_button.disabled = disabled
 	if evolution_prompt_skip_button != null:
@@ -24583,6 +24668,11 @@ func _setup_bag_item_use_popup() -> void:
 	bag_item_use_quantity_spinbox.value_changed.connect(_on_bag_item_use_quantity_changed)
 	quantity_row.add_child(bag_item_use_quantity_spinbox)
 
+	bag_item_use_form_selector = OptionButton.new()
+	bag_item_use_form_selector.item_selected.connect(_on_bag_evolution_form_selected)
+	bag_item_use_form_row = _create_evolution_form_row(bag_item_use_form_selector)
+	layout.add_child(bag_item_use_form_row)
+
 	bag_item_use_status_label = Label.new()
 	bag_item_use_status_label.text = LocalizationManager.text("ui.bag.use.select_pokemon_first")
 	bag_item_use_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -25634,6 +25724,9 @@ func _show_bag_item_use_popup(item: Dictionary) -> void:
 	if bag_item_use_popup == null:
 		return
 
+	if bag_item_use_form_row != null:
+		bag_item_use_form_row.visible = false
+		bag_item_use_form_selector.clear()
 	bag_item_use_pending_item = item.duplicate(true)
 	bag_item_use_selected_slot = -1
 	bag_item_use_in_progress = false
@@ -26071,11 +26164,31 @@ func _on_bag_item_use_pokemon_selected(slot_index: int) -> void:
 		return
 
 	bag_item_use_selected_slot = slot_index
+	_refresh_bag_evolution_form_choices(pokemon)
 	bag_item_use_quantity_spinbox.editable = true
 	if bag_item_use_confirm_button != null:
 		bag_item_use_confirm_button.disabled = false
 	_refresh_bag_item_use_selected_preview()
 	_refresh_bag_item_use_party_list()
+
+func _refresh_bag_evolution_form_choices(pokemon: Pokemon) -> void:
+	if bag_item_use_form_selector == null:
+		return
+	var by_pokemon := _staff_dictionary_from_variant(bag_item_use_pending_item.get("evolutionChoices", {}))
+	var choices: Array = _array_from_variant(by_pokemon.get(str(pokemon.owned_pokemon_id), []))
+	bag_item_use_form_row.visible = choices.size() > 1
+	_populate_evolution_form_selector(bag_item_use_form_selector, choices)
+	bag_item_use_form_selector.disabled = bag_item_use_in_progress
+
+func _selected_bag_evolution_target() -> String:
+	if bag_item_use_form_row == null or not bag_item_use_form_row.visible or bag_item_use_form_selector.selected < 0:
+		return ""
+	var choice: Dictionary = bag_item_use_form_selector.get_item_metadata(bag_item_use_form_selector.selected)
+	return _evolution_prompt_target_species_id(choice)
+
+func _on_bag_evolution_form_selected(_index: int) -> void:
+	if not bag_item_use_in_progress:
+		_refresh_bag_item_use_selected_preview()
 
 func _refresh_bag_item_use_selected_preview() -> void:
 	if bag_item_use_selected_slot < 0 or bag_item_use_selected_slot >= PlayerSave.party.size():
@@ -26091,6 +26204,12 @@ func _refresh_bag_item_use_selected_preview() -> void:
 	var quantity: int = clampi(int(bag_item_use_quantity_spinbox.value), 1, int(bag_item_use_quantity_spinbox.max_value))
 	var preview := _bag_item_use_preview_for_pokemon(pokemon, item_id, quantity)
 	var preview_text := str(preview.get("label", ""))
+	var selected_target := _selected_bag_evolution_target()
+	if not selected_target.is_empty():
+		preview_text = LocalizationManager.text("ui.evolution.available", {
+			"from": _pokemon_display_name(pokemon),
+			"to": bag_item_use_form_selector.get_item_text(bag_item_use_form_selector.selected),
+		})
 	if preview_text == "":
 		preview_text = LocalizationManager.text("ui.bag.use.no_item_change")
 	_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.selected_preview", {
@@ -26136,7 +26255,12 @@ func _on_bag_item_use_confirm_pressed() -> void:
 	_set_bag_item_use_status(LocalizationManager.text("ui.bag.use.using"), false)
 	_refresh_bag_item_use_party_list()
 
-	var result: Dictionary = await InventoryService.use_pokemon_item(pokemon.owned_pokemon_id, item_id, quantity)
+	var selected_target := _selected_bag_evolution_target()
+	if bag_item_use_form_selector != null:
+		bag_item_use_form_selector.disabled = true
+	var result: Dictionary = await InventoryService.use_pokemon_item(pokemon.owned_pokemon_id, item_id, quantity, selected_target)
+	if bag_item_use_form_selector != null:
+		bag_item_use_form_selector.disabled = false
 	bag_item_use_in_progress = false
 	bag_item_use_quantity_spinbox.editable = true
 	if bag_item_use_confirm_button != null:
@@ -26537,6 +26661,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"machineCompatiblePokemonIds": item.get("machineCompatiblePokemonIds", []),
 			"pokemonCompatibilityKnown": bool(item.get("pokemonCompatibilityKnown", false)),
 			"compatiblePokemonIds": item.get("compatiblePokemonIds", []),
+			"evolutionChoices": _staff_dictionary_from_variant(item.get("evolutionChoices", {})).duplicate(true),
 			"gameplay": gameplay,
 			"useNotice": use_notice,
 			"useAction": str(item.get("useAction", "")).strip_edges(),

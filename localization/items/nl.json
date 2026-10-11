@@ -1,4 +1,16 @@
 {
+  "alola-stone": {
+    "name": "Alola Stone",
+    "shortDesc": "Laat Pikachu, Exeggcute evolueren naar hun Alola-evolutie. Wordt verbruikt bij succesvol gebruik."
+  },
+  "galar-stone": {
+    "name": "Galar Stone",
+    "shortDesc": "Laat Koffing, Mime Jr. evolueren naar hun Galar-evolutie. Wordt verbruikt bij succesvol gebruik."
+  },
+  "hisui-stone": {
+    "name": "Hisui Stone",
+    "shortDesc": "Laat Quilava, Dewott, Dartrix, Petilil, Rufflet, Goomy, Bergmite evolueren naar hun Hisui-evolutie. Wordt verbruikt bij succesvol gebruik."
+  },
   "stick": {
     "name": "Leek",
     "shortDesc": "Gebruik op Galarian Farfetch’d om te evolueren naar Sirfetch’d. Verhoogt ook critical hits als held item."
@@ -13,7 +25,7 @@
   },
   "strawberry-sweet": {
     "name": "Strawberry Sweet",
-    "shortDesc": "Laat Milcery evolueren naar Alcremie bij gebruik."
+    "shortDesc": "Laat Milcery bij gebruik evolueren naar de gekozen Alcremie-smaak."
   },
   "gold-coin": {"name": "Gold Coin", "shortDesc": "Laat Gimmighoul evolueren naar Gholdengo. Wordt verbruikt bij succesvol gebruik."},
   "gyarados-mount": {"name": "Gyarados-mount", "shortDesc": "Ontgrendelt Gyarados als surfmount."},

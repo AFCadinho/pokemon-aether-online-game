@@ -24,7 +24,10 @@ var context_windows: Array[Window] = []
 static func attach(control: Control, handler: Callable) -> Node:
 	var existing := control.get_node_or_null("TouchContextGesture")
 	if existing != null:
+		existing.target = control
 		existing.input_handler = handler
+		if not control.gui_input.is_connected(existing._on_gui_input):
+			control.gui_input.connect(existing._on_gui_input)
 		return existing
 	var gesture := load("res://scripts/ui/mobile/touch_context_gesture.gd").new() as Node
 	gesture.name = "TouchContextGesture"
