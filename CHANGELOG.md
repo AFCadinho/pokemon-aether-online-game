@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh the Guild Base lobby visual from the artist TMX, including animated fountain water.
+
 - Allow Guild Base table decorations across the full tabletop grid, preserving existing placements.
 
 - Make the Guild Base furnishing action visible below the HUD and style its catalog, category dropdown, controls and permission window to match the Guild interface.
