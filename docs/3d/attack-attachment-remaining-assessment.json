@@ -2175,6 +2175,26 @@
     },
     "remaining_model_blockers": 3
   },
+  "family_routing_follow_up": {
+    "complete_catalog": false,
+    "forms": 30,
+    "global_missing_routes": {
+      "configured_move_pairs": 7589,
+      "forms_with_missing_routes": 304,
+      "missing_parts": {
+        "foot": 1,
+        "hand": 231,
+        "mouth": 81
+      },
+      "species_forms": 1200,
+      "supported_move_pairs": 30563
+    },
+    "offline_wild_trainer_pairs": 8,
+    "report": "docs/3d/attack-attachment-family-routing-review.json",
+    "representative_effects": 37,
+    "resolved_supported_move_pairs": 73,
+    "runtime_models_checked": 60
+  },
   "pending_queue_assessments": {
     "aipom": {
       "actions": [

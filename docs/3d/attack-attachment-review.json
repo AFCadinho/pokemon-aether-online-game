@@ -40,7 +40,7 @@
     "runtime_profiles": 1197,
     "species_forms": 1200
   },
-  "profile_sha256": "e31c8504124edc21386bed9f6d197d4e7fb3e24cb3e4d6eb62ec850a6d2b6925",
+  "profile_sha256": "8417cd81b8a658c587371e146e1158d4f623071ba393ce438b1bbd1f21cf5355",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -4028,11 +4028,13 @@
       "attachment_overrides": {
         "mouth": "muzzle"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
         "status": "reviewed_surface_alias_effect_review_pending"
       },
       "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Front muzzle surface and separate distal forehoof points; the rearing physical clips distinguish forehooves from hindhooves. Muzzle is not an exposed oral aperture. Attack-family routing remains pending.",
         "preview": "remaining-markers-v401/arceus.png",
@@ -10352,11 +10354,13 @@
       "attachment_overrides": {
         "mouth": "muzzle"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
         "status": "reviewed_surface_alias_effect_review_pending"
       },
       "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Lower front ice-face seam/muzzle follows native head motion. White eye material remains an asset issue; no oral cavity is claimed. Attack-family routing remains pending.",
         "preview": "remaining-markers-v401/bergmite.png",
@@ -11985,6 +11989,7 @@
     "bonsly": {
       "anatomical_move_routing_review": "pending",
       "attachment_overrides": {},
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "No hands/forelimbs; use the body contact origin for the strike family. This is an intentional procedural body origin, not a calibrated hand.",
         "status": "anatomical_alternative_selected_effect_review_pending"
@@ -11992,6 +11997,7 @@
       "family_attachments": {
         "strikes": "body"
       },
+      "family_choreography": {},
       "latest_candidate_review": {
         "status": "mouth_pose_review_pass"
       },
@@ -12404,6 +12410,29 @@
     },
     "brambleghast": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Front twig below the eyes. Rejected emission during the spin; charge starts at .67 and beam launches at .70 after the face returns forward.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "effect_start_fraction": 0.67,
+          "emission_end_fraction": 0.88,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.8,
+          "launch_fraction": 0.7
+        }
+      },
       "latest_candidate_review": {
         "notes": "Native anatomy and individually projected alternate parts reviewed in v392/v394; approved part definitions installed. Family routing remains pending. See per-part scopes for exposed/occluded native poses.",
         "status": "concealed_mouth_with_reviewed_casting_parts"
@@ -12486,6 +12515,29 @@
     },
     "bramblin": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Lower front twig below the floating eyes. Beam starts after the roll has settled; no casting through the rotating branch cage.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "effect_start_fraction": 0.67,
+          "emission_end_fraction": 0.88,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.8,
+          "launch_fraction": 0.7
+        }
+      },
       "latest_candidate_review": {
         "notes": "Native anatomy and individually projected alternate parts reviewed in v392/v394; approved part definitions installed. Family routing remains pending. See per-part scopes for exposed/occluded native poses.",
         "status": "concealed_mouth_with_reviewed_casting_parts"
@@ -20119,11 +20171,13 @@
       "attachment_overrides": {
         "mouth": "muzzle"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
         "status": "reviewed_surface_alias_effect_review_pending"
       },
       "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Front muzzle between the long fangs and four separately measured distal paw points follow the sampled native poses. Muzzle is a surface outlet, not a visible oral cavity. Attack-family routing remains pending.",
         "preview": "remaining-markers-v401/chien-pao.png",
@@ -27113,6 +27167,18 @@
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "muzzle"
+      },
+      "family_actions": {},
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Reviewed lower skull muzzle. Reduced Mud-Slap size and arc leave the skull visible at release.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "The skull conceals the mouth. Authored muzzle outlet just below the projected skull rim supplies six breath/vocal routes; Water Gun, Flamethrower and Growl have sampled runtime reviews. Mud-Slap needs a separate anatomical route; other effects and continuous clearance remain pending.",
         "preview": "part-review-v166/cubone.png",
@@ -28051,6 +28117,28 @@
     },
     "darkrai-mega": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Lower face below the white crest, independently measured for this form. Special-attack beam exits forward; crest can hide the early charge from the rear.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Dark lower facial surface under the white crest follows the head. Crest occlusion occurs in some physical samples; no oral cavity is claimed. Attack-family routing remains pending.",
         "preview": "remaining-markers-v401/darkrai-mega.png",
@@ -31205,6 +31293,18 @@
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {},
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Front surface below the nose; late special-attack release reuses the reviewed sludge window. This is a surface casting point, not an exposed mouth cavity.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch avoids the lowered nose covering the resting point. Selected cast routes sampled; remaining routes and full clearance pending.",
         "status": "mouthless_with_reviewed_casting_parts"
@@ -31435,6 +31535,18 @@
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {},
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Own front surface below the nose; late special-attack release. Hair and rock base are excluded.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch; shortened Flash Cannon to .60 impact/.66 end, before the late backward tilt that made the previous .80 end inappropriate. Selected cast routes sampled; remaining routes and full clearance pending.",
         "status": "mouthless_with_reviewed_casting_parts"
@@ -33203,11 +33315,13 @@
       "attachment_overrides": {
         "mouth": "muzzle"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
         "status": "reviewed_surface_alias_effect_review_pending"
       },
       "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Independently projected upper and lower front snout rims give a point inside the visible snout opening. Corrected the rejected throat/base point; the point follows opening and closing in idle, physical and special samples. Attack-family routing remains pending.",
         "preview": "marker-corrections-v405/dragalge-mega.png",
@@ -35298,6 +35412,18 @@
           "status": "sampled_runtime_origin_review_charge_overlap_pending"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face_primary"
+      },
+      "family_actions": {},
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Single foreground head for generic casting and Mud-Slap; physical release after the forward bow. Existing explicit multi-head sound routes stay intact.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles to avoid sending the rear projectile through another head. Selected cast routes sampled; remaining routes and full clearance pending.",
         "status": "mouthless_with_reviewed_casting_parts"
@@ -35716,6 +35842,18 @@
           "status": "sampled_runtime_origin_review_charge_overlap_pending"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face_primary"
+      },
+      "family_actions": {},
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Own foreground head, with hair clear of the late physical release. Existing multi-head sound choices are retained.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles. Hair occludes the source in one view at early poses. Selected cast routes sampled; remaining routes and full clearance pending.",
         "status": "mouthless_with_reviewed_casting_parts"
@@ -39877,11 +40015,13 @@
       "attachment_overrides": {
         "mouth": "muzzle"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
         "status": "reviewed_surface_alias_effect_review_pending"
       },
       "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Front split-snout tips and separate chest core surface follow native head/body motion. The muzzle is not an exposed oral cavity. Attack-family routing remains pending.",
         "preview": "marker-corrections-v403/eternatus.png",
@@ -40532,6 +40672,7 @@
     "exeggutor-alola": {
       "anatomical_move_routing_review": "pending",
       "attachment_overrides": {},
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "No hands/forelimbs; use the body contact origin for the strike family. This is an intentional procedural body origin, not a calibrated hand.",
         "status": "anatomical_alternative_selected_effect_review_pending"
@@ -40539,6 +40680,7 @@
       "family_attachments": {
         "strikes": "body"
       },
+      "family_choreography": {},
       "latest_candidate_review": {
         "status": "pending_anatomical_route"
       },
@@ -52086,6 +52228,28 @@
     },
     "glimmora-mega": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "spike"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Long front central spike tip, ahead of the flower petals; narrow special-attack beam follows the tip.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Front black spike endpoint follows the native flower motions. This is a spike emitter, not a mouth. Attack-family routing remains pending.",
         "preview": "remaining-markers-v401/glimmora-mega.png",
@@ -53587,6 +53751,28 @@
     },
     "golisopod": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Front face between antenna roots. Special beam clears the opening as the arms spread. Bug Bite uses the face route; precise target contact spacing remains outside this approval.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Front facial surface between antenna roots and two separately measured distal claw points follow native poses. Far claw is occluded in side views; facial point is not an oral aperture. Attack-family routing remains pending.",
         "preview": "remaining-markers-v401/golisopod.png",
@@ -53763,6 +53949,28 @@
     },
     "golisopod-mega": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Own purple front face point; beam follows it below the upper appendages. Upper claws and possible arm nozzles are not certified here.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Front purple facial surface, two front distal claw points and two front leg endpoints follow native poses. Upper claw pair and arm nozzles are outside this review. Attack-family routing remains pending.",
         "preview": "remaining-markers-v401/golisopod-mega.png",
@@ -79246,6 +79454,28 @@
           "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
         }
       },
+      "attachment_overrides": {
+        "mouth": "eye"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Central eye; narrow beam uses the already reviewed special clip and stays between the magnets during release.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.62,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Central pupil projected independently; special_attack leaves the eye directed forward after the early tilt. Magnet surfaces are separate pending electrical origins. Selected cast routes sampled; remaining routes and full clearance pending.",
         "status": "mouthless_with_reviewed_casting_parts"
@@ -79431,6 +79661,28 @@
           "part": "face",
           "scope": "Normal and shiny, two views: Three separately measured eye surfaces emit during special_attack .32/.48/end .65, scale .14. Front close views and wider views show each beam centered on its own eye, including the third unit clipped in the initial close sheet. Reverse views confirm separate paths; rotating magnets occlude some views, so continuous magnet/beam clearance is not approved. Other moves, opponent sizes and live NPC/wild battles remain pending.",
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Three eye points remain separate. Volt Switch emits three beams and Screech uses three sound sources; front views distinguish these from the magnets.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.14,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.32
         }
       },
       "latest_candidate_review": {
@@ -79912,6 +80164,28 @@
           "part": "eye",
           "scope": "Normal and shiny, two offline views, eight sampled fractions. Central red lens projected independently; physical_attack keeps the lens forward, avoiding the upward tilt of special_attack. Magnetic poles need separate electrical review. Wider .8 camera review at .12/.28/.30/.31/.34/.40/.50/.65: glow follows the eye, rings progress forward after launch and vanish by .65. Broad rings cross magnet silhouettes in projection and are edge-on in the first view. Full ring orientation and geometry clearance remain pending. Other move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
           "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        }
+      },
+      "attachment_overrides": {
+        "mouth": "eye"
+      },
+      "family_actions": {
+        "beams": "physical_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Central red lens. Physical clip keeps the lens facing the target; generic beams use its existing reviewed timing.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.62,
+          "emission_scale": 0.18,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
         }
       },
       "latest_candidate_review": {
@@ -85481,11 +85755,13 @@
       "attachment_overrides": {
         "hand": "claw_lower_right"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "Generic hand attacks use the separately reviewed lower right claw. All four claw points remain available; actual contact alignment pending.",
         "status": "reviewed_surface_alias_effect_review_pending"
       },
       "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Mouth inside the special-attack opening above the chin spike; four separately measured upper/lower claw points follow all sampled native actions. Source material appearance is outside this marker review.",
         "preview": "remaining-markers-v401/metagross-mega.png",
@@ -87164,6 +87440,28 @@
     },
     "mimikyu": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "casting"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "True-body casting surface below the costume head, not the painted Pikachu mouth. Beam and reduced Shadow Ball use this point.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Native anatomy and individually projected alternate parts reviewed in v392/v394; approved part definitions installed. Family routing remains pending. See per-part scopes for exposed/occluded native poses.",
         "status": "concealed_mouth_with_reviewed_casting_parts"
@@ -87343,6 +87641,28 @@
     },
     "mimikyu-busted": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "casting"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Independently reviewed true-body casting surface; native special clip lifts the costume head temporarily. Reduced Shadow Ball and beam remain below it.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Native anatomy and individually projected alternate parts reviewed in v392/v394; approved part definitions installed. Family routing remains pending. See per-part scopes for exposed/occluded native poses.",
         "status": "concealed_mouth_with_reviewed_casting_parts"
@@ -91430,6 +91750,28 @@
     },
     "necrozma": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "physical_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Front prism below the colored eyes. Rejected special clip turns the front away; physical clip exposes the prism during the main beam window. Sweeping arms can occlude early windup.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Front prism surface below colored eyes and two separate distal claw points follow native poses. Left claw corrected using its own visible surface. Facial point is not a mouth. Attack-family routing remains pending.",
         "preview": "marker-corrections-v403/necrozma.png",
@@ -93287,6 +93629,18 @@
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "nose"
+      },
+      "family_actions": {},
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Nose tip casting surface. Reduced Mud-Slap forms in front of the tip, not above the stone head.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Individually measured magnetic nose-tip source follows special_attack .30-.65; the tip levels out after the initial tilt. Sampled beam departs from the tip. Volt Switch peripheral sparks still need continuous clearance review. Selected casts only; remaining moves need individual review.",
         "status": "mouthless_with_reviewed_casting_parts"
@@ -100621,6 +100975,7 @@
     "poliwag": {
       "anatomical_move_routing_review": "pending",
       "attachment_overrides": {},
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "No hands/forelimbs; use the body contact origin for the strike family. This is an intentional procedural body origin, not a calibrated hand.",
         "status": "anatomical_alternative_selected_effect_review_pending"
@@ -100628,6 +100983,7 @@
       "family_attachments": {
         "strikes": "body"
       },
+      "family_choreography": {},
       "latest_candidate_review": {
         "status": "mouth_pose_review_pass"
       },
@@ -100974,6 +101330,30 @@
     },
     "poltchageist": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "spirit"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Generic beams use the extended spoon tip; dedicated Shadow Ball uses the spirit spiral above the pot. The reduced effects follow the separate native surfaces.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {
+        "beams": "spoon"
+      },
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Native anatomy and individually projected alternate parts reviewed in v392/v394; approved part definitions installed. Family routing remains pending. See per-part scopes for exposed/occluded native poses.",
         "status": "concealed_mouth_with_reviewed_casting_parts"
@@ -104634,11 +105014,13 @@
       "attachment_overrides": {
         "mouth": "muzzle"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
         "status": "reviewed_surface_alias_effect_review_pending"
       },
       "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Lower black facial surface and separate front cloud surface, plus four separate distal paws. Cloud occludes the muzzle in idle; the exposed physical/special samples locate it correctly. Attack-family routing remains pending.",
         "preview": "remaining-markers-v401/raging-bolt.png",
@@ -106675,6 +107057,18 @@
           "status": "sampled_runtime_origin_region_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {},
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Face-dot center. Reduced Mud-Slap uses the exposed front panel while arms move to either side.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "No ordinary mouth is modeled. Individually projected and reviewed face emitter installed for explicitly routed beam/water moves. This does not approve remaining body/limb origins, contact timing or all effects.",
         "preview": "face-review-v110/regice.png",
@@ -106996,6 +107390,28 @@
           "status": "pending_tendril_clearance_review"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Face-dot center with reduced beam width. Native electrical arm strands can cross the viewing line; this approves the origin, not all strand clearance.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.14,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "No ordinary mouth is modeled. Individually projected and reviewed face emitter installed for explicitly routed beam/water moves. This does not approve remaining body/limb origins, contact timing or all effects.",
         "preview": "face-review-v110/regieleki.png",
@@ -107226,6 +107642,18 @@
           "status": "sampled_runtime_origin_region_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {},
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Center of the yellow face strip, not either shoulder gem. Reduced Mud-Slap remains attached during the forward lean.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "No ordinary mouth is modeled. Individually projected and reviewed face emitter installed for explicitly routed beam/water moves. This does not approve remaining body/limb origins, contact timing or all effects.",
         "preview": "face-review-v111/regigigas.png",
@@ -107404,6 +107832,18 @@
           "status": "sampled_runtime_origin_region_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {},
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Face-dot panel between the shoulder rocks. Reduced Mud-Slap stays on the front surface.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "No ordinary mouth is modeled. Individually projected and reviewed face emitter installed for explicitly routed beam/water moves. This does not approve remaining body/limb origins, contact timing or all effects.",
         "preview": "face-review-v110/regirock.png",
@@ -107597,6 +108037,18 @@
           "status": "sampled_runtime_origin_region_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {},
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Face-dot center on the dark front panel. Reduced Mud-Slap follows it while the hands lift nearby.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "No ordinary mouth is modeled. Individually projected and reviewed face emitter installed for explicitly routed beam/water moves. This does not approve remaining body/limb origins, contact timing or all effects.",
         "preview": "face-review-v111/registeel.png",
@@ -112696,6 +113148,28 @@
     },
     "sandy-shocks": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "eye_upper"
+      },
+      "family_actions": {
+        "beams": "physical_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Upper central eye selected as one source. Physical clip exposes the eye; rejected special clip moved the magnets across the beam path.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Three separately measured eye surfaces follow their individual separating heads in all sampled native actions. Eye surfaces are occluded when heads turn away. Attack-family routing remains pending.",
         "preview": "remaining-markers-v401/sandy-shocks.png",
@@ -114607,6 +115081,28 @@
     },
     "scovillain-mega": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "mouth_red"
+      },
+      "family_actions": {
+        "beams": "physical_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Own red mouth for generic beams and Flamethrower using physical_attack; Solar Beam explicitly uses the green mouth and special_attack. Narrow effects remain within the respective open lips.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Red and green mouth openings are independent emitters; separate distal leaf hands and feet follow the sampled native poses. No automatic decision to emit every move from both heads is made. Attack-family routing remains pending.",
         "preview": "remaining-markers-v401/scovillain-mega.png",
@@ -115148,6 +115644,7 @@
     "scrafty-mega": {
       "anatomical_move_routing_review": "pending",
       "attachment_overrides": {},
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "Hands remain concealed by trousers. Both strike and claw target graphics use the procedural body contact origin, matching the native head/body lunge. The preview rejected a foot origin because the raised foot points backward during the lunge. Exact head contact and approach timing remain pending.",
         "status": "anatomical_alternative_selected_effect_review_pending"
@@ -115156,6 +115653,7 @@
         "claws": "body",
         "strikes": "body"
       },
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
         "preview": "mouth-reframe-v15/scrafty-mega.png",
@@ -131674,11 +132172,13 @@
       "attachment_overrides": {
         "mouth": "muzzle"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
         "status": "reviewed_surface_alias_effect_review_pending"
       },
       "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Lower front cream muzzle/chin surface follows all sampled native actions. No open mouth cavity is claimed. Attack-family routing remains pending.",
         "preview": "remaining-markers-v401/tatsugiri.png",
@@ -133097,11 +133597,13 @@
       "attachment_overrides": {
         "mouth": "muzzle"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
         "status": "reviewed_surface_alias_effect_review_pending"
       },
       "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Small upper floating turtle front beak/muzzle surface follows native motion independently of the large lower shell and gem ring. Attack-family routing remains pending.",
         "preview": "remaining-markers-v401/terapagos-stellar.png",
@@ -133183,11 +133685,13 @@
       "attachment_overrides": {
         "mouth": "muzzle"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
         "status": "reviewed_surface_alias_effect_review_pending"
       },
       "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Native anatomy and individually projected alternate parts reviewed in v392/v394; approved part definitions installed. Family routing remains pending. See per-part scopes for exposed/occluded native poses.",
         "status": "concealed_mouth_with_reviewed_casting_parts"
@@ -134590,11 +135094,13 @@
       "attachment_overrides": {
         "mouth": "muzzle"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
         "status": "reviewed_surface_alias_effect_review_pending"
       },
       "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Native anatomy and individually projected alternate parts reviewed in v392/v394; approved part definitions installed. Family routing remains pending. See per-part scopes for exposed/occluded native poses.",
         "status": "concealed_mouth_with_reviewed_casting_parts"
@@ -135605,6 +136111,7 @@
       "attachment_overrides": {
         "hand": "foot"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "No hands/forelimbs. Strike and claw effects use the reviewed foot. The hand alias also covers the dedicated Scratch presenter.",
         "status": "anatomical_alternative_selected_effect_review_pending"
@@ -135613,6 +136120,7 @@
         "claws": "foot",
         "strikes": "foot"
       },
+      "family_choreography": {},
       "latest_candidate_review": {
         "status": "mouth_pose_review_pass"
       },
@@ -143629,6 +144137,28 @@
           "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
         }
       },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Front seam below the eyes as a casting surface. Narrow generic beam follows the forward-facing special clip.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Individually projected front surface on the red strip below the eyes; no oral opening. Special_attack .35 launch after the early upward tilt. Selected cast routes sampled; remaining routes and full clearance pending.",
         "status": "mouthless_with_reviewed_casting_parts"
@@ -143752,6 +144282,28 @@
           "part": "face",
           "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected orange front strip below the eyes; no oral opening. Rejected .35 launch while the face points down. Physical_attack .43 launch emits as the face turns forward, .55 beam impact/.65 end or .63 sound impact. Narrow beam follows the projected front surface in the sampled emission frames and ends before recovery. Early charge, full-radius clearance and intervening frames require further review. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "physical_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Own front seam surface; physical clip and later .43 release avoid casting during the downward roll.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.43
         }
       },
       "latest_candidate_review": {
@@ -146881,6 +147433,28 @@
     },
     "wo-chien": {
       "anatomical_move_routing_review": "pending",
+      "attachment_overrides": {
+        "mouth": "face"
+      },
+      "family_actions": {
+        "beams": "special_attack"
+      },
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Front leaf cluster beneath the eyestalks as a casting surface, not an oral cavity. Narrow beam follows the lowered face.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {
+        "beams": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.48,
+          "launch_fraction": 0.3
+        }
+      },
       "latest_candidate_review": {
         "notes": "Native anatomy and individually projected alternate parts reviewed in v392/v394; approved part definitions installed. Family routing remains pending. See per-part scopes for exposed/occluded native poses.",
         "status": "concealed_mouth_with_reviewed_casting_parts"
@@ -147231,6 +147805,7 @@
       "attachment_overrides": {
         "hand": "foot"
       },
+      "family_actions": {},
       "family_attachment_review": {
         "scope": "No hands/forelimbs. Native punch-family motion is a body lunge, so strikes use the procedural body origin. Claw/dedicated Scratch fallback uses the reviewed foot. Target contact distance and timing remain pending.",
         "status": "anatomical_alternative_selected_effect_review_pending"
@@ -147239,6 +147814,7 @@
         "claws": "foot",
         "strikes": "body"
       },
+      "family_choreography": {},
       "latest_candidate_review": {
         "status": "mouth_pose_review_pass"
       },
@@ -147583,6 +148159,18 @@
           "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
         }
       },
+      "attachment_overrides": {
+        "mouth": "muzzle"
+      },
+      "family_actions": {},
+      "family_attachment_review": {
+        "all_move_effects_visually_approved": false,
+        "evidence": "docs/3d/attack-attachment-family-routing-review.json",
+        "scope": "Reviewed three muzzle points; Mud-Slap presenter uses the primary source. Smaller projectile and lower arc expose the head at release; this does not certify three-projectile choreography.",
+        "status": "reviewed_surface_route_with_representative_effects"
+      },
+      "family_attachments": {},
+      "family_choreography": {},
       "latest_candidate_review": {
         "notes": "Three individually reviewed muzzle outlets; selected Water Gun/Ice Beam/Hyper Beam windows reviewed in normal/shiny front and reverse samples. Mud-Slap, Water Pulse, contact routes and remaining effects pending.",
         "status": "concealed_mouth_with_reviewed_muzzle_outlet"

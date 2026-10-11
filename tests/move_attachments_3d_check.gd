@@ -245,7 +245,8 @@ func _run() -> void:
 			assert(Attachments.action_for(species, move, {"physical_attack": {}, "special_attack": {}}) == "special_attack")
 		assert(Attachments.definitions_for(species, "mouth").size() == 1)
 		assert(Attachments.definitions_for(species, "mouth_red").size() == 1)
-	assert(Attachments.action_for("scovillain-mega", "flamethrower", {"physical_attack": {}, "special_attack": {}}).is_empty(), "Alternate forms must not inherit incompatible native action routes")
+	assert(Attachments.action_for("scovillain-mega", "flamethrower", {"physical_attack": {}, "special_attack": {}}) == "physical_attack", "Mega has its own reviewed red-mouth clip")
+	assert(Attachments.action_for("scovillain-mega", "bite", {"physical_attack": {}, "special_attack": {}}).is_empty(), "Unconfigured Mega moves must not inherit base-form action overrides")
 	for route: Array in [["decidueye", "lowkick", "physical_attack_2"], ["glastrier", "doublekick", "physical_attack_2"], ["calyrex-ice", "doublekick", "physical_attack"], ["calyrex-shadow", "doublekick", "physical_attack"], ["exploud", "lowkick", "physical_attack"]]:
 		for identity: String in [route[0], route[0] + "@shiny"]:
 			assert(Attachments.part_for(identity, route[1]) == "foot")
@@ -631,6 +632,43 @@ func _check_lick_window(world: Node3D) -> void:
 		assert(is_equal_approx(widths[1]/widths[0],.5 if move == "Lick" else 1.0),"Tongue fades before retraction; other lashes retain their lifetime")
 
 func _check_family_routes() -> void:
+	for route: Array in [
+		["brambleghast", "mudslap", "face"],
+		["bramblin", "mudslap", "face"],
+		["cubone", "mudslap", "muzzle"],
+		["darkrai-mega", "mudslap", "face"],
+		["diglett", "mudslap", "face"],
+		["diglett-alola", "mudslap", "face"],
+		["dugtrio", "mudslap", "face_primary"],
+		["dugtrio-alola", "mudslap", "face_primary"],
+		["glimmora-mega", "mudslap", "spike"],
+		["golisopod", "mudslap", "face"],
+		["golisopod-mega", "mudslap", "face"],
+		["magnemite", "mudslap", "eye"],
+		["magneton", "mudslap", "face"],
+		["magnezone", "mudslap", "eye"],
+		["mimikyu", "mudslap", "casting"],
+		["mimikyu-busted", "mudslap", "casting"],
+		["necrozma", "mudslap", "face"],
+		["nosepass", "mudslap", "nose"],
+		["poltchageist", "mudslap", "spirit"],
+		["regice", "mudslap", "face"],
+		["regieleki", "mudslap", "face"],
+		["regigigas", "mudslap", "face"],
+		["regirock", "mudslap", "face"],
+		["registeel", "mudslap", "face"],
+		["sandy-shocks", "mudslap", "eye_upper"],
+		["scovillain-mega", "mudslap", "mouth_red"],
+		["voltorb", "mudslap", "face"],
+		["voltorb-hisui", "mudslap", "face"],
+		["wo-chien", "mudslap", "face"],
+		["wugtrio", "mudslap", "muzzle"],
+	]:
+		for identity: String in [route[0], route[0]+"@shiny"]:
+			assert(Attachments.part_for(identity, route[1]) == route[2])
+			assert(not Attachments.definitions_for(identity, route[2]).is_empty())
+	assert(Attachments.part_for("poltchageist", "scald") == "spoon")
+	assert(Attachments.part_for("scovillain-mega", "solarbeam") == "mouth_green")
 	for route: Array in [["bonsly","suckerpunch","body"],["exeggutor-alola","superpower","body"],["poliwag","pound","body"],["torchic","scratch","foot"],["torchic","rocksmash","foot"],["wooper","icepunch","body"],["scrafty-mega","closecombat","body"],["scrafty-mega","dragonclaw","body"],["dragalge-mega","watergun","muzzle"],["metagross-mega","rocksmash","claw_lower_right"],["doduo","furyattack","beak_tip"],["dodrio","furyattack","beak_tip"]]:
 		for identity: String in [route[0], route[0]+"@shiny"]:
 			assert(Attachments.part_for(identity,route[1]) == route[2])
@@ -643,6 +681,24 @@ func _check_family_routes() -> void:
 	assert(Attachments.part_for("__family_test","watergun") == "muzzle")
 	assert(Attachments.part_for("__family_test","tackle") == "body")
 	profiles.erase("__family_test")
+	profiles["__family_timing_test"] = {
+		"family_actions":{"beams":"physical_attack"},
+		"family_choreography":{"beams":{"action":"physical_attack","launch_fraction":.3,"impact_fraction":.5,"emission_end_fraction":.7,"emission_scale":.15}},
+		"move_actions":{"hyperbeam":"special_attack"},
+		"move_choreography":{"hyperbeam":{"action":"special_attack","launch_fraction":.4,"impact_fraction":.6}}}
+	var available := {"physical_attack":{},"special_attack":{}}
+	assert(Attachments.action_for("__family_timing_test","voltswitch",available) == "physical_attack")
+	assert(Attachments.action_for("__family_timing_test@shiny","voltswitch",available) == "physical_attack")
+	assert(Attachments.action_for("__family_timing_test","hyperbeam",available) == "special_attack")
+	assert(Attachments.action_for("__family_timing_test","voltswitch",{"special_attack":{}}).is_empty())
+	assert(Attachments.action_for("__family_timing_test","scratch",available).is_empty())
+	assert(is_equal_approx(Attachments.choreography_for("__family_timing_test","voltswitch","physical_attack").emission_scale,.15))
+	assert(is_equal_approx(Attachments.choreography_for("__family_timing_test","hyperbeam","special_attack").launch_fraction,.4))
+	assert(Attachments.choreography_for("__family_timing_test","hyperbeam","physical_attack").is_empty(),"Explicit move spec must not fall through to family timing")
+	assert(Attachments.choreography_for("__family_timing_test","voltswitch","special_attack").is_empty())
+	profiles["__family_timing_test"].family_choreography.beams.launch_fraction = .8
+	assert(Attachments.choreography_for("__family_timing_test","voltswitch","physical_attack").is_empty())
+	profiles.erase("__family_timing_test")
 
 func _check_effect_start(world: Node3D) -> void:
 	var calibrated: Dictionary = Attachments.CALIBRATED.data.profiles

@@ -1,12 +1,12 @@
 {
   "complete": false,
   "counts": {
-    "configured_move_pairs": 7516,
-    "forms_with_missing_routes": 323,
+    "configured_move_pairs": 7589,
+    "forms_with_missing_routes": 304,
     "missing_parts": {
       "foot": 1,
       "hand": 231,
-      "mouth": 111
+      "mouth": 81
     },
     "species_forms": 1200,
     "supported_move_pairs": 30563
@@ -15,15 +15,15 @@
     "body",
     "orb_clearance"
   ],
-  "learnset_audit_sha256": "c21cb53acf7a682d93552b0551a8318267226fb50e783995f81c252770006fc6",
+  "learnset_audit_sha256": "3f245ae5ea41811c420a6071a1a52683a806221decef1449a0ff57b5062d2dfd",
   "schema": 1,
   "scope": "Missing configured anatomical routes grouped by form and family. Existing points may need an alias; absent anatomy may need a deliberate alternative. This is not a visual approval or a count of all unfinished effects.",
   "source_sha256": {
-    "data/battle_move_attachments_3d.json": "e31c8504124edc21386bed9f6d197d4e7fb3e24cb3e4d6eb62ec850a6d2b6925",
+    "data/battle_move_attachments_3d.json": "8417cd81b8a658c587371e146e1158d4f623071ba393ce438b1bbd1f21cf5355",
     "data/battle_move_recipes_3d.json": "4f237143c9001b7fc43f9bd0358f8361173e8f148f30d23bd8db7c7f27c90429",
     "scripts/battle/animations/model_action_map.gd": "6b09908b3b6568e7ecc8e642c155ff9f73964bbc4af0a0c8741723fedca37b67",
     "scripts/battle/battle_ui/experimental_battle_3d.gd": "08960a8faa84fe02ee1b3904e1427801248982c205737478fac7e96657819ebb",
-    "scripts/battle/battle_ui/move_attachments_3d.gd": "95efeac95693e7a6fd6db0b4717d9a0b661768c962a80e9f11accc6f928c97a8",
+    "scripts/battle/battle_ui/move_attachments_3d.gd": "a5cbe5f2b635a24f9b6a35f535a802631583eed97afcd2c4efcf9e038f5b3e25",
     "scripts/battle/battle_ui/move_effect_3d.gd": "ac79d3a4f07e74cf09ceb2f24100b1650e5256f47ab834bb638439a6a1d76bd4",
     "scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
     "scripts/battle/battle_ui/screened_model_catalog.json": "e48e36f568932290b2b7f1f461e15391444d6e7821d48f6ef0c59ede5b36839d"
@@ -525,16 +525,6 @@
             "representative_move": "astonish",
             "supported_move_count": 1
           }
-        },
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 2
-          },
-          "dedicated_presenter": {
-            "representative_move": "shadowball",
-            "supported_move_count": 1
-          }
         }
       },
       "runtime_sha256": "82a5fab9807dc35e8954edc8cdf0ac9fa2d9a9baecb45a92f222c1d17c6998f0",
@@ -549,16 +539,6 @@
         "hand": {
           "claws": {
             "representative_move": "astonish",
-            "supported_move_count": 1
-          }
-        },
-        "mouth": {
-          "beams": {
-            "representative_move": "solarbeam",
-            "supported_move_count": 1
-          },
-          "dedicated_presenter": {
-            "representative_move": "shadowball",
             "supported_move_count": 1
           }
         }
@@ -957,26 +937,6 @@
       "runtime_sha256": "7c0f8990367a65f4cb55f0780b720430318136970d0e0d1dc0c36dce54a88c1c",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "cubone": {
-      "configured_parts": [
-        "foot",
-        "hand",
-        "left_foot",
-        "left_hand",
-        "muzzle"
-      ],
-      "learnset_sha256": "ad42fd6d5ab738a2d0444eedb9936e5506e7a108b9c116db4a77bf3d0a8d7103",
-      "missing_routes": {
-        "mouth": {
-          "projectiles": {
-            "representative_move": "mudslap",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "2dae78980d84fce9c10957e188c7d3e3573a0c76322a4eb039dd92b4a2c52b50",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
     "cufant": {
       "configured_parts": [
         "hand",
@@ -1053,20 +1013,6 @@
           "strikes": {
             "representative_move": "drainpunch",
             "supported_move_count": 3
-          }
-        },
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 1
-          },
-          "dedicated_presenter": {
-            "representative_move": "icebeam",
-            "supported_move_count": 3
-          },
-          "projectiles": {
-            "representative_move": "mudslap",
-            "supported_move_count": 1
           }
         }
       },
@@ -1175,12 +1121,6 @@
             "representative_move": "rocksmash",
             "supported_move_count": 2
           }
-        },
-        "mouth": {
-          "projectiles": {
-            "representative_move": "mudslap",
-            "supported_move_count": 1
-          }
         }
       },
       "runtime_sha256": "fcd78a240c6048749808c34f81d04c178b9008949ef962f781b2c04afd182b1b",
@@ -1203,12 +1143,6 @@
           },
           "strikes": {
             "representative_move": "suckerpunch",
-            "supported_move_count": 1
-          }
-        },
-        "mouth": {
-          "projectiles": {
-            "representative_move": "mudslap",
             "supported_move_count": 1
           }
         }
@@ -1436,12 +1370,6 @@
             "representative_move": "rocksmash",
             "supported_move_count": 2
           }
-        },
-        "mouth": {
-          "projectiles": {
-            "representative_move": "mudslap",
-            "supported_move_count": 1
-          }
         }
       },
       "runtime_sha256": "73ef9bcd3bc477db0f7b4c79e8e9d1df80cfbdd2ac728fd19c29bad6625849a6",
@@ -1465,12 +1393,6 @@
           },
           "strikes": {
             "representative_move": "suckerpunch",
-            "supported_move_count": 1
-          }
-        },
-        "mouth": {
-          "projectiles": {
-            "representative_move": "mudslap",
             "supported_move_count": 1
           }
         }
@@ -2066,26 +1988,6 @@
       "runtime_sha256": "468f40828154c18b7684bbc83d6170b101ac4edb4e973c8d2d4f04a0e4a1d97a",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "glimmora-mega": {
-      "configured_parts": [
-        "spike"
-      ],
-      "learnset_sha256": "8b98f3b0fe1da643a6d49cc9c76ccea47c4320825c5dbbe9736eaf1fce291cfc",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 2
-          },
-          "dedicated_presenter": {
-            "representative_move": "flashcannon",
-            "supported_move_count": 2
-          }
-        }
-      },
-      "runtime_sha256": "0303144c8001129d753f03da3c11af97ddfa07389a6e8c8cf9466344d8473cd4",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
     "golbat": {
       "configured_parts": [
         "mouth"
@@ -2123,68 +2025,6 @@
         }
       },
       "runtime_sha256": "8c85c8f2980c05c606477ea4eef9999eff3b7a3faf066df72e60b8f4549cbc2a",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "golisopod": {
-      "configured_parts": [
-        "face",
-        "hand",
-        "left_hand"
-      ],
-      "learnset_sha256": "71f24c971ba32027bc2c50b03762ed3e68b98ff3a7e35a6ad58d0d7b25980640",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 2
-          },
-          "claws": {
-            "representative_move": "bugbite",
-            "supported_move_count": 1
-          },
-          "dedicated_presenter": {
-            "representative_move": "icebeam",
-            "supported_move_count": 3
-          },
-          "waves": {
-            "representative_move": "screech",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "b2482a1f48dc253fc75b07c0de802f664d6d44e40cea7d75bdc333a082193d67",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "golisopod-mega": {
-      "configured_parts": [
-        "face",
-        "foot",
-        "hand",
-        "left_foot",
-        "left_hand"
-      ],
-      "learnset_sha256": "a78807bd9c0724e7a58f2aebbd5b5aad13b4282753c0b62cc41f77e695fc6bd8",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 2
-          },
-          "claws": {
-            "representative_move": "bugbite",
-            "supported_move_count": 1
-          },
-          "dedicated_presenter": {
-            "representative_move": "icebeam",
-            "supported_move_count": 3
-          },
-          "waves": {
-            "representative_move": "screech",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "716752c06a6f0547cb8654181f4b6f5a9eb1be879a4cc083ee73bd96824b4870",
       "status": "individual_anatomy_or_routing_review_required"
     },
     "golurk": {
@@ -3088,59 +2928,6 @@
       "runtime_sha256": "c8c8305f82422647306ce1e197c70cfd5318089610e249a5abc3bc3e849fe4d0",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "magnemite": {
-      "configured_parts": [
-        "eye"
-      ],
-      "learnset_sha256": "aa85fd001738bc2767bff1f54a0457d45c6247c22d548cdb5de732be11a1f953",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "voltswitch",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "a71c4cedd58bf7a62169700d4a2db68aacc5354bf37a4d4459672e628ccd9631",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "magneton": {
-      "configured_parts": [
-        "face",
-        "magnet_poles"
-      ],
-      "learnset_sha256": "471df14a3fd9bcdb8e203838ad198d169fe25c3339ed8214bc95b0d74132580d",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "voltswitch",
-            "supported_move_count": 1
-          },
-          "waves": {
-            "representative_move": "screech",
-            "supported_move_count": 2
-          }
-        }
-      },
-      "runtime_sha256": "0539751e0792adf0e4b0c0cf600342948bfa170dd9e9fc7a0a2871ca5c0bb0d1",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "magnezone": {
-      "configured_parts": [
-        "eye"
-      ],
-      "learnset_sha256": "80203672eba8593e258e6a4648f3d810ab2e8204643d69fd14a82efb2c69e362",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "voltswitch",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "642741f2cfbfc3d993299c3ef97e599265d0a31dbafd06a81e567bcde4db3013",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
     "malamar": {
       "configured_parts": [
         "mouth"
@@ -3421,56 +3208,6 @@
       "runtime_sha256": "dace4c875ec7c87e9b1d8233f52cf09c2eb80d7aa99d1398c46b6ea633870915",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "mimikyu": {
-      "configured_parts": [
-        "casting",
-        "hand"
-      ],
-      "learnset_sha256": "badd29fa22a1fadb6e63cacbb3ae0a4bdfc0fe48217745b8675792c1fe029e0f",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 1
-          },
-          "dedicated_presenter": {
-            "representative_move": "shadowball",
-            "supported_move_count": 1
-          },
-          "waves": {
-            "representative_move": "screech",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "19983148f714cdab35abc64f40e6822e3e6b069f34e9f33ad999c583e2434608",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "mimikyu-busted": {
-      "configured_parts": [
-        "casting",
-        "hand"
-      ],
-      "learnset_sha256": "a46cba67af9abc655d82b249ff0aee0911d104c8d6753e714ec0b4092c7ae00b",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 1
-          },
-          "dedicated_presenter": {
-            "representative_move": "shadowball",
-            "supported_move_count": 1
-          },
-          "waves": {
-            "representative_move": "screech",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "7be56b8fad62babf3f2ff1a49a206f9b9017eb31afc7e024f6e2c4c785e5e23f",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
     "minior": {
       "configured_parts": [],
       "learnset_sha256": "cadfa8988211a15235fec552c1612d61a929111964059410fee8ccd543c92e78",
@@ -3631,28 +3368,6 @@
       "runtime_sha256": "b0cde424d031ab7b0c6936bd293a57ee0b1ec7e51d7bd80ce3cb6302cc0840d3",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "necrozma": {
-      "configured_parts": [
-        "face",
-        "hand",
-        "left_hand"
-      ],
-      "learnset_sha256": "3df38fb46b718bdac0c867afa559eb7e80c4379fcf41c0bb839ded0e91ba8908",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 2
-          },
-          "dedicated_presenter": {
-            "representative_move": "flashcannon",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "a20e5a15930f8a94f6538aace052b52c27cb831e2a817f0b8945147aa1577462",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
     "nincada": {
       "configured_parts": [
         "mouth"
@@ -3727,12 +3442,6 @@
           "strikes": {
             "representative_move": "firepunch",
             "supported_move_count": 4
-          }
-        },
-        "mouth": {
-          "projectiles": {
-            "representative_move": "mudslap",
-            "supported_move_count": 1
           }
         }
       },
@@ -4226,29 +3935,6 @@
       "runtime_sha256": "e85593b423cb7d343b9eeafa8c270e37ee4d9f96f91751b50956fb10a08b2ffe",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "poltchageist": {
-      "configured_parts": [
-        "hand",
-        "left_hand",
-        "spirit",
-        "spoon"
-      ],
-      "learnset_sha256": "ca9cae39d4d1e0f23079e77b62c7467ef7c372cb2415080ce7b2d1faf975c2cb",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "scald",
-            "supported_move_count": 2
-          },
-          "dedicated_presenter": {
-            "representative_move": "shadowball",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "e28d04c3e14b1f0e8e2ffad543413dfea27ed59fed71991cf109d23171d6eb25",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
     "polteageist": {
       "configured_parts": [
         "mouth",
@@ -4446,12 +4132,6 @@
             "representative_move": "icepunch",
             "supported_move_count": 4
           }
-        },
-        "mouth": {
-          "projectiles": {
-            "representative_move": "mudslap",
-            "supported_move_count": 1
-          }
         }
       },
       "runtime_sha256": "1d98b8669be58052f90698ec7a5879adef4214b3846ca8a85d8abe4c565971bb",
@@ -4477,80 +4157,6 @@
         }
       },
       "runtime_sha256": "7d033a0a6843f0673a6e2134ab4a5e0c644aacf442b88dfe708ed80b5ba4ea68",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "regieleki": {
-      "configured_parts": [
-        "face"
-      ],
-      "learnset_sha256": "6e93b6632252b1ee6ad378f66fb19ff552fa522c3ef05ce489ca893f8c7ffa7f",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "voltswitch",
-            "supported_move_count": 1
-          },
-          "waves": {
-            "representative_move": "screech",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "caa124fcb00478201591ffb486a94631cb6b35383cbbaa5873488513057a5f4f",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "regigigas": {
-      "configured_parts": [
-        "face",
-        "hand",
-        "left_hand"
-      ],
-      "learnset_sha256": "c75e028a95242c304b54d32e7bb128f05d67dc186b848f636cbc6392e7dd2c8a",
-      "missing_routes": {
-        "mouth": {
-          "projectiles": {
-            "representative_move": "mudslap",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "11cbc8837445a77d6e43756d90238201522ec81ea3766e2180a5e38344fe6468",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "regirock": {
-      "configured_parts": [
-        "face",
-        "hand",
-        "left_hand"
-      ],
-      "learnset_sha256": "1e09323a94014db06df09ac6bb76634c328b9415f8271297334c418c7403160e",
-      "missing_routes": {
-        "mouth": {
-          "projectiles": {
-            "representative_move": "mudslap",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "7bc5c79b1f2341079d296860bb656f7fe7fe737c3d14e9858db0b590a5fdfc52",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "registeel": {
-      "configured_parts": [
-        "face",
-        "hand",
-        "left_hand"
-      ],
-      "learnset_sha256": "4db46feb113eb111222aba76c1e1a6174b22314d844770bb7d5c662a0f012cc6",
-      "missing_routes": {
-        "mouth": {
-          "projectiles": {
-            "representative_move": "mudslap",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "46dba6339767906ea8365d9e75a86099270187351f5803594317125809f2eac3",
       "status": "individual_anatomy_or_routing_review_required"
     },
     "rellor": {
@@ -4728,32 +4334,6 @@
       "runtime_sha256": "395832506d07b5545dd5f016cb8e4cc70030bf04021fdc3701b9b6008fa2d3f2",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "sandy-shocks": {
-      "configured_parts": [
-        "eye_left",
-        "eye_right",
-        "eye_upper"
-      ],
-      "learnset_sha256": "aac48af2e5f444d936dc55d3020f6819b4f6dca0cdfef0a616112b59f2c448a4",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 2
-          },
-          "dedicated_presenter": {
-            "representative_move": "flashcannon",
-            "supported_move_count": 1
-          },
-          "waves": {
-            "representative_move": "screech",
-            "supported_move_count": 2
-          }
-        }
-      },
-      "runtime_sha256": "3b77ea7c3a8c881c4348850b22a26a592bd5e34d2b09c2c33446a4dfb78f5acc",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
     "sandygast": {
       "configured_parts": [
         "mouth"
@@ -4826,31 +4406,6 @@
         }
       },
       "runtime_sha256": "c0e9b39ce080b74321ae9715a819cdc4c5609f8fb2dba56775275d347c4a4c67",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "scovillain-mega": {
-      "configured_parts": [
-        "foot",
-        "hand",
-        "left_foot",
-        "left_hand",
-        "mouth_green",
-        "mouth_red"
-      ],
-      "learnset_sha256": "fa7fa8a65ff6c16d4045ecd873929306b2aa7e10eee797bb1abed32657d94317",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 2
-          },
-          "dedicated_presenter": {
-            "representative_move": "bite",
-            "supported_move_count": 2
-          }
-        }
-      },
-      "runtime_sha256": "9741fb37d3b98eaa4788f92921e5ab690194a7d1df736dd6ae48f3151c30df1e",
       "status": "individual_anatomy_or_routing_review_required"
     },
     "scyther": {
@@ -6061,31 +5616,9 @@
             "representative_move": "suckerpunch",
             "supported_move_count": 1
           }
-        },
-        "mouth": {
-          "beams": {
-            "representative_move": "voltswitch",
-            "supported_move_count": 1
-          }
         }
       },
       "runtime_sha256": "efaad3701a1e1a0f5f0369434c0f22f5d9e409a858b45d9149dfe1ddd07672e1",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "voltorb-hisui": {
-      "configured_parts": [
-        "face"
-      ],
-      "learnset_sha256": "5984d0cc0fe43ea79a5e98755807e300b97061d90721794190d412c5ec93b62f",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "voltswitch",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "85443417f931ff63a1b7e693317c4ebef47e8a6522b53cc1b28a1e34f64a9a29",
       "status": "individual_anatomy_or_routing_review_required"
     },
     "whirlipede": {
@@ -6121,26 +5654,6 @@
       "runtime_sha256": "51d93d83df2131673d4820e560533fea771e60b8c6b40d2a7eb4ea5086aa9b41",
       "status": "individual_anatomy_or_routing_review_required"
     },
-    "wo-chien": {
-      "configured_parts": [
-        "face"
-      ],
-      "learnset_sha256": "fc794ee761aa71113d983891908df2b03c6efe5c2961ee9f47af0a2051a64ca2",
-      "missing_routes": {
-        "mouth": {
-          "beams": {
-            "representative_move": "hyperbeam",
-            "supported_move_count": 2
-          },
-          "projectiles": {
-            "representative_move": "mudslap",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "de02214c3f8fee949bef286786ea37f5a0153aea3d91db0c7738ffae59101267",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
     "wormadam": {
       "configured_parts": [
         "mouth"
@@ -6166,16 +5679,6 @@
         "hand": {
           "strikes": {
             "representative_move": "suckerpunch",
-            "supported_move_count": 1
-          }
-        },
-        "mouth": {
-          "dedicated_presenter": {
-            "representative_move": "waterpulse",
-            "supported_move_count": 1
-          },
-          "projectiles": {
-            "representative_move": "mudslap",
             "supported_move_count": 1
           }
         }

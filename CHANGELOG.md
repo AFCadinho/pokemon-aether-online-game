@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Connect reviewed attack origins for 30 more Pokémon forms. Share beam animation and timing by attack family, delay Brambleghast/Bramblin beams until after their spin, and use Mega Scovillain’s separate red and green mouths.
+
 - Reduce the optional 3D test collection by sharing identical normal/shiny geometry, skin data and animations while preserving each appearance and independent poses.
 
 - Place the Evolution Item Seller to the left of the Z-Crystal Seller in the Aether Clash Lobby, using the existing shop interface.

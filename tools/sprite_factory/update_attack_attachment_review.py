@@ -69,6 +69,8 @@ def main():
             row['family_attachment_review'] = profile['family_attachment_review']
             row['family_attachments'] = profile.get('family_attachments', {})
             row['attachment_overrides'] = profile.get('attachment_overrides', {})
+            row['family_actions'] = profile.get('family_actions', {})
+            row['family_choreography'] = profile.get('family_choreography', {})
         if profile.get('anatomical_route_reviews'):
             row['anatomical_move_routing_review'] = 'partially_reviewed'
             row['anatomical_route_reviews'] = profile['anatomical_route_reviews']

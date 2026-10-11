@@ -57778,8 +57778,9 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "e31c8504124edc21386bed9f6d197d4e7fb3e24cb3e4d6eb62ec850a6d2b6925",
-		"scripts/battle/battle_ui/move_attachments_3d.gd": "95efeac95693e7a6fd6db0b4717d9a0b661768c962a80e9f11accc6f928c97a8",
+		"data/battle_move_attachments_3d.json": "8417cd81b8a658c587371e146e1158d4f623071ba393ce438b1bbd1f21cf5355",
+		"data/battle_move_recipes_3d.json": "4f237143c9001b7fc43f9bd0358f8361173e8f148f30d23bd8db7c7f27c90429",
+		"scripts/battle/battle_ui/move_attachments_3d.gd": "a5cbe5f2b635a24f9b6a35f535a802631583eed97afcd2c4efcf9e038f5b3e25",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "82ee6f558c779bc8e2ca4975b6ace3b8cf90e8452ffc9cfc0cfd620af3790c6f",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
 		"scripts/battle/battle_ui/screened_model_catalog.json": "e48e36f568932290b2b7f1f461e15391444d6e7821d48f6ef0c59ede5b36839d"
@@ -61557,9 +61558,25 @@
 			]
 		},
 		"brambleghast": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"effect_start_fraction": 0.67,
+					"emission_end_fraction": 0.88,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.8,
+					"launch_fraction": 0.7
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -61567,9 +61584,25 @@
 			]
 		},
 		"bramblin": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"effect_start_fraction": 0.67,
+					"emission_end_fraction": 0.88,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.8,
+					"launch_fraction": 0.7
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -65730,6 +65763,9 @@
 			]
 		},
 		"cubone": {
+			"attachment_overrides": {
+				"mouth": "muzzle"
+			},
 			"attachments": [
 				"foot",
 				"hand",
@@ -65928,9 +65964,24 @@
 			]
 		},
 		"darkrai-mega": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -66873,6 +66924,9 @@
 					]
 				}
 			},
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face"
 			],
@@ -66926,6 +66980,9 @@
 						]
 					]
 				}
+			},
+			"attachment_overrides": {
+				"mouth": "face"
 			},
 			"attachments": [
 				"face"
@@ -68147,6 +68204,9 @@
 			]
 		},
 		"dugtrio": {
+			"attachment_overrides": {
+				"mouth": "face_primary"
+			},
 			"attachments": [
 				"face",
 				"face_primary"
@@ -68158,6 +68218,9 @@
 			]
 		},
 		"dugtrio-alola": {
+			"attachment_overrides": {
+				"mouth": "face_primary"
+			},
 			"attachments": [
 				"face",
 				"face_primary"
@@ -72986,9 +73049,24 @@
 			]
 		},
 		"glimmora-mega": {
+			"attachment_overrides": {
+				"mouth": "spike"
+			},
 			"attachments": [
 				"spike"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -73381,11 +73459,26 @@
 			]
 		},
 		"golisopod": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face",
 				"hand",
 				"left_hand"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -73393,6 +73486,9 @@
 			]
 		},
 		"golisopod-mega": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face",
 				"foot",
@@ -73400,6 +73496,18 @@
 				"left_foot",
 				"left_hand"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -80868,9 +80976,24 @@
 			]
 		},
 		"magnemite": {
+			"attachment_overrides": {
+				"mouth": "eye"
+			},
 			"attachments": [
 				"eye"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"emission_end_fraction": 0.62,
+					"emission_scale": 0.12,
+					"impact_fraction": 0.45,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -80878,10 +81001,25 @@
 			]
 		},
 		"magneton": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face",
 				"magnet_poles"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.14,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.32
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -80889,9 +81027,24 @@
 			]
 		},
 		"magnezone": {
+			"attachment_overrides": {
+				"mouth": "eye"
+			},
 			"attachments": [
 				"eye"
 			],
+			"family_actions": {
+				"beams": "physical_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "physical_attack",
+					"emission_end_fraction": 0.62,
+					"emission_scale": 0.18,
+					"impact_fraction": 0.45,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -82847,10 +83000,25 @@
 			]
 		},
 		"mimikyu": {
+			"attachment_overrides": {
+				"mouth": "casting"
+			},
 			"attachments": [
 				"casting",
 				"hand"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -82858,10 +83026,25 @@
 			]
 		},
 		"mimikyu-busted": {
+			"attachment_overrides": {
+				"mouth": "casting"
+			},
 			"attachments": [
 				"casting",
 				"hand"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -84014,11 +84197,26 @@
 			]
 		},
 		"necrozma": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face",
 				"hand",
 				"left_hand"
 			],
+			"family_actions": {
+				"beams": "physical_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "physical_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -84573,6 +84771,9 @@
 			]
 		},
 		"nosepass": {
+			"attachment_overrides": {
+				"mouth": "nose"
+			},
 			"attachments": [
 				"nose"
 			],
@@ -87061,12 +87262,30 @@
 			]
 		},
 		"poltchageist": {
+			"attachment_overrides": {
+				"mouth": "spirit"
+			},
 			"attachments": [
 				"hand",
 				"left_hand",
 				"spirit",
 				"spoon"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_attachments": {
+				"beams": "spoon"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -88751,6 +88970,9 @@
 			]
 		},
 		"regice": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face"
 			],
@@ -88771,9 +88993,24 @@
 			]
 		},
 		"regieleki": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.14,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -88781,6 +89018,9 @@
 			]
 		},
 		"regigigas": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face",
 				"hand",
@@ -88793,6 +89033,9 @@
 			]
 		},
 		"regirock": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face",
 				"hand",
@@ -88805,6 +89048,9 @@
 			]
 		},
 		"registeel": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face",
 				"hand",
@@ -90321,11 +90567,26 @@
 			]
 		},
 		"sandy-shocks": {
+			"attachment_overrides": {
+				"mouth": "eye_upper"
+			},
 			"attachments": [
 				"eye_left",
 				"eye_right",
 				"eye_upper"
 			],
+			"family_actions": {
+				"beams": "physical_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "physical_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -90800,6 +91061,9 @@
 			]
 		},
 		"scovillain-mega": {
+			"attachment_overrides": {
+				"mouth": "mouth_red"
+			},
 			"attachments": [
 				"foot",
 				"hand",
@@ -90808,6 +91072,18 @@
 				"mouth_green",
 				"mouth_red"
 			],
+			"family_actions": {
+				"beams": "physical_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "physical_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -100605,9 +100881,24 @@
 			]
 		},
 		"voltorb": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.12,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -100615,9 +100906,24 @@
 			]
 		},
 		"voltorb-hisui": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face"
 			],
+			"family_actions": {
+				"beams": "physical_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "physical_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.55,
+					"launch_fraction": 0.43
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -101544,9 +101850,24 @@
 			]
 		},
 		"wo-chien": {
+			"attachment_overrides": {
+				"mouth": "face"
+			},
 			"attachments": [
 				"face"
 			],
+			"family_actions": {
+				"beams": "special_attack"
+			},
+			"family_choreography": {
+				"beams": {
+					"action": "special_attack",
+					"emission_end_fraction": 0.65,
+					"emission_scale": 0.15,
+					"impact_fraction": 0.48,
+					"launch_fraction": 0.3
+				}
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -101779,6 +102100,9 @@
 			]
 		},
 		"wugtrio": {
+			"attachment_overrides": {
+				"mouth": "muzzle"
+			},
 			"attachments": [
 				"muzzle"
 			],

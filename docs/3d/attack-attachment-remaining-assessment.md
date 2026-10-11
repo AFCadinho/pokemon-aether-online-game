@@ -1,6 +1,10 @@
 # Remaining attack attachment assessment
 
-## Current correction follow-up
+## Latest family routing follow-up
+
+Linked 30 previously reviewed anatomical surfaces and inspected 37 representative effects. Beam clips/timing can now be shared by recipe family. The missing-route backlog falls from 323 to 304 forms (mouth: 111 to 81; hand: 231; foot: 1). Eleven changed forms still need hand routing. See the [individual decisions and evidence](attack-attachment-family-routing-review.md).
+
+## Previous positional correction follow-up
 
 - Corrected all 37 forms in the positional queue.
 - Added missing points for 14 of 15 forms; Mega Scrafty keeps its hands concealed and uses a body alternative.
@@ -9,7 +13,7 @@
 - Focused regression, choreography, coverage and learnset audits pass. All 80 changed profiles pass real normal/shiny binding checks at 21 fractions per native action (160 models).
 - Seven representative effects were sampled offline in both wild and trainer stage contexts, two views and six fractions. All pairs have matching anchors and timing. These checks do not exercise server battle preparation, arena entry, or live NPC/wild battles.
 
-**The whole catalog is not finished.** The [family backlog](attack-attachment-family-backlog.json) contains 323 forms with missing anatomical routes: 231 hand, 111 mouth and one foot (overlapping categories). Existing named points may need routing; other cases need fresh calibration or an anatomical alternative. This count excludes intentional procedural body/orb origins and does not count all remaining timing/contact/clearance work.
+**The whole catalog is not finished.** The [family backlog](attack-attachment-family-backlog.json) contains 304 forms with missing anatomical routes: 231 hand, 81 mouth and one foot (overlapping categories). Existing named points may need routing; other cases need fresh calibration or an anatomical alternative. This count excludes intentional procedural body/orb origins and does not count all remaining timing/contact/clearance work.
 
 The original three model blockers remain, plus Cramorant/Deoxys visibility issues. Ogerpon’s three masked club forms have separately measured club surfaces, but overlapping shaft geometry and weapon routing remain unresolved. Ivy Cudgel has no current 3D presenter. Contact previews still expose facing, distance or target-art limitations for Poliwag, Wooper, Torchic, Mega Scrafty and Mega Barbaracle; their full effects are not approved.
 

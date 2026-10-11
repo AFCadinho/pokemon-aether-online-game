@@ -79,6 +79,10 @@ func _run() -> void:
 			for move: String in Attachments.CALIBRATED.data.profiles[species].get("move_actions", {}):
 				if Attachments.action_for(identity,move,available_actions).is_empty():
 					errors.append("Unavailable move action: "+identity+":"+move)
+			for family: String in Attachments.CALIBRATED.data.profiles[species].get("family_actions", {}):
+				var action: String = Attachments.CALIBRATED.data.profiles[species].family_actions[family]
+				if action not in ["physical_attack", "physical_attack_2", "special_attack", "special_attack_2"] or not available_actions.has(action):
+					errors.append("Unavailable family action: "+identity+":"+family)
 			var poses := {}
 			for action: String in player.get_animation_list():
 				if action != "idle" and not "attack" in action: continue
