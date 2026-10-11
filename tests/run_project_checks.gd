@@ -377,6 +377,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/on_demand_3d_version_pruning_check.gd",
 	"res://tests/approved_3d_release_v11_check.gd",
 	"res://tests/hawlucha_source_repair_check.gd",
+	"res://tests/shared_geometry_production_binding_check.gd",
 	"res://tests/full_3d_catalog_size_check.gd",
 	"res://tests/trainer_entry_before_response_check.gd",
 	"res://tests/trainer_3d_summon_visibility_check.gd",

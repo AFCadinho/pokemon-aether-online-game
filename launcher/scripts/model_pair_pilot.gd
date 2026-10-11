@@ -1,10 +1,12 @@
 extends RefCounted
-## Local opt-in until installers, real battles and platform release checks qualify.
+## Pinned shared-model catalogs for production and local qualification.
 const DATA = preload("res://data/model_pair_pilot.json")
+const PRODUCTION = preload("res://data/approved_3d_release_v13.json")
 const CATALOG_PATH := "res://data/model_pair_catalog.json"
 const QUALIFIED_PATH := "res://data/model_pair_qualified.json"
 const GEOMETRY_PATH := "res://data/model_pair_geometry.json"
 const GEOMETRY_CATALOG_PATH := "res://data/model_pair_geometry_catalog.json"
+const PRODUCTION_PATH := "res://data/approved_3d_bundles_v13_index.json"
 const REFERENCE_FORMAT := "model-pair-ref-v1"
 static var _catalog := {}
 static var _qualified_catalog := {}
@@ -14,7 +16,12 @@ static var _catalog_mutex := Mutex.new()
 static var _lookup_mutex := Mutex.new()
 
 static func geometry_enabled() -> bool:
-	return OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_GEOMETRY_TEST") == "1"
+	return production_enabled() or (OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_GEOMETRY_TEST") == "1")
+
+static func production_enabled() -> bool:
+	if OS.is_debug_build():
+		return OS.get_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST") == "1"
+	return OS.has_feature("windows") or OS.has_feature("linuxbsd") or OS.has_feature("macos")
 
 static func catalog_enabled() -> bool:
 	return OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_CATALOG_TEST") == "1"
@@ -26,6 +33,8 @@ static func enabled() -> bool:
 	return geometry_enabled() or qualified_enabled() or catalog_enabled() or (OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_PILOT") == "1")
 
 static func data_path() -> String:
+	if production_enabled():
+		return PRODUCTION_PATH
 	if geometry_enabled():
 		return GEOMETRY_PATH
 	if qualified_enabled():
@@ -52,12 +61,14 @@ static func catalog() -> Dictionary:
 			for asset: Dictionary in load(GEOMETRY_CATALOG_PATH).data.assets:
 				if positions.has(asset.asset_id): merged.assets[positions[asset.asset_id]] = asset
 				else: merged.assets.append(asset)
-			_geometry_catalog = _expand_index(load(GEOMETRY_PATH).data, merged)
+			_geometry_catalog = _expand_index(load(data_path()).data, merged)
 		result = _geometry_catalog
 	_catalog_mutex.unlock()
 	return result
 
 static func release() -> Dictionary:
+	if production_enabled():
+		return PRODUCTION.data
 	if not enabled():
 		return {}
 	var path := data_path()

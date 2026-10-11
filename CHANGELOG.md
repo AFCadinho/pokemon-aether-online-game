@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reduce the optional desktop 3D collection to about 8.7 GB by sharing exact normal/shiny geometry in one verified model pack per eligible pair, while keeping both appearances and older release catalogs available.
+
 - Add the Akatsuki Outfit Box to Gift Store → Outfits for 450 Gems, with complete trainer and overworld previews for both models.
 
 - Add the Akatsuki Outfit Box for both player models, with an ankle-length robe, trousers, sandals and separate headband; includes trainer and overworld activity sprites.
