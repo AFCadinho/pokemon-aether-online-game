@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a Guild Base manager behind the main-hall counter for leader-controlled visitor access and member approval of entry requests.
+
 - Add the Emerald Luchador outfit box for both player models, with five separately wearable cosmetics including a mask and feather-wing Back accessory. Available for item grants; no store listing.
 
 - Keep facegear with dedicated fishing and riding sprites aligned with the head by avoiding an extra activity offset, for local and remote players.

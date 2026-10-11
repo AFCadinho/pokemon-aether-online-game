@@ -1,7 +1,7 @@
 @tool
 extends DialogueNPC
 
-@export_enum("directory", "lift") var service_kind := "directory"
+@export_enum("directory", "lift", "management") var service_kind := "directory"
 var guild_service: Node
 
 func _ready() -> void:
@@ -24,6 +24,9 @@ func interact_with_player(_player: Node2D) -> void:
 	var synced: Dictionary = await world.sync_player_position_for_world_action()
 	if not bool(synced.get("success", false)):
 		await GameErrorDialogService.show_response(synced)
+		return
+	if service_kind == "management":
+		await _manage_visitors(world)
 		return
 	var result: Dictionary = await guild_service.base_room_directory(service_kind == "lift")
 	if not bool(result.get("success", false)):
@@ -49,6 +52,24 @@ func interact_with_player(_player: Node2D) -> void:
 	GameState.unlock_overworld_input()
 	# Let the NPC interaction finish before map replacement destroys it.
 	world.call_deferred("apply_authorized_teleport_state", travel.state)
+
+
+func _manage_visitors(world: Node) -> void:
+	var room: Node = get_parent()
+	while room != null and not room.has_method("configure_guild_base_instance"):
+		room = room.get_parent()
+	if room == null or int(room.guild_id) <= 0:
+		return
+	# Use this instance's owner, rather than cached membership: the server
+	# rejects visiting players and supplies the leader's policy permission.
+	var result: Dictionary = await guild_service.base_visit_requests(room.guild_id)
+	if not bool(result.get("success", false)):
+		await GameErrorDialogService.show_response(result)
+		return
+	var menu := preload("res://scripts/ui/guild_base_visit_menu.gd").new()
+	world.add_child(menu)
+	menu.open(guild_service, result.state, "", room.guild_id)
+	await menu.resolved
 
 
 func _sync_nameplate() -> void:

@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_mask"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_1c676"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_hmjdt"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/guild_base_management_npc.tscn" id="6_manager"]
 
 [sub_resource type="RectangleShape2D" id="shape_0"]
 size = Vector2(96, 24)
@@ -186,6 +187,12 @@ position = Vector2(0, -16)
 y_sort_enabled = true
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=117241514]
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+y_sort_enabled = true
+
+[node name="Manager" parent="Entities/NPCs" instance=ExtResource("6_manager")]
+position = Vector2(368, 240)
 
 [node name="Furniture" type="Node2D" parent="Entities" unique_id=248750834]
 
