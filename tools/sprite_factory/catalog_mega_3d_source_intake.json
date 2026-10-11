@@ -1738,11 +1738,15 @@
       "name": "hawlucha-mega",
       "pokedex_number": 701,
       "forme": "Mega",
-      "source_resource_id": "pm0701_11_00",
-      "source_status": "za_dump_available",
+      "source_resource_id": "pm0761_51_00",
+      "source_status": "repaired_local_candidate_pending_catalog_admission_and_publication",
       "approved_3d_bundle": "pokemon_3d:hawlucha:mega",
-      "production_approved": true,
-      "source_identity_evidence": {
+      "previous_source_resource_id": "pm0701_11_00",
+      "source_mapping_audit": {
+        "path": "catalog_mega_hawlucha_source_audit.json",
+        "sha256": "9d7f9c321476aaa8702ba624ff6f683c11dacce9e61234b93c5105ab8c77df84"
+      },
+      "previous_source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0701/pm0701_11_00/icon/pm0701_11_00_00_0.png",
         "sha256": "aa5f72123eb12643c1c9142b478ad9d82d985a1e761a09e40f991fce5b9d7ca4",
@@ -1751,11 +1755,27 @@
         "official_identity_reference": "https://www.pokemon.com/us/pokemon-news/mega-hawlucha-enters-the-ring-in-pokemon-legends-z-a",
         "not_final_appearance_approval": true
       },
-      "local_runtime_approved": true,
-      "published": true,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
-      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
-      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
+      "source_identity_evidence": {
+        "status": "developer_table_and_source_icon_match",
+        "archive_member": "pm0761/pm0761_51_00/icon/pm0761_51_00_00_0.png",
+        "sha256": "7c258227937a995177d86e44e5356d2c3009f1910b87c75fc230cdd9da820f75",
+        "shiny_archive_member": "pm0761/pm0761_51_00/icon/pm0761_51_00_00_1.png",
+        "shiny_sha256": "a34b35136ef1d0091b7f89ad96caec14b015127a4cd056120088db9f769ca83f",
+        "not_final_appearance_approval": false
+      },
+      "source_repair_pending_publication": true,
+      "previous_source_publication": {
+        "production_approved": true,
+        "local_runtime_approved": true,
+        "published": true,
+        "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+        "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+        "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
+      },
+      "production_approved": false,
+      "local_runtime_approved": false,
+      "published": false,
+      "repair_evidence": "catalog_source_model_repairs_results.json"
     },
     {
       "showdown_id": "zygardemega",

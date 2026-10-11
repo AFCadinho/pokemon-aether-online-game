@@ -27,6 +27,7 @@ def main():
              "scripts/battle/animations/reviewed_source_visibility.gd",
              "scripts/battle/animations/source_visibility_pack.gd",
              "resources/battle/model_visibility/roaring_moon.json",
+             "resources/battle/model_visibility/catalog_repairs.json",
              "tools/sprite_factory/storage_components_check.gd",
              "tools/sprite_factory/storage_components.gd",
              "scripts/battle/battle_ui/material_response.gd",

@@ -62,9 +62,14 @@ def source_number(row, root: Path) -> int:
         raise ValueError("Malformed explicit source resource ID")
     number = int(ident[2:6])
     evidence = row.get("source_mapping_audit")
+    if row.get("showdown_id") == "hawluchamega" and not evidence:
+        raise ValueError("Mega Hawlucha requires its repaired developer-number audit")
     if evidence:
-        audit_path = HERE / "catalog_mega_25_source_audit.json"
-        if evidence.get("path") != audit_path.name or evidence.get("sha256") != sha(audit_path):
+        audit_name = evidence.get("path")
+        if audit_name not in ("catalog_mega_25_source_audit.json", "catalog_mega_hawlucha_source_audit.json"):
+            raise ValueError("Unrecognized source mapping audit")
+        audit_path = HERE / audit_name
+        if evidence.get("sha256") != sha(audit_path):
             raise ValueError("Source mapping audit provenance mismatch")
         audit = json.loads(audit_path.read_text())
         matches = [r for r in audit["entries"] if r["showdown_id"] == row["showdown_id"]]

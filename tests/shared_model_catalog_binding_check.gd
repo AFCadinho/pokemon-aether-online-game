@@ -82,7 +82,7 @@ func _run() -> void:
 			entry.pair_asset = altered
 			assert(Pilot.entry_asset(entry).is_empty(), "External catalog supplied a source binding")
 			checked += 1
-	assert(checked == 2168 and corrections == 8)
+	assert(checked == 2168 and corrections == 16)
 	OS.unset_environment("POKEAETHER_SHARED_MODEL_CATALOG_TEST")
 	OS.set_environment("POKEAETHER_SHARED_MODEL_PILOT", "1")
 	assert(Pilot.catalog() == Pilot.DATA.data and Pilot.release().requiredAssetIds.size() == 17)

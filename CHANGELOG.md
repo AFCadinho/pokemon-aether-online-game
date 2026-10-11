@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Correct overlapping 3D model parts for normal and shiny Cramorant, Deoxys, Minior and Togedemaru. Rebuild Mega Hawlucha from the correct source as a local replacement candidate.
+
 - Add 337 individually reviewed 3D attack points and anatomical alternatives across 290 remaining Pokémon forms, shared by normal and shiny appearances. Align Cetitan’s mouth emission and Sinistea’s hand release with their native poses, and give Scyther separate wing attack points.
 
 - Reimport the enlarged Guild Base personal-room visual and align its collision, camera mask, arrival and return door with the new layout.

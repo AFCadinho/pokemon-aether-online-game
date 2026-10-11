@@ -41,6 +41,24 @@ class SourceMappingTests(unittest.TestCase):
         self.assertEqual(production.source_number(self.row, self.root), 722)
         self.assertEqual(self.row["pokedex_number"], 652)
 
+    def test_hawlucha_repair_audit_uses_developer_number_761(self):
+        audit = json.loads(self.audit.read_text())
+        audit["entries"][0].update(showdown_id="hawluchamega", species="hawlucha-mega",
+            pokedex_number=701, source_resource_id="pm0761_51_00",
+            dev_number_mapping_evidence={"developer_number": 761})
+        audit["source_resources"]["pm0761_51_00"] = audit["source_resources"].pop("pm0722_51_00")
+        path = self.root / "catalog_mega_hawlucha_source_audit.json"
+        path.write_text(json.dumps(audit))
+        row = dict(showdown_id="hawluchamega", name="hawlucha-mega", pokedex_number=701,
+            source_resource_id="pm0761_51_00",
+            source_mapping_audit=dict(path=path.name, sha256=production.sha(path)))
+        self.assertEqual(production.source_number(row, self.root), 761)
+        with self.assertRaises(ValueError):
+            production.source_number({**row, "source_resource_id": "pm0701_11_00",
+                                      "source_mapping_audit": None}, self.root)
+        with self.assertRaises(ValueError):
+            production.source_number({**row, "source_resource_id": "pm0701_11_00"}, self.root)
+
     def test_legacy_matching_dex_requires_no_alternate_audit(self):
         row = {"pokedex_number": 3, "source_resource_id": "pm0003_51_00"}
         self.assertEqual(production.source_number(row, self.root), 3)
