@@ -1,7 +1,8 @@
 {
-  "ui.store.category.held-items.label": "携带道具",
-  "ui.store.category.held-items.description": "供携带该道具的宝可梦使用的装备。",
-  "ui.store.category.held-items.promise": "宝可梦装备",
+  "ui.store.badge.training": "训练",
+  "ui.store.category.held-items.label": "训练道具",
+  "ui.store.category.held-items.description": "用于在野生对战中训练宝可梦的道具。",
+  "ui.store.category.held-items.promise": "野生对战",
   "ui.store.already_purchased": "已购买",
   "ui.store.once_per_account": "此道具每个账号只能购买一次。",
   "ui.guild_base.rooms.floor_search": "搜索楼层或玩家…",

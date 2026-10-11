@@ -95,7 +95,7 @@ const CATEGORY_LABELS := {
 	"guilds": "Guilds",
 	"mounts": "Mounts",
 	"charms": "Charms",
-	"held-items": "Held Items",
+	"held-items": "Training Items",
 	"services": "Trainer Services",
 	"credits": "Credit Vouchers",
 }
@@ -106,7 +106,7 @@ const CATEGORY_DESCRIPTIONS := {
 	"guilds": "Consumable templates that permanently unlock for your Guild without affecting gameplay.",
 	"mounts": "Travel through the overworld in your own style.",
 	"charms": "Use supported field moves without carrying a Pokémon that knows them. Progression and area rules still apply.",
-	"held-items": "Equipment for the Pokémon holding it.",
+	"held-items": "Items for training your Pokémon in wild battles.",
 	"services": "Optional changes to your trainer identity and account.",
 	"credits": "Tradeable vouchers bought with Gems. Claim one to add personal card credit.",
 }
@@ -117,7 +117,7 @@ const CATEGORY_PROMISES := {
 	"guilds": "GUILD COSMETIC",
 	"mounts": "TRAVEL STYLE",
 	"charms": "FIELD CONVENIENCE",
-	"held-items": "POKÉMON EQUIPMENT",
+	"held-items": "WILD BATTLES",
 	"services": "TRAINER SERVICE",
 	"credits": "PERSONAL CREDIT",
 }
@@ -943,7 +943,7 @@ const CATALOG: Array[Dictionary] = [
 		"price": 1000,
 		"icon": preload("res://assets/items/icons/AETHERPOWERBAND.png"),
 		"categories": ["held-items"],
-		"badge": "HELD ITEM",
+		"badge": "TRAINING",
 	},
 	{
 		"id": "aether-band",
@@ -952,7 +952,7 @@ const CATALOG: Array[Dictionary] = [
 		"price": 1000,
 		"icon": preload("res://assets/items/icons/AETHERBAND.png"),
 		"categories": ["held-items"],
-		"badge": "HELD ITEM",
+		"badge": "TRAINING",
 	},
 	{
 		"id": "surf-charm",

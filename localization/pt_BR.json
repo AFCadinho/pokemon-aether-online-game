@@ -1,7 +1,8 @@
 {
-  "ui.store.category.held-items.label": "Itens segurados",
-  "ui.store.category.held-items.description": "Equipamento para o Pokémon que segura o item.",
-  "ui.store.category.held-items.promise": "EQUIPAMENTO POKÉMON",
+  "ui.store.badge.training": "TREINO",
+  "ui.store.category.held-items.label": "Itens de treino",
+  "ui.store.category.held-items.description": "Itens para treinar seus Pokémon em batalhas selvagens.",
+  "ui.store.category.held-items.promise": "BATALHAS SELVAGENS",
   "ui.store.already_purchased": "Já comprado",
   "ui.store.once_per_account": "Este item só pode ser comprado uma vez por conta.",
   "ui.guild_base.rooms.floor_search": "Buscar andar ou jogador…",

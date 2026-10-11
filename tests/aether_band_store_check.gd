@@ -31,7 +31,7 @@ func _run() -> void:
 	for item_id in ["aether-band", "aether-power-band"]:
 		var item: Dictionary = store.call("_catalog_item", item_id)
 		_check(item.get("price") == 1000, "Band preview uses 1000 Gems")
-		_check(item.get("categories") == ["held-items"], "Band is in Held Items")
+		_check(item.get("categories") == ["held-items"], "Band is in Training Items")
 		var icon: Texture2D = IconResolver.load_icon(item_id)
 		_check(icon != null and icon.resource_path.ends_with(item_id.to_upper().replace("-", "") + ".png"), "Band resolves its own Bag and held-item icon")
 		var offer := {"itemId": item_id, "accountUnique": true, "accountBound": true, "owned": false,
