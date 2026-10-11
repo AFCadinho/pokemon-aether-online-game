@@ -90,30 +90,42 @@ python3 tools/prepare_shared_model_readiness.py \
   --packs /absolute/shared-model-catalog/full-v2/packs \
   --output /absolute/assigned/frontend/.tmp/FRESH-READINESS
 
-godot --headless --log-file /absolute/task/install.engine.log \
-  --path /absolute/assigned/frontend \
-  --script res://tests/shared_model_collection_install_check.gd -- \
-  /absolute/assigned/frontend/.tmp/FRESH-READINESS/input.json
-
-godot --rendering-method mobile --log-file /absolute/task/session.engine.log \
-  --path /absolute/assigned/frontend \
-  --script res://tests/shared_model_collection_stress_check.gd -- \
-  /absolute/assigned/frontend/.tmp/FRESH-READINESS/fresh/store \
-  /absolute/assigned/frontend/.tmp/FRESH-READINESS/session.json
+python3 tools/run_shared_model_readiness_phase.py \
+  --run /absolute/assigned/frontend/.tmp/FRESH-READINESS --phase installation
+python3 tools/run_shared_model_readiness_phase.py \
+  --run /absolute/assigned/frontend/.tmp/FRESH-READINESS --phase consumers
+python3 tools/run_shared_model_readiness_phase.py \
+  --run /absolute/assigned/frontend/.tmp/FRESH-READINESS --phase session
 ```
 
 The preparer validates the selection against the committed receipt and source
 metadata; the real installer independently hashes all physical inputs. Fresh
 and upgrade stores are separate. Interrupted attempts, including externally
 terminated runs, remain retained and do not constitute completed evidence.
+Commit the intended implementation and diagnostics before starting a phase.
+The phase runner verifies its input hashes against that commit, retains logs
+and execution receipts, uses fresh per-phase runtime directories, and rejects
+changed inputs or incomplete results. It does not overwrite prior phase output.
+Run this wrapper through `slot-env` too; the session phase requires the real GPU.
+For a corrected session diagnostic, use `--phase session --attempt session-v2`
+and supply its JSON to the collector with `--session`. This retains the failed
+attempt, its runtime directories, logs, inputs and receipt unchanged.
+
+After all three phases, the full mount check and external interruption suite
+have passed, `collect_shared_model_readiness.py --run RUN --mounts MOUNT_JSON
+--crashes CRASH_DIRECTORY` checks their receipts and source commits, then
+independently hashes both installed collections. It refuses to overwrite the
+checked-in readiness record. Different diagnostic revisions may be recorded
+per phase; the production inputs must remain identical throughout the run.
 
 ## Platform and release boundary
 
 The available host is Linux, Godot 4.6.2, Mobile Vulkan, NVIDIA RTX 3070 Laptop
 GPU. Native Windows/macOS installation, update, repair, cleanup and process
 lease behavior require those systems. Physical Android runtime, GPU/driver
-compatibility and phone memory require a connected device. No Android device
-was attached during initial discovery. Linux checks, platform-branch unit tests,
+compatibility and phone memory require a connected device. The user confirmed
+that only this Linux machine was available; no native Windows/macOS host or
+physical Android device could be tested. Linux checks, platform-branch unit tests,
 Wine and emulation cannot stand in for those native-device results.
 
 All proposed workloads must have successful receipts before being described as

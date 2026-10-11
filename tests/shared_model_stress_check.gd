@@ -9,6 +9,7 @@ const Pilot = preload("res://scripts/services/model_pair_pilot.gd")
 const Store = preload("res://launcher/scripts/asset_bundle_store.gd")
 const Index = preload("res://launcher/scripts/asset_bundle_index.gd")
 const Contract = preload("res://tools/sprite_factory/model_pair_bundle_contract.gd")
+const Reviewed = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 var failures: Array[String] = []
 var samples: Array[Dictionary] = []
 var battles := 0
@@ -16,6 +17,7 @@ var previews := 0
 var canceled := 0
 var texture_checks := 0
 var started := 0
+var expected_bindings := {}
 
 class Sink extends Logger:
 	var errors: Array[String] = []
@@ -43,6 +45,30 @@ func texture_refs(scene: PackedScene) -> Array[WeakRef]:
 		result.append(weakref(texture))
 	return result
 
+func check_loaded_revisions(stage: Node, species: String) -> void:
+	if expected_bindings.is_empty():
+		for asset: Dictionary in Pilot.catalog().assets:
+			for appearance: Dictionary in asset.appearances:
+				expected_bindings[str(appearance.runtime_identity)] = {"asset": asset, "appearance": appearance}
+	# The requested pair must use the qualified pack. Anticipated forms may be
+	# deliberately retained v11 originals, but must still use their exact hashes.
+	for identity in [species, species + "@shiny"]:
+		var expected: Dictionary = expected_bindings.get(Reviewed.canonical_identity(identity), {})
+		check(stage.entries.has(identity) and expected.get("asset", {}).get("format") == Pair.FORMAT, "Requested shared appearance loaded " + identity)
+	for identity: String in stage.entries:
+		var entry: Dictionary = stage.entries[identity]
+		var canonical := Reviewed.canonical_identity(identity)
+		var expected: Dictionary = expected_bindings.get(canonical, {})
+		if not check(not expected.is_empty(), "Loaded identity belongs to compiled collection " + identity):
+			continue
+		var digest := str(entry.get("_verified_runtime_hash", ""))
+		check(digest == expected.appearance.runtime_sha256, "Exact compiled runtime revision loaded " + identity)
+		if expected.asset.get("format") == Pair.FORMAT:
+			var trusted := Pilot.asset_for(canonical, digest)
+			check(not trusted.is_empty() and entry.get("_pair_asset") == trusted, "Actual qualified pack revision loaded " + identity)
+		else:
+			check(not entry.has("_pair_asset"), "Retained original form stays original " + identity)
+
 func battle(species: String) -> Array[WeakRef]:
 	var refs: Array[WeakRef] = []
 	root.grab_focus()
@@ -53,10 +79,7 @@ func battle(species: String) -> Array[WeakRef]:
 	stage.set_combatant(1, species, true)
 	await stage.await_prepared(true, 45000)
 	if check(stage.active and not stage.preparation_failed and stage.handles("p1") and stage.handles("p2"), "Battle prepares " + species + ": " + stage.catalog_problem + " / " + stage.reason + " / loaded=" + stage.loaded_path + " requested=" + root.get_node("SettingsManager").get_battle_3d_catalog_path() + " / " + JSON.stringify(stage.preparation_metrics)):
-		for identity: String in stage.entries:
-			var entry: Dictionary = stage.entries[identity]
-			var trusted := Pilot.asset_for(identity, str(entry.get("_verified_runtime_hash", "")))
-			check(not trusted.is_empty() and entry.get("_pair_asset") == trusted, "Actual qualified pack revision loaded " + identity)
+		check_loaded_revisions(stage, species)
 		for scene: PackedScene in stage.packed.values():
 			refs.append_array(texture_refs(scene))
 		check(not refs.is_empty(), "Battle owns textures: " + species)

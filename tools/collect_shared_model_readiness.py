@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,23 +27,31 @@ def main():
     parser.add_argument("--run", type=Path, required=True)
     parser.add_argument("--mounts", type=Path, required=True)
     parser.add_argument("--crashes", type=Path, required=True)
+    parser.add_argument("--session", type=Path, help="Successful session receipt, if a later retained attempt was needed")
     args = parser.parse_args()
     assert os.environ.get("POKEAETHER_SLOT") == ROOT.parent.name, "Use assigned slot-env"
     run = args.run.resolve()
     run.relative_to(ROOT / ".tmp")
     target = ROOT / "data/shared_model_readiness_checks.json"
     assert not target.exists(), "Retain previously recorded evidence"
-    install, consumers, session = (read(run / name) for name in ("installation.json", "consumers.json", "session.json"))
+    session_path = (args.session or run / "session.json").resolve()
+    session_path.relative_to(run)
+    assert session_path.parent == run and session_path.suffix == ".json"
+    session_name = session_path.stem
+    install, consumers, session = (read(path) for path in (run / "installation.json", run / "consumers.json", session_path))
     mounts, crashes = read(args.mounts), read(args.crashes / "receipt.json")
     for proof in (install, consumers, session, mounts, crashes):
         assert proof["ok"] is True
+    assert all(proof["os"] == "Linux" for proof in (install, consumers, session))
+    assert session["renderer"] == "mobile"
     revision = (run / "implementation-commit.txt").read_text().strip()
     inputs = read(run / "inputs.sha256.json")
     phases = {"installation": {"qualified_source_commit": revision, "inputs": inputs.copy()}}
     for name in ("consumers", "session"):
-        execution = read(run / (name + ".execution.json"))
+        artifact_name = session_name if name == "session" else name
+        execution = read(run / (artifact_name + ".execution.json"))
         assert execution["ok"] and execution["returncode"] == 0 and execution["inputs_unchanged"]
-        frozen = read(run / (name + ".inputs.json"))
+        frozen = read(run / (artifact_name + ".inputs.json"))
         phases[name] = {"qualified_source_commit": execution["implementation_commit"], "inputs": frozen}
         for path, digest in frozen.items():
             # Different diagnostics may be refined before they are first run.
@@ -74,6 +83,7 @@ def main():
     assert len(crashes["records"]) == 63 and all(r["ok"] for r in crashes["records"])
     assert sum(r["point"] is not None for r in crashes["records"]) == 20
     assert len(install["records"]) == 2
+    assert {record["mode"] for record in install["records"]} == {"fresh", "upgrade"}
     physical = []
     for record in install["records"]:
         mode = record["mode"]
@@ -115,11 +125,18 @@ def main():
         physical.append({"mode": mode, "independently_hashed_payloads": checked, "installed_object_bytes": size})
         if mode == "fresh":
             assert consumers["catalog_sha256"] == session["catalog_sha256"] == record["catalog_sha256"]
-    artifacts = {name: sha(run / name) for name in ("input.json", "installation.json", "installation.log", "consumers.json", "consumers.log", "consumers.execution.json", "session.json", "session.log", "session.execution.json")}
+    artifact_names = ["input.json", "installation.json", "installation.log", "consumers.json", "consumers.log", "consumers.execution.json"]
+    artifact_names += [session_name + suffix for suffix in (".json", ".log", ".execution.json")]
+    artifacts = {name: sha(run / name) for name in artifact_names}
     artifacts["mounts"] = sha(args.mounts)
     artifacts["crashes"] = sha(args.crashes / "receipt.json")
+    collection_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    collection_tools = {"tools/" + name: sha(ROOT / "tools" / name) for name in
+                        ("collect_shared_model_readiness.py", "prepare_shared_model_readiness.py", "run_shared_model_readiness_phase.py")}
+    frozen_commit_check({"qualified_source_commit": collection_commit, "inputs": collection_tools})
     result = {"schema": 1, "linux_checks_passed": True, "production_approved": False,
               "native_platforms_pending": ["Windows", "macOS", "Android device"],
+              "collection_source_commit": collection_commit, "collection_tools": collection_tools,
               "implementation_commit": revision, "phase_inputs": phases, "artifact_sha256": artifacts,
               "index_bytes": (ROOT / "data/model_pair_qualified.json").stat().st_size,
               "index_sha256": sha(ROOT / "data/model_pair_qualified.json"),
