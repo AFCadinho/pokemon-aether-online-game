@@ -226,29 +226,29 @@ func _beam_stage(from: Vector3,flight: float,after: float,alpha: float,facing: B
 	var charge := clampf(elapsed/maxf(launch,.01),0,1)
 	for source: Vector3 in emission_sources:
 		if flight<0:
-			_piece(soft_quad,soft,source,Vector3.ONE*(.5+charge*1.2)*weight,facing)
+			_piece(soft_quad,soft,source,Vector3.ONE*(.5+charge*1.2)*weight*emission_scale,facing)
 			for i in 5:
 				var a := elapsed*2+i*TAU/5
-				var offset := (axis.x*cos(a)+axis.z*sin(a))*(1-charge*.65)*weight
-				_line(source+offset,source+offset*.65,.016*alpha,pearl)
+				var offset := (axis.x*cos(a)+axis.z*sin(a))*(1-charge*.65)*weight*emission_scale
+				_line(source+offset,source+offset*.65,.016*emission_scale*alpha,pearl)
 			continue
 		var p := clampf(flight,0,1)
 		var end := source.lerp(aim,p)
 		var fade := (1-smoothstep(0,.65,after))*smoothstep(0,.12,flight)
 		if emission_end >= 0:
 			fade = (1-smoothstep(impact,emission_end,elapsed))*smoothstep(0,.12,flight)
-		var width := (.18 if motif=="breath-stream" else .25)*weight*fade
+		var width := (.18 if motif=="breath-stream" else .25)*weight*fade*emission_scale
 		_line(source,end,width,surface);_line(source,end,width*.32,pearl)
 		for i in 12:
 			var q := fmod(elapsed*1.2+i/12.0,1.)*p
 			var point := source.lerp(end,q)
 			var spin := elapsed*7+i*.7
 			var offset := (axis.x*cos(spin)+axis.z*sin(spin))*width*1.7
-			_source_sprite(point+offset,.48,_cast_art(),fmod(elapsed+i*.1,1),alpha*fade*.55,facing,spin)
+			_source_sprite(point+offset,.48*emission_scale,_cast_art(),fmod(elapsed+i*.1,1),alpha*fade*.55,facing,spin)
 			if i%3==0:_piece(ring,edge,point,Vector3.ONE*width*(1.5+q),axis)
 		if motif=="electric-beam":
 			for i in 6:
-				_line(source.lerp(end,i/6.)+axis.x*sin(i*3+elapsed*30)*.15,source.lerp(end,(i+1)/6.)+axis.x*sin((i+1)*3+elapsed*30)*.15,.03*fade,pearl)
+				_line(source.lerp(end,i/6.)+axis.x*sin(i*3+elapsed*30)*.15*emission_scale,source.lerp(end,(i+1)/6.)+axis.x*sin((i+1)*3+elapsed*30)*.15*emission_scale,.03*emission_scale*fade,pearl)
 
 func _projectile_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
 	var charge := clampf(elapsed/maxf(launch,.01),0,1)

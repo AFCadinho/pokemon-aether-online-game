@@ -3150,6 +3150,202 @@
         "side_fraction": 0.45
       }
     },
+    "arboliva": {
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "physical_attack_2",
+          "part": "olive_nozzle",
+          "scope": "Normal and shiny, two views: Hyper Beam uses the individually projected distal left olive opening and physical_attack_2 .14/.22/end .32 with emission scale .3. The narrow core meets the opening at .22/.30 and is absent at .33/.40 before leaves fold over it. Full continuous leaf/olive clearance and different target heights remain pending. Live NPC/wild battle review remains pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "physical_attack_2",
+          "part": "olive_nozzle",
+          "scope": "Normal and shiny, two views: Solar Beam now originates in the distal left olive opening, not the absent mouth. Physical_attack_2 .14/.22/end .32 keeps the nozzle facing forward; the normal special clip swings it sideways/back. Emission scale .3 lets the .22 core fit the olive opening and .30 fading core remain centered; none at .33/.40 as leaves fold forward. Full continuous leaf/olive clearance and different target heights remain pending. Live NPC/wild battle review remains pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "hyperbeam": "physical_attack_2",
+        "solarbeam": "physical_attack_2"
+      },
+      "move_choreography": {
+        "hyperbeam": {
+          "action": "physical_attack_2",
+          "emission_end_fraction": 0.32,
+          "emission_scale": 0.3,
+          "impact_fraction": 0.22,
+          "launch_fraction": 0.14
+        },
+        "solarbeam": {
+          "action": "physical_attack_2",
+          "emission_end_fraction": 0.32,
+          "emission_scale": 0.3,
+          "impact_fraction": 0.22,
+          "launch_fraction": 0.14
+        }
+      },
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "328e78f3d7b77c5193f58a074bce3ba1dafc05c6111c4dc0d6b8ce0c70d90e16",
+          "fractions": [
+            0.12,
+            0.16,
+            0.22,
+            0.3,
+            0.33,
+            0.4
+          ],
+          "normal_runtime_sha256": "61ea510db6ec3c78757c3c6824816abce2a29ff28ba2635e44022c3eaeac17a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "617c4fd1ea908f3828b09558e96e07262d4748f0683e791f3f7b34a206d4e813",
+          "scope": "Normal and shiny, two views: Hyper Beam uses the individually projected distal left olive opening and physical_attack_2 .14/.22/end .32 with emission scale .3. The narrow core meets the opening at .22/.30 and is absent at .33/.40 before leaves fold over it. Full continuous leaf/olive clearance and different target heights remain pending. Live NPC/wild battle review remains pending.",
+          "shiny_preview_sha256": "4b503e3bc9e10efe74e501e4660c824a784a3c43e241be8c4e576fd1f729a188",
+          "shiny_runtime_sha256": "837607388aaaecd9ab0f2495fedb9fbec759a61bc5491c9691573a062964b1b3",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 48.0,
+            "emission_scale": 0.3,
+            "frames": 150.0,
+            "impact_frame": 33.0,
+            "launch_frame": 21.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "328e78f3d7b77c5193f58a074bce3ba1dafc05c6111c4dc0d6b8ce0c70d90e16",
+          "fractions": [
+            0.12,
+            0.16,
+            0.22,
+            0.3,
+            0.33,
+            0.4
+          ],
+          "normal_runtime_sha256": "61ea510db6ec3c78757c3c6824816abce2a29ff28ba2635e44022c3eaeac17a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "14caf8d2fc7037875790f0f0880774c3ce4160c8ce947c81d5ae8fa7994af13c",
+          "scope": "Normal and shiny, two views: Solar Beam now originates in the distal left olive opening, not the absent mouth. Physical_attack_2 .14/.22/end .32 keeps the nozzle facing forward; the normal special clip swings it sideways/back. Emission scale .3 lets the .22 core fit the olive opening and .30 fading core remain centered; none at .33/.40 as leaves fold forward. Full continuous leaf/olive clearance and different target heights remain pending. Live NPC/wild battle review remains pending.",
+          "shiny_preview_sha256": "a924bc117c67e284448c925e2be380cf12a126fa5883193c68e83e91c8b72ecf",
+          "shiny_runtime_sha256": "837607388aaaecd9ab0f2495fedb9fbec759a61bc5491c9691573a062964b1b3",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 48.0,
+            "emission_scale": 0.3,
+            "frames": 150.0,
+            "impact_frame": 33.0,
+            "launch_frame": 21.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "hyperbeam": "olive_nozzle",
+        "solarbeam": "olive_nozzle"
+      },
+      "part_reviews": {
+        "olive_nozzle": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "aaec20625850c4ad9f20b20a011de2c34a1b69ab6aa691fdd8fed9f53dda04c8",
+            "8526b22ad00d39d35f701fc5e98ce4cf1f808318ad539f025104830f940bb410"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "d510b95c7470834f7b0690eaa8fed7f606b48b7ef0066639d0786afd8b16819b",
+            "landmarks": [
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.229447946803518,
+                  0.694488863212401,
+                  0.0760631899840818
+                ],
+                "column": 1.0,
+                "distance": 0.504081174331222,
+                "mesh": "pm1041_00_00/Skeleton3D/pm1041_00_00_olive_mesh",
+                "mesh_contains": "olive",
+                "pixel": [
+                  225.0,
+                  245.0
+                ],
+                "surface": 0,
+                "triangle": 907,
+                "vertex_indices": [
+                  430,
+                  431,
+                  384
+                ],
+                "weight": 0.5
+              },
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.179297661926398,
+                  0.359010022760573,
+                  0.461692315313029
+                ],
+                "column": 1.0,
+                "distance": 0.531146839748462,
+                "mesh": "pm1041_00_00/Skeleton3D/pm1041_00_00_olive_mesh",
+                "mesh_contains": "olive",
+                "pixel": [
+                  218.0,
+                  329.0
+                ],
+                "surface": 0,
+                "triangle": 319,
+                "vertex_indices": [
+                  370,
+                  373,
+                  438
+                ],
+                "weight": 0.5
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "manual_skinned_surface_landmark_visual_review",
+          "normal_runtime_sha256": "61ea510db6ec3c78757c3c6824816abce2a29ff28ba2635e44022c3eaeac17a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "79ec83a2f0c0c4014674475783fc68a81951322eadd09e99985cdaebe1c4513f",
+          "scope": "Projected upper/lower rim points put the marker at the center of the distal left-branch olive opening, following left_feeler_c_02 through idle and every native attack. Underside and side poses resolve the opening; special .20/.65 and physical_2 front views partly hide it. Other olives need separate routes if used. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "olive_nozzle": [
+          [
+            {
+              "bone": "left_feeler_c_02",
+              "offset": [
+                0.219291478395462,
+                0.000973472371697426,
+                0.00217586755752563
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "arcanine": {
       "part_reviews": {
         "foot": {
@@ -20323,6 +20519,160 @@
       }
     },
     "cubone": {
+      "anatomical_route_reviews": {
+        "bubblebeam": {
+          "part": "muzzle",
+          "scope": "Authored outlet for the concealed mouth; action timing and actual effects require individual review.",
+          "status": "pending_actual_effect_review"
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two views: Flamethrower uses the authored concealed-mouth outlet below the lower/front skull rim, scale .28 and special_attack .14/.22/end .30. The early window avoids the held bone crossing the stream later at .36-.45. The core leaves below the mask at .16/.22/.28; none at .31/.40. Muzzle particles still overlap the projected mask/upper body silhouette: continuous clearance and effect styling remain pending. Live NPC/wild battle review remains pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "growl": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two views: Growl uses the concealed-mouth outlet and special_attack .14/.22 while the head is raised and the held bone is lowered. The .15/.18 rings travel outward at muzzle height; charge is visible at .13. No geometric mouth opening is present. Continuous source clearance, ring size/orientation and other move timings remain pending. Live NPC/wild battle review remains pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "icebeam": {
+          "part": "muzzle",
+          "scope": "Authored outlet for the concealed mouth; action timing and actual effects require individual review.",
+          "status": "pending_actual_effect_review"
+        },
+        "screech": {
+          "part": "muzzle",
+          "scope": "Authored outlet for the concealed mouth; action timing and actual effects require individual review.",
+          "status": "pending_actual_effect_review"
+        },
+        "watergun": {
+          "action": "special_attack",
+          "part": "muzzle",
+          "scope": "Normal and shiny, two views: Water Gun uses the authored concealed-mouth outlet below the lower/front skull rim, scale .25 and special_attack .14/.22/end .30. The early window avoids the held bone crossing the stream later at .36-.45. Viewed .16/.22/.28 streams connect below the mask; none at .31/.40. This model exposes no mouth opening; continuous mask-rim clearance and target-height variation remain pending. Live NPC/wild battle review remains pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_choreography": {
+        "flamethrower": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.3,
+          "emission_scale": 0.28,
+          "impact_fraction": 0.22,
+          "launch_fraction": 0.14
+        },
+        "growl": {
+          "action": "special_attack",
+          "impact_fraction": 0.22,
+          "launch_fraction": 0.14
+        },
+        "watergun": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.3,
+          "emission_scale": 0.25,
+          "impact_fraction": 0.22,
+          "launch_fraction": 0.14
+        }
+      },
+      "move_effect_reviews": {
+        "flamethrower": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "7ffa646c6c7f3850c48b7b709bfd0e1759f1258e8a87eb91a4bce0a6c9c6cbc2",
+          "fractions": [
+            0.12,
+            0.16,
+            0.22,
+            0.28,
+            0.31,
+            0.4
+          ],
+          "normal_runtime_sha256": "2dae78980d84fce9c10957e188c7d3e3573a0c76322a4eb039dd92b4a2c52b50",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "14278e6fb60fc4a4883635d59b7ea6e50d109e5cb7ccc11c96b069e4a7601166",
+          "scope": "Normal and shiny, two views: Flamethrower uses the authored concealed-mouth outlet below the lower/front skull rim, scale .28 and special_attack .14/.22/end .30. The early window avoids the held bone crossing the stream later at .36-.45. The core leaves below the mask at .16/.22/.28; none at .31/.40. Muzzle particles still overlap the projected mask/upper body silhouette: continuous clearance and effect styling remain pending. Live NPC/wild battle review remains pending.",
+          "shiny_preview_sha256": "dc87481380dbc846e06fb66dd4c2458bd576fa3137a4fcbd1ed00fdeacfe10c7",
+          "shiny_runtime_sha256": "8bfbcbfe17135860ba35e61c0100a0154f767b84214595bd31116f7fecf86751",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 36.0,
+            "emission_scale": 0.28,
+            "frames": 120.0,
+            "impact_frame": 26.4,
+            "launch_frame": 16.8,
+            "move_key": "flamethrower"
+          },
+          "views": 2
+        },
+        "growl": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "69d6d7fd098492a408f808f35f74b070759c47649f401d530d2cbc343f42c78e",
+          "fractions": [
+            0.13,
+            0.15,
+            0.18,
+            0.22,
+            0.3,
+            0.4
+          ],
+          "normal_runtime_sha256": "2dae78980d84fce9c10957e188c7d3e3573a0c76322a4eb039dd92b4a2c52b50",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f2af17d8f809e2c95976558f71c0080f25af32d6a82b66983b9758286145719e",
+          "scope": "Normal and shiny, two views: Growl uses the concealed-mouth outlet and special_attack .14/.22 while the head is raised and the held bone is lowered. The .15/.18 rings travel outward at muzzle height; charge is visible at .13. No geometric mouth opening is present. Continuous source clearance, ring size/orientation and other move timings remain pending. Live NPC/wild battle review remains pending.",
+          "shiny_preview_sha256": "fc3b958db1f70b3f13315aa5938a16f476d864e624a49cbd4ba262beeb656bd9",
+          "shiny_runtime_sha256": "8bfbcbfe17135860ba35e61c0100a0154f767b84214595bd31116f7fecf86751",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 26.4,
+            "launch_frame": 16.8,
+            "move_key": "growl"
+          },
+          "views": 2
+        },
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "7ffa646c6c7f3850c48b7b709bfd0e1759f1258e8a87eb91a4bce0a6c9c6cbc2",
+          "fractions": [
+            0.12,
+            0.16,
+            0.22,
+            0.28,
+            0.31,
+            0.4
+          ],
+          "normal_runtime_sha256": "2dae78980d84fce9c10957e188c7d3e3573a0c76322a4eb039dd92b4a2c52b50",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3d54805827bf2d66e7aedd5608a47836982916b61556a26d3c194343a3975c0d",
+          "scope": "Normal and shiny, two views: Water Gun uses the authored concealed-mouth outlet below the lower/front skull rim, scale .25 and special_attack .14/.22/end .30. The early window avoids the held bone crossing the stream later at .36-.45. Viewed .16/.22/.28 streams connect below the mask; none at .31/.40. This model exposes no mouth opening; continuous mask-rim clearance and target-height variation remain pending. Live NPC/wild battle review remains pending.",
+          "shiny_preview_sha256": "7310c48294a5cf0ef9d60f2f30b269cf2513e6d9f3c2e6e6510283ea48fd2825",
+          "shiny_runtime_sha256": "8bfbcbfe17135860ba35e61c0100a0154f767b84214595bd31116f7fecf86751",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 36.0,
+            "emission_scale": 0.25,
+            "frames": 120.0,
+            "impact_frame": 26.4,
+            "launch_frame": 16.8,
+            "move_key": "watergun"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bubblebeam": "muzzle",
+        "flamethrower": "muzzle",
+        "growl": "muzzle",
+        "icebeam": "muzzle",
+        "screech": "muzzle",
+        "watergun": "muzzle"
+      },
       "part_reviews": {
         "foot": {
           "actions": [
@@ -20391,6 +20741,74 @@
           "preview_sha256": "4c1eda66b5b6b722fe5e134045b1e859b907ab212094f9cbfa82775f0cb7d457",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
           "side_fraction": 0.45
+        },
+        "muzzle": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "50b935bc0d5acc0d995c30ef7a5aa5abaee50924d20baa1d44885ae58ac836f9"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "after": [
+                -0.0679331615269184,
+                0,
+                0.14557074689865102
+              ],
+              "before": [
+                -0.0609331615269184,
+                -0.00788700114935637,
+                0.141570746898651
+              ],
+              "bone": "feeler_a",
+              "part": "muzzle",
+              "reason": "Center the masked muzzle outlet and clear the bottom/front skull rim; this is an authored outlet for a concealed mouth, not a visible lip landmark."
+            }
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "5f360a60b29d806b7767ea01e748dda806aef01d1c179b0ebfd664cefc96134f",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0528071407333689,
+                  0.0655824764311752,
+                  0.881610382835456
+                ],
+                "column": 1.0,
+                "distance": 0.354341292451842,
+                "mesh": "pm0104_00_00/Skeleton3D/pm0104_00_00_head_mesh",
+                "mesh_contains": "head",
+                "pixel": [
+                  210.0,
+                  226.0
+                ],
+                "surface": 0,
+                "triangle": 384,
+                "vertex_indices": [
+                  532,
+                  533,
+                  531
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "manual_surface_landmark_with_reviewed_clearance_offset",
+          "normal_runtime_sha256": "2dae78980d84fce9c10957e188c7d3e3573a0c76322a4eb039dd92b4a2c52b50",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6281ea5095a0b871e99bab7bfff365dcf9b27b5ef107923060905129e60a8431",
+          "scope": "Authored concealed-mouth outlet centered just below the projected lower/front skull rim. It follows the masked muzzle through the visible idle, physical and special poses, including the raised-head underside view. The model has no resolved open lips, so this is a muzzle outlet rather than an approved mouth opening. Move routing and actual effects pending.",
+          "side_fraction": 0.45
         }
       },
       "parts": {
@@ -20443,6 +20861,19 @@
                 0.0030188346281647994
               ],
               "weight": 1
+            }
+          ]
+        ],
+        "muzzle": [
+          [
+            {
+              "bone": "feeler_a",
+              "offset": [
+                -0.0679331615269184,
+                0,
+                0.14557074689865102
+              ],
+              "weight": 1.0
             }
           ]
         ]
@@ -101092,10 +101523,10 @@
         "watergun": {
           "action": "physical_attack",
           "emission_end_fraction": 0.28,
+          "emission_scale": 0.2,
           "impact_fraction": 0.22,
           "launch_fraction": 0.12,
-          "water_stream_arc_height": 1.0,
-          "water_stream_scale": 0.2
+          "water_stream_arc_height": 1.0
         }
       },
       "move_effect_reviews": {
@@ -101115,6 +101546,18 @@
               "preview_sha256": "acd7863892de8f0f43a8fb04762f9dd0d97ba2018d0543475357a0badb1bc4cd",
               "runtime_sha256": "e6fb2aba3bf01dd6f604885b30557cf279f001197d66933abdcebb4db7a90b67",
               "scope": "Full stream trajectory reaches the same-species target and stays above the source body in the six sampled poses .12/.16/.18/.20/.24/.27; target splash remains independent. This distant view cannot establish lip clearance."
+            },
+            {
+              "capture_sha256": "52a5c7ed2cf31bccd28f0f1ffdfb477f29575125fa278b6ef0ea778c68b818b9",
+              "pose_sampling": "forward_from_start_v1",
+              "preview_sha256": "010b2dad85a63a87a26c6d6e98ff1c82137cb365f0121a7a6341415346ae8a42",
+              "scope": "After generalizing water_stream_scale to emission_scale: pixel-identical to the reviewed v162 close views."
+            },
+            {
+              "capture_sha256": "abe9d8a87a613fce43d2f9c6f3ef8479a6af1b55ded6e2f0c58fa7202eac385c",
+              "pose_sampling": "forward_from_start_v1",
+              "preview_sha256": "0e5023bbcf88dd61c9c0d6110e172f713868fae1703159bb2ecef28b264a5f01",
+              "scope": "After generalizing water_stream_scale to emission_scale: pixel-identical to the reviewed v162 close views."
             }
           ],
           "attachment_data_sha256_at_capture": "c0d90b3a809212bf487174e4cb1f28a18445a4eb44b81d8043a43fd9ab10f20b",

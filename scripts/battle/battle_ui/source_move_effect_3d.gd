@@ -19,12 +19,10 @@ var sprite_keys: Array[String] = []
 var quad := QuadMesh.new()
 var beam_material: ShaderMaterial
 var water_emission_end := 0.0
-var water_stream_scale := 1.0
 var water_stream_arc_height := 0.0
 
 func start(move: String, timing: Dictionary, options: Dictionary, native_clock: Callable, positions: Callable, guard: Callable) -> void:
 	water_emission_end = float(timing.get("emission_end_frame", float(timing.impact_frame) + float(timing.frames) * 0.18)) / 60.0
-	water_stream_scale = float(timing.get("water_stream_scale", 1.0))
 	water_stream_arc_height = float(timing.get("water_stream_arc_height", 0.0))
 	super.start(move, timing, options, native_clock, positions, guard)
 
@@ -121,10 +119,10 @@ func _draw_watergun(_from: Vector3, to: Vector3, facing: Basis) -> void:
 		if travel >= 0 and elapsed < water_emission_end:
 			var fade := 1.0 - clampf((elapsed - impact) / maxf(water_emission_end - impact, 0.01), 0, 1)
 			_water_stream(origin, to, clampf(travel, 0, 1), fade)
-			_source_sprite(origin, 0.48 * water_stream_scale, "water_muzzle", fmod(elapsed * 3, 1.0), fade * 0.6, facing)
+			_source_sprite(origin, 0.48 * emission_scale, "water_muzzle", fmod(elapsed * 3, 1.0), fade * 0.6, facing)
 			for i in 5:
 				var phase := clampf(travel - i * 0.045, 0, 1)
-				_source_sprite(_water_stream_point(origin, to, phase), 0.32 * water_stream_scale, "water_drop", float(i) / 8.0, 0.75 * fade, facing, float(i))
+				_source_sprite(_water_stream_point(origin, to, phase), 0.32 * emission_scale, "water_drop", float(i) / 8.0, 0.75 * fade, facing, float(i))
 	if hit and after >= 0 and after < 1:
 		_source_sprite(to, 1.35, "water_splash", after, 0.9 * (1.0 - after * 0.3), facing)
 		for i in 9:
@@ -166,4 +164,4 @@ void fragment() {
 		beam_material.set_shader_parameter("flow_mask", NOISE)
 	beam_material.set_shader_parameter("seconds", elapsed)
 	beam_material.set_shader_parameter("opacity", opacity)
-	_line(from, to, 0.09 * water_stream_scale * opacity, beam_material)
+	_line(from, to, 0.09 * emission_scale * opacity, beam_material)

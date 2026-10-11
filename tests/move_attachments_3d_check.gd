@@ -85,6 +85,20 @@ func _run() -> void:
 			assert(emitters.size() == 1 and emitters[0].size() > 1)
 			assert(Attachments.part_for(identity, "icebeam") == "mouth")
 
+	for identity: String in ["arboliva", "arboliva@shiny"]:
+		for move: String in ["hyperbeam", "solarbeam"]:
+			assert(Attachments.part_for(identity, move) == "olive_nozzle")
+			assert(Attachments.action_for(identity, move, {"physical_attack_2":{}}) == "physical_attack_2")
+		assert(Attachments.definitions_for(identity, "olive_nozzle")[0][0].bone == "left_feeler_c_02")
+		assert(Attachments.definitions_for(identity, "mouth").is_empty())
+	for identity: String in ["cubone", "cubone@shiny"]:
+		for move: String in ["bubblebeam", "flamethrower", "growl", "icebeam", "screech", "watergun"]:
+			assert(Attachments.part_for(identity, move) == "muzzle")
+		assert(Attachments.definitions_for(identity, "muzzle")[0][0].bone == "feeler_a")
+		assert(Attachments.definitions_for(identity, "mouth").is_empty())
+	assert(Attachments.definitions_for("dolliv", "olive_nozzle").is_empty())
+	assert(Attachments.definitions_for("marowak", "muzzle").is_empty())
+
 	for species: String in ["skarmory", "skarmory-mega"]:
 		for identity: String in [species, species + "@shiny"]:
 			assert(Attachments.part_for(identity, "peck") == "beak_tip")

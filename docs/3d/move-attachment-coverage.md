@@ -7,8 +7,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1060 species/forms.
-- No anatomical attachment profile: 140 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 1061 species/forms.
+- No anatomical attachment profile: 139 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 980 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
@@ -41,6 +41,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | appletun | hand, left_hand, mouth | Same attachment profile |
 | araquanid | mouth | Same attachment profile |
 | arbok | mouth | Same attachment profile |
+| arboliva | olive_nozzle | Same attachment profile |
 | arcanine | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | arcanine-hisui | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | archaludon | hand, left_hand, mouth | Same attachment profile |
@@ -196,7 +197,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | croconaw | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | crustle | hand, left_hand, mouth | Same attachment profile |
 | cubchoo | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| cubone | foot, hand, left_foot, left_hand | Same attachment profile |
+| cubone | foot, hand, left_foot, left_hand, muzzle | Same attachment profile |
 | cufant | hand, left_hand | Same attachment profile |
 | cursola | mouth | Same attachment profile |
 | cyclizar | hand, left_hand, mouth | Same attachment profile |

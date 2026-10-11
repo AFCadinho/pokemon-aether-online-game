@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Anchor Arboliva’s Solar Beam and Hyper Beam to an olive opening and Cubone’s breath and vocal moves below its skull rim. Align selected attacks with forward-facing poses and fit their streams to the departure point.
+
 - Calibrate mouth origins and selected beam timing for Swinub, Steelix, Stonjourner, Mandibuzz, Swanna, Snivy and Stunfisk. Give Stunfisk a narrower Water Gun stream that rises from its upward-facing mouth before curving toward the target.
 
 - Calibrate mouth origins and open-mouth Hyper Beam timing for Skarmory, Mega Skarmory and Sandaconda; give both Skarmory forms separate bill-tip origins and forward-facing Peck impact timing.

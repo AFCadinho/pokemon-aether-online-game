@@ -34,6 +34,22 @@ predicate meshes invalidate the attachment and retain the bounds fallback.
 Mega Golurk also uses separate anchors for its attached hands and detached
 rocket fists, selected by the visibility of their respective meshes.
 
+Per-move `move_choreography` applies only when the selected native `action`
+matches. It supplies `launch_fraction`, `impact_fraction`, optional
+`emission_end_fraction` and optional `contact_yaw_degrees`. Emission end stops
+source streams and particles; target impact graphics retain their own lifetime.
+The fire, ice, staged-beam and Water Gun presenters consume that end marker.
+Unspecified values retain their existing move timing.
+
+Fire, ice, staged beams and Water Gun accept `emission_scale` (positive, at
+most 4). It adjusts the source stream width, muzzle and traveling particles;
+endpoints and target impact sizes remain unchanged. Water Gun additionally
+accepts `water_stream_arc_height` (0–4 world units).
+The arc is a parabola with fixed source and target endpoints. Stunfisk uses
+these settings with an individually selected early native pose so its upward
+mouth can emit a narrow stream clear of its body. These settings belong to the
+exact form and move; a visible Substitute does not inherit them.
+
 The [full catalog coverage audit](move-attachment-coverage.md) lists every
 supported species/form and distinguishes configured attachments from bounds
 fallbacks. Rerun it after changing profiles or admitting additional models.
@@ -102,7 +118,9 @@ runtime catalog. The tools read those scenes without modifying them:
   affected captures; these require a fresh visual review.
 - `attack_attachment_move_preview.gd`: actual stage anchors and move effects
   with native animation and contact movement. These are offline captures;
-  they do not certify live wild or NPC battle presentation.
+  they do not certify live wild or NPC battle presentation. `--camera-frame both`
+  frames the entire source-to-target trajectory; the default remains a source
+  closeup. `--fractions` selects up to eight native clip fractions.
 - `check_calibrated_move_attachments.gd`: binding and finite-coordinate checks
   at 21 moments per native clip, including normal/shiny consistency.
 - `tools/audit_move_attachment_learnsets.gd`: supported move/part coverage
