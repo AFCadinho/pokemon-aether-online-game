@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Place the Evolution Item Seller to the left of the Z-Crystal Seller in the Aether Clash Lobby, using the existing shop interface.
+
 - Explain incorrect usernames or passwords at sign-in with clear retry guidance in all four supported languages, instead of showing a session-verification error.
 
 - Add a reusable Evolution Item Seller NPC using the existing shop interface, ready for later map placement, with localized Item Dex source names.
