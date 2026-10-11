@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a private Guild Base elevator cabin, reachable from the lift waiting room with a return door.
+
 - Keep movement and NPC interaction blocked while a shop or other modal window is open, including the handoff from NPC dialogue; release only the window’s own input lock on close.
 
 - Connect reviewed attack origins for 30 more Pokémon forms. Share beam animation and timing by attack family, delay Brambleghast/Bramblin beams until after their spin, and use Mega Scovillain’s separate red and green mouths.
