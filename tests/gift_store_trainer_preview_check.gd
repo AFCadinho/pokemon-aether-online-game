@@ -31,6 +31,14 @@ func _run() -> void:
 		var thor := store._current_character_preview_appearance()
 		_check(thor.get("top") == "Thor_Shirt" and thor.get("bottom") == "Thor_Trousers" and thor.get("shoes") == "Thor_Shoes" and thor.get("cape") == "Thor_Hammer", "Thor Store preview includes all four parts for " + gender)
 		_check(store._selected_purchase_chroma_colors().is_empty(), "Thor box uses fixed colours")
+		store._select_product("emerald-luchador-outfit")
+		var luchador := store._current_character_preview_appearance()
+		var expected_parts := {"top": "EmeraldLuchador_Shirt", "bottom": "EmeraldLuchador_Trousers", "shoes": "EmeraldLuchador_Shoes", "facegear": "EmeraldLuchador_Mask", "cape": "EmeraldLuchador_Wings"}
+		for slot: String in expected_parts:
+			_check(luchador.get(slot) == expected_parts[slot], "Emerald Luchador preview includes %s for %s" % [slot, gender])
+		_check(store._selected_purchase_chroma_colors().is_empty(), "Emerald Luchador box uses fixed colours")
+		var luchador_item := store._catalog_item("emerald-luchador-outfit")
+		_check(luchador_item.get("price") == 450 and luchador_item.get("cosmetic_subcategory") == "outfits", "Emerald Luchador is offered under Outfits for 450 Gems")
 		for item: Dictionary in store.CATALOG:
 			if store._preview_parts_for_item(item).is_empty():
 				continue
