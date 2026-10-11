@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1038 species/forms.
-- No anatomical attachment profile: 162 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 941 species/forms.
+- At least one configured anatomical attachment: 1041 species/forms.
+- No anatomical attachment profile: 159 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 947 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -778,8 +778,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | sandile | mouth | Same attachment profile |
 | sandshrew | foot, hand, left_foot, left_hand | Same attachment profile |
 | sandshrew-alola | foot, hand, left_foot, left_hand | Same attachment profile |
-| sandslash | foot, hand, left_foot, left_hand | Same attachment profile |
-| sandslash-alola | foot, hand, left_foot, left_hand | Same attachment profile |
+| sandslash | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| sandslash-alola | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | sandygast | mouth | Same attachment profile |
 | sawk | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | sawsbuck | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -975,15 +975,18 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | vanillite | mouth | Same attachment profile |
 | vanilluxe | mouth | Same attachment profile |
 | vaporeon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| varoom | mouth | Same attachment profile |
 | veluza | mouth | Same attachment profile |
+| venomoth | mouth | Same attachment profile |
 | venusaur | hand, left_hand, mouth | Same attachment profile |
 | venusaur-mega | hand, left_hand, mouth | Same attachment profile |
 | vespiquen | mouth | Same attachment profile |
-| vibrava | hand, left_hand | Same attachment profile |
+| vibrava | hand, left_hand, mouth | Same attachment profile |
 | victini | hand, left_hand, mouth | Same attachment profile |
 | victreebel | mouth | Same attachment profile |
 | victreebel-mega | mouth | Same attachment profile |
 | vigoroth | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| vikavolt | mouth | Same attachment profile |
 | vileplume | mouth | Same attachment profile |
 | virizion | foot, left_foot, mouth | Same attachment profile |
 | vivillon | mouth | Same attachment profile |

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Place mouth effects on Vibrava, Vikavolt, Varoom, Venomoth and both Sandslash forms individually; align Vikavolt’s Flash Cannon, Varoom’s Sludge Bomb and Alolan Sandslash’s Ice Beam with their attack poses.
+
 - Give Zweilous separate attack origins for both mouths, use Zapdos’s upper bill tips for Peck and Mega Zygarde’s cannon for Hyper Beam, and align Walking Wake, Watchog and Hisuian Zoroark’s Flamethrower with their open-mouth poses.
 
 - Add individually reviewed mouth, hand and foot attachment profiles for more 3D Pokémon forms, including points that follow moving jaws and snouts. Connect Snivy, Servine and Serperior's Vine Whip to their animated vine tips, follow Thwackey's open/closed muzzle changes, track Mega Golurk's detached rocket fists, emit Magmortar's fire attacks from its arm cannon, and give Scovillain separate red and green mouth origins with matching attack poses. Make Hatterene launch Shadow Ball from the hand on its hat and Kadabra form it between its animated hands and use Fraxure’s open-jaw pose for Bite. Use Noivern’s open-jaw launch pose for Flamethrower and Hyper Beam, and time Salandit’s and Volcanion’s Flamethrower to their open mouths. Align Exploud’s Low Kick timing and turn Glastrier and Ice Rider Calyrex toward their opponent for rear kicks.

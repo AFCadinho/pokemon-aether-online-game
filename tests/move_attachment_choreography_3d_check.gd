@@ -85,9 +85,39 @@ func _run() -> void:
 	assert(Attachments.choreography_for("zoroark","flamethrower","physical_attack_2").is_empty())
 	for identity: String in ["walking-wake", "watchog", "zoroark-hisui"]:
 		assert(Attachments.choreography_for(identity,"hyperbeam","special_attack").is_empty())
+	for route: Array in [["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
+		for slot in 4:
+			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
+			var actor := "p%d" % (slot+1)
+			stage.identities[slot] = identity
+			stage.combatants[slot] = {"species":route[0],"shiny":bool(slot % 2)}
+			stage.entries[identity] = stage.entries.fixture.duplicate(true)
+			stage.visual_bounds[identity] = stage.visual_bounds.fixture.duplicate(true)
+			stage.start_move_action(actor,route[1])
+			stage.players[slot].pause()
+			assert(stage.current_actions[slot] == route[2])
+			var timing: Dictionary = stage.move_timing(route[1],actor)
+			assert(is_equal_approx(timing.launch_frame / timing.frames,route[3]))
+			assert(is_equal_approx(timing.impact_frame / timing.frames,route[4]))
+			var effect: Node = stage.create_move_effect(route[1],actor,"p%d" % ((slot^1)+1),{})
+			effect.set_process(false)
+			assert(is_equal_approx(effect.launch,timing.launch_frame/60.0))
+			assert(is_equal_approx(effect.impact,timing.impact_frame/60.0))
+			effect.cancel()
+			var doll := Doll.new()
+			stage.world.add_child(doll)
+			stage.substitute_models[slot] = doll
+			assert(not stage.move_timing(route[1],actor).has("contact_yaw_degrees"))
+			doll.free()
+			stage.substitute_models[slot] = null
+	assert(Attachments.choreography_for("vikavolt","hyperbeam","special_attack").is_empty())
+	assert(Attachments.choreography_for("varoom","flashcannon","physical_attack_2").is_empty())
+	assert(Attachments.action_for("revavroom","sludgebomb",{"physical_attack_2":{}}).is_empty())
+	assert(Attachments.choreography_for("sandslash","icebeam","special_attack").is_empty())
+	assert(Attachments.choreography_for("sandslash-alola","blizzard","special_attack").is_empty())
 	router.release_threaded_resource_requests()
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=8 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=11 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()
