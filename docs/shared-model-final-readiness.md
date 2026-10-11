@@ -35,11 +35,11 @@ handoff and complete-download planning all understand the compact representation
 Both writers check the existing 8 MiB bound before publication. Runtime catalog
 validation still requires an array, including for an empty installed state.
 
-The synthetic complete-state check measures about 1.50 MB per metadata file;
-actual installed runtime size depends on the absolute installation path. This
-is metadata/disk deduplication, not an assertion that parsed dictionary memory
-has the same size. The prepared installed model saving remains 3,011,912,272
-bytes (23.43%) from the recorded renderer-qualified selection.
+The actual complete-state check measures about 1.50 MB per metadata file;
+installed runtime size depends on the absolute installation path. This
+is metadata/disk deduplication; parsed dictionary memory is measured separately.
+Both physical installations contain **9,844,999,677 bytes of model objects**,
+saving **3,011,912,272 bytes (23.43%)** against the recorded original collection.
 
 Repair now compares the active/previous publication pointers captured when a
 collection starts. Restoring a corrupt pack can make the existing generation
@@ -77,6 +77,64 @@ covers both an empty fallback and a valid previous v11 generation.
   full candidate binding and historical renderer-evidence checks remain relevant
   regressions. The Linux external SIGKILL runner exercises 20 interruption
   points with 63 worker invocations.
+
+## Completed Linux installation checks
+
+The physical fresh and v11-upgrade checks passed with Godot 4.6.2 on Linux.
+Both converge to the same installed-state generation,
+`829cae552dfe4f4ded07bc10014360187a78513e5103013f1714015f14cb00e1`.
+Each keeps exactly 1,200 objects and exposes all 2,400 appearances. Both resume
+an interrupted collection, reject incomplete publication, restart without any
+downloads, and repair exactly the deliberately corrupted Abomasnow pair.
+
+| Installation | Bundles downloaded | State bytes | Runtime catalog bytes | Old objects removed |
+| --- | ---: | ---: | ---: | ---: |
+| Fresh | 1,200 | 1,499,017 | 1,460,482 | 0 |
+| Complete v11 upgrade | 1,082 | 1,499,017 | 1,465,282 | 1,082 |
+
+The different runtime catalog sizes reflect the different absolute fixture
+paths. Upgrade cleanup also removes the obsolete generation. The separate
+consumer check passed: an empty launcher store reuses all 1,200 game bundles,
+and the on-demand service verifies all 2,400 appearances without a request.
+
+## Completed Linux session and collected evidence
+
+The [readiness record](../data/shared_model_readiness_checks.json) combines the
+successful installation, consumer, mount, session and interruption receipts.
+Its collector independently hashes 1,318 payloads in each physical installation
+(1,082 PCKs and 236 retained original scenes), checks all metadata and object
+identities, and validates source commits and completed logs. It retains the
+unsuccessful first session's hashes and errors separately.
+
+The successful session used Godot 4.6.2, Mobile Vulkan and the NVIDIA RTX 3070
+Laptop GPU for **86 minutes 47 seconds**: all 1,082 qualified pairs, followed by
+two identical 128-pair demanding/corrected cohorts. It completed **1,338 battles,
+5,352 previews, three canceled selections and 42,548 expired-texture checks**,
+with no captured engine/script errors. All 1,082 pack, namespace and closure
+registries remain present; their serialized size stays 545,335 bytes during
+revisits. Registry sizes include absolute fixture paths.
+
+| Metric after clearing actors/previews/cache | First repeated cohort | Second repeated cohort | Change |
+| --- | ---: | ---: | ---: |
+| Godot static allocation, bytes | 712,839,652 | 717,669,136 | +4,829,484 |
+| GPU texture ownership, bytes | 167,752,704 | 167,752,704 | 0 |
+| GPU buffer ownership, bytes | 11,010,460 | 11,010,460 | 0 |
+| Resources | 794 | 794 | 0 |
+| Nodes / orphan nodes | 400 / 0 | 400 / 0 | 0 |
+
+The static-allocation increase is **4.61 MiB**, within the predetermined
+16 MiB comparison limit. The heap counter still rises and its cause has not
+been isolated. The earlier 16-pair pilot also recorded static growth
+(3,619,444 bytes over its 80 post-warm-up battles). This result establishes the
+measured growth budget and stable GPU/resource ownership; phone RAM usage and
+a completely flat heap remain outside this evidence. RSS is recorded separately
+in the receipt.
+
+Production inputs remained unchanged across phases. The receipt pins the
+installation implementation at `9d63bc7bbeb58b9fe468f4f2b79e310a82602584`,
+consumer diagnostics at `a61a831a11c116b30c19e24f0ec15a4ee2098eea`, and corrected
+session diagnostics at `bd07f858d1737c13b80d8bee3b7b2fbee41d1af4`.
+It also pins the collection tools, raw artifacts and phase input hashes.
 
 ## Reproduction
 
@@ -136,8 +194,9 @@ that only this Linux machine was available; no native Windows/macOS host or
 physical Android device could be tested. Linux checks, platform-branch unit tests,
 Wine and emulation cannot stand in for those native-device results.
 
-All proposed workloads must have successful receipts before being described as
-passed. A mount-index test is not an actor-memory or FPS test; RSS is distinct
-from Godot static allocation and GPU monitors; SIGKILL is not power-loss
-durability. Full paired release certification, promotion, publication and player
-activation retain their separate explicit authorization requirements.
+The local Linux workloads above have successful receipts. The record explicitly
+sets `production_approved: false` and lists Windows, macOS and a physical Android
+device as pending. Mount-index counts, actor/resource ownership, Godot static
+allocation and RSS are distinct measurements. FPS and power-loss durability were
+not certified. Full paired release certification, promotion, publication and
+player activation retain their separate explicit authorization requirements.
