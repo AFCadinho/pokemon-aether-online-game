@@ -157,7 +157,30 @@ func _run() -> void:
 	for spec: Dictionary in Catalog.load_data().items:
 		var scene: Node2D = load(str(spec.scenePath)).instantiate()
 		_check(scene.furniture_id == str(spec.id) and scene.get_node("Visual").get_used_cells().size() > 0, "catalog scene loads: " + str(spec.id))
+		var visual: TileMapLayer = scene.get_node("Visual")
+		_check(visual.position == Vector2(spec.visualOffset[0], spec.visualOffset[1]), "catalog scene keeps its artwork offset: " + str(spec.id))
+		for y: int in range(spec.tiles.size()):
+			for x: int in range(spec.tiles[y].size()):
+				var gid := int(spec.tiles[y][x])
+				if gid > 0:
+					var coords: Array = Catalog.atlas[str(gid)]
+					_check(visual.get_cell_atlas_coords(Vector2i(x, y)) == Vector2i(coords[0], coords[1]), "scene uses the correct source tile: " + str(spec.id))
+		var icon: Texture2D = load("res://assets/guild_base/furniture/icons/%s.png" % str(spec.id))
+		_check(icon != null and icon.get_size() == Vector2(spec.visualSize[0], spec.visualSize[1]) * 32, "complete catalog icon: " + str(spec.id))
+		var value := _item("catalog_item", str(spec.id), 8, 4 if str(spec.placement) == "wall" else 8)
+		var layout: Array = [value]
+		if str(spec.placement) == "surface":
+			value.merge({"x": 0, "y": 0, "parentId": "parent", "slot": 0}, true)
+			layout.push_front(_item("parent", "table_small", 8, 8))
+		_check(Catalog.validate(map, layout) == "", "catalog item fits the real room: " + str(spec.id))
+		_check(str(spec.category) in editor.CATEGORIES, "catalog category is available: " + str(spec.id))
 		scene.free()
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+		var translations: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
+		for spec: Dictionary in Catalog.load_data().items:
+			_check(translations.has(str(spec.nameKey)), "localized item name: " + locale + ":" + str(spec.id))
+		for key: String in editor.CATEGORIES:
+			_check(translations.has("ui.guild_base.furnish.category." + key), "localized category: " + locale + ":" + key)
 	var rug := _item("rug", "red_carpet", 9, 9, {"width": 5, "height": 4})
 	var resized := Furniture.instantiate_placement(map, rug, [])
 	_check(resized.get_node("Visual").get_used_cells().size() == 20 and not resized.blocks_world_position(Vector2(304, 304)), "resized carpets remain walkable and use nine-slice artwork")

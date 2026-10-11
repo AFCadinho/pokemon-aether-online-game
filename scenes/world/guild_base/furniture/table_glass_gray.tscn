@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_s0k1i"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_mwm34"]
+
+[node name="TableGlassGray" type="Node2D" unique_id=868791875]
+texture_filter = 1
+script = ExtResource("1_s0k1i")
+furniture_id = "table_glass_gray"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1868668044]
+position = Vector2(0, -96)
+tile_map_data = PackedByteArray("AAAAAAAAAAANABEAAAABAAAAAAAOABEAAAACAAAAAAAPABEAAAAAAAEAAAAFABIAAAABAAEAAAAGABIAAAACAAEAAAAHABIAAAAAAAIAAAANABIAAAABAAIAAAAOABIAAAACAAIAAAAPABIAAAA=")
+tile_set = ExtResource("2_mwm34")

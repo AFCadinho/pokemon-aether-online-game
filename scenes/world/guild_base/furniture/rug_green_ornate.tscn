@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_isqs7"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_xwmwd"]
+
+[node name="RugGreenOrnate" type="Node2D" unique_id=995505753]
+texture_filter = 1
+script = ExtResource("1_isqs7")
+furniture_id = "rug_green_ornate"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=2002499607]
+position = Vector2(0, -160)
+tile_map_data = PackedByteArray("AAAAAAAAAAAGAAMAAAABAAAAAAAHAAMAAAACAAAAAAAIAAMAAAADAAAAAAAJAAMAAAAAAAEAAAANAAMAAAABAAEAAAAOAAMAAAACAAEAAAAPAAMAAAADAAEAAAAAAAQAAAAAAAIAAAAEAAQAAAABAAIAAAAFAAQAAAACAAIAAAAGAAQAAAADAAIAAAAHAAQAAAAAAAMAAAALAAQAAAABAAMAAAAMAAQAAAACAAMAAAANAAQAAAADAAMAAAAOAAQAAAAAAAQAAAACAAUAAAABAAQAAAADAAUAAAACAAQAAAAEAAUAAAADAAQAAAAFAAUAAAA=")
+tile_set = ExtResource("2_xwmwd")

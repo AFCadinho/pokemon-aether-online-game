@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_mgapy"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_3p7se"]
+
+[node name="BedDoublePlum" type="Node2D" unique_id=706474812]
+texture_filter = 1
+script = ExtResource("1_mgapy")
+furniture_id = "bed_double_plum"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=415555924]
+position = Vector2(0, -96)
+tile_map_data = PackedByteArray("AAAAAAAAAAAMABwAAAABAAAAAAANABwAAAACAAAAAAAOABwAAAAAAAEAAAACAB0AAAABAAEAAAADAB0AAAACAAEAAAAEAB0AAAAAAAIAAAAIAB0AAAABAAIAAAAJAB0AAAACAAIAAAAKAB0AAAA=")
+tile_set = ExtResource("2_3p7se")

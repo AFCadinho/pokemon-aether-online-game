@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_cerh0"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_gaies"]
+
+[node name="RugPurpleOrnate" type="Node2D" unique_id=99096703]
+texture_filter = 1
+script = ExtResource("1_cerh0")
+furniture_id = "rug_purple_ornate"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=253798901]
+position = Vector2(0, -160)
+tile_map_data = PackedByteArray("AAAAAAAAAAAJAAUAAAABAAAAAAAKAAUAAAACAAAAAAALAAUAAAADAAAAAAAMAAUAAAAAAAEAAAAAAAYAAAABAAEAAAABAAYAAAACAAEAAAACAAYAAAADAAEAAAADAAYAAAAAAAIAAAAEAAYAAAABAAIAAAAFAAYAAAACAAIAAAAGAAYAAAADAAIAAAAHAAYAAAAAAAMAAAAIAAYAAAABAAMAAAAJAAYAAAACAAMAAAAKAAYAAAADAAMAAAALAAYAAAAAAAQAAAAMAAYAAAABAAQAAAANAAYAAAACAAQAAAAOAAYAAAADAAQAAAAPAAYAAAA=")
+tile_set = ExtResource("2_gaies")

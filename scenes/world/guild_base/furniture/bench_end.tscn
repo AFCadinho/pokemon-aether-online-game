@@ -10,5 +10,5 @@ furniture_id = "bench_end"
 
 [node name="Visual" type="TileMapLayer" parent="." unique_id=1325120392]
 position = Vector2(0, -64)
-tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 0, 13, 0, 4, 0, 0, 0)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 14, 0, 0, 0, 0, 0, 1, 0, 0, 0, 13, 0, 15, 0, 0, 0)
 tile_set = ExtResource("2_uyn5g")

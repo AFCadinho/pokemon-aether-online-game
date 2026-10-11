@@ -65,23 +65,36 @@ grid cell (six on small tables, eight on large tables) and follow the table
 when moved. Occupied cells show a red preview instead of jumping to another
 cell. Returning a table returns its decorations too.
 
-The catalog contains 24 reusable scenes in `scenes/world/guild_base/furniture/`.
+The catalog contains 129 reusable scenes in `scenes/world/guild_base/furniture/`,
+organized into ten categories. Alongside the original 24 designs, it includes
+colored seating, glass and wooden tables, bookcases and dressers, single and
+double beds, plants, tabletop decorations, rugs and decorative laboratory
+capsules. These are decoration assets; lab displays do not provide gameplay
+services. Tables and low dressers provide surface slots. Regular furniture
+blocks its movement footprint; rugs remain walkable.
 Each uses a `TileMapLayer` with a compact shared atlas, a movement footprint and
 the existing character-blocking protocol. Tall art renders above its footprint;
 the player remains sorted by feet. The original decorated TMXs are references,
 not preplaced layouts. Their selected tiles can be rebuilt without editing the
-artist sources:
+artist sources. The shared indoor sheet credits Akizakura16, Shiny570 and
+Ultimospriter; the catalog records this source attribution:
 
 ```sh
 python tools/import_guild_base_furniture.py \
   '/home/adinho/Documents/tiled_pokeaether/kanto/artist/tilesets/inside/Indoors Tileset.tsx'
+ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend --import
 ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend \
   --script res://tools/import_guild_base_furniture.gd
 ```
 
 Keep `data/guild_base_furniture.json` byte-identical to the account-service
-catalog. The first visit initializes a finite starter inventory once. Both
-rooms draw from it. This version does not buy furniture or charge the Guild Bank.
+catalog. The first visit initializes a finite starter inventory once. Catalog
+version 2 seeds missing furniture IDs on the first subsequent visit or edit,
+under the same Guild lock as layout saves. It preserves existing totals,
+including zero, unknown legacy inventory IDs, layouts, revisions and leases.
+Both side rooms draw from the shared inventory. This version does not buy
+furniture or charge the Guild Bank. Personal rooms retain their separate empty
+template and do not yet use this Guild-shared editor.
 The leader grants explicit decorating rights through **Decorating rights**;
 Guild rank alone does not grant them. One editor per room holds a server lease,
 renewed while editing. Concurrent saves in different rooms share a Guild lock,

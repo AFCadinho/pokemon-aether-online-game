@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_r74to"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_6loct"]
+
+[node name="FlowerPotPink" type="Node2D" unique_id=1886052647]
+texture_filter = 1
+script = ExtResource("1_r74to")
+furniture_id = "flower_pot_pink"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=2024922442]
+position = Vector2(0, -32)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 22, 0, 0, 0)
+tile_set = ExtResource("2_6loct")

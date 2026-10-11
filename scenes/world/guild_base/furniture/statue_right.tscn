@@ -10,5 +10,5 @@ furniture_id = "statue_right"
 
 [node name="Visual" type="TileMapLayer" parent="." unique_id=24589632]
 position = Vector2(-32, -96)
-tile_map_data = PackedByteArray("AAAAAAAAAAALAAIAAAABAAAAAAAMAAIAAAACAAAAAAANAAIAAAABAAEAAAAAAAMAAAACAAEAAAABAAMAAAABAAIAAAAEAAMAAAA=")
+tile_map_data = PackedByteArray("AAAAAAAAAAAPAAgAAAABAAAAAAAAAAkAAAACAAAAAAABAAkAAAABAAEAAAAEAAkAAAACAAEAAAAFAAkAAAABAAIAAAAIAAkAAAA=")
 tile_set = ExtResource("2_qmy2x")

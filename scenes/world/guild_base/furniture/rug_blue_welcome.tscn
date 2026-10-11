@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_n58oi"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_482vw"]
+
+[node name="RugBlueWelcome" type="Node2D" unique_id=2090865457]
+texture_filter = 1
+script = ExtResource("1_n58oi")
+furniture_id = "rug_blue_welcome"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=189254448]
+position = Vector2(0, -64)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAcAAAABAAAAAAABAAcAAAACAAAAAAACAAcAAAAAAAEAAAADAAcAAAABAAEAAAAEAAcAAAACAAEAAAAFAAcAAAA=")
+tile_set = ExtResource("2_482vw")
