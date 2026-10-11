@@ -36,7 +36,7 @@ func _run() -> void:
 	sample("baseline")
 	var assets: Array[Dictionary] = []
 	var members := 0
-	for asset: Dictionary in Pilot.DATA.data.assets:
+	for asset: Dictionary in Pilot.catalog().assets:
 		if asset.get("format") != Pair.FORMAT:
 			continue
 		assets.append(asset)

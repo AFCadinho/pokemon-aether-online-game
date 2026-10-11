@@ -157,6 +157,8 @@ func cached_index(descriptor: Dictionary) -> Dictionary:
 	if file == null or file.get_length() != int(descriptor.sizeBytes) or FileAccess.get_sha256(path) != str(descriptor.sha256):
 		return {}
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if parsed is Dictionary:
+		parsed = PairPilot.expand_index(parsed)
 	if not parsed is Dictionary or not _release_index_error(parsed, descriptor).is_empty():
 		return {}
 	return parsed
@@ -180,6 +182,8 @@ func accept_index(descriptor: Dictionary, downloaded_path: String, include_bundl
 	if file == null or file.get_length() != int(descriptor.sizeBytes) or FileAccess.get_sha256(downloaded_path) != str(descriptor.sha256):
 		return {"error": "Asset bundle index integrity check failed.", "jobs": []}
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if parsed is Dictionary:
+		parsed = PairPilot.expand_index(parsed)
 	if not parsed is Dictionary:
 		return {"error": "Asset bundle index is invalid.", "jobs": []}
 	error = _release_index_error(parsed, descriptor)

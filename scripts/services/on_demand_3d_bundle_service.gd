@@ -450,7 +450,7 @@ func _catalog(path: String) -> Array:
 	if file == null or file.get_length() > MAX_CATALOG_BYTES:
 		return []
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
-	return parsed if parsed is Array else []
+	return PairPilot.expand_entries(parsed)
 
 
 func _merge_entries(first: Array, second: Array) -> Array:
@@ -510,7 +510,7 @@ func _read_local_index(path: String, release: Dictionary) -> Dictionary:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 	if not parsed is Dictionary or not parsed.get("assets") is Array or parsed.get("catalog_revision") != release.revision:
 		return {}
-	return parsed
+	return PairPilot.expand_index(parsed)
 
 
 func _approved_index() -> Dictionary:
@@ -635,11 +635,14 @@ func _publish_catalog(entries: Array) -> String:
 	var path := ProjectSettings.globalize_path(ROOT.path_join("runtime-catalog.json"))
 	if DirAccess.make_dir_recursive_absolute(path.get_base_dir()) != OK:
 		return ""
+	var content := JSON.stringify(PairPilot.compact_entries(entries)) + "\n"
+	if content.to_utf8_buffer().size() > MAX_CATALOG_BYTES:
+		return ""
 	var temporary := path + ".partial"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
 	if file == null:
 		return ""
-	file.store_string(JSON.stringify(entries, "\t") + "\n")
+	file.store_string(content)
 	file.close()
 	return path if DirAccess.rename_absolute(temporary, path) == OK else ""
 

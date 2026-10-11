@@ -53,6 +53,10 @@ func battle(species: String) -> Array[WeakRef]:
 	stage.set_combatant(1, species, true)
 	await stage.await_prepared(true, 45000)
 	if check(stage.active and not stage.preparation_failed and stage.handles("p1") and stage.handles("p2"), "Battle prepares " + species + ": " + stage.catalog_problem + " / " + stage.reason + " / loaded=" + stage.loaded_path + " requested=" + root.get_node("SettingsManager").get_battle_3d_catalog_path() + " / " + JSON.stringify(stage.preparation_metrics)):
+		for identity: String in stage.entries:
+			var entry: Dictionary = stage.entries[identity]
+			var trusted := Pilot.asset_for(identity, str(entry.get("_verified_runtime_hash", "")))
+			check(not trusted.is_empty() and entry.get("_pair_asset") == trusted, "Actual qualified pack revision loaded " + identity)
 		for scene: PackedScene in stage.packed.values():
 			refs.append_array(texture_refs(scene))
 		check(not refs.is_empty(), "Battle owns textures: " + species)

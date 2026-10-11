@@ -3,6 +3,7 @@ extends RefCounted
 const Index = preload("asset_bundle_index.gd")
 const Usage = preload("model_store_usage.gd")
 const PairPack = preload("model_pair_pack.gd")
+const PairPilot = preload("model_pair_pilot.gd")
 const STATE_SCHEMA := 1
 const STATE_KIND := "pokeaether-installed-asset-bundles"
 const BUNDLE_SCHEMA := 1
@@ -37,7 +38,9 @@ static func _read_json(path: String, maximum := MAX_JSON) -> Dictionary:
 	if file == null or file.get_length() > maximum:
 		return {}
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
-	return parsed if parsed is Dictionary else {}
+	if not parsed is Dictionary:
+		return {}
+	return PairPilot.expand_state(parsed) if maximum == MAX_STATE_JSON else parsed
 
 
 static func _safe_relative(path: String) -> bool:
@@ -146,7 +149,10 @@ func begin_collection(index: Dictionary, requested_ids: Array[String]) -> Dictio
 	var error := Index.validate(index)
 	if not error.is_empty():
 		return {"error": error}
+	var pointers := _collection_pointers()
 	var generation := active_generation()
+	if _collection_pointers() != pointers:
+		return {"error": "Installed models changed. Prepare the collection again."}
 	var baseline := _read_json(_generations_root().path_join(generation).path_join("installed-state.json"), MAX_STATE_JSON) if not generation.is_empty() else _empty_state("")
 	var plan := Index.plan(index, baseline, requested_ids)
 	if not plan.missing.is_empty():
@@ -166,7 +172,7 @@ func begin_collection(index: Dictionary, requested_ids: Array[String]) -> Dictio
 			downloads.append(asset_id)
 		else:
 			installed[asset_id] = _state_entry(asset, manifest)
-	return {"error": "", "index": index.duplicate(true), "generation": generation,
+	return {"error": "", "index": index.duplicate(true), "generation": generation, "pointers": pointers,
 		"installed": installed, "wanted": plan.downloads + plan.unchanged, "downloads": downloads}
 
 
@@ -188,7 +194,9 @@ func finish_collection(session: Dictionary) -> Dictionary:
 	var indexed := Index.by_id(session.get("index", {}))
 	if indexed.is_empty() or not session.get("installed") is Dictionary or not session.get("wanted") is Array:
 		return {"error": "Invalid collection."}
-	if active_generation() != str(session.get("generation", "")):
+	# Repair can make the current generation valid again without changing any
+	# pointer. Compare publication state, not the fallback chosen by validation.
+	if _collection_pointers() != session.get("pointers"):
 		return {"error": "Installed models changed. Prepare the collection again."}
 	for asset_id: String in session.wanted:
 		if not indexed.has(asset_id):
@@ -200,8 +208,18 @@ func finish_collection(session: Dictionary) -> Dictionary:
 		session.installed[asset_id] = _state_entry(indexed[asset_id], manifest)
 	var next := _empty_state(str(session.index.catalog_revision))
 	next.assets = session.installed.duplicate(true)
+	if _collection_pointers() != session.get("pointers"):
+		return {"error": "Installed models changed. Prepare the collection again."}
 	var error := _write_generation(next)
 	return {"error": error}
+
+
+func _collection_pointers() -> Dictionary:
+	var result := {}
+	for previous in [false, true]:
+		var path := _pointer_path(previous)
+		result[str(previous)] = FileAccess.get_sha256(path) if FileAccess.file_exists(path) else ""
+	return result
 
 
 func _object_manifest(asset: Dictionary) -> Dictionary:
@@ -562,7 +580,10 @@ func _validate_object(archive_sha256: String, expected_manifest := {}) -> bool:
 func _write_generation(next: Dictionary) -> String:
 	if next.get("schema") != STATE_SCHEMA or next.get("kind") != STATE_KIND or not next.get("assets") is Dictionary:
 		return "Invalid installed state."
-	var state_text := JSON.stringify(_sorted_state(next), "\t") + "\n"
+	var state_text := JSON.stringify(PairPilot.compact_state(_sorted_state(next))) + "\n"
+	var catalog_text := JSON.stringify(PairPilot.compact_entries(_runtime_catalog(next))) + "\n"
+	if state_text.to_utf8_buffer().size() > MAX_STATE_JSON or catalog_text.to_utf8_buffer().size() > MAX_STATE_JSON:
+		return "Installed metadata exceeds the supported size."
 	var generation := state_text.sha256_text()
 	var directory := _generations_root().path_join(generation)
 	if not DirAccess.dir_exists_absolute(directory):
@@ -570,7 +591,7 @@ func _write_generation(next: Dictionary) -> String:
 		if DirAccess.make_dir_recursive_absolute(staging) != OK:
 			return "Cannot stage installed state."
 		var state_error := _write_text(staging.path_join("installed-state.json"), state_text)
-		var catalog_error := _write_text(staging.path_join("runtime-catalog.json"), JSON.stringify(_runtime_catalog(next), "\t") + "\n")
+		var catalog_error := _write_text(staging.path_join("runtime-catalog.json"), catalog_text)
 		if state_error != OK or catalog_error != OK:
 			_remove_tree(staging)
 			return "Cannot write installed state."
@@ -644,11 +665,16 @@ func _validate_generation_metadata(generation: String) -> bool:
 		if object_manifest.get("dependencies", []) != asset.get("dependencies", []) or object_manifest.get("appearances", []) != asset.get("appearances", []):
 			return false
 	var catalog_path := directory.path_join("runtime-catalog.json")
-	var catalog_json := JSON.new()
-	if catalog_json.parse(FileAccess.get_file_as_string(catalog_path)) != OK:
+	var catalog_file := FileAccess.open(catalog_path, FileAccess.READ)
+	if catalog_file == null or catalog_file.get_length() > MAX_STATE_JSON:
 		return false
-	var parsed: Variant = catalog_json.data
-	if not parsed is Array:
+	var catalog_json := JSON.new()
+	if catalog_json.parse(catalog_file.get_as_text()) != OK:
+		return false
+	if not catalog_json.data is Array:
+		return false
+	var parsed: Array = PairPilot.expand_entries(catalog_json.data)
+	if parsed.size() != catalog_json.data.size():
 		return false
 	var expected := _runtime_catalog(state_data)
 	if parsed.size() != expected.size():

@@ -1774,6 +1774,7 @@ func _load_catalog(path: String, preserve_actors := false) -> void:
 	var portable_pack := data is Dictionary
 	if portable_pack:
 		data = ReviewedModels.pack_entries(data, prepared_path.get_base_dir())
+	data = preload("res://scripts/services/model_pair_pilot.gd").expand_entries(data)
 	if not data is Array:
 		return
 	var seen := {}
