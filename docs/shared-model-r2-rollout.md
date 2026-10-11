@@ -1,5 +1,11 @@
 # Shared-model R2 rollout
 
+The qualified test upload documented below was superseded by the
+[geometry-sharing staging and cleanup](shared-model-geometry-r2-staging.md).
+The earlier receipt remains historical evidence; 968 of its PCKs and its pilot
+index were retired after the new collection was fully verified. The 114 PCKs
+still needed by the new collection and the live v11 objects remain available.
+
 The existing public desktop manifests select `approved-pokemon-3d-v11`.
 Changing its immutable ZIPs or index in place would invalidate the hashes
 compiled into installed games and launchers. The qualified PCK collection also

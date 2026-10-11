@@ -86,6 +86,7 @@ func _check_catalog_response_parsing() -> void:
 						"name": "Poke Ball",
 						"category": "poke-balls",
 						"shortDesc": "A device for catching Pokemon.",
+						"flavorText": "A round capsule with a red and white shell.",
 						"sellPrice": 100,
 						"requiredBadges": 0,
 						"available": true,
@@ -114,6 +115,9 @@ func _check_catalog_response_parsing() -> void:
 	_check_equal(items.size(), 1, "catalog item count")
 	var first_item: Dictionary = items[0]
 	_check_equal(first_item.get("itemId", ""), "poke-ball", "catalog item id")
+	_check_equal(first_item.get("flavorText", ""), "A round capsule with a red and white shell.", "catalog retains general item description")
+	_check_equal(service.normalize_market_item({"itemId": "legacy"}).get("flavorText"), "", "old catalog responses retain an empty flavor fallback")
+
 	_check_equal(first_item.get("sellPrice", 0), 100, "catalog item sale price")
 	_check_equal(first_item.get("requiredBadges", -1), 0, "catalog item badge requirement")
 	_check_equal(first_item.get("available", false), true, "catalog item availability")

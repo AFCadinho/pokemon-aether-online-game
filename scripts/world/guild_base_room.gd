@@ -1,11 +1,13 @@
 extends "res://scripts/world/map_metadata.gd"
 
 ## Shared room template. The server supplies a guild-specific map ID on entry.
-@export_enum("main_hall", "left_room", "right_room", "elevator", "elevator_cabin") var room_key := "main_hall"
+@export_enum("main_hall", "left_room", "right_room", "elevator", "elevator_cabin", "player_floor", "player_room") var room_key := "main_hall"
 @export var room_size := Vector2i(30, 40)
 @export var walkable_rects: Array[Rect2i] = []
 @export var blocked_rects: Array[Rect2i] = []
 
+var floor_number := 0
+var room_number := 0
 var guild_id := 0
 var base_town_id := ""
 var access_refresh_in_flight := false
@@ -39,17 +41,37 @@ func _ready() -> void:
 
 func configure_guild_base_instance(instance_map_id: String) -> void:
 	var parts := instance_map_id.split(":")
-	if parts.size() != 4 or parts[0] != "guild_base" or parts[3] != room_key:
+	if parts.size() != 4 or parts[0] != "guild_base":
 		push_error("Invalid Guild Base instance for room %s." % room_key)
 		return
 	if not parts[2].is_valid_int() or int(parts[2]) <= 0:
 		push_error("Invalid Guild Base owner.")
+		return
+	var token: String = parts[3]
+	floor_number = 0
+	room_number = 0
+	if room_key in ["player_floor", "player_room", "elevator_cabin"] and token.begins_with(room_key + "_"):
+		var suffix := token.trim_prefix(room_key + "_")
+		if not suffix.is_valid_int() or int(suffix) <= 0:
+			push_error("Invalid Guild Base floor or room.")
+			return
+		if room_key == "player_room":
+			floor_number = (int(suffix) - 1) / 4 + 1
+			room_number = (int(suffix) - 1) % 4 + 1
+		else:
+			floor_number = int(suffix)
+	elif token != room_key or room_key in ["player_floor", "player_room"]:
+		push_error("Invalid Guild Base room template.")
 		return
 	guild_id = int(parts[2])
 	base_town_id = parts[1]
 	map_id = instance_map_id
 	location_id = instance_map_id
 	music_profile_id = "kanto." + base_town_id.trim_prefix("kanto_")
+	if room_key == "player_floor":
+		map_display_name = LocalizationManager.text("ui.guild_base.rooms.floor_title", {"floor": floor_number})
+	elif room_key == "player_room":
+		map_display_name = LocalizationManager.text("ui.guild_base.rooms.room_title", {"floor": floor_number, "room": room_number})
 
 
 func is_walkable_tile(tile: Vector2i) -> bool:

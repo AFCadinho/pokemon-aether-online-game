@@ -4,6 +4,21 @@
 
 - Add 337 individually reviewed 3D attack points and anatomical alternatives across 290 remaining Pokémon forms, shared by normal and shiny appearances. Align Cetitan’s mouth emission and Sinistea’s hand release with their native poses, and give Scyther separate wing attack points.
 
+- Reimport the enlarged Guild Base personal-room visual and align its collision, camera mask, arrival and return door with the new layout.
+
+- Organize the Guild Base lift into a compact searchable floor grid with ground-floor and personal-room shortcuts and a fixed destination footer.
+- Show localized general item descriptions in NPC shop details, rows and tooltips; retain evolution instructions in the Bag and Item Dex.
+
+- Added Guild Base reception and lift attendants, stable automatic player-room assignments, searchable room addresses, and reusable personal-room interiors with Guild-private travel.
+
+- Prepare a reusable Guild Base player-floor hallway with four room slots, a central lift, collision and a camera mask; floor allocation will follow later.
+
+- Share rival encounter loading, completion and retry behavior through a reusable trainer controller; preserve each location's rematch policy.
+
+- Correct the Guild Base cabin walls, lamps and lift control panel by preserving cropped Tiled collection images without overwriting their shared atlas.
+
+- Keep Nugget Bridge Gary gone after any starter-variant victory; retry failed progress or starter lookups without starting an incorrect rival battle.
+
 - Add individually reviewed left/right hand attack points for Mega Ampharos, Kangaskhan, Mega Kangaskhan, Marill, Spinda, Pichu, Plusle, Minun and Dusknoir; use Spinda’s raised-hand clip for hand strikes.
 
 - Add a private Guild Base elevator cabin, reachable from the lift waiting room with a return door.

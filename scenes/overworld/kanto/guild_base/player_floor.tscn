@@ -1,0 +1,165 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_room.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/guild_base_player_floor/guild_base_player_floor.visual.tscn" id="2_visual"]
+[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="3_mask"]
+
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="4_exit"]
+
+[sub_resource type="RectangleShape2D" id="shape_exit"]
+size = Vector2(24, 24)
+
+[node name="GuildBasePlayerFloor" type="Node2D"]
+script = ExtResource("1_room")
+room_key = "player_floor"
+room_size = Vector2i(31, 15)
+walkable_rects = Array[Rect2i]([Rect2i(3, 6, 25, 5)])
+blocked_rects = Array[Rect2i]([Rect2i(3, 9, 1, 1), Rect2i(27, 9, 1, 1), Rect2i(6, 10, 3, 1), Rect2i(22, 10, 3, 1)])
+map_id = "guild_base_player_floor"
+map_region_name = "Kanto"
+map_display_name = "Guild Base — Player Floor"
+world_access_group_id = "guild_bases"
+world_access_group_label = "Guild Bases"
+world_access_area_type = "interior"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+metadata/pao_reusable_template = true
+metadata/guild_base_room_slots = 4
+
+[node name="Visual" parent="." instance=ExtResource("2_visual")]
+
+[node name="DoorMats" parent="Visual" index="5"]
+z_index = 1
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromElevator" type="Marker2D" parent="Spawns"]
+position = Vector2(496, 240)
+
+[node name="FromRoom1" type="Marker2D" parent="Spawns"]
+position = Vector2(176, 240)
+
+[node name="FromRoom2" type="Marker2D" parent="Spawns"]
+position = Vector2(336, 240)
+
+[node name="FromRoom3" type="Marker2D" parent="Spawns"]
+position = Vector2(656, 240)
+
+[node name="FromRoom4" type="Marker2D" parent="Spawns"]
+position = Vector2(816, 240)
+
+[node name="DoorAnchors" type="Node2D" parent="."]
+
+[node name="Elevator" type="Marker2D" parent="DoorAnchors"]
+position = Vector2(496, 192)
+
+[node name="Room1" type="Marker2D" parent="DoorAnchors"]
+position = Vector2(176, 192)
+
+[node name="Room2" type="Marker2D" parent="DoorAnchors"]
+position = Vector2(336, 192)
+
+[node name="Room3" type="Marker2D" parent="DoorAnchors"]
+position = Vector2(656, 192)
+
+[node name="Room4" type="Marker2D" parent="DoorAnchors"]
+position = Vector2(816, 192)
+
+[node name="Exits" type="Node2D" parent="."]
+
+
+[node name="ToCabin" type="Area2D" parent="Exits"]
+position = Vector2(496, 192)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/guild_base/elevator_cabin.tscn"
+target_spawn_name = "FromElevator"
+transition_id = "guild_base_player_floor__to_cabin"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCabin"]
+shape = SubResource("shape_exit")
+
+[node name="ToRoom1" type="Area2D" parent="Exits"]
+position = Vector2(176, 192)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/guild_base/player_room.tscn"
+target_spawn_name = "FromFloor"
+transition_id = "guild_base_player_floor__to_room_1"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoom1"]
+shape = SubResource("shape_exit")
+
+[node name="ToRoom2" type="Area2D" parent="Exits"]
+position = Vector2(336, 192)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/guild_base/player_room.tscn"
+target_spawn_name = "FromFloor"
+transition_id = "guild_base_player_floor__to_room_2"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoom2"]
+shape = SubResource("shape_exit")
+
+[node name="ToRoom3" type="Area2D" parent="Exits"]
+position = Vector2(656, 192)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/guild_base/player_room.tscn"
+target_spawn_name = "FromFloor"
+transition_id = "guild_base_player_floor__to_room_3"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoom3"]
+shape = SubResource("shape_exit")
+
+[node name="ToRoom4" type="Area2D" parent="Exits"]
+position = Vector2(816, 192)
+script = ExtResource("4_exit")
+target_scene_path = "res://scenes/overworld/kanto/guild_base/player_room.tscn"
+target_spawn_name = "FromFloor"
+transition_id = "guild_base_player_floor__to_room_4"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoom4"]
+shape = SubResource("shape_exit")
+
+[node name="Entities" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[node name="Furniture" type="Node2D" parent="Entities"]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("3_mask")
+floor_regions = {
+&"player_floor": Rect2(96, 112, 800, 264)
+}
+active_floor = &"player_floor"
+constrain_camera_to_active_floor = true
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Tiles" type="Node2D" parent="."]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles"]
+
+[connection signal="body_entered" from="Exits/ToCabin" to="Exits/ToCabin" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToRoom1" to="Exits/ToRoom1" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToRoom2" to="Exits/ToRoom2" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToRoom3" to="Exits/ToRoom3" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToRoom4" to="Exits/ToRoom4" method="_on_body_entered"]

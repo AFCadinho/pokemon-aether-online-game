@@ -271,7 +271,9 @@
 			"locationGroupId": "guild_bases",
 			"locationGroupLabel": "Guild Bases",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://c3xcjmtdk07h4"
+			],
 			"scenePath": "res://scenes/overworld/kanto/guild_base/elevator_cabin.tscn",
 			"spawnPoints": {
 				"from_elevator": {
@@ -362,6 +364,92 @@
 					"tile": {
 						"x": 15,
 						"y": 36
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"guild_base_player_floor": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Guild Base — Player Floor",
+			"locationGroupId": "guild_bases",
+			"locationGroupLabel": "Guild Bases",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/guild_base/player_floor.tscn",
+			"spawnPoints": {
+				"from_elevator": {
+					"facingDirection": "down",
+					"label": "Elevator",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromElevator",
+					"tile": {
+						"x": 15,
+						"y": 7
+					}
+				},
+				"from_room_1": {
+					"facingDirection": "down",
+					"label": "Room 1",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromRoom1",
+					"tile": {
+						"x": 5,
+						"y": 7
+					}
+				},
+				"from_room_2": {
+					"facingDirection": "down",
+					"label": "Room 2",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromRoom2",
+					"tile": {
+						"x": 10,
+						"y": 7
+					}
+				},
+				"from_room_3": {
+					"facingDirection": "down",
+					"label": "Room 3",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromRoom3",
+					"tile": {
+						"x": 20,
+						"y": 7
+					}
+				},
+				"from_room_4": {
+					"facingDirection": "down",
+					"label": "Room 4",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromRoom4",
+					"tile": {
+						"x": 25,
+						"y": 7
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"guild_base_player_room": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Guild Base — Player Room",
+			"locationGroupId": "guild_bases",
+			"locationGroupLabel": "Guild Bases",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/guild_base/player_room.tscn",
+			"spawnPoints": {
+				"from_floor": {
+					"facingDirection": "down",
+					"label": "Floor",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromFloor",
+					"tile": {
+						"x": 9,
+						"y": 12
 					}
 				}
 			},
@@ -5344,7 +5432,9 @@
 		"guild_base_elevator__to_cabin": {
 			"destination": {
 				"mapId": "guild_base_elevator_cabin",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://c3xcjmtdk07h4"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/guild_base/elevator_cabin.tscn",
 				"position": {
 					"x": 240.0,
@@ -5466,6 +5556,92 @@
 			},
 			"destinationAreaId": "kanto_vermilion_city",
 			"sourceMapId": "guild_base_main_hall"
+		},
+		"guild_base_player_floor__to_cabin": {
+			"destination": {
+				"mapId": "guild_base_elevator_cabin",
+				"mapSceneAliases": [
+					"uid://c3xcjmtdk07h4"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/elevator_cabin.tscn",
+				"position": {
+					"x": 240.0,
+					"y": 240.0
+				},
+				"spawnMarker": "FromElevator"
+			},
+			"destinationAreaId": "guild_base_elevator_cabin",
+			"sourceMapId": "guild_base_player_floor"
+		},
+		"guild_base_player_floor__to_room_1": {
+			"destination": {
+				"mapId": "guild_base_player_room",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/player_room.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 400.0
+				},
+				"spawnMarker": "FromFloor"
+			},
+			"destinationAreaId": "guild_base_player_room",
+			"sourceMapId": "guild_base_player_floor"
+		},
+		"guild_base_player_floor__to_room_2": {
+			"destination": {
+				"mapId": "guild_base_player_room",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/player_room.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 400.0
+				},
+				"spawnMarker": "FromFloor"
+			},
+			"destinationAreaId": "guild_base_player_room",
+			"sourceMapId": "guild_base_player_floor"
+		},
+		"guild_base_player_floor__to_room_3": {
+			"destination": {
+				"mapId": "guild_base_player_room",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/player_room.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 400.0
+				},
+				"spawnMarker": "FromFloor"
+			},
+			"destinationAreaId": "guild_base_player_room",
+			"sourceMapId": "guild_base_player_floor"
+		},
+		"guild_base_player_floor__to_room_4": {
+			"destination": {
+				"mapId": "guild_base_player_room",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/player_room.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 400.0
+				},
+				"spawnMarker": "FromFloor"
+			},
+			"destinationAreaId": "guild_base_player_room",
+			"sourceMapId": "guild_base_player_floor"
+		},
+		"guild_base_player_room__to_floor": {
+			"destination": {
+				"mapId": "guild_base_player_floor",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/player_floor.tscn",
+				"position": {
+					"x": 176.0,
+					"y": 240.0
+				},
+				"spawnMarker": "FromRoom1"
+			},
+			"destinationAreaId": "guild_base_player_floor",
+			"sourceMapId": "guild_base_player_room"
 		},
 		"guild_base_right_room__to_main_hall": {
 			"destination": {

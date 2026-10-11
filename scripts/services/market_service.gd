@@ -204,6 +204,7 @@ func normalize_market_item(value: Variant) -> Dictionary:
 		"name": str(item.get("name", "")),
 		"category": str(item.get("category", "")),
 		"shortDesc": str(item.get("shortDesc", "")),
+		"flavorText": str(item.get("flavorText", "")),
 		"sellPrice": max(int(item.get("sellPrice", 0)), 0),
 		"requiredBadges": max(int(item.get("requiredBadges", 0)), 0),
 		"available": bool(item.get("available", true)),

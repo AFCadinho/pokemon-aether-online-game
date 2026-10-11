@@ -91,23 +91,59 @@ fresh authorized fetch; ten-second polling also reconciles layouts after an outa
 Offline player positions covered by new furniture recover to nearby clear floor
 through the existing authorized teleport flow on login.
 
-Personal rooms are not included in this feature.
-The upper door of the lift waiting room enters `elevator_cabin.tscn`, built
-from `Guild Base Elevator.tmx`. Its mask and collision cover the cabin floor
-and lower exit threshold. The lower exit returns to `FromCabin` in the waiting
-room; both arrival points are clear of their exit triggers. The control panel
-keeps its authored offset. Floor selection and personal-room destinations
-remain a separate next step.
+The upper door of the waiting room enters `elevator_cabin.tscn`. A
+receptionist behind its left counter opens a searchable member directory,
+including **Find my room**. The cabin attendant lists assigned floors and the
+ground floor in a bounded number grid. The lift search filters by an exact
+floor number or a member name; ground-floor and personal-room shortcuts stay
+above the scroll area, and the selected destination/travel action stay below
+it. **Find my room** clears filters and scrolls to the assigned floor. The grid
+adapts to the window width, with stacked shortcuts on narrow windows.
+Choosing a floor opens its hallway; the ground floor opens the
+waiting room. Entering a cabin from an upper hallway carries that floor in the
+instance ID, so leaving without selecting another destination returns there.
+
+`player_floor.tscn` reuses `Guild Base Player Floor.tmx` for every hallway.
+Its four rooms are numbered **1–4 from left to right on each floor**. The
+central door returns to the lift. `player_room.tscn` reuses the empty
+`Guild Base Player Room.tmx`, retaining all four layers, with collision,
+a lower return door, a visibility mask and constrained camera. Guild members
+can visit occupied rooms in their own base; empty room doors report that no
+member is assigned. Personal-room furnishing and leader-controlled room
+reassignment remain future work.
+
+The server lazily assigns rooms when either attendant is first visited (and
+reconciles new members on later visits/room transitions). Each membership has a
+nullable zero-based `base_room_slot`, unique within its Guild. Assignment holds
+the Guild lock, keeps occupied slots unchanged and fills the first free slot
+in join order. Departure deletes the membership/slot; other members retain
+their addresses. Floor = slot // 4 + 1, room = slot % 4 + 1. Only floors with
+assigned rooms appear in the lift. Migration `0325_guild_base_player_rooms`
+adds this field and its unique/check constraints.
+
+Private IDs use `guild_base:<town>:<guild>:player_floor_<floor>`,
+`player_room_<slot+1>` and `elevator_cabin_<floor>` for upper cabins. The
+existing `elevator_cabin` ID is the ground-floor cabin. Shared templates are
+registered in the world-access catalog but excluded from staff teleport
+choices. The server checks Guild membership, assigned destinations, current
+room, door/NPC proximity, idle state and pending teleports. Presence retains
+full instance identity; leaving a Guild revokes access to rooms and floors.
 
 For Celadon/Saffron, add their actual city entrance/return points and registrars
 before enabling purchases. Reuse the room scenes; extend the server door/return
 contract and town access rather than duplicating maps per Guild or town.
 
 Focused checks: `tests/guild_base_interior_check.gd`,
+`tests/guild_base_player_floor_check.gd`, `tests/guild_base_player_rooms_check.gd`,
 `tests/guild_base_furnishing_check.gd` (add `-- --screenshot` with a graphics
 renderer for a visual preview), account-service `tests.test_guild_base_interiors`,
-`tests.test_guild_base_furniture`, and gateway `tests.test_guild_base_presence`
+`tests.test_guild_base_furniture`, `tests.test_guild_base_player_rooms`, and gateway `tests.test_guild_base_presence`
 and `tests.test_guild_base_furniture_events`. Optional account-service
 `tests.test_guild_base_furniture_postgres.PostgresFurnitureTests` tests migration
 and concurrency when `GUILD_FURNITURE_TEST_DATABASE_URL` points at a disposable
 PostgreSQL database; it creates and drops its own randomly named test schemas.
+
+Focused player-room PostgreSQL checks: `tests.test_guild_base_player_rooms_postgres`
+uses `GUILD_ROOM_TEST_DATABASE_URL` for a disposable database and creates/drops
+its own random test schema. It covers migration up/down and simultaneous first
+visits.
