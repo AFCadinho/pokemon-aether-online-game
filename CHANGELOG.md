@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Visit other Guild Bases through the guard, request entry to closed bases, and let members inside approve visitors. Keep guest access through the shared rooms and garden until departure to the street.
+- Correct overlapping 3D model parts for normal and shiny Cramorant, Deoxys, Minior and Togedemaru. Rebuild Mega Hawlucha from the correct source as a local replacement candidate.
 
 - Expand Guild Base furnishing to 129 reusable furniture and decoration designs from the existing indoor tileset, with beds, storage, seating, rugs and laboratory displays.
 

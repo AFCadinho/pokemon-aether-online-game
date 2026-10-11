@@ -1,0 +1,340 @@
+{
+  "schema": 1,
+  "status": "four_runtime_visibility_repairs_and_five_local_repaired_source_pairs",
+  "production_published": false,
+  "evidence_root": ".tmp/source-model-repairs",
+  "evidence_sha256": {
+    "scene-inventory.json": "d57b90e788086b769a0b6ed1b25b44cc24e71ba1e46cf7a209490fb207ed9186",
+    "blend-inventory.json": "75ab7a68af3c8973cd9f5cc0644074019bf2550c24cbbef9b80f224a068e2d13",
+    "hawlucha-corrected/result.json": "2839bd7c195eb5310babf7263843f6e59b05194d6e9ef6580405baa6abf2d49b",
+    "hawlucha-native-review/godot-review.json": "3f30a35f2d2db6a959211e1411f2539f0fde1e284038222fd17db8bc0abfaaed",
+    "hawlucha-battle/baseline/battle-review.json": "d3d0d0eba4507020f22ad4f535e10380b2fbb4f7679974d7f98a92199cb8f55d",
+    "hawlucha-battle/final/battle-review.json": "9cac89d58e447faab5dfc1283aa0cc972f3737edb150fd7fd15592ca7a6fb1ce",
+    "hawlucha-battle/placement.json": "f4635510d414bed450db7be5d5560e49897c000bbf0939b8d6cae4e48e1a0b0e",
+    "baked-runtime/catalog.json": "deccb22e72f69f4de6de25b49005ec96a9e9abb6ea1dec8b257d9fa516534618",
+    "bundle-integrity.json": "d7d429e3fe8d3aac519d3a83e5e4773395d932041c395dc83a908ef661f20e38",
+    "visibility-regression-check.log": "69bd6b3d66d2ce0bd105c1f51c5dddbae4f366ffbccc95cfd3b4a900fccece56",
+    "visibility-tracks-check.log": "bf0b27d94dfcba093fe7d3e1c3d3d66e4371b141dd454577207fb9b0f898ea13",
+    "shared-binding-check.log": "f2a39948fcb44732a032e03cf3071a3160ac610584801ce14e175d739a999f31",
+    "shared-geometry-check.log": "7843baae7d48ef58fe06b30790cd25e91b7be081d5327a30d0d1adf9ee62df8d",
+    "source-mapping-tests.log": "a9a62c93b51eee640410bdd1924c2eb7632ed5f8a5eac2ea425b405c1a8a196c",
+    "bake.log": "45cdf7cbc73bfc5b9a4e672858f98943909cca33294d9b0644e2a18a3ed9621d",
+    "visibility-final-v1/cramorant.png": "46e58c055296894b39f1c362e29409153eb20c77c8ac9f5b2b3bae7d596d234f",
+    "visibility-final-v1/cramorant@shiny.png": "bbaef2b6fca2f3c97bb3cf4c92e3c98b435384495f78e101317d8befde741bcc",
+    "visibility-final-v1/deoxys.png": "ccb792396bde495cc4622690068e6f4a94d37e892c024a6f943371e92891d731",
+    "visibility-final-v1/deoxys@shiny.png": "c0ee7fa2ea03aa0068dad903c09ccb4ebab6d3b28f713930cda5db01107fdb47",
+    "visibility-final-v1/minior.png": "02fecc2926068e156c32c4be627d496bdb8ecb50104ab3ab684a0de2aca0ea44",
+    "visibility-final-v1/minior@shiny.png": "cc01e364d8a0e3dbdeeed4b863ce588be65002076932d86e464dfacb6bc92000",
+    "visibility-final-v1/togedemaru.png": "58a1a83f26bb2ea8d7f3f2f75486b01f2e7e378df15a4d7aa3f2c8c8fc62276f",
+    "visibility-final-v1/togedemaru@shiny.png": "3df4e2f280a75296e9ad2ad355d024fd4e92ce34d5ee2c5cd0dd3103dd275935",
+    "visibility-corrected/hawlucha-mega.png": "e21bc5affbbeabbd16cb33b3b8ba0371d48147e1ff9ead59f2a5f73bcb58b631",
+    "visibility-corrected/hawlucha-mega@shiny.png": "8a3f83830e473aa8ec1e8785c4ddcc1376de5af09661d07d33b5b98ee8c628df",
+    "hawlucha-battle/technical-qualification.json": "ad6d17c3e845be1ddbccffd64e455479eface577ddbf83c9c12b511e917dd345"
+  },
+  "visibility_policy": "reviewed_visible_geometry_reconstruction_v1",
+  "visibility_models": {
+    "cramorant": {
+      "source_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
+      "glb_sha256": "caaff81c16370b6dc871d97164e9a05947611d45219f6872ca5e44a6b2074744",
+      "profile": "cramorant",
+      "container_sha256": "3eb47e83f08df090dfdf350a8a82dc62802b81260c753071eae5bd5527f62afd"
+    },
+    "cramorant@shiny": {
+      "source_sha256": "edfdb8605972a0980945c2c656c489f9b92070be48bf92fd4ba4e6b8ab4ad81e",
+      "glb_sha256": "418614ba3bdcccbe50268e43aefcf3b41ff191f5b6fe65b95f16bd92e9a8d7ef",
+      "profile": "cramorant",
+      "container_sha256": "71c72e3f8e5b4303339454c20b5e71cf09675ab7d9adb50a61675e25c4eb4021"
+    },
+    "deoxys": {
+      "source_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+      "glb_sha256": "89f533307ed4b798055016916d99fdae51a4621870430d49e16506997c42b6e2",
+      "profile": "deoxys",
+      "container_sha256": "19e18f58ffb10bddb05be10048446648f32b68b547203d48a7ecaf83a1119daf"
+    },
+    "deoxys@shiny": {
+      "source_sha256": "f199afea834e82396f457ce09d4c3ced365a9a26b1c185210d45d1747bf5ae8c",
+      "glb_sha256": "aee9f8b4fed259e7237e9f9704f2a0e6ff045eb65fb51d3802763a6314a693d9",
+      "profile": "deoxys",
+      "container_sha256": "cefd743ff7de383f7c657a4ad7fd54574df9e14cdbed550f8ed224fb2bb3a338"
+    },
+    "minior": {
+      "source_sha256": "af0e49e0463d05f75c37a4259de45a603e2a7e6bb309286f60f22eacf05aeb94",
+      "glb_sha256": "4f65762a4d8d1a89811cdf2453726dfcb916164710aa9898f119b383666589a3",
+      "profile": "minior",
+      "container_sha256": "5c797921ce4e5a87f227e0f8303c54c1a97ce23b6b2ddd87faaeb075383ad3c4"
+    },
+    "minior@shiny": {
+      "source_sha256": "6d640abbafaa4ec91f159958940baa9bdeb5b7f7753b0053eacedb2eb233ace9",
+      "glb_sha256": "8352b4ab00dd8a301c1d8480538ecc20d0751370438bf76ce9318182c77b5602",
+      "profile": "minior",
+      "container_sha256": "9544d27d0e112e10bed91aae1358500ac0121f779a68032abaef5d2e8017b146"
+    },
+    "togedemaru": {
+      "source_sha256": "2f317420982aefbfd2bbe3a0d88bdb81ad981ba48c7ab943f632812a96133b31",
+      "glb_sha256": "e488fe461dd0c90071e290d46a3983008da3772d9d93e6fefd520bfdbb5ed910",
+      "profile": "togedemaru",
+      "container_sha256": "57416467ec506423e5d92ff6fd886b0003c4c6e1e3e9e309a1d3f54f6e1da261"
+    },
+    "togedemaru@shiny": {
+      "source_sha256": "d2885df3708251464388bb533fa1b073641366bbf18cd8f7af522e0edadd54e1",
+      "glb_sha256": "ead76d499e522292c9134e35b3db5566f1e79438cde63a8d4850df053a3b800c",
+      "profile": "togedemaru",
+      "container_sha256": "f7f87b77f7e05a8dbb12d8e114ef3e9bbaf26aa155ca16bd6ec5cf5db86cb0a1"
+    }
+  },
+  "decisions": {
+    "cramorant": "Base Cramorant excludes both fish meshes and both swallowed Pikachu meshes. All seven native clips inspected.",
+    "deoxys": "Normal Deoxys uses animated paired tentacles (arm2); alternate humanoid hands and transient sphere are excluded. All seven native clips inspected.",
+    "minior": "Base identity is the meteor shell. Keep shell and its inner spike geometry; exclude exposed-core eye/mouth overlays and detached shell fragments. Combined normal/shiny meteor geometry reviewed in all seven native clips.",
+    "togedemaru": "Exact admitted scene names are misleading: EffGcloud01 contains the complete normal body, face, limbs and tail. Exclude the tucked duplicate body and two alternate needle sets. All seven native clips inspected."
+  },
+  "repaired_scenes": [
+    {
+      "bytes": 5251250.0,
+      "published": false,
+      "repair_source_sha256": "d6df52661bb85a1a80447c6b75c5fe1dbcff29cfe7ec513fdde473cc4caa0ac7",
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/baked-runtime/cramorant.scn",
+      "runtime_schema": 1.0,
+      "runtime_sha256": "263e74de5bbf84140b94a026e268df24da460e2962410ca0f8bbf7f2679e3074",
+      "species": "cramorant",
+      "variant": "normal"
+    },
+    {
+      "bytes": 5224842.0,
+      "published": false,
+      "repair_source_sha256": "edfdb8605972a0980945c2c656c489f9b92070be48bf92fd4ba4e6b8ab4ad81e",
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/baked-runtime/cramorant-shiny.scn",
+      "runtime_schema": 1.0,
+      "runtime_sha256": "f9fbd5ef0b0e1f8abdf074171188cbb405351a7452f849cc126256e62659d36b",
+      "species": "cramorant",
+      "variant": "shiny"
+    },
+    {
+      "bytes": 3542040.0,
+      "published": false,
+      "repair_source_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/baked-runtime/deoxys.scn",
+      "runtime_schema": 1.0,
+      "runtime_sha256": "5c2220f1fbdcbb8fc2e7a98b85b95d9d70795fa54bdfa03a6399c9c818e3e15d",
+      "species": "deoxys",
+      "variant": "normal"
+    },
+    {
+      "bytes": 3406450.0,
+      "published": false,
+      "repair_source_sha256": "f199afea834e82396f457ce09d4c3ced365a9a26b1c185210d45d1747bf5ae8c",
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/baked-runtime/deoxys-shiny.scn",
+      "runtime_schema": 1.0,
+      "runtime_sha256": "38e6580f8724bb243f62f6706f7667cf6802f536b433b3494df0bfa7fd62326c",
+      "species": "deoxys",
+      "variant": "shiny"
+    },
+    {
+      "bytes": 3563113.0,
+      "published": false,
+      "repair_source_sha256": "af0e49e0463d05f75c37a4259de45a603e2a7e6bb309286f60f22eacf05aeb94",
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/baked-runtime/minior.scn",
+      "runtime_schema": 1.0,
+      "runtime_sha256": "423e92d0012a43ae9d57b200062fe51d67581d4c1c972856105cb118cc3f1679",
+      "species": "minior",
+      "variant": "normal"
+    },
+    {
+      "bytes": 3494633.0,
+      "published": false,
+      "repair_source_sha256": "6d640abbafaa4ec91f159958940baa9bdeb5b7f7753b0053eacedb2eb233ace9",
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/baked-runtime/minior-shiny.scn",
+      "runtime_schema": 1.0,
+      "runtime_sha256": "6d4362a2801626c8bb7fb5b388b2b7175c9bd8218cf8abde9fc67f6953766051",
+      "species": "minior",
+      "variant": "shiny"
+    },
+    {
+      "bytes": 1839879.0,
+      "published": false,
+      "repair_source_sha256": "2f317420982aefbfd2bbe3a0d88bdb81ad981ba48c7ab943f632812a96133b31",
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/baked-runtime/togedemaru.scn",
+      "runtime_schema": 1.0,
+      "runtime_sha256": "11bc14e4e2793fe135249b65c292b43318adbb3bbf9da37af01aa00363332b2f",
+      "species": "togedemaru",
+      "variant": "normal"
+    },
+    {
+      "bytes": 1823112.0,
+      "published": false,
+      "repair_source_sha256": "d2885df3708251464388bb533fa1b073641366bbf18cd8f7af522e0edadd54e1",
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/baked-runtime/togedemaru-shiny.scn",
+      "runtime_schema": 1.0,
+      "runtime_sha256": "1da07f75b52abb1e69994930f870fa7a29746caeb9444168429614bb878b230c",
+      "species": "togedemaru",
+      "variant": "shiny"
+    }
+  ],
+  "hawlucha": {
+    "correct_source": "pm0761_51_00",
+    "previous_wrong_source": "pm0701_11_00",
+    "geometry_motion_sha256": "4a3a6d8458546ffa34daf2fae7ae0a4eb2dee6ef7feb28e9ada25c61e87ff163",
+    "scenes": [
+      {
+        "species": "hawluchamega",
+        "glb_sha256": "5b1ce76da365d263f1b53b2a37b41500605360415dc3d95b460b08bed060af21",
+        "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/hawlucha-corrected/runtime/hawluchamega.scn",
+        "runtime_sha256": "12a952cf283f62b2c036a096064af91867287578184df200e17302e9a3e1ff93"
+      },
+      {
+        "species": "hawluchamega-shiny",
+        "glb_sha256": "bc3c21bcfb50c9f0190f7185091919c5c22966f92c6e3b9b04d77a90671c42dd",
+        "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/hawlucha-corrected/runtime/hawluchamega-shiny.scn",
+        "runtime_sha256": "44acb80a8b86780d205235310fe872c78fe460e59e39c84bfb2a3f47d32ee814"
+      }
+    ],
+    "rest_policy": "Own faint_loop is used for sleep; source bank has no distinct sleep clip.",
+    "battle_scope": "flat_floor_two_runtime_camera_presets; HUD proxy only; not full UI or arena collision certification",
+    "independent_sample_hz": 120,
+    "minimum_floor_clearance": 0.0249999985098839,
+    "reviewed_battle_captures": 48,
+    "active_catalog_replaced": false
+  },
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:cramorant:base",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/visibility-bundles/v1-00101324780f51a709ae2d7aab5850e6c4a4b8a42e03f662884817f1f323d094.zip",
+      "sha256": "00101324780f51a709ae2d7aab5850e6c4a4b8a42e03f662884817f1f323d094",
+      "bytes": 14093992,
+      "appearances": [
+        {
+          "bytes": 7067889,
+          "runtime_identity": "cramorant",
+          "runtime_path": "models/normal.scn",
+          "runtime_sha256": "263e74de5bbf84140b94a026e268df24da460e2962410ca0f8bbf7f2679e3074",
+          "variant": "normal"
+        },
+        {
+          "bytes": 7025048,
+          "runtime_identity": "cramorant@shiny",
+          "runtime_path": "models/shiny.scn",
+          "runtime_sha256": "f9fbd5ef0b0e1f8abdf074171188cbb405351a7452f849cc126256e62659d36b",
+          "variant": "shiny"
+        }
+      ]
+    },
+    {
+      "asset_id": "pokemon_3d:deoxys:base",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/visibility-bundles/v1-e3b7b1266c10e63d65cc6ce23f7e99eeca6df3c4e7231b6de85d2643200c5036.zip",
+      "sha256": "e3b7b1266c10e63d65cc6ce23f7e99eeca6df3c4e7231b6de85d2643200c5036",
+      "bytes": 10251409,
+      "appearances": [
+        {
+          "bytes": 5228506,
+          "runtime_identity": "deoxys",
+          "runtime_path": "models/normal.scn",
+          "runtime_sha256": "5c2220f1fbdcbb8fc2e7a98b85b95d9d70795fa54bdfa03a6399c9c818e3e15d",
+          "variant": "normal"
+        },
+        {
+          "bytes": 5021860,
+          "runtime_identity": "deoxys@shiny",
+          "runtime_path": "models/shiny.scn",
+          "runtime_sha256": "38e6580f8724bb243f62f6706f7667cf6802f536b433b3494df0bfa7fd62326c",
+          "variant": "shiny"
+        }
+      ]
+    },
+    {
+      "asset_id": "pokemon_3d:minior:base",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/visibility-bundles/v1-4f7bcdaf8fad26f30bd98f41e87b00d357461f35e6e62eed8a69b63364dbc5c2.zip",
+      "sha256": "4f7bcdaf8fad26f30bd98f41e87b00d357461f35e6e62eed8a69b63364dbc5c2",
+      "bytes": 10233161,
+      "appearances": [
+        {
+          "bytes": 5170533,
+          "runtime_identity": "minior",
+          "runtime_path": "models/normal.scn",
+          "runtime_sha256": "423e92d0012a43ae9d57b200062fe51d67581d4c1c972856105cb118cc3f1679",
+          "variant": "normal"
+        },
+        {
+          "bytes": 5061585,
+          "runtime_identity": "minior@shiny",
+          "runtime_path": "models/shiny.scn",
+          "runtime_sha256": "6d4362a2801626c8bb7fb5b388b2b7175c9bd8218cf8abde9fc67f6953766051",
+          "variant": "shiny"
+        }
+      ]
+    },
+    {
+      "asset_id": "pokemon_3d:togedemaru:base",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/visibility-bundles/v1-be86023198ee21e4f318c8fd386a6a51693a98b58486e4ec419b34d35f9676e2.zip",
+      "sha256": "be86023198ee21e4f318c8fd386a6a51693a98b58486e4ec419b34d35f9676e2",
+      "bytes": 5159617,
+      "appearances": [
+        {
+          "bytes": 2582953,
+          "runtime_identity": "togedemaru",
+          "runtime_path": "models/normal.scn",
+          "runtime_sha256": "11bc14e4e2793fe135249b65c292b43318adbb3bbf9da37af01aa00363332b2f",
+          "variant": "normal"
+        },
+        {
+          "bytes": 2575605,
+          "runtime_identity": "togedemaru@shiny",
+          "runtime_path": "models/shiny.scn",
+          "runtime_sha256": "1da07f75b52abb1e69994930f870fa7a29746caeb9444168429614bb878b230c",
+          "variant": "shiny"
+        }
+      ]
+    },
+    {
+      "asset_id": "pokemon_3d:hawlucha:mega",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/source-model-repairs/hawlucha-battle/local-candidates/bundles/v1-fc617b3a04b6ad0dd2ffbc12b334b107c6e59b25366b52cef317e25514432520.zip",
+      "sha256": "fc617b3a04b6ad0dd2ffbc12b334b107c6e59b25366b52cef317e25514432520",
+      "bytes": 17611582,
+      "appearances": [
+        {
+          "bytes": 8813462,
+          "runtime_identity": "hawlucha-mega",
+          "runtime_path": "models/normal.scn",
+          "runtime_sha256": "12a952cf283f62b2c036a096064af91867287578184df200e17302e9a3e1ff93",
+          "variant": "normal"
+        },
+        {
+          "bytes": 8797059,
+          "runtime_identity": "hawlucha-mega@shiny",
+          "runtime_path": "models/shiny.scn",
+          "runtime_sha256": "44acb80a8b86780d205235310fe872c78fe460e59e39c84bfb2a3f47d32ee814",
+          "variant": "shiny"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    "10 original appearances, each instantiated twice: exact hashes, unchanged native tracks and bone poses, private libraries, unchanged shared mesh/skin, RESET, idempotence, unknown revision and bad mesh rejection",
+    "8 repaired SCNs serialized and reloaded with visibility masks across all clips",
+    "12 Python source-mapping tests",
+    "2168 shared-catalog appearance bindings; 16 correction bindings",
+    "Shared geometry catalog binding regression",
+    "Source visibility track boundaries, switches, RESET, reload and instance isolation",
+    "2 corrected Mega Hawlucha SCNs: native timing, pose order regression; 60 Hz placement and independent 120 Hz clearance",
+    "5 local archive bundles / 10 scene hashes verified"
+  ],
+  "remaining": [
+    "Mega Hawlucha corrected pair is a local candidate; active catalog/shared packs and published bundles still contain the previous source until separate admission/release.",
+    "The five species attack attachment calibration remains a separate follow-up; this repair does not approve their emission points.",
+    "Four visibility masks reconstruct the reviewed base form; alternate form transitions and missing source-authored visibility keys are not recovered."
+  ],
+  "implementation_sha256": {
+    "scripts/battle/animations/reviewed_source_visibility.gd": "935ba6726a9c000a69fe25ce7a922aca7677f918a32c3a1eee6655f2a5655444",
+    "resources/battle/model_visibility/catalog_repairs.json": "2eb93ffa14cc35b694b5a87b3648928baa1a24aebd786500fbb258eafc040491",
+    "tools/sprite_factory/bake_reviewed_visibility_repairs.gd": "e8e70df2a8142eebd377ff7f13cbce3f0e589f080d211213d5551a825ba58423",
+    "tools/sprite_factory/catalog_mega_hawlucha_source_audit.json": "9d7f9c321476aaa8702ba624ff6f683c11dacce9e61234b93c5105ab8c77df84",
+    "tools/sprite_factory/catalog_mega_3d_production.py": "5c244f679af561d7dc18a15eca049e83ad7b6f3a8d618c20495a87ec34a4f172"
+  }
+}
