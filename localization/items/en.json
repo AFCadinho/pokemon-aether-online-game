@@ -25,7 +25,8 @@
   },
   "strawberry-sweet": {
     "name": "Strawberry Sweet",
-    "shortDesc": "Use on Milcery and choose one of nine Alcremie flavors. Consumed only on successful evolution."
+    "shortDesc": "Use on Milcery and choose one of nine Alcremie flavors. Consumed only on successful evolution.",
+    "flavorText": "A strawberry-shaped sweet. When a Milcery holds this, it will spin around happily."
   },
   "gold-coin": {
     "name": "Gold Coin",
@@ -877,7 +878,8 @@
   },
   "auspicious-armor": {
     "name": "Auspicious Armor",
-    "shortDesc": "Use to evolve: Charcadet → Armarouge. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Charcadet → Armarouge. Consumed only on successful evolution.",
+    "flavorText": "An old set of golden armor, treasured for its fine craftsmanship."
   },
   "black-augurite": {
     "name": "Black Augurite",
@@ -885,119 +887,148 @@
   },
   "chipped-pot": {
     "name": "Chipped Pot",
-    "shortDesc": "Use to evolve: Sinistea Antique → Polteageist Antique. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Sinistea Antique → Polteageist Antique. Consumed only on successful evolution.",
+    "flavorText": "A peculiar teapot that can make a certain species of Pokemon evolve. It may be chipped, but tea poured from it is delicious."
   },
   "cracked-pot": {
     "name": "Cracked Pot",
-    "shortDesc": "Use to evolve: Sinistea → Polteageist. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Sinistea → Polteageist. Consumed only on successful evolution.",
+    "flavorText": "A peculiar teapot that can make a certain species of Pokemon evolve. It may be cracked, but tea poured from it is delicious."
   },
   "dawn-stone": {
     "name": "Dawn Stone",
-    "shortDesc": "Use on male Kirlia for Gallade or female Snorunt for Froslass. Consumed only on successful evolution."
+    "shortDesc": "Use on male Kirlia for Gallade or female Snorunt for Froslass. Consumed only on successful evolution.",
+    "flavorText": "A peculiar stone that can make certain species of Pokemon evolve. It sparkles like a glittering eye."
   },
   "deep-sea-scale": {
     "name": "Deep Sea Scale",
-    "shortDesc": "When held, doubles Clamperl's Sp. Def. Use to evolve: Clamperl → Gorebyss. Consumed only on successful evolution."
+    "shortDesc": "When held, doubles Clamperl's Sp. Def. Use to evolve: Clamperl → Gorebyss. Consumed only on successful evolution.",
+    "flavorText": "An item to be held by Clamperl. This scale shines with a faint pink and raises the holders Sp. Def stat."
   },
   "deep-sea-tooth": {
     "name": "Deep Sea Tooth",
-    "shortDesc": "When held, doubles Clamperl's Sp. Atk. Use to evolve: Clamperl → Huntail. Consumed only on successful evolution."
+    "shortDesc": "When held, doubles Clamperl's Sp. Atk. Use to evolve: Clamperl → Huntail. Consumed only on successful evolution.",
+    "flavorText": "An item to be held by Clamperl. This fang gleams a sharp silver and raises the holders Sp. Atk stat."
   },
   "dragon-scale": {
     "name": "Dragon Scale",
-    "shortDesc": "Use to evolve: Seadra → Kingdra. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Seadra → Kingdra. Consumed only on successful evolution.",
+    "flavorText": "A very tough and inflexible scale. Dragon-type Pokemon may be holding this item when caught."
   },
   "dubious-disc": {
     "name": "Dubious Disc",
-    "shortDesc": "Use to evolve: Porygon2 → Porygon-Z. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Porygon2 → Porygon-Z. Consumed only on successful evolution.",
+    "flavorText": "A transparent device overflowing with dubious data. Its producer is unknown."
   },
   "dusk-stone": {
     "name": "Dusk Stone",
-    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution.",
+    "flavorText": "A peculiar stone that can make certain species of Pokemon evolve. It holds shadows as dark as can be."
   },
   "electirizer": {
     "name": "Electirizer",
-    "shortDesc": "Use to evolve: Electabuzz → Electivire. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Electabuzz → Electivire. Consumed only on successful evolution.",
+    "flavorText": "A box packed with a tremendous amount of electric energy. Its loved by a certain Pokemon."
   },
   "fire-stone": {
     "name": "Fire Stone",
-    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution.",
+    "flavorText": "A peculiar stone that can make certain species of Pokemon evolve. The stone has a fiery orange heart."
   },
   "galarica-cuff": {
     "name": "Galarica Cuff",
-    "shortDesc": "Use to evolve: Slowpoke Galar → Slowbro Galar. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Slowpoke Galar → Slowbro Galar. Consumed only on successful evolution.",
+    "flavorText": "A cuff made from woven-together Galarica Twigs. Giving it to Galarian Slowpoke makes the Pokemon very happy."
   },
   "galarica-wreath": {
     "name": "Galarica Wreath",
-    "shortDesc": "Use to evolve: Slowpoke Galar → Slowking Galar. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Slowpoke Galar → Slowking Galar. Consumed only on successful evolution.",
+    "flavorText": "A wreath made from woven-together Galarica Twigs. Placing it on the head of a Galarian Slowpoke makes the Pokemon very happy."
   },
   "ice-stone": {
     "name": "Ice Stone",
-    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution.",
+    "flavorText": "A peculiar stone that can make certain species of Pokemon evolve. It has an unmistakable snowflake pattern."
   },
   "kings-rock": {
     "name": "Kings Rock",
-    "shortDesc": "When held, adds a 10% flinch chance to eligible damaging moves. Use to evolve: Poliwhirl → Politoed; Slowpoke → Slowking. Consumed only on successful evolution."
+    "shortDesc": "When held, adds a 10% flinch chance to eligible damaging moves. Use to evolve: Poliwhirl → Politoed; Slowpoke → Slowking. Consumed only on successful evolution.",
+    "flavorText": "An item to be held by a Pokemon. When the holder successfully inflicts damage, the target may also flinch."
   },
   "leaf-stone": {
     "name": "Leaf Stone",
-    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution.",
+    "flavorText": "A peculiar stone that can make certain species of Pokemon evolve. It has an unmistakable leaf pattern."
   },
   "linking-cord": {
     "name": "Linking Cord",
-    "shortDesc": "Use on compatible trade-evolving Pokémon. Karrablast and Shelmet require a real trade with each other. Consumed only on successful evolution."
+    "shortDesc": "Use on compatible trade-evolving Pokémon. Karrablast and Shelmet require a real trade with each other. Consumed only on successful evolution.",
+    "flavorText": "A cable with plugs at both ends, used to connect devices."
   },
   "magmarizer": {
     "name": "Magmarizer",
-    "shortDesc": "Use to evolve: Magmar → Magmortar. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Magmar → Magmortar. Consumed only on successful evolution.",
+    "flavorText": "A box packed with a tremendous amount of magma energy. Its loved by a certain Pokemon."
   },
   "malicious-armor": {
     "name": "Malicious Armor",
-    "shortDesc": "Use to evolve: Charcadet → Ceruledge. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Charcadet → Ceruledge. Consumed only on successful evolution.",
+    "flavorText": "An old set of dark armor with a mysterious, unsettling presence."
   },
   "masterpiece-teacup": {
     "name": "Masterpiece Teacup",
-    "shortDesc": "Use to evolve: Poltchageist Artisan → Sinistcha Masterpiece. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Poltchageist Artisan → Sinistcha Masterpiece. Consumed only on successful evolution.",
+    "flavorText": "A finely crafted teacup with an elegant finish."
   },
   "metal-alloy": {
     "name": "Metal Alloy",
-    "shortDesc": "Use to evolve: Duraludon → Archaludon. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Duraludon → Archaludon. Consumed only on successful evolution.",
+    "flavorText": "A sturdy alloy made by combining different metals."
   },
   "metal-coat": {
     "name": "Metal Coat",
-    "shortDesc": "When held, boosts Steel-type moves. Use to evolve: Onix → Steelix; Scyther → Scizor. Consumed only on successful evolution."
+    "shortDesc": "When held, boosts Steel-type moves. Use to evolve: Onix → Steelix; Scyther → Scizor. Consumed only on successful evolution.",
+    "flavorText": "An item to be held by a Pokemon. Its a special metallic film that can boost the power of Steel-type moves."
   },
   "moon-stone": {
     "name": "Moon Stone",
-    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution.",
+    "flavorText": "A peculiar stone that can make certain species of Pokemon evolve. It is as black as the night sky."
   },
   "oval-stone": {
     "name": "Oval Stone",
-    "shortDesc": "To be held by Happiny. Level up during daytime (05:00–21:00 game time) to evolve into Chansey. Consumed only on successful evolution."
+    "shortDesc": "To be held by Happiny. Level up during daytime (05:00–21:00 game time) to evolve into Chansey. Consumed only on successful evolution.",
+    "flavorText": "A peculiar stone that can make certain species of Pokemon evolve. Its as round as a Pokemon Egg."
   },
   "prism-scale": {
     "name": "Prism Scale",
-    "shortDesc": "Use to evolve: Feebas → Milotic. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Feebas → Milotic. Consumed only on successful evolution.",
+    "flavorText": "A mysterious scale that causes a certain Pokemon to evolve. It shines in rainbow colors."
   },
   "protector": {
     "name": "Protector",
-    "shortDesc": "Use to evolve: Rhydon → Rhyperior. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Rhydon → Rhyperior. Consumed only on successful evolution.",
+    "flavorText": "A protective item of some sort. It is extremely stiff and heavy. Its loved by a certain Pokemon."
   },
   "razor-claw": {
     "name": "Razor Claw",
-    "shortDesc": "When held, raises the critical-hit ratio by one stage. Have Sneasel hold it and level up at night (21:00–05:00 game time) for Weavile; Hisui Sneasel must level up during daytime (05:00–21:00 game time) for Sneasler. Consumed only on successful evolution."
+    "shortDesc": "When held, raises the critical-hit ratio by one stage. Have Sneasel hold it and level up at night (21:00–05:00 game time) for Weavile; Hisui Sneasel must level up during daytime (05:00–21:00 game time) for Sneasler. Consumed only on successful evolution.",
+    "flavorText": "An item to be held by a Pokemon. This sharply hooked claw increases the holders critical-hit ratio."
   },
   "razor-fang": {
     "name": "Razor Fang",
-    "shortDesc": "When held, adds a 10% flinch chance to eligible damaging moves. Have Gligar hold it and level up at night (21:00–05:00 game time) to evolve into Gliscor. Consumed only on successful evolution."
+    "shortDesc": "When held, adds a 10% flinch chance to eligible damaging moves. Have Gligar hold it and level up at night (21:00–05:00 game time) to evolve into Gliscor. Consumed only on successful evolution.",
+    "flavorText": "An item to be held by a Pokemon. When the holder successfully inflicts damage, the target may also flinch."
   },
   "reaper-cloth": {
     "name": "Reaper Cloth",
-    "shortDesc": "Use to evolve: Dusclops → Dusknoir. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Dusclops → Dusknoir. Consumed only on successful evolution.",
+    "flavorText": "A cloth imbued with horrifyingly strong spiritual energy. Its loved by a certain Pokemon."
   },
   "sachet": {
     "name": "Sachet",
-    "shortDesc": "Use to evolve: Spritzee → Aromatisse. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Spritzee → Aromatisse. Consumed only on successful evolution.",
+    "flavorText": "A sachet filled with fragrant perfumes that are just slightly too overwhelming. Yet its loved by a certain Pokemon."
   },
   "scroll-of-darkness": {
     "name": "Scroll of Darkness",
@@ -1009,43 +1040,53 @@
   },
   "shiny-stone": {
     "name": "Shiny Stone",
-    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution.",
+    "flavorText": "A peculiar stone that can make certain species of Pokemon evolve. It shines with a dazzling light."
   },
   "sun-stone": {
     "name": "Sun Stone",
-    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution.",
+    "flavorText": "A peculiar stone that can make certain species of Pokemon evolve. It burns as red as the evening sun."
   },
   "sweet-apple": {
     "name": "Sweet Apple",
-    "shortDesc": "Use to evolve: Applin → Appletun. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Applin → Appletun. Consumed only on successful evolution.",
+    "flavorText": "A peculiar apple that can make a certain species of Pokemon evolve. Its exceptionally sweet."
   },
   "syrupy-apple": {
     "name": "Syrupy Apple",
-    "shortDesc": "Use to evolve: Applin → Dipplin. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Applin → Dipplin. Consumed only on successful evolution.",
+    "flavorText": "An apple coated in a thick layer of sweet syrup."
   },
   "tart-apple": {
     "name": "Tart Apple",
-    "shortDesc": "Use to evolve: Applin → Flapple. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Applin → Flapple. Consumed only on successful evolution.",
+    "flavorText": "A peculiar apple that can make a certain species of Pokemon evolve. Its exceptionally tart."
   },
   "thunder-stone": {
     "name": "Thunder Stone",
-    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution.",
+    "flavorText": "A peculiar stone that can make certain species of Pokemon evolve. It has a distinct thunderbolt pattern."
   },
   "unremarkable-teacup": {
     "name": "Unremarkable Teacup",
-    "shortDesc": "Use to evolve: Poltchageist → Sinistcha. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Poltchageist → Sinistcha. Consumed only on successful evolution.",
+    "flavorText": "A simple, well-used teacup with a plain finish."
   },
   "up-grade": {
     "name": "Upgrade",
-    "shortDesc": "Use to evolve: Porygon → Porygon2. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Porygon → Porygon2. Consumed only on successful evolution.",
+    "flavorText": "A transparent device somehow filled with all sorts of data. It was produced by Silph Co."
   },
   "water-stone": {
     "name": "Water Stone",
-    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution."
+    "shortDesc": "Use on a compatible Pokémon to evolve it. Consumed only on successful evolution.",
+    "flavorText": "A peculiar stone that can make certain species of Pokemon evolve. It is the blue of a pool of clear water."
   },
   "whipped-dream": {
     "name": "Whipped Dream",
-    "shortDesc": "Use to evolve: Swirlix → Slurpuff. Consumed only on successful evolution."
+    "shortDesc": "Use to evolve: Swirlix → Slurpuff. Consumed only on successful evolution.",
+    "flavorText": "A soft and sweet treat made of fluffy, puffy, whipped, and whirled cream. Its loved by a certain Pokemon."
   },
   "berry-sweet": {
     "name": "Berry Sweet",

@@ -7,9 +7,13 @@ var failed := false
 
 
 func _init() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
 	_check_market_popup_contract()
 	_check_market_attendant_uses_ui()
-
+	_check_shop_description_presentation()
 	quit(1 if failed else 0)
 
 
@@ -75,6 +79,45 @@ func _check_market_popup_contract() -> void:
 func _check_market_attendant_uses_ui() -> void:
 	var text := _read_text(MARKET_ATTENDANT_SCRIPT)
 	_check_true(text.contains('ui_overlay.call("open_market", market, market_mode, inventory_items)'), "Market attendant opens the selected market mode")
+
+
+func _check_shop_description_presentation() -> void:
+	var overlay = load(UI_OVERLAY_SCRIPT).new()
+	var host := Control.new()
+	root.add_child(host)
+	overlay.root_control = host
+	var item := {
+		"itemId": "auspicious-armor", "name": "Auspicious Armor", "category": "misc",
+		"shortDesc": "Use to evolve: Charcadet → Armarouge. Consumed only on successful evolution.",
+		"flavorText": "An old set of golden armor, treasured for its fine craftsmanship.",
+		"costs": [{"currency": "money", "amount": 100000}],
+	}
+	var empty_catalog: Array[Dictionary] = []
+	var localization := root.get_node("ItemLocalization")
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+		root.get_node("LocalizationManager").set_locale(locale)
+		var catalog: Dictionary = localization.get_catalog(locale)
+		var expected := str(catalog["auspicious-armor"]["flavorText"])
+		overlay.open_market({"id": "evolution_item_shop", "items": [item]})
+		_check_true(overlay.market_detail_description_label.text == expected, locale + " shop detail uses the general description")
+		_check_true(not expected.contains("Armarouge"), locale + " general description does not give an evolution recipe")
+		_check_true(str(overlay.market_selected_item["shortDesc"]).contains("Armarouge"), locale + " evolution instructions remain in the item summary")
+		for row: Node in overlay.market_item_list.get_children():
+			if not row.is_queued_for_deletion():
+				_check_true(row.tooltip_text == expected, locale + " shop tooltip uses the same description")
+		var sold: Array = overlay._market_sell_items(empty_catalog, [{"itemId": "auspicious-armor", "quantity": 1, "tradable": true, "sellPrice": 1000}])
+		_check_true(sold.size() == 1 and overlay._market_item_description(sold[0]) == expected, locale + " Item Buyer also uses the general description")
+		for item_id: Variant in catalog:
+			if (catalog[item_id] as Dictionary).has("flavorText"):
+				_check_true(not localization.shop_description({"id": item_id}).is_empty(), locale + " localizes general item description: " + str(item_id))
+		overlay._hide_market_popup()
+	root.get_node("LocalizationManager").set_locale("en")
+	_check_true(localization.shop_description({"id": "unknown-item", "shortDesc": "Fallback summary"}) == "Fallback summary", "items without general text retain their summary")
+	_check_true(localization.shop_description({"id": "unknown-item", "flavorText": "Server general description"}) == "Server general description", "English accepts a server-provided general description")
+	_check_true(localization.short_description("auspicious-armor").contains("Armarouge"), "Bag and Item Dex retain the evolution explanation")
+	host.free()
+	overlay.free()
+	print("PASS shop general descriptions, evolution summaries and four locales")
 
 
 func _read_text(path: String) -> String:
