@@ -179,7 +179,7 @@ func _run() -> void:
 			doll.free()
 			stage.substitute_models[slot] = null
 	assert(Attachments.action_for("cetoddle","waterpulse",{"physical_attack":{}}).is_empty())
-	assert(Attachments.choreography_for("cetitan","icebeam","physical_attack").is_empty())
+	assert(is_equal_approx(Attachments.choreography_for("cetitan","icebeam","physical_attack").launch_fraction, .16))
 	assert(Attachments.choreography_for("lugia","icebeam","special_attack").is_empty())
 	assert(Attachments.choreography_for("ho-oh","hyperbeam","special_attack").is_empty())
 	assert(Attachments.action_for("stunfisk-galar","watergun",{"physical_attack":{}}).is_empty())

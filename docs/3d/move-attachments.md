@@ -17,18 +17,23 @@ Draco Meteor profile is approved by this checkpoint.
 
 ## Remaining anatomical marker assessment
 
-The follow-up corrects all 37 forms in the positional queue and installs missing
+The latest [catalog origin review](attack-attachment-catalog-review.md) assesses
+all 295 remaining forms and installs routes for 290 of them. It adds 337 part
+bindings and resolves 652 supported learnset routes, including 100 intentional
+body alternatives. Normal and shiny share one profile per exact form.
+
+The earlier positional follow-up corrects all 37 forms in the positional queue and installs missing
 points for 14 of the 15 forms in that queue. Mega Scrafty's hands stay concealed;
 its native body lunge uses a body origin. In this follow-up, 129 part reviews on
 63 forms were installed or replaced, including Mega Barbaracle's separate open
 and twisted-hand bindings, Togekiss's wing tips and Enamorus's tail end.
-This is a bounded correction batch, not completion of the whole catalog.
+These figures describe the earlier bounded correction batch.
 
 The [family backlog](attack-attachment-family-backlog.json) intersects supported
-presenters with learnsets across all 1,200 forms. There are still 295 forms with
-an unconfigured anatomical route: 222 request a hand, 81 a mouth, and one a
-foot (categories overlap). Some need a link to an already reviewed named part;
-others need anatomical calibration or a deliberate alternative. Body and orb
+presenters with learnsets across all 1,200 forms. Five forms retain an
+unconfigured anatomical route because of source-model blockers: Cramorant,
+Deoxys, Mega Hawlucha, Minior and Togedemaru. Three request a hand, four a mouth,
+and one a foot (categories overlap). Body and orb
 origins are procedural and are excluded from these missing-part counts.
 
 The [family routing follow-up](attack-attachment-family-routing-review.md) links
@@ -63,11 +68,11 @@ The initial pending-part pass accepted 94 palm, paw and other surface points on 
 Every remaining proposal has a recorded correction, missing-part, anatomy or
 model decision, with preview hashes and native pose evidence.
 
-This checkpoint assesses marker placement during native idle and attack clips.
+These checkpoints assess marker placement during native idle and attack clips.
 Accepted palm or fin casting points do not automatically certify distal contact
-points. Attack-family routing, effect timing/size/clearance and live NPC/wild
-battle checks remain pending. The next calibration work follows the recorded
-corrections and anatomical families, rather than enumerating individual moves.
+points. The latest catalog pass resolves available anatomical routing; full
+contact presentation, continuous effect clearance and live NPC/wild battle
+checks remain pending. Source-model repairs are required for the five blockers.
 
 ## Moth and insect review checkpoint
 

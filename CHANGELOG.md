@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add 337 individually reviewed 3D attack points and anatomical alternatives across 290 remaining Pokémon forms, shared by normal and shiny appearances. Align Cetitan’s mouth emission and Sinistea’s hand release with their native poses, and give Scyther separate wing attack points.
+
 - Add individually reviewed left/right hand attack points for Mega Ampharos, Kangaskhan, Mega Kangaskhan, Marill, Spinda, Pichu, Plusle, Minun and Dusknoir; use Spinda’s raised-hand clip for hand strikes.
 
 - Add a private Guild Base elevator cabin, reachable from the lift waiting room with a return door.
