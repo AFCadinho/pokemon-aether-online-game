@@ -75,6 +75,20 @@ func _run() -> void:
 		and mega_stone_vendor.position == Vector2(1456, 944),
 		"Mega Stone Seller uses the temporary lobby market location"
 	)
+	var evolution_vendor := lobby.get_node_or_null("Entities/NPCs/EvolutionItemVendor")
+	_check(
+		evolution_vendor != null
+		and evolution_vendor.position == Vector2(1200, 944)
+		and evolution_vendor.market_id == "evolution_item_shop"
+		and evolution_vendor.market_mode == "player_buys",
+		"Evolution Item Seller opens the existing buying shop at its server location"
+	)
+	_check(
+		evolution_vendor != null
+		and evolution_vendor.npc_definition_id == "evolution_item_vendor"
+		and evolution_vendor.call("_get_npc_metadata_id") == "evolution_item_vendor",
+		"Placed Evolution Item Seller resolves shared metadata and localized dialogue"
+	)
 	var lobby_scene_source := FileAccess.get_file_as_string(LOBBY_SCENE)
 	_check(
 		lobby_scene_source.contains("res://scenes/npcs/battle_point_vendor_npc.tscn")
@@ -90,6 +104,11 @@ func _run() -> void:
 		lobby_scene_source.contains("res://scenes/npcs/mega_stone_vendor_npc.tscn")
 		and lobby_scene_source.contains('[node name="MegaStoneVendor"'),
 		"Lobby placement instantiates the reusable Mega Stone Seller scene"
+	)
+	_check(
+		lobby_scene_source.contains("res://scenes/npcs/evolution_item_vendor_npc.tscn")
+		and lobby_scene_source.contains('[node name="EvolutionItemVendor"'),
+		"Lobby placement instantiates the reusable Evolution Item Seller scene"
 	)
 	var night_lights := lobby.get_node_or_null("NightLights")
 	_check(night_lights != null, "Lobby owns a hand-maintained night-light layer")
@@ -144,6 +163,8 @@ func _run() -> void:
 		collision != null and collision.get_cell_source_id(Vector2i(45, 29)) == -1,
 		"Mega Stone Seller placement tile is available"
 	)
+	for tile: Vector2i in [Vector2i(37, 29), Vector2i(36, 29), Vector2i(35, 29), Vector2i(37, 30)]:
+		_check(collision.get_cell_source_id(tile) == -1, "Evolution Item Seller placement or approach tile is walkable: " + str(tile))
 	lobby.queue_free()
 	quit(1 if failed else 0)
 
