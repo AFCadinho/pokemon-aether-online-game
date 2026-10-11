@@ -198,16 +198,16 @@ physical installer check remains a regression check for the original pilot.
 
 ## Remaining activation work
 
-The catalog is intended for local qualification, using bounded per-pair runtime
-catalogs. Full bulk activation still needs metadata-size work: the full index
-is about 6.96 MB, above the launcher's current 1 MiB descriptor limit, and a
-runtime catalog repeats pair metadata per appearance against an 8 MiB reader
-limit. This task does not silently raise those limits. The complete installer
-and runtime catalog representation must be qualified before activating the
-whole collection through a launcher release.
+This renderer run used bounded per-pair runtime catalogs. The subsequent
+[collection readiness work](shared-model-final-readiness.md) adds a separate
+qualified debug option containing 1,082 shared pairs and 118 exact v11 originals.
+Its compact index is 236,908 bytes, within the existing 1 MiB descriptor limit;
+installed metadata also retains the existing 8 MiB limits. See that record for
+complete installation, update, repair and long-session evidence. Neither debug
+option activates a launcher release.
 
-Larger distinct-pack mount budgets, native Windows/macOS installation, update,
-repair and cleanup, and physical Android runtime checks remain. These local
-Linux checks do not certify those platforms, total memory, FPS or every possible
-frame. Full paired certification, publication and release promotion retain
-their separate authorization requirements.
+Native Windows/macOS installation, update, repair and cleanup, and physical
+Android runtime checks remain: only the Linux host was available for the
+follow-up. Local Linux checks do not certify those platforms, total memory,
+FPS or every possible frame. Full paired certification, publication and release
+promotion retain their separate authorization requirements.

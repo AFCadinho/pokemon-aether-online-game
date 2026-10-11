@@ -129,7 +129,10 @@ func _request_cached_model() -> bool:
 	for path in catalogs:
 		if path.is_empty() or not FileAccess.file_exists(path):
 			continue
-		var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+		var catalog_file := FileAccess.open(path, FileAccess.READ)
+		if catalog_file == null or catalog_file.get_length() > 8 * 1024 * 1024:
+			continue
+		var raw: Variant = preload("res://scripts/services/model_pair_pilot.gd").expand_entries(JSON.parse_string(catalog_file.get_as_text()))
 		if not raw is Array:
 			continue
 		for candidate: Variant in raw:

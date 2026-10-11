@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the shared-model test collection within existing metadata limits and let repaired model collections finish without a false concurrent-update error.
+
 - Furnish both private Guild Base side rooms from shared starter storage, with reusable furniture, movable tabletop decorations, adjustable rugs and leader-granted editing rights.
 
 - Add localized Leek, Leader's Crest, Strawberry Sweet and Peat Block evolution descriptions; preview Peat Block against game time and send authorized developer time overrides with item use.

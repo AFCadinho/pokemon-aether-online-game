@@ -132,15 +132,19 @@ The [complete storage audit](shared-model-catalog-audit.md) measures all 1,200
 pairs, with 1,084 selected shared pairs and 3.02 GB / 23.46% less installed data.
 The [local catalog qualification](shared-model-catalog-qualification.md) adds
 the broader candidate bindings and renderer/actor checks through a separate
-debug test option. Whole-catalog metadata limits still require qualification.
+debug test option. Its exact whole-pair qualification retains 1,082 shared pairs
+and 118 originals, saving 3.01 GB / 23.43% of installed model data. The follow-up
+[collection readiness work](shared-model-final-readiness.md) supplies compact
+metadata within the existing limits and records complete-collection checks.
 Native Windows/macOS installation, update,
 repair and cleanup checks remain; the previous Android cohort qualification
 does not certify this new installer/presenter integration. Mounted index growth
 across long sessions and interrupted replacement recovery need broader platform
 qualification. The subsequent [session and interruption checks](shared-model-stress.md)
 qualify 96 battles, 384 previews, repeated mount budgets and 20 SIGKILL/restart
-cases on Linux, with recovery of abandoned staged/quarantined copies. Broader
-distinct-pack counts and native platform qualification remain open. There is no
+cases on Linux, with recovery of abandoned staged/quarantined copies. The
+collection readiness record extends the distinct-pack coverage; native platform
+qualification remains open because only Linux was available. There is no
 claimed FPS, physical phone RAM or all-catalog size
 improvement from these local checks. Full paired certification, publication and
 release promotion require their separate explicit authorization.

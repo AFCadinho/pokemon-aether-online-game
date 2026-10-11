@@ -28,7 +28,10 @@ static func models_plan(service: RefCounted, descriptor: Dictionary, game_catalo
 		by_id[asset.asset_id] = asset
 	var installed := {}
 	if not game_catalog.is_empty() and FileAccess.file_exists(game_catalog):
-		var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(game_catalog))
+		var file := FileAccess.open(game_catalog, FileAccess.READ)
+		var raw: Variant = []
+		if file != null and file.get_length() <= 8 * 1024 * 1024:
+			raw = preload("model_pair_pilot.gd").expand_entries(JSON.parse_string(file.get_as_text()))
 		if raw is Array:
 			for entry: Variant in raw:
 				if entry is Dictionary:
