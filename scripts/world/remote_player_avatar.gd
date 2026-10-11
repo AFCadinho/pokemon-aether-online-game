@@ -1812,8 +1812,8 @@ func _get_mount_part_offset_adjustments(category: String) -> Dictionary:
 func _get_activity_layer_offset(category: String, direction: String = "") -> Vector2:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(current_body_movement_style)
-	# Dedicated hair and headgear sheets already follow the activity body's head position.
-	if normalized_category in ["headgear", "hair"] and CharacterAppearanceService.has_authored_movement_pose(
+	# Dedicated head layers already follow the activity body's head position.
+	if normalized_category in ["headgear", "hair", "facegear"] and CharacterAppearanceService.has_authored_movement_pose(
 		normalized_category, _get_appearance_part_id(normalized_category), current_body_gender, normalized_style
 	):
 		return Vector2.ZERO

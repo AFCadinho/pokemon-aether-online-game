@@ -1111,5 +1111,29 @@
   "star-sweet": {
     "name": "Ster lief",
     "shortDesc": "Heeft momenteel geen evolutie-effect in PokeAether. Gebruik Strawberry Sweet voor Milcery."
+  },
+  "emerald-luchador-shirt": {
+    "name": "Emerald Luchador Jas",
+    "shortDesc": "Cosmetic met vaste kleuren voor mannelijke en vrouwelijke trainers. Activeer hem in je tas en draag hem via Character Customization."
+  },
+  "emerald-luchador-trousers": {
+    "name": "Emerald Luchador Broek",
+    "shortDesc": "Cosmetic met vaste kleuren voor mannelijke en vrouwelijke trainers. Activeer hem in je tas en draag hem via Character Customization."
+  },
+  "emerald-luchador-shoes": {
+    "name": "Emerald Luchador Laarzen",
+    "shortDesc": "Cosmetic met vaste kleuren voor mannelijke en vrouwelijke trainers. Activeer hem in je tas en draag hem via Character Customization."
+  },
+  "emerald-luchador-mask": {
+    "name": "Emerald Luchador Masker",
+    "shortDesc": "Cosmetic met vaste kleuren voor mannelijke en vrouwelijke trainers. Activeer hem in je tas en draag hem via Character Customization."
+  },
+  "emerald-luchador-wings": {
+    "name": "Emerald Luchador Vleugels",
+    "shortDesc": "Draag deze groene verenvleugels in het Back-slot, met elke outfit. Voor mannelijke en vrouwelijke trainers."
+  },
+  "emerald-luchador-outfit": {
+    "name": "Emerald Luchador Outfitbox",
+    "shortDesc": "Bevat vijf losse onderdelen: jas, broek, laarzen, masker en Back-vleugels. Voor beide geslachten. Open de box in je tas."
   }
 }

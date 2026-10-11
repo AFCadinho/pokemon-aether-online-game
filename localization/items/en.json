@@ -1111,5 +1111,29 @@
   "star-sweet": {
     "name": "Star Sweet",
     "shortDesc": "Currently has no evolution effect in PokeAether. Use Strawberry Sweet for Milcery."
+  },
+  "emerald-luchador-shirt": {
+    "name": "Emerald Luchador Jacket",
+    "shortDesc": "Fixed-colour cosmetic for male and female trainers. Activate it in your Bag, then equip it in Character Customization."
+  },
+  "emerald-luchador-trousers": {
+    "name": "Emerald Luchador Trousers",
+    "shortDesc": "Fixed-colour cosmetic for male and female trainers. Activate it in your Bag, then equip it in Character Customization."
+  },
+  "emerald-luchador-shoes": {
+    "name": "Emerald Luchador Boots",
+    "shortDesc": "Fixed-colour cosmetic for male and female trainers. Activate it in your Bag, then equip it in Character Customization."
+  },
+  "emerald-luchador-mask": {
+    "name": "Emerald Luchador Mask",
+    "shortDesc": "Fixed-colour cosmetic for male and female trainers. Activate it in your Bag, then equip it in Character Customization."
+  },
+  "emerald-luchador-wings": {
+    "name": "Emerald Luchador Wings",
+    "shortDesc": "Wear these emerald feather wings in the Back slot, with any outfit. Fits male and female trainers."
+  },
+  "emerald-luchador-outfit": {
+    "name": "Emerald Luchador Outfit Box",
+    "shortDesc": "Contains five separate items: jacket, trousers, boots, mask and Back wings. Fits both genders. Open the box in your Bag."
   }
 }

@@ -168,6 +168,140 @@
         }
       ]
     },
+    "emerald-luchador-mask": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "facegear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "EmeraldLuchador_Mask"
+        }
+      ]
+    },
+    "emerald-luchador-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "EmeraldLuchador_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "EmeraldLuchador_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "EmeraldLuchador_Shoes"
+        },
+        {
+          "category": "facegear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "EmeraldLuchador_Mask"
+        },
+        {
+          "category": "cape",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "EmeraldLuchador_Wings"
+        }
+      ]
+    },
+    "emerald-luchador-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "EmeraldLuchador_Shirt"
+        }
+      ]
+    },
+    "emerald-luchador-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "EmeraldLuchador_Shoes"
+        }
+      ]
+    },
+    "emerald-luchador-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "EmeraldLuchador_Trousers"
+        }
+      ]
+    },
+    "emerald-luchador-wings": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "cape",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "EmeraldLuchador_Wings"
+        }
+      ]
+    },
     "lucario-aura-fighter-outfit": {
       "bundle": true,
       "genders": [
@@ -927,6 +1061,13 @@
           "male": "CelebiForestRanger_Trousers"
         }
       },
+      "EmeraldLuchador_Trousers": {
+        "item_id": "emerald-luchador-trousers",
+        "render_variants": {
+          "female": "EmeraldLuchador_Trousers",
+          "male": "EmeraldLuchador_Trousers"
+        }
+      },
       "LucarioAuraFighter_Trousers": {
         "item_id": "lucario-aura-fighter-trousers",
         "render_variants": {
@@ -971,6 +1112,13 @@
       }
     },
     "cape": {
+      "EmeraldLuchador_Wings": {
+        "item_id": "emerald-luchador-wings",
+        "render_variants": {
+          "female": "EmeraldLuchador_Wings",
+          "male": "EmeraldLuchador_Wings"
+        }
+      },
       "Thor_Hammer": {
         "item_id": "thor-hammer",
         "render_variants": {
@@ -980,6 +1128,13 @@
       }
     },
     "facegear": {
+      "EmeraldLuchador_Mask": {
+        "item_id": "emerald-luchador-mask",
+        "render_variants": {
+          "female": "EmeraldLuchador_Mask",
+          "male": "EmeraldLuchador_Mask"
+        }
+      },
       "LugiaSkyCaptain_Goggles": {
         "item_id": "lugia-sky-captain-goggles",
         "render_variants": {
@@ -1017,6 +1172,13 @@
         "render_variants": {
           "female": "CelebiForestRanger_Shoes",
           "male": "CelebiForestRanger_Shoes"
+        }
+      },
+      "EmeraldLuchador_Shoes": {
+        "item_id": "emerald-luchador-shoes",
+        "render_variants": {
+          "female": "EmeraldLuchador_Shoes",
+          "male": "EmeraldLuchador_Shoes"
         }
       },
       "LucarioAuraFighter_Shoes": {
@@ -1075,6 +1237,13 @@
         "render_variants": {
           "female": "CelebiForestRanger_Shirt",
           "male": "CelebiForestRanger_Shirt"
+        }
+      },
+      "EmeraldLuchador_Shirt": {
+        "item_id": "emerald-luchador-shirt",
+        "render_variants": {
+          "female": "EmeraldLuchador_Shirt",
+          "male": "EmeraldLuchador_Shirt"
         }
       },
       "LucarioAuraFighter_Shirt": {
