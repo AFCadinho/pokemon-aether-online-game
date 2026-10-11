@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_1c676"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_hmjdt"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/guild_base_management_npc.tscn" id="6_manager"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/pokemon_pc_interactable.tscn" id="7_xlakn"]
 
 [sub_resource type="RectangleShape2D" id="shape_0"]
 size = Vector2(96, 24)
@@ -192,9 +193,14 @@ y_sort_enabled = true
 y_sort_enabled = true
 
 [node name="Manager" parent="Entities/NPCs" unique_id=1469897079 instance=ExtResource("6_manager")]
-position = Vector2(368, 240)
+position = Vector2(496, 1072)
 
 [node name="Furniture" type="Node2D" parent="Entities" unique_id=248750834]
+
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=134383951]
+
+[node name="PokemonPC" parent="Entities/Interactables" unique_id=227421799 instance=ExtResource("7_xlakn")]
+position = Vector2(496, 752)
 
 [node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=822771890]
 z_index = 4096
