@@ -7,8 +7,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1094 species/forms.
-- No anatomical attachment profile: 106 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 1100 species/forms.
+- No anatomical attachment profile: 100 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 990 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
@@ -237,6 +237,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | diancie | mouth | Same attachment profile |
 | diancie-mega | mouth | Same attachment profile |
 | diggersby | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| diglett | face | Same attachment profile |
+| diglett-alola | face | Same attachment profile |
 | dipplin | mouth | Same attachment profile |
 | ditto | mouth | Same attachment profile |
 | dodrio | beak_tip, foot, left_foot, mouth, mouth_primary | Same attachment profile |
@@ -269,6 +271,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | dubwool | foot, mouth | Same attachment profile |
 | ducklett | mouth | Same attachment profile |
 | dudunsparce | mouth | Same attachment profile |
+| dugtrio | face, face_primary | Same attachment profile |
+| dugtrio-alola | face, face_primary | Same attachment profile |
 | dunsparce | mouth | Same attachment profile |
 | duosion | mouth | Same attachment profile |
 | duraludon | hand, left_hand, mouth | Same attachment profile |
@@ -1044,6 +1048,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | vivillon | mouth | Same attachment profile |
 | volbeat | hand, left_hand, mouth | Same attachment profile |
 | volcanion | hand, left_hand, mouth | Same attachment profile |
+| voltorb | face | Same attachment profile |
+| voltorb-hisui | face | Same attachment profile |
 | vullaby | hand, left_hand, mouth | Same attachment profile |
 | vulpix | mouth | Same attachment profile |
 | vulpix-alola | mouth | Same attachment profile |

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate selected face attack origins for Voltorb, Hisuian Voltorb, Diglett, Dugtrio and their Alolan forms, including separate bindings for Dugtrio heads and adjusted Hisuian Voltorb and Alolan Diglett beam timing.
+
 - Calibrate selected eye and face attack origins for Magnemite, Magnezone, Lampent, Chandelure, Bronzor, Bronzong, Cascoon and Kakuna. Adjust Lampent and Chandelure Ember size and delay Chandelure casts until its face turns forward.
 
 - Launch Silcoon’s Poison Sting from its forward-facing spike during the flip animation, with darts sized to the spike.

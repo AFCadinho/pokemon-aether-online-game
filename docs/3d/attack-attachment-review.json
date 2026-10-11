@@ -7,19 +7,19 @@
       "mouth_not_required_by_current_supported_learnset": 2,
       "mouthless_species_with_reviewed_alternate_emitter": 8,
       "mouthless_whole_body_move_anchor_reviewed": 1,
-      "mouthless_with_reviewed_casting_parts": 21,
+      "mouthless_with_reviewed_casting_parts": 27,
       "pending_anatomical_casting_review": 1,
       "pending_anatomical_mouth_review": 13,
       "pending_anatomical_mouthpart_review": 3,
       "pending_anatomical_muzzle_review": 1,
-      "pending_anatomical_route": 30,
-      "pending_anatomical_routing_review": 88,
+      "pending_anatomical_route": 28,
+      "pending_anatomical_routing_review": 86,
       "pending_animation_addon_review": 1,
       "pending_camera_framing": 1,
       "pending_corrected_mouth_pose_review": 1,
       "pending_manual_anatomical_calibration": 1,
       "pending_mask_casting_review": 1,
-      "pending_mouth_proposal_or_anatomical_route": 10,
+      "pending_mouth_proposal_or_anatomical_route": 8,
       "pending_mouthpart_clearance_review": 3,
       "pending_multi_pose_mouth_fit": 2,
       "pending_multipose_correction": 1,
@@ -43,12 +43,12 @@
       "pending_multipose_correction": 8,
       "pending_runtime_identity_review": 4,
       "pending_runtime_visibility_and_anatomy_review": 4,
-      "sampled_marker_pose_review_pass_installed": 1801
+      "sampled_marker_pose_review_pass_installed": 1809
     },
-    "runtime_profiles": 1094,
+    "runtime_profiles": 1100,
     "species_forms": 1200
   },
-  "profile_sha256": "e34b15b6ee8632735db9ffe08db375a04db8999fd20b92ec4231443f91c22c11",
+  "profile_sha256": "50b9ee9ea3f9165158a0145ff5b9ea7e59cc222d7666da9b271565cba48004e9",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -24307,14 +24307,126 @@
       }
     },
     "diglett": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Pink oval is nose; no visible mouth. Require per-move anatomical choice.",
-        "preview": "mouth-fallback-review-v6/diglett.png",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "growl": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch avoids the lowered nose covering the resting point. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch avoids the lowered nose covering the resting point. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch avoids the lowered nose covering the resting point. Scale .06 limits the charge below the nose, close to the upper rock edge; .57/.58 samples show the orb and trailing droplets leaving forward. Full-radius rock/nose clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch avoids the lowered nose covering the resting point. Selected cast routes sampled; remaining routes and full clearance pending.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "growl": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.53,
+            0.55,
+            0.57,
+            0.58,
+            0.65,
+            0.74,
+            0.75
+          ],
+          "normal_runtime_sha256": "fcd78a240c6048749808c34f81d04c178b9008949ef962f781b2c04afd182b1b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3db4349bd07b195b22fa24b78a06e822e1eaeb8c9c81128f221baec355e3f1af",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch avoids the lowered nose covering the resting point. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c97da3b87fedb1616028dde61542b0bb123dc68492d73fcc2fe3db663cfa49e9",
+          "shiny_runtime_sha256": "98cdd12b71d51108d28b486c19d7de8c14ca392f1051a308013dd10aa07c4891",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 90.0,
+            "launch_frame": 66.0,
+            "move_key": "growl"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.53,
+            0.55,
+            0.57,
+            0.58,
+            0.65,
+            0.74,
+            0.75
+          ],
+          "normal_runtime_sha256": "fcd78a240c6048749808c34f81d04c178b9008949ef962f781b2c04afd182b1b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5e1b4b2d26217c80efa68acdc7d10cd29b747e36d76427e80cdbfbd8cf463a0a",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch avoids the lowered nose covering the resting point. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d3c85ef9b8392ae5172b14afb1173f0d03aaad13af0fd2c5b8ae39ee0b41451c",
+          "shiny_runtime_sha256": "98cdd12b71d51108d28b486c19d7de8c14ca392f1051a308013dd10aa07c4891",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 90.0,
+            "launch_frame": 66.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.53,
+            0.55,
+            0.57,
+            0.58,
+            0.65,
+            0.74,
+            0.75
+          ],
+          "normal_runtime_sha256": "fcd78a240c6048749808c34f81d04c178b9008949ef962f781b2c04afd182b1b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5dd0f4fc13863896a1a1454f3876cdf07c910c0aabb2277045e4509eac71aa7e",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch avoids the lowered nose covering the resting point. Scale .06 limits the charge below the nose, close to the upper rock edge; .57/.58 samples show the orb and trailing droplets leaving forward. Full-radius rock/nose clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "1c1e1957f92095b6468f4b1551bf08ea3d9125331dd5090512b361b08c409763",
+          "shiny_runtime_sha256": "98cdd12b71d51108d28b486c19d7de8c14ca392f1051a308013dd10aa07c4891",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.06,
+            "frames": 120.0,
+            "impact_frame": 90.0,
+            "launch_frame": 66.0,
+            "move_key": "sludgebomb"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -24323,17 +24435,260 @@
       ],
       "normal_runtime_sha256": "fcd78a240c6048749808c34f81d04c178b9008949ef962f781b2c04afd182b1b",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "bd0213c1cbda40155dabb850bc44f74378f63e74aa83c2a32820579ab50ea7d1",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0332775069075719,
+                  0.0960131744830342,
+                  0.870709318609394
+                ],
+                "column": 0.0,
+                "distance": 0.612617898197333,
+                "mesh": "pm0050_00_00/Skeleton3D/pm0050_00_00_body_mesh",
+                "pixel": [
+                  203.0,
+                  146.0
+                ],
+                "surface": 0,
+                "triangle": 877,
+                "vertex_indices": [
+                  459,
+                  454,
+                  251
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "fcd78a240c6048749808c34f81d04c178b9008949ef962f781b2c04afd182b1b",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3a67b018b1d7b2e90b1095c3f81f02ea7421896037834bf1b550385061a0d80f",
+          "scope": "Individually projected face below the nose; no visible oral opening. Native nose deformation can cover the resting point in some actions. Move routing and actual effects pending.",
+          "side_fraction": 0.45,
+          "special_action_override": {
+            "manual_surface_landmarks": {
+              "capture_sha256": "00a5d85ab1e2985c582bdc6433b057c8cb4038968259236728ef3dd6b77ae892",
+              "landmarks": [
+                {
+                  "action": "special_attack",
+                  "barycentric": [
+                    0.49167528130057,
+                    0.378930909276511,
+                    0.129393809422919
+                  ],
+                  "column": 1.0,
+                  "distance": 0.159612314906361,
+                  "mesh": "pm0050_00_00/Skeleton3D/pm0050_00_00_body_mesh",
+                  "pixel": [
+                    210.0,
+                    208.0
+                  ],
+                  "surface": 0,
+                  "triangle": 874,
+                  "vertex_indices": [
+                    251,
+                    379,
+                    582
+                  ],
+                  "weight": 1.0
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            },
+            "scope": "Special attack uses a separately projected point below the lowered nose; the idle point is occluded by the nose. Review limited to idle and special action use. Physical actions have no cast approval."
+          }
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "diglett-alola": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Pink oval is nose; no visible mouth. Require per-move anatomical choice.",
-        "preview": "mouth-fallback-review-v6/diglett-alola.png",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch; shortened Flash Cannon to .60 impact/.66 end, before the late backward tilt that made the previous .80 end inappropriate. Narrow beam follows the projected front surface in the sampled emission frames and ends before recovery. Early charge, full-radius clearance and intervening frames require further review. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "growl": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch; shortened Flash Cannon to .60 impact/.66 end, before the late backward tilt that made the previous .80 end inappropriate. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch; shortened Flash Cannon to .60 impact/.66 end, before the late backward tilt that made the previous .80 end inappropriate. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch; shortened Flash Cannon to .60 impact/.66 end, before the late backward tilt that made the previous .80 end inappropriate. Scale .06 limits the charge below the nose, close to the upper rock edge; .57/.58 samples show the orb and trailing droplets leaving forward. Full-radius rock/nose clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch; shortened Flash Cannon to .60 impact/.66 end, before the late backward tilt that made the previous .80 end inappropriate. Selected cast routes sampled; remaining routes and full clearance pending.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "75dd60ea314bff55966fffbfacec690b89253f1c4aded2be9a537c0876c99856",
+          "fractions": [
+            0.12,
+            0.53,
+            0.55,
+            0.57,
+            0.575,
+            0.58,
+            0.6,
+            0.74
+          ],
+          "normal_runtime_sha256": "fb6d3c0a9ebdab1db5cea147819dd07c2af91aad8ed69195c3927f3dde00f345",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e915a9d72ac55047590da9f8601e47bfec35cad6298bb5691c2d03083c890fbc",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch; shortened Flash Cannon to .60 impact/.66 end, before the late backward tilt that made the previous .80 end inappropriate. Narrow beam follows the projected front surface in the sampled emission frames and ends before recovery. Early charge, full-radius clearance and intervening frames require further review. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c13e55c2c31b91f27d43e8a1f6425eca4937347315e2cf81256d6fe73e4f4717",
+          "shiny_runtime_sha256": "4389182b138a329a95a2d1a6a4505306a732731b53b16166cc8fbee0ef33181f",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 79.2,
+            "emission_scale": 0.06,
+            "frames": 120.0,
+            "impact_frame": 72.0,
+            "launch_frame": 66.0,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "growl": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.53,
+            0.55,
+            0.57,
+            0.58,
+            0.65,
+            0.74,
+            0.75
+          ],
+          "normal_runtime_sha256": "fb6d3c0a9ebdab1db5cea147819dd07c2af91aad8ed69195c3927f3dde00f345",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7a428ab59fa9225c254678937f597c7a4148d99fc44f2e5df4c259494dd07842",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch; shortened Flash Cannon to .60 impact/.66 end, before the late backward tilt that made the previous .80 end inappropriate. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "8434cce4200cb3bfbc61b2a2a324183843d43cf573963d2935f1a298ce869a19",
+          "shiny_runtime_sha256": "4389182b138a329a95a2d1a6a4505306a732731b53b16166cc8fbee0ef33181f",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 90.0,
+            "launch_frame": 66.0,
+            "move_key": "growl"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.53,
+            0.55,
+            0.57,
+            0.58,
+            0.65,
+            0.74,
+            0.75
+          ],
+          "normal_runtime_sha256": "fb6d3c0a9ebdab1db5cea147819dd07c2af91aad8ed69195c3927f3dde00f345",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c4b00c15dd0ffaa333e9f952fd1ec17f033a272ff4da889a103c025322228f0e",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch; shortened Flash Cannon to .60 impact/.66 end, before the late backward tilt that made the previous .80 end inappropriate. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c05faa229a425c08eb9f8216ea3b31dff60ab21a7ad25ebeda8dd13f78126fc0",
+          "shiny_runtime_sha256": "4389182b138a329a95a2d1a6a4505306a732731b53b16166cc8fbee0ef33181f",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 90.0,
+            "launch_frame": 66.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.53,
+            0.55,
+            0.57,
+            0.58,
+            0.65,
+            0.74,
+            0.75
+          ],
+          "normal_runtime_sha256": "fb6d3c0a9ebdab1db5cea147819dd07c2af91aad8ed69195c3927f3dde00f345",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c118b03a32916a47f8da02c767d0c05834a25bf8c7757cb93ab7df21cedd4db9",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected face below the nose, with a separate special_attack binding projected in the lowered .45 pose. Special_attack .55 launch; shortened Flash Cannon to .60 impact/.66 end, before the late backward tilt that made the previous .80 end inappropriate. Scale .06 limits the charge below the nose, close to the upper rock edge; .57/.58 samples show the orb and trailing droplets leaving forward. Full-radius rock/nose clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "2a90b55c510597124b8fccc27877e4d27b383808557339f89260c6259a9f2daf",
+          "shiny_runtime_sha256": "4389182b138a329a95a2d1a6a4505306a732731b53b16166cc8fbee0ef33181f",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.06,
+            "frames": 120.0,
+            "impact_frame": 90.0,
+            "launch_frame": 66.0,
+            "move_key": "sludgebomb"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -24342,7 +24697,100 @@
       ],
       "normal_runtime_sha256": "fb6d3c0a9ebdab1db5cea147819dd07c2af91aad8ed69195c3927f3dde00f345",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "97e2c1db00420d08ce967eb55f5cc07b7f31abe8328f62d453e7060802fddcca",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.00612776598127784,
+                  0.00416492332754783,
+                  0.989707310691174
+                ],
+                "column": 0.0,
+                "distance": 0.64989318757238,
+                "mesh": "pm0050_00_11/Skeleton3D/pm0050_00_11_body_mesh",
+                "pixel": [
+                  207.0,
+                  174.0
+                ],
+                "surface": 0,
+                "triangle": 631,
+                "vertex_indices": [
+                  184,
+                  186,
+                  192
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "fb6d3c0a9ebdab1db5cea147819dd07c2af91aad8ed69195c3927f3dde00f345",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "950f44fc6a479f718deeb7d0ef05cef272f152793e77ed3a053687e0d701f777",
+          "scope": "Individually projected face below the nose; no visible oral opening. Native nose deformation can cover the resting point in some actions. Move routing and actual effects pending.",
+          "side_fraction": 0.45,
+          "special_action_override": {
+            "manual_surface_landmarks": {
+              "capture_sha256": "28c0048f404cf8a25881635538d1bc6f2c35b8a976bd548277b736bd50464a07",
+              "landmarks": [
+                {
+                  "action": "special_attack",
+                  "barycentric": [
+                    0.00446490626607288,
+                    0.528915481530925,
+                    0.466619612203002
+                  ],
+                  "column": 1.0,
+                  "distance": 0.159223669172221,
+                  "mesh": "pm0050_00_11/Skeleton3D/pm0050_00_11_body_mesh",
+                  "pixel": [
+                    210.0,
+                    208.0
+                  ],
+                  "surface": 0,
+                  "triangle": 494,
+                  "vertex_indices": [
+                    314,
+                    315,
+                    192
+                  ],
+                  "weight": 1.0
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            },
+            "scope": "Special attack uses a separately projected point below the lowered nose; the idle point is occluded by the nose. Review limited to idle and special action use. Physical actions have no cast approval."
+          }
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "dipplin": {
       "anatomical_move_routing_review": "pending",
@@ -27650,9 +28098,164 @@
       "part_status": {}
     },
     "dugtrio": {
-      "anatomical_move_routing_review": "pending",
-      "mouth_status": "pending_mouth_proposal_or_anatomical_route",
-      "move_effect_review": "pending",
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "growl": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles to avoid sending the rear projectile through another head. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Three concurrent sound sources; rear source proximity to foreground heads and hair remains a specific clearance review item. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "part": "face_primary",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles to avoid sending the rear projectile through another head. Narrow beam follows the projected front surface in the sampled emission frames and ends before recovery. Early charge, full-radius clearance and intervening frames require further review. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles to avoid sending the rear projectile through another head. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Three concurrent sound sources; rear source proximity to foreground heads and hair remains a specific clearance review item. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        },
+        "sludgebomb": {
+          "action": "physical_attack",
+          "part": "face_primary",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles to avoid sending the rear projectile through another head. At .38 the charge overlaps the deformed nose or is hidden by hair; the .40 launch includes downward authored droplets, with the main orb moving forward at .42. The early charge needs further adjustment before visual approval. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_review_charge_overlap_pending"
+        }
+      },
+      "latest_candidate_review": {
+        "notes": "Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles to avoid sending the rear projectile through another head. Selected cast routes sampled; remaining routes and full clearance pending.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "growl": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.5,
+            0.58,
+            0.6,
+            0.74
+          ],
+          "normal_runtime_sha256": "73ef9bcd3bc477db0f7b4c79e8e9d1df80cfbdd2ac728fd19c29bad6625849a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8ac62a6e846e827985ef54bb31f3695cd58fb577f6948376b05f9635bb740ee7",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles to avoid sending the rear projectile through another head. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Three concurrent sound sources; rear source proximity to foreground heads and hair remains a specific clearance review item. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ef9e16755ab13de04233c7c23a7c2261335066dee096c35ee566aa1755a746ca",
+          "shiny_runtime_sha256": "a35f64506afafe6edee59a35153f6ad679b7120251fe46385aa5f4ba6d0143aa",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 66.0,
+            "launch_frame": 44.0,
+            "move_key": "growl"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.475,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "73ef9bcd3bc477db0f7b4c79e8e9d1df80cfbdd2ac728fd19c29bad6625849a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ae290d465d3d67a889af3f370942b41cf8d5de8cc5d03c2a591f289c6fc17689",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles to avoid sending the rear projectile through another head. Narrow beam follows the projected front surface in the sampled emission frames and ends before recovery. Early charge, full-radius clearance and intervening frames require further review. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d71141a267df0d91df1d8fd308515ddc1667c6f4d8c212f9f90887e260140f08",
+          "shiny_runtime_sha256": "a35f64506afafe6edee59a35153f6ad679b7120251fe46385aa5f4ba6d0143aa",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 77.0,
+            "emission_scale": 0.1,
+            "frames": 110.0,
+            "impact_frame": 60.5,
+            "launch_frame": 44.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.5,
+            0.58,
+            0.6,
+            0.74
+          ],
+          "normal_runtime_sha256": "73ef9bcd3bc477db0f7b4c79e8e9d1df80cfbdd2ac728fd19c29bad6625849a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c854a89e3f27c1a7b5c101e594a67c4791bcd090f19ace8d6533518036626e88",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles to avoid sending the rear projectile through another head. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Three concurrent sound sources; rear source proximity to foreground heads and hair remains a specific clearance review item. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b1845a48f6d99901ea70f65943cb9897b161650534baf97e384aa0000370fc76",
+          "shiny_runtime_sha256": "a35f64506afafe6edee59a35153f6ad679b7120251fe46385aa5f4ba6d0143aa",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 66.0,
+            "launch_frame": 44.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.5,
+            0.58,
+            0.6,
+            0.74
+          ],
+          "normal_runtime_sha256": "73ef9bcd3bc477db0f7b4c79e8e9d1df80cfbdd2ac728fd19c29bad6625849a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "dd1927d830768bba052a63a1f6aeca715ca598ceac67f02ccf8955aae19ebc9e",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles to avoid sending the rear projectile through another head. At .38 the charge overlaps the deformed nose or is hidden by hair; the .40 launch includes downward authored droplets, with the main orb moving forward at .42. The early charge needs further adjustment before visual approval. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "a1f7afed3bd0c230174b3fb16466bdafeea4c4720a5a41f92951b0a6cd95542d",
+          "shiny_runtime_sha256": "a35f64506afafe6edee59a35153f6ad679b7120251fe46385aa5f4ba6d0143aa",
+          "status": "sampled_runtime_origin_review_charge_overlap_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 110.0,
+            "impact_frame": 66.0,
+            "launch_frame": 44.0,
+            "move_key": "sludgebomb"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -27661,12 +28264,448 @@
       ],
       "normal_runtime_sha256": "73ef9bcd3bc477db0f7b4c79e8e9d1df80cfbdd2ac728fd19c29bad6625849a6",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass",
+            "face_primary": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "61c5c30178b0e0916f10e23d84eb2a051982e85ffe6a5dac7e4e10706bb59d2a",
+            "813367c4811e1c86e36b2e1244aa77c00cdfce638d23f61d6b716f3314547695"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "individual_heads": {
+              "face_left": {
+                "capture_sha256": "f392c237c6585ed5ef60d67774225e1010110aca25e9eeeb47bd982a3dde0995",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.261871137550898,
+                      0.468674000047368,
+                      0.269454862401734
+                    ],
+                    "column": 0.0,
+                    "distance": 2.02025419228584,
+                    "mesh": "pm0051_00_00/Skeleton3D/pm0051_00_00_body_b_mesh",
+                    "pixel": [
+                      138.0,
+                      183.0
+                    ],
+                    "surface": 0,
+                    "triangle": 490,
+                    "vertex_indices": [
+                      166,
+                      184,
+                      183
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              },
+              "face_right": {
+                "capture_sha256": "f392c237c6585ed5ef60d67774225e1010110aca25e9eeeb47bd982a3dde0995",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.0967732608508016,
+                      0.158728948471422,
+                      0.744497790677776
+                    ],
+                    "column": 0.0,
+                    "distance": 2.02849555554746,
+                    "mesh": "pm0051_00_00/Skeleton3D/pm0051_00_00_body_a_mesh",
+                    "pixel": [
+                      250.0,
+                      226.0
+                    ],
+                    "surface": 0,
+                    "triangle": 469,
+                    "vertex_indices": [
+                      122,
+                      104,
+                      123
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              },
+              "face_top": {
+                "capture_sha256": "f392c237c6585ed5ef60d67774225e1010110aca25e9eeeb47bd982a3dde0995",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.129929258971056,
+                      0.736448095390496,
+                      0.133622645638447
+                    ],
+                    "column": 0.0,
+                    "distance": 2.41019813238123,
+                    "mesh": "pm0051_00_00/Skeleton3D/pm0051_00_00_body_c_mesh",
+                    "pixel": [
+                      230.0,
+                      128.0
+                    ],
+                    "surface": 0,
+                    "triangle": 902,
+                    "vertex_indices": [
+                      343,
+                      344,
+                      313
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              }
+            }
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "73ef9bcd3bc477db0f7b4c79e8e9d1df80cfbdd2ac728fd19c29bad6625849a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "40e2e31af154dd54ec681fd2a6e28bb6076b7dadb5558081172caf84929752a1",
+          "scope": "Individually projected face below the nose; no visible oral opening. Native nose deformation can cover the resting point in some actions. Three face points are independently bound; physical_attack keeps all three exposed at .45/.65, while other actions allow head/hair occlusion. face_primary selects the left foreground head for single projectiles. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "face_primary": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "61c5c30178b0e0916f10e23d84eb2a051982e85ffe6a5dac7e4e10706bb59d2a",
+            "813367c4811e1c86e36b2e1244aa77c00cdfce638d23f61d6b716f3314547695"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "individual_heads": {
+              "face_left": {
+                "capture_sha256": "f392c237c6585ed5ef60d67774225e1010110aca25e9eeeb47bd982a3dde0995",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.261871137550898,
+                      0.468674000047368,
+                      0.269454862401734
+                    ],
+                    "column": 0.0,
+                    "distance": 2.02025419228584,
+                    "mesh": "pm0051_00_00/Skeleton3D/pm0051_00_00_body_b_mesh",
+                    "pixel": [
+                      138.0,
+                      183.0
+                    ],
+                    "surface": 0,
+                    "triangle": 490,
+                    "vertex_indices": [
+                      166,
+                      184,
+                      183
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              },
+              "face_right": {
+                "capture_sha256": "f392c237c6585ed5ef60d67774225e1010110aca25e9eeeb47bd982a3dde0995",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.0967732608508016,
+                      0.158728948471422,
+                      0.744497790677776
+                    ],
+                    "column": 0.0,
+                    "distance": 2.02849555554746,
+                    "mesh": "pm0051_00_00/Skeleton3D/pm0051_00_00_body_a_mesh",
+                    "pixel": [
+                      250.0,
+                      226.0
+                    ],
+                    "surface": 0,
+                    "triangle": 469,
+                    "vertex_indices": [
+                      122,
+                      104,
+                      123
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              },
+              "face_top": {
+                "capture_sha256": "f392c237c6585ed5ef60d67774225e1010110aca25e9eeeb47bd982a3dde0995",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.129929258971056,
+                      0.736448095390496,
+                      0.133622645638447
+                    ],
+                    "column": 0.0,
+                    "distance": 2.41019813238123,
+                    "mesh": "pm0051_00_00/Skeleton3D/pm0051_00_00_body_c_mesh",
+                    "pixel": [
+                      230.0,
+                      128.0
+                    ],
+                    "surface": 0,
+                    "triangle": 902,
+                    "vertex_indices": [
+                      343,
+                      344,
+                      313
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              }
+            }
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "73ef9bcd3bc477db0f7b4c79e8e9d1df80cfbdd2ac728fd19c29bad6625849a6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "40e2e31af154dd54ec681fd2a6e28bb6076b7dadb5558081172caf84929752a1",
+          "scope": "Individually projected face below the nose; no visible oral opening. Native nose deformation can cover the resting point in some actions. Three face points are independently bound; physical_attack keeps all three exposed at .45/.65, while other actions allow head/hair occlusion. face_primary selects the left foreground head for single projectiles. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed",
+        "face_primary": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "dugtrio-alola": {
-      "anatomical_move_routing_review": "pending",
-      "mouth_status": "pending_mouth_proposal_or_anatomical_route",
-      "move_effect_review": "pending",
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "physical_attack",
+          "part": "face_primary",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles. Hair occludes the source in one view at early poses. Narrow beam follows the projected front surface in the sampled emission frames and ends before recovery. Early charge, full-radius clearance and intervening frames require further review. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "growl": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles. Hair occludes the source in one view at early poses. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Three concurrent sound sources; rear source proximity to foreground heads and hair remains a specific clearance review item. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "part": "face_primary",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles. Hair occludes the source in one view at early poses. Narrow beam follows the projected front surface in the sampled emission frames and ends before recovery. Early charge, full-radius clearance and intervening frames require further review. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles. Hair occludes the source in one view at early poses. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Three concurrent sound sources; rear source proximity to foreground heads and hair remains a specific clearance review item. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        },
+        "sludgebomb": {
+          "action": "physical_attack",
+          "part": "face_primary",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles. Hair occludes the source in one view at early poses. At .38 the charge overlaps the deformed nose or is hidden by hair; the .40 launch includes downward authored droplets, with the main orb moving forward at .42. The early charge needs further adjustment before visual approval. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_review_charge_overlap_pending"
+        }
+      },
+      "latest_candidate_review": {
+        "notes": "Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles. Hair occludes the source in one view at early poses. Selected cast routes sampled; remaining routes and full clearance pending.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.475,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "710d68c97da3ad13b83135af9423863c2e75bce6e3b0d0bdfa1079d923e9ea56",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f0aad66fe8ae7dc66412c25fa5d69afcd4a5033a89dd87153ac32540a2234ec2",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles. Hair occludes the source in one view at early poses. Narrow beam follows the projected front surface in the sampled emission frames and ends before recovery. Early charge, full-radius clearance and intervening frames require further review. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "6e24b6ccc3c14b428e5d92f03d296f6c0c78ddc98fd589f572af263948a934b4",
+          "shiny_runtime_sha256": "db9e09be170833f3dbbdfd1707516aa6ecb6bb9f21e7da0e9a0cc46f7777bedd",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 77.0,
+            "emission_scale": 0.1,
+            "frames": 110.0,
+            "impact_frame": 60.5,
+            "launch_frame": 44.0,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "growl": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.5,
+            0.58,
+            0.6,
+            0.74
+          ],
+          "normal_runtime_sha256": "710d68c97da3ad13b83135af9423863c2e75bce6e3b0d0bdfa1079d923e9ea56",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d55d6ecfc04c53f97a4adb7bd4cab431740a42339bc5813ac44e25f9fa3a2913",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles. Hair occludes the source in one view at early poses. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Three concurrent sound sources; rear source proximity to foreground heads and hair remains a specific clearance review item. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9cc2502c3de309dd5dd8a77cc1154fec47aa4df26659184f2d45ef0e692c8067",
+          "shiny_runtime_sha256": "db9e09be170833f3dbbdfd1707516aa6ecb6bb9f21e7da0e9a0cc46f7777bedd",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 66.0,
+            "launch_frame": 44.0,
+            "move_key": "growl"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.475,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "710d68c97da3ad13b83135af9423863c2e75bce6e3b0d0bdfa1079d923e9ea56",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4cbe5880d5103b38c7a9995be4edb0c615537c4aab80e41e08d4e6d0a0f109bc",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles. Hair occludes the source in one view at early poses. Narrow beam follows the projected front surface in the sampled emission frames and ends before recovery. Early charge, full-radius clearance and intervening frames require further review. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "927dbf532325187a1d80debbeac23099a9c4d74be1993ea07d3b36d6b0c618d4",
+          "shiny_runtime_sha256": "db9e09be170833f3dbbdfd1707516aa6ecb6bb9f21e7da0e9a0cc46f7777bedd",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 77.0,
+            "emission_scale": 0.1,
+            "frames": 110.0,
+            "impact_frame": 60.5,
+            "launch_frame": 44.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.5,
+            0.58,
+            0.6,
+            0.74
+          ],
+          "normal_runtime_sha256": "710d68c97da3ad13b83135af9423863c2e75bce6e3b0d0bdfa1079d923e9ea56",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a7763811cb4f233ec86f43bb722c6384f1ef26125ddc5193e81587bd23ce0254",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles. Hair occludes the source in one view at early poses. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Three concurrent sound sources; rear source proximity to foreground heads and hair remains a specific clearance review item. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "a8e1596ce5900e0388b2bc796d93bac914d393941e1ad924562f80de022d73eb",
+          "shiny_runtime_sha256": "db9e09be170833f3dbbdfd1707516aa6ecb6bb9f21e7da0e9a0cc46f7777bedd",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 66.0,
+            "launch_frame": 44.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.5,
+            0.58,
+            0.6,
+            0.74
+          ],
+          "normal_runtime_sha256": "710d68c97da3ad13b83135af9423863c2e75bce6e3b0d0bdfa1079d923e9ea56",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d048b53b647c10973e4a209a824d049a1abb95696ffe0d41708ff621b3df9c87",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Three independently projected face surfaces with distinct weighted head bindings. Physical_attack .40 launch; face_primary selects the left foreground head for single projectiles. Hair occludes the source in one view at early poses. At .38 the charge overlaps the deformed nose or is hidden by hair; the .40 launch includes downward authored droplets, with the main orb moving forward at .42. The early charge needs further adjustment before visual approval. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "53f45c057c12b1d8195ae7a4f1e8e789f1fd09e1ad336105c8a94a8b81ca3928",
+          "shiny_runtime_sha256": "db9e09be170833f3dbbdfd1707516aa6ecb6bb9f21e7da0e9a0cc46f7777bedd",
+          "status": "sampled_runtime_origin_review_charge_overlap_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 110.0,
+            "impact_frame": 66.0,
+            "launch_frame": 44.0,
+            "move_key": "sludgebomb"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -27675,7 +28714,250 @@
       ],
       "normal_runtime_sha256": "710d68c97da3ad13b83135af9423863c2e75bce6e3b0d0bdfa1079d923e9ea56",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass",
+            "face_primary": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "f299f4f915201b17401398a473372a9fd26f40cdd5c562a5eb7b667250404b77",
+            "da6b76eeb1b1adab59084f4e0a6a04e30c4e03cafd5b641caa7361015846f85b"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "individual_heads": {
+              "face_left": {
+                "capture_sha256": "f4a0a54f90a526f21261648e6d3218d62228c8b2f59af6dcd16fb1f023c63a7c",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.0635635856158387,
+                      0.136064151163888,
+                      0.800372263220273
+                    ],
+                    "column": 0.0,
+                    "distance": 2.23705470817562,
+                    "mesh": "pm0051_00_11/Skeleton3D/pm0051_00_11_michaelbody_mesh",
+                    "pixel": [
+                      142.0,
+                      183.0
+                    ],
+                    "surface": 0,
+                    "triangle": 385,
+                    "vertex_indices": [
+                      112,
+                      88,
+                      110
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              },
+              "face_right": {
+                "capture_sha256": "f4a0a54f90a526f21261648e6d3218d62228c8b2f59af6dcd16fb1f023c63a7c",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.533813228934527,
+                      0.157169814037145,
+                      0.309016957028328
+                    ],
+                    "column": 0.0,
+                    "distance": 2.24053711239536,
+                    "mesh": "pm0051_00_11/Skeleton3D/pm0051_00_11_ashleybody_mesh",
+                    "pixel": [
+                      243.0,
+                      215.0
+                    ],
+                    "surface": 0,
+                    "triangle": 244,
+                    "vertex_indices": [
+                      103,
+                      81,
+                      71
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              },
+              "face_top": {
+                "capture_sha256": "f4a0a54f90a526f21261648e6d3218d62228c8b2f59af6dcd16fb1f023c63a7c",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.0968007822850368,
+                      0.85607581965498,
+                      0.0471233980599827
+                    ],
+                    "column": 0.0,
+                    "distance": 2.62625517076841,
+                    "mesh": "pm0051_00_11/Skeleton3D/pm0051_00_11_jessicabody_mesh",
+                    "pixel": [
+                      226.0,
+                      132.0
+                    ],
+                    "surface": 0,
+                    "triangle": 516,
+                    "vertex_indices": [
+                      156,
+                      157,
+                      126
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              }
+            }
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "710d68c97da3ad13b83135af9423863c2e75bce6e3b0d0bdfa1079d923e9ea56",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9e19203967f712c24a35c7ffa10b0ef01eeaead812fd947c50a7eb452815d798",
+          "scope": "Individually projected face below the nose; no visible oral opening. Native nose deformation can cover the resting point in some actions. Three face points are independently bound; physical_attack keeps all three exposed at .45/.65, while other actions allow head/hair occlusion. face_primary selects the left foreground head for single projectiles. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "face_primary": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "f299f4f915201b17401398a473372a9fd26f40cdd5c562a5eb7b667250404b77",
+            "da6b76eeb1b1adab59084f4e0a6a04e30c4e03cafd5b641caa7361015846f85b"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "individual_heads": {
+              "face_left": {
+                "capture_sha256": "f4a0a54f90a526f21261648e6d3218d62228c8b2f59af6dcd16fb1f023c63a7c",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.0635635856158387,
+                      0.136064151163888,
+                      0.800372263220273
+                    ],
+                    "column": 0.0,
+                    "distance": 2.23705470817562,
+                    "mesh": "pm0051_00_11/Skeleton3D/pm0051_00_11_michaelbody_mesh",
+                    "pixel": [
+                      142.0,
+                      183.0
+                    ],
+                    "surface": 0,
+                    "triangle": 385,
+                    "vertex_indices": [
+                      112,
+                      88,
+                      110
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              },
+              "face_right": {
+                "capture_sha256": "f4a0a54f90a526f21261648e6d3218d62228c8b2f59af6dcd16fb1f023c63a7c",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.533813228934527,
+                      0.157169814037145,
+                      0.309016957028328
+                    ],
+                    "column": 0.0,
+                    "distance": 2.24053711239536,
+                    "mesh": "pm0051_00_11/Skeleton3D/pm0051_00_11_ashleybody_mesh",
+                    "pixel": [
+                      243.0,
+                      215.0
+                    ],
+                    "surface": 0,
+                    "triangle": 244,
+                    "vertex_indices": [
+                      103,
+                      81,
+                      71
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              },
+              "face_top": {
+                "capture_sha256": "f4a0a54f90a526f21261648e6d3218d62228c8b2f59af6dcd16fb1f023c63a7c",
+                "landmarks": [
+                  {
+                    "action": "idle",
+                    "barycentric": [
+                      0.0968007822850368,
+                      0.85607581965498,
+                      0.0471233980599827
+                    ],
+                    "column": 0.0,
+                    "distance": 2.62625517076841,
+                    "mesh": "pm0051_00_11/Skeleton3D/pm0051_00_11_jessicabody_mesh",
+                    "pixel": [
+                      226.0,
+                      132.0
+                    ],
+                    "surface": 0,
+                    "triangle": 516,
+                    "vertex_indices": [
+                      156,
+                      157,
+                      126
+                    ],
+                    "weight": 1.0
+                  }
+                ],
+                "method": "ray_triangle_barycentric_skin_binding"
+              }
+            }
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "710d68c97da3ad13b83135af9423863c2e75bce6e3b0d0bdfa1079d923e9ea56",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9e19203967f712c24a35c7ffa10b0ef01eeaead812fd947c50a7eb452815d798",
+          "scope": "Individually projected face below the nose; no visible oral opening. Native nose deformation can cover the resting point in some actions. Three face points are independently bound; physical_attack keeps all three exposed at .45/.65, while other actions allow head/hair occlusion. face_primary selects the left foreground head for single projectiles. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed",
+        "face_primary": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "dunsparce": {
       "anatomical_move_routing_review": "pending",
@@ -112254,14 +113536,53 @@
       "part_status": {}
     },
     "voltorb": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "No mouth; review body discharge route instead of invented mouth.",
-        "preview": "mouth-forward-v18e/voltorb.png",
-        "status": "pending_anatomical_route"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "screech": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected front surface on the red strip below the eyes; no oral opening. Special_attack .35 launch after the early upward tilt. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_route",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected front surface on the red strip below the eyes; no oral opening. Special_attack .35 launch after the early upward tilt. Selected cast routes sampled; remaining routes and full clearance pending.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "741be9b089f4f71485dd7216f63752d97661f8e5055ace2abeeb1ccb07b69291",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.45,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "efaad3701a1e1a0f5f0369434c0f22f5d9e409a858b45d9149dfe1ddd07672e1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "27679fbf050cf89c6db390ff2a4888ac11e20fb0549490a2c9fe83ee417a3a5f",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected front surface on the red strip below the eyes; no oral opening. Special_attack .35 launch after the early upward tilt. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c839b66337cbb7826c08c36fe94a5873bb2e3833289c963ccd8d0cace07a1c81",
+          "shiny_runtime_sha256": "d092ae0967fbaae7a2bfdd0f66ac71751d5ab14ea891b808030f3cbe7b92c3a4",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 138.0,
+            "impact_frame": 75.9,
+            "launch_frame": 48.3,
+            "move_key": "screech"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -112270,17 +113591,155 @@
       ],
       "normal_runtime_sha256": "efaad3701a1e1a0f5f0369434c0f22f5d9e409a858b45d9149dfe1ddd07672e1",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "e7381b75f0463a921d73a6fd75529ade5a3453de8a43f0f472c6129326bf5fd1",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.142646872454735,
+                  0.583031233602884,
+                  0.274321893942381
+                ],
+                "column": 0.0,
+                "distance": 0.995626793150369,
+                "mesh": "pm0100_00_00/Skeleton3D/pm0100_00_00_body_mesh",
+                "pixel": [
+                  176.0,
+                  236.0
+                ],
+                "surface": 0,
+                "triangle": 677,
+                "vertex_indices": [
+                  371,
+                  373,
+                  228
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "efaad3701a1e1a0f5f0369434c0f22f5d9e409a858b45d9149dfe1ddd07672e1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ecba7c07d0655531234c35de0f7ee442191133b66d7dbe0f3c677b13c058b441",
+          "scope": "Individually projected front surface below the eyes, above the lower hemisphere. No oral opening; physical_attack_2 turns the surface away. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "voltorb-hisui": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "No mouth; review body discharge and top opening move routes.",
-        "preview": "mouth-forward-v18e/voltorb-hisui.png",
-        "status": "pending_anatomical_route"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "screech": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected orange front strip below the eyes; no oral opening. Rejected .35 launch while the face points down. Physical_attack .43 launch emits as the face turns forward, .55 beam impact/.65 end or .63 sound impact. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending"
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected orange front strip below the eyes; no oral opening. Rejected .35 launch while the face points down. Physical_attack .43 launch emits as the face turns forward, .55 beam impact/.65 end or .63 sound impact. Narrow beam follows the projected front surface in the sampled emission frames and ends before recovery. Early charge, full-radius clearance and intervening frames require further review. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_anatomical_route",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected orange front strip below the eyes; no oral opening. Rejected .35 launch while the face points down. Physical_attack .43 launch emits as the face turns forward, .55 beam impact/.65 end or .63 sound impact. Selected cast routes sampled; remaining routes and full clearance pending.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "screech": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "75dd60ea314bff55966fffbfacec690b89253f1c4aded2be9a537c0876c99856",
+          "fractions": [
+            0.12,
+            0.41,
+            0.43,
+            0.45,
+            0.53,
+            0.58,
+            0.63,
+            0.74
+          ],
+          "normal_runtime_sha256": "85443417f931ff63a1b7e693317c4ebef47e8a6522b53cc1b28a1e34f64a9a29",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a2f3709afcd208292f8b68b5885b1e5e008d0011aa6373b01f80d69d7e51b4d9",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected orange front strip below the eyes; no oral opening. Rejected .35 launch while the face points down. Physical_attack .43 launch emits as the face turns forward, .55 beam impact/.65 end or .63 sound impact. Sound glow follows the selected front surfaces and rings move forward after launch. Broad rings overlap body silhouettes in projection and are edge-on in the first view; full ring geometry clearance remains pending. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "cff9ea2212fbe3d0349958f568163c6e69d2e287836ed0645c8f8e1fcee8ce98",
+          "shiny_runtime_sha256": "9dee12991aa3264d9d2831a4e50f038faf2240f68f9ffac9f4571d6475dfba15",
+          "status": "sampled_origin_and_timing_review_sound_ring_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 90.0,
+            "impact_frame": 56.7,
+            "launch_frame": 38.7,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "75dd60ea314bff55966fffbfacec690b89253f1c4aded2be9a537c0876c99856",
+          "fractions": [
+            0.12,
+            0.41,
+            0.43,
+            0.45,
+            0.49,
+            0.55,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "85443417f931ff63a1b7e693317c4ebef47e8a6522b53cc1b28a1e34f64a9a29",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "99cf17965fc9a739e0f3cdd6395c0e1e7e5046eca237621092ede902c246331d",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions. Individually projected orange front strip below the eyes; no oral opening. Rejected .35 launch while the face points down. Physical_attack .43 launch emits as the face turns forward, .55 beam impact/.65 end or .63 sound impact. Narrow beam follows the projected front surface in the sampled emission frames and ends before recovery. Early charge, full-radius clearance and intervening frames require further review. Other move routes, continuous clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ee2a9f763cc30b77ce8331f11cfa5c889c081686165ae18dcb273ec03bbce5b9",
+          "shiny_runtime_sha256": "9dee12991aa3264d9d2831a4e50f038faf2240f68f9ffac9f4571d6475dfba15",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 58.5,
+            "emission_scale": 0.15,
+            "frames": 90.0,
+            "impact_frame": 49.5,
+            "launch_frame": 38.7,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -112289,7 +113748,68 @@
       ],
       "normal_runtime_sha256": "85443417f931ff63a1b7e693317c4ebef47e8a6522b53cc1b28a1e34f64a9a29",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "dc247cd1c052558049ac32ddc362b6530446922195bbf5ec582f82b2681322b0",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.115994993574264,
+                  0.516407172602678,
+                  0.367597833823057
+                ],
+                "column": 0.0,
+                "distance": 1.00459752890233,
+                "mesh": "pm0100_00_41/Skeleton3D/pm0100_00_41_body_mesh",
+                "pixel": [
+                  174.0,
+                  240.0
+                ],
+                "surface": 0,
+                "triangle": 183,
+                "vertex_indices": [
+                  275,
+                  277,
+                  276
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "85443417f931ff63a1b7e693317c4ebef47e8a6522b53cc1b28a1e34f64a9a29",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d0fe7083507859d6c09c7e17f9f76d50f3dac9df93209f47be549c531f0bb8bf",
+          "scope": "Individually projected front surface below the eyes, above the lower hemisphere. No oral opening; physical_attack_2 turns the surface away. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "vullaby": {
       "anatomical_move_routing_review": "pending",

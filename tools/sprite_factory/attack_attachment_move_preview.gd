@@ -12,6 +12,7 @@ var move := "Vine Whip"
 var camera_yaw := 0.0
 var camera_scale := 1.0
 var camera_frame := "source"
+var hide_effects := false
 var requested_fractions: Array[float] = []
 var viewport: SubViewport
 var world: Node3D
@@ -23,6 +24,7 @@ func _init() -> void:
 	for i in args.size():
 		if args[i] in ["--catalog", "--output", "--species", "--target-species", "--move", "--camera-yaw", "--camera-scale", "--camera-frame", "--fractions"] and i + 1 >= args.size():
 			printerr("Missing argument: ", args[i]); quit(1); return
+		if args[i] == "--hide-effects": hide_effects = true
 		if args[i] == "--catalog": catalog_path = args[i+1]
 		if args[i] == "--output": output = args[i+1]
 		if args[i] == "--species": species = args[i+1]
@@ -118,6 +120,7 @@ func _run() -> void:
 	var effect: Node = stage.create_move_effect(move,"p1","p2",{"show_impact":true})
 	assert(effect != null, "Move effect is unavailable")
 	effect.set_process(false)
+	effect.visible = not hide_effects
 	var timing: Dictionary = stage.move_timing(move,"p1")
 	var fractions := [.2,.45,.65]
 	# Include the active lash/beam interval even when authored timing differs.
@@ -157,7 +160,7 @@ func _run() -> void:
 	if target_species != species: filename += "-vs-" + target_species
 	assert(sheet.save_png(output.path_join(filename+".png")) == OK)
 	var file := FileAccess.open(output.path_join(filename+".json"),FileAccess.WRITE)
-	file.store_string(JSON.stringify({"species":species,"target_species":target_species,"target_runtime_sha256":target_model.runtime_sha256,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"camera_frame":camera_frame,"camera_scale":camera_scale,"camera_yaw":rad_to_deg(camera_yaw),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
+	file.store_string(JSON.stringify({"species":species,"target_species":target_species,"target_runtime_sha256":target_model.runtime_sha256,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"effects_hidden":hide_effects,"camera_frame":camera_frame,"camera_scale":camera_scale,"camera_yaw":rad_to_deg(camera_yaw),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
 	file.close()
 	effect.cancel(); await process_frame
 	stage.world = null; stage.camera = null; stage.free()
