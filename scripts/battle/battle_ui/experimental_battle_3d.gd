@@ -610,6 +610,9 @@ func attack_action_for(move_name: String, actor: String = "") -> String:
 			move_categories = parsed
 	var key := AttackSelection.move_key(move_name)
 	var index := actor_index(actor)
+	if index >= 0 and index < identities.size() and entries.has(identities[index]):
+		var attachment_action := MoveAttachments.action_for(identities[index], MoveEffect.move_key(move_name), entries[identities[index]].get("action_timing", {}))
+		if not attachment_action.is_empty(): return attachment_action
 	if MoveRecipes.supports(move_name):
 		if not MoveRecipes.contact(move_name): return "special_attack"
 		if MoveRecipes.get_recipe(move_name).family == "z": return "physical_attack"
@@ -1020,6 +1023,10 @@ func _start_move_contact(actor: String, target: String, timing: Dictionary, effe
 	var destination := _move_visual(target)
 	var partner: Vector3 = _position(index + 1 if index % 2 == 0 else index - 1) - _position(index)
 	var turn := wrapf(atan2(delta.x, delta.z) - atan2(partner.x, partner.z), -PI, PI)
+	# A reviewed rear kick turns the actual Pokemon during its approach.
+	# A Substitute keeps its own presentation and never inherits the rig turn.
+	if source == actors[index]:
+		turn += deg_to_rad(float(timing.get("contact_yaw_degrees", 0)))
 	var motion := {"source":source, "target":destination, "actor":actor, "target_ident":target,
 		"clock":bind_action_clock(actor), "duration":float(timing.frames)/60.0,
 		"quick": str(timing.get("move_key", "")) == "quickattack",
@@ -1150,6 +1157,11 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 	var direction := (end-source).normalized()
 	source += direction * minf(a.radius * 0.55, (end-source).length()*0.15)
 	end -= direction * minf(b.radius * 0.5, (end-source).length()*0.15)
+	var attachment := {}
+	var index := actor_index(actor)
+	# A visible Substitute owns the emitter; never emit from the hidden Pokémon.
+	if _move_visual(actor) == actors[index]:
+		attachment = MoveAttachments.sample(actors[index], identities[index], MoveEffect.move_key(move), world, current_actions[index])
 	if MoveEffect.move_key(move) in ["moonblast","dracometeor"]:
 		# Reserve space for the fully grown orb, not just its centre. Charge and
 		# flight share this point, while the moon stays above the attacker.
@@ -1158,9 +1170,10 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 		var orb_radius: float = (DracoMeteorEffect.CHARGE_RADIUS if MoveEffect.move_key(move)=="dracometeor" else BatchFourMoveEffect.MOONBLAST_ORB_RADIUS) * MoveEffect.PRESENTATION_SCALES[MoveEffect.move_key(move)]
 		var body_extent := forward.abs().dot(a.get("half_extents",Vector3(a.radius,0,a.radius)))
 		source = a.position + Vector3.UP * a.height * source_height + forward * (body_extent + orb_radius + 0.15)
-		return {"source":source,"sources":[source],"target":end,"radius":b.radius,
+		var orb_sources: Array = attachment.get("sources", [source])
+		return {"source":orb_sources[0],"sources":orb_sources,"target":end,"radius":b.radius,
 			"moon_source":moon_source,"target_ground":Vector3(end.x,_position(actor_index(target)).y+0.04,end.z),
-			"attachment_part":"bounds","attachment_bones":[]}
+			"attachment_part":attachment.get("part","bounds"),"attachment_bones":attachment.get("bones",[])}
 	if not recipe.is_empty() and not bool(recipe.contact) and recipe.family!="beams":
 		# Continuous beams use the near-body fallback above, without an orb gap.
 		# Unprofiled body emitters reserve room for the projectile, including its
@@ -1171,11 +1184,6 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 		if recipe.has("z_choreography"):
 			clearance = 0.9 # Room for Z charge orbs before they leave the body.
 		source = a.position + Vector3.UP*a.height*source_height + forward*(extent+clearance)
-	var attachment := {}
-	var index := actor_index(actor)
-	# A visible Substitute owns the emitter; never emit from the hidden Pokémon.
-	if _move_visual(actor) == actors[index]:
-		attachment = MoveAttachments.sample(actors[index], identities[index], MoveEffect.move_key(move), world)
 	var sources: Array = attachment.get("sources", [source])
 	return {"source": sources[0], "sources": sources, "target": end, "radius": b.radius,
 		"field":_move_field(),
@@ -1357,6 +1365,17 @@ func move_timing(move: String, ident: String) -> Dictionary:
 		elif profile.move_key == "dracometeor":
 			profile["launch_frame"] = float(profile.frames) * (0.7/3.2)
 			profile["impact_frame"] = float(profile.frames) * (2.05/3.2)
+		var choreography := MoveAttachments.choreography_for(identities[index], profile.move_key, mapped.action)
+		if not choreography.is_empty() and _move_visual(ident) == actors[index]:
+			profile["launch_frame"] = float(profile.frames) * float(choreography.launch_fraction)
+			profile["impact_frame"] = float(profile.frames) * float(choreography.impact_fraction)
+			profile["contact_yaw_degrees"] = float(choreography.contact_yaw_degrees)
+			if choreography.has("effect_start_fraction"):
+				profile["effect_start_frame"] = float(profile.frames) * float(choreography.effect_start_fraction)
+			if choreography.has("emission_end_fraction"):
+				profile["emission_end_frame"] = float(profile.frames) * float(choreography.emission_end_fraction)
+			for field in ["emission_scale", "water_stream_arc_height", "projectile_arc_height"]:
+				if choreography.has(field): profile[field] = choreography[field]
 	return profile
 
 func action_clock(ident: String, generation: int, end_seconds: float) -> float:

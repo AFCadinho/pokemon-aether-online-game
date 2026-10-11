@@ -2,6 +2,73 @@
 
 ## Unreleased
 
+- Correct remaining reviewed 3D limb attachment positions, add missing points for 14 forms, and select anatomical alternatives for handless Pokémon. Make Mega Barbaracle's attack point follow its changing hand mesh and connect reviewed muzzles to generic mouth attacks.
+
+- Add individually reviewed 3D attack attachment profiles for 40 remaining forms and 94 reviewed limb points across 47 forms; record outstanding anatomical corrections and model blockers.
+
+- Calibrate selected Exeggcute, Hippowdon, Gliscor, Wiglett, Toedscool, Chi-Yu and Grapploct attack origins and release timing; scale Sludge Bomb drips for small emitters.
+
+- Calibrate selected Beedrill, Mega Beedrill, Ceruledge and Magearna-form attack origins; fit Magearna’s Draining Kiss hearts to its mouth at release.
+
+- Calibrate selected mouth, cannon and tongue attacks for Clamperl, Clauncher, Clawitzer, Genesect, Revavroom and Regidrago; fit sound release to small openings and end Revavroom’s Lick extension before its tongue retracts.
+
+- Let Moonblast and Draco Meteor honor configured attack points; calibrate Flabébé's Moonblast to its animated flower point. Unconfigured forms retain the existing orb clearance.
+
+- Calibrate selected attacks for Dustox, Mothim, Frosmoth, Cutiefly, Iron Moth, Larvesta and Volcarona, including individual facial/proboscis points and emission timing for Mothim's mandibles and Larvesta's moving head fur.
+
+- Calibrate selected attacks for Weedle, Wurmple, Venipede, Whirlipede, Surskit, Masquerain, Kricketot and Kricketune. Poison Sting follows separately timed spike positions; smaller water globes, an earlier silk window and a lower sludge arc fit the reviewed models.
+
+- Calibrate selected attack origins for Cottonee, Cherrim, Petilil, Lilligant, Fomantis, Lurantis, Morelull and Spoink, including Cherrim’s bud and Spoink’s pearl. Time Lilligant and Lurantis’s beams after their arms move aside.
+
+- Calibrate selected face, mouth, gem, cannon and flower attack origins for Seedot, Pineco, Forretress, Pupitar, Carbink, Cryogonal, Glimmet and Glimmora. Match Forretress’s beams to its rotating nozzle and Glimmora’s casts to its opened flower.
+
+- Calibrate selected attacks for Gimmighoul, Meltan, Melmetal, Nosepass, Nacli, Naclstack and Rolycoly, using their mouth, eye, nose, face or wheel. Adjust Rolycoly’s Mud-Slap arc to leave in front of its wheel.
+
+- Calibrate selected face attack origins for Voltorb, Hisuian Voltorb, Diglett, Dugtrio and their Alolan forms, including separate bindings for Dugtrio heads and adjusted Hisuian Voltorb and Alolan Diglett beam timing.
+
+- Calibrate selected eye and face attack origins for Magnemite, Magnezone, Lampent, Chandelure, Bronzor, Bronzong, Cascoon and Kakuna. Adjust Lampent and Chandelure Ember size and delay Chandelure casts until its face turns forward.
+
+- Launch Silcoon’s Poison Sting from its forward-facing spike during the flip animation, with darts sized to the spike.
+
+- Calibrate selected eye-based attacks for Honedge, Doublade and both Aegislash forms, and face-based attacks for Silcoon and Spewpa. Make String Shot follow its moving source and prevent model materials from painting over correctly positioned attack effects.
+
+- Make Sinistea’s Shadow Ball charge follow its tea and emerging spirit during the special attack animation, with one active source at a time.
+
+- Calibrate Beldum’s forehead, Unown’s eye, Mega Chandelure’s grille and Runerigus’s eye for selected 3D attacks. Size Unown’s Hidden Power to its eye and delay Runerigus’s casts past the initial hand movement.
+
+- Give Wugtrio’s three heads and Magneton’s three eyes separate origins for selected beams. Calibrate Mega Starmie’s gem for seven casts and align their emission windows with the native animations.
+
+- Calibrate Mamoswine’s and Venonat’s concealed-mouth outlets and Flabébé’s lip and held-flower origins. Align selected beams and vocal moves with their native poses, and fit Venonat’s Sludge Bomb to its mouth region.
+
+- Anchor Hydrapple’s beam attacks to its exposed mouth above the tongue, fit the stream width, and match Hyper Beam, Solar Beam and Dragon Breath to the open-mouth pose.
+
+- Calibrate Dodrio’s three mouths and beak tips individually. Match Growl and Supersonic to all three open bills, give Hyper Beam a narrower central-mouth stream, and route Doduo/Dodrio’s Fury Attack to their beak tips.
+
+- Give Doduo separate animated mouth and beak-tip attack origins for both heads. Growl and Supersonic now release sound waves from both mouths, with timing matched to the open-bill pose.
+
+- Calibrate selected mouth, muzzle and mandible attack origins for Hisuian Electrode, Kyurem, Latios, Gastly, Klefki, Spiritomb, Mareanie, Snom and Spinarak. Match selected beam and bite timings to their native poses, and fit Flash Cannon and Ice Beam widths to small mouths.
+
+- Anchor Arboliva’s Solar Beam and Hyper Beam to an olive opening and Cubone’s breath and vocal moves below its skull rim. Align selected attacks with forward-facing poses and fit their streams to the departure point.
+
+- Calibrate mouth origins and selected beam timing for Swinub, Steelix, Stonjourner, Mandibuzz, Swanna, Snivy and Stunfisk. Give Stunfisk a narrower Water Gun stream that rises from its upward-facing mouth before curving toward the target.
+
+- Calibrate mouth origins and open-mouth Hyper Beam timing for Skarmory, Mega Skarmory and Sandaconda; give both Skarmory forms separate bill-tip origins and forward-facing Peck impact timing.
+
+- Calibrate mouth origins for Archaludon, Ariados, Hisuian Avalugg, Mega Glalie and Roaring Moon; align the reviewed Archaludon Hyper Beam, Hisuian Avalugg Ice Beam and Roaring Moon Flamethrower with their native mouth and wing movements.
+
+- Refine mouth origins for Houndstone, Minccino, Grumpig, Slaking, Sudowoodo, Wyrdeer and Slugma; align their reviewed Growl, Hyper Beam and Flamethrower animations with open-mouth poses.
+
+- Refine mouth origins for Cetoddle, Drizzile, Crabominable, Lugia and Ho-Oh; align Cetoddle’s Ice Beam, Lugia’s Hyper Beam and Ho-Oh’s Flamethrower with their open-mouth poses.
+
+- Make mouth origins follow both Grimer forms, Goodra, Gengar, Crobat and Bunnelby through their attack poses, and time Goodra’s Flamethrower to its open mouth.
+
+- Anchor beam attacks to the central face lights of Regice, Regirock, Registeel, Regigigas and Regieleki, and water and beam attacks to Staryu’s and Starmie’s gems.
+
+- Place mouth effects on Vibrava, Vikavolt, Varoom, Venomoth and both Sandslash forms individually; align Vikavolt’s Flash Cannon, Varoom’s Sludge Bomb and Alolan Sandslash’s Ice Beam with their attack poses.
+
+- Give Zweilous separate attack origins for both mouths, use Zapdos’s upper bill tips for Peck and Mega Zygarde’s cannon for Hyper Beam, and align Walking Wake, Watchog and Hisuian Zoroark’s Flamethrower with their open-mouth poses.
+
+- Add individually reviewed mouth, hand and foot attachment profiles for more 3D Pokémon forms, including points that follow moving jaws and snouts. Connect Snivy, Servine and Serperior's Vine Whip to their animated vine tips, follow Thwackey's open/closed muzzle changes, track Mega Golurk's detached rocket fists, emit Magmortar's fire attacks from its arm cannon, and give Scovillain separate red and green mouth origins with matching attack poses. Make Hatterene launch Shadow Ball from the hand on its hat and Kadabra form it between its animated hands and use Fraxure’s open-jaw pose for Bite. Use Noivern’s open-jaw launch pose for Flamethrower and Hyper Beam, and time Salandit’s and Volcanion’s Flamethrower to their open mouths. Align Exploud’s Low Kick timing and turn Glastrier and Ice Rider Calyrex toward their opponent for rear kicks.
 - Explain direct use, successful consumption and game-time requirements for all evolution items in English, Dutch, Brazilian Portuguese and Simplified Chinese; describe the two Kubfu scrolls and Black Augurite, and mark unused Sweets as inactive.
 
 - Refresh the Guild Base lobby visual from the artist TMX, including animated fountain water.
