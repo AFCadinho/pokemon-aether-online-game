@@ -448,8 +448,8 @@
 					"safeForStaffTeleport": false,
 					"spawnMarker": "FromFloor",
 					"tile": {
-						"x": 8,
-						"y": 10
+						"x": 9,
+						"y": 12
 					}
 				}
 			},
@@ -5579,8 +5579,8 @@
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/guild_base/player_room.tscn",
 				"position": {
-					"x": 272.0,
-					"y": 336.0
+					"x": 304.0,
+					"y": 400.0
 				},
 				"spawnMarker": "FromFloor"
 			},
@@ -5593,8 +5593,8 @@
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/guild_base/player_room.tscn",
 				"position": {
-					"x": 272.0,
-					"y": 336.0
+					"x": 304.0,
+					"y": 400.0
 				},
 				"spawnMarker": "FromFloor"
 			},
@@ -5607,8 +5607,8 @@
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/guild_base/player_room.tscn",
 				"position": {
-					"x": 272.0,
-					"y": 336.0
+					"x": 304.0,
+					"y": 400.0
 				},
 				"spawnMarker": "FromFloor"
 			},
@@ -5621,8 +5621,8 @@
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/guild_base/player_room.tscn",
 				"position": {
-					"x": 272.0,
-					"y": 336.0
+					"x": 304.0,
+					"y": 400.0
 				},
 				"spawnMarker": "FromFloor"
 			},

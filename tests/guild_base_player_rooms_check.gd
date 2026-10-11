@@ -47,9 +47,15 @@ func _run() -> void:
 	room.configure_guild_base_instance("guild_base:kanto_vermilion_city:7:player_room_7")
 	_check(room.floor_number == 2 and room.room_number == 3 and room.guild_id == 7, "room index 7 resolves to floor 2, local room 3")
 	_check(room.get_node("Visual").get_child_count() == 4 and room.get_node("Visual/Objects").get_used_cells().is_empty(), "the personal room preserves the empty four-layer TMX visual")
+	_check(room.room_size == Vector2i(19,16) and room.is_walkable_tile(Vector2i(13,11)), "the enlarged template exposes the additional authored floor space")
+	var arrival: Marker2D = room.get_node("Spawns/FromFloor")
+	var exit: Area2D = room.get_node("Exits/ToFloor")
+	_check(arrival.position == Vector2(304,400) and exit.position == Vector2(304,432), "arrival and return door align with the relocated threshold")
+	_check(not exit.contains_world_position(arrival.position), "arriving does not immediately trigger the return door")
+	_check(room.get_node("FloorVisibilityMask").get_active_floor_region() == Rect2(128,32,352,416), "the camera mask covers the enlarged room")
 	var collision: TileMapLayer = room.find_map_tilemap_layer("Collision")
-	_check(collision.get_cell_source_id(Vector2i(8,10)) == -1 and collision.get_cell_source_id(Vector2i(8,11)) == -1, "the arrival and lower exit have clear physical floor")
-	for point: Vector2i in [Vector2i(4,4),Vector2i(12,4),Vector2i(4,10),Vector2i(12,10),Vector2i(3,7),Vector2i(8,12)]:
+	_check(collision.get_cell_source_id(Vector2i(9,12)) == -1 and collision.get_cell_source_id(Vector2i(9,13)) == -1, "the arrival and lower exit have clear physical floor")
+	for point: Vector2i in [Vector2i(4,4),Vector2i(14,4),Vector2i(4,12),Vector2i(14,12),Vector2i(3,7),Vector2i(9,14)]:
 		_check(collision.get_cell_source_id(point) != -1, "corners and room boundaries block walking " + str(point))
 	_check(room.get_node("FloorVisibilityMask").constrain_camera_to_active_floor and room.furnishing_editor == null, "personal room has a camera mask and awaits its own furnishing system")
 	for key: String in ["elevator", "elevator_cabin"]:
