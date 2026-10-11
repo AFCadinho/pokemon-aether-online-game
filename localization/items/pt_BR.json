@@ -1,4 +1,16 @@
 {
+  "alola-stone": {
+    "name": "Pedra de Alola",
+    "shortDesc": "Evolui Pikachu, Exeggcute para sua evolução de Alola. Consumida quando a evolução é bem-sucedida."
+  },
+  "galar-stone": {
+    "name": "Pedra de Galar",
+    "shortDesc": "Evolui Koffing, Mime Jr. para sua evolução de Galar. Consumida quando a evolução é bem-sucedida."
+  },
+  "hisui-stone": {
+    "name": "Pedra de Hisui",
+    "shortDesc": "Evolui Quilava, Dewott, Dartrix, Petilil, Rufflet, Goomy, Bergmite para sua evolução de Hisui. Consumida quando a evolução é bem-sucedida."
+  },
   "stick": {
     "name": "Leek",
     "shortDesc": "Use em Farfetch’d de Galar para evoluir para Sirfetch’d. Também aumenta acertos críticos quando equipado."

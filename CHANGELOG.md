@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add distinct icons and localized Bag descriptions for Alola Stone, Galar Stone and Hisui Stone.
+
 - Keep the shared-model test collection within existing metadata limits and let repaired model collections finish without a false concurrent-update error.
 
 - Furnish both private Guild Base side rooms from shared starter storage, with reusable furniture, movable tabletop decorations, adjustable rugs and leader-granted editing rights.

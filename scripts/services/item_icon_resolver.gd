@@ -3,6 +3,11 @@ extends RefCounted
 class_name ItemIconResolver
 
 const ICON_ROOT := "res://assets/items/icons/"
+const REGIONAL_EVOLUTION_STONE_ICONS := {
+	"alola-stone": ICON_ROOT + "ALOLASTONE.svg",
+	"galar-stone": ICON_ROOT + "GALARSTONE.svg",
+	"hisui-stone": ICON_ROOT + "HISUISTONE.svg",
+}
 const MOVE_TYPE_INDEX_PATH := "res://data/move_type_index.json"
 const CharacterAppearanceServiceScript := preload("res://scripts/services/character_appearance_service.gd")
 const MountServiceScript := preload("res://scripts/services/mount_service.gd")
@@ -18,6 +23,8 @@ static func load_icon(
 	cosmetic_gender: String = "male"
 ) -> Texture2D:
 	var canonical_id := _canonical_item_id(item_id)
+	if REGIONAL_EVOLUTION_STONE_ICONS.has(canonical_id):
+		return _load_texture(REGIONAL_EVOLUTION_STONE_ICONS[canonical_id])
 	if canonical_id == "gold-coin":
 		return _load_texture(ICON_ROOT + "GIMMIGHOULCOIN.png")
 	if canonical_id == "aether-gift-voucher":
