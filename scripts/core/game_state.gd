@@ -129,6 +129,7 @@ func lock_input() -> void:
 	
 func unlock_input() -> void:
 	input_locked = false
+	overworld_input_legacy_locked = false
 	overworld_input_locked = overworld_input_legacy_locked or not overworld_input_lock_owners.is_empty()
 	ui_input_locked = not ui_input_lock_owners.is_empty()
 
