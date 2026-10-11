@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Activate the Guild interface's free Guild Base teleport for members of Guilds that own a base, arriving in their private main hall.
+
 - Replace the Aether Band icon with a transparent 48×48 pixel art band in the Gift Store, Bag and held-item displays.
 
 - Give the Emerald Luchador mask a black-and-gold wrestling-mask silhouette with forehead and cheek coverage, on both trainer models and all overworld poses.

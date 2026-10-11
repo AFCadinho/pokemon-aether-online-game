@@ -1090,6 +1090,16 @@ func base_lift_travel(floor: int) -> Dictionary:
 	return result
 
 
+func teleport_to_base() -> Dictionary:
+	var result := await _base_furniture_request("/teleport", HTTPClient.METHOD_POST, {})
+	if not bool(result.get("success", false)):
+		return result
+	var state := _dictionary(result.state.get("state", {}))
+	if state.is_empty():
+		return {"success": false, "error": LocalizationManager.text("ui.guild.base.error.failed")}
+	return {"success": true, "state": state}
+
+
 func base_visit_directory(registrar_id: String, query := "") -> Dictionary:
 	return await _base_furniture_request("/visits/registrars/%s?q=%s" % [registrar_id.uri_encode(), query.uri_encode()], HTTPClient.METHOD_GET, {})
 
