@@ -1,4 +1,8 @@
 {
+  "ui.guild_base.furnish.eyebrow": "公会基地",
+  "ui.guild_base.furnish.shared_storage": "公会共享家具仓库",
+  "ui.guild_base.furnish.category_label": "家具类别",
+  "ui.guild_base.furnish.available": "可用数量：{count}",
   "ui.guild_base.furnish.room.left_room": "左侧",
   "ui.guild_base.furnish.room.right_room": "右侧",
   "ui.guild.log.filter.action.base_furnished": "房间布置",

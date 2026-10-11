@@ -1,4 +1,8 @@
 {
+  "ui.guild_base.furnish.eyebrow": "Guildbase",
+  "ui.guild_base.furnish.shared_storage": "Gedeelde meubelvoorraad van je guild",
+  "ui.guild_base.furnish.category_label": "Meubelcategorie",
+  "ui.guild_base.furnish.available": "{count} beschikbaar",
   "ui.guild_base.furnish.room.left_room": "links",
   "ui.guild_base.furnish.room.right_room": "rechts",
   "ui.guild.log.filter.action.base_furnished": "Kamerinrichting",

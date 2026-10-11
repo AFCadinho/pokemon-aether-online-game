@@ -2,6 +2,14 @@ extends CanvasLayer
 
 const Catalog := preload("res://scripts/world/guild_base_furniture_catalog.gd")
 const Furniture := preload("res://scripts/world/guild_base_furniture.gd")
+const SelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
+const FURNISH_ICON := preload("res://assets/ui/guild_base_furnish.svg")
+const TEXT := Color("#f4f0de")
+const MUTED := Color("#aeb8c5")
+const BORDER := Color("#315070")
+const ACCENT := Color("#60d3ff")
+const GOLD := Color("#dec58a")
+
 const INPUT_LOCK := &"guild_base_furnishing"
 const CATEGORIES := ["tables", "seating", "decorations", "kitchen", "walls", "floor", "table_decor"]
 
@@ -23,6 +31,7 @@ var camera_state: Dictionary = {}
 var rendered_revision := -1
 var enter_button: Button
 var placement_surface: Control
+var done_button: Button
 var panel: PanelContainer
 var list: ItemList
 var category: OptionButton
@@ -64,91 +73,218 @@ func _ready() -> void:
 func _text(key: String, values: Dictionary = {}) -> String:
 	return LocalizationManager.text("ui.guild_base.furnish." + key, values)
 
-func _button(text: String, callback: Callable) -> Button:
+func _style(background: Color, border := BORDER, radius := 9, margin := 10) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(radius)
+	style.set_content_margin_all(margin)
+	return style
+
+func _editor_theme() -> Theme:
+	var theme := Theme.new()
+	theme.default_font_size = 15
+	theme.set_color("font_color", "Label", TEXT)
+	for type: String in ["Button", "CheckBox"]:
+		theme.set_color("font_color", type, TEXT)
+		theme.set_color("font_hover_color", type, Color.WHITE)
+		theme.set_color("font_pressed_color", type, Color.WHITE)
+		theme.set_color("font_disabled_color", type, Color("#69798b"))
+		theme.set_stylebox("normal", type, _style(Color("#0b1a2b")))
+		theme.set_stylebox("hover", type, _style(Color("#112a44"), ACCENT))
+		theme.set_stylebox("pressed", type, _style(Color("#060e18"), ACCENT))
+		theme.set_stylebox("focus", type, _style(Color.TRANSPARENT, ACCENT, 9, 0))
+		theme.set_stylebox("disabled", type, _style(Color("#080f19"), Color("#26384b")))
+	theme.set_icon("checked", "CheckBox", SelectorStyle.RADIO_CHECKED)
+	theme.set_icon("unchecked", "CheckBox", SelectorStyle.RADIO_UNCHECKED)
+	theme.set_icon("checked_disabled", "CheckBox", SelectorStyle.RADIO_CHECKED)
+	theme.set_icon("unchecked_disabled", "CheckBox", SelectorStyle.RADIO_UNCHECKED)
+	theme.set_constant("h_separation", "CheckBox", 12)
+	var inset := _style(Color("#060e19"), Color("#263e55"), 9, 10)
+	theme.set_stylebox("panel", "ItemList", inset)
+	theme.set_stylebox("focus", "ItemList", _style(Color.TRANSPARENT, ACCENT, 9, 0))
+	theme.set_stylebox("selected", "ItemList", _style(Color("#16314a"), GOLD, 7, 5))
+	theme.set_stylebox("selected_focus", "ItemList", _style(Color("#183851"), GOLD, 7, 5))
+	theme.set_stylebox("hovered", "ItemList", _style(Color("#0e2337"), BORDER, 7, 5))
+	theme.set_color("font_color", "ItemList", TEXT)
+	theme.set_color("font_selected_color", "ItemList", Color.WHITE)
+	theme.set_constant("v_separation", "ItemList", 12)
+	theme.set_constant("icon_margin", "ItemList", 14)
+	for type: String in ["VScrollBar", "HScrollBar"]:
+		theme.set_stylebox("scroll", type, _style(Color("#08111e"), Color.TRANSPARENT, 3, 3))
+		theme.set_stylebox("scroll_focus", type, _style(Color("#08111e"), Color.TRANSPARENT, 3, 3))
+		for state_name: String in ["grabber", "grabber_highlight", "grabber_pressed"]:
+			theme.set_stylebox(state_name, type, _style(BORDER if state_name == "grabber" else ACCENT, Color.TRANSPARENT, 3, 3))
+	theme.set_stylebox("normal", "LineEdit", inset)
+	theme.set_stylebox("focus", "LineEdit", _style(Color("#071225"), ACCENT))
+	theme.set_color("font_color", "LineEdit", TEXT)
+	theme.set_color("caret_color", "LineEdit", GOLD)
+	theme.set_color("selection_color", "LineEdit", Color("#224b68"))
+	theme.set_stylebox("panel", "TooltipPanel", _style(Color("#081522")))
+	theme.set_color("font_color", "TooltipLabel", TEXT)
+	theme.set_font_size("font_size", "TooltipLabel", 13)
+	var window_border := _style(Color("#050b14"), BORDER, 12, 12)
+	window_border.content_margin_top = 34
+	window_border.shadow_color = Color(0, 0, 0, 0.5)
+	window_border.shadow_size = 16
+	theme.set_stylebox("embedded_border", "Window", window_border)
+	theme.set_stylebox("embedded_unfocused_border", "Window", window_border)
+	theme.set_color("title_color", "Window", TEXT)
+	theme.set_font_size("title_font_size", "Window", 16)
+	return theme
+
+func _button(text: String, callback: Callable, primary := false) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.pressed.connect(callback)
-	button.custom_minimum_size.y = 34
+	button.custom_minimum_size.y = 42
+	if primary:
+		button.add_theme_stylebox_override("normal", _style(Color("#12364b"), ACCENT))
+		button.add_theme_stylebox_override("hover", _style(Color("#194860"), Color("#a1eaff")))
+		button.add_theme_stylebox_override("pressed", _style(Color("#0b2435"), ACCENT))
 	return button
+
+func _caption(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 13)
+	label.add_theme_color_override("font_color", MUTED)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return label
 
 func _build_ui() -> void:
 	var root := Control.new()
 	placement_surface = root
+	root.theme = _editor_theme()
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.gui_input.connect(_on_placement_surface_input)
 	add_child(root)
 	enter_button = _button(_text("open"), begin_editing)
-	enter_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
-	enter_button.position = Vector2(-216, 16)
-	enter_button.size = Vector2(200, 36)
-	enter_button.visible = false
 	root.add_child(enter_button)
+	# A dedicated action below the top HUD, clear of its right-hand icons.
+	enter_button.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	enter_button.position = Vector2(24, 96)
+	enter_button.custom_minimum_size = Vector2(248, 54)
+	enter_button.size = enter_button.custom_minimum_size
+	enter_button.icon = FURNISH_ICON
+	enter_button.add_theme_constant_override("h_separation", 12)
+	enter_button.add_theme_font_size_override("font_size", 16)
+	var action_style := _style(Color("#142237"), GOLD, 11, 14)
+	action_style.shadow_color = Color(0, 0, 0, 0.55)
+	action_style.shadow_size = 10
+	enter_button.add_theme_stylebox_override("normal", action_style)
+	enter_button.add_theme_stylebox_override("hover", _style(Color("#203550"), GOLD, 11, 14))
+	enter_button.add_theme_stylebox_override("pressed", _style(Color("#0d192a"), GOLD, 11, 14))
+	enter_button.visible = false
 	panel = PanelContainer.new()
+	root.add_child(panel)
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.anchor_left = 1
-	panel.offset_left = -304
-	panel.offset_top = 16
-	panel.offset_right = -16
-	panel.offset_bottom = -16
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color("142732")
-	style.border_color = Color("3b8998")
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(8)
-	style.set_content_margin_all(12)
-	panel.add_theme_stylebox_override("panel", style)
-	root.add_child(panel)
+	panel.offset_left = -452
+	panel.offset_top = 88
+	panel.offset_right = -88
+	panel.offset_bottom = -24
+	var frame := _style(Color("#050b14f7"), BORDER, 13, 16)
+	frame.border_width_top = 2
+	frame.shadow_color = Color(0, 0, 0, 0.55)
+	frame.shadow_size = 18
+	frame.shadow_offset = Vector2(0, 6)
+	panel.add_theme_stylebox_override("panel", frame)
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	panel.add_child(scroll)
 	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 8)
-	panel.add_child(column)
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	column.add_theme_constant_override("separation", 10)
+	scroll.add_child(column)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 12)
+	column.add_child(header)
+	var icon := TextureRect.new()
+	icon.texture = FURNISH_ICON
+	icon.custom_minimum_size = Vector2(32, 32)
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header.add_child(icon)
+	var heading := VBoxContainer.new()
+	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.add_child(heading)
+	var eyebrow := _caption(_text("eyebrow").to_upper())
+	eyebrow.add_theme_color_override("font_color", GOLD)
+	heading.add_child(eyebrow)
 	var title := Label.new()
 	title.text = _text("title")
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title.add_theme_font_size_override("font_size", 20)
-	column.add_child(title)
+	heading.add_child(title)
+	column.add_child(_caption(_text("shared_storage")))
+	var separator := HSeparator.new()
+	separator.add_theme_stylebox_override("separator", _style(Color("#263e55"), Color.TRANSPARENT, 0, 0))
+	column.add_child(separator)
+	column.add_child(_caption(_text("category_label")))
 	category = OptionButton.new()
+	SelectorStyle.configure(category)
 	for id: String in CATEGORIES:
 		category.add_item(_text("category." + id))
 		category.set_item_metadata(category.item_count - 1, id)
 	category.item_selected.connect(func(_index: int): _populate_catalog())
 	column.add_child(category)
 	list = ItemList.new()
-	list.custom_minimum_size = Vector2(250, 160)
+	list.custom_minimum_size = Vector2(250, 112)
 	list.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	list.fixed_icon_size = Vector2i(40, 40)
+	list.fixed_icon_size = Vector2i(48, 48)
+	list.max_text_lines = 2
 	list.item_selected.connect(_catalog_selected)
 	column.add_child(list)
 	dimensions = HBoxContainer.new()
+	dimensions.add_theme_constant_override("separation", 12)
 	column.add_child(dimensions)
 	for dimension: String in ["width", "height"]:
-		var label := Label.new()
-		label.text = _text(dimension)
-		dimensions.add_child(label)
+		var field := VBoxContainer.new()
+		field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		dimensions.add_child(field)
+		field.add_child(_caption(_text(dimension)))
 		var box := SpinBox.new()
 		box.min_value = 2
 		box.max_value = 15 if dimension == "width" else 12
 		box.value = 3
-		box.custom_minimum_size.x = 72
-		dimensions.add_child(box)
+		box.custom_minimum_size.y = 40
+		field.add_child(box)
 		if dimension == "width":
 			width_box = box
 		else:
 			height_box = box
 	dimensions.visible = false
+	var help_panel := PanelContainer.new()
+	var help_style := _style(Color("#0b1827"), BORDER, 8, 12)
+	help_style.border_width_left = 3
+	help_panel.add_theme_stylebox_override("panel", help_style)
+	column.add_child(help_panel)
 	status_label = Label.new()
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	status_label.custom_minimum_size.y = 54
-	column.add_child(status_label)
+	status_label.custom_minimum_size.y = 44
+	status_label.add_theme_font_size_override("font_size", 14)
+	status_label.add_theme_color_override("font_color", MUTED)
+	help_panel.add_child(status_label)
 	select_button = _button(_text("select_move"), _start_selecting)
 	column.add_child(select_button)
 	remove_button = _button(_text("take_back"), _take_back)
 	remove_button.disabled = true
 	column.add_child(remove_button)
 	rights_button = _button(_text("rights"), _show_rights)
+	rights_button.add_theme_font_size_override("font_size", 14)
 	column.add_child(rights_button)
-	column.add_child(_button(_text("done"), finish_editing))
+	done_button = _button(_text("done"), finish_editing, true)
+	column.add_child(done_button)
 	panel.visible = false
+
+func _set_status(message: String, error := false) -> void:
+	status_label.text = message
+	status_label.add_theme_color_override("font_color", Color("#efb0b2") if error else MUTED)
 
 func _current() -> bool:
 	return is_instance_valid(room) and room.is_inside_tree() and GameState.current_map == room and room.guild_id > 0 and AuthService.is_authenticated()
@@ -258,7 +394,7 @@ func begin_editing() -> void:
 	_fit_camera()
 	lease_timer.start()
 	_populate_catalog()
-	status_label.text = _text("help")
+	_set_status(_text("help"))
 
 func finish_editing() -> void:
 	if busy:
@@ -299,8 +435,9 @@ func _populate_catalog() -> void:
 		if str(spec.category) != filter:
 			continue
 		var count := int(state.get("inventory", {}).get(spec.id, 0))
-		list.add_item("%s  ×%d" % [LocalizationManager.text(str(spec.nameKey)), count], load("res://assets/guild_base/furniture/icons/%s.png" % str(spec.id)))
+		list.add_item("%s   ×%d" % [LocalizationManager.text(str(spec.nameKey)), count], load("res://assets/guild_base/furniture/icons/%s.png" % str(spec.id)))
 		var index := list.item_count - 1
+		list.set_item_tooltip(index, _text("available", {"count": count}))
 		list.set_item_metadata(index, str(spec.id))
 		list.set_item_disabled(index, count <= 0 or busy)
 		if str(spec.id) == selected_furniture:
@@ -314,12 +451,12 @@ func _catalog_selected(index: int) -> void:
 	dimensions.visible = bool(spec.resizable)
 	width_box.value = spec.footprint[0]
 	height_box.value = spec.footprint[1]
-	status_label.text = _text("surface_help" if str(spec.placement) == "surface" else "help")
+	_set_status(_text("surface_help" if str(spec.placement) == "surface" else "help"))
 
 func _start_selecting() -> void:
 	_clear_selection()
 	selecting = true
-	status_label.text = _text("select_help")
+	_set_status(_text("select_help"))
 
 func _clear_selection() -> void:
 	if is_instance_valid(preview):
@@ -360,7 +497,7 @@ func _process(_delta: float) -> void:
 	preview.visible = true
 	var reason := _candidate_error(candidate)
 	preview.modulate = Color(0.4, 1, 0.6, 0.65) if reason == "" else Color(1, 0.35, 0.35, 0.65)
-	status_label.text = _text("valid" if reason == "" else "invalid." + reason)
+	_set_status(_text("valid" if reason == "" else "invalid." + reason), reason != "")
 
 func _placement_at(world_position: Vector2) -> Dictionary:
 	var spec := Catalog.item(selected_furniture)
@@ -523,7 +660,7 @@ func _commit(items: Array) -> void:
 	if busy or not building or not _current():
 		return
 	busy = true
-	status_label.text = _text("saving")
+	_set_status(_text("saving"))
 	remove_button.disabled = true
 	var result: Dictionary = await guild_service.save_base_furniture(room.room_key, lease_token, int(state.revision), items)
 	busy = false
@@ -532,7 +669,7 @@ func _commit(items: Array) -> void:
 	if bool(result.get("success", false)):
 		_clear_selection()
 		apply_state(result.state)
-		status_label.text = _text("saved")
+		_set_status(_text("saved"))
 	else:
 		_clear_selection()
 		await refresh()
@@ -542,7 +679,7 @@ func _commit(items: Array) -> void:
 
 func _error(response: Dictionary) -> void:
 	if is_instance_valid(status_label):
-		status_label.text = BackendErrorLocalizationService.message(response, "ui.guild_base.furnish.failed")
+		_set_status(BackendErrorLocalizationService.message(response, "ui.guild_base.furnish.failed"), true)
 	if not building and _current():
 		await GameErrorDialogService.show_response(response, "ui.guild_base.furnish.failed")
 
@@ -558,6 +695,7 @@ func _show_rights() -> void:
 		_error(result)
 		return
 	rights_window = Window.new()
+	rights_window.theme = placement_surface.theme
 	rights_window.title = _text("rights")
 	rights_window.size = Vector2i(360, 400)
 	rights_window.transient = true
@@ -567,6 +705,7 @@ func _show_rights() -> void:
 	var scroll := ScrollContainer.new()
 	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	rights_window.add_child(scroll)
+	scroll.add_theme_stylebox_override("panel", _style(Color("#050b14"), BORDER, 10, 12))
 	var column := VBoxContainer.new()
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(column)
@@ -610,7 +749,7 @@ func _fit_camera() -> void:
 		return
 	var viewport_size := get_viewport().get_visible_rect().size
 	var region: Rect2 = room.get_node("FloorVisibilityMask").get_active_floor_region()
-	var dock_width := panel.size.x + 32
+	var dock_width := viewport_size.x - panel.position.x + 24
 	var zoom := clampf(minf((viewport_size.x-dock_width-48)/region.size.x, (viewport_size.y-64)/region.size.y), 0.2, 1.5)
 	camera.zoom = Vector2(zoom, zoom)
 	var center := room.to_global(region.get_center()) + Vector2(dock_width/(2*zoom), 0)

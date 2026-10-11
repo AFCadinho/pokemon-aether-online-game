@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make the Guild Base furnishing action visible below the HUD and style its catalog, category dropdown, controls and permission window to match the Guild interface.
+
 - Choose Maushold family size, Dudunsparce length, Vivillon pattern and Alcremie flavor before evolving, using a form selector in evolution prompts and the Bag.
 
 - Restore Summary clicks and context actions for every party Pokémon after duplicating the party cards.
