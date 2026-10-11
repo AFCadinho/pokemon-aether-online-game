@@ -50,7 +50,7 @@ func _run() -> void:
 			await get_tree().process_frame
 	assert(Attachments.choreography_for("decidueye-hisui","lowkick","physical_attack_2").is_empty())
 	assert(Attachments.choreography_for("glastrier","tackle","physical_attack_2").is_empty())
-	for route: Array in [["salandit","special_attack",.35,.45,.64], ["volcanion","physical_attack_2",.4,.48,.55], ["walking-wake","special_attack",.3,.45,.6], ["watchog","special_attack",.35,.45,.7], ["zoroark-hisui","physical_attack_2",.2,.28,.32]]:
+	for route: Array in [["goodra","special_attack",.28,.42,.56], ["salandit","special_attack",.35,.45,.64], ["volcanion","physical_attack_2",.4,.48,.55], ["walking-wake","special_attack",.3,.45,.6], ["watchog","special_attack",.35,.45,.7], ["zoroark-hisui","physical_attack_2",.2,.28,.32]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -77,6 +77,8 @@ func _run() -> void:
 			stage.substitute_models[slot] = null
 	assert(Attachments.choreography_for("salandit","flamethrower","physical_attack").is_empty())
 	assert(Attachments.choreography_for("salandit","ember","special_attack").is_empty())
+	assert(Attachments.choreography_for("goodra-hisui","flamethrower","special_attack").is_empty())
+	assert(Attachments.choreography_for("goodra","watergun","special_attack").is_empty())
 	assert(Attachments.choreography_for("salazzle","flamethrower","special_attack").is_empty())
 	assert(Attachments.choreography_for("volcanion","flamethrower","special_attack").is_empty())
 	assert(Attachments.choreography_for("volcanion","watergun","physical_attack_2").is_empty())
@@ -119,5 +121,5 @@ func _run() -> void:
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=11 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=12 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()

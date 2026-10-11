@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make mouth origins follow both Grimer forms, Goodra, Gengar, Crobat and Bunnelby through their attack poses, and time Goodra’s Flamethrower to its open mouth.
+
 - Anchor beam attacks to the central face lights of Regice, Regirock, Registeel, Regigigas and Regieleki, and water and beam attacks to Staryu’s and Starmie’s gems.
 
 - Place mouth effects on Vibrava, Vikavolt, Varoom, Venomoth and both Sandslash forms individually; align Vikavolt’s Flash Cannon, Varoom’s Sludge Bomb and Alolan Sandslash’s Ice Beam with their attack poses.

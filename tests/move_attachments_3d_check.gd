@@ -69,6 +69,15 @@ func _run() -> void:
 			assert(Attachments.part_for(identity, move) == "gem")
 	assert(Attachments.part_for("starmie", "hyperbeam") == "gem")
 	assert(Attachments.part_for("starmie-mega", "watergun") == "mouth")
+	for species: String in ["grimer", "grimer-alola", "goodra", "gengar", "crobat", "bunnelby"]:
+		for identity: String in [species, species + "@shiny"]:
+			var emitters := Attachments.definitions_for(identity, "mouth")
+			assert(emitters.size() == 1)
+			assert(emitters[0].size() > 1 if species != "crobat" else emitters[0][0].bone == "head")
+			assert(Attachments.part_for(identity, "sludgebomb") == "mouth")
+	assert(Attachments.definitions_for("grimer", "mouth") != Attachments.definitions_for("grimer-alola", "mouth"))
+	assert(Attachments.definitions_for("goodra", "mouth") != Attachments.definitions_for("goodra-hisui", "mouth"))
+	assert(Attachments.definitions_for("gengar", "mouth") != Attachments.definitions_for("gengar-mega", "mouth"))
 
 	for identity: String in ["zweilous", "zweilous@shiny"]:
 		var heads := Attachments.definitions_for(identity, "mouth")

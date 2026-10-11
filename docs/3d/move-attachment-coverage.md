@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1045 species/forms.
-- No anatomical attachment profile: 155 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 947 species/forms.
+- At least one configured anatomical attachment: 1046 species/forms.
+- No anatomical attachment profile: 154 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 953 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -114,7 +114,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | buizel | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | bulbasaur | hand, left_hand, mouth | Same attachment profile |
 | buneary | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| bunnelby | foot, hand, left_foot, left_hand | Same attachment profile |
+| bunnelby | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | burmy | mouth | Same attachment profile |
 | butterfree | mouth | Same attachment profile |
 | buzzwole | hand, left_hand, mouth | Same attachment profile |
@@ -190,6 +190,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | crawdaunt | mouth | Same attachment profile |
 | cresselia | mouth | Same attachment profile |
 | croagunk | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| crobat | mouth | Same attachment profile |
 | crocalor | mouth | Same attachment profile |
 | croconaw | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | crustle | hand, left_hand, mouth | Same attachment profile |
@@ -345,7 +346,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | gardevoir-mega | hand, left_hand, mouth | Same attachment profile |
 | garganacl | hand, left_hand | Same attachment profile |
 | gastrodon | mouth | Same attachment profile |
-| gengar | hand, left_hand | Same attachment profile |
+| gengar | hand, left_hand, mouth | Same attachment profile |
 | gengar-mega | hand, left_hand, mouth | Same attachment profile |
 | geodude | hand, left_hand, mouth | Same attachment profile |
 | geodude-alola | hand, left_hand, mouth | Same attachment profile |
@@ -369,7 +370,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | golett | foot, hand, left_foot, left_hand | Same attachment profile |
 | golurk | foot, hand, left_foot, left_hand | Same attachment profile |
 | golurk-mega | foot, hand, left_foot, left_hand | Same attachment profile |
-| goodra | hand, left_hand | Same attachment profile |
+| goodra | hand, left_hand, mouth | Same attachment profile |
 | goodra-hisui | hand, left_hand, mouth | Same attachment profile |
 | goomy | mouth | Same attachment profile |
 | gorebyss | mouth | Same attachment profile |
@@ -387,8 +388,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | greedent | hand, left_hand, mouth | Same attachment profile |
 | greninja | foot, hand, left_foot, left_hand | Same attachment profile |
 | greninja-mega | foot, left_foot | Same attachment profile |
-| grimer | hand, left_hand | Same attachment profile |
-| grimer-alola | hand, left_hand | Same attachment profile |
+| grimer | hand, left_hand, mouth | Same attachment profile |
+| grimer-alola | hand, left_hand, mouth | Same attachment profile |
 | grimmsnarl | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | grookey | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | grotle | hand, left_hand, mouth | Same attachment profile |
