@@ -1143,5 +1143,25 @@
   "emerald-luchador-outfit": {
     "name": "Emerald Luchador 服装礼盒",
     "shortDesc": "内含五件固定配色的独立外观：外套、长裤、靴子、面具和背部羽翼。男女角色均可使用。在背包中打开。"
+  },
+  "akatsuki-shirt": {
+    "name": "晓组织长袍",
+    "shortDesc": "男女训练家均可使用的固定配色外观。在背包中激活后，可在角色自定义中穿戴。"
+  },
+  "akatsuki-trousers": {
+    "name": "晓组织长裤",
+    "shortDesc": "男女训练家均可使用的固定配色外观。在背包中激活后，可在角色自定义中穿戴。"
+  },
+  "akatsuki-shoes": {
+    "name": "晓组织凉鞋",
+    "shortDesc": "男女训练家均可使用的固定配色外观。在背包中激活后，可在角色自定义中穿戴。"
+  },
+  "akatsuki-headband": {
+    "name": "晓组织护额",
+    "shortDesc": "男女训练家均可使用的固定配色外观。在背包中激活后，可在角色自定义中穿戴。"
+  },
+  "akatsuki-outfit": {
+    "name": "晓组织服装礼盒",
+    "shortDesc": "包含四件独立外观：长袍、长裤、凉鞋和护额。男女角色均可使用。在背包中打开礼盒。"
   }
 }

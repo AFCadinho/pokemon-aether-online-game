@@ -1,0 +1,165 @@
+{
+  "revision": 2,
+  "assets": [
+    {
+      "path": "assets/player/male/top/Akatsuki_Shirt.png",
+      "source": "male/overworld/Walking/Shirt.png",
+      "sha256": "cfa213038d0d989c91b2f609747a6aa20203526445a4af70e8a4a3edf0662b17"
+    },
+    {
+      "path": "assets/player/male/top/fish/Akatsuki_Shirt_fish.png",
+      "source": "male/overworld/Fishing/Shirt.png",
+      "sha256": "70171f15e869cc2f34761d2d825d4cc34815cdd2f3ecbc7f0318a880bb94bb88"
+    },
+    {
+      "path": "assets/player/male/top/ride/Akatsuki_Shirt_ride.png",
+      "source": "male/overworld/Riding/Shirt.png",
+      "sha256": "37944aacc4e8c736f8f5036003eec7ff91d6f553b17fcc3f0f2c7f4cee2fcb56"
+    },
+    {
+      "path": "assets/battles/trainers/player/male/akatsuki/Shirt.png",
+      "source": "male/trainer/Shirt.png",
+      "sha256": "e0dfd808d054eb92c1afbcde1d222e75b90629d97bdce64bb20064d2e9ac7f09"
+    },
+    {
+      "path": "assets/player/male/bottom/Akatsuki_Trousers.png",
+      "source": "male/overworld/Walking/Trousers.png",
+      "sha256": "919a005080da83c9f2b75ed2b9dcba2f76ffd4d77e4ec9ad53578d706c763c98"
+    },
+    {
+      "path": "assets/player/male/bottom/fish/Akatsuki_Trousers_fish.png",
+      "source": "male/overworld/Fishing/Trousers.png",
+      "sha256": "3e034e19e727e1e1011db1d8f7b12178cb7f412d9c303729051df50ef2049835"
+    },
+    {
+      "path": "assets/player/male/bottom/ride/Akatsuki_Trousers_ride.png",
+      "source": "male/overworld/Riding/Trousers.png",
+      "sha256": "6bb22fb57893ba2202bf7f42a118a1465be1ca5552e08356e535623438055ab6"
+    },
+    {
+      "path": "assets/battles/trainers/player/male/akatsuki/Trousers.png",
+      "source": "male/trainer/Trousers.png",
+      "sha256": "a7767035a3cf14a8b0ff9b474932473bb9b688130459e5146214d693b6c676bd"
+    },
+    {
+      "path": "assets/player/male/shoes/Akatsuki_Shoes.png",
+      "source": "male/overworld/Walking/Shoes.png",
+      "sha256": "52e3f235c6c185b5ce8f59bc9db85ac8d6dbb8d6c24b95288b3dbbab2f552503"
+    },
+    {
+      "path": "assets/player/male/shoes/fish/Akatsuki_Shoes_fish.png",
+      "source": "male/overworld/Fishing/Shoes.png",
+      "sha256": "ee5756d9c08f7437412856c3749c5b98074e1ed1bdc823bfa435f95b0165c24a"
+    },
+    {
+      "path": "assets/player/male/shoes/ride/Akatsuki_Shoes_ride.png",
+      "source": "male/overworld/Riding/Shoes.png",
+      "sha256": "006388cc1cc4275969bf7f5fd44f89fd222cd31b3c7877a74771c30f502c535b"
+    },
+    {
+      "path": "assets/battles/trainers/player/male/akatsuki/Shoes.png",
+      "source": "male/trainer/Shoes.png",
+      "sha256": "ded8b94ade248482650e1853b641a8f29073ac60da6b18f662b986b51f9cd53a"
+    },
+    {
+      "path": "assets/player/male/headgear/Akatsuki_Headband.png",
+      "source": "male/overworld/Walking/Headband.png",
+      "sha256": "1161b71477929447854c68d4e5327169d369a4949839f7d52f3c8bcbf25963ae"
+    },
+    {
+      "path": "assets/player/male/headgear/fish/Akatsuki_Headband_fish.png",
+      "source": "male/overworld/Fishing/Headband.png",
+      "sha256": "e581dd9276269df433d9d8512a861951ca2ba8d0c42514ec9b7826a424d973bf"
+    },
+    {
+      "path": "assets/player/male/headgear/ride/Akatsuki_Headband_ride.png",
+      "source": "male/overworld/Riding/Headband.png",
+      "sha256": "87d7c215d654fd1fdb61df7fd642eba5c1c0f7d8b4594cd4f8bc2a384ad3e6e1"
+    },
+    {
+      "path": "assets/battles/trainers/player/male/akatsuki/Headband.png",
+      "source": "male/trainer/Headband.png",
+      "sha256": "bde8c32a266396c7d40666602113cb6e1ed0e639aebb27d21dc70d79be91d972"
+    },
+    {
+      "path": "assets/player/female/top/Akatsuki_Shirt.png",
+      "source": "female/overworld/Walking/Shirt.png",
+      "sha256": "cfa213038d0d989c91b2f609747a6aa20203526445a4af70e8a4a3edf0662b17"
+    },
+    {
+      "path": "assets/player/female/top/fish/Akatsuki_Shirt_fish.png",
+      "source": "female/overworld/Fishing/Shirt.png",
+      "sha256": "3e5f2450b4109e384d45f93964240ef4f16643ff4f7d22a604c75f54a9274cb4"
+    },
+    {
+      "path": "assets/player/female/top/ride/Akatsuki_Shirt_ride.png",
+      "source": "female/overworld/Riding/Shirt.png",
+      "sha256": "37944aacc4e8c736f8f5036003eec7ff91d6f553b17fcc3f0f2c7f4cee2fcb56"
+    },
+    {
+      "path": "assets/battles/trainers/player/female/akatsuki/Shirt.png",
+      "source": "female/trainer/Shirt.png",
+      "sha256": "bf7328a13407b667a70dd5b8f34d00b0330b535338c8521295ca9dffd196712a"
+    },
+    {
+      "path": "assets/player/female/bottom/Akatsuki_Trousers.png",
+      "source": "female/overworld/Walking/Trousers.png",
+      "sha256": "8d4e18a365c3c03ed8ee5029d27924542c11d4569d2a95759bca7fc3820fb9b5"
+    },
+    {
+      "path": "assets/player/female/bottom/fish/Akatsuki_Trousers_fish.png",
+      "source": "female/overworld/Fishing/Trousers.png",
+      "sha256": "3ad43c051c80eaa2f8ebb496aaf3c2ed78d48c067678c0017973b88577ef101a"
+    },
+    {
+      "path": "assets/player/female/bottom/ride/Akatsuki_Trousers_ride.png",
+      "source": "female/overworld/Riding/Trousers.png",
+      "sha256": "6bb22fb57893ba2202bf7f42a118a1465be1ca5552e08356e535623438055ab6"
+    },
+    {
+      "path": "assets/battles/trainers/player/female/akatsuki/Trousers.png",
+      "source": "female/trainer/Trousers.png",
+      "sha256": "a7767035a3cf14a8b0ff9b474932473bb9b688130459e5146214d693b6c676bd"
+    },
+    {
+      "path": "assets/player/female/shoes/Akatsuki_Shoes.png",
+      "source": "female/overworld/Walking/Shoes.png",
+      "sha256": "52e3f235c6c185b5ce8f59bc9db85ac8d6dbb8d6c24b95288b3dbbab2f552503"
+    },
+    {
+      "path": "assets/player/female/shoes/fish/Akatsuki_Shoes_fish.png",
+      "source": "female/overworld/Fishing/Shoes.png",
+      "sha256": "ee5756d9c08f7437412856c3749c5b98074e1ed1bdc823bfa435f95b0165c24a"
+    },
+    {
+      "path": "assets/player/female/shoes/ride/Akatsuki_Shoes_ride.png",
+      "source": "female/overworld/Riding/Shoes.png",
+      "sha256": "006388cc1cc4275969bf7f5fd44f89fd222cd31b3c7877a74771c30f502c535b"
+    },
+    {
+      "path": "assets/battles/trainers/player/female/akatsuki/Shoes.png",
+      "source": "female/trainer/Shoes.png",
+      "sha256": "c31a1ed848dc1d6c69867d916208f36da254032b70dc1c47d179b7ca638f3807"
+    },
+    {
+      "path": "assets/player/female/headgear/Akatsuki_Headband.png",
+      "source": "female/overworld/Walking/Headband.png",
+      "sha256": "1161b71477929447854c68d4e5327169d369a4949839f7d52f3c8bcbf25963ae"
+    },
+    {
+      "path": "assets/player/female/headgear/fish/Akatsuki_Headband_fish.png",
+      "source": "female/overworld/Fishing/Headband.png",
+      "sha256": "e581dd9276269df433d9d8512a861951ca2ba8d0c42514ec9b7826a424d973bf"
+    },
+    {
+      "path": "assets/player/female/headgear/ride/Akatsuki_Headband_ride.png",
+      "source": "female/overworld/Riding/Headband.png",
+      "sha256": "87d7c215d654fd1fdb61df7fd642eba5c1c0f7d8b4594cd4f8bc2a384ad3e6e1"
+    },
+    {
+      "path": "assets/battles/trainers/player/female/akatsuki/Headband.png",
+      "source": "female/trainer/Headband.png",
+      "sha256": "bde8c32a266396c7d40666602113cb6e1ed0e639aebb27d21dc70d79be91d972"
+    }
+  ]
+}

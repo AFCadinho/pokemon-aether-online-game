@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Akatsuki Outfit Box for both player models, with an ankle-length robe, trousers, sandals and separate headband; includes trainer and overworld activity sprites.
+
 - Publish the official Aether training items guide with four interface screenshots, explaining both Bands, Gems/card credit, equipment, EV limits and co-op rules; clearly mark the items as upcoming.
 
 - Show the owning Guild's name in Guild Base location labels and let leaders name the two shared side rooms through the base manager.

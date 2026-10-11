@@ -1143,5 +1143,25 @@
   "emerald-luchador-outfit": {
     "name": "Emerald Luchador Outfit Box",
     "shortDesc": "Contains five separate fixed-colour items: jacket, trousers, boots, mask and Back wings. Fits both genders. Open the box in your Bag."
+  },
+  "akatsuki-shirt": {
+    "name": "Akatsuki Robe",
+    "shortDesc": "Fixed-colour cosmetic for male and female trainers. Activate it in your Bag, then equip it in Character Customization."
+  },
+  "akatsuki-trousers": {
+    "name": "Akatsuki Trousers",
+    "shortDesc": "Fixed-colour cosmetic for male and female trainers. Activate it in your Bag, then equip it in Character Customization."
+  },
+  "akatsuki-shoes": {
+    "name": "Akatsuki Sandals",
+    "shortDesc": "Fixed-colour cosmetic for male and female trainers. Activate it in your Bag, then equip it in Character Customization."
+  },
+  "akatsuki-headband": {
+    "name": "Akatsuki Headband",
+    "shortDesc": "Fixed-colour cosmetic for male and female trainers. Activate it in your Bag, then equip it in Character Customization."
+  },
+  "akatsuki-outfit": {
+    "name": "Akatsuki Outfit Box",
+    "shortDesc": "Contains four separate items: a long robe, trousers, sandals and headband. Fits both genders. Open the box in your Bag."
   }
 }

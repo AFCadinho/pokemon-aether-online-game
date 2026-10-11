@@ -84,6 +84,115 @@
         }
       ]
     },
+    "akatsuki-headband": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "headgear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Akatsuki_Headband"
+        }
+      ]
+    },
+    "akatsuki-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Akatsuki_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Akatsuki_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Akatsuki_Shoes"
+        },
+        {
+          "category": "headgear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Akatsuki_Headband"
+        }
+      ]
+    },
+    "akatsuki-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Akatsuki_Shirt"
+        }
+      ]
+    },
+    "akatsuki-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Akatsuki_Shoes"
+        }
+      ]
+    },
+    "akatsuki-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Akatsuki_Trousers"
+        }
+      ]
+    },
     "celebi-forest-ranger-outfit": {
       "bundle": true,
       "genders": [
@@ -1054,6 +1163,13 @@
           "male": "AetherVoyager_Trousers"
         }
       },
+      "Akatsuki_Trousers": {
+        "item_id": "akatsuki-trousers",
+        "render_variants": {
+          "female": "Akatsuki_Trousers",
+          "male": "Akatsuki_Trousers"
+        }
+      },
       "CelebiForestRanger_Trousers": {
         "item_id": "celebi-forest-ranger-trousers",
         "render_variants": {
@@ -1151,6 +1267,13 @@
       }
     },
     "headgear": {
+      "Akatsuki_Headband": {
+        "item_id": "akatsuki-headband",
+        "render_variants": {
+          "female": "Akatsuki_Headband",
+          "male": "Akatsuki_Headband"
+        }
+      },
       "TeamRocket_Cap": {
         "item_id": "team-rocket-cap",
         "render_variants": {
@@ -1165,6 +1288,13 @@
         "render_variants": {
           "female": "AetherVoyager_Shoes",
           "male": "AetherVoyager_Shoes"
+        }
+      },
+      "Akatsuki_Shoes": {
+        "item_id": "akatsuki-shoes",
+        "render_variants": {
+          "female": "Akatsuki_Shoes",
+          "male": "Akatsuki_Shoes"
         }
       },
       "CelebiForestRanger_Shoes": {
@@ -1230,6 +1360,13 @@
         "render_variants": {
           "female": "AetherVoyager_Shirt",
           "male": "AetherVoyager_Shirt"
+        }
+      },
+      "Akatsuki_Shirt": {
+        "item_id": "akatsuki-shirt",
+        "render_variants": {
+          "female": "Akatsuki_Shirt",
+          "male": "Akatsuki_Shirt"
         }
       },
       "CelebiForestRanger_Shirt": {
