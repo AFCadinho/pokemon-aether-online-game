@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare a reusable Guild Base player-floor hallway with four room slots, a central lift, collision and a camera mask; floor allocation will follow later.
+
 - Share rival encounter loading, completion and retry behavior through a reusable trainer controller; preserve each location's rematch policy.
 
 - Correct the Guild Base cabin walls, lamps and lift control panel by preserving cropped Tiled collection images without overwriting their shared atlas.

@@ -99,11 +99,28 @@ room; both arrival points are clear of their exit triggers. The control panel
 keeps its authored offset. Floor selection and personal-room destinations
 remain a separate next step.
 
+`player_floor.tscn` is the reusable hallway template imported from
+`Guild Base Player Floor.tmx`. It has four room slots, left to right, and a
+central lift. `DoorAnchors/Room1` through `Room4` and `DoorAnchors/Elevator`
+mark future door connections; `Spawns/FromRoom1` through `FromRoom4` and
+`Spawns/FromElevator` provide arrivals on clear floor. Fixed plants and benches
+block walking, door mats render beneath players, and the floor mask bounds the
+interior and camera.
+
+Its `map_id` stays empty, so catalog generation excludes this unassigned
+template. No active exits or member ownership are assigned yet. Later floor
+allocation must supply distinct authorized Guild/floor identities, choose
+which members occupy the four room slots, and connect their personal room
+instances. Reuse this one scene for every floor rather than duplicating its
+art. Until that system exists, the cabin returns to the ground-floor waiting
+room by default.
+
 For Celadon/Saffron, add their actual city entrance/return points and registrars
 before enabling purchases. Reuse the room scenes; extend the server door/return
 contract and town access rather than duplicating maps per Guild or town.
 
 Focused checks: `tests/guild_base_interior_check.gd`,
+`tests/guild_base_player_floor_check.gd`,
 `tests/guild_base_furnishing_check.gd` (add `-- --screenshot` with a graphics
 renderer for a visual preview), account-service `tests.test_guild_base_interiors`,
 `tests.test_guild_base_furniture`, and gateway `tests.test_guild_base_presence`
