@@ -130,6 +130,18 @@ def main():
     artifacts = {name: sha(run / name) for name in artifact_names}
     artifacts["mounts"] = sha(args.mounts)
     artifacts["crashes"] = sha(args.crashes / "receipt.json")
+    previous_sessions = []
+    for path in sorted(run.glob("session*.json")):
+        if path == session_path:
+            continue
+        previous = read(path)
+        if "qualified_pairs" not in previous or "battles" not in previous:
+            continue
+        related = [path.with_name(path.stem + suffix) for suffix in
+                   (".json", ".log", ".execution.json", ".inputs.json")]
+        previous_sessions.append({"receipt": path.name, "ok": previous["ok"],
+                                  "battles": previous["battles"], "errors": previous["errors"],
+                                  "artifact_sha256": {p.name: sha(p) for p in related if p.exists()}})
     collection_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     collection_tools = {"tools/" + name: sha(ROOT / "tools" / name) for name in
                         ("collect_shared_model_readiness.py", "prepare_shared_model_readiness.py", "run_shared_model_readiness_phase.py")}
@@ -144,6 +156,7 @@ def main():
               "mounts": {k: v for k, v in mounts.items() if k != "samples"},
               "mount_samples": [mounts["samples"][0], mounts["samples"][1], *mounts["samples"][-2:]],
               "session": session, "crash_invocations": 63, "injected_kills": 20}
+    result["prior_session_attempts"] = previous_sessions
     target.write_text(json.dumps(result, sort_keys=True, indent=2) + "\n")
     print("SHARED_MODEL_READINESS_COLLECTED", target)
 

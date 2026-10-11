@@ -117,6 +117,14 @@ have passed, `collect_shared_model_readiness.py --run RUN --mounts MOUNT_JSON
 independently hashes both installed collections. It refuses to overwrite the
 checked-in readiness record. Different diagnostic revisions may be recorded
 per phase; the production inputs must remain identical throughout the run.
+Earlier session receipts and their log/input hashes remain in the collected
+record. The first complete-catalog attempt stopped after 200 battles because
+the diagnostic incorrectly required anticipated Darmanitan Zen forms to use
+shared packs too. Those forms deliberately retain their v11 originals. The
+corrected diagnostic requires the requested pair to be shared and verifies the
+exact compiled hash of every loaded appearance, including original anticipated
+forms and canonical aliases. Both Darmanitan cases passed a focused GPU check;
+the interrupted full attempt does not count as a passed session.
 
 ## Platform and release boundary
 
