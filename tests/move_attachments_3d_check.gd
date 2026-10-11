@@ -23,6 +23,7 @@ func _run() -> void:
 	_check_weighted_attachments(world)
 	_check_family_routes()
 	_check_reviewed_hand_routes()
+	_check_catalog_routes()
 	var actor := _rig(world, ["head", "left_feeler_b_02", "right_feeler_b_02"])
 	actor.transform = Transform3D(Basis(Vector3.UP, 0.9).scaled(Vector3(2, 3, 2)), Vector3(-4, 1, 2))
 	var skeleton: Skeleton3D = actor.get_node("Rig")
@@ -56,7 +57,7 @@ func _run() -> void:
 	for identity: String in ["zygarde-mega", "zygarde-mega@shiny"]:
 		assert(Attachments.part_for(identity, "hyperbeam") == "cannon")
 		assert(Attachments.definitions_for(identity, "cannon")[0][0].bone == "feeler_a_02")
-		assert(Attachments.part_for(identity, "bite") == "mouth")
+		assert(Attachments.part_for(identity, "bite") == "face")
 	assert(Attachments.part_for("zygarde-50", "hyperbeam") == "mouth")
 	for species: String in ["regice", "regieleki", "regigigas", "regirock", "registeel", "staryu", "starmie"]:
 		for identity: String in [species, species + "@shiny"]:
@@ -804,3 +805,25 @@ func _check_reviewed_hand_routes() -> void:
 		assert(Attachments.action_for(identity, "drainpunch", {"physical_attack_2":{}}) == "physical_attack_2")
 		assert(Attachments.action_for(identity, "firepunch", {"physical_attack":{}}).is_empty())
 		assert(Attachments.action_for(identity, "lowkick", {"physical_attack_2":{}}).is_empty(), "Hand clip choice excludes kicks")
+
+func _check_catalog_routes() -> void:
+	for suffix: String in ["", "@shiny"]:
+		for route: Array in [["aegislash-blade","closecombat","blade_tip"], ["aegislash-shield","closecombat","shield_front"], ["arbok","rocksmash","body"], ["tinkaton","rocksmash","hammer"], ["scyther","wingattack","wing"], ["scyther","closecombat","hand"], ["zygarde-mega","dragonbreath","cannon"], ["zygarde-mega","bite","face"], ["mawile-mega","bite","jaw"], ["cetitan","icebeam","muzzle"], ["sinistea","suckerpunch","hand"]]:
+			var identity: String = route[0] + suffix
+			assert(Attachments.part_for(identity, route[1]) == route[2])
+			if route[2] != "body": assert(not Attachments.definitions_for(identity, route[2]).is_empty())
+		for species: String in ["scyther", "tinkaton", "calyrex-ice", "calyrex-shadow", "iron-hands", "annihilape"]:
+			for move_key: String in ["lowkick", "doublekick", "highjumpkick"]:
+				assert(Attachments.part_for(species + suffix, move_key) == "foot", "Hand aliases must preserve explicit kick origins")
+		assert(Attachments.action_for("scyther" + suffix,"wingattack",{"physical_attack_2":{}}) == "physical_attack_2")
+		for move_key: String in ["astonish", "suckerpunch"]:
+			var identity := "sinistea" + suffix
+			assert(Attachments.action_for(identity,move_key,{"physical_attack":{}}) == "physical_attack")
+			assert(Attachments.choreography_for(identity,move_key,"physical_attack").effect_start_fraction >= .3, "The hand must emerge before its effect")
+		for move_key: String in ["hyperbeam", "icebeam", "growl"]:
+			assert(Attachments.action_for("cetitan" + suffix,move_key,{"physical_attack":{}}) == "physical_attack")
+			assert(Attachments.choreography_for("cetitan" + suffix,move_key,"physical_attack").launch_fraction < .25)
+	assert(Attachments.definitions_for("scyther","wing") != Attachments.definitions_for("scyther","hand"))
+	assert(Attachments.definitions_for("mawile-mega","jaw") != Attachments.definitions_for("mawile-mega","jaw_other"))
+	for species: String in ["hawlucha-mega", "minior", "togedemaru"]:
+		assert(not Attachments.CALIBRATED.data.profiles.has(species), "Unresolved source models remain excluded")

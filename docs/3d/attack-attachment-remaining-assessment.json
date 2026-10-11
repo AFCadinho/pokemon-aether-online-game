@@ -20,6 +20,41 @@
   "all_attack_families_complete": false,
   "all_marker_corrections_complete": false,
   "assessment_complete": true,
+  "catalog_origin_follow_up": {
+    "counts": {
+      "assessed_forms": 295,
+      "configured_supported_move_pairs": 8178,
+      "forms_with_marker_pose_reviews": 209,
+      "forms_with_resolved_routes": 290,
+      "intentional_body_alternative_routes": 100,
+      "new_part_bindings": 337,
+      "newly_bone_bound_routes": 552,
+      "normal_shiny_models_checked": 580,
+      "remaining_missing_parts": {
+        "foot": 1,
+        "hand": 3,
+        "mouth": 4
+      },
+      "remaining_missing_route_forms": 5,
+      "representative_effects_inspected": 473,
+      "resolved_supported_learnset_routes": 652,
+      "source_model_blockers": 5,
+      "supported_move_pairs": 30563
+    },
+    "limitations": [
+      "Review is per exact species/form and affected attack family. It is not individual visual certification of all 30,563 supported species/move pairs.",
+      "Marker review samples native poses and two views; continuous animation clearance is not exhaustively certified.",
+      "Existing contact spacing, facing, oversized impact decorations and native mesh deformation remain presentation follow-ups.",
+      "Dhelmise physical attack stretches its source mesh; the same deformation is visible in native context without attack effects.",
+      "Golurk and Iron Hands raise a hand across the face casting region; Mudsdale hooves cross its beam region during bucking. Continuous effect/body clearance remains unresolved.",
+      "Greninja Lick retains its native tongue scarf alongside the procedural tongue; full tongue presentation is not approved.",
+      "All three Mega Tatsugiri variants have overlapping native heads during their attack actions. Selected form head origins were reviewed; continuous head/effect clearance remains unresolved.",
+      "Masked Ogerpon club shafts overlap in the source model. Ivy Cudgel has no current supported 3D presenter.",
+      "Five source-model identity/visibility blockers remain: Cramorant, Deoxys, Mega Hawlucha, Minior, Togedemaru.",
+      "Normal/shiny share attachment profiles. The 580-model binding check uses original native scenes; it does not claim a new full run against the optional shared-geometry packs."
+    ],
+    "report": "attack-attachment-catalog-review.json"
+  },
   "correction_follow_up": {
     "complete_all_attack_families": false,
     "counts": {
@@ -10285,7 +10320,7 @@
       "result": "sampled_marker_profiles_installed"
     }
   },
-  "profile_sha256": "b71782eaeae2593dc477ffdbb6e64ef500ce0564e4741255a2042301c28ce7c1",
+  "profile_sha256": "e5ef7c1259e0f5ba1cb27532dbf6942aed3cdc2d961ed7d1d01f1fda8742d73d",
   "schema": 1,
   "scope": "Initial assessment plus correction follow-up; see correction_follow_up for current work and family backlog for all-catalog gaps.",
   "technical_checks": {

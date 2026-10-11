@@ -1,6 +1,12 @@
 # Remaining attack attachment assessment
 
-## Latest hand calibration follow-up
+## Latest catalog origin follow-up
+
+Assessed all 295 remaining forms individually and installed anatomical routes for 290 forms. Added 337 part bindings and resolved 652 supported learnset routes: 552 now use reviewed anatomy and 100 use an intentional body alternative. Normal and shiny share the exact form's attachment profile. The [catalog review](attack-attachment-catalog-review.md) records the individual decisions, representative effect inspections and remaining limitations.
+
+Five forms remain blocked by source models: Cramorant, Deoxys, Mega Hawlucha, Minior and Togedemaru. Missing requests are three hands, four mouths and one foot, with overlapping categories. Contact spacing, facing, effect clearance and target impact art still require presentation work; this is completion of the available anatomical origin work, not approval of every whole animation.
+
+## Previous hand calibration follow-up
 
 Added 18 individually reviewed left/right hand points across nine exact forms, enabling 37 supported learnset routes. Missing-route forms: 304 → 295; hand requests: 231 → 222. Representative strikes were inspected for every changed form; contact distance, facing and target impact art remain partly unresolved. See the [individual hand decisions](attack-attachment-hand-review.md).
 
@@ -17,7 +23,7 @@ Linked 30 previously reviewed anatomical surfaces and inspected 37 representativ
 - Focused regression, choreography, coverage and learnset audits pass. All 80 changed profiles pass real normal/shiny binding checks at 21 fractions per native action (160 models).
 - Seven representative effects were sampled offline in both wild and trainer stage contexts, two views and six fractions. All pairs have matching anchors and timing. These checks do not exercise server battle preparation, arena entry, or live NPC/wild battles.
 
-**The whole catalog is not finished.** The [family backlog](attack-attachment-family-backlog.json) contains 295 forms with missing anatomical routes: 222 hand, 81 mouth and one foot (overlapping categories). Existing named points may need routing; other cases need fresh calibration or an anatomical alternative. This count excludes intentional procedural body/orb origins and does not count all remaining timing/contact/clearance work.
+The current [family backlog](attack-attachment-family-backlog.json) contains the five source-model blockers listed above. Historical counts in the earlier follow-ups describe those batches before the latest catalog pass. Intentional procedural body/orb origins are excluded from missing-part counts, as is remaining timing/contact/clearance work.
 
 The original three model blockers remain, plus Cramorant/Deoxys visibility issues. Ogerpon’s three masked club forms have separately measured club surfaces, but overlapping shaft geometry and weapon routing remain unresolved. Ivy Cudgel has no current 3D presenter. Contact previews still expose facing, distance or target-art limitations for Poliwag, Wooper, Torchic, Mega Scrafty and Mega Barbaracle; their full effects are not approved.
 
