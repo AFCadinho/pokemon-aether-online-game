@@ -62,7 +62,7 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1131,
+		"with_any_attachment": 1138,
 		"with_beak_tip": 6,
 		"with_bud": 1,
 		"with_cannon": 3,
@@ -72,7 +72,7 @@
 		"with_cotton_front": 1,
 		"with_electric_body": 1,
 		"with_eye": 9,
-		"with_face": 37,
+		"with_face": 41,
 		"with_face_primary": 2,
 		"with_flower_core": 1,
 		"with_flower_tip": 1,
@@ -86,19 +86,20 @@
 		"with_left_hand_upper": 1,
 		"with_magnet_poles": 1,
 		"with_mandibles": 2,
-		"with_mouth": 992,
+		"with_mouth": 994,
 		"with_mouth_primary": 1,
 		"with_mouth_red": 1,
 		"with_muzzle": 9,
 		"with_nose": 1,
 		"with_olive_nozzle": 1,
 		"with_pearl": 1,
+		"with_proboscis_tip": 1,
 		"with_spike": 3,
 		"with_spikes": 2,
 		"with_spirit": 1,
 		"with_vines": 3,
 		"with_wheel_front": 1,
-		"without_attachments": 69
+		"without_attachments": 62
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -8522,6 +8523,30 @@
 				]
 			]
 		},
+		"cutiefly": {
+			"proboscis_tip": [
+				[
+					{
+						"bone": "jaw",
+						"offset": [
+							0.0238957460969687,
+							-0.00027724719257094,
+							0.00068312842631712
+						],
+						"weight": 0.997913900054241
+					},
+					{
+						"bone": "root_jaw",
+						"offset": [
+							0.0413366071879864,
+							-0.00022148608695715,
+							0.00576061103492975
+						],
+						"weight": 0.00208609994575902
+					}
+				]
+			]
+		},
 		"cyclizar": {
 			"hand": [
 				[
@@ -11731,6 +11756,30 @@
 							-0.00840413570404053
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"dustox": {
+			"mouth": [
+				[
+					{
+						"bone": "jaw",
+						"offset": [
+							0.207729697227478,
+							0.00611084001138806,
+							-0.00196934049017727
+						],
+						"weight": 0.983708976901618
+					},
+					{
+						"bone": "head",
+						"offset": [
+							0.0774861574172974,
+							0.0114118838682771,
+							0.208002865314484
+						],
+						"weight": 0.0162910230983825
 					}
 				]
 			]
@@ -14961,6 +15010,30 @@
 							-0.00079604983329775
 						],
 						"weight": 1.0
+					}
+				]
+			]
+		},
+		"frosmoth": {
+			"face": [
+				[
+					{
+						"bone": "spine",
+						"offset": [
+							0.0740412324666977,
+							0.00033394165802747,
+							0.144987151026726
+						],
+						"weight": 0.805644345386388
+					},
+					{
+						"bone": "head",
+						"offset": [
+							0.0109775373712182,
+							0.00020685557683464,
+							0.0547410808503628
+						],
+						"weight": 0.194355654613613
 					}
 				]
 			]
@@ -21624,6 +21697,21 @@
 				]
 			]
 		},
+		"iron-moth": {
+			"face": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0613213591277599,
+							0.00096448772819712,
+							0.0990732759237289
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"iron-thorns": {
 			"foot": [
 				[
@@ -23921,6 +24009,21 @@
 							-0.0278177354484797
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"larvesta": {
+			"face": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.230481922626495,
+							-0.0071502523496747,
+							0.150187432765961
+						],
+						"weight": 1.0
 					}
 				]
 			]
@@ -29868,6 +29971,48 @@
 							0.0019640402424211
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"mothim": {
+			"mouth": [
+				[
+					{
+						"bone": "right_jaw",
+						"offset": [
+							0.0511019863188267,
+							-0.00628076773136854,
+							-0.00747181009501219
+						],
+						"weight": 0.426831872961242
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.0839512348175049,
+							-0.00000000207664774265481,
+							-0.00292792054824531
+						],
+						"weight": 0.184084335183618
+					},
+					{
+						"bone": "head",
+						"offset": [
+							0.0362103097140789,
+							0.0000000024616677585243,
+							0.153079226613045
+						],
+						"weight": 0.0823851329887073
+					},
+					{
+						"bone": "left_jaw",
+						"offset": [
+							0.0383261106908321,
+							-0.00119380792602897,
+							-0.0106072248890996
+						],
+						"weight": 0.306698658866433
 					}
 				]
 			]
@@ -47883,6 +48028,30 @@
 				]
 			]
 		},
+		"volcarona": {
+			"face": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.106324978172779,
+							-0.00745712919160724,
+							0.14675934612751
+						],
+						"weight": 0.891780999036284
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.0311745963990688,
+							0.00323450355790555,
+							0.0559904389083385
+						],
+						"weight": 0.108219000963716
+					}
+				]
+			]
+		},
 		"voltorb": {
 			"face": [
 				[
@@ -50869,7 +51038,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "ae8388bfccd577a1a138d97a5851a149fbda2b33782b50edecc722ba369fbdef",
+		"data/battle_move_attachments_3d.json": "ac09c92731f6a0240528819a9d47324e2624db5c9242e713cd53d5e4111ec441",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "6680d78a47c878651d2c29f5d7cc83d4b4148eb455ea91c4631d6a8fb552d6f3",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
@@ -58659,8 +58828,10 @@
 			]
 		},
 		"cutiefly": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"proboscis_tip"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -61259,8 +61430,59 @@
 			]
 		},
 		"dustox": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "7d7c2182dbae1a54a5eb2740806780c1399a8b7f05c3293e0a8adb47160d5dbd",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "8e06c1618d64e1957c8d7a64ac90cafba4644c62e6808db9b403faa1292850ec",
+				"scope": "Individually projected curved mouth seam below the two eyes, predominantly jaw-bound. It follows the mouth through idle, physical and special poses; the lower face candidate was rejected. Actual move effects and continuous clearance remain pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "b0a38a6134aa4c858f689cc86ba9ae03b20c23d57f2da3668cf3cacee21b7d23",
+					"landmarks": [
+						{
+							"action": "idle",
+							"barycentric": [
+								0.11816331489333,
+								0.543047895494721,
+								0.338788789611949
+							],
+							"column": 0.0,
+							"distance": 0.513464088024611,
+							"mesh": "pm0269_00_00_trmdl/Skeleton3D/pm0269_00_00_body_a_mesh",
+							"pixel": [
+								229.0,
+								148.0
+							],
+							"surface": 0.0,
+							"triangle": 1284.0,
+							"vertex_indices": [
+								1160.0,
+								1158.0,
+								1161.0
+							],
+							"weight": 1.0
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -64091,8 +64313,10 @@
 			]
 		},
 		"frosmoth": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -69650,8 +69874,10 @@
 			]
 		},
 		"iron-moth": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -71261,8 +71487,10 @@
 			]
 		},
 		"larvesta": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -75438,8 +75666,83 @@
 			]
 		},
 		"mothim": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "49e6d4f793f16e6232cc3e41874c3edec70884ddccb707e0b0ed8012a1777faa",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "70cf35b650839b77a2bca4c2d692a9e3086b03650fd1d67df460c97225bfa2bd",
+				"scope": "Individually projected left and right inner mandible rims from physical_attack .20, combined into one mouth emitter with both jaw influences. The marker follows the opening as it opens/closes; the earlier single left-jaw rim was rejected. Actual move effects and continuous clearance remain pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "445e453b8377e877c3ff1ea068eb791603f4c9d3c18b347763eed40cf4c5d19c",
+					"landmarks": [
+						{
+							"action": "physical_attack",
+							"barycentric": [
+								0.0904499758426468,
+								0.354279813000298,
+								0.555270211157056
+							],
+							"column": 0.0,
+							"distance": 0.388420605803341,
+							"mesh": "pm0414_00_00/Skeleton3D/pm0414_00_00_body_mesh",
+							"pixel": [
+								159.0,
+								186.0
+							],
+							"surface": 0.0,
+							"triangle": 26.0,
+							"vertex_indices": [
+								934.0,
+								939.0,
+								936.0
+							],
+							"weight": 0.5
+						},
+						{
+							"action": "physical_attack",
+							"barycentric": [
+								0.0464821652724634,
+								0.175133274600784,
+								0.778384560126753
+							],
+							"column": 0.0,
+							"distance": 0.384821307543241,
+							"mesh": "pm0414_00_00/Skeleton3D/pm0414_00_00_body_mesh",
+							"pixel": [
+								200.0,
+								188.0
+							],
+							"surface": 0.0,
+							"triangle": 17.0,
+							"vertex_indices": [
+								627.0,
+								623.0,
+								621.0
+							],
+							"weight": 0.5
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -91929,8 +92232,10 @@
 			]
 		},
 		"volcarona": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"

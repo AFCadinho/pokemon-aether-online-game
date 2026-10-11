@@ -208,6 +208,7 @@ func _run() -> void:
 			assert(effect.cursor == 0)
 		effect.cancel()
 
+	await _check_moth_routes()
 	_check_stream_scaling()
 	_check_orb_scaling()
 	_check_staged_projectile_scaling("Hidden Power")
@@ -224,7 +225,7 @@ func _run() -> void:
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=262 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=298 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()
 
 func _check_stream_scaling() -> void:
@@ -579,3 +580,46 @@ func _check_sludge_arc() -> void:
 				assert(is_equal_approx(base.origin.x,adjusted.origin.x) and is_equal_approx(base.origin.z,adjusted.origin.z))
 				if phase!=2:assert(base.is_equal_approx(adjusted),"Charge, launch and impact stay fixed")
 	assert(is_equal_approx(captures[2][2][0].origin.y-captures[3][2][0].origin.y,.05))
+
+func _check_moth_routes() -> void:
+	# Explicit expected values for the individually reviewed moth/insect routes.
+	var routes: Array = [{"species":"dustox","move":"Hyper Beam","part":"mouth","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45,"emission_end_fraction":0.65,"emission_scale":0.12},{"species":"dustox","move":"Solar Beam","part":"mouth","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45,"emission_end_fraction":0.65,"emission_scale":0.12},{"species":"dustox","move":"Shadow Ball","part":"mouth","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.5,"emission_scale":0.1},{"species":"dustox","move":"String Shot","part":"mouth","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.5,"emission_scale":0.2},{"species":"dustox","move":"Bug Bite","part":"mouth","action":"physical_attack","launch_fraction":0.3,"impact_fraction":0.45,"contact_yaw_degrees":0},{"species":"dustox","move":"Sludge Bomb","part":"mouth","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.5,"emission_scale":0.1,"projectile_arc_height":0.1},{"species":"dustox","move":"Poison Sting","part":"mouth","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.5,"emission_scale":0.12},{"species":"frosmoth","move":"Hyper Beam","part":"face","action":"special_attack","launch_fraction":0.4,"impact_fraction":0.5,"emission_end_fraction":0.65,"emission_scale":0.08},{"species":"frosmoth","move":"Ice Beam","part":"face","action":"special_attack","launch_fraction":0.4,"impact_fraction":0.5,"emission_end_fraction":0.65,"emission_scale":0.08},{"species":"frosmoth","move":"Bug Bite","part":"face","action":"physical_attack","launch_fraction":0.35,"impact_fraction":0.5,"contact_yaw_degrees":0},{"species":"cutiefly","move":"Bug Bite","part":"proboscis_tip","action":"physical_attack","launch_fraction":0.35,"impact_fraction":0.5,"contact_yaw_degrees":0},{"species":"iron-moth","move":"Flamethrower","part":"face","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45,"emission_end_fraction":0.65,"emission_scale":0.1},{"species":"iron-moth","move":"Solar Beam","part":"face","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45,"emission_end_fraction":0.65,"emission_scale":0.1},{"species":"iron-moth","move":"Hyper Beam","part":"face","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45,"emission_end_fraction":0.65,"emission_scale":0.1},{"species":"iron-moth","move":"Flash Cannon","part":"face","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45,"emission_end_fraction":0.65,"emission_scale":0.1},{"species":"iron-moth","move":"Ember","part":"face","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45,"emission_scale":0.12},{"species":"iron-moth","move":"Screech","part":"face","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45},{"species":"larvesta","move":"Flamethrower","part":"face","action":"special_attack","launch_fraction":0.4,"impact_fraction":0.5,"emission_end_fraction":0.6,"emission_scale":0.1},{"species":"larvesta","move":"Solar Beam","part":"face","action":"special_attack","launch_fraction":0.4,"impact_fraction":0.5,"emission_end_fraction":0.6,"emission_scale":0.1},{"species":"larvesta","move":"Ember","part":"face","action":"special_attack","launch_fraction":0.4,"impact_fraction":0.5,"emission_scale":0.12},{"species":"larvesta","move":"Screech","part":"face","action":"special_attack","launch_fraction":0.4,"impact_fraction":0.5},{"species":"larvesta","move":"String Shot","part":"face","action":"special_attack","launch_fraction":0.4,"impact_fraction":0.5,"emission_end_fraction":0.6,"emission_scale":0.2},{"species":"larvesta","move":"Bug Bite","part":"face","action":"special_attack","launch_fraction":0.4,"impact_fraction":0.5,"contact_yaw_degrees":0},{"species":"volcarona","move":"Flamethrower","part":"face","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45,"emission_end_fraction":0.65,"emission_scale":0.1},{"species":"volcarona","move":"Solar Beam","part":"face","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45,"emission_end_fraction":0.65,"emission_scale":0.1},{"species":"volcarona","move":"Hyper Beam","part":"face","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45,"emission_end_fraction":0.65,"emission_scale":0.1},{"species":"volcarona","move":"Ember","part":"face","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45,"emission_scale":0.12},{"species":"volcarona","move":"Screech","part":"face","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45},{"species":"volcarona","move":"String Shot","part":"face","action":"special_attack","launch_fraction":0.3,"impact_fraction":0.45,"emission_scale":0.2},{"species":"volcarona","move":"Bug Bite","part":"face","action":"physical_attack","launch_fraction":0.3,"impact_fraction":0.45,"contact_yaw_degrees":0},{"species":"mothim","move":"Hyper Beam","part":"mouth","action":"physical_attack","launch_fraction":0.14,"impact_fraction":0.24,"emission_scale":0.08,"emission_end_fraction":0.34},{"species":"mothim","move":"Solar Beam","part":"mouth","action":"physical_attack","launch_fraction":0.14,"impact_fraction":0.24,"emission_scale":0.08,"emission_end_fraction":0.34},{"species":"mothim","move":"Shadow Ball","part":"mouth","action":"physical_attack","launch_fraction":0.18,"impact_fraction":0.35,"emission_scale":0.08},{"species":"mothim","move":"String Shot","part":"mouth","action":"physical_attack","launch_fraction":0.14,"impact_fraction":0.3,"emission_scale":0.15,"emission_end_fraction":0.36},{"species":"mothim","move":"Bug Bite","part":"mouth","action":"physical_attack","launch_fraction":0.5,"impact_fraction":0.65,"contact_yaw_degrees":0},{"species":"mothim","move":"Mud Slap","part":"mouth","action":"physical_attack","launch_fraction":0.18,"impact_fraction":0.35,"emission_scale":0.08,"projectile_arc_height":0.05}]
+	for route: Dictionary in routes:
+		for slot in 4:
+			var identity: String = route.species + ("@shiny" if slot % 2 else "")
+			var actor := "p%d" % (slot+1)
+			stage.identities[slot] = identity
+			stage.combatants[slot] = {"species":route.species,"shiny":bool(slot % 2)}
+			stage.entries[identity] = stage.entries.fixture.duplicate(true)
+			stage.visual_bounds[identity] = stage.visual_bounds.fixture.duplicate(true)
+			stage.start_move_action(actor,route.move)
+			stage.players[slot].pause()
+			assert(stage.current_actions[slot] == route.action)
+			var timing: Dictionary = stage.move_timing(route.move,actor)
+			assert(is_equal_approx(timing.launch_frame / timing.frames,route.launch_fraction))
+			assert(is_equal_approx(timing.impact_frame / timing.frames,route.impact_fraction))
+			var effect: Node = stage.create_move_effect(route.move,actor,"p%d" % ((slot^1)+1),{})
+			effect.set_process(false)
+			for key: String in ["emission_scale","projectile_arc_height"]:
+				if route.has(key):
+					assert(is_equal_approx(timing[key],route[key]))
+					assert(is_equal_approx(effect.get(key),route[key]))
+			if route.has("contact_yaw_degrees"):
+				assert(is_equal_approx(timing.contact_yaw_degrees,route.contact_yaw_degrees))
+			if route.has("emission_end_fraction"):
+				assert(is_equal_approx(timing.emission_end_frame / timing.frames,route.emission_end_fraction))
+				assert(is_equal_approx(effect.emission_end,timing.emission_end_frame/60.0))
+				effect.clock = func(): return contact_seconds
+				contact_seconds=effect.emission_end+.001
+				effect._process(0)
+				assert(effect.cursor==0,"Moth source emission ends inside the selected window")
+			effect.cancel()
+			var doll := Doll.new()
+			stage.world.add_child(doll)
+			stage.substitute_models[slot] = doll
+			var substitute_timing: Dictionary = stage.move_timing(route.move,actor)
+			for key: String in ["emission_scale","projectile_arc_height","contact_yaw_degrees","emission_end_frame"]:
+				assert(not substitute_timing.has(key))
+			doll.free()
+			stage.substitute_models[slot] = null
+			await get_tree().process_frame

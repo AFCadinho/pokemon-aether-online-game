@@ -7,6 +7,20 @@ uses a hand. Physical hit graphics still appear at the target. Tackle, Scratch, 
 use a separate [contact approach](contact-move-effects.md) to move the attacker
 to the target and back on the same native action clock.
 
+## Moth and insect review checkpoint
+
+Dustox and Mothim have individually projected jaw-weighted mouth points.
+Frosmoth, Iron Moth, Larvesta and Volcarona use individually reviewed facial
+casting regions; Cutiefly uses its proboscis tip. Thirty-six selected routes
+were rendered in normal and shiny variants with two camera views and eight
+sampled fractions. Mothim uses an earlier physical clip window for emission
+and a later opening for Bug Bite. Larvesta waits until its forehead fur rises.
+The effects advance with native poses at 120 Hz between captures.
+
+These are sampled origin/timing reviews. Continuous effect-radius clearance,
+contact distances, remaining routes and live NPC/wild battles are pending.
+Beautifly remains unresolved: its curled proboscis can obstruct the outlet.
+
 ## Profiles and review status
 
 The expanded registry is `data/battle_move_attachments_3d.json`. Each form has

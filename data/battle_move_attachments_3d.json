@@ -23888,6 +23888,137 @@
         "side_fraction": 0.45
       }
     },
+    "cutiefly": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "proboscis_tip",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected near-distal proboscis point, weighted to jaw/root_jaw. The first shaft candidate was moved forward. Bug Bite physical_attack .35/.50 follows the forward pointing proboscis. The target and impact art obscure the actual contact surface; target clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.35
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "a689553ea86f7a04b078c42d2c935265ce3d1fb81434ce0730f79cb3d3bc0763",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5e567512c552a33c159967120fca1e52c2e829141ac61c3777fa0914e7a43e77",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected near-distal proboscis point, weighted to jaw/root_jaw. The first shaft candidate was moved forward. Bug Bite physical_attack .35/.50 follows the forward pointing proboscis. The target and impact art obscure the actual contact surface; target clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "863c850a4fd86cf9d894ccef81dca068383e1bcc459417a2b040c95a97ca088f",
+          "shiny_runtime_sha256": "14a10b8d021f5feb0e838069979d6cdaa95e07ccd286b53908e47ccdd99be049",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 90.0,
+            "impact_frame": 45.0,
+            "launch_frame": 31.5,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "proboscis_tip"
+      },
+      "part_reviews": {
+        "proboscis_tip": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "3922284b78bb1baa4a6af98b70dba8479b691c78dcf8120de7847a80325c5178",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0718288287968809,
+                  0.136892626511978,
+                  0.791278544691141
+                ],
+                "column": 3.0,
+                "distance": 0.237759462610936,
+                "mesh": "pm0834_00_00/Skeleton3D/pm0834_00_00_nose_mesh",
+                "pixel": [
+                  194.0,
+                  182.0
+                ],
+                "surface": 0,
+                "triangle": 55,
+                "vertex_indices": [
+                  155,
+                  154,
+                  134
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "a689553ea86f7a04b078c42d2c935265ce3d1fb81434ce0730f79cb3d3bc0763",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "59a086febaeba828ad0e60cbd1e07c122b101fe50506e01ed2a35de4733429ec",
+          "scope": "Near the distal tip of the brown proboscis, jaw/root_jaw weighted. The revised point is farther forward than the first shaft candidate. Physical_attack aims forward after the upward early pose; special_attack turns away. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "proboscis_tip": [
+          [
+            {
+              "bone": "jaw",
+              "offset": [
+                0.0238957460969687,
+                -0.00027724719257094,
+                0.000683128426317126
+              ],
+              "weight": 0.997913900054241
+            },
+            {
+              "bone": "root_jaw",
+              "offset": [
+                0.0413366071879864,
+                -0.000221486086957157,
+                0.00576061103492975
+              ],
+              "weight": 0.00208609994575902
+            }
+          ]
+        ]
+      }
+    },
     "cyclizar": {
       "part_reviews": {
         "hand": {
@@ -33117,6 +33248,418 @@
         "side_fraction": 0.45
       }
     },
+    "dustox": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "poisonsting": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack",
+        "hyperbeam": "special_attack",
+        "poisonsting": "special_attack",
+        "shadowball": "special_attack",
+        "sludgebomb": "special_attack",
+        "solarbeam": "special_attack",
+        "stringshot": "special_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "poisonsting": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "emission_scale": 0.1,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "emission_scale": 0.1,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3,
+          "projectile_arc_height": 0.1
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "7d7c2182dbae1a54a5eb2740806780c1399a8b7f05c3293e0a8adb47160d5dbd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "86c110e0d56e1cfe200b1a1c5e0d34c37545b32a03981863c9c0fe9261e90851",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ff28d49f33a92f28bafc2746a29e2f44e1236e1fd5129e3226d45d0aacfe42c6",
+          "shiny_runtime_sha256": "6cff742b718764e3a4045b926982b812d7c25595c2d2d1622410e412bd286d94",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 162.5,
+            "impact_frame": 73.125,
+            "launch_frame": 48.75,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "7d7c2182dbae1a54a5eb2740806780c1399a8b7f05c3293e0a8adb47160d5dbd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2f5b911f01550b8081d367a659f0938791dbeb105a2ae9b0abde1fa8930abbee",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f913f7e4358810bdc2a43177c5e0187e11bfb44afd79014ac48e0c1e5a02a7ae",
+          "shiny_runtime_sha256": "6cff742b718764e3a4045b926982b812d7c25595c2d2d1622410e412bd286d94",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 48.75,
+            "emission_scale": 0.12,
+            "frames": 75.0,
+            "impact_frame": 33.75,
+            "launch_frame": 22.5,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "poisonsting": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "7d7c2182dbae1a54a5eb2740806780c1399a8b7f05c3293e0a8adb47160d5dbd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "84f10f0a5046120dd9c7e58438c82844c10630727c7a725f87e8d901c96e969d",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "a621cfc2286505106c79bccd19d9072a6a72065b4d3363bbeb6f8a8025896468",
+          "shiny_runtime_sha256": "6cff742b718764e3a4045b926982b812d7c25595c2d2d1622410e412bd286d94",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 75.0,
+            "impact_frame": 37.5,
+            "launch_frame": 22.5,
+            "move_key": "poisonsting"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "7d7c2182dbae1a54a5eb2740806780c1399a8b7f05c3293e0a8adb47160d5dbd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "fe7a5ee71e28f51a4a21be462de5eedfba98751a44aebc69ca951067fb40e736",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c4c491188e1384a43d371fa038fad1133f06d977b19b6e3bbdd2e408ecd679a2",
+          "shiny_runtime_sha256": "6cff742b718764e3a4045b926982b812d7c25595c2d2d1622410e412bd286d94",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 75.0,
+            "impact_frame": 37.5,
+            "launch_frame": 22.5,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "7d7c2182dbae1a54a5eb2740806780c1399a8b7f05c3293e0a8adb47160d5dbd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7d5d0b7f3d3f178d4e118b426a91a12b89c8f55f9a9e1beb2b78a72cb7633713",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "1fc952351cf0a83ab5c9f69d94e0b7f9290ac36e205d6f842208824ed07eecdc",
+          "shiny_runtime_sha256": "6cff742b718764e3a4045b926982b812d7c25595c2d2d1622410e412bd286d94",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 75.0,
+            "impact_frame": 37.5,
+            "launch_frame": 22.5,
+            "move_key": "sludgebomb",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "7d7c2182dbae1a54a5eb2740806780c1399a8b7f05c3293e0a8adb47160d5dbd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0b47deca1f93a70196d9dbd6666fdb259f7198205e7be619cc5f50808f4b2526",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "14bf53a90847a7789ad8e15946d93ad759116501cf071926a314003b87dc878f",
+          "shiny_runtime_sha256": "6cff742b718764e3a4045b926982b812d7c25595c2d2d1622410e412bd286d94",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 48.75,
+            "emission_scale": 0.12,
+            "frames": 75.0,
+            "impact_frame": 33.75,
+            "launch_frame": 22.5,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "7d7c2182dbae1a54a5eb2740806780c1399a8b7f05c3293e0a8adb47160d5dbd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6816912082b52a92ea1c2a07c695b6950c7d28a6ece654f34657f470f4a6d3a2",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected curved mouth seam below the eyes, weighted to jaw/head. The first lower-face candidate was rejected. Special_attack Hyper Beam/Solar Beam .30/.45/.65 use scale .12; Shadow Ball/Sludge Bomb .30/.50 scale .10, sludge arc .10; String Shot .30/.50 scale .20; Poison Sting .30/.50 scale .12. Effects depart from the slit above the feet in the samples. Bug Bite physical_attack .30/.45 still needs contact-distance review; sludge droplets and silk remain close to the feet. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ed8480435cf17d7c2baec180cf0ba6884fe383183164ef43e8f1364e5cd88beb",
+          "shiny_runtime_sha256": "6cff742b718764e3a4045b926982b812d7c25595c2d2d1622410e412bd286d94",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 75.0,
+            "impact_frame": 37.5,
+            "launch_frame": 22.5,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "mouth",
+        "hyperbeam": "mouth",
+        "poisonsting": "mouth",
+        "shadowball": "mouth",
+        "sludgebomb": "mouth",
+        "solarbeam": "mouth",
+        "stringshot": "mouth"
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "jaw",
+              "offset": [
+                0.207729697227478,
+                0.00611084001138806,
+                -0.00196934049017727
+              ],
+              "weight": 0.983708976901618
+            },
+            {
+              "bone": "head",
+              "offset": [
+                0.0774861574172974,
+                0.0114118838682771,
+                0.208002865314484
+              ],
+              "weight": 0.0162910230983825
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "7d7c2182dbae1a54a5eb2740806780c1399a8b7f05c3293e0a8adb47160d5dbd",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "8e06c1618d64e1957c8d7a64ac90cafba4644c62e6808db9b403faa1292850ec",
+        "scope": "Individually projected curved mouth seam below the two eyes, predominantly jaw-bound. It follows the mouth through idle, physical and special poses; the lower face candidate was rejected. Actual move effects and continuous clearance remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "b0a38a6134aa4c858f689cc86ba9ae03b20c23d57f2da3668cf3cacee21b7d23",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.11816331489333,
+                0.543047895494721,
+                0.338788789611949
+              ],
+              "column": 0.0,
+              "distance": 0.513464088024611,
+              "mesh": "pm0269_00_00_trmdl/Skeleton3D/pm0269_00_00_body_a_mesh",
+              "pixel": [
+                229.0,
+                148.0
+              ],
+              "surface": 0,
+              "triangle": 1284,
+              "vertex_indices": [
+                1160,
+                1158,
+                1161
+              ],
+              "weight": 1.0
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      }
+    },
     "dwebble": {
       "part_reviews": {
         "hand": {
@@ -41714,6 +42257,233 @@
                 -0.0007960498332977503
               ],
               "weight": 1
+            }
+          ]
+        ]
+      }
+    },
+    "frosmoth": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected small face below the blue eyes, weighted to spine/head. The first chest point between the arms was rejected. Hyper Beam/Ice Beam special_attack .40/.50/.65 scale .08 depart above the separated forelimbs. Bug Bite physical_attack .35/.50 uses this face; impact art hides contact. Continuous limb and beam-radius clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected small face below the blue eyes, weighted to spine/head. The first chest point between the arms was rejected. Hyper Beam/Ice Beam special_attack .40/.50/.65 scale .08 depart above the separated forelimbs. Bug Bite physical_attack .35/.50 uses this face; impact art hides contact. Continuous limb and beam-radius clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected small face below the blue eyes, weighted to spine/head. The first chest point between the arms was rejected. Hyper Beam/Ice Beam special_attack .40/.50/.65 scale .08 depart above the separated forelimbs. Bug Bite physical_attack .35/.50 uses this face; impact art hides contact. Continuous limb and beam-radius clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack",
+        "hyperbeam": "special_attack",
+        "icebeam": "special_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.35
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.08,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.08,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "98105431b9053b281a786d4aa90b559d56055359cda95db115988d68b0d51f38",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2597d07819e7b0ab18215146f5581ba218f9af12d5ec1c3313f33f1c1e3a8c2f",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected small face below the blue eyes, weighted to spine/head. The first chest point between the arms was rejected. Hyper Beam/Ice Beam special_attack .40/.50/.65 scale .08 depart above the separated forelimbs. Bug Bite physical_attack .35/.50 uses this face; impact art hides contact. Continuous limb and beam-radius clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3120c8de1e727c8e116a6275bdd9cf5ec180087b3900ba318564b8b99d4ae54c",
+          "shiny_runtime_sha256": "580f23353283c289d87ec3287425bb1b6d77a3b718b1daf5ca2adafde9e3e57e",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 130.0,
+            "impact_frame": 65.0,
+            "launch_frame": 45.5,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "98105431b9053b281a786d4aa90b559d56055359cda95db115988d68b0d51f38",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "52304eca5a7126e8a8588df9ea9f61b91217ee86a70073c88895eda49a6affc7",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected small face below the blue eyes, weighted to spine/head. The first chest point between the arms was rejected. Hyper Beam/Ice Beam special_attack .40/.50/.65 scale .08 depart above the separated forelimbs. Bug Bite physical_attack .35/.50 uses this face; impact art hides contact. Continuous limb and beam-radius clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "de6bafa5ae052c24d6625ab1ed16790c2ca64d642c92b5b355eeaea4c930a2b9",
+          "shiny_runtime_sha256": "580f23353283c289d87ec3287425bb1b6d77a3b718b1daf5ca2adafde9e3e57e",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.08,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "98105431b9053b281a786d4aa90b559d56055359cda95db115988d68b0d51f38",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5c7bead60f4debd7d2623d7227576918559e5e079d4c1e85aa840e234d97dae5",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected small face below the blue eyes, weighted to spine/head. The first chest point between the arms was rejected. Hyper Beam/Ice Beam special_attack .40/.50/.65 scale .08 depart above the separated forelimbs. Bug Bite physical_attack .35/.50 uses this face; impact art hides contact. Continuous limb and beam-radius clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3ccafd6fd02ba451f9b20b4860c100ce0429908192ff82869307c6a3beaa0f94",
+          "shiny_runtime_sha256": "580f23353283c289d87ec3287425bb1b6d77a3b718b1daf5ca2adafde9e3e57e",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.08,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "face",
+        "hyperbeam": "face",
+        "icebeam": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "f154d00250b9d2910f1d00dfa01f6ecf424966ad26282b54517b7f85e69fe343",
+            "landmarks": [
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.0147568909694209,
+                  0.173918879573472,
+                  0.811324229457107
+                ],
+                "column": 1.0,
+                "distance": 0.602370338175779,
+                "mesh": "pm0946_00_00/Skeleton3D/pm0946_00_00_body_mesh",
+                "pixel": [
+                  204.0,
+                  136.0
+                ],
+                "surface": 0,
+                "triangle": 282,
+                "vertex_indices": [
+                  609,
+                  610,
+                  930
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "98105431b9053b281a786d4aa90b559d56055359cda95db115988d68b0d51f38",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9878696db06561bf87b5a2208e3095739aa46cda294e952506c67a8dc8c38e26",
+          "scope": "Small lower face directly below the eyes, spine/head weighted. The first chest candidate between the arms was rejected. Special_attack exposes the face above the separated arms at .45/.65. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "spine",
+              "offset": [
+                0.0740412324666977,
+                0.00033394165802747,
+                0.144987151026726
+              ],
+              "weight": 0.805644345386388
+            },
+            {
+              "bone": "head",
+              "offset": [
+                0.0109775373712182,
+                0.000206855576834641,
+                0.0547410808503628
+              ],
+              "weight": 0.194355654613613
             }
           ]
         ]
@@ -59074,6 +59844,365 @@
         "side_fraction": 0.45
       }
     },
+    "iron-moth": {
+      "anatomical_route_reviews": {
+        "ember": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected central lower black face below the eyes, bound to head. The earlier lateral point was rejected. Flamethrower/Solar Beam/Hyper Beam/Flash Cannon special_attack .30/.45/.65 scale .10 depart above the metal body with wings behind. Ember .30/.45 scale .12 and Screech .30/.45 use the same face. No mouth cavity is claimed. Screech charge is broad over the head and full ring clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected central lower black face below the eyes, bound to head. The earlier lateral point was rejected. Flamethrower/Solar Beam/Hyper Beam/Flash Cannon special_attack .30/.45/.65 scale .10 depart above the metal body with wings behind. Ember .30/.45 scale .12 and Screech .30/.45 use the same face. No mouth cavity is claimed. Screech charge is broad over the head and full ring clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected central lower black face below the eyes, bound to head. The earlier lateral point was rejected. Flamethrower/Solar Beam/Hyper Beam/Flash Cannon special_attack .30/.45/.65 scale .10 depart above the metal body with wings behind. Ember .30/.45 scale .12 and Screech .30/.45 use the same face. No mouth cavity is claimed. Screech charge is broad over the head and full ring clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected central lower black face below the eyes, bound to head. The earlier lateral point was rejected. Flamethrower/Solar Beam/Hyper Beam/Flash Cannon special_attack .30/.45/.65 scale .10 depart above the metal body with wings behind. Ember .30/.45 scale .12 and Screech .30/.45 use the same face. No mouth cavity is claimed. Screech charge is broad over the head and full ring clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected central lower black face below the eyes, bound to head. The earlier lateral point was rejected. Flamethrower/Solar Beam/Hyper Beam/Flash Cannon special_attack .30/.45/.65 scale .10 depart above the metal body with wings behind. Ember .30/.45 scale .12 and Screech .30/.45 use the same face. No mouth cavity is claimed. Screech charge is broad over the head and full ring clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected central lower black face below the eyes, bound to head. The earlier lateral point was rejected. Flamethrower/Solar Beam/Hyper Beam/Flash Cannon special_attack .30/.45/.65 scale .10 depart above the metal body with wings behind. Ember .30/.45 scale .12 and Screech .30/.45 use the same face. No mouth cavity is claimed. Screech charge is broad over the head and full ring clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "ember": "special_attack",
+        "flamethrower": "special_attack",
+        "flashcannon": "special_attack",
+        "hyperbeam": "special_attack",
+        "screech": "special_attack",
+        "solarbeam": "special_attack"
+      },
+      "move_choreography": {
+        "ember": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "screech": {
+          "action": "special_attack",
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_effect_reviews": {
+        "ember": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "49282521d910665d1a42fc131a21940af2d19ebcb8274ba07ae7c3683453c333",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4b9f24333f94c66632268c6d13238260b94f2cfd4b235fc10cecc403ecdbabae",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected central lower black face below the eyes, bound to head. The earlier lateral point was rejected. Flamethrower/Solar Beam/Hyper Beam/Flash Cannon special_attack .30/.45/.65 scale .10 depart above the metal body with wings behind. Ember .30/.45 scale .12 and Screech .30/.45 use the same face. No mouth cavity is claimed. Screech charge is broad over the head and full ring clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b3836dae21c5827540fe24bf2c28ef5016baf72e1ce197aafd3c1d499129955f",
+          "shiny_runtime_sha256": "d4a4691d7538c2fa2f3a456f94eb5d477bc411c922364f11de5d6f3529b34b05",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 41.4,
+            "move_key": "ember"
+          },
+          "views": 2
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "49282521d910665d1a42fc131a21940af2d19ebcb8274ba07ae7c3683453c333",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e512689440e7a56cbda78b3947e3e6db1a6353d86e1ca4fbad7e7a388cc7247d",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected central lower black face below the eyes, bound to head. The earlier lateral point was rejected. Flamethrower/Solar Beam/Hyper Beam/Flash Cannon special_attack .30/.45/.65 scale .10 depart above the metal body with wings behind. Ember .30/.45 scale .12 and Screech .30/.45 use the same face. No mouth cavity is claimed. Screech charge is broad over the head and full ring clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f2c382d609ba01b094bb4f3230b32e0f7045b9ff9380e6a22232c2d6c49b2a9c",
+          "shiny_runtime_sha256": "d4a4691d7538c2fa2f3a456f94eb5d477bc411c922364f11de5d6f3529b34b05",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.1,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 41.4,
+            "move_key": "flamethrower"
+          },
+          "views": 2
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "49282521d910665d1a42fc131a21940af2d19ebcb8274ba07ae7c3683453c333",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0437891624e77eead72d052296ad348aab731443befb084d273c833382cfd262",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected central lower black face below the eyes, bound to head. The earlier lateral point was rejected. Flamethrower/Solar Beam/Hyper Beam/Flash Cannon special_attack .30/.45/.65 scale .10 depart above the metal body with wings behind. Ember .30/.45 scale .12 and Screech .30/.45 use the same face. No mouth cavity is claimed. Screech charge is broad over the head and full ring clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "af1f05e55b7bb3518bc080c25fe4c3ab9eb45796e529896b45f7313b1316b7f7",
+          "shiny_runtime_sha256": "d4a4691d7538c2fa2f3a456f94eb5d477bc411c922364f11de5d6f3529b34b05",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.1,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 41.4,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "49282521d910665d1a42fc131a21940af2d19ebcb8274ba07ae7c3683453c333",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "89b2025ad451d765042f158b35b2cde2c66b1e8d4ce6357f6ec34c613537d70a",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected central lower black face below the eyes, bound to head. The earlier lateral point was rejected. Flamethrower/Solar Beam/Hyper Beam/Flash Cannon special_attack .30/.45/.65 scale .10 depart above the metal body with wings behind. Ember .30/.45 scale .12 and Screech .30/.45 use the same face. No mouth cavity is claimed. Screech charge is broad over the head and full ring clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "da00a9b88713275151472fdc93620d88bb7c8edfa673487a96abad9d15b835be",
+          "shiny_runtime_sha256": "d4a4691d7538c2fa2f3a456f94eb5d477bc411c922364f11de5d6f3529b34b05",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.1,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 41.4,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "49282521d910665d1a42fc131a21940af2d19ebcb8274ba07ae7c3683453c333",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "86d41bd85cd89c80eb0df9a44b4bf3f27cd9a7b9021876498d686c2812373397",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected central lower black face below the eyes, bound to head. The earlier lateral point was rejected. Flamethrower/Solar Beam/Hyper Beam/Flash Cannon special_attack .30/.45/.65 scale .10 depart above the metal body with wings behind. Ember .30/.45 scale .12 and Screech .30/.45 use the same face. No mouth cavity is claimed. Screech charge is broad over the head and full ring clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c76d5328c3e5bcbfe2008c9f7ff84c11f738178980016348bce6f2a64ffbb385",
+          "shiny_runtime_sha256": "d4a4691d7538c2fa2f3a456f94eb5d477bc411c922364f11de5d6f3529b34b05",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 41.4,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "49282521d910665d1a42fc131a21940af2d19ebcb8274ba07ae7c3683453c333",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f4effee80e3f77608d81f5ef58dfa81e6d86815a49002fec733957cba0579a57",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected central lower black face below the eyes, bound to head. The earlier lateral point was rejected. Flamethrower/Solar Beam/Hyper Beam/Flash Cannon special_attack .30/.45/.65 scale .10 depart above the metal body with wings behind. Ember .30/.45 scale .12 and Screech .30/.45 use the same face. No mouth cavity is claimed. Screech charge is broad over the head and full ring clearance remains pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "6e171a64ef78b22d33fc2b8f9864a45b2d8b4328b9c046bc4895f962b0026303",
+          "shiny_runtime_sha256": "d4a4691d7538c2fa2f3a456f94eb5d477bc411c922364f11de5d6f3529b34b05",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 89.7,
+            "emission_scale": 0.1,
+            "frames": 138.0,
+            "impact_frame": 62.1,
+            "launch_frame": 41.4,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "ember": "face",
+        "flamethrower": "face",
+        "flashcannon": "face",
+        "hyperbeam": "face",
+        "screech": "face",
+        "solarbeam": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "cb2bf14a238ee9932ab3209ced6ed70879a10d8ddfcd72f2c29657ee62e6c019",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.091884904640195,
+                  0.814053397869616,
+                  0.0940616974901889
+                ],
+                "column": 0.0,
+                "distance": 0.387224656585904,
+                "mesh": "pm1092_00_00/Skeleton3D/pm1092_00_00_glass_mesh",
+                "pixel": [
+                  232.0,
+                  207.0
+                ],
+                "surface": 0,
+                "triangle": 269,
+                "vertex_indices": [
+                  134,
+                  135,
+                  133
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "49282521d910665d1a42fc131a21940af2d19ebcb8274ba07ae7c3683453c333",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a04711724810e7a3fcc7b9b548e2eefe3da617547148914cd58ce64604d35592",
+          "scope": "Central lower black face below the orange eyes, bound to head. The first lateral face point was rejected; this point is centered above the metallic lower body. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.0613213591277599,
+                0.000964487728197128,
+                0.0990732759237289
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "iron-thorns": {
       "part_reviews": {
         "foot": {
@@ -65436,6 +66565,362 @@
         "preview_sha256": "964c83b4ea082943271afa9f001d417ac278fd734640812a4c47b3df4b3bc65c",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "larvesta": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected black face between the eyes, bound to head. Special_attack .40/.50 waits until the white forehead fur rises. Flamethrower/Solar Beam end .60 at scale .10; Ember scale .12; String Shot end .60 scale .20; Screech and Bug Bite use the same .40/.50 timing. Sampled release is below the raised fur and the silk is gone by .58. Early Solar Beam/Screech charge overlaps the lowered fur; continuous fur/ring clearance and Bug Bite contact distance remain pending. No exposed mouth cavity is claimed. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "ember": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected black face between the eyes, bound to head. Special_attack .40/.50 waits until the white forehead fur rises. Flamethrower/Solar Beam end .60 at scale .10; Ember scale .12; String Shot end .60 scale .20; Screech and Bug Bite use the same .40/.50 timing. Sampled release is below the raised fur and the silk is gone by .58. Early Solar Beam/Screech charge overlaps the lowered fur; continuous fur/ring clearance and Bug Bite contact distance remain pending. No exposed mouth cavity is claimed. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected black face between the eyes, bound to head. Special_attack .40/.50 waits until the white forehead fur rises. Flamethrower/Solar Beam end .60 at scale .10; Ember scale .12; String Shot end .60 scale .20; Screech and Bug Bite use the same .40/.50 timing. Sampled release is below the raised fur and the silk is gone by .58. Early Solar Beam/Screech charge overlaps the lowered fur; continuous fur/ring clearance and Bug Bite contact distance remain pending. No exposed mouth cavity is claimed. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected black face between the eyes, bound to head. Special_attack .40/.50 waits until the white forehead fur rises. Flamethrower/Solar Beam end .60 at scale .10; Ember scale .12; String Shot end .60 scale .20; Screech and Bug Bite use the same .40/.50 timing. Sampled release is below the raised fur and the silk is gone by .58. Early Solar Beam/Screech charge overlaps the lowered fur; continuous fur/ring clearance and Bug Bite contact distance remain pending. No exposed mouth cavity is claimed. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected black face between the eyes, bound to head. Special_attack .40/.50 waits until the white forehead fur rises. Flamethrower/Solar Beam end .60 at scale .10; Ember scale .12; String Shot end .60 scale .20; Screech and Bug Bite use the same .40/.50 timing. Sampled release is below the raised fur and the silk is gone by .58. Early Solar Beam/Screech charge overlaps the lowered fur; continuous fur/ring clearance and Bug Bite contact distance remain pending. No exposed mouth cavity is claimed. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected black face between the eyes, bound to head. Special_attack .40/.50 waits until the white forehead fur rises. Flamethrower/Solar Beam end .60 at scale .10; Ember scale .12; String Shot end .60 scale .20; Screech and Bug Bite use the same .40/.50 timing. Sampled release is below the raised fur and the silk is gone by .58. Early Solar Beam/Screech charge overlaps the lowered fur; continuous fur/ring clearance and Bug Bite contact distance remain pending. No exposed mouth cavity is claimed. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "bugbite": "special_attack",
+        "ember": "special_attack",
+        "flamethrower": "special_attack",
+        "screech": "special_attack",
+        "solarbeam": "special_attack",
+        "stringshot": "special_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "special_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "ember": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.6,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "screech": {
+          "action": "special_attack",
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.6,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.6,
+          "emission_scale": 0.2,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "96285aaa712dc0f9a75b4e4687c079e6080fa53bd43a9ef5523d77441bc554bd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "57c85ec04b4b9032aebe33106ed8c0ec0982c1c77a080f6489370b964bb771f0",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected black face between the eyes, bound to head. Special_attack .40/.50 waits until the white forehead fur rises. Flamethrower/Solar Beam end .60 at scale .10; Ember scale .12; String Shot end .60 scale .20; Screech and Bug Bite use the same .40/.50 timing. Sampled release is below the raised fur and the silk is gone by .58. Early Solar Beam/Screech charge overlaps the lowered fur; continuous fur/ring clearance and Bug Bite contact distance remain pending. No exposed mouth cavity is claimed. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "e2b9ffded3f88be3059b0132b1c2b0c61fa20e2c2d9665509cd1d7ed39d11e51",
+          "shiny_runtime_sha256": "b02f79141c2c64abbafdebd4e5f64606a0a4bb208173d10b3b441b754a74f798",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "ember": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "96285aaa712dc0f9a75b4e4687c079e6080fa53bd43a9ef5523d77441bc554bd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "120caadafaddbada2ff8174eb7e0c7039f88a3b892b24135cfe857f62888989e",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected black face between the eyes, bound to head. Special_attack .40/.50 waits until the white forehead fur rises. Flamethrower/Solar Beam end .60 at scale .10; Ember scale .12; String Shot end .60 scale .20; Screech and Bug Bite use the same .40/.50 timing. Sampled release is below the raised fur and the silk is gone by .58. Early Solar Beam/Screech charge overlaps the lowered fur; continuous fur/ring clearance and Bug Bite contact distance remain pending. No exposed mouth cavity is claimed. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "20c942cbb0895c6ab6bf44bb9f603a66d982960b9b70b697519a171954c2be44",
+          "shiny_runtime_sha256": "b02f79141c2c64abbafdebd4e5f64606a0a4bb208173d10b3b441b754a74f798",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "ember"
+          },
+          "views": 2
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "96285aaa712dc0f9a75b4e4687c079e6080fa53bd43a9ef5523d77441bc554bd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "329c13ab7fe59027c61f4a895cc74b2164a219beb5d7023139ee251fc124065a",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected black face between the eyes, bound to head. Special_attack .40/.50 waits until the white forehead fur rises. Flamethrower/Solar Beam end .60 at scale .10; Ember scale .12; String Shot end .60 scale .20; Screech and Bug Bite use the same .40/.50 timing. Sampled release is below the raised fur and the silk is gone by .58. Early Solar Beam/Screech charge overlaps the lowered fur; continuous fur/ring clearance and Bug Bite contact distance remain pending. No exposed mouth cavity is claimed. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "8cb02e41ab5d1b040dfdc0d9be8a4f2ae8449999440cbe15afa8277db5f3d7e8",
+          "shiny_runtime_sha256": "b02f79141c2c64abbafdebd4e5f64606a0a4bb208173d10b3b441b754a74f798",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 72.0,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "flamethrower"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "96285aaa712dc0f9a75b4e4687c079e6080fa53bd43a9ef5523d77441bc554bd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c6c86554f8208abf58c499fe06a4e99f872325baeba6093939d2035ddaae03b3",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected black face between the eyes, bound to head. Special_attack .40/.50 waits until the white forehead fur rises. Flamethrower/Solar Beam end .60 at scale .10; Ember scale .12; String Shot end .60 scale .20; Screech and Bug Bite use the same .40/.50 timing. Sampled release is below the raised fur and the silk is gone by .58. Early Solar Beam/Screech charge overlaps the lowered fur; continuous fur/ring clearance and Bug Bite contact distance remain pending. No exposed mouth cavity is claimed. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f3a8721480c7299e92e2e219b8de725358d600c94c2b70ae149a4bc871be42a5",
+          "shiny_runtime_sha256": "b02f79141c2c64abbafdebd4e5f64606a0a4bb208173d10b3b441b754a74f798",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "96285aaa712dc0f9a75b4e4687c079e6080fa53bd43a9ef5523d77441bc554bd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "11eeb626aaac0967278640b48d246428e80c61c0f45df1a2e69e6d997a2fea10",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected black face between the eyes, bound to head. Special_attack .40/.50 waits until the white forehead fur rises. Flamethrower/Solar Beam end .60 at scale .10; Ember scale .12; String Shot end .60 scale .20; Screech and Bug Bite use the same .40/.50 timing. Sampled release is below the raised fur and the silk is gone by .58. Early Solar Beam/Screech charge overlaps the lowered fur; continuous fur/ring clearance and Bug Bite contact distance remain pending. No exposed mouth cavity is claimed. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "15603d390cf2225b60e428565c20b07fd5e3800adbf61c8800ad242ad49aec43",
+          "shiny_runtime_sha256": "b02f79141c2c64abbafdebd4e5f64606a0a4bb208173d10b3b441b754a74f798",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 72.0,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "96285aaa712dc0f9a75b4e4687c079e6080fa53bd43a9ef5523d77441bc554bd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "dd260babff63f708196caee65c1bcb7f5f4a805d36404f174fe4a8ed19ba11cc",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected black face between the eyes, bound to head. Special_attack .40/.50 waits until the white forehead fur rises. Flamethrower/Solar Beam end .60 at scale .10; Ember scale .12; String Shot end .60 scale .20; Screech and Bug Bite use the same .40/.50 timing. Sampled release is below the raised fur and the silk is gone by .58. Early Solar Beam/Screech charge overlaps the lowered fur; continuous fur/ring clearance and Bug Bite contact distance remain pending. No exposed mouth cavity is claimed. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "8ca44657500eacfb223895ec8712ee8c0c387062ab0a60b5fd8c71f71400e9f0",
+          "shiny_runtime_sha256": "b02f79141c2c64abbafdebd4e5f64606a0a4bb208173d10b3b441b754a74f798",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 72.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "face",
+        "ember": "face",
+        "flamethrower": "face",
+        "screech": "face",
+        "solarbeam": "face",
+        "stringshot": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "6e67664d981a8b18c5edc9351a69d2738bf74963a19e5e0f21530b56a0f16632",
+            "landmarks": [
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.474565980904034,
+                  0.223167963132531,
+                  0.302266055963435
+                ],
+                "column": 1.0,
+                "distance": 1.71592480368519,
+                "mesh": "pm0636_00_00/Skeleton3D/pm0636_00_00_body_mesh",
+                "pixel": [
+                  206.0,
+                  180.0
+                ],
+                "surface": 1,
+                "triangle": 2926,
+                "vertex_indices": [
+                  967,
+                  1746,
+                  970
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "96285aaa712dc0f9a75b4e4687c079e6080fa53bd43a9ef5523d77441bc554bd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1cbb87c9f027a5c2f37a89ae6a14ade777ad519eec5861b3543499ac1d575a33",
+          "scope": "Exposed black face between the eyes, bound to head. The fur covers it during physical_attack and early special_attack; special_attack .45 exposes it under the raised forehead. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.230481922626495,
+                -0.0071502523496747,
+                0.150187432765961
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
       }
     },
     "larvitar": {
@@ -81791,6 +83276,413 @@
         "preview_sha256": "566589fa08dded82034ac2b33aec71f0834701dc65e0a00fe4a50ced6e4ce8b8",
         "scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
         "side_fraction": 0.45
+      }
+    },
+    "mothim": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Two separately projected inner mandible rims are combined into one jaw/head-weighted mouth emitter. The first single-jaw candidate was rejected. Special_attack .30/.45-.65 was rejected because the mandibles closed and the wings crossed the side view. Physical_attack Hyper Beam/Solar Beam now use .14/.24/.34 scale .08; Shadow Ball/Mud-Slap .18/.35 scale .08, mud arc .05; String Shot .14/.30/.36 scale .15. Samples show forward release from the opening between the eyes above the white forelegs. Bug Bite uses the later .50/.65 opening; wide wings still leave contact distance unresolved. The final beam/silk fade between sampled fractions needs continuous closure review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Two separately projected inner mandible rims are combined into one jaw/head-weighted mouth emitter. The first single-jaw candidate was rejected. Special_attack .30/.45-.65 was rejected because the mandibles closed and the wings crossed the side view. Physical_attack Hyper Beam/Solar Beam now use .14/.24/.34 scale .08; Shadow Ball/Mud-Slap .18/.35 scale .08, mud arc .05; String Shot .14/.30/.36 scale .15. Samples show forward release from the opening between the eyes above the white forelegs. Bug Bite uses the later .50/.65 opening; wide wings still leave contact distance unresolved. The final beam/silk fade between sampled fractions needs continuous closure review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "mudslap": {
+          "action": "physical_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Two separately projected inner mandible rims are combined into one jaw/head-weighted mouth emitter. The first single-jaw candidate was rejected. Special_attack .30/.45-.65 was rejected because the mandibles closed and the wings crossed the side view. Physical_attack Hyper Beam/Solar Beam now use .14/.24/.34 scale .08; Shadow Ball/Mud-Slap .18/.35 scale .08, mud arc .05; String Shot .14/.30/.36 scale .15. Samples show forward release from the opening between the eyes above the white forelegs. Bug Bite uses the later .50/.65 opening; wide wings still leave contact distance unresolved. The final beam/silk fade between sampled fractions needs continuous closure review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "physical_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Two separately projected inner mandible rims are combined into one jaw/head-weighted mouth emitter. The first single-jaw candidate was rejected. Special_attack .30/.45-.65 was rejected because the mandibles closed and the wings crossed the side view. Physical_attack Hyper Beam/Solar Beam now use .14/.24/.34 scale .08; Shadow Ball/Mud-Slap .18/.35 scale .08, mud arc .05; String Shot .14/.30/.36 scale .15. Samples show forward release from the opening between the eyes above the white forelegs. Bug Bite uses the later .50/.65 opening; wide wings still leave contact distance unresolved. The final beam/silk fade between sampled fractions needs continuous closure review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Two separately projected inner mandible rims are combined into one jaw/head-weighted mouth emitter. The first single-jaw candidate was rejected. Special_attack .30/.45-.65 was rejected because the mandibles closed and the wings crossed the side view. Physical_attack Hyper Beam/Solar Beam now use .14/.24/.34 scale .08; Shadow Ball/Mud-Slap .18/.35 scale .08, mud arc .05; String Shot .14/.30/.36 scale .15. Samples show forward release from the opening between the eyes above the white forelegs. Bug Bite uses the later .50/.65 opening; wide wings still leave contact distance unresolved. The final beam/silk fade between sampled fractions needs continuous closure review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "stringshot": {
+          "action": "physical_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Two separately projected inner mandible rims are combined into one jaw/head-weighted mouth emitter. The first single-jaw candidate was rejected. Special_attack .30/.45-.65 was rejected because the mandibles closed and the wings crossed the side view. Physical_attack Hyper Beam/Solar Beam now use .14/.24/.34 scale .08; Shadow Ball/Mud-Slap .18/.35 scale .08, mud arc .05; String Shot .14/.30/.36 scale .15. Samples show forward release from the opening between the eyes above the white forelegs. Bug Bite uses the later .50/.65 opening; wide wings still leave contact distance unresolved. The final beam/silk fade between sampled fractions needs continuous closure review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack",
+        "hyperbeam": "physical_attack",
+        "mudslap": "physical_attack",
+        "shadowball": "physical_attack",
+        "solarbeam": "physical_attack",
+        "stringshot": "physical_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.65,
+          "launch_fraction": 0.5
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.34,
+          "emission_scale": 0.08,
+          "impact_fraction": 0.24,
+          "launch_fraction": 0.14
+        },
+        "mudslap": {
+          "action": "physical_attack",
+          "emission_scale": 0.08,
+          "impact_fraction": 0.35,
+          "launch_fraction": 0.18,
+          "projectile_arc_height": 0.05
+        },
+        "shadowball": {
+          "action": "physical_attack",
+          "emission_scale": 0.08,
+          "impact_fraction": 0.35,
+          "launch_fraction": 0.18
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.34,
+          "emission_scale": 0.08,
+          "impact_fraction": 0.24,
+          "launch_fraction": 0.14
+        },
+        "stringshot": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.36,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.3,
+          "launch_fraction": 0.14
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "09d504aa02e1ac9481918afaa8c119e8a4149b4c54d1ba6156caef318d7c401d",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.48,
+            0.5,
+            0.52,
+            0.575,
+            0.58,
+            0.65,
+            0.74
+          ],
+          "normal_runtime_sha256": "49e6d4f793f16e6232cc3e41874c3edec70884ddccb707e0b0ed8012a1777faa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e53faace6e96e395dc3d26791ee2c0d4b4be82f23f414d3185fdce0c835b9d84",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Two separately projected inner mandible rims are combined into one jaw/head-weighted mouth emitter. The first single-jaw candidate was rejected. Special_attack .30/.45-.65 was rejected because the mandibles closed and the wings crossed the side view. Physical_attack Hyper Beam/Solar Beam now use .14/.24/.34 scale .08; Shadow Ball/Mud-Slap .18/.35 scale .08, mud arc .05; String Shot .14/.30/.36 scale .15. Samples show forward release from the opening between the eyes above the white forelegs. Bug Bite uses the later .50/.65 opening; wide wings still leave contact distance unresolved. The final beam/silk fade between sampled fractions needs continuous closure review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "513fae77bd5c627d0b646519f5fae13abcb2d692fb3cc35d83cc6519fcdcbc40",
+          "shiny_runtime_sha256": "ef75c1459ca61480868b685711a445d12c74c4393a24089e1c2d9de97bf186af",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 64.0,
+            "impact_frame": 41.6,
+            "launch_frame": 32.0,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "09d504aa02e1ac9481918afaa8c119e8a4149b4c54d1ba6156caef318d7c401d",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.14,
+            0.16,
+            0.19,
+            0.24,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "49e6d4f793f16e6232cc3e41874c3edec70884ddccb707e0b0ed8012a1777faa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "27742e8ebb6b56e6a6dc24e9c7aa7e32bfddc87724d52792f19e207308977e03",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Two separately projected inner mandible rims are combined into one jaw/head-weighted mouth emitter. The first single-jaw candidate was rejected. Special_attack .30/.45-.65 was rejected because the mandibles closed and the wings crossed the side view. Physical_attack Hyper Beam/Solar Beam now use .14/.24/.34 scale .08; Shadow Ball/Mud-Slap .18/.35 scale .08, mud arc .05; String Shot .14/.30/.36 scale .15. Samples show forward release from the opening between the eyes above the white forelegs. Bug Bite uses the later .50/.65 opening; wide wings still leave contact distance unresolved. The final beam/silk fade between sampled fractions needs continuous closure review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "34e1ad62c0c893490d584cea2b82268960cebfdb29f782b9d9f59d73fd9bc183",
+          "shiny_runtime_sha256": "ef75c1459ca61480868b685711a445d12c74c4393a24089e1c2d9de97bf186af",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 21.76,
+            "emission_scale": 0.08,
+            "frames": 64.0,
+            "impact_frame": 15.36,
+            "launch_frame": 8.96,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "mudslap": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "09d504aa02e1ac9481918afaa8c119e8a4149b4c54d1ba6156caef318d7c401d",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.16,
+            0.18,
+            0.2,
+            0.265,
+            0.35,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "49e6d4f793f16e6232cc3e41874c3edec70884ddccb707e0b0ed8012a1777faa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "97bf5cbea813e2da36bb07b0f02078ce79800d8b36919262ed6281546b1c2233",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Two separately projected inner mandible rims are combined into one jaw/head-weighted mouth emitter. The first single-jaw candidate was rejected. Special_attack .30/.45-.65 was rejected because the mandibles closed and the wings crossed the side view. Physical_attack Hyper Beam/Solar Beam now use .14/.24/.34 scale .08; Shadow Ball/Mud-Slap .18/.35 scale .08, mud arc .05; String Shot .14/.30/.36 scale .15. Samples show forward release from the opening between the eyes above the white forelegs. Bug Bite uses the later .50/.65 opening; wide wings still leave contact distance unresolved. The final beam/silk fade between sampled fractions needs continuous closure review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "615896ba44a71e48e194d72a5d5b313a060b628fa5c7a9f0acf1aa3998cb8287",
+          "shiny_runtime_sha256": "ef75c1459ca61480868b685711a445d12c74c4393a24089e1c2d9de97bf186af",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.08,
+            "frames": 64.0,
+            "impact_frame": 22.4,
+            "launch_frame": 11.52,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.05
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "09d504aa02e1ac9481918afaa8c119e8a4149b4c54d1ba6156caef318d7c401d",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.16,
+            0.18,
+            0.2,
+            0.265,
+            0.35,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "49e6d4f793f16e6232cc3e41874c3edec70884ddccb707e0b0ed8012a1777faa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "46f019b83182c56af1a2b236892b2fce83807ef0959660da82b04440ac8b0100",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Two separately projected inner mandible rims are combined into one jaw/head-weighted mouth emitter. The first single-jaw candidate was rejected. Special_attack .30/.45-.65 was rejected because the mandibles closed and the wings crossed the side view. Physical_attack Hyper Beam/Solar Beam now use .14/.24/.34 scale .08; Shadow Ball/Mud-Slap .18/.35 scale .08, mud arc .05; String Shot .14/.30/.36 scale .15. Samples show forward release from the opening between the eyes above the white forelegs. Bug Bite uses the later .50/.65 opening; wide wings still leave contact distance unresolved. The final beam/silk fade between sampled fractions needs continuous closure review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "04d94eb24dde726d67c6fbf5ef9feb49e79741c9e80ca2b962eb0107a14fffe7",
+          "shiny_runtime_sha256": "ef75c1459ca61480868b685711a445d12c74c4393a24089e1c2d9de97bf186af",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.08,
+            "frames": 64.0,
+            "impact_frame": 22.4,
+            "launch_frame": 11.52,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "09d504aa02e1ac9481918afaa8c119e8a4149b4c54d1ba6156caef318d7c401d",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.14,
+            0.16,
+            0.19,
+            0.24,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "49e6d4f793f16e6232cc3e41874c3edec70884ddccb707e0b0ed8012a1777faa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "93451ef9f318d24a7303f4cf088425496a03fa56ce325e317967d53e0171314b",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Two separately projected inner mandible rims are combined into one jaw/head-weighted mouth emitter. The first single-jaw candidate was rejected. Special_attack .30/.45-.65 was rejected because the mandibles closed and the wings crossed the side view. Physical_attack Hyper Beam/Solar Beam now use .14/.24/.34 scale .08; Shadow Ball/Mud-Slap .18/.35 scale .08, mud arc .05; String Shot .14/.30/.36 scale .15. Samples show forward release from the opening between the eyes above the white forelegs. Bug Bite uses the later .50/.65 opening; wide wings still leave contact distance unresolved. The final beam/silk fade between sampled fractions needs continuous closure review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d06847de33d2942f099a3e09e0661ddc0672af922680ed40b8c8bd042375b4db",
+          "shiny_runtime_sha256": "ef75c1459ca61480868b685711a445d12c74c4393a24089e1c2d9de97bf186af",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 21.76,
+            "emission_scale": 0.08,
+            "frames": 64.0,
+            "impact_frame": 15.36,
+            "launch_frame": 8.96,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "09d504aa02e1ac9481918afaa8c119e8a4149b4c54d1ba6156caef318d7c401d",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.14,
+            0.16,
+            0.22,
+            0.3,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "49e6d4f793f16e6232cc3e41874c3edec70884ddccb707e0b0ed8012a1777faa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "fc356f4beafb6f6647431c9de5f5d3684adcd23951d2d907683584555deabc31",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Two separately projected inner mandible rims are combined into one jaw/head-weighted mouth emitter. The first single-jaw candidate was rejected. Special_attack .30/.45-.65 was rejected because the mandibles closed and the wings crossed the side view. Physical_attack Hyper Beam/Solar Beam now use .14/.24/.34 scale .08; Shadow Ball/Mud-Slap .18/.35 scale .08, mud arc .05; String Shot .14/.30/.36 scale .15. Samples show forward release from the opening between the eyes above the white forelegs. Bug Bite uses the later .50/.65 opening; wide wings still leave contact distance unresolved. The final beam/silk fade between sampled fractions needs continuous closure review. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "7fc75dfb10aaa8e604aebcfd562fca37ba242e6aceccd5997d8f539020bef91f",
+          "shiny_runtime_sha256": "ef75c1459ca61480868b685711a445d12c74c4393a24089e1c2d9de97bf186af",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 23.04,
+            "emission_scale": 0.15,
+            "frames": 64.0,
+            "impact_frame": 19.2,
+            "launch_frame": 8.96,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "mouth",
+        "hyperbeam": "mouth",
+        "mudslap": "mouth",
+        "shadowball": "mouth",
+        "solarbeam": "mouth",
+        "stringshot": "mouth"
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "right_jaw",
+              "offset": [
+                0.0511019863188267,
+                -0.00628076773136854,
+                -0.00747181009501219
+              ],
+              "weight": 0.426831872961242
+            },
+            {
+              "bone": "jaw",
+              "offset": [
+                0.0839512348175049,
+                -2.07664774265481e-09,
+                -0.00292792054824531
+              ],
+              "weight": 0.184084335183618
+            },
+            {
+              "bone": "head",
+              "offset": [
+                0.0362103097140789,
+                2.4616677585243e-09,
+                0.153079226613045
+              ],
+              "weight": 0.0823851329887073
+            },
+            {
+              "bone": "left_jaw",
+              "offset": [
+                0.0383261106908321,
+                -0.00119380792602897,
+                -0.0106072248890996
+              ],
+              "weight": 0.306698658866433
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "49e6d4f793f16e6232cc3e41874c3edec70884ddccb707e0b0ed8012a1777faa",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "70cf35b650839b77a2bca4c2d692a9e3086b03650fd1d67df460c97225bfa2bd",
+        "scope": "Individually projected left and right inner mandible rims from physical_attack .20, combined into one mouth emitter with both jaw influences. The marker follows the opening as it opens/closes; the earlier single left-jaw rim was rejected. Actual move effects and continuous clearance remain pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "445e453b8377e877c3ff1ea068eb791603f4c9d3c18b347763eed40cf4c5d19c",
+          "landmarks": [
+            {
+              "action": "physical_attack",
+              "barycentric": [
+                0.0904499758426468,
+                0.354279813000298,
+                0.555270211157056
+              ],
+              "column": 0.0,
+              "distance": 0.388420605803341,
+              "mesh": "pm0414_00_00/Skeleton3D/pm0414_00_00_body_mesh",
+              "pixel": [
+                159.0,
+                186.0
+              ],
+              "surface": 0,
+              "triangle": 26,
+              "vertex_indices": [
+                934,
+                939,
+                936
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "physical_attack",
+              "barycentric": [
+                0.0464821652724634,
+                0.175133274600784,
+                0.778384560126753
+              ],
+              "column": 0.0,
+              "distance": 0.384821307543241,
+              "mesh": "pm0414_00_00/Skeleton3D/pm0414_00_00_body_mesh",
+              "pixel": [
+                200.0,
+                188.0
+              ],
+              "surface": 0,
+              "triangle": 17,
+              "vertex_indices": [
+                627,
+                623,
+                621
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "mr-mime": {
@@ -131732,6 +133624,417 @@
           ],
           "method": "ray_triangle_barycentric_skin_binding"
         }
+      }
+    },
+    "volcarona": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "ember": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack",
+        "ember": "special_attack",
+        "flamethrower": "special_attack",
+        "hyperbeam": "special_attack",
+        "screech": "special_attack",
+        "solarbeam": "special_attack",
+        "stringshot": "special_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "ember": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "screech": {
+          "action": "special_attack",
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "6e69a1af4509909d53d99c932e8f219db19da877bb415b5d0b769b7505e4ddd7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1497854131fb80a46c83a1f37fe32ccc2213fa604849fb76b9c3d05a9c88593f",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "fadbfdba3e88bd50f24f36db56ae0b776e2f0d390f699f08ef1b94a189780863",
+          "shiny_runtime_sha256": "b750788a0e91ba232d4fb0064988e4b4b9ba48c35b2ad813a2112e2c9aedc5d8",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 49.5,
+            "launch_frame": 33.0,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "ember": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "6e69a1af4509909d53d99c932e8f219db19da877bb415b5d0b769b7505e4ddd7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5a1c9cdac778b2477d097487e4f3cda46e92d67d35addc6674fc9ec176b3ba2b",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "bb194556085dd15b3e4ea8dfcbdd70d9ad7d3d3382dcc95c40979aeca5162cf1",
+          "shiny_runtime_sha256": "b750788a0e91ba232d4fb0064988e4b4b9ba48c35b2ad813a2112e2c9aedc5d8",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "ember"
+          },
+          "views": 2
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "6e69a1af4509909d53d99c932e8f219db19da877bb415b5d0b769b7505e4ddd7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7151ac3163a3753911ec05be102dbe336de25f7c42e9e0d60203f90ac679fd5e",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "320b0255a750e9c9f8683d836b3c47f9acef739a21fdc2bb5f56c727739cce9a",
+          "shiny_runtime_sha256": "b750788a0e91ba232d4fb0064988e4b4b9ba48c35b2ad813a2112e2c9aedc5d8",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "flamethrower"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "6e69a1af4509909d53d99c932e8f219db19da877bb415b5d0b769b7505e4ddd7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d6303d79008bf94d6ff35baa88e4770c3d1b9c24f9e3068d725f5df98e379602",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d1a47795d84d18f5a1b4c325c90dd4ef3ef787f1e5584a81c29251b14aee59e5",
+          "shiny_runtime_sha256": "b750788a0e91ba232d4fb0064988e4b4b9ba48c35b2ad813a2112e2c9aedc5d8",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "6e69a1af4509909d53d99c932e8f219db19da877bb415b5d0b769b7505e4ddd7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "450fe833f882e7a6eb3d65da76726ce75f2a9f2b7e266b677378ac4895fbfb23",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "e0ef0926ad1d9311ff795824e19f461cae8d3a5c2cca1484d26f6f136908b560",
+          "shiny_runtime_sha256": "b750788a0e91ba232d4fb0064988e4b4b9ba48c35b2ad813a2112e2c9aedc5d8",
+          "status": "sampled_origin_and_timing_review_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "6e69a1af4509909d53d99c932e8f219db19da877bb415b5d0b769b7505e4ddd7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a8da77c38dd46920b59d72c7431e1a9b0bfc494565ec7d120e78dc4ac709ab90",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "5590bb4b539d3cf7f180396275e349b64391b72b6ed0ec9b410d7ed672660e24",
+          "shiny_runtime_sha256": "b750788a0e91ba232d4fb0064988e4b4b9ba48c35b2ad813a2112e2c9aedc5d8",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2a5f723a476f32012c6fa8b56e00f418af877fa7b42e63a717ecdcdbed510bd",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.12,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.58,
+            0.74
+          ],
+          "normal_runtime_sha256": "6e69a1af4509909d53d99c932e8f219db19da877bb415b5d0b769b7505e4ddd7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e8468670a88e0dad97d4e887c5b1b132ce51f5810ec4a79a7795ec0a404cb58b",
+          "scope": "Normal and shiny, two offline views, eight sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower black face between the eyes, weighted to head/jaw above the white collar. Flamethrower/Solar Beam/Hyper Beam special_attack .30/.45/.65 scale .10, Ember .30/.45 scale .12, String Shot .30/.45 scale .20 and Screech .30/.45 depart forward from the face in the samples. No exposed mouth cavity is claimed. Bug Bite physical_attack .30/.45 bows forward; wing silhouette leaves a contact gap. Broad sound charge and continuous silk/collar clearance remain pending. Remaining move routes, continuous full-radius clearance, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "8944d52e3fa4b36ce7caec7e268416aa63b5d4aceefc10b699926a67662e199e",
+          "shiny_runtime_sha256": "b750788a0e91ba232d4fb0064988e4b4b9ba48c35b2ad813a2112e2c9aedc5d8",
+          "status": "sampled_origin_size_and_timing_review_full_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "launch_frame": 36.0,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "face",
+        "ember": "face",
+        "flamethrower": "face",
+        "hyperbeam": "face",
+        "screech": "face",
+        "solarbeam": "face",
+        "stringshot": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "a17de1d1d7fcbb75bb24350b2f698afe7eb81a22985915093858e45cdca92d3b",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.48727340796831,
+                  0.20631487879776,
+                  0.30641171323393
+                ],
+                "column": 0.0,
+                "distance": 3.45745246384354,
+                "mesh": "pm0637_00_00/Skeleton3D/pm0637_00_00_body_mesh",
+                "pixel": [
+                  207.0,
+                  168.0
+                ],
+                "surface": 0,
+                "triangle": 2816,
+                "vertex_indices": [
+                  1477,
+                  1479,
+                  1464
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "6e69a1af4509909d53d99c932e8f219db19da877bb415b5d0b769b7505e4ddd7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "027beb73eaaf58efa248b1ec665a787c283762f793ab9413f9267f2c3b3b1224",
+          "scope": "Lower black face between the eyes, head/jaw weighted. No visible mouth cavity; this is a facial casting surface above the white collar. Special_attack keeps the face forward; physical_attack_2 turns away. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.106324978172779,
+                -0.00745712919160724,
+                0.14675934612751
+              ],
+              "weight": 0.891780999036284
+            },
+            {
+              "bone": "jaw",
+              "offset": [
+                0.0311745963990688,
+                0.00323450355790555,
+                0.0559904389083385
+              ],
+              "weight": 0.108219000963716
+            }
+          ]
+        ]
       }
     },
     "voltorb": {

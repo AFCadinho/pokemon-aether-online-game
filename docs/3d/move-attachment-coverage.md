@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1131 species/forms.
-- No anatomical attachment profile: 69 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 992 species/forms.
+- At least one configured anatomical attachment: 1138 species/forms.
+- No anatomical attachment profile: 62 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 994 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -212,6 +212,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | cubone | foot, hand, left_foot, left_hand, muzzle | Same attachment profile |
 | cufant | hand, left_hand | Same attachment profile |
 | cursola | mouth | Same attachment profile |
+| cutiefly | proboscis_tip | Same attachment profile |
 | cyclizar | hand, left_hand, mouth | Same attachment profile |
 | cyndaquil | foot, left_foot, mouth | Same attachment profile |
 | dachsbun | mouth | Same attachment profile |
@@ -284,6 +285,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | dusclops | hand, left_hand | Same attachment profile |
 | dusknoir | mouth | Same attachment profile |
 | duskull | hand, left_hand, mouth | Same attachment profile |
+| dustox | mouth | Same attachment profile |
 | dwebble | hand, left_hand, mouth | Same attachment profile |
 | eelektrik | mouth | Same attachment profile |
 | eelektross | hand, left_hand, mouth | Same attachment profile |
@@ -354,6 +356,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | frogadier | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | froslass | hand, left_hand | Same attachment profile |
 | froslass-mega | hand, left_hand | Same attachment profile |
+| frosmoth | face | Same attachment profile |
 | fuecoco | mouth | Same attachment profile |
 | furfrou | hand, left_hand | Same attachment profile |
 | furret | mouth | Same attachment profile |
@@ -483,6 +486,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | iron-hands | foot, hand, left_foot, left_hand | Same attachment profile |
 | iron-jugulis | mouth | Same attachment profile |
 | iron-leaves | hand, left_hand, mouth | Same attachment profile |
+| iron-moth | face | Same attachment profile |
 | iron-thorns | foot, left_foot, mouth | Same attachment profile |
 | iron-treads | mouth | Same attachment profile |
 | iron-valiant | foot, hand, left_foot, left_hand | Same attachment profile |
@@ -535,6 +539,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | landorus | mouth | Same attachment profile |
 | lanturn | hand, left_hand, mouth | Same attachment profile |
 | lapras | hand, left_hand, mouth | Same attachment profile |
+| larvesta | face | Same attachment profile |
 | larvitar | mouth | Same attachment profile |
 | latias | mouth | Same attachment profile |
 | latias-mega | mouth | Same attachment profile |
@@ -654,6 +659,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | morgrem | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | morpeko | hand, left_hand, mouth | Same attachment profile |
 | morpeko-hangry | hand, left_hand, mouth | Same attachment profile |
+| mothim | mouth | Same attachment profile |
 | mr-mime | hand, left_hand, mouth | Same attachment profile |
 | mr-mime-galar | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | mr-rime | foot, hand, left_foot, left_hand | Same attachment profile |
@@ -1076,6 +1082,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | vivillon | mouth | Same attachment profile |
 | volbeat | hand, left_hand, mouth | Same attachment profile |
 | volcanion | hand, left_hand, mouth | Same attachment profile |
+| volcarona | face | Same attachment profile |
 | voltorb | face | Same attachment profile |
 | voltorb-hisui | face | Same attachment profile |
 | vullaby | hand, left_hand, mouth | Same attachment profile |
