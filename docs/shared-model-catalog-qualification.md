@@ -12,6 +12,41 @@ these new candidate hashes can inherit reviewed model profiles. The lookup is
 indexed by identity and scene hash, initialized under mutexes for the worker
 and main-thread callers, and returns independent dictionary copies.
 
+## Recorded Linux result
+
+The complete `full-v3` run on Godot 4.6.2 / Mobile Vulkan / NVIDIA GeForce RTX
+3070 Laptop GPU tested all 1,084 selected pairs (2,168 appearances) in about
+84.9 minutes. The [compact evidence receipt](../tools/shared_model_qualification_results.json)
+pins the tested source commit, inputs, retained batch reports and additional
+source controls. The retained run is under the assigned slot's
+`.tmp/shared-model-qualification/full-v3`.
+
+- 24,784 candidate frames, with 74,352 original/repeat/candidate PNGs.
+- 24,542 frames match the first original; 223 more match the repeat original.
+- 19 frames on six appearances require additional review. Exact unchanged-source
+  witnesses explain Armarouge, both Regieleki appearances and Alolan Sandslash.
+- Shiny Greninja has five unresolved frames with one to four differing pixels.
+  Normal Inkay has two differing pixels in its front idle frame, with a
+  maximum channel difference of one. Both complete pairs retain v11; no pixel error is tolerated or rounded away.
+- All 2,168 actual battle setups and 8,672 Pokédex/summary previews pass their
+  animation, pose, placement, routing, camera and cache checks.
+
+There are 2,166 appearances with exact source witnesses, but only 1,082 complete
+pairs qualify. The isolated passing counterparts of Greninja and Inkay do not
+make their packs eligible. The retained qualified index therefore contains
+1,082 shared pairs and 118 original v11 entries, preserving the two extra
+fallbacks as well as the 116 existing storage-audit exclusions.
+
+| Bytes | Original v11 collection | Qualified selection | Saved |
+| --- | ---: | ---: | ---: |
+| Download | 12,857,317,549 | 9,838,055,989 | 3,019,261,560 (23.48%) |
+| Installed | 12,856,911,949 | 9,844,999,677 | 3,011,912,272 (23.43%) |
+
+These are measured container/install totals, not RAM or VRAM estimates. The
+qualified index is a local draft, with `production_approved: false`; it has not
+been published or activated for players. The full debug test catalog retains
+all candidates, including held candidates, for reproducible diagnostics.
+
 ## Existing behavior retained
 
 All 2,168 candidate appearances resolve to their own approved source profiles.
@@ -81,7 +116,7 @@ normal and shiny Centiskorch, Ponyta and Rapidash exactly. That attempt and its
 pre-fix script remain under `full-v1`. A second attempt stopped after 216 pairs
 when review found a misplaced lookup mutex. The lock now belongs to the lookup
 function; a four-thread cold-lookup test covers all 2,168 bindings and checks
-that returned copies cannot alter trusted data. The final run starts fresh
+that returned copies cannot alter trusted data. The final run started fresh
 under `full-v3`; neither earlier attempt counts toward its evidence.
 
 The primary verdict always remains in the evidence, including held frames.
@@ -149,7 +184,7 @@ source witness for every held frame.
 
 Collection also writes a retained `qualified-index.json`. A pair is shared
 only when both normal and shiny qualify; otherwise its complete original v11
-entry is preserved byte-for-byte as JSON data. The receipt's `selection` records
+entry is preserved exactly as JSON data. The receipt's `selection` records
 the exact shared asset IDs, additional original pairs, and recalculated download
 and installed totals. The full debug test catalog deliberately keeps all 1,084
 storage candidates for reproducibility; it is not an activation approval for a
