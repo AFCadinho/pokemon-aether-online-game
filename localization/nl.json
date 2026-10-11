@@ -1316,7 +1316,7 @@
   "ui.login.error.offline": "PokeAether is momenteel offline. Probeer het later opnieuw.",
   "ui.login.error.maintenance": "PokeAether is tijdelijk gesloten wegens onderhoud. Probeer het later opnieuw.",
   "ui.login.error.enter_world": "De wereld kon niet worden betreden. Neem contact op met staff.",
-  "ui.login.error.invalid_credentials": "Ongeldige gebruikersnaam of ongeldig wachtwoord.",
+  "ui.login.error.invalid_credentials": "Gebruikersnaam of wachtwoord klopt niet. Controleer je gegevens en probeer opnieuw.",
   "ui.login.error.email_not_verified": "Bevestig je e-mailadres voordat je inlogt.",
   "ui.login.error.unavailable": "PokeAether is momenteel niet beschikbaar. Probeer het later opnieuw.",
   "ui.session.logout_countdown": "{message} Je wordt over {seconds} seconden uitgelogd.",

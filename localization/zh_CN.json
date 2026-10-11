@@ -1282,7 +1282,7 @@
   "ui.login.error.offline": "PokeAether 目前处于离线状态。请稍后重试。",
   "ui.login.error.maintenance": "PokeAether 暂时关闭进行维护。请稍后重试。",
   "ui.login.error.enter_world": "无法进入世界。请联系工作人员。",
-  "ui.login.error.invalid_credentials": "用户名或密码无效。",
+  "ui.login.error.invalid_credentials": "用户名或密码不正确。请检查登录信息后重试。",
   "ui.login.error.email_not_verified": "登录前验证您的电子邮件地址。",
   "ui.login.error.unavailable": "PokeAether 目前不可用。请稍后重试。",
   "ui.session.logout_countdown": "{message} 在 {seconds} 秒后注销。",
