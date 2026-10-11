@@ -62,7 +62,7 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1069,
+		"with_any_attachment": 1070,
 		"with_beak_tip": 6,
 		"with_cannon": 2,
 		"with_cannons": 1,
@@ -77,13 +77,13 @@
 		"with_left_hand": 574,
 		"with_left_hand_upper": 1,
 		"with_mandibles": 2,
-		"with_mouth": 988,
+		"with_mouth": 989,
 		"with_mouth_primary": 1,
 		"with_mouth_red": 1,
 		"with_muzzle": 2,
 		"with_olive_nozzle": 1,
 		"with_vines": 3,
-		"without_attachments": 131
+		"without_attachments": 130
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -20002,6 +20002,30 @@
 							-0.0651563626705162
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"hydrapple": {
+			"mouth": [
+				[
+					{
+						"bone": "nose_a",
+						"offset": [
+							0.0382969938218594,
+							-0.00656293425709009,
+							0.0625353679060936
+						],
+						"weight": 0.8
+					},
+					{
+						"bone": "jaw_a_02",
+						"offset": [
+							0.0978011339902878,
+							-0.00502787251025438,
+							-0.0342753231525421
+						],
+						"weight": 0.2
 					}
 				]
 			]
@@ -49191,7 +49215,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "cbbb83bf714f09bd92dbca59953e4f2f6a276f334e9aa1ea461a0a117200612e",
+		"data/battle_move_attachments_3d.json": "6adac4e9bb3ae41fc2cbb71a46c5c0b783721394063080bae61212a32e5e5cad",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "e1e876a615cacbda2aaadba60934db81fe133509a5ccc8af1c7556badb86ca0a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
@@ -66991,8 +67015,88 @@
 			]
 		},
 		"hydrapple": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"manual_adjustments": {
+					"method": "individual_tongue_clearance_adjustment",
+					"notes": "The projected upper/lower lip midpoint crosses the protruding tongue. Use 80 percent upper lip and 20 percent lower lip for a source in the upper opening. Only the active main head is configured; other four heads remain retracted in the available native clips. Requires fresh visual review."
+				},
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "faaab6531c0bb1dd9ea88e9a332882ed7678471de73bd52e5f2864bb6c361cfa",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "9d180a04c44353a4e5b6143f91519e5f3ee398f3278e16196144089201d9213a",
+				"scope": "Individually projected upper nose/lip and lower jaw lip from the active main head; 80/20 weighting places the source above the protruding tongue in the visible special_attack .45 front/side opening. Closed native poses follow the lip seam; tongue-occluded frontal physical views are not a clearance approval. The initial lip midpoint crossed the tongue and was rejected. The other four heads remain retracted in available idle/physical/special clips and have no active mouth emitters. Actual per-move timing and effects pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "4d1936149eb04350db08aa113dc5387cc6bca350c771462de455198a9f685e95",
+					"landmarks": [
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.385152306653307,
+								0.34300091973851,
+								0.271846773608182
+							],
+							"column": 1.0,
+							"distance": 0.734169833606331,
+							"mesh": "pm1122_00_00/Skeleton3D/pm1122_00_00_body_a_mesh",
+							"mesh_contains": "body_a_mesh",
+							"pixel": [
+								210.0,
+								160.0
+							],
+							"surface": 0.0,
+							"triangle": 310.0,
+							"vertex_indices": [
+								340.0,
+								341.0,
+								381.0
+							],
+							"weight": 0.5
+						},
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.0646779031407509,
+								0.514046676409775,
+								0.421275420449474
+							],
+							"column": 1.0,
+							"distance": 0.835835090780776,
+							"mesh": "pm1122_00_00/Skeleton3D/pm1122_00_00_body_a_mesh",
+							"mesh_contains": "body_a_mesh",
+							"pixel": [
+								210.0,
+								271.0
+							],
+							"surface": 0.0,
+							"triangle": 1209.0,
+							"vertex_indices": [
+								204.0,
+								245.0,
+								209.0
+							],
+							"weight": 0.5
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"

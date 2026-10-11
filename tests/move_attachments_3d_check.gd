@@ -109,6 +109,15 @@ func _run() -> void:
 		assert(Attachments.definitions_for(identity, "mouth")[0][0].bone == "head")
 		assert(Attachments.part_for(identity, "hyperbeam") == "mouth")
 
+	for identity: String in ["hydrapple", "hydrapple@shiny"]:
+		var mouths := Attachments.definitions_for(identity, "mouth")
+		assert(mouths.size() == 1, "Only the exposed head emits; retracted heads stay inside the apple")
+		assert(mouths[0].size() == 2)
+		assert(mouths[0][0].bone == "nose_a" and mouths[0][1].bone == "jaw_a_02")
+		assert(is_equal_approx(mouths[0][0].weight, .8))
+		for move: String in ["hyperbeam", "solarbeam", "dragonbreath", "bugbite"]:
+			assert(Attachments.part_for(identity, move) == "mouth")
+
 	for species: String in ["doduo", "dodrio"]:
 		for identity: String in [species, species + "@shiny"]:
 			var heads := 2 if species == "doduo" else 3

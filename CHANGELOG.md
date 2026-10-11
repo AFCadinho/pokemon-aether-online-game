@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Anchor Hydrapple’s beam attacks to its exposed mouth above the tongue, fit the stream width, and match Hyper Beam, Solar Beam and Dragon Breath to the open-mouth pose.
+
 - Calibrate Dodrio’s three mouths and beak tips individually. Match Growl and Supersonic to all three open bills, give Hyper Beam a narrower central-mouth stream, and route Doduo/Dodrio’s Fury Attack to their beak tips.
 
 - Give Doduo separate animated mouth and beak-tip attack origins for both heads. Growl and Supersonic now release sound waves from both mouths, with timing matched to the open-bill pose.

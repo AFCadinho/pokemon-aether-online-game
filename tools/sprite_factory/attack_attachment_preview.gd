@@ -12,6 +12,7 @@ var camera_scale := 1.0
 var camera_yaw := 0.0
 var camera_elevation := 0.0
 var emitter_index := 0
+var hide_markers := false
 var pose_fractions: Array[float] = [0.2, 0.45, 0.65, 0.45]
 var viewport: SubViewport
 var world: Node3D
@@ -38,6 +39,7 @@ func _init() -> void:
 		if args[i] == "--species": selected.assign(args[i+1].split(","))
 		if args[i] == "--part": selected_part = args[i+1]
 		if args[i] == "--native-only": native_only = true
+		if args[i] == "--hide-markers": hide_markers = true
 		if args[i] == "--camera-scale": camera_scale = float(args[i+1])
 		if args[i] == "--camera-yaw": camera_yaw = deg_to_rad(float(args[i+1]))
 		if args[i] == "--camera-elevation": camera_elevation = float(args[i+1])
@@ -135,6 +137,7 @@ func _run() -> void:
 	world.add_child(camera)
 	camera.fov = 35
 	var marker := _marker(Color.MAGENTA)
+	marker.visible = not hide_markers
 	var label := Label.new()
 	label.position = Vector2(6,5)
 	label.add_theme_font_size_override("font_size",17)
@@ -225,7 +228,7 @@ func _run() -> void:
 					target = box.get_center()
 					size = maxf(box.size.length()*0.95,0.01)
 					for item: Dictionary in overview_markers:
-						item.marker.visible = _visible(actor, item.source)
+						item.marker.visible = not hide_markers and _visible(actor, item.source)
 						item.marker.position = _point(actor,item.source)
 						item.marker.scale = Vector3.ONE*size*0.012
 				camera.position = target + direction*size
@@ -244,7 +247,7 @@ func _run() -> void:
 		assert(sheet.save_png(output.path_join(identity+".png"))==OK)
 		var file := FileAccess.open(output.path_join(identity+".json"),FileAccess.WRITE)
 		file.store_string(JSON.stringify({"identity":identity,"runtime_sha256":entry.runtime_sha256,
-			"width":420,"height":360,"parts":sources,"captures":captures,"pose_sampling":"forward_from_start_v1"},"\t")+"\n")
+			"width":420,"height":360,"parts":sources,"captures":captures,"markers_visible":not hide_markers,"pose_sampling":"forward_from_start_v1"},"\t")+"\n")
 		file.close()
 		for item: Dictionary in overview_markers: item.marker.free()
 		actor.free()

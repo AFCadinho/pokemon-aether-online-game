@@ -50469,6 +50469,291 @@
         "side_fraction": 0.45
       }
     },
+    "hydrapple": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Physical_attack .20/.42 with yaw 0 follows the main-head forward snap. Full-body captures show the approaching head and native neck extension, but a gap remains at .40 and the impact art masks exact contact at .42. Target contact alignment is NOT approved. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_native_action_review_contact_alignment_pending"
+        },
+        "dragonbreath": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Special_attack .38/.46/end .55 with emission scale .16. The single exposed head emits above the projecting tongue at .40/.46, fades at .53, and has no beam at .56/.65. Upper-biased weighted nose_a/jaw_a_02 point avoids the tongue intersection seen in the equal-weight trial. Four other heads stay retracted inside the apple in these clips and must not emit. Other opponent heights and continuous silhouette clearance remain pending. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Special_attack .38/.46/end .55 with emission scale .16. The single exposed head emits above the projecting tongue at .40/.46, fades at .53, and has no beam at .56/.65. Upper-biased weighted nose_a/jaw_a_02 point avoids the tongue intersection seen in the equal-weight trial. Four other heads stay retracted inside the apple in these clips and must not emit. Other opponent heights and continuous silhouette clearance remain pending. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two views: Special_attack .38/.46/end .55 with emission scale .16. The single exposed head emits above the projecting tongue at .40/.46, fades at .53, and has no beam at .56/.65. Upper-biased weighted nose_a/jaw_a_02 point avoids the tongue intersection seen in the equal-weight trial. Four other heads stay retracted inside the apple in these clips and must not emit. Other opponent heights and continuous silhouette clearance remain pending. Other moves and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack",
+        "dragonbreath": "special_attack",
+        "hyperbeam": "special_attack",
+        "solarbeam": "special_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.42,
+          "launch_fraction": 0.2
+        },
+        "dragonbreath": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.55,
+          "emission_scale": 0.16,
+          "impact_fraction": 0.46,
+          "launch_fraction": 0.38
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.55,
+          "emission_scale": 0.16,
+          "impact_fraction": 0.46,
+          "launch_fraction": 0.38
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.55,
+          "emission_scale": 0.16,
+          "impact_fraction": 0.46,
+          "launch_fraction": 0.38
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "74a8e4facb700cc6aad58189b6a6a4c2ffee19a3464116c9178d38f3ec9b9a44",
+          "fractions": [
+            0.15,
+            0.2,
+            0.3,
+            0.4,
+            0.42,
+            0.48
+          ],
+          "normal_runtime_sha256": "faaab6531c0bb1dd9ea88e9a332882ed7678471de73bd52e5f2864bb6c361cfa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2158c4f47405de93e81aa7dd5d75b17c9ee5061de20f3890248c2522a2ff4bf0",
+          "scope": "Normal and shiny, two views: Physical_attack .20/.42 with yaw 0 follows the main-head forward snap. Full-body captures show the approaching head and native neck extension, but a gap remains at .40 and the impact art masks exact contact at .42. Target contact alignment is NOT approved. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b0ff4a936c8cd11a16789118022985d4085c78412c4273ae5fec2976033c5266",
+          "shiny_runtime_sha256": "ebdfb72718127c1f0d6ac21d5d8f942d6dac1ab1a8698e3be3f37c8f276f1155",
+          "status": "sampled_native_action_review_contact_alignment_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 277.5,
+            "impact_frame": 116.55,
+            "launch_frame": 55.5,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "dragonbreath": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "74a8e4facb700cc6aad58189b6a6a4c2ffee19a3464116c9178d38f3ec9b9a44",
+          "fractions": [
+            0.36,
+            0.4,
+            0.46,
+            0.53,
+            0.56,
+            0.65
+          ],
+          "normal_runtime_sha256": "faaab6531c0bb1dd9ea88e9a332882ed7678471de73bd52e5f2864bb6c361cfa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9e7a770ce863c7c9573dda8ea44ac61581bfecadaa374a7faf12515e1d29edf2",
+          "scope": "Normal and shiny, two views: Special_attack .38/.46/end .55 with emission scale .16. The single exposed head emits above the projecting tongue at .40/.46, fades at .53, and has no beam at .56/.65. Upper-biased weighted nose_a/jaw_a_02 point avoids the tongue intersection seen in the equal-weight trial. Four other heads stay retracted inside the apple in these clips and must not emit. Other opponent heights and continuous silhouette clearance remain pending. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "478cdb9ce2c6a7fd864fdacbf3306534b1f7fc2fb9f75100ef1eb751873da237",
+          "shiny_runtime_sha256": "ebdfb72718127c1f0d6ac21d5d8f942d6dac1ab1a8698e3be3f37c8f276f1155",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 191.125,
+            "emission_scale": 0.16,
+            "frames": 347.5,
+            "impact_frame": 159.85,
+            "launch_frame": 132.05,
+            "move_key": "dragonbreath"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "74a8e4facb700cc6aad58189b6a6a4c2ffee19a3464116c9178d38f3ec9b9a44",
+          "fractions": [
+            0.36,
+            0.4,
+            0.46,
+            0.53,
+            0.56,
+            0.65
+          ],
+          "normal_runtime_sha256": "faaab6531c0bb1dd9ea88e9a332882ed7678471de73bd52e5f2864bb6c361cfa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3fb6a31e15e23190ccbf08adc2a1b42dc0d4558ae356b19ed735f09f1500106f",
+          "scope": "Normal and shiny, two views: Special_attack .38/.46/end .55 with emission scale .16. The single exposed head emits above the projecting tongue at .40/.46, fades at .53, and has no beam at .56/.65. Upper-biased weighted nose_a/jaw_a_02 point avoids the tongue intersection seen in the equal-weight trial. Four other heads stay retracted inside the apple in these clips and must not emit. Other opponent heights and continuous silhouette clearance remain pending. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "671317dedcbf6056194acb3d7c7225b2e9f804eb935a3fda140e806373971e7c",
+          "shiny_runtime_sha256": "ebdfb72718127c1f0d6ac21d5d8f942d6dac1ab1a8698e3be3f37c8f276f1155",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 191.125,
+            "emission_scale": 0.16,
+            "frames": 347.5,
+            "impact_frame": 159.85,
+            "launch_frame": 132.05,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "74a8e4facb700cc6aad58189b6a6a4c2ffee19a3464116c9178d38f3ec9b9a44",
+          "fractions": [
+            0.36,
+            0.4,
+            0.46,
+            0.53,
+            0.56,
+            0.65
+          ],
+          "normal_runtime_sha256": "faaab6531c0bb1dd9ea88e9a332882ed7678471de73bd52e5f2864bb6c361cfa",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "13711c219494c9b6d5c181c767b05ad4e07e6ccfd8fdd991473df2a93d9b3e4e",
+          "scope": "Normal and shiny, two views: Special_attack .38/.46/end .55 with emission scale .16. The single exposed head emits above the projecting tongue at .40/.46, fades at .53, and has no beam at .56/.65. Upper-biased weighted nose_a/jaw_a_02 point avoids the tongue intersection seen in the equal-weight trial. Four other heads stay retracted inside the apple in these clips and must not emit. Other opponent heights and continuous silhouette clearance remain pending. Other moves and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "7124077ff7438bdc112f87fc52f1a267aeaaea7c64cc86754ede89b20186f1e4",
+          "shiny_runtime_sha256": "ebdfb72718127c1f0d6ac21d5d8f942d6dac1ab1a8698e3be3f37c8f276f1155",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 191.125,
+            "emission_scale": 0.16,
+            "frames": 347.5,
+            "impact_frame": 159.85,
+            "launch_frame": 132.05,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "nose_a",
+              "offset": [
+                0.0382969938218594,
+                -0.00656293425709009,
+                0.0625353679060936
+              ],
+              "weight": 0.8
+            },
+            {
+              "bone": "jaw_a_02",
+              "offset": [
+                0.0978011339902878,
+                -0.00502787251025438,
+                -0.0342753231525421
+              ],
+              "weight": 0.2
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "manual_adjustments": {
+          "method": "individual_tongue_clearance_adjustment",
+          "notes": "The projected upper/lower lip midpoint crosses the protruding tongue. Use 80 percent upper lip and 20 percent lower lip for a source in the upper opening. Only the active main head is configured; other four heads remain retracted in the available native clips. Requires fresh visual review."
+        },
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "faaab6531c0bb1dd9ea88e9a332882ed7678471de73bd52e5f2864bb6c361cfa",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "9d180a04c44353a4e5b6143f91519e5f3ee398f3278e16196144089201d9213a",
+        "scope": "Individually projected upper nose/lip and lower jaw lip from the active main head; 80/20 weighting places the source above the protruding tongue in the visible special_attack .45 front/side opening. Closed native poses follow the lip seam; tongue-occluded frontal physical views are not a clearance approval. The initial lip midpoint crossed the tongue and was rejected. The other four heads remain retracted in available idle/physical/special clips and have no active mouth emitters. Actual per-move timing and effects pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "4d1936149eb04350db08aa113dc5387cc6bca350c771462de455198a9f685e95",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.385152306653307,
+                0.34300091973851,
+                0.271846773608182
+              ],
+              "column": 1.0,
+              "distance": 0.734169833606331,
+              "mesh": "pm1122_00_00/Skeleton3D/pm1122_00_00_body_a_mesh",
+              "mesh_contains": "body_a_mesh",
+              "pixel": [
+                210.0,
+                160.0
+              ],
+              "surface": 0,
+              "triangle": 310,
+              "vertex_indices": [
+                340,
+                341,
+                381
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.0646779031407509,
+                0.514046676409775,
+                0.421275420449474
+              ],
+              "column": 1.0,
+              "distance": 0.835835090780776,
+              "mesh": "pm1122_00_00/Skeleton3D/pm1122_00_00_body_a_mesh",
+              "mesh_contains": "body_a_mesh",
+              "pixel": [
+                210.0,
+                271.0
+              ],
+              "surface": 0,
+              "triangle": 1209,
+              "vertex_indices": [
+                204,
+                245,
+                209
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      }
+    },
     "hydreigon": {
       "parts": {
         "mouth": [
