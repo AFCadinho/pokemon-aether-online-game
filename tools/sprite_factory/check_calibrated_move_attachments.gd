@@ -111,9 +111,12 @@ func _run() -> void:
 							if absf(normal[key][source][axis]-poses[key][source][axis]) > 0.001:
 								errors.append("Shiny attachment pose differs: "+species+":"+key)
 			checks[identity] = {"runtime_sha256":digest,"sample_count":poses.size(),"pose_sha256":JSON.stringify(poses).sha256_text()}
+			# Keep GPU resources alive until mesh instances have been removed.
+			var render_resources := _retain_render_resources(actor)
 			actor.free()
-			packed = null
 			await process_frame
+			packed = null
+			render_resources.clear()
 		print("CALIBRATED_ATTACHMENT_CHECK ",species)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output.get_base_dir()))
 	var file := FileAccess.open(output,FileAccess.WRITE)
@@ -130,3 +133,14 @@ func _run() -> void:
 	for error: String in errors: printerr(error)
 	print("CALIBRATED_ATTACHMENTS_CHECKED models=",checks.size()," errors=",errors.size())
 	quit(0 if errors.is_empty() else 1)
+
+func _retain_render_resources(actor: Node3D) -> Array[Resource]:
+	var resources: Array[Resource] = []
+	for instance: MeshInstance3D in actor.find_children("*", "MeshInstance3D", true, false):
+		if instance.mesh != null:
+			resources.append(instance.mesh)
+			for surface in instance.mesh.get_surface_count():
+				var material := instance.get_active_material(surface)
+				if material != null: resources.append(material)
+		if instance.material_overlay != null: resources.append(instance.material_overlay)
+	return resources

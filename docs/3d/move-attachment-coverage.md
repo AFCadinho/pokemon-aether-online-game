@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1107 species/forms.
-- No anatomical attachment profile: 93 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 991 species/forms.
+- At least one configured anatomical attachment: 1115 species/forms.
+- No anatomical attachment profile: 85 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 992 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -133,6 +133,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | camerupt | hand, left_hand, mouth | Same attachment profile |
 | camerupt-mega | mouth | Same attachment profile |
 | capsakid | mouth | Same attachment profile |
+| carbink | gem | Same attachment profile |
 | carkol | mouth | Same attachment profile |
 | carnivine | hand, left_hand, mouth | Same attachment profile |
 | carracosta | foot, left_foot, mouth | Same attachment profile |
@@ -204,6 +205,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | crocalor | mouth | Same attachment profile |
 | croconaw | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | crustle | hand, left_hand, mouth | Same attachment profile |
+| cryogonal | mouth | Same attachment profile |
 | cubchoo | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | cubone | foot, hand, left_foot, left_hand, muzzle | Same attachment profile |
 | cufant | hand, left_hand | Same attachment profile |
@@ -341,6 +343,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | flutter-mane | hand, left_hand, mouth | Same attachment profile |
 | flygon | mouth | Same attachment profile |
 | foongus | mouth | Same attachment profile |
+| forretress | cannon | Same attachment profile |
 | fraxure | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | frigibax | hand, left_hand, mouth | Same attachment profile |
 | frillish-male | mouth | Same attachment profile |
@@ -380,6 +383,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | glameow | hand, left_hand, mouth | Same attachment profile |
 | glastrier | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | gligar | hand, left_hand, mouth | Same attachment profile |
+| glimmet | face | Same attachment profile |
+| glimmora | flower_core | Same attachment profile |
 | gloom | hand, left_hand, mouth | Same attachment profile |
 | gogoat | mouth | Same attachment profile |
 | golbat | mouth | Same attachment profile |
@@ -733,6 +738,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | pikipek | mouth | Same attachment profile |
 | piloswine | mouth | Same attachment profile |
 | pincurchin | mouth | Same attachment profile |
+| pineco | face | Same attachment profile |
 | pinsir | hand, left_hand, mouth | Same attachment profile |
 | pinsir-mega | hand, left_hand, mouth | Same attachment profile |
 | piplup | hand, left_hand, mouth | Same attachment profile |
@@ -755,6 +761,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | probopass | hand, left_hand | Same attachment profile |
 | psyduck | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | pumpkaboo-average | mouth | Same attachment profile |
+| pupitar | face | Same attachment profile |
 | purrloin | hand, left_hand, mouth | Same attachment profile |
 | purugly | hand, left_hand, mouth | Same attachment profile |
 | pyroar-male | hand, left_hand, mouth | Same attachment profile |
@@ -845,6 +852,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | seadra | mouth | Same attachment profile |
 | seaking | mouth | Same attachment profile |
 | sealeo | mouth | Same attachment profile |
+| seedot | face | Same attachment profile |
 | seel | mouth | Same attachment profile |
 | seismitoad | foot, hand, left_hand, mouth | Same attachment profile |
 | sentret | hand, left_hand, mouth | Same attachment profile |

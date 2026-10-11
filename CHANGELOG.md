@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate selected face, mouth, gem, cannon and flower attack origins for Seedot, Pineco, Forretress, Pupitar, Carbink, Cryogonal, Glimmet and Glimmora. Match Forretress’s beams to its rotating nozzle and Glimmora’s casts to its opened flower.
+
 - Calibrate selected attacks for Gimmighoul, Meltan, Melmetal, Nosepass, Nacli, Naclstack and Rolycoly, using their mouth, eye, nose, face or wheel. Adjust Rolycoly’s Mud-Slap arc to leave in front of its wheel.
 
 - Calibrate selected face attack origins for Voltorb, Hisuian Voltorb, Diglett, Dugtrio and their Alolan forms, including separate bindings for Dugtrio heads and adjusted Hisuian Voltorb and Alolan Diglett beam timing.

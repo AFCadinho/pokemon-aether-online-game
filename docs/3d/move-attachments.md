@@ -146,10 +146,12 @@ runtime catalog. The tools read those scenes without modifying them:
   and is an offline review option; it does not change production lighting.
 - `check_calibrated_move_attachments.gd`: binding and finite-coordinate checks
   at 21 moments per native clip, including normal/shiny consistency.
-  Inspect the engine log as well as the JSON result: the Diglett/Alolan Diglett
-  batch currently reports null-material errors while freeing a model in both
-  headless and GPU runs, despite zero binding errors. These cleanup errors
-  remain unresolved; a clean binding report is not an engine-error-free run.
+  Inspect the engine log as well as the JSON result. The checker retains active
+  mesh/material resources until mesh instances have been freed and a frame has
+  elapsed. This fixes the reproduced Diglett, Alolan Diglett and Pineco
+  null-material cleanup errors (six-model headless and twenty-model GPU focused
+  checks). A clean binding report alone still does not certify rendering or
+  visual placement.
 - `tools/audit_move_attachment_learnsets.gd`: supported move/part coverage
   against local learnsets, including moves still using bounds fallbacks. Each
   move also records the actual stage-selected native clip and whether that

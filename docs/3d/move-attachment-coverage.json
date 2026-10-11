@@ -62,19 +62,20 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1107,
+		"with_any_attachment": 1115,
 		"with_beak_tip": 6,
-		"with_cannon": 2,
+		"with_cannon": 3,
 		"with_cannons": 1,
 		"with_casting": 2,
 		"with_electric_body": 1,
 		"with_eye": 9,
-		"with_face": 24,
+		"with_face": 28,
 		"with_face_primary": 2,
+		"with_flower_core": 1,
 		"with_flower_tip": 1,
 		"with_foot": 307,
 		"with_forehead": 1,
-		"with_gem": 3,
+		"with_gem": 4,
 		"with_hand": 576,
 		"with_hand_upper": 1,
 		"with_left_foot": 288,
@@ -82,7 +83,7 @@
 		"with_left_hand_upper": 1,
 		"with_magnet_poles": 1,
 		"with_mandibles": 2,
-		"with_mouth": 991,
+		"with_mouth": 992,
 		"with_mouth_primary": 1,
 		"with_mouth_red": 1,
 		"with_muzzle": 5,
@@ -92,7 +93,7 @@
 		"with_spirit": 1,
 		"with_vines": 3,
 		"with_wheel_front": 1,
-		"without_attachments": 93
+		"without_attachments": 85
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -5376,6 +5377,21 @@
 				]
 			]
 		},
+		"carbink": {
+			"gem": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.056872483342886,
+							0.0002183630131185,
+							0.0499908626079559
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"carkol": {
 			"mouth": [
 				[
@@ -8246,6 +8262,21 @@
 							0.0,
 							0.0,
 							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
+		"cryogonal": {
+			"mouth": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							-0.184699267148972,
+							0.00866039749234915,
+							0.0731958448886871
 						],
 						"weight": 1.0
 					}
@@ -14456,6 +14487,21 @@
 				]
 			]
 		},
+		"forretress": {
+			"cannon": [
+				[
+					{
+						"bone": "left_hand_b",
+						"offset": [
+							0.317443549633026,
+							-0.004715655464679,
+							-0.00071508839027956
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"fraxure": {
 			"foot": [
 				[
@@ -16351,6 +16397,72 @@
 							0.00079621240729466
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"glimmet": {
+			"face": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							0.111405812203884,
+							0.00053886137902736,
+							0.0276974476873875
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
+		"glimmora": {
+			"flower_core": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							-0.297980844974518,
+							0.0153560684993863,
+							-0.0014139034319669
+						],
+						"weight": 0.671412176674036
+					},
+					{
+						"bone": "feeler_k_01",
+						"offset": [
+							0.0145119139924645,
+							0.0206352062523365,
+							-0.0371042974293232
+						],
+						"weight": 0.0965543723759029
+					},
+					{
+						"bone": "feeler_l_01",
+						"offset": [
+							-0.00158199667930603,
+							-0.0000000291696764520566,
+							-0.0376597344875336
+						],
+						"weight": 0.05767550793934
+					},
+					{
+						"bone": "feeler_m_01",
+						"offset": [
+							0.0313498303294182,
+							-0.0127677349373698,
+							-0.0427936986088753
+						],
+						"weight": 0.156050603922325
+					},
+					{
+						"bone": "feeler_m_02",
+						"offset": [
+							-0.118480086326599,
+							-0.000000160863507403519,
+							-0.0788327306509018
+						],
+						"weight": 0.0183073390883958
 					}
 				]
 			]
@@ -33431,6 +33543,21 @@
 				]
 			]
 		},
+		"pineco": {
+			"face": [
+				[
+					{
+						"bone": "feeler_a_02",
+						"offset": [
+							0.0700725615024567,
+							0.0135165862739086,
+							0.0277865137904882
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"pinsir": {
 			"hand": [
 				[
@@ -34369,6 +34496,30 @@
 							0.00067411363124847
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"pupitar": {
+			"face": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							-0.134545236825943,
+							0.00325842783786356,
+							0.273446470499039
+						],
+						"weight": 0.790035954359917
+					},
+					{
+						"bone": "tail_01",
+						"offset": [
+							-0.0083099277690053,
+							0.00064534455304965,
+							-0.271479099988937
+						],
+						"weight": 0.209964045640083
 					}
 				]
 			]
@@ -38670,6 +38821,21 @@
 							0.0,
 							0.0,
 							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
+		"seedot": {
+			"face": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							0.0153145221993327,
+							-0.00084908178541809,
+							0.131532087922096
 						],
 						"weight": 1.0
 					}
@@ -50335,7 +50501,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "5128736d5ffd6672e5021588a186566cb96f26320b8e932c87c1356c1ca0f2d3",
+		"data/battle_move_attachments_3d.json": "287e71fce981830a851e1ba488662ed4dda513d62fcfcdb5a142dc99a3215d58",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "ad4678cfc50ac1f520b1cc5330af3292ed0b0a30ed055c8f997cdc72cc830c37",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
@@ -55157,8 +55323,10 @@
 			]
 		},
 		"carbink": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"gem"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -57952,8 +58120,83 @@
 			]
 		},
 		"cryogonal": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "f7ea98e175ca24baf690d5df0c815f26d99da8102984b571d3565956a9ae50de",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "0f9f9477e3630fce5dee161c26abd543015cb19bd0c8338fa20b582586f79c85",
+				"scope": "Individually projected upper/lower central mouth-opening rim between the ice chains. Corrects the rejected lower point on the ice beneath the opening. Marker remains in the black opening in frontal idle and special_attack samples. Chain occlusion in the side view and during physical turns needs actual-effect clearance review.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "4da5b57a9a83e2babedc869355e2aa7088cd4ce31eb3b9ca6823a94b4a25c5fa",
+					"landmarks": [
+						{
+							"action": "idle",
+							"barycentric": [
+								0.419021681707134,
+								0.208939385185061,
+								0.372038933107805
+							],
+							"column": 0.0,
+							"distance": 2.14223341679387,
+							"mesh": "pm0615_00_00/Skeleton3D/pm0615_00_00_body_mesh",
+							"pixel": [
+								210.0,
+								210.0
+							],
+							"surface": 0.0,
+							"triangle": 371.0,
+							"vertex_indices": [
+								348.0,
+								350.0,
+								349.0
+							],
+							"weight": 0.5
+						},
+						{
+							"action": "idle",
+							"barycentric": [
+								0.477291471466603,
+								0.0560855266392897,
+								0.466623001894107
+							],
+							"column": 0.0,
+							"distance": 2.27172449246948,
+							"mesh": "pm0615_00_00/Skeleton3D/pm0615_00_00_body_mesh",
+							"pixel": [
+								213.0,
+								227.0
+							],
+							"surface": 0.0,
+							"triangle": 4.0,
+							"vertex_indices": [
+								403.0,
+								405.0,
+								404.0
+							],
+							"weight": 0.5
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -63236,8 +63479,10 @@
 			]
 		},
 		"forretress": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"cannon"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -64984,16 +65229,20 @@
 			]
 		},
 		"glimmet": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
 			]
 		},
 		"glimmora": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"flower_core"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -77970,8 +78219,10 @@
 			]
 		},
 		"pineco": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -78717,8 +78968,10 @@
 			]
 		},
 		"pupitar": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -82073,8 +82326,10 @@
 			]
 		},
 		"seedot": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
