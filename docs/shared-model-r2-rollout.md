@@ -6,6 +6,41 @@ compiled into installed games and launchers. The qualified PCK collection also
 requires the shared-model consumer code; the current local implementation
 accepts it only through a debug opt-in.
 
+## Completed staging, 11 October 2026
+
+The [publication receipt](../release/shared_model_collection_r2_receipt.json)
+records all **1,200 payloads and the exact compact index** passing full public
+GET SHA-256 and HEAD size checks. **1,082 PCKs were uploaded and 118 existing
+v11 ZIPs were reused.** The new uploaded payloads total 9,592,362,316 bytes;
+the new index is 236,908 bytes. The seven known manifest paths were compared
+before/after; six exist, one is absent, and all states remained unchanged.
+Current desktop version **0.3.105 / v11** continues using its existing collection.
+The [preflight](../release/shared_model_collection_r2_receipt.preflight.json)
+pins the operation's source commit and the exact immutable object plan.
+
+The [actual download check](../release/shared_model_public_download_checks.json)
+passed on Linux/Godot 4.6.2 using the game's unmodified HTTP downloader and
+the launcher release adapter, starting from an empty owned store. It fetched
+the public compact index, accepted/planned all 1,200 entries, fetched/installed
+Abomasnow and Mega Garchomp PCKs plus the retained Greninja/Inkay ZIPs, and
+decoded all eight normal/shiny scenes after checked pack mounting. The
+completed receipt and shutdown log contain no captured engine/script errors.
+This check uses the debug opt-in; it is not a production-build/platform test.
+
+Eight focused Python publication/receipt tests pass, including refusing an
+existing bad key, changed upload inputs, incomplete/duplicate ID sets, wrong
+payload/index hashes and forged activation flags. Offline full receipt
+reconciliation and GDScript parse checks also pass. No full paired release
+gate, main promotion, push, new build publication or player activation ran.
+
+The original public manifest bytes are retained in the task's owned
+`.tmp/shared-model-r2-rollout/previous-manifests/` evidence directory, matching
+the preflight hashes. Raw HTTP test stores/logs remain owned by that task;
+they were not copied to another checkout. Old R2 objects were not deleted.
+This staging operation added **9,592,599,224 bytes** of R2 objects.
+This is the temporary cost of retaining the existing collection;
+it is not yet the final active-collection or account-storage saving.
+
 ## Immutable staging
 
 `tools/publish_shared_model_collection.py` reads the retained readiness source
