@@ -107,6 +107,40 @@ func _run() -> void:
 	service.state = {"guildId": 7, "roomKey": "left_room", "revision": 0, "items": [table, flowers], "inventory": {}, "canEdit": true, "canManageEditors": true}
 	for spec: Dictionary in Catalog.load_data().items:
 		service.state.inventory[spec.id] = spec.starterQuantity - (1 if spec.id in ["table_small", "flowers"] else 0)
+	if "--screenshot" in OS.get_cmdline_user_args():
+		# Visual QA starts directly in the editor, without opening native test
+		# dialogs first. Embed the dropdown in the captured game viewport.
+		root.gui_embed_subwindows = true
+		root.mode = Window.MODE_WINDOWED
+		root.size = Vector2i(1440, 960)
+		root.grab_focus()
+		service.state.items.append(_item("plant", "plant", 15, 7))
+		service.state.items.append(_item("rug", "red_carpet", 9, 9, {"width": 5, "height": 4}))
+		service.state.inventory.plant -= 1
+		service.state.inventory.red_carpet -= 1
+		await process_frame
+		await editor.refresh()
+		await editor.begin_editing()
+		await _capture_preview("preview")
+		_click(editor.category.get_global_rect().get_center())
+		await _capture_preview("dropdown")
+		editor.category.get_popup().hide()
+		editor.category.select(5)
+		editor._populate_catalog()
+		editor._catalog_selected(0)
+		await _capture_preview("rugs")
+		await editor._show_rights()
+		await _capture_preview("rights")
+		editor.rights_window.close_requested.emit()
+		await process_frame
+		await editor.finish_editing()
+		await _capture_preview("action")
+		game.current_map = null
+		world.free()
+		service.free()
+		print("guild_base_furnishing_preview: PASS")
+		quit()
+		return
 	await process_frame
 	await editor.refresh()
 	_check(Catalog.validate(map, service.state.items) == "", "table and its decoration form a valid layout")
@@ -172,14 +206,13 @@ func _run() -> void:
 	_check(service.updates == [[2, true]], "only the selected member's explicit decorating right changes")
 	editor.rights_window.close_requested.emit()
 	await process_frame
-	var controls: Node = editor.panel.get_child(0)
-	var done_button: Button = controls.get_child(controls.get_child_count() - 1)
+	var done_button: Button = editor.done_button
 	_click(done_button.get_global_rect().get_center())
 	await process_frame
 	_check(not editor.building and service.released == 1 and not game.is_overworld_input_locked() and camera.zoom == Vector2.ONE, "leaving releases the lease, input lock and camera override")
 	var hud_clicks: Array = []
 	hud.get_child(0).gui_input.connect(func(_event: InputEvent): hud_clicks.append(true))
-	_click(Vector2(40, 140))
+	_click(Vector2(40, 180))
 	_check(not hud_clicks.is_empty(), "Done returns normal mouse input to the underlying HUD")
 	await editor.begin_editing()
 	service.renew_fails = true
@@ -192,16 +225,6 @@ func _run() -> void:
 	await editor.begin_editing()
 	editor.apply_state(service.state.merged({"canEdit": false}, true))
 	_check(not editor.building and not editor.enter_button.visible, "revoked permissions close editing immediately")
-	# Optionally render a reviewable editor screenshot with real Godot graphics.
-	if "--screenshot" in OS.get_cmdline_user_args():
-		service.state.items = [table, flowers, _item("plant", "plant", 15, 7), rug]
-		service.state.revision += 1
-		await editor.begin_editing()
-		await process_frame
-		await process_frame
-		await RenderingServer.frame_post_draw
-		root.get_texture().get_image().save_png("/tmp/guild-base-furnishing-preview.png")
-		await editor.finish_editing()
 	game.current_map = null
 	world.free()
 	hud.free()
@@ -214,6 +237,12 @@ func _check(value: bool, message: String) -> void:
 	if not value:
 		failed = true
 		push_error(message)
+
+func _capture_preview(name: String) -> void:
+	await process_frame
+	await process_frame
+	await RenderingServer.frame_post_draw
+	root.get_texture().get_image().save_png("/tmp/guild-base-furnishing-%s.png" % name)
 
 func _click(position: Vector2) -> void:
 	var event := InputEventMouseButton.new()

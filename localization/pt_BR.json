@@ -1,4 +1,8 @@
 {
+  "ui.guild_base.furnish.eyebrow": "Base da guilda",
+  "ui.guild_base.furnish.shared_storage": "Estoque de móveis compartilhado da guilda",
+  "ui.guild_base.furnish.category_label": "Categoria de móveis",
+  "ui.guild_base.furnish.available": "{count} disponíveis",
   "ui.guild_base.furnish.room.left_room": "esquerda",
   "ui.guild_base.furnish.room.right_room": "direita",
   "ui.guild.log.filter.action.base_furnished": "Decoração de sala",

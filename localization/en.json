@@ -1,4 +1,8 @@
 {
+  "ui.guild_base.furnish.eyebrow": "Guild base",
+  "ui.guild_base.furnish.shared_storage": "Shared guild furniture storage",
+  "ui.guild_base.furnish.category_label": "Furniture category",
+  "ui.guild_base.furnish.available": "{count} available",
   "ui.guild_base.furnish.room.left_room": "left",
   "ui.guild_base.furnish.room.right_room": "right",
   "ui.guild.log.filter.action.base_furnished": "Room furnishing",
