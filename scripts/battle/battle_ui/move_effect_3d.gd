@@ -45,6 +45,7 @@ var elapsed := 0.0
 var duration := 1.0
 var impact := 0.45
 var launch := 0.1
+var effect_start := 0.0
 var done := false
 var cancelled := false
 var hit := false
@@ -137,6 +138,8 @@ func start(move: String, timing: Dictionary, options: Dictionary, native_clock: 
 	duration = float(timing.frames) / 60.0
 	impact = float(timing.impact_frame) / 60.0
 	launch = launch_time(timing)
+	var requested_start := float(timing.get("effect_start_frame", 0.0)) / 60.0
+	effect_start = clampf(requested_start, 0.0, launch) if is_finite(requested_start) else 0.0
 	clock = native_clock
 	anchors = positions
 	valid = guard
@@ -174,6 +177,9 @@ func _material(color: Color, alpha: float) -> StandardMaterial3D:
 
 func seconds() -> float:
 	return elapsed
+
+func charge_progress() -> float:
+	return clampf((elapsed-effect_start)/maxf(launch-effect_start,.01),0,1)
 
 func cancel() -> void:
 	if done: return
@@ -236,6 +242,10 @@ func _process(_delta: float) -> void:
 	if elapsed + 0.00001 >= duration:
 		elapsed = duration
 		_finish()
+		return
+	if elapsed < effect_start:
+		cursor = 0
+		for piece: MeshInstance3D in pieces: piece.visible = false
 		return
 	var points: Dictionary = anchors.call()
 	emission_sources = points.get("sources", [points.source])

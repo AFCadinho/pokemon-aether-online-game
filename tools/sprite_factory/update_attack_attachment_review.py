@@ -65,6 +65,10 @@ def main():
             for part in profile['part_reviews']:
                 row['part_status'][part] = 'sampled_marker_pose_review_pass_installed'
         row['anatomical_move_routing_review'] = 'pending'
+        if profile.get('family_attachment_review'):
+            row['family_attachment_review'] = profile['family_attachment_review']
+            row['family_attachments'] = profile.get('family_attachments', {})
+            row['attachment_overrides'] = profile.get('attachment_overrides', {})
         if profile.get('anatomical_route_reviews'):
             row['anatomical_move_routing_review'] = 'partially_reviewed'
             row['anatomical_route_reviews'] = profile['anatomical_route_reviews']

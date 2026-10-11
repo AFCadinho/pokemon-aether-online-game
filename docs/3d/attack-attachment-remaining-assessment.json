@@ -20,6 +20,2136 @@
   "all_attack_families_complete": false,
   "all_marker_corrections_complete": false,
   "assessment_complete": true,
+  "correction_follow_up": {
+    "complete_all_attack_families": false,
+    "counts": {
+      "forms_with_part_changes": 63,
+      "forms_with_runtime_changes": 80,
+      "missing_queue_forms_with_concealed_hands_alternative": 1,
+      "missing_queue_forms_with_points_added": 14,
+      "part_reviews_installed_or_replaced": 129,
+      "positional_queue_forms_corrected": 37
+    },
+    "forms": {
+      "anorith": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/anorith",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "arceus": {
+        "attachment_overrides": {
+          "mouth": "muzzle"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/arceus",
+        "family_attachments": {},
+        "family_review": {
+          "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
+          "status": "reviewed_surface_alias_effect_review_pending"
+        },
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "armaldo": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/armaldo",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "aron": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/aron",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "barbaracle": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/barbaracle",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand",
+          "upper_hand",
+          "upper_left_hand"
+        ]
+      },
+      "barbaracle-mega": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/barbaracle-mega",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "bergmite": {
+        "attachment_overrides": {
+          "mouth": "muzzle"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/bergmite",
+        "family_attachments": {},
+        "family_review": {
+          "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
+          "status": "reviewed_surface_alias_effect_review_pending"
+        },
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "bonsly": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/bonsly",
+        "family_attachments": {
+          "strikes": "body"
+        },
+        "family_review": {
+          "scope": "No hands/forelimbs; use the body contact origin for the strike family. This is an intentional procedural body origin, not a calibrated hand.",
+          "status": "anatomical_alternative_selected_effect_review_pending"
+        },
+        "initial_assessment": "anatomically_not_applicable",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "carracosta": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/carracosta",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "chien-pao": {
+        "attachment_overrides": {
+          "mouth": "muzzle"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/chien-pao",
+        "family_attachments": {},
+        "family_review": {
+          "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
+          "status": "reviewed_surface_alias_effect_review_pending"
+        },
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "corphish": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/corphish",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "decidueye": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/decidueye",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "delphox-mega": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/delphox-mega",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "dragalge-mega": {
+        "attachment_overrides": {
+          "mouth": "muzzle"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/dragalge-mega",
+        "family_attachments": {},
+        "family_review": {
+          "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
+          "status": "reviewed_surface_alias_effect_review_pending"
+        },
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "drampa": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/drampa",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "eelektross-mega": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/eelektross-mega",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_anatomical_routing_review",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "electabuzz": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/electabuzz",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "enamorus": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/enamorus",
+        "family_attachments": {},
+        "family_review": {},
+        "reviewed_parts_installed_or_replaced": [
+          "tail"
+        ]
+      },
+      "eternatus": {
+        "attachment_overrides": {
+          "mouth": "muzzle"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/eternatus",
+        "family_attachments": {},
+        "family_review": {
+          "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
+          "status": "reviewed_surface_alias_effect_review_pending"
+        },
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "exeggutor-alola": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/exeggutor-alola",
+        "family_attachments": {
+          "strikes": "body"
+        },
+        "family_review": {
+          "scope": "No hands/forelimbs; use the body contact origin for the strike family. This is an intentional procedural body origin, not a calibrated hand.",
+          "status": "anatomical_alternative_selected_effect_review_pending"
+        },
+        "initial_assessment": "anatomically_not_applicable",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "flamigo": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/flamigo",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_multipose_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "fomantis": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/fomantis",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "garbodor": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/garbodor",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "garchomp-mega": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/garchomp-mega",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "girafarig": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/girafarig",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "gliscor": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/gliscor",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "gogoat": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/gogoat",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "hippowdon": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/hippowdon",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "hydreigon": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/hydreigon",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_anatomical_routing_review",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "iron-thorns": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/iron-thorns",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "kabutops": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/kabutops",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "kingler": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/kingler",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "kleavor": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/kleavor",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "kricketune": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/kricketune",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "kubfu": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/kubfu",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "metagross-mega": {
+        "attachment_overrides": {
+          "hand": "claw_lower_right"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/metagross-mega",
+        "family_attachments": {},
+        "family_review": {
+          "scope": "Generic hand attacks use the separately reviewed lower right claw. All four claw points remain available; actual contact alignment pending.",
+          "status": "reviewed_surface_alias_effect_review_pending"
+        },
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "muk": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/muk",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "muk-alola": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/muk-alola",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "natu": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/natu",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_multipose_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "nidoran-f": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/nidoran-f",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "nidoran-m": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/nidoran-m",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "nihilego": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/nihilego",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_multipose_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "nymble": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/nymble",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "ogerpon": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/ogerpon",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_anatomical_routing_review",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "ogerpon-cornerstone": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/ogerpon-cornerstone",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_anatomical_routing_review",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "club",
+          "hand",
+          "left_hand"
+        ]
+      },
+      "ogerpon-hearthflame": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/ogerpon-hearthflame",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_anatomical_routing_review",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "club",
+          "hand",
+          "left_hand"
+        ]
+      },
+      "ogerpon-wellspring": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/ogerpon-wellspring",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_anatomical_routing_review",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "club",
+          "hand",
+          "left_hand"
+        ]
+      },
+      "parasect": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/parasect",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_multipose_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "pawniard": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/pawniard",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "piloswine": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/piloswine",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "poliwag": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/poliwag",
+        "family_attachments": {
+          "strikes": "body"
+        },
+        "family_review": {
+          "scope": "No hands/forelimbs; use the body contact origin for the strike family. This is an intentional procedural body origin, not a calibrated hand.",
+          "status": "anatomical_alternative_selected_effect_review_pending"
+        },
+        "initial_assessment": "anatomically_not_applicable",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "prinplup": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/prinplup",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "raging-bolt": {
+        "attachment_overrides": {
+          "mouth": "muzzle"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/raging-bolt",
+        "family_attachments": {},
+        "family_review": {
+          "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
+          "status": "reviewed_surface_alias_effect_review_pending"
+        },
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "rapidash": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/rapidash",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "relicanth": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/relicanth",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_multipose_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "reshiram": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/reshiram",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_anatomical_routing_review",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "rotom": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/rotom",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "salamence-mega": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/salamence-mega",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_anatomical_routing_review",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "scizor": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/scizor",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "scrafty-mega": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/scrafty-mega",
+        "family_attachments": {
+          "claws": "body",
+          "strikes": "body"
+        },
+        "family_review": {
+          "scope": "Hands remain concealed by trousers. Both strike and claw target graphics use the procedural body contact origin, matching the native head/body lunge. The preview rejected a foot origin because the raised foot points backward during the lunge. Exact head contact and approach timing remain pending.",
+          "status": "anatomical_alternative_selected_effect_review_pending"
+        },
+        "initial_assessment": "pending_missing_part",
+        "result": "concealed_hands_body_alternative_selected_contact_review_pending",
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "sealeo": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/sealeo",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "skiddo": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/skiddo",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "slither-wing": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/slither-wing",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "slowbro-galar": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/slowbro-galar",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_anatomical_routing_review",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "left_hand"
+        ]
+      },
+      "staraptor-mega": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/staraptor-mega",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "sudowoodo": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/sudowoodo",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "tapu-koko": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/tapu-koko",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_anatomical_routing_review",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "tatsugiri": {
+        "attachment_overrides": {
+          "mouth": "muzzle"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/tatsugiri",
+        "family_attachments": {},
+        "family_review": {
+          "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
+          "status": "reviewed_surface_alias_effect_review_pending"
+        },
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "terapagos-stellar": {
+        "attachment_overrides": {
+          "mouth": "muzzle"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/terapagos-stellar",
+        "family_attachments": {},
+        "family_review": {
+          "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
+          "status": "reviewed_surface_alias_effect_review_pending"
+        },
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "terapagos-terastal": {
+        "attachment_overrides": {
+          "mouth": "muzzle"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/terapagos-terastal",
+        "family_attachments": {},
+        "family_review": {
+          "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
+          "status": "reviewed_surface_alias_effect_review_pending"
+        },
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "thievul": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/thievul",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "ting-lu": {
+        "attachment_overrides": {
+          "mouth": "muzzle"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/ting-lu",
+        "family_attachments": {},
+        "family_review": {
+          "scope": "Generic mouth routes use the individually reviewed muzzle surface. The surface review does not assert an exposed oral cavity; timing, scale and clearance remain pending.",
+          "status": "reviewed_surface_alias_effect_review_pending"
+        },
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "togekiss": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/togekiss",
+        "family_attachments": {},
+        "family_review": {},
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "torchic": {
+        "attachment_overrides": {
+          "hand": "foot"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/torchic",
+        "family_attachments": {
+          "claws": "foot",
+          "strikes": "foot"
+        },
+        "family_review": {
+          "scope": "No hands/forelimbs. Strike and claw effects use the reviewed foot. The hand alias also covers the dedicated Scratch presenter.",
+          "status": "anatomical_alternative_selected_effect_review_pending"
+        },
+        "initial_assessment": "anatomically_not_applicable",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "virizion": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/virizion",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "wailord": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/wailord",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "wooloo": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/wooloo",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_multipose_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "foot",
+          "left_foot"
+        ]
+      },
+      "wooper": {
+        "attachment_overrides": {
+          "hand": "foot"
+        },
+        "evidence": "attack-attachment-review.json#species_forms/wooper",
+        "family_attachments": {
+          "claws": "foot",
+          "strikes": "body"
+        },
+        "family_review": {
+          "scope": "No hands/forelimbs. Native punch-family motion is a body lunge, so strikes use the procedural body origin. Claw/dedicated Scratch fallback uses the reviewed foot. Target contact distance and timing remain pending.",
+          "status": "anatomical_alternative_selected_effect_review_pending"
+        },
+        "initial_assessment": "anatomically_not_applicable",
+        "result": "anatomical_points_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": []
+      },
+      "wyrdeer": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/wyrdeer",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_distal_contact_correction",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      },
+      "zapdos-galar": {
+        "attachment_overrides": {},
+        "evidence": "attack-attachment-review.json#species_forms/zapdos-galar",
+        "family_attachments": {},
+        "family_review": {},
+        "initial_assessment": "pending_missing_part",
+        "result": "sampled_marker_correction_installed_family_effect_review_pending",
+        "reviewed_parts_installed_or_replaced": [
+          "hand",
+          "left_hand"
+        ]
+      }
+    },
+    "live_npc_wild_battles_tested": false,
+    "remaining_blockers": {
+      "cramorant": "Embedded Pikachu variants prevent reliable wing selection.",
+      "deoxys": "Simultaneous arm variants prevent reliable intended arm selection.",
+      "hawlucha-mega": "Wrong source identity; white poodle model.",
+      "minior": "Torn shell, duplicate core/eye pieces and detached fragments.",
+      "ogerpon-cornerstone,ogerpon-hearthflame,ogerpon-wellspring": "Club point is scoped to physical_attack_2. Extra shaft geometry remains visible; weapon routing is not approved. Ivy Cudgel has no current 3D presenter.",
+      "togedemaru": "Duplicate faces and limbs."
+    },
+    "remaining_global_routes": {
+      "counts": {
+        "configured_move_pairs": 7516,
+        "forms_with_missing_routes": 323,
+        "missing_parts": {
+          "foot": 1,
+          "hand": 231,
+          "mouth": 111
+        },
+        "species_forms": 1200,
+        "supported_move_pairs": 30563
+      },
+      "inventory": "attack-attachment-family-backlog.json"
+    },
+    "representative_effect_checks": {
+      "barbaracle-mega": {
+        "action": "physical_attack",
+        "attachment_data_sha256_at_capture": "5837ed013279ced7acf47daedd9ecbb4e6cd2dc0e8aeea7e8bdbb036583eebee",
+        "capture_sha256": "bf3527b7891c51366911abe6a8c490f1f31a913a56b14bb78764c8bfc3807e36",
+        "fractions": [
+          0.1,
+          0.25,
+          0.4,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "rocksmash",
+        "native_runtime_sha256": "c8afe3c51f2650fccb22a1a46bb84233473e4ea223a48843ae76fefadf7d74b8",
+        "scope": "Rock Smash selects the guarded hand point. Generic target graphics and the contact gap remain unresolved.",
+        "status": "offline_stage_context_parity_pass_full_visual_approval_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 134.0,
+          "impact_frame": 69.68,
+          "launch_frame": 18.76,
+          "move_key": "rocksmash"
+        },
+        "trainer_preview_sha256": "46e6f5ca82b45eceec351592d95af1a361c5cc7dc4769dbe711270d93e7c91ec",
+        "variant": "normal",
+        "views": 2,
+        "wild_preview_sha256": "46e6f5ca82b45eceec351592d95af1a361c5cc7dc4769dbe711270d93e7c91ec"
+      },
+      "charmeleon": {
+        "action": "special_attack",
+        "attachment_data_sha256_at_capture": "5837ed013279ced7acf47daedd9ecbb4e6cd2dc0e8aeea7e8bdbb036583eebee",
+        "capture_sha256": "1ea44330e8eb927ceffe088c43b965a43b905fc23de51a1ece7b74d311801c0e",
+        "fractions": [
+          0.1,
+          0.25,
+          0.4,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "flamethrower",
+        "native_runtime_sha256": "b1999be8808e159ed9c24f26da4d8593ea7cb74823b5100840c10c7684d80eb7",
+        "scope": "Flamethrower follows the mouth at sampled release and beam poses; particle noise differs between runs.",
+        "status": "offline_stage_context_parity_pass_full_visual_approval_pending",
+        "timing": {
+          "action": "special_attack",
+          "frames": 138.0,
+          "impact_frame": 62.1,
+          "move_key": "flamethrower"
+        },
+        "trainer_preview_sha256": "23fea10657da97dc87ef2c40f4d18f55cdf47f40c59d133ef4545eb54f9977be",
+        "variant": "normal",
+        "views": 2,
+        "wild_preview_sha256": "31339ea519eef4b51d11ecaaa2448d5d1f12f39e7acf67a8750af1c27f373aa8"
+      },
+      "dragalge-mega": {
+        "action": "special_attack",
+        "attachment_data_sha256_at_capture": "5837ed013279ced7acf47daedd9ecbb4e6cd2dc0e8aeea7e8bdbb036583eebee",
+        "capture_sha256": "6075c063a5632a7868ce2228d177d4a507cfcec913e7792055a87928e35bdb98",
+        "fractions": [
+          0.1,
+          0.25,
+          0.4,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "watergun",
+        "native_runtime_sha256": "f9779744b821b00da02a88e4555e9bcbfe956a41c9af0f4f12bf4c09fdd45f74",
+        "scope": "Water Gun uses the reviewed snout opening. Stream size, leaf clearance and other target heights are not certified.",
+        "status": "offline_stage_context_parity_pass_full_visual_approval_pending",
+        "timing": {
+          "action": "special_attack",
+          "frames": 148.0,
+          "impact_frame": 66.6,
+          "move_key": "watergun"
+        },
+        "trainer_preview_sha256": "a506e5db2344322af0b0d9236df15b306a2796ec0b9a4cd9b61b6b998ae9a853",
+        "variant": "normal",
+        "views": 2,
+        "wild_preview_sha256": "a506e5db2344322af0b0d9236df15b306a2796ec0b9a4cd9b61b6b998ae9a853"
+      },
+      "poliwag": {
+        "action": "physical_attack",
+        "attachment_data_sha256_at_capture": "5837ed013279ced7acf47daedd9ecbb4e6cd2dc0e8aeea7e8bdbb036583eebee",
+        "capture_sha256": "3746aba9542a014c882a642617e58a1c7a5eccd060e733a85c024d3001567051",
+        "fractions": [
+          0.1,
+          0.25,
+          0.4,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "pound",
+        "native_runtime_sha256": "423e4b4c8ff4516516bcf0519d6ca41225898be653b89534a1fe58bedafa2481",
+        "scope": "Pound uses the intentional procedural body origin. Native turn faces away at some contact samples; facing, approach and tail contact remain unresolved.",
+        "status": "offline_stage_context_parity_pass_full_visual_approval_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 227.5,
+          "impact_frame": 118.3,
+          "launch_frame": 31.85,
+          "move_key": "pound"
+        },
+        "trainer_preview_sha256": "8965c2cf00004ee353ba1cb66441c3c411b0e28cb8bd124b498edf37487695dd",
+        "variant": "normal",
+        "views": 2,
+        "wild_preview_sha256": "8965c2cf00004ee353ba1cb66441c3c411b0e28cb8bd124b498edf37487695dd"
+      },
+      "scrafty-mega": {
+        "action": "physical_attack",
+        "attachment_data_sha256_at_capture": "e31c8504124edc21386bed9f6d197d4e7fb3e24cb3e4d6eb62ec850a6d2b6925",
+        "capture_sha256": "e12cb279246084ea261932f17965a8d16eef5f3a8a3294820cb4263cd20d470d",
+        "fractions": [
+          0.1,
+          0.25,
+          0.4,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "dragonclaw",
+        "native_runtime_sha256": "25c221e1999d5bcce832c24a4fb436be54a36399a3a546424c4e1848a1cc575a",
+        "scope": "Dragon Claw uses body after rejecting the backward-facing foot alternative. Native head contact distance and target art remain unresolved.",
+        "status": "offline_stage_context_parity_pass_full_visual_approval_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 118.0,
+          "impact_frame": 61.36,
+          "launch_frame": 16.52,
+          "move_key": "dragonclaw"
+        },
+        "trainer_preview_sha256": "0ab49a13851141d9e2207b95666d50655fb865934d5dff8c1e3d5ab232873854",
+        "variant": "normal",
+        "views": 2,
+        "wild_preview_sha256": "0ab49a13851141d9e2207b95666d50655fb865934d5dff8c1e3d5ab232873854"
+      },
+      "torchic": {
+        "action": "physical_attack",
+        "attachment_data_sha256_at_capture": "5837ed013279ced7acf47daedd9ecbb4e6cd2dc0e8aeea7e8bdbb036583eebee",
+        "capture_sha256": "baafa638399d98e6c756a1d56bdd47aaa9d254b62f1e649cd9d91b82b0916cd1",
+        "fractions": [
+          0.1,
+          0.25,
+          0.4,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "scratch",
+        "native_runtime_sha256": "3a5a4d0fe4db6f53884c315d0bc8119e275c70ef98c14986d2dfbfc8f348a91b",
+        "scope": "Scratch selects the foot instead of an absent hand. Native body approach and exact claw contact remain unresolved.",
+        "status": "offline_stage_context_parity_pass_full_visual_approval_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 227.5,
+          "impact_frame": 102.375,
+          "move_key": "scratch"
+        },
+        "trainer_preview_sha256": "1f0e5f265e8bcdb3e4712ad004834bd95b759b828f7914667face55cdff7dc83",
+        "variant": "normal",
+        "views": 2,
+        "wild_preview_sha256": "1f0e5f265e8bcdb3e4712ad004834bd95b759b828f7914667face55cdff7dc83"
+      },
+      "wooper": {
+        "action": "physical_attack",
+        "attachment_data_sha256_at_capture": "e31c8504124edc21386bed9f6d197d4e7fb3e24cb3e4d6eb62ec850a6d2b6925",
+        "capture_sha256": "8b7cac8d3b110dbd260f65232bbd760c82d70de945a1bc2b2d8a3a257b84b73a",
+        "fractions": [
+          0.1,
+          0.25,
+          0.4,
+          0.52,
+          0.65,
+          0.8
+        ],
+        "move": "icepunch",
+        "native_runtime_sha256": "828aaf53b81bbebbb7f9f9a5eeeac07252c9d7c9615cb0f4ea6eeb6e68222c28",
+        "scope": "Ice Punch uses a body alternative matching the native lunge. Exact contact distance and target graphics remain unresolved.",
+        "status": "offline_stage_context_parity_pass_full_visual_approval_pending",
+        "timing": {
+          "action": "physical_attack",
+          "frames": 130.0,
+          "impact_frame": 67.6,
+          "launch_frame": 18.2,
+          "move_key": "icepunch"
+        },
+        "trainer_preview_sha256": "32632e3fbc43bf05c131e5342c52ea2df211ee1c8a56343fc150b7ecab55aeb8",
+        "variant": "normal",
+        "views": 2,
+        "wild_preview_sha256": "32632e3fbc43bf05c131e5342c52ea2df211ee1c8a56343fc150b7ecab55aeb8"
+      }
+    },
+    "scope": "Follow-up to the 118-form proposal assessment; grouped family routing and remaining catalog inventory, not universal effect approval.",
+    "technical_checks": {
+      "choreography": {
+        "banner": "MOVE_ATTACHMENT_CHOREOGRAPHY_OK calibrated_routes=true slots=4 shiny=true cancellation=true substitute=true emission_end=true",
+        "log_sha256": "cc2f07caff7ed8cd1d80af119c780a6662ed077c825dd55136cb00465b9b7ead",
+        "result": "pass"
+      },
+      "coverage": {
+        "banner": "MOVE_ATTACHMENT_COVERAGE_OK {\"catalog_identities\":2400,\"normal\":1200,\"shiny\":1200,\"species_forms\":1200,\"with_any_attachment\":1197,\"with_arm_spikes\":2,\"with_beak_tip\":6,\"with_blades\":1,\"with_body\":1,\"with_bud\":1,\"with_cannon\":6,\"with_cannons\":1,\"with_carapace_front\":1,\"with_casting\":4,\"with_claw_lower_left\":1,\"with_claw_lower_right\":1,\"with_claw_upper_left\":1,\"with_claw_upper_right\":1,\"with_cloud\":1,\"with_club\":3,\"with_core\":1,\"with_cotton_front\":1,\"with_electric_body\":1,\"with_eye\":9,\"with_eye_left\":1,\"with_eye_right\":1,\"with_eye_upper\":1,\"with_face\":56,\"with_face_orange\":3,\"with_face_pink\":3,\"with_face_primary\":2,\"with_face_yellow\":3,\"with_flower_core\":1,\"with_flower_tip\":1,\"with_foot\":314,\"with_forehead\":1,\"with_gem\":4,\"with_hand\":696,\"with_hand_upper\":1,\"with_left_foot\":295,\"with_left_hand\":694,\"with_left_hand_upper\":1,\"with_magnet_poles\":1,\"with_mandibles\":2,\"with_mouth\":1011,\"with_mouth_green\":1,\"with_mouth_primary\":2,\"with_mouth_red\":2,\"with_muzzle\":19,\"with_nose\":2,\"with_olive_nozzle\":1,\"with_orb\":2,\"with_pearl\":1,\"with_proboscis_tip\":2,\"with_shell_front\":1,\"with_shield\":1,\"with_spear\":1,\"with_spike\":6,\"with_spikes\":2,\"with_spirit\":2,\"with_spoon\":1,\"with_spout\":1,\"with_tail\":1,\"with_tongue_tip\":1,\"with_upper_hand\":1,\"with_upper_left_hand\":1,\"with_vines\":3,\"with_wheel_front\":1,\"without_attachments\":3} aliases=6",
+        "log_sha256": "4c815e37f26b9f7811ee39a584c44c96393493144ec8043588f9532977d9068c",
+        "result": "pass"
+      },
+      "coverage-freshness": {
+        "banner": "MOVE_ATTACHMENT_COVERAGE_OK {\"catalog_identities\":2400,\"normal\":1200,\"shiny\":1200,\"species_forms\":1200,\"with_any_attachment\":1197,\"with_arm_spikes\":2,\"with_beak_tip\":6,\"with_blades\":1,\"with_body\":1,\"with_bud\":1,\"with_cannon\":6,\"with_cannons\":1,\"with_carapace_front\":1,\"with_casting\":4,\"with_claw_lower_left\":1,\"with_claw_lower_right\":1,\"with_claw_upper_left\":1,\"with_claw_upper_right\":1,\"with_cloud\":1,\"with_club\":3,\"with_core\":1,\"with_cotton_front\":1,\"with_electric_body\":1,\"with_eye\":9,\"with_eye_left\":1,\"with_eye_right\":1,\"with_eye_upper\":1,\"with_face\":56,\"with_face_orange\":3,\"with_face_pink\":3,\"with_face_primary\":2,\"with_face_yellow\":3,\"with_flower_core\":1,\"with_flower_tip\":1,\"with_foot\":314,\"with_forehead\":1,\"with_gem\":4,\"with_hand\":696,\"with_hand_upper\":1,\"with_left_foot\":295,\"with_left_hand\":694,\"with_left_hand_upper\":1,\"with_magnet_poles\":1,\"with_mandibles\":2,\"with_mouth\":1011,\"with_mouth_green\":1,\"with_mouth_primary\":2,\"with_mouth_red\":2,\"with_muzzle\":19,\"with_nose\":2,\"with_olive_nozzle\":1,\"with_orb\":2,\"with_pearl\":1,\"with_proboscis_tip\":2,\"with_shell_front\":1,\"with_shield\":1,\"with_spear\":1,\"with_spike\":6,\"with_spikes\":2,\"with_spirit\":2,\"with_spoon\":1,\"with_spout\":1,\"with_tail\":1,\"with_tongue_tip\":1,\"with_upper_hand\":1,\"with_upper_left_hand\":1,\"with_vines\":3,\"with_wheel_front\":1,\"without_attachments\":3} aliases=6",
+        "log_sha256": "4c815e37f26b9f7811ee39a584c44c96393493144ec8043588f9532977d9068c",
+        "result": "pass"
+      },
+      "learnsets": {
+        "banner": "ATTACHMENT_LEARNSETS {\"configured_move_pairs\":7516,\"missing_parts\":{\"foot\":1,\"hand\":231,\"mouth\":111},\"species_forms\":1200,\"supported_move_pairs\":30563} errors=0",
+        "log_sha256": "1917062644d7919d6d7373873d946d8235deb960d9b925fab2cdeffa3f1fa743",
+        "result": "pass"
+      },
+      "regression": {
+        "banner": "MOVE_ATTACHMENTS_3D_OK transforms=true moving_bones=true forms=true lifecycle=true paired_beams=true paired_vines=true paired_sound=true single_impact=true",
+        "log_sha256": "10c145d88153e3a58297ff314d7ebb87ed54aebcc876e32f23a39f80bf619c7a",
+        "result": "pass"
+      },
+      "runtime_bindings": {
+        "checked_profile_count": 80,
+        "errors": [],
+        "models": {
+          "anorith": {
+            "pose_sha256": "961422ea3fa4ed5be8cb585fdbaa8375f892eb53298ee95ec3478236211f0461",
+            "runtime_sha256": "e1b11c7a2790f3f5748831d9298f0f8e84b3dd0b40bb0be2db51d54e67d4c7a3",
+            "sample_count": 189
+          },
+          "anorith@shiny": {
+            "pose_sha256": "961422ea3fa4ed5be8cb585fdbaa8375f892eb53298ee95ec3478236211f0461",
+            "runtime_sha256": "63bbd0f8cd5ebfc182b1311a3b40f20d946c5e287a69687284dcdbf11efe0124",
+            "sample_count": 189
+          },
+          "arceus": {
+            "pose_sha256": "ee0ed9876978c7b89ae568eb5925763e21938689c45d3b9b04cee2127352802c",
+            "runtime_sha256": "9055adc7e3d0a801e341a25b1e14a3cfa52ba6a7ddd9b350122b62bd4336fe15",
+            "sample_count": 252
+          },
+          "arceus@shiny": {
+            "pose_sha256": "ee0ed9876978c7b89ae568eb5925763e21938689c45d3b9b04cee2127352802c",
+            "runtime_sha256": "e4dbbeae95d359896b73835450945dfec04dffd6aa29158cca93a61eeb4d3738",
+            "sample_count": 252
+          },
+          "armaldo": {
+            "pose_sha256": "55d5258e551010e78facadaeba4a8bf63500f6500bad63cd9299e6ab43be2259",
+            "runtime_sha256": "9fd86c1f9bf005f379720d494ded254683dc5a8224a6cbcc5e15dd18d5d9d228",
+            "sample_count": 252
+          },
+          "armaldo@shiny": {
+            "pose_sha256": "55d5258e551010e78facadaeba4a8bf63500f6500bad63cd9299e6ab43be2259",
+            "runtime_sha256": "0b307585c4daddfbfa1622c80ef9e6bf44276a3a676fc2e56b5b5dc939c42f07",
+            "sample_count": 252
+          },
+          "aron": {
+            "pose_sha256": "93df968392295c6e12938b00972cd7534f4d997360d6dea2904f866265e0b081",
+            "runtime_sha256": "466da65c39d458012d57d70e771759f73960145de931fa1f19781e4383f02a2f",
+            "sample_count": 189
+          },
+          "aron@shiny": {
+            "pose_sha256": "93df968392295c6e12938b00972cd7534f4d997360d6dea2904f866265e0b081",
+            "runtime_sha256": "64c146fbcc2655cad7af52462cb2694711d15987cab601fe311a870076dc54d9",
+            "sample_count": 189
+          },
+          "barbaracle": {
+            "pose_sha256": "626206c734e1b019d3881f2cf90fb7c6cde17752e745634419c88ba97398465d",
+            "runtime_sha256": "19e96775454b1cb9802de19a8e53f7f319a601b8d80ba19ad4349435a8cc0c1c",
+            "sample_count": 441
+          },
+          "barbaracle-mega": {
+            "pose_sha256": "d1426acedd04fea2154a4a0acccb9e30e42dd15dd5b7fee03371f1da58579cf0",
+            "runtime_sha256": "c8afe3c51f2650fccb22a1a46bb84233473e4ea223a48843ae76fefadf7d74b8",
+            "sample_count": 315
+          },
+          "barbaracle-mega@shiny": {
+            "pose_sha256": "d1426acedd04fea2154a4a0acccb9e30e42dd15dd5b7fee03371f1da58579cf0",
+            "runtime_sha256": "da36a26c2a00d4464c23e04e58b69634f8b73ecaa15228204b721a8d060c99e4",
+            "sample_count": 315
+          },
+          "barbaracle@shiny": {
+            "pose_sha256": "626206c734e1b019d3881f2cf90fb7c6cde17752e745634419c88ba97398465d",
+            "runtime_sha256": "00c97cb1646dafb26caa7b2218f954535333697a8c75c976d7548a03e8b3e1f8",
+            "sample_count": 441
+          },
+          "bergmite": {
+            "pose_sha256": "586ea1aca0b8763a6f046d9e68fa199de95a29897ca571de044fcf9874c93fbd",
+            "runtime_sha256": "531789020b685ff6fc6e21b6ae9f668d7888d7ef459b8f3eeb5d45efcd002f44",
+            "sample_count": 84
+          },
+          "bergmite@shiny": {
+            "pose_sha256": "586ea1aca0b8763a6f046d9e68fa199de95a29897ca571de044fcf9874c93fbd",
+            "runtime_sha256": "b1ab5c6c05ee45854e10faa3b886eb79b3a99be3da6a5fdd34f01d6f1808c1de",
+            "sample_count": 84
+          },
+          "bonsly": {
+            "pose_sha256": "40121a5ce1e2036b2d7d91ab428c69ba2107045da4171ca240393f61aa110c6b",
+            "runtime_sha256": "ac25e7386ff5140b26f039012102cdf8fca08be3d769466df1755723cb55ed29",
+            "sample_count": 252
+          },
+          "bonsly@shiny": {
+            "pose_sha256": "40121a5ce1e2036b2d7d91ab428c69ba2107045da4171ca240393f61aa110c6b",
+            "runtime_sha256": "48dc21a9968f7871a5164218a67a0e68637438c5d4196ad24b53dc2f85ea223c",
+            "sample_count": 252
+          },
+          "carracosta": {
+            "pose_sha256": "322b5b60c51c38a41973dcdd1f94169ac4d06ced105245e890768e6dc9584ec5",
+            "runtime_sha256": "2d47b4840a52c9b7ec50fc98b3bae4189bb1d90485a29e3fe68d31be5c8a62d7",
+            "sample_count": 315
+          },
+          "carracosta@shiny": {
+            "pose_sha256": "322b5b60c51c38a41973dcdd1f94169ac4d06ced105245e890768e6dc9584ec5",
+            "runtime_sha256": "b5c2f2fb39b866f1b045884a75d94f8ef0253ee5e363e2e516f242abb4ba41ba",
+            "sample_count": 315
+          },
+          "chien-pao": {
+            "pose_sha256": "2bd91783c2c7f2ed22ee113f1019634c0587e9f405eb1dc13fb32418d6941eee",
+            "runtime_sha256": "d8f0c8d62ba7c088127f7e6f9545eba247b5631dd9c9796fa4cac6183bbcc799",
+            "sample_count": 420
+          },
+          "chien-pao@shiny": {
+            "pose_sha256": "2bd91783c2c7f2ed22ee113f1019634c0587e9f405eb1dc13fb32418d6941eee",
+            "runtime_sha256": "3a2363c37d58cc26c10cc1da845b7aa78c6e805743bde22ef28e534ee7e07cc1",
+            "sample_count": 420
+          },
+          "corphish": {
+            "pose_sha256": "4dbb1f1ddc26a6607fa19920ffccbf522179b1df4f6512841f54b395a3b8d3fe",
+            "runtime_sha256": "c2ebdf5d77c20315624b0c51b8503a7c4356e601cb8e251dc618ee9eb9ed7939",
+            "sample_count": 252
+          },
+          "corphish@shiny": {
+            "pose_sha256": "4dbb1f1ddc26a6607fa19920ffccbf522179b1df4f6512841f54b395a3b8d3fe",
+            "runtime_sha256": "c3b6d874ce8f1a4815215502ec1e85a4d963c48d2835c7e560370a3bf03db447",
+            "sample_count": 252
+          },
+          "decidueye": {
+            "pose_sha256": "15d3e16075fa3997b62d37fb785effd31337d5207a60a385f882dab73c200eee",
+            "runtime_sha256": "a2cf932d5b0f42db9720513fa6ed09304c83f42c39d188fa75591c3b3349f912",
+            "sample_count": 420
+          },
+          "decidueye@shiny": {
+            "pose_sha256": "15d3e16075fa3997b62d37fb785effd31337d5207a60a385f882dab73c200eee",
+            "runtime_sha256": "b32a853a9f20fa5c3160fb7cce9b842a8a01f2d345996bb9d75c7691f1213403",
+            "sample_count": 420
+          },
+          "delphox-mega": {
+            "pose_sha256": "b3af21736858853345a2d83bb49451319eda485447482292d5bbd77ea065d5ab",
+            "runtime_sha256": "17035b29caef71487c2b8b2ac9b98d93d7ace601fee3bb7445dc76d6f0276a41",
+            "sample_count": 315
+          },
+          "delphox-mega@shiny": {
+            "pose_sha256": "b3af21736858853345a2d83bb49451319eda485447482292d5bbd77ea065d5ab",
+            "runtime_sha256": "36bf2c11adb10b5af63a3437be522d230213534482a51c59068207ce910f06a0",
+            "sample_count": 315
+          },
+          "dragalge-mega": {
+            "pose_sha256": "ecba767b8699f39c1b1e4f8f99c5bd40e9ad5385cfddaf495dbcdfa629ac5e7c",
+            "runtime_sha256": "f9779744b821b00da02a88e4555e9bcbfe956a41c9af0f4f12bf4c09fdd45f74",
+            "sample_count": 63
+          },
+          "dragalge-mega@shiny": {
+            "pose_sha256": "ecba767b8699f39c1b1e4f8f99c5bd40e9ad5385cfddaf495dbcdfa629ac5e7c",
+            "runtime_sha256": "d957641518d8ab89bc6bfc4249002fadac02ac7050e1494f0691d7afe09c8851",
+            "sample_count": 63
+          },
+          "drampa": {
+            "pose_sha256": "d862f78f2a244880f9e2a954c98bfc9d8ed9c75bddae8930a28f64b17aca349d",
+            "runtime_sha256": "f232fcb2b42ebf7446eacb22c3e10fed3623a0e374414dc079d77f85613d58f7",
+            "sample_count": 189
+          },
+          "drampa@shiny": {
+            "pose_sha256": "d862f78f2a244880f9e2a954c98bfc9d8ed9c75bddae8930a28f64b17aca349d",
+            "runtime_sha256": "2e51c84abe662ceeab8de80534ec7c7fcf7edf775a54346b804108ee201fb4d4",
+            "sample_count": 189
+          },
+          "eelektross-mega": {
+            "pose_sha256": "7632d48c185775f9e687494e31b604a2cd56f3d8346c7c5332dc942c4a25cdda",
+            "runtime_sha256": "75d5010e5ce45af9f602dc37ee977b468e0b2123f21808a250c7c48b67988a8c",
+            "sample_count": 189
+          },
+          "eelektross-mega@shiny": {
+            "pose_sha256": "7632d48c185775f9e687494e31b604a2cd56f3d8346c7c5332dc942c4a25cdda",
+            "runtime_sha256": "e64eaea02644b5a12f00876385cc5db18bfd8aba29bbf54d6844848803260deb",
+            "sample_count": 189
+          },
+          "electabuzz": {
+            "pose_sha256": "d9d2b2353e8905e40d591ab12578720d0d3d3a8fe4627348f733a6e944423bf2",
+            "runtime_sha256": "07230c14ca400f63e254fb4ffd96cd718ca8d55629d3b7265d01b7034b159adb",
+            "sample_count": 420
+          },
+          "electabuzz@shiny": {
+            "pose_sha256": "d9d2b2353e8905e40d591ab12578720d0d3d3a8fe4627348f733a6e944423bf2",
+            "runtime_sha256": "89bca298b751b317d38728851ed757ba37a3c9bec715a737cf23f914a463c23a",
+            "sample_count": 420
+          },
+          "enamorus": {
+            "pose_sha256": "57f4d2c0633dea047141421ba5f8538cb8776e607e73445763781c859712d136",
+            "runtime_sha256": "94ab496517890ad2f1122a315945c39b6a920a081555786d3dcd0cbff843c528",
+            "sample_count": 336
+          },
+          "enamorus@shiny": {
+            "pose_sha256": "57f4d2c0633dea047141421ba5f8538cb8776e607e73445763781c859712d136",
+            "runtime_sha256": "e862d6be88421a467448c835de595c8176604689c34b8a7f6b0128b79e7cadd8",
+            "sample_count": 336
+          },
+          "eternatus": {
+            "pose_sha256": "021c8f132f6981d19a52b4945b6c460e43e7bea3fc4d162b884ffd0f34d834a5",
+            "runtime_sha256": "4d1d679e05cc9abdf870b7412658fb842cfc997c4032966608c945000e141aed",
+            "sample_count": 168
+          },
+          "eternatus@shiny": {
+            "pose_sha256": "021c8f132f6981d19a52b4945b6c460e43e7bea3fc4d162b884ffd0f34d834a5",
+            "runtime_sha256": "2ddbdf0f972edabade9a038271429fa447c698cb90e5f89d72597d615bf9160f",
+            "sample_count": 168
+          },
+          "exeggutor-alola": {
+            "pose_sha256": "74f3a9a62605959060008b36eb83a0922ea741554452bcc8f1183c47f1472611",
+            "runtime_sha256": "6c85e1322382c6e0ffa5aba5587397f92e4d44fd5c3c4b3db4fd5331027c6b98",
+            "sample_count": 126
+          },
+          "exeggutor-alola@shiny": {
+            "pose_sha256": "74f3a9a62605959060008b36eb83a0922ea741554452bcc8f1183c47f1472611",
+            "runtime_sha256": "628621311f7be171a301ae7b24c61d68d98cd55cb8f7baa6ed0055d1eac8ace4",
+            "sample_count": 126
+          },
+          "flamigo": {
+            "pose_sha256": "e8467504cf15baed591cb78e49557daf2dff6e6e0ac92fe9a7896f1aa0be2214",
+            "runtime_sha256": "3acacd7c084d693ef22c0a8037eca30797bcbacfe2052a745f23972eceb2ee2d",
+            "sample_count": 420
+          },
+          "flamigo@shiny": {
+            "pose_sha256": "e8467504cf15baed591cb78e49557daf2dff6e6e0ac92fe9a7896f1aa0be2214",
+            "runtime_sha256": "08c0bf5ea04b0e16fcfb68ae83f66c89d8e91b7bb24be4c91bbe2bea23dbec53",
+            "sample_count": 420
+          },
+          "fomantis": {
+            "pose_sha256": "6af0a2d45331ed74d802c83bdf574831595d549abde435341d601548a65d5190",
+            "runtime_sha256": "503bb542f81c48f6cb0786146c19430dba413fd6cf18d36e71b20b87bc63aec9",
+            "sample_count": 252
+          },
+          "fomantis@shiny": {
+            "pose_sha256": "6af0a2d45331ed74d802c83bdf574831595d549abde435341d601548a65d5190",
+            "runtime_sha256": "73443386cd6580bb7ae69113033d11aae2e9290ce728409700677c502224044a",
+            "sample_count": 252
+          },
+          "garbodor": {
+            "pose_sha256": "2214dd029cc1ce74ba2436703e5b368351d2975a244dbc0081201dd61e5a69e1",
+            "runtime_sha256": "7adc7591d30c4ca8f12611bf2748975958f28b44c34de5a5f761c5bcee0a980d",
+            "sample_count": 189
+          },
+          "garbodor@shiny": {
+            "pose_sha256": "2214dd029cc1ce74ba2436703e5b368351d2975a244dbc0081201dd61e5a69e1",
+            "runtime_sha256": "cc19b709c4628e2abc640a328880e3ff4a10b2bf4b88c59336ef74698b788c92",
+            "sample_count": 189
+          },
+          "garchomp-mega": {
+            "pose_sha256": "f07f0b282f273a3e2018809e30b8015519b74e405a4106303e63e80b82dd72d4",
+            "runtime_sha256": "b878a45366990747a272e28ad652ccfdeeb91433e077378edea5c009ef98c9ea",
+            "sample_count": 189
+          },
+          "garchomp-mega@shiny": {
+            "pose_sha256": "f07f0b282f273a3e2018809e30b8015519b74e405a4106303e63e80b82dd72d4",
+            "runtime_sha256": "b604129db08fddc3b083b00e783e2257da49254a8958d4fa525a3b1a5279939c",
+            "sample_count": 189
+          },
+          "girafarig": {
+            "pose_sha256": "31e7ecf10c5a88a0daa8816c512d94bbc65e73f786decb3ba8b5a35614b9f7d6",
+            "runtime_sha256": "0ed942c42cdb87481c36d18403e31f5e4c43ab4150ccb7ff4dfa2d45f06a45ad",
+            "sample_count": 420
+          },
+          "girafarig@shiny": {
+            "pose_sha256": "31e7ecf10c5a88a0daa8816c512d94bbc65e73f786decb3ba8b5a35614b9f7d6",
+            "runtime_sha256": "d97f6346b5b157bea5e27cb7df36f2f84c81a54418a8f0881a1892323603ede5",
+            "sample_count": 420
+          },
+          "gliscor": {
+            "pose_sha256": "6a02fb3b066300635b7288374ec3cbbde0f00aa97909b417b73e69dd32958a58",
+            "runtime_sha256": "50f221440f650911bf9582dbc42ebd2ed76fcfd5db564d09fc877f47c8897ef1",
+            "sample_count": 189
+          },
+          "gliscor@shiny": {
+            "pose_sha256": "6a02fb3b066300635b7288374ec3cbbde0f00aa97909b417b73e69dd32958a58",
+            "runtime_sha256": "4dd6a61c0d36516dedc371d98f4dafddb3ca7b5a29c065868c3933f8396bc3c8",
+            "sample_count": 189
+          },
+          "gogoat": {
+            "pose_sha256": "24651d4309907518c11ad2804c153688d74896e2a0a3db6a3673f52855881154",
+            "runtime_sha256": "f216b471c17afa5563a33aa1ca99b9b4094e99fed17fde85d1127af0f4f98a91",
+            "sample_count": 252
+          },
+          "gogoat@shiny": {
+            "pose_sha256": "24651d4309907518c11ad2804c153688d74896e2a0a3db6a3673f52855881154",
+            "runtime_sha256": "4c1edfd5d637a36d86520ec45fb5a20f9913eab14c4ec4302371770b811cd618",
+            "sample_count": 252
+          },
+          "hippowdon": {
+            "pose_sha256": "26b02e734707a36fcddbfefb62c55583e060c1b72830f90a99c65e3001812d18",
+            "runtime_sha256": "316f8f6c7c706433ff80a53437c890bf0022941ca46660a2f46651664042dbc4",
+            "sample_count": 252
+          },
+          "hippowdon@shiny": {
+            "pose_sha256": "26b02e734707a36fcddbfefb62c55583e060c1b72830f90a99c65e3001812d18",
+            "runtime_sha256": "b4c6a55ba487f5bf7668645a99ef9ae4411e600d6c953a0b937e3c538209a675",
+            "sample_count": 252
+          },
+          "hydreigon": {
+            "pose_sha256": "5e2d506f136bc823f9df3ebc9a81fda0c9e97bd5ee529b9cddf74c412d6dd313",
+            "runtime_sha256": "04123f0638ea83f68418798195b5435abef1e86a5639237f97141ee840309a10",
+            "sample_count": 252
+          },
+          "hydreigon@shiny": {
+            "pose_sha256": "5e2d506f136bc823f9df3ebc9a81fda0c9e97bd5ee529b9cddf74c412d6dd313",
+            "runtime_sha256": "b35529480a4ec0d56dfe819c54f086f63050afa9f120d3eba4afd254b80319e9",
+            "sample_count": 252
+          },
+          "iron-thorns": {
+            "pose_sha256": "1ae23f954c58e2c595c3cfb9d8cd0c9e9663360c87a9927f913cad33283bfc6a",
+            "runtime_sha256": "5ed15c871c1ad83bf6e602b47fdaad9c4483b2cb83666ef47ff45027eb1eb040",
+            "sample_count": 420
+          },
+          "iron-thorns@shiny": {
+            "pose_sha256": "1ae23f954c58e2c595c3cfb9d8cd0c9e9663360c87a9927f913cad33283bfc6a",
+            "runtime_sha256": "bd62c62f216513f03bdf96cd2ec24c521d756f946d1ed5ca0babaef0b332c5e2",
+            "sample_count": 420
+          },
+          "kabutops": {
+            "pose_sha256": "bee5f4cfae631ec07fa224ebbff672ec29b881c4959caaf8576c657990ec8e3d",
+            "runtime_sha256": "d5e93535853cd1e389e6cacd6b70feaf1d06a9e0ee0bced0ce3dbb562b6faeee",
+            "sample_count": 252
+          },
+          "kabutops@shiny": {
+            "pose_sha256": "bee5f4cfae631ec07fa224ebbff672ec29b881c4959caaf8576c657990ec8e3d",
+            "runtime_sha256": "73aa3c4319dba7a7a955005e10499dd0ce49d5fa89776d902c8686320ba0d3ab",
+            "sample_count": 252
+          },
+          "kingler": {
+            "pose_sha256": "c0c81c9b2f9ccc8fbb31e0cf3c9235c0f5eb1f0f4d25b63f2b431c6af18d77e0",
+            "runtime_sha256": "c6f71553542bac164e796eeebd6a1f76ff0ece0c10f905168677b771aacaec50",
+            "sample_count": 189
+          },
+          "kingler@shiny": {
+            "pose_sha256": "c0c81c9b2f9ccc8fbb31e0cf3c9235c0f5eb1f0f4d25b63f2b431c6af18d77e0",
+            "runtime_sha256": "880fb4c0c2d45f38da7e04367911e4b0976e9172edd95ed62e99974d6b79b667",
+            "sample_count": 189
+          },
+          "kleavor": {
+            "pose_sha256": "a50472a5db06ea451e08cf5740f1dd5193cc790348d2c67680fccc595079aed8",
+            "runtime_sha256": "e0f26d2009c46056b776eb7a95e6b4b9f69cab19f6b8b7fb0e66562367080472",
+            "sample_count": 252
+          },
+          "kleavor@shiny": {
+            "pose_sha256": "a50472a5db06ea451e08cf5740f1dd5193cc790348d2c67680fccc595079aed8",
+            "runtime_sha256": "84c3f23f8e1a9802115bea6fa1b16e89e0012a732eb22475f59a2addb4c43a40",
+            "sample_count": 252
+          },
+          "kricketune": {
+            "pose_sha256": "44d1377aaa039017db40e1fa8d92f8908399d6327b33a364909924c469f30d09",
+            "runtime_sha256": "e692cb684a986535469f19c19bef22be67a7ddfc9334ab04b9c03295cf478f75",
+            "sample_count": 252
+          },
+          "kricketune@shiny": {
+            "pose_sha256": "44d1377aaa039017db40e1fa8d92f8908399d6327b33a364909924c469f30d09",
+            "runtime_sha256": "0247c4d5f87e8563e2dc528088790f750ae49d29a8c879083f67007429e2e660",
+            "sample_count": 252
+          },
+          "kubfu": {
+            "pose_sha256": "65c64e30291c66f4a90d998f6a4d21165fabc9fad3a78cfc6ada4299193324a9",
+            "runtime_sha256": "d42188009b52d787287eec3594557cdcb1f4c5155b4d3e99129851a3eb19367d",
+            "sample_count": 336
+          },
+          "kubfu@shiny": {
+            "pose_sha256": "65c64e30291c66f4a90d998f6a4d21165fabc9fad3a78cfc6ada4299193324a9",
+            "runtime_sha256": "7b523cb208092eab6c8db924bdbb7aea4854f63cbbe3ea8f0af86ca70a3ae33f",
+            "sample_count": 336
+          },
+          "metagross-mega": {
+            "pose_sha256": "44aa0b85e94830f35e1d90613ff1f202f8480b20386c2b2b6ba7df0a2662dff2",
+            "runtime_sha256": "c27ac48631fe53965dcb9fafb266eeb88f9cc59df190b1e3c81fd460c80b2fc8",
+            "sample_count": 420
+          },
+          "metagross-mega@shiny": {
+            "pose_sha256": "44aa0b85e94830f35e1d90613ff1f202f8480b20386c2b2b6ba7df0a2662dff2",
+            "runtime_sha256": "bb5aefaf4de24ee1b24556140927b26a2f36687f08802b76813f052d204ae131",
+            "sample_count": 420
+          },
+          "muk": {
+            "pose_sha256": "53033a9335990914e209e2ed80a1df6e5fca02b7e4ccf02d851abd899ba917c6",
+            "runtime_sha256": "c18cf3e2ccfa6faff72a67ad28a915290d241883e3afe442ce7a3ee68f69906b",
+            "sample_count": 252
+          },
+          "muk-alola": {
+            "pose_sha256": "ea1aaa553560c84a2579e4cb637a70d1b8f7f8e3a5ae801f06b9394434d4e09d",
+            "runtime_sha256": "7b07d7b3690e6c43f628bf498eec25916f790aaf9bcdd8d31dbc7ec6cdf8a504",
+            "sample_count": 252
+          },
+          "muk-alola@shiny": {
+            "pose_sha256": "ea1aaa553560c84a2579e4cb637a70d1b8f7f8e3a5ae801f06b9394434d4e09d",
+            "runtime_sha256": "9d503b899fe1d802d28a43c67841a0ea37d27165f0543fe2b7f55c74cd54ed1b",
+            "sample_count": 252
+          },
+          "muk@shiny": {
+            "pose_sha256": "53033a9335990914e209e2ed80a1df6e5fca02b7e4ccf02d851abd899ba917c6",
+            "runtime_sha256": "7b0061000e3f35c6fee1cd6c94dbc312ba622f0bc745e353a6aedf0d50686fae",
+            "sample_count": 252
+          },
+          "natu": {
+            "pose_sha256": "46a85b7cd909d648e80d29c6fcbda5d4c4ed236df2ec43ff5578b5ffab310c36",
+            "runtime_sha256": "235216ecfb6454fde12a0fcdae0f061ab031f0f7d1d3e8504424f1f0f846c3f8",
+            "sample_count": 189
+          },
+          "natu@shiny": {
+            "pose_sha256": "46a85b7cd909d648e80d29c6fcbda5d4c4ed236df2ec43ff5578b5ffab310c36",
+            "runtime_sha256": "ff955863738ec7264c7b0657704bd7e7ae3397a67c433be88c12a1e0ea6ee5dd",
+            "sample_count": 189
+          },
+          "nidoran-f": {
+            "pose_sha256": "1dda391725d562382d6dd972b3c93d85c7b6d895706a0be95bdc04a03ebca755",
+            "runtime_sha256": "65469dda207ac6a1cb78ff5a77d5b1fa1321658f0e475f7ccda95a9ae20a077d",
+            "sample_count": 315
+          },
+          "nidoran-f@shiny": {
+            "pose_sha256": "1dda391725d562382d6dd972b3c93d85c7b6d895706a0be95bdc04a03ebca755",
+            "runtime_sha256": "59d8936cdc3948a74d6613bc716e1f7a5ae0f092ecf7067e7c635ea3a4b8d91a",
+            "sample_count": 315
+          },
+          "nidoran-m": {
+            "pose_sha256": "6b8b85b3adc18bb29d29780e1e0f30ee29e9d5d69a2fb5de6f856ed2297fa6f5",
+            "runtime_sha256": "6d37745f419963ccf3b9b40f4a45e08877c5d1d4b9263309d0bb83b944ae1da6",
+            "sample_count": 315
+          },
+          "nidoran-m@shiny": {
+            "pose_sha256": "6b8b85b3adc18bb29d29780e1e0f30ee29e9d5d69a2fb5de6f856ed2297fa6f5",
+            "runtime_sha256": "c36b7dbff8ce32fc17e00ba6fad1a63b64474752b692f195edd70d3ca849c327",
+            "sample_count": 315
+          },
+          "nihilego": {
+            "pose_sha256": "01c22692f9d2408defa817c064cd5712db35d01594dfaef416134546b0d03007",
+            "runtime_sha256": "4f3c407fc544cc1d92aad6c601f6a6ce8dcd4d4e22dad733c3f352ebe83bae5d",
+            "sample_count": 252
+          },
+          "nihilego@shiny": {
+            "pose_sha256": "01c22692f9d2408defa817c064cd5712db35d01594dfaef416134546b0d03007",
+            "runtime_sha256": "b63eff3db1a04410f722f22d127b1863a901118177b37d1f50fb9a847598f341",
+            "sample_count": 252
+          },
+          "nymble": {
+            "pose_sha256": "7b87e54256e7cae822798f322ea459c13153b1ae84f22aff19d9fb111c418b3f",
+            "runtime_sha256": "88feb93e9e31db4b3a562a13fbc1c83007e23faec6a2426705ef26b7b4a7f3a3",
+            "sample_count": 336
+          },
+          "nymble@shiny": {
+            "pose_sha256": "7b87e54256e7cae822798f322ea459c13153b1ae84f22aff19d9fb111c418b3f",
+            "runtime_sha256": "8925d6e134ad843f3fd54a9c28f72697b7672745724eb661da581d27e759c9c6",
+            "sample_count": 336
+          },
+          "ogerpon": {
+            "pose_sha256": "9b495192ffb4fe62cb6edbcc2379fca53235315acf69153789df54ce2db8b22e",
+            "runtime_sha256": "cb5af9538e7652e95bc8efbcddc5dd2777cac8279d85f8974ef28cd8bbb8c1c5",
+            "sample_count": 252
+          },
+          "ogerpon-cornerstone": {
+            "pose_sha256": "33be3963e45f8107bbafb59c7a6d19000870f73c951dbc3061510a2e2161de0a",
+            "runtime_sha256": "af6b2121e80ee5cd334b60af8b4f3e3508d83054ea40963599343bc3288326a1",
+            "sample_count": 357
+          },
+          "ogerpon-cornerstone@shiny": {
+            "pose_sha256": "33be3963e45f8107bbafb59c7a6d19000870f73c951dbc3061510a2e2161de0a",
+            "runtime_sha256": "67363276af89c90ef52165c48b72c212ebcd1bbd249b13d857e570c5ab67a2bb",
+            "sample_count": 357
+          },
+          "ogerpon-hearthflame": {
+            "pose_sha256": "09795aa2fd611e7c9cfc89c8ce75060be698685956f00d2f59cc2fad4bed378e",
+            "runtime_sha256": "bc6ee51d0501b89faa7b3ee3218f2ca36e66f4ae2a50b8bb4e86bd9ec4d590ae",
+            "sample_count": 357
+          },
+          "ogerpon-hearthflame@shiny": {
+            "pose_sha256": "09795aa2fd611e7c9cfc89c8ce75060be698685956f00d2f59cc2fad4bed378e",
+            "runtime_sha256": "28354d52af6f284e75b08fdbbec47ebe92a7305ebf99f5387ab964cdc2bbcee5",
+            "sample_count": 357
+          },
+          "ogerpon-wellspring": {
+            "pose_sha256": "336071f288698e34816e7195e41927d447dcdd3df178ce23fff4883400c4d308",
+            "runtime_sha256": "8174cf7cca1af9d2ae6bc009ec5c3feac4fba2117cb144fa1c5a8462236db028",
+            "sample_count": 357
+          },
+          "ogerpon-wellspring@shiny": {
+            "pose_sha256": "336071f288698e34816e7195e41927d447dcdd3df178ce23fff4883400c4d308",
+            "runtime_sha256": "2c81f3bcde229e0d6888a6c1c5216cd5a85c675c551688803164d56a8838e51a",
+            "sample_count": 357
+          },
+          "ogerpon@shiny": {
+            "pose_sha256": "9b495192ffb4fe62cb6edbcc2379fca53235315acf69153789df54ce2db8b22e",
+            "runtime_sha256": "788c889ad6f0967e498a305f43c85497f2fc54f23df7edba4dbcd03094e6f810",
+            "sample_count": 252
+          },
+          "parasect": {
+            "pose_sha256": "3938e25f33e6f88425feea1243ee481ec12244e40c48ab713c677de1c320eee0",
+            "runtime_sha256": "710042dcf935b92e2b60e311c5a7bc68968605e3942cba6ad77748840c996655",
+            "sample_count": 189
+          },
+          "parasect@shiny": {
+            "pose_sha256": "3938e25f33e6f88425feea1243ee481ec12244e40c48ab713c677de1c320eee0",
+            "runtime_sha256": "79dcbf0c813be0bb29cb228a73578bb2ae8f5964e5e63869f81af4360afba3f1",
+            "sample_count": 189
+          },
+          "pawniard": {
+            "pose_sha256": "09a2387147303a1cb2c27cc4aba62067d29f4b6fcee3cf9754e37be1377e9d9b",
+            "runtime_sha256": "338f1b1729ec5f70836503db765c65db2cf048d194a09e07ac59ad8b5d52f92a",
+            "sample_count": 336
+          },
+          "pawniard@shiny": {
+            "pose_sha256": "09a2387147303a1cb2c27cc4aba62067d29f4b6fcee3cf9754e37be1377e9d9b",
+            "runtime_sha256": "c1dadda44ffc3f2f1c4aeaa88b03990bb2327437a7a1424294a0c378b3a54a34",
+            "sample_count": 336
+          },
+          "piloswine": {
+            "pose_sha256": "c30248374f794f3484ad69298ab5dbec5b3a0661d61406710e0a3e0ace387ae6",
+            "runtime_sha256": "38436a960052fbb88d2c90a452dcd38e9262d054aba029f75360ad50a25ea9aa",
+            "sample_count": 189
+          },
+          "piloswine@shiny": {
+            "pose_sha256": "c30248374f794f3484ad69298ab5dbec5b3a0661d61406710e0a3e0ace387ae6",
+            "runtime_sha256": "b900573bf7695e52d37469d0d4d5836ce21efc9dfc5f56e65cdd4ab335ff2a97",
+            "sample_count": 189
+          },
+          "poliwag": {
+            "pose_sha256": "3eceaee853c4c9883a889f4a1629c5ca73fd1a2d7ecfd36c76f808bea472a4ea",
+            "runtime_sha256": "423e4b4c8ff4516516bcf0519d6ca41225898be653b89534a1fe58bedafa2481",
+            "sample_count": 252
+          },
+          "poliwag@shiny": {
+            "pose_sha256": "3eceaee853c4c9883a889f4a1629c5ca73fd1a2d7ecfd36c76f808bea472a4ea",
+            "runtime_sha256": "e2a50d646fb8ee0d8e7530766e2f40f509a30d0e3a70e554aafdf9877bde3977",
+            "sample_count": 252
+          },
+          "prinplup": {
+            "pose_sha256": "ffbf50ef9b9c4c5dfdd45dd6ea692d1e6f2bce6607be2200dba27e176efa85c7",
+            "runtime_sha256": "4b07228856a988ac15c5de07f135fb784ee11641e1d3acd39941e3edcb01d1c6",
+            "sample_count": 252
+          },
+          "prinplup@shiny": {
+            "pose_sha256": "ffbf50ef9b9c4c5dfdd45dd6ea692d1e6f2bce6607be2200dba27e176efa85c7",
+            "runtime_sha256": "c0cc652cbae2fff4ccd310d445897d7291f753437917c20fc978682cc22a415f",
+            "sample_count": 252
+          },
+          "raging-bolt": {
+            "pose_sha256": "1f5056faeee8995ceed87fe44041ec165e2e39098e2e03c8dd3636c127e4d51d",
+            "runtime_sha256": "2e521421fdfbb03ac33661381d5b3ab157bb6f7cce257925d6c639aad1c7cadf",
+            "sample_count": 378
+          },
+          "raging-bolt@shiny": {
+            "pose_sha256": "1f5056faeee8995ceed87fe44041ec165e2e39098e2e03c8dd3636c127e4d51d",
+            "runtime_sha256": "ce9f828e1dd81929da7acbb77f0b4059bb1cd5d231ea2ce320af6dfcfaa3cc46",
+            "sample_count": 378
+          },
+          "rapidash": {
+            "pose_sha256": "2269f55f380954ffee414ee580ecb3fa26d13bf0dc5877f926594169d3b2136d",
+            "runtime_sha256": "ab14975738f0631ad2583846829148f5fb4658e9dca238c15940ccd0908490bf",
+            "sample_count": 252
+          },
+          "rapidash@shiny": {
+            "pose_sha256": "2269f55f380954ffee414ee580ecb3fa26d13bf0dc5877f926594169d3b2136d",
+            "runtime_sha256": "1b973102ace22aec937cbcd9f87cc7659837b07bc93cace5222f76de1483e6d2",
+            "sample_count": 252
+          },
+          "relicanth": {
+            "pose_sha256": "6c68dd419f8e7ea468033e753dda49155375e30ac5ae04b86ecbdddd95210e9c",
+            "runtime_sha256": "d9bad5bc8d29f3d092565402fef53599d23353aa09f8f4a0735f03b91312650e",
+            "sample_count": 189
+          },
+          "relicanth@shiny": {
+            "pose_sha256": "6c68dd419f8e7ea468033e753dda49155375e30ac5ae04b86ecbdddd95210e9c",
+            "runtime_sha256": "e9b2459d3b06a65f81ed6a3485f26add79cc8fbaaa09d16a9c617286a5a8d440",
+            "sample_count": 189
+          },
+          "reshiram": {
+            "pose_sha256": "b41684c1836e160cb707d9033109e348a8e97b12ce23f00931797e5e87bf37d1",
+            "runtime_sha256": "e3d8ef90fb5633b4b051a365d1e6a1e57f8d59b8761518640435ab34ca0881ed",
+            "sample_count": 252
+          },
+          "reshiram@shiny": {
+            "pose_sha256": "b41684c1836e160cb707d9033109e348a8e97b12ce23f00931797e5e87bf37d1",
+            "runtime_sha256": "f1e6799b7110175246f9dc775ab4ef7bc196b3863b51cf06c69e0c7294f2269b",
+            "sample_count": 252
+          },
+          "rotom": {
+            "pose_sha256": "4741cea245f747b141254ba202e3c478aaaa09a7f7283ab5331f2bbb9734b1c6",
+            "runtime_sha256": "6882e8155a1e018c1f32c139e6dc39700fe1b4b5bbfe7e02a0a7a151c24547b9",
+            "sample_count": 252
+          },
+          "rotom@shiny": {
+            "pose_sha256": "4741cea245f747b141254ba202e3c478aaaa09a7f7283ab5331f2bbb9734b1c6",
+            "runtime_sha256": "9fc8b93ffdb369785335381ad7a3398e980b4b9e8825897efb74e0e0c8f9064a",
+            "sample_count": 252
+          },
+          "salamence-mega": {
+            "pose_sha256": "ebd3c12befa9f6ce07c0920e2d078d391373f254b8c0c06c5eafbd99a87d5460",
+            "runtime_sha256": "0963ccea1152b855d93a2b744429b9e0550c71cb821a7a685c589e289bf698e2",
+            "sample_count": 189
+          },
+          "salamence-mega@shiny": {
+            "pose_sha256": "ebd3c12befa9f6ce07c0920e2d078d391373f254b8c0c06c5eafbd99a87d5460",
+            "runtime_sha256": "1c3c057575e5c35aac155ea8b8f6ff177e3477206b84e1ee417a116a8a8426e9",
+            "sample_count": 189
+          },
+          "scizor": {
+            "pose_sha256": "df3cef189968d4062fe30a868136de473bdd5cea6903344b61bda61ca2a087d9",
+            "runtime_sha256": "a771ad5d5223597bcc4675485a66bd4e2a2a7c71ac0e80922ac9c88dec485567",
+            "sample_count": 252
+          },
+          "scizor@shiny": {
+            "pose_sha256": "df3cef189968d4062fe30a868136de473bdd5cea6903344b61bda61ca2a087d9",
+            "runtime_sha256": "501922d52d151c7a0287356b02597056be8f11c0b655a63bd510aa33aedba7d8",
+            "sample_count": 252
+          },
+          "scrafty-mega": {
+            "pose_sha256": "e91eed36247e916f71b55331d11e7cc03a821399d6c64aa6791e675fae3e3922",
+            "runtime_sha256": "25c221e1999d5bcce832c24a4fb436be54a36399a3a546424c4e1848a1cc575a",
+            "sample_count": 189
+          },
+          "scrafty-mega@shiny": {
+            "pose_sha256": "e91eed36247e916f71b55331d11e7cc03a821399d6c64aa6791e675fae3e3922",
+            "runtime_sha256": "331735c70f037c4854f3d039f167cd7faf80c35c23cb7a5b6f0870bd5829cd1a",
+            "sample_count": 189
+          },
+          "sealeo": {
+            "pose_sha256": "5629346f06de7a8c6a55fab039125e7e3554969a4364db9d8666055cbcc211bf",
+            "runtime_sha256": "46aa3642a7554754eae3a1097f4de754072e9f823f660afcb7db73692d87f1e0",
+            "sample_count": 189
+          },
+          "sealeo@shiny": {
+            "pose_sha256": "5629346f06de7a8c6a55fab039125e7e3554969a4364db9d8666055cbcc211bf",
+            "runtime_sha256": "43128c5555dae6da4354f1688b1fb3d440176bd3bdca511305de993d16c9aac9",
+            "sample_count": 189
+          },
+          "skiddo": {
+            "pose_sha256": "754e89962e69cad21aefe2fda9d550f9262ea8153cd6e8e0f4e5bd0b0180f9f4",
+            "runtime_sha256": "a212975c359c3c06fa45a8e36a8b6a934e5b8f15a427bf3042e69facb8d6d146",
+            "sample_count": 252
+          },
+          "skiddo@shiny": {
+            "pose_sha256": "754e89962e69cad21aefe2fda9d550f9262ea8153cd6e8e0f4e5bd0b0180f9f4",
+            "runtime_sha256": "fd87f007e64a310be58409ba726c2cd2d37434eaab183af554f2319385787258",
+            "sample_count": 252
+          },
+          "slither-wing": {
+            "pose_sha256": "406ea7b94d781c240884fb4958f648b8b6d15d02282df59d1f735ae3aa17b0e4",
+            "runtime_sha256": "1f1471f22e5b07875949196af8a9aea3db00b71ee55d111ea125d39d0b6fdd55",
+            "sample_count": 336
+          },
+          "slither-wing@shiny": {
+            "pose_sha256": "406ea7b94d781c240884fb4958f648b8b6d15d02282df59d1f735ae3aa17b0e4",
+            "runtime_sha256": "91ac9929a74cf17ed6a462cbb31943288d26382603d1b2c504a1da672fef82e7",
+            "sample_count": 336
+          },
+          "slowbro-galar": {
+            "pose_sha256": "d840e03eb1c22cd448500eae4fac01c3a143dba5b30cadca426e2c8ef7c113b5",
+            "runtime_sha256": "68d2f19948628ce8357a0951dc5db6ae9dd3a7a2a4644dc58fc3746921af2c2e",
+            "sample_count": 252
+          },
+          "slowbro-galar@shiny": {
+            "pose_sha256": "d840e03eb1c22cd448500eae4fac01c3a143dba5b30cadca426e2c8ef7c113b5",
+            "runtime_sha256": "80de30d6a30701e94601bd2fb02f56ab0d3a6ddf0f28838adaa6feb83fe8f5f5",
+            "sample_count": 252
+          },
+          "staraptor-mega": {
+            "pose_sha256": "616c783c813d58b9c0201618d931ca6f5cc8c33093963495fb4cf1046e0b4cce",
+            "runtime_sha256": "144491086087d4a05557165fb2817ec9814d295bc081e9a745b76ca6d3d3b9eb",
+            "sample_count": 189
+          },
+          "staraptor-mega@shiny": {
+            "pose_sha256": "616c783c813d58b9c0201618d931ca6f5cc8c33093963495fb4cf1046e0b4cce",
+            "runtime_sha256": "848d98a3307f2b71531f21a1eba4e4966a16de1448e46af419b15eed677f5760",
+            "sample_count": 189
+          },
+          "sudowoodo": {
+            "pose_sha256": "9b49b63bec0aa73f169aa041f49003c9f0801f880d9be657da95a5030bcc48c3",
+            "runtime_sha256": "7cfb2145f52b8cd45f8a8803c386f7e5592b13f99e724bdf0055862f69835b97",
+            "sample_count": 420
+          },
+          "sudowoodo@shiny": {
+            "pose_sha256": "9b49b63bec0aa73f169aa041f49003c9f0801f880d9be657da95a5030bcc48c3",
+            "runtime_sha256": "741220f4355734aedb1a9b235932dfda2d3be6f1ca22f6949781afaa9d3b6982",
+            "sample_count": 420
+          },
+          "tapu-koko": {
+            "pose_sha256": "72af448f193048d1602d27dfe0cb133a236ac25909b191c7333f1c114efc6ad6",
+            "runtime_sha256": "ab52721914cbca93c768893ba1eb4d421a1d043ab996f3eb05c5aef813e474e2",
+            "sample_count": 252
+          },
+          "tapu-koko@shiny": {
+            "pose_sha256": "72af448f193048d1602d27dfe0cb133a236ac25909b191c7333f1c114efc6ad6",
+            "runtime_sha256": "fbe3f2c8afb858af26a435513b22a77720fcca7effb3889d9b9e3e98695ff983",
+            "sample_count": 252
+          },
+          "tatsugiri": {
+            "pose_sha256": "26a731814a96053d8022ac7f954d6d22cae590f795171abbe4976b6d5b43b69e",
+            "runtime_sha256": "c28f3b70b2310ad68beb45a148f5f3b00e1de0edd6af399fa6c0490df7e96f71",
+            "sample_count": 84
+          },
+          "tatsugiri@shiny": {
+            "pose_sha256": "26a731814a96053d8022ac7f954d6d22cae590f795171abbe4976b6d5b43b69e",
+            "runtime_sha256": "dad40912454e4491fee7a6f88cd288568cffa336a3c0a847f26db1e06f45f9d0",
+            "sample_count": 84
+          },
+          "terapagos-stellar": {
+            "pose_sha256": "d8d2feb08a512f004f11d309566f771db51ffd4ead2fba563ff167e6221af08c",
+            "runtime_sha256": "c576e439b2e5b550f47c51ab78a4d171397e5016583ee2fc59e24e1d1b912d3b",
+            "sample_count": 63
+          },
+          "terapagos-stellar@shiny": {
+            "pose_sha256": "d8d2feb08a512f004f11d309566f771db51ffd4ead2fba563ff167e6221af08c",
+            "runtime_sha256": "da0693ccd27ce3e9286edbf6331c396dc1c126b3dbb11535500d70db703967b6",
+            "sample_count": 63
+          },
+          "terapagos-terastal": {
+            "pose_sha256": "31d522bbadcafdddac51b80f8b58a8bdf24e05fd3df5507c6818b1e8cd50ddcf",
+            "runtime_sha256": "af68997faccfe42b4e56c0e1ddd85ea42a09a0b5898124dc8838816dbd829bcc",
+            "sample_count": 63
+          },
+          "terapagos-terastal@shiny": {
+            "pose_sha256": "31d522bbadcafdddac51b80f8b58a8bdf24e05fd3df5507c6818b1e8cd50ddcf",
+            "runtime_sha256": "4661967d0efc5090518645b35fab2c09ef3dcd8e52ea75925cc073987b99d817",
+            "sample_count": 63
+          },
+          "thievul": {
+            "pose_sha256": "84adc4f637f6d61366372b9762088bcc6b0ccfb37c33b3132e0ecc85869854ca",
+            "runtime_sha256": "aa369b2782146cc386d6e63ffa0d41230ffc742c97f01b86616ef35b8315bcba",
+            "sample_count": 189
+          },
+          "thievul@shiny": {
+            "pose_sha256": "84adc4f637f6d61366372b9762088bcc6b0ccfb37c33b3132e0ecc85869854ca",
+            "runtime_sha256": "cddca3b7c643dd0b08739f6e4e5121b5545aea724b9fda1b7039cec285502c65",
+            "sample_count": 189
+          },
+          "ting-lu": {
+            "pose_sha256": "222234aff7ed7263171d14eb4cdf943d859eea001e394d8d581879c91566c64f",
+            "runtime_sha256": "009ddd18b32837fa9a93c2ce0df853fa881004b12c92b06456a8491949091ac4",
+            "sample_count": 84
+          },
+          "ting-lu@shiny": {
+            "pose_sha256": "222234aff7ed7263171d14eb4cdf943d859eea001e394d8d581879c91566c64f",
+            "runtime_sha256": "bd4e0083678b4a37b55e1a8f0209ae4f411b9be7a1be10e4533b531ba864dee4",
+            "sample_count": 84
+          },
+          "togekiss": {
+            "pose_sha256": "0772a523a03528b8d0ba4955ee10da030067d5d3d3127d2eedbbe3289737b808",
+            "runtime_sha256": "bee8de8e6dd7ac5d675c09ac734f18298acb517e668e8ebe7cbdbb7a348f548e",
+            "sample_count": 252
+          },
+          "togekiss@shiny": {
+            "pose_sha256": "0772a523a03528b8d0ba4955ee10da030067d5d3d3127d2eedbbe3289737b808",
+            "runtime_sha256": "377186207c3ea04d39447dd4a1279bcf7abe944df8d9daf2ebfcb84c489f3ccb",
+            "sample_count": 252
+          },
+          "torchic": {
+            "pose_sha256": "1a5c3f1d738df046b38fcbc3efea0ec8e8afb9969a19db157713e549cf573287",
+            "runtime_sha256": "3a5a4d0fe4db6f53884c315d0bc8119e275c70ef98c14986d2dfbfc8f348a91b",
+            "sample_count": 252
+          },
+          "torchic@shiny": {
+            "pose_sha256": "1a5c3f1d738df046b38fcbc3efea0ec8e8afb9969a19db157713e549cf573287",
+            "runtime_sha256": "7d49c891283fa685c16764bc97d889b0ee5295acf6b9305a322227067ef7a2ec",
+            "sample_count": 252
+          },
+          "virizion": {
+            "pose_sha256": "64bf9664ab2c219bbcdfa69d48f078359640d2db6846da0764652c66229db79d",
+            "runtime_sha256": "db349619fbe1865547911ad03085a3bdc8ff509d2247fefdeaabfc7df5993219",
+            "sample_count": 420
+          },
+          "virizion@shiny": {
+            "pose_sha256": "64bf9664ab2c219bbcdfa69d48f078359640d2db6846da0764652c66229db79d",
+            "runtime_sha256": "a0985086b82a0d1478594d069c1dfedd79d3f9ed3bbc6c19c5d0b27658327408",
+            "sample_count": 420
+          },
+          "wailord": {
+            "pose_sha256": "e6561b3c01ae7ad2cc3d67e8d6d9b8348a3f88cc63f07e39eac42c1a45c7be3c",
+            "runtime_sha256": "8fdf0ac6bf2f9d25e10b7d7249e7c065a8d0c3cfd811bad419cd9e72be9961c4",
+            "sample_count": 189
+          },
+          "wailord@shiny": {
+            "pose_sha256": "e6561b3c01ae7ad2cc3d67e8d6d9b8348a3f88cc63f07e39eac42c1a45c7be3c",
+            "runtime_sha256": "2880ea1364826eff598e4847418a17dba168f71d2ca37d2625e2cff5dc303598",
+            "sample_count": 189
+          },
+          "wooloo": {
+            "pose_sha256": "74b4c6b6c5bf3343da4476fc6101ab202208ad4c50e4fb0243f6a7916c8f828b",
+            "runtime_sha256": "28a0b88ce4715ecaf21904527b9979f7e2dafce0a27f80e010af7efb4214b800",
+            "sample_count": 189
+          },
+          "wooloo@shiny": {
+            "pose_sha256": "74b4c6b6c5bf3343da4476fc6101ab202208ad4c50e4fb0243f6a7916c8f828b",
+            "runtime_sha256": "61df49b52d35802fb46b3b4599061f5d11045bb26d5f98e88efdd07b1745ede9",
+            "sample_count": 189
+          },
+          "wooper": {
+            "pose_sha256": "fdcadd07c9e2b8ed81f6b3d81c0ab12fb2ffa19d116183cd6006de8220849a87",
+            "runtime_sha256": "828aaf53b81bbebbb7f9f9a5eeeac07252c9d7c9615cb0f4ea6eeb6e68222c28",
+            "sample_count": 252
+          },
+          "wooper@shiny": {
+            "pose_sha256": "fdcadd07c9e2b8ed81f6b3d81c0ab12fb2ffa19d116183cd6006de8220849a87",
+            "runtime_sha256": "2c94fa9d537109c5c5ea44447f2d7fd9435fb2c81c83c6bbcf460e7552ff601a",
+            "sample_count": 252
+          },
+          "wyrdeer": {
+            "pose_sha256": "e62a6c90e4bd1856d060efb02f2e44168c7ea3ccd99575733161e907c310beab",
+            "runtime_sha256": "9482e3ca8f3622ade95419042653623697a3ce2b043f0d4b2f95939fcbd4ac9b",
+            "sample_count": 420
+          },
+          "wyrdeer@shiny": {
+            "pose_sha256": "e62a6c90e4bd1856d060efb02f2e44168c7ea3ccd99575733161e907c310beab",
+            "runtime_sha256": "16060b5339ba3cbe1dffd7ad3d1a10ace04c3504b5e5ac9c725aa8289aef3b60",
+            "sample_count": 420
+          },
+          "zapdos-galar": {
+            "pose_sha256": "c6f38672f91c12258926dd661d1d0763ef78fe9096577ce3eefdc600eeb218e3",
+            "runtime_sha256": "643cd2aba3d222b825207f47456aad256403d004ec5cfb30d1172c4f307aaef8",
+            "sample_count": 504
+          },
+          "zapdos-galar@shiny": {
+            "pose_sha256": "c6f38672f91c12258926dd661d1d0763ef78fe9096577ce3eefdc600eeb218e3",
+            "runtime_sha256": "df66ae46de648bdc104df95038ae31fded0decf49ccc01e471a88180097d1698",
+            "sample_count": 504
+          }
+        },
+        "profile_count": 1197,
+        "profile_sha256": "e31c8504124edc21386bed9f6d197d4e7fb3e24cb3e4d6eb62ec850a6d2b6925",
+        "requested_species": [
+          "anorith",
+          "arceus",
+          "armaldo",
+          "aron",
+          "barbaracle",
+          "barbaracle-mega",
+          "bergmite",
+          "bonsly",
+          "carracosta",
+          "chien-pao",
+          "corphish",
+          "decidueye",
+          "delphox-mega",
+          "dragalge-mega",
+          "drampa",
+          "eelektross-mega",
+          "electabuzz",
+          "enamorus",
+          "eternatus",
+          "exeggutor-alola",
+          "flamigo",
+          "fomantis",
+          "garbodor",
+          "garchomp-mega",
+          "girafarig",
+          "gliscor",
+          "gogoat",
+          "hippowdon",
+          "hydreigon",
+          "iron-thorns",
+          "kabutops",
+          "kingler",
+          "kleavor",
+          "kricketune",
+          "kubfu",
+          "metagross-mega",
+          "muk",
+          "muk-alola",
+          "natu",
+          "nidoran-f",
+          "nidoran-m",
+          "nihilego",
+          "nymble",
+          "ogerpon",
+          "ogerpon-cornerstone",
+          "ogerpon-hearthflame",
+          "ogerpon-wellspring",
+          "parasect",
+          "pawniard",
+          "piloswine",
+          "poliwag",
+          "prinplup",
+          "raging-bolt",
+          "rapidash",
+          "relicanth",
+          "reshiram",
+          "rotom",
+          "salamence-mega",
+          "scizor",
+          "scrafty-mega",
+          "sealeo",
+          "skiddo",
+          "slither-wing",
+          "slowbro-galar",
+          "staraptor-mega",
+          "sudowoodo",
+          "tapu-koko",
+          "tatsugiri",
+          "terapagos-stellar",
+          "terapagos-terastal",
+          "thievul",
+          "ting-lu",
+          "togekiss",
+          "torchic",
+          "virizion",
+          "wailord",
+          "wooloo",
+          "wooper",
+          "wyrdeer",
+          "zapdos-galar"
+        ],
+        "samples_per_action": 21,
+        "schema": 1,
+        "visual_verification": false
+      }
+    }
+  },
   "counts": {
     "approved_queue_parts_installed": 94,
     "new_profiles": 40,
@@ -8109,9 +10239,9 @@
       "result": "sampled_marker_profiles_installed"
     }
   },
-  "profile_sha256": "034079b6a880e50bad47f8e95b19e4bdcd66e24596a4675522ac58c39557e204",
+  "profile_sha256": "e31c8504124edc21386bed9f6d197d4e7fb3e24cb3e4d6eb62ec850a6d2b6925",
   "schema": 1,
-  "scope": "Assessment checkpoint for the remaining 43 forms without profiles and 226 pending parts on 118 forms. Sampled marker geometry does not certify attack-family routing, contact surfaces, effect size/timing/clearance or live NPC/wild battles. Some accepted palm/fin casting anchors still require distinct distal contact origins. Shiny models receive technical binding checks; visual sheets here use normal models.",
+  "scope": "Initial assessment plus correction follow-up; see correction_follow_up for current work and family backlog for all-catalog gaps.",
   "technical_checks": {
     "attachment_regression": {
       "banner": "MOVE_ATTACHMENTS_3D_OK transforms=true moving_bones=true forms=true lifecycle=true paired_beams=true paired_vines=true paired_sound=true single_impact=true",

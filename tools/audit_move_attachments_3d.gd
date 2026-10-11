@@ -64,6 +64,13 @@ func _run() -> void:
 				_fail("Invalid attachment definition: " + species + ":" + part)
 				return
 		var profile: Dictionary = Attachments.CALIBRATED.data.profiles.get(species, {})
+		for field: String in ["family_attachments", "attachment_overrides"]:
+			if not profile.has(field): continue
+			rows[species][field] = profile[field]
+			for part: String in profile[field].values():
+				if part not in ["body", "orb_clearance"] and part not in Attachments.configured_parts(species):
+					_fail("Unconfigured family/part override: " + species + ":" + part)
+					return
 		if profile.has("review"): rows[species]["review"] = profile.review
 		if profile.has("actions"):
 			rows[species]["action_overrides"] = profile.actions

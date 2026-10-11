@@ -17,11 +17,39 @@ Draco Meteor profile is approved by this checkpoint.
 
 ## Remaining anatomical marker assessment
 
+The follow-up corrects all 37 forms in the positional queue and installs missing
+points for 14 of the 15 forms in that queue. Mega Scrafty's hands stay concealed;
+its native body lunge uses a body origin. In this follow-up, 129 part reviews on
+63 forms were installed or replaced, including Mega Barbaracle's separate open
+and twisted-hand bindings, Togekiss's wing tips and Enamorus's tail end.
+This is a bounded correction batch, not completion of the whole catalog.
+
+The [family backlog](attack-attachment-family-backlog.json) intersects supported
+presenters with learnsets across all 1,200 forms. There are still 323 forms with
+an unconfigured anatomical route: 231 request a hand, 111 a mouth, and one a
+foot (categories overlap). Some need a link to an already reviewed named part;
+others need anatomical calibration or a deliberate alternative. Body and orb
+origins are procedural and are excluded from these missing-part counts.
+
+To refresh that inventory from the assigned frontend slot, run the learnset
+audit through `slot-env`, then summarize its output from the frontend directory:
+
+```bash
+ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend --script res://tools/audit_move_attachment_learnsets.gd -- --learnsets /absolute/path/to/slot/backend/pokemon-data/data/species --output res://.tmp/attack-attachments/learnsets.json
+# From the assigned frontend directory:
+python3 tools/sprite_factory/summarize_attack_attachment_families.py --audit .tmp/attack-attachments/learnsets.json
+```
+
+The summarizer checks the audit's source digests before writing the backlog.
+`attack_attachment_move_preview.gd --battle-kind wild` or `trainer` samples the
+actual stage under that context. It remains an offline model/effect review and
+does not exercise encounter preparation or a live battle server.
+
 The [remaining assessment](attack-attachment-remaining-assessment.md) records
 individual visual decisions for the 43 forms previously without a profile and
 226 pending part entries on 118 forms. Forty forms now have profiles; Mega
 Hawlucha, Minior and Togedemaru remain blocked by model identity or visibility.
-The pending-part pass accepts 94 palm, paw and other surface points on 47 forms.
+The initial pending-part pass accepted 94 palm, paw and other surface points on 47 forms.
 Every remaining proposal has a recorded correction, missing-part, anatomy or
 model decision, with preview hashes and native pose evidence.
 
@@ -111,6 +139,13 @@ An outer array describes separate emitters. Each emitter's inner array contains
 weighted bone-local points, allowing a mouth origin to follow both moving lips.
 `actions` can override parts for a particular native clip; `moves` selects a
 part for an individual move and `move_actions` selects its native attack clip.
+`family_attachments` selects a part for a recipe family, while
+`attachment_overrides` maps generic anatomy to a reviewed species-specific name
+(for example, `mouth` to `muzzle`). Precedence is explicit move override, family
+override, then the generic part and its anatomical alias. A family-selected part
+is final and is not aliased again. Shiny shares the exact form's configuration;
+alternate and Mega forms do not inherit it. A `body` alternative intentionally
+uses the existing procedural body origin; it is not counted as a calibrated hand.
 Snivy's Vine Whip uses both animated vine tips and `physical_attack_2`.
 Servine uses that same action name with its own measured tip offsets; Serperior
 uses `physical_attack`. Magmortar's Ember and Flamethrower use the right cannon
@@ -136,6 +171,10 @@ matches. It supplies `launch_fraction`, `impact_fraction`, optional
 source streams and particles; target impact graphics retain their own lifetime.
 The fire, ice, Flash Cannon, staged-beam and Water Gun presenters consume that end marker.
 Unspecified values retain their existing move timing.
+Optional `effect_start_fraction` delays preparation graphics until a selected
+native pose (0 through launch). Charge growth starts at that point; launch,
+impact and cancellation retain their existing behavior. This option is covered
+by regression checks; this correction batch does not enable it on a new profile.
 
 Fire, ice, Flash Cannon, staged beams and Water Gun accept `emission_scale` (positive, at
 most 4). It adjusts the source stream width, muzzle and traveling particles;

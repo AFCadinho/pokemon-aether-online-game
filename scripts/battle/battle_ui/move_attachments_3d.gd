@@ -41,9 +41,16 @@ static func action_for(identity: String, move_key: String, available_actions: Di
 static func part_for(identity: String, move_key: String) -> String:
 	# Shiny uses the same rig; alternate/Mega forms require their own profile.
 	var species := Catalog.canonical_identity(identity).trim_suffix("@shiny")
+	var profile: Dictionary = CALIBRATED.data.profiles.get(species, {})
 	var overrides: Dictionary = MOVE_OVERRIDES.get(species, {}).duplicate()
-	overrides.merge(CALIBRATED.data.profiles.get(species, {}).get("moves", {}), true)
-	return overrides.get(move_key, MOVE_PARTS.get(move_key, Recipes.get_recipe(move_key).get("attachment", "body")))
+	overrides.merge(profile.get("moves", {}), true)
+	if overrides.has(move_key): return str(overrides[move_key])
+	var recipe := Recipes.get_recipe(move_key)
+	var family_parts: Dictionary = profile.get("family_attachments", {})
+	if family_parts.has(recipe.get("family", "")):
+		return str(family_parts[recipe.family])
+	var part: String = MOVE_PARTS.get(move_key, recipe.get("attachment", "body"))
+	return str(profile.get("attachment_overrides", {}).get(part, part))
 
 ## Reviewed timing/orientation belongs to one exact form, move and native clip.
 static func choreography_for(identity: String, move_key: String, action: String) -> Dictionary:
@@ -56,6 +63,10 @@ static func choreography_for(identity: String, move_key: String, action: String)
 	if not is_finite(launch) or not is_finite(impact) or not is_finite(yaw): return {}
 	if launch < 0 or launch >= impact or impact >= 1 or absf(yaw) > 180: return {}
 	var timing := {"launch_fraction": launch, "impact_fraction": impact, "contact_yaw_degrees": yaw}
+	if spec.has("effect_start_fraction"):
+		var effect_start := float(spec.effect_start_fraction)
+		if not is_finite(effect_start) or effect_start < 0 or effect_start > launch: return {}
+		timing["effect_start_fraction"] = effect_start
 	if spec.has("emission_end_fraction"):
 		var emission_end := float(spec.emission_end_fraction)
 		if not is_finite(emission_end) or emission_end <= impact or emission_end > 1: return {}

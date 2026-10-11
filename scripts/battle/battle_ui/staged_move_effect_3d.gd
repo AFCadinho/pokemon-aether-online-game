@@ -232,7 +232,7 @@ func _contact_stage(from: Vector3,center: Vector3,flight: float,after: float,alp
 
 func _beam_stage(from: Vector3,flight: float,after: float,alpha: float,facing: Basis,axis: Basis) -> void:
 	if emission_end >= 0 and elapsed >= emission_end: return
-	var charge := clampf(elapsed/maxf(launch,.01),0,1)
+	var charge := charge_progress()
 	for source: Vector3 in emission_sources:
 		if flight<0:
 			_piece(soft_quad,soft,source,Vector3.ONE*(.5+charge*1.2)*weight*emission_scale,facing)
@@ -260,7 +260,7 @@ func _beam_stage(from: Vector3,flight: float,after: float,alpha: float,facing: B
 				_line(source.lerp(end,i/6.)+axis.x*sin(i*3+elapsed*30)*.15*emission_scale,source.lerp(end,(i+1)/6.)+axis.x*sin((i+1)*3+elapsed*30)*.15*emission_scale,.03*emission_scale*fade,pearl)
 
 func _projectile_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
-	var charge := clampf(elapsed/maxf(launch,.01),0,1)
+	var charge := charge_progress()
 	if flight<0:
 		_piece(soft_quad,soft,origin,Vector3.ONE*(.4+charge)*weight*emission_scale,facing)
 		_source_sprite(origin,(.5+charge*.4)*emission_scale,_cast_art(),charge,alpha*.65,facing)

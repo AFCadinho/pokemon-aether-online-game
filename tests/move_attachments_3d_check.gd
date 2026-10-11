@@ -21,6 +21,7 @@ func _run() -> void:
 	add_child(world)
 	world.transform = Transform3D(Basis(Vector3.UP, 0.3), Vector3(5, -2, 3))
 	_check_weighted_attachments(world)
+	_check_family_routes()
 	var actor := _rig(world, ["head", "left_feeler_b_02", "right_feeler_b_02"])
 	actor.transform = Transform3D(Basis(Vector3.UP, 0.9).scaled(Vector3(2, 3, 2)), Vector3(-4, 1, 2))
 	var skeleton: Skeleton3D = actor.get_node("Rig")
@@ -458,6 +459,7 @@ func _run() -> void:
 	_check_sound_scale(world)
 	_check_heart_scale(world)
 	_check_sludge_trail_scale(world)
+	_check_effect_start(world)
 	_check_lick_window(world)
 	print("MOVE_ATTACHMENTS_3D_OK transforms=true moving_bones=true forms=true lifecycle=true paired_beams=true paired_vines=true paired_sound=true single_impact=true")
 	get_tree().quit()
@@ -627,6 +629,53 @@ func _check_lick_window(world: Node3D) -> void:
 					widths.append(width)
 			effect.free()
 		assert(is_equal_approx(widths[1]/widths[0],.5 if move == "Lick" else 1.0),"Tongue fades before retraction; other lashes retain their lifetime")
+
+func _check_family_routes() -> void:
+	for route: Array in [["bonsly","suckerpunch","body"],["exeggutor-alola","superpower","body"],["poliwag","pound","body"],["torchic","scratch","foot"],["torchic","rocksmash","foot"],["wooper","icepunch","body"],["scrafty-mega","closecombat","body"],["scrafty-mega","dragonclaw","body"],["dragalge-mega","watergun","muzzle"],["metagross-mega","rocksmash","claw_lower_right"],["doduo","furyattack","beak_tip"],["dodrio","furyattack","beak_tip"]]:
+		for identity: String in [route[0], route[0]+"@shiny"]:
+			assert(Attachments.part_for(identity,route[1]) == route[2])
+	assert(Attachments.part_for("scrafty","closecombat") == "hand", "Alternate forms do not change base-form routes")
+	var profiles: Dictionary = Attachments.CALIBRATED.data.profiles
+	profiles["__family_test"] = {"moves":{"rocksmash":"explicit"},"family_attachments":{"strikes":"family"},"attachment_overrides":{"hand":"alias","mouth":"muzzle"}}
+	assert(Attachments.part_for("__family_test","rocksmash") == "explicit")
+	assert(Attachments.part_for("__family_test","superpower") == "family")
+	assert(Attachments.part_for("__family_test","scratch") == "alias")
+	assert(Attachments.part_for("__family_test","watergun") == "muzzle")
+	assert(Attachments.part_for("__family_test","tackle") == "body")
+	profiles.erase("__family_test")
+
+func _check_effect_start(world: Node3D) -> void:
+	var calibrated: Dictionary = Attachments.CALIBRATED.data.profiles
+	var spec := {"action":"special_attack","launch_fraction":.4,"impact_fraction":.6,"effect_start_fraction":.2}
+	calibrated["__effect_start_test"] = {"move_choreography":{"shadowball":spec}}
+	assert(is_equal_approx(Attachments.choreography_for("__effect_start_test","shadowball","special_attack").effect_start_fraction,.2))
+	for invalid: float in [-.1, .41, INF, NAN]:
+		spec.effect_start_fraction = invalid
+		assert(Attachments.choreography_for("__effect_start_test","shadowball","special_attack").is_empty())
+	calibrated.erase("__effect_start_test")
+	for route: Array in [[Stage.BatchFourMoveEffect,"Shadow Ball"],[Stage.StagedMoveEffect,"Hyper Beam"]]:
+		for start_fraction: float in [0., .2]:
+			seconds = 0
+			var effect: Node3D = route[0].new()
+			world.add_child(effect)
+			var timing := {"frames":60,"launch_frame":24,"impact_frame":36}
+			if start_fraction > 0: timing.effect_start_frame = start_fraction*60
+			effect.start(route[1],timing,{},func(): return seconds,func(): return {"source":Vector3(-2,1,0),"sources":[Vector3(-2,1,0)],"target":Vector3(2,1,0),"radius":.8},func(): return true)
+			effect.set_process(false)
+			seconds = .1
+			effect._process(0)
+			assert((effect.cursor == 0) == (start_fraction > 0),"Delayed visuals must remain hidden before the selected native pose")
+			seconds = .3
+			effect._process(0)
+			assert(effect.cursor > 0)
+			assert(is_equal_approx(effect.charge_progress(),.5 if start_fraction > 0 else .75))
+			assert(is_equal_approx(effect.launch,.4) and is_equal_approx(effect.impact,.6),"Delaying preparation must preserve release and impact")
+			effect.free()
+		seconds = 0
+		var cancelled: Node3D = route[0].new()
+		world.add_child(cancelled)
+		cancelled.start(route[1],{"frames":60,"launch_frame":24,"impact_frame":36,"effect_start_frame":12},{},func(): return seconds,func(): return {},func(): return false)
+		assert(cancelled.done and cancelled.cancelled,"Cancellation remains active before delayed visuals begin")
 
 func _check_sludge_trail_scale(world: Node3D) -> void:
 	var effects: Array = []

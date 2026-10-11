@@ -1,6 +1,89 @@
 # Remaining attack attachment assessment
 
-## Scope
+## Current correction follow-up
+
+- Corrected all 37 forms in the positional queue.
+- Added missing points for 14 of 15 forms; Mega Scrafty keeps its hands concealed and uses a body alternative.
+- Installed or replaced 129 reviewed part records on 63 forms. Extra points include Togekiss’s wing tips, Enamorus’s tail end and Mega Barbaracle’s open/twisted hand variants.
+- Selected family alternatives for handless forms and connected 10 reviewed muzzles plus Mega Metagross’s lower right claw to generic routes. Doduo/Dodrio retain their already reviewed beak routes.
+- Focused regression, choreography, coverage and learnset audits pass. All 80 changed profiles pass real normal/shiny binding checks at 21 fractions per native action (160 models).
+- Seven representative effects were sampled offline in both wild and trainer stage contexts, two views and six fractions. All pairs have matching anchors and timing. These checks do not exercise server battle preparation, arena entry, or live NPC/wild battles.
+
+**The whole catalog is not finished.** The [family backlog](attack-attachment-family-backlog.json) contains 323 forms with missing anatomical routes: 231 hand, 111 mouth and one foot (overlapping categories). Existing named points may need routing; other cases need fresh calibration or an anatomical alternative. This count excludes intentional procedural body/orb origins and does not count all remaining timing/contact/clearance work.
+
+The original three model blockers remain, plus Cramorant/Deoxys visibility issues. Ogerpon’s three masked club forms have separately measured club surfaces, but overlapping shaft geometry and weapon routing remain unresolved. Ivy Cudgel has no current 3D presenter. Contact previews still expose facing, distance or target-art limitations for Poliwag, Wooper, Torchic, Mega Scrafty and Mega Barbaracle; their full effects are not approved.
+
+### Corrected forms
+
+| Form | Installed/replaced points |
+| --- | --- |
+| anorith | hand, left_hand |
+| armaldo | hand, left_hand |
+| aron | hand, left_hand |
+| barbaracle | hand, left_hand, upper_hand, upper_left_hand |
+| barbaracle-mega | hand, left_hand |
+| carracosta | hand, left_hand |
+| corphish | hand, left_hand |
+| decidueye | hand, left_hand |
+| delphox-mega | hand, left_hand |
+| drampa | hand, left_hand |
+| eelektross-mega | hand, left_hand |
+| electabuzz | hand, left_hand |
+| enamorus | tail |
+| flamigo | hand, left_hand |
+| fomantis | hand, left_hand |
+| garbodor | hand, left_hand |
+| garchomp-mega | hand, left_hand |
+| girafarig | hand, left_hand |
+| gliscor | hand, left_hand |
+| gogoat | hand, left_hand |
+| hippowdon | hand, left_hand |
+| hydreigon | hand, left_hand |
+| iron-thorns | hand, left_hand |
+| kabutops | hand, left_hand |
+| kingler | hand, left_hand |
+| kleavor | hand, left_hand |
+| kricketune | hand, left_hand |
+| kubfu | hand, left_hand |
+| muk | hand, left_hand |
+| muk-alola | hand, left_hand |
+| natu | hand, left_hand |
+| nidoran-f | hand, left_hand |
+| nidoran-m | hand, left_hand |
+| nihilego | hand, left_hand |
+| nymble | hand, left_hand |
+| ogerpon | hand, left_hand |
+| ogerpon-cornerstone | club, hand, left_hand |
+| ogerpon-hearthflame | club, hand, left_hand |
+| ogerpon-wellspring | club, hand, left_hand |
+| parasect | hand, left_hand |
+| pawniard | hand, left_hand |
+| piloswine | hand, left_hand |
+| prinplup | hand, left_hand |
+| rapidash | hand, left_hand |
+| relicanth | hand, left_hand |
+| reshiram | hand, left_hand |
+| rotom | hand, left_hand |
+| salamence-mega | hand, left_hand |
+| scizor | hand, left_hand |
+| sealeo | hand, left_hand |
+| skiddo | hand, left_hand |
+| slither-wing | hand, left_hand |
+| slowbro-galar | left_hand |
+| staraptor-mega | hand, left_hand |
+| sudowoodo | hand, left_hand |
+| tapu-koko | hand, left_hand |
+| thievul | hand, left_hand |
+| togekiss | hand, left_hand |
+| virizion | hand, left_hand |
+| wailord | hand, left_hand |
+| wooloo | foot, left_foot |
+| wyrdeer | hand, left_hand |
+| zapdos-galar | hand, left_hand |
+
+The JSON record retains per-form evidence, test digests and the earlier assessment. The sections below describe that **initial assessment**, before this follow-up.
+
+## Initial assessment scope
 
 Assessment of the remaining anatomical marker proposals is complete. Corrections and attack-family integration remain incomplete. Normal models were viewed at native idle and attack fractions 0.20, 0.45 and 0.65, plus a side view at 0.45. Mega Floette, Mega Rayquaza and Mega Zygarde also received separate hand closeups.
 

@@ -162,7 +162,7 @@ func _contact(from: Vector3,to: Vector3,center: Vector3,body: float,travel: floa
 func _beam(to: Vector3,travel: float,after: float,alpha: float,variant: String,facing: Basis) -> void:
 	for source: Vector3 in emission_sources:
 		if travel<0:
-			_source_sprite(source,.6*clampf(elapsed/maxf(launch,.01),0,1),"0",0,alpha,facing)
+			_source_sprite(source,.6*charge_progress(),"0",0,alpha,facing)
 		elif after<.45:
 			var end := source.lerp(to,clampf(travel,0,1))
 			var width := (.21 if key in ["hyperbeam","solarbeam"] else .13)*smoothstep(0,.15,travel)*(1-smoothstep(0,.45,after))
@@ -180,7 +180,7 @@ func _beam(to: Vector3,travel: float,after: float,alpha: float,variant: String,f
 
 func _projectile(from: Vector3,to: Vector3,travel: float,alpha: float,variant: String,facing: Basis,side: Vector3,path_basis: Basis) -> void:
 	if travel<0:
-		_source_sprite(from,.5*clampf(elapsed/maxf(launch,.01),0,1),"0",0,alpha*.5,facing)
+		_source_sprite(from,.5*charge_progress(),"0",0,alpha*.5,facing)
 		return
 	var dissolve := 1-smoothstep(1,1.22,travel)
 	if dissolve<=0: return

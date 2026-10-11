@@ -9,6 +9,7 @@ var output := "res://.tmp/attack-attachments/move-previews"
 var species := "snivy"
 var target_species := ""
 var move := "Vine Whip"
+var battle_kind := "trainer"
 var camera_yaw := 0.0
 var camera_scale := 1.0
 var camera_frame := "source"
@@ -23,7 +24,7 @@ var stage: Control
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
 	for i in args.size():
-		if args[i] in ["--catalog", "--output", "--species", "--target-species", "--move", "--camera-yaw", "--camera-scale", "--camera-frame", "--fractions"] and i + 1 >= args.size():
+		if args[i] in ["--catalog", "--output", "--species", "--target-species", "--move", "--battle-kind", "--camera-yaw", "--camera-scale", "--camera-frame", "--fractions"] and i + 1 >= args.size():
 			printerr("Missing argument: ", args[i]); quit(1); return
 		if args[i] == "--hide-effects": hide_effects = true
 		if args[i] == "--neutral-reflections": neutral_reflections = true
@@ -32,6 +33,7 @@ func _init() -> void:
 		if args[i] == "--species": species = args[i+1]
 		if args[i] == "--target-species": target_species = args[i+1]
 		if args[i] == "--move": move = args[i+1]
+		if args[i] == "--battle-kind": battle_kind = args[i+1]
 		if args[i] == "--camera-yaw": camera_yaw = deg_to_rad(float(args[i+1]))
 		if args[i] == "--camera-scale": camera_scale = float(args[i+1])
 		if args[i] == "--camera-frame": camera_frame = args[i+1]
@@ -44,6 +46,8 @@ func _init() -> void:
 				printerr("At most eight pose fractions are supported"); quit(1); return
 	if camera_frame not in ["source", "both"]:
 		printerr("Invalid camera frame"); quit(1); return
+	if battle_kind not in ["wild", "trainer"]:
+		printerr("Invalid battle kind"); quit(1); return
 	if not is_finite(camera_scale) or camera_scale <= 0 or not is_finite(camera_yaw):
 		printerr("Invalid camera settings"); quit(1); return
 	_run.call_deferred()
@@ -98,6 +102,7 @@ func _run() -> void:
 	light.rotation_degrees = Vector3(-30,-30,0)
 	camera = Camera3D.new(); world.add_child(camera); camera.fov = 40
 	stage = Stage.new(); root.add_child(stage); stage.set_process(false)
+	stage.set_battle_context(&"grass", battle_kind)
 	stage.active = true; stage.world = world; stage.camera = camera
 	stage.entries[species] = profile
 	stage.visual_bounds[species] = profile.get("bounds", {})
@@ -178,7 +183,7 @@ func _run() -> void:
 	if target_species != species: filename += "-vs-" + target_species
 	assert(sheet.save_png(output.path_join(filename+".png")) == OK)
 	var file := FileAccess.open(output.path_join(filename+".json"),FileAccess.WRITE)
-	file.store_string(JSON.stringify({"species":species,"target_species":target_species,"target_runtime_sha256":target_model.runtime_sha256,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"effect_sampling":"native_clock_120hz_v1","effects_hidden":hide_effects,"neutral_reflections":neutral_reflections,"camera_frame":camera_frame,"camera_scale":camera_scale,"camera_yaw":rad_to_deg(camera_yaw),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
+	file.store_string(JSON.stringify({"battle_kind":battle_kind,"species":species,"target_species":target_species,"target_runtime_sha256":target_model.runtime_sha256,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"effect_sampling":"native_clock_120hz_v1","effects_hidden":hide_effects,"neutral_reflections":neutral_reflections,"camera_frame":camera_frame,"camera_scale":camera_scale,"camera_yaw":rad_to_deg(camera_yaw),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
 	file.close()
 	effect.cancel(); await process_frame
 	stage.world = null; stage.camera = null; stage.free()

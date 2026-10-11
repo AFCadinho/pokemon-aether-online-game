@@ -137,7 +137,7 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 	return true
 
 func _draw_orb(from: Vector3, to: Vector3, travel: float, _after: float, facing: Basis, path_basis: Basis) -> void:
-	var charge := clampf(elapsed/maxf(launch,0.01),0,1)
+	var charge := charge_progress()
 	if elapsed<=0: return
 	if key=="moonblast" and travel<0.6:
 		_source_sprite(moon_origin+Vector3.UP*(1.35+0.3*(presentation_scale-1.0)),0.85,"moon",0,sin(charge*PI*0.5)*(1.0-clampf(travel/0.6,0,1))*0.7,facing)
@@ -227,7 +227,7 @@ func _draw_cannon(to: Vector3, travel: float, after: float, facing: Basis) -> vo
 	var fade := 1.0-clampf(after/0.65,0,1)
 	if emission_end >= 0:
 		fade = 1.0-clampf((elapsed-impact)/maxf(emission_end-impact,.01),0,1)
-	var charge := clampf(elapsed/maxf(launch,0.01),0,1)
+	var charge := charge_progress()
 	for origin: Vector3 in emission_sources:
 		if travel<0:
 			_source_sprite(origin,charge*0.7*emission_scale,"flash_muzzle",0,charge*0.75,facing,elapsed*4)
