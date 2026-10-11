@@ -56,6 +56,20 @@ func _run() -> void:
 		assert(Attachments.definitions_for(identity, "cannon")[0][0].bone == "feeler_a_02")
 		assert(Attachments.part_for(identity, "bite") == "mouth")
 	assert(Attachments.part_for("zygarde-50", "hyperbeam") == "mouth")
+	for species: String in ["regice", "regieleki", "regigigas", "regirock", "registeel", "staryu", "starmie"]:
+		for identity: String in [species, species + "@shiny"]:
+			var part := "gem" if species.begins_with("star") else "face"
+			var move := "watergun" if part == "gem" else "hyperbeam"
+			assert(Attachments.part_for(identity, move) == part)
+			assert(Attachments.definitions_for(identity, part).size() == 1)
+			assert(Attachments.definitions_for(identity, "mouth").is_empty())
+			assert(Attachments.part_for(identity, "tackle") == "body")
+	for identity: String in ["staryu", "staryu@shiny", "starmie", "starmie@shiny"]:
+		for move: String in ["watergun", "bubblebeam", "icebeam", "flashcannon", "scald", "waterpulse"]:
+			assert(Attachments.part_for(identity, move) == "gem")
+	assert(Attachments.part_for("starmie", "hyperbeam") == "gem")
+	assert(Attachments.part_for("starmie-mega", "watergun") == "mouth")
+
 	for identity: String in ["zweilous", "zweilous@shiny"]:
 		var heads := Attachments.definitions_for(identity, "mouth")
 		assert(heads.size() == 2)

@@ -80416,8 +80416,366 @@
         "side_fraction": 0.45
       }
     },
-    "regigigas": {
+    "regice": {
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal/shiny beam starts at the central light of the cross-shaped facial array. The raised-arm charge pose partly obscures broad effect edges, while later extended-arm poses show the origin on the face. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal/shiny beam starts at the central light of the cross-shaped facial array. The raised-arm charge pose partly obscures broad effect edges, while later extended-arm poses show the origin on the face. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal/shiny beam starts at the central light of the cross-shaped facial array. The raised-arm charge pose partly obscures broad effect edges, while later extended-arm poses show the origin on the face. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        }
+      },
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "1d98b8669be58052f90698ec7a5879adef4214b3846ca8a85d8abe4c565971bb",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2f14a737721ddbbec7ebcfb9c695099d8c957c52b2e10d0591e2d372925c6cc7",
+          "scope": "Normal/shiny beam starts at the central light of the cross-shaped facial array. The raised-arm charge pose partly obscures broad effect edges, while later extended-arm poses show the origin on the face. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "shiny_preview_sha256": "2093bca0606d8ab248db83e3c9b941824c69b58189af7b638534b0041f837745",
+          "shiny_runtime_sha256": "83c350e7cbb566b69cffc25ff20a90e94e45719d16a37e9e13938a51ad75fb81",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 302.5,
+            "impact_frame": 136.125,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "1d98b8669be58052f90698ec7a5879adef4214b3846ca8a85d8abe4c565971bb",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "15697adc8d81180ccff7fb4fa3e7b6de10b1325cec9df2c894b8e220c197679b",
+          "scope": "Normal/shiny beam starts at the central light of the cross-shaped facial array. The raised-arm charge pose partly obscures broad effect edges, while later extended-arm poses show the origin on the face. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "shiny_preview_sha256": "4a1a627c127be75cbc5261c1394fe5cf8b3e2f210ec30c0bf3b5cca0f5d05c59",
+          "shiny_runtime_sha256": "83c350e7cbb566b69cffc25ff20a90e94e45719d16a37e9e13938a51ad75fb81",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 302.5,
+            "impact_frame": 187.55,
+            "launch_frame": 75.625,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "3f581ae188b7450e837b0534394c84b6d76b877f7a07ff0c836a7afaae28d519",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "1d98b8669be58052f90698ec7a5879adef4214b3846ca8a85d8abe4c565971bb",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6f8d25ede6a09c7b24e89318936016794d8b1b917f4eda1da6ab6a78d818625b",
+          "scope": "Normal/shiny beam starts at the central light of the cross-shaped facial array. The raised-arm charge pose partly obscures broad effect edges, while later extended-arm poses show the origin on the face. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "shiny_preview_sha256": "b4ccdd83db99e399c8aa30aaed8c65778f163c4a8b1f2f8840644e74daf35e86",
+          "shiny_runtime_sha256": "83c350e7cbb566b69cffc25ff20a90e94e45719d16a37e9e13938a51ad75fb81",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 302.5,
+            "impact_frame": 136.125,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "flashcannon": "face",
+        "hyperbeam": "face",
+        "icebeam": "face"
+      },
       "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "a898f5ede9c251bbd1d8ef7f6bacb877d0be0cec9aafb5d086792e1cb0f9c8d5",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0203463324980386,
+                  0.81312885978864,
+                  0.166524807713321
+                ],
+                "column": 1.0,
+                "distance": 5.74118234402374,
+                "mesh": "pm0378_00_00_trmdl/Skeleton3D/pm0378_00_00_body_mesh",
+                "pixel": [
+                  207.0,
+                  167.0
+                ],
+                "surface": 2,
+                "triangle": 113,
+                "vertex_indices": [
+                  57,
+                  56,
+                  61
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "1d98b8669be58052f90698ec7a5879adef4214b3846ca8a85d8abe4c565971bb",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9270b7bb7efc8a212b5ea9e86dbe740a9d88485c6cba8d16b0e0664173be49f6",
+          "scope": "Projected central light on the cross-shaped facial array follows the torso through all sampled native attack poses. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                0.560234069824219,
+                0.00340014835819602,
+                0.36867368221283
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
+    "regieleki": {
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal/shiny Hyper Beam starts at the central facial light. Moving electrical tendrils and rings overlap the beam, so full tendril clearance remains pending despite the independently reviewed face attachment. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "status": "pending_tendril_clearance_review"
+        }
+      },
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "3f581ae188b7450e837b0534394c84b6d76b877f7a07ff0c836a7afaae28d519",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "caa124fcb00478201591ffb486a94631cb6b35383cbbaa5873488513057a5f4f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5d43c007f127dca5f3ffd24fc37a1db0414240c875fb564a07e883126c53a886",
+          "scope": "Normal/shiny Hyper Beam starts at the central facial light. Moving electrical tendrils and rings overlap the beam, so full tendril clearance remains pending despite the independently reviewed face attachment. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "shiny_preview_sha256": "2ffa884c998e16f1922d20338f71d9ed7170ea5e92ab6a602429f35aa5b213e6",
+          "shiny_runtime_sha256": "fb7f32f68ed95d54bb3b0a306cadfa29a41b996840abd352e6e965f73d0cd85d",
+          "status": "pending_tendril_clearance_review",
+          "timing": {
+            "action": "special_attack",
+            "frames": 120.0,
+            "impact_frame": 74.4,
+            "launch_frame": 30.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "hyperbeam": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "bda3396c40b6ef6f72e0db41425c5f37f81139219029ccdd56babce8cb442614",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.041895665598871,
+                  0.783337877379737,
+                  0.174766457021392
+                ],
+                "column": 1.0,
+                "distance": 1.81166309666038,
+                "mesh": "pm0989_00_00/Skeleton3D/pm0989_00_00_eye_mesh",
+                "pixel": [
+                  192.0,
+                  217.0
+                ],
+                "surface": 0,
+                "triangle": 13,
+                "vertex_indices": [
+                  3,
+                  10,
+                  1
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "caa124fcb00478201591ffb486a94631cb6b35383cbbaa5873488513057a5f4f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9973a8aae212fbdd09ee30b4ef097edab7d9c8b7dba5256b490840145c088fbf",
+          "scope": "Projected central facial light follows the head during its strong rotations. Arm tendrils obscure side views; only visible face poses are approved. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.188967451453209,
+                -0.000397940864786506,
+                0.318114399909973
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
+    "regigigas": {
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal/shiny Hyper Beam starts at the center of the long faceplate while both arms spread. Faceplate bending is followed in the sampled poses. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        }
+      },
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "3f581ae188b7450e837b0534394c84b6d76b877f7a07ff0c836a7afaae28d519",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "11cbc8837445a77d6e43756d90238201522ec81ea3766e2180a5e38344fe6468",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "49a3f5d27163455997281b891f73cc31c0eb6b13c7825205287995940af48811",
+          "scope": "Normal/shiny Hyper Beam starts at the center of the long faceplate while both arms spread. Faceplate bending is followed in the sampled poses. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "shiny_preview_sha256": "c6caf683cf575655706907c1aefc5567471973394eee9c27995b5de5a05d31de",
+          "shiny_runtime_sha256": "14b561fcc9fb602faed3316931e6eeefd568a58b70b6f156a34d24afc31cc873",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 162.0,
+            "impact_frame": 100.44,
+            "launch_frame": 40.5,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "hyperbeam": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "b517dcd7279edb297772c34d07090aabd576540626c06bbf15c0cef72e86b12a",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.496232073603979,
+                  0.264528022621754,
+                  0.239239903774267
+                ],
+                "column": 1.0,
+                "distance": 5.14915461794561,
+                "mesh": "pm0486_00_00/Skeleton3D/pm0486_00_00_body_d_mesh",
+                "pixel": [
+                  218.0,
+                  232.0
+                ],
+                "surface": 1,
+                "triangle": 20,
+                "vertex_indices": [
+                  13,
+                  14,
+                  10
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "11cbc8837445a77d6e43756d90238201522ec81ea3766e2180a5e38344fe6468",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "20d2dbfeeaa2157ea42013058ea77dc7c4e5c05f3095375156c2f44cd6b1a266",
+          "scope": "Projected center of the long gold faceplate follows the spine during visible poses. Punching arms occlude some physical views, while special poses keep it clear. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -80456,6 +80814,19 @@
         }
       },
       "parts": {
+        "face": [
+          [
+            {
+              "bone": "spine_03",
+              "offset": [
+                0.252432405948639,
+                0.00650569377467036,
+                0.840877294540405
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -80521,7 +80892,124 @@
       }
     },
     "regirock": {
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal/shiny beam starts at the central facial light between the orange columns. The face remains the origin as the torso straightens. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal/shiny beam starts at the central facial light between the orange columns. The face remains the origin as the torso straightens. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        }
+      },
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "7bc5c79b1f2341079d296860bb656f7fe7fe737c3d14e9858db0b590a5fdfc52",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "698e84b1db80537fc540085717b8898c82ad098e140a390a7a51ff616f3890ab",
+          "scope": "Normal/shiny beam starts at the central facial light between the orange columns. The face remains the origin as the torso straightens. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "shiny_preview_sha256": "25b6867fc6fb571c3aeccba8e49e34e67eabd52d937fb948ab73cb3c542f4a50",
+          "shiny_runtime_sha256": "72d9a8ebcee0ac3d713915a6a0982b67ddb474f68ac7b28fa1b574e21d73bf69",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 302.5,
+            "impact_frame": 136.125,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "3f581ae188b7450e837b0534394c84b6d76b877f7a07ff0c836a7afaae28d519",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "7bc5c79b1f2341079d296860bb656f7fe7fe737c3d14e9858db0b590a5fdfc52",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "78fe254e90327476b62b39636e24780585772f026ffcc01952e876f74ea6be70",
+          "scope": "Normal/shiny beam starts at the central facial light between the orange columns. The face remains the origin as the torso straightens. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "shiny_preview_sha256": "b6f09ba7f713ac4e1801e8f53e24dc17889dea57292bf63650be4fd75b2e42a1",
+          "shiny_runtime_sha256": "72d9a8ebcee0ac3d713915a6a0982b67ddb474f68ac7b28fa1b574e21d73bf69",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 302.5,
+            "impact_frame": 187.55,
+            "launch_frame": 75.625,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "flashcannon": "face",
+        "hyperbeam": "face"
+      },
       "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "4ce8e19724a76a1beaf28421a13eb19435fa872fd14a7531d5cc3b4ae4647c2c",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0668864812225397,
+                  0.245100925819149,
+                  0.688012592958311
+                ],
+                "column": 1.0,
+                "distance": 5.09721957755894,
+                "mesh": "pm0377_00_00_trmdl/Skeleton3D/pm0377_00_00_body_mesh",
+                "pixel": [
+                  205.0,
+                  139.0
+                ],
+                "surface": 2,
+                "triangle": 57,
+                "vertex_indices": [
+                  50,
+                  44,
+                  30
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "7bc5c79b1f2341079d296860bb656f7fe7fe737c3d14e9858db0b590a5fdfc52",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d76e1a20224ce26346a3ac608c730edf66c4d192e6eab110ec03143f2cf19622",
+          "scope": "Projected central light between the orange facial columns follows its stone torso through sampled native poses. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -80560,6 +81048,19 @@
         }
       },
       "parts": {
+        "face": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                0.789312720298767,
+                -0.0016084045637399,
+                0.137715011835098
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -80589,7 +81090,124 @@
       }
     },
     "registeel": {
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal/shiny beam starts at the central red faceplate light. Hands frame the beam in front views and obscure the side view; the point follows the spherical head. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal/shiny beam starts at the central red faceplate light. Hands frame the beam in front views and obscure the side view; the point follows the spherical head. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        }
+      },
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "3f581ae188b7450e837b0534394c84b6d76b877f7a07ff0c836a7afaae28d519",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "46dba6339767906ea8365d9e75a86099270187351f5803594317125809f2eac3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1a008c454dad985455ccf2e9fe5080d1ee36a073108b10ec3cebe7f7febbb1d5",
+          "scope": "Normal/shiny beam starts at the central red faceplate light. Hands frame the beam in front views and obscure the side view; the point follows the spherical head. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "shiny_preview_sha256": "5e76b15651e201b2dde159139a623437e5a9bea51094162861b54e20a89739d3",
+          "shiny_runtime_sha256": "9496a7974263ed82b752317c05d942d7e47c79500cf059f34d5c814a6c673174",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 347.5,
+            "impact_frame": 156.375,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "46dba6339767906ea8365d9e75a86099270187351f5803594317125809f2eac3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2ee36a676f5bf750870e7a027982acf79e72c0e4f5ce708bb9c3655923fe1883",
+          "scope": "Normal/shiny beam starts at the central red faceplate light. Hands frame the beam in front views and obscure the side view; the point follows the spherical head. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "shiny_preview_sha256": "6b60bfe422e56b145396a8b142f156b42023fc40e75e4ef65d43853d18217d73",
+          "shiny_runtime_sha256": "9496a7974263ed82b752317c05d942d7e47c79500cf059f34d5c814a6c673174",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 347.5,
+            "impact_frame": 215.45,
+            "launch_frame": 86.875,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "flashcannon": "face",
+        "hyperbeam": "face"
+      },
       "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "2c9717b687449733036bd7b100ada82694ea4cdd0c7bec78447cf91e7d819d71",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.00210288898680805,
+                  0.707874179106473,
+                  0.290022931906719
+                ],
+                "column": 1.0,
+                "distance": 1.75235249187243,
+                "mesh": "pm0379_00_00_trmdl/Skeleton3D/pm0379_00_00_body_mesh",
+                "pixel": [
+                  204.0,
+                  174.0
+                ],
+                "surface": 2,
+                "triangle": 62,
+                "vertex_indices": [
+                  29,
+                  30,
+                  200
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "46dba6339767906ea8365d9e75a86099270187351f5803594317125809f2eac3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5e050a315f46f5b59a11745a2cb456ea62ea58ffc5325badb583709daad4eb66",
+          "scope": "Projected central red faceplate light follows the spherical head through sampled native poses. Raised hands obscure the special side view. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -80628,6 +81246,19 @@
         }
       },
       "parts": {
+        "face": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.699813306331635,
+                0.00214897119440138,
+                0.604882657527924
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -94389,6 +95020,562 @@
         "preview_sha256": "6a30ce856d13d51815df6bb0237c47fbfc30d5ebaffdfd2c3595b7ab60d65fa5",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "starmie": {
+      "anatomical_route_reviews": {
+        "bubblebeam": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny actual effect reviewed from two views. The nearest visible bubbles leave the front gem; gaps later in flight are particle spacing. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny actual effect reviewed from two views. The wide beam is centered on the front gem as the body straightens. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny actual effect reviewed from two views. Charge and later beam remain centered on the gem through the sampled casting bend. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny actual effect reviewed from two views. The beam begins at the gem center and follows the casting bend; early star-arm overlap partly hides the side view. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "scald": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny actual effect reviewed from two views. Charge and later water beam are centered on the gem through the sampled casting bend. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "watergun": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny Water Gun starts at the front of the pink/cyan gem and follows the special-attack body bend. The point remains on the gem as the star straightens. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny actual effect reviewed from two views. At fraction 0.169 no ring is present; at 0.171 the first ring is centered on the front gem before moving outward at 0.18 and 0.19. Broad later rings and source clearance were also viewed at 0.2/0.405/0.45/0.65. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        }
+      },
+      "move_effect_reviews": {
+        "bubblebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "4810e2aa45a9b122e596e514ee4b066bf1f5377edfaba2e93fed88e739124150",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4c85c5d1bd706335dda522f591b6291508361c661c5f14c67da9d12ffbb8ec62",
+          "scope": "Normal/shiny actual effect reviewed from two views. The nearest visible bubbles leave the front gem; gaps later in flight are particle spacing. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "shiny_preview_sha256": "7234a39f544fffd5bb9c17aa51b8f73624d2718d2da336c81f57fa6125a5c6b0",
+          "shiny_runtime_sha256": "d1a47413b05590dfc8fa0ac7c4c1397d9391def0e79819b96d207c5f56c85b4a",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 132.0,
+            "impact_frame": 59.4,
+            "move_key": "bubblebeam"
+          },
+          "views": 2
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "4810e2aa45a9b122e596e514ee4b066bf1f5377edfaba2e93fed88e739124150",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "71b628838268c0dd136361a53bf64cc16f4370987d94aa8e3835ed2a12443c4e",
+          "scope": "Normal/shiny actual effect reviewed from two views. The wide beam is centered on the front gem as the body straightens. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "shiny_preview_sha256": "df275c6bd5082a763737bec853d68dd3a9c27e12975036c333778260f3ec1a6e",
+          "shiny_runtime_sha256": "d1a47413b05590dfc8fa0ac7c4c1397d9391def0e79819b96d207c5f56c85b4a",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 132.0,
+            "impact_frame": 59.4,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "4810e2aa45a9b122e596e514ee4b066bf1f5377edfaba2e93fed88e739124150",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3537b8796623b8a699c79b0d25b73d06efc2240d74b9125bd70581dd024faa1c",
+          "scope": "Normal/shiny actual effect reviewed from two views. Charge and later beam remain centered on the gem through the sampled casting bend. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "shiny_preview_sha256": "1cb2494493d2421417e9198f2dc03a4660959524f20424024dd79090052ee4da",
+          "shiny_runtime_sha256": "d1a47413b05590dfc8fa0ac7c4c1397d9391def0e79819b96d207c5f56c85b4a",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 132.0,
+            "impact_frame": 81.84,
+            "launch_frame": 33.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "4810e2aa45a9b122e596e514ee4b066bf1f5377edfaba2e93fed88e739124150",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "cf45e8725319a34df3e508a86b29341b6bdb347fabc4200e96093c4a20c87a2f",
+          "scope": "Normal/shiny actual effect reviewed from two views. The beam begins at the gem center and follows the casting bend; early star-arm overlap partly hides the side view. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "shiny_preview_sha256": "4964f72f5557fb8ca4b26d9604aac5c88015da4c821f588e24cc900b181cd24c",
+          "shiny_runtime_sha256": "d1a47413b05590dfc8fa0ac7c4c1397d9391def0e79819b96d207c5f56c85b4a",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 132.0,
+            "impact_frame": 59.4,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        },
+        "scald": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "4810e2aa45a9b122e596e514ee4b066bf1f5377edfaba2e93fed88e739124150",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9419e6ee1b1c927c2a7191b2a48e20820f4237e43adfe52bfd8bbab990c7f6c6",
+          "scope": "Normal/shiny actual effect reviewed from two views. Charge and later water beam are centered on the gem through the sampled casting bend. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "shiny_preview_sha256": "8b54710f9ffdef92eae2ce09de3c55f4b819c032edd946ba8de7f4de0876b34e",
+          "shiny_runtime_sha256": "d1a47413b05590dfc8fa0ac7c4c1397d9391def0e79819b96d207c5f56c85b4a",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 132.0,
+            "impact_frame": 81.84,
+            "launch_frame": 33.0,
+            "move_key": "scald"
+          },
+          "views": 2
+        },
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "4810e2aa45a9b122e596e514ee4b066bf1f5377edfaba2e93fed88e739124150",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4a32c91257f9e98478daed79f41374b33cf782e7820ddb6ac18d8e51df0eb559",
+          "scope": "Normal/shiny Water Gun starts at the front of the pink/cyan gem and follows the special-attack body bend. The point remains on the gem as the star straightens. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "shiny_preview_sha256": "67c16bb3a8b5ac74799b8e9c8de922071b548f87e85f7e7685cfe322ff4af3dd",
+          "shiny_runtime_sha256": "d1a47413b05590dfc8fa0ac7c4c1397d9391def0e79819b96d207c5f56c85b4a",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 132.0,
+            "impact_frame": 59.4,
+            "move_key": "watergun"
+          },
+          "views": 2
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "47c91b6d1bae6a5f962a317a3502e10c998bf287550d326a513e91526f7d3f50",
+          "fractions": [
+            0.169,
+            0.171,
+            0.18,
+            0.19
+          ],
+          "later_preview_sha256": "bb71d2a865c68a4604f1e60cbca682339664ce9f85e7ea9e0b182936e09f7996",
+          "later_shiny_preview_sha256": "5236900ab90bc6c18803dbd510ede0a0c9b29eed32b2709718c7c5c192b4a907",
+          "normal_runtime_sha256": "4810e2aa45a9b122e596e514ee4b066bf1f5377edfaba2e93fed88e739124150",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0ffda1044fea8b1b242d95789551187dbe7f35da2f3e5360f7aa915feb32978f",
+          "scope": "Normal/shiny actual effect reviewed from two views. At fraction 0.169 no ring is present; at 0.171 the first ring is centered on the front gem before moving outward at 0.18 and 0.19. Broad later rings and source clearance were also viewed at 0.2/0.405/0.45/0.65. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "shiny_preview_sha256": "0ae124c093c71a9877dc035fa8b264a05256a99dd455a3f7824d81b0e431700d",
+          "shiny_runtime_sha256": "d1a47413b05590dfc8fa0ac7c4c1397d9391def0e79819b96d207c5f56c85b4a",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 132.0,
+            "impact_frame": 59.4,
+            "move_key": "waterpulse"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bubblebeam": "gem",
+        "flashcannon": "gem",
+        "hyperbeam": "gem",
+        "icebeam": "gem",
+        "scald": "gem",
+        "watergun": "gem",
+        "waterpulse": "gem"
+      },
+      "part_reviews": {
+        "gem": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "b865858fd59913e6c01313db65c4513e0f21ec9b8e063e4bc64c560ac1a74a7c",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.107383637433451,
+                  0.876707885208913,
+                  0.0159084773576354
+                ],
+                "column": 1.0,
+                "distance": 1.25616680648349,
+                "mesh": "pm0121_00_00/Skeleton3D/pm0121_00_00_body_mesh",
+                "pixel": [
+                  210.0,
+                  192.0
+                ],
+                "surface": 2,
+                "triangle": 240,
+                "vertex_indices": [
+                  147,
+                  148,
+                  143
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "4810e2aa45a9b122e596e514ee4b066bf1f5377edfaba2e93fed88e739124150",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7762e9765d485f0e39a44f3bb05124854e165749528739461d7eea27275a7199",
+          "scope": "Projected front gem region stays on the pink gem through native poses. It is centered in the idle/special casting views; during the tilted physical_attack_2 pose perspective makes its screen position appear above the visible disk center, so this does not approve physical contact geometry. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "gem": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                -0.00541840447112918,
+                0.00403610337525606,
+                0.244188845157623
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
+    "staryu": {
+      "anatomical_route_reviews": {
+        "bubblebeam": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny actual effect reviewed from two views. The nearest visible bubbles leave the front gem; gaps later in flight are particle spacing. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny actual effect reviewed from two views. The wide beam is centered on the front gem as the body straightens. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny actual effect reviewed from two views. The beam begins at the gem center and follows the casting bend; early star-arm overlap partly hides the side view. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "scald": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny actual effect reviewed from two views. Charge and later water beam are centered on the gem through the sampled casting bend. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "watergun": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny Water Gun starts at the front of the red/blue gem and follows its special-attack tilt. Gem and water effects overlap at the source as intended. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "part": "gem",
+          "scope": "Normal/shiny actual effect reviewed from two views. At fraction 0.169 no ring is present; at 0.171 the first ring is centered on the front gem before moving outward at 0.18 and 0.19. Broad later rings and source clearance were also viewed at 0.2/0.405/0.45/0.65. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "status": "sampled_runtime_origin_region_review_pass"
+        }
+      },
+      "move_effect_reviews": {
+        "bubblebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "e674f7a2dbdd9c15e55d029e3f348088407020c5dbdcd71d39d1517eb191bdc4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "79ec39f984ebbab42d0cfeb5f382b7e5db2937979628f852c9841e02572f6413",
+          "scope": "Normal/shiny actual effect reviewed from two views. The nearest visible bubbles leave the front gem; gaps later in flight are particle spacing. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "shiny_preview_sha256": "f6d65879ada4c01fbcc4ca4662f677afec5cf7ece8df9f351a51c84376c8c700",
+          "shiny_runtime_sha256": "57bf9f438bd1db2d08c13835711ce148c9076712dccf3a9340051806609f7138",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "move_key": "bubblebeam"
+          },
+          "views": 2
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "e674f7a2dbdd9c15e55d029e3f348088407020c5dbdcd71d39d1517eb191bdc4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6184c567ba85b00c4abe85489690e2a3005312aab92406b7b37d1be66d98f50e",
+          "scope": "Normal/shiny actual effect reviewed from two views. The wide beam is centered on the front gem as the body straightens. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "shiny_preview_sha256": "03c6f771a8c2ad97dc18fb6b250ce00b2d7385fe32421d9e23d4f3eb46a727a8",
+          "shiny_runtime_sha256": "57bf9f438bd1db2d08c13835711ce148c9076712dccf3a9340051806609f7138",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "e674f7a2dbdd9c15e55d029e3f348088407020c5dbdcd71d39d1517eb191bdc4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a62bd43be808b67e07faa2e2f6e87c2a136dfe73e44ecc4d7ee6a856114af6fa",
+          "scope": "Normal/shiny actual effect reviewed from two views. The beam begins at the gem center and follows the casting bend; early star-arm overlap partly hides the side view. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "shiny_preview_sha256": "0898706e5f1657023b5dadef29aaf37d9352bb0db0bdadf95266419fc29d43ed",
+          "shiny_runtime_sha256": "57bf9f438bd1db2d08c13835711ce148c9076712dccf3a9340051806609f7138",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        },
+        "scald": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "deb4b2c5b31d8f23957803ee609de0f18eea05538dc47e07c2c3d39e9bab001f",
+          "fractions": [
+            0.2,
+            0.45,
+            0.583,
+            0.65
+          ],
+          "normal_runtime_sha256": "e674f7a2dbdd9c15e55d029e3f348088407020c5dbdcd71d39d1517eb191bdc4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7c1df84acabdb09bf5c9a658e4e0477530d325a0353759dc8698d3675eb8823b",
+          "scope": "Normal/shiny actual effect reviewed from two views. Charge and later water beam are centered on the gem through the sampled casting bend. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "shiny_preview_sha256": "85c5a37f5b194fc4ec640245c677c299ce496103376e7d825bed9ebe4e00d28e",
+          "shiny_runtime_sha256": "57bf9f438bd1db2d08c13835711ce148c9076712dccf3a9340051806609f7138",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 120.0,
+            "impact_frame": 74.4,
+            "launch_frame": 30.0,
+            "move_key": "scald"
+          },
+          "views": 2
+        },
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "3f581ae188b7450e837b0534394c84b6d76b877f7a07ff0c836a7afaae28d519",
+          "fractions": [
+            0.2,
+            0.405,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "e674f7a2dbdd9c15e55d029e3f348088407020c5dbdcd71d39d1517eb191bdc4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b35ea10142a9fcf28b1071b06ebcc992348f42a756063fa0a1757a6c312a5cdc",
+          "scope": "Normal/shiny Water Gun starts at the front of the red/blue gem and follows its special-attack tilt. Gem and water effects overlap at the source as intended. Review covers sampled origin placement for this move only; physical contacts, other effects and live battles remain pending.",
+          "shiny_preview_sha256": "38f8eb1acaded669f05e44d06a93b9e0f0168645eee8dae08931501768809bf5",
+          "shiny_runtime_sha256": "57bf9f438bd1db2d08c13835711ce148c9076712dccf3a9340051806609f7138",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "move_key": "watergun"
+          },
+          "views": 2
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "47c91b6d1bae6a5f962a317a3502e10c998bf287550d326a513e91526f7d3f50",
+          "fractions": [
+            0.169,
+            0.171,
+            0.18,
+            0.19
+          ],
+          "later_preview_sha256": "7ad6066e1ca308cfde2156952759ffa1ffe17fae0054af3db3a452334f067291",
+          "later_shiny_preview_sha256": "ccc5f7d40a9ec66ac3f0e7487317adb912851a767fa53506073b36824b52490c",
+          "normal_runtime_sha256": "e674f7a2dbdd9c15e55d029e3f348088407020c5dbdcd71d39d1517eb191bdc4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9ff4305568dd4f0232b613ba33673978b191e4c38a2f75c08f6747e7a615ffb7",
+          "scope": "Normal/shiny actual effect reviewed from two views. At fraction 0.169 no ring is present; at 0.171 the first ring is centered on the front gem before moving outward at 0.18 and 0.19. Broad later rings and source clearance were also viewed at 0.2/0.405/0.45/0.65. Approval covers the sampled origin region only; effect size, physical contacts, other moves and live battle review remain outside this approval.",
+          "shiny_preview_sha256": "e604e9448a22625ce5ee40dd5a35337822ac92368905193e2fd751aff95eb20e",
+          "shiny_runtime_sha256": "57bf9f438bd1db2d08c13835711ce148c9076712dccf3a9340051806609f7138",
+          "status": "sampled_runtime_origin_region_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "frames": 120.0,
+            "impact_frame": 54.0,
+            "move_key": "waterpulse"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bubblebeam": "gem",
+        "flashcannon": "gem",
+        "icebeam": "gem",
+        "scald": "gem",
+        "watergun": "gem",
+        "waterpulse": "gem"
+      },
+      "part_reviews": {
+        "gem": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "ffa08e970fc9c4661428e37824f4d1d0575bcd453ada9198a581afb9c72b53b9",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.619452081594595,
+                  0.0262251989185657,
+                  0.354322719486839
+                ],
+                "column": 1.0,
+                "distance": 2.10319063193978,
+                "mesh": "pm0120_00_00/Skeleton3D/pm0120_00_00_body_mesh",
+                "pixel": [
+                  208.0,
+                  176.0
+                ],
+                "surface": 1,
+                "triangle": 184,
+                "vertex_indices": [
+                  15,
+                  17,
+                  16
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "e674f7a2dbdd9c15e55d029e3f348088407020c5dbdcd71d39d1517eb191bdc4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b6078afb5f5fb2e89a398bbf4773568654320959d7f3437c2cbd30f1f0301009",
+          "scope": "Projected front-center of the red gem stays on its front surface during sampled bends and rotations, including the side view. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "gem": [
+          [
+            {
+              "bone": "waist",
+              "offset": [
+                0.0105749703943729,
+                -0.000385569932404906,
+                0.183620974421501
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
       }
     },
     "steenee": {

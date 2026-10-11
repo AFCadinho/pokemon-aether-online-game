@@ -7,8 +7,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1041 species/forms.
-- No anatomical attachment profile: 159 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 1045 species/forms.
+- No anatomical attachment profile: 155 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 947 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
@@ -746,9 +746,11 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | rattata-alola | hand, left_hand, mouth | Same attachment profile |
 | rayquaza | mouth | Same attachment profile |
 | rayquaza-mega | mouth | Same attachment profile |
-| regigigas | hand, left_hand | Same attachment profile |
-| regirock | hand, left_hand | Same attachment profile |
-| registeel | hand, left_hand | Same attachment profile |
+| regice | face | Same attachment profile |
+| regieleki | face | Same attachment profile |
+| regigigas | face, hand, left_hand | Same attachment profile |
+| regirock | face, hand, left_hand | Same attachment profile |
+| registeel | face, hand, left_hand | Same attachment profile |
 | relicanth | mouth | Same attachment profile |
 | remoraid | mouth | Same attachment profile |
 | reshiram | mouth | Same attachment profile |
@@ -883,6 +885,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | staraptor-mega | mouth | Same attachment profile |
 | staravia | mouth | Same attachment profile |
 | starly | mouth | Same attachment profile |
+| starmie | gem | Same attachment profile |
+| staryu | gem | Same attachment profile |
 | steenee | mouth | Same attachment profile |
 | stonjourner | foot, hand, left_foot, left_hand | Same attachment profile |
 | stoutland | mouth | Same attachment profile |

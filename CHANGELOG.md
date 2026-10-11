@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Anchor beam attacks to the central face lights of Regice, Regirock, Registeel, Regigigas and Regieleki, and water and beam attacks to Staryu’s and Starmie’s gems.
+
 - Place mouth effects on Vibrava, Vikavolt, Varoom, Venomoth and both Sandslash forms individually; align Vikavolt’s Flash Cannon, Varoom’s Sludge Bomb and Alolan Sandslash’s Ice Beam with their attack poses.
 
 - Give Zweilous separate attack origins for both mouths, use Zapdos’s upper bill tips for Peck and Mega Zygarde’s cannon for Hyper Beam, and align Walking Wake, Watchog and Hisuian Zoroark’s Flamethrower with their open-mouth poses.
