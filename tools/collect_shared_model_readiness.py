@@ -76,6 +76,23 @@ def main():
     assert len(session["repeated_pairs"]) == len(set(session["repeated_pairs"])) == 128
     assert set(session["repeated_pairs"]) <= identities
     assert (session["battles"], session["previews"], session["canceled"]) == (1338, 5352, 3)
+    completed = {row["label"]: row for row in session["samples"] if row["label"].startswith("completed-sweep-")}
+    assert set(completed) == {"completed-sweep-1", "completed-sweep-2", "completed-sweep-3"}
+    warm, final = completed["completed-sweep-2"], completed["completed-sweep-3"]
+    bounds = {"static_growth_bytes": final["static_bytes"] - warm["static_bytes"],
+              "static_growth_limit_bytes": 16 * 1048576,
+              "texture_growth_bytes": final["texture_bytes"] - warm["texture_bytes"],
+              "buffer_growth_bytes": final["buffer_bytes"] - warm["buffer_bytes"],
+              "gpu_growth_limit_bytes": 1048576,
+              "resource_growth": final["resources"] - warm["resources"], "resource_growth_limit": 8,
+              "node_growth": final["nodes"] - warm["nodes"],
+              "orphan_growth": final["orphans"] - warm["orphans"],
+              "mount_registry_growth_bytes": final["mount_registry_json_bytes"] - warm["mount_registry_json_bytes"]}
+    assert bounds["static_growth_bytes"] <= bounds["static_growth_limit_bytes"]
+    assert max(bounds["texture_growth_bytes"], bounds["buffer_growth_bytes"]) <= bounds["gpu_growth_limit_bytes"]
+    assert bounds["resource_growth"] <= bounds["resource_growth_limit"]
+    assert bounds["node_growth"] == bounds["orphan_growth"] == bounds["mount_registry_growth_bytes"] == 0
+    assert all(row["mounts"] == row["closures"] == row["namespaces"] == 1082 for row in completed.values())
     assert not session["errors"] and not install["errors"] and not mounts["errors"]
     assert mounts["pairs"] == 1082 and mounts["repeat_mount_requests"] == 5410
     assert mounts["declared_pck_members"] == sum(len(a["pair_manifest"]["files"]) + 1 for a in pairs)
@@ -155,7 +172,7 @@ def main():
               "installation": install, "consumers": consumers, "independent_physical_checks": physical,
               "mounts": {k: v for k, v in mounts.items() if k != "samples"},
               "mount_samples": [mounts["samples"][0], mounts["samples"][1], *mounts["samples"][-2:]],
-              "session": session, "crash_invocations": 63, "injected_kills": 20}
+              "session": session, "session_bounds": bounds, "crash_invocations": 63, "injected_kills": 20}
     result["prior_session_attempts"] = previous_sessions
     target.write_text(json.dumps(result, sort_keys=True, indent=2) + "\n")
     print("SHARED_MODEL_READINESS_COLLECTED", target)
