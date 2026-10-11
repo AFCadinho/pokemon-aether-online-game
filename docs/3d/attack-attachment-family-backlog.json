@@ -1,12 +1,10 @@
 {
-  "complete": false,
+  "complete": true,
+  "complete_visual_review": false,
   "counts": {
-    "configured_move_pairs": 8333,
-    "forms_with_missing_routes": 2,
-    "missing_parts": {
-      "foot": 1,
-      "hand": 1
-    },
+    "configured_move_pairs": 8335,
+    "forms_with_missing_routes": 0,
+    "missing_parts": {},
     "species_forms": 1200,
     "supported_move_pairs": 30646
   },
@@ -14,11 +12,11 @@
     "body",
     "orb_clearance"
   ],
-  "learnset_audit_sha256": "7c1d6a8b6fbfaf2bba329ae43dd663722308513aa583cb7d4d2d3d041a764486",
+  "learnset_audit_sha256": "74a0088a585f107e997bee8cc6b5faa3144b031f3a7b7d70dd2a473b2abfa42d",
   "schema": 1,
   "scope": "Missing configured anatomical routes grouped by form and family. Existing points may need an alias; absent anatomy may need a deliberate alternative. This is not a visual approval or a count of all unfinished effects.",
   "source_sha256": {
-    "data/battle_move_attachments_3d.json": "a3d8cff6dfc99b22f6e0820449d97955ccb0e68697d8db6a9593f25d64170aed",
+    "data/battle_move_attachments_3d.json": "214c8d23816c591ebb2e7b633a9c8eb53d4a864eefdd7c9f7fdc1bd74ed135b0",
     "data/battle_move_recipes_3d.json": "4f237143c9001b7fc43f9bd0358f8361173e8f148f30d23bd8db7c7f27c90429",
     "scripts/battle/animations/model_action_map.gd": "6b09908b3b6568e7ecc8e642c155ff9f73964bbc4af0a0c8741723fedca37b67",
     "scripts/battle/battle_ui/experimental_battle_3d.gd": "08960a8faa84fe02ee1b3904e1427801248982c205737478fac7e96657819ebb",
@@ -27,40 +25,5 @@
     "scripts/battle/battle_ui/reviewed_model_catalog.json": "4a89f879b5ade817e5d576823cfc197618bbee4ebe8e3585ba1d22b35167c505",
     "scripts/battle/battle_ui/screened_model_catalog.json": "e48e36f568932290b2b7f1f461e15391444d6e7821d48f6ef0c59ede5b36839d"
   },
-  "species_forms": {
-    "avalugg-hisui": {
-      "configured_parts": [
-        "mouth"
-      ],
-      "learnset_sha256": "cef925de9c0a668c76f94c1b64c3d9b8ff5eb8d4c3611c536da3142189cd74fe",
-      "missing_routes": {
-        "hand": {
-          "strikes": {
-            "representative_move": "rocksmash",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "e90f8342680e151eb5ffe56a9f3c956168f92cd5b1d7d9bae2dc59c332447d15",
-      "status": "individual_anatomy_or_routing_review_required"
-    },
-    "raichu-alola": {
-      "configured_parts": [
-        "hand",
-        "left_hand",
-        "mouth"
-      ],
-      "learnset_sha256": "f9e51dfd2fc5a583be347c51752a9f3eb5926d0b52823a7c93a9b4912fb685b4",
-      "missing_routes": {
-        "foot": {
-          "strikes": {
-            "representative_move": "doublekick",
-            "supported_move_count": 1
-          }
-        }
-      },
-      "runtime_sha256": "2c65d428103d734c65c15c48ae06aefcb26ec632e3f21e67a94680f00c47e2f6",
-      "status": "individual_anatomy_or_routing_review_required"
-    }
-  }
+  "species_forms": {}
 }

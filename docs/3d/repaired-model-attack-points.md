@@ -70,9 +70,8 @@ native attachment binding; repaired-source inspection; `move_attachments_3d_chec
 historical v11 metadata validation; shared catalog/geometry metadata reconciliation;
 eight publication guard tests; twelve source-mapping tests; full learnset routing audit.
 
-The current 1,200-form audit has 30,646 supported routes and 8,333 configured
-bone-bound routes. New learnset entries outside the original 295-form cohort
-introduced two outstanding cases: Hisuian Avalugg/Rock Smash and Alolan
-Raichu/Double Kick. They are recorded in the regenerated
-[backlog](attack-attachment-family-backlog.json); none of the five repaired forms
-has a missing anatomical route.
+At this source-repair checkpoint, the 1,200-form audit had 30,646 supported
+routes and 8,333 configured bone-bound routes. Its two remaining cases,
+Hisuian Avalugg/Rock Smash and Alolan Raichu/Double Kick, are now resolved by
+the [contact follow-up](remaining-contact-attack-points.md). The regenerated
+[backlog](attack-attachment-family-backlog.json) has no missing anatomical routes.

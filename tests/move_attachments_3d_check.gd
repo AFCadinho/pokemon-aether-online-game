@@ -24,6 +24,7 @@ func _run() -> void:
 	_check_family_routes()
 	_check_reviewed_hand_routes()
 	_check_catalog_routes()
+	_check_remaining_contact_routes(world)
 	var actor := _rig(world, ["head", "left_feeler_b_02", "right_feeler_b_02"])
 	actor.transform = Transform3D(Basis(Vector3.UP, 0.9).scaled(Vector3(2, 3, 2)), Vector3(-4, 1, 2))
 	var skeleton: Skeleton3D = actor.get_node("Rig")
@@ -831,3 +832,32 @@ func _check_catalog_routes() -> void:
 			assert(not Attachments.definitions_for(route[0] + suffix, route[2]).is_empty())
 		assert(Attachments.action_for("togedemaru" + suffix, "hyperbeam", {"physical_attack": {}}) == "physical_attack")
 		assert(Attachments.choreography_for("hawlucha-mega" + suffix, "hyperbeam", "special_attack").emission_end_fraction <= .5)
+
+func _check_remaining_contact_routes(world: Node3D) -> void:
+	var cases := [
+		["avalugg-hisui", "rocksmash", "prow", "left_feeler_a", .25],
+		["raichu-alola", "doublekick", "left_foot", "left_foot_index", .28],
+	]
+	for route: Array in cases:
+		var actor := _rig(world, [route[3]])
+		var skeleton: Skeleton3D = actor.get_node("Rig")
+		for suffix: String in ["", "@shiny"]:
+			var identity: String = route[0] + suffix
+			assert(Attachments.part_for(identity, route[1]) == route[2])
+			var definitions := Attachments.definitions_for(identity, route[2])
+			assert(definitions.size() == 1 and definitions[0][0].bone == route[3])
+			assert(Attachments.action_for(identity, route[1], {"physical_attack": {}, "physical_attack_2": {}}) == "physical_attack_2")
+			assert(Attachments.action_for(identity, route[1], {"physical_attack": {}}).is_empty())
+			var timing := Attachments.choreography_for(identity, route[1], "physical_attack_2")
+			assert(is_equal_approx(timing.launch_fraction, route[4]) and is_equal_approx(timing.impact_fraction, .43))
+			assert(Attachments.choreography_for(identity, route[1], "physical_attack").is_empty())
+			skeleton.set_bone_pose_position(0, Vector3.ZERO)
+			var before := Attachments.sample(actor, identity, route[1], world, "physical_attack_2")
+			skeleton.set_bone_pose_position(0, Vector3(.1, .2, .3))
+			var after := Attachments.sample(actor, identity, route[1], world, "physical_attack_2")
+			assert(before.sources.size() == 1 and after.sources.size() == 1)
+			assert((after.sources[0] - before.sources[0]).is_equal_approx(Vector3(.1, .2, .3)), "Contact origin must follow the current native bone pose")
+			assert(Attachments.part_for(identity, "icebeam") == "mouth", "Contact fix preserves existing mouth routes")
+		actor.free()
+	assert(Attachments.definitions_for("raichu-alola", "foot")[0][0].bone == "right_foot_index")
+	assert(Attachments.definitions_for("raichu-alola", "foot") != Attachments.definitions_for("raichu-alola", "left_foot"))

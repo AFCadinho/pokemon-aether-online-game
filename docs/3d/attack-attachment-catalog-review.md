@@ -6,12 +6,12 @@ The five historical source holds are resolved, including normal and shiny.
 All 295 forms in the original remaining cohort were assessed individually and
 their original missing anatomical routes are resolved. The latest learnsets add
 two routes outside that cohort: Hisuian Avalugg's Rock Smash and Alolan Raichu's
-Double Kick. Those remain in the current backlog.
+Double Kick. Both are now resolved by the [final contact follow-up](remaining-contact-attack-points.md); the current missing-origin backlog is empty.
 
 The follow-up adds **20** part bindings and resolves **29** previously missing
 routes across the five repaired forms. **16** representative moves were inspected
 in both normal/shiny appearances (32 sheets); **3,150** bone-point samples passed.
-Current catalog totals: **8,333** configured bone-bound routes among **30,646**
+Current catalog totals: **8,335** configured bone-bound routes among **30,646**
 supported move/form pairs. Full per-move presentation approval remains separate.
 
 ## Earlier bulk phase
