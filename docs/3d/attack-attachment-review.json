@@ -10,29 +10,29 @@
       "mouth_projection_pending": 1,
       "mouthless_species_with_reviewed_alternate_emitter": 8,
       "mouthless_whole_body_move_anchor_reviewed": 1,
-      "mouthless_with_reviewed_casting_parts": 44,
+      "mouthless_with_reviewed_casting_parts": 48,
       "pending_anatomical_casting_review": 1,
       "pending_anatomical_mouth_review": 12,
       "pending_anatomical_mouthpart_review": 2,
       "pending_anatomical_muzzle_review": 1,
-      "pending_anatomical_route": 21,
-      "pending_anatomical_routing_review": 50,
-      "pending_animation_addon_review": 1,
+      "pending_anatomical_route": 19,
+      "pending_anatomical_routing_review": 47,
       "pending_camera_framing": 1,
       "pending_corrected_mouth_pose_review": 1,
       "pending_mask_casting_review": 1,
       "pending_mouth_proposal_or_anatomical_route": 8,
       "pending_mouthpart_clearance_review": 2,
-      "pending_multi_pose_mouth_fit": 2,
+      "pending_multi_pose_mouth_fit": 1,
       "pending_multipose_correction": 1,
       "pending_multipose_mouth_correction": 4,
       "pending_runtime_identity_review": 1,
       "pending_runtime_material_review": 5,
       "pending_runtime_visibility_and_anatomy_review": 1,
       "pending_source_visibility_review": 2,
+      "primary_mouth_reviewed_other_heads_pending": 1,
       "retain_existing_calibration": 4,
       "reviewed_mandibles_with_mouth_route_review_pending": 2,
-      "sampled_mouth_pose_review_pass": 997
+      "sampled_mouth_pose_review_pass": 999
     },
     "part_status": {
       "correction_pending": 2,
@@ -45,12 +45,12 @@
       "pending_multipose_correction": 8,
       "pending_runtime_identity_review": 4,
       "pending_runtime_visibility_and_anatomy_review": 4,
-      "sampled_marker_pose_review_pass_installed": 1865
+      "sampled_marker_pose_review_pass_installed": 1872
     },
-    "runtime_profiles": 1150,
+    "runtime_profiles": 1157,
     "species_forms": 1200
   },
-  "profile_sha256": "184615781cbbf3e27e8af1309ac17ed38f512e257fc4dc4b36b30590d9865fb7",
+  "profile_sha256": "dfb4c7e1a1cb2ba91dc7b26008a3af996b418448db3d31a1935968ae73718d72",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -17974,14 +17974,134 @@
       "part_status": {}
     },
     "chi-yu": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Fire body and small mouth require per-move anatomical selection",
-        "preview": "mouth-fallback-review-v6/chi-yu.png",
-        "status": "pending_anatomical_route"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "ember": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Head-bound lower orange facial region between the jade eye rings is individually projected; no exposed oral cavity is claimed. Physical_attack keeps the selected fire/beam release pointing forward. Release flashes remain near the lower gem tips, requiring full-radius continuous review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "flamethrower": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Head-bound lower orange facial region between the jade eye rings is individually projected; no exposed oral cavity is claimed. Physical_attack keeps the selected fire/beam release pointing forward. Release flashes remain near the lower gem tips, requiring full-radius continuous review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Head-bound lower orange facial region between the jade eye rings is individually projected; no exposed oral cavity is claimed. Physical_attack keeps the selected fire/beam release pointing forward. Release flashes remain near the lower gem tips, requiring full-radius continuous review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_route",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Head-bound lower orange facial region between the jade eye rings is individually projected; no exposed oral cavity is claimed. Physical_attack keeps the selected fire/beam release pointing forward. Release flashes remain near the lower gem tips, requiring full-radius continuous review.",
+        "preview": "mouth-context-v382/chi-yu.png",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "ember": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "fa6566a210f877333e1aec79ea453dafa136facf7842b32bca4c0113528cf07f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e9ac2d9e6d9881740924c302bf10c505fee67ca4cc6e71b3b61fff0598cc163e",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Head-bound lower orange facial region between the jade eye rings is individually projected; no exposed oral cavity is claimed. Physical_attack keeps the selected fire/beam release pointing forward. Release flashes remain near the lower gem tips, requiring full-radius continuous review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "a6f3597b1efd89c5d12f611b64c8d5a4c2e29fda35b878142cfa73e79d4a2244",
+          "shiny_runtime_sha256": "4b54072e79ccf3130d17fe062c2a09e00fa15bece9f8255dc7181c9955dd2ea2",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 110.0,
+            "impact_frame": 55.0,
+            "launch_frame": 44.0,
+            "move_key": "ember"
+          },
+          "views": 2
+        },
+        "flamethrower": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.6,
+            0.78
+          ],
+          "normal_runtime_sha256": "fa6566a210f877333e1aec79ea453dafa136facf7842b32bca4c0113528cf07f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "93a9c7d4e28c651ad7bf2890baca6c79cb5eec537dc093c971de0d474fdf18a3",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Head-bound lower orange facial region between the jade eye rings is individually projected; no exposed oral cavity is claimed. Physical_attack keeps the selected fire/beam release pointing forward. Release flashes remain near the lower gem tips, requiring full-radius continuous review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "8c3dc7ed542ae4be7a75983da96c785157c28960ddab65125b30c33d7e79c953",
+          "shiny_runtime_sha256": "4b54072e79ccf3130d17fe062c2a09e00fa15bece9f8255dc7181c9955dd2ea2",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 66.0,
+            "emission_scale": 0.12,
+            "frames": 110.0,
+            "impact_frame": 55.0,
+            "launch_frame": 44.0,
+            "move_key": "flamethrower"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.6,
+            0.78
+          ],
+          "normal_runtime_sha256": "fa6566a210f877333e1aec79ea453dafa136facf7842b32bca4c0113528cf07f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b8a5355737a0b00e67826c4ba59830a59733849d29eaea171ad66daefee84f52",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Head-bound lower orange facial region between the jade eye rings is individually projected; no exposed oral cavity is claimed. Physical_attack keeps the selected fire/beam release pointing forward. Release flashes remain near the lower gem tips, requiring full-radius continuous review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "e678df9c3cabcf7bd23fe65426f9dc83b50405464cb89305569e55a84651305b",
+          "shiny_runtime_sha256": "4b54072e79ccf3130d17fe062c2a09e00fa15bece9f8255dc7181c9955dd2ea2",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 66.0,
+            "emission_scale": 0.1,
+            "frames": 110.0,
+            "impact_frame": 55.0,
+            "launch_frame": 44.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -17990,7 +18110,68 @@
       ],
       "normal_runtime_sha256": "fa6566a210f877333e1aec79ea453dafa136facf7842b32bca4c0113528cf07f",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "7d083b6cf7b3cf2ea92e7bce57d6fb5ed2c4319c0697ba40d7959d139a4e83b4",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.708763032217574,
+                  0.240130739837197,
+                  0.051106227945229
+                ],
+                "column": 0.0,
+                "distance": 1.36686285459914,
+                "mesh": "pm1101_00_00/Skeleton3D/pm1101_00_00_body_mesh",
+                "pixel": [
+                  196.0,
+                  277.0
+                ],
+                "surface": 0,
+                "triangle": 711,
+                "vertex_indices": [
+                  396,
+                  141,
+                  142
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "fa6566a210f877333e1aec79ea453dafa136facf7842b32bca4c0113528cf07f",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "884d5a9622351f79bf9d5a09af36c9095b3e6bcd39d632c67f44adef310de4d3",
+          "scope": "Head-bound lower orange facial region between the jade eye rings; no visible oral opening is claimed. All native sampled poses reviewed, with eye-ring clearance requiring actual effects. Sampled marker review only; continuous clearance pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "chien-pao": {
       "anatomical_move_routing_review": "pending",
@@ -35704,13 +35885,96 @@
       "part_status": {}
     },
     "exeggcute": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "preview": "v5-extra-review/exeggcute.png",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "mouth_primary",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted upper/lower mouth rims on the foremost central egg are independent of the other five heads. Solar Beam and Sludge Bomb use this primary mouth in special_attack. Other five mouths and body routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "mouth_primary",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted upper/lower mouth rims on the foremost central egg are independent of the other five heads. Solar Beam and Sludge Bomb use this primary mouth in special_attack. Other five mouths and body routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Weighted upper/lower mouth rims on the foremost central egg are independent of the other five heads. Solar Beam and Sludge Bomb use this primary mouth in special_attack. Other five mouths and body routes remain pending.",
+        "preview": "mouth-context-v382/exeggcute.png",
+        "status": "primary_mouth_reviewed_other_heads_pending"
+      },
+      "mouth_status": "primary_mouth_reviewed_other_heads_pending",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f3386b3d870712eee12a9c1871c614a854d676e7c132e600bdec679f1f617e4c",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.4,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "7d1640800c5574d68cecc0d9a49bd5e6fd5eed28640ab72eda3fef6f30656ccc",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "49457ec3bdb9f53f416a9610245b90479492f5bf28a07cb32891d5ab96bf4c98",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted upper/lower mouth rims on the foremost central egg are independent of the other five heads. Solar Beam and Sludge Bomb use this primary mouth in special_attack. Other five mouths and body routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b34042b6ab8923653e08f06bb7b650a19b0ebe7a6ac6d6c741f7839b7b9a102e",
+          "shiny_runtime_sha256": "93cdab0e458135df742e610697c38898f091f0464fa3094c5f9bd8722585df35",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.08,
+            "frames": 302.5,
+            "impact_frame": 136.125,
+            "launch_frame": 105.875,
+            "move_key": "sludgebomb",
+            "projectile_arc_height": 0.08
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.4,
+            0.45,
+            0.55,
+            0.78
+          ],
+          "normal_runtime_sha256": "7d1640800c5574d68cecc0d9a49bd5e6fd5eed28640ab72eda3fef6f30656ccc",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d65b5050e1c0611019d71bbe7c63dd28ecbc7a2f6e7f05f48601dcbb620d092d",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted upper/lower mouth rims on the foremost central egg are independent of the other five heads. Solar Beam and Sludge Bomb use this primary mouth in special_attack. Other five mouths and body routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b417815b9f789a377a704c72b4a5582483ea62cfa43c66751b35f64819d5a3c9",
+          "shiny_runtime_sha256": "93cdab0e458135df742e610697c38898f091f0464fa3094c5f9bd8722585df35",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 166.375,
+            "emission_scale": 0.08,
+            "frames": 302.5,
+            "impact_frame": 136.125,
+            "launch_frame": 105.875,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -35719,7 +35983,91 @@
       ],
       "normal_runtime_sha256": "7d1640800c5574d68cecc0d9a49bd5e6fd5eed28640ab72eda3fef6f30656ccc",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "mouth_primary": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "mouth_primary": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "aab1d953fd92f230a8a7eb9d5a7dfdb80ea6ded7c71f79e85c53934c55c6af48",
+            "landmarks": [
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.508036179650188,
+                  0.236467634467188,
+                  0.255496185882625
+                ],
+                "column": 1.0,
+                "distance": 1.98492223045597,
+                "mesh": "pm0102_00_00_trmdl/Skeleton3D/pm0102_00_00_body_mesh_shape",
+                "pixel": [
+                  144.0,
+                  222.0
+                ],
+                "surface": 1,
+                "triangle": 2076,
+                "vertex_indices": [
+                  1627,
+                  1629,
+                  247
+                ],
+                "weight": 0.5
+              },
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.367310510355827,
+                  0.468457761769819,
+                  0.164231727874354
+                ],
+                "column": 1.0,
+                "distance": 1.96387135486443,
+                "mesh": "pm0102_00_00_trmdl/Skeleton3D/pm0102_00_00_body_mesh_shape",
+                "pixel": [
+                  144.0,
+                  227.0
+                ],
+                "surface": 1,
+                "triangle": 1665,
+                "vertex_indices": [
+                  1522,
+                  1615,
+                  1622
+                ],
+                "weight": 0.5
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "7d1640800c5574d68cecc0d9a49bd5e6fd5eed28640ab72eda3fef6f30656ccc",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "dba1d66be8df1445a23fd0eb96c7437aca44909b35a2575a0f839307cbc210e7",
+          "scope": "Projected upper/lower lips on the foremost central egg; spine_c and jaw_c weighted point. This is one primary head, not an average across the six eggs. Sampled marker review only; continuous clearance pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "mouth_primary": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "exeggutor": {
       "anatomical_move_routing_review": "pending",
@@ -46044,12 +46392,282 @@
       "part_status": {}
     },
     "gliscor": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "status": "pending_animation_addon_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted head/jaw point follows the central tooth gap. Claws hide the mouth in side views. Bug Bite uses the forward-facing special_attack opening because physical_attack turns the head away. Contact distance, claw clearance, tail routes and the uncaptured physical_attack_2 addon remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted head/jaw point follows the central tooth gap. Claws hide the mouth in side views. Bug Bite uses the forward-facing special_attack opening because physical_attack turns the head away. Contact distance, claw clearance, tail routes and the uncaptured physical_attack_2 addon remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted head/jaw point follows the central tooth gap. Claws hide the mouth in side views. Bug Bite uses the forward-facing special_attack opening because physical_attack turns the head away. Contact distance, claw clearance, tail routes and the uncaptured physical_attack_2 addon remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted head/jaw point follows the central tooth gap. Claws hide the mouth in side views. Bug Bite uses the forward-facing special_attack opening because physical_attack turns the head away. Contact distance, claw clearance, tail routes and the uncaptured physical_attack_2 addon remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted head/jaw point follows the central tooth gap. Claws hide the mouth in side views. Bug Bite uses the forward-facing special_attack opening because physical_attack turns the head away. Contact distance, claw clearance, tail routes and the uncaptured physical_attack_2 addon remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        }
       },
-      "mouth_status": "pending_animation_addon_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Separately projected upper and lower central mouth rims; head/jaw weights track the tooth gap across idle, physical and special poses. Side claws can occlude the mouth. Sampled marker review only; continuous clearance pending.",
+        "preview": "mouth-context-v382/gliscor.png",
+        "status": "mouth_pose_review_pass"
+      },
+      "mouth_review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "50f221440f650911bf9582dbc42ebd2ed76fcfd5db564d09fc877f47c8897ef1",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "ef0642fac259de6f004cdbd38ca245f9f478599eca6dc3b0f7e21aa6972c1d43",
+        "scope": "Separately projected upper and lower central mouth rims; head/jaw weights track the tooth gap across idle, physical and special poses. Side claws can occlude the mouth. Sampled marker review only; continuous clearance pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "4a32177465b85016a11eb8b050287623f7a5f37883c25149e663597a1a7a1c80",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.32535820498218,
+                0.456905946479894,
+                0.217735848537926
+              ],
+              "column": 1.0,
+              "distance": 3.16152548841552,
+              "mesh": "pm0472_00_00/Skeleton3D/pm0472_00_00_head_mesh",
+              "pixel": [
+                208.0,
+                163.0
+              ],
+              "surface": 0,
+              "triangle": 282,
+              "vertex_indices": [
+                128,
+                131,
+                364
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.367367669642763,
+                0.206999692858429,
+                0.425632637498808
+              ],
+              "column": 1.0,
+              "distance": 3.20219582922929,
+              "mesh": "pm0472_00_00/Skeleton3D/pm0472_00_00_head_mesh",
+              "pixel": [
+                208.0,
+                170.0
+              ],
+              "surface": 0,
+              "triangle": 450,
+              "vertex_indices": [
+                326,
+                604,
+                332
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      },
+      "mouth_status": "sampled_mouth_pose_review_pass",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "84540eabd5a4f5eca5a5f14a744d7eb91ba2002f95a97847470c8360cc07d33b",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "50f221440f650911bf9582dbc42ebd2ed76fcfd5db564d09fc877f47c8897ef1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "25d03860d2b14da99900d22f42cf61e6c3f69ea2e96a72652abd4733de61d7a6",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted head/jaw point follows the central tooth gap. Claws hide the mouth in side views. Bug Bite uses the forward-facing special_attack opening because physical_attack turns the head away. Contact distance, claw clearance, tail routes and the uncaptured physical_attack_2 addon remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "bfa50d65dec58eab55e3a63bd651d4074c082aee14bf1dbdc63b2357e04f1c04",
+          "shiny_runtime_sha256": "4dd6a61c0d36516dedc371d98f4dafddb3ca7b5a29c065868c3933f8396bc3c8",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "50f221440f650911bf9582dbc42ebd2ed76fcfd5db564d09fc877f47c8897ef1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "37049ebd4dcefcf8ac8832dea275856042f7e486cd1b7552c61116981153038e",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted head/jaw point follows the central tooth gap. Claws hide the mouth in side views. Bug Bite uses the forward-facing special_attack opening because physical_attack turns the head away. Contact distance, claw clearance, tail routes and the uncaptured physical_attack_2 addon remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "aad78a150fb5369620cdeca6f4bc25a7c3339512fc4ace4740a04215bbda3340",
+          "shiny_runtime_sha256": "4dd6a61c0d36516dedc371d98f4dafddb3ca7b5a29c065868c3933f8396bc3c8",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "50f221440f650911bf9582dbc42ebd2ed76fcfd5db564d09fc877f47c8897ef1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "00289bf477b1651b581438b4c40ae934b5147c8e73168414bdeece8b9747e8c8",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted head/jaw point follows the central tooth gap. Claws hide the mouth in side views. Bug Bite uses the forward-facing special_attack opening because physical_attack turns the head away. Contact distance, claw clearance, tail routes and the uncaptured physical_attack_2 addon remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "4bca9c0668d7802d0d05e9682ab369bb2a179f3f2caafafea509d4e87af99221",
+          "shiny_runtime_sha256": "4dd6a61c0d36516dedc371d98f4dafddb3ca7b5a29c065868c3933f8396bc3c8",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "50f221440f650911bf9582dbc42ebd2ed76fcfd5db564d09fc877f47c8897ef1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7d8666b22d202c147b2e9e3e63e13e318c2adf3ba980e60a20f90a1a9880994f",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted head/jaw point follows the central tooth gap. Claws hide the mouth in side views. Bug Bite uses the forward-facing special_attack opening because physical_attack turns the head away. Contact distance, claw clearance, tail routes and the uncaptured physical_attack_2 addon remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "04c3f82800a15efbedcf9e4b3f3e3c3299c90681ca2ac73ead0191b7904facc7",
+          "shiny_runtime_sha256": "4dd6a61c0d36516dedc371d98f4dafddb3ca7b5a29c065868c3933f8396bc3c8",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f3386b3d870712eee12a9c1871c614a854d676e7c132e600bdec679f1f617e4c",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "50f221440f650911bf9582dbc42ebd2ed76fcfd5db564d09fc877f47c8897ef1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3ef13631ff8ac02b5654a7740e59adec79ed509bdef6f2f91fb7ff9e77544353",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Weighted head/jaw point follows the central tooth gap. Claws hide the mouth in side views. Bug Bite uses the forward-facing special_attack opening because physical_attack turns the head away. Contact distance, claw clearance, tail routes and the uncaptured physical_attack_2 addon remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "08282b361a9c18a999faa4769be2818994471ca2685dd80b6025159378ff1b6d",
+          "shiny_runtime_sha256": "4dd6a61c0d36516dedc371d98f4dafddb3ca7b5a29c065868c3933f8396bc3c8",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "sludgebomb",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -48725,12 +49343,280 @@
       }
     },
     "grapploct": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "status": "pending_anatomical_route"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "drainpunch": {
+          "action": "physical_attack",
+          "part": "left_hand",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "focusblast": {
+          "action": "physical_attack",
+          "part": "left_hand",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "icepunch": {
+          "action": "physical_attack",
+          "part": "left_hand",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "rocksmash": {
+          "action": "physical_attack",
+          "part": "left_hand",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "suckerpunch": {
+          "action": "physical_attack",
+          "part": "left_hand",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "superpower": {
+          "action": "physical_attack",
+          "part": "left_hand",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_route",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending.",
+        "preview": "mouth-context-v382/grapploct.png",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "drainpunch": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "905849a968e247e8b4ad1851442d519eba03270708a2b2a8b1d0a9cbbe142b24",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "db5d094872fd6b0260d4073f5618815bcb6a54e9e1d141d7f4fa601ea68dae0f",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "580b6ccafd060013f490f270cc4af92d2855a6769172655822611405742c5414",
+          "shiny_runtime_sha256": "a26f2bb5184beb1029f8cc2f99137a4171329defbdf4c98f046bf2e98fe3f1e6",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 118.0,
+            "impact_frame": 53.1,
+            "launch_frame": 35.4,
+            "move_key": "drainpunch"
+          },
+          "views": 2
+        },
+        "focusblast": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "84540eabd5a4f5eca5a5f14a744d7eb91ba2002f95a97847470c8360cc07d33b",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.43,
+            0.45,
+            0.47,
+            0.525,
+            0.6,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "905849a968e247e8b4ad1851442d519eba03270708a2b2a8b1d0a9cbbe142b24",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0f2b98d7df73c732ac18455ae0ff14e5dbb8874f6997b5754b4e3a540d26f768",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "5f05729fd4bb93000eb9a023ab362349e93f6267319e4cdc6667ba811b917f84",
+          "shiny_runtime_sha256": "a26f2bb5184beb1029f8cc2f99137a4171329defbdf4c98f046bf2e98fe3f1e6",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 118.0,
+            "impact_frame": 70.8,
+            "launch_frame": 53.1,
+            "move_key": "focusblast"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "905849a968e247e8b4ad1851442d519eba03270708a2b2a8b1d0a9cbbe142b24",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3094fc58b59307707c0905c4dd90dbeb257bf511eca2fb5f11d281b36db21a0e",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "58668f57febdf1a213b82c42b7c44fe7ad5c5981a124a2689fef304321470267",
+          "shiny_runtime_sha256": "a26f2bb5184beb1029f8cc2f99137a4171329defbdf4c98f046bf2e98fe3f1e6",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 85.8,
+            "emission_scale": 0.2,
+            "frames": 132.0,
+            "impact_frame": 66.0,
+            "launch_frame": 52.8,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "icepunch": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "905849a968e247e8b4ad1851442d519eba03270708a2b2a8b1d0a9cbbe142b24",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ad9805faaf105ee16a635b0e11012d857d5b96b92bb67aac5946d0f7a7dd383a",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3ab72671ced2ebf2953bab3b84180ff6209b88547db85e2f2fe745850303422c",
+          "shiny_runtime_sha256": "a26f2bb5184beb1029f8cc2f99137a4171329defbdf4c98f046bf2e98fe3f1e6",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 118.0,
+            "impact_frame": 53.1,
+            "launch_frame": 35.4,
+            "move_key": "icepunch"
+          },
+          "views": 2
+        },
+        "rocksmash": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "905849a968e247e8b4ad1851442d519eba03270708a2b2a8b1d0a9cbbe142b24",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9a709456293a8c7f83ef5e3a35071f4ea03f9da25541c60e17dc832705949552",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3ebe289ce54fe9411de7ca4fe9057e9053499f032954ac1641e612af612cf2ff",
+          "shiny_runtime_sha256": "a26f2bb5184beb1029f8cc2f99137a4171329defbdf4c98f046bf2e98fe3f1e6",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 118.0,
+            "impact_frame": 53.1,
+            "launch_frame": 35.4,
+            "move_key": "rocksmash"
+          },
+          "views": 2
+        },
+        "suckerpunch": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "905849a968e247e8b4ad1851442d519eba03270708a2b2a8b1d0a9cbbe142b24",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3d263015a6649b76e97fce4ee34c3baa3e692ae88d96590019c3cb5ab6b998cc",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3cef59e50ed7c97254bb394f8907edc59478943529162a620f43332c5bbd7fef",
+          "shiny_runtime_sha256": "a26f2bb5184beb1029f8cc2f99137a4171329defbdf4c98f046bf2e98fe3f1e6",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 118.0,
+            "impact_frame": 53.1,
+            "launch_frame": 35.4,
+            "move_key": "suckerpunch"
+          },
+          "views": 2
+        },
+        "superpower": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "905849a968e247e8b4ad1851442d519eba03270708a2b2a8b1d0a9cbbe142b24",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3141b0f0d25a641926092a8c4678716cd1132e7356e176f0c406e06545c3469e",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Lower facial/beak point, right upper arm A tip and left lower arm B fist were independently projected. Hyper Beam uses the face. Focus Blast uses the left lower B fist at physical_attack .45 after the arm extends; the special_attack upper-arm route behind the head and .375 lower-arm release before extension were rejected. Five single-strike contact moves use this left lower B fist. Contact distances remain too large; Ice Punch streaks overlap other arms during windup and multi-arm combinations remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9b241da07f4cbaa175b12cf9f80914f2bdb291cb4902cb7721d713bfa7e04e93",
+          "shiny_runtime_sha256": "a26f2bb5184beb1029f8cc2f99137a4171329defbdf4c98f046bf2e98fe3f1e6",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 118.0,
+            "impact_frame": 53.1,
+            "launch_frame": 35.4,
+            "move_key": "superpower"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -48738,7 +49624,165 @@
       ],
       "normal_runtime_sha256": "905849a968e247e8b4ad1851442d519eba03270708a2b2a8b1d0a9cbbe142b24",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass",
+            "hand": "sampled_marker_pose_review_pass",
+            "left_hand": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "ae279c85c961ad20b5c34fc5d1d4392a23cb2c9d5a4e9bf9ede42953bed50eb2",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.373162432775138,
+                  0.308489704062663,
+                  0.318347863162199
+                ],
+                "column": 0.0,
+                "distance": 2.76460230658078,
+                "mesh": "pm0965_00_00/Skeleton3D/pm0965_00_00_body_mesh",
+                "pixel": [
+                  213.0,
+                  191.0
+                ],
+                "surface": 0,
+                "triangle": 202,
+                "vertex_indices": [
+                  621,
+                  613,
+                  622
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "905849a968e247e8b4ad1851442d519eba03270708a2b2a8b1d0a9cbbe142b24",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "70215d19fc359400713aef9d3c315d48ff74f1123bb0352694b98a98298eb59c",
+          "scope": "Individually projected blue lower facial/beak region bound to upper_jaw, head and root_jaw. No exposed oral cavity is claimed. Crossed arms hide it early in special_attack. Sampled marker review only; continuous clearance pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "ae279c85c961ad20b5c34fc5d1d4392a23cb2c9d5a4e9bf9ede42953bed50eb2",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.816704310985123,
+                  0.132317862656683,
+                  0.0509778263581944
+                ],
+                "column": 0.0,
+                "distance": 2.67403387740962,
+                "mesh": "pm0965_00_00/Skeleton3D/pm0965_00_00_body_mesh",
+                "pixel": [
+                  98.0,
+                  128.0
+                ],
+                "surface": 0,
+                "triangle": 102,
+                "vertex_indices": [
+                  212,
+                  210,
+                  244
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "905849a968e247e8b4ad1851442d519eba03270708a2b2a8b1d0a9cbbe142b24",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "03e6855ff1f9778945b502816fb1ec66caba0b3ec2d5e611fc5525ee5ab23f7c",
+          "scope": "Individually projected right upper arm A terminal segment, right_finger_a_02/01 weighted; sampled native poses and side reviewed. Sampled marker review only; continuous clearance pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "ae279c85c961ad20b5c34fc5d1d4392a23cb2c9d5a4e9bf9ede42953bed50eb2",
+            "landmarks": [
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.63140671349171,
+                  0.226736347551696,
+                  0.141856938956594
+                ],
+                "column": 3.0,
+                "distance": 2.51599513483002,
+                "mesh": "pm0965_00_00/Skeleton3D/pm0965_00_00_body_mesh",
+                "pixel": [
+                  88.0,
+                  140.0
+                ],
+                "surface": 0,
+                "triangle": 682,
+                "vertex_indices": [
+                  655,
+                  650,
+                  657
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "905849a968e247e8b4ad1851442d519eba03270708a2b2a8b1d0a9cbbe142b24",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "03e6855ff1f9778945b502816fb1ec66caba0b3ec2d5e611fc5525ee5ab23f7c",
+          "scope": "Projected leading outer surface of the curled left lower arm B during physical_attack .45 side view, weighted to finger_b_01/02 and hand_b. The prior upper arm A point missed this strike and was rejected for this route. Other arms overlap in frontal views and contacts remain pending. Sampled marker review only; continuous clearance pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed",
+        "hand": "sampled_marker_pose_review_pass_installed",
+        "left_hand": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "graveler": {
       "anatomical_move_routing_review": "pending",
@@ -54186,13 +55230,244 @@
       }
     },
     "hippowdon": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Latest idle calibration drifts or sits below the mouth in some native attack poses; not installed.",
-        "status": "pending_multi_pose_mouth_fit"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "bite": {
+          "action": "physical_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separately projected upper/lower lip rims track the wide opening. Hyper Beam ends at .27 before closure, verified at .16,.18,.23,.24,.25,.26,.27,.29. Bite impact .31 coincides with closing the physical_attack jaw. Contact distance remains visibly too large and fang effect size remains pending. Early charge and continuous tooth clearance need further review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separately projected upper/lower lip rims track the wide opening. Hyper Beam ends at .27 before closure, verified at .16,.18,.23,.24,.25,.26,.27,.29. Bite impact .31 coincides with closing the physical_attack jaw. Contact distance remains visibly too large and fang effect size remains pending. Early charge and continuous tooth clearance need further review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separately projected upper/lower lip rims track the wide opening. Hyper Beam ends at .27 before closure, verified at .16,.18,.23,.24,.25,.26,.27,.29. Bite impact .31 coincides with closing the physical_attack jaw. Contact distance remains visibly too large and fang effect size remains pending. Early charge and continuous tooth clearance need further review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separately projected upper/lower lip rims track the wide opening. Hyper Beam ends at .27 before closure, verified at .16,.18,.23,.24,.25,.26,.27,.29. Bite impact .31 coincides with closing the physical_attack jaw. Contact distance remains visibly too large and fang effect size remains pending. Early charge and continuous tooth clearance need further review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        }
       },
-      "mouth_status": "pending_multi_pose_mouth_fit",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Separately projected upper and lower lip rims in the open special_attack pose. Weighted upper_jaw_a_02/lower_jaw_a_03/a_02 follows the wide opening and closed lips in sampled actions. Sampled marker review only; continuous clearance pending.",
+        "preview": "mouth-context-v382/hippowdon.png",
+        "status": "mouth_pose_review_pass"
+      },
+      "mouth_review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "316f8f6c7c706433ff80a53437c890bf0022941ca46660a2f46651664042dbc4",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "d76779b798dfca166cd190fda5f3cfbd53a07c6e19814220adb25fd71cc1f94f",
+        "scope": "Separately projected upper and lower lip rims in the open special_attack pose. Weighted upper_jaw_a_02/lower_jaw_a_03/a_02 follows the wide opening and closed lips in sampled actions. Sampled marker review only; continuous clearance pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "9ccfa406f04c598c71c178cd573532e80762c5f2ac387b9d443272712334b923",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.0432182662839828,
+                0.877816464042559,
+                0.0789652696734585
+              ],
+              "column": 0.0,
+              "distance": 4.68644235335206,
+              "mesh": "pm0450_00_00/Skeleton3D/pm0450_00_00_body_mesh",
+              "pixel": [
+                204.0,
+                121.0
+              ],
+              "surface": 1,
+              "triangle": 1465,
+              "vertex_indices": [
+                563,
+                564,
+                492
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.148438509304801,
+                0.832636678489185,
+                0.0189248122060142
+              ],
+              "column": 0.0,
+              "distance": 5.07981979328258,
+              "mesh": "pm0450_00_00/Skeleton3D/pm0450_00_00_body_mesh",
+              "pixel": [
+                205.0,
+                225.0
+              ],
+              "surface": 1,
+              "triangle": 147,
+              "vertex_indices": [
+                43,
+                59,
+                57
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      },
+      "mouth_status": "sampled_mouth_pose_review_pass",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "bite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "f3386b3d870712eee12a9c1871c614a854d676e7c132e600bdec679f1f617e4c",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.15,
+            0.22,
+            0.26,
+            0.29,
+            0.3,
+            0.31,
+            0.32,
+            0.45
+          ],
+          "normal_runtime_sha256": "316f8f6c7c706433ff80a53437c890bf0022941ca46660a2f46651664042dbc4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a2ff04613265d051f7622b41cbe316b3d355d24f3b7bc53624454cdaeaf07bd3",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separately projected upper/lower lip rims track the wide opening. Hyper Beam ends at .27 before closure, verified at .16,.18,.23,.24,.25,.26,.27,.29. Bite impact .31 coincides with closing the physical_attack jaw. Contact distance remains visibly too large and fang effect size remains pending. Early charge and continuous tooth clearance need further review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3e49c10c686da36673d5b8e791fa31eb010584c878852a66372917364a4a246e",
+          "shiny_runtime_sha256": "b4c6a55ba487f5bf7668645a99ef9ae4411e600d6c953a0b937e3c538209a675",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 130.0,
+            "impact_frame": 40.3,
+            "launch_frame": 19.5,
+            "move_key": "bite"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f3386b3d870712eee12a9c1871c614a854d676e7c132e600bdec679f1f617e4c",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.16,
+            0.18,
+            0.23,
+            0.24,
+            0.25,
+            0.26,
+            0.27,
+            0.29
+          ],
+          "normal_runtime_sha256": "316f8f6c7c706433ff80a53437c890bf0022941ca46660a2f46651664042dbc4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0862926b9323080f3c5db9688f3214594eea7df6e625234e2b829aadfb3791d8",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separately projected upper/lower lip rims track the wide opening. Hyper Beam ends at .27 before closure, verified at .16,.18,.23,.24,.25,.26,.27,.29. Bite impact .31 coincides with closing the physical_attack jaw. Contact distance remains visibly too large and fang effect size remains pending. Early charge and continuous tooth clearance need further review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "fce1cdaa7e87939670759c3143cb0dfc8eb8ea7156d9715aaccee40c2f6cfea6",
+          "shiny_runtime_sha256": "b4c6a55ba487f5bf7668645a99ef9ae4411e600d6c953a0b937e3c538209a675",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 37.26,
+            "emission_scale": 0.35,
+            "frames": 138.0,
+            "impact_frame": 31.74,
+            "launch_frame": 22.08,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.14,
+            0.16,
+            0.18,
+            0.195,
+            0.23,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "316f8f6c7c706433ff80a53437c890bf0022941ca46660a2f46651664042dbc4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a495a522120f3ddc65bf2411e0baa455ce6ff3d85dd701f6c64ae0c658585d6a",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separately projected upper/lower lip rims track the wide opening. Hyper Beam ends at .27 before closure, verified at .16,.18,.23,.24,.25,.26,.27,.29. Bite impact .31 coincides with closing the physical_attack jaw. Contact distance remains visibly too large and fang effect size remains pending. Early charge and continuous tooth clearance need further review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "73c23b5606e60fae89b87f9c354208da08c644650a0d3f859552d8fddc255551",
+          "shiny_runtime_sha256": "b4c6a55ba487f5bf7668645a99ef9ae4411e600d6c953a0b937e3c538209a675",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.25,
+            "frames": 138.0,
+            "impact_frame": 31.74,
+            "launch_frame": 22.08,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.15
+          },
+          "views": 2
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.14,
+            0.16,
+            0.18,
+            0.195,
+            0.23,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "316f8f6c7c706433ff80a53437c890bf0022941ca46660a2f46651664042dbc4",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4e267b5a0ca7fb33bae5df51be38f7baa72dc5db8f98505734a96316d2ce2199",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separately projected upper/lower lip rims track the wide opening. Hyper Beam ends at .27 before closure, verified at .16,.18,.23,.24,.25,.26,.27,.29. Bite impact .31 coincides with closing the physical_attack jaw. Contact distance remains visibly too large and fang effect size remains pending. Early charge and continuous tooth clearance need further review. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "2d5f4679cefa5e4733392648c2f09fd0b642bbcfc8979362111e8e3702d3df83",
+          "shiny_runtime_sha256": "b4c6a55ba487f5bf7668645a99ef9ae4411e600d6c953a0b937e3c538209a675",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.3,
+            "frames": 138.0,
+            "impact_frame": 31.74,
+            "launch_frame": 22.08,
+            "move_key": "waterpulse"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -116909,15 +118184,250 @@
       "part_status": {}
     },
     "toedscool": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Point on upper head/cap rejected. Eyes sit beneath the skirt and no verified mouth opening appears. Needs cap/body/tentacle/foot routes.",
-        "preview": "mouth-context-v85/toedscool.png",
-        "preview_sha256": "a654f990c1fa4ac09e88618a6bcceb5864fd40ed2d3bbd43e5dce7af6b84bdcf",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending.",
+        "preview": "mouth-context-v382/toedscool.png",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "940ce75563a3ad13fa40affd258a9fa4dc3ffec720bff8b443da946687fee817",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "468699e5e012f7cae7aa7b7135a418c19dce4bf01a3bd63b414a7e777618a7ae",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "e990d0b38b0aa67b77ce52940ed1259729e40617b5240cef2bf04e705ea3583e",
+          "shiny_runtime_sha256": "63398b915b7f1b2ffae6cd1f6bcb45d50f7d0ae1296c49c7c1da9d2b4b2ef1f6",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 42.0,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "940ce75563a3ad13fa40affd258a9fa4dc3ffec720bff8b443da946687fee817",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "94003f8232ac632ca2f8687724b7cfcdb8a36313819954e2203e6ca5ab353ceb",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d722d88a50dff6f2d7f136b4d54527c17ecc1e6b970a173ba0da71bdc2d40520",
+          "shiny_runtime_sha256": "63398b915b7f1b2ffae6cd1f6bcb45d50f7d0ae1296c49c7c1da9d2b4b2ef1f6",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 42.0,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "940ce75563a3ad13fa40affd258a9fa4dc3ffec720bff8b443da946687fee817",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d4f685de5c9ce30a8615db44f5bb330bce5c1fbb1d53801658d4cd9dbe34148a",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "8384bc47d437cccd8f152b332f9f1e55bcd15107fa9b4cadfe385f551850a389",
+          "shiny_runtime_sha256": "63398b915b7f1b2ffae6cd1f6bcb45d50f7d0ae1296c49c7c1da9d2b4b2ef1f6",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 42.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f3386b3d870712eee12a9c1871c614a854d676e7c132e600bdec679f1f617e4c",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "940ce75563a3ad13fa40affd258a9fa4dc3ffec720bff8b443da946687fee817",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "dc3c01fd3bda5d6e0c7f86cba8ce9032c645f28b6cb44784c93800464bf3e9a0",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9d97083d9cc4e599ff3e52df343e6d248ccce3ddc44ce707be0ae60bba80618d",
+          "shiny_runtime_sha256": "63398b915b7f1b2ffae6cd1f6bcb45d50f7d0ae1296c49c7c1da9d2b4b2ef1f6",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 42.0,
+            "move_key": "sludgebomb",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "940ce75563a3ad13fa40affd258a9fa4dc3ffec720bff8b443da946687fee817",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "790737e33879489f50a6174512d7b16c5db0f19c03484a287414b18d940f7d9e",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9a8178c5e4d708fd570f51e70bdb6f7221307a8d0090b1585045a1b89c999b4e",
+          "shiny_runtime_sha256": "63398b915b7f1b2ffae6cd1f6bcb45d50f7d0ae1296c49c7c1da9d2b4b2ef1f6",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 42.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "940ce75563a3ad13fa40affd258a9fa4dc3ffec720bff8b443da946687fee817",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "347c5588fa167f201a7636d7e1b1a9b3d75f4114b13e68a9034a01d2abcfd4d2",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected lower central cap fringe follows waist; no exposed oral cavity is claimed. Sludge Bomb droplets now scale their downward offset with emission size, removing the long trail down the front leg at launch. The charge orb remains near the upper front leg. Continuous leg clearance and body/foot routes remain pending. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "a6bac7e163448c83b97837335946f34c3a888f98df83746578fdafb91ca5236a",
+          "shiny_runtime_sha256": "63398b915b7f1b2ffae6cd1f6bcb45d50f7d0ae1296c49c7c1da9d2b4b2ef1f6",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 42.0,
+            "move_key": "supersonic"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -116926,7 +118436,68 @@
       ],
       "normal_runtime_sha256": "940ce75563a3ad13fa40affd258a9fa4dc3ffec720bff8b443da946687fee817",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "bfbc3d4f66334e37625ac3a3a6fc1716685757ec2d5c6c5f235b95d6b517cc93",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0506839472626986,
+                  0.74400757991136,
+                  0.205308472825941
+                ],
+                "column": 0.0,
+                "distance": 1.13761030428283,
+                "mesh": "pm1110_00_00/Skeleton3D/pm1110_00_00_body_a_mesh",
+                "pixel": [
+                  207.0,
+                  184.0
+                ],
+                "surface": 0,
+                "triangle": 1695,
+                "vertex_indices": [
+                  955,
+                  956,
+                  954
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "940ce75563a3ad13fa40affd258a9fa4dc3ffec720bff8b443da946687fee817",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f131d2797a52e5b03fd1fb718b46c9f8066ad45653739d3eb47838adc73f53c3",
+          "scope": "Individually projected lower central cap fringe below the eyes, waist-bound. Follows cap in sampled native actions; no oral opening is claimed. Sampled marker review only; continuous clearance pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "toedscruel": {
       "anatomical_move_routing_review": "pending",
@@ -127383,15 +128954,210 @@
       }
     },
     "wiglett": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "No opening is resolved beneath the large pink nose. Original point drifts on the head during strong bends. Needs a front-head water origin that follows the correct bone.",
-        "preview": "mouth-context-v91/wiglett.png",
-        "preview_sha256": "30b36763b86089dbd6b118b20fa218b00d9c7c23d340658d212d1bc004093c35",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "icebeam": {
+          "action": "special_attack",
+          "part": "nose",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected pink nose follows nose/head bones during bending. The model has no exposed oral cavity. Selected streams, pulse and mud leave this nose. Sucker Punch uses the nose, with unresolved contact height/distance and whole-model base-rock translation. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "part": "nose",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected pink nose follows nose/head bones during bending. The model has no exposed oral cavity. Selected streams, pulse and mud leave this nose. Sucker Punch uses the nose, with unresolved contact height/distance and whole-model base-rock translation. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "suckerpunch": {
+          "action": "physical_attack",
+          "part": "nose",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected pink nose follows nose/head bones during bending. The model has no exposed oral cavity. Selected streams, pulse and mud leave this nose. Sucker Punch uses the nose, with unresolved contact height/distance and whole-model base-rock translation. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "watergun": {
+          "action": "special_attack",
+          "part": "nose",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected pink nose follows nose/head bones during bending. The model has no exposed oral cavity. Selected streams, pulse and mud leave this nose. Sucker Punch uses the nose, with unresolved contact height/distance and whole-model base-rock translation. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "part": "nose",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected pink nose follows nose/head bones during bending. The model has no exposed oral cavity. Selected streams, pulse and mud leave this nose. Sucker Punch uses the nose, with unresolved contact height/distance and whole-model base-rock translation. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected pink nose follows nose/head bones during bending. The model has no exposed oral cavity. Selected streams, pulse and mud leave this nose. Sucker Punch uses the nose, with unresolved contact height/distance and whole-model base-rock translation.",
+        "preview": "mouth-context-v382/wiglett.png",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "f923e0783448844eb820f733142fe05a4868f8302d7497a1befb5230dee6ad41",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f974350f445dbd5f4b20845e2567f0c50f8e426e804e6f4b3357c3c6a402b46c",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected pink nose follows nose/head bones during bending. The model has no exposed oral cavity. Selected streams, pulse and mud leave this nose. Sucker Punch uses the nose, with unresolved contact height/distance and whole-model base-rock translation. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "dca2c6bfb4d97374a21259c079c492d8e2258d8f5ea679979056dca85381a6ce",
+          "shiny_runtime_sha256": "fa71e2655b2842302f5f548351ae1c1fbd3a403068b6d26bc2bfed4ba07e2d79",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "f923e0783448844eb820f733142fe05a4868f8302d7497a1befb5230dee6ad41",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b1f2a500c4122ed960e530b49fd5f588fa9c8fc10c1298df862ea9be8f2a854c",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected pink nose follows nose/head bones during bending. The model has no exposed oral cavity. Selected streams, pulse and mud leave this nose. Sucker Punch uses the nose, with unresolved contact height/distance and whole-model base-rock translation. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c98257de20e7b8d62f7d2ea1f4a7bc54b770c4355add52622d399f98e44438a0",
+          "shiny_runtime_sha256": "fa71e2655b2842302f5f548351ae1c1fbd3a403068b6d26bc2bfed4ba07e2d79",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "suckerpunch": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.4,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "f923e0783448844eb820f733142fe05a4868f8302d7497a1befb5230dee6ad41",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ded2072582d30255dfd53fff8fff530a9877e99be2a4bab56417dc32979dd756",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected pink nose follows nose/head bones during bending. The model has no exposed oral cavity. Selected streams, pulse and mud leave this nose. Sucker Punch uses the nose, with unresolved contact height/distance and whole-model base-rock translation. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c9905f84c30d5a9addb7cee6d24e884dcee860983c109706a246bb432d705b8a",
+          "shiny_runtime_sha256": "fa71e2655b2842302f5f548351ae1c1fbd3a403068b6d26bc2bfed4ba07e2d79",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 49.5,
+            "launch_frame": 38.5,
+            "move_key": "suckerpunch"
+          },
+          "views": 2
+        },
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "f923e0783448844eb820f733142fe05a4868f8302d7497a1befb5230dee6ad41",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a7d04170ed0e289ff2c48c6d2a392bee57a6f3f5ffa0863733711b505465dd9a",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected pink nose follows nose/head bones during bending. The model has no exposed oral cavity. Selected streams, pulse and mud leave this nose. Sucker Punch uses the nose, with unresolved contact height/distance and whole-model base-rock translation. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "1ea9e806dd1537f4ad7b12dc2144c2dd89bb7d0465baa572e3b37e8c8004dab6",
+          "shiny_runtime_sha256": "fa71e2655b2842302f5f548351ae1c1fbd3a403068b6d26bc2bfed4ba07e2d79",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "watergun"
+          },
+          "views": 2
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "645d09b89151b48a799d628c35e23916d96d7bd8c7bedfdcfeee9fa3d8c0afd8",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "f923e0783448844eb820f733142fe05a4868f8302d7497a1befb5230dee6ad41",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "368b7faa69029c969cf0d1cd4c6e7d9ac18c68332842d7bb7d29529c0fcc6cdc",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Individually projected pink nose follows nose/head bones during bending. The model has no exposed oral cavity. Selected streams, pulse and mud leave this nose. Sucker Punch uses the nose, with unresolved contact height/distance and whole-model base-rock translation. Remaining routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "07edc03dfc1bcbefb251a9ce0756534e402dce2d8602831090b4062c681ad073",
+          "shiny_runtime_sha256": "fa71e2655b2842302f5f548351ae1c1fbd3a403068b6d26bc2bfed4ba07e2d79",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "waterpulse"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -127400,7 +129166,68 @@
       ],
       "normal_runtime_sha256": "f923e0783448844eb820f733142fe05a4868f8302d7497a1befb5230dee6ad41",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "nose": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "nose": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "2b34fa4a9ae78a99e938100fd1b005b9a203de191c17a4421407aa593962e661",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.0691570017934189,
+                  0.878181491552053,
+                  0.0526615066545279
+                ],
+                "column": 0.0,
+                "distance": 1.70033025244882,
+                "mesh": "pm1033_00_00/Skeleton3D/pm1033_00_00_body_a_mesh",
+                "pixel": [
+                  205.0,
+                  26.0
+                ],
+                "surface": 0,
+                "triangle": 1452,
+                "vertex_indices": [
+                  243,
+                  244,
+                  209
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "f923e0783448844eb820f733142fe05a4868f8302d7497a1befb5230dee6ad41",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "819748c69b45c851744e072f88369bb3c5fe6413754dd44f01ec5025df423ea7",
+          "scope": "Individually projected front of pink nose, weighted mainly to nose and partly head. It follows the bending native poses; rear views hide it behind the head. No exposed mouth opening is claimed. Sampled marker review only; continuous clearance pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "nose": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "wimpod": {
       "anatomical_move_routing_review": "pending",

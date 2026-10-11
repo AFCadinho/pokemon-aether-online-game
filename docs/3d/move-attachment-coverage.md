@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1150 species/forms.
-- No anatomical attachment profile: 50 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 1001 species/forms.
+- At least one configured anatomical attachment: 1157 species/forms.
+- No anatomical attachment profile: 43 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 1003 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -166,6 +166,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | chesnaught-mega | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | chespin | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | chewtle | mouth | Same attachment profile |
+| chi-yu | face | Same attachment profile |
 | chikorita | mouth | Same attachment profile |
 | chimchar | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | chimecho | hand, left_hand, mouth | Same attachment profile |
@@ -319,6 +320,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | espurr | hand, left_hand, mouth | Same attachment profile |
 | excadrill | hand, left_hand, mouth | Same attachment profile |
 | excadrill-mega | mouth | Same attachment profile |
+| exeggcute | mouth_primary | Same attachment profile |
 | exeggutor | foot, left_foot, mouth | Same attachment profile |
 | exeggutor-alola | foot, left_foot | Same attachment profile |
 | exploud | foot, left_foot, mouth | Same attachment profile |
@@ -398,6 +400,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | gligar | hand, left_hand, mouth | Same attachment profile |
 | glimmet | face | Same attachment profile |
 | glimmora | flower_core | Same attachment profile |
+| gliscor | mouth | Same attachment profile |
 | gloom | hand, left_hand, mouth | Same attachment profile |
 | gogoat | mouth | Same attachment profile |
 | golbat | mouth | Same attachment profile |
@@ -420,6 +423,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | gourgeist-average | hand, left_hand, mouth | Same attachment profile |
 | grafaiai | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | granbull | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| grapploct | face, hand, left_hand | Same attachment profile |
 | graveler | mouth | Same attachment profile |
 | graveler-alola | mouth | Same attachment profile |
 | great-tusk | mouth | Same attachment profile |
@@ -461,6 +465,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | heracross-mega | foot, hand, left_foot, left_hand | Same attachment profile |
 | herdier | mouth | Same attachment profile |
 | hippopotas | mouth | Same attachment profile |
+| hippowdon | mouth | Same attachment profile |
 | hitmonchan | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | hitmonlee | foot, hand, left_foot, left_hand | Same attachment profile |
 | hitmontop | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -1030,6 +1035,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | tinkaton | mouth | Same attachment profile |
 | tinkatuff | mouth | Same attachment profile |
 | tirtouga | mouth | Same attachment profile |
+| toedscool | face | Same attachment profile |
 | toedscruel | mouth | Same attachment profile |
 | togepi | hand, left_hand, mouth | Same attachment profile |
 | togetic | hand, left_hand, mouth | Same attachment profile |
@@ -1117,6 +1123,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | whiscash | hand, left_hand, mouth | Same attachment profile |
 | whismur | hand, left_hand, mouth | Same attachment profile |
 | wigglytuff | hand, left_hand, mouth | Same attachment profile |
+| wiglett | nose | Same attachment profile |
 | wimpod | mouth | Same attachment profile |
 | wingull | mouth | Same attachment profile |
 | wishiwashi | mouth | Same attachment profile |

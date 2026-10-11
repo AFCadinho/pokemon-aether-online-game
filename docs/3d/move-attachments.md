@@ -62,6 +62,23 @@ still has distance gaps, and Ceruledge's Close Combat has unresolved generic
 fist graphics over its native sword swing. Continuous clearance, remaining
 moves, other target sizes and live NPC/wild battles remain pending.
 
+## Seven-form mouth, nose and tentacle review checkpoint
+
+Exeggcute, Hippowdon, Gliscor, Wiglett, Toedscool, Chi-Yu and Grapploct have
+32 selected routes with individually projected points. Exeggcute uses one
+primary egg mouth; the other five heads remain pending. Hippowdon's beam
+ends before jaw closure, and Bite impact follows the closing jaw. Gliscor's
+Bug Bite uses its forward-facing open-mouth animation. Wiglett uses its nose;
+Toedscool and Chi-Yu use individually reviewed facial casting regions.
+Grapploct's beak and two distinct arm tips are separate; Focus Blast waits for
+the lower left fist to extend. Sludge Bomb droplet offsets scale with the
+emitter, preserving the existing arc and default-size behavior.
+
+Normal and shiny effects were inspected in two offline views. Contact distances
+and some early charge/body overlaps remain unresolved. Continuous clearance,
+remaining moves and limbs, other target sizes and live NPC/wild battles remain
+pending. These records are sampled calibration evidence, not full approval.
+
 ## Profiles and review status
 
 The expanded registry is `data/battle_move_attachments_3d.json`. Each form has

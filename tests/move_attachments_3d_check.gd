@@ -457,6 +457,7 @@ func _run() -> void:
 	_check_paired_sound(world)
 	_check_sound_scale(world)
 	_check_heart_scale(world)
+	_check_sludge_trail_scale(world)
 	_check_lick_window(world)
 	print("MOVE_ATTACHMENTS_3D_OK transforms=true moving_bones=true forms=true lifecycle=true paired_beams=true paired_vines=true paired_sound=true single_impact=true")
 	get_tree().quit()
@@ -626,6 +627,35 @@ func _check_lick_window(world: Node3D) -> void:
 					widths.append(width)
 			effect.free()
 		assert(is_equal_approx(widths[1]/widths[0],.5 if move == "Lick" else 1.0),"Tongue fades before retraction; other lashes retain their lifetime")
+
+func _check_sludge_trail_scale(world: Node3D) -> void:
+	var effects: Array = []
+	var from := Vector3(-2,1,0)
+	var to := Vector3(2,1,0)
+	for scale_value: float in [1., .12]:
+		seconds = 0
+		var effect := Stage.BatchFourMoveEffect.new()
+		world.add_child(effect)
+		var timing := {"frames":60,"launch_frame":12,"impact_frame":36,"projectile_arc_height":.1}
+		if scale_value != 1.: timing.emission_scale = scale_value
+		effect.start("Sludge Bomb",timing,{},func(): return seconds,func(): return {"source":from,"sources":[from],"target":to,"radius":.8},func(): return true)
+		effect.set_process(false)
+		effect._build_surface()
+		effect.elapsed = .2
+		effects.append(effect)
+	for travel: float in [0., .5]:
+		for effect: Node3D in effects:
+			effect.cursor = 0
+			effect._draw_orb(from,to,travel,0.,Basis.IDENTITY,Basis.IDENTITY)
+			assert(effect.cursor == 6)
+			for i in 5:
+				var p := maxf(travel-float(i+1)*.035,0.)
+				var path := from.lerp(to,p)+Vector3.UP*sin(p*PI)*.1
+				var expected: Vector3 = path-Vector3.UP*float(i)*.035*effect.emission_scale
+				assert(effect.pieces[i+1].position.is_equal_approx(expected),"Sludge droplets must retain the arc and scale their downward offset at small emitters")
+		for i in 6:
+			assert(effects[1].pieces[i].scale.is_equal_approx(effects[0].pieces[i].scale*.12))
+	for effect: Node3D in effects: effect.free()
 
 func _check_heart_scale(world: Node3D) -> void:
 	var effects: Array = []

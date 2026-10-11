@@ -62,7 +62,7 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1150,
+		"with_any_attachment": 1157,
 		"with_arm_spikes": 2,
 		"with_beak_tip": 6,
 		"with_blades": 1,
@@ -74,25 +74,25 @@
 		"with_cotton_front": 1,
 		"with_electric_body": 1,
 		"with_eye": 9,
-		"with_face": 43,
+		"with_face": 46,
 		"with_face_primary": 2,
 		"with_flower_core": 1,
 		"with_flower_tip": 1,
 		"with_foot": 307,
 		"with_forehead": 1,
 		"with_gem": 4,
-		"with_hand": 579,
+		"with_hand": 580,
 		"with_hand_upper": 1,
 		"with_left_foot": 288,
-		"with_left_hand": 577,
+		"with_left_hand": 578,
 		"with_left_hand_upper": 1,
 		"with_magnet_poles": 1,
 		"with_mandibles": 2,
-		"with_mouth": 1001,
-		"with_mouth_primary": 1,
+		"with_mouth": 1003,
+		"with_mouth_primary": 2,
 		"with_mouth_red": 1,
 		"with_muzzle": 9,
-		"with_nose": 1,
+		"with_nose": 2,
 		"with_olive_nozzle": 1,
 		"with_pearl": 1,
 		"with_proboscis_tip": 1,
@@ -102,7 +102,7 @@
 		"with_tongue_tip": 1,
 		"with_vines": 3,
 		"with_wheel_front": 1,
-		"without_attachments": 50
+		"without_attachments": 43
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -6681,6 +6681,21 @@
 							-0.00310550933824791
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"chi-yu": {
+			"face": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.195238918066025,
+							0.0572339110076427,
+							0.00076007726602256
+						],
+						"weight": 1.0
 					}
 				]
 			]
@@ -13278,6 +13293,30 @@
 				]
 			]
 		},
+		"exeggcute": {
+			"mouth_primary": [
+				[
+					{
+						"bone": "spine_c",
+						"offset": [
+							-0.0729076489806175,
+							0.00886908639222383,
+							0.117294602096081
+						],
+						"weight": 0.696360812150946
+					},
+					{
+						"bone": "jaw_c",
+						"offset": [
+							0.188159316778183,
+							-0.00918440334498882,
+							-0.0050805676728487
+						],
+						"weight": 0.303639187849054
+					}
+				]
+			]
+		},
 		"exeggutor": {
 			"foot": [
 				[
@@ -16901,6 +16940,30 @@
 				]
 			]
 		},
+		"gliscor": {
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0999383106827736,
+							0.00569114042446017,
+							0.210739478468895
+						],
+						"weight": 0.54212855165487
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.197412580251694,
+							0.00560394255444407,
+							-0.00570901622995734
+						],
+						"weight": 0.45787144834513
+					}
+				]
+			]
+		},
 		"gloom": {
 			"hand": [
 				[
@@ -18155,6 +18218,92 @@
 							-0.00340414931997657
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"grapploct": {
+			"face": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.179201513528824,
+							-0.0191619452089071,
+							0.0542996600270271
+						],
+						"weight": 0.63723717746094
+					},
+					{
+						"bone": "head",
+						"offset": [
+							0.0822290480136871,
+							0.0107001326978207,
+							0.249887093901634
+						],
+						"weight": 0.331521744733081
+					},
+					{
+						"bone": "root_jaw",
+						"offset": [
+							0.230604350566864,
+							0.0324419625103474,
+							-0.038417499512434
+						],
+						"weight": 0.0312410778059793
+					}
+				]
+			],
+			"hand": [
+				[
+					{
+						"bone": "right_finger_a_02",
+						"offset": [
+							0.155869334936142,
+							-0.056341890245676,
+							-0.00450193928554654
+						],
+						"weight": 0.936432650825014
+					},
+					{
+						"bone": "right_finger_a_01",
+						"offset": [
+							0.304719418287277,
+							-0.0574122183024883,
+							-0.00423399917781353
+						],
+						"weight": 0.0635673491749859
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "left_finger_b_01",
+						"offset": [
+							0.133248224854469,
+							0.0703663155436516,
+							-0.0609204918146133
+						],
+						"weight": 0.684468694827194
+					},
+					{
+						"bone": "left_finger_b_02",
+						"offset": [
+							-0.0126672144979239,
+							0.0713996142148972,
+							-0.0594522878527641
+						],
+						"weight": 0.288369856191409
+					},
+					{
+						"bone": "left_hand_b",
+						"offset": [
+							0.274890631437302,
+							0.0698549449443817,
+							-0.0616468079388142
+						],
+						"weight": 0.0271614489813972
 					}
 				]
 			]
@@ -20527,6 +20676,39 @@
 							-0.0610200315713882
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"hippowdon": {
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw_a_02",
+						"offset": [
+							0.436689287424088,
+							-0.00884735491126776,
+							-0.158862173557281
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw_a_03",
+						"offset": [
+							0.304951876401901,
+							-0.00182627013418823,
+							-0.148015335202217
+						],
+						"weight": 0.487132328539432
+					},
+					{
+						"bone": "lower_jaw_a_02",
+						"offset": [
+							0.572682023048401,
+							-0.00288026034832001,
+							-0.174759075045586
+						],
+						"weight": 0.0128676714605682
 					}
 				]
 			]
@@ -45532,6 +45714,21 @@
 				]
 			]
 		},
+		"toedscool": {
+			"face": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							-0.0390880145132542,
+							-0.00061519158771261,
+							0.151429072022438
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"toedscruel": {
 			"mouth": [
 				[
@@ -49390,6 +49587,30 @@
 				]
 			]
 		},
+		"wiglett": {
+			"nose": [
+				[
+					{
+						"bone": "nose",
+						"offset": [
+							0.0619793236255646,
+							-0.00100070075131953,
+							0.0131343910470605
+						],
+						"weight": 0.923420625982846
+					},
+					{
+						"bone": "head",
+						"offset": [
+							0.166717708110809,
+							-0.0011933840578422,
+							0.0141331218183041
+						],
+						"weight": 0.0765793740171541
+					}
+				]
+			]
+		},
 		"wimpod": {
 			"mouth": [
 				[
@@ -51464,7 +51685,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "184615781cbbf3e27e8af1309ac17ed38f512e257fc4dc4b36b30590d9865fb7",
+		"data/battle_move_attachments_3d.json": "dfb4c7e1a1cb2ba91dc7b26008a3af996b418448db3d31a1935968ae73718d72",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "90b20b98c0d743fb77a44a9aa2a9df027b348134628970b63b7fdd9312e36d4b",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
@@ -57403,8 +57624,10 @@
 			]
 		},
 		"chi-yu": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -63100,8 +63323,10 @@
 			]
 		},
 		"exeggcute": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth_primary"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -66477,8 +66702,82 @@
 			]
 		},
 		"gliscor": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "50f221440f650911bf9582dbc42ebd2ed76fcfd5db564d09fc877f47c8897ef1",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "ef0642fac259de6f004cdbd38ca245f9f478599eca6dc3b0f7e21aa6972c1d43",
+				"scope": "Separately projected upper and lower central mouth rims; head/jaw weights track the tooth gap across idle, physical and special poses. Side claws can occlude the mouth. Sampled marker review only; continuous clearance pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "4a32177465b85016a11eb8b050287623f7a5f37883c25149e663597a1a7a1c80",
+					"landmarks": [
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.32535820498218,
+								0.456905946479894,
+								0.217735848537926
+							],
+							"column": 1.0,
+							"distance": 3.16152548841552,
+							"mesh": "pm0472_00_00/Skeleton3D/pm0472_00_00_head_mesh",
+							"pixel": [
+								208.0,
+								163.0
+							],
+							"surface": 0.0,
+							"triangle": 282.0,
+							"vertex_indices": [
+								128.0,
+								131.0,
+								364.0
+							],
+							"weight": 0.5
+						},
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.367367669642763,
+								0.206999692858429,
+								0.425632637498808
+							],
+							"column": 1.0,
+							"distance": 3.20219582922929,
+							"mesh": "pm0472_00_00/Skeleton3D/pm0472_00_00_head_mesh",
+							"pixel": [
+								208.0,
+								170.0
+							],
+							"surface": 0.0,
+							"triangle": 450.0,
+							"vertex_indices": [
+								326.0,
+								604.0,
+								332.0
+							],
+							"weight": 0.5
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -67418,8 +67717,12 @@
 			]
 		},
 		"grapploct": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face",
+				"hand",
+				"left_hand"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -69281,8 +69584,83 @@
 			]
 		},
 		"hippowdon": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "316f8f6c7c706433ff80a53437c890bf0022941ca46660a2f46651664042dbc4",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "d76779b798dfca166cd190fda5f3cfbd53a07c6e19814220adb25fd71cc1f94f",
+				"scope": "Separately projected upper and lower lip rims in the open special_attack pose. Weighted upper_jaw_a_02/lower_jaw_a_03/a_02 follows the wide opening and closed lips in sampled actions. Sampled marker review only; continuous clearance pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "9ccfa406f04c598c71c178cd573532e80762c5f2ac387b9d443272712334b923",
+					"landmarks": [
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.0432182662839828,
+								0.877816464042559,
+								0.0789652696734585
+							],
+							"column": 0.0,
+							"distance": 4.68644235335206,
+							"mesh": "pm0450_00_00/Skeleton3D/pm0450_00_00_body_mesh",
+							"pixel": [
+								204.0,
+								121.0
+							],
+							"surface": 1.0,
+							"triangle": 1465.0,
+							"vertex_indices": [
+								563.0,
+								564.0,
+								492.0
+							],
+							"weight": 0.5
+						},
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.148438509304801,
+								0.832636678489185,
+								0.0189248122060142
+							],
+							"column": 0.0,
+							"distance": 5.07981979328258,
+							"mesh": "pm0450_00_00/Skeleton3D/pm0450_00_00_body_mesh",
+							"pixel": [
+								205.0,
+								225.0
+							],
+							"surface": 1.0,
+							"triangle": 147.0,
+							"vertex_indices": [
+								43.0,
+								59.0,
+								57.0
+							],
+							"weight": 0.5
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -90182,8 +90560,10 @@
 			]
 		},
 		"toedscool": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -93909,8 +94289,10 @@
 			]
 		},
 		"wiglett": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"nose"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"

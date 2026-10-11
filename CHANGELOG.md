@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate selected Exeggcute, Hippowdon, Gliscor, Wiglett, Toedscool, Chi-Yu and Grapploct attack origins and release timing; scale Sludge Bomb drips for small emitters.
+
 - Calibrate selected Beedrill, Mega Beedrill, Ceruledge and Magearna-form attack origins; fit Magearna’s Draining Kiss hearts to its mouth at release.
 
 - Calibrate selected mouth, cannon and tongue attacks for Clamperl, Clauncher, Clawitzer, Genesect, Revavroom and Regidrago; fit sound release to small openings and end Revavroom’s Lick extension before its tongue retracts.

@@ -167,7 +167,7 @@ func _draw_orb(from: Vector3, to: Vector3, travel: float, _after: float, facing:
 		var behind := from.lerp(to,p)
 		var size := radius*(0.52-float(i)*0.075)
 		if key=="sludgebomb":
-			behind.y += sin(p*PI)*projectile_arc_height - float(i)*0.035
+			behind.y += sin(p*PI)*projectile_arc_height - float(i)*0.035*emission_scale
 			_piece(sphere,surface_material,behind,Vector3.ONE*size)
 		elif key=="moonblast":
 			behind += Vector3(sin(i*2.4),cos(i*2.4),sin(i))*0.13*emission_scale
