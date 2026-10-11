@@ -355,8 +355,10 @@ func _status_stage(flight: float,after: float,alpha: float,facing: Basis,side: V
 			for i in 5:
 				var q := clampf(flight-i*.06,0,1)
 				var point := origin.lerp(aim,q)+side*sin(q*PI)*(i-2)*.45+Vector3.UP*sin(q*PI)*.4
-				_heart(point,(.17+i%2*.04)*fade,facing,edge)
-				_source_sprite(point,.55,"spark",q,alpha*fade*.3,facing)
+				# Fit the mouth at release, then grow along the existing path.
+				var heart_scale := lerpf(emission_scale,1.0,smoothstep(0.0,.35,q))
+				_heart(point,(.17+i%2*.04)*fade*heart_scale,facing,edge)
+				_source_sprite(point,.55*heart_scale,"spark",q,alpha*fade*.3,facing)
 		"woven-threads", "paralysis-arcs":
 			# A reviewed silk window ends before a later pose closes the outlet.
 			if motif=="woven-threads" and emission_end >= 0:

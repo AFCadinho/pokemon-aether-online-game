@@ -47,6 +47,21 @@ These are sampled origin/timing reviews, not continuous clearance approval.
 Contact distances, remaining routes, other target sizes and live NPC/wild
 battles remain pending. Regidrago's jaw-arm contact points are unresolved.
 
+## Arm spikes, sword tips and Magearna mouth review checkpoint
+
+Beedrill, Mega Beedrill, Ceruledge and three Magearna forms have 29 selected
+routes with individually projected points. Beedrill has separate face, arm-spike
+and posterior stinger points; Mega Beedrill uses its own weighted mouth and tips.
+Ceruledge emits Flamethrower from both swords, and Ember/Shadow Ball from the
+right sword. Each Magearna mouth was reviewed separately in native poses.
+Draining Kiss accepts emission_scale for hearts and sparkles, growing to normal
+size over the first .35 of travel. Its default scale preserves existing effects.
+
+Normal and shiny effects were inspected in two offline views. Physical contact
+still has distance gaps, and Ceruledge's Close Combat has unresolved generic
+fist graphics over its native sword swing. Continuous clearance, remaining
+moves, other target sizes and live NPC/wild battles remain pending.
+
 ## Profiles and review status
 
 The expanded registry is `data/battle_move_attachments_3d.json`. Each form has

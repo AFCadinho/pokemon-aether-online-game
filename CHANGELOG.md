@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate selected Beedrill, Mega Beedrill, Ceruledge and Magearna-form attack origins; fit Magearna’s Draining Kiss hearts to its mouth at release.
+
 - Calibrate selected mouth, cannon and tongue attacks for Clamperl, Clauncher, Clawitzer, Genesect, Revavroom and Regidrago; fit sound release to small openings and end Revavroom’s Lick extension before its tongue retracts.
 
 - Let Moonblast and Draco Meteor honor configured attack points; calibrate Flabébé's Moonblast to its animated flower point. Unconfigured forms retain the existing orb clearance.

@@ -456,6 +456,7 @@ func _run() -> void:
 	assert(is_equal_approx(lash_widths[1] / lash_widths[0], .008 / .045), "Native vine tips must retain their narrower extension width")
 	_check_paired_sound(world)
 	_check_sound_scale(world)
+	_check_heart_scale(world)
 	_check_lick_window(world)
 	print("MOVE_ATTACHMENTS_3D_OK transforms=true moving_bones=true forms=true lifecycle=true paired_beams=true paired_vines=true paired_sound=true single_impact=true")
 	get_tree().quit()
@@ -625,3 +626,29 @@ func _check_lick_window(world: Node3D) -> void:
 					widths.append(width)
 			effect.free()
 		assert(is_equal_approx(widths[1]/widths[0],.5 if move == "Lick" else 1.0),"Tongue fades before retraction; other lashes retain their lifetime")
+
+func _check_heart_scale(world: Node3D) -> void:
+	var effects: Array = []
+	var points := {"source":Vector3(-2,1,0),"sources":[Vector3(-2,1,0)],"target":Vector3(2,1,0),"radius":.8}
+	for scale_value: float in [1., .25]:
+		seconds = 0
+		var effect := Stage.StagedMoveEffect.new()
+		world.add_child(effect)
+		var timing := {"frames":60,"launch_frame":12,"impact_frame":36}
+		if scale_value != 1.: timing.emission_scale = scale_value
+		effect.start("Draining Kiss",timing,{},func(): return seconds,func(): return points,func(): return true)
+		effect.set_process(false)
+		effects.append(effect)
+	var full: Node3D = effects[0]
+	var small: Node3D = effects[1]
+	for travel: float in [0., 1.3]:
+		for effect: Node3D in effects:
+			effect.cursor = 0
+			effect._status_stage(travel,0.,1.,Basis.IDENTITY,Vector3.RIGHT,Basis.IDENTITY)
+		assert(full.cursor == 20 and small.cursor == 20)
+		var ratio := .25 if travel == 0. else 1.
+		var center: Vector3 = full.origin if travel == 0. else full.aim
+		for i in full.cursor:
+			assert(small.pieces[i].scale.is_equal_approx(full.pieces[i].scale*ratio), "Heart geometry and sparkle fit the release point and grow during travel")
+			assert((small.pieces[i].position-center).is_equal_approx((full.pieces[i].position-center)*ratio))
+	for effect: Node3D in effects: effect.free()

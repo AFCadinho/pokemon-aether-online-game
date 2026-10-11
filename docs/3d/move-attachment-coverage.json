@@ -62,8 +62,10 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1144,
+		"with_any_attachment": 1150,
+		"with_arm_spikes": 2,
 		"with_beak_tip": 6,
+		"with_blades": 1,
 		"with_bud": 1,
 		"with_cannon": 6,
 		"with_cannons": 1,
@@ -72,21 +74,21 @@
 		"with_cotton_front": 1,
 		"with_electric_body": 1,
 		"with_eye": 9,
-		"with_face": 42,
+		"with_face": 43,
 		"with_face_primary": 2,
 		"with_flower_core": 1,
 		"with_flower_tip": 1,
 		"with_foot": 307,
 		"with_forehead": 1,
 		"with_gem": 4,
-		"with_hand": 576,
+		"with_hand": 579,
 		"with_hand_upper": 1,
 		"with_left_foot": 288,
-		"with_left_hand": 574,
+		"with_left_hand": 577,
 		"with_left_hand_upper": 1,
 		"with_magnet_poles": 1,
 		"with_mandibles": 2,
-		"with_mouth": 997,
+		"with_mouth": 1001,
 		"with_mouth_primary": 1,
 		"with_mouth_red": 1,
 		"with_muzzle": 9,
@@ -94,13 +96,13 @@
 		"with_olive_nozzle": 1,
 		"with_pearl": 1,
 		"with_proboscis_tip": 1,
-		"with_spike": 3,
+		"with_spike": 5,
 		"with_spikes": 2,
 		"with_spirit": 1,
 		"with_tongue_tip": 1,
 		"with_vines": 3,
 		"with_wheel_front": 1,
-		"without_attachments": 56
+		"without_attachments": 50
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -3186,6 +3188,171 @@
 				]
 			]
 		},
+		"beedrill": {
+			"arm_spikes": [
+				[
+					{
+						"bone": "right_hand",
+						"offset": [
+							0.478068172931671,
+							-0.00049602286890149,
+							-0.00833383481949568
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "left_hand",
+						"offset": [
+							0.485875964164734,
+							0.00616542203351855,
+							0.00272796768695116
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"face": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							-0.0422031804919243,
+							0.0135698523372412,
+							0.197980999946594
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"hand": [
+				[
+					{
+						"bone": "right_hand",
+						"offset": [
+							0.478068172931671,
+							-0.00049602286890149,
+							-0.00833383481949568
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "left_hand",
+						"offset": [
+							0.485875964164734,
+							0.00616542203351855,
+							0.00272796768695116
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"spike": [
+				[
+					{
+						"bone": "tail_03",
+						"offset": [
+							0.193430244922638,
+							0.00809116940945387,
+							-0.00368139380589128
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
+		"beedrill-mega": {
+			"arm_spikes": [
+				[
+					{
+						"bone": "right_arm_02",
+						"offset": [
+							0.794459104537964,
+							0.00294388271868229,
+							-0.00989455170929432
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "left_arm_02",
+						"offset": [
+							0.80803519487381,
+							-0.00289515545591712,
+							0.00764835067093372
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"hand": [
+				[
+					{
+						"bone": "right_arm_02",
+						"offset": [
+							0.794459104537964,
+							0.00294388271868229,
+							-0.00989455170929432
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "left_arm_02",
+						"offset": [
+							0.80803519487381,
+							-0.00289515545591712,
+							0.00764835067093372
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							-0.0659349039196968,
+							0.00504011241719127,
+							0.217801660299301
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "spine",
+						"offset": [
+							0.128838986158371,
+							0.0108176209032536,
+							0.137864619493484
+						],
+						"weight": 0.5
+					}
+				]
+			],
+			"spike": [
+				[
+					{
+						"bone": "tail_03",
+						"offset": [
+							0.328795582056046,
+							0.00659548537805676,
+							0.00270686554722488
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"beheeyem": {
 			"hand": [
 				[
@@ -5674,6 +5841,58 @@
 							0.0,
 							0.0,
 							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
+		"ceruledge": {
+			"blades": [
+				[
+					{
+						"bone": "right_claw_a",
+						"offset": [
+							0.67182469367981,
+							0.00830067321658134,
+							0.0112643977627158
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "left_claw_a",
+						"offset": [
+							0.686018764972687,
+							0.00282312836498022,
+							0.0126305408775806
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"hand": [
+				[
+					{
+						"bone": "right_claw_a",
+						"offset": [
+							0.67182469367981,
+							0.00830067321658134,
+							0.0112643977627158
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_hand": [
+				[
+					{
+						"bone": "left_claw_a",
+						"offset": [
+							0.686018764972687,
+							0.00282312836498022,
+							0.0126305408775806
 						],
 						"weight": 1.0
 					}
@@ -26368,6 +26587,51 @@
 							-0.0226966794580221
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"magearna": {
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0403096117079258,
+							-0.00291939312592149,
+							0.0916138887405396
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
+		"magearna-mega": {
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0400292687118053,
+							0.00052189384587109,
+							0.0935101509094238
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
+		"magearna-original-mega": {
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0400292687118053,
+							0.00052189384587109,
+							0.0935101509094238
+						],
+						"weight": 1.0
 					}
 				]
 			]
@@ -51200,8 +51464,8 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "3a2f2989058f9ccaba18255dd383c1c0bf6335cc5d8be63561627f6235360c55",
-		"scripts/battle/battle_ui/move_attachments_3d.gd": "4892be8c0aa4940ee562f9eb081163a8050bd793b18149cfae713ec9fc332d20",
+		"data/battle_move_attachments_3d.json": "184615781cbbf3e27e8af1309ac17ed38f512e257fc4dc4b36b30590d9865fb7",
+		"scripts/battle/battle_ui/move_attachments_3d.gd": "90b20b98c0d743fb77a44a9aa2a9df027b348134628970b63b7fdd9312e36d4b",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
 		"scripts/battle/battle_ui/screened_model_catalog.json": "e48e36f568932290b2b7f1f461e15391444d6e7821d48f6ef0c59ede5b36839d"
@@ -53922,16 +54186,101 @@
 			]
 		},
 		"beedrill": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"arm_spikes",
+				"face",
+				"hand",
+				"left_hand",
+				"spike"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
 			]
 		},
 		"beedrill-mega": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"arm_spikes",
+				"hand",
+				"left_hand",
+				"mouth",
+				"spike"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "fe4ed01627c554e4963991d420737c4aa11884b9de04ffd1dac760976831d0f2",
+				"scope": "Separate upper and lower lip landmarks averaged into one head/spine weighted mouth point; special_attack opens the gap. The original single lower-rim candidate was replaced. Sampled native poses reviewed; move effects and continuous clearance pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "963a9caa4eb818077dd4883cf9eb512ce5eecf33da260f29fcdf4dd552f5d98d",
+					"landmarks": [
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.491703580359749,
+								0.349052590935865,
+								0.159243828704387
+							],
+							"column": 1.0,
+							"distance": 0.560910718005636,
+							"mesh": "pm0015_51_00/Skeleton3D/pm0015_51_00_body_mesh",
+							"pixel": [
+								211.0,
+								160.0
+							],
+							"surface": 0.0,
+							"triangle": 2915.0,
+							"vertex_indices": [
+								1620.0,
+								85.0,
+								1604.0
+							],
+							"weight": 0.5
+						},
+						{
+							"action": "special_attack",
+							"barycentric": [
+								0.529093453374324,
+								0.29077528843755,
+								0.180131258188126
+							],
+							"column": 1.0,
+							"distance": 0.796986181904944,
+							"mesh": "pm0015_51_00/Skeleton3D/pm0015_51_00_body_mesh",
+							"pixel": [
+								211.0,
+								180.0
+							],
+							"surface": 0.0,
+							"triangle": 4425.0,
+							"vertex_indices": [
+								2782.0,
+								2783.0,
+								2800.0
+							],
+							"weight": 0.5
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -56425,8 +56774,12 @@
 			]
 		},
 		"ceruledge": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"blades",
+				"hand",
+				"left_hand"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -73413,24 +73766,178 @@
 			]
 		},
 		"magearna": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "bb0e8377fc64d4c502151aa75721a767377c7e10201ac009ad34e801e154bbcc",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "6964841631a9a31c223c276e8ad34be0d1514df75476f728407346959b6c0ce8",
+				"scope": "Individually projected small lower facial mouth dot bound to head; Mega variants corrected upward from the initial chin candidate. Sampled native poses reviewed; move effects and continuous clearance pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "a180a3e63fe975d14a8d715a894130f04826a5f3bae68a96d406e88fb7adc90f",
+					"landmarks": [
+						{
+							"action": "idle",
+							"barycentric": [
+								0.105280521914848,
+								0.873972911599774,
+								0.0207465664853787
+							],
+							"column": 0.0,
+							"distance": 2.0297229716026,
+							"mesh": "pm0882_11_00/Skeleton3D/pm0882_11_00_body_mesh",
+							"pixel": [
+								208.0,
+								128.0
+							],
+							"surface": 3.0,
+							"triangle": 85.0,
+							"vertex_indices": [
+								128.0,
+								3.0,
+								32.0
+							],
+							"weight": 1.0
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
 			]
 		},
 		"magearna-mega": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "ea1855265a1cb9d11ada81b9964d125dce09eca49459056628a1d149808de32a",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "602657eb04803674c6c9026682dfa9ec27cba33f1902213b586e5d2ee72749ce",
+				"scope": "Individually projected small lower facial mouth dot bound to head; Mega variants corrected upward from the initial chin candidate. Sampled native poses reviewed; move effects and continuous clearance pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "928eabb7d8c1d68bcd6d4cba8b2a4af050cc39f60ca25c1d2c0af9df487ef12f",
+					"landmarks": [
+						{
+							"action": "idle",
+							"barycentric": [
+								0.468371630431374,
+								0.396778243236487,
+								0.134850126332139
+							],
+							"column": 0.0,
+							"distance": 0.790165453648355,
+							"mesh": "pm0882_51_00/Skeleton3D/pm0882_51_00_body_mesh",
+							"pixel": [
+								212.0,
+								170.0
+							],
+							"surface": 3.0,
+							"triangle": 284.0,
+							"vertex_indices": [
+								11.0,
+								116.0,
+								122.0
+							],
+							"weight": 1.0
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
 			]
 		},
 		"magearna-original-mega": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "f611f047e99cfa364072b525f25ebac2ec07345176beeca86b3541a6f033621a",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "5d7cc5bee9651ceb52053facdb728ccf9b906481b2b2b50f6400225ee2996639",
+				"scope": "Individually projected small lower facial mouth dot bound to head; Mega variants corrected upward from the initial chin candidate. Sampled native poses reviewed; move effects and continuous clearance pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": {
+					"capture_sha256": "db7cad88ba09eabb040620a5e392a9f4f96ffec755ee9e673c76c42311dd20c0",
+					"landmarks": [
+						{
+							"action": "idle",
+							"barycentric": [
+								0.468371630431374,
+								0.396778243236487,
+								0.134850126332139
+							],
+							"column": 0.0,
+							"distance": 0.790165453648355,
+							"mesh": "pm0882_52_00/Skeleton3D/pm0882_51_00_body_mesh",
+							"pixel": [
+								212.0,
+								170.0
+							],
+							"surface": 3.0,
+							"triangle": 284.0,
+							"vertex_indices": [
+								11.0,
+								116.0,
+								122.0
+							],
+							"weight": 1.0
+						}
+					],
+					"method": "ray_triangle_barycentric_skin_binding"
+				}
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"

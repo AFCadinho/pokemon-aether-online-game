@@ -8298,6 +8298,1418 @@
         "side_fraction": 0.45
       }
     },
+    "beedrill": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "furyattack": {
+          "action": "physical_attack",
+          "part": "arm_spikes",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "peck": {
+          "action": "physical_attack_2",
+          "part": "spike",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "poisonsting": {
+          "action": "physical_attack_2",
+          "part": "spike",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "rocksmash": {
+          "action": "physical_attack",
+          "part": "hand",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack",
+        "furyattack": "physical_attack",
+        "hyperbeam": "special_attack",
+        "peck": "physical_attack_2",
+        "poisonsting": "physical_attack_2",
+        "rocksmash": "physical_attack",
+        "sludgebomb": "special_attack",
+        "solarbeam": "special_attack",
+        "stringshot": "special_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "furyattack": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.68,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        },
+        "peck": {
+          "action": "physical_attack_2",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "poisonsting": {
+          "action": "physical_attack_2",
+          "emission_scale": 0.15,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.35
+        },
+        "rocksmash": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "emission_scale": 0.1,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3,
+          "projectile_arc_height": 0.1
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.68,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.68,
+          "emission_scale": 0.2,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "e1ee7e1bb49748da68d7cc5ba6f2bfc3dbbfdaaf7022e1794821d9613191f94b",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7976385d8fbd46e57d4f2b3a392e020c6d8243f08a5e3a69ddfa305deae15662",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b7972b7a030ffa30097f740fa77ec067cc27d3b019971fa88c790de7db105460",
+          "shiny_runtime_sha256": "5ae5f20e5a854356ddfd0906afd4e9e21f925e822e351f269c498e6047a39342",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 106.0,
+            "impact_frame": 47.7,
+            "launch_frame": 31.8,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "furyattack": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "e1ee7e1bb49748da68d7cc5ba6f2bfc3dbbfdaaf7022e1794821d9613191f94b",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9b151e3f5e4811c21804412184a73c4c4b40af9f48bfd0881d5ffc2a8749766c",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "e284fd8e05ab14cc1353d2af1e90452ba5bddf5afd890f44d53b5d619069b5e9",
+          "shiny_runtime_sha256": "5ae5f20e5a854356ddfd0906afd4e9e21f925e822e351f269c498e6047a39342",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 106.0,
+            "impact_frame": 47.7,
+            "launch_frame": 31.8,
+            "move_key": "furyattack"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "e1ee7e1bb49748da68d7cc5ba6f2bfc3dbbfdaaf7022e1794821d9613191f94b",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.68,
+            0.78
+          ],
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "10eb55cc2fcf0184408b07fbe54a0b2409a7e1d28de23dd98340aa93901b4bf7",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3d1b6619717f7086fd10f1fda8ab8016c55226f051bbddd6a2f923e461956b9c",
+          "shiny_runtime_sha256": "5ae5f20e5a854356ddfd0906afd4e9e21f925e822e351f269c498e6047a39342",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 81.6,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "peck": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "e1ee7e1bb49748da68d7cc5ba6f2bfc3dbbfdaaf7022e1794821d9613191f94b",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3e73fb73f7cb5b82bd8db1431392f34cddab4fea5a182dd6ffd5fd72d5bcd10d",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "7cdc414bca3186e197fd1fed4c489613586365dd5ad1a1e111db9971f53aaed2",
+          "shiny_runtime_sha256": "5ae5f20e5a854356ddfd0906afd4e9e21f925e822e351f269c498e6047a39342",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 110.0,
+            "impact_frame": 49.5,
+            "launch_frame": 33.0,
+            "move_key": "peck"
+          },
+          "views": 2
+        },
+        "poisonsting": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d3f3e3f83d300821e549899359120d6e3d436347573f58b145028490e936ef20",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ab97228b4ae0eb59c0664b83a790ba2900809f6105b434c4dea303270816b2e1",
+          "shiny_runtime_sha256": "5ae5f20e5a854356ddfd0906afd4e9e21f925e822e351f269c498e6047a39342",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 110.0,
+            "impact_frame": 55.0,
+            "launch_frame": 38.5,
+            "move_key": "poisonsting"
+          },
+          "views": 2
+        },
+        "rocksmash": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "e1ee7e1bb49748da68d7cc5ba6f2bfc3dbbfdaaf7022e1794821d9613191f94b",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0e20adf6897fc189252c0754f0d97eab9d8eb3b92de0995f632ce1a7671e6b14",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "bbec06bb02cc2e985ee638ab1452efdb3afc50ff1105f356f3d67af4e4f4bf27",
+          "shiny_runtime_sha256": "5ae5f20e5a854356ddfd0906afd4e9e21f925e822e351f269c498e6047a39342",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 106.0,
+            "impact_frame": 47.7,
+            "launch_frame": 31.8,
+            "move_key": "rocksmash"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "e1ee7e1bb49748da68d7cc5ba6f2bfc3dbbfdaaf7022e1794821d9613191f94b",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0513961b59c465cb61a9ac00d3330bc9a7bef2da647208e11b75a5d56cee7f75",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "21a637e0d0894cdb233f6e459858c80f7fce2c76ff7afaea5877109ba74c7999",
+          "shiny_runtime_sha256": "5ae5f20e5a854356ddfd0906afd4e9e21f925e822e351f269c498e6047a39342",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "sludgebomb",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "e1ee7e1bb49748da68d7cc5ba6f2bfc3dbbfdaaf7022e1794821d9613191f94b",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.68,
+            0.78
+          ],
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8ed47d721ed6590fa75306d01193ac90dfecc2be2b08f5b0486a44cd432ffa89",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "35f077ccaab0b452e5f13fae4dee96b14f0688544df8b67aca6f4cbaad477cdf",
+          "shiny_runtime_sha256": "5ae5f20e5a854356ddfd0906afd4e9e21f925e822e351f269c498e6047a39342",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 81.6,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "e1ee7e1bb49748da68d7cc5ba6f2bfc3dbbfdaaf7022e1794821d9613191f94b",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.68,
+            0.78
+          ],
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "89902dc0c6c9c4eedb394b7470587e7b521ce55bdb16773f4d713b971435ab97",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower face is a head-bound casting region without an exposed oral cavity. Separate right/left arm-spike tips and posterior tail_03 stinger were individually projected and reviewed in all native clips. Face beams/sludge/silk release between raised arms. Poison Sting uses the posterior stinger in physical_attack_2. The arms occlude the face in side views, and silk passes near the legs. Physical contact retains a visible distance gap; continuous arm/leg and full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9d0adba7896bbd81b2e180d7542ad8d955f53ce4f45b4b9579dd016ccb7bc22c",
+          "shiny_runtime_sha256": "5ae5f20e5a854356ddfd0906afd4e9e21f925e822e351f269c498e6047a39342",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 81.6,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "face",
+        "furyattack": "arm_spikes",
+        "hyperbeam": "face",
+        "peck": "spike",
+        "poisonsting": "spike",
+        "rocksmash": "hand",
+        "sludgebomb": "face",
+        "solarbeam": "face",
+        "stringshot": "face"
+      },
+      "part_reviews": {
+        "arm_spikes": {
+          "method": "paired_independently_projected_tips",
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "parts": [
+            "hand",
+            "left_hand"
+          ],
+          "pose_sampling": "forward_from_start_v1",
+          "scope": "Two separately projected and sampled distal tips; see hand and left_hand reviews. Selected effects sampled in normal/shiny; continuous clearance, contact distance and remaining routes pending."
+        },
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "09910985ccda208652f93a551570f9c4ec84086a75e19fcf4942fd76310a1fd9",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.324222123184543,
+                  0.129311777986185,
+                  0.546466098829272
+                ],
+                "column": 0.0,
+                "distance": 2.78595989758484,
+                "mesh": "pm0015_00_00/Skeleton3D/pm0015_00_00_body_mesh",
+                "pixel": [
+                  211.0,
+                  173.0
+                ],
+                "surface": 0,
+                "triangle": 3655,
+                "vertex_indices": [
+                  488,
+                  263,
+                  342
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2e4128a3cfa35f2e213fd898d403780b828dbab28256760efb35c53fe345567f",
+          "scope": "Individually projected lower front face under the eyes, head-bound. No visible oral cavity is claimed; face casting route needs actual effects review. Idle, all available native attack clips and side sample inspected. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "09910985ccda208652f93a551570f9c4ec84086a75e19fcf4942fd76310a1fd9",
+            "landmarks": [
+              {
+                "action": "physical_attack_2",
+                "barycentric": [
+                  0.857047724458287,
+                  0.0470778222473272,
+                  0.0958744532943854
+                ],
+                "column": 3.0,
+                "distance": 3.29397823887211,
+                "mesh": "pm0015_00_00/Skeleton3D/pm0015_00_00_body_mesh",
+                "pixel": [
+                  117.0,
+                  192.0
+                ],
+                "surface": 0,
+                "triangle": 1988,
+                "vertex_indices": [
+                  712,
+                  711,
+                  701
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2e4128a3cfa35f2e213fd898d403780b828dbab28256760efb35c53fe345567f",
+          "scope": "Individually projected distal right blade/arm-spike tip. Idle, all available native attack clips and side sample inspected. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "09910985ccda208652f93a551570f9c4ec84086a75e19fcf4942fd76310a1fd9",
+            "landmarks": [
+              {
+                "action": "physical_attack_2",
+                "barycentric": [
+                  0.2362827169233,
+                  0.364994711926239,
+                  0.398722571150461
+                ],
+                "column": 3.0,
+                "distance": 2.50384641768989,
+                "mesh": "pm0015_00_00/Skeleton3D/pm0015_00_00_body_mesh",
+                "pixel": [
+                  151.0,
+                  43.0
+                ],
+                "surface": 0,
+                "triangle": 2653,
+                "vertex_indices": [
+                  1713,
+                  1715,
+                  1704
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2e4128a3cfa35f2e213fd898d403780b828dbab28256760efb35c53fe345567f",
+          "scope": "Individually projected distal left blade/arm-spike tip. Idle, all available native attack clips and side sample inspected. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "spike": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "09910985ccda208652f93a551570f9c4ec84086a75e19fcf4942fd76310a1fd9",
+            "landmarks": [
+              {
+                "action": "physical_attack_2",
+                "barycentric": [
+                  0.348052436289762,
+                  0.438324062051652,
+                  0.213623501658586
+                ],
+                "column": 3.0,
+                "distance": 2.49422479111603,
+                "mesh": "pm0015_00_00/Skeleton3D/pm0015_00_00_body_mesh",
+                "pixel": [
+                  104.0,
+                  229.0
+                ],
+                "surface": 0,
+                "triangle": 1086,
+                "vertex_indices": [
+                  2335,
+                  2367,
+                  2340
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "2f71df866440c37999567fe48abd91e6a19d57ea704a64f955257dffaf36b4ad",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2e4128a3cfa35f2e213fd898d403780b828dbab28256760efb35c53fe345567f",
+          "scope": "Individually projected distal posterior stinger, bound to tail_03. Physical_attack_2 raises it forward. Idle, all available native attack clips and side sample inspected. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "arm_spikes": [
+          [
+            {
+              "bone": "right_hand",
+              "offset": [
+                0.478068172931671,
+                -0.000496022868901491,
+                -0.00833383481949568
+              ],
+              "weight": 1.0
+            }
+          ],
+          [
+            {
+              "bone": "left_hand",
+              "offset": [
+                0.485875964164734,
+                0.00616542203351855,
+                0.00272796768695116
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "face": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                -0.0422031804919243,
+                0.0135698523372412,
+                0.197980999946594
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "hand": [
+          [
+            {
+              "bone": "right_hand",
+              "offset": [
+                0.478068172931671,
+                -0.000496022868901491,
+                -0.00833383481949568
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_hand",
+              "offset": [
+                0.485875964164734,
+                0.00616542203351855,
+                0.00272796768695116
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "spike": [
+          [
+            {
+              "bone": "tail_03",
+              "offset": [
+                0.193430244922638,
+                0.00809116940945387,
+                -0.00368139380589128
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
+    "beedrill-mega": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "furyattack": {
+          "action": "physical_attack",
+          "part": "arm_spikes",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "peck": {
+          "action": "physical_attack_2",
+          "part": "spike",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "rocksmash": {
+          "action": "physical_attack",
+          "part": "hand",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack",
+        "furyattack": "physical_attack",
+        "hyperbeam": "special_attack",
+        "peck": "physical_attack_2",
+        "rocksmash": "physical_attack",
+        "sludgebomb": "special_attack",
+        "solarbeam": "special_attack",
+        "stringshot": "special_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "furyattack": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.68,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "peck": {
+          "action": "physical_attack_2",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "rocksmash": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "emission_scale": 0.1,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4,
+          "projectile_arc_height": 0.1
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.68,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.68,
+          "emission_scale": 0.2,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4328d0053896cfacd0e56cb3ab2750c166af8bea42a47cc03bd8b453f658de9d",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "5c9b163542df4abbbfac4e64b419676be12d2bf380cd08433444d25da133ccf9",
+          "shiny_runtime_sha256": "ed5fae6e5b316df50a1286e8040b8540362f1440f1b24ec7651a4ab33e0a0f33",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 118.0,
+            "impact_frame": 53.1,
+            "launch_frame": 35.4,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "furyattack": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5059b2e8ffdf45308dae0dd258579e103b7deee9fcaa2ad7e520eaa926a0f172",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f6c03ebf5dcc72160a5ae240955984ddfbef31d112615d515b0133ac4cc5a2bc",
+          "shiny_runtime_sha256": "ed5fae6e5b316df50a1286e8040b8540362f1440f1b24ec7651a4ab33e0a0f33",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 118.0,
+            "impact_frame": 53.1,
+            "launch_frame": 35.4,
+            "move_key": "furyattack"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "e1ee7e1bb49748da68d7cc5ba6f2bfc3dbbfdaaf7022e1794821d9613191f94b",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.68,
+            0.78
+          ],
+          "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a77ba7ada361bd8d5ffa9f33797bf4dc16317ef1668f05fd3e8a3f0e64fbe09a",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "1f83347ba4f55d432857f755e4b155db8c4cdd91bee20a24bfec3b0f4ebdf4a7",
+          "shiny_runtime_sha256": "ed5fae6e5b316df50a1286e8040b8540362f1440f1b24ec7651a4ab33e0a0f33",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 81.6,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "peck": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0847c315cf0e9d1d10afef519ad880b7cab3e105dea78c92c2f27b0d74b7fabe",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "61bfead73cd8e1e7533427eb5ba4eec8577d58a33cda9c008bc3151917e8ce0d",
+          "shiny_runtime_sha256": "ed5fae6e5b316df50a1286e8040b8540362f1440f1b24ec7651a4ab33e0a0f33",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "frames": 130.0,
+            "impact_frame": 58.5,
+            "launch_frame": 39.0,
+            "move_key": "peck"
+          },
+          "views": 2
+        },
+        "rocksmash": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e82c9a2e218428fdadfda847eaf1bac09807a4c08aaa34ce513af2bf8cb9efa8",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "568719e4b696e0207f4e12f7f12aebf1221600be355f5161e4cde0617159fd33",
+          "shiny_runtime_sha256": "ed5fae6e5b316df50a1286e8040b8540362f1440f1b24ec7651a4ab33e0a0f33",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 118.0,
+            "impact_frame": 53.1,
+            "launch_frame": 35.4,
+            "move_key": "rocksmash"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "dab5d094a9bd5e3d05eec147b10579d3d9ea244fcf7444f8704b674a436efe81",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d55221b29b600a1fa711482910d2562a5e13ecb466b98bccb1ef8c67c38e4191",
+          "shiny_runtime_sha256": "ed5fae6e5b316df50a1286e8040b8540362f1440f1b24ec7651a4ab33e0a0f33",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "sludgebomb",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.68,
+            0.78
+          ],
+          "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3d34d449cceef6846975860e3b89d085679e67545e6911c6b62aed1c96ed093b",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b54d2424719f716a5dee25bf7167e4504a78b4c31bbac92dc25da67b1d1165f6",
+          "shiny_runtime_sha256": "ed5fae6e5b316df50a1286e8040b8540362f1440f1b24ec7651a4ab33e0a0f33",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 81.6,
+            "emission_scale": 0.1,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        },
+        "stringshot": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.68,
+            0.78
+          ],
+          "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "00d0e461a3f14af6d867c22853991bb2531a827fdc7a5129d3536182660b9a2f",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Separate upper/lower mouth rims form a weighted head/spine point. Special_attack .40 release waits for the open gap. Independently projected right/left arm tips and posterior stinger use this form's own geometry; the stinger is raised in physical_attack_2. Physical contact retains a visible distance gap, with the mouth behind the long arms and the raised stinger below target center. Continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "682a3e6779e042dcaaf236ecbccd8c2e01c571ef901fd25b4e716ab871fcc161",
+          "shiny_runtime_sha256": "ed5fae6e5b316df50a1286e8040b8540362f1440f1b24ec7651a4ab33e0a0f33",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 81.6,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "stringshot"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "mouth",
+        "furyattack": "arm_spikes",
+        "hyperbeam": "mouth",
+        "peck": "spike",
+        "rocksmash": "hand",
+        "sludgebomb": "mouth",
+        "solarbeam": "mouth",
+        "stringshot": "mouth"
+      },
+      "part_reviews": {
+        "arm_spikes": {
+          "method": "paired_independently_projected_tips",
+          "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+          "parts": [
+            "hand",
+            "left_hand"
+          ],
+          "pose_sampling": "forward_from_start_v1",
+          "scope": "Two separately projected and sampled distal tips; see hand and left_hand reviews. Selected effects sampled in normal/shiny; continuous clearance, contact distance and remaining routes pending."
+        },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "99f0dbbf11f5bdc20a041731c957688f2c23171dd1e9d246ae62287772722ecb",
+            "landmarks": [
+              {
+                "action": "physical_attack_2",
+                "barycentric": [
+                  0.128868477634503,
+                  0.343906272836717,
+                  0.52722524952878
+                ],
+                "column": 3.0,
+                "distance": 2.37747393204311,
+                "mesh": "pm0015_51_00/Skeleton3D/pm0015_51_00_body_mesh",
+                "pixel": [
+                  65.0,
+                  230.0
+                ],
+                "surface": 0,
+                "triangle": 1698,
+                "vertex_indices": [
+                  2225,
+                  2226,
+                  2251
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "70096ad24628f9cd5abfb2961b3c858507accd7648849babd256e187821e83bb",
+          "scope": "Individually projected distal right blade/arm-spike tip. Idle, all available native attack clips and side sample inspected. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "99f0dbbf11f5bdc20a041731c957688f2c23171dd1e9d246ae62287772722ecb",
+            "landmarks": [
+              {
+                "action": "physical_attack_2",
+                "barycentric": [
+                  0.809046685932377,
+                  0.0096176076201045,
+                  0.181335706447518
+                ],
+                "column": 3.0,
+                "distance": 1.92653979892095,
+                "mesh": "pm0015_51_00/Skeleton3D/pm0015_51_00_body_mesh",
+                "pixel": [
+                  96.0,
+                  238.0
+                ],
+                "surface": 0,
+                "triangle": 652,
+                "vertex_indices": [
+                  735,
+                  688,
+                  689
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "70096ad24628f9cd5abfb2961b3c858507accd7648849babd256e187821e83bb",
+          "scope": "Individually projected distal left blade/arm-spike tip. Idle, all available native attack clips and side sample inspected. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "spike": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "99f0dbbf11f5bdc20a041731c957688f2c23171dd1e9d246ae62287772722ecb",
+            "landmarks": [
+              {
+                "action": "physical_attack_2",
+                "barycentric": [
+                  0.929116386328148,
+                  0.0361016160866011,
+                  0.0347819975852511
+                ],
+                "column": 3.0,
+                "distance": 2.1464736481853,
+                "mesh": "pm0015_51_00/Skeleton3D/pm0015_51_00_body_mesh",
+                "pixel": [
+                  55.0,
+                  290.0
+                ],
+                "surface": 1,
+                "triangle": 63,
+                "vertex_indices": [
+                  28,
+                  40,
+                  22
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "70096ad24628f9cd5abfb2961b3c858507accd7648849babd256e187821e83bb",
+          "scope": "Individually projected distal posterior stinger, bound to tail_03. Physical_attack_2 raises it forward. Idle, all available native attack clips and side sample inspected. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "arm_spikes": [
+          [
+            {
+              "bone": "right_arm_02",
+              "offset": [
+                0.794459104537964,
+                0.00294388271868229,
+                -0.00989455170929432
+              ],
+              "weight": 1.0
+            }
+          ],
+          [
+            {
+              "bone": "left_arm_02",
+              "offset": [
+                0.80803519487381,
+                -0.00289515545591712,
+                0.00764835067093372
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "hand": [
+          [
+            {
+              "bone": "right_arm_02",
+              "offset": [
+                0.794459104537964,
+                0.00294388271868229,
+                -0.00989455170929432
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_arm_02",
+              "offset": [
+                0.80803519487381,
+                -0.00289515545591712,
+                0.00764835067093372
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                -0.0659349039196968,
+                0.00504011241719127,
+                0.217801660299301
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "spine",
+              "offset": [
+                0.128838986158371,
+                0.0108176209032536,
+                0.137864619493484
+              ],
+              "weight": 0.5
+            }
+          ]
+        ],
+        "spike": [
+          [
+            {
+              "bone": "tail_03",
+              "offset": [
+                0.328795582056046,
+                0.00659548537805676,
+                0.00270686554722488
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "6b158520ff9f1cc23c07ec6048b82ee8804ca09567585b390078fa4266172757",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "fe4ed01627c554e4963991d420737c4aa11884b9de04ffd1dac760976831d0f2",
+        "scope": "Separate upper and lower lip landmarks averaged into one head/spine weighted mouth point; special_attack opens the gap. The original single lower-rim candidate was replaced. Sampled native poses reviewed; move effects and continuous clearance pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "963a9caa4eb818077dd4883cf9eb512ce5eecf33da260f29fcdf4dd552f5d98d",
+          "landmarks": [
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.491703580359749,
+                0.349052590935865,
+                0.159243828704387
+              ],
+              "column": 1.0,
+              "distance": 0.560910718005636,
+              "mesh": "pm0015_51_00/Skeleton3D/pm0015_51_00_body_mesh",
+              "pixel": [
+                211.0,
+                160.0
+              ],
+              "surface": 0,
+              "triangle": 2915,
+              "vertex_indices": [
+                1620,
+                85,
+                1604
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "special_attack",
+              "barycentric": [
+                0.529093453374324,
+                0.29077528843755,
+                0.180131258188126
+              ],
+              "column": 1.0,
+              "distance": 0.796986181904944,
+              "mesh": "pm0015_51_00/Skeleton3D/pm0015_51_00_body_mesh",
+              "pixel": [
+                211.0,
+                180.0
+              ],
+              "surface": 0,
+              "triangle": 4425,
+              "vertex_indices": [
+                2782,
+                2783,
+                2800
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      }
+    },
     "beheeyem": {
       "part_reviews": {
         "hand": {
@@ -15494,6 +16906,453 @@
         "preview_sha256": "5afb6c7b96a3ee683b66daf1aec09a516ba3b641db32431b289265e0898c77bb",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "ceruledge": {
+      "anatomical_route_reviews": {
+        "astonish": {
+          "action": "physical_attack",
+          "part": "hand",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Independently projected right/left sword tips follow their respective claw bones. Flamethrower uses both tips; Ember and Shadow Ball explicitly use the right tip because their presenters emit one source. Special_attack .35 release follows the crossed-blade pose and opens the blades to each side. Contact distances and continuous blade/body clearance remain pending. Close Combat still uses oversized generic fist graphics over a native sword swing; this presentation mismatch is unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "closecombat": {
+          "action": "physical_attack",
+          "part": "hand",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Independently projected right/left sword tips follow their respective claw bones. Flamethrower uses both tips; Ember and Shadow Ball explicitly use the right tip because their presenters emit one source. Special_attack .35 release follows the crossed-blade pose and opens the blades to each side. Contact distances and continuous blade/body clearance remain pending. Close Combat still uses oversized generic fist graphics over a native sword swing; this presentation mismatch is unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_review_presentation_mismatch_unresolved"
+        },
+        "dragonclaw": {
+          "action": "physical_attack",
+          "part": "blades",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Independently projected right/left sword tips follow their respective claw bones. Flamethrower uses both tips; Ember and Shadow Ball explicitly use the right tip because their presenters emit one source. Special_attack .35 release follows the crossed-blade pose and opens the blades to each side. Contact distances and continuous blade/body clearance remain pending. Close Combat still uses oversized generic fist graphics over a native sword swing; this presentation mismatch is unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "ember": {
+          "action": "special_attack",
+          "part": "hand",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Independently projected right/left sword tips follow their respective claw bones. Flamethrower uses both tips; Ember and Shadow Ball explicitly use the right tip because their presenters emit one source. Special_attack .35 release follows the crossed-blade pose and opens the blades to each side. Contact distances and continuous blade/body clearance remain pending. Close Combat still uses oversized generic fist graphics over a native sword swing; this presentation mismatch is unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "part": "blades",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Independently projected right/left sword tips follow their respective claw bones. Flamethrower uses both tips; Ember and Shadow Ball explicitly use the right tip because their presenters emit one source. Special_attack .35 release follows the crossed-blade pose and opens the blades to each side. Contact distances and continuous blade/body clearance remain pending. Close Combat still uses oversized generic fist graphics over a native sword swing; this presentation mismatch is unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "part": "hand",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Independently projected right/left sword tips follow their respective claw bones. Flamethrower uses both tips; Ember and Shadow Ball explicitly use the right tip because their presenters emit one source. Special_attack .35 release follows the crossed-blade pose and opens the blades to each side. Contact distances and continuous blade/body clearance remain pending. Close Combat still uses oversized generic fist graphics over a native sword swing; this presentation mismatch is unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "astonish": "physical_attack",
+        "closecombat": "physical_attack",
+        "dragonclaw": "physical_attack",
+        "ember": "special_attack",
+        "flamethrower": "special_attack",
+        "shadowball": "special_attack"
+      },
+      "move_choreography": {
+        "astonish": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "closecombat": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "dragonclaw": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "ember": {
+          "action": "special_attack",
+          "emission_scale": 0.15,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.35
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.68,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.35
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.35
+        }
+      },
+      "move_effect_reviews": {
+        "astonish": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "103c8e940d38e51ca5d3382b6b0159d0b64d8cbb58ba2e28ad0c2b978ab7e32a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "23af92abaf05694e873c08124dfe8d89cb55ddccf72587ca70e317de2cc7f94b",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Independently projected right/left sword tips follow their respective claw bones. Flamethrower uses both tips; Ember and Shadow Ball explicitly use the right tip because their presenters emit one source. Special_attack .35 release follows the crossed-blade pose and opens the blades to each side. Contact distances and continuous blade/body clearance remain pending. Close Combat still uses oversized generic fist graphics over a native sword swing; this presentation mismatch is unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "436e919b7e13dcd48b65eb8bf3c08e2e2aca41e57d59f0c7e03b52607fbd1dfe",
+          "shiny_runtime_sha256": "0f7417f1d6932f0a4a00d169ba2cca6484c90affa49a7aa6d08058d793a62a44",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 90.0,
+            "impact_frame": 40.5,
+            "launch_frame": 27.0,
+            "move_key": "astonish"
+          },
+          "views": 2
+        },
+        "closecombat": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "103c8e940d38e51ca5d3382b6b0159d0b64d8cbb58ba2e28ad0c2b978ab7e32a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b400bd91d110d6ee87901ae9112045e3d5abf3bff5158480ec3217d43b96b115",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Independently projected right/left sword tips follow their respective claw bones. Flamethrower uses both tips; Ember and Shadow Ball explicitly use the right tip because their presenters emit one source. Special_attack .35 release follows the crossed-blade pose and opens the blades to each side. Contact distances and continuous blade/body clearance remain pending. Close Combat still uses oversized generic fist graphics over a native sword swing; this presentation mismatch is unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "2a0dcb7758d8745dadd9a619bb01900f5b99984844dced71ef44596aa4eaf5f0",
+          "shiny_runtime_sha256": "0f7417f1d6932f0a4a00d169ba2cca6484c90affa49a7aa6d08058d793a62a44",
+          "status": "sampled_origin_review_presentation_mismatch_unresolved",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 90.0,
+            "impact_frame": 40.5,
+            "launch_frame": 27.0,
+            "move_key": "closecombat"
+          },
+          "views": 2
+        },
+        "dragonclaw": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "103c8e940d38e51ca5d3382b6b0159d0b64d8cbb58ba2e28ad0c2b978ab7e32a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ff198671d8f2ea4252ffee04b062204b310f556b756c18dff613ee707d6eac17",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Independently projected right/left sword tips follow their respective claw bones. Flamethrower uses both tips; Ember and Shadow Ball explicitly use the right tip because their presenters emit one source. Special_attack .35 release follows the crossed-blade pose and opens the blades to each side. Contact distances and continuous blade/body clearance remain pending. Close Combat still uses oversized generic fist graphics over a native sword swing; this presentation mismatch is unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "255a0ee1772897a37be41a2836c31f916efa52c8a61309d5b12ef519c97d228a",
+          "shiny_runtime_sha256": "0f7417f1d6932f0a4a00d169ba2cca6484c90affa49a7aa6d08058d793a62a44",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 90.0,
+            "impact_frame": 40.5,
+            "launch_frame": 27.0,
+            "move_key": "dragonclaw"
+          },
+          "views": 2
+        },
+        "ember": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bd1f73fb8027a5b21fe9b57cdb94142e216d9a239634bafef2edd98009d207da",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "103c8e940d38e51ca5d3382b6b0159d0b64d8cbb58ba2e28ad0c2b978ab7e32a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d2be550cb42726911be94e4756c03073999886fc26effb624c29c59d3a6d7dee",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Independently projected right/left sword tips follow their respective claw bones. Flamethrower uses both tips; Ember and Shadow Ball explicitly use the right tip because their presenters emit one source. Special_attack .35 release follows the crossed-blade pose and opens the blades to each side. Contact distances and continuous blade/body clearance remain pending. Close Combat still uses oversized generic fist graphics over a native sword swing; this presentation mismatch is unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "72337e5e180683e04d2e67abfcf93a8bc49dbb068f98fe53f89b5ada9a2a8c0f",
+          "shiny_runtime_sha256": "0f7417f1d6932f0a4a00d169ba2cca6484c90affa49a7aa6d08058d793a62a44",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 42.0,
+            "move_key": "ember"
+          },
+          "views": 2
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.68,
+            0.78
+          ],
+          "normal_runtime_sha256": "103c8e940d38e51ca5d3382b6b0159d0b64d8cbb58ba2e28ad0c2b978ab7e32a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "01fe3d76a237a8cf1b513cf80d0f915ae463191ff82aeda480a2e90e22a131cd",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Independently projected right/left sword tips follow their respective claw bones. Flamethrower uses both tips; Ember and Shadow Ball explicitly use the right tip because their presenters emit one source. Special_attack .35 release follows the crossed-blade pose and opens the blades to each side. Contact distances and continuous blade/body clearance remain pending. Close Combat still uses oversized generic fist graphics over a native sword swing; this presentation mismatch is unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "dab931e0be3c73a07adb648e274e25233e02af5d6e550fc130f948a83ed90d28",
+          "shiny_runtime_sha256": "0f7417f1d6932f0a4a00d169ba2cca6484c90affa49a7aa6d08058d793a62a44",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 81.6,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 42.0,
+            "move_key": "flamethrower"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bd1f73fb8027a5b21fe9b57cdb94142e216d9a239634bafef2edd98009d207da",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "103c8e940d38e51ca5d3382b6b0159d0b64d8cbb58ba2e28ad0c2b978ab7e32a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "66df6a23c91d512f03547ad19ee3dfe36cf4f9912b3d88504def49fee3aa72ef",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. Independently projected right/left sword tips follow their respective claw bones. Flamethrower uses both tips; Ember and Shadow Ball explicitly use the right tip because their presenters emit one source. Special_attack .35 release follows the crossed-blade pose and opens the blades to each side. Contact distances and continuous blade/body clearance remain pending. Close Combat still uses oversized generic fist graphics over a native sword swing; this presentation mismatch is unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3553c2679ce216e2e578f624aa9f3ac5c809268e5f481b2424915fef83ddfa11",
+          "shiny_runtime_sha256": "0f7417f1d6932f0a4a00d169ba2cca6484c90affa49a7aa6d08058d793a62a44",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 42.0,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "astonish": "hand",
+        "closecombat": "hand",
+        "dragonclaw": "blades",
+        "ember": "hand",
+        "flamethrower": "blades",
+        "shadowball": "hand"
+      },
+      "part_reviews": {
+        "blades": {
+          "method": "paired_independently_projected_tips",
+          "normal_runtime_sha256": "103c8e940d38e51ca5d3382b6b0159d0b64d8cbb58ba2e28ad0c2b978ab7e32a",
+          "parts": [
+            "hand",
+            "left_hand"
+          ],
+          "pose_sampling": "forward_from_start_v1",
+          "scope": "Two separately projected and sampled distal tips; see hand and left_hand reviews. Selected effects sampled in normal/shiny; continuous clearance, contact distance and remaining routes pending."
+        },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "324288e7aed2714f981fa74752254ce027341edc141037630675361ba26b9e69",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.539457648324881,
+                  0.416141108036591,
+                  0.0444012436385278
+                ],
+                "column": 0.0,
+                "distance": 4.05073277831779,
+                "mesh": "pm1109_00_00/Skeleton3D/pm1109_00_00_r_longblade_mesh",
+                "pixel": [
+                  111.0,
+                  268.0
+                ],
+                "surface": 0,
+                "triangle": 248,
+                "vertex_indices": [
+                  219,
+                  225,
+                  226
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "103c8e940d38e51ca5d3382b6b0159d0b64d8cbb58ba2e28ad0c2b978ab7e32a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b42fa935d633fb7b0c1a8a03c2f199abfae17e32d925327c14ac69c25f867e9d",
+          "scope": "Individually projected distal right blade/arm-spike tip. Idle, all available native attack clips and side sample inspected. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "324288e7aed2714f981fa74752254ce027341edc141037630675361ba26b9e69",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.160327273018221,
+                  0.525376430746411,
+                  0.314296296235367
+                ],
+                "column": 0.0,
+                "distance": 3.12402355850072,
+                "mesh": "pm1109_00_00/Skeleton3D/pm1109_00_00_l_longblade_mesh",
+                "pixel": [
+                  343.0,
+                  304.0
+                ],
+                "surface": 0,
+                "triangle": 32,
+                "vertex_indices": [
+                  53,
+                  59,
+                  60
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "103c8e940d38e51ca5d3382b6b0159d0b64d8cbb58ba2e28ad0c2b978ab7e32a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b42fa935d633fb7b0c1a8a03c2f199abfae17e32d925327c14ac69c25f867e9d",
+          "scope": "Individually projected distal left blade/arm-spike tip. Idle, all available native attack clips and side sample inspected. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "blades": [
+          [
+            {
+              "bone": "right_claw_a",
+              "offset": [
+                0.67182469367981,
+                0.00830067321658134,
+                0.0112643977627158
+              ],
+              "weight": 1.0
+            }
+          ],
+          [
+            {
+              "bone": "left_claw_a",
+              "offset": [
+                0.686018764972687,
+                0.00282312836498022,
+                0.0126305408775806
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "hand": [
+          [
+            {
+              "bone": "right_claw_a",
+              "offset": [
+                0.67182469367981,
+                0.00830067321658134,
+                0.0112643977627158
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_claw_a",
+              "offset": [
+                0.686018764972687,
+                0.00282312836498022,
+                0.0126305408775806
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
       }
     },
     "cetitan": {
@@ -74529,6 +76388,511 @@
         "preview_sha256": "4d829be5e189ff0c83a3023d9b55ac81058ba6aa358085992278a9c37445819e",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "magearna": {
+      "anatomical_route_reviews": {
+        "disarmingvoice": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The small lower facial mouth dot was individually projected and follows head in sampled native clips. Disarming Voice and Draining Kiss use special_attack .30/.50 and .15 initial emission scale. The oversized original hearts obscured the face and were rejected; hearts and sparkles now start small and grow during travel. Arm/cone cannon and core casting points remain unreviewed; continuous clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "drainingkiss": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The small lower facial mouth dot was individually projected and follows head in sampled native clips. Disarming Voice and Draining Kiss use special_attack .30/.50 and .15 initial emission scale. The oversized original hearts obscured the face and were rejected; hearts and sparkles now start small and grow during travel. Arm/cone cannon and core casting points remain unreviewed; continuous clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "disarmingvoice": "special_attack",
+        "drainingkiss": "special_attack"
+      },
+      "move_choreography": {
+        "disarmingvoice": {
+          "action": "special_attack",
+          "emission_scale": 0.15,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        },
+        "drainingkiss": {
+          "action": "special_attack",
+          "emission_scale": 0.15,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_effect_reviews": {
+        "disarmingvoice": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "bb0e8377fc64d4c502151aa75721a767377c7e10201ac009ad34e801e154bbcc",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "820e8d3e6c41982fe3a2214a503bbeb24758c93261d615a44ac083dc8684f44a",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The small lower facial mouth dot was individually projected and follows head in sampled native clips. Disarming Voice and Draining Kiss use special_attack .30/.50 and .15 initial emission scale. The oversized original hearts obscured the face and were rejected; hearts and sparkles now start small and grow during travel. Arm/cone cannon and core casting points remain unreviewed; continuous clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "24c15760105ea3c1b7b72158aa63ee6dc8f2566030dc850ba1a788e5d6dcc4ff",
+          "shiny_runtime_sha256": "e5e38f18c5cb7fc7a5fa946a821d78b720c1eb7ff1e1b4e0ba4254795ec62046",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "disarmingvoice"
+          },
+          "views": 2
+        },
+        "drainingkiss": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bd1f73fb8027a5b21fe9b57cdb94142e216d9a239634bafef2edd98009d207da",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "bb0e8377fc64d4c502151aa75721a767377c7e10201ac009ad34e801e154bbcc",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "965e11d72197729cb9bca6a1aa4bd80d39e3ef1643cf90e3c652cd38ddb56594",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The small lower facial mouth dot was individually projected and follows head in sampled native clips. Disarming Voice and Draining Kiss use special_attack .30/.50 and .15 initial emission scale. The oversized original hearts obscured the face and were rejected; hearts and sparkles now start small and grow during travel. Arm/cone cannon and core casting points remain unreviewed; continuous clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ce0bdb9c0345aa70f7472d5eb67e025e76802d2596ec1020da8caebb90fae0ba",
+          "shiny_runtime_sha256": "e5e38f18c5cb7fc7a5fa946a821d78b720c1eb7ff1e1b4e0ba4254795ec62046",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 36.0,
+            "move_key": "drainingkiss"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "disarmingvoice": "mouth",
+        "drainingkiss": "mouth"
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.0403096117079258,
+                -0.00291939312592149,
+                0.0916138887405396
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "bb0e8377fc64d4c502151aa75721a767377c7e10201ac009ad34e801e154bbcc",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "6964841631a9a31c223c276e8ad34be0d1514df75476f728407346959b6c0ce8",
+        "scope": "Individually projected small lower facial mouth dot bound to head; Mega variants corrected upward from the initial chin candidate. Sampled native poses reviewed; move effects and continuous clearance pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "a180a3e63fe975d14a8d715a894130f04826a5f3bae68a96d406e88fb7adc90f",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.105280521914848,
+                0.873972911599774,
+                0.0207465664853787
+              ],
+              "column": 0.0,
+              "distance": 2.0297229716026,
+              "mesh": "pm0882_11_00/Skeleton3D/pm0882_11_00_body_mesh",
+              "pixel": [
+                208.0,
+                128.0
+              ],
+              "surface": 3,
+              "triangle": 85,
+              "vertex_indices": [
+                128,
+                3,
+                32
+              ],
+              "weight": 1.0
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      }
+    },
+    "magearna-mega": {
+      "anatomical_route_reviews": {
+        "disarmingvoice": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. This form's lower mouth dot was individually projected, correcting the rejected initial chin point upward. Disarming Voice and Draining Kiss use special_attack .30/.50 with .15 initial scale. Original full-size hearts were rejected for obscuring the face. The sampled path lies above the orbiting gears; continuous gear and full-radius clearance and remaining arm/core routes remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "drainingkiss": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. This form's lower mouth dot was individually projected, correcting the rejected initial chin point upward. Disarming Voice and Draining Kiss use special_attack .30/.50 with .15 initial scale. Original full-size hearts were rejected for obscuring the face. The sampled path lies above the orbiting gears; continuous gear and full-radius clearance and remaining arm/core routes remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "disarmingvoice": "special_attack",
+        "drainingkiss": "special_attack"
+      },
+      "move_choreography": {
+        "disarmingvoice": {
+          "action": "special_attack",
+          "emission_scale": 0.15,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        },
+        "drainingkiss": {
+          "action": "special_attack",
+          "emission_scale": 0.15,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_effect_reviews": {
+        "disarmingvoice": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "ea1855265a1cb9d11ada81b9964d125dce09eca49459056628a1d149808de32a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f9eaf82fb6ede72f42c867af118c3bc16770b4a581ee6b03369a0c04bae37efa",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. This form's lower mouth dot was individually projected, correcting the rejected initial chin point upward. Disarming Voice and Draining Kiss use special_attack .30/.50 with .15 initial scale. Original full-size hearts were rejected for obscuring the face. The sampled path lies above the orbiting gears; continuous gear and full-radius clearance and remaining arm/core routes remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "a79c4d9015985641731fc24aba34ed2dbe44eaf01544fd8b2ea37cfa3c93c4d2",
+          "shiny_runtime_sha256": "476886f65340cc3d6e1c27b9eb615973cc56e65b36290544194ca776e50218ea",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 148.0,
+            "impact_frame": 74.0,
+            "launch_frame": 44.4,
+            "move_key": "disarmingvoice"
+          },
+          "views": 2
+        },
+        "drainingkiss": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bd1f73fb8027a5b21fe9b57cdb94142e216d9a239634bafef2edd98009d207da",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "ea1855265a1cb9d11ada81b9964d125dce09eca49459056628a1d149808de32a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8a926e44e641ba34eca14c51fc567ddfd263b3a6481b6ee5bad2857ae1c947c6",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. This form's lower mouth dot was individually projected, correcting the rejected initial chin point upward. Disarming Voice and Draining Kiss use special_attack .30/.50 with .15 initial scale. Original full-size hearts were rejected for obscuring the face. The sampled path lies above the orbiting gears; continuous gear and full-radius clearance and remaining arm/core routes remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "96d4ea35958182f4ca309539e199a68b0cee6c8b49b8611026ed0abdd047f503",
+          "shiny_runtime_sha256": "476886f65340cc3d6e1c27b9eb615973cc56e65b36290544194ca776e50218ea",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 148.0,
+            "impact_frame": 74.0,
+            "launch_frame": 44.4,
+            "move_key": "drainingkiss"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "disarmingvoice": "mouth",
+        "drainingkiss": "mouth"
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.0400292687118053,
+                0.000521893845871091,
+                0.0935101509094238
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "ea1855265a1cb9d11ada81b9964d125dce09eca49459056628a1d149808de32a",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "602657eb04803674c6c9026682dfa9ec27cba33f1902213b586e5d2ee72749ce",
+        "scope": "Individually projected small lower facial mouth dot bound to head; Mega variants corrected upward from the initial chin candidate. Sampled native poses reviewed; move effects and continuous clearance pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "928eabb7d8c1d68bcd6d4cba8b2a4af050cc39f60ca25c1d2c0af9df487ef12f",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.468371630431374,
+                0.396778243236487,
+                0.134850126332139
+              ],
+              "column": 0.0,
+              "distance": 0.790165453648355,
+              "mesh": "pm0882_51_00/Skeleton3D/pm0882_51_00_body_mesh",
+              "pixel": [
+                212.0,
+                170.0
+              ],
+              "surface": 3,
+              "triangle": 284,
+              "vertex_indices": [
+                11,
+                116,
+                122
+              ],
+              "weight": 1.0
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      }
+    },
+    "magearna-original-mega": {
+      "anatomical_route_reviews": {
+        "disarmingvoice": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. This form's lower mouth dot was independently projected, correcting the initial chin candidate upward. Disarming Voice and Draining Kiss use special_attack .30/.50 with .15 initial scale. Original full-size hearts were rejected for obscuring the face. The sampled path lies above the orbiting gears; continuous gear and full-radius clearance and remaining arm/core routes remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        },
+        "drainingkiss": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. This form's lower mouth dot was independently projected, correcting the initial chin candidate upward. Disarming Voice and Draining Kiss use special_attack .30/.50 with .15 initial scale. Original full-size hearts were rejected for obscuring the face. The sampled path lies above the orbiting gears; continuous gear and full-radius clearance and remaining arm/core routes remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending"
+        }
+      },
+      "move_actions": {
+        "disarmingvoice": "special_attack",
+        "drainingkiss": "special_attack"
+      },
+      "move_choreography": {
+        "disarmingvoice": {
+          "action": "special_attack",
+          "emission_scale": 0.15,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        },
+        "drainingkiss": {
+          "action": "special_attack",
+          "emission_scale": 0.15,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_effect_reviews": {
+        "disarmingvoice": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "79c9b8decc6880d0577d0ecff66fcba93a955da658932be3972c9aa8073c8351",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "f611f047e99cfa364072b525f25ebac2ec07345176beeca86b3541a6f033621a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b5599fad4bcff3df8d7395da214383110de6402dda37f19411ade02464438b3d",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. This form's lower mouth dot was independently projected, correcting the initial chin candidate upward. Disarming Voice and Draining Kiss use special_attack .30/.50 with .15 initial scale. Original full-size hearts were rejected for obscuring the face. The sampled path lies above the orbiting gears; continuous gear and full-radius clearance and remaining arm/core routes remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c73131d30704d2ced53bd3da25e8a4f310449b1788d6d99373dbad6b9309dbc5",
+          "shiny_runtime_sha256": "1679bbbd461ebac06a540874f30cf76aab1557057a72f16e2be8027d7eca20f6",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 148.0,
+            "impact_frame": 74.0,
+            "launch_frame": 44.4,
+            "move_key": "disarmingvoice"
+          },
+          "views": 2
+        },
+        "drainingkiss": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "bd1f73fb8027a5b21fe9b57cdb94142e216d9a239634bafef2edd98009d207da",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "f611f047e99cfa364072b525f25ebac2ec07345176beeca86b3541a6f033621a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5f46b117398905ca2da1831468767cf98a867aa6d55d7402cce9401d9e5726f0",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. This form's lower mouth dot was independently projected, correcting the initial chin candidate upward. Disarming Voice and Draining Kiss use special_attack .30/.50 with .15 initial scale. Original full-size hearts were rejected for obscuring the face. The sampled path lies above the orbiting gears; continuous gear and full-radius clearance and remaining arm/core routes remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "805a2a376b696942a255a46a926dcc76fc66e3ccd76b49e190f4490736a3719f",
+          "shiny_runtime_sha256": "1679bbbd461ebac06a540874f30cf76aab1557057a72f16e2be8027d7eca20f6",
+          "status": "sampled_origin_and_timing_review_continuous_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 148.0,
+            "impact_frame": 74.0,
+            "launch_frame": 44.4,
+            "move_key": "drainingkiss"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "disarmingvoice": "mouth",
+        "drainingkiss": "mouth"
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.0400292687118053,
+                0.000521893845871091,
+                0.0935101509094238
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "f611f047e99cfa364072b525f25ebac2ec07345176beeca86b3541a6f033621a",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "5d7cc5bee9651ceb52053facdb728ccf9b906481b2b2b50f6400225ee2996639",
+        "scope": "Individually projected small lower facial mouth dot bound to head; Mega variants corrected upward from the initial chin candidate. Sampled native poses reviewed; move effects and continuous clearance pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "db7cad88ba09eabb040620a5e392a9f4f96ffec755ee9e673c76c42311dd20c0",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.468371630431374,
+                0.396778243236487,
+                0.134850126332139
+              ],
+              "column": 0.0,
+              "distance": 0.790165453648355,
+              "mesh": "pm0882_52_00/Skeleton3D/pm0882_51_00_body_mesh",
+              "pixel": [
+                212.0,
+                170.0
+              ],
+              "surface": 3,
+              "triangle": 284,
+              "vertex_indices": [
+                11,
+                116,
+                122
+              ],
+              "weight": 1.0
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "magikarp": {

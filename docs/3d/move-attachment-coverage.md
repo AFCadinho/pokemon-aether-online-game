@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1144 species/forms.
-- No anatomical attachment profile: 56 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 997 species/forms.
+- At least one configured anatomical attachment: 1150 species/forms.
+- No anatomical attachment profile: 50 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 1001 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -84,6 +84,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | baxcalibur-mega | hand, left_hand, mouth | Same attachment profile |
 | bayleef | hand, left_hand, mouth | Same attachment profile |
 | beartic | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| beedrill | arm_spikes, face, hand, left_hand, spike | Same attachment profile |
+| beedrill-mega | arm_spikes, hand, left_hand, mouth, spike | Same attachment profile |
 | beheeyem | hand, left_hand, mouth | Same attachment profile |
 | beldum | forehead | Same attachment profile |
 | bellibolt | mouth | Same attachment profile |
@@ -144,6 +146,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | celebi | hand, left_hand, mouth | Same attachment profile |
 | celesteela | hand, left_hand, mouth | Same attachment profile |
 | centiskorch | mouth | Same attachment profile |
+| ceruledge | blades, hand, left_hand | Same attachment profile |
 | cetitan | hand, left_hand | Same attachment profile |
 | cetoddle | hand, left_hand, mouth | Same attachment profile |
 | chandelure | face | Same attachment profile |
@@ -591,6 +594,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | machop | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | magby | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | magcargo | mouth | Same attachment profile |
+| magearna | mouth | Same attachment profile |
+| magearna-mega | mouth | Same attachment profile |
+| magearna-original-mega | mouth | Same attachment profile |
 | magikarp | mouth | Same attachment profile |
 | magmar | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | magmortar | cannon, foot, hand, left_foot, left_hand, mouth | Same attachment profile |
