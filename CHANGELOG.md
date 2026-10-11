@@ -4,6 +4,8 @@
 
 - Explain incorrect usernames or passwords at sign-in with clear retry guidance in all four supported languages, instead of showing a session-verification error.
 
+- Add a reusable Evolution Item Seller NPC using the existing shop interface, ready for later map placement, with localized Item Dex source names.
+
 - Correct remaining reviewed 3D limb attachment positions, add missing points for 14 forms, and select anatomical alternatives for handless Pokémon. Make Mega Barbaracle's attack point follow its changing hand mesh and connect reviewed muzzles to generic mouth attacks.
 
 - Add individually reviewed 3D attack attachment profiles for 40 remaining forms and 94 reviewed limb points across 47 forms; record outstanding anatomical corrections and model blockers.

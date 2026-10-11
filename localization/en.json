@@ -6735,5 +6735,6 @@
   "ui.evolution_conditions.partner_trade": "Trade this Pokémon for {partner}. Linking Cord does not replace this trade.",
   "ui.evolution_conditions.shed_rule": "Evolve your owned Pokémon into {pokemon} with a free party slot. Shedinja appears in that slot.",
   "ui.evolution.result.bonus_created": "{pokemon} appeared in your party.",
-  "ui.trade.review.evolves_to": "Evolves into {pokemon} after this trade."
+  "ui.trade.review.evolves_to": "Evolves into {pokemon} after this trade.",
+  "ui.item_dex.shop.evolution_item_shop": "Evolution Item Seller"
 }
