@@ -46,6 +46,20 @@ func _run() -> void:
 	assert(Attachments.part_for("charmander", "scratch") == "hand")
 	assert(Attachments.part_for("pikachu", "tackle") == "body")
 	assert(Attachments.part_for("pikachu@shiny", "thundershock") == "electric_body")
+	for identity: String in ["zapdos", "zapdos@shiny", "zapdos-galar", "zapdos-galar@shiny"]:
+		assert(Attachments.part_for(identity, "peck") == "beak_tip")
+		assert(Attachments.part_for(identity, "hyperbeam") == "mouth")
+		assert(Attachments.definitions_for(identity, "beak_tip").size() == 1)
+		assert(Attachments.definitions_for(identity, "beak_tip")[0][0].bone == "head")
+	for identity: String in ["zygarde-mega", "zygarde-mega@shiny"]:
+		assert(Attachments.part_for(identity, "hyperbeam") == "cannon")
+		assert(Attachments.definitions_for(identity, "cannon")[0][0].bone == "feeler_a_02")
+		assert(Attachments.part_for(identity, "bite") == "mouth")
+	assert(Attachments.part_for("zygarde-50", "hyperbeam") == "mouth")
+	for identity: String in ["zweilous", "zweilous@shiny"]:
+		var heads := Attachments.definitions_for(identity, "mouth")
+		assert(heads.size() == 2)
+		assert(heads[0][0].bone == "right_head" and heads[1][0].bone == "left_head")
 	for move: String in ["bugbite", "peck", "lick"]:
 		assert(Attachments.part_for("charmander", move) == "mouth")
 	for move: String in ["doublekick", "highjumpkick", "lowkick", "pyroball"]:

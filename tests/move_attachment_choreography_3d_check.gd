@@ -50,7 +50,7 @@ func _run() -> void:
 			await get_tree().process_frame
 	assert(Attachments.choreography_for("decidueye-hisui","lowkick","physical_attack_2").is_empty())
 	assert(Attachments.choreography_for("glastrier","tackle","physical_attack_2").is_empty())
-	for route: Array in [["salandit","special_attack",.35,.45,.64], ["volcanion","physical_attack_2",.4,.48,.55]]:
+	for route: Array in [["salandit","special_attack",.35,.45,.64], ["volcanion","physical_attack_2",.4,.48,.55], ["walking-wake","special_attack",.3,.45,.6], ["watchog","special_attack",.35,.45,.7], ["zoroark-hisui","physical_attack_2",.2,.28,.32]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -82,9 +82,12 @@ func _run() -> void:
 	assert(Attachments.choreography_for("volcanion","watergun","physical_attack_2").is_empty())
 	assert(Attachments.action_for("volcanion","watergun",{"physical_attack_2":{}}).is_empty())
 	assert(Attachments.action_for("volcanion","flamethrower",{"special_attack":{}}).is_empty())
+	assert(Attachments.choreography_for("zoroark","flamethrower","physical_attack_2").is_empty())
+	for identity: String in ["walking-wake", "watchog", "zoroark-hisui"]:
+		assert(Attachments.choreography_for(identity,"hyperbeam","special_attack").is_empty())
 	router.release_threaded_resource_requests()
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=5 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=8 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()

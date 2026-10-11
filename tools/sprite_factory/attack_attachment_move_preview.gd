@@ -10,6 +10,7 @@ var species := "snivy"
 var move := "Vine Whip"
 var camera_yaw := 0.0
 var camera_scale := 1.0
+var requested_fractions: Array[float] = []
 var viewport: SubViewport
 var world: Node3D
 var camera: Camera3D
@@ -18,7 +19,7 @@ var stage: Control
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
 	for i in args.size():
-		if args[i] in ["--catalog", "--output", "--species", "--move", "--camera-yaw", "--camera-scale"] and i + 1 >= args.size():
+		if args[i] in ["--catalog", "--output", "--species", "--move", "--camera-yaw", "--camera-scale", "--fractions"] and i + 1 >= args.size():
 			printerr("Missing argument: ", args[i]); quit(1); return
 		if args[i] == "--catalog": catalog_path = args[i+1]
 		if args[i] == "--output": output = args[i+1]
@@ -26,6 +27,13 @@ func _init() -> void:
 		if args[i] == "--move": move = args[i+1]
 		if args[i] == "--camera-yaw": camera_yaw = deg_to_rad(float(args[i+1]))
 		if args[i] == "--camera-scale": camera_scale = float(args[i+1])
+		if args[i] == "--fractions":
+			for value: String in args[i+1].split(",", true):
+				if not value.is_valid_float() or not is_finite(float(value)) or float(value) < 0 or float(value) > 1:
+					printerr("Invalid pose fraction: ", value); quit(1); return
+				requested_fractions.append(float(value))
+			if requested_fractions.size() > 8:
+				printerr("At most eight pose fractions are supported"); quit(1); return
 	if not is_finite(camera_scale) or camera_scale <= 0 or not is_finite(camera_yaw):
 		printerr("Invalid camera settings"); quit(1); return
 	_run.call_deferred()
@@ -92,6 +100,7 @@ func _run() -> void:
 	var fractions := [.2,.45,.65]
 	# Include the active lash/beam interval even when authored timing differs.
 	fractions.append(lerpf(float(timing.get("launch_frame",0)),float(timing.impact_frame),.9)/float(timing.frames))
+	if not requested_fractions.is_empty(): fractions = requested_fractions.duplicate()
 	fractions.sort()
 	var sheet := Image.create(720*2,540*fractions.size(),false,Image.FORMAT_RGB8)
 	var label := Label.new(); label.position = Vector2(8,8); label.add_theme_font_size_override("font_size",18); viewport.add_child(label)

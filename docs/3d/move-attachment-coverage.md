@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1034 species/forms.
-- No anatomical attachment profile: 166 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 932 species/forms.
+- At least one configured anatomical attachment: 1038 species/forms.
+- No anatomical attachment profile: 162 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 941 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -994,10 +994,10 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | vulpix-alola | mouth | Same attachment profile |
 | wailmer | hand, left_hand, mouth | Same attachment profile |
 | wailord | mouth | Same attachment profile |
-| walking-wake | foot, left_foot | Same attachment profile |
+| walking-wake | foot, left_foot, mouth | Same attachment profile |
 | walrein | hand, left_hand, mouth | Same attachment profile |
 | wartortle | hand, left_hand, mouth | Same attachment profile |
-| watchog | foot, hand, left_foot, left_hand | Same attachment profile |
+| watchog | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | wattrel | mouth | Same attachment profile |
 | weavile | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | weepinbell | hand, left_hand, mouth | Same attachment profile |
@@ -1016,13 +1016,14 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | wooloo | mouth | Same attachment profile |
 | wooper | foot, left_foot, mouth | Same attachment profile |
 | wooper-paldea | foot, left_foot, mouth | Same attachment profile |
+| wormadam | mouth | Same attachment profile |
 | wynaut | mouth | Same attachment profile |
 | wyrdeer | foot, left_foot | Same attachment profile |
 | xatu | mouth | Same attachment profile |
 | xerneas | hand, left_hand, mouth | Same attachment profile |
 | xurkitree | hand, left_hand, mouth | Same attachment profile |
 | yamask | hand, left_hand | Same attachment profile |
-| yamask-galar | hand, left_hand | Same attachment profile |
+| yamask-galar | hand, left_hand, mouth | Same attachment profile |
 | yamper | mouth | Same attachment profile |
 | yanma | mouth | Same attachment profile |
 | yanmega | mouth | Same attachment profile |
@@ -1033,7 +1034,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | zamazenta | hand, left_hand, mouth | Same attachment profile |
 | zamazenta-crowned | hand, left_hand, mouth | Same attachment profile |
 | zangoose | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| zapdos-galar | foot, left_foot | Same attachment profile |
+| zapdos | beak_tip, mouth | Same attachment profile |
+| zapdos-galar | beak_tip, foot, left_foot, mouth | Same attachment profile |
 | zarude | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | zebstrika | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | zekrom | mouth | Same attachment profile |
@@ -1042,11 +1044,13 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | zigzagoon | mouth | Same attachment profile |
 | zigzagoon-galar | mouth | Same attachment profile |
 | zoroark | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| zoroark-hisui | foot, hand, left_foot, left_hand | Same attachment profile |
+| zoroark-hisui | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | zorua | hand, left_hand, mouth | Same attachment profile |
 | zorua-hisui | hand, left_hand, mouth | Same attachment profile |
 | zubat | mouth | Same attachment profile |
-| zweilous | hand, left_hand | Same attachment profile |
+| zweilous | hand, left_hand, mouth | Same attachment profile |
+| zygarde-50 | mouth | Same attachment profile |
+| zygarde-mega | cannon | Same attachment profile |
 
 ## Interpretation
 
