@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1007 species/forms.
-- No anatomical attachment profile: 193 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 883 species/forms.
+- At least one configured anatomical attachment: 1010 species/forms.
+- No anatomical attachment profile: 190 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 890 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -230,6 +230,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | ditto | mouth | Same attachment profile |
 | dodrio | foot, left_foot | Same attachment profile |
 | doduo | foot, left_foot | Same attachment profile |
+| dolliv | mouth | Same attachment profile |
 | dondozo | mouth | Same attachment profile |
 | donphan | hand, left_hand | Same attachment profile |
 | dottler | mouth | Same attachment profile |
@@ -262,7 +263,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | durant | mouth | Same attachment profile |
 | dusclops | hand, left_hand | Same attachment profile |
 | dusknoir | mouth | Same attachment profile |
-| duskull | hand, left_hand | Same attachment profile |
+| duskull | hand, left_hand, mouth | Same attachment profile |
 | dwebble | hand, left_hand, mouth | Same attachment profile |
 | eelektrik | mouth | Same attachment profile |
 | eelektross | hand, left_hand, mouth | Same attachment profile |
@@ -371,7 +372,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | gorebyss | mouth | Same attachment profile |
 | gossifleur | mouth | Same attachment profile |
 | gothita | hand, left_hand, mouth | Same attachment profile |
-| gothitelle | hand, left_hand | Same attachment profile |
+| gothitelle | hand, left_hand, mouth | Same attachment profile |
 | gothorita | hand, left_hand, mouth | Same attachment profile |
 | gouging-fire | foot, left_foot, mouth | Same attachment profile |
 | gourgeist-average | hand, left_hand, mouth | Same attachment profile |
@@ -457,7 +458,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | jynx | hand, left_hand, mouth | Same attachment profile |
 | kabuto | mouth | Same attachment profile |
 | kabutops | foot, mouth | Same attachment profile |
-| kadabra | hand, left_hand | Same attachment profile |
+| kadabra | hand, left_hand, mouth | Same attachment profile |
 | kangaskhan | foot, left_foot, mouth | Same attachment profile |
 | kangaskhan-mega | foot, left_foot, mouth | Same attachment profile |
 | karrablast | hand, left_hand, mouth | Same attachment profile |
@@ -562,7 +563,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | meganium-mega | hand, left_hand, mouth | Same attachment profile |
 | meloetta | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | meowscarada | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| meowstic-m-mega | hand, left_hand | Same attachment profile |
+| meowstic-m-mega | hand, left_hand, mouth | Same attachment profile |
 | meowstic-male | hand, left_hand, mouth | Same attachment profile |
 | meowth | hand, left_hand, mouth | Same attachment profile |
 | meowth-alola | hand, left_hand, mouth | Same attachment profile |
@@ -625,6 +626,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | nymble | foot, left_foot | Same attachment profile |
 | obstagoon | foot, hand, left_hand, mouth | Same attachment profile |
 | octillery | mouth | Same attachment profile |
+| oddish | mouth | Same attachment profile |
 | ogerpon | foot, left_foot | Same attachment profile |
 | ogerpon-cornerstone | foot, left_foot | Same attachment profile |
 | ogerpon-hearthflame | foot, left_foot | Same attachment profile |
@@ -809,6 +811,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | simipour | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | simisage | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | simisear | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| sinistcha | mouth | Same attachment profile |
 | sirfetchd | mouth | Same attachment profile |
 | sizzlipede | mouth | Same attachment profile |
 | skeledirge | mouth | Same attachment profile |
