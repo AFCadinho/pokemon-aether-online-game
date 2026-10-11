@@ -10,7 +10,7 @@ func _run() -> void:
 		var clip := Animation.new()
 		clip.length = 1.0
 		player.get_animation_library("").add_animation("physical_attack_2", clip)
-	for route: Array in [["hydrapple","Bug Bite","physical_attack",.20,.42,0.0], ["dodrio","Peck","physical_attack",.30,.45,0.0], ["dodrio","Fury Attack","physical_attack",.30,.45,0.0], ["doduo","Fury Attack","physical_attack",.30,.45,0.0], ["doduo","Peck","physical_attack",.30,.45,0.0], ["snom","Bug Bite","physical_attack",.18,.45,0.0], ["spinarak","Bug Bite","physical_attack",.24,.45,0.0], ["skarmory","Peck","physical_attack",.12,.28,0.0], ["skarmory-mega","Peck","physical_attack",.20,.40,0.0], ["glastrier","Double Kick","physical_attack_2",.12,.45,180.0], ["calyrex-ice","Double Kick","physical_attack",.12,.45,180.0], ["exploud","Low Kick","physical_attack",.05,.22,0.0]]:
+	for route: Array in [["beldum","Iron Head","physical_attack",.20,.42,0.0], ["beldum","Tackle","physical_attack",.20,.42,0.0], ["hydrapple","Bug Bite","physical_attack",.20,.42,0.0], ["dodrio","Peck","physical_attack",.30,.45,0.0], ["dodrio","Fury Attack","physical_attack",.30,.45,0.0], ["doduo","Fury Attack","physical_attack",.30,.45,0.0], ["doduo","Peck","physical_attack",.30,.45,0.0], ["snom","Bug Bite","physical_attack",.18,.45,0.0], ["spinarak","Bug Bite","physical_attack",.24,.45,0.0], ["skarmory","Peck","physical_attack",.12,.28,0.0], ["skarmory-mega","Peck","physical_attack",.20,.40,0.0], ["glastrier","Double Kick","physical_attack_2",.12,.45,180.0], ["calyrex-ice","Double Kick","physical_attack",.12,.45,180.0], ["exploud","Low Kick","physical_attack",.05,.22,0.0]]:
 		for slot in 4:
 			var identity: String = route[0] + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -50,7 +50,7 @@ func _run() -> void:
 			await get_tree().process_frame
 	assert(Attachments.choreography_for("decidueye-hisui","lowkick","physical_attack_2").is_empty())
 	assert(Attachments.choreography_for("glastrier","tackle","physical_attack_2").is_empty())
-	for route: Array in [["cubone","special_attack",.14,.22,.30], ["roaring-moon","special_attack",.18,.22,.25], ["slaking","physical_attack_2",.32,.45,.65], ["slugma","special_attack",.28,.44,.72], ["ho-oh","special_attack",.22,.36,.46], ["goodra","special_attack",.28,.42,.56], ["salandit","special_attack",.35,.45,.64], ["volcanion","physical_attack_2",.4,.48,.55], ["walking-wake","special_attack",.3,.45,.6], ["watchog","special_attack",.35,.45,.7], ["zoroark-hisui","physical_attack_2",.2,.28,.32]]:
+	for route: Array in [["chandelure-mega","special_attack",.32,.48,.65], ["cubone","special_attack",.14,.22,.30], ["roaring-moon","special_attack",.18,.22,.25], ["slaking","physical_attack_2",.32,.45,.65], ["slugma","special_attack",.28,.44,.72], ["ho-oh","special_attack",.22,.36,.46], ["goodra","special_attack",.28,.42,.56], ["salandit","special_attack",.35,.45,.64], ["volcanion","physical_attack_2",.4,.48,.55], ["walking-wake","special_attack",.3,.45,.6], ["watchog","special_attack",.35,.45,.7], ["zoroark-hisui","physical_attack_2",.2,.28,.32]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -87,7 +87,7 @@ func _run() -> void:
 	assert(Attachments.choreography_for("zoroark","flamethrower","physical_attack_2").is_empty())
 	for identity: String in ["walking-wake", "watchog", "zoroark-hisui"]:
 		assert(Attachments.choreography_for(identity,"hyperbeam","special_attack").is_empty())
-	for route: Array in [["starmie-mega","Bubble Beam","special_attack",.32,.55], ["starmie-mega","Water Pulse","special_attack",.32,.55], ["venonat","Sludge Bomb","special_attack",.34,.55], ["venonat","Screech","special_attack",.34,.55], ["venonat","Supersonic","special_attack",.34,.55], ["flabebe","Disarming Voice","physical_attack_2",.25,.45], ["dodrio","Growl","special_attack",.30,.50], ["dodrio","Supersonic","special_attack",.30,.50], ["doduo","Growl","special_attack",.36,.58], ["doduo","Supersonic","special_attack",.36,.58], ["gastly","Shadow Ball","special_attack",.42,.65], ["cubone","Growl","special_attack",.14,.22], ["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
+	for route: Array in [["unown","Hidden Power","special_attack",.30,.52], ["chandelure-mega","Ember","special_attack",.32,.55], ["chandelure-mega","Shadow Ball","special_attack",.32,.55], ["runerigus","Shadow Ball","special_attack",.48,.62], ["starmie-mega","Bubble Beam","special_attack",.32,.55], ["starmie-mega","Water Pulse","special_attack",.32,.55], ["venonat","Sludge Bomb","special_attack",.34,.55], ["venonat","Screech","special_attack",.34,.55], ["venonat","Supersonic","special_attack",.34,.55], ["flabebe","Disarming Voice","physical_attack_2",.25,.45], ["dodrio","Growl","special_attack",.30,.50], ["dodrio","Supersonic","special_attack",.30,.50], ["doduo","Growl","special_attack",.36,.58], ["doduo","Supersonic","special_attack",.36,.58], ["gastly","Shadow Ball","special_attack",.42,.65], ["cubone","Growl","special_attack",.14,.22], ["swanna","Water Gun","special_attack",.30,.45], ["minccino","Growl","physical_attack",.12,.24], ["vikavolt","Flash Cannon","special_attack",.10,.16], ["varoom","Sludge Bomb","physical_attack_2",.12,.40], ["sandslash-alola","Ice Beam","special_attack",.32,.45]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -117,7 +117,7 @@ func _run() -> void:
 	assert(Attachments.action_for("revavroom","sludgebomb",{"physical_attack_2":{}}).is_empty())
 	assert(Attachments.choreography_for("sandslash","icebeam","special_attack").is_empty())
 	assert(Attachments.choreography_for("sandslash-alola","blizzard","special_attack").is_empty())
-	for route: Array in [["wugtrio","Water Gun","special_attack",.32,.45,.62], ["wugtrio","Ice Beam","special_attack",.32,.45,.62], ["wugtrio","Hyper Beam","special_attack",.32,.45,.62], ["magneton","Hyper Beam","special_attack",.32,.48,.65], ["magneton","Flash Cannon","special_attack",.32,.48,.65], ["starmie-mega","Water Gun","special_attack",.32,.48,.65], ["starmie-mega","Ice Beam","special_attack",.32,.48,.65], ["starmie-mega","Hyper Beam","special_attack",.32,.48,.65], ["starmie-mega","Flash Cannon","special_attack",.32,.48,.65], ["starmie-mega","Scald","special_attack",.32,.48,.65], ["mamoswine","Hyper Beam","special_attack",.34,.48,.62], ["mamoswine","Ice Beam","special_attack",.34,.48,.62], ["venonat","Solar Beam","special_attack",.34,.48,.62], ["flabebe","Solar Beam","physical_attack_2",.25,.45,.60], ["hydrapple","Hyper Beam","special_attack",.38,.46,.55], ["hydrapple","Solar Beam","special_attack",.38,.46,.55], ["hydrapple","Dragon Breath","special_attack",.38,.46,.55], ["dodrio","Hyper Beam","special_attack",.30,.50,.70], ["electrode-hisui","Hyper Beam","physical_attack",.28,.42,.60], ["kyurem","Ice Beam","special_attack",.30,.45,.60], ["latios","Ice Beam","special_attack",.38,.50,.65], ["klefki","Flash Cannon","special_attack",.30,.45,.60], ["spiritomb","Hyper Beam","special_attack",.38,.50,.68], ["mareanie","Ice Beam","physical_attack",.60,.65,.72], ["arboliva","Solar Beam","physical_attack_2",.14,.22,.32], ["arboliva","Hyper Beam","physical_attack_2",.14,.22,.32], ["cubone","Water Gun","special_attack",.14,.22,.30], ["stunfisk","Water Gun","physical_attack",.12,.22,.28], ["snivy","Solar Beam","special_attack",.38,.48,.62], ["swinub","Ice Beam","special_attack",.34,.45,.58], ["steelix","Hyper Beam","special_attack",.42,.60,.74], ["stonjourner","Hyper Beam","special_attack",.38,.50,.66], ["mandibuzz","Hyper Beam","special_attack",.42,.60,.74], ["skarmory","Hyper Beam","special_attack",.30,.42,.54], ["skarmory-mega","Hyper Beam","special_attack",.18,.25,.32], ["sandaconda","Hyper Beam","physical_attack_2",.12,.22,.28], ["archaludon","Hyper Beam","special_attack",.18,.24,.29], ["avalugg-hisui","Ice Beam","special_attack",.33,.42,.50], ["grumpig","Hyper Beam","special_attack",.10,.22,.30], ["wyrdeer","Hyper Beam","special_attack",.17,.22,.26], ["houndstone","Hyper Beam","special_attack",.42,.60,.72], ["sudowoodo","Hyper Beam","special_attack",.42,.60,.80], ["cetoddle","Ice Beam","physical_attack",.10,.18,.25], ["lugia","Hyper Beam","special_attack",.27,.40,.53]]:
+	for route: Array in [["chandelure-mega","Hyper Beam","special_attack",.32,.48,.65], ["chandelure-mega","Solar Beam","special_attack",.32,.48,.65], ["runerigus","Hyper Beam","special_attack",.48,.55,.65], ["wugtrio","Water Gun","special_attack",.32,.45,.62], ["wugtrio","Ice Beam","special_attack",.32,.45,.62], ["wugtrio","Hyper Beam","special_attack",.32,.45,.62], ["magneton","Hyper Beam","special_attack",.32,.48,.65], ["magneton","Flash Cannon","special_attack",.32,.48,.65], ["starmie-mega","Water Gun","special_attack",.32,.48,.65], ["starmie-mega","Ice Beam","special_attack",.32,.48,.65], ["starmie-mega","Hyper Beam","special_attack",.32,.48,.65], ["starmie-mega","Flash Cannon","special_attack",.32,.48,.65], ["starmie-mega","Scald","special_attack",.32,.48,.65], ["mamoswine","Hyper Beam","special_attack",.34,.48,.62], ["mamoswine","Ice Beam","special_attack",.34,.48,.62], ["venonat","Solar Beam","special_attack",.34,.48,.62], ["flabebe","Solar Beam","physical_attack_2",.25,.45,.60], ["hydrapple","Hyper Beam","special_attack",.38,.46,.55], ["hydrapple","Solar Beam","special_attack",.38,.46,.55], ["hydrapple","Dragon Breath","special_attack",.38,.46,.55], ["dodrio","Hyper Beam","special_attack",.30,.50,.70], ["electrode-hisui","Hyper Beam","physical_attack",.28,.42,.60], ["kyurem","Ice Beam","special_attack",.30,.45,.60], ["latios","Ice Beam","special_attack",.38,.50,.65], ["klefki","Flash Cannon","special_attack",.30,.45,.60], ["spiritomb","Hyper Beam","special_attack",.38,.50,.68], ["mareanie","Ice Beam","physical_attack",.60,.65,.72], ["arboliva","Solar Beam","physical_attack_2",.14,.22,.32], ["arboliva","Hyper Beam","physical_attack_2",.14,.22,.32], ["cubone","Water Gun","special_attack",.14,.22,.30], ["stunfisk","Water Gun","physical_attack",.12,.22,.28], ["snivy","Solar Beam","special_attack",.38,.48,.62], ["swinub","Ice Beam","special_attack",.34,.45,.58], ["steelix","Hyper Beam","special_attack",.42,.60,.74], ["stonjourner","Hyper Beam","special_attack",.38,.50,.66], ["mandibuzz","Hyper Beam","special_attack",.42,.60,.74], ["skarmory","Hyper Beam","special_attack",.30,.42,.54], ["skarmory-mega","Hyper Beam","special_attack",.18,.25,.32], ["sandaconda","Hyper Beam","physical_attack_2",.12,.22,.28], ["archaludon","Hyper Beam","special_attack",.18,.24,.29], ["avalugg-hisui","Ice Beam","special_attack",.33,.42,.50], ["grumpig","Hyper Beam","special_attack",.10,.22,.30], ["wyrdeer","Hyper Beam","special_attack",.17,.22,.26], ["houndstone","Hyper Beam","special_attack",.42,.60,.72], ["sudowoodo","Hyper Beam","special_attack",.42,.60,.80], ["cetoddle","Ice Beam","physical_attack",.10,.18,.25], ["lugia","Hyper Beam","special_attack",.27,.40,.53]]:
 		for slot in 4:
 			var identity := str(route[0]) + ("@shiny" if slot % 2 else "")
 			var actor := "p%d" % (slot+1)
@@ -202,11 +202,12 @@ func _run() -> void:
 
 	_check_stream_scaling()
 	_check_orb_scaling()
+	_check_hidden_power_scaling()
 	router.release_threaded_resource_requests()
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=84 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
+	print("MOVE_ATTACHMENT_CHOREOGRAPHY_OK routes=94 slots=4 shiny=true cancellation=true substitute=true emission_end=true")
 	get_tree().quit()
 
 func _check_stream_scaling() -> void:
@@ -280,3 +281,36 @@ func _check_orb_scaling() -> void:
 				var small_index: int = captures[2][phase].orb_index
 				assert(baseline[index].origin.is_equal_approx(smaller[small_index].origin), "Orb charge and flight centers are unchanged")
 				for axis in 3: assert(is_equal_approx(smaller[small_index].basis[axis].length(),baseline[index].basis[axis].length()*.25))
+
+func _check_hidden_power_scaling() -> void:
+	var captures := []
+	for scale_value: float in [-1.0, 1.0, .25]:
+		var effect := preload("res://scripts/battle/battle_ui/staged_move_effect_3d.gd").new()
+		stage.world.add_child(effect)
+		var timing := {"frames":60.0,"launch_frame":12.0,"impact_frame":27.0}
+		if scale_value > 0: timing.emission_scale = scale_value
+		contact_seconds = 0.0
+		effect.start("Hidden Power", timing, {"show_impact":true}, func(): return contact_seconds, func(): return {"source":Vector3(1,1,0),"target":Vector3(4,1,0),"radius":.5}, func(): return true)
+		effect.set_process(false)
+		var phases := []
+		for seconds: float in [.1,.3,.75]:
+			contact_seconds = seconds
+			effect._process(0)
+			var transforms: Array[Transform3D] = []
+			for index in effect.cursor: transforms.append(effect.pieces[index].transform)
+			assert(not transforms.is_empty())
+			phases.append(transforms)
+		captures.append(phases)
+		effect.cancel()
+	for phase in 3:
+		var baseline: Array = captures[0][phase]
+		var explicit_default: Array = captures[1][phase]
+		var smaller: Array = captures[2][phase]
+		assert(baseline.size() == explicit_default.size() and baseline.size() == smaller.size())
+		for index in baseline.size():
+			assert(baseline[index].is_equal_approx(explicit_default[index]), "Default staged projectile geometry is preserved")
+			assert(baseline[index].origin.is_equal_approx(smaller[index].origin), "Projectile positions stay unchanged")
+			if phase == 2:
+				assert(baseline[index].is_equal_approx(smaller[index]), "Faded projectile and independent impact keep their geometry")
+			else:
+				for axis in 3: assert(is_equal_approx(smaller[index].basis[axis].length(), baseline[index].basis[axis].length()*.25))

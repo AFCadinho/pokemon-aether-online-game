@@ -62,15 +62,17 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1075,
+		"with_any_attachment": 1079,
 		"with_beak_tip": 6,
 		"with_cannon": 2,
 		"with_cannons": 1,
 		"with_casting": 2,
 		"with_electric_body": 1,
-		"with_face": 6,
+		"with_eye": 1,
+		"with_face": 8,
 		"with_flower_tip": 1,
 		"with_foot": 307,
+		"with_forehead": 1,
 		"with_gem": 3,
 		"with_hand": 576,
 		"with_hand_upper": 1,
@@ -85,7 +87,7 @@
 		"with_muzzle": 5,
 		"with_olive_nozzle": 1,
 		"with_vines": 3,
-		"without_attachments": 125
+		"without_attachments": 121
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -3182,6 +3184,21 @@
 				]
 			]
 		},
+		"beldum": {
+			"forehead": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.080742135643959,
+							0.0124289924278855,
+							-0.0554034560918808
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"bellibolt": {
 			"mouth": [
 				[
@@ -5643,6 +5660,21 @@
 							0.0686229094862938
 						],
 						"weight": 0.236806292647304
+					}
+				]
+			]
+		},
+		"chandelure-mega": {
+			"face": [
+				[
+					{
+						"bone": "spine",
+						"offset": [
+							0.68578827381134,
+							-0.00055634876480326,
+							0.391805499792099
+						],
+						"weight": 1.0
 					}
 				]
 			]
@@ -36070,6 +36102,21 @@
 				]
 			]
 		},
+		"runerigus": {
+			"face": [
+				[
+					{
+						"bone": "feeler_a_03",
+						"offset": [
+							0.133313596248627,
+							-0.0552322119474411,
+							0.122979581356049
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"sableye": {
 			"foot": [
 				[
@@ -45508,6 +45555,21 @@
 				]
 			]
 		},
+		"unown": {
+			"eye": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							-0.00060493370983749,
+							-0.00135651393793523,
+							0.0529424399137497
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"ursaluna": {
 			"foot": [
 				[
@@ -49514,8 +49576,8 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "cc50b8d6e7b288818e2168b63957b0400aa22bc99b7a2be043382be4c3dba3a3",
-		"scripts/battle/battle_ui/move_attachments_3d.gd": "9b8d5a37b8ed4037fb71399034235c8d5a64b322efcedfbd4eb0316652787c29",
+		"data/battle_move_attachments_3d.json": "1634f1fcfa9941b6011b2114d0375bfb58eae97e0be8220385cb8be0d35bb7c2",
+		"scripts/battle/battle_ui/move_attachments_3d.gd": "87ca7240427a92f602f728c840eb2c7453427c70e0f74c7b02f296da7e8a2337",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
 		"scripts/battle/battle_ui/screened_model_catalog.json": "e48e36f568932290b2b7f1f461e15391444d6e7821d48f6ef0c59ede5b36839d"
@@ -52243,8 +52305,10 @@
 			]
 		},
 		"beldum": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"forehead"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -54811,8 +54875,10 @@
 			]
 		},
 		"chandelure-mega": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -79521,8 +79587,10 @@
 			]
 		},
 		"runerigus": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"face"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -88546,8 +88614,10 @@
 			]
 		},
 		"unown": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"eye"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"

@@ -256,8 +256,8 @@ func _beam_stage(from: Vector3,flight: float,after: float,alpha: float,facing: B
 func _projectile_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
 	var charge := clampf(elapsed/maxf(launch,.01),0,1)
 	if flight<0:
-		_piece(soft_quad,soft,origin,Vector3.ONE*(.4+charge)*weight,facing)
-		_source_sprite(origin,.5+charge*.4,_cast_art(),charge,alpha*.65,facing)
+		_piece(soft_quad,soft,origin,Vector3.ONE*(.4+charge)*weight*emission_scale,facing)
+		_source_sprite(origin,(.5+charge*.4)*emission_scale,_cast_art(),charge,alpha*.65,facing)
 		return
 	var count := 7 if motif=="leaf-fan" else 4 if motif=="spinning-shards" else 1
 	var fade := 1-smoothstep(0,.45,after)
@@ -265,19 +265,19 @@ func _projectile_stage(flight: float,after: float,alpha: float,facing: Basis,sid
 		var p := smoothstep(0,1,clampf(flight-i*.025,0,1))
 		var point := origin.lerp(aim,p)+side*sin(p*PI)*(i-(count-1)*.5)*.45
 		if motif=="arcing-bomb":point.y+=sin(p*PI)*1.8
-		if motif=="leaf-fan":_piece(feather,surface,point,Vector3(.55,.45,.4)*fade,axis*Basis(Vector3.UP,elapsed*7+i))
+		if motif=="leaf-fan":_piece(feather,surface,point,Vector3(.55,.45,.4)*fade*emission_scale,axis*Basis(Vector3.UP,elapsed*7+i))
 		elif motif=="spinning-shards":
-			_piece(prism,surface,point,Vector3(.2,.5,.25)*fade,axis*Basis(Vector3.UP,elapsed*8+i))
-			if key=="watershuriken":_piece(crescent,pearl,point,Vector3.ONE*.4*fade,facing*Basis(Vector3.FORWARD,elapsed*14+i))
+			_piece(prism,surface,point,Vector3(.2,.5,.25)*fade*emission_scale,axis*Basis(Vector3.UP,elapsed*8+i))
+			if key=="watershuriken":_piece(crescent,pearl,point,Vector3.ONE*.4*fade*emission_scale,facing*Basis(Vector3.FORWARD,elapsed*14+i))
 		else:
-			_piece(sphere,surface,point,Vector3.ONE*.4*weight*fade)
-			_piece(soft_quad,soft,point,Vector3.ONE*1.65*fade,facing)
-			for turn in 2:_piece(crescent,edge,point,Vector3.ONE*.6*fade,facing*Basis(Vector3.FORWARD,elapsed*4+turn*PI))
+			_piece(sphere,surface,point,Vector3.ONE*.4*weight*fade*emission_scale)
+			_piece(soft_quad,soft,point,Vector3.ONE*1.65*fade*emission_scale,facing)
+			for turn in 2:_piece(crescent,edge,point,Vector3.ONE*.6*fade*emission_scale,facing*Basis(Vector3.FORWARD,elapsed*4+turn*PI))
 		for j in 5:
 			var q := maxf(0,p-j*.025)
 			var tail := origin.lerp(aim,q)+side*sin(q*PI)*(i-(count-1)*.5)*.45
 			if motif=="arcing-bomb":tail.y+=sin(q*PI)*1.8
-			_source_sprite(tail,(.65-j*.09) if count==1 else .28,_cast_art(),fmod(elapsed+j*.13,1),alpha*fade*(.55-j*.07),facing,i+j)
+			_source_sprite(tail,((.65-j*.09) if count==1 else .28)*emission_scale,_cast_art(),fmod(elapsed+j*.13,1),alpha*fade*(.55-j*.07),facing,i+j)
 
 func _wave_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
 	if motif=="heart-stream":_status_stage(flight,after,alpha,facing,side,axis);return

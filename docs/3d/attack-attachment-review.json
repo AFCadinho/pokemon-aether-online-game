@@ -5,21 +5,21 @@
       "concealed_mouth_with_reviewed_muzzle_outlet": 5,
       "hold_native_red_mouth_action": 1,
       "mouth_not_required_by_current_supported_learnset": 2,
-      "mouth_not_required_by_supported_learnset": 1,
       "mouthless_species_with_reviewed_alternate_emitter": 8,
-      "mouthless_with_reviewed_casting_parts": 2,
+      "mouthless_whole_body_move_anchor_reviewed": 1,
+      "mouthless_with_reviewed_casting_parts": 6,
       "pending_anatomical_casting_review": 1,
       "pending_anatomical_mouth_review": 13,
       "pending_anatomical_mouthpart_review": 3,
       "pending_anatomical_muzzle_review": 1,
       "pending_anatomical_route": 34,
-      "pending_anatomical_routing_review": 92,
+      "pending_anatomical_routing_review": 91,
       "pending_animation_addon_review": 1,
       "pending_camera_framing": 2,
       "pending_corrected_mouth_pose_review": 1,
-      "pending_manual_anatomical_calibration": 6,
+      "pending_manual_anatomical_calibration": 3,
       "pending_mask_casting_review": 1,
-      "pending_mouth_proposal_or_anatomical_route": 15,
+      "pending_mouth_proposal_or_anatomical_route": 14,
       "pending_mouthpart_clearance_review": 3,
       "pending_multi_pose_mouth_fit": 2,
       "pending_multipose_correction": 1,
@@ -27,7 +27,7 @@
       "pending_runtime_identity_review": 1,
       "pending_runtime_material_review": 5,
       "pending_runtime_visibility_and_anatomy_review": 1,
-      "pending_source_visibility_review": 2,
+      "pending_source_visibility_review": 3,
       "retain_existing_calibration": 4,
       "reviewed_mandibles_with_mouth_route_review_pending": 2,
       "sampled_mouth_pose_review_pass": 986
@@ -43,12 +43,12 @@
       "pending_multipose_correction": 8,
       "pending_runtime_identity_review": 4,
       "pending_runtime_visibility_and_anatomy_review": 4,
-      "sampled_marker_pose_review_pass_installed": 1781
+      "sampled_marker_pose_review_pass_installed": 1785
     },
-    "runtime_profiles": 1075,
+    "runtime_profiles": 1079,
     "species_forms": 1200
   },
-  "profile_sha256": "cc50b8d6e7b288818e2168b63957b0400aa22bc99b7a2be043382be4c3dba3a3",
+  "profile_sha256": "1634f1fcfa9941b6011b2114d0375bfb58eae97e0be8220385cb8be0d35bb7c2",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -6956,14 +6956,97 @@
       }
     },
     "beldum": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Head-center framing proposal is not an approved mouth point.",
-        "preview": "mouth-fallback-review-v6/beldum.png",
-        "status": "pending_anatomical_routing_review"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "ironhead": {
+          "action": "physical_attack",
+          "part": "forehead",
+          "scope": "Normal and shiny, two views: Physical_attack .20/.42 and yaw 0 use the head-first lunge, unlike physical_attack_2 which presents the rear claws. Forehead binding is individually reviewed. Normal/shiny source and two-actor views show the approach and return, but the opponent and contact art obscure the exact forehead/target intersection at .42/.55; distance and penetration require further contact review. Live NPC/wild battles remain pending.",
+          "status": "sampled_native_action_and_attachment_review_contact_clearance_pending"
+        },
+        "tackle": {
+          "action": "physical_attack",
+          "part": "forehead",
+          "scope": "Normal and shiny, two views: Physical_attack .20/.42 and yaw 0 use the head-first lunge, unlike physical_attack_2 which presents the rear claws. Forehead binding is individually reviewed. Normal/shiny source and two-actor views show the approach and return, but the opponent and contact art obscure the exact forehead/target intersection at .42/.55; distance and penetration require further contact review. Live NPC/wild battles remain pending.",
+          "status": "sampled_native_action_and_attachment_review_contact_clearance_pending"
+        }
       },
-      "mouth_status": "pending_anatomical_routing_review",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Forehead binding and two head-first native contact routes installed; exact contact distance/penetration pending.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "ironhead": {
+          "action": "physical_attack",
+          "additional_previews": [
+            {
+              "normal_preview_sha256": "a1f1eab5b8cc6fe581d12256dab23b3d28f53ed100c249d8db4fbde946829d80",
+              "shiny_preview_sha256": "e8b791607c8809c35ecbacc5f7dba8358a1777cd731d5788078deb2c248a95dc"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "b14dce9ed6f341cc8064e598ba8faced73ff9b8fe40ceb8f08a53ba7aa6b6ab9",
+          "fractions": [
+            0.18,
+            0.2,
+            0.3,
+            0.42,
+            0.55,
+            0.72
+          ],
+          "normal_runtime_sha256": "eb76a49ef493b9c77aa43c240be4402afc9f08951a9752f5d79798824ae44c23",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e2f8ac96a46226cab3cf349deffae9d3f68b8876fe9352efcc54b751937b47c8",
+          "scope": "Normal and shiny, two views: Physical_attack .20/.42 and yaw 0 use the head-first lunge, unlike physical_attack_2 which presents the rear claws. Forehead binding is individually reviewed. Normal/shiny source and two-actor views show the approach and return, but the opponent and contact art obscure the exact forehead/target intersection at .42/.55; distance and penetration require further contact review. Live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "479d0fb43f84bc2ece6915c06ba8533d4d91cb431588f8e1c51bb1ef7888e972",
+          "shiny_runtime_sha256": "3bd07deba0e853a6e34b36e77364ecce7e0ce5671a4952359ffcbdb5714c18dd",
+          "status": "sampled_native_action_and_attachment_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 227.5,
+            "impact_frame": 95.55,
+            "launch_frame": 45.5,
+            "move_key": "ironhead"
+          },
+          "views": 2
+        },
+        "tackle": {
+          "action": "physical_attack",
+          "additional_previews": [
+            {
+              "normal_preview_sha256": "b03b7139d00a0e404ff6c3a9f2519ca04413a661a96b2f034812f876f37b4e13",
+              "shiny_preview_sha256": "d9436afd41d9430baa793165f3127f28be986225aac0352521e34c1c597fc622"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "b14dce9ed6f341cc8064e598ba8faced73ff9b8fe40ceb8f08a53ba7aa6b6ab9",
+          "fractions": [
+            0.18,
+            0.2,
+            0.3,
+            0.42,
+            0.55,
+            0.72
+          ],
+          "normal_runtime_sha256": "eb76a49ef493b9c77aa43c240be4402afc9f08951a9752f5d79798824ae44c23",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4991f22a95ce7e4483e1058bde53c821cbbd0f081d3b92c4ccef0613711afb9f",
+          "scope": "Normal and shiny, two views: Physical_attack .20/.42 and yaw 0 use the head-first lunge, unlike physical_attack_2 which presents the rear claws. Forehead binding is individually reviewed. Normal/shiny source and two-actor views show the approach and return, but the opponent and contact art obscure the exact forehead/target intersection at .42/.55; distance and penetration require further contact review. Live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "631cf6afc494422ac2eb050c9e5d2f181396af4f9e416c95e9d525743dc79f13",
+          "shiny_runtime_sha256": "3bd07deba0e853a6e34b36e77364ecce7e0ce5671a4952359ffcbdb5714c18dd",
+          "status": "sampled_native_action_and_attachment_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 227.5,
+            "impact_frame": 95.55,
+            "launch_frame": 45.5,
+            "move_key": "tackle"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -6972,7 +7055,68 @@
       ],
       "normal_runtime_sha256": "eb76a49ef493b9c77aa43c240be4402afc9f08951a9752f5d79798824ae44c23",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "forehead": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "forehead": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "fbec8d4566e1e4fac9b458bb7ddb7115e786df75a6a7e4ba971b0304fd66c09b",
+            "landmarks": [
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.0113440736318351,
+                  0.252567076543874,
+                  0.736088849824291
+                ],
+                "column": 1.0,
+                "distance": 0.716651832499239,
+                "mesh": "pm0374_00_00_trmdl/Skeleton3D/pm0374_00_00_head_mesh",
+                "pixel": [
+                  180.0,
+                  192.0
+                ],
+                "surface": 0,
+                "triangle": 43,
+                "vertex_indices": [
+                  147,
+                  82,
+                  127
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "eb76a49ef493b9c77aa43c240be4402afc9f08951a9752f5d79798824ae44c23",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a0cc78c35b234a6e525b7a433bfe68b02bd244c3fc5681751f97b169ac53d89d",
+          "scope": "Individually projected blue forehead above the front eye. Tracks the head across idle and three native attack clips. Physical_attack presents the head forward; physical_attack_2 flips to present the rear claws and is not approved for forehead contact. Contact distance remains pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "forehead": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "bellibolt": {
       "anatomical_move_routing_review": "pending",
@@ -13014,9 +13158,224 @@
       "part_status": {}
     },
     "chandelure-mega": {
-      "anatomical_move_routing_review": "pending",
-      "mouth_status": "pending_mouth_proposal_or_anatomical_route",
-      "move_effect_review": "pending",
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "ember": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two views: Uses the central face grille and special_attack .32/.48/end .65 with scale .15 for beams; Shadow Ball .32/.55 with scale .2; Ember .32/.55 with default art dimensions. Front and reverse close views show the source at the front grille and beam shutdown before the return pose. Candle flames overlap the path in some projections; continuous clearance is not certified. Ember smoke remains broad and its styling still needs review. Same-form target bounds aim above the face because of the tall crown flame; target hit-point calibration remains pending. Live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two views: Uses the central face grille and special_attack .32/.48/end .65 with scale .15 for beams; Shadow Ball .32/.55 with scale .2; Ember .32/.55 with default art dimensions. Front and reverse close views show the source at the front grille and beam shutdown before the return pose. Candle flames overlap the path in some projections; continuous clearance is not certified. Ember smoke remains broad and its styling still needs review. Same-form target bounds aim above the face because of the tall crown flame; target hit-point calibration remains pending. Live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two views: Uses the central face grille and special_attack .32/.48/end .65 with scale .15 for beams; Shadow Ball .32/.55 with scale .2; Ember .32/.55 with default art dimensions. Front and reverse close views show the source at the front grille and beam shutdown before the return pose. Candle flames overlap the path in some projections; continuous clearance is not certified. Ember smoke remains broad and its styling still needs review. Same-form target bounds aim above the face because of the tall crown flame; target hit-point calibration remains pending. Live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two views: Uses the central face grille and special_attack .32/.48/end .65 with scale .15 for beams; Shadow Ball .32/.55 with scale .2; Ember .32/.55 with default art dimensions. Front and reverse close views show the source at the front grille and beam shutdown before the return pose. Candle flames overlap the path in some projections; continuous clearance is not certified. Ember smoke remains broad and its styling still needs review. Same-form target bounds aim above the face because of the tall crown flame; target hit-point calibration remains pending. Live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two views: Uses the central face grille and special_attack .32/.48/end .65 with scale .15 for beams; Shadow Ball .32/.55 with scale .2; Ember .32/.55 with default art dimensions. Front and reverse close views show the source at the front grille and beam shutdown before the return pose. Candle flames overlap the path in some projections; continuous clearance is not certified. Ember smoke remains broad and its styling still needs review. Same-form target bounds aim above the face because of the tall crown flame; target hit-point calibration remains pending. Live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "latest_candidate_review": {
+        "notes": "Mega-specific central grille with sampled five cast routes. Body/hand moves, candle clearance, target bounds and broad Ember art pending.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "ember": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "normal_preview_sha256": "84a0fc2a9126d14b9e8341fdc92ba19e64d51296079ac1b5710e90411f1153ad",
+              "shiny_preview_sha256": "f75f6274f5b32df96bdc8d18bec7d6c70511a73a96ea755aedcd0d9e380a2b37"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "0885b96a79c4eded85353ad48202842bc57058c2630829ba17ca698bae04ba15",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.5,
+            0.65,
+            0.8
+          ],
+          "normal_runtime_sha256": "b2e36f2a4164e23f3c417b571502ca5fcac1d6d4082c01fff600a2715ffb5320",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7267779fdd9299c1c8bc83411101bad06f89c7f2e4c5a95fe79bd7d37c05ed46",
+          "scope": "Normal and shiny, two views: Uses the central face grille and special_attack .32/.48/end .65 with scale .15 for beams; Shadow Ball .32/.55 with scale .2; Ember .32/.55 with default art dimensions. Front and reverse close views show the source at the front grille and beam shutdown before the return pose. Candle flames overlap the path in some projections; continuous clearance is not certified. Ember smoke remains broad and its styling still needs review. Same-form target bounds aim above the face because of the tall crown flame; target hit-point calibration remains pending. Live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "f9765169bc91c788a5ab370c6c12e54178d8a6f55bba42d0239d1b8d2f183977",
+          "shiny_runtime_sha256": "336ee8fbc03925b216e422f217ba68a8637a9c8834fdb2641d02ef9317524ea8",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 38.4,
+            "move_key": "ember"
+          },
+          "views": 2
+        },
+        "flamethrower": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "normal_preview_sha256": "481a079ef3ce73a60e43ebcce610dd666d1434c340c86c2fc2aa75c775100383",
+              "shiny_preview_sha256": "ec8f83b7a24fe0fbf266f83051a9023ffc380ee42de87be70ac35d67519b20d4"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "0885b96a79c4eded85353ad48202842bc57058c2630829ba17ca698bae04ba15",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.5,
+            0.65,
+            0.8
+          ],
+          "normal_runtime_sha256": "b2e36f2a4164e23f3c417b571502ca5fcac1d6d4082c01fff600a2715ffb5320",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "88fe4d684dcb072e772bbeb7f44dc453b32033b16893da761b53fe233ed74b85",
+          "scope": "Normal and shiny, two views: Uses the central face grille and special_attack .32/.48/end .65 with scale .15 for beams; Shadow Ball .32/.55 with scale .2; Ember .32/.55 with default art dimensions. Front and reverse close views show the source at the front grille and beam shutdown before the return pose. Candle flames overlap the path in some projections; continuous clearance is not certified. Ember smoke remains broad and its styling still needs review. Same-form target bounds aim above the face because of the tall crown flame; target hit-point calibration remains pending. Live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "56c934cf31d00a62380b832b0bcad1cc3776efda234e9d995245911698586ed3",
+          "shiny_runtime_sha256": "336ee8fbc03925b216e422f217ba68a8637a9c8834fdb2641d02ef9317524ea8",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 38.4,
+            "move_key": "flamethrower"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "normal_preview_sha256": "8d065a21d4595b3eda3d17ba9e07ff835967433c80d8211892eb1b56f16ad993",
+              "shiny_preview_sha256": "6b824d5e485ff8376b5c16377871392465ab2e47ad09ae02979d03fa94b12317"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "0885b96a79c4eded85353ad48202842bc57058c2630829ba17ca698bae04ba15",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.5,
+            0.65,
+            0.8
+          ],
+          "normal_runtime_sha256": "b2e36f2a4164e23f3c417b571502ca5fcac1d6d4082c01fff600a2715ffb5320",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "590d7a9d3ae366ac5a90840fc1205ecafe56e56c07faeffd6d571aad10bc581d",
+          "scope": "Normal and shiny, two views: Uses the central face grille and special_attack .32/.48/end .65 with scale .15 for beams; Shadow Ball .32/.55 with scale .2; Ember .32/.55 with default art dimensions. Front and reverse close views show the source at the front grille and beam shutdown before the return pose. Candle flames overlap the path in some projections; continuous clearance is not certified. Ember smoke remains broad and its styling still needs review. Same-form target bounds aim above the face because of the tall crown flame; target hit-point calibration remains pending. Live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "51cf44247297dffd94c6a2a1dcadb6e2275041dfe8f4d6f0d27ab7b043c6d591",
+          "shiny_runtime_sha256": "336ee8fbc03925b216e422f217ba68a8637a9c8834fdb2641d02ef9317524ea8",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 38.4,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "normal_preview_sha256": "f7edb3e3c8eaf3d14870d43b994d2752f14482f7ffabef7e66ab8ced771af9f6",
+              "shiny_preview_sha256": "0f5a095182dbf8a499007e950a1f902be04f68961bdbbf4e526ab54363ac0e3b"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "0885b96a79c4eded85353ad48202842bc57058c2630829ba17ca698bae04ba15",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.5,
+            0.65,
+            0.8
+          ],
+          "normal_runtime_sha256": "b2e36f2a4164e23f3c417b571502ca5fcac1d6d4082c01fff600a2715ffb5320",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1e3e20310168d94b1431ddc0f901b6a93cb45c670df628cc261812b4ea4567a0",
+          "scope": "Normal and shiny, two views: Uses the central face grille and special_attack .32/.48/end .65 with scale .15 for beams; Shadow Ball .32/.55 with scale .2; Ember .32/.55 with default art dimensions. Front and reverse close views show the source at the front grille and beam shutdown before the return pose. Candle flames overlap the path in some projections; continuous clearance is not certified. Ember smoke remains broad and its styling still needs review. Same-form target bounds aim above the face because of the tall crown flame; target hit-point calibration remains pending. Live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "6762db017cdb48c2ad0cc9ba2fa0eee4bbf80e54503c1687ebfc2727ea04f162",
+          "shiny_runtime_sha256": "336ee8fbc03925b216e422f217ba68a8637a9c8834fdb2641d02ef9317524ea8",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 38.4,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "normal_preview_sha256": "1e83a2b887216f0f25deb8dad37b62556d6803f004d77e2e6f7ce40b8dce1708",
+              "shiny_preview_sha256": "c173428257646df00fa777e6ae174c93f8cc03662a37833c267a244024e17ad7"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "0885b96a79c4eded85353ad48202842bc57058c2630829ba17ca698bae04ba15",
+          "fractions": [
+            0.28,
+            0.34,
+            0.4,
+            0.5,
+            0.65,
+            0.8
+          ],
+          "normal_runtime_sha256": "b2e36f2a4164e23f3c417b571502ca5fcac1d6d4082c01fff600a2715ffb5320",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a955aef3dc61b92fc04d65b007aa616b47373b65cb9bb0352008c2c302b52b96",
+          "scope": "Normal and shiny, two views: Uses the central face grille and special_attack .32/.48/end .65 with scale .15 for beams; Shadow Ball .32/.55 with scale .2; Ember .32/.55 with default art dimensions. Front and reverse close views show the source at the front grille and beam shutdown before the return pose. Candle flames overlap the path in some projections; continuous clearance is not certified. Ember smoke remains broad and its styling still needs review. Same-form target bounds aim above the face because of the tall crown flame; target hit-point calibration remains pending. Live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "32912dae53afc8e52c4a99c8e7936f6fa6959f8ecbc485582bc452cf83429bc3",
+          "shiny_runtime_sha256": "336ee8fbc03925b216e422f217ba68a8637a9c8834fdb2641d02ef9317524ea8",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 78.0,
+            "emission_scale": 0.15,
+            "frames": 120.0,
+            "impact_frame": 57.6,
+            "launch_frame": 38.4,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -13024,7 +13383,67 @@
       ],
       "normal_runtime_sha256": "b2e36f2a4164e23f3c417b571502ca5fcac1d6d4082c01fff600a2715ffb5320",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {},
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "2262be7ed9e872c891559aaada70840386dbd2acd30ae8545c15d7271a58058f",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.49739961012924,
+                  0.0315248369308359,
+                  0.471075552939924
+                ],
+                "column": 1.0,
+                "distance": 0.930662074028433,
+                "mesh": "pm0609_51_00/Skeleton3D/pm0609_51_00_body_b_mesh",
+                "pixel": [
+                  147.0,
+                  188.0
+                ],
+                "surface": 0,
+                "triangle": 988,
+                "vertex_indices": [
+                  1813,
+                  1814,
+                  1811
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "b2e36f2a4164e23f3c417b571502ca5fcac1d6d4082c01fff600a2715ffb5320",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c28b8cd6ac3a0b92dc8a2265b286b7a5f51ba41c7398b14ea08b05ca9ae501e5",
+          "scope": "Central intersection of the face grille, refined from the incorrect off-center rivet proposal. Bound to this Mega form\u2019s spine. Visible idle and special attack samples track the grille; spinning physical and occluded candle-arm views are excluded. No mouth opening is present. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      },
       "previous_pose_visibility_differences": [
         {
           "action": "physical_attack",
@@ -17536,11 +17955,18 @@
     "cosmoem": {
       "anatomical_move_routing_review": "pending",
       "latest_candidate_review": {
-        "notes": "Supported move Teleport uses body origin; no mouth move in current learnset",
-        "preview": "mouth-fallback-review-v6/cosmoem.png",
-        "status": "mouth_not_required_by_supported_learnset"
+        "move_effect_evidence": {
+          "move": "teleport",
+          "normal_preview_sha256": "9bf01e1880d0a19ffcebee5c26e7cc51cb518d208e29fb08a92e0aeb9f7880c9",
+          "normal_runtime_sha256": "2f6e181618a5dac5bb04ef5eca71dd90b33d16c6d1208568914e61931533e704",
+          "pose_sampling": "forward_from_start_v1",
+          "shiny_preview_sha256": "b82edb05b6f7e1e881faa127d6babb5b857f1a4927f5050d19831bb54458b08c",
+          "shiny_runtime_sha256": "5343838c40cb374057714226ea1e13393b4d3e3bae3fa36ab082c77114bea1b8"
+        },
+        "notes": "Only supported animated move is Teleport. Renderer uses actor_center/caster_ground for the whole-body phase portal; no oral/limb source is appropriate. Normal and shiny special_attack .15/.25/.40/.55/.70/.85 reviewed in two views; orbiting rings surround the shell. This sampled offline review does not certify continuous geometry clearance or live battles.",
+        "status": "mouthless_whole_body_move_anchor_reviewed"
       },
-      "mouth_status": "mouth_not_required_by_supported_learnset",
+      "mouth_status": "mouthless_whole_body_move_anchor_reviewed",
       "move_effect_review": "pending",
       "native_actions": [
         "idle",
@@ -81990,14 +82416,100 @@
       "part_status": {}
     },
     "runerigus": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "No ordinary mouth; drawing and moving stone fragments require move-specific origins. Marker on upper slab.",
-        "preview": "mouth-fallback-review-v6/runerigus.png",
-        "status": "pending_manual_anatomical_calibration"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two views: Uses the individually projected purple eye on the independent mask. Earlier .34 launch was rejected after reverse views showed the fingers crossing the beam/ball path. Hyper Beam now launches .48, impacts .55, ends .65 at scale .08; Shadow Ball launches .48, impacts .62 at scale .1. Sampled source alignment is recorded separately from continuous hand clearance and other target sizes. Live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two views: Uses the individually projected purple eye on the independent mask. Earlier .34 launch was rejected after reverse views showed the fingers crossing the beam/ball path. Hyper Beam now launches .48, impacts .55, ends .65 at scale .08; Shadow Ball launches .48, impacts .62 at scale .1. Sampled source alignment is recorded separately from continuous hand clearance and other target sizes. Live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_manual_anatomical_calibration",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Purple eye binding and two cast routes. Later launch chosen after rejecting early finger/path intersections. Body/hand moves and continuous clearance pending.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "hyperbeam": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "normal_preview_sha256": "6d350e2e3bf35977f5777b1b4ceb39aaf99a44ba85c16ab415c39cd514e95fd3",
+              "shiny_preview_sha256": "69fe058eed1763ab85910b0829c78c9fc4f80aa1f98510e871d1c739f47e2538"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "422e8e14c4d2a74e37f39904d14958ccc7c449adfec4e3c670fd23b71c6479f6",
+          "fractions": [
+            0.44,
+            0.48,
+            0.51,
+            0.55,
+            0.62,
+            0.68
+          ],
+          "normal_runtime_sha256": "7c2cbd05555eae50b634c630ea73c2ca86f8a62e9c5d11bfb4a80f4a7ef603ba",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b32120335b111cba140c3de6f17e1e639f6cd6d94d85f003cbf0c7ff54e39d9e",
+          "scope": "Normal and shiny, two views: Uses the individually projected purple eye on the independent mask. Earlier .34 launch was rejected after reverse views showed the fingers crossing the beam/ball path. Hyper Beam now launches .48, impacts .55, ends .65 at scale .08; Shadow Ball launches .48, impacts .62 at scale .1. Sampled source alignment is recorded separately from continuous hand clearance and other target sizes. Live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b8f0bb157016ef2953e7a48c051f90e06113beea61393d9ebfdc6d230a5c07ae",
+          "shiny_runtime_sha256": "307c08051a0379a01d8abc9c7503379d1eef80703a87b5e98e3ec3d66a9763d9",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 96.2,
+            "emission_scale": 0.08,
+            "frames": 148.0,
+            "impact_frame": 81.4,
+            "launch_frame": 71.04,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "additional_previews": [
+            {
+              "normal_preview_sha256": "2b925e198c41ede6b0aed855cfae044a0d7ac33ce976ffc5fa20d3a87ac15c1e",
+              "shiny_preview_sha256": "0bb52696c916be0ab78963eb2474cb7a35be5c1528f4c8887b747f5bbec3a5d0"
+            }
+          ],
+          "attachment_data_sha256_at_capture": "422e8e14c4d2a74e37f39904d14958ccc7c449adfec4e3c670fd23b71c6479f6",
+          "fractions": [
+            0.44,
+            0.48,
+            0.51,
+            0.55,
+            0.62,
+            0.68
+          ],
+          "normal_runtime_sha256": "7c2cbd05555eae50b634c630ea73c2ca86f8a62e9c5d11bfb4a80f4a7ef603ba",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "83f18aca572ad9fd98d7f90a3d03ade5b8a76294347c125050dd91c6eb3ca286",
+          "scope": "Normal and shiny, two views: Uses the individually projected purple eye on the independent mask. Earlier .34 launch was rejected after reverse views showed the fingers crossing the beam/ball path. Hyper Beam now launches .48, impacts .55, ends .65 at scale .08; Shadow Ball launches .48, impacts .62 at scale .1. Sampled source alignment is recorded separately from continuous hand clearance and other target sizes. Live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "66bbab87e6bcb2cfea2b649ca31bdd4ba0c3663b8226c0bbcb418addb3e9ef67",
+          "shiny_runtime_sha256": "307c08051a0379a01d8abc9c7503379d1eef80703a87b5e98e3ec3d66a9763d9",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 148.0,
+            "impact_frame": 91.76,
+            "launch_frame": 71.04,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -82005,7 +82517,67 @@
       ],
       "normal_runtime_sha256": "7c2cbd05555eae50b634c630ea73c2ca86f8a62e9c5d11bfb4a80f4a7ef603ba",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "face": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "dcdbd55f5b71a4b9a51f725997486b2a54bb08235266b7c2222a6f2c27d8af8e",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.082324162556852,
+                  0.3661467324237,
+                  0.551529105019448
+                ],
+                "column": 1.0,
+                "distance": 1.51958951776132,
+                "mesh": "pm0979_00_31/Skeleton3D/pm0979_00_31_shell_a_mesh",
+                "pixel": [
+                  206.0,
+                  170.0
+                ],
+                "surface": 0,
+                "triangle": 13,
+                "vertex_indices": [
+                  5,
+                  6,
+                  0
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "7c2cbd05555eae50b634c630ea73c2ca86f8a62e9c5d11bfb4a80f4a7ef603ba",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "74f82c740a8e702967777be1e5c00bc154dc2b0fa59969237f64fddd35c14852",
+          "scope": "Purple eye in the front mask, refined upward from the first lower-eye proposal. Tracks the independent front stone panel through idle, physical and special clips. Early special poses and side views obscured by ghost hands are excluded from clearance approval. Painted red mouth is not an oral opening. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "face": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "sableye": {
       "anatomical_move_routing_review": "pending",
@@ -88537,11 +89109,11 @@
     "sinistea": {
       "anatomical_move_routing_review": "pending",
       "latest_candidate_review": {
-        "notes": "Marker floats above cup when spirit hidden; spirit extends during attacks. Need action-aware spirit/cup origins.",
-        "preview": "mouth-fallback-review-v6/sinistea.png",
-        "status": "pending_manual_anatomical_calibration"
+        "candidate_preview_sha256": "60352fd0e3dca97a76979ec1088a4f058fd833c825424af22fb267a811ba0f08",
+        "notes": "Projected spirit point follows top_c_mesh in special_attack .20/.45/.65, but floats above the cup in idle because that ghost mesh is hidden. Native visibility enables top_c only from 0.283333s to 1.666667s in the 2.30s special clip. Rejected unconditional spirit installation. Must coordinate source selection/charge with the changing tea/ghost meshes before routing Shadow Ball.",
+        "status": "pending_source_visibility_review"
       },
-      "mouth_status": "pending_manual_anatomical_calibration",
+      "mouth_status": "pending_source_visibility_review",
       "move_effect_review": "pending",
       "native_actions": [
         "idle",
@@ -105141,14 +105713,52 @@
       "part_status": {}
     },
     "unown": {
-      "anatomical_move_routing_review": "pending",
-      "latest_candidate_review": {
-        "notes": "Marker on upper arm; no mouth. Reframe central eye/body origin and review supported moves.",
-        "preview": "mouth-fallback-review-v6/unown.png",
-        "status": "pending_manual_anatomical_calibration"
+      "anatomical_move_routing_review": "partially_reviewed",
+      "anatomical_route_reviews": {
+        "hiddenpower": {
+          "action": "special_attack",
+          "part": "eye",
+          "scope": "Normal and shiny, two views: Hidden Power uses the individually projected pupil and special_attack .30/.52. Rejected the default size because it obscured the whole actor. Scale .12 keeps the .28 charge centered at the eye, the .30/.31 launch at the pupil and the .32/.34 projectile in front of the face, clear by .40. This covers the launch sequence, not the complete flight or live battle target sizes. Live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
       },
-      "mouth_status": "pending_manual_anatomical_calibration",
-      "move_effect_review": "pending",
+      "latest_candidate_review": {
+        "notes": "Individually projected pupil with sampled Hidden Power launch, normal and shiny. Full flight and live battles pending.",
+        "status": "mouthless_with_reviewed_casting_parts"
+      },
+      "mouth_status": "mouthless_with_reviewed_casting_parts",
+      "move_effect_review": "partially_reviewed",
+      "move_effect_reviews": {
+        "hiddenpower": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b14dce9ed6f341cc8064e598ba8faced73ff9b8fe40ceb8f08a53ba7aa6b6ab9",
+          "fractions": [
+            0.28,
+            0.3,
+            0.31,
+            0.32,
+            0.34,
+            0.4
+          ],
+          "normal_runtime_sha256": "69531f3b036c25eade76d6df232865d3de53c90fb580f6c83a9027c3d5cbb9df",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c381d208472bcb806ef4c45254f96d02db8b9e9783a396fb5d5ff6ffac7a09fd",
+          "scope": "Normal and shiny, two views: Hidden Power uses the individually projected pupil and special_attack .30/.52. Rejected the default size because it obscured the whole actor. Scale .12 keeps the .28 charge centered at the eye, the .30/.31 launch at the pupil and the .32/.34 projectile in front of the face, clear by .40. This covers the launch sequence, not the complete flight or live battle target sizes. Live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d4b20019874b6e416133f9835da7eb4d35c3694c0b11bd890045299229efb93b",
+          "shiny_runtime_sha256": "2b3f36a558c9fb3a22d619e05e62590993dd1c3b269179ce11b6101212d017dc",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 30.0,
+            "impact_frame": 15.6,
+            "launch_frame": 9.0,
+            "move_key": "hiddenpower"
+          },
+          "views": 2
+        }
+      },
       "native_actions": [
         "idle",
         "physical_attack",
@@ -105157,7 +105767,68 @@
       ],
       "normal_runtime_sha256": "69531f3b036c25eade76d6df232865d3de53c90fb580f6c83a9027c3d5cbb9df",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "eye": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "eye": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "c0ca8b01bc0d2f79dbfbb74d3c7d784e21ab7b00ddce849e195a128ba90292a7",
+            "landmarks": [
+              {
+                "action": "idle",
+                "barycentric": [
+                  0.92029496009418,
+                  0.0413228669640745,
+                  0.0383821729417459
+                ],
+                "column": 1.0,
+                "distance": 0.154626124498583,
+                "mesh": "pm0201_11_00_trmdl/Skeleton3D/pm0201_11_00_body_mesh_shape",
+                "pixel": [
+                  219.0,
+                  192.0
+                ],
+                "surface": 0,
+                "triangle": 316,
+                "vertex_indices": [
+                  262,
+                  303,
+                  742
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "69531f3b036c25eade76d6df232865d3de53c90fb580f6c83a9027c3d5cbb9df",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "cbcb3816b5d9229908855e3567d7e46bebc2604ec01a4e1a34c9bea0524587a8",
+          "scope": "Individually projected pupil surface, refined below the white glint. Visible idle and special-attack poses track the center of the pupil; physical clips turn the eye away or flip the body and those occluded views are excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "eye": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "ursaluna": {
       "anatomical_move_routing_review": "pending",

@@ -7,8 +7,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1075 species/forms.
-- No anatomical attachment profile: 125 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 1079 species/forms.
+- No anatomical attachment profile: 121 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 990 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
@@ -83,6 +83,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | bayleef | hand, left_hand, mouth | Same attachment profile |
 | beartic | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | beheeyem | hand, left_hand, mouth | Same attachment profile |
+| beldum | forehead | Same attachment profile |
 | bellibolt | mouth | Same attachment profile |
 | bellossom | mouth | Same attachment profile |
 | bellsprout | hand, left_hand, mouth | Same attachment profile |
@@ -139,6 +140,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | centiskorch | mouth | Same attachment profile |
 | cetitan | hand, left_hand | Same attachment profile |
 | cetoddle | hand, left_hand, mouth | Same attachment profile |
+| chandelure-mega | face | Same attachment profile |
 | chansey | hand, left_hand, mouth | Same attachment profile |
 | charcadet | hand, left_hand | Same attachment profile |
 | charizard | hand, left_hand, mouth | Same attachment profile |
@@ -785,6 +787,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | rotom | mouth | Same attachment profile |
 | rowlet | mouth | Same attachment profile |
 | rufflet | mouth | Same attachment profile |
+| runerigus | face | Same attachment profile |
 | sableye | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | sableye-mega | foot, left_foot, mouth | Same attachment profile |
 | salamence | hand, left_hand, mouth | Same attachment profile |
@@ -999,6 +1002,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | tyrunt | hand, left_hand, mouth | Same attachment profile |
 | umbreon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | unfezant | mouth | Same attachment profile |
+| unown | eye | Same attachment profile |
 | ursaluna | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | ursaring | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | urshifu | foot, left_foot | Same attachment profile |

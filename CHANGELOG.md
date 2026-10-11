@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calibrate Beldum’s forehead, Unown’s eye, Mega Chandelure’s grille and Runerigus’s eye for selected 3D attacks. Size Unown’s Hidden Power to its eye and delay Runerigus’s casts past the initial hand movement.
+
 - Give Wugtrio’s three heads and Magneton’s three eyes separate origins for selected beams. Calibrate Mega Starmie’s gem for seven casts and align their emission windows with the native animations.
 
 - Calibrate Mamoswine’s and Venonat’s concealed-mouth outlets and Flabébé’s lip and held-flower origins. Align selected beams and vocal moves with their native poses, and fit Venonat’s Sludge Bomb to its mouth region.

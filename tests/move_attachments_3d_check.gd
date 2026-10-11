@@ -69,6 +69,14 @@ func _run() -> void:
 			assert(Attachments.part_for(identity, move) == "gem")
 	assert(Attachments.part_for("starmie", "hyperbeam") == "gem")
 	assert(Attachments.definitions_for("starmie-mega", "gem") != Attachments.definitions_for("starmie", "gem"))
+	for route: Array in [["beldum", "forehead", "head", ["ironhead", "tackle"]], ["unown", "eye", "waist", ["hiddenpower"]], ["chandelure-mega", "face", "spine", ["ember", "flamethrower", "hyperbeam", "shadowball", "solarbeam"]], ["runerigus", "face", "feeler_a_03", ["hyperbeam", "shadowball"]]]:
+		for identity: String in [route[0], route[0] + "@shiny"]:
+			var definition := Attachments.definitions_for(identity, route[1])
+			assert(definition.size() == 1 and definition[0][0].bone == route[2])
+			for move: String in route[3]: assert(Attachments.part_for(identity, move) == route[1])
+	assert(Attachments.definitions_for("chandelure", "face").is_empty())
+	assert(Attachments.definitions_for("yamask-galar", "face").is_empty())
+	assert(is_equal_approx(Attachments.choreography_for("unown", "hiddenpower", "special_attack").emission_scale, .12))
 	for species: String in ["grimer", "grimer-alola", "goodra", "gengar", "crobat", "bunnelby"]:
 		for identity: String in [species, species + "@shiny"]:
 			var emitters := Attachments.definitions_for(identity, "mouth")
