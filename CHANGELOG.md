@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Allow Guild Base table decorations across the full tabletop grid, preserving existing placements.
+
 - Make the Guild Base furnishing action visible below the HUD and style its catalog, category dropdown, controls and permission window to match the Guild interface.
 
 - Choose Maushold family size, Dudunsparce length, Vivillon pattern and Alcremie flavor before evolving, using a form selector in evolution prompts and the Bag.

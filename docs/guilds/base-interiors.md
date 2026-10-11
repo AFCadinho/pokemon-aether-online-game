@@ -59,8 +59,10 @@ selects existing furniture; **Return to storage** removes it. Each click saves
 on the server. **Done** or Escape restores the camera and walking controls.
 Red previews reject overlaps, invisible artwork, blocked routes and occupied
 player tiles. The entrance remains clear. Rugs have adjustable dimensions and
-allow furniture on top; flowers and plates attach to a free tabletop slot and
-follow the table when moved. Returning a table returns its decorations too.
+allow furniture on top; flowers and plates attach to the pointed-at tabletop
+grid cell (six on small tables, eight on large tables) and follow the table
+when moved. Occupied cells show a red preview instead of jumping to another
+cell. Returning a table returns its decorations too.
 
 The catalog contains 24 reusable scenes in `scenes/world/guild_base/furniture/`.
 Each uses a `TileMapLayer` with a compact shared atlas, a movement footprint and

@@ -517,16 +517,14 @@ func _placement_at(world_position: Vector2) -> Dictionary:
 			return {}
 		var slots: Array = Catalog.item(str(table.furnitureId)).surfaceSlots
 		var root_position := Vector2(int(table.x), int(table.y) + int(table.height)) * 32
-		var used := {}
-		for placed: Dictionary in state.items:
-			if str(placed.get("parentId", "")) == str(table.id) and str(placed.id) != selected_instance:
-				used[int(placed.slot)] = true
 		var nearest := -1
 		var distance := INF
 		for index: int in range(slots.size()):
 			var position := root_position + Vector2(slots[index][0], slots[index][1]) + Vector2(16, -16)
 			var candidate_distance := position.distance_squared_to(room.to_local(world_position))
-			if not used.has(index) and candidate_distance < distance:
+			# Pick the pointed-at cell, even if occupied. Validation shows a red
+			# preview there instead of jumping to a distant empty tabletop cell.
+			if candidate_distance < distance:
 				nearest = index
 				distance = candidate_distance
 		if nearest < 0:
