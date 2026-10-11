@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Allow Aether Band purchases for 1,000 card credits as an alternative to 1,000 Gems, with one shared purchase limit per account and permanent binding.
 - Activate the Guild interface's free Guild Base teleport for members of Guilds that own a base, arriving in their private main hall.
 - Add the Emerald Luchador Outfit Box to the Gift Store for 450 Gems (or 450 account-binding card credits), for both player models.
 
