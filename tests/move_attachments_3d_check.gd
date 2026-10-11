@@ -455,6 +455,8 @@ func _run() -> void:
 		await get_tree().process_frame
 	assert(is_equal_approx(lash_widths[1] / lash_widths[0], .008 / .045), "Native vine tips must retain their narrower extension width")
 	_check_paired_sound(world)
+	_check_sound_scale(world)
+	_check_lick_window(world)
 	print("MOVE_ATTACHMENTS_3D_OK transforms=true moving_bones=true forms=true lifecycle=true paired_beams=true paired_vines=true paired_sound=true single_impact=true")
 	get_tree().quit()
 
@@ -555,3 +557,71 @@ func _check_paired_sound(world: Node3D) -> void:
 		assert(counts[2] == counts[0] * 3, "All three heads must emit the full sound pattern")
 		assert(impact_counts[0] == impact_counts[1] and impact_counts[1] == impact_counts[2], "Multiple mouths keep one target impact")
 		assert(impact_counts[0] > 0 if move == "Disarming Voice" else impact_counts[0] == 0)
+
+func _check_sound_scale(world: Node3D) -> void:
+	for move: String in ["Growl", "Supersonic", "Screech", "Disarming Voice"]:
+		var effects: Array = []
+		var points := {"source":Vector3(-2,1,0),"sources":[Vector3(-2,1,-.5),Vector3(-2,1,.5)],"target":Vector3(2,1,0),"radius":.8}
+		for scale_value: float in [1., .25]:
+			seconds = .1
+			var effect := Stage.StagedMoveEffect.new()
+			world.add_child(effect)
+			effect.start(move,{"frames":60,"launch_frame":12,"impact_frame":36,"emission_scale":scale_value},{},func(): return seconds,func(): return points,func(): return true)
+			effect.set_process(false)
+			effects.append(effect)
+		var full: Node3D = effects[0]
+		var small: Node3D = effects[1]
+		assert(full.cursor == 2 and small.cursor == 2)
+		for i in 2:
+			assert(small.pieces[i].position.is_equal_approx(full.pieces[i].position))
+			assert(small.pieces[i].scale.is_equal_approx(full.pieces[i].scale*.25), "Each mouth charge honors the reviewed size")
+		assert(is_equal_approx(small._sound_wave_scale(0), .25))
+		assert(is_equal_approx(small._sound_wave_scale(.175), .625))
+		assert(is_equal_approx(small._sound_wave_scale(.35), 1.0))
+		assert(is_equal_approx(full._sound_wave_scale(.175), 1.0))
+		# Inspect one complete ring and its two strokes before the next release.
+		for effect: Node3D in effects:
+			effect.cursor = 0
+			effect._wave_rings(points.source,.085,1.,1.,Basis.IDENTITY,Vector3.RIGHT,Basis.IDENTITY)
+		assert(full.cursor > 0 and full.cursor == small.cursor)
+		var wave_scale: float = small._sound_wave_scale(.085)
+		for i in full.cursor:
+			assert(small.pieces[i].scale.is_equal_approx(full.pieces[i].scale*wave_scale), "Sound radius and strokes expand from the reviewed outlet size")
+			if full.pieces[i].mesh == full.ring:
+				assert(small.pieces[i].position.is_equal_approx(full.pieces[i].position), "Size must not change the released ring path")
+		seconds = .65
+		for effect: Node3D in effects: effect._process(0)
+		var start: int = full.cursor
+		assert(start == small.cursor)
+		for effect: Node3D in effects:
+			effect.hit = true
+			effect._process(0)
+		assert(full.cursor == small.cursor)
+		if move == "Disarming Voice": assert(full.cursor > start)
+		else: assert(full.cursor == start)
+		for i in range(start,full.cursor):
+			assert(small.pieces[i].transform.is_equal_approx(full.pieces[i].transform), "Target impact keeps its original size")
+		for effect: Node3D in effects: effect.free()
+
+func _check_lick_window(world: Node3D) -> void:
+	for move: String in ["Lick", "Vine Whip"]:
+		var widths: Array[float] = []
+		for use_window in [false,true]:
+			var effect := Stage.StagedMoveEffect.new()
+			world.add_child(effect)
+			var timing := {"frames":60,"launch_frame":6,"impact_frame":12}
+			if use_window: timing.emission_end_frame = 16.2
+			seconds = 0
+			effect.start(move,timing,{},func(): return seconds,func(): return {"source":Vector3(-2,1,0),"sources":[Vector3(-2,1,0)],"target":Vector3(2,1,0),"radius":.8},func(): return true)
+			effect.set_process(false)
+			for time: float in [.2,.235,.271,.65]:
+				seconds = time
+				effect._process(0)
+				# Eight ground streaks precede twelve attached lash segments.
+				var expected := 8 if use_window and move == "Lick" and time >= .27 else 20
+				assert(effect.cursor == expected,"Only the reviewed tongue extension ends early")
+				if time == .235:
+					var width: float = effect.pieces[8].basis.x.length()
+					widths.append(width)
+			effect.free()
+		assert(is_equal_approx(widths[1]/widths[0],.5 if move == "Lick" else 1.0),"Tongue fades before retraction; other lashes retain their lifetime")

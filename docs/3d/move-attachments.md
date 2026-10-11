@@ -29,6 +29,24 @@ These are sampled origin/timing reviews. Continuous effect-radius clearance,
 contact distances, remaining routes and live NPC/wild battles are pending.
 Beautifly remains unresolved: its curled proboscis can obstruct the outlet.
 
+## Shell, cannon and tongue review checkpoint
+
+Clamperl, Clauncher, Clawitzer, Genesect, Revavroom and Regidrago have 39
+selected routes with individually projected mouth, claw/cannon, facial or
+tongue points. Normal and shiny effects were inspected in two offline views.
+Clamperl waits for its shell opening; Genesect uses its unfolded cannon window.
+Revavroom uses its upper grille and a separate distal tongue attachment.
+Its Lick extension fades after impact and ends at .27 of the native clip,
+before the tongue retracts. Ground movement accents and target impact retain
+their separate lifetimes. Other lashes retain their existing behavior.
+
+Sound-call/sound-tunnel attacks accept emission_scale for their mouth charge
+and initial ring size. Rings and their decorative strokes expand to normal
+size over the first .35 of travel. Default scale 1 preserves existing effects.
+These are sampled origin/timing reviews, not continuous clearance approval.
+Contact distances, remaining routes, other target sizes and live NPC/wild
+battles remain pending. Regidrago's jaw-arm contact points are unresolved.
+
 ## Profiles and review status
 
 The expanded registry is `data/battle_move_attachments_3d.json`. Each form has

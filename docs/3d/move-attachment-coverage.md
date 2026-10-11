@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1138 species/forms.
-- No anatomical attachment profile: 62 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 994 species/forms.
+- At least one configured anatomical attachment: 1144 species/forms.
+- No anatomical attachment profile: 56 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 997 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -171,6 +171,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | chingling | hand, left_hand, mouth | Same attachment profile |
 | cinccino | hand, left_hand, mouth | Same attachment profile |
 | cinderace | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| clamperl | mouth | Same attachment profile |
+| clauncher | cannon | Same attachment profile |
+| clawitzer | cannon | Same attachment profile |
 | claydol | hand, left_hand, mouth | Same attachment profile |
 | clefable | hand, left_hand, mouth | Same attachment profile |
 | clefable-mega | mouth | Same attachment profile |
@@ -373,6 +376,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | garganacl | hand, left_hand | Same attachment profile |
 | gastly | mouth | Same attachment profile |
 | gastrodon | mouth | Same attachment profile |
+| genesect | cannon, mouth | Same attachment profile |
 | gengar | hand, left_hand, mouth | Same attachment profile |
 | gengar-mega | hand, left_hand, mouth | Same attachment profile |
 | geodude | hand, left_hand, mouth | Same attachment profile |
@@ -809,6 +813,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | rayquaza | mouth | Same attachment profile |
 | rayquaza-mega | mouth | Same attachment profile |
 | regice | face | Same attachment profile |
+| regidrago | face | Same attachment profile |
 | regieleki | face | Same attachment profile |
 | regigigas | face, hand, left_hand | Same attachment profile |
 | regirock | face, hand, left_hand | Same attachment profile |
@@ -817,6 +822,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | remoraid | mouth | Same attachment profile |
 | reshiram | mouth | Same attachment profile |
 | reuniclus | hand, left_hand, mouth | Same attachment profile |
+| revavroom | mouth, tongue_tip | Same attachment profile |
 | rhydon | hand, left_hand, mouth | Same attachment profile |
 | rhyhorn | hand, left_hand, mouth | Same attachment profile |
 | rhyperior | hand, left_hand, mouth | Same attachment profile |

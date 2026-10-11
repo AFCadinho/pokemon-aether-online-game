@@ -19112,6 +19112,1418 @@
         "side_fraction": 0.45
       }
     },
+    "clamperl": {
+      "anatomical_route_reviews": {
+        "icebeam": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The individually projected mouth line below the eyes is bound to Head. Special_attack .42 release waits for the shell opening; streams use .08 scale and end .68, Water Pulse .12, Supersonic .08 initial scale. Sampled effects depart between the blue shell bulbs. The earlier full-size sound charge and the subsequent constant-size almost invisible waves were rejected. Continuous shell/bulb and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "scald": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The individually projected mouth line below the eyes is bound to Head. Special_attack .42 release waits for the shell opening; streams use .08 scale and end .68, Water Pulse .12, Supersonic .08 initial scale. Sampled effects depart between the blue shell bulbs. The earlier full-size sound charge and the subsequent constant-size almost invisible waves were rejected. Continuous shell/bulb and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The individually projected mouth line below the eyes is bound to Head. Special_attack .42 release waits for the shell opening; streams use .08 scale and end .68, Water Pulse .12, Supersonic .08 initial scale. Sampled effects depart between the blue shell bulbs. The earlier full-size sound charge and the subsequent constant-size almost invisible waves were rejected. Continuous shell/bulb and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_ring_clearance_pending"
+        },
+        "watergun": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The individually projected mouth line below the eyes is bound to Head. Special_attack .42 release waits for the shell opening; streams use .08 scale and end .68, Water Pulse .12, Supersonic .08 initial scale. Sampled effects depart between the blue shell bulbs. The earlier full-size sound charge and the subsequent constant-size almost invisible waves were rejected. Continuous shell/bulb and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The individually projected mouth line below the eyes is bound to Head. Special_attack .42 release waits for the shell opening; streams use .08 scale and end .68, Water Pulse .12, Supersonic .08 initial scale. Sampled effects depart between the blue shell bulbs. The earlier full-size sound charge and the subsequent constant-size almost invisible waves were rejected. Continuous shell/bulb and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "icebeam": "special_attack",
+        "scald": "special_attack",
+        "supersonic": "special_attack",
+        "watergun": "special_attack",
+        "waterpulse": "special_attack"
+      },
+      "move_choreography": {
+        "icebeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.68,
+          "emission_scale": 0.08,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.42
+        },
+        "scald": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.68,
+          "emission_scale": 0.08,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.42
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "emission_scale": 0.08,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.42
+        },
+        "watergun": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.68,
+          "emission_scale": 0.08,
+          "impact_fraction": 0.52,
+          "launch_fraction": 0.42
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.42
+        }
+      },
+      "move_effect_reviews": {
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.4,
+            0.42,
+            0.44,
+            0.47,
+            0.52,
+            0.68,
+            0.78
+          ],
+          "normal_runtime_sha256": "15e49a83f7badeecaa8a11482e747c32fe67fadc76ae3a4c2aa504a4572ecc98",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a7d1b3760fc3a64df0d0cc589e10c54caa2dcaaa708e811e634ec8f093091c21",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The individually projected mouth line below the eyes is bound to Head. Special_attack .42 release waits for the shell opening; streams use .08 scale and end .68, Water Pulse .12, Supersonic .08 initial scale. Sampled effects depart between the blue shell bulbs. The earlier full-size sound charge and the subsequent constant-size almost invisible waves were rejected. Continuous shell/bulb and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9d72adab6bda8d7c40581ca069ac50e4ba0d495fe40fede5393c20fa8c82b64d",
+          "shiny_runtime_sha256": "9c9a4109fe9a38e7f6c327182fa3d24098dc2653c75ac7f4bc804fe82eeee1fe",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 85.6799937744144,
+            "emission_scale": 0.08,
+            "frames": 125.999990844727,
+            "impact_frame": 65.519995239258,
+            "launch_frame": 52.9199961547853,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        },
+        "scald": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.4,
+            0.42,
+            0.44,
+            0.47,
+            0.52,
+            0.68,
+            0.78
+          ],
+          "normal_runtime_sha256": "15e49a83f7badeecaa8a11482e747c32fe67fadc76ae3a4c2aa504a4572ecc98",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "84a0d7f283adc5856db7cb49009b43145f69d54b2853b4023494f52b3e998b4b",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The individually projected mouth line below the eyes is bound to Head. Special_attack .42 release waits for the shell opening; streams use .08 scale and end .68, Water Pulse .12, Supersonic .08 initial scale. Sampled effects depart between the blue shell bulbs. The earlier full-size sound charge and the subsequent constant-size almost invisible waves were rejected. Continuous shell/bulb and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "2d912b1e52bad2e2774c0a55ca85d237151bbfd4145a543e66b72a0eda2141cd",
+          "shiny_runtime_sha256": "9c9a4109fe9a38e7f6c327182fa3d24098dc2653c75ac7f4bc804fe82eeee1fe",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 85.6799937744144,
+            "emission_scale": 0.08,
+            "frames": 125.999990844727,
+            "impact_frame": 65.519995239258,
+            "launch_frame": 52.9199961547853,
+            "move_key": "scald"
+          },
+          "views": 2
+        },
+        "supersonic": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b3e42f3856c19829f73373059f61df77d5d51bf5e9d843db578fe80287471aa5",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.4,
+            0.42,
+            0.44,
+            0.485,
+            0.55,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "15e49a83f7badeecaa8a11482e747c32fe67fadc76ae3a4c2aa504a4572ecc98",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f1a2f585501f554499a614a0a719ca180eaf53eb72ebc6a7abbccb63c1c5c6c2",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The individually projected mouth line below the eyes is bound to Head. Special_attack .42 release waits for the shell opening; streams use .08 scale and end .68, Water Pulse .12, Supersonic .08 initial scale. Sampled effects depart between the blue shell bulbs. The earlier full-size sound charge and the subsequent constant-size almost invisible waves were rejected. Continuous shell/bulb and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "1351ec92b9a1d21f016f807d6e04eb35b3cbff8ba215920f3f7a2166d7d4e72f",
+          "shiny_runtime_sha256": "9c9a4109fe9a38e7f6c327182fa3d24098dc2653c75ac7f4bc804fe82eeee1fe",
+          "status": "sampled_origin_size_and_timing_review_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.08,
+            "frames": 125.999990844727,
+            "impact_frame": 69.2999949645998,
+            "launch_frame": 52.9199961547853,
+            "move_key": "supersonic"
+          },
+          "views": 2
+        },
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.4,
+            0.42,
+            0.44,
+            0.47,
+            0.52,
+            0.68,
+            0.78
+          ],
+          "normal_runtime_sha256": "15e49a83f7badeecaa8a11482e747c32fe67fadc76ae3a4c2aa504a4572ecc98",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f2941b37e701b720e4a43af3933cba68c58ebed325213bc58899083888b9a055",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The individually projected mouth line below the eyes is bound to Head. Special_attack .42 release waits for the shell opening; streams use .08 scale and end .68, Water Pulse .12, Supersonic .08 initial scale. Sampled effects depart between the blue shell bulbs. The earlier full-size sound charge and the subsequent constant-size almost invisible waves were rejected. Continuous shell/bulb and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c0ad52f2c96b26e7acc30c4d714b8d0f4b068afded2019a3fad5a94ae1de1643",
+          "shiny_runtime_sha256": "9c9a4109fe9a38e7f6c327182fa3d24098dc2653c75ac7f4bc804fe82eeee1fe",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 85.6799937744144,
+            "emission_scale": 0.08,
+            "frames": 125.999990844727,
+            "impact_frame": 65.519995239258,
+            "launch_frame": 52.9199961547853,
+            "move_key": "watergun"
+          },
+          "views": 2
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.4,
+            0.42,
+            0.44,
+            0.485,
+            0.55,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "15e49a83f7badeecaa8a11482e747c32fe67fadc76ae3a4c2aa504a4572ecc98",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7fe3b7677a1ca3f3a7f6bde0665d2cbfd180104cb69ead216a91176d6ee674f9",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The individually projected mouth line below the eyes is bound to Head. Special_attack .42 release waits for the shell opening; streams use .08 scale and end .68, Water Pulse .12, Supersonic .08 initial scale. Sampled effects depart between the blue shell bulbs. The earlier full-size sound charge and the subsequent constant-size almost invisible waves were rejected. Continuous shell/bulb and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3343cbe61ea9ea59ecf28b94f39697cbd33ad46b799640638290937eb411ca38",
+          "shiny_runtime_sha256": "9c9a4109fe9a38e7f6c327182fa3d24098dc2653c75ac7f4bc804fe82eeee1fe",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 125.999990844727,
+            "impact_frame": 69.2999949645998,
+            "launch_frame": 52.9199961547853,
+            "move_key": "waterpulse"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "icebeam": "mouth",
+        "scald": "mouth",
+        "supersonic": "mouth",
+        "watergun": "mouth",
+        "waterpulse": "mouth"
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "Head",
+              "offset": [
+                0.0684989765286446,
+                0.000496470078360289,
+                0.0572690106928349
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "15e49a83f7badeecaa8a11482e747c32fe67fadc76ae3a4c2aa504a4572ecc98",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "a3e9715afdf85bd880be85f495ba6b53702c4d19a02dc614a70561385ae1d869",
+        "scope": "Tiny red mouth line on the pink head. Individually projected in idle and reviewed during shell opening. Closed-shell poses hide the point; effects pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "63c2c93aed082c8a0b2ed36684a95bde37c87f39c105891cd07d7599b9dd66c7",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.031890415521168,
+                0.522281781225807,
+                0.445827803253025
+              ],
+              "column": 0.0,
+              "distance": 0.915306479703057,
+              "mesh": "pm0366_00/Skeleton3D/pm0366_00_00_BodySkin",
+              "pixel": [
+                207.0,
+                199.0
+              ],
+              "surface": 3,
+              "triangle": 0,
+              "vertex_indices": [
+                2,
+                0,
+                1
+              ],
+              "weight": 1.0
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
+      }
+    },
+    "clauncher": {
+      "anatomical_route_reviews": {
+        "bubble": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "bubblebeam": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "scald": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "watergun": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "bubble": "special_attack",
+        "bubblebeam": "special_attack",
+        "flashcannon": "special_attack",
+        "icebeam": "special_attack",
+        "mudslap": "special_attack",
+        "scald": "special_attack",
+        "sludgebomb": "special_attack",
+        "watergun": "special_attack",
+        "waterpulse": "special_attack"
+      },
+      "move_choreography": {
+        "bubble": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "bubblebeam": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3,
+          "projectile_arc_height": 0.1
+        },
+        "scald": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3,
+          "projectile_arc_height": 0.1
+        },
+        "watergun": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.65,
+          "emission_scale": 0.1,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "emission_scale": 0.12,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.3
+        }
+      },
+      "move_effect_reviews": {
+        "bubble": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "3879f3f77c7b6c719c53ec9119042956acaa6c371a74e3300ef5e9db0cd47fe0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0df38860270ba479ee53006f2b06f3cedb54406a35890a132db7c57c4244b9f4",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "7983bacc5f2f7488a6e214ec607b418c0969ff51597002c1b9ca4038eae9fca9",
+          "shiny_runtime_sha256": "acd49ca54717f8704da4df41821688961b52b99f6fe4ce5c85ee1637b49a4c76",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 162.0,
+            "impact_frame": 72.9,
+            "launch_frame": 48.6,
+            "move_key": "bubble"
+          },
+          "views": 2
+        },
+        "bubblebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "3879f3f77c7b6c719c53ec9119042956acaa6c371a74e3300ef5e9db0cd47fe0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "cb741ac4c2e72d2e41943613736908b3d7781ff4b619d01a793421efb6ce2282",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "56025d132c15f7c264c56b87f08704890254b1a19a4d49b5a2afbcf5c21d9ca2",
+          "shiny_runtime_sha256": "acd49ca54717f8704da4df41821688961b52b99f6fe4ce5c85ee1637b49a4c76",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 162.0,
+            "impact_frame": 72.9,
+            "launch_frame": 48.6,
+            "move_key": "bubblebeam"
+          },
+          "views": 2
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "3879f3f77c7b6c719c53ec9119042956acaa6c371a74e3300ef5e9db0cd47fe0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7765642de0d8690fe2d0acb86eecef7b0bd16507e6e433857f4b6b0a87643e99",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ef110972627745603c9f4ee9ea776e59ad1b0cf52cd64755d9a8a7359258fd3e",
+          "shiny_runtime_sha256": "acd49ca54717f8704da4df41821688961b52b99f6fe4ce5c85ee1637b49a4c76",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 105.3,
+            "emission_scale": 0.1,
+            "frames": 162.0,
+            "impact_frame": 72.9,
+            "launch_frame": 48.6,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "3879f3f77c7b6c719c53ec9119042956acaa6c371a74e3300ef5e9db0cd47fe0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "35e7bae003e935c5c0e7b08acb8a9863690ccabc9d818c618a78a221eeaed691",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "e249871c4367201dc441e0c0ab298331361054b269dcd79492aa11379de8d0b3",
+          "shiny_runtime_sha256": "acd49ca54717f8704da4df41821688961b52b99f6fe4ce5c85ee1637b49a4c76",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 105.3,
+            "emission_scale": 0.1,
+            "frames": 162.0,
+            "impact_frame": 72.9,
+            "launch_frame": 48.6,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "3879f3f77c7b6c719c53ec9119042956acaa6c371a74e3300ef5e9db0cd47fe0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ae39987f7be053a6d0da1a7a38edf00051251ca08b984ad75f282303845647f6",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "83c8e4a5ba4eac05d2610aec241955e3f99ffdcd4972c6ab61417ffd5b751bad",
+          "shiny_runtime_sha256": "acd49ca54717f8704da4df41821688961b52b99f6fe4ce5c85ee1637b49a4c76",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 162.0,
+            "impact_frame": 72.9,
+            "launch_frame": 48.6,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "scald": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "3879f3f77c7b6c719c53ec9119042956acaa6c371a74e3300ef5e9db0cd47fe0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d79c35fcc29cb231bc87780f9b61dcb8e5821dfe04e209d50186edf5cf83a333",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "4dd6b544a55641158ec83ddaade90a5f1851afaa78127e8c5a29d60fe57e8570",
+          "shiny_runtime_sha256": "acd49ca54717f8704da4df41821688961b52b99f6fe4ce5c85ee1637b49a4c76",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 105.3,
+            "emission_scale": 0.1,
+            "frames": 162.0,
+            "impact_frame": 72.9,
+            "launch_frame": 48.6,
+            "move_key": "scald"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "3879f3f77c7b6c719c53ec9119042956acaa6c371a74e3300ef5e9db0cd47fe0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "aad7c4a4479ccda7683433577fbe3c110419cb1a85badedc260d9a253cf5ca04",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "97d61d530d7558371c663805de05dfd799b8d759bfa23a8ec983e67814a851b9",
+          "shiny_runtime_sha256": "acd49ca54717f8704da4df41821688961b52b99f6fe4ce5c85ee1637b49a4c76",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 162.0,
+            "impact_frame": 72.9,
+            "launch_frame": 48.6,
+            "move_key": "sludgebomb",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "3879f3f77c7b6c719c53ec9119042956acaa6c371a74e3300ef5e9db0cd47fe0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4de431233b87783df987253205c2e885483977a4f7f344fb47c8ae1b78a64055",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "ac6803779b32419f10d7b35b5669615a807206d6f26f76382ccaedb70e367adb",
+          "shiny_runtime_sha256": "acd49ca54717f8704da4df41821688961b52b99f6fe4ce5c85ee1637b49a4c76",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 105.3,
+            "emission_scale": 0.1,
+            "frames": 162.0,
+            "impact_frame": 72.9,
+            "launch_frame": 48.6,
+            "move_key": "watergun"
+          },
+          "views": 2
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.375,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "3879f3f77c7b6c719c53ec9119042956acaa6c371a74e3300ef5e9db0cd47fe0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "324fc090d30b4ddbbf463e8e1da274adda07934c13a459a00fb2f9c4fad4f6d5",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw bore is individually projected and bound to right_arm_02. Special_attack .30 release uses .10 streams ending .65; bubbles/pulse .12, sludge/mud .10 with .10 arc. The sampled paths depart from the opened bore. Bubble and mud radii remain close to the claw edges; continuous full-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "14e6e3271c41b931ac8bfc95474aa5f00260807e070cfc9d69d1deec45ca8f02",
+          "shiny_runtime_sha256": "acd49ca54717f8704da4df41821688961b52b99f6fe4ce5c85ee1637b49a4c76",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.12,
+            "frames": 162.0,
+            "impact_frame": 72.9,
+            "launch_frame": 48.6,
+            "move_key": "waterpulse"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bubble": "cannon",
+        "bubblebeam": "cannon",
+        "flashcannon": "cannon",
+        "icebeam": "cannon",
+        "mudslap": "cannon",
+        "scald": "cannon",
+        "sludgebomb": "cannon",
+        "watergun": "cannon",
+        "waterpulse": "cannon"
+      },
+      "part_reviews": {
+        "cannon": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "ba08284eb8f76d25eb7ae9c8f922bb4d6ef6bbae8a97c72faff5658069f3d52c",
+            "landmarks": [
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.635797048260081,
+                  0.279319719805637,
+                  0.084883231934282
+                ],
+                "column": 1.0,
+                "distance": 1.01784335990078,
+                "mesh": "pm0756_00_00/Skeleton3D/pm0756_00_00_right_hand_mesh",
+                "pixel": [
+                  136.0,
+                  226.0
+                ],
+                "surface": 1,
+                "triangle": 749,
+                "vertex_indices": [
+                  289,
+                  332,
+                  331
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "3879f3f77c7b6c719c53ec9119042956acaa6c371a74e3300ef5e9db0cd47fe0",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3b47e47d927873baae1170689ea134dcd258c911894dc388bcaa11c8542edaec",
+          "scope": "Dark inner bore of the large right claw, bound to right_arm_02. Special attack opens the claw; closed-claw poses conceal this outlet. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "cannon": [
+          [
+            {
+              "bone": "right_arm_02",
+              "offset": [
+                0.0355324484407902,
+                -0.017172796651721,
+                0.0183797124773264
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
+    "clawitzer": {
+      "anatomical_route_reviews": {
+        "bubble": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "bubblebeam": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "scald": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "watergun": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "bubble": "special_attack",
+        "bubblebeam": "special_attack",
+        "flashcannon": "special_attack",
+        "hyperbeam": "special_attack",
+        "icebeam": "special_attack",
+        "mudslap": "special_attack",
+        "scald": "special_attack",
+        "shadowball": "special_attack",
+        "sludgebomb": "special_attack",
+        "watergun": "special_attack",
+        "waterpulse": "special_attack"
+      },
+      "move_choreography": {
+        "bubble": {
+          "action": "special_attack",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.4
+        },
+        "bubblebeam": {
+          "action": "special_attack",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.4
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.7,
+          "emission_scale": 0.2,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.7,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.7,
+          "emission_scale": 0.2,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.4,
+          "projectile_arc_height": 0.1
+        },
+        "scald": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.7,
+          "emission_scale": 0.2,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.4
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.4,
+          "projectile_arc_height": 0.1
+        },
+        "watergun": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.7,
+          "emission_scale": 0.2,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.55,
+          "launch_fraction": 0.4
+        }
+      },
+      "move_effect_reviews": {
+        "bubble": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.475,
+            0.55,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "0f5a8f992439feffbee24c9de86a3a022183ea56afacd743671e2dc488ef10a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "acf2105fc7f979811161c0fe7663499d4f46e3583ef9d5cb1fd77fe69365e8e1",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "a4263f7aa3584c5b60bcf61858eaef65df1a94885b26fb8ae1fe19da72c2bdc3",
+          "shiny_runtime_sha256": "ce15a91a71b7d8bcca055665f1e1a86cbd80f8fd7a115d3abef046d01f0827f2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 48.0,
+            "move_key": "bubble"
+          },
+          "views": 2
+        },
+        "bubblebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.475,
+            0.55,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "0f5a8f992439feffbee24c9de86a3a022183ea56afacd743671e2dc488ef10a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "58e3f6f2225708cf8d8a95497cdefc74196081b51a6d532048f2e00caec5e63a",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c267848b1a9e73c0cb1c47e6947ea165f48dde7320fc53f7f4bc55a08942779e",
+          "shiny_runtime_sha256": "ce15a91a71b7d8bcca055665f1e1a86cbd80f8fd7a115d3abef046d01f0827f2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 48.0,
+            "move_key": "bubblebeam"
+          },
+          "views": 2
+        },
+        "flashcannon": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.7,
+            0.78
+          ],
+          "normal_runtime_sha256": "0f5a8f992439feffbee24c9de86a3a022183ea56afacd743671e2dc488ef10a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "469b93352827c19274cd2f97fdae5cef21313f42f2646daedf0fbfd339a5fbd8",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "502aa61c946c397db76054a7aedb4225fec4b923f0ffc62fccbddf3ca8651f75",
+          "shiny_runtime_sha256": "ce15a91a71b7d8bcca055665f1e1a86cbd80f8fd7a115d3abef046d01f0827f2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 84.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "f1b92f7071957fc9de90bb2a9d5aa395e4cc9168842e1275b6833fa1f021bc00",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.7,
+            0.78
+          ],
+          "normal_runtime_sha256": "0f5a8f992439feffbee24c9de86a3a022183ea56afacd743671e2dc488ef10a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "45b5a88e0812e76277061ccaf55bb3a0a01e2fb3a881b49cea138d0131284979",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "e6a9f084aa97915e3c0cb968363a85e62bd0f17d0162f813b1ba51bd70f4d33c",
+          "shiny_runtime_sha256": "ce15a91a71b7d8bcca055665f1e1a86cbd80f8fd7a115d3abef046d01f0827f2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 84.0,
+            "emission_scale": 0.12,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "icebeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.7,
+            0.78
+          ],
+          "normal_runtime_sha256": "0f5a8f992439feffbee24c9de86a3a022183ea56afacd743671e2dc488ef10a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7a01e735641db0fe6d43f16046671fb39cc650b6139d4c1b477b9b7a2c0c8c75",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "62aa9ad5bacd2b1b8055e59e68c32ca685270446e47ee225dc946395ec8ceec2",
+          "shiny_runtime_sha256": "ce15a91a71b7d8bcca055665f1e1a86cbd80f8fd7a115d3abef046d01f0827f2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 84.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        },
+        "mudslap": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.475,
+            0.55,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "0f5a8f992439feffbee24c9de86a3a022183ea56afacd743671e2dc488ef10a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "63d64e5898b838f944bc54ca6979997f8e0165e38b9b8d14260a615ad4bae865",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "82d949833ca1db56f4034bee36649e201b30456782cad38eb90c93edb86359a6",
+          "shiny_runtime_sha256": "ce15a91a71b7d8bcca055665f1e1a86cbd80f8fd7a115d3abef046d01f0827f2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 48.0,
+            "move_key": "mudslap",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "scald": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.7,
+            0.78
+          ],
+          "normal_runtime_sha256": "0f5a8f992439feffbee24c9de86a3a022183ea56afacd743671e2dc488ef10a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "78d7110256d38c57fc3aa6521d64b5446c4ac39f7133e72179f8aab41a4f991c",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "72488be17d4df2a2bd7f2a8a094d567368d496644b34f01333a04a24e428df9e",
+          "shiny_runtime_sha256": "ce15a91a71b7d8bcca055665f1e1a86cbd80f8fd7a115d3abef046d01f0827f2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 84.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "scald"
+          },
+          "views": 2
+        },
+        "shadowball": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.475,
+            0.55,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "0f5a8f992439feffbee24c9de86a3a022183ea56afacd743671e2dc488ef10a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d536c877aa52205dc28a3e4644806c9b2893d78544d01fa1cb8a3fc5a9529516",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "3100495569ad679d3c590c495957b50d544a4ad18dcff3a6550a84cb1eaa9734",
+          "shiny_runtime_sha256": "ce15a91a71b7d8bcca055665f1e1a86cbd80f8fd7a115d3abef046d01f0827f2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 48.0,
+            "move_key": "shadowball"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.475,
+            0.55,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "0f5a8f992439feffbee24c9de86a3a022183ea56afacd743671e2dc488ef10a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "afa4bc094a47f108da85e8cb2403d9a52fe49f42c4e11191e0daa52fec99daec",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "103a1daf615c60531678e8d8d4ddd70fdd3b54e00f8fdd7bd7421a40e222e93c",
+          "shiny_runtime_sha256": "ce15a91a71b7d8bcca055665f1e1a86cbd80f8fd7a115d3abef046d01f0827f2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 48.0,
+            "move_key": "sludgebomb",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        },
+        "watergun": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.7,
+            0.78
+          ],
+          "normal_runtime_sha256": "0f5a8f992439feffbee24c9de86a3a022183ea56afacd743671e2dc488ef10a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3db1f7b5fd4e9dc09b4c55de7fec5ebc3516068a2027fd2fa13433aac373432b",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "1acb30715f3a441c945835c810310b287166a804b7a96ea0968d7e1f0eb5b113",
+          "shiny_runtime_sha256": "ce15a91a71b7d8bcca055665f1e1a86cbd80f8fd7a115d3abef046d01f0827f2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 84.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 60.0,
+            "launch_frame": 48.0,
+            "move_key": "watergun"
+          },
+          "views": 2
+        },
+        "waterpulse": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.475,
+            0.55,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "0f5a8f992439feffbee24c9de86a3a022183ea56afacd743671e2dc488ef10a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b8e75d5bf2fd8fbbef894b98bb355bf90c11faaa1d660098d83dc8c69ee25ab8",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The large right claw inner bore is individually projected and bound to right_arm_02. Special_attack .40 release uses .20 streams ending .70 except Hyper Beam .12 after excessive rim sparks at .20 were rejected. Orbs and bubbles use .20; sludge/mud have .10 arc. Sampled beams pass above the lower yellow claw; continuous inner-claw and effect-radius clearance remains pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "6e01adf8ff26aaf30c509847effa5f303939788d8ff08157b7b835ac3308242f",
+          "shiny_runtime_sha256": "ce15a91a71b7d8bcca055665f1e1a86cbd80f8fd7a115d3abef046d01f0827f2",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 120.0,
+            "impact_frame": 66.0,
+            "launch_frame": 48.0,
+            "move_key": "waterpulse"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bubble": "cannon",
+        "bubblebeam": "cannon",
+        "flashcannon": "cannon",
+        "hyperbeam": "cannon",
+        "icebeam": "cannon",
+        "mudslap": "cannon",
+        "scald": "cannon",
+        "shadowball": "cannon",
+        "sludgebomb": "cannon",
+        "watergun": "cannon",
+        "waterpulse": "cannon"
+      },
+      "part_reviews": {
+        "cannon": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "ae4a12514c92acdb1731ca4d6ed7a95987a2d36731c584db6149458494fc9956",
+            "landmarks": [
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.0697126041960551,
+                  0.558667526892408,
+                  0.371619868911537
+                ],
+                "column": 0.0,
+                "distance": 2.32458395064834,
+                "mesh": "pm0757_00_00/Skeleton3D/pm0757_00_00_right_hand_mesh",
+                "pixel": [
+                  173.0,
+                  181.0
+                ],
+                "surface": 1,
+                "triangle": 1374,
+                "vertex_indices": [
+                  1328,
+                  1326,
+                  1331
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "0f5a8f992439feffbee24c9de86a3a022183ea56afacd743671e2dc488ef10a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3b759e451d55ddcbec692b0376a15a88291ef28667e315fff4b915990095fee0",
+          "scope": "Blue inner bore of the large right claw, bound to right_arm_02. Wide-context review confirms this is the bore; forward beam clearance past the moving claw tips remains pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "cannon": [
+          [
+            {
+              "bone": "right_arm_02",
+              "offset": [
+                0.163446649909019,
+                -0.0846473947167397,
+                0.10813319683075
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "claydol": {
       "part_reviews": {
         "hand": {
@@ -44287,6 +45699,498 @@
         "preview_sha256": "8e3fca3dc3f9163ac35eac3f5b9ab5ad525221ed08f017379ddd6bb9b9298a66",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "genesect": {
+      "anatomical_route_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "flamethrower": {
+          "action": "physical_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "flashcannon": {
+          "action": "physical_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "icebeam": {
+          "action": "physical_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "screech": {
+          "action": "special_attack",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_ring_clearance_pending"
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "part": "cannon",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "bugbite": "physical_attack",
+        "flamethrower": "physical_attack",
+        "flashcannon": "physical_attack",
+        "hyperbeam": "physical_attack",
+        "icebeam": "physical_attack",
+        "screech": "special_attack",
+        "solarbeam": "physical_attack"
+      },
+      "move_choreography": {
+        "bugbite": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.35
+        },
+        "flamethrower": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.56,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "flashcannon": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.56,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.56,
+          "emission_scale": 0.06,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "icebeam": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.56,
+          "emission_scale": 0.12,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        },
+        "screech": {
+          "action": "special_attack",
+          "emission_scale": 0.1,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.3
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "emission_end_fraction": 0.56,
+          "emission_scale": 0.06,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.4
+        }
+      },
+      "move_effect_reviews": {
+        "bugbite": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "b3e42f3856c19829f73373059f61df77d5d51bf5e9d843db578fe80287471aa5",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.4,
+            0.45,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "f6ba77aa9ea4c5b459cd6287d27a172d04077aee51ce679612832427557d779c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0f331cded237b0db6cb62ff478497a2494cf819edb26833f3e26d431273bd6a9",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "5b03f25e536ac16ddcfcae9864ba0e08f72309ee8182493a60e1e32f2a65f973",
+          "shiny_runtime_sha256": "b66424a5daf0563ff7829a8f3aa27897bbd1309ba21b305985cee2ecda26ea53",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 118.0,
+            "impact_frame": 53.1,
+            "launch_frame": 41.3,
+            "move_key": "bugbite"
+          },
+          "views": 2
+        },
+        "flamethrower": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.56,
+            0.78
+          ],
+          "normal_runtime_sha256": "f6ba77aa9ea4c5b459cd6287d27a172d04077aee51ce679612832427557d779c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8a51032b3e797da030a0835a59b39e4207d1ad81543768fee39a6ec13fbf0a8d",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "5704127a4c159192d2bd8493133588963fc0bec2ff930d4afd672158fe40e871",
+          "shiny_runtime_sha256": "b66424a5daf0563ff7829a8f3aa27897bbd1309ba21b305985cee2ecda26ea53",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 66.08,
+            "emission_scale": 0.12,
+            "frames": 118.0,
+            "impact_frame": 59.0,
+            "launch_frame": 47.2,
+            "move_key": "flamethrower"
+          },
+          "views": 2
+        },
+        "flashcannon": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.56,
+            0.78
+          ],
+          "normal_runtime_sha256": "f6ba77aa9ea4c5b459cd6287d27a172d04077aee51ce679612832427557d779c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4dac3e9e67a84620c9f0e073931713df5a15b7f91f956c02d5501619ce04f9e6",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "b4057cfba548909b3f417abd01408ba805ac88fb15b94f572d98d5830b3a3d9a",
+          "shiny_runtime_sha256": "b66424a5daf0563ff7829a8f3aa27897bbd1309ba21b305985cee2ecda26ea53",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 66.08,
+            "emission_scale": 0.12,
+            "frames": 118.0,
+            "impact_frame": 59.0,
+            "launch_frame": 47.2,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "f1b92f7071957fc9de90bb2a9d5aa395e4cc9168842e1275b6833fa1f021bc00",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.56,
+            0.78
+          ],
+          "normal_runtime_sha256": "f6ba77aa9ea4c5b459cd6287d27a172d04077aee51ce679612832427557d779c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "97dabbc5c8b6d8eca2ee852946a5c46d2a16f791068814f5c837529bca2975fe",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "17182c8c706da59e8e82adb889bb9f27258010f413bdb0403e60a18907994a66",
+          "shiny_runtime_sha256": "b66424a5daf0563ff7829a8f3aa27897bbd1309ba21b305985cee2ecda26ea53",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 66.08,
+            "emission_scale": 0.06,
+            "frames": 118.0,
+            "impact_frame": 59.0,
+            "launch_frame": 47.2,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "icebeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.56,
+            0.78
+          ],
+          "normal_runtime_sha256": "f6ba77aa9ea4c5b459cd6287d27a172d04077aee51ce679612832427557d779c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a76ddc04fe68057db3445f7d5f4d9bd131a53fc58cc02e237cfdbf92c4d76299",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "07a03e023e42515848de81a550c8426ac8f1034199bd962a0d49e082272ae368",
+          "shiny_runtime_sha256": "b66424a5daf0563ff7829a8f3aa27897bbd1309ba21b305985cee2ecda26ea53",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 66.08,
+            "emission_scale": 0.12,
+            "frames": 118.0,
+            "impact_frame": 59.0,
+            "launch_frame": 47.2,
+            "move_key": "icebeam"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b3e42f3856c19829f73373059f61df77d5d51bf5e9d843db578fe80287471aa5",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.28,
+            0.3,
+            0.32,
+            0.4,
+            0.5,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "f6ba77aa9ea4c5b459cd6287d27a172d04077aee51ce679612832427557d779c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1adf910b6167e3d2da1f650e146385cb2628d488e363a84915076ab87ac8fd85",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "fbc09c80bcc5b9094b5e218b7941bd6329366b85053c2e00316a8798ca0ff890",
+          "shiny_runtime_sha256": "b66424a5daf0563ff7829a8f3aa27897bbd1309ba21b305985cee2ecda26ea53",
+          "status": "sampled_origin_size_and_timing_review_ring_clearance_pending",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.1,
+            "frames": 132.0,
+            "impact_frame": 66.0,
+            "launch_frame": 39.6,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "solarbeam": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "f1b92f7071957fc9de90bb2a9d5aa395e4cc9168842e1275b6833fa1f021bc00",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.38,
+            0.4,
+            0.42,
+            0.45,
+            0.5,
+            0.56,
+            0.78
+          ],
+          "normal_runtime_sha256": "f6ba77aa9ea4c5b459cd6287d27a172d04077aee51ce679612832427557d779c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7e11065ff2d2b96003e9faf2384f9bf9106054a6c2b5605cb0fddfd463f73efd",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The native flight model unfolds its back cannon during physical_attack. Two projected barrel rim points are combined into one feeler_d emitter; a side vent candidate was rejected. Cannon beams use .40/.50/.56 timing, .12 scale except Hyper Beam/Solar Beam .06 after excessive rim glow at .12 was rejected. The separate head-bound mouth lies on the white tooth strip, lowered from the initial upper-rim candidate. Screech uses special_attack .30/.50 scale .10; Bug Bite uses physical_attack .35/.45. Early cannon charge inside the folded cowl, continuous limb clearance and bite contact distance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "d82861a5e703136d8bd90a55c6779913c570c09dd33bced7a4724d2f84e7e224",
+          "shiny_runtime_sha256": "b66424a5daf0563ff7829a8f3aa27897bbd1309ba21b305985cee2ecda26ea53",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 66.08,
+            "emission_scale": 0.06,
+            "frames": 118.0,
+            "impact_frame": 59.0,
+            "launch_frame": 47.2,
+            "move_key": "solarbeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "bugbite": "mouth",
+        "flamethrower": "cannon",
+        "flashcannon": "cannon",
+        "hyperbeam": "cannon",
+        "icebeam": "cannon",
+        "screech": "mouth",
+        "solarbeam": "cannon"
+      },
+      "part_reviews": {
+        "cannon": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "2732045124ff993fb44f59e0c77840aa4ae3cbfd9365d64c677ad64f5f4abd8e",
+            "landmarks": [
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.27199332886489,
+                  0.299107852981296,
+                  0.428898818153814
+                ],
+                "column": 1.0,
+                "distance": 2.34063000565815,
+                "mesh": "pm0649_11_00/Skeleton3D/pm0649_11_00_cowl_mesh",
+                "pixel": [
+                  276.0,
+                  72.0
+                ],
+                "surface": 0,
+                "triangle": 190,
+                "vertex_indices": [
+                  1,
+                  3,
+                  12
+                ],
+                "weight": 0.5
+              },
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.259206931371486,
+                  0.169588743957404,
+                  0.57120432467111
+                ],
+                "column": 1.0,
+                "distance": 2.36858200714664,
+                "mesh": "pm0649_11_00/Skeleton3D/pm0649_11_00_cowl_mesh",
+                "pixel": [
+                  288.0,
+                  80.0
+                ],
+                "surface": 2,
+                "triangle": 56,
+                "vertex_indices": [
+                  56,
+                  42,
+                  51
+                ],
+                "weight": 0.5
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "f6ba77aa9ea4c5b459cd6287d27a172d04077aee51ce679612832427557d779c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c6cbcc7ee419d0b493617ab3910afab8180d94e0f919fc0e0fb9a28b795739a7",
+          "scope": "Triangular opening at the end of the raised back cannon, bound to feeler_d. Two rim landmarks averaged into one emitter. Initial side vent was rejected. Physical attack unfolds the cannon around .45; other sampled poses fold it inside the cowl. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "cannon": [
+          [
+            {
+              "bone": "feeler_d",
+              "offset": [
+                0.455992043018341,
+                0.00975038670003414,
+                -0.0240261293947697
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "mouth": [
+          [
+            {
+              "bone": "head",
+              "offset": [
+                0.384418487548828,
+                -0.0021206196397543,
+                0.0138489855453372
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "f6ba77aa9ea4c5b459cd6287d27a172d04077aee51ce679612832427557d779c",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "7b3a01bcc2cdbeec1a6089e0dffd1bd926c2fe21187e88679aeb9c7174ffb12e",
+        "scope": "Individually projected centre of the white tooth strip, bound to head. Initial upper-rim candidate was lowered onto the teeth. Visible sampled native poses inspected; action-specific contact clearance pending.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "21b25534e3cbbe69817aaf86aa368f037f4dc0a802d4bfdc878c9b99adc1ded7",
+          "landmarks": [
+            {
+              "action": "idle",
+              "barycentric": [
+                0.49660999679299,
+                0.468499617666425,
+                0.0348903855405854
+              ],
+              "column": 0.0,
+              "distance": 1.31326382730775,
+              "mesh": "pm0649_11_00/Skeleton3D/pm0649_11_00_head_mesh",
+              "pixel": [
+                210.0,
+                184.0
+              ],
+              "surface": 1,
+              "triangle": 7,
+              "vertex_indices": [
+                4,
+                5,
+                9
+              ],
+              "weight": 1.0
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "gengar": {
@@ -99662,6 +101566,179 @@
         ]
       }
     },
+    "regidrago": {
+      "anatomical_route_reviews": {
+        "dragonbreath": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower central blue facial dot on the pink torso is individually projected and bound to waist_a. Hyper Beam/Dragon Breath special_attack .35/.50/.68 scale .25 release while the surrounding dragon-jaw arms are open. This is a facial casting point, not an oral cavity. Early charge behind the arms and continuous inner-teeth/full-radius clearance remain pending. Bite and Dragon Claw have not been rerouted to this face; their separate jaw-arm points remain unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "part": "face",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower central blue facial dot on the pink torso is individually projected and bound to waist_a. Hyper Beam/Dragon Breath special_attack .35/.50/.68 scale .25 release while the surrounding dragon-jaw arms are open. This is a facial casting point, not an oral cavity. Early charge behind the arms and continuous inner-teeth/full-radius clearance remain pending. Bite and Dragon Claw have not been rerouted to this face; their separate jaw-arm points remain unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "dragonbreath": "special_attack",
+        "hyperbeam": "special_attack"
+      },
+      "move_choreography": {
+        "dragonbreath": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.68,
+          "emission_scale": 0.25,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.35
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "emission_end_fraction": 0.68,
+          "emission_scale": 0.25,
+          "impact_fraction": 0.5,
+          "launch_fraction": 0.35
+        }
+      },
+      "move_effect_reviews": {
+        "dragonbreath": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.68,
+            0.78
+          ],
+          "normal_runtime_sha256": "7d033a0a6843f0673a6e2134ab4a5e0c644aacf442b88dfe708ed80b5ba4ea68",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "52b6c3905f43a1bb72c447ba6807f7bd22bb94a4ddf9119ece84c6d6c11e159c",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower central blue facial dot on the pink torso is individually projected and bound to waist_a. Hyper Beam/Dragon Breath special_attack .35/.50/.68 scale .25 release while the surrounding dragon-jaw arms are open. This is a facial casting point, not an oral cavity. Early charge behind the arms and continuous inner-teeth/full-radius clearance remain pending. Bite and Dragon Claw have not been rerouted to this face; their separate jaw-arm points remain unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "a6c8e30e21d5104955c7c5c17de3a1231aa34d9a71e92c5d51ba39074fd0e554",
+          "shiny_runtime_sha256": "97539ce04a1b498103cf0032a3afc479dc370a1d19fc68ebd0d65d280d40e1b8",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 110.16,
+            "emission_scale": 0.25,
+            "frames": 162.0,
+            "impact_frame": 81.0,
+            "launch_frame": 56.7,
+            "move_key": "dragonbreath"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.33,
+            0.35,
+            0.37,
+            0.425,
+            0.5,
+            0.68,
+            0.78
+          ],
+          "normal_runtime_sha256": "7d033a0a6843f0673a6e2134ab4a5e0c644aacf442b88dfe708ed80b5ba4ea68",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "869cf4338bc8df763bdf68a7b06a712d949524349ce63eebac66cc0abaf10d9c",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The lower central blue facial dot on the pink torso is individually projected and bound to waist_a. Hyper Beam/Dragon Breath special_attack .35/.50/.68 scale .25 release while the surrounding dragon-jaw arms are open. This is a facial casting point, not an oral cavity. Early charge behind the arms and continuous inner-teeth/full-radius clearance remain pending. Bite and Dragon Claw have not been rerouted to this face; their separate jaw-arm points remain unresolved. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "9508bdcc7611ce597b3b960d5bf587e289251f29132298a20785c4d12ae17862",
+          "shiny_runtime_sha256": "97539ce04a1b498103cf0032a3afc479dc370a1d19fc68ebd0d65d280d40e1b8",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "special_attack",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 110.16,
+            "emission_scale": 0.25,
+            "frames": 162.0,
+            "impact_frame": 81.0,
+            "launch_frame": 56.7,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "dragonbreath": "face",
+        "hyperbeam": "face"
+      },
+      "part_reviews": {
+        "face": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "2edb3960b567f763e1a491c8fa109d925dc077c23cc7ea4d6839723c644fb3c8",
+            "landmarks": [
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.212088938815002,
+                  0.24052710047086,
+                  0.547383960714138
+                ],
+                "column": 1.0,
+                "distance": 4.78930353167167,
+                "mesh": "pm0990_00_00/Skeleton3D/pm0990_00_00_body_mesh",
+                "pixel": [
+                  207.0,
+                  170.0
+                ],
+                "surface": 2,
+                "triangle": 157,
+                "vertex_indices": [
+                  60,
+                  51,
+                  61
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "7d033a0a6843f0673a6e2134ab4a5e0c644aacf442b88dfe708ed80b5ba4ea68",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2ac3ab3d8bac54f087f98bd5e8457f51778c4f08bdac3dbdc0109a85c8aa77f2",
+          "scope": "Lower central blue facial dot on the pink body, bound to waist_a. Facial casting region, not an oral cavity. Special_attack .45/.65 opens the surrounding dragon jaw arms. Bite and Dragon Claw require separate arm points. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "face": [
+          [
+            {
+              "bone": "waist_a",
+              "offset": [
+                0.0239337142556906,
+                -0.00317762675695121,
+                0.453628540039062
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "regieleki": {
       "anatomical_route_reviews": {
         "hyperbeam": {
@@ -100670,6 +102747,451 @@
         "preview_sha256": "08228a16cebae4b524287b2921f6ceb7c6b1366ada15c07ac37b344facdc8b46",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "revavroom": {
+      "anatomical_route_reviews": {
+        "flashcannon": {
+          "action": "physical_attack_2",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The mouth is the upper engine grille above the eye; independently projected upper and lower grille points are combined with jaw/hair weights. Physical_attack_2 .12/.20 streams use .15 scale and end .27; Sludge Bomb .15 arc .10; Screech .20 initial scale. A separately projected distal tongue point replaces the rejected root candidate. Lick .10/.20 ends .27: the previous extension persisting after tongue retraction was rejected. At .235 it thins and by .27 it is gone in both variants, while target graphics continue. Contact distance, late impact overlap and continuous full-radius clearance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "hyperbeam": {
+          "action": "physical_attack_2",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The mouth is the upper engine grille above the eye; independently projected upper and lower grille points are combined with jaw/hair weights. Physical_attack_2 .12/.20 streams use .15 scale and end .27; Sludge Bomb .15 arc .10; Screech .20 initial scale. A separately projected distal tongue point replaces the rejected root candidate. Lick .10/.20 ends .27: the previous extension persisting after tongue retraction was rejected. At .235 it thins and by .27 it is gone in both variants, while target graphics continue. Contact distance, late impact overlap and continuous full-radius clearance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        },
+        "lick": {
+          "action": "physical_attack_2",
+          "part": "tongue_tip",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The mouth is the upper engine grille above the eye; independently projected upper and lower grille points are combined with jaw/hair weights. Physical_attack_2 .12/.20 streams use .15 scale and end .27; Sludge Bomb .15 arc .10; Screech .20 initial scale. A separately projected distal tongue point replaces the rejected root candidate. Lick .10/.20 ends .27: the previous extension persisting after tongue retraction was rejected. At .235 it thins and by .27 it is gone in both variants, while target graphics continue. Contact distance, late impact overlap and continuous full-radius clearance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending"
+        },
+        "screech": {
+          "action": "physical_attack_2",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The mouth is the upper engine grille above the eye; independently projected upper and lower grille points are combined with jaw/hair weights. Physical_attack_2 .12/.20 streams use .15 scale and end .27; Sludge Bomb .15 arc .10; Screech .20 initial scale. A separately projected distal tongue point replaces the rejected root candidate. Lick .10/.20 ends .27: the previous extension persisting after tongue retraction was rejected. At .235 it thins and by .27 it is gone in both variants, while target graphics continue. Contact distance, late impact overlap and continuous full-radius clearance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_origin_size_and_timing_review_ring_clearance_pending"
+        },
+        "sludgebomb": {
+          "action": "physical_attack_2",
+          "part": "mouth",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The mouth is the upper engine grille above the eye; independently projected upper and lower grille points are combined with jaw/hair weights. Physical_attack_2 .12/.20 streams use .15 scale and end .27; Sludge Bomb .15 arc .10; Screech .20 initial scale. A separately projected distal tongue point replaces the rejected root candidate. Lick .10/.20 ends .27: the previous extension persisting after tongue retraction was rejected. At .235 it thins and by .27 it is gone in both variants, while target graphics continue. Contact distance, late impact overlap and continuous full-radius clearance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass"
+        }
+      },
+      "move_actions": {
+        "flashcannon": "physical_attack_2",
+        "hyperbeam": "physical_attack_2",
+        "lick": "physical_attack_2",
+        "screech": "physical_attack_2",
+        "sludgebomb": "physical_attack_2"
+      },
+      "move_choreography": {
+        "flashcannon": {
+          "action": "physical_attack_2",
+          "emission_end_fraction": 0.27,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.2,
+          "launch_fraction": 0.12
+        },
+        "hyperbeam": {
+          "action": "physical_attack_2",
+          "emission_end_fraction": 0.27,
+          "emission_scale": 0.15,
+          "impact_fraction": 0.2,
+          "launch_fraction": 0.12
+        },
+        "lick": {
+          "action": "physical_attack_2",
+          "contact_yaw_degrees": 0,
+          "emission_end_fraction": 0.27,
+          "impact_fraction": 0.2,
+          "launch_fraction": 0.1
+        },
+        "screech": {
+          "action": "physical_attack_2",
+          "emission_scale": 0.2,
+          "impact_fraction": 0.2,
+          "launch_fraction": 0.12
+        },
+        "sludgebomb": {
+          "action": "physical_attack_2",
+          "emission_scale": 0.15,
+          "impact_fraction": 0.2,
+          "launch_fraction": 0.12,
+          "projectile_arc_height": 0.1
+        }
+      },
+      "move_effect_reviews": {
+        "flashcannon": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.1,
+            0.12,
+            0.14,
+            0.16,
+            0.2,
+            0.27,
+            0.78
+          ],
+          "normal_runtime_sha256": "b3e98b7d3015fc67c7a0609535956a5d879455623947fc58b0973acb3e23172c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d9bcd62f86f43da5f7b7e87941cb19ce5e1ed4a404e85c37e061db99d87daf5d",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The mouth is the upper engine grille above the eye; independently projected upper and lower grille points are combined with jaw/hair weights. Physical_attack_2 .12/.20 streams use .15 scale and end .27; Sludge Bomb .15 arc .10; Screech .20 initial scale. A separately projected distal tongue point replaces the rejected root candidate. Lick .10/.20 ends .27: the previous extension persisting after tongue retraction was rejected. At .235 it thins and by .27 it is gone in both variants, while target graphics continue. Contact distance, late impact overlap and continuous full-radius clearance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "94af2b27c49db37eaa3128b1a4159cd5c5dcea9d50a0b7163d9a0096e5fbfaa4",
+          "shiny_runtime_sha256": "dcb5b2f9decc9ff08817c504363e70932d5d8eb9757cb0e13231daf41f5aa157",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 40.5,
+            "emission_scale": 0.15,
+            "frames": 150.0,
+            "impact_frame": 30.0,
+            "launch_frame": 18.0,
+            "move_key": "flashcannon"
+          },
+          "views": 2
+        },
+        "hyperbeam": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.1,
+            0.12,
+            0.14,
+            0.16,
+            0.2,
+            0.27,
+            0.78
+          ],
+          "normal_runtime_sha256": "b3e98b7d3015fc67c7a0609535956a5d879455623947fc58b0973acb3e23172c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c3d92717b2fc5636bb883445e6f7d0c9ef85b0b771c1f838f9cbd87b5ca2db3e",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The mouth is the upper engine grille above the eye; independently projected upper and lower grille points are combined with jaw/hair weights. Physical_attack_2 .12/.20 streams use .15 scale and end .27; Sludge Bomb .15 arc .10; Screech .20 initial scale. A separately projected distal tongue point replaces the rejected root candidate. Lick .10/.20 ends .27: the previous extension persisting after tongue retraction was rejected. At .235 it thins and by .27 it is gone in both variants, while target graphics continue. Contact distance, late impact overlap and continuous full-radius clearance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "30925046288d9ea06f2f3000d0e8f7eacfbda9623a5a1cdac581ce6acac87902",
+          "shiny_runtime_sha256": "dcb5b2f9decc9ff08817c504363e70932d5d8eb9757cb0e13231daf41f5aa157",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 40.5,
+            "emission_scale": 0.15,
+            "frames": 150.0,
+            "impact_frame": 30.0,
+            "launch_frame": 18.0,
+            "move_key": "hyperbeam"
+          },
+          "views": 2
+        },
+        "lick": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "adaa51c28ea4c7358cd1952cd55b5fa2e5c1127a56ca49896c941d97cc4f62a3",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.1,
+            0.175,
+            0.2,
+            0.235,
+            0.27,
+            0.4,
+            0.65
+          ],
+          "normal_runtime_sha256": "b3e98b7d3015fc67c7a0609535956a5d879455623947fc58b0973acb3e23172c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "53fc24f24b334f05afdbfdd90a9d3d4ea5b0430ed3e3c78dedc48665650cf5b6",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The mouth is the upper engine grille above the eye; independently projected upper and lower grille points are combined with jaw/hair weights. Physical_attack_2 .12/.20 streams use .15 scale and end .27; Sludge Bomb .15 arc .10; Screech .20 initial scale. A separately projected distal tongue point replaces the rejected root candidate. Lick .10/.20 ends .27: the previous extension persisting after tongue retraction was rejected. At .235 it thins and by .27 it is gone in both variants, while target graphics continue. Contact distance, late impact overlap and continuous full-radius clearance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "73dada577718ac94f6d2699d27125f1ff8365ffe79bcf33ffec47052e82d24cc",
+          "shiny_runtime_sha256": "dcb5b2f9decc9ff08817c504363e70932d5d8eb9757cb0e13231daf41f5aa157",
+          "status": "sampled_origin_and_action_review_contact_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_end_frame": 40.5,
+            "frames": 150.0,
+            "impact_frame": 30.0,
+            "launch_frame": 15.0,
+            "move_key": "lick"
+          },
+          "views": 2
+        },
+        "screech": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "b3e42f3856c19829f73373059f61df77d5d51bf5e9d843db578fe80287471aa5",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.1,
+            0.12,
+            0.14,
+            0.16,
+            0.2,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "b3e98b7d3015fc67c7a0609535956a5d879455623947fc58b0973acb3e23172c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0f3a9a616c5eb7fa1b70bc8a37160ff0db95bef24d7210f18a2378373c61833b",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The mouth is the upper engine grille above the eye; independently projected upper and lower grille points are combined with jaw/hair weights. Physical_attack_2 .12/.20 streams use .15 scale and end .27; Sludge Bomb .15 arc .10; Screech .20 initial scale. A separately projected distal tongue point replaces the rejected root candidate. Lick .10/.20 ends .27: the previous extension persisting after tongue retraction was rejected. At .235 it thins and by .27 it is gone in both variants, while target graphics continue. Contact distance, late impact overlap and continuous full-radius clearance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "c5ce38ff4f0347582009c82ad74959e894cd7cc902b98ead773b717d53d83165",
+          "shiny_runtime_sha256": "dcb5b2f9decc9ff08817c504363e70932d5d8eb9757cb0e13231daf41f5aa157",
+          "status": "sampled_origin_size_and_timing_review_ring_clearance_pending",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.2,
+            "frames": 150.0,
+            "impact_frame": 30.0,
+            "launch_frame": 18.0,
+            "move_key": "screech"
+          },
+          "views": 2
+        },
+        "sludgebomb": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "b2e9be62403bd256d46710b318f0d21fbe5ebf78ecc2f258b7e54e83c15a3df7",
+          "effect_sampling": "native_clock_120hz_v1",
+          "fractions": [
+            0.08,
+            0.1,
+            0.12,
+            0.14,
+            0.16,
+            0.2,
+            0.65,
+            0.78
+          ],
+          "normal_runtime_sha256": "b3e98b7d3015fc67c7a0609535956a5d879455623947fc58b0973acb3e23172c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0edd1f09d8c028936de2cca8f690b6edf474aed54e146fe548d28f5bc769acd9",
+          "scope": "Normal and shiny, two offline views, 8 sampled fractions with sequential native pose/effect stepping at 120 Hz. The mouth is the upper engine grille above the eye; independently projected upper and lower grille points are combined with jaw/hair weights. Physical_attack_2 .12/.20 streams use .15 scale and end .27; Sludge Bomb .15 arc .10; Screech .20 initial scale. A separately projected distal tongue point replaces the rejected root candidate. Lick .10/.20 ends .27: the previous extension persisting after tongue retraction was rejected. At .235 it thins and by .27 it is gone in both variants, while target graphics continue. Contact distance, late impact overlap and continuous full-radius clearance remain pending. Remaining move routes, other target sizes and live NPC/wild battles remain pending.",
+          "shiny_preview_sha256": "2c16bbb378782cd3377cb6901151da7690dfad4b812b8881d6584c86b4cd1ba6",
+          "shiny_runtime_sha256": "dcb5b2f9decc9ff08817c504363e70932d5d8eb9757cb0e13231daf41f5aa157",
+          "status": "sampled_runtime_origin_region_and_action_timing_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 0.0,
+            "emission_scale": 0.15,
+            "frames": 150.0,
+            "impact_frame": 30.0,
+            "launch_frame": 18.0,
+            "move_key": "sludgebomb",
+            "projectile_arc_height": 0.1
+          },
+          "views": 2
+        }
+      },
+      "moves": {
+        "flashcannon": "mouth",
+        "hyperbeam": "mouth",
+        "lick": "tongue_tip",
+        "screech": "mouth",
+        "sludgebomb": "mouth"
+      },
+      "part_reviews": {
+        "tongue_tip": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "62150a6dc3241c83789e30c7bcc5c5486cf5c171dc289fe3367a72f7683e4c3f",
+            "landmarks": [
+              {
+                "action": "physical_attack_2",
+                "barycentric": [
+                  0.542383530713447,
+                  0.0908428906266111,
+                  0.366773578659942
+                ],
+                "column": 0.0,
+                "distance": 0.927438833740228,
+                "mesh": "pm1047_00_00/Skeleton3D/pm1047_00_00_tongue_mesh",
+                "pixel": [
+                  311.0,
+                  181.0
+                ],
+                "surface": 0,
+                "triangle": 248,
+                "vertex_indices": [
+                  217,
+                  166,
+                  163
+                ],
+                "weight": 1.0
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "b3e98b7d3015fc67c7a0609535956a5d879455623947fc58b0973acb3e23172c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1d6023a70bbf0315afc06f21826b05626a27e1fb35efad8d6e5b5acb6b4d1e58",
+          "scope": "Individually projected near-distal broad tongue tip, weighted to tongue_05/tongue_04. The initial narrow root candidate was rejected. Physical_attack_2 .20 exposes the tip; other actions conceal it. Contact direction and distance pending. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "mouth": [
+          [
+            {
+              "bone": "upper_jaw",
+              "offset": [
+                -0.0206571146845818,
+                0.0144275464117527,
+                0.252260506153107
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "lower_jaw_01",
+              "offset": [
+                -0.0113648790866137,
+                -0.0248185079544783,
+                0.215298995375633
+              ],
+              "weight": 0.314036704632246
+            },
+            {
+              "bone": "hair_03",
+              "offset": [
+                0.0315473079681396,
+                1.0410180273368e-08,
+                0.218366742134094
+              ],
+              "weight": 0.0912893812434615
+            },
+            {
+              "bone": "hair_04",
+              "offset": [
+                -0.0514526963233948,
+                1.04101811615465e-08,
+                0.2183668166399
+              ],
+              "weight": 0.0777667526993453
+            },
+            {
+              "bone": "hair_05",
+              "offset": [
+                -0.112452685832977,
+                1.04101811615465e-08,
+                0.218366801738739
+              ],
+              "weight": 0.0169071614249476
+            }
+          ]
+        ],
+        "tongue_tip": [
+          [
+            {
+              "bone": "tongue_05",
+              "offset": [
+                0.0815540254116058,
+                -0.0117211015895009,
+                -0.0180170554667711
+              ],
+              "weight": 0.983666795643734
+            },
+            {
+              "bone": "tongue_04",
+              "offset": [
+                0.155521139502525,
+                -0.00849559623748064,
+                -0.0193026475608349
+              ],
+              "weight": 0.0163332043562661
+            }
+          ]
+        ]
+      },
+      "review": {
+        "actions": [
+          "idle",
+          "physical_attack",
+          "physical_attack_2",
+          "special_attack"
+        ],
+        "fractions": [
+          0.2,
+          0.45,
+          0.65
+        ],
+        "measurements": [],
+        "method": "manual_skinned_surface_landmark_visual_review",
+        "normal_runtime_sha256": "b3e98b7d3015fc67c7a0609535956a5d879455623947fc58b0973acb3e23172c",
+        "pose_fits": [],
+        "pose_sampling": "forward_from_start_v1",
+        "preview_sha256": "d687266dcde9bda45c8f5ab2691288867816dc331559333a2fc4997621180ffa",
+        "scope": "Upper engine zigzag mouth above the yellow eye, averaged from upper and lower jaw rims. Physical_attack_2 .20 opens this mouth and exposes the tongue. Initial off-centre point was rejected.",
+        "side_fraction": 0.45,
+        "surface_landmarks": {
+          "capture_sha256": "8f5281dded9eb63ef5a9274102e453203476c8bc0bb6f5640256fc290d8e1b76",
+          "landmarks": [
+            {
+              "action": "physical_attack_2",
+              "barycentric": [
+                0.167423783920112,
+                0.0347026368931807,
+                0.797873579186708
+              ],
+              "column": 0.0,
+              "distance": 1.13572040270149,
+              "mesh": "pm1047_00_00/Skeleton3D/pm1047_00_00_jaw_mesh",
+              "pixel": [
+                244.0,
+                97.0
+              ],
+              "surface": 0,
+              "triangle": 91,
+              "vertex_indices": [
+                190,
+                194,
+                195
+              ],
+              "weight": 0.5
+            },
+            {
+              "action": "physical_attack_2",
+              "barycentric": [
+                0.0453016000892511,
+                0.278463553172037,
+                0.676234846738712
+              ],
+              "column": 0.0,
+              "distance": 1.28082201034689,
+              "mesh": "pm1047_00_00/Skeleton3D/pm1047_00_00_head_mesh",
+              "pixel": [
+                247.0,
+                262.0
+              ],
+              "surface": 0,
+              "triangle": 144,
+              "vertex_indices": [
+                180,
+                168,
+                166
+              ],
+              "weight": 0.5
+            }
+          ],
+          "method": "ray_triangle_barycentric_skin_binding"
+        }
       }
     },
     "rhydon": {

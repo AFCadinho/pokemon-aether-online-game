@@ -199,6 +199,10 @@ func _contact_stage(from: Vector3,center: Vector3,flight: float,after: float,alp
 		for i in 3:
 			_piece(crescent,pearl,aim+side*(i-1)*.2,Vector3.ONE*(.5+strike*.7)*weight*fade,facing*Basis(Vector3.FORWARD,-.7+i*.4))
 	elif motif=="reaching-lash":
+		# Stop the tongue extension before the native tongue retracts.
+		if key=="lick" and emission_end >= 0:
+			if elapsed >= emission_end: return
+			fade *= 1-smoothstep(impact,emission_end,elapsed)
 		var native_vines: bool = anchors.call().get("attachment_part", "") == "vines"
 		for source: Vector3 in emission_sources:
 			var last := source
@@ -289,7 +293,7 @@ func _wave_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vec
 	if flight<0:
 		var charge_sources: Array = emission_sources if motif in ["sound-call", "sound-tunnel"] and recipe.target != "actor" else [origin]
 		for source: Vector3 in charge_sources:
-			_piece(soft_quad,soft,source,Vector3.ONE*.9*elapsed/maxf(launch,.01),facing)
+			_piece(soft_quad,soft,source,Vector3.ONE*.9*elapsed/maxf(launch,.01)*_sound_emission_scale(),facing)
 		return
 	var fade := 1-smoothstep(.1,1,after)
 	if motif=="sound-call" and recipe.target=="actor":
@@ -319,20 +323,28 @@ func _wave_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vec
 			var p := clampf(after*1.5-i*.03,0,1)
 			_source_sprite(aim.lerp(initial_center,p)+Vector3.UP*sin(p*PI)*.8,.35,"spark",0,alpha*(1-p),facing)
 
+func _sound_emission_scale() -> float:
+	return emission_scale if motif in ["sound-call", "sound-tunnel"] and recipe.target != "actor" else 1.0
+
+func _sound_wave_scale(travel: float) -> float:
+	# Fit the outlet at release, then expand once the wave is away from it.
+	return lerpf(_sound_emission_scale(), 1.0, smoothstep(0.0, .35, travel))
+
 func _wave_rings(source: Vector3,flight: float,fade: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
 	for i in 7:
 		var p := flight-i*.09
 		if p<0 or p>1.3:continue
 		var travel := clampf(p,0,1)
 		var point := source.lerp(aim,travel)
-		var radius := (.2+travel*(1.2 if motif=="sound-tunnel" else .9))*weight
+		var wave_scale := _sound_wave_scale(travel)
+		var radius := (.2+travel*(1.2 if motif=="sound-tunnel" else .9))*weight*wave_scale
 		var visibility := sin(clampf(p/1.3,0,1)*PI)*fade
 		_piece(ring,edge,point,Vector3.ONE*radius*visibility,axis)
 		if motif in ["psychic-tunnel","dark-tunnel"]:
 			for sign_value in [-1.,1.]:_piece(crescent,pearl,point,Vector3.ONE*radius*visibility,axis*Basis(Vector3.RIGHT,PI/2)*Basis(Vector3.UP,elapsed*sign_value+i))
 			_source_sprite(point,radius*1.4,"mist" if motif=="dark-tunnel" else "spark",travel,alpha*visibility*.3,facing)
 		elif motif=="sound-tunnel":
-			for sign_value in [-1.,1.]:_line(point+side*radius*sign_value,point+side*radius*sign_value+Vector3.UP*.35,.02*visibility,pearl)
+			for sign_value in [-1.,1.]:_line(point+side*radius*sign_value,point+side*radius*sign_value+Vector3.UP*.35*wave_scale,.02*visibility*wave_scale,pearl)
 
 func _status_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
 	if flight<0:return
