@@ -6889,7 +6889,7 @@
   "ui.guild_base.visits.status_approved": "Je mag naar binnen. Ga naar binnen voordat de toestemming verloopt.",
   "ui.guild_base.visits.status_declined": "Je verzoek is afgewezen.",
   "ui.guild_base.visits.status_expired": "Je verzoek is verlopen. Je kunt een nieuw verzoek sturen.",
-  "ui.guild_base.visits.badge": "Bezoekers · {count} verzoeken",
+  "ui.guild_base.visits.badge": "Bezoekersverzoeken · {count}",
   "ui.guild_base.visits.notification": "{name} vraagt toegang tot jullie guildbase.",
   "ui.guild_base.visits.error_no_host": "Er is geen guildlid binnen om je binnen te laten.",
   "ui.guild_base.visits.error_cooldown": "Wacht even voordat je opnieuw toegang vraagt.",

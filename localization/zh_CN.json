@@ -6889,7 +6889,7 @@
   "ui.guild_base.visits.status_approved": "申请已获批准。请在许可到期前进入。",
   "ui.guild_base.visits.status_declined": "申请已被拒绝。",
   "ui.guild_base.visits.status_expired": "申请已过期，可以重新申请。",
-  "ui.guild_base.visits.badge": "访客 · {count} 个申请",
+  "ui.guild_base.visits.badge": "来访申请 · {count}",
   "ui.guild_base.visits.notification": "{name} 正在申请拜访你们的公会基地。",
   "ui.guild_base.visits.error_no_host": "目前没有公会成员在基地内批准申请。",
   "ui.guild_base.visits.error_cooldown": "请稍等再发送申请。",

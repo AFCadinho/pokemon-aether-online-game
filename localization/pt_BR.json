@@ -6889,7 +6889,7 @@
   "ui.guild_base.visits.status_approved": "Entrada aprovada. Entre antes que a permissão expire.",
   "ui.guild_base.visits.status_declined": "Sua solicitação foi recusada.",
   "ui.guild_base.visits.status_expired": "A solicitação expirou. Você pode enviar outra.",
-  "ui.guild_base.visits.badge": "Visitantes · {count} solicitações",
+  "ui.guild_base.visits.badge": "Pedidos de visita · {count}",
   "ui.guild_base.visits.notification": "{name} pede para visitar sua base.",
   "ui.guild_base.visits.error_no_host": "Nenhum membro está dentro para permitir sua entrada.",
   "ui.guild_base.visits.error_cooldown": "Aguarde um pouco antes de solicitar novamente.",

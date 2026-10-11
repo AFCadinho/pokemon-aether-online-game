@@ -6889,7 +6889,7 @@
   "ui.guild_base.visits.status_approved": "You have been invited in. Enter before permission expires.",
   "ui.guild_base.visits.status_declined": "Your request was declined.",
   "ui.guild_base.visits.status_expired": "Your request expired. You can send a new one.",
-  "ui.guild_base.visits.badge": "Visitors · {count} requests",
+  "ui.guild_base.visits.badge": "Visitor requests · {count}",
   "ui.guild_base.visits.notification": "{name} is asking to visit your Guild Base.",
   "ui.guild_base.visits.error_no_host": "No Guild member is inside to let you in.",
   "ui.guild_base.visits.error_cooldown": "Wait briefly before sending another request.",

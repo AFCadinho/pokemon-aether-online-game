@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Move Guild Base visitor requests away from the party panel into a compact upper-right notification, shown only while requests are pending; keep access settings at the base manager.
+
 - Add a Guild Base manager behind the main-hall counter for leader-controlled visitor access and member approval of entry requests.
 
 - Add the Emerald Luchador outfit box for both player models, with five separately wearable cosmetics including a mask and feather-wing Back accessory. Available for item grants; no store listing.
