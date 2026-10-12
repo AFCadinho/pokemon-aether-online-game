@@ -136,6 +136,15 @@ static func _resolve_part_layer(
 	var texture := _load_texture(path)
 	if texture == null:
 		return {}
+	# Some authored clothing includes exposed-skin shading. Only explicitly
+	# marked parts reuse the body's exact skin-palette mask; fabric stays intact.
+	if bool(part.get("skin_tint", false)):
+		var skin_tone := CharacterAppearanceService.resolve_skin_tone(
+			str(appearance_state.get("body", "")),
+			str(appearance_state.get("skin_tone", "")),
+			gender
+		)
+		texture = _skin_variant(path, texture, skin_tone)
 	var tint_key := str(part.get("tint", "")).strip_edges()
 	if tint_key.is_empty() and category == "hair" and CharacterAppearanceService.is_tintable_part(category, resolved_id):
 		tint_key = "hair_color"

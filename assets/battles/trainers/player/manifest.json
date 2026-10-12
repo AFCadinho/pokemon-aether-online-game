@@ -92,6 +92,10 @@
             "Akatsuki_Trousers": {
               "path": "res://assets/battles/trainers/player/male/akatsuki/Trousers.png",
               "scale": 1.0
+            },
+            "SS4_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/super_saiyan_4/Trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -169,6 +173,10 @@
             },
             "Akatsuki_Shoes": {
               "path": "res://assets/battles/trainers/player/male/akatsuki/Shoes.png",
+              "scale": 1.0
+            },
+            "SS4_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/super_saiyan_4/Shoes.png",
               "scale": 1.0
             }
           }
@@ -248,6 +256,11 @@
             "Akatsuki_Shirt": {
               "path": "res://assets/battles/trainers/player/male/akatsuki/Shirt.png",
               "scale": 1.0
+            },
+            "SS4_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/super_saiyan_4/Shirt.png",
+              "scale": 1.0,
+              "skin_tint": true
             }
           }
         },
@@ -294,6 +307,10 @@
               "path": "res://assets/battles/trainers/player/male/hairstyle_batch_1/aether_male_hair_03.png",
               "scale": 1.0,
               "tint": "hair_color"
+            },
+            "SS4_Hair": {
+              "path": "res://assets/battles/trainers/player/male/super_saiyan_4/Hair.png",
+              "scale": 1.0
             }
           }
         },
@@ -368,6 +385,10 @@
             "EmeraldLuchador_Wings": {
               "path": "res://assets/battles/trainers/player/male/emerald_luchador/BackRear.png",
               "scale": 1.0
+            },
+            "SS4_Tail": {
+              "path": "res://assets/battles/trainers/player/male/super_saiyan_4/BackRear.png",
+              "scale": 1.0
             }
           }
         },
@@ -383,6 +404,10 @@
             },
             "EmeraldLuchador_Wings": {
               "path": "res://assets/battles/trainers/player/male/emerald_luchador/BackFront.png",
+              "scale": 1.0
+            },
+            "SS4_Tail": {
+              "path": "res://assets/battles/trainers/player/male/super_saiyan_4/BackFront.png",
               "scale": 1.0
             }
           }
@@ -453,6 +478,10 @@
             },
             "Akatsuki_Trousers": {
               "path": "res://assets/battles/trainers/player/female/akatsuki/Trousers.png",
+              "scale": 1.0
+            },
+            "SS4_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/super_saiyan_4/Trousers.png",
               "scale": 1.0
             }
           }
@@ -532,6 +561,10 @@
             "Akatsuki_Shoes": {
               "path": "res://assets/battles/trainers/player/female/akatsuki/Shoes.png",
               "scale": 1.0
+            },
+            "SS4_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/super_saiyan_4/Shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -605,6 +638,10 @@
             "Akatsuki_Shirt": {
               "path": "res://assets/battles/trainers/player/female/akatsuki/Shirt.png",
               "scale": 1.0
+            },
+            "SS4_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/super_saiyan_4/Shirt.png",
+              "scale": 1.0
             }
           }
         },
@@ -647,6 +684,10 @@
             },
             "TeamRocketFemale_Hair": {
               "path": "res://assets/battles/trainers/player/female/team_rocket_outfit/hair.png",
+              "scale": 1.0
+            },
+            "SS4_Hair": {
+              "path": "res://assets/battles/trainers/player/female/super_saiyan_4/Hair.png",
               "scale": 1.0
             }
           }
@@ -717,6 +758,10 @@
             "EmeraldLuchador_Wings": {
               "path": "res://assets/battles/trainers/player/female/emerald_luchador/BackRear.png",
               "scale": 1.0
+            },
+            "SS4_Tail": {
+              "path": "res://assets/battles/trainers/player/female/super_saiyan_4/BackRear.png",
+              "scale": 1.0
             }
           }
         },
@@ -732,6 +777,10 @@
             },
             "EmeraldLuchador_Wings": {
               "path": "res://assets/battles/trainers/player/female/emerald_luchador/BackFront.png",
+              "scale": 1.0
+            },
+            "SS4_Tail": {
+              "path": "res://assets/battles/trainers/player/female/super_saiyan_4/BackFront.png",
               "scale": 1.0
             }
           }

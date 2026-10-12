@@ -1,0 +1,245 @@
+{
+  "source_revision": 4,
+  "files": [
+    {
+      "source": "male/trainer/Shirt.png",
+      "path": "assets/battles/trainers/player/male/super_saiyan_4/Shirt.png",
+      "sha256": "cfd481cc12f86457c869575f2c456109c4e56ce7bfbdd96e58a8ab07782416b9"
+    },
+    {
+      "source": "male/overworld/Walking/Shirt.png",
+      "path": "assets/player/male/top/SS4_Shirt.png",
+      "sha256": "cc6fc09084d8c01ac3ce5264abed3a68c66c9131f8d13a74fd3646ea65886d83"
+    },
+    {
+      "source": "male/overworld/Fishing/Shirt.png",
+      "path": "assets/player/male/top/fish/SS4_Shirt_fish.png",
+      "sha256": "90a44ab2ad0467914fee8f7b5298f26c03a4bd3ba2a9eebcf5685444d0536e44"
+    },
+    {
+      "source": "male/overworld/Riding/Shirt.png",
+      "path": "assets/player/male/top/ride/SS4_Shirt_ride.png",
+      "sha256": "10faf054e25cbc4c403d0abb29b029e6f7728100028cc51b91cfa50a55ac931b"
+    },
+    {
+      "source": "male/trainer/Trousers.png",
+      "path": "assets/battles/trainers/player/male/super_saiyan_4/Trousers.png",
+      "sha256": "4d98e1d18fee238f966615cfcb0762c49dfb630bf4dcee66576fdfa068ec6aaa"
+    },
+    {
+      "source": "male/overworld/Walking/Trousers.png",
+      "path": "assets/player/male/bottom/SS4_Trousers.png",
+      "sha256": "1b606dc10f56fea08bbbdc6ed4da11feb200d84db467fd7d591fd39185bdeff6"
+    },
+    {
+      "source": "male/overworld/Fishing/Trousers.png",
+      "path": "assets/player/male/bottom/fish/SS4_Trousers_fish.png",
+      "sha256": "96c9e01463465f74f172f0dd536e9fa24e013edefd97cf726c33502f9365b846"
+    },
+    {
+      "source": "male/overworld/Riding/Trousers.png",
+      "path": "assets/player/male/bottom/ride/SS4_Trousers_ride.png",
+      "sha256": "d67525385ae4b333976964dc54883f3d2d0f81f7e52c33f488306bc6bab8aa16"
+    },
+    {
+      "source": "male/trainer/Shoes.png",
+      "path": "assets/battles/trainers/player/male/super_saiyan_4/Shoes.png",
+      "sha256": "570a96c0147366fb0557ff3302f6daab013a27ceda6bf96b6098ae6b6acbc8bf"
+    },
+    {
+      "source": "male/overworld/Walking/Shoes.png",
+      "path": "assets/player/male/shoes/SS4_Shoes.png",
+      "sha256": "9dfca9a0d2c2e2d6b6316680e783106b2cd7907fbd363de9b15094f3aa3c39ee"
+    },
+    {
+      "source": "male/overworld/Fishing/Shoes.png",
+      "path": "assets/player/male/shoes/fish/SS4_Shoes_fish.png",
+      "sha256": "3fc199e57fea989ff9ac1edc597fb1c18bd215ecc6bd981f1c4c70bc8abd44fe"
+    },
+    {
+      "source": "male/overworld/Riding/Shoes.png",
+      "path": "assets/player/male/shoes/ride/SS4_Shoes_ride.png",
+      "sha256": "97e60af6b3a2fc83bd661925749a1f6f8a9c4986d9f8f8ffd7674d13089b8694"
+    },
+    {
+      "source": "male/trainer/Hair.png",
+      "path": "assets/battles/trainers/player/male/super_saiyan_4/Hair.png",
+      "sha256": "8115b53c7c639f9fa31667ce73a86ef22d6fd8857513b1db92a03b678bb1aa2c"
+    },
+    {
+      "source": "male/overworld/Walking/Hair.png",
+      "path": "assets/player/male/hair/SS4_Hair.png",
+      "sha256": "c9ebea715d7481a9747bb453278ed11d82a95016049e471acccf0496e9e23722"
+    },
+    {
+      "source": "male/overworld/Fishing/Hair.png",
+      "path": "assets/player/male/hair/fish/SS4_Hair_fish.png",
+      "sha256": "12c80339a9d8dedba631e3719eb9c7ac2d0bf1021fa944a44ec3f551e71ab780"
+    },
+    {
+      "source": "male/overworld/Riding/Hair.png",
+      "path": "assets/player/male/hair/ride/SS4_Hair_ride.png",
+      "sha256": "de81e7c767b30aff990b22fe622fe3cfa42ef33bd629fb5625be7569c516d97b"
+    },
+    {
+      "source": "male/trainer/BackRear.png",
+      "path": "assets/battles/trainers/player/male/super_saiyan_4/BackRear.png",
+      "sha256": "2951653d5e788fad874829baec266236223d3030ffd6ca5904f2a0658bd311e7"
+    },
+    {
+      "source": "male/overworld/Walking/BackRear.png",
+      "path": "assets/player/male/cape/SS4_Tail.png",
+      "sha256": "35771ddafbd27a1d31f8337c32e448243551ef14fcf6734f0da9a7814195fbdb"
+    },
+    {
+      "source": "male/overworld/Fishing/BackRear.png",
+      "path": "assets/player/male/cape/fish/SS4_Tail_fish.png",
+      "sha256": "6880f2da21a4dcd97a5ae1db716a80fca786a82da8376aea01cd40cdb2b8cdaa"
+    },
+    {
+      "source": "male/overworld/Riding/BackRear.png",
+      "path": "assets/player/male/cape/ride/SS4_Tail_ride.png",
+      "sha256": "27a97e6cec8cc7d650a6dbf1888f3d294a11eccbe5f4829f3c95bb1fcab47e44"
+    },
+    {
+      "source": "male/trainer/BackFront.png",
+      "path": "assets/battles/trainers/player/male/super_saiyan_4/BackFront.png",
+      "sha256": "3b2e6eac48076f216003be0d52e818fa4715a39f67284b6efda8ae35e6c80c3e"
+    },
+    {
+      "source": "male/overworld/Walking/BackFront.png",
+      "path": "assets/player/male/cape_overlay/SS4_Tail.png",
+      "sha256": "6b434018ced417f61bd471bd6265f1568132c355a259ec66d0235dc9f26ad9b6"
+    },
+    {
+      "source": "male/overworld/Fishing/BackFront.png",
+      "path": "assets/player/male/cape_overlay/fish/SS4_Tail_fish.png",
+      "sha256": "80e5a262545ad5534628f7f22665f73516d602c5e40d4adf955089e3f41d59a5"
+    },
+    {
+      "source": "male/overworld/Riding/BackFront.png",
+      "path": "assets/player/male/cape_overlay/ride/SS4_Tail_ride.png",
+      "sha256": "e33fea059cdef378b5e8146fc5c7a602bf21251df012adbbe9bfa7c0569da086"
+    },
+    {
+      "source": "female/trainer/Shirt.png",
+      "path": "assets/battles/trainers/player/female/super_saiyan_4/Shirt.png",
+      "sha256": "7e553f37a81b7bfd88e16d48878998923f8816ebe0f1a5b59a81930970b25dc6"
+    },
+    {
+      "source": "female/overworld/Walking/Shirt.png",
+      "path": "assets/player/female/top/SS4_Shirt.png",
+      "sha256": "945446b5e69b167d25d1333911abb30cc58ad0940f951700fc7eb58d5b719f24"
+    },
+    {
+      "source": "female/overworld/Fishing/Shirt.png",
+      "path": "assets/player/female/top/fish/SS4_Shirt_fish.png",
+      "sha256": "fa74a343cf6a4f3031215d8ce82e83b4feba3dd4c000a3037d2bccd1b59f0348"
+    },
+    {
+      "source": "female/overworld/Riding/Shirt.png",
+      "path": "assets/player/female/top/ride/SS4_Shirt_ride.png",
+      "sha256": "ffa62ddee1ffe319815a64582a7aca87cf195f59c1578f8170fda6129df62bda"
+    },
+    {
+      "source": "female/trainer/Trousers.png",
+      "path": "assets/battles/trainers/player/female/super_saiyan_4/Trousers.png",
+      "sha256": "507cfb1279cb24a64cd5deacce1ba110cf18c46a1054a6a0d31de65d4becd22a"
+    },
+    {
+      "source": "female/overworld/Walking/Trousers.png",
+      "path": "assets/player/female/bottom/SS4_Trousers.png",
+      "sha256": "8bfe1f0f770e308ead85aaaa765e050f35b3a0a1a33c5e5c190e6cfcb1fa71ab"
+    },
+    {
+      "source": "female/overworld/Fishing/Trousers.png",
+      "path": "assets/player/female/bottom/fish/SS4_Trousers_fish.png",
+      "sha256": "028418194564e8d1a28e542df8d20323bcd879f036a136c55cd66e0b8c03059e"
+    },
+    {
+      "source": "female/overworld/Riding/Trousers.png",
+      "path": "assets/player/female/bottom/ride/SS4_Trousers_ride.png",
+      "sha256": "31c665f7c0f57d8a50dda697d48dc1bd95e9367864646039bc097f562d512d7a"
+    },
+    {
+      "source": "female/trainer/Shoes.png",
+      "path": "assets/battles/trainers/player/female/super_saiyan_4/Shoes.png",
+      "sha256": "0ac08dc1ac9a98ee7a0bca6fc0ffdf489eb0fed3ed706cc53f67048f04acf6cc"
+    },
+    {
+      "source": "female/overworld/Walking/Shoes.png",
+      "path": "assets/player/female/shoes/SS4_Shoes.png",
+      "sha256": "f616c03e62f51b47edafb0aca92233deed9c498d992b1a659fa2be55b6688b9e"
+    },
+    {
+      "source": "female/overworld/Fishing/Shoes.png",
+      "path": "assets/player/female/shoes/fish/SS4_Shoes_fish.png",
+      "sha256": "64d518e983ede92b12b9d70ff4faee0cf99ae1bf377947a4a65f60015ffd7d4d"
+    },
+    {
+      "source": "female/overworld/Riding/Shoes.png",
+      "path": "assets/player/female/shoes/ride/SS4_Shoes_ride.png",
+      "sha256": "9337f8a2a82b5db8370895aebec595e0abd9cf054f448330f77e68fba0f8b34b"
+    },
+    {
+      "source": "female/trainer/Hair.png",
+      "path": "assets/battles/trainers/player/female/super_saiyan_4/Hair.png",
+      "sha256": "378fbfbb8a8a3e4c0f229fb41dd5f92c66d95a886058770d0794d76659015226"
+    },
+    {
+      "source": "female/overworld/Walking/Hair.png",
+      "path": "assets/player/female/hair/SS4_Hair.png",
+      "sha256": "c645a8228dc36c9d4d8325062f3dc437751fdb4abfcd4f69768f8b1ba30155b7"
+    },
+    {
+      "source": "female/overworld/Fishing/Hair.png",
+      "path": "assets/player/female/hair/fish/SS4_Hair_fish.png",
+      "sha256": "3a2b89b10a292300219953f44405fa9fbe08cdc393d52840eb94e9080bb0810e"
+    },
+    {
+      "source": "female/overworld/Riding/Hair.png",
+      "path": "assets/player/female/hair/ride/SS4_Hair_ride.png",
+      "sha256": "1d29815737a57626f5e8fb75eff1fe49075522f5545b895b36e19d8957a3fdae"
+    },
+    {
+      "source": "female/trainer/BackRear.png",
+      "path": "assets/battles/trainers/player/female/super_saiyan_4/BackRear.png",
+      "sha256": "6aba8ceb4adee8276538868eeb546f8f0bf0b96d8ef2703a03eb5e10f2c20d75"
+    },
+    {
+      "source": "female/overworld/Walking/BackRear.png",
+      "path": "assets/player/female/cape/SS4_Tail.png",
+      "sha256": "f0a0cfc9b61e47a19d906c3d4553f91986786008ff39424a7acfd1eb57ef2fd6"
+    },
+    {
+      "source": "female/overworld/Fishing/BackRear.png",
+      "path": "assets/player/female/cape/fish/SS4_Tail_fish.png",
+      "sha256": "6e0f4c63ffc4b3f376d7cef8e6ff5cdc61f917f8be614fb0e4943bb8fcd5c28c"
+    },
+    {
+      "source": "female/overworld/Riding/BackRear.png",
+      "path": "assets/player/female/cape/ride/SS4_Tail_ride.png",
+      "sha256": "44467fd1d28909a2f258c3c5464d3ce5cc2cc89b6336ff040c8810a16f2baea7"
+    },
+    {
+      "source": "female/trainer/BackFront.png",
+      "path": "assets/battles/trainers/player/female/super_saiyan_4/BackFront.png",
+      "sha256": "3b2e6eac48076f216003be0d52e818fa4715a39f67284b6efda8ae35e6c80c3e"
+    },
+    {
+      "source": "female/overworld/Walking/BackFront.png",
+      "path": "assets/player/female/cape_overlay/SS4_Tail.png",
+      "sha256": "5c5bb06f83b88c9f3bb66875f84b090c29febc7a3e2a09e2ff689ec814e3cd5e"
+    },
+    {
+      "source": "female/overworld/Fishing/BackFront.png",
+      "path": "assets/player/female/cape_overlay/fish/SS4_Tail_fish.png",
+      "sha256": "ad331b6210ad14a19982983a2400a3a8fd58fb40582ceb5794ab9be8dcc438f2"
+    },
+    {
+      "source": "female/overworld/Riding/BackFront.png",
+      "path": "assets/player/female/cape_overlay/ride/SS4_Tail_ride.png",
+      "sha256": "8584684074f2d35f989fa3cf03f2a5afe63d1992ee37a38e9d32475266ac907a"
+    }
+  ]
+}

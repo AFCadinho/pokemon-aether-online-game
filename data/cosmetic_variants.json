@@ -797,6 +797,140 @@
         }
       ]
     },
+    "super-saiyan-4-hair": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "hair",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "SS4_Hair"
+        }
+      ]
+    },
+    "super-saiyan-4-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "SS4_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "SS4_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "SS4_Shoes"
+        },
+        {
+          "category": "hair",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "SS4_Hair"
+        },
+        {
+          "category": "cape",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "SS4_Tail"
+        }
+      ]
+    },
+    "super-saiyan-4-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "SS4_Shirt"
+        }
+      ]
+    },
+    "super-saiyan-4-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "SS4_Shoes"
+        }
+      ]
+    },
+    "super-saiyan-4-tail": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "cape",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "SS4_Tail"
+        }
+      ]
+    },
+    "super-saiyan-4-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "SS4_Trousers"
+        }
+      ]
+    },
     "team-rocket-cap": {
       "bundle": false,
       "genders": [
@@ -1212,6 +1346,13 @@
           "male": "RotomEngineer_Trousers"
         }
       },
+      "SS4_Trousers": {
+        "item_id": "super-saiyan-4-trousers",
+        "render_variants": {
+          "female": "SS4_Trousers",
+          "male": "SS4_Trousers"
+        }
+      },
       "TeamRocket_Trousers": {
         "item_id": "team-rocket-trousers",
         "render_variants": {
@@ -1233,6 +1374,13 @@
         "render_variants": {
           "female": "EmeraldLuchador_Wings",
           "male": "EmeraldLuchador_Wings"
+        }
+      },
+      "SS4_Tail": {
+        "item_id": "super-saiyan-4-tail",
+        "render_variants": {
+          "female": "SS4_Tail",
+          "male": "SS4_Tail"
         }
       },
       "Thor_Hammer": {
@@ -1263,6 +1411,15 @@
         "render_variants": {
           "female": "RotomEngineer_Goggles",
           "male": "RotomEngineer_Goggles"
+        }
+      }
+    },
+    "hair": {
+      "SS4_Hair": {
+        "item_id": "super-saiyan-4-hair",
+        "render_variants": {
+          "female": "SS4_Hair",
+          "male": "SS4_Hair"
         }
       }
     },
@@ -1339,6 +1496,13 @@
           "male": "RotomEngineer_Shoes"
         }
       },
+      "SS4_Shoes": {
+        "item_id": "super-saiyan-4-shoes",
+        "render_variants": {
+          "female": "SS4_Shoes",
+          "male": "SS4_Shoes"
+        }
+      },
       "TeamRocket_Shoes": {
         "item_id": "team-rocket-shoes",
         "render_variants": {
@@ -1409,6 +1573,13 @@
         "render_variants": {
           "female": "RotomEngineer_Shirt",
           "male": "RotomEngineer_Shirt"
+        }
+      },
+      "SS4_Shirt": {
+        "item_id": "super-saiyan-4-shirt",
+        "render_variants": {
+          "female": "SS4_Shirt",
+          "male": "SS4_Shirt"
         }
       },
       "TeamRocket_Shirt": {
