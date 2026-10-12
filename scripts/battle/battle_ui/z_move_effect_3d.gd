@@ -4,7 +4,9 @@ extends "res://scripts/battle/battle_ui/family_move_effect_3d.gd"
 const Forms = preload("res://scripts/battle/battle_ui/z_move_forms_3d.gd")
 const SkystrikePath = preload("res://scripts/battle/battle_ui/skystrike_path_3d.gd")
 const SkystrikeExplosion = preload("res://scripts/battle/battle_ui/skystrike_explosion_3d.gd")
+const ZClimax = preload("res://scripts/battle/battle_ui/z_climax_3d.gd")
 var skystrike_explosion: RefCounted
+var cinematic_climax: RefCounted
 var style := ""
 var dark: StandardMaterial3D
 var accent: StandardMaterial3D
@@ -30,6 +32,7 @@ func _prepare() -> void:
 	ring.rings = 48
 	style = str(recipe.z_choreography.style)
 	if style == "sky_dive": skystrike_explosion = SkystrikeExplosion.new()
+	elif ZClimax.supports(key): cinematic_climax = ZClimax.new(key)
 	var kind := 1 if style in ["water_vortex", "ocean_orb"] else 2 if style in ["boulder", "stone_rain", "fissure"] else 3 if style == "drill" else 4 if style == "ice_prison" else 0
 	if style == "fire_orb": kind = 5
 	surface = Forms.material(Color(str(recipe.color)), kind, style in ["water_vortex", "acid_column"])
@@ -89,6 +92,12 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 	wake_surface.set_shader_parameter("seconds",elapsed)
 	wake_surface.set_shader_parameter("opacity",envelope)
 	impact_drawn = false
+	# Delivery gives way to one authored finale, rather than piling a blast on
+	# top of lingering cages, boulders or projectiles at the same position.
+	if after >= 0 and cinematic_climax != null and (hit or style == "evolution"):
+		cinematic_climax.draw(self,after,fixed_actor_ground if style == "evolution" else fixed_ground)
+		impact_drawn = hit and bool(recipe.damaging)
+		return true
 	# Small inward streaks establish energy; each move supplies its own main form.
 	if elapsed<launch:
 		for i in 6:
@@ -114,7 +123,6 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 	# One final gameplay beat; the preceding barrage/spiral is only choreography.
 	if hit and bool(recipe.damaging) and after>=0:
 		impact_drawn = true
-		if style != "sky_dive": _climax(aim,fixed_ground,after,facing,side)
 	return true
 
 func _bolt(a: Vector3,b: Vector3,width: float,seed_value: float,mat: Material) -> void:
@@ -387,14 +395,6 @@ func _body_scene(from: Vector3,center: Vector3,charge: float,flight: float,after
 		_line(point+offset-axis.y*(.5+flight),point+offset,.035*alpha,edge)
 	if style=="body_slam" and after>=0:
 		for i in 2:_piece(ring,edge,fixed_ground,Vector3.ONE*(.7+after*(2+i*.5))*alpha)
-
-func _climax(target: Vector3, ground: Vector3, after: float, _facing: Basis, _side: Vector3) -> void:
-	var fade := 1.0 - clampf(after,0,1)
-	# A single solid expansion and ground pressure wave replace the sprite burst.
-	var flash := 1.0 - smoothstep(0.0,0.32,after)
-	if flash > 0.001: _piece(sphere, pale, target, Vector3.ONE * (0.3 + after * 3.0) * flash)
-	for i in 2:
-		_piece(ring, edge, ground + Vector3.UP * 0.04 * i, Vector3.ONE * (0.45 + after * (1.4 + i * 0.3)) * fade)
 
 func _skystrike_scene(points: Dictionary, charge: float, after: float, alpha: float) -> void:
 	var center: Vector3 = points.actor_center

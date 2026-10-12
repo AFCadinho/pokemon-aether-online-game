@@ -45,7 +45,14 @@ func apply(stage: Node) -> void:
 			var after: float = (seconds-effect.impact)/maxf(effect.duration-effect.impact,0.01)
 			var recoil := ZCinema.SkystrikeExplosion.recoil(after)
 			pose.origin += pose.basis.x*recoil.x+pose.basis.y*recoil.y
-		var recovery := smoothstep(maxf(0.86, effect.impact / effect.duration + 0.04), 1.0, p)
+		elif ZCinema.Climax.supports(effect.key) and effect.hit and seconds >= effect.impact:
+			var after: float = (seconds-effect.impact)/maxf(effect.duration-effect.impact,0.01)
+			var recoil := ZCinema.Climax.recoil(effect.key,after)
+			pose.origin += pose.basis.x*recoil.x+pose.basis.y*recoil.y
+		var recovery_start: float = maxf(0.86,effect.impact/effect.duration+0.04)
+		if ZCinema.Climax.supports(effect.key):
+			recovery_start = maxf(0.86,lerpf(effect.impact/effect.duration,1.0,0.72))
+		var recovery := smoothstep(recovery_start,1.0,p)
 		stage.camera.transform = pose.interpolate_with(overview, recovery)
 		return
 	if effect.key != "dracometeor":
