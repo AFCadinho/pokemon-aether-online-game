@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep fainted Pokémon in their 3D resting pose until the replacement switch recalls them and summons the next Pokémon, without a 2D faint fallback. Apply the resting pose immediately when battle animations are disabled.
+
 - Brighten the matte 3D stadium floor with a muted purple-grey base and a subtle even glow, and soften the lower battle UI shading while keeping white floor reflections disabled.
 
 - Restore stat boosts, drops and Pokémon effect indicators after 3D lead summons and switches, including AI Sparring and PvP battles started from Team Preview.
