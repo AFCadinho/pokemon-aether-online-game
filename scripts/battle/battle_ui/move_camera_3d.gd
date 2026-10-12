@@ -1,5 +1,6 @@
 extends RefCounted
 ## Shots follow the VFX's native clock, including pause and recovery.
+const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const PROFILES := {
 	"dracometeor":"meteor", "moonblast":"moon", "focusblast":"orb", "shadowball":"orb",
 	"hyperbeam":"beam", "solarbeam":"beam", "flashcannon":"beam", "electroshot":"beam",
@@ -10,7 +11,7 @@ var actor := ""
 var target := ""
 
 func supports(key: String) -> bool:
-	return PROFILES.has(key)
+	return PROFILES.has(key) or not Recipes.get_recipe(key).get("camera", "").is_empty()
 
 func begin(owner: Node, source: String, destination: String) -> void:
 	effect = owner
@@ -77,7 +78,7 @@ func apply(stage: Node) -> void:
 	camera.transform = camera.transform.interpolate_with(overview, smoothstep(0.88, 1.0, p))
 
 func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
-	var profile: String = PROFILES.get(effect.key, "")
+	var profile: String = PROFILES.get(effect.key, Recipes.get_recipe(effect.key).get("camera", ""))
 	if profile.is_empty(): return
 	var a: Dictionary = stage._move_bounds(actor)
 	var b: Dictionary = stage._move_bounds(target)
@@ -96,7 +97,10 @@ func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
 	var aim: Vector3 = anchors.target
 	# Recipe projectiles capture their trajectory; misses must keep framing
 	# the original aim rather than following the target's dodge.
-	if profile in ["beam", "kick"] and effect.get_script() == stage.StagedMoveEffect and effect.launched:
+	if effect.get_script() == stage.ExtendedMoveEffect and effect.launched:
+		source = effect.origin
+		aim = effect.aim
+	elif profile in ["beam", "kick"] and effect.get_script() == stage.StagedMoveEffect and effect.launched:
 		source = effect.origin
 		aim = effect.aim
 	elif profile in ["moon", "orb"] and effect.launched:

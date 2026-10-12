@@ -28,7 +28,7 @@ var orb_light: OmniLight3D
 var profile_lights: Array[OmniLight3D] = []
 
 func supports(key: String) -> bool:
-	return key == "dracometeor" or ORBS.has(key) or Profiles.PROFILES.has(key)
+	return key == "dracometeor" or ORBS.has(key) or Profiles.supports(key)
 
 func begin(owner: Node) -> void:
 	suspend()
@@ -74,7 +74,7 @@ func apply(stage: Node) -> void:
 		var charge := smoothstep(effect.effect_start, maxf(effect.launch, effect.effect_start + 0.01), seconds)
 		weight = charge * (1.0 - smoothstep(effect.impact, effect.duration, seconds))
 	var lighting_sample := {}
-	if Profiles.PROFILES.has(effect.key):
+	if Profiles.supports(effect.key):
 		lighting_sample = Profiles.sample(effect, seconds)
 		weight = float(lighting_sample.weight)
 	if weight <= 0.00001:

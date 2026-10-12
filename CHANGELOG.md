@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add native 3D presentations for the remaining 707 unique gameplay moves (901 total), with explicit per-move profiles, solid attack forms, bounded animation sounds, selected cinematic cameras and temporary lighting. Cover physical/special Z-move ID aliases, preserve the existing 194 presentations, and extend the offline review picker.
+
 - Show animated 3D teams during Team Preview, and keep battles in 3D with Stealth Rock, Spikes, Toxic Spikes, Sticky Web, Reflect, Light Screen and Aurora Veil on the field.
 
 - Add the Pewter Museum of Science interior using the authored Tiled visual, with blocked exhibits and a connected entrance and return to Pewter City.

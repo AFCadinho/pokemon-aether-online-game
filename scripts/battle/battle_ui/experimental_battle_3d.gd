@@ -21,6 +21,7 @@ const BubbleMoveEffect = preload("res://scripts/battle/battle_ui/bubble_move_eff
 const IceBeamMoveEffect = preload("res://scripts/battle/battle_ui/ice_beam_move_effect_3d.gd")
 const MoveRecipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const ZMoveEffect = preload("res://scripts/battle/battle_ui/z_move_effect_3d.gd")
+const ExtendedMoveEffect = preload("res://scripts/battle/battle_ui/extended_move_effect_3d.gd")
 const StagedMoveEffect = preload("res://scripts/battle/battle_ui/staged_move_effect_3d.gd")
 const BattlefieldMoveEffect = preload("res://scripts/battle/battle_ui/battlefield_move_effect_3d.gd")
 const DracoMeteorEffect = preload("res://scripts/battle/battle_ui/draco_meteor_effect_3d.gd")
@@ -1217,6 +1218,8 @@ func _start_move_contact(actor: String, target: String, timing: Dictionary, effe
 	if source != actors[index] and source.get("body") is Node3D:
 		motion.hud_sub_transform = source.body.global_transform
 	var z_recipe := MoveRecipes.get_recipe(str(timing.get("move_key", "")))
+	if z_recipe.has("contact_arc"):
+		motion["contact_arc"] = float(z_recipe.contact_arc)
 	if z_recipe.has("close_choreography"):
 		motion["combo"] = z_recipe.close_choreography
 	if z_recipe.has("z_choreography"):
@@ -1274,6 +1277,9 @@ func _update_move_contacts() -> void:
 		var returning := smoothstep(return_start, return_end, seconds)
 		var weight := outward * (1.0 - returning)
 		var offset: Vector3 = motion.displacement * weight
+		if motion.has("contact_arc"):
+			var arc_phase := clampf((seconds-approach_start)/maxf(contact_time-approach_start,.01),0,1)
+			offset.y += sin(arc_phase*PI)*float(motion.contact_arc)
 		if z_style in ["sky_dive","moonsault","body_slam","electric_dive"]:
 			var leap := clampf((seconds-approach_start)/maxf(contact_time-approach_start,.01),0,1)
 			offset.y += sin(leap*PI) * (2.0 if z_style=="sky_dive" else 1.3)
@@ -1395,6 +1401,8 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 		effect = BattlefieldMoveEffect.new()
 	elif recipe.has("z_choreography"):
 		effect = ZMoveEffect.new()
+	elif recipe.get("renderer", "") == "extended":
+		effect = ExtendedMoveEffect.new()
 	elif MoveRecipes.supports(move):
 		effect = StagedMoveEffect.new()
 	elif MoveEffect.move_key(move)=="dracometeor":

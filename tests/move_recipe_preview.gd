@@ -3,8 +3,8 @@ const RecipeBook = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 func _start() -> void:
 	left_species = "Dragonite"
 	await super._start()
-	root.title = "PokeAether — alle 194 3D-moves"
-	status.text = "24 goedgekeurde moves + 170 nieuwe basisversies. Kies een move en test beide kanten, ontwijken en pauze."
+	root.title = "PokeAether — alle 901 3D-moves"
+	status.text = "194 bestaande moves + 707 nieuwe presentaties. Kies een move en test beide kanten, ontwijken en pauze."
 	move_picker.select(FIRST_MOVES.size())
 	print("ALL_MOVES_PREVIEW_READY moves=",move_picker.item_count)
 	if "--smoke-recipes" in OS.get_cmdline_user_args(): await _check_recipes()
