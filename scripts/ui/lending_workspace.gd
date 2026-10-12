@@ -5,6 +5,7 @@ class_name LendingWorkspaceNode
 signal return_requests_changed(requests: Array)
 
 const LoanInvitationDialogScript := preload("res://scripts/ui/loan_invitation_dialog.gd")
+const Mounts := preload("res://scripts/services/mount_service.gd")
 const AetherConfirmationDialogScene := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 
 const WINDOW_SIZE := Vector2i(900, 640)
@@ -961,7 +962,7 @@ func _loan_asset_row(asset: Dictionary, is_borrower: bool, loan_status: String, 
 		if description != "":
 			panel.tooltip_text = description
 			icon.tooltip_text = description
-		if is_borrower and loan_status in ["active", "return_pending"] and asset_status in ["active", "return_pending"]:
+		if is_borrower and str(snapshot.get("category", "")) != "mounts" and loan_status in ["active", "return_pending"] and asset_status in ["active", "return_pending"]:
 			var action := Button.new()
 			action.text = _t("ui.lending.detach_item") if held_pokemon_id > 0 else _t("ui.lending.attach_item")
 			action.disabled = mutation_in_flight
@@ -1714,7 +1715,7 @@ func _item_candidates(value: Variant) -> Array[Dictionary]:
 			if (
 				item_id == ""
 				or int(entry.get("quantity", 0)) <= 0
-				or not bool(entry.get("isHoldable", false))
+				or not (bool(entry.get("isHoldable", false)) or (category == "mounts" and not Mounts.get_mount_id_for_unlock_item(item_id).is_empty()))
 				or not bool(entry.get("tradable", false))
 				or category == "berries"
 			):

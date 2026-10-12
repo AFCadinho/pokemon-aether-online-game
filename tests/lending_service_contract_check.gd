@@ -110,6 +110,18 @@ func _init() -> void:
 	_check(str(party[0].get("heldItemId", "")) == "light-ball", "held item remains an explicit selectable asset")
 	var items := workspace._item_candidates([{"itemId": "leftovers", "name": "Leftovers", "quantity": 2, "category": "held-items", "isHoldable": true, "tradable": true}, {"itemId": "oran-berry", "quantity": 3, "category": "berries", "isHoldable": true, "tradable": true}, {"itemId": "potion", "quantity": 1, "category": "medicine", "isHoldable": false, "tradable": true}, {"itemId": "secret-key", "quantity": 1, "category": "key-items", "isHoldable": false, "tradable": false}])
 	_check(items.size() == 1 and str(items[0].get("itemId", "")) == "leftovers", "key items excluded from client candidates")
+	var mount_items := workspace._item_candidates([
+		{"itemId": "arcanine-mount", "quantity": 1, "category": "mounts", "isHoldable": false, "tradable": true},
+		{"itemId": "primal-kyogre-mount", "quantity": 1, "category": "mounts", "isHoldable": false, "tradable": true},
+		{"itemId": "arcanine-mount-bound", "quantity": 1, "category": "mounts", "isHoldable": false, "tradable": false},
+		{"itemId": "cyclizar-mount", "quantity": 1, "category": "mounts", "isHoldable": false, "tradable": false},
+		{"itemId": "arcanine-mount-box", "quantity": 1, "category": "mounts", "isHoldable": false, "tradable": true},
+	])
+	_check(mount_items.size() == 2 and mount_items[0].itemId == "arcanine-mount" and mount_items[1].itemId == "primal-kyogre-mount", "direct offers accept tradeable land and Surf mounts and exclude bound mounts and boxes")
+	var mount_row := workspace._loan_asset_row({"assetId": "mount-1", "assetType": "item", "status": "active", "itemId": "arcanine-mount", "snapshot": {"name": "Arcanine", "category": "mounts"}}, true, "active", "mount-loan", 1, 1)
+	var mount_buttons := _button_texts(mount_row)
+	_check("ui.lending.attach_item" not in mount_buttons and "ui.lending.return_asset" in mount_buttons, "mount loans retain return controls without a Pokemon attach action")
+	mount_row.free()
 	_check(workspace_source.contains("_selected_item_copy_count") and workspace_source.contains("\"quantity\": int(selected_items.get"), "multiple item copies remain separate loan assets")
 	var box_candidates := workspace._box_candidates([{"boxIndex": 2, "slots": [{"slotIndex": 4, "pokemon": {"id": 9, "pokemon": {"species": "Abra", "level": 8}}}]}])
 	_check(box_candidates.size() == 1 and int(box_candidates[0].get("pokemonId", 0)) == 9 and str(box_candidates[0].get("sourceType", "")) == "box", "PC Box Pokemon are selectable loan candidates")
