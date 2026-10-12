@@ -173,8 +173,24 @@ func _process(_delta: float) -> void:
 		return
 	if source_world_id != 0 and source_world_id != stage.world.get_instance_id():
 		_drop()
-	for index in stage.actors.size():
-		var source: Node = stage.actors[index]
+	var slots: Array = []
+	if stage.has_method("material_response_slots"):
+		slots = stage.material_response_slots()
+	else:
+		var identities: Variant = stage.get("identities")
+		for index in stage.actors.size():
+			slots.append({"actor": stage.actors[index], "identity": identities[index] if identities is Array and index < identities.size() else ""})
+	while copies.size() > slots.size():
+		var retiring: Node = copies.pop_back()
+		if is_instance_valid(retiring): retiring.queue_free()
+		source_ids.pop_back()
+		pairs.pop_back()
+	while copies.size() < slots.size():
+		copies.append(null)
+		source_ids.append(0)
+		pairs.append([])
+	for index in slots.size():
+		var source: Node = slots[index].actor
 		var id := source.get_instance_id() if is_instance_valid(source) else 0
 		if id == source_ids[index]:
 			continue
@@ -187,7 +203,7 @@ func _process(_delta: float) -> void:
 			continue # Legacy prepared catalogs retain their standard materials.
 		if viewport == null:
 			_build()
-		copies[index] = stage.packed[stage.identities[index]].instantiate()
+		copies[index] = stage.packed[slots[index].identity].instantiate()
 		world.add_child(copies[index])
 		_pair(source, copies[index], pairs[index], _surface_order(source))
 	if viewport != null:

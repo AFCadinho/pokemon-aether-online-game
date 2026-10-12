@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show animated 3D teams during Team Preview, and keep battles in 3D with Stealth Rock, Spikes, Toxic Spikes, Sticky Web, Reflect, Light Screen and Aurora Veil on the field.
+
 - Add the Pewter Museum of Science interior using the authored Tiled visual, with blocked exhibits and a connected entrance and return to Pewter City.
 
 - Give Hyper Beam, Solar Beam, Flash Cannon, Pyro Ball, Flamethrower, Thunderbolt, Electro Shot, Ice Beam, Blizzard and Hurricane individual light colours and timing. Light follows beams, cannon outlets and the fireball arc; wide storms tint the arena. Preserve animation duration, weather, camera settings and cleanup.
