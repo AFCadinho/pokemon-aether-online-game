@@ -78,16 +78,21 @@ func run() -> void:
 		result["production_validator_error"] = inspection.error
 		if job.expect_production_codec:
 			assert(str(inspection.error).is_empty(), str(inspection.error))
+			var mount_error := Pair.mount_checked(job.pack, asset, inspection)
+			assert(mount_error.is_empty(), mount_error)
+			result["production_mount_error"] = mount_error
 		else:
 			assert(inspection.error == "Model-pair decoded size/codec mismatch.", "Unexpected validator outcome")
-		# Larger blocks have already passed the independent physical/hash checks
-		# but deliberately fail the current production admission rule above.
-		assert(ProjectSettings.load_resource_pack(job.pack, false))
+			# Larger blocks have passed independent physical/hash checks but
+			# deliberately fail the current production admission rule above.
+			assert(ProjectSettings.load_resource_pack(job.pack, false))
 	for appearance: Dictionary in asset.appearances:
 		var relative := "models/" + str(appearance.variant) + ".scn"
 		var path: String = str(asset.pair_manifest.resource_root).path_join(relative) if job.format == "pck" else str(job.scene_directory).path_join(relative)
 		assert(FileAccess.get_sha256(path) == appearance.runtime_sha256)
-		for cycle in 3:
+		var cycles := int(job.get("load_cycles", 3))
+		assert(cycles >= 1 and cycles <= 3)
+		for cycle in cycles:
 			var start := Time.get_ticks_usec()
 			var scene := ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene
 			assert(scene != null)
@@ -95,7 +100,10 @@ func run() -> void:
 			result.load_instantiate_ms.append((Time.get_ticks_usec() - start) / 1000.0)
 			root.add_child(actor)
 			if cycle == 0:
-				result.appearances.append({"variant": appearance.variant, "semantic_sha256": Audit.signature(scene), "motion": motion(actor)})
+				if job.get("load_only", false):
+					result.appearances.append({"variant": appearance.variant, "runtime_sha256": appearance.runtime_sha256, "loaded": true})
+				else:
+					result.appearances.append({"variant": appearance.variant, "semantic_sha256": Audit.signature(scene), "motion": motion(actor)})
 			retire(actor)
 			scene = null
 	result.errors = sink.errors.duplicate()
