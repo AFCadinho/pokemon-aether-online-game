@@ -73,10 +73,31 @@ func _run() -> void:
 		occupied.append(slot.actor.position)
 		_check(slot.player.is_playing() and slot.player.current_animation == "idle", "preview uses native idle clips")
 		_check(slot.actor.scale.x <= 1.65, "large bodies fit their preview slot")
+		if slot.side == 0:
+			_check(slot.nameplate == null, "local preview models do not receive enemy nameplates")
+		else:
+			_check(slot.nameplate.get_node("SpeciesName").text == SPECIES[slot.index], "enemy nameplates use the public species name without shiny model suffixes")
+			_check(slot.nameplate.is_visible_in_tree() and slot.nameplate.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+				"enemy nameplates remain readable without intercepting lead selection")
+	var plates := []
+	for slot in stage.preview_visual.slots:
+		if slot.side != 1: continue
+		for rect: Rect2 in plates:
+			_check(not rect.intersects(slot.nameplate.get_rect()), "projected enemy nameplates do not overlap")
+		plates.append(slot.nameplate.get_rect())
+	var nameplate_layer: Control = stage.preview_visual.nameplate_layer
 	var preview: Node = stage.preview_visual
 	stage.set_team_preview(_team(false), _team(true), layers)
 	await process_frame
 	_check(stage.preview_visual == preview, "repeated roster snapshots preserve animations")
+	# Same model identity can arrive with corrected casing/display spelling.
+	var renamed_team := _team(true)
+	renamed_team[0].displaySpecies = "DRAGONITE"
+	renamed_team[0].nickname = "Private nickname must not replace the species"
+	stage.set_team_preview(_team(false), renamed_team, layers)
+	_check(stage.preview_visual == preview and preview.slots[6].nameplate.get_node("SpeciesName").text == "DRAGONITE",
+		"same-model public name updates preserve actors and ignore nicknames")
+	stage.set_team_preview(_team(false), _team(true), layers)
 	stage.playback_speed = 0.0
 	await process_frame
 	_check(preview.slots.all(func(slot): return slot.player.speed_scale == 0.0), "replay pause freezes every preview actor")
@@ -86,18 +107,24 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_check(not stage.active and layers.all(func(layer): return layer.visible), "2D mode restores populated legacy preview")
+	_check(not is_instance_valid(nameplate_layer) or not nameplate_layer.visible, "leaving native 3D hides enemy nameplates")
 	settings.battle_presentation_mode = "3d"
 	stage.set_team_preview(_team(true), _team(false), layers)
 	await stage.await_prepared(true)
 	await process_frame
 	_check(stage.preview_visual.slots[0].identity.ends_with("@shiny"), "spectator side swap rebuilds mapped public rosters")
+	_check(stage.preview_visual.slots[6].side == 1 and stage.preview_visual.slots[6].nameplate.get_node("SpeciesName").text == SPECIES[0],
+		"spectator side changes place nameplates only on the mapped enemy team")
+	nameplate_layer = stage.preview_visual.nameplate_layer
 	stage.clear_team_preview()
 	_check(stage.preview_visual == null and layers.all(func(layer): return not layer.visible), "lead transition clears preview synchronously")
+	_check(not nameplate_layer.visible, "lead transition hides nameplates in the same frame")
 	stage.set_combatant(0, "Dragonite")
 	stage.set_combatant(1, "Pikachu", true)
 	await stage.await_prepared(true)
 	await process_frame
 	_check(stage.handles("p1") and stage.handles("p2"), "selected leads enter the normal presenter")
+	_check(not is_instance_valid(nameplate_layer), "lead transition releases the external nameplate layer")
 	_check(stage.packed.size() <= stage._needed_species().size(), "preview-only resources leave presenter demand")
 	var retained: Array = stage.actors.duplicate()
 	var presentation := Presentation.new()
@@ -151,7 +178,14 @@ func _run() -> void:
 
 func _check_battle_wiring() -> void:
 	var battle: Node = load("res://scenes/battle/battle.tscn").instantiate()
-	root.add_child(battle)
+	var host: Control
+	var capture_prefix := OS.get_environment("POKEAETHER_FIELD_PREVIEW_CAPTURE")
+	if not capture_prefix.is_empty() and DisplayServer.get_name() != "headless":
+		host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+		root.add_child(host)
+		host.mount(battle, null, WildEncounterTransition.STYLE_WILD, true)
+	else:
+		root.add_child(battle)
 	var own_team := _team(false)
 	var enemy_team := _team(true)
 	for team in [own_team, enemy_team]:
@@ -171,6 +205,10 @@ func _check_battle_wiring() -> void:
 	await process_frame
 	_check(is_instance_valid(presenter.preview_visual) and presenter.preview_visual.slots.size() == 12,
 		"real Battle controller routes its public rosters to native Team Preview")
+	if host != null:
+		await host.wait_until_revealed()
+		await RenderingServer.frame_post_draw
+		_check(root.get_texture().get_image().save_png(capture_prefix + "-nameplates.png") == OK, "capture enemy nameplates on the battle screen")
 	battle.team_preview_lead_selection_active = false
 	await battle._prepare_team_preview_lead_summon_transition()
 	battle._show_team_preview_layers()
@@ -178,7 +216,11 @@ func _check_battle_wiring() -> void:
 	battle._update_side_condition_ui([{"scope": "side", "effectType": "sideCondition", "side": "p2", "effect": "Spikes", "layers": 2}], 1)
 	_check(presenter.side_conditions[0].is_empty() and presenter.side_conditions[1].get("spikes") == 2,
 		"real field UI routes presentation effects to their mapped native side")
-	battle.queue_free()
+	if host != null:
+		host.release()
+		host.queue_free()
+	else:
+		battle.queue_free()
 	await process_frame
 	await process_frame
 
