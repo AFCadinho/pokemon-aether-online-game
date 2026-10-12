@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refine Dark Pulse, Surf, Blizzard, Earth Power and Overheat with continuous 3D energy fronts, breaking water, rolling snow, ground ruptures and billowing fire. Add individually coloured atmosphere and framing while preserving native speed, sound and hit/miss/block handling.
+
 - Separate permanent Guild Bank withdrawals from borrowing and confirm both item and Pokémon actions. Explain permanent ownership for withdrawals, the current Guild loan duration for borrowing, and early recall by authorized Guild Leaders or Captains.
 
 - Make Irelia overworld blades clearer at sprite scale and cover the exposed scalp around the right-facing ear for both genders.
