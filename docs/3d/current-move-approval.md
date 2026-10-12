@@ -4,6 +4,8 @@ Approved by the user on **2026-10-06**: all **194 currently implemented 3D moves
 including the red/blue Close Combat revision. The current animation round is complete.
 Further changes are individual refinements driven by real gameplay feedback.
 
+The subsequent [15-move elemental batch](elemental-move-batch.md) adds individually authored fire, water, poison, energy and storm effects; these refinements are pending player review.
+
 The subsequent [five elemental refinements](elemental-move-refinements.md) update Dark Pulse, Surf, Blizzard, Earth Power and Overheat; these new presentations are pending player review.
 
 The subsequent [cinematic Z finales](z-move-cinematic-climaxes.md) revise 34 Z-moves; those new finales are pending player review. Supersonic Skystrike is the approved reference for that pass.
@@ -33,7 +35,7 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | Baby-Doll Eyes | `babydolleyes` | Approved |
 | Bite | `bite` | Approved |
 | Black Hole Eclipse | `blackholeeclipse` | Original approved; new finale pending |
-| Bleakwind Storm | `bleakwindstorm` | Approved |
+| Bleakwind Storm | `bleakwindstorm` | Original approved; new refinement pending |
 | Blizzard | `blizzard` | Original approved; new refinement pending |
 | Bloom Doom | `bloomdoom` | Original approved; new finale pending |
 | Body Press | `bodypress` | Approved |
@@ -101,7 +103,7 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | Haze | `haze` | Approved |
 | Head Smash | `headsmash` | Approved |
 | Headlong Rush | `headlongrush` | Approved |
-| Heat Wave | `heatwave` | Approved |
+| Heat Wave | `heatwave` | Original approved; new refinement pending |
 | Hex | `hex` | Approved |
 | Hidden Power | `hiddenpower` | Approved |
 | High Jump Kick | `highjumpkick` | Approved |
@@ -141,10 +143,10 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | Pound | `pound` | Approved |
 | Powder Snow | `powdersnow` | Approved |
 | Protect | `protect` | Approved |
-| Psychic | `psychic` | Approved |
+| Psychic | `psychic` | Original approved; new refinement pending |
 | Psychic Noise | `psychicnoise` | Approved |
 | Psychic Terrain | `psychicterrain` | Approved |
-| Psyshock | `psyshock` | Approved |
+| Psyshock | `psyshock` | Original approved; new refinement pending |
 | Pulverizing Pancake | `pulverizingpancake` | Original approved; new finale pending |
 | Pursuit | `pursuit` | Approved |
 | Pyro Ball | `pyroball` | Approved |
