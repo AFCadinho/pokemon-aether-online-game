@@ -4,6 +4,10 @@ On 12 October 2026 the user authorized a 20-pair compression experiment after
 the v11 retirement. It ran in the existing slot-d after that slot became free.
 This is an offline study; it changes no production asset, catalog or R2 object.
 
+The follow-up [full 1,200-pair audit](v13-full-lossless-compression-audit.md)
+measured an additional 1,029,628,070-byte saving (11.85%) at 256 KiB / level 19.
+All native members remain byte-exact and all 2,400 appearances load on Linux.
+
 ## Measured result
 
 The selected v13 archives total **201,852,282 bytes**. The current complete v13
