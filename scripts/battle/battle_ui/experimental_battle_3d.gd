@@ -21,6 +21,7 @@ const BubbleMoveEffect = preload("res://scripts/battle/battle_ui/bubble_move_eff
 const IceBeamMoveEffect = preload("res://scripts/battle/battle_ui/ice_beam_move_effect_3d.gd")
 const MoveRecipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const ZMoveEffect = preload("res://scripts/battle/battle_ui/z_move_effect_3d.gd")
+const SkystrikePath = preload("res://scripts/battle/battle_ui/skystrike_path_3d.gd")
 const ExtendedMoveEffect = preload("res://scripts/battle/battle_ui/extended_move_effect_3d.gd")
 const StagedMoveEffect = preload("res://scripts/battle/battle_ui/staged_move_effect_3d.gd")
 const BattlefieldMoveEffect = preload("res://scripts/battle/battle_ui/battlefield_move_effect_3d.gd")
@@ -1314,9 +1315,12 @@ func _update_move_contacts() -> void:
 		if motion.has("contact_arc"):
 			var arc_phase := clampf((seconds-approach_start)/maxf(contact_time-approach_start,.01),0,1)
 			offset.y += sin(arc_phase*PI)*float(motion.contact_arc)
-		if z_style in ["sky_dive","moonsault","body_slam","electric_dive"]:
+		if z_style == "sky_dive":
 			var leap := clampf((seconds-approach_start)/maxf(contact_time-approach_start,.01),0,1)
-			offset.y += sin(leap*PI) * (2.0 if z_style=="sky_dive" else 1.3)
+			offset = SkystrikePath.offset(leap,motion.displacement)*(1.0-returning)
+		elif z_style in ["moonsault","body_slam","electric_dive"]:
+			var leap := clampf((seconds-approach_start)/maxf(contact_time-approach_start,.01),0,1)
+			offset.y += sin(leap*PI) * 1.3
 		var yaw := float(motion.yaw)*weight
 		if motion.has("combo"):
 			var frame := seconds/duration*float(motion.combo.source_frames)

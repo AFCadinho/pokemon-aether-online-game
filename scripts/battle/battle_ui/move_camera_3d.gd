@@ -154,6 +154,12 @@ func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
 			if profile == "kick":
 				_append_box(points, source.lerp(aim, 0.5) + Vector3.UP * effect.projectile_arc_height, Vector3.ONE * scale_value * effect.emission_scale * 0.8)
 				_append_body(points, a)
+	if effect.key == "fierywrath":
+		_append_body(points,a)
+		_append_box(points,source,Vector3(2.0,2.0,2.0))
+		if seconds >= effect.launch:
+			_append_box(points,anchors.target_ground+Vector3.UP*1.5,Vector3(3.2,1.8,3.2))
+			direction = -forward*0.4+side+Vector3.UP*0.25
 	# Fitting a fixed shot envelope avoids camera pumping with every particle.
 	camera.transform = _fit(camera, points, direction.normalized())
 	camera.transform = camera.transform.interpolate_with(overview, smoothstep(0.88, 1.0, phase))

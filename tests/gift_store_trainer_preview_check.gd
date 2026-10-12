@@ -47,6 +47,14 @@ func _run() -> void:
 		_check(store._selected_purchase_chroma_colors().is_empty(), "Akatsuki box uses fixed colours")
 		var akatsuki_item := store._catalog_item("akatsuki-outfit")
 		_check(akatsuki_item.get("price") == 450 and akatsuki_item.get("cosmetic_subcategory") == "outfits", "Akatsuki is offered under Outfits for 450 Gems")
+		store._select_product("super-saiyan-4-outfit")
+		var ss4 := store._current_character_preview_appearance()
+		var ss4_parts := {"top": "SS4_Shirt", "bottom": "SS4_Trousers", "shoes": "SS4_Shoes", "hair": "SS4_Hair", "cape": "SS4_Tail"}
+		for slot: String in ss4_parts:
+			_check(ss4.get(slot) == ss4_parts[slot], "SS4 preview includes %s for %s" % [slot, gender])
+		_check(store._selected_purchase_chroma_colors().is_empty(), "SS4 box uses fixed colours")
+		var ss4_item := store._catalog_item("super-saiyan-4-outfit")
+		_check(ss4_item.get("price") == 450 and ss4_item.get("cosmetic_subcategory") == "outfits", "SS4 is offered under Outfits for 450 Gems")
 		for item: Dictionary in store.CATALOG:
 			if store._preview_parts_for_item(item).is_empty():
 				continue

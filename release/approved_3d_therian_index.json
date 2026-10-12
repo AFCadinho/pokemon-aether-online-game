@@ -1,0 +1,593 @@
+{
+  "schema": 1,
+  "kind": "pokeaether-optional-asset-index",
+  "catalog_revision": "therian-shared-local-v1",
+  "runtime_contract": {
+    "pokemon_3d": 2,
+    "godot": "4.6"
+  },
+  "assets": [
+    {
+      "asset_id": "pokemon_3d:tornadus-therian:base",
+      "species_id": "tornadus-therian",
+      "form_id": "base",
+      "version": 1,
+      "dependencies": [],
+      "appearances": [
+        {
+          "variant": "normal",
+          "runtime_identity": "tornadus-therian",
+          "runtime_path": "models/normal.scn",
+          "runtime_sha256": "17e3aa42f791bd23f99b64affce57434f1064c32c5d34a3c7c7376a24268a761",
+          "bytes": 2454175,
+          "source_sha256": "1a7f83fa0fa3079ee3a6a862ebdcff1bf6820fb5500241e9b7069756551feea7",
+          "cache_source_bytes": 9231769,
+          "semantic_sha256": "6c1f29f2e90e5b70ad7dc0db264717c2a0807f8cfe0fa1556b35ab78e1a79ca5"
+        },
+        {
+          "variant": "shiny",
+          "runtime_identity": "tornadus-therian@shiny",
+          "runtime_path": "models/shiny.scn",
+          "runtime_sha256": "7328a1ae0f39cafc80c1afd62b4474052dad582203a81d1cc5f67793fa2ca765",
+          "bytes": 2454261,
+          "source_sha256": "b93aea677c7db8aa787ff4597ef752ed627b5fe6144f6f7f3772c4f94acd2c79",
+          "cache_source_bytes": 9217776,
+          "semantic_sha256": "687129be8bd88c2e8bc945b32d1420871377ed6af535e9e84386fd2f74a8ae1d"
+        }
+      ],
+      "format": "model-pair-pck-v1",
+      "national_dex": 641,
+      "pair_manifest": {
+        "schema": 1,
+        "kind": "pokeaether-model-pair",
+        "asset_id": "pokemon_3d:tornadus-therian:base",
+        "species_id": "tornadus-therian",
+        "form_id": "base",
+        "version": 1,
+        "dependencies": [],
+        "appearances": [
+          {
+            "variant": "normal",
+            "runtime_identity": "tornadus-therian",
+            "runtime_path": "models/normal.scn",
+            "runtime_sha256": "17e3aa42f791bd23f99b64affce57434f1064c32c5d34a3c7c7376a24268a761",
+            "bytes": 2454175,
+            "source_sha256": "1a7f83fa0fa3079ee3a6a862ebdcff1bf6820fb5500241e9b7069756551feea7",
+            "cache_source_bytes": 9231769,
+            "semantic_sha256": "6c1f29f2e90e5b70ad7dc0db264717c2a0807f8cfe0fa1556b35ab78e1a79ca5"
+          },
+          {
+            "variant": "shiny",
+            "runtime_identity": "tornadus-therian@shiny",
+            "runtime_path": "models/shiny.scn",
+            "runtime_sha256": "7328a1ae0f39cafc80c1afd62b4474052dad582203a81d1cc5f67793fa2ca765",
+            "bytes": 2454261,
+            "source_sha256": "b93aea677c7db8aa787ff4597ef752ed627b5fe6144f6f7f3772c4f94acd2c79",
+            "cache_source_bytes": 9217776,
+            "semantic_sha256": "687129be8bd88c2e8bc945b32d1420871377ed6af535e9e84386fd2f74a8ae1d"
+          }
+        ],
+        "resource_root": "res://pokemon-pairs/81aafa479c6fde1766f16ed7660b12e96b3d1fd78f2540d2433072aa50298023",
+        "files": [
+          {
+            "path": "models/normal.scn",
+            "bytes": 2454175,
+            "sha256": "17e3aa42f791bd23f99b64affce57434f1064c32c5d34a3c7c7376a24268a761",
+            "decoded_bytes": 5062920
+          },
+          {
+            "path": "models/shiny.scn",
+            "bytes": 2454261,
+            "sha256": "7328a1ae0f39cafc80c1afd62b4474052dad582203a81d1cc5f67793fa2ca765",
+            "decoded_bytes": 5062926
+          },
+          {
+            "path": "textures/00e378e4bfb5fea3afd3b1a57f20358fca3481c8242799ba7be0f913edca6eaf.res",
+            "bytes": 1437,
+            "sha256": "a1d1797954373e3c26138cbf76169e423623e6c55eb5128f16da0d11a57b89e9",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/0ffcaba9334af9ab7d12bd8e1b93194b6194ff6ba380017085cd09d20a26f382.res",
+            "bytes": 469462,
+            "sha256": "8a7608df5f0e2bcd267c15a96ed5b88b56cc16eeb1ca65d336164a2ae5958d25",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/2108214eb89b431228382a296b04b200f791c4d5c40df33ea636b2df2b98a89d.res",
+            "bytes": 469466,
+            "sha256": "b4f0274081fe640143962b51dbf788b6b10f134a5c30be5d8e6d3cd11815bc28",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/2eea51b2eee140c97c132dfa408c017f1c258e15c434effdfd87607a8a44b13f.res",
+            "bytes": 1436,
+            "sha256": "48f61ca904d9aa68b9efb07eca73c47bea01ea0686b373943267d93b21cd5aba",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/4122958bfc620f370a864d143c74160c6155e78cf8ae2a45f0580779757b3e31.res",
+            "bytes": 1363,
+            "sha256": "6e9b4a8bf4ca487b4d50f2224b6ddb1222f345655a0562869f85a7c2e0c6da23",
+            "decoded_bytes": 49653
+          },
+          {
+            "path": "textures/5bd24529a5e22ddc017f321ef390676909a72cb5bdb9d8c860565bcb4fd3ffed.res",
+            "bytes": 302477,
+            "sha256": "629725fd298ac686eb9d6c0dd31491e46354d72da519a26efc9e37d887f9cd65",
+            "decoded_bytes": 3146225
+          },
+          {
+            "path": "textures/73e8e8a12a856af4825582eef89ee13eb176a76b95c49ed0bf9beb67ae8b0f5b.res",
+            "bytes": 10788,
+            "sha256": "81368a18ceb2efd90e404fca824ef53c1f1958bcb65a2ffaa234eaa76e8f4922",
+            "decoded_bytes": 262639
+          },
+          {
+            "path": "textures/7cec5b2287c189403d459ea42bcd380e113a8d94f1be4ea24f014684b693aba5.res",
+            "bytes": 1435,
+            "sha256": "70e85a2d3b3f0d545761bcd169ceae79685417ac41e48f2d3abea93c489dd3f7",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/9129934fca3ac5a83f9e6199980b7de41d765350838d2ea94aca640f5bc568de.res",
+            "bytes": 1437,
+            "sha256": "a1e243332e81962907206f6aff0f2da7923be2ef8b8d11f3efd62f968b3820c9",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/a80a4625e015cf6002f2378eddba88922a254fc584995e31d5ee8e6125290423.res",
+            "bytes": 608560,
+            "sha256": "069fddd5bdaae9b9df87e86bf41e19d788078a13c5627b86bd8d1a5e393bee54",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/ac0840208bfaf1b322d063770cd1cdc30e7b72dcf867a1d16093421aa4efa3e9.res",
+            "bytes": 261056,
+            "sha256": "3bf85ea830dabda067722c730d666a6f405b49390b759383a557ba23f719b984",
+            "decoded_bytes": 1049074
+          },
+          {
+            "path": "textures/b05c015ad484c83e142a3ce7ed52c2dc680760f296ce5b1b0ab70fd02d365b50.res",
+            "bytes": 1364,
+            "sha256": "f42411ee29ab0c161a4f98fd77bd5716c6093d71690975c887768e12df538b37",
+            "decoded_bytes": 49653
+          },
+          {
+            "path": "textures/c6b9e457af6a7fe0d9dd5193db4d844eeb505dcbbad5363e1011e5de1651df03.res",
+            "bytes": 281589,
+            "sha256": "15d05aea8f4e32768b134062a784b3590d5d144f6d1311b526370f87d185169f",
+            "decoded_bytes": 1049074
+          },
+          {
+            "path": "textures/c7cf888bcdce749f888af1088b8ec4e53e9877708671615f2109a0e728228465.res",
+            "bytes": 471787,
+            "sha256": "1254a70396c3fb808dd4d8c57c1b5a50b36b878f8b0c8043c752f5f4937c81be",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/d616b86a09e5a82956d94b1a12276527c908b1148dd7da98a9dc4e0082663e2a.res",
+            "bytes": 621866,
+            "sha256": "106ada3f9771dfa90a7ffe7ee1e44be8e6197d48d0ff3719f823c204b6b30971",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/f980c9da8d9dc07eabf2e58457c6a1f85239bfaeff61a5fd09e14d79162123b9.res",
+            "bytes": 471786,
+            "sha256": "dca46c49b87efd75ff4777dddccc9aaa9beba5ddac66fa80d3527bd56f6d4cf9",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/fb2b01426015adc82e12bb044f5b8b0976a6f8ea00f6c343b202e735847e237d.res",
+            "bytes": 231174,
+            "sha256": "724bb665b33a6fdfd8b42618482a6d7be790e82abc7e7c6728b81df8e856af91",
+            "decoded_bytes": 3146225
+          }
+        ]
+      },
+      "sha256": "1b97090ad79fca7e880980a19539fa34f8138ce16c0acf5d7fcbb95129a57ae3",
+      "size_bytes": 9126844,
+      "object_key": "optional-assets/pokemon_3d/tornadus-therian/base/v1-1b97090ad79fca7e880980a19539fa34f8138ce16c0acf5d7fcbb95129a57ae3.pck"
+    },
+    {
+      "asset_id": "pokemon_3d:thundurus-therian:base",
+      "species_id": "thundurus-therian",
+      "form_id": "base",
+      "version": 1,
+      "dependencies": [],
+      "appearances": [
+        {
+          "variant": "normal",
+          "runtime_identity": "thundurus-therian",
+          "runtime_path": "models/normal.scn",
+          "runtime_sha256": "314e18034134536b984c244e0ef83e1e1c8615cdf1bbe8dc0734dc45016674b6",
+          "bytes": 2238802,
+          "source_sha256": "4700195c597723815bcc51c72a2c965a661b8c9f6b7b2562afb90a802e74d0db",
+          "cache_source_bytes": 8893742,
+          "semantic_sha256": "e0587d94dd3bb0cf50da32f6b3fd1007b5390c09e3abd64577b19898a190dd2b"
+        },
+        {
+          "variant": "shiny",
+          "runtime_identity": "thundurus-therian@shiny",
+          "runtime_path": "models/shiny.scn",
+          "runtime_sha256": "8540b87d75f421e1aca1bbbb21634bd1ebfd386189819227bd6b653f1656138d",
+          "bytes": 2238728,
+          "source_sha256": "8a89eee8972ede7bd0261bb6482c74b01e24088ab18f9fe75e419ef838310e69",
+          "cache_source_bytes": 9055065,
+          "semantic_sha256": "626a60ef5f868a4fc7334414d77d0ccba6ffc5fafeafb058449a39e9d5392de5"
+        }
+      ],
+      "format": "model-pair-pck-v1",
+      "national_dex": 642,
+      "pair_manifest": {
+        "schema": 1,
+        "kind": "pokeaether-model-pair",
+        "asset_id": "pokemon_3d:thundurus-therian:base",
+        "species_id": "thundurus-therian",
+        "form_id": "base",
+        "version": 1,
+        "dependencies": [],
+        "appearances": [
+          {
+            "variant": "normal",
+            "runtime_identity": "thundurus-therian",
+            "runtime_path": "models/normal.scn",
+            "runtime_sha256": "314e18034134536b984c244e0ef83e1e1c8615cdf1bbe8dc0734dc45016674b6",
+            "bytes": 2238802,
+            "source_sha256": "4700195c597723815bcc51c72a2c965a661b8c9f6b7b2562afb90a802e74d0db",
+            "cache_source_bytes": 8893742,
+            "semantic_sha256": "e0587d94dd3bb0cf50da32f6b3fd1007b5390c09e3abd64577b19898a190dd2b"
+          },
+          {
+            "variant": "shiny",
+            "runtime_identity": "thundurus-therian@shiny",
+            "runtime_path": "models/shiny.scn",
+            "runtime_sha256": "8540b87d75f421e1aca1bbbb21634bd1ebfd386189819227bd6b653f1656138d",
+            "bytes": 2238728,
+            "source_sha256": "8a89eee8972ede7bd0261bb6482c74b01e24088ab18f9fe75e419ef838310e69",
+            "cache_source_bytes": 9055065,
+            "semantic_sha256": "626a60ef5f868a4fc7334414d77d0ccba6ffc5fafeafb058449a39e9d5392de5"
+          }
+        ],
+        "resource_root": "res://pokemon-pairs/e20183f622af8be92a407e1556ec17909109c457e4b476c956b05aed588943af",
+        "files": [
+          {
+            "path": "models/normal.scn",
+            "bytes": 2238802,
+            "sha256": "314e18034134536b984c244e0ef83e1e1c8615cdf1bbe8dc0734dc45016674b6",
+            "decoded_bytes": 4644801
+          },
+          {
+            "path": "models/shiny.scn",
+            "bytes": 2238728,
+            "sha256": "8540b87d75f421e1aca1bbbb21634bd1ebfd386189819227bd6b653f1656138d",
+            "decoded_bytes": 4644807
+          },
+          {
+            "path": "textures/0fb6cdb236360f30bfd2fb168b1bc80d67887e1b656c28b7eab9418db254aba3.res",
+            "bytes": 608397,
+            "sha256": "19150d05e9f137863caa63ba8f3b0a062758f25b91ddd570386bfbb4fd6a7de1",
+            "decoded_bytes": 4194799
+          },
+          {
+            "path": "textures/1246e0c08ad0e5071475228d4f3a7da746e3dde43a4b11c1138d8d1e33a5d103.res",
+            "bytes": 740,
+            "sha256": "b528aeb7132762354a06e819ad2cfeefff85f80a00fcab111b23c28a71f025fa",
+            "decoded_bytes": 49653
+          },
+          {
+            "path": "textures/18844d3d120d6f190027491826a2519d3c92a84b858c63603e77f952732f5dc8.res",
+            "bytes": 744,
+            "sha256": "7bc895584c5df48866166df858dad857ca1e35092454a77db9be582b8424ef87",
+            "decoded_bytes": 49653
+          },
+          {
+            "path": "textures/3f00062641d667b3ad0ac71ba61f4b03e48bef248b14979319e8f778284c9c4a.res",
+            "bytes": 742,
+            "sha256": "63c90c0effe77bcc0e82a072d7820e2d499718a265dcb70618d245049360c740",
+            "decoded_bytes": 49653
+          },
+          {
+            "path": "textures/5c33ddb16e26827c637a17a82b8c835035e861456b21156a7e48a078585d66a7.res",
+            "bytes": 202080,
+            "sha256": "b844a807ab14a209ae29d454b5f47a719841aea2edf49a495c61f3b3dac28a5c",
+            "decoded_bytes": 3146225
+          },
+          {
+            "path": "textures/65aed59659f22d1892de5c7ec0cb5aca2ac9cb206621beccd399d6b59a4e7bd6.res",
+            "bytes": 6865,
+            "sha256": "abdbee6b99e44c1020795accd754cdc5f62f1deec99799e47aa74d18aec46481",
+            "decoded_bytes": 262639
+          },
+          {
+            "path": "textures/7044889053fc94f905bfb7ade9fad5c8fd91388611d9eabbbf6d1e2a785efeba.res",
+            "bytes": 530993,
+            "sha256": "d1172798d8ca971f0a0400e2744b974ca4df32b898cae108c05d5aee58cea087",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/75aeaf09300e15917b6f93c5fa1a872fcb6b0e280bfdee25e2b64f3040cf3920.res",
+            "bytes": 301854,
+            "sha256": "e850653db89e8318eb5a9d296de40c691468a9954d126cc50b4269a11ac48362",
+            "decoded_bytes": 1049074
+          },
+          {
+            "path": "textures/768e9a2f25244ad40f089f3d4c8aac1e825eb964253e6a6802f2626b6f41cc90.res",
+            "bytes": 384569,
+            "sha256": "767e014d25376e3358b5a76b85d5e4f040ab7d7094b54e771bf320e4c7f36841",
+            "decoded_bytes": 3146225
+          },
+          {
+            "path": "textures/7eb6137c99df56c54518ea09b9a2af2cf519378b1ab8b0de429d4b351b13aeb8.res",
+            "bytes": 783,
+            "sha256": "033b61fcfc666682811577db7299104263fb31429ac2a8b3744b7802324b19dd",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/836ea7411051332b898777cf1ce97f979bd58f4991a2ce7fd9e179052141bbc0.res",
+            "bytes": 783,
+            "sha256": "eb6aeee2614609612a56bd81b9b6aa9dfa4ff8e97e1f72c808a225d1991744dd",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/8cc89e03116fe82988380e356049aa7e94eb91bb195ab270eb7105daddc4f0ff.res",
+            "bytes": 781,
+            "sha256": "8d47c86863de054b2c6224a9502787a039b935326843d72e4b27697e12e21e4a",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/934f37dca060277777a0a95b1e2d72657442315c7a0794ca5cd66a62d814c2a4.res",
+            "bytes": 317518,
+            "sha256": "9310c2428dfed7f17ee8547011cce8cb8c340cfa4c2ca47534754ee35692e90e",
+            "decoded_bytes": 1049074
+          },
+          {
+            "path": "textures/9afa92de8381a2fff8a83d8932b1470111c007f27518b962b772acdb5585cced.res",
+            "bytes": 745,
+            "sha256": "6d3003ced48afa654e87f9a72a8e9fbf9f34d82a989f30a8611e2b1d6c2df6c6",
+            "decoded_bytes": 49653
+          },
+          {
+            "path": "textures/b0c4bbb8aa74d7c3dde26df201d0e9b77892a5543b799138398b8a52365de10d.res",
+            "bytes": 530991,
+            "sha256": "610a50d1daee2ed1354e1bd519c107593927ba8a5750cdd026aa2f4bd9c14a28",
+            "decoded_bytes": 4194799
+          },
+          {
+            "path": "textures/b6672ce9cb1ee0be6027512d1dcd3b485a9a20d276761e1d799d09b4d5f06c49.res",
+            "bytes": 535155,
+            "sha256": "c09eb0d6fe23439165af74f16c1d29788332e9c39c5b6717a2892e6b5ae2d065",
+            "decoded_bytes": 4194799
+          },
+          {
+            "path": "textures/bb05313cfa7067412f5528f83e9239ce6dba37bb43685a07b7fd92880aa0c5dc.res",
+            "bytes": 535154,
+            "sha256": "7d0d76b649b08e98cff0232852d45d080057e520b34ccf552e1d36825231d5dd",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/cdc2532434834842b2d9d5ca6e8d0394e5ce8e7de3ce3eca792bb3b3dddcffcd.res",
+            "bytes": 780,
+            "sha256": "a31add32b1444ba69c8fc41c453d58c2d06a4102f3ef5f58c7788f0852367654",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/e1c617ae442166128a61e45bb2c202eabc1308e40038befe1233be5c6186325c.res",
+            "bytes": 512714,
+            "sha256": "cde0b2607724ef39cc1fa50fb825065818a6186e41c5d57f015c33b495e77cd0",
+            "decoded_bytes": 4194799
+          }
+        ]
+      },
+      "sha256": "8176f62f217417718004b877c60e38796e4fdba0f57fb85fdb44611f0ae41ffc",
+      "size_bytes": 8960836,
+      "object_key": "optional-assets/pokemon_3d/thundurus-therian/base/v1-8176f62f217417718004b877c60e38796e4fdba0f57fb85fdb44611f0ae41ffc.pck"
+    },
+    {
+      "asset_id": "pokemon_3d:landorus-therian:base",
+      "species_id": "landorus-therian",
+      "form_id": "base",
+      "version": 1,
+      "dependencies": [],
+      "appearances": [
+        {
+          "variant": "normal",
+          "runtime_identity": "landorus-therian",
+          "runtime_path": "models/normal.scn",
+          "runtime_sha256": "cfaaeb56a55da92e38722fa21a57a447310499886c7a05aea2215135c987941f",
+          "bytes": 1773513,
+          "source_sha256": "33e746612d4461b6bfa459de950e06cec42359daedad71a331960dae9bdb68c6",
+          "cache_source_bytes": 10704405,
+          "semantic_sha256": "7d530d83822bab951cfa4fd0cb1a238d7e7bcb24d86672f26d20e693dd016d46"
+        },
+        {
+          "variant": "shiny",
+          "runtime_identity": "landorus-therian@shiny",
+          "runtime_path": "models/shiny.scn",
+          "runtime_sha256": "4cc8483c3d9f679e3dd57097e9e51eaca37c5e32f5f151dc43935227372765da",
+          "bytes": 1773470,
+          "source_sha256": "a3d3993a482d618dcb2272d7c100dac17fecbb6338e7f0d9f9767255a1d7984a",
+          "cache_source_bytes": 11240965,
+          "semantic_sha256": "08303f215157f30d73d506c42754675f71880640bda9526dfd40b05c755592a4"
+        }
+      ],
+      "format": "model-pair-pck-v1",
+      "national_dex": 645,
+      "pair_manifest": {
+        "schema": 1,
+        "kind": "pokeaether-model-pair",
+        "asset_id": "pokemon_3d:landorus-therian:base",
+        "species_id": "landorus-therian",
+        "form_id": "base",
+        "version": 1,
+        "dependencies": [],
+        "appearances": [
+          {
+            "variant": "normal",
+            "runtime_identity": "landorus-therian",
+            "runtime_path": "models/normal.scn",
+            "runtime_sha256": "cfaaeb56a55da92e38722fa21a57a447310499886c7a05aea2215135c987941f",
+            "bytes": 1773513,
+            "source_sha256": "33e746612d4461b6bfa459de950e06cec42359daedad71a331960dae9bdb68c6",
+            "cache_source_bytes": 10704405,
+            "semantic_sha256": "7d530d83822bab951cfa4fd0cb1a238d7e7bcb24d86672f26d20e693dd016d46"
+          },
+          {
+            "variant": "shiny",
+            "runtime_identity": "landorus-therian@shiny",
+            "runtime_path": "models/shiny.scn",
+            "runtime_sha256": "4cc8483c3d9f679e3dd57097e9e51eaca37c5e32f5f151dc43935227372765da",
+            "bytes": 1773470,
+            "source_sha256": "a3d3993a482d618dcb2272d7c100dac17fecbb6338e7f0d9f9767255a1d7984a",
+            "cache_source_bytes": 11240965,
+            "semantic_sha256": "08303f215157f30d73d506c42754675f71880640bda9526dfd40b05c755592a4"
+          }
+        ],
+        "resource_root": "res://pokemon-pairs/42263b498442c7175f3d394158195b54b3f5942293ad1944a89ea1a012a456a8",
+        "files": [
+          {
+            "path": "models/normal.scn",
+            "bytes": 1773513,
+            "sha256": "cfaaeb56a55da92e38722fa21a57a447310499886c7a05aea2215135c987941f",
+            "decoded_bytes": 3543493
+          },
+          {
+            "path": "models/shiny.scn",
+            "bytes": 1773470,
+            "sha256": "4cc8483c3d9f679e3dd57097e9e51eaca37c5e32f5f151dc43935227372765da",
+            "decoded_bytes": 3543499
+          },
+          {
+            "path": "textures/00a36c8e2b6f537ac1b93913f22d9863b84bac4a21498f427bcfb754d01018bc.res",
+            "bytes": 1063,
+            "sha256": "0c80bbdfd5ffca8ba020960be9a4e6cf2338bdc5f8b75a784bc31dce6020c9d6",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/1125c2e081ab99e09bc0439748aff0deef0d8383e4b378452d8af4dcb214cada.res",
+            "bytes": 9630,
+            "sha256": "e42091949b0e73c71f1088e90db1f7d5555015c3e1c5f0b131711e82cb58beb8",
+            "decoded_bytes": 262639
+          },
+          {
+            "path": "textures/16989e348ac10039eedba781f497ecf941a2a92f6bcc9f5d4099c05b8a68531f.res",
+            "bytes": 988,
+            "sha256": "2ed1baa88028783f539631e035156114d4087f0deb0fa50a8188f9c333e091a2",
+            "decoded_bytes": 49653
+          },
+          {
+            "path": "textures/1ca404080c021513d4781dcb3b1021f482f331976281520d6d5c19eefdfe84b6.res",
+            "bytes": 640350,
+            "sha256": "c095b833118514266a1f42d9a4c243cee71600f0c17dcb3697571406dc6f7301",
+            "decoded_bytes": 4194799
+          },
+          {
+            "path": "textures/28ca500e98ceae2fca48363b7e89066211810943a537ef3f7c5e0da4eadd340b.res",
+            "bytes": 635925,
+            "sha256": "728876c225ed2e73fcb8d96b8e4601517c0cd2f4c7c32ab91be53ff6a78033d8",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/319b49a007b787ac8f2ab26f9854b09770f7b398cf457cdba2fee6e7499d7ef8.res",
+            "bytes": 1047,
+            "sha256": "f99bc7172b6919dfc2e5cbafe789519f6a5aff64cf2c9d643bef50744b7514e6",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/3a1ae22837a06aeb10f4f77345cf6c17acd89bdcc7c246ddb00f48fb6ab4809d.res",
+            "bytes": 1064,
+            "sha256": "f5c04ba8ae187257efa96fd44da59cc30328d26100a257031f73a361717d0f20",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/44905b3d7c7263f0d294c2e19d40abfd4f7d9bf1a11be7b52bc7602612337f7b.res",
+            "bytes": 990,
+            "sha256": "4afba0d884dae503d923a852e53f4ccf6101cf1561ae4920ec79cf39c45001cd",
+            "decoded_bytes": 49653
+          },
+          {
+            "path": "textures/4c345e45ec19a0859ebf1461f265f5ee3cad53b69c21d8025278ec8b35d4b404.res",
+            "bytes": 769756,
+            "sha256": "94f8fb3ed93b0642abd87547c5bb70540f2582d79ecc32f9f710fe440dae8400",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/5cfa86afea17563d75029451dc2202cb80578da56d3bcc28ff31870ea1dfb89f.res",
+            "bytes": 769758,
+            "sha256": "a956f557e8932c07dc0d25a1c44a8c5aa7dab7c7c209c9388a38faa5981805bc",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/6843f48ceee663c7ef361326945d52a576fedf4026a4f242b48ef1b4e2bcfc4e.res",
+            "bytes": 672942,
+            "sha256": "d301d38819d78385e7ea5e7098eae50583e9f17be6b304802d2d7b081d11e3d2",
+            "decoded_bytes": 4194799
+          },
+          {
+            "path": "textures/6d6329dec7995570bd7a018b96c221943c689d0483b4d05f72fb873596729696.res",
+            "bytes": 635962,
+            "sha256": "e86be0db3a6e4e1eb05adeec2c42a26337ea4087b55c59c6ade9d5f8d8271ef3",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/7a7e47b688a15e7803ffe8e77becb9d11677d980272ac56ccb0a8df04c33171c.res",
+            "bytes": 991,
+            "sha256": "a7ba66507e259df2d4566b3d96ebe4acaa28aad0d1bf7d87485d9961b1f5364d",
+            "decoded_bytes": 49653
+          },
+          {
+            "path": "textures/86dc785d82605a7265a7108b1abd5e11e6ad59913fa3c1fab78338d1fcabd599.res",
+            "bytes": 987,
+            "sha256": "df4b3575c0e0ab1a3adc49628a28ac992666792a5d18d6c022bdd891f55a8911",
+            "decoded_bytes": 49653
+          },
+          {
+            "path": "textures/af22b6211b98363bf38de85feda0b84d8e7a4171bc6e5a7bf52af83ea9e2a5fe.res",
+            "bytes": 1046,
+            "sha256": "b273ef1ec5f95832340c09c732b477eead33ecd71deb85b6462df5b4fa4cd5a8",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/bad5e55e367c5b9f04547b2dad09fecf7162d921ddba7e33e996020dfc21c423.res",
+            "bytes": 640349,
+            "sha256": "b7e8777a49a309a60442542272fa44fa742a5492ebc6fef0231941fa02c3a0d3",
+            "decoded_bytes": 4194799
+          },
+          {
+            "path": "textures/be2ee59630b673690cc67ba1fb061f67d64346c0c2ebfbe8d4e99f04ba3ca9b7.res",
+            "bytes": 373074,
+            "sha256": "411a60120dd5ee735d6365d2a56fa4d2c06f69ea3ae65cbfbb18fe226f28bbce",
+            "decoded_bytes": 3146225
+          },
+          {
+            "path": "textures/e042cf943a0f747fb120e2acfdad33eaf161683e8edfc20272b9642b61096de7.res",
+            "bytes": 672942,
+            "sha256": "6a6052e074bd6e95f8d61b5ec0717151dead3da44157d2d8e07b19e2395a3315",
+            "decoded_bytes": 4194799
+          },
+          {
+            "path": "textures/e726363fe9e1bbce35c00af47f7bb4b610fe71f8a48c121766157e60388491e2.res",
+            "bytes": 308396,
+            "sha256": "b1b9d41e53c73829fb98ea9b811d84ef981e10cb1853fc4fc61db67537f4b9d7",
+            "decoded_bytes": 1049074
+          },
+          {
+            "path": "textures/f63f0a24363796ae939f07e04787414dfe6e970f53f4063f760065a9d73b0023.res",
+            "bytes": 314366,
+            "sha256": "0050112ae2f313ad15adcaf88512303aa0314a519dbe648b0726ded407f57a3b",
+            "decoded_bytes": 3146225
+          },
+          {
+            "path": "textures/fd52b0ca8d347701e573df1ce2fadebbb9475ce55ae0d8871b3cbe7c61e215e9.res",
+            "bytes": 298047,
+            "sha256": "756f12401a18104ddf4121ac237044433a816a0a24d61ffb1dc06ebcdd8d2579",
+            "decoded_bytes": 1049074
+          }
+        ]
+      },
+      "sha256": "778973604ccb880ffe3ca9e00458ae2e38cce465cdef13958910b32c0f74078f",
+      "size_bytes": 10308300,
+      "object_key": "optional-assets/pokemon_3d/landorus-therian/base/v1-778973604ccb880ffe3ca9e00458ae2e38cce465cdef13958910b32c0f74078f.pck"
+    }
+  ]
+}
