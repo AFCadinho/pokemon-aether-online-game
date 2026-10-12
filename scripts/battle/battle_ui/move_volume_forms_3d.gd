@@ -84,3 +84,86 @@ static func along(direction: Vector3) -> Basis:
 	if y.length_squared() < 0.01: y = Vector3.UP
 	var x := y.cross(Vector3.UP if absf(y.y) < 0.95 else Vector3.RIGHT).normalized()
 	return Basis(x, y, x.cross(y))
+
+static func orb_material(kind: int) -> ShaderMaterial:
+	var shader := Shader.new()
+	shader.code = """
+shader_type spatial;
+render_mode unshaded, cull_back;
+uniform float seconds = 0.0;
+uniform int kind = 0;
+void fragment() {
+	float angle = UV.x * 6.283185;
+	float face = max(dot(normalize(NORMAL), normalize(VIEW)), 0.0);
+	float flow = sin(angle * 3.0 + UV.y * 13.0 - seconds * 5.0
+		+ sin(angle * 2.0 - UV.y * 8.0 + seconds * 2.0) * 1.8);
+	vec3 color;
+	float glow;
+	if (kind == 0) {
+		// Dense shadow with violet folds across the surface, not orbiting hoops.
+		float folds = smoothstep(0.35, 0.95, flow);
+		color = mix(vec3(0.045, 0.006, 0.08), vec3(0.48, 0.075, 0.8), folds);
+		color += vec3(0.21, 0.025, 0.35) * pow(1.0 - face, 3.0);
+		glow = 0.3;
+	} else if (kind == 1) {
+		// Compressed blue energy with gold currents embedded in its skin.
+		float current = smoothstep(0.91, 0.99, sin(angle * 3.0 + UV.y * 18.0 - seconds * 9.0));
+		color = mix(vec3(0.015, 0.16, 0.65), vec3(0.3, 0.88, 1.0), face * 0.7 + flow * 0.15);
+		color = mix(color, vec3(1.0, 0.7, 0.16), current * 0.85);
+		glow = 0.65;
+	} else {
+		// Broad pearly bands keep the moon sphere smooth and legible.
+		float pearl = 0.5 + 0.5 * sin(angle + UV.y * 9.0 - seconds * 2.0 + flow * 0.4);
+		color = mix(vec3(0.36, 0.43, 0.9), vec3(1.0, 0.68, 0.86), pearl);
+		color = mix(color, vec3(0.91, 0.96, 1.0), pow(face, 4.0) * 0.7);
+		glow = 0.35;
+	}
+	ALBEDO = color * (0.65 + face * 0.35);
+	EMISSION = color * glow;
+}
+"""
+	var material := ShaderMaterial.new()
+	material.shader = shader
+	material.set_shader_parameter("kind", kind)
+	return material
+
+static func orb_wake_material(kind: int) -> ShaderMaterial:
+	var shader := Shader.new()
+	shader.code = """
+shader_type spatial;
+render_mode unshaded, cull_disabled, blend_mix, depth_draw_never;
+uniform float seconds = 0.0;
+uniform int kind = 0;
+void fragment() {
+	float flow = 0.5 + 0.5 * sin(UV.x * 18.84956 + UV.y * 9.0 - seconds * 7.0);
+	float face = pow(abs(dot(normalize(NORMAL), normalize(VIEW))), 0.5);
+	vec3 low = kind == 0 ? vec3(0.09, 0.015, 0.16) : (kind == 1 ? vec3(0.05, 0.3, 0.9) : vec3(0.45, 0.5, 1.0));
+	vec3 high = kind == 0 ? vec3(0.5, 0.12, 0.8) : (kind == 1 ? vec3(0.5, 0.94, 1.0) : vec3(1.0, 0.8, 0.95));
+	ALBEDO = mix(low, high, flow * 0.55);
+	EMISSION = ALBEDO * (kind == 0 ? 0.1 : 0.4);
+	ALPHA = (1.0 - smoothstep(0.0, 1.0, UV.y)) * face * (0.3 + flow * 0.3);
+}
+"""
+	var material := ShaderMaterial.new()
+	material.shader = shader
+	material.set_shader_parameter("kind", kind)
+	return material
+
+static func orb_impact_material(kind: int) -> ShaderMaterial:
+	var shader := Shader.new()
+	shader.code = """
+shader_type spatial;
+render_mode unshaded, cull_disabled, blend_add, depth_draw_never;
+uniform int kind = 0;
+uniform float opacity = 1.0;
+void fragment() {
+	float face = abs(dot(normalize(NORMAL), normalize(VIEW)));
+	vec3 color = kind == 0 ? vec3(0.57, 0.13, 0.9) : (kind == 1 ? vec3(1.0, 0.72, 0.22) : vec3(0.85, 0.7, 1.0));
+	ALBEDO = mix(color, vec3(1.0), pow(face, 6.0) * 0.5);
+	ALPHA = pow(face, 1.5) * opacity * 0.6;
+}
+"""
+	var material := ShaderMaterial.new()
+	material.shader = shader
+	material.set_shader_parameter("kind", kind)
+	return material

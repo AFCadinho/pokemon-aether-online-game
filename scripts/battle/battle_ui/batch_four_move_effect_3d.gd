@@ -2,6 +2,8 @@ extends "res://scripts/battle/battle_ui/source_move_effect_3d.gd"
 ## Ten inspected SV sources, with authored 3D geometry on the shared native clock.
 const MOVE_KEYS := ["shadowball", "sludgebomb", "focusblast", "moonblast", "iceshard", "poisonsting", "swift", "flashcannon", "magicalleaf", "waterpulse"]
 const MOONBLAST_ORB_RADIUS := 0.29
+const VolumeForms = preload("res://scripts/battle/battle_ui/move_volume_forms_3d.gd")
+const SOLID_ORBS := ["shadowball", "focusblast", "moonblast"]
 const PALETTES := {
 	"shadowball": [Color("21062e"), Color("9b38e8")],
 	"sludgebomb": [Color("421052"), Color("bc58d4")],
@@ -48,6 +50,11 @@ const ART := {
 	"waterpulse_hit": [preload("res://assets/battles/moves_3d/sv_waterpulse/cpt_2_shock0003.png"), Vector3(0.35,0.75,1), 4.0, false],
 	"pulse_bubble": [preload("res://assets/battles/moves_3d/sv_waterpulse/cpt_2_bubble0005.png"), Vector3(0.65,0.9,1), 8.0, true],
 }
+var orb_body: ShaderMaterial
+var orb_wake: ShaderMaterial
+var wake_mesh: ArrayMesh
+var orb_impact: ShaderMaterial
+var pressure_ring: TorusMesh
 var surface_material: ShaderMaterial
 var gold_material: StandardMaterial3D
 var ring := TorusMesh.new()
@@ -78,6 +85,17 @@ func _build_surface() -> void:
 	ring.rings = 24
 	ring.ring_segments = 8
 	gold_material = _material(Color("ffbd52"), 0.85)
+	if key in SOLID_ORBS:
+		var kind := SOLID_ORBS.find(key)
+		orb_body = VolumeForms.orb_material(kind)
+		orb_wake = VolumeForms.orb_wake_material(kind)
+		wake_mesh = VolumeForms.swept_mesh(false)
+		orb_impact = VolumeForms.orb_impact_material(kind)
+		pressure_ring = TorusMesh.new()
+		pressure_ring.inner_radius = 0.94
+		pressure_ring.outer_radius = 1.0
+		pressure_ring.rings = 48
+		pressure_ring.ring_segments = 12
 	if not MASKS.has(key): return
 	var shader := Shader.new()
 	shader.code = """
@@ -113,6 +131,9 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 	var travel := (elapsed-launch)/maxf(impact-launch,0.01)
 	var after := (elapsed-impact)/maxf(duration*0.22,0.01)
 	if surface_material != null: surface_material.set_shader_parameter("seconds", elapsed)
+	if orb_body != null:
+		orb_body.set_shader_parameter("seconds", elapsed)
+		orb_wake.set_shader_parameter("seconds", elapsed)
 	edge.albedo_color.a = 0.85*(1.0-clampf(after,0,1))
 	gold_material.albedo_color.a = 0.85*(1.0-clampf(after,0,1))
 	if key=="moonblast" and not launched:
@@ -149,31 +170,43 @@ func _draw_orb(from: Vector3, to: Vector3, travel: float, _after: float, facing:
 	if key=="sludgebomb": point.y += sin(t*PI)*projectile_arc_height
 	# Let the moon appear first, build the orb, then hold it briefly at full size.
 	var orb_charge := clampf((charge-0.25)/0.65,0,1) if key=="moonblast" else charge
-	var base_radius := MOONBLAST_ORB_RADIUS if key=="moonblast" else (0.34 if key=="sludgebomb" else 0.29)
-	var radius := base_radius * emission_scale * (orb_charge if travel<0 else 1.0)
-	var orb_scale := Vector3.ONE * radius
-	if key=="sludgebomb": orb_scale *= Vector3(1.0+sin(elapsed*15)*0.12,0.9,1.1)
+	if key in SOLID_ORBS:
+		_draw_solid_orb(from, point, t, orb_charge, travel, path_basis)
+		return
+	var radius := 0.34 * emission_scale * (orb_charge if travel<0 else 1.0)
+	var orb_scale := Vector3.ONE * radius * Vector3(1.0+sin(elapsed*15)*0.12,0.9,1.1)
 	_piece(sphere,surface_material,point,orb_scale)
-	if key=="focusblast":
-		for angle in [0.55,-0.65]:
-			_piece(ring,gold_material,point,Vector3.ONE*radius*1.28,path_basis*Basis(Vector3.RIGHT,angle)*Basis(Vector3.UP,elapsed*6))
-		_source_sprite(point,radius*2.4,"focus_streak",0,0.65,facing,elapsed*5)
-	if key=="shadowball":
-		for i in 2:
-			_piece(ring,edge,point,Vector3.ONE*radius*(1.2+i*0.2),path_basis*Basis(Vector3.RIGHT,elapsed*3+i*1.2))
 	if travel<0: return
 	for i in 5:
 		var p := maxf(t-float(i+1)*0.035,0)
 		var behind := from.lerp(to,p)
 		var size := radius*(0.52-float(i)*0.075)
-		if key=="sludgebomb":
-			behind.y += sin(p*PI)*projectile_arc_height - float(i)*0.035*emission_scale
-			_piece(sphere,surface_material,behind,Vector3.ONE*size)
-		elif key=="moonblast":
-			behind += Vector3(sin(i*2.4),cos(i*2.4),sin(i))*0.13*emission_scale
-			_source_sprite(behind,0.26*emission_scale,"moon_spark",0,0.9-float(i)*0.13,facing,elapsed+i)
-		else:
-			_piece(sphere,surface_material,behind,Vector3.ONE*size)
+		behind.y += sin(p*PI)*projectile_arc_height - float(i)*0.035*emission_scale
+		_piece(sphere,surface_material,behind,Vector3.ONE*size)
+
+func _draw_solid_orb(from: Vector3, point: Vector3, t: float, charge: float, travel: float, path_basis: Basis) -> void:
+	# Stay small at the outlet, then expand only once released into the arena.
+	var full_radius := MOONBLAST_ORB_RADIUS if key == "moonblast" else 0.29
+	var radius := lerpf(0.12, full_radius, smoothstep(0.0, 0.35, t)) * emission_scale
+	if travel < 0: radius *= smoothstep(0.0, 1.0, charge)
+	if radius < 0.001: return
+	_piece(sphere, orb_body, point, Vector3.ONE * radius, path_basis * Basis(Vector3.UP, elapsed * (0.7 if key == "moonblast" else 1.6)))
+	if travel <= 0: return
+	var length_factor := 1.4 if key == "focusblast" else (0.95 if key == "moonblast" else 0.7)
+	# World-space length is capped at distance flown, so the wake cannot cross the caster.
+	var length := minf(length_factor * emission_scale * presentation_scale, from.distance_to(point))
+	_piece(wake_mesh, orb_wake, point, Vector3(radius * 0.85, length, radius * 0.85), VolumeForms.along(from - point), true)
+
+func _draw_solid_orb_hit(to: Vector3, after: float, facing: Basis, path_basis: Basis) -> void:
+	# A brief compressed body opens into one pressure ring; the source flash is an accent.
+	var burst := 1.0 - smoothstep(0.0, 0.45, after)
+	if burst > 0.001:
+		var radius := (0.29 + after * 0.75) * burst
+		_piece(sphere, orb_body, to, Vector3(radius, radius * 0.4, radius), path_basis)
+	var expansion := smoothstep(0.0, 1.0, after)
+	orb_impact.set_shader_parameter("opacity", 1.0 - after)
+	_piece(pressure_ring, orb_impact, to, Vector3.ONE * (0.25 + expansion * 0.9), path_basis)
+	_source_sprite(to, 0.55 + after * 0.4, key + "_hit", after, (1.0 - after) * 0.4, facing)
 
 func _draw_objects(from: Vector3, to: Vector3, travel: float, facing: Basis, side: Vector3, vertical: Vector3, path_basis: Basis) -> void:
 	if travel<0 or travel>=1: return
@@ -258,6 +291,9 @@ func _draw_pulse(from: Vector3, to: Vector3, travel: float, facing: Basis, path_
 			_source_sprite(point+offset,0.12*emission_scale,"pulse_bubble",t,0.7,facing)
 
 func _draw_hit(to: Vector3, after: float, facing: Basis, path_basis: Basis) -> void:
+	if key in SOLID_ORBS:
+		_draw_solid_orb_hit(to, after, facing, path_basis)
+		return
 	var fade := 1.0-after
 	_source_sprite(to,1.05+after*0.9,key+"_hit",after,fade,facing,after*0.4)
 	match key:
@@ -267,11 +303,8 @@ func _draw_hit(to: Vector3, after: float, facing: Basis, path_basis: Basis) -> v
 				var offset := Vector3(cos(i*2.4),sin(i*2.4),sin(i))*after*0.7
 				offset.y -= after*after*0.5
 				_piece(sphere,surface_material,to+offset,Vector3.ONE*0.1*fade)
-		"focusblast", "moonblast", "waterpulse", "shadowball":
-			_piece(ring,gold_material if key=="focusblast" else edge,to,Vector3.ONE*(0.15+after*0.9),path_basis)
-			if key=="moonblast":
-				for i in 5:
-					_source_sprite(to+Vector3(cos(i*2.4),sin(i*2.4),sin(i))*after*0.7,0.35,"moon_spark",0,fade,facing)
+		"waterpulse":
+			_piece(ring,edge,to,Vector3.ONE*(0.15+after*0.9),path_basis)
 		"poisonsting": _source_sprite(to,0.8,"poison_bubble",after,fade*0.65,facing)
 		"magicalleaf": _source_sprite(to,1.1,"magic_debris",after,fade,facing)
 

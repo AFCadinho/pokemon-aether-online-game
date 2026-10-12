@@ -4,7 +4,7 @@ var seconds := 0.0
 func _run() -> void:
 	get_tree().create_timer(60).timeout.connect(func(): get_tree().quit(1))
 	_setup()
-	for move in ["Hyper Beam", "Pyro Ball", "Hurricane", "Draco Meteor"]:
+	for move in ["Hyper Beam", "Pyro Ball", "Hurricane", "Draco Meteor", "Shadow Ball", "Focus Blast", "Moonblast"]:
 		for outcome in ["hit", "miss", "block"]:
 			for reverse in [false, true]:
 				seconds = 0
@@ -35,7 +35,13 @@ func _run() -> void:
 							assert(not "TIME" in mat.shader.code, "Pause-safe shader clock")
 							materials.append([mat, mat.get_shader_parameter("seconds")])
 					max_billboards = maxi(max_billboards, billboards)
-					if move != "Draco Meteor" and effect.impact_drawn:
+					var drew_impact := false
+					if move in ["Shadow Ball", "Focus Blast", "Moonblast"]:
+						for j in effect.cursor:
+							if effect.pieces[j].mesh is QuadMesh and effect.sprite_keys[j].ends_with("_hit"): drew_impact = true
+					else:
+						drew_impact = move != "Draco Meteor" and effect.impact_drawn
+					if drew_impact:
 						assert(outcome == "hit" and seconds >= effect.impact)
 						impact_seen = true
 					effect._process(0)
@@ -53,5 +59,5 @@ func _run() -> void:
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("SOLID_MOVE_FORMS_OK moves=4 directions=2 outcomes=3 native_clock=true bounded_geometry=true reduced_billboards=true impact_timing=true cleanup=true")
+	print("SOLID_MOVE_FORMS_OK moves=7 directions=2 outcomes=3 native_clock=true bounded_geometry=true reduced_billboards=true impact_timing=true cleanup=true")
 	get_tree().quit()
