@@ -22,6 +22,8 @@ func _run() -> void:
 			for loop_pose: bool in [true, false]:
 				await _check_wild_faints(participant, loop_pose)
 	await _check_reconnect_and_capture()
+	for participant: String in ["p1", "p3"]:
+		await _check_captured_reconnect_without_events(participant)
 	service.reset()
 	print("coop_3d_faint_persistence_check: ", "PASS" if failures == 0 else "FAIL")
 	quit(1 if failures else 0)
@@ -127,6 +129,24 @@ func _check_reconnect_and_capture() -> void:
 	snapshot.events = []
 	panel._apply_positions(snapshot)
 	_check(not panel._native_sprite("p2").visible, "2D keeps its existing fainted-sprite visibility")
+	battle.queue_free()
+	await process_frame
+	await process_frame
+
+func _check_captured_reconnect_without_events(participant: String) -> void:
+	root.get_node("SettingsManager").battle_presentation_mode = "3d"
+	var battle: Variant = _coop_fixture()
+	var panel: Node = battle.coop_presenter
+	var model: Node = battle.animation_router.model_presenter
+	var snapshot := _snapshot(participant)
+	snapshot.positions[2].fainted = true
+	snapshot.positions[2].hpPercent = 0
+	snapshot.positions[2].captured = true
+	panel._latest = snapshot
+	panel._apply_positions(snapshot)
+	for frame in 8: await process_frame
+	_check(model.combatants[1].species == "" and not model.handles("p2") and model.handles("p4"),
+		"a cold reconnect hides captures even after their event leaves the log tail")
 	battle.queue_free()
 	await process_frame
 	await process_frame

@@ -771,6 +771,15 @@ func _pokemon_name_for_command(controller: String) -> String:
 func _apply_native_positions(snapshot: Dictionary) -> void:
 	_native_fainted_models.clear()
 	_remember_native_captures(snapshot.get("events", []))
+	# Current servers distinguish captures directly; older servers can still
+	# use the public event history/cache above. Never retain private receipts.
+	for position: Dictionary in snapshot.get("positions", []):
+		if position.has("captured"):
+			var controller := str(position.get("controller", ""))
+			if bool(position.captured):
+				_native_captured_controllers[controller] = true
+			else:
+				_native_captured_controllers.erase(controller)
 	_native_turn.set_turn(int(snapshot.get("turn", 0)))
 	_apply_native_field(snapshot)
 	var own_team: Array = snapshot.get("ownTeam", [])
