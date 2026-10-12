@@ -2983,6 +2983,8 @@
   "ui.guild.emblem.clear": "Limpar",
   "ui.guild.emblem.save": "Salvar emblema",
   "ui.guild.emblem.color": "Cor {number}",
+  "ui.guild.invitation.accept": "Entrar na Guilda",
+  "ui.guild.invitation.benefits": "Chat da Guilda · Banco compartilhado · Jogue junto",
   "ui.guild.invitation.title": "Convite para Guilda",
   "ui.guild.invitation.subtitle": "Uma Guilda quer que você participe",
   "ui.guild.invitation.decline_tooltip": "Recusar convite",

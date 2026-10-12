@@ -4,6 +4,10 @@
 
 - Let artists paint Guild furniture collision in each scene’s Collision TileMapLayer and export it to both catalogs from Godot. Use the painted cells for walking, placement overlap, player occupancy and route checks, preserve them during visual imports and keep existing room layouts compatible.
 
+- Give incoming Guild invitations a prominent Guild emblem, a gold invitation card and a clear Join Guild action. Style Guild departure with the compact Aether confirmation layout.
+
+- Show server-wide System notices for wild Ultra Rare, Legendary and Shiny encounters and their outcomes in every chat except Help.
+
 - Make 3D switches flow directly from recall into summon: prepare the incoming public model before recalling, close the ball during absorption and skip repeated entry warmup. Keep doubles replacements hidden until their summon releases them.
 
 - Prepare normal and shiny Urshifu Rapid Strike 3D models with their own stance and animations for the next model release, preventing this missing form from forcing battles into 2D once activated.

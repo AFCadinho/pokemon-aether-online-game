@@ -2983,6 +2983,8 @@
   "ui.guild.emblem.clear": "清除",
   "ui.guild.emblem.save": "保存徽章",
   "ui.guild.emblem.color": "颜色 {number}",
+  "ui.guild.invitation.accept": "加入公会",
+  "ui.guild.invitation.benefits": "公会聊天 · 共享仓库 · 一起冒险",
   "ui.guild.invitation.title": "公会邀请",
   "ui.guild.invitation.subtitle": "一个公会希望您加入",
   "ui.guild.invitation.decline_tooltip": "拒绝邀请",
