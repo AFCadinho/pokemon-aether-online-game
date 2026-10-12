@@ -78,11 +78,14 @@ func run() -> void:
 		result["production_validator_error"] = inspection.error
 		if job.expect_production_codec:
 			assert(str(inspection.error).is_empty(), str(inspection.error))
+			var mount_error := Pair.mount_checked(job.pack, asset, inspection)
+			assert(mount_error.is_empty(), mount_error)
+			result["production_mount_error"] = mount_error
 		else:
 			assert(inspection.error == "Model-pair decoded size/codec mismatch.", "Unexpected validator outcome")
-		# Larger blocks have already passed the independent physical/hash checks
-		# but deliberately fail the current production admission rule above.
-		assert(ProjectSettings.load_resource_pack(job.pack, false))
+			# Larger blocks have passed independent physical/hash checks but
+			# deliberately fail the current production admission rule above.
+			assert(ProjectSettings.load_resource_pack(job.pack, false))
 	for appearance: Dictionary in asset.appearances:
 		var relative := "models/" + str(appearance.variant) + ".scn"
 		var path: String = str(asset.pair_manifest.resource_root).path_join(relative) if job.format == "pck" else str(job.scene_directory).path_join(relative)
