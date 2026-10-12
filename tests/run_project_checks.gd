@@ -394,6 +394,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/trainer_entry_before_response_check.gd",
 	"res://tests/trainer_3d_summon_visibility_check.gd",
 	"res://tests/battle_3d_faint_replacement_check.gd",
+	"res://tests/battle_3d_switch_transition_check.gd",
 	"res://tests/fullscreen_battle_fade_check.gd",
 	"res://tests/explicit_sprite_preview_check.gd",
 	"res://tests/transit_menu_runtime_check.gd",

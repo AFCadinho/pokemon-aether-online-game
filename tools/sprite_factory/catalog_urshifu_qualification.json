@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "forms": [
+    "urshifu-rapid-strike"
+  ],
+  "models": 2,
+  "reviewer": "assistant",
+  "scope": "Local Linux Godot 4.6.2; native appearance, battle placement, animation transitions, delivery and shared textures",
+  "published": false,
+  "release_approved": false,
+  "runtime_approved": true,
+  "source_intake_sha256": "171135d20a978d1699ed47c726f7aacb9f1e165d0e97fe18090a50e67cb2d95d",
+  "bundle_index_sha256": "1f953d2beabf47ed8cd2577223f312e7ec280b3cb30ef3682071ecca200bf32a",
+  "bundle_size_bytes": 12215440,
+  "pixel_exact_frames": 24,
+  "sharing": "Textures shared within the normal/shiny pair; independent scenes retain animated eye materials",
+  "visibility_repair": "Continuous nearest sampling of unchanged source visibility keys prevents stale teeth meshes when replaying an attack. Reverse 120 Hz samples match source state exactly.",
+  "visual_review": "Assistant inspected both idle-front appearances, normal and shiny attack/sleep/faint poses, and both battle cameras including shiny and grounded rest.",
+  "evidence_sha256": {
+    "runtime-v2/report.json": "43dc887ae0c7cdf40b4f417b1a9de733474201fa79aef5b6e307e3dfa4a34e71",
+    "runtime-fixture.json": "6a3c32f388b2d8d77d1b305c3563ac86a9d2b978fa76e4c1a06bd5a9f0e70c4a",
+    "appearance-v2/godot-review.json": "5452dec8b60c8bac36dcd3aacc2eb3fbb736deb8d21e1d5bc67cc76965103cd4",
+    "transitions-v2.json": "ece35433fa91943d64c8326a9d07afddd70697d2c7be81285fcbf389413cff54",
+    "source-contract.json": "bc29c085a0b0239131ffa437dd06ebea677fda6e05d2c561e3f7788da3774363",
+    "battle/placement.json": "67e7e6c7180cb744e7276cd78da28c1b8f079f2bc584f2cf6f080c47379e991b",
+    "battle/final/battle-review.json": "88855af0449268305c5e4f078d514307bfddd1adad240ad29d047d81b942d4df",
+    "shared/validated/receipts.jsonl": "136ebe4005c1f7abdbd5faaac2318f72e538fd47df2409e54a39eeb40573bd42",
+    "shared/pixel-comparison.json": "c765a2ed10de930fa0386dfd2829b213c5010f3aa98dfd469091cc0d9c4f3638",
+    "shared/render-qualified/report.json": "d246f829751a3c406f65d575974a4ce49848ad456c4dc6dc1afb69f60695468a",
+    "runtime-check.log": "228164339340b765b4ebabc6eed54f1fe3092c47b940ed20c53156b75d43c312",
+    "shared-runtime-check.log": "228164339340b765b4ebabc6eed54f1fe3092c47b940ed20c53156b75d43c312",
+    "admitted-check.log": "228164339340b765b4ebabc6eed54f1fe3092c47b940ed20c53156b75d43c312"
+  },
+  "remaining": [
+    "Include the Rapid Strike pack in the next selected model index",
+    "Release certification and publication"
+  ],
+  "admitted_registry_check_passed": true,
+  "code_sha256": {
+    "tools/sprite_factory/catalog_urshifu_delivery.py": "8357e4a76c68a94e67694c2a5083a7e05ed12d7845a646ce7e86e7d8e5679421",
+    "tools/sprite_factory/catalog_urshifu_models.py": "0d86547f34b77d4a0f2942109b6efdbf9f60745feb02f7935ac0de3349166114",
+    "tools/sprite_factory/catalog_urshifu_pair_render.gd": "69cfc81ed17e7ee4cfa86b35bacae3f36ee694f494e494aba86bd54280c0f059",
+    "tools/sprite_factory/catalog_urshifu_battle_review.gd": "03c63bf5bcf37e070c7b869e27058823f967785edb8b26519fda40ded90a0747",
+    "tools/sprite_factory/catalog_urshifu_runtime.gd": "88f7cabc6e711a119f31d519a27eba79d299860fc710d846ca6be4978614986b",
+    "tools/sprite_factory/catalog_urshifu_transition_check.gd": "2d150380aba67bc1210ac3227ab89cf71adcb29e86f995e59b4fc9a0a5b04edb",
+    "tools/sprite_factory/catalog_urshifu_source_contract.gd": "d97831561b2fb5bd1595e98868e2d357ebc5e8ec2fd22a562a781549f53c3908",
+    "tools/sprite_factory/catalog_urshifu_appearance_review.gd": "c4a696bc942e600c8f284f84867f31e35c5853ac0e311f88cc10b5624419fb66",
+    "tests/battle_3d_urshifu_check.gd": "c7c21494159981705d5395cc55e889a2b09fc6c7334c28823512376fb110447f"
+  }
+}
