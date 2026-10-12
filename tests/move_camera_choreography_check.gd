@@ -26,7 +26,8 @@ func _run() -> void:
 					var effect: Node = stage.create_move_effect(move, actor, target, {"result":result, "show_impact":true})
 					effect.set_process(false)
 					stage.players[slot].speed_scale = 0.0
-					assert(stage.move_camera.effect == effect and stage.move_atmosphere.effect == null)
+					assert(stage.move_camera.effect == effect)
+					assert((stage.move_atmosphere.effect == effect) == stage.move_atmosphere.supports(effect.key))
 					assert(is_equal_approx(effect.duration, float(timing.frames) / 60.0), "Camera never extends animation duration")
 					_sample(slot, effect, effect.launch * 0.6)
 					var charge: Transform3D = stage.camera.transform

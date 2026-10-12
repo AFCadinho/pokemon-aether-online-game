@@ -63,12 +63,16 @@ func _capture_cameras() -> void:
 				var pose: Transform3D = renderer.camera.transform
 				await create_timer(0.08).timeout
 				assert(renderer.camera.transform.is_equal_approx(pose), move + " pause holds camera")
-				assert(renderer.camera.environment == original_environment and renderer.move_atmosphere.effect == null)
+				if renderer.move_atmosphere.supports(effect.key):
+					assert(renderer.move_atmosphere.effect == effect)
+				else:
+					assert(renderer.camera.environment == original_environment and renderer.move_atmosphere.effect == null)
 				battle.animation_router.playback_speed = 1.0
 			while move_busy:
 				assert(Time.get_ticks_msec() < deadline, move + " recovery stalled")
 				await process_frame
 			assert(renderer.move_camera.effect == null and renderer.common_effects.is_empty())
+			assert(renderer.camera.environment == original_environment and renderer.move_atmosphere.orb_light == null)
 			print("MOVE_CAMERA_PREVIEW ", move, " reverse=", reverse)
 	assert(reviewed > 0, "No matching camera moves")
 	print("MOVE_CAMERA_CHOREOGRAPHY_PREVIEW_OK moves=", reviewed, " directions=2 charge=true flight=true impact=true pause=true recovery=true offline=true")

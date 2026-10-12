@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add subtle purple Shadow Ball, blue-and-gold Focus Blast and moonlit Moonblast atmosphere with local orb lighting and a soft hit pulse. Preserve move timing, weather and arena lighting, restoring the original environment on completion or cancellation.
+
 - Give Shadow Ball, Focus Blast and Moonblast distinct solid energy spheres, continuous tapered wakes and focused impacts. Orbs charge small at the source and grow after release, preserving native timing and cinematic cameras.
 
 - Fix Trainers remaining unable to move after Aethernet travel changes maps.
