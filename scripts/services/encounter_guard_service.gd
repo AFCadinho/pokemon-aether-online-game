@@ -16,11 +16,11 @@ var submitting := false
 var elapsed := 2.0
 var deadline_msec := 0
 var retry_msec := 0
-var choices: Array[String] = []
 var challenge_id := ""
 var layer: CanvasLayer
 var backdrop: ColorRect
 var prompt: Label
+var reference: TextureRect
 var countdown: Label
 var feedback: Label
 var grid: GridContainer
@@ -53,6 +53,12 @@ func _ready() -> void:
 	prompt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(prompt)
+	reference = TextureRect.new()
+	reference.custom_minimum_size = Vector2(96, 96)
+	reference.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	reference.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	reference.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	box.add_child(reference)
 	grid = GridContainer.new()
 	grid.columns = 3
 	grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -83,7 +89,7 @@ func _process(delta: float) -> void:
 		var seconds := maxi(0, ceili(float(deadline_msec - Time.get_ticks_msec()) / 1000.0))
 		countdown.text = LocalizationManager.text("ui.encounter_guard.timer", {"seconds": seconds})
 		for button: Button in grid.get_children():
-			button.disabled = seconds == 0 or submitting or int(guard.get("attemptsRemaining", 0)) == 0 or Time.get_ticks_msec() < retry_msec or choices.has(str(button.get_meta("option_id", "")))
+			button.disabled = seconds == 0 or submitting or Time.get_ticks_msec() < retry_msec
 		# The server decides whether a last-second submission arrived in time.
 		# Continue polling at zero; do not discard a pending accepted answer.
 	elapsed += delta
@@ -160,6 +166,7 @@ func _show_lock() -> void:
 		get_tree().paused = true
 		backdrop.show()
 	grid.show()
+	reference.show()
 	var remaining_seconds := maxf(0, float(guard.get("expiresAt", 0)) - float(guard.get("serverTime", Time.get_unix_time_from_system())))
 	deadline_msec = Time.get_ticks_msec() + int(remaining_seconds * 1000)
 	retry_msec = Time.get_ticks_msec() + int(maxf(0, float(guard.get("retryAt", 0)) - float(guard.get("serverTime", 0))) * 1000)
@@ -168,18 +175,15 @@ func _show_lock() -> void:
 	if next_id == challenge_id:
 		return
 	challenge_id = next_id
-	choices.clear()
 	for child in grid.get_children():
 		grid.remove_child(child)
 		child.queue_free()
-	var names := PackedStringArray()
-	for target in challenge.get("targets", []):
-		names.append(LocalizationManager.text("ui.encounter_guard.symbol." + str(target)))
-	prompt.text = LocalizationManager.text("ui.encounter_guard.prompt") + "\n" + " → ".join(names)
-	feedback.text = LocalizationManager.text("ui.encounter_guard.progress", {"count": 0})
-	var exhausted := int(guard.get("attemptsRemaining", 0)) == 0
-	if exhausted:
-		feedback.text = LocalizationManager.text("ui.encounter_guard.exhausted")
+	prompt.text = LocalizationManager.text("ui.encounter_guard.prompt")
+	feedback.text = ""
+	reference.texture = null
+	var example := Image.new()
+	if example.load_png_from_buffer(Marshalls.base64_to_raw(str(challenge.get("referenceImage", "")))) == OK:
+		reference.texture = ImageTexture.create_from_image(example)
 	for option: Dictionary in challenge.get("options", []):
 		var image := Image.new()
 		if image.load_png_from_buffer(Marshalls.base64_to_raw(str(option.get("image", "")))) != OK:
@@ -190,7 +194,7 @@ func _show_lock() -> void:
 		button.add_theme_constant_override("icon_max_width", 88)
 		button.expand_icon = true
 		button.focus_mode = Control.FOCUS_NONE
-		button.disabled = exhausted
+		button.disabled = Time.get_ticks_msec() < retry_msec
 		button.set_meta("option_id", str(option.get("id", "")))
 		button.pressed.connect(_choose.bind(str(option.get("id", "")), button))
 		grid.add_child(button)
@@ -203,28 +207,25 @@ func _show_partner_wait() -> void:
 		backdrop.show()
 	challenge_id = ""
 	grid.hide()
+	reference.hide()
 	prompt.text = LocalizationManager.text("ui.encounter_guard.partner")
 	feedback.text = ""
 	countdown.text = ""
 
 
 func _choose(option_id: String, button: Button) -> void:
-	if submitting or Time.get_ticks_msec() < retry_msec:
+	if submitting or Time.get_ticks_msec() < retry_msec or Time.get_ticks_msec() >= deadline_msec:
 		return
-	choices.append(option_id)
 	button.disabled = true
-	feedback.text = LocalizationManager.text("ui.encounter_guard.progress", {"count": choices.size()})
-	if choices.size() != 3:
-		return
 	submitting = true
 	var result := await _request(HTTPClient.METHOD_POST, "/unlock", {
-		"battleId": guard.get("battleId", ""), "challengeId": challenge_id, "choices": choices})
+		"battleId": guard.get("battleId", ""), "challengeId": challenge_id, "choices": [option_id]})
 	submitting = false
 	if bool(result.get("success", false)):
 		var was_locked := bool(guard.get("locked", false))
 		apply_state(result.get("encounterGuard", {}))
 		if was_locked and bool(guard.get("locked", false)):
-			feedback.text = LocalizationManager.text("ui.encounter_guard.wrong") if int(guard.get("attemptsRemaining", 0)) > 0 else LocalizationManager.text("ui.encounter_guard.exhausted")
+			feedback.text = LocalizationManager.text("ui.encounter_guard.wrong")
 	else:
 		# Do not permit client-side dismissal after an ambiguous result. Reload
 		# the authoritative challenge, including whether the answer succeeded.
@@ -238,7 +239,6 @@ func _hide_lock() -> void:
 		backdrop.hide()
 		get_tree().paused = previously_paused
 	challenge_id = ""
-	choices.clear()
 	released.emit()
 
 

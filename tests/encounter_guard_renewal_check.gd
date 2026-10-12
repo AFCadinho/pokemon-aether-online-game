@@ -106,7 +106,7 @@ func _run() -> void:
 	# Rare protection is consumed before the symbol challenge. Offer only after
 	# successful unlock, co-op partner readiness and completion of the battle.
 	world.is_in_battle = true
-	_state({"active": false, "remaining": 0, "locked": true, "battleId": "rare-check", "expiresAt": clock + 60, "challenge": {}})
+	_state({"active": false, "remaining": 0, "locked": true, "battleId": "rare-check", "expiresAt": clock + 60, "challenge": JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/encounter_guard_challenge.json"))})
 	await ui._refresh_encounter_guard_renewal(3)
 	_check(guard.renewal_pending and paused and not ui.ui_confirm_popup.visible, "rare consumption queues renewal behind the unlock screen")
 	_state({"active": false, "remaining": 0, "battleId": "rare-check", "waitingForPartner": true})
