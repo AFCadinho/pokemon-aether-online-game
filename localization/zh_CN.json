@@ -2622,6 +2622,7 @@
   "ui.guild.permissions.action_tooltip": "为该成员设置个人公会银行权限。",
   "ui.guild.permissions.title": "公会银行权限 · {trainer}",
   "ui.guild.permissions.hint": "职位权限为默认设置。仅在该成员需要例外时选择个人允许或拒绝。",
+  "ui.guild.permissions.assets": "道具与宝可梦",
   "ui.guild.permissions.inherit_allowed": "继承职位 · 允许",
   "ui.guild.permissions.inherit_denied": "继承职位 · 禁止",
   "ui.guild.permissions.allow": "个人允许",

@@ -2656,6 +2656,7 @@
   "ui.guild.permissions.action_tooltip": "Stel persoonlijke Guildbankrechten in voor dit lid.",
   "ui.guild.permissions.title": "Guildbankrechten · {trainer}",
   "ui.guild.permissions.hint": "Rangrechten zijn de standaard. Kies alleen Persoonlijk toestaan of weigeren wanneer dit lid een uitzondering nodig heeft.",
+  "ui.guild.permissions.assets": "Items en Pokémon",
   "ui.guild.permissions.inherit_allowed": "Overnemen van rang · Toegestaan",
   "ui.guild.permissions.inherit_denied": "Overnemen van rang · Geblokkeerd",
   "ui.guild.permissions.allow": "Persoonlijk toestaan",
