@@ -71,6 +71,7 @@ var user_camera_yaw := 0.0
 var user_camera_pitch := 0.0
 var user_camera_zoom := 1.0
 var move_camera := preload("res://scripts/battle/battle_ui/move_camera_3d.gd").new()
+var move_atmosphere := preload("res://scripts/battle/battle_ui/draco_meteor_atmosphere_3d.gd").new()
 var coop_camera_focus_enabled := false
 var coop_camera_focus_index := -1
 var coop_camera_focus_weight := 0.0
@@ -177,6 +178,7 @@ func set_weather_condition(condition: String) -> void:
 
 func _clear_weather() -> void:
 	if is_instance_valid(weather_effect):
+		move_atmosphere.suspend()
 		weather_effect.cancel()
 	weather_effect = null
 
@@ -184,16 +186,19 @@ func _sync_weather() -> void:
 	var enabled: bool = owns_weather() and get_tree().root.get_node("SettingsManager").weather_effects and not weather_condition.is_empty()
 	if not enabled or not is_instance_valid(world) or not is_instance_valid(camera):
 		_clear_weather()
+		move_atmosphere.apply(self)
 		return
 	if is_instance_valid(weather_effect):
 		if weather_effect.key == weather_condition and weather_effect.get_parent() == world:
 			return
 		_clear_weather()
+	move_atmosphere.suspend()
 	weather_effect = WeatherEffect.new()
 	world.add_child(weather_effect)
 	var origin := ArenaCatalog.battle_origin(arena_id)
 	if is_instance_valid(arena_root): origin.y = float(arena_root.get_meta("surface_height", 0.0))
 	weather_effect.start(weather_condition, world, camera, origin, common_effect_speed)
+	move_atmosphere.apply(self)
 
 var saved_colors := {}
 var reason := "2D selected"
@@ -1251,7 +1256,9 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 		func(): return active and _move_visual(actor) == source and _move_visual(target) == destination)
 	if MoveEffect.move_key(move) == "dracometeor" and not effect.done and is_instance_valid(camera):
 		move_camera.begin(effect, actor, target)
+		move_atmosphere.begin(effect)
 		effect.finished.connect(func():
+			move_atmosphere.clear(effect)
 			if move_camera.clear(effect) and active and is_instance_valid(camera):
 				_update_camera(0.0), CONNECT_ONE_SHOT)
 		_update_camera(0.0)
@@ -2283,6 +2290,7 @@ func _default_camera_home() -> Vector3:
 func _update_camera(delta: float) -> void:
 	var settings := get_tree().root.get_node("SettingsManager")
 	if settings.battle_presentation_mode == "2.5d":
+		move_atmosphere.suspend()
 		# A flat background cannot follow orbit/zoom or perspective depth changes.
 		# Keep a shallow, centered view and equal model scale on both platforms.
 		camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -2334,6 +2342,7 @@ func _update_camera(delta: float) -> void:
 	camera.look_at(target)
 	if settings.battle_3d_camera_motion and active:
 		move_camera.apply(self)
+	move_atmosphere.apply(self)
 
 func _process(delta: float) -> void:
 	_sync_render_size()
