@@ -103,6 +103,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/battle_vs_panel_layout_check.gd",
 	"res://tests/moves_grid_disabled_state_check.gd",
 	"res://tests/battle_ui_layout_check.gd",
+	"res://tests/battle_stat_badge_typography_check.gd",
 	"res://tests/battle_trainer_staging_check.gd",
 	"res://tests/battle_animation_anchor_check.gd",
 	"res://tests/battle_terrain_field_visual_check.gd",

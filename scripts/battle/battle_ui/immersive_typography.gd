@@ -37,9 +37,8 @@ func _base_target(control: Control) -> int:
 			return 14
 		return 12
 	if "StatStage" in path:
-		# Keep the four-card doubles HUD compact in both immersive modes.
-		var settings := get_node("/root/SettingsManager")
-		return 24 if settings.battle_presentation_mode == "3d" and not battle.coop_mode else 12
+		# Larger text also grows PanelContainer badges; keep HP text dominant.
+		return 12
 	if "CalcPanel" in path:
 		return 14
 	if "PartyGrid" in path and not "Hover" in path:
