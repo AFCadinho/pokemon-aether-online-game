@@ -45,6 +45,9 @@ func interact_with_player(_player: Node2D) -> void:
 	if not bool(begin_result.get("success", false)):
 		await GameErrorDialogService.show_response(begin_result, "backend.error.transit_unavailable")
 		return
+	# The teleport now owns a scoped movement lock. Release the NPC's legacy
+	# interaction lock before the source map can destroy this waiting Keeper.
+	GameState.unlock_overworld_input()
 	if world.has_method("play_aethernet_departure_effect"):
 		await world.call("play_aethernet_departure_effect")
 	var travel_result: Dictionary = await TransitService.travel(destination_id)
