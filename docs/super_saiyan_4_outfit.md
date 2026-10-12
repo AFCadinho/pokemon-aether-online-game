@@ -15,7 +15,11 @@ five separately activated wardrobe items:
 Opening the box puts five items in the Bag. Activate each to unlock it in
 Character Customization. The usual tradeable wardrobe lifecycle applies;
 account-bound boxes keep all contents bound. Gender changes preserve owned
-and equipped parts. No role restriction or Gift Store offer is configured.
+and equipped parts. No role restriction applies. The box is sold under Gift
+Store → Cosmetics → Outfits for **450 Gems**, or 450 personal card credits
+under the existing alternate-payment policy. Gem purchases are tradeable; card
+purchases and all their contents stay bound. The Store previews all five parts
+on both trainer and overworld models. Loose parts are not sold separately.
 
 The 48 PNGs are byte-identical to the approved revision 4 of
 `designs/Super Saiyan 4/Model Assets`. `super_saiyan_4_asset_hashes.json` records
@@ -37,4 +41,4 @@ base sprites were modified. Item labels are available in EN/NL/PT-BR/ZH-CN.
 Focused validation: `tests/super_saiyan_4_outfit_check.gd`, trainer preview
 regressions, generated cosmetic catalog checks and paired backend
 `tests.test_super_saiyan_4_outfit` (inventory, wardrobe, binding, gender changes,
-dev search and absence from the store).
+dev search, Store eligibility, exact-price purchasing and payment binding).

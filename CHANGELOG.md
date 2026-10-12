@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Super Saiyan 4 (SS4) Outfit Box to Gift Store → Cosmetics → Outfits for 450 Gems, with complete male/female trainer and overworld previews.
+
 - Add the Super Saiyan 4 (SS4) Outfit Box for both player models, with separate fur, trousers, shoes, fixed-colour hair and an animated tail under Back; include trainer and overworld art and skin-tone-aware trainer chest shading.
 
 - Connect Legendary Mining Drops to Rock Smash's rock tiers, show their chances and values in Skills, and let Collector Hugo buy all ores after confirmation at the Pewter Museum counter. Update the forum guide for the upcoming release.
