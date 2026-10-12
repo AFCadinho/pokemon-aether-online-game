@@ -54,6 +54,11 @@ brongetrouwe shader en een onafhankelijke visuele vergelijking zijn nog nodig.
 De concrete materiaalparameters en bron-/visibility-pins staan bij Zygarde in
 `tools/sprite_factory/remaining_forms_repair_result.json`.
 
+De vervolgpoging in [zygarde-ten-core.md](zygarde-ten-core.md) bevestigt dat
+ook de correct geselecteerde Biochao-hondvorm dezelfde ontbrekende materiaalinputs
+heeft. De beschikbare probe-afbeelding is wit; de shaderwerking en transparante
+buitenlaag blijven onbewezen. Zygarde is daardoor nog niet toegelaten.
+
 ## Omvang en bewijs
 
 - Vier nieuwe pakketten: **30.519.364 bytes** (circa 29,1 MiB).
