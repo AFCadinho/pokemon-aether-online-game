@@ -103,7 +103,13 @@ def main() -> None:
         "--max-delete",
         type=int,
         default=200,
-        help="Refuse the cleanup when more than this many objects would be deleted.",
+        help="Maximum obsolete non-3D objects to delete.",
+    )
+    parser.add_argument(
+        "--max-bundle-delete",
+        type=int,
+        default=0,
+        help="Separate cap for obsolete 3D model payloads; defaults to no 3D deletions beyond --max-delete.",
     )
     parser.add_argument(
         "--apply",
@@ -121,6 +127,8 @@ def main() -> None:
         raise SystemExit("--minimum-age-hours must be at least 1")
     if args.max_delete < 1:
         raise SystemExit("--max-delete must be at least 1")
+    if args.max_bundle_delete < 0:
+        raise SystemExit("--max-bundle-delete must be nonnegative")
 
     manifest_dir = Path(args.manifest_dir).resolve()
     manifests = _load_local_manifests(manifest_dir, args.scope)
@@ -153,9 +161,13 @@ def main() -> None:
     for item in plan.delete:
         print(f"DELETE {item.key} ({item.size} bytes)")
 
-    if len(plan.delete) > args.max_delete:
+    bundle_deletes = sum(item.key.startswith("optional-assets/pokemon_3d/") for item in plan.delete)
+    other_deletes = len(plan.delete) - bundle_deletes
+    over_limit = (bundle_deletes > args.max_bundle_delete or other_deletes > args.max_delete) if args.max_bundle_delete else len(plan.delete) > args.max_delete
+    if over_limit:
         raise SystemExit(
-            f"Refusing to delete {len(plan.delete)} objects; --max-delete is {args.max_delete}"
+            f"Refusing to delete {bundle_deletes} 3D objects and {other_deletes} other objects; "
+            f"--max-bundle-delete is {args.max_bundle_delete} and --max-delete is {args.max_delete}"
         )
     if not args.apply:
         print("Dry-run only; pass --apply to delete the planned objects.")
@@ -298,12 +310,44 @@ def _protected_keys_from_asset_bundle_indexes(indexes: list[dict]) -> set[str]:
         assets = index.get("assets")
         if not isinstance(assets, list) or not assets:
             raise SystemExit("Asset bundle content index has no assets")
+        references = [asset for asset in assets if isinstance(asset, dict) and asset.get("format") == "model-pair-ref-v1"]
+        trusted: dict[str, dict] = {}
+        if references:
+            revision = index.get("catalog_revision")
+            match = re.fullmatch(r"approved-pokemon-3d-(v[1-9][0-9]*)", revision) if isinstance(revision, str) else None
+            if match is None:
+                raise SystemExit("Referenced asset bundle index has an unsupported revision")
+            version = match.group(1)
+            index_path = PROJECT_ROOT / "release" / f"approved_3d_bundles_{version}_index.json"
+            metadata_path = PROJECT_ROOT / "release" / f"approved_3d_bundles_{version}.json"
+            if not index_path.is_file() or not metadata_path.is_file():
+                raise SystemExit("Referenced asset bundle metadata is unavailable")
+            index_bytes = index_path.read_bytes()
+            metadata = _read_manifest(metadata_path.read_text(encoding="utf-8"), str(metadata_path))
+            if (json.loads(index_bytes) != index
+                    or metadata.get("revision") != revision
+                    or metadata.get("index", {}).get("sha256") != hashlib.sha256(index_bytes).hexdigest()
+                    or not isinstance(metadata.get("bundles"), list)):
+                raise SystemExit("Referenced asset bundle metadata does not match the public index")
+            trusted = {asset["asset_id"]: asset for asset in metadata["bundles"]
+                       if isinstance(asset, dict) and isinstance(asset.get("asset_id"), str)}
+            if len(trusted) != len(assets):
+                raise SystemExit("Referenced asset bundle metadata is incomplete")
         for asset in assets:
             if not isinstance(asset, dict):
                 raise SystemExit("Asset bundle content index contains an invalid asset")
-            key = asset.get("object_key")
+            if asset.get("format") == "model-pair-ref-v1":
+                record = trusted.get(asset.get("asset_id"))
+                if (record is None or set(asset) != {"asset_id", "format", "sha256"}
+                        or asset.get("sha256") != record.get("sha256")):
+                    raise SystemExit("Referenced asset bundle entry does not match trusted metadata")
+                key = record.get("object_key")
+            else:
+                key = asset.get("object_key")
             if not isinstance(key, str) or _object_family(key) is None or not key.startswith("optional-assets/pokemon_3d/"):
                 raise SystemExit("Asset bundle content index contains an unsafe object key")
+            if asset.get("format") == "model-pair-ref-v1" and not key.endswith("-" + asset["sha256"] + (".pck" if key.endswith(".pck") else ".zip")):
+                raise SystemExit("Referenced asset bundle key does not match its digest")
             protected.add(key)
     return protected
 
@@ -379,7 +423,7 @@ def _object_family(key: str) -> str | None:
         return None
     if key.startswith("optional-assets/pokemon_3d/"):
         parts = key.split("/")
-        if len(parts) == 5 and parts[2] and parts[3] and re.fullmatch(r"v[1-9][0-9]*-[a-f0-9]{64}\.zip", parts[4]):
+        if len(parts) == 5 and parts[2] and parts[3] and re.fullmatch(r"v[1-9][0-9]*-[a-f0-9]{64}\.(?:zip|pck)", parts[4]):
             return f"bundle:pokemon_3d:{parts[2]}:{parts[3]}"
         return None
     launcher = LAUNCHER_OBJECT_PATTERN.fullmatch(key)

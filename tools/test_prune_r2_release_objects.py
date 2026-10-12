@@ -4,6 +4,7 @@ import datetime as dt
 import hashlib
 import json
 import unittest
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from prune_r2_release_objects import (
@@ -32,6 +33,21 @@ def recent_item(key: str, hours_old: int, size: int = 10) -> R2Object:
 
 
 class R2ReleasePrunerTests(unittest.TestCase):
+    def test_shared_geometry_release_index_protects_all_pck_and_zip_objects(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        index = json.loads((root / "release/approved_3d_bundles_v13_index.json").read_text())
+        metadata = json.loads((root / "release/approved_3d_bundles_v13.json").read_text())
+        protected = _protected_keys_from_asset_bundle_indexes([index])
+        self.assertEqual(protected, {row["object_key"] for row in metadata["bundles"]})
+        self.assertEqual(len(protected), 1200)
+        self.assertTrue(any(key.endswith(".pck") for key in protected))
+        self.assertTrue(any(key.endswith(".zip") for key in protected))
+
+        changed = json.loads(json.dumps(index))
+        changed["assets"][0]["sha256"] = "0" * 64
+        with self.assertRaises(SystemExit):
+            _protected_keys_from_asset_bundle_indexes([changed])
+
     def test_android_manifest_protects_immutable_apk_release(self) -> None:
         manifest = {
             "game": {
