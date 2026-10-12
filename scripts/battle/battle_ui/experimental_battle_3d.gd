@@ -1430,13 +1430,15 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 		_start_move_contact(actor, target, timing, effect)
 	effect.start(move, timing, options, bind_action_clock(actor), positions,
 		func(): return active and _move_visual(actor) == source and _move_visual(target) == destination)
-	if move_camera.supports(MoveEffect.move_key(move)) and not effect.done and is_instance_valid(camera):
-		move_camera.begin(effect, actor, target)
-		if MoveEffect.move_key(move) == "dracometeor":
+	if (move_camera.supports(MoveEffect.move_key(move)) or move_atmosphere.supports(MoveEffect.move_key(move))) and not effect.done and is_instance_valid(camera):
+		if move_camera.supports(MoveEffect.move_key(move)):
+			move_camera.begin(effect, actor, target)
+		if move_atmosphere.supports(MoveEffect.move_key(move)):
 			move_atmosphere.begin(effect)
 		effect.finished.connect(func():
 			move_atmosphere.clear(effect)
-			if move_camera.clear(effect) and active and is_instance_valid(camera):
+			move_camera.clear(effect)
+			if active and is_instance_valid(camera):
 				_update_camera(0.0), CONNECT_ONE_SHOT)
 		_update_camera(0.0)
 	return effect

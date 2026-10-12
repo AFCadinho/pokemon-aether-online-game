@@ -4,6 +4,12 @@
 
 - Show animated 3D teams during Team Preview, and keep battles in 3D with Stealth Rock, Spikes, Toxic Spikes, Sticky Web, Reflect, Light Screen and Aurora Veil on the field.
 
+- Add the Pewter Museum of Science interior using the authored Tiled visual, with blocked exhibits and a connected entrance and return to Pewter City.
+
+- Give Hyper Beam, Solar Beam, Flash Cannon, Pyro Ball, Flamethrower, Thunderbolt, Electro Shot, Ice Beam, Blizzard and Hurricane individual light colours and timing. Light follows beams, cannon outlets and the fireball arc; wide storms tint the arena. Preserve animation duration, weather, camera settings and cleanup.
+
+- Add subtle purple Shadow Ball, blue-and-gold Focus Blast and moonlit Moonblast atmosphere with local orb lighting and a soft hit pulse. Preserve move timing, weather and arena lighting, restoring the original environment on completion or cancellation.
+
 - Give Shadow Ball, Focus Blast and Moonblast distinct solid energy spheres, continuous tapered wakes and focused impacts. Orbs charge small at the source and grow after release, preserving native timing and cinematic cameras.
 
 - Fix Trainers remaining unable to move after Aethernet travel changes maps.

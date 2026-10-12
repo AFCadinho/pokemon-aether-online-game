@@ -86,6 +86,13 @@
         }
       }
     },
+    "kanto_pewter_city_museum": {
+      "points": {
+        "from_pewter_city": {
+          "facingDirection": "up"
+        }
+      }
+    },
     "kanto_pewter_city": {
       "label": "Pewter City",
       "points": {
