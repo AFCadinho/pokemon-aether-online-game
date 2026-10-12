@@ -21,6 +21,10 @@ is 8,688,757,818 bytes. R2 billed storage will not immediately fall by that
 amount, because older immutable payloads remain available for rollback.
 
 Desktop exports (Windows, Linux, macOS) select v13 without an environment flag.
+Local desktop editor play also defaults to v13 after the v11 ZIP retirement,
+so Team Preview does not request removed v11/v12 payloads. Explicit diagnostic
+catalog flags retain their selected fixtures; `POKEAETHER_SHARED_MODEL_PRODUCTION_TEST=0`
+disables the editor default for offline legacy checks.
 The debug `POKEAETHER_SHARED_MODEL_PRODUCTION_TEST=1` flag exercises the exact
 production path in editor tests; it has no effect in release exports. Android
 and browser continue using their existing 2D workflows. Publication tooling
