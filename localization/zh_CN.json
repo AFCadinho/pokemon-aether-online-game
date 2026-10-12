@@ -214,6 +214,7 @@
   "ui.settings.storage.confirm_models": "删除已下载的宝可梦3D模型？需要时会重新下载。你的宝可梦和游戏进度会保留。",
   "ui.settings.storage.failed": "部分文件无法删除，请重试。",
   "ui.battle.downloading_pokemon": "正在下载宝可梦…",
+  "ui.battle.preparing_battle": "正在准备对战…",
   "ui.mobile.panel.options": "物品",
   "ui.mobile.panel.actions": "操作",
   "ui.mobile.panel.party": "队伍",

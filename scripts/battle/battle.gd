@@ -7908,6 +7908,7 @@ func setup_trainer_battle_from_response(
 	# Early entry keeps the arena visible while automatic lead requests run in
 	# both layouts; the mechanical preview phase stays hidden.
 	if team_preview_enabled:
+		_prepare_team_preview_entry()
 		await _notify_trainer_entry_ready(entry_ready_callback)
 
 	var lead_response := await _run_trainer_lead_selection(api_response)
@@ -8024,6 +8025,7 @@ func setup_pvp_battle_from_response(
 		if not _is_spectator_battle():
 			_set_pvp_party_hud_display_override()
 		_connect_pvp_realtime(local_player_id, str(api_response.get("battleId", "")), api_response)
+		_prepare_team_preview_entry()
 		await _notify_pvp_entry_ready(entry_ready_callback)
 		if _is_spectator_battle():
 			lead_response = await _run_pvp_spectator_team_preview()
@@ -9701,6 +9703,14 @@ func _poll_pvp_room_until_team_preview_complete(local_player_id: String) -> Dict
 		return completed_response
 
 	return {}
+
+func _prepare_team_preview_entry() -> void:
+	# Publish the public roster before the screen host waits for model readiness.
+	# Lead input opens only after the entry callback has revealed the prepared field.
+	team_preview_lead_selection_active = true
+	queued_battle_action.clear()
+	_set_battle_input_locked(true)
+	_show_team_preview_layers()
 
 func _show_team_preview_layers() -> void:
 	# A delayed recovery/update must never redraw Team Preview after lead choice.

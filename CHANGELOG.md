@@ -4,6 +4,12 @@
 
 - Populate the Pewter Museum of Science with four dialogue NPCs and an entrance attendant offering admission for 100 Pokédollars per visit. Confirm payment before entering; leaving is free.
 
+- Show battle preparation and Pokémon download progress when entering 3D AI Sparring or PvP, prepare Team Preview before revealing the field, and start battle music once the arena is visible.
+
+- Retire obsolete v11 model downloads after a verified full offline backup; keep every v13 model and reused ZIP available. Older clients requesting retired models must update.
+
+- Add native 3D presentations for the remaining 707 unique gameplay moves (901 total), with explicit per-move profiles, solid attack forms, bounded animation sounds, selected cinematic cameras and temporary lighting. Cover physical/special Z-move ID aliases, preserve the existing 194 presentations, and extend the offline review picker.
+
 - Show animated 3D teams during Team Preview, and keep battles in 3D with Stealth Rock, Spikes, Toxic Spikes, Sticky Web, Reflect, Light Screen and Aurora Veil on the field.
 
 - Add the Pewter Museum of Science interior using the authored Tiled visual, with blocked exhibits and a connected entrance and return to Pewter City.

@@ -46,3 +46,6 @@ __pycache__/
 
 # Generated availability catalog for the browser audio export.
 /generated/browser_audio_catalog.json
+
+# Isolated, local preview/test artifacts.
+/.runtime/
