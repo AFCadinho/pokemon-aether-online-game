@@ -55,6 +55,14 @@ func _run() -> void:
 		_check(store._selected_purchase_chroma_colors().is_empty(), "SS4 box uses fixed colours")
 		var ss4_item := store._catalog_item("super-saiyan-4-outfit")
 		_check(ss4_item.get("price") == 450 and ss4_item.get("cosmetic_subcategory") == "outfits", "SS4 is offered under Outfits for 450 Gems")
+		store._select_product("irelia-outfit")
+		var irelia := store._current_character_preview_appearance()
+		var irelia_parts := {"top": "Irelia_Shirt", "bottom": "Irelia_Trousers", "shoes": "Irelia_Shoes", "hair": "Irelia_Hair", "headgear": "Irelia_Circlet", "cape": "Irelia_Blades"}
+		for slot: String in irelia_parts:
+			_check(irelia.get(slot) == irelia_parts[slot], "Irelia preview includes %s for %s" % [slot, gender])
+		_check(store._selected_purchase_chroma_colors().is_empty(), "Irelia box uses fixed colours")
+		var irelia_item := store._catalog_item("irelia-outfit")
+		_check(irelia_item.get("price") == 450 and irelia_item.get("cosmetic_subcategory") == "outfits", "Irelia is offered under Outfits for 450 Gems")
 		for item: Dictionary in store.CATALOG:
 			if store._preview_parts_for_item(item).is_empty():
 				continue
