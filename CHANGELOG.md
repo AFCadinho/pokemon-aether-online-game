@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Compact personal boost tooltips to one line per effect with its remaining duration or encounter count.
+
 - Display Encounter Guard charge in the personal boosts tray, with a compact remaining count and descriptive tooltip, removing the overlapping trainer-header label.
 
 - Prepare normal and shiny 3D models for 120 additional forms for the next model release, with native animations and compact pair packs; fix eight model-name aliases that prevented existing models from being found.

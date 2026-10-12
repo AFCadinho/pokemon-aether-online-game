@@ -14274,15 +14274,7 @@ func _personal_buffs_summary_tooltip() -> String:
 		active_personal_buffs.size()
 	)]
 	for buff_value: Variant in active_personal_buffs:
-		var buff := buff_value as Dictionary
-		var description := _localized_buff_description(buff)
-		var remaining := str(buff.get("remaining", "")).strip_edges()
-		lines.append("")
-		lines.append(_localized_buff_name(buff))
-		if description != "":
-			lines.append(description)
-		if remaining != "":
-			lines.append(LocalizationManager.text("ui.buff.remaining", {"remaining": remaining}))
+		lines.append(_buff_tooltip(buff_value as Dictionary))
 	lines.append(LocalizationManager.text(
 		"ui.buff.hide_details" if personal_buffs_expanded else "ui.buff.show_details"
 	))
@@ -14418,14 +14410,9 @@ func _apply_buff_tray_group_visibility(panel: PanelContainer, tray_available: bo
 	)
 
 func _buff_tooltip(buff: Dictionary) -> String:
-	var lines: Array[String] = [_localized_buff_name(buff)]
-	var description := _localized_buff_description(buff)
-	if description != "":
-		lines.append(description)
+	var name := _localized_buff_name(buff)
 	var remaining := str(buff.get("remaining", "")).strip_edges()
-	if remaining != "":
-		lines.append(LocalizationManager.text("ui.buff.remaining", {"remaining": remaining}))
-	return "\n".join(lines)
+	return name if remaining.is_empty() else "%s · %s" % [name, remaining]
 
 func _buff_overflow_tooltip(buffs: Array, start_index: int) -> String:
 	var names: Array[String] = []
