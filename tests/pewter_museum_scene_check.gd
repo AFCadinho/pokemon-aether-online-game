@@ -37,6 +37,8 @@ func _run() -> void:
 		occupied[tile] = true
 		_check(not npc.npc_id.is_empty() and npc.npc_sprite_frames != null, "museum NPC has metadata and sprite " + npc.name)
 	_check(occupied.size() == 5, "four museum dialogue NPCs and an indoor attendant are present")
+	var buyer := museum.get_node("Entities/NPCs/CollectorHugo")
+	_check(buyer.position == Vector2(464, 464) and buyer.has_method("_offer_sale"), "Hugo buys ores behind the right blue counter")
 	_check(not city.has_node("Entities/NPCs/MuseumAttendantIris"), "outdoor entrance has no payment guard")
 	var attendant := museum.get_node("Entities/NPCs/MuseumAttendantIris")
 	_check(attendant.position == Vector2(400, 528) and attendant.guarded_transition_id == "kanto_pewter_city_museum__to_exhibits"

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Connect Legendary Mining Drops to Rock Smash's rock tiers, show their chances and values in Skills, and let Collector Hugo buy all ores after confirmation at the Pewter Museum counter. Update the forum guide for the upcoming release.
+
 - Add distinct transparent pixel-art inventory icons for Emberite, Voltite, Glacite, Astralite and Aetherium Ore.
 
 - Keep the two HP cards in 3D single battles on a fixed upper row, with your Pokémon on the left and the opponent on the right. Keep stat indicators attached and reserve space for the battle header as the window resizes.
