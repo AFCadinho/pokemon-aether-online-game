@@ -2373,7 +2373,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "psychicnoise": {
       "name": "Psychic Noise",
@@ -2449,7 +2449,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "screech": {
       "name": "Screech",
@@ -2574,7 +2574,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved",
+      "presentation_review": "implemented-pending-player-review",
       "battlefield_staging": "twin-icy-spirals"
     },
     "blizzard": {
@@ -2781,7 +2781,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "battlefield-staging-user-approved",
+      "presentation_review": "implemented-pending-player-review",
       "battlefield_staging": "rolling-refractive-heat-front"
     },
     "hurricane": {
