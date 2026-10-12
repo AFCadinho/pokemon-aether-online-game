@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show battle preparation and Pokémon download progress when entering 3D AI Sparring or PvP, prepare Team Preview before revealing the field, and start battle music once the arena is visible.
+
 - Retire obsolete v11 model downloads after a verified full offline backup; keep every v13 model and reused ZIP available. Older clients requesting retired models must update.
 
 - Add native 3D presentations for the remaining 707 unique gameplay moves (901 total), with explicit per-move profiles, solid attack forms, bounded animation sounds, selected cinematic cameras and temporary lighting. Cover physical/special Z-move ID aliases, preserve the existing 194 presentations, and extend the offline review picker.

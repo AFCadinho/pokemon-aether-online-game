@@ -11,6 +11,9 @@ var generation := 0
 var reveal_tween: Tween
 var chat_bridge: Node
 var loading_label: Label
+var loading_progress: ProgressBar
+var loading_backdrop: ColorRect
+var loading_entry_requested := false
 const FADE_SECONDS := 0.18
 const MIN_FADE_FRAMES := 12
 var outgoing_snapshot: TextureRect
@@ -43,6 +46,14 @@ func _ready() -> void:
 	outgoing_snapshot.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(outgoing_snapshot)
 	move_child(outgoing_snapshot, 0)
+	loading_backdrop = ColorRect.new()
+	loading_backdrop.name = "LoadingBackdrop"
+	loading_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	loading_backdrop.color = Color(0.006, 0.014, 0.035, 1.0)
+	loading_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(loading_backdrop)
+	move_child(loading_backdrop, 1)
+	loading_backdrop.hide()
 	var stack := VBoxContainer.new()
 	stack.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	stack.position = Vector2(-260,-55)
@@ -52,7 +63,13 @@ func _ready() -> void:
 	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	loading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	loading_label.custom_minimum_size = Vector2(520,60)
+	loading_label.add_theme_font_size_override("font_size", 28)
 	stack.add_child(loading_label)
+	loading_progress = ProgressBar.new()
+	loading_progress.custom_minimum_size = Vector2(520, 8)
+	loading_progress.show_percentage = false
+	loading_progress.indeterminate = true
+	stack.add_child(loading_progress)
 	stack.hide()
 func _prepare_2d_fallback() -> void:
 	if not is_instance_valid(battle):
@@ -144,13 +161,20 @@ func _process(_delta: float) -> void:
 					_reveal_cover()
 	var progress: Dictionary = presenter.battle_download_progress() if is_instance_valid(presenter) and not presenter.preparation_failed else {}
 	var show_download := not preparation_ready and not progress.is_empty() and loading_message_after_ms > 0 and Time.get_ticks_msec() >= loading_message_after_ms
-	loading_label.get_parent().visible = show_download
+	var show_preparation := loading_entry_requested and not preparation_ready and reveal_tween == null
+	loading_label.get_parent().visible = show_download or show_preparation
+	loading_progress.visible = loading_entry_requested
+	loading_progress.indeterminate = not show_download or int(progress.get("total_bytes", 0)) <= 0
 	loading_label.text = ""
 	if show_download:
 		loading_label.text = LocalizationManager.text("ui.battle.downloading_pokemon")
 		var total := int(progress.get("total_bytes", 0))
 		if total > 0:
-			loading_label.text += " %d%%" % clampi(int(100.0 * int(progress.get("received_bytes", 0)) / total), 0, 99)
+			var percent := clampi(int(100.0 * int(progress.get("received_bytes", 0)) / total), 0, 99)
+			loading_label.text += " %d%%" % percent
+			loading_progress.value = percent
+	elif show_preparation:
+		loading_label.text = LocalizationManager.text("ui.battle.preparing_battle")
 
 func prewarm_battle(instance: Control, immersive := true) -> void:
 	# Build battle controls while the world is open on any platform. Keep the whole
@@ -171,6 +195,16 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_
 	$Cover.color.a = 0.0
 	loading_label.get_parent().hide()
 	loading_message_after_ms = Time.get_ticks_msec() + 500
+	var settings := get_node("/root/SettingsManager")
+	loading_entry_requested = transition_style == WildEncounterTransition.STYLE_FULLSCREEN_FADE and settings.battle_presentation_mode in ["2.5d", "3d"] and preload("res://scripts/battle/battle_ui/model_platform.gd").supported()
+	loading_backdrop.visible = loading_entry_requested
+	if loading_entry_requested:
+		# Replace the lobby snapshot immediately, including local model validation
+		# and render warmup, then fade directly from this screen to the ready arena.
+		outgoing_snapshot.texture = null
+		loading_message_after_ms = Time.get_ticks_msec()
+		loading_label.text = LocalizationManager.text("ui.battle.preparing_battle")
+		loading_label.get_parent().show()
 	# Entry callbacks release the fade only after authoritative scene setup.
 	# Replay/resume paths without an encounter transition retain auto reveal.
 	reveal_requested = transition_style != WildEncounterTransition.STYLE_FULLSCREEN_FADE
@@ -239,7 +273,7 @@ func _reveal_when_prepared(token: int) -> void:
 	var settings := get_node("/root/SettingsManager")
 	if presenter != null and settings.battle_presentation_mode in ["2.5d", "3d"] and not settings.has_manual_battle_3d_catalog_selection() and not OS.has_environment("POKEAETHER_3D_STAGE_REPORT") and preload("res://scripts/battle/battle_ui/model_platform.gd").supported():
 		# A fresh install has no models yet. Keep the first encounter covered
-		# until its combatants are known; Team Preview deliberately opens empty.
+		# until combatants or the public Team Preview roster are known.
 		var model_deadline := Time.get_ticks_msec() + 30000
 		while not released and token == generation and is_instance_valid(battle) and is_instance_valid(presenter):
 			if bool(battle.get("team_preview_lead_selection_active")):
@@ -271,6 +305,8 @@ func _reveal_when_prepared(token: int) -> void:
 
 
 func reveal_pending_entry() -> void:
+	# The already prepared empty arena provides feedback for early world entries.
+	loading_entry_requested = false
 	var settings := get_node("/root/SettingsManager")
 	if settings.battle_presentation_mode == "3d" and preload("res://scripts/battle/battle_ui/model_platform.gd").supported():
 		var presenter := battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")
@@ -301,6 +337,8 @@ func _apply_entry_fade() -> void:
 		return
 	content.position = Vector2.ZERO
 	content.modulate.a = fade_progress
+	if loading_backdrop != null:
+		loading_backdrop.modulate.a = 1.0 - fade_progress
 	if outgoing_snapshot != null:
 		outgoing_snapshot.position = Vector2.ZERO
 		outgoing_snapshot.modulate.a = 1.0

@@ -211,6 +211,7 @@
   "ui.settings.storage.confirm_models": "Gedownloade 3D Pokémon-modellen verwijderen? Ze worden opnieuw gedownload wanneer je ze nodig hebt. Je Pokémon en voortgang blijven bewaard.",
   "ui.settings.storage.failed": "Sommige bestanden konden niet worden verwijderd. Probeer het opnieuw.",
   "ui.battle.downloading_pokemon": "Pokémon downloaden…",
+  "ui.battle.preparing_battle": "Gevecht voorbereiden…",
   "ui.mobile.panel.options": "Items",
   "ui.mobile.panel.actions": "Acties",
   "ui.mobile.panel.party": "Team",
