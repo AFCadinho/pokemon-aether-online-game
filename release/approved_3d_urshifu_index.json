@@ -1,0 +1,175 @@
+{
+  "schema": 1,
+  "kind": "pokeaether-optional-asset-index",
+  "catalog_revision": "urshifu-shared-local-v1",
+  "runtime_contract": {
+    "pokemon_3d": 2,
+    "godot": "4.6"
+  },
+  "assets": [
+    {
+      "asset_id": "pokemon_3d:urshifu-rapid-strike:base",
+      "species_id": "urshifu-rapid-strike",
+      "form_id": "base",
+      "version": 1,
+      "dependencies": [],
+      "appearances": [
+        {
+          "variant": "normal",
+          "runtime_identity": "urshifu-rapid-strike",
+          "runtime_path": "models/normal.scn",
+          "runtime_sha256": "9945579e6afada95893c1081af68caed12e46bc90bd5830350da97c517919ca3",
+          "bytes": 3862399,
+          "source_sha256": "8942567349ca16dd31247c143dabdb618e16ff71f6af207d59d173c3ea96293d",
+          "cache_source_bytes": 10656997,
+          "semantic_sha256": "55e83f36f0950050d9983e15f5d1cdbea7c48f8ac207c249e55da96e7ec2980f"
+        },
+        {
+          "variant": "shiny",
+          "runtime_identity": "urshifu-rapid-strike@shiny",
+          "runtime_path": "models/shiny.scn",
+          "runtime_sha256": "f633479a2d48e59183ea8481414ee6589bda8cee274c0b31e4f647dd5e9a17d5",
+          "bytes": 3862489,
+          "source_sha256": "76ef6e80a0088097e6c6440d15da278b86891a3fe00facc267ad7c9a2f3c16ca",
+          "cache_source_bytes": 10633981,
+          "semantic_sha256": "c8146b43f2d9c9a2fafa0e8cd48b7990ebe6a44d434ff1d58b37c8ab379d9fd7"
+        }
+      ],
+      "format": "model-pair-pck-v1",
+      "national_dex": 892,
+      "pair_manifest": {
+        "schema": 1,
+        "kind": "pokeaether-model-pair",
+        "asset_id": "pokemon_3d:urshifu-rapid-strike:base",
+        "species_id": "urshifu-rapid-strike",
+        "form_id": "base",
+        "version": 1,
+        "dependencies": [],
+        "appearances": [
+          {
+            "variant": "normal",
+            "runtime_identity": "urshifu-rapid-strike",
+            "runtime_path": "models/normal.scn",
+            "runtime_sha256": "9945579e6afada95893c1081af68caed12e46bc90bd5830350da97c517919ca3",
+            "bytes": 3862399,
+            "source_sha256": "8942567349ca16dd31247c143dabdb618e16ff71f6af207d59d173c3ea96293d",
+            "cache_source_bytes": 10656997,
+            "semantic_sha256": "55e83f36f0950050d9983e15f5d1cdbea7c48f8ac207c249e55da96e7ec2980f"
+          },
+          {
+            "variant": "shiny",
+            "runtime_identity": "urshifu-rapid-strike@shiny",
+            "runtime_path": "models/shiny.scn",
+            "runtime_sha256": "f633479a2d48e59183ea8481414ee6589bda8cee274c0b31e4f647dd5e9a17d5",
+            "bytes": 3862489,
+            "source_sha256": "76ef6e80a0088097e6c6440d15da278b86891a3fe00facc267ad7c9a2f3c16ca",
+            "cache_source_bytes": 10633981,
+            "semantic_sha256": "c8146b43f2d9c9a2fafa0e8cd48b7990ebe6a44d434ff1d58b37c8ab379d9fd7"
+          }
+        ],
+        "resource_root": "res://pokemon-pairs/fc7a1f49537cf8e262cd8ba86e132c2363f05514f2e21e179683967b21966947",
+        "files": [
+          {
+            "path": "models/normal.scn",
+            "bytes": 3862399,
+            "sha256": "9945579e6afada95893c1081af68caed12e46bc90bd5830350da97c517919ca3",
+            "decoded_bytes": 7667815
+          },
+          {
+            "path": "models/shiny.scn",
+            "bytes": 3862489,
+            "sha256": "f633479a2d48e59183ea8481414ee6589bda8cee274c0b31e4f647dd5e9a17d5",
+            "decoded_bytes": 7667821
+          },
+          {
+            "path": "textures/0cd47eeb3ac41aa512e1d1907a71cc8d4f11f1ccb273485d649002ac7e83c7c2.res",
+            "bytes": 26635,
+            "sha256": "deaea2fe6cd2f19af352700e094bdd2a5bcbfd36f00739b2df01d4d06e89adac",
+            "decoded_bytes": 262639
+          },
+          {
+            "path": "textures/114b575410614cba1af12e5473dbc87dc8a4c75afa18268a9e3f97d6d4c90279.res",
+            "bytes": 87492,
+            "sha256": "8a9b0c5735ed9bc388121f89db740d38d14399ccc2ca6da6a1deb56b430c11f3",
+            "decoded_bytes": 349986
+          },
+          {
+            "path": "textures/1d209feb2a13c6911da719470d45a4f5141ef96a787f2d9c9664de8f0dd31e6e.res",
+            "bytes": 341852,
+            "sha256": "2396551eb38b9644ebe5ef7e7fb8999155603c11b0f365733041f60e12704a25",
+            "decoded_bytes": 1049074
+          },
+          {
+            "path": "textures/27cf3c27924bfce59635014859ca1af654a63aef8915a60d17a79e7a2a8f98f3.res",
+            "bytes": 669059,
+            "sha256": "04ffc7b0d2a27a51e858c8610d6c7666791a9b9be175c198dcab266c4104b1b0",
+            "decoded_bytes": 4194799
+          },
+          {
+            "path": "textures/285211e31ee6ffb408529ecee7a1072c08f65151fb65db4eade7a969fecd1c6b.res",
+            "bytes": 788,
+            "sha256": "724e7f3b148e87b7602256b770f3b2b593380cf504e18d520d01926a488f0bbe",
+            "decoded_bytes": 49653
+          },
+          {
+            "path": "textures/3a657c74dc1da2d175e3fabdb88e85acc195f3f1bcb47c4489959c07b70ba8ce.res",
+            "bytes": 656868,
+            "sha256": "a4adab8e1ca147d417effb8efbe05d93f4bb6cf558775e52c60db27e501d01f0",
+            "decoded_bytes": 4194799
+          },
+          {
+            "path": "textures/4531c5aaf144a1e10b33a497c3da1fff8b3fb47f60ea722115bd5964eeeddc8c.res",
+            "bytes": 445801,
+            "sha256": "053296315774cb5fce1a0d322f605c9481b204d3ce6fb552c2c86cc5f4a4327b",
+            "decoded_bytes": 3146225
+          },
+          {
+            "path": "textures/488cb7f9b69aea069d7b6482432d24d63bed09689cfbcb8234c4de487ec4eaef.res",
+            "bytes": 733023,
+            "sha256": "0db57513b91b6df842609849d5f92d6547b8e2ebca16585484ac495616a63796",
+            "decoded_bytes": 4194799
+          },
+          {
+            "path": "textures/49f7e9e0d62222ddbe8ad4151e62f71600c0cd78f015b31949cb07106ec5dceb.res",
+            "bytes": 310179,
+            "sha256": "860433f38bdc3fb5d385069ef502f406f25c9cbef069dfe57f9bebfe6d71ec7b",
+            "decoded_bytes": 1049074
+          },
+          {
+            "path": "textures/5e63ae40ef7d332243a3a085407169c93345a1dedc005db4b3538bf4710af060.res",
+            "bytes": 787,
+            "sha256": "11a98d475fab8783faaa713bf9a7ccb9ef9f422ca63e80eb27701ef8853cc51a",
+            "decoded_bytes": 49653
+          },
+          {
+            "path": "textures/80f4b4ebb9491e8f605b1d2d747cadf6fec2ff1823ff5bd22401d67a435acf68.res",
+            "bytes": 948,
+            "sha256": "8ac9d2d8b343ff6a84840cbc77a1f6edf0c3eb71ebf85844fcb97501a8ca3287",
+            "decoded_bytes": 66030
+          },
+          {
+            "path": "textures/baaf043933a09411b606ebb49768a600ade5dda46f2db9a7a7770dd6c66eb477.res",
+            "bytes": 479533,
+            "sha256": "9d95f656a8d944e7f25dc06c5f982a8fd7be7fc0df1578db712c1e1671d5349e",
+            "decoded_bytes": 3146225
+          },
+          {
+            "path": "textures/dfb2801d158543f7e5c10c20e871c27fcbefa4e3d4dafdee32602e73c12f35ff.res",
+            "bytes": 727995,
+            "sha256": "27d353bcd0644cfc7fa15adab457519aaaaa00bc98a69b32220b314828330053",
+            "decoded_bytes": 4194799
+          },
+          {
+            "path": "textures/e6e53b46f9cce85030761ba833206b1f2f7e6ab7d3c73491007b2b2bb437412b.res",
+            "bytes": 947,
+            "sha256": "467cf80fcab2582bef4f831b29ccf9d4e2b38e4cbd4982eac21db8f284f5c9fe",
+            "decoded_bytes": 66030
+          }
+        ]
+      },
+      "sha256": "b8eb5b4965bef2f3cbd194fe751c30ba00215fe7579e4814fd4796dd684764a5",
+      "size_bytes": 12215440,
+      "object_key": "optional-assets/pokemon_3d/urshifu-rapid-strike/base/v1-b8eb5b4965bef2f3cbd194fe751c30ba00215fe7579e4814fd4796dd684764a5.pck"
+    }
+  ]
+}

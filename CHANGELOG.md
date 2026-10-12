@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare normal and shiny Urshifu Rapid Strike 3D models with their own stance and animations for the next model release, preventing this missing form from forcing battles into 2D once activated.
+
 - Identify Guild room templates by their position from the Main Hall: Room 1 on the right and Room 2 on the left, replacing confusing interior door-side labels.
 
 - Offer the Irelia Outfit Box for both genders in the Gift Store for 450 Gems, with six fixed-colour parts and the standard 450-credit bound alternative.
