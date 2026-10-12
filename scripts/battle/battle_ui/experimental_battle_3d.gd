@@ -1254,9 +1254,10 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 		_start_move_contact(actor, target, timing, effect)
 	effect.start(move, timing, options, bind_action_clock(actor), positions,
 		func(): return active and _move_visual(actor) == source and _move_visual(target) == destination)
-	if MoveEffect.move_key(move) == "dracometeor" and not effect.done and is_instance_valid(camera):
+	if move_camera.supports(MoveEffect.move_key(move)) and not effect.done and is_instance_valid(camera):
 		move_camera.begin(effect, actor, target)
-		move_atmosphere.begin(effect)
+		if MoveEffect.move_key(move) == "dracometeor":
+			move_atmosphere.begin(effect)
 		effect.finished.connect(func():
 			move_atmosphere.clear(effect)
 			if move_camera.clear(effect) and active and is_instance_valid(camera):
