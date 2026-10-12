@@ -1166,11 +1166,11 @@
   },
   "guild-room-1-template": {
     "name": "Guild Café · Sala 1",
-    "shortDesc": "Sala 1, porta à esquerda. Receba um item na Bag e doe-o ao Guild Manager para desbloquear este projeto editável permanentemente para sua Guild."
+    "shortDesc": "Sala 1, à direita do saguão principal. Receba um item na Bag e doe-o ao Guild Manager para desbloquear este projeto editável permanentemente para sua Guild."
   },
   "guild-room-2-template": {
     "name": "Grand Lounge · Sala 2",
-    "shortDesc": "Sala 2, porta à direita. Receba um item na Bag e doe-o ao Guild Manager para desbloquear este projeto editável permanentemente para sua Guild."
+    "shortDesc": "Sala 2, à esquerda do saguão principal. Receba um item na Bag e doe-o ao Guild Manager para desbloquear este projeto editável permanentemente para sua Guild."
   },
   "flying-nimbus-mount": {
     "name": "Montaria Nuvem Voadora",
