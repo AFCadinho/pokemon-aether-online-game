@@ -1,4 +1,5 @@
 {
+  "ui.buff.encounter_guard.encounters": "{count} 次遭遇",
   "ui.encounter_guard.partner": "正在等待队友解锁 Encounter Guard…",
   "ui.encounter_guard.prompt": "依次点击以下三个符号：",
   "ui.encounter_guard.timer": "剩余 {seconds} 秒 · 超时将结束遭遇并退出登录。",

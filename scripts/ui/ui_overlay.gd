@@ -13865,6 +13865,8 @@ func _setup_status_docks() -> void:
 			"cooldownUntil": "",
 		},
 	])
+	if not EncounterGuardService.charge_changed.is_connected(_refresh_personal_buffs_from_entitlements):
+		EncounterGuardService.charge_changed.connect(_refresh_personal_buffs_from_entitlements)
 	set_personal_buffs([])
 	_load_startup_global_buffs.call_deferred()
 
@@ -13988,6 +13990,7 @@ func _refresh_personal_buffs_from_entitlements() -> void:
 			var buff := buff_value as Dictionary
 			var buff_id := str(buff.get("id", "")).strip_edges().to_lower()
 			if buff_id in [
+				"encounter_guard",
 				"adventure_party_exp",
 				"aether_blessing",
 				"aether_blessing_shiny_bonus",
@@ -14008,8 +14011,25 @@ func _refresh_personal_buffs_from_entitlements() -> void:
 	var party_exp_bonus := _current_adventure_party_exp_buff()
 	if not party_exp_bonus.is_empty():
 		buffs.push_front(party_exp_bonus)
+	var encounter_guard_buff := _current_encounter_guard_buff()
+	if not encounter_guard_buff.is_empty():
+		buffs.push_front(encounter_guard_buff)
 	_render_personal_buffs(buffs)
 	_refresh_aether_blessing_membership_status()
+
+
+func _current_encounter_guard_buff() -> Dictionary:
+	var guard: Dictionary = EncounterGuardService.guard
+	var remaining := maxi(int(guard.get("remaining", 0)), 0)
+	if not bool(guard.get("active", false)) or remaining == 0:
+		return {}
+	return {
+		"id": "encounter_guard",
+		"name": ItemLocalization.display_name("encounter-guard", "Encounter Guard"),
+		"description": ItemLocalization.short_description("encounter-guard"),
+		"remaining": LocalizationManager.text("ui.buff.encounter_guard.encounters", {"count": remaining}),
+		"compactRemaining": str(remaining),
+	}
 
 
 func _current_adventure_party_exp_buff() -> Dictionary:

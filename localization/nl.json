@@ -1,4 +1,5 @@
 {
+  "ui.buff.encounter_guard.encounters": "{count} encounters",
   "ui.encounter_guard.partner": "Wachten tot je partner Encounter Guard heeft ontgrendeld…",
   "ui.encounter_guard.prompt": "Klik deze drie symbolen in volgorde aan:",
   "ui.encounter_guard.timer": "Nog {seconds}s · Bij timeout eindigt de encounter en word je uitgelogd.",
