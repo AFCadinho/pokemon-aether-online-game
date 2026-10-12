@@ -226,9 +226,13 @@ func _preview_keys() -> Array[String]:
 	return result
 
 func _preview_supported() -> bool:
+	return _unsupported_preview_keys().is_empty()
+
+func _unsupported_preview_keys() -> Array[String]:
+	var unsupported: Array[String] = []
 	for identity in _preview_keys():
-		if not _supports_combatant(identity, false, false, false): return false
-	return true
+		if not _supports_combatant(identity, false, false, false): unsupported.append(identity)
+	return unsupported
 
 func _preview_blocked() -> bool:
 	return not _preview_supported() or not preview_problem.is_empty() or _preview_keys().any(func(identity): return failed_models.has(identity))
@@ -290,7 +294,7 @@ func material_response_slots() -> Array[Dictionary]:
 func _process_team_preview() -> void:
 	_queue_preview_download()
 	if not _preview_supported() or not preview_problem.is_empty():
-		reason = preview_problem if not preview_problem.is_empty() else "Unsupported Team Preview Pokémon/form"
+		reason = preview_problem if not preview_problem.is_empty() else "Unsupported Team Preview Pokémon/form: " + ", ".join(_unsupported_preview_keys())
 		_set_active(false)
 		_upgrade_legacy_preview()
 		return
@@ -377,6 +381,7 @@ func _sync_weather() -> void:
 
 var saved_colors := {}
 var reason := "2D selected"
+var last_fallback_reason := ""
 var catalog_problem := ""
 var current_actions := ["idle", "idle", "idle", "idle"]
 var resting := [true, true, true, true]
@@ -608,6 +613,12 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 		if settings.battle_presentation_mode not in ["2.5d", "3d"] or not ModelPlatform.supported():
 			warming_render = false
 			return
+		if _preview_wants_3d() and _preview_blocked():
+			# An unsupported roster or failed preview does not need an arena or
+			# catalog to finish loading before revealing its deliberate 2D fallback.
+			_process_team_preview()
+			warming_render = false
+			return
 		var requested: String = settings.get_battle_3d_catalog_path()
 		if requested.is_empty():
 			requested = OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
@@ -653,9 +664,14 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 		if Time.get_ticks_msec() >= deadline or Time.get_ticks_msec() >= hard_deadline:
 			_cancel_load()
 			pending_entries.clear()
-			preparation_failed = true
 			warming_render = false
 			reason = "3D preparation stalled: " + preparation_phase
+			if _preview_wants_3d():
+				# Only abandon this roster. Selected leads still get their own
+				# download/validation attempt after clear_team_preview().
+				preview_problem = reason
+			else:
+				preparation_failed = true
 			_set_active(false)
 			return
 		await get_tree().process_frame
@@ -2317,6 +2333,13 @@ func _clear_actors() -> void:
 		identities[i] = ""
 
 func _set_active(value: bool) -> void:
+	if value:
+		last_fallback_reason = ""
+	elif not preparation_cancelled and not _models_pending() and not is_instance_valid(model_downloader):
+		var terminal := preparation_failed or reason.begins_with("Unsupported") or reason.begins_with("Prepared") or (not preview_problem.is_empty() and reason == preview_problem)
+		if terminal and reason != last_fallback_reason:
+			last_fallback_reason = reason
+			print("BATTLE_3D_FALLBACK phase=", "team_preview" if preview_enabled else "battle", " reason=", reason)
 	if active and not value:
 		_clear_substitute_models()
 		_clear_status_effects()

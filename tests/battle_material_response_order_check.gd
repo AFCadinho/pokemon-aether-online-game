@@ -47,6 +47,18 @@ func _run() -> void:
 	assert(light.own_world_3d)
 	assert(response.world.get_node_or_null("battle_weather_visual") == null)
 	assert(response.world.get_node_or_null("battle_field_visual") == null, "Persistent field visuals must not be duplicated into the irradiance pass")
+	# The preview can be cleared after _process but before frame_pre_draw.
+	var source := Node3D.new()
+	var copy := Node3D.new()
+	response.pairs[0] = [[source, copy]]
+	source.free()
+	var before_sync: int = response.sync_count
+	response._sync()
+	assert(response.sync_count == before_sync + 1, "Freed preview sources must not interrupt the pre-draw callback")
+	copy.free()
+	response._sync()
+	assert(response.sync_count == before_sync + 2, "Freed irradiance copies must also be skipped")
+	response.pairs[0] = []
 	response._drop()
 	await process_frame
 	assert(not is_instance_valid(light))

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep a failed or stalled 3D Team Preview from disabling 3D for supported battle leads, resolve unsupported previews immediately, and safely release preview models between render frames.
+
 - Show readable species nameplates above the opposing Pokémon during 3D Team Preview, following their arena positions and clearing them before lead summons.
 
 - Reframe the 3D battle overview toward the Pokémon with a higher viewing angle and HUD-aware zoom limits, keeping resting models above the battle controls while preserving attack timing, cinematic shots and 2.5D framing.

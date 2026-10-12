@@ -221,10 +221,12 @@ func _sync() -> void:
 	camera.far = stage.camera.far
 	for list in pairs:
 		for pair in list:
+			# Preview teardown may free an actor between reconciliation and the
+			# pre-draw callback. Check the Variants before casting them to Node.
+			if not is_instance_valid(pair[0]) or not is_instance_valid(pair[1]):
+				continue
 			var source: Node = pair[0]
 			var copy: Node = pair[1]
-			if not is_instance_valid(source) or not is_instance_valid(copy):
-				continue
 			if source is Node3D:
 				copy.transform = source.transform
 				copy.visible = source.visible
