@@ -1171,5 +1171,9 @@
   "guild-room-2-template": {
     "name": "Grand Lounge · Room 2",
     "shortDesc": "Room 2, door right. Receive a Bag item and donate it at the Guild Manager to permanently unlock this editable design for your Guild."
+  },
+  "flying-nimbus-mount": {
+    "name": "Flying Nimbus Mount",
+    "shortDesc": "Unlocks Flying Nimbus as a land mount. Requires a Mount License for the current region."
   }
 }
