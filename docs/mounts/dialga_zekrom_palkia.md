@@ -12,8 +12,8 @@
 These mounts can be granted through existing administration/reward
 tooling. Ownership unlocks the corresponding Land selector entry; the current
 region's Mount License remains required.
-Dialga, Zekrom and Palkia each have a Land Gift Store box for 750 Aether Gems or
-eligible Gift Voucher credits. Each grants the corresponding normal or shiny
+Their Land Gift Store boxes cost 750 Aether Gems for Dialga and Palkia, and
+1,000 Aether Gems for Zekrom. Eligible card credit uses the same numeric price. Each grants the corresponding normal or shiny
 mount using the shared 50/60/70/80 pity
 rules; the short description shows the mount and 50% base chance.
 Suicune is deferred.

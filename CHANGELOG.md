@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Keep a failed or stalled 3D Team Preview from disabling 3D for supported battle leads, resolve unsupported previews immediately, and safely release preview models between render frames.
+- Set the Zekrom Mount Box Gift Store price to 1,000 Aether Gems.
 
 - Add the Flying Nimbus Mount Box to Gift Store → Mounts → Land for 500 Aether Gems, with normal and dark shiny previews.
 
@@ -15,6 +15,8 @@
 - Add the grantable Flying Nimbus land mount with the approved golden cloud, seated rider, gentle hover and a short moving cloud trail.
 
 - Show readable species nameplates above the opposing Pokémon during 3D Team Preview, following their arena positions and clearing them before lead summons.
+
+- Keep a failed or stalled 3D Team Preview from disabling 3D for supported battle leads, resolve unsupported previews immediately, and safely release preview models between render frames.
 
 - Reframe the 3D battle overview toward the Pokémon with a higher viewing angle and HUD-aware zoom limits, keeping resting models above the battle controls while preserving attack timing, cinematic shots and 2.5D framing.
 
