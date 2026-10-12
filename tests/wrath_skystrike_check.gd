@@ -39,6 +39,17 @@ func _run() -> void:
 					if effect.impact_drawn:
 						assert(outcome=="hit" and effect.elapsed>=effect.impact)
 						saw_impact = true
+					if move=="supersonicskystrike" and effect.elapsed>=effect.impact:
+						assert((effect.cursor>=11)==(outcome=="hit"),"Solid explosion exists only on a confirmed hit")
+						var after: float = (effect.elapsed-effect.impact)/(effect.duration-effect.impact)
+						if outcome=="hit" and after<0.65:
+							for i in range(1,effect.cursor):
+								var piece: MeshInstance3D = effect.pieces[i]
+								var bounds := piece.mesh.get_aabb()
+								for corner in 8: _in_frame(piece.transform*(bounds.get_endpoint(corner)*1.12),"Explosion volume stays framed")
+							var opacity: float = effect.skystrike_explosion.cloud.get_shader_parameter("opacity")
+							effect._process(0)
+							assert(effect.skystrike_explosion.cloud.get_shader_parameter("opacity")==opacity,"Explosion freezes with the native clock")
 					if move=="supersonicskystrike" and effect.elapsed>=effect.launch and effect.elapsed<effect.impact:
 						_in_frame(effect.anchors.call().actor_center, "Skystrike model stays framed during ascent and dive")
 					var pose: Transform3D = stage.camera.transform

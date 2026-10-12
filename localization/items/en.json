@@ -1207,5 +1207,33 @@
   "super-saiyan-4-outfit": {
     "name": "Super Saiyan 4 (SS4) Outfit Box",
     "shortDesc": "Contains five separate SS4 cosmetics: fur, trousers, shoes, hair and a tail (Back). Fits male and female characters."
+  },
+  "irelia-shirt": {
+    "name": "Irelia Tunic",
+    "shortDesc": "Activate this Irelia item in your Bag, then equip it in Character Customization."
+  },
+  "irelia-trousers": {
+    "name": "Irelia Trousers",
+    "shortDesc": "Activate this Irelia item in your Bag, then equip it in Character Customization."
+  },
+  "irelia-shoes": {
+    "name": "Irelia Boots",
+    "shortDesc": "Activate this Irelia item in your Bag, then equip it in Character Customization."
+  },
+  "irelia-hair": {
+    "name": "Irelia Hair",
+    "shortDesc": "Activate this Irelia item in your Bag, then equip it in Character Customization."
+  },
+  "irelia-circlet": {
+    "name": "Irelia Circlet",
+    "shortDesc": "Activate this Irelia item in your Bag, then equip it in Character Customization."
+  },
+  "irelia-blades": {
+    "name": "Irelia Floating Blades",
+    "shortDesc": "Activate this Irelia item in your Bag, then equip it in Character Customization."
+  },
+  "irelia-outfit": {
+    "name": "Irelia Outfit Box",
+    "shortDesc": "Contains six separate cosmetics: tunic, trousers, boots, hair, circlet and floating blades (Back). Fits male and female characters."
   }
 }

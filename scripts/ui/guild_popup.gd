@@ -1021,6 +1021,7 @@ func _build_member_page() -> Control:
 	member_content = VBoxContainer.new()
 	member_content.name = "GuildMemberDashboard"
 	member_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	member_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	member_content.add_theme_constant_override("separation", 12)
 	scroll.add_child(member_content)
 	return scroll
@@ -3280,6 +3281,7 @@ func _build_guild_bank_workspace() -> Control:
 	panel.name = "GuildBankWorkspace"
 	panel.custom_minimum_size = Vector2(0, 310)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 15, 13, 15, 14)
@@ -3483,6 +3485,7 @@ func _build_guild_funds_workspace() -> Control:
 func _build_guild_bank_category_preview(category: String) -> Control:
 	var workspace := VBoxContainer.new()
 	workspace.name = "GuildBank%sPreview" % category.capitalize()
+	workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	workspace.add_theme_constant_override("separation", 10)
 	var heading := HBoxContainer.new()
 	heading.add_theme_constant_override("separation", 10)
@@ -3513,6 +3516,7 @@ func _build_guild_bank_category_preview(category: String) -> Control:
 	var columns := GridContainer.new()
 	columns.name = "GuildBank%sPreviewColumns" % category.capitalize()
 	columns.columns = 2
+	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	columns.add_theme_constant_override("h_separation", 10)
 	workspace.add_child(columns)
 	match category:
@@ -4478,6 +4482,7 @@ func _build_guild_item_list(
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 240 if action == "deposit" else 190)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 10, 9, 10, 9)
@@ -4703,6 +4708,7 @@ func _build_guild_pokemon_list(
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 190)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 10, 9, 10, 9)
@@ -6057,25 +6063,64 @@ func _on_guild_member_action_selected(action_id: int, member: Dictionary) -> voi
 			_open_guild_leadership_transfer_dialog(member)
 
 
+func _build_guild_member_action_dialog(
+	dialog_name: String,
+	title: String,
+	message: String,
+	confirm_text: String,
+	icon: Texture2D,
+	variant: String = "primary"
+) -> AetherConfirmationDialog:
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	dialog.name = dialog_name
+	add_child(dialog)
+	dialog.configure(title, message, confirm_text, _t("common.cancel"))
+	dialog.accent_icon.texture = icon
+	dialog.panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 11, 1))
+	_set_margins(dialog.panel.get_node("Margin") as MarginContainer, 16, 14, 16, 14)
+	dialog.title_label.add_theme_font_size_override("font_size", 16)
+	dialog.title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	dialog.message_label.add_theme_font_size_override("font_size", 13)
+	dialog.message_panel.custom_minimum_size.y = 0
+	dialog.message_panel.size_flags_vertical = Control.SIZE_FILL
+	_apply_button_style(dialog.close_button)
+	_set_localized_property(dialog.close_button, "tooltip_text", "common.close")
+	_apply_button_style(dialog.cancel_button)
+	_apply_button_style(dialog.confirm_button, variant)
+	for button: Button in [dialog.cancel_button, dialog.confirm_button]:
+		button.focus_mode = Control.FOCUS_ALL
+		button.add_theme_stylebox_override("focus", button.get_theme_stylebox("hover").duplicate())
+	if get_viewport_rect().size.x < 480:
+		var old_actions := dialog.confirm_button.get_parent() as HBoxContainer
+		var actions := VBoxContainer.new()
+		actions.name = "GuildMemberDialogCompactActions"
+		actions.add_theme_constant_override("separation", 8)
+		old_actions.get_parent().add_child(actions)
+		dialog.cancel_button.reparent(actions)
+		dialog.confirm_button.reparent(actions)
+		old_actions.queue_free()
+	dialog.canceled.connect(dialog.queue_free)
+	return dialog
+
+
 func _open_guild_leadership_transfer_dialog(member: Dictionary) -> void:
 	var user_id := int(member.get("userId", 0))
 	if user_id <= 0 or str(member.get("role", "recruit")) == "leader":
 		return
 	var trainer_name := str(member.get("displayName", member.get("username", _t("common.unknown"))))
-	var dialog := ConfirmationDialog.new()
-	dialog.name = "GuildLeadershipTransferDialog_%d" % user_id
-	dialog.title = _t("ui.guild.leadership.transfer_title")
-	dialog.dialog_text = _t("ui.guild.leadership.transfer_confirm", {"trainer": trainer_name})
-	dialog.ok_button_text = _t("ui.guild.leadership.transfer_action_short")
-	dialog.cancel_button_text = _t("common.cancel")
-	_apply_guild_confirmation_style(dialog, "danger")
-	add_child(dialog)
+	var dialog := _build_guild_member_action_dialog(
+		"GuildLeadershipTransferDialog_%d" % user_id,
+		_t("ui.guild.leadership.transfer_title"),
+		_t("ui.guild.leadership.transfer_confirm", {"trainer": trainer_name}),
+		_t("ui.guild.leadership.transfer_action_short"),
+		GUILD_MEMBER_RANK_ICON,
+		"danger"
+	)
 	dialog.confirmed.connect(_transfer_guild_leadership.bind(user_id, trainer_name, dialog))
-	dialog.canceled.connect(dialog.queue_free)
-	dialog.popup_centered(Vector2i(500, 220))
+	dialog.popup_centered(Vector2i(520, 220))
 
 
-func _transfer_guild_leadership(user_id: int, trainer_name: String, dialog: ConfirmationDialog) -> void:
+func _transfer_guild_leadership(user_id: int, trainer_name: String, dialog: AetherConfirmationDialog) -> void:
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
 		if is_instance_valid(dialog):
@@ -6109,20 +6154,19 @@ func _open_guild_member_kick_dialog(member: Dictionary) -> void:
 	if user_id <= 0:
 		return
 	var trainer_name := str(member.get("displayName", member.get("username", _t("common.unknown"))))
-	var dialog := ConfirmationDialog.new()
-	dialog.name = "GuildMemberKickDialog_%d" % user_id
-	dialog.title = _t("ui.guild.member.kick_title")
-	dialog.dialog_text = _t("ui.guild.member.kick_confirm", {"trainer": trainer_name})
-	dialog.ok_button_text = _t("ui.guild.member.kick_confirm_action")
-	dialog.cancel_button_text = _t("common.cancel")
-	_apply_guild_confirmation_style(dialog, "danger")
-	add_child(dialog)
+	var dialog := _build_guild_member_action_dialog(
+		"GuildMemberKickDialog_%d" % user_id,
+		_t("ui.guild.member.kick_title"),
+		_t("ui.guild.member.kick_confirm", {"trainer": trainer_name}),
+		_t("ui.guild.member.kick_confirm_action"),
+		GUILD_MEMBER_REMOVE_ICON,
+		"danger"
+	)
 	dialog.confirmed.connect(_kick_guild_member.bind(user_id, trainer_name, dialog))
-	dialog.canceled.connect(dialog.queue_free)
-	dialog.popup_centered(Vector2i(470, 220))
+	dialog.popup_centered(Vector2i(520, 220))
 
 
-func _kick_guild_member(user_id: int, trainer_name: String, dialog: ConfirmationDialog) -> void:
+func _kick_guild_member(user_id: int, trainer_name: String, dialog: AetherConfirmationDialog) -> void:
 	var guild_service := get_node_or_null("/root/GuildService")
 	if guild_service == null:
 		if is_instance_valid(dialog):
@@ -6198,26 +6242,15 @@ func _open_guild_member_rank_dialog(member: Dictionary) -> void:
 	var user_id := int(member.get("userId", 0))
 	if user_id <= 0 or str(member.get("role", "recruit")) == "leader":
 		return
-	var dialog := ConfirmationDialog.new()
-	dialog.name = "GuildMemberRankDialog_%d" % user_id
-	dialog.title = _t("ui.guild.member.change_rank_title", {
-		"trainer": str(member.get("displayName", member.get("username", _t("common.unknown")))),
-	})
-	dialog.ok_button_text = _t("common.save")
-	dialog.cancel_button_text = _t("common.cancel")
-	_apply_guild_confirmation_style(dialog, "primary")
-	add_child(dialog)
-	var content := VBoxContainer.new()
-	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	content.offset_left = 18
-	content.offset_top = 48
-	content.offset_right = -18
-	content.offset_bottom = -62
-	content.add_theme_constant_override("separation", 9)
-	dialog.add_child(content)
-	var hint := _localized_label("ui.guild.member.change_rank_hint", 11, UI_MUTED)
-	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	content.add_child(hint)
+	var dialog := _build_guild_member_action_dialog(
+		"GuildMemberRankDialog_%d" % user_id,
+		_t("ui.guild.member.change_rank_title", {
+			"trainer": str(member.get("displayName", member.get("username", _t("common.unknown")))),
+		}),
+		_t("ui.guild.member.change_rank_hint"),
+		_t("common.save"),
+		GUILD_MEMBER_RANK_ICON
+	)
 	var select := OptionButton.new()
 	select.name = "GuildMemberRankSelect_%d" % user_id
 	select.custom_minimum_size = Vector2(0, 36)
@@ -6228,10 +6261,11 @@ func _open_guild_member_rank_dialog(member: Dictionary) -> void:
 		if role == current_role:
 			select.select(select.item_count - 1)
 	_apply_option_button_style(select)
-	content.add_child(select)
+	select.focus_mode = Control.FOCUS_ALL
+	dialog.add_custom_control(select)
 	dialog.confirmed.connect(_save_guild_member_rank.bind(user_id, current_role, select, dialog))
-	dialog.canceled.connect(dialog.queue_free)
-	dialog.popup_centered(Vector2i(430, 205))
+	dialog.popup_centered(Vector2i(480, 260))
+	select.grab_focus.call_deferred()
 
 
 func _open_guild_member_bank_permissions(member: Dictionary) -> void:
@@ -6430,7 +6464,7 @@ func _save_guild_member_rank(
 	user_id: int,
 	current_role: String,
 	select: OptionButton,
-	dialog: ConfirmationDialog
+	dialog: AetherConfirmationDialog
 ) -> void:
 	if select == null or select.selected < 0 or select.selected >= select.item_count:
 		return
@@ -6445,7 +6479,7 @@ func _save_guild_member_rank(
 		select.disabled = false
 		_set_member_status(_t("ui.guild.error.service_unavailable"), true)
 		if dialog != null and is_instance_valid(dialog):
-			dialog.popup_centered(Vector2i(430, 205))
+			dialog.popup_centered(Vector2i(480, 260))
 		return
 	var response: Variant = await guild_service.call("update_member_role", user_id, role)
 	var result := _dictionary(response)
@@ -6453,7 +6487,7 @@ func _save_guild_member_rank(
 		select.disabled = false
 		_set_member_status(str(result.get("error", _t("ui.guild.error.update_role"))), true)
 		if dialog != null and is_instance_valid(dialog):
-			dialog.popup_centered(Vector2i(430, 205))
+			dialog.popup_centered(Vector2i(480, 260))
 		return
 	if dialog != null and is_instance_valid(dialog):
 		dialog.queue_free()

@@ -1285,13 +1285,27 @@ func _run() -> void:
 	if managed_actions != null:
 		managed_actions.get_popup().id_pressed.emit(GuildPopup.GUILD_MEMBER_ACTION_CHANGE_RANK)
 		await process_frame
-	var rank_dialog := popup.find_child("GuildMemberRankDialog_2", true, false) as ConfirmationDialog
+	var rank_dialog := popup.find_child("GuildMemberRankDialog_2", true, false) as AetherConfirmationDialog
 	_check(rank_dialog != null and rank_dialog.visible, "Change rank opens from the member action menu")
-	_check_dialog_styled(rank_dialog, "Guild member rank dialog")
-	_check(popup.find_child("GuildMemberRankSelect_2", true, false) != null, "rank changes retain every assignable Guild rank")
+	await _check_member_action_dialog(rank_dialog, "Guild member rank dialog")
+	var rank_select := popup.find_child("GuildMemberRankSelect_2", true, false) as OptionButton
+	_check(rank_select != null and rank_select.item_count == GuildPopup.GUILD_ASSIGNABLE_ROLES.size(), "rank changes retain every assignable Guild rank")
+	_check(rank_select != null and str(rank_select.get_item_metadata(rank_select.selected)) == "captain", "rank changes select the member's current rank")
 	if rank_dialog != null:
-		rank_dialog.canceled.emit()
+		rank_dialog.cancel_button.pressed.emit()
 		await process_frame
+		_check(not is_instance_valid(rank_dialog), "Cancel closes the rank editor")
+	if managed_actions != null:
+		managed_actions.get_popup().id_pressed.emit(GuildPopup.GUILD_MEMBER_ACTION_TRANSFER_LEADERSHIP)
+		await process_frame
+	var transfer_dialog := popup.find_child("GuildLeadershipTransferDialog_2", true, false) as AetherConfirmationDialog
+	_check(transfer_dialog != null and transfer_dialog.visible, "leadership transfer opens from the member menu")
+	_check(transfer_dialog != null and transfer_dialog.message_label.text.contains("Maple") and transfer_dialog.message_label.text.contains("Captain"), "leadership transfer identifies the Trainer and explains the leader's new rank")
+	await _check_member_action_dialog(transfer_dialog, "Guild leadership transfer dialog", true)
+	if transfer_dialog != null:
+		transfer_dialog.close_button.pressed.emit()
+		await process_frame
+		_check(not is_instance_valid(transfer_dialog), "Close dismisses leadership transfer without confirming")
 	if managed_actions != null:
 		managed_actions.get_popup().id_pressed.emit(GuildPopup.GUILD_MEMBER_ACTION_BANK_RIGHTS)
 		await process_frame
@@ -1325,12 +1339,12 @@ func _run() -> void:
 	if managed_actions != null:
 		managed_actions.get_popup().id_pressed.emit(GuildPopup.GUILD_MEMBER_ACTION_KICK)
 		await process_frame
-	var kick_dialog := popup.find_child("GuildMemberKickDialog_2", true, false) as ConfirmationDialog
+	var kick_dialog := popup.find_child("GuildMemberKickDialog_2", true, false) as AetherConfirmationDialog
 	_check(kick_dialog != null and kick_dialog.visible, "removing a Guild member asks for confirmation")
-	_check(kick_dialog != null and kick_dialog.dialog_text.contains("Maple"), "Guild removal confirmation identifies the selected Trainer")
-	_check_dialog_styled(kick_dialog, "Guild member removal dialog")
+	_check(kick_dialog != null and kick_dialog.message_label.text.contains("Maple"), "Guild removal confirmation identifies the selected Trainer")
+	await _check_member_action_dialog(kick_dialog, "Guild member removal dialog", true)
 	if kick_dialog != null:
-		kick_dialog.canceled.emit()
+		kick_dialog.cancel_button.pressed.emit()
 		await process_frame
 	var captain_member_actions := popup._build_guild_member_actions_button(
 		{"userId": 2, "role": "member", "online": true}, "captain", 1, false
@@ -1724,6 +1738,9 @@ func _run() -> void:
 		localization_manager.set_locale("en")
 		await process_frame
 	popup.close()
+	await _check_compact_member_actions(packed, Vector2i(480, 360))
+	await _check_compact_member_actions(packed, Vector2i(360, 640))
+	await _check_expanding_bank_previews(packed)
 	quit(1 if failed else 0)
 
 
@@ -1784,6 +1801,105 @@ func _check_compact_bank_permissions(packed: PackedScene, viewport_size: Vector2
 		dialog.window_input.emit(escape)
 		await process_frame
 		_check(not is_instance_valid(dialog), "Escape closes the compact Bank rights editor")
+	viewport.free()
+
+
+func _check_member_action_dialog(dialog: AetherConfirmationDialog, label: String, danger := false) -> void:
+	_check(dialog != null and dialog.panel.has_theme_stylebox_override("panel"), "%s uses a styled Aether panel" % label)
+	if dialog == null:
+		return
+	for frame: int in range(8):
+		await process_frame
+	var initial_size := dialog.panel.size
+	for frame: int in range(8):
+		await process_frame
+	_check(dialog.panel.size.is_equal_approx(initial_size) and dialog.panel.size.y <= 320, "%s keeps its compact height after layout settles" % label)
+	var panel_rect := dialog.panel.get_global_rect()
+	var viewport_rect := dialog.get_viewport_rect()
+	_check(viewport_rect.encloses(panel_rect), "%s fits inside the viewport" % label)
+	_check(panel_rect.encloses(dialog.confirm_button.get_global_rect()) and panel_rect.encloses(dialog.cancel_button.get_global_rect()), "%s keeps both actions visible inside its panel" % label)
+	_check(dialog.title_label.get_global_rect().end.y <= dialog.message_panel.get_global_rect().position.y and dialog.message_panel.get_global_rect().end.y <= dialog.cancel_button.get_global_rect().position.y, "%s separates its header, message and actions" % label)
+	_check(_button_background_is(dialog.confirm_button, Color("#35151bf2") if danger else GuildPopup.UI_PRIMARY_BACKGROUND), "%s gives confirmation the appropriate action colour" % label)
+
+
+func _check_compact_member_actions(packed: PackedScene, viewport_size: Vector2i) -> void:
+	var viewport := SubViewport.new()
+	viewport.size = viewport_size
+	root.add_child(viewport)
+	var compact_popup := packed.instantiate() as GuildPopup
+	viewport.add_child(compact_popup)
+	await process_frame
+	var localization_manager := root.get_node_or_null("LocalizationManager")
+	var old_locale := str(localization_manager.get("current_locale")) if localization_manager != null else "en"
+	if localization_manager != null:
+		localization_manager.set_locale("nl")
+	compact_popup.show_debug_member_preview()
+	compact_popup.open()
+	var member := {"userId": 99, "displayName": "Trainer Met Een Lange Naam", "role": "captain"}
+	for action: String in ["rank", "transfer", "kick"]:
+		match action:
+			"rank": compact_popup._open_guild_member_rank_dialog(member)
+			"transfer": compact_popup._open_guild_leadership_transfer_dialog(member)
+			"kick": compact_popup._open_guild_member_kick_dialog(member)
+		var dialog := compact_popup.get_children().filter(func(child: Node): return child is AetherConfirmationDialog).back() as AetherConfirmationDialog
+		await _check_member_action_dialog(dialog, "%s at %s in Dutch" % [action, viewport_size], action != "rank")
+		if action == "rank":
+			var select := dialog.find_child("GuildMemberRankSelect_99", true, false) as OptionButton
+			_check(select != null and str(select.get_item_metadata(select.selected)) == "captain", "compact rank editor preserves the selected rank")
+			dialog.confirm_button.pressed.emit()
+			await process_frame
+			_check(not is_instance_valid(dialog), "saving an unchanged rank closes the compact editor")
+		else:
+			var escape := InputEventAction.new()
+			escape.action = "ui_cancel"
+			escape.pressed = true
+			dialog._unhandled_input(escape)
+			await process_frame
+			_check(not is_instance_valid(dialog), "Escape dismisses %s without confirming" % action)
+	if localization_manager != null:
+		localization_manager.set_locale(old_locale)
+	viewport.free()
+
+
+func _check_expanding_bank_previews(packed: PackedScene) -> void:
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1200, 1100)
+	root.add_child(viewport)
+	var popup := packed.instantiate() as GuildPopup
+	viewport.add_child(popup)
+	await process_frame
+	popup.show_debug_member_preview()
+	popup.open()
+	popup.custom_minimum_size = Vector2.ZERO
+	popup._show_guild_section("bank")
+	for category: String in ["items", "resources", "pokemon"]:
+		popup._on_guild_bank_category_opened(category)
+		var previous_height := 0.0
+		for height: int in [700, 900, 560]:
+			popup.size.y = height
+			for frame: int in range(8):
+				await process_frame
+			var workspace := popup.find_child("GuildBankWorkspace", true, false) as Control
+			var columns := popup.find_child("GuildBank%sPreviewColumns" % category.capitalize(), true, false) as GridContainer
+			var page_scroll := popup.member_content.get_parent() as ScrollContainer
+			_check(is_equal_approx(workspace.get_global_rect().end.y, popup.member_content.get_global_rect().end.y) and popup.member_content.size.y >= page_scroll.size.y, "%s uses the available tab height at %s pixels" % [category, height])
+			var bottom_padding := (workspace.get_child(0) as MarginContainer).get_theme_constant("margin_bottom") + workspace.get_theme_stylebox("panel").get_margin(SIDE_BOTTOM)
+			_check(is_equal_approx(columns.get_global_rect().end.y, workspace.get_global_rect().end.y - bottom_padding), "%s storage columns fill their workspace down to its bottom margin" % category)
+			_check(is_equal_approx((columns.get_child(0) as Control).size.y, columns.size.y) and is_equal_approx((columns.get_child(1) as Control).size.y, columns.size.y), "%s gives stored and donation lists the same available height" % category)
+			if height == 900:
+				_check(columns.size.y >= previous_height + 190, "%s shows more list space when the popup grows" % category)
+			elif height == 560:
+				_check(columns.size.y < previous_height, "%s contracts its lists when the popup shrinks" % category)
+			previous_height = columns.size.y
+			for list_scroll: ScrollContainer in columns.find_children("*", "ScrollContainer", true, false):
+				_check(columns.get_global_rect().encloses(list_scroll.get_global_rect()) and list_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED, "%s keeps list scrolling inside the expanded columns" % category)
+	popup.guild_bank_state["inventory"] = []
+	popup._on_guild_bank_category_opened("items")
+	for frame: int in range(8):
+		await process_frame
+	var empty_columns := popup.find_child("GuildBankItemsPreviewColumns", true, false) as GridContainer
+	_check(is_equal_approx((empty_columns.get_child(1) as Control).size.y, empty_columns.size.y), "an empty donation list still fills the available column height")
+	_check(popup.find_child("GuildBankItemsDonationSearchInput", true, false) != null, "expanded empty donation lists retain their search field")
 	viewport.free()
 
 

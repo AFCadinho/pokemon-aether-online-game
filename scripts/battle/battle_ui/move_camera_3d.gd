@@ -41,6 +41,10 @@ func apply(stage: Node) -> void:
 		var overview: Transform3D = stage.camera.transform
 		var shot := ZCinema.shot(effect, stage.camera, z_context, seconds)
 		var pose := _fit(stage.camera, shot.points, shot.direction)
+		if effect.key == "supersonicskystrike" and effect.hit and seconds >= effect.impact:
+			var after: float = (seconds-effect.impact)/maxf(effect.duration-effect.impact,0.01)
+			var recoil := ZCinema.SkystrikeExplosion.recoil(after)
+			pose.origin += pose.basis.x*recoil.x+pose.basis.y*recoil.y
 		var recovery := smoothstep(maxf(0.86, effect.impact / effect.duration + 0.04), 1.0, p)
 		stage.camera.transform = pose.interpolate_with(overview, recovery)
 		return

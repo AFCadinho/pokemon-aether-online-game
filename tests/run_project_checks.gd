@@ -507,6 +507,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/emerald_luchador_outfit_check.gd",
 	"res://tests/akatsuki_outfit_check.gd",
 	"res://tests/super_saiyan_4_outfit_check.gd",
+	"res://tests/irelia_outfit_check.gd",
 	"res://tests/adventure_trainer_sprites_check.gd",
 	"res://tests/adventure_outfit_gender_ui_check.gd",
 	"res://tests/cosmetic_variant_ui_check.gd",
