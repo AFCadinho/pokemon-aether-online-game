@@ -70,6 +70,7 @@ var forest_pool: Node
 var user_camera_yaw := 0.0
 var user_camera_pitch := 0.0
 var user_camera_zoom := 1.0
+var move_camera := preload("res://scripts/battle/battle_ui/move_camera_3d.gd").new()
 var coop_camera_focus_enabled := false
 var coop_camera_focus_index := -1
 var coop_camera_focus_weight := 0.0
@@ -1248,6 +1249,12 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 		_start_move_contact(actor, target, timing, effect)
 	effect.start(move, timing, options, bind_action_clock(actor), positions,
 		func(): return active and _move_visual(actor) == source and _move_visual(target) == destination)
+	if MoveEffect.move_key(move) == "dracometeor" and not effect.done and is_instance_valid(camera):
+		move_camera.begin(effect, actor, target)
+		effect.finished.connect(func():
+			if move_camera.clear(effect) and active and is_instance_valid(camera):
+				_update_camera(0.0), CONNECT_ONE_SHOT)
+		_update_camera(0.0)
 	return effect
 
 func start_move_action(ident: String, move: String) -> void:
@@ -2325,6 +2332,8 @@ func _update_camera(delta: float) -> void:
 	offset *= user_camera_zoom * (1.45 if double_mode else 1.0) * (1.0 - focus_mix * 0.13)
 	camera.position = target + offset
 	camera.look_at(target)
+	if settings.battle_3d_camera_motion and active:
+		move_camera.apply(self)
 
 func _process(delta: float) -> void:
 	_sync_render_size()
