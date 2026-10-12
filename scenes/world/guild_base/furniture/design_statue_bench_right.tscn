@@ -2,18 +2,27 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_l6d8n"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_y5i45"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_y5i45"]
 
-[node name="DesignStatueBenchRight" type="Node2D" unique_id=1302668003]
+[node name="DesignStatueBenchRight" type="Node2D" unique_id=720099893]
 texture_filter = 1
 script = ExtResource("1_l6d8n")
 furniture_id = "design_statue_bench_right"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=466300015]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1548367136]
 position = Vector2(-32, -96)
 tile_map_data = PackedByteArray("AAAAAAAAAAAPAAgAAAABAAAAAAANAA4AAAACAAAAAAAOAA4AAAADAAAAAAAOAA4AAAAEAAAAAAAOAA4AAAAFAAAAAAAPAA4AAAABAAEAAAALAA8AAAACAAEAAAAMAA8AAAADAAEAAAAMAA8AAAAEAAEAAAAMAA8AAAAFAAEAAAANAA8AAAABAAIAAAAIAAkAAAAFAAIAAAAJAAkAAAA=")
 tile_set = ExtResource("2_y5i45")
 
-[node name="ArtLayer1" type="TileMapLayer" parent="." unique_id=1255984293]
+[node name="ArtLayer1" type="TileMapLayer" parent="." unique_id=1418331272]
 position = Vector2(-32, -96)
 tile_map_data = PackedByteArray("AAABAAAAAAAAAAkAAAACAAAAAAABAAkAAAABAAEAAAAEAAkAAAACAAEAAAAFAAkAAAAFAAEAAAAGAAkAAAA=")
 tile_set = ExtResource("2_y5i45")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1816228675]
+z_index = 10
+position = Vector2(0, -96)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAAEAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAAEAAIAAAAAAAAAAAA=")
+tile_set = ExtResource("3_y5i45")
+collision_enabled = false
+navigation_enabled = false

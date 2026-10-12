@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_67mfs"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_wt41o"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_wt41o"]
 
-[node name="StoolPink" type="Node2D" unique_id=1075999680]
+[node name="StoolPink" type="Node2D" unique_id=523585115]
 texture_filter = 1
 script = ExtResource("1_67mfs")
 furniture_id = "stool_pink"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=453744005]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=726933028]
 position = Vector2(0, -32)
 tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 13, 0, 0, 0)
 tile_set = ExtResource("2_wt41o")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=2027407170]
+z_index = 10
+position = Vector2(0, -32)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255)
+tile_set = ExtResource("3_wt41o")
+collision_enabled = false
+navigation_enabled = false

@@ -1,6 +1,9 @@
 extends "res://tests/battle_dialogue_preview.gd"
 var sample_seconds := 0.0
 
+func _preview_moves() -> Array:
+	return ["darkpulse", "surf", "blizzard", "earthpower", "overheat"]
+
 func _start() -> void:
 	left_species = "Dragonite"
 	for argument in OS.get_cmdline_user_args():
@@ -14,7 +17,7 @@ func _start() -> void:
 	assert(renderer.active,renderer.reason)
 	battle.animation_router.playback_speed = 0
 	toolbar.get_parent().hide()
-	for move in ["darkpulse", "surf", "blizzard", "earthpower", "overheat"]:
+	for move in _preview_moves():
 		for reverse in [false,true]:
 			var actor := "p2" if reverse else "p1"
 			var target := "p1" if reverse else "p2"
@@ -40,7 +43,7 @@ func _start() -> void:
 				await process_frame
 				renderer._action("idle",renderer.actor_index(actor))
 				assert(renderer.common_effects.is_empty() and renderer.move_camera.effect==null and renderer.move_atmosphere.effect==null)
-	print("ELEMENTAL_PREVIEW_OK moves=5 directions=2 outcomes=3 phases=7")
+	print("ELEMENTAL_PREVIEW_OK moves=",_preview_moves().size()," directions=2 outcomes=3 phases=7")
 	host.release()
 	host.queue_free()
 	host = null

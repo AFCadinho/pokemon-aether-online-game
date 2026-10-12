@@ -1,4 +1,8 @@
 {
+  "encounter-guard": {
+    "name": "Encounter Guard",
+    "shortDesc": "Protege até 3.000 encontros selvagens. Consumido no primeiro Ultra Rare, Legendary ou Shiny: desbloqueie em 60 segundos ou o encontro termina e você é desconectado."
+  },
   "aether-power-band": {
     "name": "Aether Power Band",
     "shortDesc": "O portador recebe os EVs de cada Pokémon selvagem derrotado, mesmo sem participar, mais 10 por atributo que esse Pokémon concede. Os limites de EVs se aplicam. Não compartilha EXP. Intransferível. Uma compra por conta."
@@ -1235,5 +1239,33 @@
   "irelia-outfit": {
     "name": "Irelia Caixa de Traje",
     "shortDesc": "Contém seis cosméticos separados: túnica, calças, botas, cabelo, diadema e lâminas flutuantes (Costas). Para personagens masculinos e femininos."
+  },
+  "kakashi-shirt": {
+    "name": "Kakashi Colete",
+    "shortDesc": "Ative este item de Kakashi na Bolsa e equipe-o na personalização do personagem."
+  },
+  "kakashi-trousers": {
+    "name": "Kakashi Calças",
+    "shortDesc": "Ative este item de Kakashi na Bolsa e equipe-o na personalização do personagem."
+  },
+  "kakashi-shoes": {
+    "name": "Kakashi Sandálias",
+    "shortDesc": "Ative este item de Kakashi na Bolsa e equipe-o na personalização do personagem."
+  },
+  "kakashi-hair": {
+    "name": "Kakashi Cabelo",
+    "shortDesc": "Ative este item de Kakashi na Bolsa e equipe-o na personalização do personagem."
+  },
+  "kakashi-headband": {
+    "name": "Kakashi Bandana",
+    "shortDesc": "Ative este item de Kakashi na Bolsa e equipe-o na personalização do personagem."
+  },
+  "kakashi-mask": {
+    "name": "Kakashi Máscara",
+    "shortDesc": "Ative este item de Kakashi na Bolsa e equipe-o na personalização do personagem."
+  },
+  "kakashi-outfit": {
+    "name": "Kakashi Caixa de Traje",
+    "shortDesc": "Contém seis cosméticos separados: colete, calças, sandálias, cabelo, bandana e máscara. Para personagens masculinos e femininos."
   }
 }

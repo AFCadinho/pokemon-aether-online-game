@@ -1,6 +1,7 @@
 extends SceneTree
 
 const CHECK_SCRIPTS: Array[String] = [
+	"res://tests/encounter_guard_check.gd",
 	"res://tests/shop_modal_input_lock_check.gd",
 	"res://tests/lobby_flower_animation_check.gd",
 	"res://tests/lobby_fountain_animation_check.gd",
@@ -13,6 +14,8 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/gift_store_popular_check.gd",
 	"res://tests/gift_store_catalog_controls_check.gd",
 	"res://tests/gift_store_guild_tabs_check.gd",
+	"res://tests/guild_furniture_collision_check.gd",
+	"res://tests/guild_room_template_authoring_check.gd",
 	"res://tests/aether_band_store_check.gd",
 	"res://tests/gift_store_drag_check.gd",
 	"res://tests/gift_store_trainer_preview_check.gd",
@@ -134,6 +137,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/localization_backend_error_check.gd",
 	"res://tests/server_access_status_check.gd",
 	"res://tests/system_staff_announcement_check.gd",
+	"res://tests/wild_system_announcement_check.gd",
 	"res://tests/aether_clash_global_announcement_check.gd",
 	"res://tests/account_email_login_check.gd",
 	"res://tests/required_name_change_check.gd",
@@ -417,6 +421,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/day_night_system_check.gd",
 	"res://tests/night_light_check.gd",
 	"res://tests/field_move_flash_light_check.gd",
+	"res://tests/rock_tunnel_visibility_check.gd",
 	"res://tests/field_move_badge_requirement_check.gd",
 	"res://tests/field_move_inventory_refresh_check.gd",
 	"res://tests/overworld_field_interactables_check.gd",
@@ -511,6 +516,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/akatsuki_outfit_check.gd",
 	"res://tests/super_saiyan_4_outfit_check.gd",
 	"res://tests/irelia_outfit_check.gd",
+	"res://tests/kakashi_outfit_check.gd",
 	"res://tests/adventure_trainer_sprites_check.gd",
 	"res://tests/adventure_outfit_gender_ui_check.gd",
 	"res://tests/cosmetic_variant_ui_check.gd",

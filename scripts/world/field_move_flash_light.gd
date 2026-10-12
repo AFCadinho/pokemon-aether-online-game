@@ -2,6 +2,8 @@ extends Node2D
 
 class_name OverworldFieldMoveFlashLight
 
+signal active_changed(active: bool)
+
 const MIN_DARKNESS_INTENSITY := 0.05
 
 @export_range(0.0, 2.0, 0.05) var max_energy := 0.52
@@ -11,15 +13,20 @@ const MIN_DARKNESS_INTENSITY := 0.05
 @onready var point_light: PointLight2D = $PointLight2D
 
 var active := false
+var cave_visibility_group_id := ""
 var current_darkness_intensity := 0.0
 var _day_night_controller: Node
+
+
+func _enter_tree() -> void:
+	# Map transitions remove and re-add the player without running _ready again.
+	call_deferred("_connect_day_night_controller")
 
 
 func _ready() -> void:
 	point_light.color = light_color
 	point_light.texture_scale = light_texture_scale
 	_apply_light_state()
-	call_deferred("_connect_day_night_controller")
 
 
 func _exit_tree() -> void:
@@ -31,13 +38,12 @@ func _exit_tree() -> void:
 
 
 func can_activate() -> bool:
-	return current_darkness_intensity > MIN_DARKNESS_INTENSITY
+	return not cave_visibility_group_id.is_empty() or current_darkness_intensity > MIN_DARKNESS_INTENSITY
 
 
 func activate() -> Dictionary:
 	if active:
-		active = false
-		_apply_light_state()
+		deactivate()
 		return {
 			"success": true,
 			"deactivated": true,
@@ -49,6 +55,7 @@ func activate() -> Dictionary:
 		}
 	active = true
 	_apply_light_state()
+	active_changed.emit(active)
 	return {
 		"success": true,
 		"deactivated": false,
@@ -56,8 +63,19 @@ func activate() -> Dictionary:
 
 
 func deactivate() -> void:
+	var was_active := active
 	active = false
 	_apply_light_state()
+	if was_active:
+		active_changed.emit(active)
+
+
+func apply_cave_visibility_group(group_id: String) -> void:
+	if cave_visibility_group_id == group_id:
+		return
+	cave_visibility_group_id = group_id
+	# Each cave visit needs its own activation, even when Flash was on outdoors.
+	deactivate()
 
 
 func set_darkness_intensity(darkness_intensity: float) -> void:
@@ -68,7 +86,8 @@ func set_darkness_intensity(darkness_intensity: float) -> void:
 func _apply_light_state() -> void:
 	if point_light == null:
 		return
-	var visible_intensity := smoothstep(0.0, 1.0, current_darkness_intensity) if active else 0.0
+	var use_point_light := active and cave_visibility_group_id.is_empty()
+	var visible_intensity := smoothstep(0.0, 1.0, current_darkness_intensity) if use_point_light else 0.0
 	point_light.energy = max_energy * visible_intensity
 	point_light.enabled = visible_intensity > 0.001
 

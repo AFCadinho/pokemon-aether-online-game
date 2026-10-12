@@ -4,6 +4,26 @@
 
 - Prepare normal and shiny 3D models for 120 additional forms for the next model release, with native animations and compact pair packs; fix eight model-name aliases that prevented existing models from being found.
 
+- Limit visibility on both Rock Tunnel floors to a small circle around the player until Flash reveals the whole area. Keep Flash across floors and battles, reset it when leaving the cave, and show a cave entry hint.
+
+- Offer the Kakashi Outfit Box for both genders in the Gift Store for 450 Gems, with six fixed-colour parts and the standard 450-credit bound alternative.
+
+- Refine the remaining 821 catalogue move presentations with smooth 3D surfaces, continuous trails, elemental hit volumes and quieter status auras. Add appropriate ranged camera shots and environment colours while preserving move timing, audio, confirmed outcomes and the existing dedicated, Z and recent elemental presentations.
+
+- Add the grantable Kakashi Outfit Box for both genders, with six separate cosmetics, a continuous tilted headband, trainer and overworld poses, and Dev Tools item search.
+
+- Add Encounter Guard to the Bag and hotbar, with a remaining-encounter indicator and a blocking visual symbol challenge for rare wild spawns. Support co-op waiting and logout when the 60-second deadline expires.
+
+- Add complete editable Guild Café and Grand Lounge scenes for painting shared furniture collision in room context. Make all coloured floor cushions and the cushions inside Café furniture walkable.
+
+- Refine 15 more 3D moves with individually sculpted fire, muddy water, sludge, dark energy, psychic strikes and storms, including a recognizable Fire Blast glyph and an energy-dragon silhouette for Dragon Pulse. Match atmosphere and camera framing to each attack while preserving speed, audio and hit/miss/block behavior.
+
+- Let artists paint Guild furniture collision in each scene’s Collision TileMapLayer and export it to both catalogs from Godot. Use the painted cells for walking, placement overlap, player occupancy and route checks, preserve them during visual imports and keep existing room layouts compatible.
+
+- Give incoming Guild invitations a prominent Guild emblem, a gold invitation card and a clear Join Guild action. Style Guild departure with the compact Aether confirmation layout.
+
+- Show server-wide System notices for wild Ultra Rare, Legendary and Shiny encounters and their outcomes in every chat except Help.
+
 - Make 3D switches flow directly from recall into summon: prepare the incoming public model before recalling, close the ball during absorption and skip repeated entry warmup. Keep doubles replacements hidden until their summon releases them.
 
 - Prepare normal and shiny Urshifu Rapid Strike 3D models with their own stance and animations for the next model release, preventing this missing form from forcing battles into 2D once activated.

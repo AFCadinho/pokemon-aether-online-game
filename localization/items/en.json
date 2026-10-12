@@ -1,4 +1,8 @@
 {
+  "encounter-guard": {
+    "name": "Encounter Guard",
+    "shortDesc": "Protects up to 3,000 wild encounters. Consumed on your first Ultra Rare, Legendary or Shiny: unlock within 60 seconds or the encounter ends and you are logged out."
+  },
   "aether-power-band": {
     "name": "Aether Power Band",
     "shortDesc": "Held: Receives EVs from each defeated wild Pokémon even without participating, plus 10 per stat that Pokémon yields. EV limits apply. Does not share EXP. Untradeable. One purchase per account."
@@ -1235,5 +1239,33 @@
   "irelia-outfit": {
     "name": "Irelia Outfit Box",
     "shortDesc": "Contains six separate cosmetics: tunic, trousers, boots, hair, circlet and floating blades (Back). Fits male and female characters."
+  },
+  "kakashi-shirt": {
+    "name": "Kakashi Vest",
+    "shortDesc": "Activate this Kakashi item in your Bag, then equip it in Character Customization."
+  },
+  "kakashi-trousers": {
+    "name": "Kakashi Trousers",
+    "shortDesc": "Activate this Kakashi item in your Bag, then equip it in Character Customization."
+  },
+  "kakashi-shoes": {
+    "name": "Kakashi Sandals",
+    "shortDesc": "Activate this Kakashi item in your Bag, then equip it in Character Customization."
+  },
+  "kakashi-hair": {
+    "name": "Kakashi Hair",
+    "shortDesc": "Activate this Kakashi item in your Bag, then equip it in Character Customization."
+  },
+  "kakashi-headband": {
+    "name": "Kakashi Headband",
+    "shortDesc": "Activate this Kakashi item in your Bag, then equip it in Character Customization."
+  },
+  "kakashi-mask": {
+    "name": "Kakashi Mask",
+    "shortDesc": "Activate this Kakashi item in your Bag, then equip it in Character Customization."
+  },
+  "kakashi-outfit": {
+    "name": "Kakashi Outfit Box",
+    "shortDesc": "Contains six separate cosmetics: vest, trousers, sandals, hair, headband and mask. Fits male and female characters."
   }
 }

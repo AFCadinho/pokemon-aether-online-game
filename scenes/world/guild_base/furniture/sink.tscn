@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_c8qsb"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_phmqc"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_phmqc"]
 
-[node name="Sink" type="Node2D" unique_id=1965454102]
+[node name="Sink" type="Node2D" unique_id=1888774223]
 texture_filter = 1
 script = ExtResource("1_c8qsb")
 furniture_id = "sink"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=1757117160]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1330044930]
 position = Vector2(0, -64)
 tile_map_data = PackedByteArray("AAAAAAAAAAABAA0AAAABAAAAAAACAA0AAAACAAAAAAAAAA0AAAAAAAEAAAAEAA0AAAABAAEAAAAFAA0AAAACAAEAAAADAA0AAAA=")
 tile_set = ExtResource("2_phmqc")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1216923512]
+z_index = 10
+position = Vector2(0, -32)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAA=")
+tile_set = ExtResource("3_phmqc")
+collision_enabled = false
+navigation_enabled = false

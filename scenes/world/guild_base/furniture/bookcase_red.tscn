@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_lmb4n"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_jxfk8"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_jxfk8"]
 
-[node name="BookcaseRed" type="Node2D" unique_id=2096146283]
+[node name="BookcaseRed" type="Node2D" unique_id=1090104225]
 texture_filter = 1
 script = ExtResource("1_lmb4n")
 furniture_id = "bookcase_red"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=1355992127]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1616201119]
 position = Vector2(0, -96)
 tile_map_data = PackedByteArray("AAAAAAAAAAANABcAAAABAAAAAAAOABcAAAAAAAEAAAAPABcAAAABAAEAAAAAABgAAAAAAAIAAAABABgAAAABAAIAAAACABgAAAA=")
 tile_set = ExtResource("2_jxfk8")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=397260438]
+z_index = 10
+position = Vector2(0, -32)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=")
+tile_set = ExtResource("3_jxfk8")
+collision_enabled = false
+navigation_enabled = false

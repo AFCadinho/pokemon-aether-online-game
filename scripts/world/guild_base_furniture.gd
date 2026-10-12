@@ -1,3 +1,4 @@
+@tool
 extends Node2D
 
 const Catalog := preload("res://scripts/world/guild_base_furniture_catalog.gd")
@@ -5,6 +6,13 @@ const Catalog := preload("res://scripts/world/guild_base_furniture_catalog.gd")
 var placement: Dictionary = {}
 var room: Node2D
 var is_preview := false
+
+func _ready() -> void:
+	if not Engine.is_editor_hint():
+		var layer := get_node_or_null("Collision") as TileMapLayer
+		if layer != null:
+			layer.hide()
+			layer.collision_enabled = false
 
 func configure(map: Node2D, value: Dictionary, preview := false) -> void:
 	room = map
@@ -14,7 +22,7 @@ func configure(map: Node2D, value: Dictionary, preview := false) -> void:
 	var rectangle := Catalog.footprint(placement)
 	position = Vector2(rectangle.position.x, rectangle.end.y) * 32
 	z_as_relative = false
-	z_index = 2 if str(spec.category) == "floor" or (str(spec.placement) == "wall" and not bool(spec.blocksMovement)) else clampi(int(position.y) - 1, -4096, 4094)
+	z_index = 2 if bool(spec.get("drawOnFloor", false)) or str(spec.category) == "floor" or (str(spec.placement) == "wall" and not bool(spec.blocksMovement)) else clampi(int(position.y) - 1, -4096, 4094)
 	if bool(spec.resizable):
 		var visual := get_node("Visual") as TileMapLayer
 		visual.clear()
@@ -38,9 +46,7 @@ func configure_surface(map: Node2D, value: Dictionary, parent_spec: Dictionary, 
 func blocks_world_position(world_position: Vector2) -> bool:
 	if is_preview or not is_instance_valid(room) or placement.is_empty():
 		return false
-	if not bool(Catalog.item(furniture_id).get("blocksMovement", false)):
-		return false
-	return Catalog.footprint(placement).has_point(Vector2i((room.to_local(world_position) / 32).floor()))
+	return Vector2i((room.to_local(world_position) / 32).floor()) in Catalog.movement_cells(placement)
 
 static func instantiate_placement(map: Node2D, value: Dictionary, all_placements: Array, preview := false) -> Node2D:
 	var spec := Catalog.item(str(value.furnitureId))

@@ -63,6 +63,14 @@ func _run() -> void:
 		_check(store._selected_purchase_chroma_colors().is_empty(), "Irelia box uses fixed colours")
 		var irelia_item := store._catalog_item("irelia-outfit")
 		_check(irelia_item.get("price") == 450 and irelia_item.get("cosmetic_subcategory") == "outfits", "Irelia is offered under Outfits for 450 Gems")
+		store._select_product("kakashi-outfit")
+		var kakashi := store._current_character_preview_appearance()
+		var kakashi_parts := {"top": "Kakashi_Shirt", "bottom": "Kakashi_Trousers", "shoes": "Kakashi_Shoes", "hair": "Kakashi_Hair", "headgear": "Kakashi_Headgear", "facegear": "Kakashi_Mask"}
+		for slot: String in kakashi_parts:
+			_check(kakashi.get(slot) == kakashi_parts[slot], "Kakashi preview includes %s for %s" % [slot, gender])
+		_check(store._selected_purchase_chroma_colors().is_empty(), "Kakashi box uses fixed colours")
+		var kakashi_item := store._catalog_item("kakashi-outfit")
+		_check(kakashi_item.get("price") == 450 and kakashi_item.get("cosmetic_subcategory") == "outfits", "Kakashi is offered under Outfits for 450 Gems")
 		for item: Dictionary in store.CATALOG:
 			if store._preview_parts_for_item(item).is_empty():
 				continue

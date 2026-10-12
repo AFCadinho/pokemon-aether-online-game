@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_8lrrr"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_yhla7"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_yhla7"]
 
-[node name="BedSinglePlum" type="Node2D" unique_id=1398754041]
+[node name="BedSinglePlum" type="Node2D" unique_id=236387805]
 texture_filter = 1
 script = ExtResource("1_8lrrr")
 furniture_id = "bed_single_plum"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=1815127942]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=607144702]
 position = Vector2(-16, -96)
 tile_map_data = PackedByteArray("AAAAAAAAAAAJABwAAAABAAAAAAAKABwAAAACAAAAAAALABwAAAAAAAEAAAAPABwAAAABAAEAAAAAAB0AAAACAAEAAAABAB0AAAAAAAIAAAAFAB0AAAABAAIAAAAGAB0AAAACAAIAAAAHAB0AAAA=")
 tile_set = ExtResource("2_yhla7")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=280982378]
+z_index = 10
+position = Vector2(0, -64)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAA=")
+tile_set = ExtResource("3_yhla7")
+collision_enabled = false
+navigation_enabled = false

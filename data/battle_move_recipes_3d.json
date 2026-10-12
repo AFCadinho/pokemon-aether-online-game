@@ -29,7 +29,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "bodypress": {
       "name": "Body Press",
@@ -58,7 +64,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "extremespeed": {
       "name": "Extreme Speed",
@@ -96,7 +102,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "fakeout": {
       "name": "Fake Out",
@@ -134,7 +140,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "flipturn": {
       "name": "Flip Turn",
@@ -163,7 +169,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "frustration": {
       "name": "Frustration",
@@ -201,7 +213,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "gigaimpact": {
       "name": "Giga Impact",
@@ -239,7 +251,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "grassyglide": {
       "name": "Grassy Glide",
@@ -277,7 +289,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "headsmash": {
       "name": "Head Smash",
@@ -306,7 +324,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "headlongrush": {
       "name": "Headlong Rush",
@@ -335,7 +353,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "ironhead": {
       "name": "Iron Head",
@@ -364,7 +382,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "knockoff": {
       "name": "Knock Off",
@@ -393,7 +417,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "outrage": {
       "name": "Outrage",
@@ -431,7 +461,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "pursuit": {
       "name": "Pursuit",
@@ -469,7 +505,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "rapidspin": {
       "name": "Rapid Spin",
@@ -498,7 +540,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "return": {
       "name": "Return",
@@ -536,7 +578,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "rollout": {
       "name": "Rollout",
@@ -574,7 +616,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "spark": {
       "name": "Spark",
@@ -612,7 +654,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "uturn": {
       "name": "U-turn",
@@ -641,7 +689,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "woodhammer": {
       "name": "Wood Hammer",
@@ -670,7 +724,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "bulletpunch": {
       "name": "Bullet Punch",
@@ -699,7 +759,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "closecombat": {
       "name": "Close Combat",
@@ -799,7 +865,7 @@
           "source_frame": 16
         }
       ],
-      "presentation_review": "close-combat-red-blue-user-approved",
+      "presentation_review": "implemented-pending-player-review",
       "close_choreography": {
         "reference_path": "res://assets/battles/animations/closecombat/closecombat.json",
         "reference_sha256": "1e2a840b2aaf7febae28382ba858d736019ed3032fa0dd967649f8646941008f",
@@ -938,7 +1004,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "drainpunch": {
       "name": "Drain Punch",
@@ -976,7 +1042,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "firepunch": {
       "name": "Fire Punch",
@@ -1014,7 +1080,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "highjumpkick": {
       "name": "High Jump Kick",
@@ -1052,7 +1124,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "icepunch": {
       "name": "Ice Punch",
@@ -1090,7 +1162,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "lowkick": {
       "name": "Low Kick",
@@ -1119,7 +1197,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "pound": {
       "name": "Pound",
@@ -1148,7 +1226,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "rocksmash": {
       "name": "Rock Smash",
@@ -1177,7 +1255,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "suckerpunch": {
       "name": "Sucker Punch",
@@ -1215,7 +1293,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "superpower": {
       "name": "Superpower",
@@ -1253,7 +1337,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "thunderpunch": {
       "name": "Thunder Punch",
@@ -1291,7 +1375,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "astonish": {
       "name": "Astonish",
@@ -1329,7 +1419,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "bugbite": {
       "name": "Bug Bite",
@@ -1358,7 +1454,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "ceaselessedge": {
       "name": "Ceaseless Edge",
@@ -1396,7 +1498,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "dragonclaw": {
       "name": "Dragon Claw",
@@ -1425,7 +1533,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "furyattack": {
       "name": "Fury Attack",
@@ -1454,7 +1568,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "kowtowcleave": {
       "name": "Kowtow Cleave",
@@ -1492,7 +1606,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "lick": {
       "name": "Lick",
@@ -1521,7 +1641,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "peck": {
       "name": "Peck",
@@ -1550,7 +1676,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "razorshell": {
       "name": "Razor Shell",
@@ -1579,7 +1711,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "vinewhip": {
       "name": "Vine Whip",
@@ -1608,7 +1746,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "wingattack": {
       "name": "Wing Attack",
@@ -1646,7 +1790,13 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "dragonbreath": {
       "name": "Dragon Breath",
@@ -1675,7 +1825,14 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "beam",
+      "cinematic_environment": true
     },
     "electroshot": {
       "name": "Electro Shot",
@@ -1713,7 +1870,14 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "beam",
+      "cinematic_environment": true
     },
     "hyperbeam": {
       "name": "Hyper Beam",
@@ -1742,7 +1906,8 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "camera": "beam"
     },
     "scald": {
       "name": "Scald",
@@ -1780,7 +1945,14 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "beam",
+      "cinematic_environment": true
     },
     "solarbeam": {
       "name": "Solar Beam",
@@ -1809,7 +1981,14 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "beam",
+      "cinematic_environment": true
     },
     "voltswitch": {
       "name": "Volt Switch",
@@ -1847,7 +2026,14 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "beam",
+      "cinematic_environment": true
     },
     "fairywind": {
       "name": "Fairy Wind",
@@ -1876,7 +2062,13 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "cinematic_environment": false
     },
     "hiddenpower": {
       "name": "Hidden Power",
@@ -1914,7 +2106,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "leafage": {
       "name": "Leafage",
@@ -1952,7 +2144,13 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "cinematic_environment": false
     },
     "mudslap": {
       "name": "Mud-Slap",
@@ -1981,7 +2179,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "pyroball": {
       "name": "Pyro Ball",
@@ -2019,7 +2217,14 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "orb",
+      "cinematic_environment": true
     },
     "rockthrow": {
       "name": "Rock Throw",
@@ -2057,7 +2262,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "watershuriken": {
       "name": "Water Shuriken",
@@ -2086,7 +2291,13 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "cinematic_environment": false
     },
     "weatherball": {
       "name": "Weather Ball",
@@ -2124,7 +2335,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "absorb": {
       "name": "Absorb",
@@ -2162,7 +2373,14 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "orb",
+      "cinematic_environment": true
     },
     "confusion": {
       "name": "Confusion",
@@ -2191,7 +2409,14 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "orb",
+      "cinematic_environment": true
     },
     "darkpulse": {
       "name": "Dark Pulse",
@@ -2229,7 +2454,14 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "implemented-pending-player-review"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "orb",
+      "cinematic_environment": true
     },
     "disarmingvoice": {
       "name": "Disarming Voice",
@@ -2248,7 +2480,14 @@
       "source_id": 574,
       "review": "first-pass",
       "audio": [],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "orb",
+      "cinematic_environment": true
     },
     "drainingkiss": {
       "name": "Draining Kiss",
@@ -2286,7 +2525,14 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "orb",
+      "cinematic_environment": true
     },
     "gust": {
       "name": "Gust",
@@ -2315,7 +2561,14 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "orb",
+      "cinematic_environment": true
     },
     "hex": {
       "name": "Hex",
@@ -2344,7 +2597,14 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "orb",
+      "cinematic_environment": true
     },
     "psychic": {
       "name": "Psychic",
@@ -2373,7 +2633,14 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "orb",
+      "cinematic_environment": true
     },
     "psychicnoise": {
       "name": "Psychic Noise",
@@ -2411,7 +2678,14 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "orb",
+      "cinematic_environment": true
     },
     "psyshock": {
       "name": "Psyshock",
@@ -2449,7 +2723,14 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "orb",
+      "cinematic_environment": true
     },
     "screech": {
       "name": "Screech",
@@ -2478,7 +2759,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "sparklingaria": {
       "name": "Sparkling Aria",
@@ -2516,7 +2797,14 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "orb",
+      "cinematic_environment": true
     },
     "supersonic": {
       "name": "Supersonic",
@@ -2545,7 +2833,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "bleakwindstorm": {
       "name": "Bleakwind Storm",
@@ -2574,8 +2862,15 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved",
-      "battlefield_staging": "twin-icy-spirals"
+      "presentation_review": "implemented-pending-player-review",
+      "battlefield_staging": "twin-icy-spirals",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "field",
+      "cinematic_environment": true
     },
     "blizzard": {
       "name": "Blizzard",
@@ -2605,7 +2900,14 @@
         }
       ],
       "presentation_review": "implemented-pending-player-review",
-      "battlefield_staging": "arena-sweep"
+      "battlefield_staging": "arena-sweep",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "field",
+      "cinematic_environment": true
     },
     "earthpower": {
       "name": "Earth Power",
@@ -2635,7 +2937,14 @@
         }
       ],
       "presentation_review": "implemented-pending-player-review",
-      "battlefield_staging": "branching-vents"
+      "battlefield_staging": "branching-vents",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "field",
+      "cinematic_environment": true
     },
     "earthquake": {
       "name": "Earthquake",
@@ -2673,8 +2982,15 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "battlefield-staging-user-approved",
-      "battlefield_staging": "arena-sweep"
+      "presentation_review": "implemented-pending-player-review",
+      "battlefield_staging": "arena-sweep",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "field",
+      "cinematic_environment": true
     },
     "explosion": {
       "name": "Explosion",
@@ -2712,8 +3028,15 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved",
-      "battlefield_staging": "caster-shockwave"
+      "presentation_review": "implemented-pending-player-review",
+      "battlefield_staging": "caster-shockwave",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "field",
+      "cinematic_environment": true
     },
     "freezedry": {
       "name": "Freeze-Dry",
@@ -2751,8 +3074,15 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved",
-      "battlefield_staging": "crystal-front"
+      "presentation_review": "implemented-pending-player-review",
+      "battlefield_staging": "crystal-front",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "field",
+      "cinematic_environment": true
     },
     "heatwave": {
       "name": "Heat Wave",
@@ -2781,8 +3111,15 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "battlefield-staging-user-approved",
-      "battlefield_staging": "rolling-refractive-heat-front"
+      "presentation_review": "implemented-pending-player-review",
+      "battlefield_staging": "rolling-refractive-heat-front",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "field",
+      "cinematic_environment": true
     },
     "hurricane": {
       "name": "Hurricane",
@@ -2811,8 +3148,15 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved",
-      "battlefield_staging": "wide-funnel"
+      "presentation_review": "implemented-pending-player-review",
+      "battlefield_staging": "wide-funnel",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "field",
+      "cinematic_environment": true
     },
     "makeitrain": {
       "name": "Make It Rain",
@@ -2850,8 +3194,15 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved",
-      "battlefield_staging": "coin-fountain-rain"
+      "presentation_review": "implemented-pending-player-review",
+      "battlefield_staging": "coin-fountain-rain",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "field",
+      "cinematic_environment": true
     },
     "powdersnow": {
       "name": "Powder Snow",
@@ -2880,8 +3231,15 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved",
-      "battlefield_staging": "low-powder-front"
+      "presentation_review": "implemented-pending-player-review",
+      "battlefield_staging": "low-powder-front",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "field",
+      "cinematic_environment": true
     },
     "terastarstorm": {
       "name": "Tera Starstorm",
@@ -2919,8 +3277,15 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "battlefield-staging-user-approved",
-      "battlefield_staging": "prismatic-constellation-and-burst"
+      "presentation_review": "implemented-pending-player-review",
+      "battlefield_staging": "prismatic-constellation-and-burst",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "camera": "field",
+      "cinematic_environment": true
     },
     "babydolleyes": {
       "name": "Baby-Doll Eyes",
@@ -2949,7 +3314,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "charm": {
       "name": "Charm",
@@ -2978,7 +3349,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "encore": {
       "name": "Encore",
@@ -3007,7 +3384,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "growl": {
       "name": "Growl",
@@ -3026,7 +3403,7 @@
       "source_id": 45,
       "review": "first-pass",
       "audio": [],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "leechseed": {
       "name": "Leech Seed",
@@ -3055,7 +3432,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "leer": {
       "name": "Leer",
@@ -3084,7 +3467,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "poisonpowder": {
       "name": "Poison Powder",
@@ -3113,7 +3496,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "sandattack": {
       "name": "Sand Attack",
@@ -3142,7 +3531,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "sleeppowder": {
       "name": "Sleep Powder",
@@ -3171,7 +3560,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "smokescreen": {
       "name": "Smokescreen",
@@ -3200,7 +3595,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "spore": {
       "name": "Spore",
@@ -3229,7 +3624,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "stringshot": {
       "name": "String Shot",
@@ -3267,7 +3668,13 @@
           "end_fraction": 0.76
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "sweetscent": {
       "name": "Sweet Scent",
@@ -3296,7 +3703,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "tailwhip": {
       "name": "Tail Whip",
@@ -3325,7 +3732,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "taunt": {
       "name": "Taunt",
@@ -3363,7 +3770,13 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "thunderwave": {
       "name": "Thunder Wave",
@@ -3392,7 +3805,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "toxic": {
       "name": "Toxic",
@@ -3430,14 +3849,20 @@
           "end_fraction": 0.76
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "willowisp": {
       "name": "Will-O-Wisp",
       "family": "status",
       "variant": "flames",
       "type": "fire",
-      "color": "ff8d38",
+      "color": "996fff",
       "contact": false,
       "target": "target",
       "damaging": false,
@@ -3468,7 +3893,13 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "agility": {
       "name": "Agility",
@@ -3497,7 +3928,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "calmmind": {
       "name": "Calm Mind",
@@ -3526,7 +3963,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "charge": {
       "name": "Charge",
@@ -3555,7 +3998,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "defensecurl": {
       "name": "Defense Curl",
@@ -3584,7 +4033,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "doubleteam": {
       "name": "Double Team",
@@ -3613,7 +4062,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "dragondance": {
       "name": "Dragon Dance",
@@ -3642,7 +4091,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "focusenergy": {
       "name": "Focus Energy",
@@ -3671,7 +4126,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "growth": {
       "name": "Growth",
@@ -3700,7 +4155,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "harden": {
       "name": "Harden",
@@ -3729,7 +4184,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "howl": {
       "name": "Howl",
@@ -3748,7 +4203,7 @@
       "source_id": 336,
       "review": "first-pass",
       "audio": [],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "nastyplot": {
       "name": "Nasty Plot",
@@ -3777,7 +4232,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "recover": {
       "name": "Recover",
@@ -3806,7 +4267,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "roost": {
       "name": "Roost",
@@ -3835,7 +4296,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "swordsdance": {
       "name": "Swords Dance",
@@ -3873,7 +4340,7 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "withdraw": {
       "name": "Withdraw",
@@ -3902,7 +4369,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "auroraveil": {
       "name": "Aurora Veil",
@@ -3940,7 +4413,13 @@
           "end_fraction": 0.8677551020408163
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "chillyreception": {
       "name": "Chilly Reception",
@@ -3978,7 +4457,13 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "courtchange": {
       "name": "Court Change",
@@ -4007,7 +4492,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "defog": {
       "name": "Defog",
@@ -4036,7 +4527,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "electricterrain": {
       "name": "Electric Terrain",
@@ -4074,7 +4571,13 @@
           "end_fraction": 0.76
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "futuresight": {
       "name": "Future Sight",
@@ -4103,7 +4606,13 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.7,
+        "mix": 0.22,
+        "brightness": 0.96
+      },
+      "cinematic_environment": false
     },
     "grassyterrain": {
       "name": "Grassy Terrain",
@@ -4132,7 +4641,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "haze": {
       "name": "Haze",
@@ -4161,7 +4676,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "lightscreen": {
       "name": "Light Screen",
@@ -4190,7 +4711,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "mistyterrain": {
       "name": "Misty Terrain",
@@ -4219,7 +4746,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "protect": {
       "name": "Protect",
@@ -4248,7 +4781,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "psychicterrain": {
       "name": "Psychic Terrain",
@@ -4286,7 +4825,13 @@
           "end_fraction": 0.9561904761904761
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "reflect": {
       "name": "Reflect",
@@ -4315,7 +4860,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "spikes": {
       "name": "Spikes",
@@ -4353,7 +4904,13 @@
           "end_fraction": 0.76
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "stealthrock": {
       "name": "Stealth Rock",
@@ -4382,7 +4939,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "stickyweb": {
       "name": "Sticky Web",
@@ -4411,7 +4974,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "substitute": {
       "name": "Substitute",
@@ -4449,7 +5018,13 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "teleport": {
       "name": "Teleport",
@@ -4478,7 +5053,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "toxicspikes": {
       "name": "Toxic Spikes",
@@ -4516,7 +5097,13 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "wish": {
       "name": "Wish",
@@ -4545,7 +5132,13 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review",
+      "lighting": {
+        "energy": 0.32,
+        "mix": 0.1,
+        "brightness": 1.0
+      },
+      "cinematic_environment": false
     },
     "10000000voltthunderbolt": {
       "name": "10,000,000 Volt Thunderbolt",

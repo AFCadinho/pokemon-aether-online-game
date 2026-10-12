@@ -24,10 +24,30 @@ static func footprint(placement: Dictionary) -> Rect2i:
 static func blocked_cells(placements: Array) -> Dictionary:
 	var cells := {}
 	for placement: Dictionary in placements:
-		if not bool(item(str(placement.furnitureId)).get("blocksMovement", false)):
-			continue
-		for cell: Vector2i in rect_cells(footprint(placement)):
+		for cell: Vector2i in movement_cells(placement):
 			cells[cell] = true
+	return cells
+
+static func movement_cells(placement: Dictionary) -> Array[Vector2i]:
+	var spec := item(str(placement.furnitureId))
+	var cells: Array[Vector2i] = []
+	if str(spec.get("placement", "")) == "surface":
+		return cells
+	if not spec.has("collisionCells"):
+		return rect_cells(footprint(placement)) if bool(spec.get("blocksMovement", false)) else cells
+	var origin := Vector2i(int(placement.x), int(placement.y))
+	if bool(spec.resizable):
+		var mask := {}
+		for cell: Array in spec.collisionCells:
+			mask[Vector2i(cell[0], cell[1])] = true
+		for y: int in range(int(placement.height)):
+			for x: int in range(int(placement.width)):
+				var source := Vector2i(0 if x == 0 else (2 if x == int(placement.width) - 1 else 1), 0 if y == 0 else (2 if y == int(placement.height) - 1 else 1))
+				if mask.has(source):
+					cells.append(origin + Vector2i(x, y))
+	else:
+		for cell: Array in spec.collisionCells:
+			cells.append(origin + Vector2i(cell[0], cell[1]))
 	return cells
 
 static func rect_cells(rectangle: Rect2i) -> Array[Vector2i]:
@@ -87,11 +107,7 @@ static func validate(room: Node, placements: Array) -> String:
 		for cell: Vector2i in rect_cells(rectangle):
 			if not room.is_walkable_tile(cell):
 				return "outside"
-			if bool(spec.blocksMovement):
-				if occupied.has(cell) or reserved.has(cell):
-					return "overlap"
-				occupied[cell] = true
-			elif str(spec.category) == "floor":
+			if not bool(spec.blocksMovement) and str(spec.category) == "floor":
 				if rugs.has(cell):
 					return "overlap"
 				rugs[cell] = true
@@ -99,6 +115,12 @@ static func validate(room: Node, placements: Array) -> String:
 				if walls.has(cell):
 					return "overlap"
 				walls[cell] = true
+		for cell: Vector2i in movement_cells(placement):
+			if not room.is_walkable_tile(cell):
+				return "outside"
+			if occupied.has(cell) or reserved.has(cell):
+				return "overlap"
+			occupied[cell] = true
 	var start := Vector2i(definition.entrance[0], definition.entrance[1])
 	var reached := {start: true}
 	var queue: Array[Vector2i] = [start]

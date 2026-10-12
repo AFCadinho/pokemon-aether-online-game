@@ -1710,12 +1710,14 @@ func _run() -> void:
 	if member_options != null:
 		member_options.get_popup().id_pressed.emit(1)
 		await process_frame
-	var leave_dialog := popup.find_child("GuildLeaveConfirmationDialog", true, false) as ConfirmationDialog
+	var leave_dialog := popup.find_child("GuildLeaveConfirmationDialog", true, false) as AetherConfirmationDialog
 	_check(leave_dialog != null and leave_dialog.visible, "leaving a Guild asks for confirmation")
-	_check_dialog_styled(leave_dialog, "leave Guild confirmation")
+	await _check_member_action_dialog(leave_dialog, "leave Guild confirmation", true)
+	_check(leave_dialog != null and leave_dialog.message_label.text.contains("Aether Vanguard") and leave_dialog.message_label.text.contains("chat, bank and member benefits"), "leave confirmation identifies the Guild and explains lost access")
 	if leave_dialog != null:
-		leave_dialog.canceled.emit()
+		leave_dialog.cancel_button.pressed.emit()
 		await process_frame
+		_check(not is_instance_valid(leave_dialog) and not popup.guild_home.is_empty(), "Cancel closes Guild departure without leaving")
 
 	popup.close()
 	await process_frame
@@ -1844,14 +1846,17 @@ func _check_compact_member_actions(packed: PackedScene, viewport_size: Vector2i)
 	compact_popup.show_debug_member_preview()
 	compact_popup.open()
 	var member := {"userId": 99, "displayName": "Trainer Met Een Lange Naam", "role": "captain"}
-	for action: String in ["rank", "transfer", "kick", "donate"]:
+	for action: String in ["rank", "transfer", "kick", "donate", "leave"]:
 		match action:
 			"rank": compact_popup._open_guild_member_rank_dialog(member)
 			"transfer": compact_popup._open_guild_leadership_transfer_dialog(member)
 			"kick": compact_popup._open_guild_member_kick_dialog(member)
 			"donate": compact_popup._confirm_guild_bank_donation("Basculegion Mount ×2", func(): pass)
+			"leave":
+				compact_popup.guild_home["membership"]["role"] = "member"
+				compact_popup._confirm_guild_leave({"name": "Guild Met Een Langere Naam"})
 		var dialog := compact_popup.get_children().filter(func(child: Node): return child is AetherConfirmationDialog).back() as AetherConfirmationDialog
-		await _check_member_action_dialog(dialog, "%s at %s in Dutch" % [action, viewport_size], action in ["transfer", "kick"])
+		await _check_member_action_dialog(dialog, "%s at %s in Dutch" % [action, viewport_size], action in ["transfer", "kick", "leave"])
 		if action == "rank":
 			var select := dialog.find_child("GuildMemberRankSelect_99", true, false) as OptionButton
 			_check(select != null and str(select.get_item_metadata(select.selected)) == "captain", "compact rank editor preserves the selected rank")

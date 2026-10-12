@@ -2,13 +2,21 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_dba5n"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_3tww3"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_3tww3"]
 
-[node name="CarpetPurple" type="Node2D" unique_id=1868961568]
+[node name="CarpetPurple" type="Node2D" unique_id=1391908883]
 texture_filter = 1
 script = ExtResource("1_dba5n")
 furniture_id = "carpet_purple"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=1828586013]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1192168071]
 position = Vector2(0, -96)
 tile_map_data = PackedByteArray("AAAAAAAAAAADAAAAAAABAAAAAAAEAAAAAAACAAAAAAAFAAAAAAAAAAEAAAAJAAAAAAABAAEAAAAKAAAAAAACAAEAAAALAAAAAAAAAAIAAAAPAAAAAAABAAIAAAAAAAEAAAACAAIAAAABAAEAAAA=")
 tile_set = ExtResource("2_3tww3")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=417644487]
+z_index = 10
+position = Vector2(0, -96)
+tile_set = ExtResource("3_3tww3")
+collision_enabled = false
+navigation_enabled = false

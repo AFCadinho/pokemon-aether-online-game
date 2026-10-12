@@ -39,7 +39,11 @@ func _run() -> void:
 			maximum=maxi(maximum,a.cursor)
 			for j in a.cursor:
 				assert(a.pieces[j].transform.is_finite() and b.pieces[j].transform.is_finite(),key)
-				assert(a.pieces[j].position.is_equal_approx(b.pieces[j].position-translation),key+" translated/elevated arena")
+				# Swept Z paths store world positions in their mesh vertices. Compare
+				# visible world bounds, not just the node origin of those paths.
+				var bounds_a: AABB = a.pieces[j].transform*a.pieces[j].mesh.get_aabb()
+				var bounds_b: AABB = b.pieces[j].transform*b.pieces[j].mesh.get_aabb()
+				assert(bounds_a.position.distance_to(bounds_b.position-translation)<.001 and bounds_a.size.distance_to(bounds_b.size)<.001,key+" translated/elevated arena")
 				assert(a.pieces[j].basis.is_equal_approx(b.pieces[j].basis),key+" world-space scale")
 			# Travel rings face along the attack path, so a sound wave is not a
 			# flat ladder lying in that path. Camera orbit must not define it.
@@ -57,15 +61,20 @@ func _run() -> void:
 			a._process(0)
 			assert(a.cursor==snapshot.size())
 			for j in a.cursor:assert(a.pieces[j].transform.is_equal_approx(snapshot[j]),key+" frozen native clock")
-		assert(a.field_center.is_equal_approx(points.field.center))
-		assert(b.field_center.is_equal_approx(moved.field.center))
+		if is_z:
+			assert(a.fixed_center.is_equal_approx(points.actor_center))
+			assert(b.fixed_center.is_equal_approx(moved.actor_center))
+		else:
+			assert(a.field_center.is_equal_approx(points.field.center))
+			assert(b.field_center.is_equal_approx(moved.field.center))
 		var aim: Vector3=a.aim
 		points.target+=Vector3(3,0,2)
 		points.target_ground+=Vector3(3,0,2)
 		points.field.center+=Vector3(1,0,1)
 		a._process(0)
 		assert(a.aim.is_equal_approx(aim),key+" dodge must not drag the aim")
-		assert(a.field_center.is_equal_approx(Vector3(0,.055,0)),key+" fixed arena")
+		if is_z: assert(a.fixed_ground.is_equal_approx(moved.target_ground-translation),key+" fixed target ground")
+		else: assert(a.field_center.is_equal_approx(Vector3(0,.055,0)),key+" fixed arena")
 		a.cancel();b.cancel()
 		await get_tree().process_frame
 	assert(ordinary==124 and z_moves==34)

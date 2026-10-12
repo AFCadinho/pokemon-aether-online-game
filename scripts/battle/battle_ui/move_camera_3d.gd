@@ -1,5 +1,6 @@
 extends RefCounted
 ## Shots follow the VFX's native clock, including pause and recovery.
+const ElementalBatch = preload("res://scripts/battle/battle_ui/elemental_batch_profiles_3d.gd")
 const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const ZCinema = preload("res://scripts/battle/battle_ui/z_move_cinema_3d.gd")
 const PROFILES := {
@@ -14,7 +15,7 @@ var target := ""
 var z_context := {}
 
 func supports(key: String) -> bool:
-	return ZCinema.supports(key) or PROFILES.has(key) or not Recipes.get_recipe(key).get("camera", "").is_empty()
+	return ElementalBatch.DATA.has(key) or ZCinema.supports(key) or PROFILES.has(key) or not Recipes.get_recipe(key).get("camera", "").is_empty()
 
 func begin(owner: Node, source: String, destination: String) -> void:
 	effect = owner
@@ -105,7 +106,7 @@ func apply(stage: Node) -> void:
 	camera.transform = camera.transform.interpolate_with(overview, smoothstep(0.88, 1.0, p))
 
 func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
-	var profile: String = PROFILES.get(effect.key, Recipes.get_recipe(effect.key).get("camera", ""))
+	var profile: String = ElementalBatch.DATA.get(effect.key,{}).get("camera",PROFILES.get(effect.key, Recipes.get_recipe(effect.key).get("camera", "")))
 	if profile.is_empty(): return
 	var a: Dictionary = stage._move_bounds(actor)
 	var b: Dictionary = stage._move_bounds(target)
@@ -124,7 +125,7 @@ func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
 	var aim: Vector3 = anchors.target
 	# Recipe projectiles capture their trajectory; misses must keep framing
 	# the original aim rather than following the target's dodge.
-	if effect.get_script() in [stage.ExtendedMoveEffect,stage.ElementalMoveEffect] and effect.launched:
+	if effect.get_script() in [stage.ExtendedMoveEffect,stage.ElementalMoveEffect,stage.ElementalBatchEffect,stage.StagedMoveEffect,stage.BattlefieldMoveEffect] and effect.launched:
 		source = effect.origin
 		aim = effect.aim
 	elif profile in ["beam", "kick"] and effect.get_script() == stage.StagedMoveEffect and effect.launched:
@@ -189,6 +190,26 @@ func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
 		if effect.key == "surf":
 			_append_box(points,anchors.actor_ground+Vector3.UP*1.3,Vector3(3.3,1.7,3.3))
 			_append_box(points,anchors.target_ground+Vector3.UP*1.3,Vector3(3.3,1.7,3.3))
+	if ElementalBatch.DATA.has(effect.key):
+		var authored: Dictionary = ElementalBatch.DATA[effect.key]
+		if profile != "field": points.clear()
+		_append_body(points,a)
+		var caster_floor: Vector3 = effect.actor_ground if effect.captured else anchors.actor_ground
+		var target_floor: Vector3 = effect.ground if effect.captured else anchors.target_ground
+		_append_box(points,caster_floor+Vector3.UP*1.7,authored.half)
+		if seconds >= effect.launch or profile == "field":
+			_append_body(points,b)
+			_append_box(points,target_floor+Vector3.UP*1.7,authored.half)
+			direction = -forward*.4+side+Vector3.UP*float(authored.elevation)
+	if effect.get_script() in [stage.ExtendedMoveEffect,stage.StagedMoveEffect] and not ElementalBatch.DATA.has(effect.key):
+		# Fixed room for the new joined impact crown and captured projectile arc.
+		# Never follow individual lobes: that would make the camera pump.
+		if seconds >= effect.launch:
+			_append_box(points,aim,Vector3.ONE*scale_value*1.6)
+			var arc: float = effect.projectile_arc_height
+			if effect.get_script()==stage.StagedMoveEffect and effect.motif!="arcing-bomb" and effect.key!="pyroball": arc=0.0
+			if arc > 0 and Recipes.get_recipe(effect.key).family == "projectiles":
+				_append_box(points,source.lerp(aim,.5)+Vector3.UP*arc,Vector3.ONE*scale_value)
 	# Fitting a fixed shot envelope avoids camera pumping with every particle.
 	camera.transform = _fit(camera, points, direction.normalized())
 	camera.transform = camera.transform.interpolate_with(overview, smoothstep(0.88, 1.0, phase))

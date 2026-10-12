@@ -2,15 +2,26 @@ extends SceneTree
 
 const Catalog := preload("res://scripts/world/guild_base_furniture_catalog.gd")
 const Furniture := preload("res://scripts/world/guild_base_furniture.gd")
+const CollisionAuthoring := preload("res://tools/guild_furniture_collision_authoring.gd")
 
 func _init() -> void:
 	var data := Catalog.load_data()
+	var floor_tiles := {}
+	for spec: Dictionary in data.items:
+		if bool(spec.get("drawOnFloor", false)):
+			for row: Array in spec.tiles:
+				for gid in row:
+					if int(gid) > 0:
+						floor_tiles[int(gid)] = true
 	var tiles: TileSet = load("res://assets/guild_base/furniture/furniture.tileset.tres")
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://scenes/world/guild_base/furniture"))
 	var prefix := OS.get_cmdline_user_args()[0] if not OS.get_cmdline_user_args().is_empty() else ""
 	for item: Dictionary in data.items:
 		if not str(item.id).begins_with(prefix):
 			continue
+		var collision_layer := CollisionAuthoring.load_existing_layer(str(item.scenePath))
+		if collision_layer == null:
+			collision_layer = CollisionAuthoring.create_layer(item)
 		var root := Node2D.new()
 		root.name = str(item.id).to_pascal_case()
 		root.set_script(Furniture)
@@ -19,6 +30,12 @@ func _init() -> void:
 		var art_layers: Array = item.get("artLayers", [item.tiles])
 		for layer_index: int in range(art_layers.size()):
 			var visual := TileMapLayer.new()
+			var floor_details := TileMapLayer.new()
+			floor_details.name = "FloorDetails%d" % layer_index
+			floor_details.tile_set = tiles
+			floor_details.position = Vector2(item.visualOffset[0], item.visualOffset[1])
+			floor_details.z_as_relative = false
+			floor_details.z_index = 2
 			visual.name = "Visual" if layer_index == 0 else "ArtLayer%d" % layer_index
 			visual.tile_set = tiles
 			visual.position = Vector2(item.visualOffset[0], item.visualOffset[1])
@@ -28,9 +45,17 @@ func _init() -> void:
 					var gid := int(art[y][x])
 					if gid > 0:
 						var coordinates: Array = Catalog.atlas[str(gid)]
-						visual.set_cell(Vector2i(x, y), 0, Vector2i(coordinates[0], coordinates[1]))
+						var target := floor_details if floor_tiles.has(gid) and not bool(item.get("drawOnFloor", false)) else visual
+						target.set_cell(Vector2i(x, y), 0, Vector2i(coordinates[0], coordinates[1]))
 			root.add_child(visual)
 			visual.owner = root
+			if not floor_details.get_used_cells().is_empty():
+				root.add_child(floor_details)
+				floor_details.owner = root
+			else:
+				floor_details.free()
+		root.add_child(collision_layer)
+		collision_layer.owner = root
 		var packed := PackedScene.new()
 		packed.pack(root)
 		var error := ResourceSaver.save(packed, str(item.scenePath))

@@ -105,7 +105,7 @@ void fragment() {
 			var radius := 1.-corner.y*.22*sin(p*PI)
 			tool.set_color(Color(1,1,1,sin(p*PI)*lerpf(.25,.85,corner.y)))
 			tool.add_vertex(Vector3(cos(a),sin(a),0)*radius)
-	crescent=tool.commit()
+	crescent=forms.blade
 	tool=SurfaceTool.new();tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for p in [Vector3(0,-1,0),Vector3(.22,0,.06),Vector3(0,1,0),Vector3(0,1,0),Vector3(-.22,0,.06),Vector3(0,-1,0)]:
 		tool.set_uv(Vector2(p.x/.44+.5,p.y*.5+.5))
@@ -140,7 +140,7 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 	var after := (elapsed-impact)/maxf(duration-impact,.01)
 	var envelope := smoothstep(0,.1,t)*(1-smoothstep(.76,1.,t))
 	edge.albedo_color.a=envelope*.7;core.albedo_color.a=envelope*.9;glow.albedo_color.a=envelope*.08;pearl.albedo_color.a=envelope*.8
-	surface.set_shader_parameter("seconds",elapsed);surface.set_shader_parameter("opacity",envelope*.65)
+	forms.sample(elapsed,envelope)
 	soft.set_shader_parameter("opacity",envelope*.5)
 	if energy_body != null:
 		energy_body.set_shader_parameter("seconds", t * float(recipe.duration_seconds))
@@ -160,14 +160,9 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 	if key in ["hyperbeam", "pyroball"]:
 		if impact_drawn: _solid_impact(after, facing, axis)
 		return true
-	if impact_drawn:
-		var fade := 1-clampf(after,0,1)
-		_source_sprite(aim,(1.3+after)*weight,"combo_blue" if key=="closecombat" else "1",clampf(after,0,1),fade*.65,facing)
-		_piece(soft_quad,soft,aim,Vector3.ONE*weight*(2.+after),facing)
-		for i in 6:
-			var a := i*TAU/6
-			var offset := (side*cos(a)+Vector3.UP*sin(a))*(.4+after*1.8)*weight
-			_line(aim+offset*.55,aim+offset,.025*fade,pearl)
+	if impact_drawn and key != "closecombat":
+		forms.impact(self,aim,after,weight*.9,axis,bool(recipe.contact))
+
 	return true
 
 func _cast_art() -> String:
@@ -190,22 +185,22 @@ func _contact_stage(from: Vector3,center: Vector3,flight: float,after: float,alp
 			_source_sprite(initial_center+Vector3(cos(a),.1,sin(a))*body*(1.3-q*.3),.38,"spark",0,q*.3,facing)
 		return
 	var fade := 1-smoothstep(.1,.85,after)
-	# Native contact motion owns approach/return; the wake follows that motion.
-	for i in 8:
-		var p := clampf(flight-i*.035,0,1)
-		var ground := caster_ground.lerp(target_ground,p)
-		var offset := side*sin(i*2.4)*body*.65
-		if motif in ["water-rush","electric-rush","leaf-rush","energy-rush","dark-rush"]:
-			_source_sprite(center-axis.y*i*.12+offset,.6-i*.035,_cast_art(),fmod(elapsed+i*.13,1),alpha*fade*.45,facing,i)
-		else:_line(ground+offset-axis.y*.3,ground+offset,.015*alpha*fade,edge)
+	# One actor-following wake follows native approach/return; no particle chain.
+	if motif in ["water-rush","electric-rush","leaf-rush","energy-rush","dark-rush"]:
+		forms.tail(self,center,-axis.y,body*.8*alpha*fade,body*1.8*smoothstep(0,.2,flight))
+	else:
+		for i in 3:
+			var offset := side*(i-1)*body*.6
+			_line(center+offset-axis.y*.6,center+offset,.018*alpha*fade,edge)
 	if motif=="elemental-punch":
 		var fist_center := from.lerp(aim,smoothstep(.35,.85,flight))
-		for i in 7:
-			var a := i*TAU/7+elapsed*4
-			var point := fist_center+(side*cos(a)+Vector3.UP*sin(a))*.32
-			if recipe.type=="ice":_piece(prism,surface,point,Vector3(.1,.3,.1)*fade,axis*Basis(Vector3.UP,a))
-			elif recipe.type=="electric":_line(fist_center,point+axis.y*.3,.022*fade,pearl)
-			else:_source_sprite(point,.7,"fire",fmod(elapsed+i*.1,1),alpha*fade*.7,facing,a)
+		forms.aura(self,fist_center,.38*fade,elapsed/duration)
+		if recipe.type=="ice":
+			for i in 3: _piece(prism,surface,fist_center+side*(i-1)*.17,Vector3(.12,.38,.12)*fade,axis)
+		elif recipe.type=="electric":
+			for i in 3:
+				var offset := (side*cos(i*TAU/3)+Vector3.UP*sin(i*TAU/3))*.4
+				_line(fist_center,fist_center+offset,.022*fade,pearl)
 	if motif in ["heavy-ram","rolling-rush","return-rush"]:
 		_piece(crescent,edge,center,Vector3.ONE*body*1.25*fade,facing*Basis(Vector3.FORWARD,elapsed*7))
 	if flight<.75 or after>.7:return
@@ -268,14 +263,8 @@ func _beam_stage(from: Vector3,flight: float,after: float,alpha: float,facing: B
 		var width := (.18 if motif=="breath-stream" else .25)*weight*fade*emission_scale
 		_tapered_beam(source,end,width,surface,source.distance_to(aim))
 		_tapered_beam(source,end,width*.32,pearl,source.distance_to(aim))
-		for i in 12:
-			var q := fmod(elapsed*1.2+i/12.0,1.)*p
-			var point := source.lerp(end,q)
-			var spin := elapsed*7+i*.7
-			var spread := _beam_radius_fraction(source.distance_to(point), source.distance_to(aim))
-			var offset := (axis.x*cos(spin)+axis.z*sin(spin))*width*1.7*spread
-			_source_sprite(point+offset,.48*emission_scale*spread,_cast_art(),fmod(elapsed+i*.1,1),alpha*fade*.55,facing,spin)
-			if i%3==0:_piece(ring,edge,point,Vector3.ONE*width*(1.5+q)*spread,axis)
+		# A single soft outer shaft supports the tapered core, with no orbiting sprites.
+		_tapered_beam(source,end,width*1.35,forms.haze,source.distance_to(aim))
 		if motif=="electric-beam":
 			for i in 6:
 				var q0 := i / 6.0
@@ -305,11 +294,10 @@ func _projectile_stage(flight: float,after: float,alpha: float,facing: Basis,sid
 			_piece(sphere,surface,point,Vector3.ONE*.4*weight*fade*emission_scale)
 			_piece(soft_quad,soft,point,Vector3.ONE*1.65*fade*emission_scale,facing)
 			for turn in 2:_piece(crescent,edge,point,Vector3.ONE*.6*fade*emission_scale,facing*Basis(Vector3.FORWARD,elapsed*4+turn*PI))
-		for j in 5:
-			var q := maxf(0,p-j*.025)
-			var tail := origin.lerp(aim,q)+side*sin(q*PI)*(i-(count-1)*.5)*.45
-			if motif=="arcing-bomb":tail.y+=_projectile_arc_offset(q)
-			_source_sprite(tail,((.65-j*.09) if count==1 else .28)*emission_scale,_cast_art(),fmod(elapsed+j*.13,1),alpha*fade*(.55-j*.07),facing,i+j)
+		var q := maxf(0,p-.13)
+		var tail := origin.lerp(aim,q)+side*sin(q*PI)*(i-(count-1)*.5)*.45
+		if motif=="arcing-bomb": tail.y+=_projectile_arc_offset(q)
+		forms.tail(self,point,tail-point,(.32 if count==1 else .12)*fade*emission_scale,point.distance_to(tail))
 
 func _projectile_arc_offset(fraction: float) -> float:
 	return sin(fraction*PI)*projectile_arc_height
@@ -373,11 +361,10 @@ func _wave_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vec
 			_piece(ring,edge,initial_center,Vector3.ONE*(body*.5+q*1.4)*fade,Basis(Vector3.RIGHT,PI/2)*Basis(Vector3.UP,i*.3))
 		return
 	if motif=="wind-spiral":
-		for i in 24:
-			var p := clampf(flight-i*.018,0,1)
-			var a := elapsed*5+i*.65
-			var point := origin.lerp(aim,p)+(side*cos(a)+axis.z*sin(a))*sin(p*PI)*.85
-			_source_sprite(point,.65,"mist",p,alpha*fade*.4,facing,a)
+		var p := clampf(flight,0,1)
+		var point := origin.lerp(aim,p)
+		forms.aura(self,point,(.15+sin(p*PI)*.75)*fade,elapsed/duration)
+		forms.tail(self,point,origin-point,.45*fade,minf(1.5,origin.distance_to(point)))
 		return
 	if motif in ["sound-call", "sound-tunnel"]:
 		# Each head keeps its own release position. Head motion after launch must
@@ -390,9 +377,9 @@ func _wave_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vec
 	else:
 		_wave_rings(origin,flight,fade,alpha,facing,side,axis)
 	if motif=="returning-drain" and hit and after>=0:
-		for i in 9:
-			var p := clampf(after*1.5-i*.03,0,1)
-			_source_sprite(aim.lerp(initial_center,p)+Vector3.UP*sin(p*PI)*.8,.35,"spark",0,alpha*(1-p),facing)
+		var p := clampf(after*1.5,0,1)
+		var point := aim.lerp(initial_center,p)+Vector3.UP*sin(p*PI)*.8
+		forms.tail(self,point,aim-point,.2*alpha*(1-p),minf(1.5,aim.distance_to(point)))
 
 func _sound_emission_scale() -> float:
 	return emission_scale if motif in ["sound-call", "sound-tunnel"] and recipe.target != "actor" else 1.0
@@ -402,8 +389,8 @@ func _sound_wave_scale(travel: float) -> float:
 	return lerpf(_sound_emission_scale(), 1.0, smoothstep(0.0, .35, travel))
 
 func _wave_rings(source: Vector3,flight: float,fade: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
-	for i in 7:
-		var p := flight-i*.09
+	for i in (5 if motif in ["sound-call","sound-tunnel"] else 3):
+		var p := flight-i*.14
 		if p<0 or p>1.3:continue
 		var travel := clampf(p,0,1)
 		var point := source.lerp(aim,travel)
@@ -412,8 +399,7 @@ func _wave_rings(source: Vector3,flight: float,fade: float,alpha: float,facing: 
 		var visibility := sin(clampf(p/1.3,0,1)*PI)*fade
 		_piece(ring,edge,point,Vector3.ONE*radius*visibility,axis)
 		if motif in ["psychic-tunnel","dark-tunnel"]:
-			for sign_value in [-1.,1.]:_piece(crescent,pearl,point,Vector3.ONE*radius*visibility,axis*Basis(Vector3.RIGHT,PI/2)*Basis(Vector3.UP,elapsed*sign_value+i))
-			_source_sprite(point,radius*1.4,"mist" if motif=="dark-tunnel" else "spark",travel,alpha*visibility*.3,facing)
+			forms.plume(self,point,Vector3(radius,.14*radius,radius)*visibility,axis)
 		elif motif=="sound-tunnel":
 			for sign_value in [-1.,1.]:_line(point+side*radius*sign_value,point+side*radius*sign_value+Vector3.UP*.35*wave_scale,.02*visibility*wave_scale,pearl)
 
@@ -470,12 +456,11 @@ func _status_stage(flight: float,after: float,alpha: float,facing: Basis,side: V
 					var a := i*TAU/6
 					_line(target_ground,target_ground+Vector3(cos(a),.04,sin(a))*(.4+clampf(after,0,1)),.018*fade,edge)
 		_:
-			for i in 24:
-				var q := clampf(flight-i*.012,0,1)
-				var a := i*2.4+elapsed*.6
-				var spread := sin(q*PI*.8)*(.3+q*.9)
-				var point := origin.lerp(aim,q)+(side*cos(a)+Vector3.UP*sin(a))*spread
-				_source_sprite(point,.38+(i%3)*.16,"mist",q,alpha*fade*.4,facing,a)
+			# A low rolling cloud, not two dozen disconnected powder billboards.
+			var point := origin.lerp(aim,p)
+			for i in 3:
+				var offset := side*(i-1)*(.18+p*.3)
+				forms.plume(self,point+offset,Vector3(.4+p*.3,.3+p*.2,.45)*fade)
 
 func _self_stage(center: Vector3,t: float,flight: float,after: float,alpha: float,facing: Basis) -> void:
 	var charge := smoothstep(0,.6,t)
@@ -498,8 +483,10 @@ func _self_stage(center: Vector3,t: float,flight: float,after: float,alpha: floa
 				_piece(sphere,glow,point,Vector3.ONE*(.15+i*.13)*alpha)
 				_piece(ring,edge,point,Vector3.ONE*(.15+i*.13)*alpha,facing*Basis(Vector3.RIGHT,PI/2))
 		"healing-rise", "growing-aura":
-			for i in 12:
-				var p := fmod(t+i/12.,1.)
+			forms.aura(self,center,body*alpha,t)
+			var count := 6 if key=="roost" or motif=="growing-aura" else 3
+			for i in count:
+				var p := fmod(t+i/float(count),1.)
 				var a := i*2.4+elapsed*.4
 				var point := caster_ground+Vector3(cos(a)*body*1.2,p*2.4,sin(a)*body*1.2)
 				if key=="roost" or motif=="growing-aura":_piece(feather,pearl,point,Vector3.ONE*.25*sin(p*PI),facing*Basis(Vector3.FORWARD,a))
@@ -508,12 +495,8 @@ func _self_stage(center: Vector3,t: float,flight: float,after: float,alpha: floa
 					_line(point-facing.y*.10,point+facing.y*.10,.028*alpha,pearl)
 				_source_sprite(point,.35,"spark",t,alpha*sin(p*PI)*.5,facing)
 		_:
-			for i in 12:
-				var a := elapsed*(4. if motif=="orbit-dance" else 1.4)+i*TAU/12
-				var radius := body*(1.8-charge*.65) if motif=="inward-focus" else body*1.3
-				var point := center+Vector3(cos(a)*radius,sin(a*2)*body*.55,sin(a)*radius)
-				_source_sprite(point,.5,"spark" if motif=="electric-charge" else _cast_art(),fmod(t+i*.1,1),alpha*.6,facing,a)
-				if i%3==0:_piece(crescent,edge,center,Vector3.ONE*radius,Basis(Vector3.UP,a)*Basis(Vector3.FORWARD,a*.3))
+			forms.aura(self,center,body*alpha,t,motif=="inward-focus")
+
 	_piece(soft_quad,soft,center,Vector3.ONE*body*2.2,facing)
 
 func _field_stage(center: Vector3,t: float,flight: float,after: float,alpha: float,facing: Basis,side: Vector3) -> void:
@@ -556,6 +539,11 @@ func _field_stage(center: Vector3,t: float,flight: float,after: float,alpha: flo
 				var a := i*TAU/7+elapsed*.4
 				_source_sprite(point+(facing.x*cos(a)+facing.y*sin(a))*1.2,.3,"spark",t,alpha*.4,facing)
 		_:
+			if motif in ["cold-front","clearing-mist","mist-field"]:
+				for i in 3:
+					var point := field_center+side*(i-1)*field_radius*.45+Vector3.UP*.45
+					forms.plume(self,point,Vector3(field_radius*.6,.65,field_radius*.65)*grow*alpha)
+				return
 			for i in 24:
 				var base := _floor_point(i,24)
 				var arrival := i/24.*.4

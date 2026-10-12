@@ -147,11 +147,11 @@ func _run() -> void:
 	var mirrored: Node2D = load("res://scenes/overworld/kanto/guild_base/right_room.tscn").instantiate()
 	root.add_child(mirrored)
 	_check(Catalog.validate(mirrored, [table, flowers]) == "", "the same reusable furniture works in the mirrored side room")
-	_check(Catalog.validate(mirrored, [_item("door", "stool", 4, 8)]) == "overlap", "the mirrored room keeps its own entrance clear")
+	_check(Catalog.validate(mirrored, [_item("door", "bin_full", 4, 8)]) == "overlap", "the mirrored room keeps its own entrance clear")
 	mirrored.free()
 	var container: Node = map.get_node("Entities/Furniture")
 	var placed: Node2D = container.get_child(0)
-	_check(placed.get_child_count() == 2, "tabletop decoration is parented to its table")
+	_check(placed.get_node_or_null("Collision") != null and placed.get_child_count() == 3, "tabletop decoration is parented beside the table's visual and authoring collision")
 	_check(Blocking.is_position_blocked_by_character(map, Vector2(176, 336)), "furniture participates in the player's existing movement blockers")
 	_check(not Blocking.is_position_blocked_by_character(map, Vector2(176, 304)), "the raised artwork does not block the tile above the footprint")
 	for spec: Dictionary in Catalog.load_data().items:
@@ -164,7 +164,9 @@ func _run() -> void:
 				var gid := int(spec.tiles[y][x])
 				if gid > 0:
 					var coords: Array = Catalog.atlas[str(gid)]
-					_check(visual.get_cell_atlas_coords(Vector2i(x, y)) == Vector2i(coords[0], coords[1]), "scene uses the correct source tile: " + str(spec.id))
+					var expected := Vector2i(coords[0], coords[1])
+					var floor_details := scene.get_node_or_null("FloorDetails0") as TileMapLayer
+					_check(visual.get_cell_atlas_coords(Vector2i(x, y)) == expected or (floor_details != null and floor_details.get_cell_atlas_coords(Vector2i(x, y)) == expected and floor_details.position == visual.position and floor_details.z_index == 2 and not floor_details.z_as_relative), "scene uses the correct source tile at its intended depth: " + str(spec.id))
 		var icon: Texture2D = load("res://assets/guild_base/furniture/icons/%s.png" % str(spec.id))
 		_check(icon != null and icon.get_size() == Vector2(spec.visualSize[0], spec.visualSize[1]) * 32, "complete catalog icon: " + str(spec.id))
 		var value := _item("catalog_item", str(spec.id), 5 if int(spec.footprint[0]) > 11 else 8, 4 if str(spec.placement) == "wall" else 8)
@@ -185,7 +187,7 @@ func _run() -> void:
 	var resized := Furniture.instantiate_placement(map, rug, [])
 	_check(resized.get_node("Visual").get_used_cells().size() == 20 and not resized.blocks_world_position(Vector2(304, 304)), "resized carpets remain walkable and use nine-slice artwork")
 	resized.free()
-	_check(Catalog.validate(map, [_item("door", "stool", 18, 8)]) == "overlap", "the room doorway stays clear")
+	_check(Catalog.validate(map, [_item("door", "bin_full", 18, 8)]) == "overlap", "the room doorway stays clear")
 	_check(Catalog.validate(map, [_item("wall", "fireplace", 5, 4), _item("picture", "painting", 5, 4)]) == "overlap", "wall decorations cannot overlap the fireplace")
 	editor.authenticated = false
 	await editor.begin_editing()
@@ -213,7 +215,8 @@ func _run() -> void:
 	moved.x = 9
 	await editor._commit(editor._candidate_items(moved))
 	placed = container.get_child(0)
-	_check(placed.position.x == 288 and placed.get_child(1).placement.parentId == "table", "moving a table keeps its decoration attached")
+	var decorations := placed.get_children().filter(func(child: Node): return child.has_method("configure_surface"))
+	_check(placed.position.x == 288 and decorations.size() == 1 and decorations[0].placement.parentId == "table", "moving a table keeps its decoration attached")
 	_check(service.state.inventory.table_small == 5, "moving does not consume another copy")
 	var old_count: int = service.state.items.size()
 	service.save_fails = true
