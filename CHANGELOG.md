@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the lower 3D battle controls readable over bright arena reflections with a soft screen-fixed navy backdrop that scales with the UI, plus a more opaque action message panel.
+
 - Show the same mount, cosmetic and special-item icons in Guild Bank storage as in the Bag. Search your own donation items and resources by name, with the query preserved after refreshes and donations.
 
 - Prepare normal and shiny Landorus-Therian, Thundurus-Therian and Tornadus-Therian 3D models, with their own animations, for the next model release.
