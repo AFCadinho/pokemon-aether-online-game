@@ -81,7 +81,9 @@ func _init() -> void:
 		map_exit_source.contains("func _resolve_arrival_facing_direction")
 		and map_exit_source.contains('player.get("last_direction")')
 		and map_exit_source.contains("arrival_facing_direction")
-		and service_source.contains('JSON.stringify({"facingDirection": normalized_facing_direction})')
+		and service_source.contains('var enter_payload := {"facingDirection": normalized_facing_direction}')
+		and service_source.contains('enter_payload["confirmEntryFee"] = true')
+		and service_source.contains('JSON.stringify(enter_payload)')
 		and map_exit_source.contains('world.call("apply_authorized_teleport_state", state)'),
 		"Map exits preserve entry direction through the server-authoritative destination state"
 	)

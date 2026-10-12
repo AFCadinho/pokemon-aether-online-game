@@ -7,6 +7,12 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
 [ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="collision_marker"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue_npc"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_f_frames.tres" id="scientist_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_m_frames.tres" id="scientist_m"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="school_kid_m"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="gentleman"]
+
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(64, 32)
 
@@ -54,6 +60,38 @@ y_sort_enabled = true
 
 [node name="Players" type="Node2D" parent="Entities"]
 [node name="NPCs" type="Node2D" parent="Entities"]
+[node name="CuratorElara" parent="Entities/NPCs" instance=ExtResource("dialogue_npc")]
+position = Vector2(752, 432)
+npc_id = "kanto_pewter_museum_curator_elara"
+npc_definition_id = "trainer_class_scientist_f"
+display_name = "Curator Elara"
+npc_sprite_frames = ExtResource("scientist_f")
+facing_direction = Vector2(-1, 0)
+
+[node name="ResearcherOwen" parent="Entities/NPCs" instance=ExtResource("dialogue_npc")]
+position = Vector2(272, 336)
+npc_id = "kanto_pewter_museum_researcher_owen"
+npc_definition_id = "trainer_class_scientist_m"
+display_name = "Fossil Researcher Owen"
+npc_sprite_frames = ExtResource("scientist_m")
+facing_direction = Vector2(-1, 0)
+
+[node name="VisitorFinn" parent="Entities/NPCs" instance=ExtResource("dialogue_npc")]
+position = Vector2(528, 432)
+npc_id = "kanto_pewter_museum_visitor_finn"
+npc_definition_id = "trainer_class_school_kid_m"
+display_name = "Young Visitor Finn"
+npc_sprite_frames = ExtResource("school_kid_m")
+facing_direction = Vector2(-1, 0)
+
+[node name="CollectorHugo" parent="Entities/NPCs" instance=ExtResource("dialogue_npc")]
+position = Vector2(688, 240)
+npc_id = "kanto_pewter_museum_collector_hugo"
+npc_definition_id = "trainer_class_gentleman"
+display_name = "Collector Hugo"
+npc_sprite_frames = ExtResource("gentleman")
+facing_direction = Vector2(1, 0)
+
 [node name="Pokemon" type="Node2D" parent="Entities"]
 [node name="Interactables" type="Node2D" parent="Entities"]
 

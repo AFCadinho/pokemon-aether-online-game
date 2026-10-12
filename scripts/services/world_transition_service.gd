@@ -70,7 +70,7 @@ func get_transition_access(transition_id: String, force_refresh := false) -> Dic
 	return {"success": true, "access": access}
 
 
-func enter_transition(transition_id: String, facing_direction: String) -> Dictionary:
+func enter_transition(transition_id: String, facing_direction: String, confirm_entry_fee := false) -> Dictionary:
 	var normalized_transition_id := transition_id.strip_edges()
 	var normalized_facing_direction := facing_direction.strip_edges().to_lower()
 	if normalized_transition_id.is_empty():
@@ -84,7 +84,7 @@ func enter_transition(transition_id: String, facing_direction: String) -> Dictio
 		if not bool(checked.get("success", false)):
 			return checked
 		var access := _dictionary_from_value(checked.get("access", {}))
-		if bool(access.get("allowed", false)):
+		if bool(access.get("allowed", false)) or (confirm_entry_fee and str(access.get("reasonCode", "")) == "ENTRY_FEE_REQUIRED"):
 			var area_id := str(access.get("areaId", ""))
 			var scene_path := WebAssetModuleService.scene_for_map(area_id)
 			if not scene_path.is_empty():
@@ -93,11 +93,14 @@ func enter_transition(transition_id: String, facing_direction: String) -> Dictio
 					return assets
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
+	var enter_payload := {"facingDirection": normalized_facing_direction}
+	if confirm_entry_fee:
+		enter_payload["confirmEntryFee"] = true
 	var response := await _request_json(
 		base_url + (_transition_enter_endpoint() % normalized_transition_id.uri_encode()),
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
-		JSON.stringify({"facingDirection": normalized_facing_direction})
+		JSON.stringify(enter_payload)
 	)
 	if not bool(response.get("success", false)):
 		return response
@@ -107,6 +110,9 @@ func enter_transition(transition_id: String, facing_direction: String) -> Dictio
 	if not access.is_empty():
 		transition_access_cache[normalized_transition_id] = access
 	var story := _dictionary_from_value(body.get("story", {}))
+	var wallet := _dictionary_from_value(body.get("wallet", {}))
+	if not wallet.is_empty():
+		PlayerWalletService.apply_wallet_result({"success": true, "wallet": wallet})
 	if not story.is_empty():
 		StoryService.apply_story_if_not_stale(story)
 	return {

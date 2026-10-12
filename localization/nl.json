@@ -1,4 +1,7 @@
 {
+  "npc.museum.admission_prompt": "Welkom in het Pewter Museum of Science! Toegang kost {fee} Pokédollars per bezoek. Wil je naar binnen?",
+  "npc.museum.admission_pay": "Betaal {fee} Pokédollars",
+  "npc.museum.admission_cancel": "Misschien later",
   "ui.store.badge.training": "TRAINING",
   "ui.store.category.held-items.label": "Training Items",
   "ui.store.category.held-items.description": "Items voor het trainen van je Pokémon tijdens wilde gevechten.",

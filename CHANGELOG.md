@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Populate the Pewter Museum of Science with four dialogue NPCs and an entrance attendant offering admission for 100 Pokédollars per visit. Confirm payment before entering; leaving is free.
+
 - Show animated 3D teams during Team Preview, and keep battles in 3D with Stealth Rock, Spikes, Toxic Spikes, Sticky Web, Reflect, Light Screen and Aurora Veil on the field.
 
 - Add the Pewter Museum of Science interior using the authored Tiled visual, with blocked exhibits and a connected entrance and return to Pewter City.
