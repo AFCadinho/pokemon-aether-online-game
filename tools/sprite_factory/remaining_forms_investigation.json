@@ -1,0 +1,849 @@
+{
+  "schema": 1,
+  "date": "2026-10-12",
+  "scope": "Investigation of the exact 53 remaining held forms; no admission or publication",
+  "runtime_approved": false,
+  "release_approved": false,
+  "published": false,
+  "previous_result": {
+    "path": "tools/sprite_factory/alternate_forms_recovery_result.json",
+    "sha256": "776477d52f46c2aca4a7204a4735424eb28ebe8fb31fdd15022a7d175bfca704"
+  },
+  "evidence": {
+    "path": "tools/sprite_factory/remaining_forms_evidence.json",
+    "sha256": "ad1e3649c6a794ac5b00cc71fb930d866d12f955f1ebd2b2a4a35ea0983de830"
+  },
+  "summary": {
+    "corrected_source_mapping": 2,
+    "effect_animation_gap": 2,
+    "identity_or_scale": 13,
+    "motion_gap": 8,
+    "no_matching_model_found": 7,
+    "renderer_or_state_work": 3,
+    "shiny_palette_gap": 5,
+    "tera_composition_gap": 4,
+    "visibility_gap": 9
+  },
+  "prepared_pairs_added": 0,
+  "entries": [
+    {
+      "species": "araquanid-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/araquanid-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "araquanid",
+      "height_ratio": 1.7222222222222223,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen."
+    },
+    {
+      "species": "burmy-sandy",
+      "previous_stage": "source-shiny-material",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0412_12_00",
+      "evidence": [
+        "blender_probes/Gen4/pm0412",
+        "families/pm0412"
+      ],
+      "category": "shiny_palette_gap",
+      "priority": 3,
+      "finding": "De eigen rigs en bewegingen staan in Biochao. De opnieuw gelezen Blender-bestanden bevatten geen als shiny/rare benoemde afbeeldingen en geen verborgen animatiekanalen die een shinyrecept opleveren. Deze familie ontbreekt in de SCVI- en Z-A-modelinventaris.",
+      "next_step": "Verifieer een vormspecifiek shiny-paletrecept tegen een betrouwbare bron voordat deze als volledig normal/shiny-paar wordt toegelaten. Een willekeurige kleurverschuiving voldoet niet aan behoud van uiterlijk."
+    },
+    {
+      "species": "burmy-trash",
+      "previous_stage": "source-shiny-material",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0412_13_00",
+      "evidence": [
+        "blender_probes/Gen4/pm0412",
+        "families/pm0412"
+      ],
+      "category": "shiny_palette_gap",
+      "priority": 3,
+      "finding": "De eigen rigs en bewegingen staan in Biochao. De opnieuw gelezen Blender-bestanden bevatten geen als shiny/rare benoemde afbeeldingen en geen verborgen animatiekanalen die een shinyrecept opleveren. Deze familie ontbreekt in de SCVI- en Z-A-modelinventaris.",
+      "next_step": "Verifieer een vormspecifiek shiny-paletrecept tegen een betrouwbare bron voordat deze als volledig normal/shiny-paar wordt toegelaten. Een willekeurige kleurverschuiving voldoet niet aan behoud van uiterlijk."
+    },
+    {
+      "species": "castform-rainy",
+      "previous_stage": "source-motion",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0351_13",
+      "evidence": [
+        "blender_probes/Gen3/pm0351",
+        "families/pm0351"
+      ],
+      "category": "motion_gap",
+      "priority": 3,
+      "next_step": "Herstel ontbrekende eigen clips of maak en beoordeel expliciet nieuwe animaties. Het laatste is nieuw animatiewerk en geen verliesloze bronherstelactie.",
+      "finding": "De betreffende eigen rig heeft vijf benoemde actions: roar, idle, special attack, eye en mouth. Geen verborgen NLA/drivers of extra objectkanalen gevonden; damage, physical attack, faint en sleep ontbreken in deze route."
+    },
+    {
+      "species": "castform-snowy",
+      "previous_stage": "source-motion",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0351_14",
+      "evidence": [
+        "blender_probes/Gen3/pm0351",
+        "families/pm0351"
+      ],
+      "category": "motion_gap",
+      "priority": 3,
+      "next_step": "Herstel ontbrekende eigen clips of maak en beoordeel expliciet nieuwe animaties. Het laatste is nieuw animatiewerk en geen verliesloze bronherstelactie.",
+      "finding": "De betreffende eigen rig heeft vijf benoemde actions: roar, idle, special attack, eye en mouth. Geen verborgen NLA/drivers of extra objectkanalen gevonden; damage, physical attack, faint en sleep ontbreken in deze route."
+    },
+    {
+      "species": "castform-sunny",
+      "previous_stage": "source-motion",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0351_12",
+      "evidence": [
+        "blender_probes/Gen3/pm0351",
+        "families/pm0351"
+      ],
+      "category": "motion_gap",
+      "priority": 3,
+      "next_step": "Herstel ontbrekende eigen clips of maak en beoordeel expliciet nieuwe animaties. Het laatste is nieuw animatiewerk en geen verliesloze bronherstelactie.",
+      "finding": "De betreffende eigen rig heeft vijf benoemde actions: roar, idle, special attack, eye en mouth. Geen verborgen NLA/drivers of extra objectkanalen gevonden; damage, physical attack, faint en sleep ontbreken in deze route."
+    },
+    {
+      "species": "cherrim-sunshine",
+      "previous_stage": "source-shiny-material",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0421_12_00",
+      "evidence": [
+        "blender_probes/Gen4/pm0421",
+        "families/pm0421"
+      ],
+      "category": "shiny_palette_gap",
+      "priority": 3,
+      "finding": "De eigen rigs en bewegingen staan in Biochao. De opnieuw gelezen Blender-bestanden bevatten geen als shiny/rare benoemde afbeeldingen en geen verborgen animatiekanalen die een shinyrecept opleveren. Deze familie ontbreekt in de SCVI- en Z-A-modelinventaris.",
+      "next_step": "Verifieer een vormspecifiek shiny-paletrecept tegen een betrouwbare bron voordat deze als volledig normal/shiny-paar wordt toegelaten. Een willekeurige kleurverschuiving voldoet niet aan behoud van uiterlijk."
+    },
+    {
+      "species": "cramorant-gorging",
+      "previous_stage": "source-visibility",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0917_13_00",
+      "evidence": [
+        "blender_probes/Gen8/pm0917",
+        "families/pm0917"
+      ],
+      "category": "visibility_gap",
+      "priority": 2,
+      "finding": "De diepe Blender-probe vindt geen verborgen objecten, objectdrivers of niet-botcurves. Eventuele vs-groepen zijn leeg. De native TRMMT-switches staan allemaal op 1; dit levert geen vormafhankelijke zichtbaarheidsanimatie op. Passende native motion/sidechannel-bestanden ontbreken in zowel de SV- als Z-A-inventaris.",
+      "next_step": "Maak een expliciete, beoordeelde zichtbaarheidstoestand voor shell/core of prooi, plus correcte ogen en overgangen. Alleen meshes uitzetten op basis van hun naam is geen bewezen verliesloze reconstructie."
+    },
+    {
+      "species": "cramorant-gulping",
+      "previous_stage": "source-visibility",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0917_12_00",
+      "evidence": [
+        "blender_probes/Gen8/pm0917",
+        "families/pm0917"
+      ],
+      "category": "visibility_gap",
+      "priority": 2,
+      "finding": "De diepe Blender-probe vindt geen verborgen objecten, objectdrivers of niet-botcurves. Eventuele vs-groepen zijn leeg. De native TRMMT-switches staan allemaal op 1; dit levert geen vormafhankelijke zichtbaarheidsanimatie op. Passende native motion/sidechannel-bestanden ontbreken in zowel de SV- als Z-A-inventaris.",
+      "next_step": "Maak een expliciete, beoordeelde zichtbaarheidstoestand voor shell/core of prooi, plus correcte ogen en overgangen. Alleen meshes uitzetten op basis van hun naam is geen bewezen verliesloze reconstructie."
+    },
+    {
+      "species": "eevee-starter",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/eevee-starter"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "eevee",
+      "height_ratio": 1,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen."
+    },
+    {
+      "species": "eternatus-eternamax",
+      "previous_stage": "source-motion",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0940_81_00",
+      "evidence": [
+        "blender_probes/Gen8/pm0940_81",
+        "families/pm0940"
+      ],
+      "category": "motion_gap",
+      "priority": 3,
+      "next_step": "Inspecteer eerst de algemeen benoemde 0–400-action en de lange loops visueel op bruikbare aparte takes. Alleen als die de ontbrekende toestanden niet bevatten, zijn extra bronclips of expliciet gemaakte animaties nodig.",
+      "finding": "Eigen Eternamax-rig en benoemde idle/aanval/damage-acties bestaan, maar geen benoemde slaap- of faint-clip. De lange loop01 (0–6000) is geen bewijs voor een verborgen volledige gevechtsset; geen NLA-bundel gevonden. De naamloze/algemeen benoemde action pm0940_81_00 (0–400) blijft inhoudelijk ongeïdentificeerd; aanwezigheid daarvan bewijst nog geen slaap of faint."
+    },
+    {
+      "species": "greninja-ash",
+      "previous_stage": "source-motion",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "model_skeleton in pm0725_ash.blend",
+      "evidence": [
+        "blender_probes/Gen6/pm0725_ash",
+        "families/pm0725"
+      ],
+      "category": "motion_gap",
+      "priority": 3,
+      "next_step": "Herstel ontbrekende eigen clips of maak en beoordeel expliciet nieuwe animaties. Het laatste is nieuw animatiewerk en geen verliesloze bronherstelactie.",
+      "finding": "De Ash-bron bevat één action (frame 0–89), geen NLA-strips en geen verborgen objectanimaties. Het andere pm0725_51_00-model in Z-A mag niet alleen op nummer als Ash worden behandeld."
+    },
+    {
+      "species": "groudon-primal",
+      "previous_stage": "source-motion",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0383_51_00",
+      "evidence": [
+        "skeleton_comparisons/pm0383",
+        "families/pm0383"
+      ],
+      "category": "motion_gap",
+      "priority": 3,
+      "next_step": "Onderzoek expliciete retargeting van de basisslaapclip inclusief extra botten en effecten, of maak een eigen rustpose met beoordeling. Niet presenteren als identieke bronanimatie.",
+      "finding": "Z-A levert eigen idle/aanval/damage/faint, maar geen eigen sleep. De basis heeft slaapclips, maar het skelet is niet gelijk: 61 tegenover 64 botrecords. Rechtstreeks hergebruik is daarmee niet bewezen."
+    },
+    {
+      "species": "gumshoos-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/gumshoos-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "gumshoos",
+      "height_ratio": 2,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen."
+    },
+    {
+      "species": "kommo-o-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/kommo-o-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "kommoo",
+      "height_ratio": 1.4999999999999998,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen."
+    },
+    {
+      "species": "kyogre-primal",
+      "previous_stage": "source-motion",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0382_51_00",
+      "evidence": [
+        "skeleton_comparisons/pm0382",
+        "families/pm0382"
+      ],
+      "category": "motion_gap",
+      "priority": 3,
+      "next_step": "Onderzoek expliciete retargeting van de basisslaapclip inclusief extra botten en effecten, of maak een eigen rustpose met beoordeling. Niet presenteren als identieke bronanimatie.",
+      "finding": "Z-A levert eigen idle/aanval/damage/faint, maar geen eigen sleep. De basis heeft slaapclips, maar het skelet is niet gelijk: 51 tegenover 59 botrecords. Rechtstreeks hergebruik is daarmee niet bewezen."
+    },
+    {
+      "species": "lurantis-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/lurantis-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "lurantis",
+      "height_ratio": 1.6666666666666665,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen."
+    },
+    {
+      "species": "mimikyu-busted-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/mimikyu-busted-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "mimikyubusted",
+      "height_ratio": 2,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Gebruik Mimikyu-Busted als basis, niet intacte Mimikyu; pas de verhouding 2 toe vóór gezamenlijke battle-framing en controleer busted-weergave en Totem-presentatie."
+    },
+    {
+      "species": "mimikyu-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/mimikyu-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "mimikyu",
+      "height_ratio": 2,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen."
+    },
+    {
+      "species": "minior-blue",
+      "previous_stage": "source-visibility",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0824_12_00",
+      "evidence": [
+        "blender_probes/Gen7/pm0824",
+        "families/pm0824"
+      ],
+      "category": "visibility_gap",
+      "priority": 2,
+      "finding": "De diepe Blender-probe vindt geen verborgen objecten, objectdrivers of niet-botcurves. Eventuele vs-groepen zijn leeg. De native TRMMT-switches staan allemaal op 1; dit levert geen vormafhankelijke zichtbaarheidsanimatie op. Passende native motion/sidechannel-bestanden ontbreken in zowel de SV- als Z-A-inventaris.",
+      "next_step": "Maak een expliciete, beoordeelde zichtbaarheidstoestand voor shell/core of prooi, plus correcte ogen en overgangen. Alleen meshes uitzetten op basis van hun naam is geen bewezen verliesloze reconstructie."
+    },
+    {
+      "species": "minior-green",
+      "previous_stage": "source-visibility",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0824_12_00",
+      "evidence": [
+        "blender_probes/Gen7/pm0824",
+        "families/pm0824"
+      ],
+      "category": "visibility_gap",
+      "priority": 2,
+      "finding": "De diepe Blender-probe vindt geen verborgen objecten, objectdrivers of niet-botcurves. Eventuele vs-groepen zijn leeg. De native TRMMT-switches staan allemaal op 1; dit levert geen vormafhankelijke zichtbaarheidsanimatie op. Passende native motion/sidechannel-bestanden ontbreken in zowel de SV- als Z-A-inventaris.",
+      "next_step": "Maak een expliciete, beoordeelde zichtbaarheidstoestand voor shell/core of prooi, plus correcte ogen en overgangen. Alleen meshes uitzetten op basis van hun naam is geen bewezen verliesloze reconstructie."
+    },
+    {
+      "species": "minior-indigo",
+      "previous_stage": "source-visibility",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0824_12_00",
+      "evidence": [
+        "blender_probes/Gen7/pm0824",
+        "families/pm0824"
+      ],
+      "category": "visibility_gap",
+      "priority": 2,
+      "finding": "De diepe Blender-probe vindt geen verborgen objecten, objectdrivers of niet-botcurves. Eventuele vs-groepen zijn leeg. De native TRMMT-switches staan allemaal op 1; dit levert geen vormafhankelijke zichtbaarheidsanimatie op. Passende native motion/sidechannel-bestanden ontbreken in zowel de SV- als Z-A-inventaris.",
+      "next_step": "Maak een expliciete, beoordeelde zichtbaarheidstoestand voor shell/core of prooi, plus correcte ogen en overgangen. Alleen meshes uitzetten op basis van hun naam is geen bewezen verliesloze reconstructie."
+    },
+    {
+      "species": "minior-meteor",
+      "previous_stage": "source-visibility",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0824_11_00",
+      "evidence": [
+        "blender_probes/Gen7/pm0824",
+        "families/pm0824"
+      ],
+      "category": "visibility_gap",
+      "priority": 2,
+      "finding": "De diepe Blender-probe vindt geen verborgen objecten, objectdrivers of niet-botcurves. Eventuele vs-groepen zijn leeg. De native TRMMT-switches staan allemaal op 1; dit levert geen vormafhankelijke zichtbaarheidsanimatie op. Passende native motion/sidechannel-bestanden ontbreken in zowel de SV- als Z-A-inventaris.",
+      "next_step": "Maak een expliciete, beoordeelde zichtbaarheidstoestand voor shell/core of prooi, plus correcte ogen en overgangen. Alleen meshes uitzetten op basis van hun naam is geen bewezen verliesloze reconstructie."
+    },
+    {
+      "species": "minior-orange",
+      "previous_stage": "source-visibility",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0824_12_00",
+      "evidence": [
+        "blender_probes/Gen7/pm0824",
+        "families/pm0824"
+      ],
+      "category": "visibility_gap",
+      "priority": 2,
+      "finding": "De diepe Blender-probe vindt geen verborgen objecten, objectdrivers of niet-botcurves. Eventuele vs-groepen zijn leeg. De native TRMMT-switches staan allemaal op 1; dit levert geen vormafhankelijke zichtbaarheidsanimatie op. Passende native motion/sidechannel-bestanden ontbreken in zowel de SV- als Z-A-inventaris.",
+      "next_step": "Maak een expliciete, beoordeelde zichtbaarheidstoestand voor shell/core of prooi, plus correcte ogen en overgangen. Alleen meshes uitzetten op basis van hun naam is geen bewezen verliesloze reconstructie."
+    },
+    {
+      "species": "minior-violet",
+      "previous_stage": "source-visibility",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0824_12_00",
+      "evidence": [
+        "blender_probes/Gen7/pm0824",
+        "families/pm0824"
+      ],
+      "category": "visibility_gap",
+      "priority": 2,
+      "finding": "De diepe Blender-probe vindt geen verborgen objecten, objectdrivers of niet-botcurves. Eventuele vs-groepen zijn leeg. De native TRMMT-switches staan allemaal op 1; dit levert geen vormafhankelijke zichtbaarheidsanimatie op. Passende native motion/sidechannel-bestanden ontbreken in zowel de SV- als Z-A-inventaris.",
+      "next_step": "Maak een expliciete, beoordeelde zichtbaarheidstoestand voor shell/core of prooi, plus correcte ogen en overgangen. Alleen meshes uitzetten op basis van hun naam is geen bewezen verliesloze reconstructie."
+    },
+    {
+      "species": "minior-yellow",
+      "previous_stage": "source-visibility",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0824_12_00",
+      "evidence": [
+        "blender_probes/Gen7/pm0824",
+        "families/pm0824"
+      ],
+      "category": "visibility_gap",
+      "priority": 2,
+      "finding": "De diepe Blender-probe vindt geen verborgen objecten, objectdrivers of niet-botcurves. Eventuele vs-groepen zijn leeg. De native TRMMT-switches staan allemaal op 1; dit levert geen vormafhankelijke zichtbaarheidsanimatie op. Passende native motion/sidechannel-bestanden ontbreken in zowel de SV- als Z-A-inventaris.",
+      "next_step": "Maak een expliciete, beoordeelde zichtbaarheidstoestand voor shell/core of prooi, plus correcte ogen en overgangen. Alleen meshes uitzetten op basis van hun naam is geen bewezen verliesloze reconstructie."
+    },
+    {
+      "species": "necrozma-dawn-wings",
+      "previous_stage": "source-effect-animation",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0865_13_00",
+      "evidence": [
+        "blender_probes/Gen7/pm0865",
+        "families/pm0865"
+      ],
+      "category": "effect_animation_gap",
+      "priority": 2,
+      "finding": "De eigen fusierig en botanimaties zijn aanwezig. De opnieuw gelezen Blender-bron heeft geen objectdrivers of niet-botcurves; in de native SV/Z-A-inventaris ontbreekt de bijbehorende pm0865-motionroute. De effectlaag is daardoor niet gereconstrueerd.",
+      "next_step": "Maak een brongetrouwe effectweergave met expliciete timing/bindingen en vergelijk die in beweging voor normal/shiny. Een statisch opgekleurd basisoppervlak is onvoldoende."
+    },
+    {
+      "species": "necrozma-dusk-mane",
+      "previous_stage": "source-effect-animation",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0865_12_00",
+      "evidence": [
+        "blender_probes/Gen7/pm0865",
+        "families/pm0865"
+      ],
+      "category": "effect_animation_gap",
+      "priority": 2,
+      "finding": "De eigen fusierig en botanimaties zijn aanwezig. De opnieuw gelezen Blender-bron heeft geen objectdrivers of niet-botcurves; in de native SV/Z-A-inventaris ontbreekt de bijbehorende pm0865-motionroute. De effectlaag is daardoor niet gereconstrueerd.",
+      "next_step": "Maak een brongetrouwe effectweergave met expliciete timing/bindingen en vergelijk die in beweging voor normal/shiny. Een statisch opgekleurd basisoppervlak is onvoldoende."
+    },
+    {
+      "species": "necrozma-ultra",
+      "previous_stage": "source-motion",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0800_14_00",
+      "evidence": [
+        "blender_probes/Gen7/pm0800",
+        "families/pm0800",
+        "families/pm0865"
+      ],
+      "category": "motion_gap",
+      "priority": 3,
+      "next_step": "Herstel ontbrekende eigen clips of maak en beoordeel expliciet nieuwe animaties. Het laatste is nieuw animatiewerk en geen verliesloze bronherstelactie.",
+      "finding": "pm0800_14_00 is de daadwerkelijk benoemde Ultra-rig in de oudere Biochao-bron; pm0865 is de nieuwere familiebenaming, geen reden om dit te hernummeren. Er zijn vier gevechtsacties plus mouth en 756 niet-botcurves in losse materiaal-acties. Damage, faint en sleep zijn niet teruggevonden."
+    },
+    {
+      "species": "ogerpon-cornerstone-tera",
+      "previous_stage": "source-variant-binding",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "families/pm1120"
+      ],
+      "category": "tera_composition_gap",
+      "priority": 2,
+      "finding": "Naast de basis staan _11_99 tot _14_99 met eigen gemmask/gem/effect-geometrie en Fresnel-materialen. De _15_00 tot _18_00-mappen leveren configuratie/iconen/effectlocators, geen volledig model. Een _99-model is dus geen volledige Ogerpon.",
+      "next_step": "Bewijs welke basis, gem-mask, attachment/animatie en tera-shader samen elke identiteit vormen. Test het geheel in beide kleuren; de bestaande basisanimaties bewijzen de aparte mask-rig nog niet."
+    },
+    {
+      "species": "ogerpon-hearthflame-tera",
+      "previous_stage": "source-variant-binding",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "families/pm1120"
+      ],
+      "category": "tera_composition_gap",
+      "priority": 2,
+      "finding": "Naast de basis staan _11_99 tot _14_99 met eigen gemmask/gem/effect-geometrie en Fresnel-materialen. De _15_00 tot _18_00-mappen leveren configuratie/iconen/effectlocators, geen volledig model. Een _99-model is dus geen volledige Ogerpon.",
+      "next_step": "Bewijs welke basis, gem-mask, attachment/animatie en tera-shader samen elke identiteit vormen. Test het geheel in beide kleuren; de bestaande basisanimaties bewijzen de aparte mask-rig nog niet."
+    },
+    {
+      "species": "ogerpon-teal-tera",
+      "previous_stage": "source-variant-binding",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "families/pm1120"
+      ],
+      "category": "tera_composition_gap",
+      "priority": 2,
+      "finding": "Naast de basis staan _11_99 tot _14_99 met eigen gemmask/gem/effect-geometrie en Fresnel-materialen. De _15_00 tot _18_00-mappen leveren configuratie/iconen/effectlocators, geen volledig model. Een _99-model is dus geen volledige Ogerpon.",
+      "next_step": "Bewijs welke basis, gem-mask, attachment/animatie en tera-shader samen elke identiteit vormen. Test het geheel in beide kleuren; de bestaande basisanimaties bewijzen de aparte mask-rig nog niet."
+    },
+    {
+      "species": "ogerpon-wellspring-tera",
+      "previous_stage": "source-variant-binding",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "families/pm1120"
+      ],
+      "category": "tera_composition_gap",
+      "priority": 2,
+      "finding": "Naast de basis staan _11_99 tot _14_99 met eigen gemmask/gem/effect-geometrie en Fresnel-materialen. De _15_00 tot _18_00-mappen leveren configuratie/iconen/effectlocators, geen volledig model. Een _99-model is dus geen volledige Ogerpon.",
+      "next_step": "Bewijs welke basis, gem-mask, attachment/animatie en tera-shader samen elke identiteit vormen. Test het geheel in beide kleuren; de bestaande basisanimaties bewijzen de aparte mask-rig nog niet."
+    },
+    {
+      "species": "pichu-spiky-eared",
+      "previous_stage": "source-model",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "families/pm0172",
+        "blender_probes/Gen2/pm0172",
+        "archive_members"
+      ],
+      "category": "no_matching_model_found",
+      "priority": 3,
+      "finding": "In de beschikbare gezinsresources en de opnieuw gelezen Biochao-rigs is geen positief passend model gevonden. Normale/gender-/pet-/Gigantamax-varianten zijn geen bewijs voor deze kostuum- of oorvorm.",
+      "next_step": "Een passend bronmodel zoeken of de ontbrekende vorm zelf modelleren en animeren. Zelf maken is geen verliesloos herstel uit de huidige bronnen."
+    },
+    {
+      "species": "pikachu-belle",
+      "previous_stage": "source-model",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "families/pm0025",
+        "blender_probes/Gen1/pm0025",
+        "archive_members"
+      ],
+      "category": "no_matching_model_found",
+      "priority": 3,
+      "finding": "In de beschikbare gezinsresources en de opnieuw gelezen Biochao-rigs is geen positief passend model gevonden. Normale/gender-/pet-/Gigantamax-varianten zijn geen bewijs voor deze kostuum- of oorvorm.",
+      "next_step": "Een passend bronmodel zoeken of de ontbrekende vorm zelf modelleren en animeren. Zelf maken is geen verliesloos herstel uit de huidige bronnen."
+    },
+    {
+      "species": "pikachu-cosplay",
+      "previous_stage": "source-model",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "families/pm0025",
+        "blender_probes/Gen1/pm0025",
+        "archive_members"
+      ],
+      "category": "no_matching_model_found",
+      "priority": 3,
+      "finding": "In de beschikbare gezinsresources en de opnieuw gelezen Biochao-rigs is geen positief passend model gevonden. Normale/gender-/pet-/Gigantamax-varianten zijn geen bewijs voor deze kostuum- of oorvorm.",
+      "next_step": "Een passend bronmodel zoeken of de ontbrekende vorm zelf modelleren en animeren. Zelf maken is geen verliesloos herstel uit de huidige bronnen."
+    },
+    {
+      "species": "pikachu-libre",
+      "previous_stage": "source-model",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "families/pm0025",
+        "blender_probes/Gen1/pm0025",
+        "archive_members"
+      ],
+      "category": "no_matching_model_found",
+      "priority": 3,
+      "finding": "In de beschikbare gezinsresources en de opnieuw gelezen Biochao-rigs is geen positief passend model gevonden. Normale/gender-/pet-/Gigantamax-varianten zijn geen bewijs voor deze kostuum- of oorvorm.",
+      "next_step": "Een passend bronmodel zoeken of de ontbrekende vorm zelf modelleren en animeren. Zelf maken is geen verliesloos herstel uit de huidige bronnen."
+    },
+    {
+      "species": "pikachu-phd",
+      "previous_stage": "source-model",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "families/pm0025",
+        "blender_probes/Gen1/pm0025",
+        "archive_members"
+      ],
+      "category": "no_matching_model_found",
+      "priority": 3,
+      "finding": "In de beschikbare gezinsresources en de opnieuw gelezen Biochao-rigs is geen positief passend model gevonden. Normale/gender-/pet-/Gigantamax-varianten zijn geen bewijs voor deze kostuum- of oorvorm.",
+      "next_step": "Een passend bronmodel zoeken of de ontbrekende vorm zelf modelleren en animeren. Zelf maken is geen verliesloos herstel uit de huidige bronnen."
+    },
+    {
+      "species": "pikachu-pop-star",
+      "previous_stage": "source-model",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "families/pm0025",
+        "blender_probes/Gen1/pm0025",
+        "archive_members"
+      ],
+      "category": "no_matching_model_found",
+      "priority": 3,
+      "finding": "In de beschikbare gezinsresources en de opnieuw gelezen Biochao-rigs is geen positief passend model gevonden. Normale/gender-/pet-/Gigantamax-varianten zijn geen bewijs voor deze kostuum- of oorvorm.",
+      "next_step": "Een passend bronmodel zoeken of de ontbrekende vorm zelf modelleren en animeren. Zelf maken is geen verliesloos herstel uit de huidige bronnen."
+    },
+    {
+      "species": "pikachu-rock-star",
+      "previous_stage": "source-model",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "families/pm0025",
+        "blender_probes/Gen1/pm0025",
+        "archive_members"
+      ],
+      "category": "no_matching_model_found",
+      "priority": 3,
+      "finding": "In de beschikbare gezinsresources en de opnieuw gelezen Biochao-rigs is geen positief passend model gevonden. Normale/gender-/pet-/Gigantamax-varianten zijn geen bewijs voor deze kostuum- of oorvorm.",
+      "next_step": "Een passend bronmodel zoeken of de ontbrekende vorm zelf modelleren en animeren. Zelf maken is geen verliesloos herstel uit de huidige bronnen."
+    },
+    {
+      "species": "pikachu-starter",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/pikachu-starter"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "pikachu",
+      "height_ratio": 1,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen."
+    },
+    {
+      "species": "poltchageist-artisan",
+      "previous_stage": "source-variant-binding",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm1133_12_00",
+      "evidence": [
+        "skeleton_comparisons/pm1133",
+        "tea_texture_differences/pm1133",
+        "repository_inputs/catalog_remaining_final_dlc_intake.json",
+        "repository_inputs/catalog_remaining_dlc_motion_intake.json"
+      ],
+      "category": "corrected_source_mapping",
+      "priority": 1,
+      "superseded_resource_family": "pm1123",
+      "finding": "De vorige intake onderzocht pm1123, de bron van een andere soort. pm1133_12_00 is de variantkandidaat van de juiste familie. Alle 77 botrecords en alle transformgegevens behalve namen zijn identiek aan _11_00; alleen niet-botnodes zijn hernoemd. Eigen normal/shiny-materialen en gemerkte bronteksturen bestaan.",
+      "next_step": "Importeer de eigen _12_00-geometrie/materialen; koppel de bestaande, eerder gereconstrueerde basisanimaties met bewezen nodevertaling. Behoud het merkteken en controleer ogen, zichtbaarheid, rustpose en beide kleuren. De basis gebruikt al een gemaakte rustpose; noem dit geen teruggevonden native slaapclip."
+    },
+    {
+      "species": "ribombee-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/ribombee-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "ribombee",
+      "height_ratio": 2,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen."
+    },
+    {
+      "species": "rockruff-dusk",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/rockruff-dusk"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "rockruff",
+      "height_ratio": 1,
+      "finding": "Rockruff-Dusk heeft dezelfde hoogte, gewicht, kleur en basisstats als Rockruff; het verschil in deze gevechtsdata is Own Tempo/evolutie. In de modelbron is één Rockruff-resource aanwezig.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen."
+    },
+    {
+      "species": "rotom-fan",
+      "previous_stage": "source-shader",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0479_15_00",
+      "evidence": [
+        "families/pm0479"
+      ],
+      "category": "renderer_or_state_work",
+      "priority": 2,
+      "finding": "Bronmodel, eigen clips en normal/shiny-materiaaldata bestaan. De eerdere bake blokkeert op een gedetailleerde 1024×1024 base en 512×512 mask; dit is een beperking van de enkelvoudige texture-bake.",
+      "next_step": "Implementeer afzonderlijke UV-sampling van base en mask in de shader; behoud beide bronresoluties. Vergelijk normale/shiny kleuren en animaties, daarna packed/original-pixelpariteit.",
+      "prior_evidence": "docs/alternate-forms-recovery.md"
+    },
+    {
+      "species": "salazzle-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/salazzle-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "salazzle",
+      "height_ratio": 1.7500000000000002,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen."
+    },
+    {
+      "species": "sinistcha-masterpiece",
+      "previous_stage": "source-variant-binding",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm1134_12_00",
+      "evidence": [
+        "skeleton_comparisons/pm1134",
+        "tea_texture_differences/pm1134",
+        "repository_inputs/catalog_remaining_final_dlc_intake.json",
+        "repository_inputs/catalog_remaining_dlc_motion_intake.json"
+      ],
+      "category": "corrected_source_mapping",
+      "priority": 1,
+      "superseded_resource_family": "pm1124",
+      "finding": "De vorige intake onderzocht pm1124, de bron van een andere soort. pm1134_12_00 is de variantkandidaat van de juiste familie. Alle 128 botrecords en alle transformgegevens behalve namen zijn identiek aan _11_00; alleen niet-botnodes zijn hernoemd. Eigen normal/shiny-materialen en gemerkte bronteksturen bestaan.",
+      "next_step": "Importeer de eigen _12_00-geometrie/materialen; koppel de bestaande, eerder gereconstrueerde basisanimaties met bewezen nodevertaling. Behoud het merkteken en controleer ogen, zichtbaarheid, rustpose en beide kleuren. De basis gebruikt al een gemaakte rustpose; noem dit geen teruggevonden native slaapclip."
+    },
+    {
+      "species": "togedemaru-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/togedemaru-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "togedemaru",
+      "height_ratio": 2,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen."
+    },
+    {
+      "species": "vikavolt-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/vikavolt-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "vikavolt",
+      "height_ratio": 1.7333333333333334,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen."
+    },
+    {
+      "species": "wormadam-sandy",
+      "previous_stage": "source-shiny-material",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0413_12_00",
+      "evidence": [
+        "blender_probes/Gen4/pm0413",
+        "families/pm0413"
+      ],
+      "category": "shiny_palette_gap",
+      "priority": 3,
+      "finding": "De eigen rigs en bewegingen staan in Biochao. De opnieuw gelezen Blender-bestanden bevatten geen als shiny/rare benoemde afbeeldingen en geen verborgen animatiekanalen die een shinyrecept opleveren. Deze familie ontbreekt in de SCVI- en Z-A-modelinventaris.",
+      "next_step": "Verifieer een vormspecifiek shiny-paletrecept tegen een betrouwbare bron voordat deze als volledig normal/shiny-paar wordt toegelaten. Een willekeurige kleurverschuiving voldoet niet aan behoud van uiterlijk."
+    },
+    {
+      "species": "wormadam-trash",
+      "previous_stage": "source-shiny-material",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0413_13_00",
+      "evidence": [
+        "blender_probes/Gen4/pm0413",
+        "families/pm0413"
+      ],
+      "category": "shiny_palette_gap",
+      "priority": 3,
+      "finding": "De eigen rigs en bewegingen staan in Biochao. De opnieuw gelezen Blender-bestanden bevatten geen als shiny/rare benoemde afbeeldingen en geen verborgen animatiekanalen die een shinyrecept opleveren. Deze familie ontbreekt in de SCVI- en Z-A-modelinventaris.",
+      "next_step": "Verifieer een vormspecifiek shiny-paletrecept tegen een betrouwbare bron voordat deze als volledig normal/shiny-paar wordt toegelaten. Een willekeurige kleurverschuiving voldoet niet aan behoud van uiterlijk."
+    },
+    {
+      "species": "xerneas-neutral",
+      "previous_stage": "source-state-material",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0768_00_00",
+      "evidence": [
+        "families/pm0768",
+        "state_channels/pm0768"
+      ],
+      "category": "renderer_or_state_work",
+      "priority": 2,
+      "finding": "Z-A bevat defaultwait én battlewait met elk 12 materiaaltracks en 6 visibilitytracks. De lege eye_red-mapper is geen uitgewerkt neutral-palet. Een apart ontbrekend skelet is hier niet de kern.",
+      "next_step": "Decodeer en vergelijk default/battle-toestand, behoud horn/back-effecten en leg vast hoe de neutral-weergave tijdens acties behouden blijft. Verifieer normal en shiny."
+    },
+    {
+      "species": "zygarde-10",
+      "previous_stage": "source-shader",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0770_11_00",
+      "evidence": [
+        "families/pm0770",
+        "state_channels/pm0770"
+      ],
+      "category": "renderer_or_state_work",
+      "priority": 2,
+      "finding": "De eigen Z-A-resource en bot-/materiaal-/visibilitykanalen bestaan. Het materiaal verwijst ook naar een probe; de eerdere omzetting kende geen gekwalificeerde mapping voor _prb_0.",
+      "next_step": "Herstel de bedoelde probe/reflection-sampling en effectlagen met behoud van de eigen 10%-geometrie; controleer de volledige animatieset en beide kleuren.",
+      "prior_evidence": "docs/alternate-forms-recovery.md"
+    }
+  ]
+}
