@@ -139,6 +139,162 @@ var terrain_condition := ""
 var trick_room_active := false
 var terrain_effect: Node3D
 var trick_room_effect: Node3D
+const SideConditions = preload("res://scripts/battle/battle_ui/side_conditions_3d.gd")
+const TeamPreview = preload("res://scripts/battle/battle_ui/team_preview_3d.gd")
+var side_conditions: Array[Dictionary] = [{}, {}]
+var side_condition_visuals: Array = [null, null]
+var preview_teams: Array = [[], []]
+var preview_layers: Array = []
+var preview_enabled := false
+var preview_generation := 0
+var preview_download_generation := -1
+var preview_download_config := ""
+var preview_problem := ""
+var preview_visual: Node3D
+
+func set_side_conditions(player_effects: Array, enemy_effects: Array) -> void:
+	side_conditions = [SideConditions.snapshot(player_effects), SideConditions.snapshot(enemy_effects)]
+	_sync_side_conditions()
+
+func _sync_side_conditions() -> void:
+	for side in 2:
+		if not owns_field_effects() or not is_instance_valid(world) or side_conditions[side].is_empty():
+			if is_instance_valid(side_condition_visuals[side]): side_condition_visuals[side].cancel()
+			side_condition_visuals[side] = null
+			continue
+		if not is_instance_valid(side_condition_visuals[side]):
+			side_condition_visuals[side] = SideConditions.new()
+			world.add_child(side_condition_visuals[side])
+		var origin := _position(side)
+		if double_mode: origin = origin.lerp(_position(side + 2), 0.5)
+		var facing := _position(1 - side) - _position(side)
+		side_condition_visuals[side].configure(origin, facing, double_mode, common_effect_speed)
+		side_condition_visuals[side].reconcile(side_conditions[side])
+
+func set_team_preview(player_team: Array, enemy_team: Array, layers: Array = []) -> void:
+	var teams := [_preview_identities(player_team), _preview_identities(enemy_team)]
+	preview_layers = layers.duplicate()
+	if preview_enabled and teams == preview_teams:
+		_sync_preview_layers()
+		return
+	_clear_preview_visual()
+	preview_teams = teams
+	preview_enabled = true
+	preview_generation += 1
+	preview_problem = ""
+	_sync_preview_layers()
+	_queue_preview_download()
+
+func _preview_identities(team: Array) -> Array[String]:
+	var result: Array[String] = []
+	for value in team.slice(0, 6):
+		if not value is Dictionary: continue
+		var species := str(value.get("displaySpecies", ""))
+		if species.is_empty(): species = str(value.get("species", ""))
+		if species.is_empty(): species = str(value.get("ident", "")).get_slice(": ", 1).strip_edges()
+		if species.is_empty(): continue
+		var shiny_value: Variant = value.get("shiny", value.get("isShiny", value.get("is_shiny", false)))
+		var shiny := str(shiny_value).to_lower() in ["true", "1", "yes"]
+		result.append(ReviewedModels.key(species, shiny))
+	return result
+
+func _preview_wants_3d() -> bool:
+	return preview_enabled and get_tree().root.get_node("SettingsManager").battle_presentation_mode == "3d" and ModelPlatform.supported()
+
+func _preview_keys() -> Array[String]:
+	var result: Array[String] = []
+	for team in preview_teams:
+		for identity: String in team:
+			if identity not in result: result.append(identity)
+	return result
+
+func _preview_supported() -> bool:
+	for identity in _preview_keys():
+		if not _supports_combatant(identity, false, false, false): return false
+	return true
+
+func _preview_blocked() -> bool:
+	return not _preview_supported() or not preview_problem.is_empty() or _preview_keys().any(func(identity): return failed_models.has(identity))
+
+func _download_preview_models(generation: int) -> void:
+	if generation != preview_generation or not _preview_wants_3d() or not _preview_supported(): return
+	await _ensure_downloaded_models(true, generation)
+
+func _queue_preview_download() -> void:
+	if not _preview_wants_3d() or not _preview_supported(): return
+	var settings := get_tree().root.get_node("SettingsManager")
+	var config := str(settings.battle_3d_catalog_path) + ":" + str(settings.has_manual_battle_3d_catalog_selection())
+	if config != preview_download_config:
+		preview_download_config = config
+		preview_generation += 1
+		preview_problem = ""
+	if preview_download_generation == preview_generation: return
+	preview_download_generation = preview_generation
+	_download_preview_models.call_deferred(preview_generation)
+
+func clear_team_preview() -> void:
+	preview_enabled = false
+	preview_generation += 1
+	preview_teams = [[], []]
+	preview_problem = ""
+	_clear_preview_visual()
+	for layer in preview_layers:
+		if is_instance_valid(layer): layer.visible = false
+	preview_layers.clear()
+	# Keep verified scenes until the next actor reconciliation: the host binds
+	# selected leads after clearing preview, and can reuse those exact scenes.
+
+func _clear_preview_visual() -> void:
+	if is_instance_valid(preview_visual): preview_visual.cancel()
+	preview_visual = null
+
+func _sync_preview_layers() -> void:
+	# Keep the legacy layer populated for an unsupported catalog or mode change.
+	for layer in preview_layers:
+		if is_instance_valid(layer): layer.visible = preview_enabled and not (_preview_wants_3d() and active)
+
+func _upgrade_legacy_preview() -> void:
+	for layer in preview_layers:
+		if is_instance_valid(layer) and layer.has_method("enable_sprite_upgrades"):
+			layer.enable_sprite_upgrades()
+
+func camera_target_for_preview() -> Vector3:
+	return ArenaCatalog.camera_target(arena_id)
+
+func material_response_slots() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for index in actors.size():
+		result.append({"actor": actors[index], "identity": identities[index]})
+	if is_instance_valid(preview_visual):
+		result.append_array(preview_visual.slots)
+	return result
+
+func _process_team_preview() -> void:
+	_queue_preview_download()
+	if not _preview_supported() or not preview_problem.is_empty():
+		reason = preview_problem if not preview_problem.is_empty() else "Unsupported Team Preview Pokémon/form"
+		_set_active(false)
+		_upgrade_legacy_preview()
+		return
+	for identity in _preview_keys():
+		if failed_models.has(identity) or not catalog_entries.has(identity) or not packed.has(identity):
+			reason = "Prepared Team Preview model unavailable: " + identity
+			_set_active(false)
+			_upgrade_legacy_preview()
+			return
+	if not _prepare_arena(): return
+	_set_active(true)
+	for actor in actors:
+		if is_instance_valid(actor): actor.hide()
+	if not is_instance_valid(preview_visual):
+		preview_visual = TeamPreview.new()
+		world.add_child(preview_visual)
+		preview_visual.build(self, preview_teams)
+	preview_visual.show()
+	preview_visual.animate(playback_speed)
+	_update_camera(0.0)
+	reason = "3D Team Preview active"
+	_prune_models()
 
 func owns_field_effects() -> bool:
 	return active and not _is_hybrid_presentation()
@@ -381,7 +537,15 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 	# Reuse these exact viewports/materials after reveal; do not rebuild them.
 	if render_under_cover:
 		warming_render = true
-	await _ensure_downloaded_models()
+	if _preview_wants_3d():
+		# The deferred roster request also serves host readiness. Do not issue a
+		# second download while the same preview is already being prepared.
+		_queue_preview_download()
+		await get_tree().process_frame
+		while is_inside_tree() and is_instance_valid(model_downloader) and not preparation_cancelled and not preparation_failed:
+			await get_tree().process_frame
+	else:
+		await _ensure_downloaded_models()
 	if preparation_cancelled or preparation_failed or not is_inside_tree():
 		warming_render = false
 		return
@@ -435,7 +599,7 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 				if not _models_pending() and _actors_resolved():
 					return
 			if render_under_cover:
-				var has_combatants := false
+				var has_combatants := _preview_wants_3d() and not _preview_keys().is_empty()
 				for index in _slot_count():
 					has_combatants = has_combatants or not combatants[index].species.is_empty()
 				if not catalog_problem.is_empty() or (not active and has_combatants):
@@ -497,7 +661,7 @@ func _render_reuse_key() -> String:
 	return "%s:%s:%s" % [viewport.get_instance_id(), viewport.size, viewport.msaa_3d]
 
 
-func _ensure_downloaded_models(preserve_actors := false) -> void:
+func _ensure_downloaded_models(preserve_actors := false, request_preview_generation := -1) -> void:
 	download_verified_files.clear()
 	if not ModelPlatform.supported() or OS.has_environment("POKEAETHER_3D_STAGE_REPORT"):
 		return
@@ -507,7 +671,11 @@ func _ensure_downloaded_models(preserve_actors := false) -> void:
 		var environment_error: String = await get_tree().root.get_node("Android3DEnvironmentService").ensure_ready()
 		if preparation_cancelled or not is_inside_tree():
 			return
+		if request_preview_generation >= 0 and (request_preview_generation != preview_generation or not _preview_wants_3d()): return
 		if not environment_error.is_empty():
+			if request_preview_generation >= 0:
+				preview_problem = environment_error
+				return
 			preparation_failed = true
 			reason = environment_error
 			return
@@ -517,8 +685,12 @@ func _ensure_downloaded_models(preserve_actors := false) -> void:
 		return
 	while is_instance_valid(model_downloader):
 		await get_tree().process_frame
+	if request_preview_generation >= 0 and (request_preview_generation != preview_generation or not _preview_wants_3d()): return
 	var needed: Array[String] = []
-	for index in _slot_count():
+	if _preview_wants_3d():
+		if not _preview_supported(): return
+		needed = _preview_keys()
+	for index in (0 if _preview_wants_3d() else _slot_count()):
 		var box: Node = boxes[index] if index < boxes.size() else null
 		if box != null and (box.double_container.visible and not double_mode):
 			return
@@ -529,7 +701,7 @@ func _ensure_downloaded_models(preserve_actors := false) -> void:
 		var identity := _combatant_key(index)
 		if not identity.is_empty() and identity not in needed:
 			needed.append(identity)
-	for identity in _anticipated_form_keys():
+	for identity in ([] if _preview_wants_3d() else _anticipated_form_keys()):
 		if identity not in needed:
 			needed.append(identity)
 	for identity: String in staged_mega_species:
@@ -556,7 +728,11 @@ func _ensure_downloaded_models(preserve_actors := false) -> void:
 	model_downloader = null
 	if preparation_cancelled or not is_inside_tree():
 		return
+	if request_preview_generation >= 0 and (request_preview_generation != preview_generation or not _preview_wants_3d()): return
 	if not str(result.get("error", "")).is_empty():
+		if request_preview_generation >= 0:
+			preview_problem = str(result.error)
+			return
 		preparation_failed = true
 		reason = str(result.error)
 		return
@@ -1883,9 +2059,12 @@ func _anticipated_form_keys() -> Array[String]:
 
 func _needed_species() -> Array[String]:
 	var needed: Array[String] = []
-	for platform in platforms:
-		if platform.hazards.visible or platform.player_screens.visible or platform.enemy_screens.visible:
-			return []
+	if _preview_wants_3d():
+		return needed if _preview_blocked() else _preview_keys()
+	if _is_hybrid_presentation():
+		for platform in platforms:
+			if platform.hazards.visible or platform.player_screens.visible or platform.enemy_screens.visible:
+				return []
 	for index in _slot_count():
 		var box: Node = boxes[index] if index < boxes.size() else null
 		if box != null and box.double_container.visible and not double_mode:
@@ -1911,6 +2090,8 @@ func _needed_species() -> Array[String]:
 func _actors_resolved() -> bool:
 	if not active:
 		return true # The process loop has resolved a fallback.
+	if _preview_wants_3d():
+		return is_instance_valid(preview_visual) and preview_visual.slots.size() == preview_teams[0].size() + preview_teams[1].size()
 	for index in _slot_count():
 		if identities[index] != _combatant_key(index):
 			return false
@@ -2089,6 +2270,7 @@ func _reuse_checked_resource(entry: Dictionary) -> void:
 		verified_model_cache_hits += 1
 
 func _clear_actors() -> void:
+	_clear_preview_visual()
 	fallback_effect_bounds.clear()
 	_clear_substitute_models()
 	_clear_status_effects()
@@ -2127,30 +2309,36 @@ func _set_active(value: bool) -> void:
 	active = value
 	_sync_weather()
 	_sync_field_effects()
+	_sync_side_conditions()
+	_sync_preview_layers()
+	if is_instance_valid(preview_visual):
+		if not _preview_wants_3d(): _clear_preview_visual()
+		else: preview_visual.visible = value
 	visible = value or (entry_arena_requested and entry_arena_visible and viewport != null)
 	if viewport != null:
 		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if visible else SubViewport.UPDATE_DISABLED
-	if not value and not entry_arena_requested:
-		for node in saved_colors:
-			if is_instance_valid(node):
-				node.self_modulate = saved_colors[node]
-		saved_colors.clear()
 	for i in boxes.size():
 		boxes[i].presentation_anchor = _anchor.bind(i) if value else Callable()
 		boxes[i].presentation_visual_rect = _visual_rect.bind(i) if value else Callable()
 		boxes[i].set_model_sprites_hidden(value or entry_arena_requested)
+	var hidden: Array = []
 	if value or entry_arena_requested:
-		var hidden: Array = []
 		if get_tree().root.get_node("SettingsManager").battle_presentation_mode == "3d":
 			for platform in platforms:
 				hidden.append(platform.get_node("PlatformImage"))
+				for node_name in ["Hazards", "PlayerScreens", "EnemyScreens"]:
+					hidden.append_array(platform.get_node(node_name).get_children())
 		for box in boxes:
 			if is_instance_valid(box.dratini_poc_shadow):
 				hidden.append(box.dratini_poc_shadow)
-		for node in hidden:
-			if not saved_colors.has(node):
-				saved_colors[node] = node.self_modulate
-			node.self_modulate.a = 0.0
+	# Restore art whose ownership changed, including native -> hybrid mode.
+	for node in saved_colors.keys():
+		if node not in hidden:
+			if is_instance_valid(node): node.self_modulate = saved_colors[node]
+			saved_colors.erase(node)
+	for node in hidden:
+		if not saved_colors.has(node): saved_colors[node] = node.self_modulate
+		node.self_modulate.a = 0.0
 
 func _sync_render_size() -> void:
 	if viewport == null:
@@ -2321,6 +2509,9 @@ func _update_camera(delta: float) -> void:
 		camera.position = origin + (_default_camera_home() - origin).rotated(Vector3.UP, sin(camera_phase) * 0.10)
 	var target := ArenaCatalog.camera_target(arena_id)
 	var offset := camera.position - target
+	if _preview_wants_3d():
+		target.y = _position(0).y + 1.0
+		offset.y = maxf(offset.y * 1.8, 7.5)
 	var focus_ready: bool = (
 		coop_camera_focus_enabled
 		and coop_camera_focus_index >= 0
@@ -2338,7 +2529,7 @@ func _update_camera(delta: float) -> void:
 	offset = offset.rotated(Vector3.UP,user_camera_yaw)
 	var right := offset.cross(Vector3.UP).normalized()
 	offset = offset.rotated(right,user_camera_pitch)
-	offset *= user_camera_zoom * (1.45 if double_mode else 1.0) * (1.0 - focus_mix * 0.13)
+	offset *= user_camera_zoom * (1.1 if _preview_wants_3d() else (1.45 if double_mode else 1.0)) * (1.0 - focus_mix * 0.13)
 	camera.position = target + offset
 	camera.look_at(target)
 	if settings.battle_3d_camera_motion and active:
@@ -2409,11 +2600,21 @@ func _process(delta: float) -> void:
 		_set_active(false)
 		_load_catalog(path)
 		return
+	_queue_preview_download()
+	if _preview_wants_3d() and _preview_blocked():
+		_cancel_load()
+		pending_entries.clear()
+		_process_team_preview()
+		_prune_models()
+		return
 	_queue_needed_models()
 	if _models_pending():
 		_import_next_model()
 		if _models_pending():
 			return
+	if _preview_wants_3d():
+		_process_team_preview()
+		return
 	if packed.is_empty() and not catalog_problem.is_empty():
 		# Empty Team Preview needs an arena, not a model catalog. Actual leads
 		# still take the complete download/validation path when they are selected.
@@ -2424,11 +2625,12 @@ func _process(delta: float) -> void:
 		_set_active(false)
 		return
 	var desired := []
-	for platform in platforms:
-		if platform.hazards.visible or platform.player_screens.visible or platform.enemy_screens.visible:
-			reason = "Field hazard/screen presentation uses 2D"
-			_set_active(false)
-			return
+	if _is_hybrid_presentation():
+		for platform in platforms:
+			if platform.hazards.visible or platform.player_screens.visible or platform.enemy_screens.visible:
+				reason = "Hybrid field hazard/screen presentation uses 2D"
+				_set_active(false)
+				return
 	for index in _slot_count():
 		var box: Node = boxes[index] if index < boxes.size() else null
 		if box != null and box.double_container.visible and not double_mode:

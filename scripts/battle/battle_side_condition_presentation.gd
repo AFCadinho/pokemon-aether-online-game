@@ -6,6 +6,7 @@ var player_battle_platform: Control
 var enemy_battle_platform: Control
 var player_side_effects_panel: Control
 var enemy_side_effects_panel: Control
+var model_presenter: Node
 
 func setup(
 	player_platform: Control,
@@ -21,6 +22,8 @@ func setup(
 func update(player_side_effects: Array, enemy_side_effects: Array, turn: int) -> void:
 	_set_battle_platform_side_effects(player_battle_platform, player_side_effects)
 	_set_battle_platform_side_effects(enemy_battle_platform, enemy_side_effects)
+	if is_instance_valid(model_presenter):
+		model_presenter.set_side_conditions(player_side_effects, enemy_side_effects)
 	_set_side_effects_panel_data(player_side_effects_panel, player_side_effects, turn)
 	_set_side_effects_panel_data(enemy_side_effects_panel, enemy_side_effects, turn)
 

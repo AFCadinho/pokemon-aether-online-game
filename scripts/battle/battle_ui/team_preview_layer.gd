@@ -7,6 +7,7 @@ const BATTLE_SPRITE_LOADER := preload("res://scripts/battle/battle_ui/sprite_box
 var sprite_loader := BATTLE_SPRITE_LOADER.new()
 var slot_sprites: Array[AnimatedSprite2D] = []
 var team_is_shown := false
+var allow_sprite_upgrades := true
 
 
 func _notification(what: int) -> void:
@@ -25,9 +26,10 @@ func _ready() -> void:
 		clear()
 
 
-func show_team(team_data: Array, side: String) -> void:
+func show_team(team_data: Array, side: String, upgrade_sprites := true) -> void:
 	_cache_slot_sprites()
 	clear()
+	allow_sprite_upgrades = upgrade_sprites
 
 	for index in range(min(team_data.size(), slot_sprites.size())):
 		var pokemon_value: Variant = team_data[index]
@@ -88,12 +90,24 @@ func _show_pokemon_in_slot(sprite: AnimatedSprite2D, pokemon_data: Dictionary, s
 	sprite.play()
 	var request_key := "%s|%s|%s" % [species, side, str(_get_shiny_from_data(pokemon_data))]
 	sprite.set_meta("web_sprite_request", request_key)
-	_upgrade_web_sprite.call_deferred(sprite, request_key, species, side, _get_shiny_from_data(pokemon_data))
+	if allow_sprite_upgrades:
+		_upgrade_web_sprite.call_deferred(sprite, request_key, species, side, _get_shiny_from_data(pokemon_data))
+
+func enable_sprite_upgrades() -> void:
+	if allow_sprite_upgrades or not team_is_shown: return
+	allow_sprite_upgrades = true
+	for sprite in slot_sprites:
+		if sprite.sprite_frames == null: continue
+		var request_key := str(sprite.get_meta("web_sprite_request", ""))
+		var parts := request_key.split("|")
+		if parts.size() == 3:
+			_upgrade_web_sprite.call_deferred(sprite, request_key, parts[0], parts[1], parts[2] == "true")
 
 
 func _upgrade_web_sprite(sprite: AnimatedSprite2D, request_key: String, species: String, side: String, is_shiny: bool) -> void:
+	if not team_is_shown or not allow_sprite_upgrades: return
 	var frames: SpriteFrames = await sprite_loader.call("request_web_sprite_frames", species, side, is_shiny)
-	if frames == null or not is_instance_valid(sprite) or str(sprite.get_meta("web_sprite_request", "")) != request_key:
+	if frames == null or not team_is_shown or not allow_sprite_upgrades or not is_instance_valid(sprite) or str(sprite.get_meta("web_sprite_request", "")) != request_key:
 		return
 	sprite.sprite_frames = frames
 	sprite.animation = IDLE_ANIMATION
