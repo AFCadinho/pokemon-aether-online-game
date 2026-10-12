@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give the other 34 Z-moves individual cinematic finales: elemental explosions, water crowns, heavy rock eruptions, ice and psychic fractures, dark implosions and a rising self-aura for Extreme Evoboost. Coordinate impact framing, lighting, camera recoil and sound while preserving move timing and the approved Supersonic Skystrike effect.
+
 - Let Guild Bank item, resource and Pokémon donation overviews use the available tab height, showing more rows while keeping each list scrollable.
 
 - Give Guild rank changes, leadership transfers and member removal compact Aether dialogs with clear headings, padded messages and visible actions on smaller screens.

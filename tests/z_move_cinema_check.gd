@@ -2,6 +2,12 @@ extends "res://tests/move_camera_choreography_check.gd"
 const ZCinema = preload("res://scripts/battle/battle_ui/z_move_cinema_3d.gd")
 const ZRecipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 
+func _sample(slot: int, effect: Node, seconds: float) -> void:
+	stage.players[slot].seek(seconds,true)
+	stage._update_move_contacts()
+	effect._process(0)
+	stage._update_camera(0)
+
 func _run() -> void:
 	get_tree().create_timer(150).timeout.connect(func(): get_tree().quit(1))
 	_setup()
@@ -21,6 +27,7 @@ func _run() -> void:
 	for key: String in ZRecipes.DATA.data.moves:
 		if not ZRecipes.get_recipe(key).has("z_choreography"): continue
 		assert(ZCinema.supports(key), key)
+		assert(key == "supersonicskystrike" or ZCinema.Climax.supports(key),key+" authored finale")
 		count += 1
 		for doubles in [false, true]:
 			stage.double_mode = doubles
@@ -37,7 +44,7 @@ func _run() -> void:
 					assert(stage.move_camera.effect == effect and stage.move_atmosphere.effect == effect)
 					var timing: Dictionary = stage.move_timing(key, actor)
 					assert(is_equal_approx(effect.duration, timing.frames / 60.0), "Native duration preserved")
-					for seconds in [effect.launch * 0.7, lerpf(effect.launch,effect.impact,0.65), lerpf(effect.impact,effect.duration,0.15)]:
+					for seconds in [effect.launch * 0.7, lerpf(effect.launch,effect.impact,0.65), lerpf(effect.impact,effect.duration,0.35)]:
 						_sample(slot, effect, seconds)
 						assert(not stage.camera.transform.is_equal_approx(overview), key)
 						assert(stage.camera.environment != null and stage.camera.environment != arena)
@@ -47,7 +54,7 @@ func _run() -> void:
 						for point: Vector3 in shot.points: _in_frame(point, key + " shot bounds")
 						var anchors: Dictionary = effect.anchors.call()
 						_in_frame(anchors.source if seconds < effect.launch else anchors.target, key + " combat anchor")
-						assert(effect.cursor > 0 and effect.cursor < 160, key + " bounded geometry")
+						assert(effect.cursor < 160 and (effect.cursor > 0 or seconds > effect.impact and not outcome.is_empty()), key + " bounded geometry")
 						for i in effect.cursor:
 							var piece: MeshInstance3D = effect.pieces[i]
 							assert(piece.transform.is_finite(), key)
@@ -59,6 +66,23 @@ func _run() -> void:
 						assert(stage.camera.environment.ambient_light_color == light_before)
 						if seconds > effect.impact:
 							assert((stage.move_atmosphere.pulse > 0) == (outcome.is_empty() and key != "extremeevoboost"), key + " outcome")
+					var climax_ref: WeakRef
+					if ZCinema.Climax.supports(key):
+						var finale: RefCounted = effect.cinematic_climax
+						climax_ref = weakref(finale)
+						for after in [0.01,0.13,0.28,0.5,0.7]:
+							_sample(slot,effect,lerpf(effect.impact,effect.duration,after))
+							var shown: bool = outcome.is_empty() or key == "extremeevoboost"
+							assert((finale.start_index>=0)==shown,key+" hit-gated finale")
+							if not shown: continue
+							for i in range(finale.start_index,finale.end_index):
+								var piece: MeshInstance3D = effect.pieces[i]
+								var bounds := piece.mesh.get_aabb()
+								for corner in 8: _in_frame(piece.transform*bounds.get_endpoint(corner),key+" complete explosion volume")
+							var opacity: float = finale.cloud.get_shader_parameter("opacity")
+							effect._process(0)
+							assert(finale.cloud.get_shader_parameter("opacity")==opacity,key+" paused shader")
+						finale = null
 					SettingsManager.battle_3d_camera_motion = false
 					stage._update_camera(0)
 					assert(stage.camera.transform.is_equal_approx(overview))
@@ -70,8 +94,10 @@ func _run() -> void:
 					assert(stage.move_camera.effect == null and stage.camera.transform.is_equal_approx(overview))
 					assert(arena.background_color == Color("345678") and not arena.fog_enabled)
 					await get_tree().process_frame
+					if climax_ref != null: assert(climax_ref.get_ref()==null,key+" finale resources released")
 		print("Z_CINEMA_PROFILE_OK ", key)
 	assert(count == 35 and ZCinema.DATA.data.moves.size() == count)
+	assert(ZCinema.Climax.DATA.data.moves.size()==34)
 	_check_portrait_framing()
 	SettingsManager.weather_effects = true
 	for key in ["hydrovortex", "blackholeeclipse", "bloomdoom"]:

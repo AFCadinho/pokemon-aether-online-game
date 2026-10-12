@@ -4,6 +4,8 @@ Approved by the user on **2026-10-06**: all **194 currently implemented 3D moves
 including the red/blue Close Combat revision. The current animation round is complete.
 Further changes are individual refinements driven by real gameplay feedback.
 
+The subsequent [cinematic Z finales](z-move-cinematic-climaxes.md) revise 34 Z-moves; those new finales are pending player review. Supersonic Skystrike is the approved reference for that pass.
+
 The subsequent [707-move extension](extended-move-presentations.md) adds gameplay
 catalogue coverage. Those presentations remain **pending player review**; this
 approval register still covers only the original 194.
@@ -18,42 +20,42 @@ documents and recipe `review` fields describe their creation/provenance phase;
 
 | Move | Key | Approval |
 | --- | --- | --- |
-| 10,000,000 Volt Thunderbolt | `10000000voltthunderbolt` | Approved |
+| 10,000,000 Volt Thunderbolt | `10000000voltthunderbolt` | Original approved; new finale pending |
 | Absorb | `absorb` | Approved |
-| Acid Downpour | `aciddownpour` | Approved |
+| Acid Downpour | `aciddownpour` | Original approved; new finale pending |
 | Agility | `agility` | Approved |
-| All-Out Pummeling | `alloutpummeling` | Approved |
+| All-Out Pummeling | `alloutpummeling` | Original approved; new finale pending |
 | Aqua Jet | `aquajet` | Approved |
 | Astonish | `astonish` | Approved |
 | Aurora Veil | `auroraveil` | Approved |
 | Baby-Doll Eyes | `babydolleyes` | Approved |
 | Bite | `bite` | Approved |
-| Black Hole Eclipse | `blackholeeclipse` | Approved |
+| Black Hole Eclipse | `blackholeeclipse` | Original approved; new finale pending |
 | Bleakwind Storm | `bleakwindstorm` | Approved |
 | Blizzard | `blizzard` | Approved |
-| Bloom Doom | `bloomdoom` | Approved |
+| Bloom Doom | `bloomdoom` | Original approved; new finale pending |
 | Body Press | `bodypress` | Approved |
-| Breakneck Blitz | `breakneckblitz` | Approved |
+| Breakneck Blitz | `breakneckblitz` | Original approved; new finale pending |
 | Bubble | `bubble` | Approved |
 | Bubble Beam | `bubblebeam` | Approved |
 | Bug Bite | `bugbite` | Approved |
 | Bullet Punch | `bulletpunch` | Approved |
 | Calm Mind | `calmmind` | Approved |
-| Catastropika | `catastropika` | Approved |
+| Catastropika | `catastropika` | Original approved; new finale pending |
 | Ceaseless Edge | `ceaselessedge` | Approved |
 | Charge | `charge` | Approved |
 | Charm | `charm` | Approved |
 | Chilly Reception | `chillyreception` | Approved |
-| Clangorous Soulblaze | `clangoroussoulblaze` | Approved |
+| Clangorous Soulblaze | `clangoroussoulblaze` | Original approved; new finale pending |
 | Close Combat | `closecombat` | Approved |
 | Confusion | `confusion` | Approved |
-| Continental Crush | `continentalcrush` | Approved |
-| Corkscrew Crash | `corkscrewcrash` | Approved |
+| Continental Crush | `continentalcrush` | Original approved; new finale pending |
+| Corkscrew Crash | `corkscrewcrash` | Original approved; new finale pending |
 | Court Change | `courtchange` | Approved |
 | Dark Pulse | `darkpulse` | Approved |
 | Defense Curl | `defensecurl` | Approved |
 | Defog | `defog` | Approved |
-| Devastating Drake | `devastatingdrake` | Approved |
+| Devastating Drake | `devastatingdrake` | Original approved; new finale pending |
 | Disarming Voice | `disarmingvoice` | Approved |
 | Double Kick | `doublekick` | Approved |
 | Double Team | `doubleteam` | Approved |
@@ -70,7 +72,7 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | Ember | `ember` | Approved |
 | Encore | `encore` | Approved |
 | Explosion | `explosion` | Approved |
-| Extreme Evoboost | `extremeevoboost` | Approved |
+| Extreme Evoboost | `extremeevoboost` | Original approved; new finale pending |
 | Extreme Speed | `extremespeed` | Approved |
 | Fairy Wind | `fairywind` | Approved |
 | Fake Out | `fakeout` | Approved |
@@ -84,14 +86,14 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | Frustration | `frustration` | Approved |
 | Fury Attack | `furyattack` | Approved |
 | Future Sight | `futuresight` | Approved |
-| Genesis Supernova | `genesissupernova` | Approved |
+| Genesis Supernova | `genesissupernova` | Original approved; new finale pending |
 | Giga Impact | `gigaimpact` | Approved |
-| Gigavolt Havoc | `gigavolthavoc` | Approved |
+| Gigavolt Havoc | `gigavolthavoc` | Original approved; new finale pending |
 | Grassy Glide | `grassyglide` | Approved |
 | Grassy Terrain | `grassyterrain` | Approved |
 | Growl | `growl` | Approved |
 | Growth | `growth` | Approved |
-| Guardian of Alola | `guardianofalola` | Approved |
+| Guardian of Alola | `guardianofalola` | Original approved; new finale pending |
 | Gust | `gust` | Approved |
 | Harden | `harden` | Approved |
 | Haze | `haze` | Approved |
@@ -103,33 +105,33 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | High Jump Kick | `highjumpkick` | Approved |
 | Howl | `howl` | Approved |
 | Hurricane | `hurricane` | Approved |
-| Hydro Vortex | `hydrovortex` | Approved |
+| Hydro Vortex | `hydrovortex` | Original approved; new finale pending |
 | Hyper Beam | `hyperbeam` | Approved |
 | Ice Beam | `icebeam` | Approved |
 | Ice Punch | `icepunch` | Approved |
 | Ice Shard | `iceshard` | Approved |
-| Inferno Overdrive | `infernooverdrive` | Approved |
+| Inferno Overdrive | `infernooverdrive` | Original approved; new finale pending |
 | Iron Head | `ironhead` | Approved |
 | Knock Off | `knockoff` | Approved |
 | Kowtow Cleave | `kowtowcleave` | Approved |
 | Leafage | `leafage` | Approved |
 | Leech Seed | `leechseed` | Approved |
 | Leer | `leer` | Approved |
-| Let’s Snuggle Forever | `letssnuggleforever` | Approved |
+| Let’s Snuggle Forever | `letssnuggleforever` | Original approved; new finale pending |
 | Lick | `lick` | Approved |
 | Light Screen | `lightscreen` | Approved |
-| Light That Burns the Sky | `lightthatburnsthesky` | Approved |
+| Light That Burns the Sky | `lightthatburnsthesky` | Original approved; new finale pending |
 | Low Kick | `lowkick` | Approved |
 | Magical Leaf | `magicalleaf` | Approved |
 | Make It Rain | `makeitrain` | Approved |
-| Malicious Moonsault | `maliciousmoonsault` | Approved |
-| Menacing Moonraze Maelstrom | `menacingmoonrazemaelstrom` | Approved |
+| Malicious Moonsault | `maliciousmoonsault` | Original approved; new finale pending |
+| Menacing Moonraze Maelstrom | `menacingmoonrazemaelstrom` | Original approved; new finale pending |
 | Misty Terrain | `mistyterrain` | Approved |
 | Moonblast | `moonblast` | Approved |
 | Mud-Slap | `mudslap` | Approved |
 | Nasty Plot | `nastyplot` | Approved |
-| Never-Ending Nightmare | `neverendingnightmare` | Approved |
-| Oceanic Operetta | `oceanicoperetta` | Approved |
+| Never-Ending Nightmare | `neverendingnightmare` | Original approved; new finale pending |
+| Oceanic Operetta | `oceanicoperetta` | Original approved; new finale pending |
 | Outrage | `outrage` | Approved |
 | Peck | `peck` | Approved |
 | Poison Powder | `poisonpowder` | Approved |
@@ -141,7 +143,7 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | Psychic Noise | `psychicnoise` | Approved |
 | Psychic Terrain | `psychicterrain` | Approved |
 | Psyshock | `psyshock` | Approved |
-| Pulverizing Pancake | `pulverizingpancake` | Approved |
+| Pulverizing Pancake | `pulverizingpancake` | Original approved; new finale pending |
 | Pursuit | `pursuit` | Approved |
 | Pyro Ball | `pyroball` | Approved |
 | Quick Attack | `quickattack` | Approved |
@@ -156,30 +158,30 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | Rollout | `rollout` | Approved |
 | Roost | `roost` | Approved |
 | Sand Attack | `sandattack` | Approved |
-| Savage Spin-Out | `savagespinout` | Approved |
+| Savage Spin-Out | `savagespinout` | Original approved; new finale pending |
 | Scald | `scald` | Approved |
 | Scratch | `scratch` | Approved |
 | Screech | `screech` | Approved |
-| Searing Sunraze Smash | `searingsunrazesmash` | Approved |
+| Searing Sunraze Smash | `searingsunrazesmash` | Original approved; new finale pending |
 | Shadow Ball | `shadowball` | Approved |
-| Shattered Psyche | `shatteredpsyche` | Approved |
-| Sinister Arrow Raid | `sinisterarrowraid` | Approved |
+| Shattered Psyche | `shatteredpsyche` | Original approved; new finale pending |
+| Sinister Arrow Raid | `sinisterarrowraid` | Original approved; new finale pending |
 | Sleep Powder | `sleeppowder` | Approved |
 | Sludge Bomb | `sludgebomb` | Approved |
 | Smokescreen | `smokescreen` | Approved |
 | Solar Beam | `solarbeam` | Approved |
-| Soul-Stealing 7-Star Strike | `soulstealing7starstrike` | Approved |
+| Soul-Stealing 7-Star Strike | `soulstealing7starstrike` | Original approved; new finale pending |
 | Spark | `spark` | Approved |
 | Sparkling Aria | `sparklingaria` | Approved |
 | Spikes | `spikes` | Approved |
-| Splintered Stormshards | `splinteredstormshards` | Approved |
+| Splintered Stormshards | `splinteredstormshards` | Original approved; new finale pending |
 | Spore | `spore` | Approved |
 | Stealth Rock | `stealthrock` | Approved |
 | Sticky Web | `stickyweb` | Approved |
-| Stoked Sparksurfer | `stokedsparksurfer` | Approved |
+| Stoked Sparksurfer | `stokedsparksurfer` | Original approved; new finale pending |
 | String Shot | `stringshot` | Approved |
 | Substitute | `substitute` | Approved |
-| Subzero Slammer | `subzeroslammer` | Approved |
+| Subzero Slammer | `subzeroslammer` | Original approved; new finale pending |
 | Sucker Punch | `suckerpunch` | Approved |
 | Superpower | `superpower` | Approved |
 | Supersonic | `supersonic` | Approved |
@@ -190,7 +192,7 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | Tackle | `tackle` | Approved |
 | Tail Whip | `tailwhip` | Approved |
 | Taunt | `taunt` | Approved |
-| Tectonic Rage | `tectonicrage` | Approved |
+| Tectonic Rage | `tectonicrage` | Original approved; new finale pending |
 | Teleport | `teleport` | Approved |
 | Tera Starstorm | `terastarstorm` | Approved |
 | Thunder Punch | `thunderpunch` | Approved |
@@ -199,7 +201,7 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | Thunderbolt | `thunderbolt` | Approved |
 | Toxic | `toxic` | Approved |
 | Toxic Spikes | `toxicspikes` | Approved |
-| Twinkle Tackle | `twinkletackle` | Approved |
+| Twinkle Tackle | `twinkletackle` | Original approved; new finale pending |
 | U-turn | `uturn` | Approved |
 | Vine Whip | `vinewhip` | Approved |
 | Volt Switch | `voltswitch` | Approved |
