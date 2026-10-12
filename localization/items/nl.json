@@ -1171,5 +1171,9 @@
   "guild-room-2-template": {
     "name": "Grand Lounge · Kamer 2",
     "shortDesc": "Kamer 2, deur rechts. Je ontvangt een Bag-item. Lever het bij de Guild Manager in om dit bewerkbare ontwerp permanent voor je guild te unlocken."
+  },
+  "flying-nimbus-mount": {
+    "name": "Flying Nimbus-mount",
+    "shortDesc": "Ontgrendelt Flying Nimbus als land-mount. Vereist een Mount License voor de huidige regio."
   }
 }

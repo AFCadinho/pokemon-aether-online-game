@@ -1171,5 +1171,9 @@
   "guild-room-2-template": {
     "name": "Grand Lounge · 房间2",
     "shortDesc": "房间2，门在右侧。购买后获得背包物品，在公会管理员处捐赠，为公会永久解锁此可编辑设计。"
+  },
+  "flying-nimbus-mount": {
+    "name": "筋斗云坐骑",
+    "shortDesc": "解锁筋斗云陆地坐骑。需要当前地区的坐骑许可证。"
   }
 }
