@@ -2665,6 +2665,7 @@
   "ui.guild.bank.search.your_resources": "Pesquisar recursos da sua Bolsa",
   "ui.guild.bank.donation.search_empty": "Nenhum item da sua Bolsa corresponde à pesquisa.",
   "ui.guild.bank.filter.all": "Todos os bens",
+  "ui.guild.bank.availability.on_loan": "Emprestado",
   "ui.guild.bank.filter.available": "Disponível",
   "ui.guild.bank.filter.borrowed": "Emprestado",
   "ui.guild.bank.filter.unavailable": "Indisponível",

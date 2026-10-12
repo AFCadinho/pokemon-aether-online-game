@@ -2699,6 +2699,7 @@
   "ui.guild.bank.search.your_resources": "Zoek in je Bag-resources",
   "ui.guild.bank.donation.search_empty": "Geen items in je Bag komen overeen met je zoekopdracht.",
   "ui.guild.bank.filter.all": "Alle bezittingen",
+  "ui.guild.bank.availability.on_loan": "Uitgeleend",
   "ui.guild.bank.filter.available": "Beschikbaar",
   "ui.guild.bank.filter.borrowed": "Geleend",
   "ui.guild.bank.filter.unavailable": "Niet beschikbaar",
