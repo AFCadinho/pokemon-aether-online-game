@@ -1669,8 +1669,25 @@ func _wait_for_pvp_battle_cover() -> void:
 
 
 func _reveal_prepared_pvp_battle() -> void:
+	var entering_battle := battle_instance
 	pvp_battle_transition_started_at_msec = -1
 	await _reveal_prepared_wild_battle()
+	if not is_in_battle or active_battle_kind != "pvp" or not is_instance_valid(entering_battle) or battle_instance != entering_battle:
+		return
+	var spectator_source_kind := str(battle_instance.spectator_source_battle_kind)
+	if battle_instance._is_spectator_battle() and spectator_source_kind == "wild":
+		MusicManager.play_wild_battle_music()
+	elif battle_instance._is_spectator_battle() and spectator_source_kind == "trainer":
+		MusicManager.play_trainer_battle_music()
+	else:
+		MusicManager.play_pvp_battle_music()
+
+
+func _reveal_prepared_training_ai_battle() -> void:
+	var entering_battle := battle_instance
+	await _reveal_prepared_wild_battle()
+	if is_in_battle and active_battle_kind == "training_ai" and is_instance_valid(entering_battle) and battle_instance == entering_battle:
+		MusicManager.play_trainer_battle_music()
 
 
 func _wait_for_wild_encounter_cover(started_at_msec: int) -> void:
@@ -4544,18 +4561,17 @@ func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 		return false
 
 	_prepare_battle_instance_reveal()
-	MusicManager.play_trainer_battle_music()
 	var battle_environment_id := _resolve_battle_environment_id("pvp", response)
 	await battle_instance.setup_trainer_battle_from_response(
 		player_lead_pokemon,
 		trainer_data,
 		response,
-		Callable(self, "_reveal_prepared_wild_battle"),
+		Callable(self, "_reveal_prepared_training_ai_battle"),
 		battle_environment_id,
 		true
 	)
 	if wild_encounter_transition.visible:
-		await _reveal_prepared_wild_battle()
+		await _reveal_prepared_training_ai_battle()
 	return true
 
 func start_pvp_battle_from_response(response: Dictionary) -> bool:
@@ -4604,12 +4620,6 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 
 	_prepare_battle_instance_reveal()
 	var spectator_source_kind := str(response.get("sourceBattleKind", "")).strip_edges().to_lower()
-	if str(response.get("viewerRole", "participant")).to_lower() == "spectator" and spectator_source_kind == "wild":
-		MusicManager.play_wild_battle_music()
-	elif str(response.get("viewerRole", "participant")).to_lower() == "spectator" and spectator_source_kind == "trainer":
-		MusicManager.play_trainer_battle_music()
-	else:
-		MusicManager.play_pvp_battle_music()
 	var environment_battle_kind := spectator_source_kind if spectator_source_kind in ["wild", "trainer"] else "pvp"
 	var battle_environment_id := _resolve_battle_environment_id(environment_battle_kind, response)
 	if trace_nearby:

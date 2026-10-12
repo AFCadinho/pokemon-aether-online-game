@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show battle preparation and Pokémon download progress when entering 3D AI Sparring or PvP, prepare Team Preview before revealing the field, and start battle music once the arena is visible.
+
 - Show animated 3D teams during Team Preview, and keep battles in 3D with Stealth Rock, Spikes, Toxic Spikes, Sticky Web, Reflect, Light Screen and Aurora Veil on the field.
 
 - Add the Pewter Museum of Science interior using the authored Tiled visual, with blocked exhibits and a connected entrance and return to Pewter City.

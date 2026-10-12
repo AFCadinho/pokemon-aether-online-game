@@ -211,6 +211,7 @@
   "ui.settings.storage.confirm_models": "Remover os modelos 3D de Pokémon baixados? Eles serão baixados novamente quando necessários. Seus Pokémon e seu progresso serão mantidos.",
   "ui.settings.storage.failed": "Alguns arquivos não puderam ser removidos. Tente novamente.",
   "ui.battle.downloading_pokemon": "Baixando Pokémon…",
+  "ui.battle.preparing_battle": "Preparando batalha…",
   "ui.mobile.panel.options": "Itens",
   "ui.mobile.panel.actions": "Ações",
   "ui.mobile.panel.party": "Equipe",
