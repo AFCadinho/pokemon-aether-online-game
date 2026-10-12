@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make Guild room designs easier to navigate with explained empty states, selection-specific preview/apply/donation actions, a More actions menu, separate save/rename dialogs and a scrollable management page on smaller screens. Show only unlocked templates or matching items in your Bag.
+
 - Make Irelia overworld blades clearer at sprite scale and cover the exposed scalp around the right-facing ear for both genders.
 
 - Give the other 34 Z-moves individual cinematic finales: elemental explosions, water crowns, heavy rock eruptions, ice and psychic fractures, dark implosions and a rising self-aura for Extreme Evoboost. Coordinate impact framing, lighting, camera recoil and sound while preserving move timing and the approved Supersonic Skystrike effect.

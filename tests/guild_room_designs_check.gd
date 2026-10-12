@@ -14,6 +14,8 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	root.content_scale_size = Vector2i(1280, 800)
+	root.size = Vector2i(1280, 800)
 	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/guild_room_designs.json"))
 	var service := Service.new()
 	root.add_child(service)
@@ -31,9 +33,60 @@ func _run() -> void:
 	menu.configure(service, 7)
 	await menu.refresh()
 	_check(menu.rows.item_count == 1, "Own designs filter by room")
+	_check(not menu.selection_panel.visible and menu.name_field == null, "Unselected designs do not show unrelated actions or an inline naming field")
+	var saved_designs: Array = service.state.saved
+	service.state.saved = []
+	await menu.refresh()
+	_check(menu.empty_state.visible and not menu.rows.visible and menu.current_room_actions.visible, "Empty library explains how to save the current room")
+	service.state.saved = saved_designs
+	await menu.refresh()
+	menu.controls.save.pressed.emit()
+	_check(menu.name_dialog.visible and menu.name_dialog.confirm_button.disabled, "Save current room opens a dedicated naming dialog")
+	menu.name_field.text = "   "
+	menu.name_field.text_changed.emit("   ")
+	_check(menu.name_dialog.confirm_button.disabled, "Blank names cannot be saved")
 	menu.name_field.text = "New design"
-	await menu._change("save", {})
-	_check(service.calls.size() == 1 and service.calls[0].owner == 7 and service.calls[0].payload.expectedRoomRevision == 3, "Save sends room revision and owner")
+	menu.name_field.text_changed.emit("New design")
+	menu.name_dialog.confirm_button.pressed.emit()
+	await process_frame
+	_check(service.calls.size() == 1 and service.calls[0].owner == 7 and service.calls[0].payload.expectedRoomRevision == 3 and service.calls[0].payload.name == "New design" and not service.calls[0].payload.has("designId"), "New save sends its own name, room revision and owner without overwriting a design")
+	menu.rows.item_selected.emit(0)
+	_check(menu.selection_panel.visible and menu.more_actions.visible, "Selecting a saved design reveals preview, apply and grouped management")
+	menu.more_actions.get_popup().id_pressed.emit(0)
+	_check(menu.name_dialog.visible and menu.name_field.text == "Meeting", "Rename uses a prefilled separate naming dialog")
+	menu.name_field.text = "Team meeting"
+	menu.name_field.text_changed.emit("Team meeting")
+	menu.name_dialog.confirm_button.pressed.emit()
+	await process_frame
+	_check(service.calls.back().payload.action == "rename" and service.calls.back().payload.name == "Team meeting", "Rename sends the selected design's new name")
+	menu.more_actions.get_popup().id_pressed.emit(1)
+	var overwrite := menu.get_child(menu.get_child_count() - 1) as AetherConfirmationDialog
+	_check(overwrite.visible and overwrite.message_label.text.contains("Meeting"), "Updating a design still requires an explicit overwrite confirmation")
+	overwrite.confirm_button.pressed.emit()
+	await process_frame
+	_check(service.calls.back().payload.action == "save" and service.calls.back().payload.designId == "saved" and service.calls.back().payload.name == "Meeting", "Update uses the selected design's name, not a stale naming draft")
+	service.state.backups.right_room = {"items": []}
+	menu.selected = {}
+	menu._render()
+	_check(menu.controls.restore.visible and not menu.controls.restore.disabled, "Recovery is available independently of a selected design")
+	menu.controls.restore.pressed.emit()
+	var recovery := menu.get_child(menu.get_child_count() - 1) as AetherConfirmationDialog
+	recovery.confirm_button.pressed.emit()
+	await process_frame
+	_check(service.calls.back().payload.source == "backup" and service.calls.back().payload.roomKey == "right_room", "Recovery targets the currently chosen room")
+	service.state.backups = {}
+	menu.busy = true
+	menu._update_controls()
+	menu.tabs[1].pressed.emit()
+	_check(menu.mode == "saved" and menu.room_select.disabled, "Pending changes lock navigation")
+	menu.busy = false
+	menu._render()
+	service.state.templates[0].unlocked = false
+	service.state.templates[0].bagQuantity = 0
+	menu.tabs[1].pressed.emit()
+	_check(menu.rows.item_count == 0 and menu.empty_state.visible and not menu.current_room_actions.visible, "Purchased templates excludes unowned offers and explains the Gift Store flow")
+	service.state.templates[0].unlocked = true
+	service.state.templates[0].bagQuantity = 1
 	menu.mode = "template"
 	menu._render()
 	menu._select(0)
@@ -75,12 +128,44 @@ func _run() -> void:
 	confirmation.canceled.emit()
 	await process_frame
 	var manager := preload("res://scripts/ui/guild_base_visit_menu.gd").new()
+	panel.hide()
 	root.add_child(manager)
 	service.state.canEdit = true
 	manager.open(service, {"policy": "request", "canManage": true, "requests": []}, "", 7, {"guildId": 7})
 	manager._show_page("room_designs")
 	await process_frame
 	_check(manager.designs_page.visible and not manager.visitor_page.visible, "Manager has a dedicated room design page")
+	if "--navigation-screenshots" in OS.get_cmdline_user_args():
+		service.state.saved = []
+		await manager.designs_page.refresh()
+		await _capture("/tmp/guild-design-navigation-empty.png")
+		manager.designs_page.controls.save.pressed.emit()
+		manager.designs_page.name_field.text = "Training hall"
+		manager.designs_page.name_field.text_changed.emit("Training hall")
+		await _capture("/tmp/guild-design-navigation-save.png")
+		manager.designs_page.name_dialog.cancel_button.pressed.emit()
+		await process_frame
+		service.state.saved = saved_designs
+		await manager.designs_page.refresh()
+		manager.designs_page.rows.item_selected.emit(0)
+		await _capture("/tmp/guild-design-navigation-selected.png")
+	for viewport_size: Vector2i in [Vector2i(1280, 800), Vector2i(640, 480)]:
+		root.content_scale_size = viewport_size
+		root.size = viewport_size
+		manager.designs_page._select(0)
+		for frame in range(4):
+			await process_frame
+		var manager_panel := manager.find_child("GuildBaseManagementPanel", true, false) as PanelContainer
+		_check(root.get_visible_rect().encloses(manager_panel.get_global_rect()), "Management stays within the viewport: " + str(root.get_visible_rect()) + " / " + str(manager_panel.get_global_rect()))
+		_check(manager.designs_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED, "Small screens scroll vertically while Close remains outside")
+		var close_button := manager.find_child("CloseGuildBaseManagement", true, false) as Button
+		_check(root.get_visible_rect().encloses(close_button.get_global_rect()) and not manager.designs_scroll.is_ancestor_of(close_button), "Close remains visible independently of page scrolling")
+		if viewport_size.x == 1280:
+			_check(manager.designs_scroll.get_v_scroll_bar().max_value <= manager.designs_scroll.size.y + 1, "Normal screens show the selected design and save action without page scrolling")
+	root.size = Vector2i(1280, 800)
+	root.content_scale_size = Vector2i(1280, 800)
+	for frame in range(4):
+		await process_frame
 	if "--screenshot" in OS.get_cmdline_user_args():
 		await process_frame
 		RenderingServer.force_draw(false)
@@ -102,6 +187,22 @@ func _run() -> void:
 		manager_confirmation.canceled.emit()
 	manager._finish({})
 	await process_frame
+	for language: String in ["en", "nl", "pt_BR", "zh_CN"]:
+		root.get_node("LocalizationManager").set_locale(language)
+		manager = preload("res://scripts/ui/guild_base_visit_menu.gd").new()
+		root.add_child(manager)
+		manager.open(service, {"policy": "request", "canManage": true, "requests": []}, "", 7, {"guildId": 7})
+		manager._show_page("room_designs")
+		manager.designs_page.rows.item_selected.emit(0)
+		manager.designs_page.controls.save.pressed.emit()
+		for frame in range(4):
+			await process_frame
+		_check(not manager.designs_page.empty_hint.text.begins_with("ui.") and not manager.designs_page.controls.save.text.begins_with("ui."), "Navigation messages and actions are localized: " + language)
+		_check(root.get_visible_rect().encloses(manager.designs_page.name_dialog.panel.get_global_rect()), "Naming dialog fits the screen: " + language)
+		manager.designs_page.name_dialog.cancel_button.pressed.emit()
+		manager._finish({})
+		await process_frame
+	root.get_node("LocalizationManager").set_locale("en")
 	var packed := load("res://scenes/interface/donator_store_popup.tscn") as PackedScene
 	_check(packed != null, "Store scene loads")
 	if packed != null:
@@ -136,6 +237,12 @@ func _run() -> void:
 	await process_frame
 	print("guild_room_designs_check: ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
+
+func _capture(path: String) -> void:
+	for frame in range(4):
+		await process_frame
+	RenderingServer.force_draw(false)
+	root.get_texture().get_image().save_png(path)
 
 func _check(ok: bool, message: String) -> void:
 	if not ok:
