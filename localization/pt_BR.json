@@ -4001,6 +4001,7 @@
   "ui.field_move.error.badge_required": "Você precisa da {badge} para usar este movimento de campo.",
   "ui.field_move.error.not_implemented": "Esse golpe de campo direto não foi implementado.",
   "ui.field_move.error.flash_not_ready": "A luz do Flash não está pronta.",
+  "ui.field_move.dark_cave_hint": "Está escuro aqui. Use Flash para iluminar os arredores.",
   "ui.field_move.flash_off": "Flash foi desligado.",
   "ui.field_move.item_lit_area": "{item} iluminou a área ao seu redor.",
   "ui.field_move.flash_source_lost": "Flash foi desligado porque nenhum Pokémon da equipe ou Amuleto pode mais usá-lo.",

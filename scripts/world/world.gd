@@ -127,6 +127,7 @@ func close_battle_replay(restore_library := true) -> void:
 @onready var day_night_controller: OverworldDayNightController = %DayNightController
 @onready var weather_controller: OverworldWeatherController = $WeatherController
 @onready var field_move_flash_light: OverworldFieldMoveFlashLight = $Player/FieldMoveFlashLight
+@onready var cave_visibility_controller: OverworldCaveVisibilityController = $CaveVisibilityController
 @onready var wild_encounter_transition: WildEncounterTransition = %WildEncounterTransition
 
 var is_loading_map := false
@@ -2376,6 +2377,11 @@ func _resolve_saved_map_scene_path(scene_path: String) -> String:
 func _apply_day_night_for_map(map_node: Node) -> void:
 	if day_night_controller != null:
 		day_night_controller.apply_map(map_node)
+	if cave_visibility_controller != null and cave_visibility_controller.apply_map(map_node):
+		get_tree().call_group.call_deferred(
+			"ui_overlay", "add_system_message",
+			LocalizationManager.text("ui.field_move.dark_cave_hint")
+		)
 
 
 func _apply_weather_for_map(map_node: Node) -> void:

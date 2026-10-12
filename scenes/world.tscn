@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/weather/overworld_weather_controller.tscn" id="8_weather"]
 [ext_resource type="Script" path="res://scripts/ui/wild_encounter_transition.gd" id="9_wild_encounter_transition"]
 [ext_resource type="PackedScene" path="res://scenes/interface/content_creator_photo_mode.tscn" id="10_creator_photo"]
+[ext_resource type="PackedScene" path="res://scenes/world/lighting/cave_visibility_controller.tscn" id="11_cave_visibility"]
 
 [node name="World" type="Node2D" unique_id=618561729]
 texture_filter = 1
@@ -33,6 +34,8 @@ canvas_modulate_path = NodePath("../WorldCanvasModulate")
 position = Vector2(304, 350)
 
 [node name="FieldMoveFlashLight" parent="Player" instance=ExtResource("7_flash_light")]
+
+[node name="CaveVisibilityController" parent="." instance=ExtResource("11_cave_visibility")]
 
 [node name="DialogueBox" parent="." unique_id=1029700965 instance=ExtResource("4_k0juu")]
 
@@ -65,5 +68,6 @@ grow_vertical = 2
 script = ExtResource("9_wild_encounter_transition")
 
 [node name="UIOverlay" parent="." unique_id=2126675853 instance=ExtResource("5_71j4m")]
+layer = 2
 
 [node name="ContentCreatorPhotoMode" parent="." instance=ExtResource("10_creator_photo")]

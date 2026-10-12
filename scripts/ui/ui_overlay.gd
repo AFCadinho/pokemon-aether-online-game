@@ -49,7 +49,8 @@ const UI_BAG_Z_INDEX := UI_WINDOW_Z_INDEX
 const UI_DRAG_Z_INDEX := 1100
 const UI_MODAL_Z_INDEX := 2000
 const UI_REWARD_NOTIFICATION_Z_INDEX := UI_MODAL_Z_INDEX + 60
-const UI_OVERLAY_BASE_LAYER := 1
+# Layer 1 holds the overworld cave sight mask beneath all interface controls.
+const UI_OVERLAY_BASE_LAYER := 2
 const UI_OVERLAY_FOCUSED_LAYER := 20
 const CHAT_MIN_SIZE := Vector2(360, 190)
 const CHAT_MAX_SIZE := Vector2(760, 520)

@@ -4035,6 +4035,7 @@
   "ui.field_move.error.badge_required": "You need the {badge} to use this field move.",
   "ui.field_move.error.not_implemented": "That direct field move is not implemented.",
   "ui.field_move.error.flash_not_ready": "The Flash light is not ready.",
+  "ui.field_move.dark_cave_hint": "It is dark here. Use Flash to light your surroundings.",
   "ui.field_move.flash_off": "Flash was turned off.",
   "ui.field_move.item_lit_area": "{item} lit the area around you.",
   "ui.field_move.flash_source_lost": "Flash turned off because no party Pokémon or Charm can use it anymore.",

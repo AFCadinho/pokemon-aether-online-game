@@ -4035,6 +4035,7 @@
   "ui.field_move.error.badge_required": "Je hebt de {badge} nodig om deze field move te gebruiken.",
   "ui.field_move.error.not_implemented": "Die directe field move is niet geïmplementeerd.",
   "ui.field_move.error.flash_not_ready": "Het Flash-licht is niet gereed.",
+  "ui.field_move.dark_cave_hint": "Het is hier donker. Gebruik Flash om je omgeving te verlichten.",
   "ui.field_move.flash_off": "Flash is uitgeschakeld.",
   "ui.field_move.item_lit_area": "{item} verlichtte de omgeving.",
   "ui.field_move.flash_source_lost": "Flash is uitgeschakeld omdat geen Pokémon in je party of Charm het meer kan gebruiken.",
