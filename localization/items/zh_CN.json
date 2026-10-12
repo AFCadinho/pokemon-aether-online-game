@@ -1239,5 +1239,33 @@
   "irelia-outfit": {
     "name": "Irelia 时装礼盒",
     "shortDesc": "包含六件独立饰品：战衣、长裤、长靴、发型、头饰和浮空刀刃（背部）。适用于男性和女性角色。"
+  },
+  "kakashi-shirt": {
+    "name": "卡卡西马甲",
+    "shortDesc": "在背包中激活此卡卡西饰品，然后在角色自定义中装备。"
+  },
+  "kakashi-trousers": {
+    "name": "卡卡西长裤",
+    "shortDesc": "在背包中激活此卡卡西饰品，然后在角色自定义中装备。"
+  },
+  "kakashi-shoes": {
+    "name": "卡卡西凉鞋",
+    "shortDesc": "在背包中激活此卡卡西饰品，然后在角色自定义中装备。"
+  },
+  "kakashi-hair": {
+    "name": "卡卡西发型",
+    "shortDesc": "在背包中激活此卡卡西饰品，然后在角色自定义中装备。"
+  },
+  "kakashi-headband": {
+    "name": "卡卡西护额",
+    "shortDesc": "在背包中激活此卡卡西饰品，然后在角色自定义中装备。"
+  },
+  "kakashi-mask": {
+    "name": "卡卡西面罩",
+    "shortDesc": "在背包中激活此卡卡西饰品，然后在角色自定义中装备。"
+  },
+  "kakashi-outfit": {
+    "name": "卡卡西时装礼盒",
+    "shortDesc": "包含六件独立饰品：马甲、长裤、凉鞋、发型、护额和面罩。适用于男性和女性角色。"
   }
 }
