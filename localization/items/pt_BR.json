@@ -1175,5 +1175,9 @@
   "flying-nimbus-mount": {
     "name": "Montaria Nuvem Voadora",
     "shortDesc": "Desbloqueia a Nuvem Voadora como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "shiny-flying-nimbus-mount": {
+    "name": "Montaria Nuvem Voadora Shiny",
+    "shortDesc": "Desbloqueia a Nuvem Voadora Shiny escura como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   }
 }
