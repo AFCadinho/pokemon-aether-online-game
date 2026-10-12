@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Retire obsolete v11 model downloads after a verified full offline backup; keep every v13 model and reused ZIP available. Older clients requesting retired models must update.
+
 - Show animated 3D teams during Team Preview, and keep battles in 3D with Stealth Rock, Spikes, Toxic Spikes, Sticky Web, Reflect, Light Screen and Aurora Veil on the field.
 
 - Add the Pewter Museum of Science interior using the authored Tiled visual, with blocked exhibits and a connected entrance and return to Pewter City.

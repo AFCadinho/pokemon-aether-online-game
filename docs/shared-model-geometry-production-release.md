@@ -37,3 +37,9 @@ The paired release gate is recorded separately. Native Windows
 and macOS runtime smoke tests and physical Android testing remain unavailable.
 Rollback restores the previous game and launcher manifests as a matching pair;
 the old v11/v12 index and objects are not deleted during this release.
+
+The later, separately authorized [v11 R2 retirement](v11-model-r2-retirement.md)
+archives the complete old collection outside R2 before removing the 1,145 v11
+ZIPs that v13 does not reference. The 55 reused ZIPs and all v13 payloads remain
+online. The original release checks above remain historical evidence; restoring
+v11 after retirement requires re-uploading the archived objects first.
