@@ -4,6 +4,7 @@ const ThorAccessoryEffect := preload("res://scripts/world/thor_accessory_effect.
 const MountHoverVisual := preload("res://scripts/world/mount_hover_visual.gd")
 const MountVisualDepth := preload("res://scripts/world/mount_visual_depth.gd")
 const MountWaterContact := preload("res://scripts/world/mount_water_contact.gd")
+const MountNimbusTrail := preload("res://scripts/world/mount_nimbus_trail.gd")
 const MountTurboEffect := preload("res://scripts/world/mount_turbo_effect.gd")
 
 const ArenaCameraPolicy := preload("res://scripts/services/aether_clash_camera_policy.gd")
@@ -234,6 +235,7 @@ const FISHING_RIPPLE_DISTANCE := TILE_SIZE * 1.45
 @onready var mount_sprite: AnimatedSprite2D = $Look/MountSprite
 @onready var mount_foreground_sprite: AnimatedSprite2D = $Look/MountForegroundSprite
 var mount_water_contact: MountWaterContact
+var mount_nimbus_trail: MountNimbusTrail
 var mount_turbo_effect: MountTurboEffect
 @onready var rider_node: Node2D = $Look/Rider
 @onready var world_camera: Camera2D = $Camera2D
@@ -405,6 +407,7 @@ func get_active_land_mount_id() -> String:
 func _sync_mount_visual() -> void:
 	_sync_mount_water_contact()
 	_sync_mount_turbo_effect()
+	_sync_mount_nimbus_trail()
 	_update_mount_hover(0.0)
 	if mount_sprite == null:
 		return
@@ -517,6 +520,18 @@ func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 	_sync_mount_rider_delta()
 	_sync_mount_foreground_frame()
 
+func _sync_mount_nimbus_trail() -> void:
+	if mount_foreground_sprite == null or mount_sprite == null:
+		return
+	var definition := MountService.get_mount_definition(active_mount_id)
+	if mount_nimbus_trail == null and str(definition.get("movementEffect", "")) == "nimbus_trail":
+		mount_nimbus_trail = MountNimbusTrail.new()
+		mount_nimbus_trail.name = "MountNimbusTrail"
+		mount_sprite.add_child(mount_nimbus_trail)
+	if mount_nimbus_trail != null:
+		mount_nimbus_trail.configure(definition, mount_sprite)
+
+
 func _sync_mount_turbo_effect() -> void:
 	if mount_foreground_sprite == null or mount_sprite == null:
 		return
@@ -553,6 +568,8 @@ func _sync_mount_foreground_frame() -> void:
 		mount_water_contact.sync_frame(mount_sprite)
 	if mount_turbo_effect != null:
 		mount_turbo_effect.sync_frame(mount_sprite)
+	if mount_nimbus_trail != null:
+		mount_nimbus_trail.sync_frame(mount_sprite)
 
 func _sync_mount_rider_delta() -> void:
 	if rider_node == null:

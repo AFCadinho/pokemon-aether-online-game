@@ -6580,6 +6580,106 @@
           ]
         ]
       }
+    },
+    "flying_nimbus": {
+      "displayName": "Flying Nimbus",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/flying_nimbus/mount.png",
+      "foregroundSheet": "res://assets/mounts/flying_nimbus/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/flying_nimbus/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 6,
+      "hoverAmplitude": 1,
+      "hoverPeriod": 2.4,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -24
+          ]
+        ],
+        "left": [
+          [
+            -3,
+            -23
+          ],
+          [
+            -3,
+            -23
+          ],
+          [
+            -3,
+            -23
+          ],
+          [
+            -3,
+            -23
+          ]
+        ],
+        "right": [
+          [
+            3,
+            -23
+          ],
+          [
+            3,
+            -23
+          ],
+          [
+            3,
+            -23
+          ],
+          [
+            3,
+            -23
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -20
+          ],
+          [
+            0,
+            -20
+          ],
+          [
+            0,
+            -20
+          ],
+          [
+            0,
+            -20
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/flying_nimbus/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/flying_nimbus/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/flying_nimbus/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/flying_nimbus/icon.png",
+      "unlockItemId": "flying-nimbus-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ],
+      "movementEffect": "nimbus_trail"
     }
   }
 }
