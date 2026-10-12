@@ -6640,6 +6640,8 @@
   "static_encounter.snorlax_sleeping": "Snorlax está dormindo profundamente. Uma Poké Flauta pode acordá-lo.",
   "static_encounter.played_flute": "Você tocou a Poké Flauta!",
   "static_encounter.snorlax_awoke": "Snorlax acordou e atacou!",
+  "ui.store.guilds.subcategory.emblems": "Emblemas",
+  "ui.store.guilds.subcategory.rooms": "Salas",
   "ui.store.mounts.mode.land": "Terrestres",
   "ui.store.mounts.mode.surf": "Surf",
   "ui.shiny_tracker.mounts.store_description_primal_kyogre": "Contém uma montaria de Surf Primal Kyogre. Chance shiny inicial: 50%.",

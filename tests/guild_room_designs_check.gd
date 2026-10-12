@@ -109,6 +109,7 @@ func _run() -> void:
 		root.add_child(store)
 		await process_frame
 		store._select_category("guilds")
+		store._select_guild_subcategory("rooms")
 		store._select_product("guild-room-1-template")
 		_check(store.room_preview_button.visible and store._catalog_item("guild-room-1-template").price == 350, "Store shows preview and approved price")
 		if "--screenshot" in OS.get_cmdline_user_args():
