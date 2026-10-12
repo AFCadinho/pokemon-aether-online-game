@@ -3,6 +3,7 @@ extends RefCounted
 const Reviewed = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 const MegaCatalog = preload("res://scripts/data/mega_champions_catalog.gd")
 const STANCE_FORMS := {
+	"mimikyu-totem": ["mimikyu-busted-totem"],
 	"terapagos": ["terapagos-terastal", "terapagos-stellar"],
 	"terapagos-terastal": ["terapagos-stellar"],
 	"mimikyu": ["mimikyu-busted"], "mimikyu-disguised": ["mimikyu-busted"],

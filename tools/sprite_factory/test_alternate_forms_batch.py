@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from remaining_forms_pin_checks import code_pin_valid
 from PIL import Image
 from alternate_forms_admission import checked, GAME, LAUNCHER, INDEX, RECEIPT
 from alternate_forms_batch import ROOT, INTAKE
@@ -98,7 +99,7 @@ class AdmittedCatalog(unittest.TestCase):
         self.assertEqual(r['source_intake_sha256'],hashlib.sha256(INTAKE.read_bytes()).hexdigest())
         self.assertEqual(self.registry['alternate_forms_qualification_sha256'],hashlib.sha256(RECEIPT.read_bytes()).hexdigest())
         for relative,pin in r['code_sha256'].items():
-            self.assertEqual(hashlib.sha256((ROOT/relative).read_bytes()).hexdigest(),pin,relative)
+            self.assertTrue(code_pin_valid(ROOT,relative,pin),relative)
         self.assertEqual(r['pixel_exact_frames'],sum(e['pixel_exact_frames'] for e in r['entries']))
         for row in r['entries']:
             self.assertGreaterEqual(row['pixel_exact_frames'],20)

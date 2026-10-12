@@ -1,0 +1,315 @@
+{
+  "schema": 1,
+  "investigation_sha256": "814c86628728dd4dfdbc2ac2d9df4417a6cbaa0ccb542a25551a8ccd1956a2df",
+  "runtime_approved": false,
+  "entries": [
+    {
+      "species": "araquanid-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/araquanid-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "araquanid",
+      "height_ratio": 1.7222222222222223,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen.",
+      "national_dex": 752
+    },
+    {
+      "species": "eevee-starter",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/eevee-starter"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "eevee",
+      "height_ratio": 1,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen.",
+      "national_dex": 133
+    },
+    {
+      "species": "gumshoos-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/gumshoos-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "gumshoos",
+      "height_ratio": 2,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen.",
+      "national_dex": 735
+    },
+    {
+      "species": "kommo-o-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/kommo-o-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "kommoo",
+      "height_ratio": 1.4999999999999998,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen.",
+      "national_dex": 784
+    },
+    {
+      "species": "lurantis-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/lurantis-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "lurantis",
+      "height_ratio": 1.6666666666666665,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen.",
+      "national_dex": 754
+    },
+    {
+      "species": "mimikyu-busted-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/mimikyu-busted-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "mimikyubusted",
+      "height_ratio": 2,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Gebruik Mimikyu-Busted als basis, niet intacte Mimikyu; pas de verhouding 2 toe vóór gezamenlijke battle-framing en controleer busted-weergave en Totem-presentatie.",
+      "national_dex": 778
+    },
+    {
+      "species": "mimikyu-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/mimikyu-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "mimikyu",
+      "height_ratio": 2,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen.",
+      "national_dex": 778
+    },
+    {
+      "species": "pikachu-starter",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/pikachu-starter"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "pikachu",
+      "height_ratio": 1,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen.",
+      "national_dex": 25
+    },
+    {
+      "species": "poltchageist-artisan",
+      "previous_stage": "source-variant-binding",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm1133_12_00",
+      "evidence": [
+        "skeleton_comparisons/pm1133",
+        "tea_texture_differences/pm1133",
+        "repository_inputs/catalog_remaining_final_dlc_intake.json",
+        "repository_inputs/catalog_remaining_dlc_motion_intake.json"
+      ],
+      "category": "corrected_source_mapping",
+      "priority": 1,
+      "superseded_resource_family": "pm1123",
+      "finding": "De vorige intake onderzocht pm1123, de bron van een andere soort. pm1133_12_00 is de variantkandidaat van de juiste familie. Alle 77 botrecords en alle transformgegevens behalve namen zijn identiek aan _11_00; alleen niet-botnodes zijn hernoemd. Eigen normal/shiny-materialen en gemerkte bronteksturen bestaan.",
+      "next_step": "Importeer de eigen _12_00-geometrie/materialen; koppel de bestaande, eerder gereconstrueerde basisanimaties met bewezen nodevertaling. Behoud het merkteken en controleer ogen, zichtbaarheid, rustpose en beide kleuren. De basis gebruikt al een gemaakte rustpose; noem dit geen teruggevonden native slaapclip.",
+      "national_dex": 1012
+    },
+    {
+      "species": "ribombee-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/ribombee-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "ribombee",
+      "height_ratio": 2,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen.",
+      "national_dex": 743
+    },
+    {
+      "species": "rockruff-dusk",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/rockruff-dusk"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "rockruff",
+      "height_ratio": 1,
+      "finding": "Rockruff-Dusk heeft dezelfde hoogte, gewicht, kleur en basisstats als Rockruff; het verschil in deze gevechtsdata is Own Tempo/evolutie. In de modelbron is één Rockruff-resource aanwezig.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen.",
+      "national_dex": 744
+    },
+    {
+      "species": "rotom-fan",
+      "previous_stage": "source-shader",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0479_15_00",
+      "evidence": [
+        "families/pm0479"
+      ],
+      "category": "renderer_or_state_work",
+      "priority": 2,
+      "finding": "Bronmodel, eigen clips en normal/shiny-materiaaldata bestaan. De eerdere bake blokkeert op een gedetailleerde 1024×1024 base en 512×512 mask; dit is een beperking van de enkelvoudige texture-bake.",
+      "next_step": "Implementeer afzonderlijke UV-sampling van base en mask in de shader; behoud beide bronresoluties. Vergelijk normale/shiny kleuren en animaties, daarna packed/original-pixelpariteit.",
+      "prior_evidence": "docs/alternate-forms-recovery.md",
+      "national_dex": 479
+    },
+    {
+      "species": "salazzle-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/salazzle-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "salazzle",
+      "height_ratio": 1.7500000000000002,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen.",
+      "national_dex": 758
+    },
+    {
+      "species": "sinistcha-masterpiece",
+      "previous_stage": "source-variant-binding",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm1134_12_00",
+      "evidence": [
+        "skeleton_comparisons/pm1134",
+        "tea_texture_differences/pm1134",
+        "repository_inputs/catalog_remaining_final_dlc_intake.json",
+        "repository_inputs/catalog_remaining_dlc_motion_intake.json"
+      ],
+      "category": "corrected_source_mapping",
+      "priority": 1,
+      "superseded_resource_family": "pm1124",
+      "finding": "De vorige intake onderzocht pm1124, de bron van een andere soort. pm1134_12_00 is de variantkandidaat van de juiste familie. Alle 128 botrecords en alle transformgegevens behalve namen zijn identiek aan _11_00; alleen niet-botnodes zijn hernoemd. Eigen normal/shiny-materialen en gemerkte bronteksturen bestaan.",
+      "next_step": "Importeer de eigen _12_00-geometrie/materialen; koppel de bestaande, eerder gereconstrueerde basisanimaties met bewezen nodevertaling. Behoud het merkteken en controleer ogen, zichtbaarheid, rustpose en beide kleuren. De basis gebruikt al een gemaakte rustpose; noem dit geen teruggevonden native slaapclip.",
+      "national_dex": 1013
+    },
+    {
+      "species": "togedemaru-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/togedemaru-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "togedemaru",
+      "height_ratio": 2,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen.",
+      "national_dex": 777
+    },
+    {
+      "species": "vikavolt-totem",
+      "previous_stage": "source-identity-scale",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": null,
+      "evidence": [
+        "identity_scale/vikavolt-totem"
+      ],
+      "category": "identity_or_scale",
+      "priority": 1,
+      "base_candidate": "vikavolt",
+      "height_ratio": 1.7333333333333334,
+      "finding": "De lokale gevechtsdata noemt de basissoort en levert een concrete hoogteverhouding. Dit is een kandidaat voor gedeelde geometrie, geen bewijs dat de volledige bronweergave identiek is.",
+      "next_step": "Koppel het juiste bestaande normal/shiny-profiel expliciet, behoud vorm/gender en controleer de weergave en schaal in battle. Totem-aura en ontbrekende broninstellingen blijven afzonderlijk te beoordelen.",
+      "national_dex": 738
+    },
+    {
+      "species": "xerneas-neutral",
+      "previous_stage": "source-state-material",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0768_00_00",
+      "evidence": [
+        "families/pm0768",
+        "state_channels/pm0768"
+      ],
+      "category": "renderer_or_state_work",
+      "priority": 2,
+      "finding": "Z-A bevat defaultwait én battlewait met elk 12 materiaaltracks en 6 visibilitytracks. De lege eye_red-mapper is geen uitgewerkt neutral-palet. Een apart ontbrekend skelet is hier niet de kern.",
+      "next_step": "Decodeer en vergelijk default/battle-toestand, behoud horn/back-effecten en leg vast hoe de neutral-weergave tijdens acties behouden blijft. Verifieer normal en shiny.",
+      "national_dex": 716
+    },
+    {
+      "species": "zygarde-10",
+      "previous_stage": "source-shader",
+      "status": "investigated_not_qualified",
+      "runtime_approved": false,
+      "resource_candidate": "pm0770_11_00",
+      "evidence": [
+        "families/pm0770",
+        "state_channels/pm0770"
+      ],
+      "category": "renderer_or_state_work",
+      "priority": 2,
+      "finding": "De eigen Z-A-resource en bot-/materiaal-/visibilitykanalen bestaan. Het materiaal verwijst ook naar een probe; de eerdere omzetting kende geen gekwalificeerde mapping voor _prb_0.",
+      "next_step": "Herstel de bedoelde probe/reflection-sampling en effectlagen met behoud van de eigen 10%-geometrie; controleer de volledige animatieset en beide kleuren.",
+      "prior_evidence": "docs/alternate-forms-recovery.md",
+      "national_dex": 718
+    }
+  ]
+}

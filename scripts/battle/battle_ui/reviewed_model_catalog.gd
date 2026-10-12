@@ -2,6 +2,7 @@ extends RefCounted
 ## Checked-in approval, not metadata supplied by a local catalog or Settings.
 const DATA = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.json")
 const SCREENED = preload("res://scripts/battle/battle_ui/screened_model_catalog.json")
+const SharedForms = preload("res://scripts/battle/battle_ui/shared_form_models.gd")
 const PairPilot = preload("res://scripts/services/model_pair_pilot.gd")
 const FORM_NAME_ALIASES := {
 	"charizard-megax": "charizard-mega-x", "charizard-megay": "charizard-mega-y",
@@ -23,7 +24,7 @@ static func canonical_identity(identity: String) -> String:
 		base = "meowstic-m-mega"
 	if base in ["mr.-mime-galar", "mrmime-galar"]:
 		base = "mr-mime-galar"
-	base = FORM_NAME_ALIASES.get(base, base)
+	base = SharedForms.canonical_species(FORM_NAME_ALIASES.get(base, base))
 	return base + ("@shiny" if shiny else "")
 
 static func aliases_for(identity: String) -> Array[String]:
@@ -33,7 +34,7 @@ static func aliases_for(identity: String) -> Array[String]:
 	if base == "mr-mime-galar":
 		var suffix := "@shiny" if identity.ends_with("@shiny") else ""
 		return ["mr.-mime-galar" + suffix, "mrmime-galar" + suffix]
-	var named: Array[String] = []
+	var named: Array[String] = SharedForms.aliases_for(identity)
 	for alias: String in FORM_NAME_ALIASES:
 		if FORM_NAME_ALIASES[alias] == base:
 			named.append(alias + ("@shiny" if identity.ends_with("@shiny") else ""))
@@ -118,6 +119,7 @@ static func pack_entries(manifest: Dictionary, directory: String) -> Array:
 	return result
 
 static func resolve(identity: String, digest: String) -> Dictionary:
+	var requested_identity := identity
 	identity = canonical_identity(identity)
 	var model: Dictionary = DATA.data.models.get(identity, {})
 	var profiles: Dictionary = DATA.data.profiles
@@ -168,4 +170,4 @@ static func resolve(identity: String, digest: String) -> Dictionary:
 			if family is String and family in ["bite", "claw_slash", "punch", "kick", "body_charge", "tail", "wing", "generic"] and action in ["physical_attack", "physical_attack_2"] and available_actions.has(action):
 				filtered[family] = action
 		profile.attack_family_actions = filtered
-	return profile
+	return SharedForms.profile_for(requested_identity, profile)
