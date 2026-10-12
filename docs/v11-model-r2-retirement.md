@@ -81,3 +81,34 @@ changing only a model descriptor would violate installed client pins.
 Keep the backup directory and its manifest with the plan and retirement receipt.
 The origin inventory, rather than cached CDN responses, proves deletion. A CDN
 may temporarily keep an old response after the R2 object has been retired.
+
+## Completed operation, 12 October 2026
+
+The apply receipt was verified at `2026-10-12T07:26:30.726886+00:00`.
+It records 1,144 deleted ZIPs and **12,704,193,156 bytes** released from R2.
+The remaining allowlisted ZIP, the old Mega Hawlucha archive (12,646,721
+bytes), was already absent before the operation. All 1,145 retired keys are
+absent from the signed origin inventory. All 1,200 active payloads, including
+the 55 reused v11 ZIPs, remain at their approved sizes; active manifests are
+byte-identical to the reviewed plan.
+
+The full backup at
+`/home/adinho/Documents/PokeAetherBackups/r2-v11-20261012` contains all 1,200
+v11 ZIPs and the pinned index, including the previously absent archive. The
+existing publisher accepted its restore report offline with
+`V11_LOCAL_OK bundles=1200 appearances=2400 no_network=true`.
+An independent post-apply verification rehashed the entire backup, checked the
+live index/manifests and signed origin inventory, and passed with
+`V11_RETIREMENT_VERIFIED backup_objects=1201 active_models=1200 retained_shared=55 retired_absent=1145`.
+
+Audit files:
+
+- [Exact retirement plan](../release/approved_3d_bundles_v11_retirement_plan.json),
+  SHA-256 `3773b6528bcc20e294e0c1041f61b7047ff264b822c38a05d7d8acf5121563b8`.
+- [Origin verification receipt](../release/approved_3d_bundles_v11_retirement_receipt.json).
+- Backup inventory SHA-256
+  `2504822fe82f4f74e3467b3ba5a60664abcecc794cd2dc5761fb64022f2555df`.
+- The backup also retains `RESTORE.md`, `retirement-plan.json`,
+  `retirement-receipt.json` and the fsynced per-object journal.
+
+No game/launcher build or manifest publication is required for this retirement.
