@@ -12,6 +12,7 @@ var battle: Control
 var initialized := [false, false]
 var coop_huds: Dictionary = {}
 var coop_huds_active := false
+var action_backdrop: TextureRect
 
 static func clear_model_hud(target: Vector2, extent: Vector2, bounds: Rect2, clearance := 12.0) -> Vector2:
 	# Keep the reserved label space clear too when the top clamp is reached.
@@ -23,6 +24,27 @@ static func clear_model_hud(target: Vector2, extent: Vector2, bounds: Rect2, cle
 
 func _ready() -> void:
 	process_priority = 100
+	# Composite after the 3D viewport, before the HUD. A canvas gradient cannot
+	# catch arena lights and stays behind the controls through camera orbits.
+	var gradient := Gradient.new()
+	gradient.offsets = PackedFloat32Array([0.0, 0.25, 0.55, 0.85, 1.0])
+	gradient.colors = PackedColorArray([
+		Color("080d1c00"), Color("080d1c70"), Color("080d1cdb"),
+		Color("080d1cf2"), Color("080d1cf2")])
+	var texture := GradientTexture2D.new()
+	texture.gradient = gradient
+	texture.width = 2
+	texture.height = 256
+	texture.fill_from = Vector2.ZERO
+	texture.fill_to = Vector2(0, 1)
+	action_backdrop = TextureRect.new()
+	action_backdrop.name = "ActionBackdrop"
+	action_backdrop.texture = texture
+	action_backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	action_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	action_backdrop.z_index = 2
+	action_backdrop.hide()
+	battle.get_node("%BattleStage").add_child(action_backdrop)
 
 func _process(delta: float) -> void:
 	layout_now(delta)
@@ -134,6 +156,11 @@ func layout_now(delta := 0.0, snap := false) -> void:
 	var presenter = battle.animation_router.model_presenter
 	var realtime_3d: bool = is_instance_valid(presenter) and presenter.active and settings.battle_presentation_mode == "3d"
 	reset_camera.visible = realtime_3d
+	# Use reserved layout bounds, including hidden moves, so selecting an attack
+	# does not make the fade jump. Stage coordinates already include UI scaling.
+	var backdrop_top := maxf(0.0, minf(prompt.position.y, moves_position.y) - 72.0)
+	_place(action_backdrop, Vector2(0, backdrop_top), Vector2(area.x, area.y - backdrop_top), 1.0)
+	action_backdrop.visible = realtime_3d and (prompt.is_visible_in_tree() or dock.is_visible_in_tree() or battle.moves_grid.is_visible_in_tree())
 	if battle.coop_mode:
 		_layout_coop_team_header(stage, header, turn, reset_camera, field_indicators)
 	if not realtime_3d:
