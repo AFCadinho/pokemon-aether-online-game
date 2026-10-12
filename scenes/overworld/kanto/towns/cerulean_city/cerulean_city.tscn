@@ -750,6 +750,7 @@ z_index = 5
 position = Vector2(1808, 720)
 script = ExtResource("22_gary_script")
 challenge_width_tiles = 6
+rival_encounter_id = "kanto_route_24_gary"
 trainer_id = "kanto_route_24_gary_bulbasaur"
 sight_range_tiles = 3
 npc_id = "kanto_route_24_gary_oak"

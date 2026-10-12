@@ -17,6 +17,9 @@ func _ready() -> void:
 func _scan(node: Node) -> void:
 	if node is SubViewport or node is Node3D:
 		return
+	# Preview cards fit their public names and size text in physical screen pixels.
+	if node.has_meta("battle_preview_nameplates"):
+		return
 	if node is Label or node is RichTextLabel or node is BaseButton or node is LineEdit or node is ProgressBar:
 		if node not in labels:
 			labels.append(node)
