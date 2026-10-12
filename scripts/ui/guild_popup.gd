@@ -3899,7 +3899,7 @@ func _render_guild_pokemon_vault_selection(detail: VBoxContainer) -> void:
 func _build_guild_pokemon_vault_actions(entry: Dictionary, pokemon: Dictionary) -> Control:
 	var actions := VBoxContainer.new()
 	actions.name = "GuildPokemonVaultSelectedActions"
-	actions.add_theme_constant_override("separation", 7)
+	actions.add_theme_constant_override("separation", 12)
 	var pokemon_id := int(entry.get("pokemonId", 0))
 	if bool(entry.get("isBorrowed", false)):
 		var loan_asset_id := str(entry.get("loanAssetId", ""))
@@ -3935,13 +3935,15 @@ func _build_guild_pokemon_vault_actions(entry: Dictionary, pokemon: Dictionary) 
 		withdraw_tooltip = _t("ui.guild.bank.tooltip.borrow_unavailable")
 	var withdraw_button := _guild_bank_action_button(
 		"GuildBankPokemonWithdrawButton_%d" % pokemon_id,
-		"ui.guild.bank.withdraw",
+		"ui.guild.bank.withdraw.permanent_action",
 		can_withdraw,
 		_on_guild_bank_pokemon_action.bind("withdraw", pokemon_id, pokemon),
 		withdraw_tooltip
 	)
 	withdraw_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_apply_button_style(withdraw_button, "secondary")
 	actions.add_child(withdraw_button)
+	actions.add_child(HSeparator.new())
 	var can_borrow := (
 		bool(access.get("lendingEnabled", false))
 		and bool(access.get("canBorrow", false))
@@ -4667,6 +4669,12 @@ func _build_guild_item_row(
 	controls.alignment = BoxContainer.ALIGNMENT_END
 	controls.add_theme_constant_override("separation", 6)
 	layout.add_child(controls)
+	var separate_actions := action == "withdraw" and not is_resource
+	if separate_actions:
+		layout.add_theme_constant_override("separation", 12)
+		var quantity_label := _localized_label("ui.guild.bank.quantity", 10, UI_MUTED)
+		quantity_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		controls.add_child(quantity_label)
 	var quantity := SpinBox.new()
 	quantity.min_value = 1
 	quantity.max_value = maxi(available if action != "deposit" else int(item.get("quantity", 1)), 1)
@@ -4695,15 +4703,21 @@ func _build_guild_item_row(
 		)
 	elif not has_available_quantity:
 		unavailable_tooltip = _t("ui.guild.bank.tooltip.item_unavailable")
-	controls.add_child(_guild_bank_action_button(
+	var action_button := _guild_bank_action_button(
 		"GuildBank%s%sButton_%s" % ["Resource" if is_resource else "Item", action.capitalize(), str(item.get("itemId", "item"))],
-		"ui.guild.bank.donate" if action == "deposit" else "ui.guild.bank.withdraw",
+		"ui.guild.bank.donate" if action == "deposit" else ("ui.guild.bank.withdraw.permanent_action" if separate_actions else "ui.guild.bank.withdraw"),
 		allowed,
 		_on_guild_bank_resource_action.bind(action, str(item.get("itemId", "")), quantity, item_name)
 		if is_resource
 		else _on_guild_bank_item_action.bind(action, str(item.get("itemId", "")), quantity, item_name),
 		"" if allowed else unavailable_tooltip
-	))
+	)
+	if separate_actions:
+		action_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_apply_button_style(action_button, "secondary")
+		layout.add_child(action_button)
+	else:
+		controls.add_child(action_button)
 	if action == "withdraw" and not is_resource:
 		var can_borrow := (
 			bool(access.get("lendingEnabled", false))
@@ -4712,13 +4726,16 @@ func _build_guild_item_row(
 			and bool(item.get("lendable", false))
 			and not _guild_bank_loan_limit_reached("items")
 		)
-		controls.add_child(_guild_bank_action_button(
+		layout.add_child(HSeparator.new())
+		var borrow_button := _guild_bank_action_button(
 			"GuildBankItemBorrowButton_%s" % str(item.get("itemId", "item")),
 			"ui.guild.bank.borrow",
 			can_borrow,
-			_on_guild_bank_item_action.bind("borrow", str(item.get("itemId", "")), quantity),
+			_on_guild_bank_item_action.bind("borrow", str(item.get("itemId", "")), quantity, item_name),
 			"" if can_borrow else _guild_bank_borrow_tooltip(item)
-		))
+		)
+		borrow_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		layout.add_child(borrow_button)
 	return card
 
 
@@ -5565,6 +5582,13 @@ func _on_guild_bank_item_action(action: String, item_id: String, quantity_input:
 			_guild_bank_item_icon(item_id)
 		)
 		return
+	if action in ["withdraw", "borrow"]:
+		_confirm_guild_bank_asset_action(
+			action, "%s ×%d" % [_guild_bank_item_name(item_id, item_name if item_name != "" else item_id), quantity],
+			_run_guild_bank_action.bind("%s_bank_item" % action, [item_id, quantity], "item"),
+			_guild_bank_item_icon(item_id), "items"
+		)
+		return
 	await _run_guild_bank_action("%s_bank_item" % action, [item_id, quantity], "item")
 
 
@@ -5592,6 +5616,13 @@ func _on_guild_bank_pokemon_action(action: String, pokemon_id: int, pokemon: Dic
 			_guild_bank_pokemon_icon(pokemon)
 		)
 		return
+	if action in ["withdraw", "borrow"]:
+		_confirm_guild_bank_asset_action(
+			action, _guild_bank_pokemon_name(pokemon),
+			_run_guild_bank_action.bind("%s_bank_pokemon" % action, [pokemon_id], "pokemon"),
+			_guild_bank_pokemon_icon(pokemon), "pokemon"
+		)
+		return
 	var service_method := "deposit_bank_pokemon" if action == "return" else "%s_bank_pokemon" % action
 	await _run_guild_bank_action(service_method, [pokemon_id], "pokemon")
 
@@ -5601,6 +5632,31 @@ func _on_guild_bank_loan_action(action: String, asset_id: String) -> void:
 		return
 	var method := "force_return_bank_loan_asset" if action == "force" else "return_bank_loan_asset"
 	await _run_guild_bank_action(method, [asset_id], "loan")
+
+
+func _confirm_guild_bank_asset_action(action: String, asset_name: String, confirmed_action: Callable, asset_icon: Texture2D, category: String) -> void:
+	var host := find_child("GuildPokemonVaultWindow" if category == "pokemon" else "GuildItemsStorageWindow", true, false) as Window
+	if host != null and not host.visible:
+		host = null
+	var duration := int(guild_bank_state.get("loanDurationSeconds", _dictionary(guild_home.get("guild", {})).get("loanDurationSeconds", 3600)))
+	var dialog := _build_guild_action_dialog(
+		"GuildBank%sConfirmationDialog" % action.capitalize(),
+		_t("ui.guild.bank.%s.confirm_title" % action),
+		_t("ui.guild.bank.%s.confirm" % action, {"asset": asset_name, "duration": _guild_loan_duration_label(duration)}),
+		_t("ui.guild.bank.withdraw.permanent_action" if action == "withdraw" else "ui.guild.bank.borrow"),
+		asset_icon, "secondary" if action == "withdraw" else "primary", host
+	)
+	dialog.accent_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	if host != null:
+		var was_exclusive := host.exclusive
+		host.exclusive = true
+		dialog.tree_exiting.connect(func():
+			if is_instance_valid(host):
+				host.exclusive = was_exclusive
+		)
+	dialog.confirmed.connect(confirmed_action, CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(520, 260))
 
 
 func _confirm_guild_bank_donation(asset_name: String, confirmed_action: Callable, asset_icon: Texture2D = GUILD_ICON) -> void:
@@ -6113,11 +6169,12 @@ func _build_guild_action_dialog(
 	message: String,
 	confirm_text: String,
 	icon: Texture2D,
-	variant: String = "primary"
+	variant: String = "primary",
+	dialog_parent: Node = null
 ) -> AetherConfirmationDialog:
 	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
 	dialog.name = dialog_name
-	add_child(dialog)
+	(dialog_parent if dialog_parent != null else self).add_child(dialog)
 	dialog.configure(title, message, confirm_text, _t("common.cancel"))
 	dialog.accent_icon.texture = icon
 	dialog.panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 11, 1))
@@ -6134,7 +6191,7 @@ func _build_guild_action_dialog(
 	for button: Button in [dialog.cancel_button, dialog.confirm_button]:
 		button.focus_mode = Control.FOCUS_ALL
 		button.add_theme_stylebox_override("focus", button.get_theme_stylebox("hover").duplicate())
-	if get_viewport_rect().size.x < 480:
+	if dialog.get_viewport_rect().size.x < 480:
 		var old_actions := dialog.confirm_button.get_parent() as HBoxContainer
 		var actions := VBoxContainer.new()
 		actions.name = "GuildMemberDialogCompactActions"
@@ -6486,6 +6543,8 @@ func _save_guild_member_bank_permissions(
 
 
 func _guild_loan_duration_label(seconds: int) -> String:
+	if seconds == 3600:
+		return _t("ui.guild.bank.loan_duration.hour")
 	return _t("ui.guild.bank.loan_duration.hours", {"hours": seconds / 3600})
 
 
