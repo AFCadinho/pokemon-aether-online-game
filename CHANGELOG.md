@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give incoming Guild invitations a prominent Guild emblem, a gold invitation card and a clear Join Guild action. Style Guild departure with the compact Aether confirmation layout.
+
 - Show server-wide System notices for wild Ultra Rare, Legendary and Shiny encounters and their outcomes in every chat except Help.
 
 - Make 3D switches flow directly from recall into summon: prepare the incoming public model before recalling, close the ball during absorption and skip repeated entry warmup. Keep doubles replacements hidden until their summon releases them.
