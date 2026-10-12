@@ -576,6 +576,17 @@ func _run() -> void:
 	_check(popup.find_child("GuildLobbyTeleportButton", true, false) != null, "guild overview keeps Lobby travel available below the top tabs")
 	_check(popup.find_child("GuildSettingsDescription", true, false) == null, "settings stay out of the guild overview")
 	_check(popup.find_child("GuildSettingsAnnouncement", true, false) == null, "announcement editing stays out of the guild overview")
+	_check(popup.find_child("GuildOverviewIdentityHeader", true, false) != null, "Overview shows the Guild identity header")
+	for section in ["bank", "aether_clash", "members", "management"]:
+		popup._show_guild_section(section)
+		await process_frame
+		_check(popup.active_guild_section == section, "%s remains accessible without the Guild header" % section)
+		_check(popup.find_child("GuildOverviewIdentityHeader", true, false) == null, "%s reserves its space for the active workspace" % section)
+		_check(popup.find_child("GuildHeaderTravelActions", true, false) == null, "%s keeps Guild travel and options on Overview" % section)
+	popup._show_guild_section("overview")
+	await process_frame
+	_check(popup.find_child("GuildOverviewIdentityHeader", true, false) != null, "returning to Overview restores the Guild identity header")
+	_check(popup.find_child("GuildOptionsMenuButton", true, false) != null, "returning to Overview restores Guild options")
 	var bank_tab := popup.find_child("GuildBankTab", true, false) as Button
 	if bank_tab != null:
 		bank_tab.pressed.emit()
@@ -1046,7 +1057,7 @@ func _run() -> void:
 		and visible_status.global_position.y < visible_workspace.global_position.y,
 		"Guild Bank feedback renders above the active workspace"
 	)
-	_check(popup.find_child("GuildHeaderTravelActions", true, false) != null, "guild travel remains available while viewing the bank")
+	_check(popup.find_child("GuildHeaderTravelActions", true, false) == null, "Guild Bank storage gets the space previously used by Guild travel")
 	overview_tab = popup.find_child("GuildOverviewTab", true, false) as Button
 	if overview_tab != null:
 		overview_tab.pressed.emit()
@@ -1454,6 +1465,8 @@ func _run() -> void:
 	_check(popup.find_child("GuildMemberSearchInput", true, false) == null, "member roster tools do not live under management")
 	_check(popup.find_child("GuildEmblemPreview", true, false) == null, "management keeps emblem controls out of settings")
 	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "leader does not see a redundant Guild emblem edit button")
+	popup._show_guild_section("overview")
+	await process_frame
 	var edit_emblem_icon_button := popup.find_child("EditGuildEmblemIconButton", true, false) as Button
 	_check(edit_emblem_icon_button != null, "leader can edit the Guild emblem by clicking it")
 	if edit_emblem_icon_button != null:
@@ -1637,11 +1650,12 @@ func _run() -> void:
 		popup._guild_bank_borrow_tooltip().contains("personally disabled"),
 		"personal Guild Bank denials explain that they are not rank restrictions"
 	)
-	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "regular members cannot edit the Guild emblem")
-	_check(popup.find_child("EditGuildEmblemIconButton", true, false) == null, "regular members cannot edit the Guild emblem icon")
 	popup._show_guild_section("overview")
 	await process_frame
 	_check(popup.find_child("GuildOverviewSection", true, false) != null, "regular members return to the overview")
+	_check(popup.find_child("GuildOverviewIdentityHeader", true, false) != null, "regular members see the Guild header on Overview")
+	_check(popup.find_child("EditGuildEmblemButton", true, false) == null, "regular members cannot edit the Guild emblem")
+	_check(popup.find_child("EditGuildEmblemIconButton", true, false) == null, "regular members cannot edit the Guild emblem icon")
 	popup.guild_bank_state["access"]["canWithdrawResources"] = false
 	popup.guild_bank_state["access"]["bankPermissionOverrides"] = {"resource_withdraw": "deny"}
 	popup._show_guild_section("bank")
