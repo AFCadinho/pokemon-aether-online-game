@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Remove bright white reflections from the 3D stadium floor at every camera angle while keeping its purple markings and animated accent lighting.
+
 - Keep the lower 3D battle controls readable over bright arena reflections with a soft screen-fixed navy backdrop that scales with the UI, plus a more opaque action message panel.
 
 - Show the same mount, cosmetic and special-item icons in Guild Bank storage as in the Bag. Search your own donation items and resources by name, with the query preserved after refreshes and donations.
