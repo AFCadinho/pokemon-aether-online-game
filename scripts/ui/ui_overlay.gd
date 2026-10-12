@@ -116,6 +116,8 @@ const CHAT_TAB_LABELS := {
 }
 const CHAT_CATEGORY_USER := "user"
 const CHAT_CATEGORY_SYSTEM := "system"
+const CHAT_CATEGORY_WILD_SYSTEM := "wild_system"
+const WILD_ANNOUNCEMENT_FORMATTER = preload("res://scripts/ui/wild_announcement_formatter.gd")
 const CHAT_CATEGORY_SYSTEM_WARNING := "system_warning"
 const CHAT_CHANNEL_GLOBAL := "global"
 const CHAT_CHANNEL_MAP := "map"
@@ -1250,6 +1252,8 @@ var pm_message_empty_state: CenterContainer
 var pm_message_empty_title_label: Label
 var pm_message_empty_hint_label: Label
 var pm_conversations_by_user_id: Dictionary = {}
+var wild_system_messages: Array[Dictionary] = []
+var wild_system_announcement_ids: Dictionary = {}
 var active_pm_user_id: int = 0
 var pm_unread_counts_by_user_id: Dictionary = {}
 var pm_total_unread_count: int = 0
@@ -34134,7 +34138,7 @@ func _render_active_pm_conversation() -> void:
 		return
 	_refresh_pm_translation_controls()
 	_clear_children(pm_message_list)
-	var has_conversations := not pm_conversations_by_user_id.is_empty()
+	var has_conversations := not pm_conversations_by_user_id.is_empty() or not wild_system_messages.is_empty()
 	if pm_empty_state != null:
 		pm_empty_state.visible = not has_conversations
 	if pm_message_area != null:
@@ -34153,6 +34157,7 @@ func _render_active_pm_conversation() -> void:
 			LocalizationManager.text("ui.chat.pm.select_title"),
 			LocalizationManager.text("ui.chat.pm.select_hint")
 		)
+		_render_pm_wild_notices()
 		return
 
 	var conversation: Dictionary = _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
@@ -34161,6 +34166,12 @@ func _render_active_pm_conversation() -> void:
 		pm_active_conversation_label.visible = true
 		pm_active_conversation_label.text = _pm_conversation_title(user, 0)
 	var messages: Array = _array_from_variant(conversation.get("messages", []))
+	if not wild_system_messages.is_empty():
+		messages = messages.duplicate()
+		messages.append_array(wild_system_messages)
+		messages.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+			return str(a.get("sentAt", "")) < str(b.get("sentAt", ""))
+		)
 	if messages.is_empty():
 		_show_pm_message_empty_state(
 			LocalizationManager.text("ui.chat.pm.no_messages_title"),
@@ -34174,7 +34185,32 @@ func _render_active_pm_conversation() -> void:
 		pm_message_empty_state.visible = false
 	for message_value: Variant in messages:
 		if message_value is Dictionary:
-			pm_message_list.add_child(_create_pm_message_row(message_value as Dictionary))
+			if bool(message_value.get("wildSystem", false)):
+				pm_message_list.add_child(_create_wild_system_label(str(message_value.get("body", ""))))
+			else:
+				pm_message_list.add_child(_create_pm_message_row(message_value as Dictionary))
+	_scroll_pm_to_bottom.call_deferred()
+
+
+func _create_wild_system_label(text: String) -> RichTextLabel:
+	var entry := RichTextLabel.new()
+	entry.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	entry.bbcode_enabled = true
+	entry.fit_content = true
+	entry.scroll_active = false
+	entry.append_text(_format_system_chat_message(text))
+	return entry
+
+
+func _render_pm_wild_notices() -> void:
+	if wild_system_messages.is_empty():
+		return
+	if pm_message_scroll != null:
+		pm_message_scroll.visible = true
+	if pm_message_empty_state != null:
+		pm_message_empty_state.visible = false
+	for message: Dictionary in wild_system_messages:
+		pm_message_list.add_child(_create_wild_system_label(str(message.get("body", ""))))
 	_scroll_pm_to_bottom.call_deferred()
 
 
@@ -51983,6 +52019,26 @@ func add_system_message(text: String) -> void:
 	_add_chat_message(text)
 
 
+func _add_wild_system_announcement(event: Dictionary) -> void:
+	var event_id := str(event.get("announcementId", "")).strip_edges()
+	if event_id == "" or wild_system_announcement_ids.has(event_id):
+		return
+	var text: String = WILD_ANNOUNCEMENT_FORMATTER.format_event(event)
+	if text == "":
+		return
+	wild_system_announcement_ids[event_id] = true
+	if wild_system_announcement_ids.size() > 8192:
+		wild_system_announcement_ids.erase(wild_system_announcement_ids.keys()[0])
+	wild_system_messages.append({
+		"body": text, "wildSystem": true, "sentAt": str(event.get("sentAt", "")),
+	})
+	if wild_system_messages.size() > 200:
+		wild_system_messages.pop_front()
+	_add_chat_message(text, false, CHAT_CATEGORY_WILD_SYSTEM)
+	if active_chat_tab == CHAT_TAB_PM:
+		_render_active_pm_conversation()
+
+
 func add_removed_item_system_message(item_id: String, quantity: int) -> void:
 	var normalized_item_id := item_id.strip_edges().to_lower()
 	var safe_quantity := maxi(quantity, 0)
@@ -52461,6 +52517,9 @@ func _scroll_chat_to_bottom() -> void:
 
 func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	if message_type == "system.wild_encounter":
+		_add_wild_system_announcement(message)
+		return
 	if message_type == "guild.admin.updated":
 		_refresh_after_guild_admin_update.call_deferred()
 		return
@@ -53867,6 +53926,8 @@ func _pokemon_preview_payload_with_current_trainer(
 
 
 func _should_show_chat_category(category: String) -> bool:
+	if category == CHAT_CATEGORY_WILD_SYSTEM:
+		return active_chat_tab != CHAT_TAB_HELP
 	if category == CHAT_CATEGORY_SYSTEM_WARNING:
 		return true
 	if category == CHAT_CATEGORY_SYSTEM:
