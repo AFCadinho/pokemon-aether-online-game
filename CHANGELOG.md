@@ -4,6 +4,8 @@
 
 - Add the grantable Flying Nimbus land mount with the approved golden cloud, seated rider, gentle hover and a short moving cloud trail.
 
+- Move Iris inside the Pewter Museum beside the blue barriers: enter the lobby for free and pay 100 Pokédollars to access the exhibits for that visit.
+
 - Populate the Pewter Museum of Science with four dialogue NPCs and an entrance attendant offering admission for 100 Pokédollars per visit. Confirm payment before entering; leaving is free.
 
 - Show battle preparation and Pokémon download progress when entering 3D AI Sparring or PvP, prepare Team Preview before revealing the field, and start battle music once the arena is visible.

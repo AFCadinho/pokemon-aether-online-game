@@ -27,8 +27,6 @@
 [ext_resource type="SpriteFrames" uid="uid://bgt5h7r4aixq5" path="res://assets/npcs/classes/black_belt_frames.tres" id="31_black_belt"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="32_daily_rock"]
 
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_f_frames.tres" id="museum_attendant_frames"]
-[ext_resource type="Script" path="res://scripts/world/npcs/museum_admission_npc.gd" id="museum_admission"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(64, 36)
@@ -389,20 +387,6 @@ requires_party_pokemon = false
 npc_id = "kanto_pewter_city_route_3_guard"
 display_name = "Pewter Route Guard"
 facing_direction = Vector2(-1, 0)
-
-[node name="MuseumAttendantIris" parent="Entities/NPCs" instance=ExtResource("28_gate_npc")]
-position = Vector2(1360, 400)
-script = ExtResource("museum_admission")
-guard_role = "transition_guard"
-guarded_transition_id = "kanto_pewter_city__to_museum"
-requires_party_pokemon = false
-npc_id = "kanto_pewter_museum_attendant_iris"
-npc_definition_id = "trainer_class_scientist_f"
-portrait_id = "showdown_scientistf_gen6"
-mugshot = null
-display_name = "Museum Attendant Iris"
-npc_sprite_frames = ExtResource("museum_attendant_frames")
-facing_direction = Vector2(1, 0)
 
 [node name="MuseumGuideTheo" parent="Entities/NPCs" unique_id=1013507065 instance=ExtResource("18_dialogue")]
 position = Vector2(1456, 560)

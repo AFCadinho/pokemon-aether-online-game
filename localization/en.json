@@ -1,5 +1,6 @@
 {
-  "npc.museum.admission_prompt": "Welcome to the Pewter Museum of Science! Admission costs {fee} Pokedollars per visit. Would you like to enter?",
+  "npc.museum.admission_paid": "You have already paid for this visit. Enjoy the exhibitions!",
+  "npc.museum.admission_prompt": "The museum entrance is free. Access to the exhibitions beyond the blue barriers costs {fee} Pokedollars for this visit. Would you like to pay?",
   "npc.museum.admission_pay": "Pay {fee} Pokedollars",
   "npc.museum.admission_cancel": "Maybe later",
   "ui.store.badge.training": "TRAINING",

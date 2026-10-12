@@ -88,6 +88,9 @@
     },
     "kanto_pewter_city_museum": {
       "points": {
+        "from_admission": {
+          "safe": false
+        },
         "from_pewter_city": {
           "facingDirection": "up"
         }

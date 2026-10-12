@@ -1,5 +1,6 @@
 {
-  "npc.museum.admission_prompt": "欢迎来到深灰科学博物馆！每次参观的门票为{fee}宝可元。要入馆吗？",
+  "npc.museum.admission_paid": "你已经为本次参观付过费了。祝你参观愉快！",
+  "npc.museum.admission_prompt": "博物馆门厅可以免费进入。每次参观蓝色围栏后方的展览需要支付{fee}宝可元。要付款吗？",
   "npc.museum.admission_pay": "支付{fee}宝可元",
   "npc.museum.admission_cancel": "下次再来",
   "ui.store.badge.training": "训练",

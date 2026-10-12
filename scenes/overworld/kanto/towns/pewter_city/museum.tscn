@@ -13,6 +13,9 @@
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="school_kid_m"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="gentleman"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/gate_npc.tscn" id="gate_npc"]
+[ext_resource type="Script" path="res://scripts/world/npcs/museum_admission_npc.gd" id="museum_admission"]
+
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(64, 32)
 
@@ -60,6 +63,20 @@ y_sort_enabled = true
 
 [node name="Players" type="Node2D" parent="Entities"]
 [node name="NPCs" type="Node2D" parent="Entities"]
+[node name="MuseumAttendantIris" parent="Entities/NPCs" instance=ExtResource("gate_npc")]
+position = Vector2(400, 528)
+script = ExtResource("museum_admission")
+guard_role = "transition_guard"
+guarded_transition_id = "kanto_pewter_city_museum__to_exhibits"
+requires_party_pokemon = false
+npc_id = "kanto_pewter_museum_attendant_iris"
+npc_definition_id = "trainer_class_scientist_f"
+portrait_id = "showdown_scientistf_gen6"
+mugshot = null
+display_name = "Museum Attendant Iris"
+npc_sprite_frames = ExtResource("scientist_f")
+facing_direction = Vector2(0, 1)
+
 [node name="CuratorElara" parent="Entities/NPCs" instance=ExtResource("dialogue_npc")]
 position = Vector2(752, 432)
 npc_id = "kanto_pewter_museum_curator_elara"
@@ -100,6 +117,9 @@ facing_direction = Vector2(1, 0)
 [node name="FromPewterCity" type="Marker2D" parent="Spawns"]
 position = Vector2(432, 624)
 
+[node name="FromAdmission" type="Marker2D" parent="Spawns"]
+position = Vector2(432, 464)
+
 [node name="Exits" type="Node2D" parent="."]
 
 [node name="ToPewterCity" type="Area2D" parent="Exits"]
@@ -116,6 +136,18 @@ shape = SubResource("shape_exit")
 [node name="DoorTransitionHint" parent="Exits/ToPewterCity" instance=ExtResource("hint")]
 tile_footprint = Vector2i(2, 1)
 flow_direction = "down"
+
+[node name="ToExhibits" type="Area2D" parent="Exits"]
+editor_description = "Authorization-only passage between the blue barriers. Iris handles payment; this area must not auto-teleport visitors who walk back through it."
+position = Vector2(416, 496)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn"
+target_spawn_name = "FromAdmission"
+transition_id = "kanto_pewter_city_museum__to_exhibits"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToExhibits"]
+shape = SubResource("shape_exit")
 
 [node name="Tiles" type="Node2D" parent="."]
 
