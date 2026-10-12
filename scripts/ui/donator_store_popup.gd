@@ -774,7 +774,7 @@ const CATALOG: Array[Dictionary] = [
 		"id": "zekrom-mount-box",
 		"name": "Zekrom Mount Box",
 		"description_key": "ui.shiny_tracker.mounts.store_description_zekrom",
-		"price": 750,
+		"price": 1000,
 		"icon": MOUNT_ICON,
 		"categories": ["mounts"],
 		"badge": "MOUNT BOX",
