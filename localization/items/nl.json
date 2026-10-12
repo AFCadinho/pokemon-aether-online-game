@@ -1207,5 +1207,33 @@
   "super-saiyan-4-outfit": {
     "name": "Super Saiyan 4 (SS4) Outfitbox",
     "shortDesc": "Bevat vijf losse SS4-cosmetics: vacht, broek, schoenen, haar en een staart (Back). Geschikt voor mannelijke en vrouwelijke personages."
+  },
+  "irelia-shirt": {
+    "name": "Irelia Tuniek",
+    "shortDesc": "Activeer dit Irelia-onderdeel in je tas en draag het via Character Customization."
+  },
+  "irelia-trousers": {
+    "name": "Irelia Broek",
+    "shortDesc": "Activeer dit Irelia-onderdeel in je tas en draag het via Character Customization."
+  },
+  "irelia-shoes": {
+    "name": "Irelia Laarzen",
+    "shortDesc": "Activeer dit Irelia-onderdeel in je tas en draag het via Character Customization."
+  },
+  "irelia-hair": {
+    "name": "Irelia Haar",
+    "shortDesc": "Activeer dit Irelia-onderdeel in je tas en draag het via Character Customization."
+  },
+  "irelia-circlet": {
+    "name": "Irelia Voorhoofdsieraad",
+    "shortDesc": "Activeer dit Irelia-onderdeel in je tas en draag het via Character Customization."
+  },
+  "irelia-blades": {
+    "name": "Irelia Zwevende messen",
+    "shortDesc": "Activeer dit Irelia-onderdeel in je tas en draag het via Character Customization."
+  },
+  "irelia-outfit": {
+    "name": "Irelia Outfitbox",
+    "shortDesc": "Bevat zes losse cosmetics: tuniek, broek, laarzen, haar, voorhoofdsieraad en zwevende messen (Back). Voor male en female."
   }
 }

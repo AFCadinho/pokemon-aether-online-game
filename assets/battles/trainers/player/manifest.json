@@ -96,6 +96,10 @@
             "SS4_Trousers": {
               "path": "res://assets/battles/trainers/player/male/super_saiyan_4/Trousers.png",
               "scale": 1.0
+            },
+            "Irelia_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/irelia/Trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -177,6 +181,10 @@
             },
             "SS4_Shoes": {
               "path": "res://assets/battles/trainers/player/male/super_saiyan_4/Shoes.png",
+              "scale": 1.0
+            },
+            "Irelia_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/irelia/Shoes.png",
               "scale": 1.0
             }
           }
@@ -261,6 +269,10 @@
               "path": "res://assets/battles/trainers/player/male/super_saiyan_4/Shirt.png",
               "scale": 1.0,
               "skin_tint": true
+            },
+            "Irelia_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/irelia/Shirt.png",
+              "scale": 1.0
             }
           }
         },
@@ -311,6 +323,10 @@
             "SS4_Hair": {
               "path": "res://assets/battles/trainers/player/male/super_saiyan_4/Hair.png",
               "scale": 1.0
+            },
+            "Irelia_Hair": {
+              "path": "res://assets/battles/trainers/player/male/irelia/Hair.png",
+              "scale": 1.0
             }
           }
         },
@@ -339,6 +355,10 @@
             },
             "Akatsuki_Headband": {
               "path": "res://assets/battles/trainers/player/male/akatsuki/Headband.png",
+              "scale": 1.0
+            },
+            "Irelia_Circlet": {
+              "path": "res://assets/battles/trainers/player/male/irelia/Headgear.png",
               "scale": 1.0
             }
           }
@@ -389,6 +409,10 @@
             "SS4_Tail": {
               "path": "res://assets/battles/trainers/player/male/super_saiyan_4/BackRear.png",
               "scale": 1.0
+            },
+            "Irelia_Blades": {
+              "path": "res://assets/battles/trainers/player/male/irelia/BackRear.png",
+              "scale": 1.0
             }
           }
         },
@@ -408,6 +432,10 @@
             },
             "SS4_Tail": {
               "path": "res://assets/battles/trainers/player/male/super_saiyan_4/BackFront.png",
+              "scale": 1.0
+            },
+            "Irelia_Blades": {
+              "path": "res://assets/battles/trainers/player/male/irelia/BackFront.png",
               "scale": 1.0
             }
           }
@@ -482,6 +510,10 @@
             },
             "SS4_Trousers": {
               "path": "res://assets/battles/trainers/player/female/super_saiyan_4/Trousers.png",
+              "scale": 1.0
+            },
+            "Irelia_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/irelia/Trousers.png",
               "scale": 1.0
             }
           }
@@ -565,6 +597,10 @@
             "SS4_Shoes": {
               "path": "res://assets/battles/trainers/player/female/super_saiyan_4/Shoes.png",
               "scale": 1.0
+            },
+            "Irelia_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/irelia/Shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -642,6 +678,10 @@
             "SS4_Shirt": {
               "path": "res://assets/battles/trainers/player/female/super_saiyan_4/Shirt.png",
               "scale": 1.0
+            },
+            "Irelia_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/irelia/Shirt.png",
+              "scale": 1.0
             }
           }
         },
@@ -689,6 +729,10 @@
             "SS4_Hair": {
               "path": "res://assets/battles/trainers/player/female/super_saiyan_4/Hair.png",
               "scale": 1.0
+            },
+            "Irelia_Hair": {
+              "path": "res://assets/battles/trainers/player/female/irelia/Hair.png",
+              "scale": 1.0
             }
           }
         },
@@ -708,6 +752,10 @@
             },
             "Akatsuki_Headband": {
               "path": "res://assets/battles/trainers/player/female/akatsuki/Headband.png",
+              "scale": 1.0
+            },
+            "Irelia_Circlet": {
+              "path": "res://assets/battles/trainers/player/female/irelia/Headgear.png",
               "scale": 1.0
             }
           }
@@ -762,6 +810,10 @@
             "SS4_Tail": {
               "path": "res://assets/battles/trainers/player/female/super_saiyan_4/BackRear.png",
               "scale": 1.0
+            },
+            "Irelia_Blades": {
+              "path": "res://assets/battles/trainers/player/female/irelia/BackRear.png",
+              "scale": 1.0
             }
           }
         },
@@ -781,6 +833,10 @@
             },
             "SS4_Tail": {
               "path": "res://assets/battles/trainers/player/female/super_saiyan_4/BackFront.png",
+              "scale": 1.0
+            },
+            "Irelia_Blades": {
+              "path": "res://assets/battles/trainers/player/female/irelia/BackFront.png",
               "scale": 1.0
             }
           }
