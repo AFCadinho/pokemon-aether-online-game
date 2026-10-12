@@ -168,13 +168,18 @@ def zip_manifest(manifest, members):
     return result
 
 
-def source_paths(args, chosen):
+def source_paths(args, chosen, replacement_packs=()):
     geometry = read(args.geometry_report)
     require(geometry.get('complete') is True, 'Incomplete geometry source report')
     paths = {r['asset']['object_key']: r['path'] for r in geometry['records']}
     textures = read(args.texture_sources)['sources']
+    replacements = {Path(path).name: str(Path(path).resolve()) for path in replacement_packs}
+    require(len(replacements) == len(replacement_packs), 'Duplicate replacement pack names')
+    require(set(replacements).issubset(Path(a['object_key']).name for a in chosen), 'Unknown replacement pack')
     for asset in chosen:
-        if asset['object_key'].endswith('.zip'):
+        if Path(asset['object_key']).name in replacements:
+            paths[asset['object_key']] = replacements[Path(asset['object_key']).name]
+        elif asset['object_key'].endswith('.zip'):
             paths[asset['object_key']] = str(args.zip_backup / 'objects' / asset['object_key'])
         elif asset['object_key'] not in paths:
             paths[asset['object_key']] = textures[asset['asset_id']]
@@ -182,7 +187,7 @@ def source_paths(args, chosen):
     return paths
 
 
-def measure_pair(asset, path, output):
+def measure_pair(asset, path, output, configurations=CONFIGS, quiet=False):
     codec = Zstd()
     original = checked_bytes(path, asset)
     is_pck = asset['object_key'].endswith('.pck')
@@ -206,14 +211,14 @@ def measure_pair(asset, path, output):
     result = {'asset_id': asset['asset_id'], 'source_path': str(path), 'source_sha256': asset['sha256'],
               'source_bytes': len(original), 'schema': source_manifest['schema'], 'format': 'pck' if is_pck else 'zip',
               'members': [], 'configurations': []}
-    payloads = {config: dict(members) for config in CONFIGS}
+    payloads = {config: dict(members) for config in configurations}
     for name in native_names:
         original_native = members[name]
         raw = decode(original_native, codec)
         record = {'path': name, 'source_bytes': len(original_native), 'source_sha256': digest(original_native),
                   'raw_bytes': len(raw), 'raw_sha256': digest(raw), 'source_block_size': blocks(original_native)[0],
                   'configurations': []}
-        for block, level in CONFIGS:
+        for block, level in configurations:
             started = time.perf_counter()
             candidate = encode(raw, block, level, codec)
             encoding_ms = (time.perf_counter()-started)*1000
@@ -234,7 +239,7 @@ def measure_pair(asset, path, output):
             target = directory / 'baseline' / name
             target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(members[name])
     write(directory / 'baseline-asset.json', asset)
-    for block, level in CONFIGS:
+    for block, level in configurations:
         candidate_members = payloads[block, level]
         candidate_asset = copy.deepcopy(asset)
         if is_pck:
@@ -270,7 +275,8 @@ def measure_pair(asset, path, output):
             'native_payload_bytes': sum(len(candidate_members[n]) for n in native_names)})
     require(digest(Path(path).read_bytes()) == asset['sha256'], 'Source changed during probe')
     write(directory / 'measurement.json', result)
-    print('V13_COMPRESSION_MEASURED', asset['asset_id'], flush=True)
+    if not quiet:
+        print('V13_COMPRESSION_MEASURED', asset['asset_id'], flush=True)
     return result
 
 
