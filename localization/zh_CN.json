@@ -1,4 +1,8 @@
 {
+  "ui.encounter_guard.renew_title": "Encounter Guard 已用完",
+  "ui.encounter_guard.renew_message": "你的 Encounter Guard 已用完。是否再激活一个？最多保护 3,000 次野外遭遇，直到遇到第一只 Ultra Rare、Legendary 或 Shiny。",
+  "ui.encounter_guard.renew_confirm": "激活",
+  "ui.encounter_guard.renew_later": "稍后",
   "ui.buff.encounter_guard.encounters": "{count} 次遭遇",
   "ui.encounter_guard.partner": "正在等待队友解锁 Encounter Guard…",
   "ui.encounter_guard.prompt": "依次点击以下三个符号：",

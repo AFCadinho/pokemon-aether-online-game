@@ -12,6 +12,7 @@ func _request(method: HTTPClient.Method, suffix := "", body: Dictionary = {}) ->
 func _logout() -> void:
 	logged_out = true
 	guard = {}
+	_reset_renewal()
 	AuthService.session_token = ""
 	AuthService.current_user = {}
 	_hide_lock()

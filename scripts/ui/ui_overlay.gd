@@ -1399,6 +1399,12 @@ var market_selected_item: Dictionary = {}
 var market_purchase_in_progress := false
 var market_mode := "player_buys"
 var movement_blocking_ui_panels: Dictionary = {}
+var encounter_guard_renewal_elapsed := 0.0
+var encounter_guard_renewal_busy := false
+var encounter_guard_activation_busy := false
+var encounter_guard_renewal_callback := Callable()
+var encounter_guard_renewal_session := ""
+var encounter_guard_renewal_revision := -1
 var owns_modal_overworld_input_lock := false
 var modal_overworld_input_lock_owner := StringName("ui_overlay_modal_%d" % get_instance_id())
 var market_context: Dictionary = {}
@@ -12865,6 +12871,7 @@ func _position_pokedex_popup() -> void:
 	pokedex_popup.offset_bottom = popup_size.y * 0.5
 
 func _process(delta: float) -> void:
+	_refresh_encounter_guard_renewal(delta)
 	var touch_size := TouchTargetSize.size_for(root_control, COLLAPSE_BUTTON_SIZE)
 	if not touch_size.is_equal_approx(_collapsible_touch_size):
 		_collapsible_touch_size = touch_size
@@ -25389,6 +25396,114 @@ func _bag_category_label(category_id: String) -> String:
 			return LocalizationManager.text(str(category.get("labelKey", category_id)))
 	return category_id.replace("_", " ").capitalize()
 
+func _encounter_guard_inventory_service() -> Node:
+	return InventoryService
+
+
+func _encounter_guard_renewal_session_is_current(token: String, revision: int) -> bool:
+	return (
+		AuthService.is_authenticated() and AuthService.session_token == token
+		and EncounterGuardService.session_token == token
+		and EncounterGuardService.renewal_revision == revision
+		and not bool(EncounterGuardService.guard.get("active", false))
+	)
+
+
+func _can_offer_encounter_guard_renewal() -> bool:
+	# Reward choices from the completed battle take priority over item renewal.
+	if (
+		evolution_is_playing or evolution_prompt_processing or move_learn_processing
+		or not evolution_prompt_queue.is_empty() or not evolution_active_prompt.is_empty()
+		or not move_learn_queue.is_empty() or not move_learn_active_prompt.is_empty()
+	):
+		return false
+	for panel: Control in [move_learn_popup, evolution_prompt_popup, evolution_overlay, global_heal_request_dialog, aether_clash_challenge_dialog]:
+		if panel != null and panel.visible:
+			return false
+	var world := GameState.get_world()
+	return (
+		ui_confirm_popup != null and not ui_confirm_popup.visible
+		and not has_meta("battle_chat_active") and world != null
+		and not bool(world.get("is_in_battle")) and not bool(world.get("wild_battle_resume_pending"))
+		and not get_tree().paused and not EncounterGuardService.backdrop.visible
+		and not GameState.is_overworld_input_locked() and not GameState.is_ui_input_locked()
+		and not _has_visible_priority_overlay_panel()
+		and not _is_text_input_focused() and not _is_overlay_pointer_interaction_active()
+	)
+
+
+func _refresh_encounter_guard_renewal(delta: float) -> void:
+	if encounter_guard_renewal_callback.is_valid():
+		# Never close a different confirmation that has replaced this one.
+		if ui_confirm_callback != encounter_guard_renewal_callback:
+			encounter_guard_renewal_callback = Callable()
+		elif (
+			not _encounter_guard_renewal_session_is_current(encounter_guard_renewal_session, encounter_guard_renewal_revision)
+			or _is_world_battle_active() or has_meta("battle_chat_active")
+		):
+			_hide_ui_confirm_popup()
+			encounter_guard_renewal_callback = Callable()
+	if not EncounterGuardService.renewal_pending or encounter_guard_renewal_busy or encounter_guard_activation_busy:
+		return
+	encounter_guard_renewal_elapsed -= delta
+	if encounter_guard_renewal_elapsed > 0.0:
+		return
+	encounter_guard_renewal_elapsed = 2.0
+	var token := AuthService.session_token
+	var revision := EncounterGuardService.renewal_revision
+	if not _encounter_guard_renewal_session_is_current(token, revision) or not _can_offer_encounter_guard_renewal():
+		return
+	encounter_guard_renewal_busy = true
+	# Refresh owned stock: purchases, trades and prior activation may have changed it.
+	var inventory: Dictionary = await _encounter_guard_inventory_service().load_inventory()
+	encounter_guard_renewal_busy = false
+	if not _encounter_guard_renewal_session_is_current(token, revision) or not EncounterGuardService.renewal_pending:
+		return
+	if not bool(inventory.get("success", false)) or not _can_offer_encounter_guard_renewal():
+		return
+	var has_spare := false
+	for item: Dictionary in inventory.get("items", []):
+		if str(item.get("itemId", item.get("item_id", ""))) == "encounter-guard" and int(item.get("quantity", 0)) > 0:
+			has_spare = true
+			break
+	EncounterGuardService.dismiss_renewal(revision)
+	if not has_spare:
+		return
+	encounter_guard_renewal_session = token
+	encounter_guard_renewal_revision = revision
+	encounter_guard_renewal_callback = Callable(self, "_activate_encounter_guard").bind(token, revision)
+	_show_ui_confirm_popup(
+		LocalizationManager.text("ui.encounter_guard.renew_title"),
+		LocalizationManager.text("ui.encounter_guard.renew_message"),
+		LocalizationManager.text("ui.encounter_guard.renew_confirm"),
+		encounter_guard_renewal_callback, Vector2i(480, 190), false,
+		LocalizationManager.text("ui.encounter_guard.renew_later")
+	)
+	_track_movement_blocking_ui_panel(ui_confirm_popup)
+
+
+func _activate_encounter_guard(expected_token := "", revision := -1) -> void:
+	if encounter_guard_activation_busy:
+		return
+	if expected_token != "" and not _encounter_guard_renewal_session_is_current(expected_token, revision):
+		return
+	var token := AuthService.session_token
+	encounter_guard_activation_busy = true
+	var result: Dictionary = await _encounter_guard_inventory_service().use_inventory_item("encounter-guard")
+	encounter_guard_activation_busy = false
+	if not AuthService.is_authenticated() or AuthService.session_token != token:
+		return
+	if not bool(result.get("success", false)):
+		_add_chat_message(str(result.get("error", LocalizationManager.text("ui.encounter_guard.failed"))))
+		return
+	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+	bag_inventory_loaded = true
+	InventoryService.apply_inventory_items(result.get("inventory", []))
+	_refresh_bag_items()
+	_refresh_bag_detail()
+	_add_chat_message(LocalizationManager.text("ui.encounter_guard.activated"))
+
+
 func _on_bag_item_selected(item: Dictionary) -> void:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "":
@@ -25401,15 +25516,7 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		_show_repel_refill_dialog(item)
 		return
 	if INVENTORY_ITEM_USE_POLICY.overworld_consumable_action(item) == "activate_encounter_guard":
-		var result: Dictionary = await InventoryService.use_inventory_item(item_id)
-		if not bool(result.get("success", false)):
-			_add_chat_message(str(result.get("error", LocalizationManager.text("ui.encounter_guard.failed"))))
-			return
-		bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
-		InventoryService.apply_inventory_items(result.get("inventory", []))
-		_refresh_bag_items()
-		_refresh_bag_detail()
-		_add_chat_message(LocalizationManager.text("ui.encounter_guard.activated"))
+		await _activate_encounter_guard()
 		return
 	if use_action == "trainer_name_change":
 		_show_trainer_name_change_popup()

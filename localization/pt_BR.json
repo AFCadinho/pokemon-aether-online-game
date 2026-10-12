@@ -1,4 +1,8 @@
 {
+  "ui.encounter_guard.renew_title": "Encounter Guard esgotado",
+  "ui.encounter_guard.renew_message": "Seu Encounter Guard acabou. Ativar outro para até 3.000 encontros selvagens, até encontrar o primeiro Ultra Rare, Legendary ou Shiny?",
+  "ui.encounter_guard.renew_confirm": "Ativar",
+  "ui.encounter_guard.renew_later": "Depois",
   "ui.buff.encounter_guard.encounters": "{count} encontros",
   "ui.encounter_guard.partner": "Aguardando seu parceiro desbloquear o Encounter Guard…",
   "ui.encounter_guard.prompt": "Clique nestes três símbolos na ordem:",

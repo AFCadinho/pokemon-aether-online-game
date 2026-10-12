@@ -1,4 +1,8 @@
 {
+  "ui.encounter_guard.renew_title": "Encounter Guard uitgewerkt",
+  "ui.encounter_guard.renew_message": "Je Encounter Guard is uitgewerkt. Wil je een nieuwe activeren voor maximaal 3.000 wilde encounters, tot je eerste Ultra Rare, Legendary of Shiny?",
+  "ui.encounter_guard.renew_confirm": "Activeren",
+  "ui.encounter_guard.renew_later": "Later",
   "ui.buff.encounter_guard.encounters": "{count} encounters",
   "ui.encounter_guard.partner": "Wachten tot je partner Encounter Guard heeft ontgrendeld…",
   "ui.encounter_guard.prompt": "Klik deze drie symbolen in volgorde aan:",
