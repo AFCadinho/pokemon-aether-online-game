@@ -1021,6 +1021,7 @@ func _build_member_page() -> Control:
 	member_content = VBoxContainer.new()
 	member_content.name = "GuildMemberDashboard"
 	member_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	member_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	member_content.add_theme_constant_override("separation", 12)
 	scroll.add_child(member_content)
 	return scroll
@@ -3280,6 +3281,7 @@ func _build_guild_bank_workspace() -> Control:
 	panel.name = "GuildBankWorkspace"
 	panel.custom_minimum_size = Vector2(0, 310)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 9, 1))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 15, 13, 15, 14)
@@ -3483,6 +3485,7 @@ func _build_guild_funds_workspace() -> Control:
 func _build_guild_bank_category_preview(category: String) -> Control:
 	var workspace := VBoxContainer.new()
 	workspace.name = "GuildBank%sPreview" % category.capitalize()
+	workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	workspace.add_theme_constant_override("separation", 10)
 	var heading := HBoxContainer.new()
 	heading.add_theme_constant_override("separation", 10)
@@ -3513,6 +3516,7 @@ func _build_guild_bank_category_preview(category: String) -> Control:
 	var columns := GridContainer.new()
 	columns.name = "GuildBank%sPreviewColumns" % category.capitalize()
 	columns.columns = 2
+	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	columns.add_theme_constant_override("h_separation", 10)
 	workspace.add_child(columns)
 	match category:
@@ -4478,6 +4482,7 @@ func _build_guild_item_list(
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 240 if action == "deposit" else 190)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 10, 9, 10, 9)
@@ -4703,6 +4708,7 @@ func _build_guild_pokemon_list(
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(0, 190)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 10, 9, 10, 9)
