@@ -1,4 +1,8 @@
 {
+  "encounter-guard": {
+    "name": "Encounter Guard",
+    "shortDesc": "最多保护 3,000 次野生遭遇。首次遇到 Ultra Rare、Legendary 或 Shiny 时消耗：须在 60 秒内解锁，否则遭遇结束并退出登录。"
+  },
   "aether-power-band": {
     "name": "Aether Power Band",
     "shortDesc": "携带者无需参战也能获得每只被击败的野生宝可梦给予的努力值，并在该宝可梦给予努力值的每项能力上额外获得10点。遵守努力值上限。不分享经验。不可交易。每个账号限购一次。"

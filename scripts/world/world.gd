@@ -2225,6 +2225,9 @@ func _resume_saved_wild_battle(saved_state: Dictionary) -> Dictionary:
 		_abort_battle_start(true)
 		return {"resumed": false, "retryable": false}
 
+	if not await EncounterGuardService.ensure_unlocked(response.get("encounterGuard")):
+		return {"resumed": false, "retryable": false}
+
 	var wild_pokemon_data := _dictionary_from_value(response.get("wildPokemon", {}))
 	var wild_pokemon: Pokemon = PokemonFactory.create_pokemon_from_backend_payload(wild_pokemon_data)
 	if wild_pokemon == null or PlayerSave.party.is_empty():
@@ -4116,6 +4119,8 @@ func start_dev_wild_battle(wild_pokemon: Pokemon) -> void:
 		_abort_battle_start()
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
+	if not await EncounterGuardService.ensure_unlocked(response.get("encounterGuard")):
+		return
 	await _prefetch_web_battle_sprites(response)
 	active_battle_id = str(response.get("battleId", ""))
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
@@ -4245,6 +4250,10 @@ func start_triggered_wild_battle_for_area(
 		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		await _show_wild_encounter_start_error(response)
+		return
+	if bool(_dictionary_from_value(response.get("encounterGuard", {})).get("locked", false)):
+		await _cancel_wild_encounter_transition()
+	if not await EncounterGuardService.ensure_unlocked(response.get("encounterGuard")):
 		return
 	active_battle_id = str(response.get("battleId", ""))
 	_trace_mobile_wild_transition("battle_created", transition_started_at_msec)

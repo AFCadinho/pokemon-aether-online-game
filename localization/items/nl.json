@@ -1,4 +1,8 @@
 {
+  "encounter-guard": {
+    "name": "Encounter Guard",
+    "shortDesc": "Beschermt maximaal 3.000 wilde encounters. Verbruikt bij je eerste Ultra Rare, Legendary of Shiny: unlock binnen 60 seconden, anders eindigt de encounter en word je uitgelogd."
+  },
   "aether-power-band": {
     "name": "Aether Power Band",
     "shortDesc": "De drager krijgt de EV’s van elke verslagen wilde Pokémon, ook zonder deelname, plus 10 per stat waarvoor die Pokémon EV’s geeft. EV-limieten gelden. Deelt geen EXP. Niet verhandelbaar. Eén aankoop per account."

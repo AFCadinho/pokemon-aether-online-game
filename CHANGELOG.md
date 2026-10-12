@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Encounter Guard to the Bag and hotbar, with a remaining-encounter indicator and a blocking visual symbol challenge for rare wild spawns. Support co-op waiting and logout when the 60-second deadline expires.
+
 - Add complete editable Guild Café and Grand Lounge scenes for painting shared furniture collision in room context. Make all coloured floor cushions and the cushions inside Café furniture walkable.
 
 - Refine 15 more 3D moves with individually sculpted fire, muddy water, sludge, dark energy, psychic strikes and storms, including a recognizable Fire Blast glyph and an energy-dragon silhouette for Dragon Pulse. Match atmosphere and camera framing to each attack while preserving speed, audio and hit/miss/block behavior.
