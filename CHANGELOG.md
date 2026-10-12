@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Shadow Ball, Focus Blast and Moonblast distinct solid energy spheres, continuous tapered wakes and focused impacts. Orbs charge small at the source and grow after release, preserving native timing and cinematic cameras.
+
 - Fix Trainers remaining unable to move after Aethernet travel changes maps.
 
 - Restore compact stat and effect indicators below the HP cards in single 3D battles.

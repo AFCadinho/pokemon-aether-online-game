@@ -22,7 +22,8 @@ func _run() -> void:
 		assert(is_equal_approx(stage.players[0].get_playing_speed(),rate))
 	stage.entries.fixture.action_timing.special_attack.frames = 60.0
 	stage.start_move_action("p1","Shadow Ball")
-	assert(is_equal_approx(stage.players[0].get_playing_speed(),1.5),"Moonblast pacing cannot leak to the next move")
+	var shadow_timing: Dictionary = stage.move_timing("Shadow Ball", "p1")
+	assert(is_equal_approx(float(shadow_timing.frames) / 60.0 / stage.players[0].get_playing_speed(), 1.7), "Shadow Ball restores its own presentation duration after Moonblast")
 	var camera := Camera3D.new()
 	stage.world.add_child(camera)
 	for move in Batch.MOVE_KEYS:
@@ -39,10 +40,28 @@ func _run() -> void:
 				effect.set_process(false)
 				var seen_flight := false
 				var seen_hit := false
+				var charge_radius := 0.0
+				var flight_radius := 0.0
 				for time in [0.0,0.1,0.3,0.4,0.6,0.79,0.8,0.85,1.0,1.2,1.6,1.95]:
 					seconds = time
 					effect._process(0)
 					assert(effect.pieces.size()<=48,"Bounded geometry for "+move)
+					if move in Batch.SOLID_ORBS and time > 0 and time < effect.impact:
+						var body_count := 0
+						var wake_count := 0
+						for j in effect.cursor:
+							var piece: MeshInstance3D = effect.pieces[j]
+							if piece.material_override == effect.orb_body:
+								body_count += 1
+								if time < effect.launch: charge_radius = maxf(charge_radius, piece.basis.x.length())
+								else: flight_radius = maxf(flight_radius, piece.basis.x.length())
+							if piece.material_override == effect.orb_wake:
+								wake_count += 1
+								var tail_end := piece.transform * Vector3.UP
+								assert(tail_end.distance_to(effect.launch_origin) <= piece.position.distance_to(effect.launch_origin) + 0.001, "Wake points back along flight")
+								assert(piece.basis.y.length() <= piece.position.distance_to(effect.launch_origin) + 0.001, "Wake cannot extend behind caster")
+						assert(body_count <= 1 and wake_count <= 1, "One solid projectile with one continuous wake")
+
 					if time>effect.launch and time<effect.impact: seen_flight = seen_flight or effect.cursor>0
 					for i in effect.cursor:
 						assert(effect.pieces[i].transform.is_finite())
@@ -65,6 +84,7 @@ func _run() -> void:
 							effect._process(0)
 							for i in effect.cursor: assert(effect.pieces[i].position.is_equal_approx(positions[i]),"Released objects cannot follow later head motion")
 				assert(seen_flight and seen_hit==(outcome=="hit"))
+				if move in Batch.SOLID_ORBS: assert(charge_radius > 0 and charge_radius < flight_radius * 0.5, "Orb grows after leaving the outlet")
 				effect.cancel()
 				await get_tree().process_frame
 		assert(stage.attack_action_for(move,"p1")=="special_attack","Ranged physical moves use a release clip")
