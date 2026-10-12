@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show readable species nameplates above the opposing Pokémon during 3D Team Preview, following their arena positions and clearing them before lead summons.
+
 - Show battle preparation and Pokémon download progress when entering 3D AI Sparring or PvP, prepare Team Preview before revealing the field, and start battle music once the arena is visible.
 
 - Retire obsolete v11 model downloads after a verified full offline backup; keep every v13 model and reused ZIP available. Older clients requesting retired models must update.

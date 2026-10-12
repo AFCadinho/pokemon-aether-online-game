@@ -145,6 +145,7 @@ const TeamPreview = preload("res://scripts/battle/battle_ui/team_preview_3d.gd")
 var side_conditions: Array[Dictionary] = [{}, {}]
 var side_condition_visuals: Array = [null, null]
 var preview_teams: Array = [[], []]
+var preview_names: Array = [[], []]
 var preview_layers: Array = []
 var preview_enabled := false
 var preview_generation := 0
@@ -174,8 +175,10 @@ func _sync_side_conditions() -> void:
 
 func set_team_preview(player_team: Array, enemy_team: Array, layers: Array = []) -> void:
 	var teams := [_preview_identities(player_team), _preview_identities(enemy_team)]
+	preview_names = [_preview_species_names(player_team), _preview_species_names(enemy_team)]
 	preview_layers = layers.duplicate()
 	if preview_enabled and teams == preview_teams:
+		if is_instance_valid(preview_visual): preview_visual.set_names(preview_names)
 		_sync_preview_layers()
 		return
 	_clear_preview_visual()
@@ -190,13 +193,25 @@ func _preview_identities(team: Array) -> Array[String]:
 	var result: Array[String] = []
 	for value in team.slice(0, 6):
 		if not value is Dictionary: continue
-		var species := str(value.get("displaySpecies", ""))
-		if species.is_empty(): species = str(value.get("species", ""))
-		if species.is_empty(): species = str(value.get("ident", "")).get_slice(": ", 1).strip_edges()
+		var species := _preview_species(value)
 		if species.is_empty(): continue
 		var shiny_value: Variant = value.get("shiny", value.get("isShiny", value.get("is_shiny", false)))
 		var shiny := str(shiny_value).to_lower() in ["true", "1", "yes"]
 		result.append(ReviewedModels.key(species, shiny))
+	return result
+
+func _preview_species(value: Dictionary) -> String:
+	var species := str(value.get("displaySpecies", "")).strip_edges()
+	if species.is_empty(): species = str(value.get("species", "")).strip_edges()
+	if species.is_empty(): species = str(value.get("ident", "")).get_slice(": ", 1).strip_edges()
+	return species
+
+func _preview_species_names(team: Array) -> Array[String]:
+	var result: Array[String] = []
+	for value in team.slice(0, 6):
+		if not value is Dictionary: continue
+		var species := _preview_species(value)
+		if not species.is_empty(): result.append(species)
 	return result
 
 func _preview_wants_3d() -> bool:
@@ -237,6 +252,7 @@ func clear_team_preview() -> void:
 	preview_enabled = false
 	preview_generation += 1
 	preview_teams = [[], []]
+	preview_names = [[], []]
 	preview_problem = ""
 	_clear_preview_visual()
 	for layer in preview_layers:
@@ -294,6 +310,7 @@ func _process_team_preview() -> void:
 	preview_visual.show()
 	preview_visual.animate(playback_speed)
 	_update_camera(0.0)
+	preview_visual.update_nameplates(self)
 	reason = "3D Team Preview active"
 	_prune_models()
 
@@ -2323,7 +2340,7 @@ func _set_active(value: bool) -> void:
 	_sync_preview_layers()
 	if is_instance_valid(preview_visual):
 		if not _preview_wants_3d(): _clear_preview_visual()
-		else: preview_visual.visible = value
+		else: preview_visual.set_presentation_visible(value)
 	visible = value or (entry_arena_requested and entry_arena_visible and viewport != null)
 	if viewport != null:
 		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if visible else SubViewport.UPDATE_DISABLED
