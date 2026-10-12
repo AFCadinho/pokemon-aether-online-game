@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare normal and shiny 3D models for 120 additional forms for the next model release, with native animations and compact pair packs; fix eight model-name aliases that prevented existing models from being found.
+
 - Limit visibility on both Rock Tunnel floors to a small circle around the player until Flash reveals the whole area. Keep Flash across floors and battles, reset it when leaving the cave, and show a cave entry hint.
 
 - Offer the Kakashi Outfit Box for both genders in the Gift Store for 450 Gems, with six fixed-colour parts and the standard 450-credit bound alternative.

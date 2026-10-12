@@ -1,5 +1,7 @@
 # Alternate-form model coverage audit
 
+This is the preserved intake snapshot. See [the subsequent batch results](alternate-forms-batch.md) for prepared additions and remaining holds.
+
 Snapshot: 2026-10-12.
 
 This audit compares all local Pokémon species files and the actual national Pokédex visibility filter against both normal/shiny model bindings, the compiled model aliases, and the hash-pinned selected v13 index. It expands shared-pack references through the same catalog/geometry precedence as the runtime. It does not access production or prove that source meshes do not exist on disk.

@@ -84,7 +84,10 @@ func source_target_matches(track: Dictionary, meshes: Dictionary) -> bool:
 				var base := mesh.trim_suffix(suffix)
 				return meshes.has(base) and track.get("source_target") == base + "_shape" + suffix and track.get("keys") == [[0.0, false]]
 		return false
-	return track.get("source_target") == track.mesh + "_shape"
+	# Some native TRACM tables use Maya's camel-case shape suffix while
+	# their TRMSH table uses _shape. The mesh stem must still match exactly.
+	return track.get("source_target") == track.mesh + "_shape" or (
+		track.mesh.ends_with("_mesh") and track.get("source_target") == track.mesh + "Shape")
 
 func add_track(animation: Animation, path: NodePath, keys: Array) -> void:
 	var index := animation.add_track(Animation.TYPE_VALUE)
