@@ -1,6 +1,7 @@
 extends RefCounted
 ## Shots follow the VFX's native clock, including pause and recovery.
 const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
+const ZCinema = preload("res://scripts/battle/battle_ui/z_move_cinema_3d.gd")
 const PROFILES := {
 	"dracometeor":"meteor", "moonblast":"moon", "focusblast":"orb", "shadowball":"orb",
 	"hyperbeam":"beam", "solarbeam":"beam", "flashcannon":"beam", "electroshot":"beam",
@@ -9,18 +10,21 @@ const PROFILES := {
 var effect: Node
 var actor := ""
 var target := ""
+var z_context := {}
 
 func supports(key: String) -> bool:
-	return PROFILES.has(key) or not Recipes.get_recipe(key).get("camera", "").is_empty()
+	return ZCinema.supports(key) or PROFILES.has(key) or not Recipes.get_recipe(key).get("camera", "").is_empty()
 
 func begin(owner: Node, source: String, destination: String) -> void:
 	effect = owner
 	actor = source
 	target = destination
+	z_context.clear()
 
 func clear(owner: Node = null) -> bool:
 	if owner != null and effect != owner: return false
 	effect = null
+	z_context.clear()
 	return true
 
 func apply(stage: Node) -> void:
@@ -29,6 +33,17 @@ func apply(stage: Node) -> void:
 	var seconds: float = effect.clock.call()
 	var p := clampf(seconds / effect.duration, 0.0, 1.0)
 	if p >= 1.0: return
+	if ZCinema.supports(effect.key):
+		if z_context.is_empty():
+			z_context = effect.anchors.call().duplicate(true)
+			z_context.actor_body = stage._move_bounds(actor).duplicate(true)
+			z_context.target_body = stage._move_bounds(target).duplicate(true)
+		var overview: Transform3D = stage.camera.transform
+		var shot := ZCinema.shot(effect, stage.camera, z_context, seconds)
+		var pose := _fit(stage.camera, shot.points, shot.direction)
+		var recovery := smoothstep(maxf(0.86, effect.impact / effect.duration + 0.04), 1.0, p)
+		stage.camera.transform = pose.interpolate_with(overview, recovery)
+		return
 	if effect.key != "dracometeor":
 		_apply_catalog(stage, seconds, p)
 		return

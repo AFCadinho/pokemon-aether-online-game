@@ -1,16 +1,7 @@
 extends "res://scripts/battle/battle_ui/family_move_effect_3d.gd"
 ## Authored 3D interpretations of the existing 2D Z-move storyboards.
 ## Per-move source frames and hashes live beside each choreography in the recipe.
-const Z_ART := {
-	"fire": [preload("res://assets/battles/moves_3d/sv_source/cpt_2_fire0010.png"),4.0,false],
-	"water": [preload("res://assets/battles/moves_3d/sv_source/cpt_2_water0013.png"),8.0,true],
-	"spark": [preload("res://assets/battles/moves_3d/sv_moonblast/cpt_0_flash0001.png"),1.0,false],
-	"smoke": [preload("res://assets/battles/moves_3d/sv_shadowball/upt_ew0247_smoke2301.png"),1.0,false],
-}
-const STAGING = preload("res://data/battle_move_staging_3d.json")
-var profile: Dictionary
-var field_center := Vector3.ZERO
-var field_radius := 5.8
+const Forms = preload("res://scripts/battle/battle_ui/z_move_forms_3d.gd")
 var style := ""
 var dark: StandardMaterial3D
 var accent: StandardMaterial3D
@@ -23,22 +14,27 @@ var fixed_source := Vector3.ZERO
 var fixed_center := Vector3.ZERO
 var fixed_actor_ground := Vector3.ZERO
 var captured := false
-var body_size := 1.0
 var tone_materials: Array[StandardMaterial3D] = []
-
-func _sprite_values(id: String) -> Array:
-	if not Z_ART.has(id): return super._sprite_values(id)
-	var color := Color(str(recipe.color))
-	var values: Array = Z_ART[id]
-	return [values[0],Vector3(color.r,color.g,color.b),values[1],values[2]]
+var funnel: ArrayMesh
+var wake: ArrayMesh
+var wake_surface: ShaderMaterial
 
 func _prepare() -> void:
 	super._prepare()
-	tooth.radial_segments = 24
+	tooth.radial_segments = 32
+	sphere.radial_segments = 40
+	sphere.rings = 20
+	ring.rings = 48
 	style = str(recipe.z_choreography.style)
-	profile = STAGING.data.moves.get(key,{})
+	var kind := 1 if style in ["water_vortex", "ocean_orb"] else 2 if style in ["boulder", "stone_rain", "fissure"] else 3 if style == "drill" else 4 if style == "ice_prison" else 0
+	if style == "fire_orb": kind = 5
+	surface = Forms.material(Color(str(recipe.color)), kind, style in ["water_vortex", "acid_column"])
+	wake_surface = Forms.wake_material(Color(str(recipe.color)))
+	funnel = Forms.Volume.swept_mesh(true)
+	wake = Forms.Volume.swept_mesh(false)
 	ring.inner_radius = 0.965
-	dark = _material(Color("150e29"),0.9)
+	dark = _material(Color("090511"),1.0)
+	dark.emission_energy_multiplier = 0.0
 	accent = _material(Color(str(recipe.color)).lerp(Color.WHITE,0.25),0.65)
 	pale = _material(Color("ffdf86"),0.8)
 	field_edge = _material(Color(str(recipe.color)),.32)
@@ -67,10 +63,6 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 		fixed_center = points.get("actor_center",from)
 		fixed_ground = points.get("target_ground",Vector3(to.x,0.04,to.z))
 		fixed_actor_ground = points.get("actor_ground",Vector3(from.x,0.04,from.z))
-		body_size = clampf(float(points.radius),.55,1.35)
-		var field: Dictionary = points.get("field",{})
-		field_center = field.get("center",(fixed_actor_ground+fixed_ground)*.5)
-		field_radius = float(field.get("radius",5.8))
 	var facing := Basis(right,up,right.cross(up))
 	var forward := (aim-fixed_source).normalized()
 	if forward.length()<.01:forward=Vector3.FORWARD
@@ -80,17 +72,18 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 	var charge := clampf(elapsed/maxf(launch,.01),0,1)
 	var flight := clampf((elapsed-launch)/maxf(impact-launch,.01),0,1)
 	var after := (elapsed-impact)/maxf(duration-impact,.01)
-	var fade := 1-clampf(after,0,1)
 	var envelope := clampf(minf(t/.07,(1-t)/.18),0,1)
 	edge.albedo_color.a = .85*envelope
 	core.albedo_color.a = .95*envelope
 	glow.albedo_color.a = .10*envelope
 	accent.albedo_color.a = .65*envelope
 	pale.albedo_color.a = .8*envelope
-	dark.albedo_color.a = .85*envelope
+	dark.albedo_color.a = envelope
 	field_edge.albedo_color.a = .32*envelope
 	surface.set_shader_parameter("seconds",elapsed)
-	surface.set_shader_parameter("opacity",envelope*.7)
+	surface.set_shader_parameter("opacity",envelope*.96)
+	wake_surface.set_shader_parameter("seconds",elapsed)
+	wake_surface.set_shader_parameter("opacity",envelope)
 	impact_drawn = false
 	# Small inward streaks establish energy; each move supplies its own main form.
 	if elapsed<launch:
@@ -171,9 +164,6 @@ func _orb_scene(charge: float,flight: float,after: float,alpha: float,facing: Ba
 			if after>=0:radius=maxf(.03,1.45*(1-clampf(after/.35,0,1)))
 			_piece(sphere,dark,center,Vector3.ONE*radius)
 			for i in 3:_piece(ring,edge,center,Vector3.ONE*radius*(1.15+i*.12),axis*Basis(Vector3.RIGHT,.4*i+elapsed*.6))
-			for i in 8:
-				var a := i*TAU/8+elapsed*3
-				_source_sprite(center+Vector3(cos(a),sin(a),sin(a*2)*.3)*radius*1.5,.45,"smoke",flight,alpha*.45,facing,a)
 		"dna_nova":
 			center=fixed_source.lerp(aim,smoothstep(.3,1,flight))
 			radius=(.3+flight*1.3)*(1-clampf(after,0,1))
@@ -185,15 +175,11 @@ func _orb_scene(charge: float,flight: float,after: float,alpha: float,facing: Ba
 					_ball(base+offset,.07,core);_ball(base-offset,.07,core)
 					_line(base+offset,base-offset,.016,edge)
 			_piece(sphere,surface,center,Vector3.ONE*radius)
-			_source_sprite(center,radius*2.6,"spark",0,alpha*.5,facing)
 		"sun_nova":
 			center=fixed_source.lerp(aim,smoothstep(.65,1,flight))+Vector3.UP*(1.5+sin(flight*PI)*.6)
 			radius=(.18+charge*.5+flight*1.4)*(1-clampf(after,0,1))
 			_piece(sphere,surface,center,Vector3.ONE*radius)
 			for i in 3:_piece(ring,pale,center,Vector3.ONE*radius*(1.12+i*.13),Basis(Vector3.RIGHT,i*PI/3)*Basis(Vector3.FORWARD,elapsed*.8))
-			for i in 7:
-				var a := i*TAU/7+elapsed
-				_source_sprite(center+(facing.x*cos(a)+facing.y*sin(a))*radius,1.1,"fire",fmod(elapsed+i*.1,1),alpha*.8,facing,a)
 		"ocean_orb":
 			center=fixed_source.lerp(aim,flight)+Vector3.UP*sin(flight*PI)*1.8
 			radius=(.35+flight*1.35)*(1-clampf(after,0,1))
@@ -203,35 +189,29 @@ func _orb_scene(charge: float,flight: float,after: float,alpha: float,facing: Ba
 				var p := center+Vector3(cos(a),sin(a*.5),sin(a))*(radius+.4)
 				_ball(p,.10*alpha,pale);_line(p,p+Vector3.UP*.35,.025*alpha,pale)
 				_line(p+Vector3.UP*.35,p+Vector3.UP*.27+facing.x*.16,.024*alpha,pale)
-			_source_sprite(center,radius*2,"water",flight,alpha*.6,facing)
 		_:
 			center=fixed_source.lerp(aim,flight)+Vector3.UP*sin(flight*PI)*.5
 			radius=(.35+charge*.3+flight*.5)*(1-clampf(after,0,1))
 			_piece(sphere,surface,center,Vector3.ONE*radius)
-			for i in 7:_source_sprite(center-Vector3.UP*.2+(fixed_source-aim).normalized()*i*.18,1.0-i*.08,"fire",fmod(elapsed+i*.1,1),alpha*.85,facing,i)
+			if elapsed >= launch and after < 0.0:
+				_piece(wake, wake_surface, center, Vector3(radius * 0.8, 1.6 + flight, radius * 0.8), Forms.Volume.along(fixed_source - aim))
 
-func _column(flight: float,after: float,alpha: float,facing: Basis) -> void:
-	if elapsed<launch:return
-	var height_value := (1.0+flight*3.3)*(1-clampf(after,0,1)*.6)
-	var water := style=="water_vortex"
-	var acid := style=="acid_column"
-	if water or acid:
-		for i in 18:
-			var h := i/18.0
-			var a := h*TAU*2+elapsed*5
-			var radius := (.5+h*.65)*(1-clampf(after,0,1)*.5)
-			var p := fixed_ground+Vector3(cos(a)*radius,h*height_value,sin(a)*radius)
-			_source_sprite(p,1.0 if water else .85,"water" if water else "smoke",fmod(h+elapsed*.6,1),alpha*.65,facing,a)
-			if i%3==0:_piece(ring,edge,fixed_ground+Vector3.UP*h*height_value,Vector3.ONE*radius)
+func _column(flight: float, after: float, alpha: float, _facing: Basis) -> void:
+	if elapsed < launch: return
+	var height_value := (1.0 + flight * 3.3) * (1.0 - clampf(after,0,1) * 0.6)
+	if style in ["water_vortex", "acid_column"]:
+		# One continuous volume makes the twisting column readable from any angle.
+		_piece(funnel, surface, fixed_ground, Vector3(1.2, height_value / presentation_scale, 1.2) * alpha, Basis(Vector3.UP, elapsed * 0.7))
+		for i in 3:
+			var h := (i + 1) / 4.0
+			_piece(ring, accent, fixed_ground + Vector3.UP * h * height_value, Vector3.ONE * (0.4 + h * 0.7) * alpha)
 	else:
-		var top := aim+Vector3.UP*4
-		var bottom := top.lerp(fixed_ground,clampf(flight*1.4,0,1))
-		_line(top,bottom,.35+flight*.35,glow)
-		_line(top,bottom,.14+flight*.14,core)
-		for i in 6:
-			var p := top.lerp(bottom,i/6.0)
-			_piece(ring,edge,p,Vector3.ONE*(.7+flight*.3),Basis(Vector3.UP,elapsed))
-			_source_sprite(p,.95,"fire" if style=="sun_column" else "spark",fmod(elapsed+i*.13,1),alpha*.6,facing,elapsed)
+		var top := aim + Vector3.UP * 4.0
+		var bottom := top.lerp(fixed_ground, clampf(flight * 1.4,0,1))
+		_line(top, bottom, (0.14 + flight * 0.22) * alpha, surface)
+		_line(top, bottom, (0.055 + flight * 0.07) * alpha, core)
+		for i in 3:
+			_piece(ring, accent, top.lerp(bottom, i / 3.0), Vector3.ONE * (0.65 + flight * 0.2) * alpha)
 
 func _lightning_scene(from: Vector3,charge: float,flight: float,after: float,facing: Basis,side: Vector3) -> void:
 	var alpha := 1-clampf(after,0,1)
@@ -246,7 +226,6 @@ func _lightning_scene(from: Vector3,charge: float,flight: float,after: float,fac
 			var top := aim+offset+Vector3.UP*(3.2+sin(i)*.6)
 			var bottom := top.lerp(aim+offset*.3,clampf(flight*1.7-i*.10,0,1))
 			_bolt(top,bottom,.05*alpha,elapsed*35+i*7,tone_materials[i] if style=="rainbow_lightning" else edge)
-			_source_sprite(bottom,.9,"spark",0,alpha*.75,facing,elapsed+i)
 		if style=="electric_surf":
 			for i in 5:
 				var p := fixed_source.lerp(aim,i/5.0)
@@ -263,10 +242,6 @@ func _bloom(charge: float,flight: float,after: float,alpha: float,facing: Basis)
 		if flight>.25:_piece(star,pale,p+Vector3.UP*height_value,Vector3.ONE*.18*alpha,facing*Basis(Vector3.FORWARD,a))
 	if elapsed>=launch:
 		_line(fixed_ground,fixed_ground+Vector3.UP*(1+flight*3),.32*alpha,glow)
-		for i in 5:
-			var a := elapsed*3+i*TAU/5
-			var p := aim+Vector3(cos(a)*.9,flight*1.8,sin(a)*.9)
-			_source_sprite(p,.55,"spark",0,alpha*.75,facing)
 
 func _falling(flight: float,after: float,alpha: float,facing: Basis,axis: Basis) -> void:
 	if elapsed<launch:return
@@ -286,7 +261,6 @@ func _falling(flight: float,after: float,alpha: float,facing: Basis,axis: Basis)
 				_line(p+Vector3(.18,.55,0),p,.028*alpha,dark)
 				_piece(tooth,edge,p,Vector3(.09,.22,.09)*alpha,Basis(Vector3.FORWARD,PI-.25))
 			else:_piece(prism,surface,p,Vector3(.24,.5,.24)*alpha,axis*Basis(Vector3.UP,elapsed+i))
-			if after>=0:_source_sprite(land,.5,"spark",after,alpha*.4,facing)
 
 func _drill_scene(from: Vector3,flight: float,after: float,alpha: float,axis: Basis) -> void:
 	var center := from+(aim-from).normalized()*.65
@@ -300,18 +274,23 @@ func _drill_scene(from: Vector3,flight: float,after: float,alpha: float,axis: Ba
 			var a := i*TAU/8
 			_piece(prism,surface,fixed_ground+Vector3(cos(a),after*.7,sin(a))*(.5+after),Vector3(.18,.3,.18)*alpha,Basis(Vector3.UP,a))
 
-func _dragon_scene(charge: float,flight: float,after: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
-	var head := fixed_source.lerp(aim,flight)+Vector3.UP*sin(flight*PI)*1.1
-	var scale_value := (.25+charge*.6)*alpha
-	_piece(sphere,surface,head,Vector3(.35,.3,.6)*scale_value,axis)
-	for i in 10:
-		var q := maxf(0,flight-i*.027)
-		var p := fixed_source.lerp(aim,q)+Vector3.UP*(sin(q*PI)*1.1+sin(elapsed*4-i*.65)*.2)+side*sin(elapsed*5-i*.6)*.25
-		_piece(sphere,surface,p,Vector3.ONE*(.35-i*.023)*scale_value)
-		if i%2==0:_source_sprite(p,.75,"fire",fmod(elapsed+i*.1,1),alpha*.65,facing,i)
-	for sign_value in [-1.0,1.0]:
-		_piece(wing,edge,head+side*.2*sign_value,Vector3(sign_value*1.6,1.2,.9)*scale_value,axis*Basis(Vector3.RIGHT,PI/2)*Basis(Vector3.UP,sin(elapsed*6)*.2))
-	if after>=0:_source_sprite(aim,2.4,"fire",after,alpha*.8,facing)
+func _dragon_scene(charge: float, flight: float, after: float, alpha: float, _facing: Basis, side: Vector3, axis: Basis) -> void:
+	var head := fixed_source.lerp(aim, flight) + Vector3.UP * sin(flight * PI) * 1.1
+	var body_scale := (0.25 + charge * 0.6) * alpha
+	var spine: Array[Vector3] = []
+	var radii: Array[float] = []
+	for i in 15:
+		var q := maxf(0.0, flight - i * 0.025)
+		var p := fixed_source.lerp(aim, q) + Vector3.UP * (sin(q * PI) * 1.1 + sin(elapsed * 4.0 - i * 0.45) * 0.12) + side * sin(elapsed * 5.0 - i * 0.4) * 0.18
+		spine.append(p)
+		radii.append(lerpf(0.3, 0.012, i / 14.0) * body_scale * presentation_scale)
+	# The path is in world coordinates: only its thickness receives effect scale.
+	_piece(Forms.tube(spine, radii), surface, Vector3.ZERO, Vector3.ONE / presentation_scale)
+	_piece(sphere, surface, head, Vector3(0.3,0.55,0.28) * body_scale, axis)
+	for sign_value in [-1.0, 1.0]:
+		_ball(head + side * 0.2 * sign_value + axis.y * 0.22 + Vector3.UP * 0.12, 0.05 * body_scale, core)
+		_piece(tooth, pale, head + side * 0.2 * sign_value + Vector3.UP * 0.2, Vector3(0.09,0.45,0.09) * body_scale)
+		_piece(wing, edge, head + side * 0.2 * sign_value, Vector3(sign_value * 1.6,1.2,0.9) * body_scale, axis * Basis(Vector3.RIGHT,PI/2) * Basis(Vector3.UP,sin(elapsed*6)*0.2))
 
 func _enclosure(flight: float,after: float,alpha: float,facing: Basis) -> void:
 	if elapsed<launch:return
@@ -324,7 +303,7 @@ func _enclosure(flight: float,after: float,alpha: float,facing: Basis) -> void:
 				var a := TAU*i/5+elapsed*.35
 				for j in 5:
 					var p := aim+Vector3(cos(a)*extent,(j-2)*.4,sin(a)*extent)
-					_piece(ring,edge,p,Vector3(.12,.12,.20)*alpha,Basis(Vector3.RIGHT,PI/2)*Basis(Vector3.FORWARD,j%2*PI/2))
+					_piece(ring,accent,p,Vector3(.12,.12,.20)*alpha,Basis(Vector3.RIGHT,PI/2)*Basis(Vector3.FORWARD,j%2*PI/2))
 		"cocoon", "shadow_shroud":
 			if style=="shadow_shroud":
 				_piece(tooth,dark,aim+Vector3.UP*.3,Vector3(extent,2.0,extent)*alpha)
@@ -333,10 +312,6 @@ func _enclosure(flight: float,after: float,alpha: float,facing: Basis) -> void:
 			for i in 10:
 				var h := i/9.0
 				_piece(ring,accent,aim+Vector3.UP*(h-.5)*2,Vector3.ONE*sin(h*PI)*extent, Basis(Vector3.FORWARD,.1*sin(elapsed*14+i)))
-			if flight>.6:
-				for i in 6:
-					var a := i*TAU/6+elapsed*8
-					_source_sprite(aim+(facing.x*cos(a)+facing.y*sin(a))*extent,.75,"spark",0,alpha*.8,facing,a)
 		"prism", "ice_prison":
 			var rot := Basis(Vector3.UP,elapsed*.5)*Basis(Vector3.FORWARD,.12)
 			if style=="prism":
@@ -384,17 +359,15 @@ func _fissure_scene(flight: float,after: float,alpha: float,facing: Basis,side: 
 		_line(p-side*.2+Vector3.UP*.03,q+side*.2+Vector3.UP*.03,.025*alpha,pale)
 		if flight>i/10.0:
 			_piece(prism,surface,p+side*.4,Vector3(.3,.2+flight*.7,.3)*alpha,Basis(Vector3.FORWARD,.2))
-			_source_sprite(q+Vector3.UP*(flight*.8),.85,"smoke",flight,alpha*.5,facing,i)
 	if flight>.55:
 		_line(fixed_ground,fixed_ground+Vector3.UP*(flight-.55)*6,.5*alpha,glow)
-		_source_sprite(aim,2.2,"fire",clampf(after,0,1),alpha*.6,facing)
 
 func _body_scene(from: Vector3,center: Vector3,charge: float,flight: float,after: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
 	var electric := style=="electric_dive"
 	var fairy := style=="fairy_comet"
 	var aerial := style in ["moonsault","sky_dive","body_slam"]
 	if elapsed<launch:
-		_source_sprite(from,.4+charge*.6,"spark",0,charge*.8,facing)
+		_ball(from, (0.08 + charge * 0.18) * alpha, surface)
 		return
 	var point := center
 	if aerial:point+=Vector3.UP*.2
@@ -407,106 +380,21 @@ func _body_scene(from: Vector3,center: Vector3,charge: float,flight: float,after
 	for i in 6:
 		var offset := side*sin(i*2.4)*.7+Vector3.UP*cos(i*2.4)*.45
 		_line(point+offset-axis.y*(.5+flight),point+offset,.035*alpha,edge)
-	if style=="moonsault" and after>=0:_source_sprite(aim,2.8,"fire",after,alpha*.85,facing)
 	if style=="body_slam" and after>=0:
 		for i in 2:_piece(ring,edge,fixed_ground,Vector3.ONE*(.7+after*(2+i*.5))*alpha)
 
-func _climax(target: Vector3,ground: Vector3,after: float,facing: Basis,side: Vector3) -> void:
-	var fade := 1-clampf(after,0,1)
-	var flash := 1-smoothstep(0,.32,after)
-	_source_sprite(target,2.6+after*2.2,"spark",0,flash*.8,facing)
-	for i in 2:_piece(ring,edge,ground+Vector3.UP*.04*i,Vector3.ONE*(.45+after*(2.6+i*.5))*fade)
-	for i in 8:
-		var a := i*TAU/8
-		var direction := side*cos(a)+Vector3.UP*sin(a)+facing.z*sin(a*3)*.25
-		_line(target+direction*(.15+after*.8),target+direction*(.4+after*2.4),.026*fade,core)
-		_source_sprite(target+direction*(.5+after*1.8),.35*fade,"spark",0,fade*.65,facing,a)
+func _climax(target: Vector3, ground: Vector3, after: float, _facing: Basis, _side: Vector3) -> void:
+	var fade := 1.0 - clampf(after,0,1)
+	# A single solid expansion and ground pressure wave replace the sprite burst.
+	var flash := 1.0 - smoothstep(0.0,0.32,after)
+	if flash > 0.001: _piece(sphere, pale, target, Vector3.ONE * (0.3 + after * 3.0) * flash)
+	for i in 2:
+		_piece(ring, edge, ground + Vector3.UP * 0.04 * i, Vector3.ONE * (0.45 + after * (1.4 + i * 0.3)) * fade)
 
-# At most twelve additional pieces. The existing 2D storyboard still owns the
-# main shape and timing; these secondary motions give it a place in the arena.
-func _field_choreography(charge: float,flight: float,after: float,alpha: float,facing: Basis,side: Vector3) -> void:
-	if profile.is_empty():return # Bloom Doom has its own approved field renderer.
-	var fade := 1-clampf(after,0,1)
-	var reach := field_radius*.84
-	match style:
-		"black_hole", "dna_nova", "sun_nova", "ocean_orb", "fire_orb":
-			for i in 12:
-				var a := i*TAU/12+elapsed*.4
-				var base := field_center+Vector3(cos(a)*reach,.12,sin(a)*reach)
-				var draw_in := clampf(charge*.35+flight*.8,0,1)
-				var focus := fixed_source.lerp(aim,flight)+Vector3.UP*(1.2 if style=="sun_nova" else .15)
-				var p := base.lerp(focus,draw_in)+Vector3.UP*sin(draw_in*PI)*1.1
-				var art_name := "water" if style=="ocean_orb" else "fire" if style in ["fire_orb","sun_nova"] else "smoke"
-				_source_sprite(p,.7+flight*.45,art_name,fmod(elapsed+i*.1,1),alpha*.45,facing,a)
-		"water_vortex", "acid_column":
-			for i in 12:
-				var a := i*TAU/12+elapsed*1.5
-				var q := fmod(elapsed*.35+i/12.,1.)
-				var radius := lerpf(reach,.65,q)
-				var center := field_center.lerp(fixed_ground,q)
-				var p := center+Vector3(cos(a)*radius,.12+q*q*1.6,sin(a)*radius)
-				_source_sprite(p,1.25,"water" if style=="water_vortex" else "smoke",q,alpha*sin(q*PI)*.6,facing,a)
-		"lightning", "rainbow_lightning", "electric_surf", "electric_dive":
-			if elapsed<launch:return
-			for i in 6:
-				var a := i*TAU/6
-				var end := field_center+Vector3(cos(a)*reach,.06,sin(a)*reach)
-				var mid := fixed_ground.lerp(end,.55)+side*sin(elapsed*26+i)*.3
-				var mat: Material = tone_materials[i] if style=="rainbow_lightning" else edge
-				_line(fixed_ground,mid,.022*alpha,mat)
-				_line(mid,fixed_ground.lerp(end,clampf(flight*1.8,0,1)),.014*alpha,mat)
-		"sun_column", "moon_column", "boulder", "stone_rain", "arrow_rain":
-			if elapsed<launch:return
-			for i in 12:
-				var a := i*2.4
-				var radius := reach*sqrt((i+.5)/12.)
-				var land := field_center+Vector3(cos(a)*radius,.05,sin(a)*radius)
-				var q := clampf(flight*1.45-i*.025,0,1)
-				var p := land+Vector3(.65,3.8,0)*(1-q)
-				if style in ["boulder","stone_rain"]:_piece(prism,surface,p,Vector3(.18,.5,.18)*alpha,Basis(Vector3.UP,a))
-				elif style=="arrow_rain":_line(p+Vector3(.2,.7,0),p,.021*alpha,edge)
-				else:_source_sprite(p,.85,"fire" if style=="sun_column" else "spark",q,alpha*.4,facing,a)
-		"chains", "cocoon", "shadow_shroud", "prism", "ice_prison":
-			if elapsed<launch:return
-			for i in 6:
-				var a := i*TAU/6
-				var base := field_center+Vector3(cos(a)*reach,.03,sin(a)*reach)
-				var q := clampf(flight*1.6,0,1)
-				var tip := base.lerp(fixed_ground,q)+Vector3.UP*sin(q*PI)*.4
-				_line(base,tip,.018*alpha,edge)
-				_source_sprite(tip,.75,"smoke" if style in ["chains","shadow_shroud"] else "spark",q,alpha*.5,facing,a)
-		"sound_rings":
-			if elapsed<launch:return
-			for i in 6:
-				var q := clampf(flight-i*.1,0,1)
-				_piece(ring,field_edge,field_center+Vector3.UP*.08*i,Vector3.ONE*reach*q*alpha)
-				var a := i*TAU/6+elapsed
-				var p := field_center+Vector3(cos(a)*reach*q,.4,sin(a)*reach*q)
-				_piece(star,pale,p,Vector3.ONE*.2*alpha,facing*Basis(Vector3.FORWARD,a))
-		"evolution":
-			for i in 8:
-				var a := i*TAU/8
-				var base := field_center+Vector3(cos(a)*reach,.15,sin(a)*reach)
-				var q := clampf(charge*.4+flight*.7,0,1)
-				var p := base.lerp(fixed_center,q)+Vector3.UP*sin(q*PI)*1.4
-				_piece(star,tone_materials[i],p,Vector3.ONE*.3*alpha,facing*Basis(Vector3.FORWARD,elapsed+i))
-		"fissure":
-			if elapsed<launch:return
-			for i in 6:
-				var base := fixed_actor_ground.lerp(fixed_ground,(i+1)/7.)
-				var end := base+side*(1. if i%2==0 else -1.)*reach*.65*clampf(flight*1.6-i*.1,0,1)
-				_line(base,end,.07*alpha,dark)
-				_line(base+Vector3.UP*.025,end+Vector3.UP*.025,.018*alpha,pale)
-		_:
-			# A corridor under physical Z moves, rather than another target halo.
-			# Separate fixed anchors keep it still while the native actor moves.
-			if elapsed<launch:return
-			for i in 6:
-				var q := clampf(flight-i*.055,0,1)
-				var base := fixed_actor_ground.lerp(fixed_ground,q)
-				var spread := .45+sin(q*PI)*reach*.3
-				for sign_value in [-1.,1.]:
-					var p: Vector3 = base+side*sign_value*spread
-					if style in ["dragon","moonsault"]:_source_sprite(p+Vector3.UP*.25,.85,"fire",q,alpha*fade*.55,facing,i)
-					elif style=="fairy_comet":_piece(star,tone_materials[i],p+Vector3.UP*.45,Vector3.ONE*.23*alpha*fade,facing*Basis(Vector3.FORWARD,elapsed+i))
-					else:_line(p,p+(fixed_ground-fixed_actor_ground).normalized()*.55,.022*alpha*fade,edge)
+func _field_choreography(charge: float, flight: float, after: float, alpha: float, _facing: Basis, _side: Vector3) -> void:
+	# The atmosphere supplies arena-scale colour. Keep geometry concentrated on
+	# the main form instead of scattering decorative sprite clouds across it.
+	if elapsed < launch:
+		_piece(ring, field_edge, fixed_actor_ground, Vector3.ONE * (0.7 + charge * 0.45) * alpha)
+	elif style in ["water_vortex", "acid_column", "sun_column", "moon_column", "black_hole"]:
+		_piece(ring, field_edge, fixed_ground, Vector3.ONE * (0.8 + flight * 0.7) * alpha * (1.0 - clampf(after,0,1)))
