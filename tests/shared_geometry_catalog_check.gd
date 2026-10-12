@@ -10,6 +10,7 @@ class Sink extends Logger:
 		if kind != Logger.ERROR_TYPE_WARNING: tree.call_deferred("quit", 2)
 var sink := Sink.new()
 func _init() -> void:
+	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST", "0")
 	sink.tree = self; OS.add_logger(sink)
 	_run.call_deferred()
 func _run() -> void:
@@ -70,7 +71,7 @@ func _run() -> void:
 	assert(Pilot.release().is_empty())
 	OS.set_environment("POKEAETHER_SHARED_MODEL_QUALIFIED_TEST", "1")
 	assert(Pilot.data_path() == Pilot.QUALIFIED_PATH and Pilot.catalog().assets.size() == 1200)
-	print("SHARED_GEOMETRY_CATALOG_OK appearances=", checked, " corrections=", corrections, " legacy_collection=true default_disabled=true")
+	print("SHARED_GEOMETRY_CATALOG_OK appearances=", checked, " corrections=", corrections, " legacy_collection=true explicit_legacy_override=true")
 	quit()
 
 func _cold_lookup(asset: Dictionary) -> bool:

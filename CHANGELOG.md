@@ -20,6 +20,8 @@
 
 - Keep a failed or stalled 3D Team Preview from disabling 3D for supported battle leads, resolve unsupported previews immediately, and safely release preview models between render frames.
 
+- Use the current published 3D collection in local desktop editor battles, avoiding removed model downloads during Team Preview; include the Pokémon and HTTP status in download failures.
+
 - Reframe the 3D battle overview toward the Pokémon with a higher viewing angle and HUD-aware zoom limits, keeping resting models above the battle controls while preserving attack timing, cinematic shots and 2.5D framing.
 
 - Move Iris inside the Pewter Museum beside the blue barriers: enter the lobby for free and pay 100 Pokédollars to access the exhibits for that visit.

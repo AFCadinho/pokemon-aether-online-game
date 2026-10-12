@@ -11,6 +11,16 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	# Default editor play uses the current published pin without an opt-in.
+	assert(Pilot.production_enabled() and LauncherPilot.production_enabled())
+	var service := Service.new()
+	assert(service._selected_release() == Pin.data)
+	for mode in ["GEOMETRY_TEST", "QUALIFIED_TEST", "CATALOG_TEST", "PILOT"]:
+		OS.set_environment("POKEAETHER_SHARED_MODEL_" + mode, "1")
+		assert(not Pilot.production_enabled() and not LauncherPilot.production_enabled(), "Explicit diagnostics must retain their catalog selection")
+		OS.unset_environment("POKEAETHER_SHARED_MODEL_" + mode)
+	assert(Pilot.production_enabled())
+	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST", "0")
 	assert(not Pilot.production_enabled())
 	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST", "1")
 	assert(Pilot.production_enabled() and LauncherPilot.production_enabled())
@@ -25,7 +35,6 @@ func _run() -> void:
 	assert(full.assets.size() == 1200 and Index.validate(full).is_empty())
 	assert(Pilot.expand_index(compact) == full)
 	assert(Pilot.release().requiredAssetIds.size() == 1200)
-	var service := Service.new()
 	assert(service._selected_release() == Pin.data)
 	var descriptor := {"schema": 1, "kind": Release.DESCRIPTOR_KIND, "revision": Pin.data.revision,
 		"url": "https://updates.pokeaether.com/" + str(Pin.data.index.object_key),
