@@ -8786,7 +8786,8 @@ func _play_lead_summon(ball_item_id: String, cry_species: String, sprite_box: Co
 		var actor_ident := "p1" if side == "back" else "p2"
 		if desktop_stage.handles(actor_ident):
 			initial_lead_summon_pending[actor_index] = false
-			await desktop_stage.send_out(actor_ident, ball_item_id, cry_species, true)
+			if await desktop_stage.send_out(actor_ident, ball_item_id, cry_species, true):
+				_restore_native_summon_target_visibility(sprite_box)
 			return
 	initial_lead_summon_pending[actor_index] = false
 	if sprite_box == null or pokeball_summon_animation_player == null:
@@ -8872,7 +8873,8 @@ func _play_switch_release(ball_item_id: String, cry_species: String, sprite_box:
 		animation_router.model_presenter.set_actor_shown(0 if side == "back" else 1, false)
 		await animation_router.model_presenter.await_prepared()
 		if animation_router.model_presenter.handles(actor_ident):
-			await animation_router.model_presenter.send_out(actor_ident, ball_item_id, cry_species)
+			if await animation_router.model_presenter.send_out(actor_ident, ball_item_id, cry_species):
+				_restore_native_summon_target_visibility(sprite_box)
 			return
 	if sprite_box == null or pokeball_summon_animation_player == null:
 		return
@@ -9050,6 +9052,18 @@ func _prepare_summon_target_hidden(sprite_box: Control) -> void:
 	sprite_box.visible = false
 	var color: Color = sprite_box.modulate
 	color.a = 0.0
+	sprite_box.modulate = color
+
+func _restore_native_summon_target_visibility(sprite_box: Control) -> void:
+	# Team Preview and 2D recalls hide the container, including its stat/effect
+	# badges. Restore it after a completed 3D summon; model ownership keeps the
+	# fallback sprites themselves transparent. Cancelled summons stay hidden.
+	if not is_instance_valid(sprite_box):
+		return
+	_stop_summon_target_visibility_tween()
+	sprite_box.visible = true
+	var color: Color = sprite_box.modulate
+	color.a = 1.0
 	sprite_box.modulate = color
 
 func _reset_summon_target_visibility(sprite_box: Control) -> void:
