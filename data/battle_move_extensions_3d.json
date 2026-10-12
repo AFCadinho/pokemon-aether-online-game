@@ -9813,7 +9813,7 @@
       "family": "waves",
       "variant": "pulse",
       "type": "dark",
-      "color": "8868b3",
+      "color": "b51e52",
       "contact": false,
       "target": "target",
       "gameplay_target": "allAdjacentFoes",
@@ -9839,11 +9839,12 @@
           "end_fraction": 0.66
         }
       ],
+      "camera": "wave",
       "presentation_review": "implemented-pending-player-review",
       "lighting": {
-        "energy": 0.0,
-        "mix": 0.0,
-        "brightness": 0.96
+        "energy": 1.65,
+        "mix": 0.58,
+        "brightness": 0.78
       },
       "source_reference": {
         "directory": "ew0822",

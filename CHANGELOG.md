@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Fiery Wrath an advancing wall of animated dark flames, crimson arena lighting and dedicated framing. Strengthen Supersonic Skystrike with a higher ascent, steep dive, continuous wind trail, ascent/dive camera cuts and expanding impact waves, preserving native timing and miss/block behavior.
+
 - Remove bright white reflections from the 3D stadium floor at every camera angle while keeping its purple markings and animated accent lighting.
 
 - Keep the lower 3D battle controls readable over bright arena reflections with a soft screen-fixed navy backdrop that scales with the UI, plus a more opaque action message panel.

@@ -2,6 +2,7 @@ extends RefCounted
 ## Z-only composition: captured attack anchors, native clock, no gameplay state.
 const DATA = preload("res://data/battle_z_cinema_3d.json")
 const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
+const SkystrikePath = preload("res://scripts/battle/battle_ui/skystrike_path_3d.gd")
 
 static func supports(key: String) -> bool:
 	return DATA.data.moves.has(key)
@@ -44,6 +45,11 @@ static func shot(effect: Node, camera: Camera3D, context: Dictionary, seconds: f
 			elif profile.shot in ["orb", "dragon", "wave"]:
 				_box(points, source.lerp(target, 0.5) + Vector3.UP * 1.5, Vector3.ONE * radius)
 		direction = -forward * 0.25 + side + Vector3.UP * float(profile.elevation)
+		if effect.key == "supersonicskystrike":
+			_box(points,context.actor_center + Vector3.UP*SkystrikePath.HEIGHT,Vector3.ONE*maxf(float(a.height)*0.65,1.8))
+			var flight := clampf((seconds-effect.launch)/maxf(effect.impact-effect.launch,0.01),0,1)
+			# Low three-quarter ascent, then a view down the diving trajectory.
+			direction = -forward*0.4+side+Vector3.UP*(0.16 if flight<0.55 else 0.85)
 	else:
 		_body(points, b)
 		var radius := 2.0 * scale_value
