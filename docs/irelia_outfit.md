@@ -9,8 +9,9 @@ headgear), and Floating Blades (`Irelia_Blades`, Back).
 Opening the box puts the six parts in the Bag. Activate each to unlock it in
 Character Customization. Standard tradeable wardrobe rules apply; bound boxes
 propagate binding to every component. Gender changes retain ownership and
-resolve each item to the corresponding model. No role restriction or Store
-offer is configured.
+resolve each item to the corresponding model. No role restriction applies.
+The Gift Store sells the box under Cosmetics → Outfits for 450 Gems, with a complete preview for either gender. Personal card
+credit costs 450 under the standard binding rules; loose parts are not sold.
 
 All 56 PNGs are byte-identical to Irelia revision 4; see
 `irelia_asset_hashes.json`. Revision 3 simplifies the overworld blades into broader, five-colour silhouettes

@@ -15,9 +15,11 @@ func _run() -> void:
 	assert(names.size()==901)
 	assert(Recipes.EXTENSIONS.data.moves.size()==707)
 	assert(not Effect.supports("unrecognized future move"))
+	var selected := OS.get_environment("POKEAETHER_TEST_MOVES").split(",",false)
 	var motifs := {}
 	var samples := 0
 	for move: String in Recipes.EXTENSIONS.data.moves:
+		if not selected.is_empty() and move not in selected: continue
 		var recipe: Dictionary = Recipes.get_recipe(move)
 		assert(not Recipes.DATA.data.moves.has(move) and move not in Effect.KEYS)
 		assert(recipe.presentation_review=="implemented-pending-player-review")
@@ -34,7 +36,7 @@ func _run() -> void:
 				assert(cue.at_seconds>=0 and cue.event.end_seconds<=plan.duration_seconds)
 				assert(FileAccess.file_exists(plan.sound_paths[cue.event.name]))
 			var effect: Node = stage.create_move_effect(move,actor,"" if recipe.target=="actor" else target,{"show_impact":bool(recipe.damaging)})
-			assert(is_instance_valid(effect) and effect.get_script()==Extended,move)
+			assert(is_instance_valid(effect) and effect.get_script()==(Stage.ElementalMoveEffect if move in Stage.ElementalMoveEffect.MOVE_KEYS else Extended),move)
 			if recipe.contact: assert(not stage.move_contacts[slot].is_empty(),move)
 			effect.cancel()
 			await get_tree().process_frame
@@ -44,7 +46,7 @@ func _run() -> void:
 				seconds=0
 				var sign_value := -1. if reverse else 1.
 				var points := {"source":Vector3(-2*sign_value,1,0),"target":Vector3(2*sign_value,1,0),"radius":.6,"actor_center":Vector3(-2*sign_value,1,0),"actor_ground":Vector3(-2*sign_value,.04,0),"target_ground":Vector3(2*sign_value,.04,0)}
-				var effect := Extended.new()
+				var effect: Node = Stage.ElementalMoveEffect.new() if move in Stage.ElementalMoveEffect.MOVE_KEYS else Extended.new()
 				stage.world.add_child(effect)
 				effect.start(move,{"frames":60.,"launch_frame":float(recipe.launch_fraction)*60.,"impact_frame":float(recipe.impact_fraction)*60.},{"show_impact":outcome=="hit" and recipe.damaging,"result":outcome},func():return seconds,func():return points,func():return true)
 				effect.set_process(false)
@@ -85,7 +87,7 @@ func _run() -> void:
 	router=null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("EXTENDED_MOVES_OK unique=",names.size()," extensions=707 motifs=",motifs.size()," samples=",samples," slots=4 directions=2 outcomes=3 native_audio=true")
+	print("EXTENDED_MOVES_OK unique=",names.size()," selected=",selected," extensions=707 motifs=",motifs.size()," samples=",samples," slots=4 directions=2 outcomes=3 native_audio=true")
 	get_tree().quit()
 
 func _presentation_checks() -> void:

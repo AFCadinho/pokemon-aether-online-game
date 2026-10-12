@@ -4,6 +4,12 @@
 
 - Make 3D switches flow directly from recall into summon: prepare the incoming public model before recalling, close the ball during absorption and skip repeated entry warmup. Keep doubles replacements hidden until their summon releases them.
 
+- Identify Guild room templates by their position from the Main Hall: Room 1 on the right and Room 2 on the left, replacing confusing interior door-side labels.
+
+- Offer the Irelia Outfit Box for both genders in the Gift Store for 450 Gems, with six fixed-colour parts and the standard 450-credit bound alternative.
+
+- Refine Dark Pulse, Surf, Blizzard, Earth Power and Overheat with continuous 3D energy fronts, breaking water, rolling snow, ground ruptures and billowing fire. Add individually coloured atmosphere and framing while preserving native speed, sound and hit/miss/block handling.
+
 - Make Guild room designs easier to navigate with explained empty states, selection-specific preview/apply/donation actions, a More actions menu, separate save/rename dialogs and a scrollable management page on smaller screens. Show only unlocked templates or matching items in your Bag.
 
 - Refine the male Irelia rear hairstyle with cleaner locks and a shorter nape, and cover rear scalp gaps for both models during walking, fishing and riding.
@@ -106,7 +112,7 @@
 
 - Give Hyper Beam a continuous energy shaft, Pyro Ball a solid rotating fireball and tapered flame, Hurricane a flowing wind funnel, and Draco Meteor larger rocky cores with clearer tails and heavier impacts. Beam attacks now leave the mouth or cannon narrowly and widen toward their target; preserve move timing and cinematic cameras.
 
-- Add named Guild room designs, manager donation of permanent room-specific templates, and zoomable Gift Store previews. Guild Café (Room 1, door left) and Grand Lounge (Room 2, door right) cost 350 Gems each. Correct the room visual mapping without mirroring the designs.
+- Add named Guild room designs, manager donation of permanent room-specific templates, and zoomable Gift Store previews. Guild Café (Room 1, right of the Main Hall) and Grand Lounge (Room 2, left of the Main Hall) cost 350 Gems each. Correct the room visual mapping without mirroring the designs.
 
 - Add cinematic 3D charge and attack camera shots for Moonblast, Hyper Beam, Solar Beam, Focus Blast, Shadow Ball, Flash Cannon, Electro Shot and Pyro Ball, plus wide field shots for Blizzard, Hurricane and Tera Starstorm. Shots follow existing move timing, respect camera motion settings and restore the player's view.
 

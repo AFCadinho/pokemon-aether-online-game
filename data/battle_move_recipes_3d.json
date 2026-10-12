@@ -2229,7 +2229,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "disarmingvoice": {
       "name": "Disarming Voice",
@@ -2604,7 +2604,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "battlefield-staging-user-approved",
+      "presentation_review": "implemented-pending-player-review",
       "battlefield_staging": "arena-sweep"
     },
     "earthpower": {
@@ -2634,7 +2634,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "current-presentation-user-approved",
+      "presentation_review": "implemented-pending-player-review",
       "battlefield_staging": "branching-vents"
     },
     "earthquake": {
