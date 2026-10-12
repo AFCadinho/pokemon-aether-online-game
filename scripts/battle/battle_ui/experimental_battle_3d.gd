@@ -1256,7 +1256,7 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 		func(): return active and _move_visual(actor) == source and _move_visual(target) == destination)
 	if move_camera.supports(MoveEffect.move_key(move)) and not effect.done and is_instance_valid(camera):
 		move_camera.begin(effect, actor, target)
-		if MoveEffect.move_key(move) == "dracometeor":
+		if move_atmosphere.supports(MoveEffect.move_key(move)):
 			move_atmosphere.begin(effect)
 		effect.finished.connect(func():
 			move_atmosphere.clear(effect)
