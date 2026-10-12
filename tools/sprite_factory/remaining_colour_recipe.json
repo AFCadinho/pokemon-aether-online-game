@@ -1,0 +1,76 @@
+{
+  "runtime_approved": false,
+  "policy": "local-mask-palette-visual-reconstruction-v1",
+  "evidence": "Existing front/shiny_front sprite sheets and pokemon_home_shiny images. Reference rendering includes lighting, so these are authored sRGB palette proposals, not recovered original colours. Burmy/Wormadam change body_a layer 1 only; Cherrim changes petals, face and bulbs, preserving eyes and green leaves.",
+  "families": {
+    "pm0412": {
+      "species": [
+        "burmy-sandy",
+        "burmy-trash"
+      ],
+      "source_sha256": "fdd59caa838866b909a066f66e82ac8f9ee51cec4056a75ef3bf22ae3144c292",
+      "shiny_srgb": {
+        "body_a": {
+          "BaseColorLayer1": [
+            81,
+            118,
+            142
+          ]
+        }
+      }
+    },
+    "pm0413": {
+      "species": [
+        "wormadam-sandy",
+        "wormadam-trash"
+      ],
+      "source_sha256": "5729ba9d76a38f5136b8d6538342e07ebbfb8648b94879a65cf83e17cd1f1a05",
+      "shiny_srgb": {
+        "body_a": {
+          "BaseColorLayer1": [
+            81,
+            118,
+            142
+          ]
+        }
+      }
+    },
+    "pm0421": {
+      "species": [
+        "cherrim-sunshine"
+      ],
+      "source_sha256": "bd921c9095747c6a56aba5a69dfb352e01a3ef9cd95f20159b609902a54da726",
+      "shiny_srgb": {
+        "body_a": {
+          "BaseColorLayer1": [
+            194,
+            142,
+            159
+          ],
+          "BaseColorLayer2": [
+            183,
+            146,
+            63
+          ],
+          "BaseColorLayer3": [
+            178,
+            85,
+            118
+          ]
+        },
+        "body_b": {
+          "BaseColorLayer1": [
+            194,
+            142,
+            159
+          ],
+          "BaseColorLayer2": [
+            183,
+            146,
+            63
+          ]
+        }
+      }
+    }
+  }
+}
