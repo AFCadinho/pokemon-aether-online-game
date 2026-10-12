@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Simplify Encounter Guard unlocks to one click on the symbol matching an example, with retries while the original minute continues counting down.
+
 - Restore 56 alternate-form 3D model pairs for the next model release: Unown letters and punctuation, Silvally types, Squawkabilly colours, Pumpkaboo/Gourgeist sizes and Sawsbuck seasons. Preserve distinct battle sizes and retain explicit holds for incomplete source models.
 
 - Offer to activate a spare Encounter Guard after its 3,000 encounters or first protected rare encounter, once battle and other interactions have finished.
