@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add distinct transparent pixel-art inventory icons for Emberite, Voltite, Glacite, Astralite and Aetherium Ore.
+
 - Add the grantable Flying Nimbus land mount with the approved golden cloud, seated rider, gentle hover and a short moving cloud trail.
 
 - Show readable species nameplates above the opposing Pokémon during 3D Team Preview, following their arena positions and clearing them before lead summons.
