@@ -36,6 +36,10 @@ func _battle() -> Variant:
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	battle.set_script(load("res://tests/fixtures/trainer_3d_summon_probe.gd"))
 	root.add_child(battle)
+	var offline_loader := load("res://tests/fixtures/offline_preview_sprite_loader.gd")
+	for layer in [battle.player_team_preview_layer, battle.enemy_team_preview_layer]:
+		layer.sprite_loader.free()
+		layer.sprite_loader = offline_loader.new()
 	var stage: Node = battle.animation_router.model_presenter
 	stage.loaded_path = ""
 	stage.catalog_problem = ""

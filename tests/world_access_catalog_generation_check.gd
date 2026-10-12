@@ -161,8 +161,12 @@ func _init() -> void:
 		"Pewter Gym is registered as an open scene-backed area"
 	)
 	_expect(
-		bool((areas.get("kanto_pewter_city_museum", {}) as Dictionary).get("accessOnly", false)),
-		"Future Pewter Museum remains an open access-only area"
+		not bool((areas.get("kanto_pewter_city_museum", {}) as Dictionary).get("accessOnly", false))
+			and (areas.get("kanto_pewter_city_museum", {}) as Dictionary).get("scenePath", "")
+			== "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn"
+			and transitions.has("kanto_pewter_city__to_museum")
+			and transitions.has("kanto_pewter_city_museum__to_pewter_city"),
+		"Pewter Museum is a scene-backed area with entrance and exit transitions"
 	)
 	_expect(
 		not bool((areas.get("kanto_pewter_city_house_1", {}) as Dictionary).get("accessOnly", false))

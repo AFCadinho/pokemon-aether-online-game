@@ -2121,18 +2121,27 @@
 			"weatherProfile": "disabled"
 		},
 		"kanto_pewter_city_museum": {
-			"accessOnly": true,
 			"areaType": "interior",
 			"defaultMode": "open",
-			"label": "Pewter City Museum",
+			"label": "Pewter Museum of Science",
 			"locationGroupId": "kanto_pewter_city",
 			"locationGroupLabel": "Pewter City",
 			"regionName": "Kanto",
 			"sceneAliases": [],
-			"scenePath": "",
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn",
 			"spawnPoints": {
-
-			}
+				"from_pewter_city": {
+					"facingDirection": "up",
+					"label": "Pewter City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPewterCity",
+					"tile": {
+						"x": 13,
+						"y": 19
+					}
+				}
+			},
+			"weatherProfile": "disabled"
 		},
 		"kanto_pewter_city_pokemon_center": {
 			"areaType": "interior",
@@ -7005,6 +7014,20 @@
 			"destinationAreaId": "kanto_pewter_city_house_2",
 			"sourceMapId": "kanto_pewter_city"
 		},
+		"kanto_pewter_city__to_museum": {
+			"destination": {
+				"mapId": "kanto_pewter_city_museum",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn",
+				"position": {
+					"x": 432.0,
+					"y": 624.0
+				},
+				"spawnMarker": "FromPewterCity"
+			},
+			"destinationAreaId": "kanto_pewter_city_museum",
+			"sourceMapId": "kanto_pewter_city"
+		},
 		"kanto_pewter_city__to_pokecenter": {
 			"destination": {
 				"mapId": "kanto_pewter_city_pokemon_center",
@@ -7100,6 +7123,22 @@
 			},
 			"destinationAreaId": "kanto_pewter_city",
 			"sourceMapId": "kanto_pewter_city_house_2"
+		},
+		"kanto_pewter_city_museum__to_pewter_city": {
+			"destination": {
+				"mapId": "kanto_pewter_city",
+				"mapSceneAliases": [
+					"uid://b63qp0afy4rpd"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+				"position": {
+					"x": 1392.0,
+					"y": 432.0
+				},
+				"spawnMarker": "FromMuseum"
+			},
+			"destinationAreaId": "kanto_pewter_city",
+			"sourceMapId": "kanto_pewter_city_museum"
 		},
 		"kanto_pewter_city_pokemon_center__to_outside": {
 			"destination": {

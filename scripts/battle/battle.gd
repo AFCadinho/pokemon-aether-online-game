@@ -1215,6 +1215,7 @@ func _on_battle_background_video_finished() -> void:
 		battle_background_video.play()
 
 func _setup_side_condition_presentation() -> void:
+	side_condition_presentation.model_presenter = animation_router.model_presenter
 	side_condition_presentation.setup(
 		player_battle_platform,
 		enemy_battle_platform,
@@ -1225,6 +1226,8 @@ func _setup_side_condition_presentation() -> void:
 func _on_settings_changed() -> void:
 	_update_battle_status_panels()
 	_update_active_sprites("settings_sprite_refresh")
+	if team_preview_lead_selection_active:
+		_show_team_preview_layers()
 
 func _process(delta: float) -> void:
 	_sync_battle_background_video()
@@ -9709,10 +9712,15 @@ func _show_team_preview_layers() -> void:
 	player_hud_panel.visible = false
 	enemy_hud_panel.visible = false
 
+	var upgrade_legacy_sprites := SettingsManager.battle_presentation_mode != "3d" or not is_instance_valid(animation_router.model_presenter)
 	if player_team_preview_layer.has_method("show_team"):
-		player_team_preview_layer.call("show_team", _get_display_team_data("p1"), "back")
+		player_team_preview_layer.call("show_team", _get_display_team_data("p1"), "back", upgrade_legacy_sprites)
 	if enemy_team_preview_layer.has_method("show_team"):
-		enemy_team_preview_layer.call("show_team", _get_display_team_data("p2"), "front")
+		enemy_team_preview_layer.call("show_team", _get_display_team_data("p2"), "front", upgrade_legacy_sprites)
+	if is_instance_valid(animation_router.model_presenter):
+		animation_router.model_presenter.set_team_preview(
+			_get_display_team_data("p1"), _get_display_team_data("p2"),
+			[player_team_preview_layer, enemy_team_preview_layer])
 
 
 func _hide_team_preview_layers() -> void:
@@ -9740,6 +9748,8 @@ func _prepare_team_preview_lead_summon_transition() -> void:
 	_clear_team_preview_visuals()
 
 func _clear_team_preview_visuals() -> void:
+	if is_instance_valid(animation_router.model_presenter):
+		animation_router.model_presenter.clear_team_preview()
 	if player_team_preview_layer.has_method("clear"):
 		player_team_preview_layer.call("clear")
 	if enemy_team_preview_layer.has_method("clear"):

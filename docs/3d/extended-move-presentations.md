@@ -9,7 +9,7 @@ add moves to learnsets or enable unsupported battle mechanics.
 The original 194 retain their renderer/data ownership and approval record. All
 707 additions are marked `implemented-pending-player-review`. Technical coverage
 and smoke captures do not constitute individual player approval or certification.
-See [the complete per-move inventory](extended-move-coverage.csv).
+See [the complete per-move inventory](extended-move-coverage.tsv).
 
 ## Construction and integration
 
