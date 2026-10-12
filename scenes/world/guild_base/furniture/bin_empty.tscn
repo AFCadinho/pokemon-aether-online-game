@@ -1,8 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dir55weslkvvo"]
 
-[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_5db3d"]
-[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_wjbo3"]
-[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_wjbo3"]
+[ext_resource type="Script" uid="uid://chrybehrbnphf" path="res://scripts/world/guild_base_furniture.gd" id="1_5db3d"]
+[ext_resource type="TileSet" uid="uid://7pvqgefkjnhs" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_wjbo3"]
+[ext_resource type="TileSet" uid="uid://r1bgefyliw8y" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_wjbo3"]
 
 [node name="BinEmpty" type="Node2D" unique_id=1080026701]
 texture_filter = 1

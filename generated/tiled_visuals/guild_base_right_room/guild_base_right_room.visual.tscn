@@ -1,6 +1,6 @@
-[gd_scene format=4]
+[gd_scene format=4 uid="uid://ueyq0bps3p8l"]
 
-[ext_resource type="TileSet" path="res://generated/tiled_visuals/guild_base_right_room/guild_base_right_room.visual.tileset.tres" id="1_un2e7"]
+[ext_resource type="TileSet" uid="uid://cpu7ki31oymhx" path="res://generated/tiled_visuals/guild_base_right_room/guild_base_right_room.visual.tileset.tres" id="1_un2e7"]
 
 [node name="GuildBaseRoom1Empty" type="Node2D" unique_id=1701500996]
 metadata/pao_generated_visual = true
