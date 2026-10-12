@@ -6,6 +6,9 @@ signal charge_changed
 const ENDPOINT := "/game/encounter-guard"
 const LOGIN_SCENE := "res://scenes/interface/login_screen.tscn"
 
+# Kept in the autoload so switching battle/world overlays does not lose the offer.
+var renewal_pending := false
+var renewal_revision := 0
 var guard: Dictionary = {}
 var session_token := ""
 var polling := false
@@ -70,6 +73,7 @@ func _process(delta: float) -> void:
 	if session_token != AuthService.session_token:
 		session_token = AuthService.session_token
 		guard = {}
+		_reset_renewal()
 		_hide_lock()
 		charge_changed.emit()
 		elapsed = 2.0
@@ -110,6 +114,7 @@ func apply_state(value: Dictionary) -> void:
 	if session_token != AuthService.session_token:
 		session_token = AuthService.session_token
 		guard = {}
+		_reset_renewal()
 		_hide_lock()
 	if float(value.get("serverTime", 0)) < float(guard.get("serverTime", 0)):
 		return
@@ -118,6 +123,15 @@ func apply_state(value: Dictionary) -> void:
 		# its battle ID, so a missed realtime logout cannot resume this battle.
 		_logout()
 		return
+	var was_active := bool(guard.get("active", false)) and int(guard.get("remaining", 0)) > 0
+	var is_active := bool(value.get("active", false)) and int(value.get("remaining", 0)) > 0
+	if is_active and not was_active:
+		_reset_renewal()
+	elif not is_active and not bool(value.get("expired", false)) and (
+		was_active or (bool(value.get("locked", false)) and not bool(guard.get("locked", false)))
+	):
+		renewal_revision += 1
+		renewal_pending = true
 	guard = value.duplicate(true)
 	charge_changed.emit()
 	if bool(guard.get("expired", false)):
@@ -128,6 +142,16 @@ func apply_state(value: Dictionary) -> void:
 		_show_partner_wait()
 	else:
 		_hide_lock()
+
+
+func dismiss_renewal(revision: int) -> void:
+	if revision == renewal_revision:
+		renewal_pending = false
+
+
+func _reset_renewal() -> void:
+	renewal_revision += 1
+	renewal_pending = false
 
 
 func _show_lock() -> void:
@@ -220,6 +244,7 @@ func _hide_lock() -> void:
 
 func _logout() -> void:
 	guard = {}
+	_reset_renewal()
 	AuthService.set_pending_login_notice(LocalizationManager.text("ui.encounter_guard.expired"))
 	AuthService.clear_session()
 	charge_changed.emit()

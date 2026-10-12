@@ -1,4 +1,8 @@
 {
+  "ui.encounter_guard.renew_title": "Encounter Guard expired",
+  "ui.encounter_guard.renew_message": "Your Encounter Guard has been used up. Activate another for up to 3,000 wild encounters, until your first Ultra Rare, Legendary or Shiny?",
+  "ui.encounter_guard.renew_confirm": "Activate",
+  "ui.encounter_guard.renew_later": "Later",
   "ui.buff.encounter_guard.encounters": "{count} encounters",
   "ui.encounter_guard.partner": "Waiting for your partner to unlock Encounter Guard…",
   "ui.encounter_guard.prompt": "Click these three symbols in order:",

@@ -94,6 +94,7 @@ func _run() -> void:
 	service.apply_state(locked)
 	service.apply_state({"locked": false, "battleId": "", "serverTime": now + 8})
 	_check(service.logged_out and not paused, "server timeout cleanup logs out even when the realtime notice was missed")
+	_check(not service.renewal_pending, "timeout logout discards the renewal offer")
 	service.queue_free()
 	await process_frame
 	auth.session_token = ""

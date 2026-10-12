@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Offer to activate a spare Encounter Guard after its 3,000 encounters or first protected rare encounter, once battle and other interactions have finished.
+
 - Compact personal boost tooltips to one line per effect with its remaining duration or encounter count.
 
 - Display Encounter Guard charge in the personal boosts tray, with a compact remaining count and descriptive tooltip, removing the overlapping trainer-header label.
