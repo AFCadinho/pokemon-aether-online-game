@@ -233,15 +233,15 @@ func _draw_cannon(to: Vector3, travel: float, after: float, facing: Basis) -> vo
 			_source_sprite(origin,charge*0.7*emission_scale,"flash_muzzle",0,charge*0.75,facing,elapsed*4)
 		elif emission_end >= 0 or after<0.65:
 			var tip := origin.lerp(to,clampf(travel,0,1))
-			_line(origin,tip,0.095*emission_scale*fade,surface_material)
-			_line(origin,tip,0.025*emission_scale*fade,core)
-			_source_sprite(origin,0.65*emission_scale,"flash_muzzle",0,fade,facing,elapsed*4)
+			_tapered_beam(origin,tip,0.095*emission_scale*fade,surface_material,origin.distance_to(to))
+			_tapered_beam(origin,tip,0.025*emission_scale*fade,core,origin.distance_to(to))
+			_source_sprite(origin,0.22*emission_scale,"flash_muzzle",0,fade,facing,elapsed*4)
 			var direction := (to-origin).normalized()
 			var side := direction.cross(Vector3.UP if absf(direction.y)<0.95 else Vector3.RIGHT).normalized()
 			var orientation := Basis(side,direction,side.cross(direction))
 			for i in 4:
 				var t := fmod(maxf(travel,0)+i*0.25,1)*clampf(travel,0,1)
-				_piece(ring,surface_material,origin.lerp(to,t),Vector3.ONE*0.15*emission_scale*fade,orientation)
+				_piece(ring,surface_material,origin.lerp(to,t),Vector3.ONE*0.15*emission_scale*fade*_beam_radius_fraction(origin.distance_to(to)*t,origin.distance_to(to)),orientation)
 
 func _draw_pulse(from: Vector3, to: Vector3, travel: float, facing: Basis, path_basis: Basis) -> void:
 	if travel<0 or travel>=1: return

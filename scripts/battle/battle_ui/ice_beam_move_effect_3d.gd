@@ -27,17 +27,18 @@ func _draw_source_move(_from: Vector3, to: Vector3, right: Vector3, up: Vector3)
 	for origin: Vector3 in emission_sources:
 		if travel < 0 or elapsed >= emission_end: continue
 		var tip := origin.lerp(to, clampf(travel, 0, 1))
-		_line(origin, tip, 0.105 * emission_scale * fade, ice_material)
-		_line(origin, tip, 0.024 * emission_scale * fade, core)
-		_source_sprite(origin, 0.45 * emission_scale, "ice_muzzle", fmod(elapsed * 4.0, 1.0), fade * 0.8, facing)
+		_tapered_beam(origin, tip, 0.105 * emission_scale * fade, ice_material, origin.distance_to(to))
+		_tapered_beam(origin, tip, 0.024 * emission_scale * fade, core, origin.distance_to(to))
+		_source_sprite(origin, 0.18 * emission_scale, "ice_muzzle", fmod(elapsed * 4.0, 1.0), fade * 0.8, facing)
 		var direction := (to - origin).normalized()
 		var side := direction.cross(Vector3.UP).normalized()
 		var vertical := side.cross(direction).normalized()
 		for i in 7:
 			var t := fmod(maxf(travel, 0) * 1.7 + float(i) / 7.0, 1.0) * clampf(travel, 0, 1)
 			var angle := float(i) * 2.399 + elapsed * 4.0
-			var point := origin.lerp(to, t) + (side * cos(angle) + vertical * sin(angle)) * 0.12 * emission_scale
-			_piece(shard_mesh, shard_material, point, Vector3(0.06, 0.18, 0.06) * emission_scale * fade,
+			var spread := _beam_radius_fraction(origin.distance_to(to) * t, origin.distance_to(to))
+			var point := origin.lerp(to, t) + (side * cos(angle) + vertical * sin(angle)) * 0.12 * emission_scale * spread
+			_piece(shard_mesh, shard_material, point, Vector3(0.06, 0.18, 0.06) * emission_scale * fade * spread,
 				Basis(Vector3(1, 1, 0).normalized(), angle))
 	if hit and after >= 0 and after < 1:
 		_source_sprite(to, 1.45 + after * 0.65, "ice_hit", after, 1.0 - after, facing)

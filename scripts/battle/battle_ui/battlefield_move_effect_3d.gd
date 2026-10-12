@@ -4,6 +4,9 @@ extends "res://scripts/battle/battle_ui/family_move_effect_3d.gd"
 const APPROVED_KEYS := ["earthquake", "blizzard", "bloomdoom"]
 const NEXT_KEYS := ["earthpower", "heatwave", "hurricane", "bleakwindstorm", "powdersnow", "freezedry", "explosion", "makeitrain", "terastarstorm"]
 const FIELD_KEYS := APPROVED_KEYS + NEXT_KEYS
+const VolumeForms = preload("res://scripts/battle/battle_ui/move_volume_forms_3d.gd")
+var hurricane_shell: ArrayMesh
+var hurricane_surface: ShaderMaterial
 # Existing packaged SV masks reused where a generic shock sheet is unsuitable.
 const SHARED_CAST_ART := {"earthpower":"powdersnow", "explosion":"powdersnow", "hurricane":"powdersnow", "bleakwindstorm":"powdersnow", "heatwave":"pyroball"}
 var field_center := Vector3.ZERO
@@ -41,6 +44,9 @@ func _geometry_scale() -> float:
 
 func _prepare() -> void:
 	super._prepare()
+	if key == "hurricane":
+		hurricane_shell = VolumeForms.swept_mesh(true)
+		hurricane_surface = VolumeForms.funnel_material()
 	if key in SHARED_CAST_ART:
 		art=art.duplicate()
 		var shared: Array=Art.MANIFEST.data.moves[SHARED_CAST_ART[key]].textures
@@ -292,7 +298,7 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 		"makeitrain":_coin_rain(travel,after,envelope,facing)
 		"terastarstorm":_star_storm(travel,after,envelope,facing)
 	impact_drawn=hit and after>=0
-	if impact_drawn:
+	if impact_drawn and key != "hurricane":
 		var fade := 1-clampf(after,0,1)
 		_source_sprite(aim,1.8+after,"1",clampf(after,0,1),fade*.7,facing)
 		for i in 6:
@@ -428,6 +434,19 @@ func _heat_wave(travel: float,after: float,alpha: float,facing: Basis) -> void:
 		_source_sprite(point,.10+(i%3)*.03,"heat_spark",phase,alpha*fade*sin(phase*PI)*.6,facing,i)
 
 func _wide_storm(travel: float,after: float,alpha: float,facing: Basis) -> void:
+	if key == "hurricane":
+		var phase := elapsed / duration
+		var grow := smoothstep(0, launch / duration, phase)
+		var fade := 1.0 - smoothstep(0.15, 1, after)
+		hurricane_surface.set_shader_parameter("seconds", phase * float(recipe.duration_seconds))
+		hurricane_surface.set_shader_parameter("opacity", alpha * fade)
+		# A broad, continuous funnel and its inner current share the same base.
+		# The floor sweep anchors its weight without detached smoke sprites.
+		_piece(hurricane_shell, hurricane_surface, field_center, Vector3(field_radius * 0.94, 3.4, field_radius * 0.94) * grow, Basis(Vector3.UP, phase * 4.0))
+		_piece(hurricane_shell, hurricane_surface, field_center, Vector3(field_radius * 0.65, 3.0, field_radius * 0.65) * grow, Basis(Vector3.UP, phase * 4.0 + PI))
+		_piece(wind_mesh, wind_material, field_center, Vector3(field_radius, 0.13, field_radius) * grow, Basis(Vector3.UP, phase * 11.0))
+		wind_material.set_shader_parameter("opacity", alpha * fade * 0.55)
+		return
 	var icy := key=="bleakwindstorm"
 	var grow := smoothstep(0,launch/maxf(duration,.01),elapsed/duration)
 	var fade := 1-smoothstep(.15,1,after)

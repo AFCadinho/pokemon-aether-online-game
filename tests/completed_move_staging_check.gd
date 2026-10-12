@@ -44,11 +44,14 @@ func _run() -> void:
 			# Travel rings face along the attack path, so a sound wave is not a
 			# flat ladder lying in that path. Camera orbit must not define it.
 			if not is_z and recipe.family in ["beams","waves"] and seconds>=a.launch and seconds<a.impact:
-				var direction: Vector3=(a.aim-a.origin).normalized()
+				var origins: Array = a.sound_launch_sources if a.motif in ["sound-call", "sound-tunnel"] and recipe.target != "actor" else [a.origin]
 				for j in a.cursor:
 					var node: MeshInstance3D=a.pieces[j]
 					if node.mesh==a.ring and node.basis.y.length()>.001:
-						assert(absf(node.basis.y.normalized().dot(direction))>.999,key+" wave plane faces travel direction")
+						var faces_emitter := false
+						for source: Vector3 in origins:
+							faces_emitter = faces_emitter or absf(node.basis.y.normalized().dot((a.aim-source).normalized())) > .999
+						assert(faces_emitter,key+" wave plane faces its emitter's travel direction")
 			var snapshot: Array=[]
 			for j in a.cursor:snapshot.append(a.pieces[j].transform)
 			a._process(0)

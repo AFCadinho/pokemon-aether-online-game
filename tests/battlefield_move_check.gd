@@ -37,11 +37,14 @@ func _run() -> void:
 				assert(effect.cursor<=90,move+" geometry budget")
 				var left := false
 				var right := false
-				for j in range(1,effect.cursor):
-					var position: Vector3=effect.pieces[j].position
-					assert(position.is_finite())
-					left=left or position.x< -1.5
-					right=right or position.x>1.5
+				for j in effect.cursor:
+					var piece: MeshInstance3D = effect.pieces[j]
+					assert(piece.transform.is_finite())
+					if piece.mesh == effect.floor_mesh: continue
+					# Continuous wind volumes span the field with geometry, not particle centers.
+					var bounds: AABB = piece.transform * piece.mesh.get_aabb()
+					left=left or bounds.position.x< -1.5
+					right=right or bounds.end.x>1.5
 				spans=spans or left and right
 				if effect.impact_drawn:assert(result=="hit" and seconds>=effect.impact)
 			assert(spans,move+" must use both halves of the arena, excluding the floor plane")
