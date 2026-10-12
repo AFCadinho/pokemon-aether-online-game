@@ -782,5 +782,5 @@ jobs:
             --retain-previous "${R2_RELEASE_RETENTION_PREVIOUS}" \
             --minimum-age-hours "${R2_RELEASE_MINIMUM_AGE_HOURS}" \
             --max-delete 200 \
-            --max-bundle-delete 1200 \
+            --max-bundle-delete 1250 \
             --apply
