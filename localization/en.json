@@ -3017,6 +3017,8 @@
   "ui.guild.emblem.clear": "Clear",
   "ui.guild.emblem.save": "Save Emblem",
   "ui.guild.emblem.color": "Colour {number}",
+  "ui.guild.invitation.accept": "Join Guild",
+  "ui.guild.invitation.benefits": "Guild chat · Shared bank · Play together",
   "ui.guild.invitation.title": "Guild Invitation",
   "ui.guild.invitation.subtitle": "A Guild would like you to join",
   "ui.guild.invitation.decline_tooltip": "Decline invitation",

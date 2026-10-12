@@ -2898,20 +2898,17 @@ func _guild_level_reward_text(reward: Dictionary) -> String:
 func _confirm_guild_leave(guild: Dictionary) -> void:
 	if is_leaving_guild or str(_dictionary(guild_home.get("membership", {})).get("role", "")) == "leader":
 		return
-	var dialog := ConfirmationDialog.new()
-	dialog.name = "GuildLeaveConfirmationDialog"
-	dialog.title = _t("ui.guild.leave.confirm_title")
-	dialog.dialog_text = _t("ui.guild.leave.confirm", {
-		"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild"))),
-	})
-	dialog.ok_button_text = _t("ui.guild.leave.action")
-	dialog.cancel_button_text = _t("common.cancel")
-	_apply_guild_confirmation_style(dialog, "danger")
+	var dialog := _build_guild_action_dialog(
+		"GuildLeaveConfirmationDialog",
+		_t("ui.guild.leave.confirm_title"),
+		_t("ui.guild.leave.confirm", {"guild": str(guild.get("name", _t("ui.guild.fallback.this_guild")))}),
+		_t("ui.guild.leave.action"),
+		GUILD_ICON,
+		"danger"
+	)
 	dialog.confirmed.connect(_leave_current_guild.bind(guild), CONNECT_ONE_SHOT)
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
-	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
-	add_child(dialog)
-	dialog.popup_centered(Vector2i(460, 190))
+	dialog.popup_centered(Vector2i(520, 220))
 
 
 func _leave_current_guild(guild: Dictionary) -> void:

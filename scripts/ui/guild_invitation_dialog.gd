@@ -4,8 +4,9 @@ class_name GuildInvitationDialog
 
 signal invitation_resolved(action: String, invitation: Dictionary)
 
-const DIALOG_SIZE := Vector2i(510, 300)
+const DIALOG_SIZE := Vector2i(560, 460)
 const GUILD_ICON: Texture2D = preload("res://assets/ui/guild.svg")
+const STAR_ICON: Texture2D = preload("res://assets/ui/icons/guild_member_rank.svg")
 const UI_BG := Color("#050912fa")
 const UI_SURFACE_RAISED := Color("#0b1a2bf7")
 const UI_BORDER := Color("#4f4935cc")
@@ -24,13 +25,14 @@ var heading_label: Label
 var status_label: Label
 var accept_button: Button
 var decline_button: Button
+var emblem_icon: TextureRect
 
 
 func setup() -> void:
 	hide()
 	title = _t("ui.guild.invitation.title")
-	min_size = DIALOG_SIZE
-	max_size = DIALOG_SIZE
+	min_size = Vector2i(280, 260)
+	wrap_controls = false
 	unresizable = true
 	borderless = true
 
@@ -81,12 +83,15 @@ func setup() -> void:
 	_set_localized_property(window_title, "text", "ui.guild.invitation.title")
 	window_title.add_theme_color_override("font_color", UI_TEXT)
 	window_title.add_theme_font_size_override("font_size", 19)
+	window_title.clip_text = true
+	window_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title_stack.add_child(window_title)
 
 	var window_subtitle := Label.new()
 	_set_localized_property(window_subtitle, "text", "ui.guild.invitation.subtitle")
 	window_subtitle.add_theme_color_override("font_color", UI_MUTED)
 	window_subtitle.add_theme_font_size_override("font_size", 11)
+	window_subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title_stack.add_child(window_subtitle)
 
 	var close_button := Button.new()
@@ -110,10 +115,11 @@ func setup() -> void:
 	header.add_child(close_button)
 
 	var content_panel := PanelContainer.new()
+	content_panel.name = "GuildInvitationCard"
 	content_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	content_panel.add_theme_stylebox_override(
 		"panel",
-		_panel_style(UI_SURFACE_RAISED, UI_BORDER, 9, 1)
+		_panel_style(UI_SURFACE_RAISED, Color(UI_ACCENT, 0.5), 14, 1)
 	)
 	root.add_child(content_panel)
 
@@ -121,22 +127,64 @@ func setup() -> void:
 	_set_margins(content_margin, 15, 13, 15, 13)
 	content_panel.add_child(content_margin)
 
+	var scroll := ScrollContainer.new()
+	scroll.name = "GuildInvitationCardScroll"
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	content_margin.add_child(scroll)
 	var stack := VBoxContainer.new()
+	stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	stack.alignment = BoxContainer.ALIGNMENT_CENTER
-	stack.add_theme_constant_override("separation", 6)
-	content_margin.add_child(stack)
+	stack.add_theme_constant_override("separation", 12)
+	scroll.add_child(stack)
 
 	position_label = Label.new()
 	position_label.name = "GuildInvitationPosition"
 	position_label.add_theme_color_override("font_color", UI_ACCENT)
 	position_label.add_theme_font_size_override("font_size", 10)
+	position_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stack.add_child(position_label)
+
+	var crest_row := HBoxContainer.new()
+	crest_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	crest_row.add_theme_constant_override("separation", 22)
+	stack.add_child(crest_row)
+	for side: int in range(3):
+		if side != 1:
+			var star := TextureRect.new()
+			star.texture = STAR_ICON
+			star.custom_minimum_size = Vector2(18, 18)
+			star.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			star.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			star.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			star.modulate = Color(UI_ACCENT, 0.65)
+			crest_row.add_child(star)
+			continue
+		var crest := PanelContainer.new()
+		crest.name = "GuildInvitationEmblemFrame"
+		crest.custom_minimum_size = Vector2(112, 112)
+		var crest_style := _panel_style(Color("#101b2af7"), UI_ACCENT, 22, 2)
+		crest_style.shadow_color = Color(UI_ACCENT, 0.14)
+		crest_style.shadow_size = 12
+		crest.add_theme_stylebox_override("panel", crest_style)
+		crest_row.add_child(crest)
+		var crest_margin := MarginContainer.new()
+		_set_margins(crest_margin, 15, 15, 15, 15)
+		crest.add_child(crest_margin)
+		emblem_icon = TextureRect.new()
+		emblem_icon.name = "GuildInvitationEmblem"
+		emblem_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		emblem_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		crest_margin.add_child(emblem_icon)
 
 	heading_label = Label.new()
 	heading_label.name = "GuildInvitationHeading"
 	heading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	heading_label.add_theme_color_override("font_color", UI_TEXT)
-	heading_label.add_theme_font_size_override("font_size", 18)
+	heading_label.add_theme_font_size_override("font_size", 24)
+	heading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	heading_label.max_lines_visible = 2
+	heading_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	stack.add_child(heading_label)
 
 	status_label = Label.new()
@@ -144,7 +192,40 @@ func setup() -> void:
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.add_theme_color_override("font_color", UI_MUTED)
+	status_label.add_theme_font_size_override("font_size", 13)
 	stack.add_child(status_label)
+	var benefits := Label.new()
+	benefits.name = "GuildInvitationBenefits"
+	_set_localized_property(benefits, "text", "ui.guild.invitation.benefits")
+	benefits.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	benefits.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	benefits.add_theme_font_size_override("font_size", 10)
+	benefits.add_theme_color_override("font_color", UI_ACCENT)
+	stack.add_child(benefits)
+	var viewport_size := get_parent().get_viewport().get_visible_rect().size
+	if viewport_size.x < 400 or viewport_size.y < 420:
+		heading_label.add_theme_font_size_override("font_size", 20)
+		heading_label.max_lines_visible = 3
+	if viewport_size.y < 420:
+		heading_label.add_theme_font_size_override("font_size", 18)
+		status_label.add_theme_font_size_override("font_size", 12)
+		stack.add_theme_constant_override("separation", 8)
+		for decoration: Node in crest_row.get_children():
+			if decoration is TextureRect:
+				(decoration as TextureRect).hide()
+		var compact_crest := crest_row.get_node("GuildInvitationEmblemFrame") as PanelContainer
+		compact_crest.custom_minimum_size = Vector2(72, 72)
+		compact_crest.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		_set_margins(compact_crest.get_child(0) as MarginContainer, 10, 10, 10, 10)
+		crest_row.add_theme_constant_override("separation", 14)
+		var identity := VBoxContainer.new()
+		identity.name = "GuildInvitationCompactIdentity"
+		identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		identity.add_theme_constant_override("separation", 6)
+		crest_row.add_child(identity)
+		heading_label.reparent(identity)
+		status_label.reparent(identity)
+		benefits.hide()
 
 	var actions := HBoxContainer.new()
 	actions.alignment = BoxContainer.ALIGNMENT_END
@@ -166,7 +247,7 @@ func setup() -> void:
 
 	accept_button = Button.new()
 	accept_button.name = "AcceptGuildInvitationDialogButton"
-	_set_localized_property(accept_button, "text", "common.accept")
+	_set_localized_property(accept_button, "text", "ui.guild.invitation.accept")
 	accept_button.custom_minimum_size = Vector2(132, 38)
 	accept_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	accept_button.pressed.connect(_accept)
@@ -211,12 +292,20 @@ func _render_invitation() -> void:
 		else _t("ui.guild.invitation.position", {"current": 1, "total": invitations.size()})
 	)
 	heading_label.text = _t("ui.guild.invitation.join", {"guild": guild_name})
+	heading_label.tooltip_text = heading_label.text
+	var emblem_value: Variant = invitation.get("guildEmblem", {})
+	var emblem := GuildEmblemTexture.create_nameplate_texture(emblem_value as Dictionary) if emblem_value is Dictionary else null
+	emblem_icon.texture = emblem if emblem != null else GUILD_ICON
+	emblem_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST if emblem != null else CanvasItem.TEXTURE_FILTER_LINEAR
 	status_label.text = _t("ui.guild.invitation.invited_by", {"inviter": inviter_name})
 	status_label.add_theme_color_override("font_color", UI_MUTED)
 	_set_action_in_flight(false)
 	_notify_once(invitation)
-	size = DIALOG_SIZE
-	popup_centered(DIALOG_SIZE)
+	var viewport_size := get_parent().get_viewport().get_visible_rect().size
+	var dialog_size := Vector2i(mini(DIALOG_SIZE.x, maxi(280, int(viewport_size.x) - 32)), mini(DIALOG_SIZE.y, maxi(260, int(viewport_size.y) - 32)))
+	max_size = dialog_size
+	size = dialog_size
+	popup_centered(dialog_size)
 
 
 func _accept() -> void:
