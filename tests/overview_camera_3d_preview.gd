@@ -9,9 +9,15 @@ func _load_preview() -> void:
 	await super._load_preview()
 
 func _start() -> void:
-	root.size = Vector2i(960, 600) if "--small-window" in OS.get_cmdline_user_args() else Vector2i(1920, 1080)
+	root.size = Vector2i(1920, 1080)
 	root.get_node("SettingsManager").battle_3d_camera_motion = false
 	await super._start()
+	if "--small-window" in OS.get_cmdline_user_args():
+		# Apply after startup restores the saved window mode.
+		root.mode = Window.MODE_WINDOWED
+		root.size = Vector2i(960, 600)
+		await create_timer(0.5).timeout
+		assert(root.size == Vector2i(960, 600), "Small-window review uses the requested window size")
 	var renderer: Node = battle.animation_router.model_presenter
 	assert(renderer.active, renderer.reason)
 	toolbar.get_parent().hide()
