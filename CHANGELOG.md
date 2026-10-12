@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make Irelia overworld blades clearer at sprite scale and cover the exposed scalp around the right-facing ear for both genders.
+
 - Give the other 34 Z-moves individual cinematic finales: elemental explosions, water crowns, heavy rock eruptions, ice and psychic fractures, dark implosions and a rising self-aura for Extreme Evoboost. Coordinate impact framing, lighting, camera recoil and sound while preserving move timing and the approved Supersonic Skystrike effect.
 
 - Style item and Pokémon donations with compact Aether confirmations, showing the asset name and icon. Add coloured availability badges to Guild storage rows, grid tiles and selected assets, including Pokémon on loan.
