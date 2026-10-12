@@ -408,8 +408,9 @@ func _populate_selector(movement_mode: String) -> void:
 		if inventory_service != null and not item_id.is_empty():
 			var loan: Dictionary = inventory_service.call("get_borrowed_mount_loan", item_id)
 			if not loan.is_empty() and not bool(inventory_service.call("has_item", item_id)) and not bool(inventory_service.call("has_item", item_id + "-bound")):
-				option.text += " · " + _text("ui.mounts.guild_loan")
-				option.tooltip_text = localization_manager.call("text", "ui.mounts.guild_loan_until", {
+				var loan_kind := "guild" if str(loan.get("loanLenderKind", "")) == "guild" else "player"
+				option.text += " · " + _text("ui.mounts.%s_loan" % loan_kind)
+				option.tooltip_text = localization_manager.call("text", "ui.mounts.%s_loan_until" % loan_kind, {
 					"deadline": str(loan.get("loanDueAt", "")).left(19).replace("T", " "),
 				})
 		option.add_theme_color_override("font_color", TEXT_COLOR)
