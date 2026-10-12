@@ -1179,5 +1179,9 @@
   "shiny-flying-nimbus-mount": {
     "name": "Montaria Nuvem Voadora Shiny",
     "shortDesc": "Desbloqueia a Nuvem Voadora Shiny escura como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "flying-nimbus-mount-box": {
+    "name": "Caixa de montaria Nuvem Voadora",
+    "shortDesc": "Contém uma montaria Nuvem Voadora. Chance shiny inicial: 50%."
   }
 }

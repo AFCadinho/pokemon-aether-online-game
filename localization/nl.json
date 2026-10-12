@@ -6981,5 +6981,6 @@
   "ui.guild.log.filter.action.base_design_changed": "Kamerontwerp aangepast",
   "ui.guild.log.guild.base_design_changed": "{actor}: {operation} · {room} · {name}.",
   "ui.guild_design.reload": "Verversen",
-  "ui.guild_design.confirm_restore": "De vorige inrichting herstellen? De huidige inrichting wordt daarna de herstelkopie."
+  "ui.guild_design.confirm_restore": "De vorige inrichting herstellen? De huidige inrichting wordt daarna de herstelkopie.",
+  "ui.shiny_tracker.mounts.store_description_flying_nimbus": "Bevat een Flying Nimbus-mount. Shiny-basiskans: 50%."
 }

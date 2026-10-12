@@ -20,6 +20,6 @@ variant uses violet #6838ce and pale periwinkle #afaeff. Gold remains the normal
 variant's default, including when switching back from shiny.
 
 Grant `shiny-flying-nimbus-mount` through administration and choose
-**Shiny Flying Nimbus** in the Land picker. There is no box or store listing.
+**Shiny Flying Nimbus** in the Land picker. The Flying Nimbus Mount Box is sold under Mounts → Land for 500 Aether Gems.
 
 Preview with `tools/preview_flying_nimbus.gd -- --shiny --output=/absolute/path`.

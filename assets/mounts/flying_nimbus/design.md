@@ -21,7 +21,7 @@ do not change world coordinates, collision, interactions or world depth.
 
 Grant item `flying-nimbus-mount` through the existing administration inventory
 reward flow, then select **Flying Nimbus** in the Land mount picker. Normal
-regional Mount License restrictions apply. No store listing or box is added.
+regional Mount License restrictions apply. The Flying Nimbus Mount Box is sold under Mounts → Land for 500 Aether Gems.
 
 Review the actual game renderer with `tools/preview_flying_nimbus.gd` and use
 `-- --output=/absolute/path` to export PNG frames for a GIF.
