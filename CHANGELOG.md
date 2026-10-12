@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare normal and shiny Urshifu Rapid Strike 3D models with their own stance and animations for the next model release, preventing this missing form from forcing battles into 2D once activated.
+
 - Refine the male Irelia rear hairstyle with cleaner locks and a shorter nape, and cover rear scalp gaps for both models during walking, fishing and riding.
 
 - Separate permanent Guild Bank withdrawals from borrowing and confirm both item and Pokémon actions. Explain permanent ownership for withdrawals, the current Guild loan duration for borrowing, and early recall by authorized Guild Leaders or Captains.
