@@ -4,6 +4,8 @@
 
 - Give Shadow Ball, Focus Blast and Moonblast distinct solid energy spheres, continuous tapered wakes and focused impacts. Orbs charge small at the source and grow after release, preserving native timing and cinematic cameras.
 
+- Fix Trainers remaining unable to move after Aethernet travel changes maps.
+
 - Restore compact stat and effect indicators below the HP cards in single 3D battles.
 
 - Give Hyper Beam a continuous energy shaft, Pyro Ball a solid rotating fireball and tapered flame, Hurricane a flowing wind funnel, and Draco Meteor larger rocky cores with clearer tails and heavier impacts. Beam attacks now leave the mouth or cannon narrowly and widen toward their target; preserve move timing and cinematic cameras.
