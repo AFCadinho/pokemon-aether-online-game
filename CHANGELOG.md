@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore compact stat and effect indicators below the HP cards in single 3D battles.
+
 - Give Hyper Beam a continuous energy shaft, Pyro Ball a solid rotating fireball and tapered flame, Hurricane a flowing wind funnel, and Draco Meteor larger rocky cores with clearer tails and heavier impacts. Beam attacks now leave the mouth or cannon narrowly and widen toward their target; preserve move timing and cinematic cameras.
 
 - Add named Guild room designs, manager donation of permanent room-specific templates, and zoomable Gift Store previews. Guild Café (Room 1, door left) and Grand Lounge (Room 2, door right) cost 350 Gems each. Correct the room visual mapping without mirroring the designs.
