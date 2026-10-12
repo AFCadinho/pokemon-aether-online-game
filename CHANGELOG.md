@@ -24,6 +24,8 @@
 
 - Show readable species nameplates above the opposing Pokémon during 3D Team Preview, following their arena positions and clearing them before lead summons.
 
+- Keep compact 3D Team Preview nameplates above the full model silhouette and clear of both teams' Pokémon as the camera or screen size changes.
+
 - Keep a failed or stalled 3D Team Preview from disabling 3D for supported battle leads, resolve unsupported previews immediately, and safely release preview models between render frames.
 
 - Use the current published 3D collection in local desktop editor battles, avoiding removed model downloads during Team Preview; include the Pokémon and HTTP status in download failures.

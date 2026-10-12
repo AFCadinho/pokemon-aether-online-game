@@ -6,7 +6,7 @@ const SourceVisibility = preload("res://scripts/battle/animations/reviewed_sourc
 var slots: Array[Dictionary] = []
 var nameplate_layer: Control
 var name_font: FontFile
-const NAME_FONT_SIZE := 18
+const NAME_FONT_SIZE := 15
 const MAX_NAME_WIDTH := 240.0
 const NAME_GAP := 8.0
 
@@ -50,7 +50,14 @@ func build(stage: Node, teams: Array) -> void:
 				clip.loop_mode = Animation.LOOP_LINEAR
 				player.play(mapped.clip, -1, mapped.speed)
 				player.advance(0.0)
-			var bounds := _bounds(actor)
+			var meshes := actor.find_children("*", "MeshInstance3D", true, false)
+			if actor is MeshInstance3D: meshes.append(actor)
+			var bounds := _bounds(actor, meshes)
+			# Reviewed idle envelopes include skeletal motion beyond the bind mesh.
+			var sampled: Dictionary = stage.visual_bounds.get(identity, {}).get("idle", {})
+			var idle_bounds := AABB()
+			if not sampled.is_empty():
+				idle_bounds = AABB(Vector3(sampled.min[0], sampled.min[1], sampled.min[2]), Vector3(sampled.size[0], sampled.size[1], sampled.size[2]))
 			var authored_scale := float(placement.scale)
 			var dimensions := bounds.size * authored_scale
 			var shrink := minf(1.0, 1.65 / maxf(maxf(dimensions.x, dimensions.z), maxf(dimensions.y, 0.01)))
@@ -62,8 +69,6 @@ func build(stage: Node, teams: Array) -> void:
 			var point: Vector3 = origin + view * sign_value * (2.7 + row * 1.8) + right * (column * 2.6 - sign_value * 1.4)
 			point.y += (float(placement.lift) + float(placement.get("hover_height", 0.0))) * shrink
 			actor.position = point
-			var top := bounds.get_center()
-			top.y = bounds.end.y
 			var plate: PanelContainer = _create_nameplate() if side == 1 else null
 			var connector: Line2D
 			if plate != null:
@@ -73,9 +78,44 @@ func build(stage: Node, teams: Array) -> void:
 				connector.z_index = -1
 				nameplate_layer.add_child(connector)
 			slots.append({"actor": actor, "player": player, "identity": identity, "side": side, "index": index,
-				"nameplate": plate, "name_anchor": top, "connector": connector})
+				"nameplate": plate, "bounds_meshes": meshes, "idle_bounds": idle_bounds, "connector": connector})
+	_sample_idle_bounds()
 	set_names(stage.preview_names)
 	update_nameplates(stage)
+
+func _sample_idle_bounds() -> void:
+	# Older approved models have no measured idle envelope. Sample their skin
+	# once during construction, rather than baking vertices every rendered frame.
+	if DisplayServer.get_name() == "headless": return
+	var unmeasured: Array[Dictionary] = []
+	for slot in slots:
+		if not slot.idle_bounds.has_volume() and slot.bounds_meshes.any(func(mesh): return mesh.skin != null):
+			unmeasured.append(slot)
+	if unmeasured.is_empty(): return
+	var positions: Array[float] = []
+	for slot in unmeasured: positions.append(slot.player.current_animation_position)
+	for sample in 8:
+		for slot in unmeasured:
+			slot.player.seek(slot.player.current_animation_length * sample / 8.0, true, true)
+			for skeleton in slot.actor.find_children("*", "Skeleton3D", true, false):
+				skeleton.force_update_all_bone_transforms()
+		# Skinning data used by bake_mesh is synchronized by the renderer.
+		RenderingServer.force_draw(false)
+		for slot in unmeasured:
+			var posed := AABB()
+			for mesh in slot.bounds_meshes:
+				if mesh.mesh == null or not mesh.is_visible_in_tree(): continue
+				var shape: Mesh = mesh.bake_mesh_from_current_skeleton_pose() if mesh.skin != null else mesh.mesh
+				if shape == null: shape = mesh.mesh
+				var box: AABB = (slot.actor.global_transform.affine_inverse() * mesh.global_transform) * shape.get_aabb()
+				posed = posed.merge(box) if posed.has_volume() else box
+			if posed.has_volume():
+				slot.idle_bounds = slot.idle_bounds.merge(posed) if slot.idle_bounds.has_volume() else posed
+	for index in unmeasured.size(): unmeasured[index].player.seek(positions[index], true, true)
+	for slot in unmeasured:
+		for skeleton in slot.actor.find_children("*", "Skeleton3D", true, false):
+			skeleton.force_update_all_bone_transforms()
+	RenderingServer.force_draw(false)
 
 func _create_nameplate() -> PanelContainer:
 	var plate := PanelContainer.new()
@@ -85,10 +125,10 @@ func _create_nameplate() -> PanelContainer:
 	card.border_color = Color(0.67, 0.5, 0.95, 0.9)
 	card.set_border_width_all(1)
 	card.set_corner_radius_all(5)
-	card.content_margin_left = 10.0
-	card.content_margin_right = 10.0
-	card.content_margin_top = 4.0
-	card.content_margin_bottom = 4.0
+	card.content_margin_left = 8.0
+	card.content_margin_right = 8.0
+	card.content_margin_top = 3.0
+	card.content_margin_bottom = 3.0
 	plate.add_theme_stylebox_override("panel", card)
 	nameplate_layer.add_child(plate)
 	var label := Label.new()
@@ -126,54 +166,89 @@ func update_nameplates(stage: Node) -> void:
 	# Three columns need room for both the names and the staggered rear row.
 	var pixels := minf(NAME_FONT_SIZE * ui_scale, stage.size.x * screen.x.length() / 40.0)
 	var font_size := maxi(8, roundi(pixels / maxf(0.1, screen.y.length())))
+	var gap := NAME_GAP / maxf(0.1, screen.y.length())
 	var occupied: Array[Rect2] = []
+	var projected: Array[Rect2] = []
+	# Project the whole volume, including its depth, rather than the midpoint
+	# of its highest face. A tilted camera can put another corner higher on screen.
 	for slot in slots:
+		var bounds := _projected_bounds(stage, slot)
+		projected.append(bounds)
+		if bounds.has_area(): occupied.append(bounds.grow(gap))
+	var cards: Array[Dictionary] = []
+	for index in slots.size():
+		var slot: Dictionary = slots[index]
 		var plate: PanelContainer = slot.nameplate
 		if not is_instance_valid(plate): continue
 		var label := plate.get_node("SpeciesName") as Label
 		if label.get_theme_font_size("font_size") != font_size:
 			label.add_theme_font_size_override("font_size", font_size)
 			_fit_nameplate(plate, label)
-		var point: Vector3 = slot.actor.global_transform * slot.name_anchor
-		plate.visible = not stage.camera.is_position_behind(point)
-		slot.connector.visible = plate.visible
+		var bounds: Rect2 = projected[index]
+		plate.visible = bounds.has_area()
+		slot.connector.hide()
 		if not plate.visible: continue
-		var anchor: Vector2 = stage.camera.unproject_position(point) * stage.size / Vector2(stage.viewport.size)
-		var desired := anchor - Vector2(plate.size.x * 0.5, plate.size.y + NAME_GAP)
-		desired.x = clampf(desired.x, NAME_GAP, maxf(NAME_GAP, stage.size.x - plate.size.x - NAME_GAP))
-		desired.y = maxf(NAME_GAP, desired.y)
-		# Keep neighboring names readable when tall bodies or a narrow field bring
-		# their projected anchors together. Prefer raising a card directly above
-		# its body; a shifted card gets a subtle connector to its own model.
-		plate.position = _free_position(desired, plate.size, occupied, stage.size.x)
-		slot.connector.visible = not plate.position.is_equal_approx(desired)
-		slot.connector.points = PackedVector2Array([plate.position + Vector2(plate.size.x * 0.5, plate.size.y), anchor])
-		occupied.append(plate.get_rect())
+		var anchor := Vector2(bounds.get_center().x, bounds.position.y)
+		var desired := anchor - Vector2(plate.size.x * 0.5, plate.size.y + gap)
+		desired.x = clampf(desired.x, gap, maxf(gap, stage.size.x - plate.size.x - gap))
+		cards.append({"slot": slot, "anchor": anchor, "desired": desired})
+	# Place the upper row first, so lower names can stay close to their models.
+	cards.sort_custom(func(a: Dictionary, b: Dictionary): return a.desired.y < b.desired.y if a.desired.y != b.desired.y else a.desired.x < b.desired.x)
+	for card in cards:
+		var slot: Dictionary = card.slot
+		var plate: PanelContainer = slot.nameplate
+		var position := _free_position(card.desired, plate.size, occupied, stage.size.x, gap)
+		# When the user zooms a model off-screen there may be no room above it.
+		# Hide its plate until it fits instead of clamping it onto the model.
+		plate.visible = position.is_finite()
+		if not plate.visible: continue
+		plate.position = position
+		slot.connector.visible = absf(position.x - card.desired.x) > gap * 0.5
+		slot.connector.points = PackedVector2Array([position + Vector2(plate.size.x * 0.5, plate.size.y), card.anchor])
+		occupied.append(plate.get_rect().grow(gap * 0.5))
 
-func _free_position(desired: Vector2, card_size: Vector2, occupied: Array[Rect2], field_width: float) -> Vector2:
+func _projected_bounds(stage: Node, slot: Dictionary) -> Rect2:
+	var bounds := _bounds(slot.actor, slot.bounds_meshes)
+	if slot.idle_bounds.has_volume(): bounds = bounds.merge(slot.idle_bounds)
+	var result := Rect2()
+	for corner in 8:
+		var point: Vector3 = slot.actor.global_transform * bounds.get_endpoint(corner)
+		if stage.camera.is_position_behind(point): return Rect2()
+		var projected: Vector2 = stage.camera.unproject_position(point) * stage.size / Vector2(stage.viewport.size)
+		result = Rect2(projected, Vector2.ZERO) if corner == 0 else result.expand(projected)
+	return result if result.intersection(Rect2(Vector2.ZERO, stage.size)).has_area() else Rect2()
+
+func _free_position(desired: Vector2, card_size: Vector2, occupied: Array[Rect2], field_width: float, gap: float) -> Vector2:
 	var columns: Array[float] = [desired.x]
 	for rect in occupied:
-		columns.append(rect.position.x - card_size.x - 6.0)
-		columns.append(rect.end.x + 6.0)
-	columns.sort_custom(func(a: float, b: float): return absf(a - desired.x) < absf(b - desired.x))
-	# First keep the horizontal anchor, then try the nearest clear column.
+		columns.append(rect.position.x - card_size.x)
+		columns.append(rect.end.x)
+	var best := Vector2.INF
+	var best_distance := INF
 	for x in columns:
-		if x < NAME_GAP or x + card_size.x > field_width - NAME_GAP: continue
+		if x < gap or x + card_size.x > field_width - gap: continue
+		var y := desired.y
 		for attempt in occupied.size() + 1:
-			var candidate := Vector2(x, desired.y - attempt * (card_size.y + 6.0))
-			if candidate.y < NAME_GAP: break
-			if not occupied.any(func(rect: Rect2): return rect.grow(3.0).intersects(Rect2(candidate, card_size))):
-				return candidate
-	return desired
+			if y < gap: break
+			var candidate := Rect2(Vector2(x, y), card_size)
+			var next_y := y
+			for rect in occupied:
+				if rect.intersects(candidate): next_y = minf(next_y, rect.position.y - card_size.y - 0.1)
+			if next_y == y:
+				var distance := absf(x - desired.x) * 1.5 + absf(y - desired.y)
+				if distance < best_distance:
+					best = candidate.position
+					best_distance = distance
+				break
+			y = next_y
+	return best
 
 func set_presentation_visible(value: bool) -> void:
 	visible = value
 	if is_instance_valid(nameplate_layer): nameplate_layer.visible = value
 
-func _bounds(actor: Node3D) -> AABB:
+func _bounds(actor: Node3D, meshes: Array) -> AABB:
 	var result := AABB()
-	var meshes := actor.find_children("*", "MeshInstance3D", true, false)
-	if actor is MeshInstance3D: meshes.append(actor)
 	for mesh in meshes:
 		if mesh.mesh == null or not mesh.is_visible_in_tree(): continue
 		var box: AABB = (actor.global_transform.affine_inverse() * mesh.global_transform) * mesh.get_aabb()
