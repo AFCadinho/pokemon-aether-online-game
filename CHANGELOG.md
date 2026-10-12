@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add native 3D presentations for the remaining 707 unique gameplay moves (901 total), with explicit per-move profiles, solid attack forms, bounded animation sounds, selected cinematic cameras and temporary lighting. Cover physical/special Z-move ID aliases, preserve the existing 194 presentations, and extend the offline review picker.
+
 - Give Hyper Beam, Solar Beam, Flash Cannon, Pyro Ball, Flamethrower, Thunderbolt, Electro Shot, Ice Beam, Blizzard and Hurricane individual light colours and timing. Light follows beams, cannon outlets and the fireball arc; wide storms tint the arena. Preserve animation duration, weather, camera settings and cleanup.
 
 - Add subtle purple Shadow Ball, blue-and-gold Focus Blast and moonlit Moonblast atmosphere with local orb lighting and a soft hit pulse. Preserve move timing, weather and arena lighting, restoring the original environment on completion or cancellation.

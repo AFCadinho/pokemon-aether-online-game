@@ -1,0 +1,708 @@
+key,name,motif,family,target,duration_seconds,source_id,sv_particle_files,audio_selection,camera,lighting,review
+accelerock,Accelerock,ram,contact,normal,1.0,709,4,exact-move-name,overview,False,implemented-pending-player-review
+acid,Acid,bomb,projectiles,allAdjacentFoes,1.4,51,2,exact-move-name,overview,False,implemented-pending-player-review
+acidarmor,Acid Armor,shield,self,self,1.4,151,3,exact-move-name,overview,False,implemented-pending-player-review
+acidspray,Acid Spray,bomb,projectiles,normal,1.4,491,3,exact-move-name,overview,False,implemented-pending-player-review
+acrobatics,Acrobatics,rush,contact,any,1.0,512,3,exact-move-name,overview,False,implemented-pending-player-review
+acupressure,Acupressure,boost,status,adjacentAllyOrSelf,1.4,367,2,exact-move-name,overview,False,implemented-pending-player-review
+aerialace,Aerial Ace,rush,contact,any,1.0,332,7,exact-move-name,overview,False,implemented-pending-player-review
+aeroblast,Aeroblast,beam,beams,any,1.75,177,0,exact-move-name,overview,False,implemented-pending-player-review
+afteryou,After You,exchange,status,normal,1.4,495,2,exact-move-name,overview,False,implemented-pending-player-review
+aircutter,Air Cutter,cutwave,projectiles,allAdjacentFoes,1.4,314,2,exact-move-name,overview,False,implemented-pending-player-review
+airslash,Air Slash,cutwave,projectiles,any,1.4,403,3,exact-move-name,overview,False,implemented-pending-player-review
+alluringvoice,Alluring Voice,sound,waves,normal,1.4,914,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+allyswitch,Ally Switch,exchange,status,self,1.4,502,1,exact-move-name,overview,True,implemented-pending-player-review
+amnesia,Amnesia,boost,self,self,1.4,133,1,exact-move-name,overview,True,implemented-pending-player-review
+anchorshot,Anchor Shot,lash,contact,normal,1.0,677,0,exact-move-name,overview,False,implemented-pending-player-review
+ancientpower,Ancient Power,eruption,field,normal,1.4,246,5,exact-move-name,overview,False,implemented-pending-player-review
+appleacid,Apple Acid,bomb,projectiles,normal,1.4,787,4,explicit-shared-motif,overview,True,implemented-pending-player-review
+aquacutter,Aqua Cutter,slash,projectiles,normal,1.0,895,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+aquaring,Aqua Ring,heal,self,self,1.4,392,2,exact-move-name,overview,True,implemented-pending-player-review
+aquastep,Aqua Step,rush,contact,normal,1.0,872,4,explicit-shared-motif,overview,True,implemented-pending-player-review
+aquatail,Aqua Tail,lash,contact,normal,1.0,401,3,exact-move-name,overview,False,implemented-pending-player-review
+armorcannon,Armor Cannon,beam,beams,normal,1.75,890,4,explicit-shared-motif,overview,True,implemented-pending-player-review
+armthrust,Arm Thrust,punch,contact,normal,1.0,292,1,exact-move-name,overview,False,implemented-pending-player-review
+aromatherapy,Aromatherapy,heal,self,allyTeam,1.4,312,0,exact-move-name,overview,True,implemented-pending-player-review
+aromaticmist,Aromatic Mist,statuscloud,status,adjacentAlly,1.4,597,2,exact-move-name,overview,True,implemented-pending-player-review
+assist,Assist,ritual,self,self,1.4,274,0,exact-move-name,overview,False,implemented-pending-player-review
+assurance,Assurance,ram,contact,normal,1.0,372,1,exact-move-name,overview,False,implemented-pending-player-review
+astralbarrage,Astral Barrage,rain,field,allAdjacentFoes,1.9,825,11,explicit-shared-motif,overview,True,implemented-pending-player-review
+attackorder,Attack Order,swarm,projectiles,normal,1.4,454,3,exact-move-name,overview,False,implemented-pending-player-review
+attract,Attract,heart,status,normal,1.4,213,2,exact-move-name,overview,False,implemented-pending-player-review
+aurasphere,Aura Sphere,orb,projectiles,any,1.4,396,4,exact-move-name,projectile,False,implemented-pending-player-review
+aurawheel,Aura Wheel,rush,projectiles,normal,1.25,783,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+aurorabeam,Aurora Beam,beam,beams,normal,1.75,62,4,exact-move-name,overview,True,implemented-pending-player-review
+autotomize,Autotomize,boost,self,self,1.4,475,0,exact-move-name,overview,False,implemented-pending-player-review
+avalanche,Avalanche,rain,field,normal,1.4,419,4,exact-move-name,overview,True,implemented-pending-player-review
+axekick,Axe Kick,kick,contact,normal,1.25,853,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+baddybad,Baddy Bad,orb,projectiles,normal,1.4,737,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+banefulbunker,Baneful Bunker,shield,self,self,1.4,661,1,exact-move-name,overview,False,implemented-pending-player-review
+barbbarrage,Barb Barrage,shard,projectiles,normal,1.4,839,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+barrage,Barrage,bomb,projectiles,normal,1.4,140,0,exact-move-name,overview,False,implemented-pending-player-review
+barrier,Barrier,shield,self,self,1.4,112,0,exact-move-name,overview,True,implemented-pending-player-review
+batonpass,Baton Pass,exchange,status,self,1.4,226,1,exact-move-name,overview,False,implemented-pending-player-review
+beakblast,Beak Blast,pierce,projectiles,normal,1.25,690,0,exact-move-name,overview,False,implemented-pending-player-review
+beatup,Beat Up,swarm,projectiles,normal,1.4,251,1,exact-move-name,overview,False,implemented-pending-player-review
+behemothbash,Behemoth Bash,ram,contact,normal,1.25,782,5,explicit-shared-motif,overview,False,implemented-pending-player-review
+behemothblade,Behemoth Blade,slash,contact,normal,1.25,781,6,explicit-shared-motif,overview,False,implemented-pending-player-review
+belch,Belch,bomb,projectiles,normal,1.65,562,3,exact-move-name,overview,False,implemented-pending-player-review
+bellydrum,Belly Drum,boost,self,self,1.4,187,4,exact-move-name,overview,False,implemented-pending-player-review
+bestow,Bestow,exchange,status,normal,1.4,516,0,exact-move-name,overview,False,implemented-pending-player-review
+bide,Bide,ram,projectiles,self,1.0,117,0,exact-move-name,overview,False,implemented-pending-player-review
+bind,Bind,lash,contact,normal,1.0,20,0,exact-move-name,overview,False,implemented-pending-player-review
+bitterblade,Bitter Blade,slash,contact,normal,1.0,891,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+bittermalice,Bitter Malice,orb,projectiles,normal,1.4,841,2,explicit-shared-motif,overview,True,implemented-pending-player-review
+blastburn,Blast Burn,eruption,field,normal,1.65,307,4,exact-move-name,overview,True,implemented-pending-player-review
+blazekick,Blaze Kick,kick,contact,normal,1.0,299,2,exact-move-name,overview,False,implemented-pending-player-review
+blazingtorque,Blazing Torque,rush,projectiles,normal,1.0,896,4,explicit-shared-motif,overview,True,implemented-pending-player-review
+block,Block,seal,status,normal,1.4,335,2,exact-move-name,overview,False,implemented-pending-player-review
+bloodmoon,Blood Moon,orb,projectiles,normal,2.1,901,0,explicit-shared-motif,projectile,False,implemented-pending-player-review
+blueflare,Blue Flare,beam,beams,normal,1.75,551,0,exact-move-name,overview,True,implemented-pending-player-review
+bodyslam,Body Slam,ram,contact,normal,1.0,34,4,exact-move-name,overview,False,implemented-pending-player-review
+boltbeak,Bolt Beak,ram,contact,normal,1.0,754,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+boltstrike,Bolt Strike,rush,contact,normal,1.25,550,0,exact-move-name,overview,True,implemented-pending-player-review
+boneclub,Bone Club,hammer,projectiles,normal,1.0,125,0,exact-move-name,overview,False,implemented-pending-player-review
+bonemerang,Bonemerang,boomerang,projectiles,normal,1.4,155,0,exact-move-name,overview,False,implemented-pending-player-review
+bonerush,Bone Rush,hammer,projectiles,normal,1.0,198,1,exact-move-name,overview,False,implemented-pending-player-review
+boomburst,Boomburst,sound,waves,allAdjacent,1.65,586,4,exact-move-name,overview,False,implemented-pending-player-review
+bounce,Bounce,vanish,contact,any,1.0,340,8,exact-move-name,overview,False,implemented-pending-player-review
+bouncybubble,Bouncy Bubble,orb,projectiles,normal,1.4,733,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+branchpoke,Branch Poke,pierce,contact,normal,1.0,785,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+bravebird,Brave Bird,rush,contact,any,1.25,413,5,exact-move-name,overview,False,implemented-pending-player-review
+breakingswipe,Breaking Swipe,ram,contact,allAdjacentFoes,1.0,784,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+brickbreak,Brick Break,slash,contact,normal,1.0,280,8,exact-move-name,overview,False,implemented-pending-player-review
+brine,Brine,wave,field,normal,1.4,362,3,exact-move-name,overview,True,implemented-pending-player-review
+brutalswing,Brutal Swing,spin,contact,allAdjacent,1.0,693,3,exact-move-name,overview,False,implemented-pending-player-review
+bugbuzz,Bug Buzz,sound,waves,normal,1.4,405,3,exact-move-name,overview,False,implemented-pending-player-review
+bulkup,Bulk Up,boost,self,self,1.4,339,1,exact-move-name,overview,False,implemented-pending-player-review
+bulldoze,Bulldoze,eruption,field,allAdjacent,1.4,523,5,exact-move-name,overview,False,implemented-pending-player-review
+bulletseed,Bullet Seed,shard,projectiles,normal,1.4,331,3,exact-move-name,overview,True,implemented-pending-player-review
+burningbulwark,Burning Bulwark,shield,self,self,1.4,908,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+burningjealousy,Burning Jealousy,burst,field,allAdjacentFoes,1.4,807,3,explicit-shared-motif,overview,True,implemented-pending-player-review
+burnup,Burn Up,burst,field,normal,1.65,682,7,exact-move-name,overview,True,implemented-pending-player-review
+buzzybuzz,Buzzy Buzz,orb,projectiles,normal,1.4,734,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+camouflage,Camouflage,ritual,self,self,1.4,293,0,exact-move-name,overview,False,implemented-pending-player-review
+captivate,Captivate,heart,status,allAdjacentFoes,1.4,445,0,exact-move-name,overview,False,implemented-pending-player-review
+celebrate,Celebrate,ritual,self,self,1.4,606,6,explicit-shared-motif,overview,False,implemented-pending-player-review
+chargebeam,Charge Beam,beam,beams,normal,1.75,451,5,exact-move-name,overview,True,implemented-pending-player-review
+chatter,Chatter,sound,waves,any,1.4,448,0,exact-move-name,overview,False,implemented-pending-player-review
+chillingwater,Chilling Water,bomb,projectiles,normal,1.4,886,4,explicit-shared-motif,overview,True,implemented-pending-player-review
+chipaway,Chip Away,ram,contact,normal,1.0,498,0,exact-move-name,overview,False,implemented-pending-player-review
+chloroblast,Chloroblast,beam,beams,normal,1.75,835,7,explicit-shared-motif,overview,True,implemented-pending-player-review
+circlethrow,Circle Throw,grip,contact,normal,1.0,509,3,exact-move-name,overview,False,implemented-pending-player-review
+clamp,Clamp,fang,contact,normal,1.0,128,0,exact-move-name,overview,False,implemented-pending-player-review
+clangingscales,Clanging Scales,sound,waves,allAdjacentFoes,1.65,691,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+clangoroussoul,Clangorous Soul,boost,self,self,1.4,775,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+clearsmog,Clear Smog,mist,status,normal,1.4,499,3,exact-move-name,overview,False,implemented-pending-player-review
+coaching,Coaching,boost,status,adjacentAlly,1.4,811,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+coil,Coil,boost,self,self,1.4,489,1,exact-move-name,overview,False,implemented-pending-player-review
+collisioncourse,Collision Course,ram,contact,normal,1.25,878,13,explicit-shared-motif,overview,False,implemented-pending-player-review
+combattorque,Combat Torque,rush,projectiles,normal,1.25,899,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+cometpunch,Comet Punch,punch,contact,normal,1.0,4,0,exact-move-name,overview,False,implemented-pending-player-review
+comeuppance,Comeuppance,ram,contact,scripted,1.0,894,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+confide,Confide,statussound,status,normal,1.4,590,2,exact-move-name,overview,False,implemented-pending-player-review
+confuseray,Confuse Ray,statuswave,status,normal,1.4,109,4,exact-move-name,overview,True,implemented-pending-player-review
+constrict,Constrict,lash,contact,normal,1.0,132,0,exact-move-name,overview,False,implemented-pending-player-review
+conversion,Conversion,exchange,status,self,1.4,160,0,exact-move-name,overview,False,implemented-pending-player-review
+conversion2,Conversion 2,exchange,status,normal,1.4,176,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+copycat,Copycat,ritual,self,self,1.4,383,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+coreenforcer,Core Enforcer,beam,beams,allAdjacentFoes,1.75,687,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+corrosivegas,Corrosive Gas,statuscloud,status,allAdjacent,1.4,810,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+cosmicpower,Cosmic Power,boost,self,self,1.4,322,2,exact-move-name,overview,True,implemented-pending-player-review
+cottonguard,Cotton Guard,boost,self,self,1.4,538,1,exact-move-name,overview,True,implemented-pending-player-review
+cottonspore,Cotton Spore,statuscloud,status,allAdjacentFoes,1.4,178,2,exact-move-name,overview,True,implemented-pending-player-review
+counter,Counter,ram,contact,scripted,1.0,68,3,exact-move-name,overview,False,implemented-pending-player-review
+covet,Covet,ram,contact,normal,1.0,343,4,exact-move-name,overview,False,implemented-pending-player-review
+crabhammer,Crabhammer,hammer,contact,normal,1.25,152,2,exact-move-name,overview,False,implemented-pending-player-review
+craftyshield,Crafty Shield,shield,self,allySide,1.4,578,0,exact-move-name,overview,True,implemented-pending-player-review
+crosschop,Cross Chop,slash,contact,normal,1.25,238,4,exact-move-name,overview,False,implemented-pending-player-review
+crosspoison,Cross Poison,slash,contact,normal,1.0,440,2,exact-move-name,overview,False,implemented-pending-player-review
+crunch,Crunch,fang,contact,normal,1.0,242,2,exact-move-name,overview,False,implemented-pending-player-review
+crushclaw,Crush Claw,slash,contact,normal,1.0,306,1,exact-move-name,overview,False,implemented-pending-player-review
+crushgrip,Crush Grip,grip,contact,normal,1.0,462,0,exact-move-name,overview,False,implemented-pending-player-review
+curse,Curse,seal,status,normal,1.4,174,3,exact-move-name,overview,True,implemented-pending-player-review
+cut,Cut,slash,contact,normal,1.0,15,2,exact-move-name,overview,False,implemented-pending-player-review
+darkestlariat,Darkest Lariat,spin,contact,normal,1.0,663,7,explicit-shared-motif,overview,False,implemented-pending-player-review
+darkvoid,Dark Void,statuswave,status,allAdjacentFoes,1.4,464,0,exact-move-name,overview,False,implemented-pending-player-review
+dazzlinggleam,Dazzling Gleam,pulse,waves,allAdjacentFoes,1.4,605,3,exact-move-name,overview,True,implemented-pending-player-review
+decorate,Decorate,boost,status,normal,1.4,777,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+defendorder,Defend Order,shield,self,self,1.4,455,2,exact-move-name,overview,False,implemented-pending-player-review
+destinybond,Destiny Bond,seal,status,self,1.4,194,5,exact-move-name,overview,True,implemented-pending-player-review
+detect,Detect,shield,self,self,1.4,197,1,exact-move-name,overview,False,implemented-pending-player-review
+diamondstorm,Diamond Storm,shard,projectiles,allAdjacentFoes,1.65,591,6,exact-move-name,overview,False,implemented-pending-player-review
+dig,Dig,vanish,contact,normal,1.0,91,5,exact-move-name,overview,False,implemented-pending-player-review
+direclaw,Dire Claw,slash,contact,normal,1.0,827,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+disable,Disable,seal,status,normal,1.4,50,2,exact-move-name,overview,False,implemented-pending-player-review
+discharge,Discharge,burst,field,allAdjacent,1.4,435,5,exact-move-name,overview,True,implemented-pending-player-review
+dive,Dive,vanish,contact,normal,1.0,291,6,exact-move-name,overview,False,implemented-pending-player-review
+dizzypunch,Dizzy Punch,punch,contact,normal,1.0,146,0,exact-move-name,overview,False,implemented-pending-player-review
+doodle,Doodle,exchange,status,adjacentFoe,1.4,867,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+doomdesire,Doom Desire,rain,field,normal,1.65,353,0,exact-move-name,overview,False,implemented-pending-player-review
+doubleedge,Double-Edge,ram,contact,normal,1.25,38,4,exact-move-name,overview,False,implemented-pending-player-review
+doublehit,Double Hit,punch,contact,normal,1.0,458,1,exact-move-name,overview,False,implemented-pending-player-review
+doubleironbash,Double Iron Bash,spin,contact,normal,1.0,742,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+doubleshock,Double Shock,rush,contact,normal,1.25,892,7,explicit-shared-motif,overview,True,implemented-pending-player-review
+doubleslap,Double Slap,punch,contact,normal,1.0,3,0,exact-move-name,overview,False,implemented-pending-player-review
+dragonascent,Dragon Ascent,rush,contact,any,1.25,620,8,exact-move-name,overview,False,implemented-pending-player-review
+dragoncheer,Dragon Cheer,boost,status,adjacentAlly,1.4,913,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+dragondarts,Dragon Darts,shard,projectiles,normal,1.4,751,3,explicit-shared-motif,overview,True,implemented-pending-player-review
+dragonenergy,Dragon Energy,beam,beams,allAdjacentFoes,1.75,820,4,explicit-shared-motif,overview,True,implemented-pending-player-review
+dragonhammer,Dragon Hammer,ram,contact,normal,1.0,692,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+dragonpulse,Dragon Pulse,pulse,waves,any,1.4,406,6,exact-move-name,overview,True,implemented-pending-player-review
+dragonrage,Dragon Rage,beam,beams,normal,1.75,82,0,exact-move-name,overview,True,implemented-pending-player-review
+dragonrush,Dragon Rush,ram,contact,normal,1.25,407,5,exact-move-name,overview,False,implemented-pending-player-review
+dragontail,Dragon Tail,lash,contact,normal,1.0,525,5,exact-move-name,overview,False,implemented-pending-player-review
+dreameater,Dream Eater,drain,waves,normal,1.65,138,5,exact-move-name,overview,True,implemented-pending-player-review
+drillpeck,Drill Peck,pierce,contact,any,1.0,65,2,exact-move-name,overview,False,implemented-pending-player-review
+drillrun,Drill Run,spin,contact,normal,1.0,529,6,exact-move-name,overview,False,implemented-pending-player-review
+drumbeating,Drum Beating,hammer,projectiles,normal,1.0,778,7,explicit-shared-motif,overview,False,implemented-pending-player-review
+dualchop,Dual Chop,slash,contact,normal,1.0,530,0,exact-move-name,overview,False,implemented-pending-player-review
+dualwingbeat,Dual Wingbeat,spin,contact,normal,1.0,814,1,explicit-shared-motif,overview,False,implemented-pending-player-review
+dynamaxcannon,Dynamax Cannon,beam,beams,normal,1.75,744,5,explicit-shared-motif,overview,True,implemented-pending-player-review
+dynamicpunch,Dynamic Punch,punch,contact,normal,1.25,223,3,exact-move-name,overview,False,implemented-pending-player-review
+echoedvoice,Echoed Voice,sound,waves,normal,1.4,497,2,exact-move-name,overview,False,implemented-pending-player-review
+eerieimpulse,Eerie Impulse,statuswave,status,normal,1.4,598,3,exact-move-name,overview,True,implemented-pending-player-review
+eeriespell,Eerie Spell,sound,waves,normal,1.4,826,2,explicit-shared-motif,overview,True,implemented-pending-player-review
+eggbomb,Egg Bomb,bomb,projectiles,normal,1.65,121,0,exact-move-name,overview,False,implemented-pending-player-review
+electrify,Electrify,statuswave,status,normal,1.4,582,0,exact-move-name,overview,True,implemented-pending-player-review
+electroball,Electro Ball,orb,projectiles,normal,1.4,486,4,exact-move-name,overview,True,implemented-pending-player-review
+electrodrift,Electro Drift,beam,beams,normal,1.75,879,13,explicit-shared-motif,overview,True,implemented-pending-player-review
+electroweb,Electroweb,cage,status,allAdjacentFoes,1.4,527,3,exact-move-name,overview,True,implemented-pending-player-review
+embargo,Embargo,seal,status,normal,1.4,373,0,exact-move-name,overview,False,implemented-pending-player-review
+endeavor,Endeavor,ram,contact,normal,1.0,283,2,exact-move-name,overview,False,implemented-pending-player-review
+endure,Endure,shield,self,self,1.4,203,2,exact-move-name,overview,False,implemented-pending-player-review
+energyball,Energy Ball,orb,projectiles,normal,1.4,412,4,exact-move-name,projectile,True,implemented-pending-player-review
+entrainment,Entrainment,statussound,status,normal,1.4,494,3,exact-move-name,overview,False,implemented-pending-player-review
+eruption,Eruption,eruption,field,allAdjacentFoes,1.65,284,6,exact-move-name,overview,True,implemented-pending-player-review
+esperwing,Esper Wing,cutwave,projectiles,normal,1.4,840,4,explicit-shared-motif,overview,True,implemented-pending-player-review
+eternabeam,Eternabeam,beam,beams,normal,2.15,795,0,explicit-shared-motif,beam,True,implemented-pending-player-review
+expandingforce,Expanding Force,pulse,waves,normal,1.4,797,6,explicit-shared-motif,overview,True,implemented-pending-player-review
+extrasensory,Extrasensory,pulse,waves,normal,1.4,326,2,exact-move-name,overview,True,implemented-pending-player-review
+facade,Facade,ram,contact,normal,1.0,263,3,exact-move-name,overview,False,implemented-pending-player-review
+fairylock,Fairy Lock,seal,status,all,1.4,587,2,exact-move-name,overview,True,implemented-pending-player-review
+faketears,Fake Tears,statuscloud,status,normal,1.4,313,2,exact-move-name,overview,False,implemented-pending-player-review
+falsesurrender,False Surrender,slash,contact,normal,1.0,793,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+falseswipe,False Swipe,slash,contact,normal,1.0,206,2,exact-move-name,overview,False,implemented-pending-player-review
+featherdance,Feather Dance,statuscloud,status,normal,1.4,297,2,exact-move-name,overview,False,implemented-pending-player-review
+feint,Feint,ram,projectiles,normal,1.0,364,1,exact-move-name,overview,False,implemented-pending-player-review
+feintattack,Feint Attack,ram,contact,normal,1.0,185,0,exact-move-name,overview,False,implemented-pending-player-review
+fellstinger,Fell Stinger,pierce,contact,normal,1.0,565,3,exact-move-name,overview,False,implemented-pending-player-review
+ficklebeam,Fickle Beam,beam,beams,normal,1.75,907,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+fierydance,Fiery Dance,burst,field,normal,1.4,552,4,exact-move-name,overview,True,implemented-pending-player-review
+fierywrath,Fiery Wrath,pulse,waves,allAdjacentFoes,1.4,822,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+filletaway,Fillet Away,boost,self,self,1.4,868,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+finalgambit,Final Gambit,pulse,waves,normal,1.4,515,4,exact-move-name,overview,False,implemented-pending-player-review
+fireblast,Fire Blast,firestar,field,normal,1.85,126,8,exact-move-name,beam,True,implemented-pending-player-review
+firefang,Fire Fang,fang,contact,normal,1.0,424,3,exact-move-name,overview,False,implemented-pending-player-review
+firelash,Fire Lash,lash,contact,normal,1.0,680,2,exact-move-name,overview,False,implemented-pending-player-review
+firepledge,Fire Pledge,eruption,field,normal,1.4,519,2,exact-move-name,overview,True,implemented-pending-player-review
+firespin,Fire Spin,vortex,field,normal,1.4,83,2,exact-move-name,overview,True,implemented-pending-player-review
+firstimpression,First Impression,ram,contact,normal,1.0,660,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+fishiousrend,Fishious Rend,fang,contact,normal,1.0,755,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+fissure,Fissure,eruption,field,normal,1.4,90,5,exact-move-name,overview,False,implemented-pending-player-review
+flail,Flail,ram,contact,normal,1.0,175,5,exact-move-name,overview,False,implemented-pending-player-review
+flameburst,Flame Burst,burst,field,normal,1.4,481,0,exact-move-name,overview,True,implemented-pending-player-review
+flamecharge,Flame Charge,rush,contact,normal,1.0,488,4,exact-move-name,overview,True,implemented-pending-player-review
+flamewheel,Flame Wheel,rush,contact,normal,1.0,172,4,exact-move-name,overview,True,implemented-pending-player-review
+flareblitz,Flare Blitz,rush,contact,normal,1.25,394,6,exact-move-name,overview,True,implemented-pending-player-review
+flash,Flash,statuswave,status,normal,1.4,148,0,exact-move-name,overview,False,implemented-pending-player-review
+flatter,Flatter,statuswave,status,normal,1.4,260,2,exact-move-name,overview,False,implemented-pending-player-review
+fleurcannon,Fleur Cannon,beam,beams,normal,1.75,705,6,explicit-shared-motif,overview,True,implemented-pending-player-review
+fling,Fling,bomb,projectiles,normal,1.4,374,3,exact-move-name,overview,False,implemented-pending-player-review
+floatyfall,Floaty Fall,vanish,contact,normal,1.0,731,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+floralhealing,Floral Healing,heal,status,normal,1.4,666,0,exact-move-name,overview,True,implemented-pending-player-review
+flowershield,Flower Shield,shield,status,all,1.4,579,0,exact-move-name,overview,True,implemented-pending-player-review
+flowertrick,Flower Trick,bomb,projectiles,normal,1.4,870,8,explicit-shared-motif,overview,True,implemented-pending-player-review
+fly,Fly,vanish,contact,any,1.0,19,4,exact-move-name,overview,False,implemented-pending-player-review
+flyingpress,Flying Press,kick,contact,any,1.25,560,4,exact-move-name,overview,False,implemented-pending-player-review
+focuspunch,Focus Punch,punch,contact,normal,1.25,264,5,exact-move-name,overview,False,implemented-pending-player-review
+followme,Follow Me,ritual,self,self,1.4,266,2,exact-move-name,overview,False,implemented-pending-player-review
+forcepalm,Force Palm,punch,contact,normal,1.0,395,2,exact-move-name,overview,False,implemented-pending-player-review
+foresight,Foresight,seal,status,normal,1.4,193,0,exact-move-name,overview,False,implemented-pending-player-review
+forestscurse,Forest’s Curse,seal,status,normal,1.4,571,0,exact-move-name,overview,True,implemented-pending-player-review
+foulplay,Foul Play,ram,contact,normal,1.0,492,4,exact-move-name,overview,False,implemented-pending-player-review
+freezeshock,Freeze Shock,beam,beams,normal,1.75,553,0,exact-move-name,overview,True,implemented-pending-player-review
+freezingglare,Freezing Glare,beam,beams,normal,1.75,821,13,explicit-shared-motif,overview,True,implemented-pending-player-review
+freezyfrost,Freezy Frost,pulse,waves,normal,1.65,739,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+frenzyplant,Frenzy Plant,eruption,field,normal,1.65,338,8,exact-move-name,overview,True,implemented-pending-player-review
+frostbreath,Frost Breath,beam,beams,normal,1.75,524,3,exact-move-name,overview,True,implemented-pending-player-review
+furycutter,Fury Cutter,slash,contact,normal,1.0,210,1,exact-move-name,overview,False,implemented-pending-player-review
+furyswipes,Fury Swipes,slash,contact,normal,1.0,154,1,exact-move-name,overview,False,implemented-pending-player-review
+fusionbolt,Fusion Bolt,lightning,field,normal,1.65,559,0,exact-move-name,overview,True,implemented-pending-player-review
+fusionflare,Fusion Flare,orb,projectiles,normal,1.65,558,0,exact-move-name,overview,True,implemented-pending-player-review
+gastroacid,Gastro Acid,statuscloud,status,normal,1.4,380,3,exact-move-name,overview,False,implemented-pending-player-review
+geargrind,Gear Grind,spin,contact,normal,1.0,544,0,exact-move-name,overview,False,implemented-pending-player-review
+gearup,Gear Up,boost,self,allySide,1.4,674,0,exact-move-name,overview,False,implemented-pending-player-review
+geomancy,Geomancy,boost,self,self,1.4,601,0,exact-move-name,overview,True,implemented-pending-player-review
+gigadrain,Giga Drain,drain,waves,normal,1.4,202,3,exact-move-name,overview,True,implemented-pending-player-review
+gigatonhammer,Gigaton Hammer,hammer,projectiles,normal,1.6,893,5,explicit-shared-motif,overview,False,implemented-pending-player-review
+glaciallance,Glacial Lance,shard,projectiles,allAdjacentFoes,1.65,824,11,explicit-shared-motif,overview,True,implemented-pending-player-review
+glaciate,Glaciate,burst,field,allAdjacentFoes,1.4,549,0,exact-move-name,overview,True,implemented-pending-player-review
+glaiverush,Glaive Rush,rush,contact,normal,1.25,862,7,explicit-shared-motif,overview,True,implemented-pending-player-review
+glare,Glare,statuswave,status,normal,1.4,137,2,exact-move-name,overview,False,implemented-pending-player-review
+glitzyglow,Glitzy Glow,orb,projectiles,normal,1.4,736,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+grassknot,Grass Knot,eruption,field,normal,1.4,447,2,exact-move-name,overview,True,implemented-pending-player-review
+grasspledge,Grass Pledge,eruption,field,normal,1.4,520,2,exact-move-name,overview,True,implemented-pending-player-review
+grasswhistle,Grass Whistle,statussound,status,normal,1.4,320,0,exact-move-name,overview,True,implemented-pending-player-review
+gravapple,Grav Apple,rain,field,normal,1.4,788,3,explicit-shared-motif,overview,True,implemented-pending-player-review
+gravity,Gravity,room,field,all,1.8,356,2,exact-move-name,overview,True,implemented-pending-player-review
+grudge,Grudge,seal,status,self,1.4,288,0,exact-move-name,overview,True,implemented-pending-player-review
+guardsplit,Guard Split,exchange,status,normal,1.4,470,3,exact-move-name,overview,True,implemented-pending-player-review
+guardswap,Guard Swap,exchange,status,normal,1.4,385,3,exact-move-name,overview,True,implemented-pending-player-review
+guillotine,Guillotine,slash,contact,normal,1.0,12,5,exact-move-name,overview,False,implemented-pending-player-review
+gunkshot,Gunk Shot,bomb,projectiles,normal,1.65,441,5,exact-move-name,overview,False,implemented-pending-player-review
+gyroball,Gyro Ball,spin,contact,normal,1.0,360,4,exact-move-name,overview,False,implemented-pending-player-review
+hail,Hail,weather,field,all,1.8,258,0,exact-move-name,overview,True,implemented-pending-player-review
+hammerarm,Hammer Arm,punch,contact,normal,1.25,359,1,exact-move-name,overview,False,implemented-pending-player-review
+happyhour,Happy Hour,ritual,self,allySide,1.4,603,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+hardpress,Hard Press,grip,contact,normal,1.0,912,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+headbutt,Headbutt,ram,contact,normal,1.0,29,2,exact-move-name,overview,False,implemented-pending-player-review
+headcharge,Head Charge,ram,contact,normal,1.25,543,0,exact-move-name,overview,False,implemented-pending-player-review
+healbell,Heal Bell,heal,self,allyTeam,1.4,215,1,exact-move-name,overview,False,implemented-pending-player-review
+healblock,Heal Block,seal,status,allAdjacentFoes,1.4,377,0,exact-move-name,overview,True,implemented-pending-player-review
+healingwish,Healing Wish,heal,self,self,1.4,361,2,exact-move-name,overview,True,implemented-pending-player-review
+healorder,Heal Order,heal,self,self,1.4,456,0,exact-move-name,overview,False,implemented-pending-player-review
+healpulse,Heal Pulse,heal,status,any,1.4,505,1,explicit-shared-motif,overview,True,implemented-pending-player-review
+heartstamp,Heart Stamp,ram,contact,normal,1.0,531,0,exact-move-name,overview,False,implemented-pending-player-review
+heartswap,Heart Swap,exchange,status,normal,1.4,391,3,exact-move-name,overview,True,implemented-pending-player-review
+heatcrash,Heat Crash,ram,contact,normal,1.0,535,3,exact-move-name,overview,False,implemented-pending-player-review
+heavyslam,Heavy Slam,ram,contact,normal,1.0,484,4,exact-move-name,overview,False,implemented-pending-player-review
+helpinghand,Helping Hand,exchange,status,adjacentAlly,1.4,270,1,exact-move-name,overview,False,implemented-pending-player-review
+highhorsepower,High Horsepower,ram,contact,normal,1.0,667,3,exact-move-name,overview,False,implemented-pending-player-review
+holdback,Hold Back,slash,contact,normal,1.0,610,1,explicit-shared-motif,overview,False,implemented-pending-player-review
+holdhands,Hold Hands,exchange,status,adjacentAlly,1.4,607,7,explicit-shared-motif,overview,False,implemented-pending-player-review
+honeclaws,Hone Claws,boost,self,self,1.4,468,1,exact-move-name,overview,False,implemented-pending-player-review
+hornattack,Horn Attack,pierce,contact,normal,1.0,30,3,exact-move-name,overview,False,implemented-pending-player-review
+horndrill,Horn Drill,pierce,contact,normal,1.0,32,5,exact-move-name,overview,False,implemented-pending-player-review
+hornleech,Horn Leech,pierce,contact,normal,1.0,532,4,exact-move-name,overview,False,implemented-pending-player-review
+hydrocannon,Hydro Cannon,beam,beams,normal,1.95,308,6,exact-move-name,beam,True,implemented-pending-player-review
+hydropump,Hydro Pump,beam,beams,normal,1.7,56,5,exact-move-name,beam,True,implemented-pending-player-review
+hydrosteam,Hydro Steam,beam,beams,normal,1.75,876,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+hyperdrill,Hyper Drill,pierce,contact,normal,1.25,887,5,explicit-shared-motif,overview,False,implemented-pending-player-review
+hyperfang,Hyper Fang,fang,contact,normal,1.0,158,0,exact-move-name,overview,False,implemented-pending-player-review
+hyperspacefury,Hyperspace Fury,vanish,projectiles,normal,1.25,621,8,exact-move-name,overview,False,implemented-pending-player-review
+hyperspacehole,Hyperspace Hole,pulse,waves,normal,1.4,593,3,exact-move-name,overview,True,implemented-pending-player-review
+hypervoice,Hyper Voice,sound,waves,allAdjacentFoes,1.4,304,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+hypnosis,Hypnosis,statuswave,status,normal,1.4,95,4,exact-move-name,overview,True,implemented-pending-player-review
+iceball,Ice Ball,spin,contact,normal,1.0,301,0,exact-move-name,overview,False,implemented-pending-player-review
+iceburn,Ice Burn,beam,beams,normal,1.75,554,0,exact-move-name,overview,True,implemented-pending-player-review
+icefang,Ice Fang,fang,contact,normal,1.0,423,3,exact-move-name,overview,False,implemented-pending-player-review
+icehammer,Ice Hammer,punch,contact,normal,1.25,665,3,exact-move-name,overview,False,implemented-pending-player-review
+icespinner,Ice Spinner,rush,contact,normal,1.0,861,4,explicit-shared-motif,overview,True,implemented-pending-player-review
+iciclecrash,Icicle Crash,rain,field,normal,1.4,556,4,exact-move-name,overview,True,implemented-pending-player-review
+iciclespear,Icicle Spear,shard,projectiles,normal,1.4,333,3,exact-move-name,overview,True,implemented-pending-player-review
+icywind,Icy Wind,vortex,field,allAdjacentFoes,1.4,196,5,exact-move-name,overview,True,implemented-pending-player-review
+imprison,Imprison,seal,status,self,1.4,286,1,exact-move-name,overview,True,implemented-pending-player-review
+incinerate,Incinerate,burst,field,allAdjacentFoes,1.4,510,3,exact-move-name,overview,True,implemented-pending-player-review
+infernalparade,Infernal Parade,orb,projectiles,normal,1.4,844,3,explicit-shared-motif,overview,True,implemented-pending-player-review
+inferno,Inferno,burst,field,normal,1.65,517,5,exact-move-name,overview,True,implemented-pending-player-review
+infestation,Infestation,swarm,projectiles,normal,1.4,611,2,exact-move-name,overview,False,implemented-pending-player-review
+ingrain,Ingrain,ritual,self,self,1.4,275,2,exact-move-name,overview,True,implemented-pending-player-review
+instruct,Instruct,exchange,status,normal,1.4,689,3,exact-move-name,overview,True,implemented-pending-player-review
+iondeluge,Ion Deluge,room,field,all,1.8,569,0,exact-move-name,overview,True,implemented-pending-player-review
+irondefense,Iron Defense,shield,self,self,1.4,334,3,exact-move-name,overview,False,implemented-pending-player-review
+irontail,Iron Tail,lash,contact,normal,1.25,231,3,exact-move-name,overview,False,implemented-pending-player-review
+ivycudgel,Ivy Cudgel,hammer,projectiles,normal,1.25,904,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+jawlock,Jaw Lock,fang,contact,normal,1.0,746,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+jetpunch,Jet Punch,punch,contact,normal,1.0,857,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+judgment,Judgment,orb,projectiles,normal,1.65,449,5,exact-move-name,overview,False,implemented-pending-player-review
+jumpkick,Jump Kick,kick,contact,normal,1.25,26,0,exact-move-name,overview,False,implemented-pending-player-review
+junglehealing,Jungle Healing,heal,status,allies,1.4,816,3,explicit-shared-motif,overview,True,implemented-pending-player-review
+karatechop,Karate Chop,slash,contact,normal,1.0,2,0,exact-move-name,overview,False,implemented-pending-player-review
+kinesis,Kinesis,statuswave,status,normal,1.4,134,0,exact-move-name,overview,True,implemented-pending-player-review
+kingsshield,King’s Shield,shield,self,self,1.4,588,0,exact-move-name,overview,False,implemented-pending-player-review
+landswrath,Land’s Wrath,eruption,field,allAdjacentFoes,1.4,616,0,exact-move-name,overview,False,implemented-pending-player-review
+laserfocus,Laser Focus,boost,self,self,1.4,673,0,exact-move-name,overview,False,implemented-pending-player-review
+lashout,Lash Out,ram,contact,normal,1.0,808,6,explicit-shared-motif,overview,False,implemented-pending-player-review
+lastresort,Last Resort,ram,contact,normal,1.25,387,6,exact-move-name,overview,False,implemented-pending-player-review
+lastrespects,Last Respects,orb,projectiles,normal,1.4,854,3,explicit-shared-motif,overview,True,implemented-pending-player-review
+lavaplume,Lava Plume,eruption,field,allAdjacent,1.4,436,6,exact-move-name,overview,True,implemented-pending-player-review
+leafblade,Leaf Blade,slash,contact,normal,1.0,348,3,exact-move-name,overview,False,implemented-pending-player-review
+leafstorm,Leaf Storm,rain,field,normal,1.65,437,6,exact-move-name,overview,True,implemented-pending-player-review
+leaftornado,Leaf Tornado,vortex,field,normal,1.4,536,0,exact-move-name,overview,True,implemented-pending-player-review
+leechlife,Leech Life,fang,contact,normal,1.0,141,6,exact-move-name,overview,False,implemented-pending-player-review
+lifedew,Life Dew,heal,status,allies,1.4,791,3,explicit-shared-motif,overview,True,implemented-pending-player-review
+lightofruin,Light of Ruin,beam,beams,normal,1.75,617,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+liquidation,Liquidation,rush,contact,normal,1.0,710,5,exact-move-name,overview,True,implemented-pending-player-review
+lockon,Lock-On,seal,status,normal,1.4,199,2,exact-move-name,overview,False,implemented-pending-player-review
+lovelykiss,Lovely Kiss,heart,status,normal,1.4,142,0,exact-move-name,overview,False,implemented-pending-player-review
+lowsweep,Low Sweep,kick,contact,normal,1.0,490,3,exact-move-name,overview,False,implemented-pending-player-review
+luckychant,Lucky Chant,ritual,self,allySide,1.4,381,0,exact-move-name,overview,False,implemented-pending-player-review
+luminacrash,Lumina Crash,lightning,field,normal,1.4,855,2,explicit-shared-motif,overview,True,implemented-pending-player-review
+lunarblessing,Lunar Blessing,heal,status,allies,1.4,849,5,explicit-shared-motif,overview,True,implemented-pending-player-review
+lunardance,Lunar Dance,heal,self,self,1.4,461,2,exact-move-name,overview,True,implemented-pending-player-review
+lunge,Lunge,rush,contact,normal,1.0,679,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+lusterpurge,Luster Purge,orb,projectiles,normal,1.4,295,0,exact-move-name,overview,True,implemented-pending-player-review
+machpunch,Mach Punch,punch,contact,normal,1.0,183,2,exact-move-name,overview,False,implemented-pending-player-review
+magicaltorque,Magical Torque,rush,projectiles,normal,1.25,900,4,explicit-shared-motif,overview,True,implemented-pending-player-review
+magiccoat,Magic Coat,shield,self,self,1.4,277,0,exact-move-name,overview,True,implemented-pending-player-review
+magicpowder,Magic Powder,statuscloud,status,normal,1.4,750,2,explicit-shared-motif,overview,True,implemented-pending-player-review
+magicroom,Magic Room,room,field,all,1.8,478,3,exact-move-name,overview,True,implemented-pending-player-review
+magmastorm,Magma Storm,vortex,field,normal,1.65,463,4,exact-move-name,overview,True,implemented-pending-player-review
+magnetbomb,Magnet Bomb,shard,projectiles,normal,1.4,443,0,exact-move-name,overview,False,implemented-pending-player-review
+magneticflux,Magnetic Flux,boost,self,allySide,1.4,602,3,exact-move-name,overview,True,implemented-pending-player-review
+magnetrise,Magnet Rise,boost,self,self,1.4,393,2,exact-move-name,overview,True,implemented-pending-player-review
+magnitude,Magnitude,eruption,field,allAdjacent,1.4,222,0,exact-move-name,overview,False,implemented-pending-player-review
+malignantchain,Malignant Chain,cage,status,normal,1.65,919,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+matblock,Mat Block,shield,self,allySide,1.4,561,0,exact-move-name,overview,False,implemented-pending-player-review
+matchagotcha,Matcha Gotcha,bomb,projectiles,allAdjacentFoes,1.4,902,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+maxairstream,Max Airstream,max,field,adjacentFoe,1.8,766,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+maxdarkness,Max Darkness,max,field,adjacentFoe,1.8,772,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+maxflare,Max Flare,max,field,adjacentFoe,1.8,757,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+maxflutterby,Max Flutterby,max,field,adjacentFoe,1.8,758,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+maxgeyser,Max Geyser,max,field,adjacentFoe,1.8,765,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+maxguard,Max Guard,shield,self,self,1.4,743,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+maxhailstorm,Max Hailstorm,max,field,adjacentFoe,1.8,763,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+maxknuckle,Max Knuckle,max,field,adjacentFoe,1.8,761,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+maxlightning,Max Lightning,max,field,adjacentFoe,1.8,759,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+maxmindstorm,Max Mindstorm,max,field,adjacentFoe,1.8,769,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+maxooze,Max Ooze,max,field,adjacentFoe,1.8,764,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+maxovergrowth,Max Overgrowth,max,field,adjacentFoe,1.8,773,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+maxphantasm,Max Phantasm,max,field,adjacentFoe,1.8,762,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+maxquake,Max Quake,max,field,adjacentFoe,1.8,771,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+maxrockfall,Max Rockfall,max,field,adjacentFoe,1.8,770,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+maxstarfall,Max Starfall,max,field,adjacentFoe,1.8,767,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+maxsteelspike,Max Steelspike,max,field,adjacentFoe,1.8,774,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+maxstrike,Max Strike,max,field,adjacentFoe,1.8,760,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+maxwyrmwind,Max Wyrmwind,max,field,adjacentFoe,1.8,768,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+meanlook,Mean Look,seal,status,normal,1.4,212,1,exact-move-name,overview,False,implemented-pending-player-review
+meditate,Meditate,boost,self,self,1.4,96,0,exact-move-name,overview,True,implemented-pending-player-review
+mefirst,Me First,ritual,status,adjacentFoe,1.4,382,0,exact-move-name,overview,False,implemented-pending-player-review
+megadrain,Mega Drain,drain,waves,normal,1.4,72,3,exact-move-name,overview,True,implemented-pending-player-review
+megahorn,Megahorn,pierce,contact,normal,1.25,224,9,exact-move-name,overview,False,implemented-pending-player-review
+megakick,Mega Kick,kick,contact,normal,1.25,25,1,exact-move-name,overview,False,implemented-pending-player-review
+megapunch,Mega Punch,punch,contact,normal,1.0,5,1,exact-move-name,overview,False,implemented-pending-player-review
+memento,Memento,ritual,status,normal,1.4,262,3,exact-move-name,overview,False,implemented-pending-player-review
+metalburst,Metal Burst,pulse,waves,scripted,1.4,368,2,exact-move-name,overview,False,implemented-pending-player-review
+metalclaw,Metal Claw,slash,contact,normal,1.0,232,1,exact-move-name,overview,False,implemented-pending-player-review
+metalsound,Metal Sound,statussound,status,normal,1.4,319,2,exact-move-name,overview,False,implemented-pending-player-review
+meteorassault,Meteor Assault,pierce,projectiles,normal,1.25,794,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+meteorbeam,Meteor Beam,beam,beams,normal,2.0,800,9,explicit-shared-motif,beam,False,implemented-pending-player-review
+meteormash,Meteor Mash,punch,contact,normal,1.0,309,4,exact-move-name,overview,False,implemented-pending-player-review
+metronome,Metronome,ritual,self,self,1.4,118,3,exact-move-name,overview,False,implemented-pending-player-review
+mightycleave,Mighty Cleave,slash,contact,normal,1.0,910,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+milkdrink,Milk Drink,heal,self,self,1.4,208,3,exact-move-name,overview,False,implemented-pending-player-review
+mimic,Mimic,ritual,status,normal,1.4,102,3,exact-move-name,overview,False,implemented-pending-player-review
+mindblown,Mind Blown,burst,field,allAdjacent,1.65,720,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+mindreader,Mind Reader,seal,status,normal,1.4,170,0,exact-move-name,overview,False,implemented-pending-player-review
+minimize,Minimize,boost,self,self,1.4,107,1,exact-move-name,overview,False,implemented-pending-player-review
+miracleeye,Miracle Eye,seal,status,normal,1.4,357,0,exact-move-name,overview,True,implemented-pending-player-review
+mirrorcoat,Mirror Coat,pulse,waves,scripted,1.4,243,2,exact-move-name,overview,True,implemented-pending-player-review
+mirrormove,Mirror Move,ritual,status,normal,1.4,119,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+mirrorshot,Mirror Shot,beam,beams,normal,1.75,429,0,exact-move-name,overview,False,implemented-pending-player-review
+mist,Mist,room,field,allySide,1.8,54,1,exact-move-name,overview,True,implemented-pending-player-review
+mistball,Mist Ball,orb,projectiles,normal,1.4,296,0,exact-move-name,overview,True,implemented-pending-player-review
+mistyexplosion,Misty Explosion,burst,field,allAdjacent,1.65,802,5,explicit-shared-motif,overview,True,implemented-pending-player-review
+moongeistbeam,Moongeist Beam,beam,beams,normal,1.75,714,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+moonlight,Moonlight,heal,self,self,1.4,236,3,exact-move-name,overview,True,implemented-pending-player-review
+morningsun,Morning Sun,heal,self,self,1.4,234,5,exact-move-name,overview,False,implemented-pending-player-review
+mortalspin,Mortal Spin,spin,contact,allAdjacentFoes,1.0,866,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+mountaingale,Mountain Gale,rain,field,normal,1.65,836,5,explicit-shared-motif,overview,True,implemented-pending-player-review
+mudbomb,Mud Bomb,bomb,projectiles,normal,1.4,426,0,exact-move-name,overview,False,implemented-pending-player-review
+muddywater,Muddy Water,wave,field,allAdjacentFoes,1.4,330,2,exact-move-name,overview,True,implemented-pending-player-review
+mudshot,Mud Shot,bomb,projectiles,normal,1.4,341,4,exact-move-name,overview,False,implemented-pending-player-review
+mudsport,Mud Sport,room,field,all,1.8,300,0,exact-move-name,overview,False,implemented-pending-player-review
+multiattack,Multi-Attack,spin,contact,normal,1.25,718,0,exact-move-name,overview,False,implemented-pending-player-review
+mysticalfire,Mystical Fire,firestar,field,normal,1.4,595,5,exact-move-name,overview,True,implemented-pending-player-review
+mysticalpower,Mystical Power,orb,projectiles,normal,1.4,832,5,explicit-shared-motif,overview,True,implemented-pending-player-review
+naturalgift,Natural Gift,bomb,projectiles,normal,1.4,363,0,exact-move-name,overview,False,implemented-pending-player-review
+naturepower,Nature Power,ritual,status,normal,1.4,267,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+naturesmadness,Nature’s Madness,pulse,waves,normal,1.4,717,0,exact-move-name,overview,True,implemented-pending-player-review
+needlearm,Needle Arm,pierce,contact,normal,1.0,302,0,exact-move-name,overview,False,implemented-pending-player-review
+nightdaze,Night Daze,pulse,waves,normal,1.4,539,4,exact-move-name,overview,False,implemented-pending-player-review
+nightmare,Nightmare,seal,status,normal,1.4,171,0,exact-move-name,overview,True,implemented-pending-player-review
+nightshade,Night Shade,pulse,waves,normal,1.4,101,3,exact-move-name,overview,True,implemented-pending-player-review
+nightslash,Night Slash,slash,contact,normal,1.0,400,4,exact-move-name,overview,False,implemented-pending-player-review
+nobleroar,Noble Roar,statussound,status,normal,1.4,568,2,exact-move-name,overview,False,implemented-pending-player-review
+noretreat,No Retreat,boost,self,self,1.4,748,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+noxioustorque,Noxious Torque,rush,projectiles,normal,1.25,898,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+nuzzle,Nuzzle,rush,contact,normal,1.0,609,3,exact-move-name,overview,True,implemented-pending-player-review
+oblivionwing,Oblivion Wing,beam,beams,any,1.75,613,0,exact-move-name,overview,False,implemented-pending-player-review
+obstruct,Obstruct,shield,self,self,1.4,792,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+octazooka,Octazooka,bomb,projectiles,normal,1.4,190,0,exact-move-name,overview,True,implemented-pending-player-review
+octolock,Octolock,seal,status,normal,1.4,753,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+odorsleuth,Odor Sleuth,seal,status,normal,1.4,316,0,exact-move-name,overview,False,implemented-pending-player-review
+ominouswind,Ominous Wind,vortex,field,normal,1.4,466,0,exact-move-name,overview,True,implemented-pending-player-review
+orderup,Order Up,hammer,projectiles,normal,1.0,856,5,explicit-shared-motif,overview,False,implemented-pending-player-review
+originpulse,Origin Pulse,beam,beams,allAdjacentFoes,1.75,618,3,exact-move-name,overview,True,implemented-pending-player-review
+overdrive,Overdrive,sound,waves,allAdjacentFoes,1.4,786,3,explicit-shared-motif,overview,True,implemented-pending-player-review
+overheat,Overheat,burst,field,normal,1.65,315,6,exact-move-name,overview,True,implemented-pending-player-review
+painsplit,Pain Split,exchange,status,normal,1.4,220,1,exact-move-name,overview,False,implemented-pending-player-review
+paraboliccharge,Parabolic Charge,drain,waves,allAdjacent,1.4,570,5,exact-move-name,overview,True,implemented-pending-player-review
+partingshot,Parting Shot,statussound,status,normal,1.4,575,1,exact-move-name,overview,False,implemented-pending-player-review
+payback,Payback,ram,contact,normal,1.0,371,3,exact-move-name,overview,False,implemented-pending-player-review
+payday,Pay Day,shard,projectiles,normal,1.4,6,3,exact-move-name,overview,False,implemented-pending-player-review
+perishsong,Perish Song,statussound,status,all,1.4,195,4,exact-move-name,overview,False,implemented-pending-player-review
+petalblizzard,Petal Blizzard,rain,field,allAdjacent,1.4,572,3,exact-move-name,overview,True,implemented-pending-player-review
+petaldance,Petal Dance,rain,field,randomNormal,1.65,80,2,exact-move-name,overview,True,implemented-pending-player-review
+phantomforce,Phantom Force,vanish,contact,normal,1.0,566,7,exact-move-name,overview,False,implemented-pending-player-review
+photongeyser,Photon Geyser,beam,beams,normal,1.75,722,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+pikapapow,Pika Papow,orb,projectiles,normal,1.4,732,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+pinmissile,Pin Missile,shard,projectiles,normal,1.4,42,3,exact-move-name,overview,False,implemented-pending-player-review
+plasmafists,Plasma Fists,punch,contact,normal,1.25,721,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+playnice,Play Nice,statuswave,status,normal,1.4,589,3,exact-move-name,overview,False,implemented-pending-player-review
+playrough,Play Rough,ram,contact,normal,1.0,583,2,exact-move-name,overview,False,implemented-pending-player-review
+pluck,Pluck,pierce,contact,any,1.0,365,1,exact-move-name,overview,False,implemented-pending-player-review
+poisonfang,Poison Fang,fang,contact,normal,1.0,305,3,exact-move-name,overview,False,implemented-pending-player-review
+poisongas,Poison Gas,statuscloud,status,allAdjacentFoes,1.4,139,3,exact-move-name,overview,False,implemented-pending-player-review
+poisonjab,Poison Jab,pierce,contact,normal,1.0,398,3,exact-move-name,overview,False,implemented-pending-player-review
+poisontail,Poison Tail,lash,contact,normal,1.0,342,2,exact-move-name,overview,False,implemented-pending-player-review
+pollenpuff,Pollen Puff,orb,projectiles,normal,1.4,676,5,exact-move-name,overview,False,implemented-pending-player-review
+poltergeist,Poltergeist,cage,status,normal,1.65,809,5,explicit-shared-motif,overview,True,implemented-pending-player-review
+populationbomb,Population Bomb,swarm,projectiles,normal,1.65,860,1,explicit-shared-motif,overview,False,implemented-pending-player-review
+pounce,Pounce,rush,contact,normal,1.0,884,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+powder,Powder,statuscloud,status,normal,1.4,600,0,exact-move-name,overview,False,implemented-pending-player-review
+powergem,Power Gem,shard,projectiles,normal,1.4,408,5,exact-move-name,overview,False,implemented-pending-player-review
+powershift,Power Shift,exchange,status,self,1.4,829,6,explicit-shared-motif,overview,False,implemented-pending-player-review
+powersplit,Power Split,exchange,status,normal,1.4,471,3,exact-move-name,overview,True,implemented-pending-player-review
+powerswap,Power Swap,exchange,status,normal,1.4,384,3,exact-move-name,overview,True,implemented-pending-player-review
+powertrick,Power Trick,exchange,status,self,1.4,379,4,exact-move-name,overview,True,implemented-pending-player-review
+powertrip,Power Trip,ram,contact,normal,1.0,681,4,exact-move-name,overview,False,implemented-pending-player-review
+poweruppunch,Power-Up Punch,punch,contact,normal,1.0,612,0,exact-move-name,overview,False,implemented-pending-player-review
+powerwhip,Power Whip,lash,contact,normal,1.25,438,3,exact-move-name,overview,False,implemented-pending-player-review
+precipiceblades,Precipice Blades,eruption,field,allAdjacentFoes,1.65,619,6,exact-move-name,overview,False,implemented-pending-player-review
+present,Present,bomb,projectiles,normal,1.4,217,1,exact-move-name,overview,False,implemented-pending-player-review
+prismaticlaser,Prismatic Laser,beam,beams,normal,2.1,711,0,exact-move-name,beam,True,implemented-pending-player-review
+psybeam,Psybeam,beam,beams,normal,1.75,60,5,exact-move-name,overview,True,implemented-pending-player-review
+psyblade,Psyblade,slash,contact,normal,1.0,875,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+psychicfangs,Psychic Fangs,fang,contact,normal,1.0,706,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+psychoboost,Psycho Boost,pulse,waves,normal,1.65,354,0,exact-move-name,overview,True,implemented-pending-player-review
+psychocut,Psycho Cut,slash,projectiles,normal,1.0,427,3,exact-move-name,overview,False,implemented-pending-player-review
+psychoshift,Psycho Shift,exchange,status,normal,1.4,375,0,exact-move-name,overview,True,implemented-pending-player-review
+psychup,Psych Up,boost,status,normal,1.4,244,1,exact-move-name,overview,False,implemented-pending-player-review
+psyshieldbash,Psyshield Bash,ram,contact,normal,1.0,828,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+psystrike,Psystrike,orb,projectiles,normal,1.65,540,6,exact-move-name,overview,True,implemented-pending-player-review
+psywave,Psywave,pulse,waves,normal,1.4,149,0,exact-move-name,overview,True,implemented-pending-player-review
+punishment,Punishment,ram,contact,normal,1.0,386,0,exact-move-name,overview,False,implemented-pending-player-review
+purify,Purify,heal,status,normal,1.4,685,0,exact-move-name,overview,False,implemented-pending-player-review
+quash,Quash,seal,status,normal,1.4,511,0,exact-move-name,overview,False,implemented-pending-player-review
+quickguard,Quick Guard,shield,self,allySide,1.4,501,2,exact-move-name,overview,False,implemented-pending-player-review
+quiverdance,Quiver Dance,boost,self,self,1.4,483,2,exact-move-name,overview,False,implemented-pending-player-review
+rage,Rage,ram,contact,normal,1.0,99,0,exact-move-name,overview,False,implemented-pending-player-review
+ragefist,Rage Fist,punch,contact,normal,1.0,889,7,explicit-shared-motif,overview,False,implemented-pending-player-review
+ragepowder,Rage Powder,statuscloud,status,self,1.4,476,2,exact-move-name,overview,False,implemented-pending-player-review
+ragingbull,Raging Bull,ram,contact,normal,1.0,873,15,explicit-shared-motif,overview,False,implemented-pending-player-review
+ragingfury,Raging Fury,rush,projectiles,randomNormal,1.25,833,5,explicit-shared-motif,overview,True,implemented-pending-player-review
+raindance,Rain Dance,weather,field,all,1.8,240,1,exact-move-name,overview,True,implemented-pending-player-review
+razorwind,Razor Wind,cutwave,projectiles,allAdjacentFoes,1.4,13,0,exact-move-name,overview,False,implemented-pending-player-review
+recycle,Recycle,ritual,self,self,1.4,278,1,exact-move-name,overview,False,implemented-pending-player-review
+reflecttype,Reflect Type,exchange,status,normal,1.4,513,2,exact-move-name,overview,False,implemented-pending-player-review
+refresh,Refresh,heal,self,self,1.4,287,0,exact-move-name,overview,False,implemented-pending-player-review
+relicsong,Relic Song,sound,waves,allAdjacentFoes,1.4,547,6,exact-move-name,overview,False,implemented-pending-player-review
+rest,Rest,heal,self,self,1.4,156,1,explicit-shared-motif,overview,True,implemented-pending-player-review
+retaliate,Retaliate,ram,contact,normal,1.0,514,5,exact-move-name,overview,False,implemented-pending-player-review
+revelationdance,Revelation Dance,burst,field,normal,1.4,686,4,exact-move-name,overview,False,implemented-pending-player-review
+revenge,Revenge,ram,contact,normal,1.0,279,0,exact-move-name,overview,False,implemented-pending-player-review
+reversal,Reversal,ram,contact,normal,1.0,179,3,exact-move-name,overview,False,implemented-pending-player-review
+revivalblessing,Revival Blessing,heal,self,self,1.4,863,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+risingvoltage,Rising Voltage,lightning,field,normal,1.4,804,9,explicit-shared-motif,overview,True,implemented-pending-player-review
+roar,Roar,statussound,status,normal,1.4,46,1,exact-move-name,overview,False,implemented-pending-player-review
+roaroftime,Roar of Time,beam,beams,normal,2.0,459,6,exact-move-name,beam,True,implemented-pending-player-review
+rockblast,Rock Blast,shard,projectiles,normal,1.4,350,2,exact-move-name,overview,False,implemented-pending-player-review
+rockclimb,Rock Climb,ram,contact,normal,1.0,431,0,exact-move-name,overview,False,implemented-pending-player-review
+rockpolish,Rock Polish,boost,self,self,1.4,397,2,exact-move-name,overview,False,implemented-pending-player-review
+rockslide,Rock Slide,rain,field,allAdjacentFoes,1.4,157,4,exact-move-name,overview,False,implemented-pending-player-review
+rocktomb,Rock Tomb,rain,field,normal,1.4,317,2,exact-move-name,overview,False,implemented-pending-player-review
+rockwrecker,Rock Wrecker,shard,projectiles,normal,1.65,439,0,exact-move-name,overview,False,implemented-pending-player-review
+roleplay,Role Play,exchange,status,normal,1.4,272,3,exact-move-name,overview,True,implemented-pending-player-review
+rollingkick,Rolling Kick,kick,contact,normal,1.0,27,0,exact-move-name,overview,False,implemented-pending-player-review
+rototiller,Rototiller,ritual,status,all,1.4,563,0,exact-move-name,overview,False,implemented-pending-player-review
+round,Round,sound,waves,normal,1.4,496,3,exact-move-name,overview,False,implemented-pending-player-review
+ruination,Ruination,pulse,waves,normal,1.4,877,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+sacredfire,Sacred Fire,burst,field,normal,1.65,221,0,exact-move-name,overview,True,implemented-pending-player-review
+sacredsword,Sacred Sword,slash,contact,normal,1.0,533,2,exact-move-name,overview,False,implemented-pending-player-review
+safeguard,Safeguard,shield,self,allySide,1.4,219,1,exact-move-name,overview,False,implemented-pending-player-review
+saltcure,Salt Cure,shard,projectiles,normal,1.4,864,6,explicit-shared-motif,overview,False,implemented-pending-player-review
+sandsearstorm,Sandsear Storm,vortex,field,allAdjacentFoes,1.65,848,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+sandstorm,Sandstorm,weather,field,all,1.8,201,3,exact-move-name,overview,True,implemented-pending-player-review
+sandtomb,Sand Tomb,vortex,field,normal,1.4,328,1,exact-move-name,overview,False,implemented-pending-player-review
+sappyseed,Sappy Seed,drain,waves,normal,1.65,738,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+scaleshot,Scale Shot,shard,projectiles,normal,1.4,799,3,explicit-shared-motif,overview,True,implemented-pending-player-review
+scaryface,Scary Face,statuswave,status,normal,1.4,184,1,exact-move-name,overview,False,implemented-pending-player-review
+scorchingsands,Scorching Sands,eruption,field,normal,1.4,815,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+searingshot,Searing Shot,burst,field,allAdjacent,1.65,545,0,exact-move-name,overview,True,implemented-pending-player-review
+secretpower,Secret Power,pulse,waves,normal,1.4,290,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+secretsword,Secret Sword,cutwave,projectiles,normal,1.4,548,0,exact-move-name,overview,False,implemented-pending-player-review
+seedbomb,Seed Bomb,bomb,projectiles,normal,1.4,402,1,exact-move-name,overview,True,implemented-pending-player-review
+seedflare,Seed Flare,burst,field,normal,1.65,465,0,exact-move-name,overview,True,implemented-pending-player-review
+seismictoss,Seismic Toss,grip,contact,normal,1.0,69,4,exact-move-name,overview,False,implemented-pending-player-review
+selfdestruct,Self-Destruct,burst,field,allAdjacent,1.65,120,5,exact-move-name,overview,False,implemented-pending-player-review
+shadowbone,Shadow Bone,hammer,projectiles,normal,1.0,708,0,exact-move-name,overview,False,implemented-pending-player-review
+shadowclaw,Shadow Claw,slash,contact,normal,1.0,421,5,exact-move-name,overview,False,implemented-pending-player-review
+shadowforce,Shadow Force,vanish,contact,normal,1.25,467,7,exact-move-name,overview,False,implemented-pending-player-review
+shadowpunch,Shadow Punch,punch,contact,normal,1.0,325,1,exact-move-name,overview,False,implemented-pending-player-review
+shadowsneak,Shadow Sneak,vanish,contact,normal,1.0,425,4,exact-move-name,overview,False,implemented-pending-player-review
+sharpen,Sharpen,boost,self,self,1.4,159,0,exact-move-name,overview,False,implemented-pending-player-review
+shedtail,Shed Tail,ritual,self,self,1.4,880,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+sheercold,Sheer Cold,burst,field,normal,1.4,329,6,exact-move-name,overview,True,implemented-pending-player-review
+shellsidearm,Shell Side Arm,bomb,projectiles,normal,1.4,801,10,explicit-shared-motif,overview,False,implemented-pending-player-review
+shellsmash,Shell Smash,boost,self,self,1.4,504,3,exact-move-name,overview,False,implemented-pending-player-review
+shelltrap,Shell Trap,burst,field,allAdjacentFoes,1.65,704,0,exact-move-name,overview,True,implemented-pending-player-review
+shelter,Shelter,shield,self,self,1.4,842,1,explicit-shared-motif,overview,False,implemented-pending-player-review
+shiftgear,Shift Gear,boost,self,self,1.4,508,2,exact-move-name,overview,False,implemented-pending-player-review
+shockwave,Shock Wave,lightning,field,normal,1.4,351,3,exact-move-name,overview,True,implemented-pending-player-review
+shoreup,Shore Up,heal,self,self,1.4,659,3,exact-move-name,overview,False,implemented-pending-player-review
+signalbeam,Signal Beam,beam,beams,normal,1.75,324,0,exact-move-name,overview,False,implemented-pending-player-review
+silktrap,Silk Trap,shield,self,self,1.4,852,1,explicit-shared-motif,overview,False,implemented-pending-player-review
+silverwind,Silver Wind,vortex,field,normal,1.4,318,0,exact-move-name,overview,False,implemented-pending-player-review
+simplebeam,Simple Beam,statuswave,status,normal,1.4,493,3,exact-move-name,overview,False,implemented-pending-player-review
+sing,Sing,statussound,status,normal,1.4,47,1,exact-move-name,overview,False,implemented-pending-player-review
+sizzlyslide,Sizzly Slide,rush,contact,normal,1.0,735,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+sketch,Sketch,ritual,status,normal,1.4,166,0,exact-move-name,overview,False,implemented-pending-player-review
+skillswap,Skill Swap,exchange,status,normal,1.4,285,3,exact-move-name,overview,True,implemented-pending-player-review
+skittersmack,Skitter Smack,rush,contact,normal,1.0,806,1,explicit-shared-motif,overview,False,implemented-pending-player-review
+skullbash,Skull Bash,ram,contact,normal,1.25,130,0,exact-move-name,overview,False,implemented-pending-player-review
+skyattack,Sky Attack,vanish,projectiles,any,1.25,143,8,exact-move-name,overview,False,implemented-pending-player-review
+skydrop,Sky Drop,vanish,contact,any,1.0,507,0,exact-move-name,overview,False,implemented-pending-player-review
+skyuppercut,Sky Uppercut,punch,contact,normal,1.0,327,0,exact-move-name,overview,False,implemented-pending-player-review
+slackoff,Slack Off,heal,self,self,1.4,303,1,exact-move-name,overview,False,implemented-pending-player-review
+slam,Slam,ram,contact,normal,1.0,21,2,exact-move-name,overview,False,implemented-pending-player-review
+slash,Slash,slash,contact,normal,1.0,163,1,exact-move-name,overview,False,implemented-pending-player-review
+sleeptalk,Sleep Talk,statussound,status,self,1.4,214,1,exact-move-name,overview,False,implemented-pending-player-review
+sludge,Sludge,bomb,projectiles,normal,1.4,124,3,exact-move-name,overview,False,implemented-pending-player-review
+sludgewave,Sludge Wave,wave,field,allAdjacent,1.4,482,2,exact-move-name,overview,False,implemented-pending-player-review
+smackdown,Smack Down,shard,projectiles,normal,1.4,479,3,exact-move-name,overview,False,implemented-pending-player-review
+smartstrike,Smart Strike,pierce,contact,normal,1.0,684,6,exact-move-name,overview,False,implemented-pending-player-review
+smellingsalts,Smelling Salts,ram,contact,normal,1.0,265,0,exact-move-name,overview,False,implemented-pending-player-review
+smog,Smog,mist,status,normal,1.4,123,2,exact-move-name,overview,False,implemented-pending-player-review
+snaptrap,Snap Trap,cage,status,normal,1.4,779,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+snarl,Snarl,sound,waves,allAdjacentFoes,1.4,555,4,exact-move-name,overview,False,implemented-pending-player-review
+snatch,Snatch,ritual,self,self,1.4,289,0,exact-move-name,overview,False,implemented-pending-player-review
+snipeshot,Snipe Shot,beam,beams,normal,1.75,745,4,explicit-shared-motif,overview,True,implemented-pending-player-review
+snore,Snore,sound,waves,normal,1.4,173,4,exact-move-name,overview,False,implemented-pending-player-review
+snowscape,Snowscape,weather,field,all,1.8,883,1,explicit-shared-motif,overview,True,implemented-pending-player-review
+soak,Soak,statuscloud,status,normal,1.4,487,2,exact-move-name,overview,True,implemented-pending-player-review
+softboiled,Soft-Boiled,heal,self,self,1.4,135,3,exact-move-name,overview,False,implemented-pending-player-review
+solarblade,Solar Blade,slash,contact,normal,1.25,669,10,explicit-shared-motif,overview,False,implemented-pending-player-review
+sonicboom,Sonic Boom,sound,waves,normal,1.4,49,0,exact-move-name,overview,False,implemented-pending-player-review
+spacialrend,Spacial Rend,cutwave,projectiles,normal,1.65,460,12,exact-move-name,projectile,True,implemented-pending-player-review
+sparklyswirl,Sparkly Swirl,sound,waves,normal,1.65,740,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+spectralthief,Spectral Thief,vanish,contact,normal,1.0,712,0,exact-move-name,overview,False,implemented-pending-player-review
+speedswap,Speed Swap,exchange,status,normal,1.4,683,3,exact-move-name,overview,True,implemented-pending-player-review
+spicyextract,Spicy Extract,statuswave,status,normal,1.4,858,3,explicit-shared-motif,overview,True,implemented-pending-player-review
+spiderweb,Spider Web,seal,status,normal,1.4,169,0,exact-move-name,overview,False,implemented-pending-player-review
+spikecannon,Spike Cannon,shard,projectiles,normal,1.4,131,0,exact-move-name,overview,False,implemented-pending-player-review
+spikyshield,Spiky Shield,shield,self,self,1.4,596,2,exact-move-name,overview,True,implemented-pending-player-review
+spinout,Spin Out,spin,contact,normal,1.25,859,9,explicit-shared-motif,overview,False,implemented-pending-player-review
+spiritbreak,Spirit Break,hammer,contact,normal,1.0,789,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+spiritshackle,Spirit Shackle,shard,projectiles,normal,1.4,662,8,exact-move-name,overview,True,implemented-pending-player-review
+spite,Spite,seal,status,normal,1.4,180,3,exact-move-name,overview,True,implemented-pending-player-review
+spitup,Spit Up,bomb,projectiles,normal,1.4,255,3,exact-move-name,overview,False,implemented-pending-player-review
+splash,Splash,ritual,self,self,1.4,150,1,exact-move-name,overview,False,implemented-pending-player-review
+splishysplash,Splishy Splash,wave,field,allAdjacentFoes,1.4,730,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+spotlight,Spotlight,ritual,status,normal,1.4,671,0,exact-move-name,overview,False,implemented-pending-player-review
+springtidestorm,Springtide Storm,vortex,field,allAdjacentFoes,1.65,831,5,explicit-shared-motif,overview,True,implemented-pending-player-review
+steameruption,Steam Eruption,burst,field,normal,1.65,592,6,exact-move-name,overview,True,implemented-pending-player-review
+steamroller,Steamroller,spin,contact,normal,1.0,537,0,exact-move-name,overview,False,implemented-pending-player-review
+steelbeam,Steel Beam,beam,beams,normal,1.75,796,6,explicit-shared-motif,overview,False,implemented-pending-player-review
+steelroller,Steel Roller,spin,contact,normal,1.25,798,10,explicit-shared-motif,overview,False,implemented-pending-player-review
+steelwing,Steel Wing,spin,contact,normal,1.0,211,1,exact-move-name,overview,False,implemented-pending-player-review
+stockpile,Stockpile,boost,self,self,1.4,254,2,exact-move-name,overview,False,implemented-pending-player-review
+stomp,Stomp,ram,contact,normal,1.0,23,1,exact-move-name,overview,False,implemented-pending-player-review
+stompingtantrum,Stomping Tantrum,ram,contact,normal,1.0,707,4,exact-move-name,overview,False,implemented-pending-player-review
+stoneaxe,Stone Axe,slash,contact,normal,1.0,830,2,exact-move-name,overview,False,implemented-pending-player-review
+stoneedge,Stone Edge,eruption,field,normal,1.65,444,5,exact-move-name,overview,False,implemented-pending-player-review
+storedpower,Stored Power,orb,projectiles,normal,1.4,500,2,exact-move-name,overview,True,implemented-pending-player-review
+stormthrow,Storm Throw,grip,contact,normal,1.0,480,0,exact-move-name,overview,False,implemented-pending-player-review
+strangesteam,Strange Steam,burst,field,normal,1.4,790,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+strength,Strength,ram,contact,normal,1.0,70,2,exact-move-name,overview,False,implemented-pending-player-review
+strengthsap,Strength Sap,heal,status,normal,1.4,668,4,exact-move-name,overview,True,implemented-pending-player-review
+struggle,Struggle,ram,contact,randomNormal,1.0,165,1,exact-move-name,overview,False,implemented-pending-player-review
+strugglebug,Struggle Bug,sound,waves,allAdjacentFoes,1.4,522,3,exact-move-name,overview,False,implemented-pending-player-review
+stuffcheeks,Stuff Cheeks,boost,self,self,1.4,747,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+stunspore,Stun Spore,statuscloud,status,normal,1.4,78,2,exact-move-name,overview,True,implemented-pending-player-review
+submission,Submission,grip,contact,normal,1.0,66,0,exact-move-name,overview,False,implemented-pending-player-review
+sunnyday,Sunny Day,weather,field,all,1.8,241,1,exact-move-name,overview,True,implemented-pending-player-review
+sunsteelstrike,Sunsteel Strike,rush,contact,normal,1.25,713,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+supercellslam,Supercell Slam,rush,contact,normal,1.25,916,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+superfang,Super Fang,fang,contact,normal,1.0,162,3,exact-move-name,overview,False,implemented-pending-player-review
+surf,Surf,wave,field,allAdjacent,1.4,57,2,exact-move-name,overview,True,implemented-pending-player-review
+surgingstrikes,Surging Strikes,punch,contact,normal,1.45,818,8,explicit-shared-motif,overview,False,implemented-pending-player-review
+swagger,Swagger,statuswave,status,normal,1.4,207,1,exact-move-name,overview,False,implemented-pending-player-review
+swallow,Swallow,heal,self,self,1.4,256,2,exact-move-name,overview,False,implemented-pending-player-review
+sweetkiss,Sweet Kiss,heart,status,normal,1.4,186,3,exact-move-name,overview,True,implemented-pending-player-review
+switcheroo,Switcheroo,exchange,status,normal,1.4,415,1,exact-move-name,overview,False,implemented-pending-player-review
+synchronoise,Synchronoise,pulse,waves,allAdjacent,1.65,485,0,exact-move-name,overview,True,implemented-pending-player-review
+synthesis,Synthesis,heal,self,self,1.4,235,4,exact-move-name,overview,True,implemented-pending-player-review
+syrupbomb,Syrup Bomb,bomb,projectiles,normal,1.4,903,0,exact-move-name,overview,True,implemented-pending-player-review
+tachyoncutter,Tachyon Cutter,cutwave,projectiles,normal,1.4,911,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+tailglow,Tail Glow,boost,self,self,1.4,294,0,exact-move-name,overview,False,implemented-pending-player-review
+tailslap,Tail Slap,lash,contact,normal,1.0,541,1,exact-move-name,overview,False,implemented-pending-player-review
+tailwind,Tailwind,room,field,allySide,1.8,366,1,exact-move-name,overview,False,implemented-pending-player-review
+takedown,Take Down,ram,contact,normal,1.0,36,3,exact-move-name,overview,False,implemented-pending-player-review
+takeheart,Take Heart,heal,self,self,1.4,850,2,explicit-shared-motif,overview,True,implemented-pending-player-review
+tarshot,Tar Shot,statuscloud,status,normal,1.4,749,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+tearfullook,Tearful Look,statuswave,status,normal,1.4,715,1,exact-move-name,overview,False,implemented-pending-player-review
+teatime,Teatime,ritual,status,all,1.4,752,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+technoblast,Techno Blast,beam,beams,normal,1.75,546,0,exact-move-name,overview,False,implemented-pending-player-review
+teeterdance,Teeter Dance,statuswave,status,allAdjacent,1.4,298,2,exact-move-name,overview,False,implemented-pending-player-review
+telekinesis,Telekinesis,seal,status,normal,1.4,477,0,exact-move-name,overview,True,implemented-pending-player-review
+temperflare,Temper Flare,rush,contact,normal,1.0,915,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+terablast,Tera Blast,orb,projectiles,normal,1.4,851,122,explicit-shared-motif,overview,False,implemented-pending-player-review
+terrainpulse,Terrain Pulse,orb,projectiles,normal,1.4,805,25,explicit-shared-motif,overview,False,implemented-pending-player-review
+thief,Thief,ram,contact,normal,1.0,168,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+thousandarrows,Thousand Arrows,shard,projectiles,allAdjacentFoes,1.4,614,0,exact-move-name,overview,False,implemented-pending-player-review
+thousandwaves,Thousand Waves,wave,field,allAdjacentFoes,1.4,615,0,exact-move-name,overview,False,implemented-pending-player-review
+thrash,Thrash,ram,contact,randomNormal,1.25,37,1,exact-move-name,overview,False,implemented-pending-player-review
+throatchop,Throat Chop,slash,contact,normal,1.0,675,2,exact-move-name,overview,False,implemented-pending-player-review
+thunder,Thunder,lightning,field,normal,1.65,87,8,exact-move-name,overview,True,implemented-pending-player-review
+thundercage,Thunder Cage,cage,status,normal,1.4,819,8,explicit-shared-motif,overview,True,implemented-pending-player-review
+thunderclap,Thunderclap,lightning,field,normal,1.4,909,0,explicit-shared-motif,overview,True,implemented-pending-player-review
+thunderfang,Thunder Fang,fang,contact,normal,1.0,422,2,exact-move-name,overview,False,implemented-pending-player-review
+thunderouskick,Thunderous Kick,kick,contact,normal,1.0,823,8,explicit-shared-motif,overview,False,implemented-pending-player-review
+tickle,Tickle,statuswave,status,normal,1.4,321,2,exact-move-name,overview,False,implemented-pending-player-review
+tidyup,Tidy Up,boost,self,self,1.4,882,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+topsyturvy,Topsy-Turvy,statuswave,status,normal,1.4,576,0,exact-move-name,overview,False,implemented-pending-player-review
+torchsong,Torch Song,sound,waves,normal,1.4,871,7,explicit-shared-motif,overview,True,implemented-pending-player-review
+torment,Torment,statuswave,status,normal,1.4,259,2,exact-move-name,overview,False,implemented-pending-player-review
+toxicthread,Toxic Thread,statuscloud,status,normal,1.4,672,0,exact-move-name,overview,False,implemented-pending-player-review
+trailblaze,Trailblaze,rush,contact,normal,1.0,885,2,explicit-shared-motif,overview,True,implemented-pending-player-review
+transform,Transform,ritual,status,normal,1.4,144,2,exact-move-name,overview,False,implemented-pending-player-review
+triattack,Tri Attack,prism,projectiles,normal,1.4,161,9,exact-move-name,overview,False,implemented-pending-player-review
+trick,Trick,exchange,status,normal,1.4,271,1,exact-move-name,overview,True,implemented-pending-player-review
+trickortreat,Trick-or-Treat,seal,status,normal,1.4,567,0,exact-move-name,overview,True,implemented-pending-player-review
+trickroom,Trick Room,room,field,all,1.6,433,3,exact-move-name,overview,True,implemented-pending-player-review
+triplearrows,Triple Arrows,shard,projectiles,normal,1.4,843,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+tripleaxel,Triple Axel,kick,contact,normal,1.0,813,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+tripledive,Triple Dive,rush,contact,normal,1.0,865,5,explicit-shared-motif,overview,True,implemented-pending-player-review
+triplekick,Triple Kick,kick,contact,normal,1.0,167,0,exact-move-name,overview,False,implemented-pending-player-review
+tropkick,Trop Kick,kick,contact,normal,1.0,688,2,exact-move-name,overview,False,implemented-pending-player-review
+trumpcard,Trump Card,pulse,waves,normal,1.4,376,0,exact-move-name,overview,False,implemented-pending-player-review
+twinbeam,Twin Beam,beam,beams,normal,1.75,888,6,explicit-shared-motif,overview,True,implemented-pending-player-review
+twineedle,Twineedle,shard,projectiles,normal,1.4,41,0,exact-move-name,overview,False,implemented-pending-player-review
+twister,Twister,vortex,field,allAdjacentFoes,1.4,239,2,exact-move-name,overview,True,implemented-pending-player-review
+upperhand,Upper Hand,ram,contact,normal,1.0,918,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+uproar,Uproar,sound,waves,randomNormal,1.4,253,2,exact-move-name,overview,False,implemented-pending-player-review
+vacuumwave,Vacuum Wave,cutwave,projectiles,normal,1.4,410,2,exact-move-name,overview,False,implemented-pending-player-review
+vcreate,V-create,rush,contact,normal,1.25,557,8,exact-move-name,overview,True,implemented-pending-player-review
+veeveevolley,Veevee Volley,ram,contact,normal,1.0,741,0,explicit-shared-motif,overview,False,implemented-pending-player-review
+venomdrench,Venom Drench,statuscloud,status,allAdjacentFoes,1.4,599,0,exact-move-name,overview,False,implemented-pending-player-review
+venoshock,Venoshock,orb,projectiles,normal,1.4,474,3,exact-move-name,overview,False,implemented-pending-player-review
+victorydance,Victory Dance,boost,self,self,1.4,837,3,explicit-shared-motif,overview,False,implemented-pending-player-review
+visegrip,Vise Grip,grip,contact,normal,1.0,11,2,explicit-shared-motif,overview,False,implemented-pending-player-review
+vitalthrow,Vital Throw,grip,contact,normal,1.0,233,0,exact-move-name,overview,False,implemented-pending-player-review
+volttackle,Volt Tackle,rush,contact,normal,1.25,344,8,exact-move-name,overview,True,implemented-pending-player-review
+wakeupslap,Wake-Up Slap,punch,contact,normal,1.0,358,0,exact-move-name,overview,False,implemented-pending-player-review
+waterfall,Waterfall,rush,contact,normal,1.0,127,3,exact-move-name,overview,True,implemented-pending-player-review
+waterpledge,Water Pledge,eruption,field,normal,1.4,518,3,exact-move-name,overview,True,implemented-pending-player-review
+watersport,Water Sport,room,field,all,1.8,346,0,exact-move-name,overview,True,implemented-pending-player-review
+waterspout,Water Spout,wave,field,allAdjacentFoes,1.65,323,5,exact-move-name,overview,True,implemented-pending-player-review
+wavecrash,Wave Crash,rush,contact,normal,1.25,834,7,explicit-shared-motif,overview,True,implemented-pending-player-review
+whirlpool,Whirlpool,vortex,field,normal,1.4,250,4,exact-move-name,overview,True,implemented-pending-player-review
+whirlwind,Whirlwind,room,field,normal,1.8,18,2,exact-move-name,overview,False,implemented-pending-player-review
+wickedblow,Wicked Blow,punch,contact,normal,1.0,817,6,explicit-shared-motif,overview,False,implemented-pending-player-review
+wickedtorque,Wicked Torque,rush,projectiles,normal,1.0,897,4,explicit-shared-motif,overview,False,implemented-pending-player-review
+wideguard,Wide Guard,shield,self,allySide,1.4,469,2,exact-move-name,overview,False,implemented-pending-player-review
+wildboltstorm,Wildbolt Storm,vortex,field,allAdjacentFoes,1.65,847,4,explicit-shared-motif,overview,True,implemented-pending-player-review
+wildcharge,Wild Charge,rush,contact,normal,1.0,528,3,exact-move-name,overview,True,implemented-pending-player-review
+wonderroom,Wonder Room,room,field,all,1.8,472,3,exact-move-name,overview,True,implemented-pending-player-review
+workup,Work Up,boost,self,self,1.4,526,3,exact-move-name,overview,False,implemented-pending-player-review
+worryseed,Worry Seed,seal,status,normal,1.4,388,3,exact-move-name,overview,True,implemented-pending-player-review
+wrap,Wrap,lash,contact,normal,1.0,35,1,exact-move-name,overview,False,implemented-pending-player-review
+wringout,Wring Out,pulse,waves,normal,1.4,378,0,exact-move-name,overview,False,implemented-pending-player-review
+xscissor,X-Scissor,slash,contact,normal,1.0,404,2,exact-move-name,overview,False,implemented-pending-player-review
+yawn,Yawn,statuswave,status,normal,1.4,281,2,exact-move-name,overview,False,implemented-pending-player-review
+zapcannon,Zap Cannon,orb,projectiles,normal,1.65,192,3,exact-move-name,overview,True,implemented-pending-player-review
+zenheadbutt,Zen Headbutt,ram,contact,normal,1.0,428,3,exact-move-name,overview,False,implemented-pending-player-review
+zingzap,Zing Zap,rush,contact,normal,1.0,716,4,exact-move-name,overview,True,implemented-pending-player-review
+zippyzap,Zippy Zap,rush,contact,normal,1.0,729,0,explicit-shared-motif,overview,True,implemented-pending-player-review

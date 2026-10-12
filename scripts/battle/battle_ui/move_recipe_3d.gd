@@ -1,15 +1,18 @@
 extends RefCounted
 ## Individually tunable first-pass recipes, separate from the approved renderers.
+const EXTENSIONS = preload("res://data/battle_move_extensions_3d.json")
 const DATA = preload("res://data/battle_move_recipes_3d.json")
 
 static func key(move: String) -> String:
-	return move.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "").replace(",", "").replace("'", "").replace("’", "").replace(".", "")
+	var normalized := move.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "").replace(",", "").replace("'", "").replace("’", "").replace(".", "")
+
+	return str(EXTENSIONS.data.aliases.get(normalized, normalized))
 
 static func get_recipe(move: String) -> Dictionary:
-	return DATA.data.moves.get(key(move), {})
+	return DATA.data.moves.get(key(move), EXTENSIONS.data.moves.get(key(move), {}))
 
 static func supports(move: String) -> bool:
-	return DATA.data.moves.has(key(move))
+	return DATA.data.moves.has(key(move)) or EXTENSIONS.data.moves.has(key(move))
 
 static func contact(move: String) -> bool:
 	return bool(get_recipe(move).get("contact", false))
@@ -29,9 +32,19 @@ static func audio_plan(timing: Dictionary) -> Dictionary:
 		if value.has("at_fraction"):
 			at = duration * float(value.at_fraction)
 			end = duration * float(value.end_fraction)
+		if recipe.get("renderer", "") == "extended":
+			# Anatomy-specific launch/impact markers override the default recipe clock.
+			var window := end - at
+			at = impact if role == "impact" else launch if role == "release" else at
+			end = minf(duration, at + window)
 		var event := {"name":value.name,"volume":value.volume,"pitch":value.pitch,
 			"requires_hit":role == "impact","role":role,"end_seconds":end,"fade_seconds":duration*0.055}
 		cues.append({"at_seconds":at,"event":event})
 		paths[value.name] = value.path
 	cues.sort_custom(func(a,b):return a.at_seconds<b.at_seconds)
 	return {"cues":cues,"sound_paths":paths,"duration_seconds":duration,"speed_scale":1.0,"bounded_to_action":true}
+
+static func all_recipes() -> Dictionary:
+	var result: Dictionary = DATA.data.moves.duplicate()
+	result.merge(EXTENSIONS.data.moves)
+	return result
