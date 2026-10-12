@@ -29,8 +29,8 @@ func _ready() -> void:
 	var gradient := Gradient.new()
 	gradient.offsets = PackedFloat32Array([0.0, 0.25, 0.55, 0.85, 1.0])
 	gradient.colors = PackedColorArray([
-		Color("080d1c00"), Color("080d1c70"), Color("080d1cdb"),
-		Color("080d1cf2"), Color("080d1cf2")])
+		Color("080d1c00"), Color("080d1c40"), Color("080d1c99"),
+		Color("080d1cb8"), Color("080d1cb8")])
 	var texture := GradientTexture2D.new()
 	texture.gradient = gradient
 	texture.width = 2

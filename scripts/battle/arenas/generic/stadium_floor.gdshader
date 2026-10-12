@@ -20,8 +20,9 @@ void fragment() {
 			moving_pool += exp(-dot(p-center,p-center)/5.0)*0.30;
 		}
 	}
-	ALBEDO = vec3(0.022,0.017,0.05);
-	EMISSION = vec3(0.20,0.05,0.48)*(line*0.6+pool) + vec3(0.43,0.24,0.65)*max(rings,center) + vec3(0.42,0.28,0.85)*moving_pool;
+	ALBEDO = vec3(0.045,0.038,0.075);
+	// A dim, uniform violet base keeps the matte field readable without glare.
+	EMISSION = vec3(0.012,0.009,0.022) + vec3(0.20,0.05,0.48)*(line*0.6+pool) + vec3(0.43,0.24,0.65)*max(rings,center) + vec3(0.42,0.28,0.85)*moving_pool;
 	ROUGHNESS = 1.0;
 	METALLIC = 0.0;
 	SPECULAR = 0.0;
