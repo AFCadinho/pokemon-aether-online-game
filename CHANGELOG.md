@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Super Saiyan 4 (SS4) Outfit Box to Gift Store → Cosmetics → Outfits for 450 Gems, with complete male/female trainer and overworld previews.
+
 - Lend tradeable land and Surf mounts directly to nearby players. Select mounts alongside held items, see player-loan deadlines in the mount selector, and safely stop riding or switch Surf mounts when the loan ends.
 
 - Add the Super Saiyan 4 (SS4) Outfit Box for both player models, with separate fur, trousers, shoes, fixed-colour hair and an animated tail under Back; include trainer and overworld art and skin-tone-aware trainer chest shading.
