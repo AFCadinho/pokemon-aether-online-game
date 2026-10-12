@@ -35,6 +35,8 @@ func _run() -> void:
 func _battle() -> Variant:
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	battle.set_script(load("res://tests/fixtures/trainer_3d_summon_probe.gd"))
+	if root.get_node("SettingsManager").battle_ui_layout == "immersive":
+		load("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
 	root.add_child(battle)
 	var offline_loader := load("res://tests/fixtures/offline_preview_sprite_loader.gd")
 	for layer in [battle.player_team_preview_layer, battle.enemy_team_preview_layer]:
@@ -100,19 +102,55 @@ func _check_intro(player: Pokemon, preview: bool) -> void:
 	_check(battle.setup_finished and battle.battle_actions_ready, "the intro completes and unlocks battle actions")
 	_check(commands == ["p1", "p2"] and throws == ["p1", "p2"], "both lead summons run through the real 3D route")
 	_check(not _hidden(stage, 0) and not _hidden(stage, 1), "both leads remain visible after their summons")
+	await _check_indicators(battle)
 	battle._update_active_sprites("settings_sprite_refresh")
 	await process_frame
 	await process_frame
 	_check(not _hidden(stage, 0) and not _hidden(stage, 1), "ordinary post-intro refreshes keep both leads visible")
 	# A later battle switch must still reveal its replacement normally.
 	await battle._play_switch_recall("poke-ball", battle.enemy_sprite_box, "front")
+	# A switch can also inherit a hidden/faded container from a 2D recall.
+	battle.enemy_sprite_box.hide()
+	battle.enemy_sprite_box.modulate.a = 0.0
 	battle._set_single_pokemon_species_with_pvp_warning(battle.enemy_sprite_box, "Arcanine", "front", false, "switch_event")
 	_seed_model(stage, "arcanine")
 	await battle._play_switch_release("poke-ball", "", battle.enemy_sprite_box, "front")
 	_check(stage.identities[1] == "arcanine" and not _hidden(stage, 1), "a later switch is not held by the opening summon")
+	_check(battle.enemy_sprite_box.is_visible_in_tree() and battle.enemy_sprite_box.modulate.a == 1.0,
+		"native switch release restores the indicator container")
+	_check(battle.enemy_sprite_box.single_sprite.self_modulate.a == 0.0, "restoring indicators never reveals the 2D sprite")
+	battle.enemy_sprite_box.hide()
+	battle.enemy_sprite_box.modulate.a = 0.0
+	var cancel_summon := func(ident: String, cue: String):
+		if ident == "p2" and cue == "summon_throw":
+			stage.cancel_actions.call_deferred()
+	stage.ball_cue.connect(cancel_summon)
+	await battle._play_switch_release("poke-ball", "", battle.enemy_sprite_box, "front")
+	stage.ball_cue.disconnect(cancel_summon)
+	_check(not battle.enemy_sprite_box.visible and battle.enemy_sprite_box.modulate.a == 0.0,
+		"a cancelled native summon does not restore the hidden indicator container")
 	battle.queue_free()
 	await process_frame
 	await process_frame
+
+func _check_indicators(battle: Node) -> void:
+	for side: String in ["p1", "p2"]:
+		var ident: String = battle.battle_state.get_active_player_pokemon(side).get("ident", "")
+		battle._apply_stat_stage_event({"type": "boost", "target": ident, "stat": "atk", "amount": 2})
+		battle._apply_stat_stage_event({"type": "unboost", "target": ident, "stat": "spe", "amount": 1})
+		battle._add_volatile_condition_for_ident(battle._normalize_battle_ident(ident), "taunt")
+	await process_frame
+	await process_frame
+	for box: Node in [battle.player_sprite_box, battle.enemy_sprite_box]:
+		var panel: Control = box.single_stat_stage_panel
+		_check(panel.stat_stage_row.get_child_count() == 3 and panel.ability_modifier_row.get_child_count() == 1,
+			"server boosts, drops and volatile effects populate both indicator rows")
+		_check(panel.is_visible_in_tree() and box.modulate.a == 1.0,
+			"stat and effect indicators remain visible after the native lead summon")
+		_check(box.single_sprite.self_modulate.a == 0.0, "visible indicator containers keep 2D sprites transparent")
+	battle._reset_battle_effect_tracking()
+	for box: Node in [battle.player_sprite_box, battle.enemy_sprite_box]:
+		_check(not box.single_stat_stage_panel.visible, "clearing battle effects also clears the restored indicators")
 
 func _check_rejected_entry_reset(player: Pokemon) -> void:
 	var battle: Variant = _battle()

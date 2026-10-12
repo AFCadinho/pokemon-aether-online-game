@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore stat boosts, drops and Pokémon effect indicators after 3D lead summons and switches, including AI Sparring and PvP battles started from Team Preview.
+
 - Show the Guild emblem, name, role, travel buttons and Guild options only on Overview, giving the other Guild tabs more space.
 
 - Keep the member Bank rights editor within the screen, with visible Save/Cancel buttons, grouped permissions and a scrollable form on smaller screens.
