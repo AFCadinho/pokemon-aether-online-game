@@ -4,25 +4,32 @@
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_kxldi"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_kxldi"]
 
-[node name="DesignCafeCornerTable" type="Node2D" unique_id=990397982]
+[node name="DesignCafeCornerTable" type="Node2D" unique_id=460837158]
 texture_filter = 1
 script = ExtResource("1_yn5ne")
 furniture_id = "design_cafe_corner_table"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=643390356]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=537151886]
 position = Vector2(0, -96)
-tile_map_data = PackedByteArray("AAAAAAAAAAAJAA0AAAABAAAAAAANAA4AAAACAAAAAAAOAA4AAAADAAAAAAAPAA4AAAABAAEAAAAEAA8AAAACAAEAAAAFAA8AAAADAAEAAAAGAA8AAAABAAIAAAALAA8AAAACAAIAAAAMAA8AAAADAAIAAAANAA8AAAA=")
+tile_map_data = PackedByteArray("AAABAAAAAAANAA4AAAACAAAAAAAOAA4AAAADAAAAAAAPAA4AAAABAAEAAAAEAA8AAAACAAEAAAAFAA8AAAADAAEAAAAGAA8AAAABAAIAAAALAA8AAAACAAIAAAAMAA8AAAADAAIAAAANAA8AAAA=")
 tile_set = ExtResource("2_kxldi")
 
-[node name="ArtLayer1" type="TileMapLayer" parent="." unique_id=1911331371]
+[node name="FloorDetails0" type="TileMapLayer" parent="." unique_id=886472666]
+z_index = 2
+z_as_relative = false
+position = Vector2(0, -96)
+tile_map_data = PackedByteArray("AAAAAAAAAAAJAA0AAAA=")
+tile_set = ExtResource("2_kxldi")
+
+[node name="ArtLayer1" type="TileMapLayer" parent="." unique_id=706053127]
 position = Vector2(0, -96)
 tile_map_data = PackedByteArray("AAACAAAAAAAGABYAAAACAAEAAAAJABYAAAADAAEAAAAFABQAAAA=")
 tile_set = ExtResource("2_kxldi")
 
-[node name="Collision" type="TileMapLayer" parent="." unique_id=408185771]
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1693368180]
 z_index = 10
 position = Vector2(0, -96)
-tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAAAAAA//////////8BAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAEA//////////8BAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAAAAAIA//////////8BAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAA=")
 tile_set = ExtResource("3_kxldi")
 collision_enabled = false
 navigation_enabled = false

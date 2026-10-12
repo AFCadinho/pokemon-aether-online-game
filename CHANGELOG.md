@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add complete editable Guild Café and Grand Lounge scenes for painting shared furniture collision in room context. Make all coloured floor cushions and the cushions inside Café furniture walkable.
+
 - Refine 15 more 3D moves with individually sculpted fire, muddy water, sludge, dark energy, psychic strikes and storms, including a recognizable Fire Blast glyph and an energy-dragon silhouette for Dragon Pulse. Match atmosphere and camera framing to each attack while preserving speed, audio and hit/miss/block behavior.
 
 - Let artists paint Guild furniture collision in each scene’s Collision TileMapLayer and export it to both catalogs from Godot. Use the painted cells for walking, placement overlap, player occupancy and route checks, preserve them during visual imports and keep existing room layouts compatible.
