@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore 56 alternate-form 3D model pairs for the next model release: Unown letters and punctuation, Silvally types, Squawkabilly colours, Pumpkaboo/Gourgeist sizes and Sawsbuck seasons. Preserve distinct battle sizes and retain explicit holds for incomplete source models.
+
 - Offer to activate a spare Encounter Guard after its 3,000 encounters or first protected rare encounter, once battle and other interactions have finished.
 
 - Compact personal boost tooltips to one line per effect with its remaining duration or encounter count.
