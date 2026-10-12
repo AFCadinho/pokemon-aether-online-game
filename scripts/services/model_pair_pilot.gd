@@ -20,7 +20,16 @@ static func geometry_enabled() -> bool:
 
 static func production_enabled() -> bool:
 	if OS.is_debug_build():
-		return OS.get_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST") == "1"
+		var override := OS.get_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST")
+		if not override.is_empty():
+			return override == "1"
+		# Local desktop play must use the published collection too: most of the
+		# old v11/v12 ZIPs have been retired. Explicit diagnostics keep their pins.
+		if not OS.has_feature("editor"):
+			return false
+		for mode in ["GEOMETRY_TEST", "QUALIFIED_TEST", "CATALOG_TEST", "PILOT"]:
+			if OS.get_environment("POKEAETHER_SHARED_MODEL_" + mode) == "1":
+				return false
 	return OS.has_feature("windows") or OS.has_feature("linuxbsd") or OS.has_feature("macos")
 
 static func catalog_enabled() -> bool:

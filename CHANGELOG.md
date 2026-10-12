@@ -4,6 +4,14 @@
 
 - Connect Legendary Mining Drops to Rock Smash's rock tiers, show their chances and values in Skills, and let Collector Hugo buy all ores after confirmation at the Pewter Museum counter. Update the forum guide for the upcoming release.
 
+- Give all 35 Z-moves individual cinematic camera and environment-colour profiles while preserving their attack and audio timing. Replace enlarged sprite clouds with smooth 3D attack forms, including flowing vortices, an energy dragon and a fiery orb; restore the battle camera and weather after each move.
+
+- Set the Zekrom Mount Box Gift Store price to 1,000 Aether Gems.
+
+- Add the Flying Nimbus Mount Box to Gift Store → Mounts → Land for 500 Aether Gems, with normal and dark shiny previews.
+
+- Add the dark blue and violet Shiny Flying Nimbus mount with a matching moving cloud trail, available through admin grants.
+
 - Add distinct transparent pixel-art inventory icons for Emberite, Voltite, Glacite, Astralite and Aetherium Ore.
 
 - Keep the two HP cards in 3D single battles on a fixed upper row, with your Pokémon on the left and the opponent on the right. Keep stat indicators attached and reserve space for the battle header as the window resizes.
@@ -11,6 +19,10 @@
 - Add the grantable Flying Nimbus land mount with the approved golden cloud, seated rider, gentle hover and a short moving cloud trail.
 
 - Show readable species nameplates above the opposing Pokémon during 3D Team Preview, following their arena positions and clearing them before lead summons.
+
+- Keep a failed or stalled 3D Team Preview from disabling 3D for supported battle leads, resolve unsupported previews immediately, and safely release preview models between render frames.
+
+- Use the current published 3D collection in local desktop editor battles, avoiding removed model downloads during Team Preview; include the Pokémon and HTTP status in download failures.
 
 - Reframe the 3D battle overview toward the Pokémon with a higher viewing angle and HUD-aware zoom limits, keeping resting models above the battle controls while preserving attack timing, cinematic shots and 2.5D framing.
 

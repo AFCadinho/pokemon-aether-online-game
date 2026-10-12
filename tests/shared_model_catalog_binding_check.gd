@@ -9,6 +9,7 @@ const Breath = preload("res://scripts/battle/animations/charmander_breath.gd")
 const Visibility = preload("res://scripts/battle/animations/reviewed_source_visibility.gd")
 
 func _init() -> void:
+	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST", "0")
 	_run.call_deferred()
 
 func _run() -> void:

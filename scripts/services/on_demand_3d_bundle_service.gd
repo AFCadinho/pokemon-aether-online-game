@@ -756,6 +756,10 @@ func _prune_unused_models(entries: Array, index: Dictionary, storage_root: Strin
 	return result
 
 
+func _start_download_request(url: String) -> Error:
+	return active_request.request(url)
+
+
 func _fetch(url: String, path: String, expected: int, digest: String, limit: int, label: String) -> String:
 	if expected < 1 or expected > limit or not url.begins_with(BASE_URL):
 		return "Invalid approved 3D download."
@@ -771,18 +775,18 @@ func _fetch(url: String, path: String, expected: int, digest: String, limit: int
 	active_label = label
 	active_size = expected
 	active_started_ms = Time.get_ticks_msec()
-	var start := active_request.request(url)
+	var start := _start_download_request(url)
 	if start != OK:
 		active_request.queue_free()
 		active_request = null
-		return "Could not start the 3D model download."
+		return "Could not start the 3D model download for %s (error %d)." % [label, start]
 	var response: Array = await active_request.request_completed
 	active_request.queue_free()
 	active_request = null
 	active_label = "Verifying %s…" % label
 	if int(response[0]) != HTTPRequest.RESULT_SUCCESS or int(response[1]) != 200:
 		DirAccess.remove_absolute(absolute + ".partial")
-		return "3D model download failed."
+		return "3D model download failed for %s (HTTP %d, request result %d)." % [label, int(response[1]), int(response[0])]
 	return await _run_storage_work(_publish_verified_download.bind(absolute, expected, digest))
 
 

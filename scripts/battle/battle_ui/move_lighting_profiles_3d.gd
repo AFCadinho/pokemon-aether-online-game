@@ -1,6 +1,7 @@
 extends RefCounted
 ## Individually authored lighting beats sampled from the existing native VFX clock.
 const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
+const ZCinema = preload("res://scripts/battle/battle_ui/z_move_cinema_3d.gd")
 const PROFILES := {
 	"hyperbeam": {"tint":Color("ffc477"), "flash":Color("fff4d6"), "brightness":0.96, "energy":1.45, "range":3.6, "mix":0.24},
 	"solarbeam": {"tint":Color("c9ed76"), "flash":Color("ffffce"), "brightness":1.025, "energy":1.15, "range":3.8, "mix":0.28},
@@ -26,6 +27,7 @@ static func emission_end(effect: Node) -> float:
 	return effect.impact
 
 static func sample(effect: Node, seconds: float) -> Dictionary:
+	if ZCinema.supports(effect.key): return ZCinema.lighting(effect, seconds)
 	if Recipes.EXTENSIONS.data.moves.has(effect.key): return _sample_extension(effect, seconds)
 	var profile: Dictionary = PROFILES[effect.key]
 	var points: Dictionary = effect.anchors.call()
@@ -106,7 +108,7 @@ static func _add(lights: Array[Dictionary], point: Vector3, color: Color, energy
 	lights.append({"point":point, "color":color, "energy":energy, "range":reach, "role":role})
 
 static func supports(key: String) -> bool:
-	return PROFILES.has(key) or float(Recipes.get_recipe(key).get("lighting", {}).get("energy", 0.0)) > 0.0
+	return ZCinema.supports(key) or PROFILES.has(key) or float(Recipes.get_recipe(key).get("lighting", {}).get("energy", 0.0)) > 0.0
 
 static func _sample_extension(effect: Node, seconds: float) -> Dictionary:
 	var recipe: Dictionary = Recipes.get_recipe(effect.key)

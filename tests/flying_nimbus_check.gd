@@ -2,8 +2,15 @@ extends "res://tests/primal_kyogre_surf_check.gd"
 
 
 func _run() -> void:
-	var id := "flying_nimbus"
-	var item := "flying-nimbus-mount"
+	for mount_id: String in ["flying_nimbus", "flying_nimbus_shiny"]:
+		_check_variant(mount_id)
+	await process_frame
+	print("Flying Nimbus checks: ", "FAILED" if failed else "PASS")
+	quit(1 if failed else 0)
+
+
+func _check_variant(id: String) -> void:
+	var item := "shiny-flying-nimbus-mount" if id.ends_with("_shiny") else "flying-nimbus-mount"
 	_check(Mounts.get_unlocked_mount_ids_for_mode("land", [item]) == [id], "Nimbus grant unlocks the land picker")
 	_check(not Mounts.is_mount_unlocked(id, []) and Mounts.is_mount_unlocked(id, [item + "-bound"]), "ownership and bound entitlement")
 	_check(Mounts.resolve_mount_id_for_mode(id, "surf").is_empty(), "Nimbus retains land movement restrictions")
@@ -33,6 +40,8 @@ func _run() -> void:
 			for avatar: Node2D in [actor, remote]:
 				var trail: Node2D = avatar.get("mount_nimbus_trail")
 				_check(trail != null and trail.enabled == (selected == id), "switching toggles Nimbus-only effect")
+				if selected == id:
+					_check(trail.trail_color == (Color("6838ce") if id.ends_with("_shiny") else Color(1.0, 0.67, 0.12)), "normal and shiny trail palettes restore on switches")
 				if selected != id:
 					_check(not trail.visible and not trail.is_processing(), "switch and dismount fully stop trail")
 					continue
@@ -55,8 +64,14 @@ func _run() -> void:
 							avatar.call("_update_mount_hover", 0.3)
 							_check(avatar.get("mount_hover_visual").visual_offset.y >= -7 and avatar.get("mount_hover_visual").visual_offset.y <= -5, "one-pixel shared hover")
 				_check(actor.call("get_feet_position") == feet and actor.call("get_interaction_position") == interaction and actor.get_node("DetectionShape").position == collision, "hover preserves gameplay anchors")
+	for selected: String in ["flying_nimbus_shiny", "flying_nimbus", "flying_nimbus_shiny"]:
+		actor.set("active_mount_id", selected)
+		actor.call("refresh_appearance")
+		actor.call("_sync_mount_visual")
+		remote.call("apply_state", {"userId": 1, "gender": "female", "appearance": Appearance.get_default_appearance("female"), "position": {"x": 0, "y": 0}, "movement": {"isMoving": true, "activityStyle": "ride", "mountId": selected}})
+		for avatar: Node2D in [actor, remote]:
+			var trail: Node2D = avatar.get("mount_nimbus_trail")
+			_check(trail.trail_color == (Color("6838ce") if selected.ends_with("_shiny") else Color(1.0, 0.67, 0.12)), "switching normal and shiny restores the right trail palette")
 	actor.free()
 	remote.free()
-	await process_frame
-	print("Flying Nimbus checks: ", "FAILED" if failed else "PASS")
-	quit(1 if failed else 0)
+	_check(Mounts.get_mount_definition(id).riderOffsets == Mounts.get_mount_definition("flying_nimbus").riderOffsets, "shiny retains approved seats")

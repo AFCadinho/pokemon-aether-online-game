@@ -9,6 +9,7 @@ func _init() -> void:
 
 
 func _run() -> void:
+	var shiny := OS.get_cmdline_user_args().has("--shiny")
 	var output := "user://flying_nimbus"
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--output="):
@@ -30,7 +31,7 @@ func _run() -> void:
 	for variant in range(2):
 		for dir in range(4):
 			var label := Label.new()
-			label.text = ("Flying Nimbus · vrouw" if variant else "Flying Nimbus · Adinho") + " · " + ["Voor", "Links", "Rechts", "Achter"][dir]
+			label.text = ("Shiny · " if shiny else "") + ("Flying Nimbus · vrouw" if variant else "Flying Nimbus · Adinho") + " · " + ["Voor", "Links", "Rechts", "Achter"][dir]
 			label.position = Vector2(20 + dir * 320, 16 + variant * 320)
 			viewport.add_child(label)
 			var actor: Variant = load("res://scripts/ui/mount_rider_preview.gd").new()
@@ -39,7 +40,7 @@ func _run() -> void:
 			var appearance := Appearance.get_default_appearance("female" if variant else "male")
 			if variant == 0:
 				appearance.merge({"gender": "male", "headgear": "", "hair": "Adinho_Hair", "hair_color": "#5a3728", "facial_hair_color": "#5a3728", "facial_hair": "Adinho_Beard", "facegear": "Adinho_Glasses", "top": "Adinho_Shirt", "bottom": "Adinho_Trousers", "shoes": "Adinho_Shoes"}, true)
-			actor.configure("flying_nimbus", appearance, DIRECTIONS[dir], false)
+			actor.configure("flying_nimbus_shiny" if shiny else "flying_nimbus", appearance, DIRECTIONS[dir], false)
 			actor.scale = Vector2(2, 2)
 			actor.position = Vector2(160 + dir * 320, 235 + variant * 320)
 			actor.base_look_position = Vector2(0, -16)

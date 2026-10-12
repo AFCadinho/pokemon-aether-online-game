@@ -170,6 +170,23 @@ func _apply_profile(stage: Node, sample: Dictionary) -> void:
 	var profile: Dictionary = sample.profile
 	pulse = float(sample.pulse)
 	_tint_environment(profile.tint, sample.color, float(profile.brightness), strength, float(profile.mix))
+	if sample.get("cinematic", false):
+		# Z backdrops sit beyond both fighters; retain an existing weather fog's
+		# shape and density. All changes belong to the temporary environment.
+		atmosphere.background_color = source.background_color.lerp(profile.tint, strength * 0.75)
+		if source.fog_enabled:
+			atmosphere.fog_light_color = source.fog_light_color.lerp(profile.tint, strength * 0.55)
+		else:
+			var anchors: Dictionary = effect.anchors.call()
+			atmosphere.fog_enabled = true
+			atmosphere.fog_mode = Environment.FOG_MODE_DEPTH
+			atmosphere.fog_light_color = profile.tint
+			atmosphere.fog_light_energy = 0.75
+			atmosphere.fog_depth_begin = maxf(camera.position.distance_to(anchors.actor_center), camera.position.distance_to(anchors.target)) + 3.0
+			atmosphere.fog_depth_end = atmosphere.fog_depth_begin + 24.0
+			atmosphere.fog_depth_curve = 0.85
+			atmosphere.fog_density = strength * 0.65
+			atmosphere.fog_sky_affect = strength * 0.75
 	if effect.key in Profiles.FIELDS and not source.fog_enabled:
 		# A shallow distant haze for wide storms, leaving the fighters clear.
 		atmosphere.fog_enabled = true

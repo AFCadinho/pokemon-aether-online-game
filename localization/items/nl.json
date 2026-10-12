@@ -1175,5 +1175,13 @@
   "flying-nimbus-mount": {
     "name": "Flying Nimbus-mount",
     "shortDesc": "Ontgrendelt Flying Nimbus als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "shiny-flying-nimbus-mount": {
+    "name": "Shiny Flying Nimbus-mount",
+    "shortDesc": "Ontgrendelt de donkere Shiny Flying Nimbus als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "flying-nimbus-mount-box": {
+    "name": "Flying Nimbus-mountbox",
+    "shortDesc": "Bevat een Flying Nimbus-mount. Shiny-basiskans: 50%."
   }
 }

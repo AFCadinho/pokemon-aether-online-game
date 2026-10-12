@@ -6996,5 +6996,6 @@
   "ui.guild.log.filter.action.base_design_changed": "房间设计变更",
   "ui.guild.log.guild.base_design_changed": "{actor}：{operation} · {room} · {name}。",
   "ui.guild_design.reload": "刷新",
-  "ui.guild_design.confirm_restore": "恢复上一布局？当前布局将成为恢复副本。"
+  "ui.guild_design.confirm_restore": "恢复上一布局？当前布局将成为恢复副本。",
+  "ui.shiny_tracker.mounts.store_description_flying_nimbus": "包含一只筋斗云坐骑。初始异色概率：50%。"
 }
