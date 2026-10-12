@@ -1,0 +1,902 @@
+key,name,type,renderer,motif,treatment,recipe_camera,recipe_light_energy,review
+10000000voltthunderbolt,"10,000,000 Volt Thunderbolt",electric,z,rainbow_lightning,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+absorb,Absorb,grass,staged,returning-drain,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+accelerock,Accelerock,rock,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+acid,Acid,poison,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+acidarmor,Acid Armor,poison,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+aciddownpour,Acid Downpour,poison,z,acid_column,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+acidspray,Acid Spray,poison,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+acrobatics,Acrobatics,flying,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+acupressure,Acupressure,normal,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+aerialace,Aerial Ace,flying,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+aeroblast,Aeroblast,flying,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.0,pending player review
+afteryou,After You,normal,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+agility,Agility,psychic,staged,orbit-dance,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+aircutter,Air Cutter,flying,extended,cutwave,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+airslash,Air Slash,flying,extended,cutwave,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+alloutpummeling,All-Out Pummeling,fighting,z,barrage,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+alluringvoice,Alluring Voice,fairy,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+allyswitch,Ally Switch,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+amnesia,Amnesia,psychic,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+anchorshot,Anchor Shot,steel,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+ancientpower,Ancient Power,rock,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+appleacid,Apple Acid,grass,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+aquacutter,Aqua Cutter,water,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+aquajet,Aqua Jet,water,staged,water-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+aquaring,Aqua Ring,water,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+aquastep,Aqua Step,water,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+aquatail,Aqua Tail,water,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+armorcannon,Armor Cannon,fire,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+armthrust,Arm Thrust,fighting,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+aromatherapy,Aromatherapy,grass,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+aromaticmist,Aromatic Mist,fairy,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+assist,Assist,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+assurance,Assurance,dark,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+astonish,Astonish,ghost,staged,ghost-strike,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+astralbarrage,Astral Barrage,ghost,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+attackorder,Attack Order,bug,extended,swarm,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+attract,Attract,normal,extended,heart,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+aurasphere,Aura Sphere,fighting,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,projectile,0.0,pending player review
+aurawheel,Aura Wheel,electric,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+aurorabeam,Aurora Beam,ice,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+auroraveil,Aurora Veil,ice,staged,protective-screen,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+autotomize,Autotomize,steel,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+avalanche,Avalanche,ice,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+axekick,Axe Kick,fighting,extended,kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+babydolleyes,Baby-Doll Eyes,fairy,staged,heart-stream,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+baddybad,Baddy Bad,dark,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+banefulbunker,Baneful Bunker,poison,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+barbbarrage,Barb Barrage,poison,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+barrage,Barrage,normal,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+barrier,Barrier,psychic,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+batonpass,Baton Pass,normal,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+beakblast,Beak Blast,flying,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+beatup,Beat Up,dark,extended,swarm,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+behemothbash,Behemoth Bash,steel,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+behemothblade,Behemoth Blade,steel,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+belch,Belch,poison,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.0,pending player review
+bellydrum,Belly Drum,normal,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+bestow,Bestow,normal,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+bide,Bide,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+bind,Bind,normal,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+bite,bite,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+bitterblade,Bitter Blade,fire,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+bittermalice,Bitter Malice,ghost,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+blackholeeclipse,Black Hole Eclipse,dark,z,black_hole,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+blastburn,Blast Burn,fire,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+blazekick,Blaze Kick,fire,extended,kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+blazingtorque,Blazing Torque,fire,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+bleakwindstorm,Bleakwind Storm,flying,elemental,individually sculpted,retain recent elemental refinement,field,0.7,pending player review
+blizzard,Blizzard,ice,elemental,individually sculpted,retain recent elemental refinement,field,0.7,pending player review
+block,Block,normal,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+bloodmoon,Blood Moon,normal,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,projectile,0.0,pending player review
+bloomdoom,Bloom Doom,grass,z,bloom_pillar,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+blueflare,Blue Flare,fire,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+bodypress,Body Press,fighting,staged,heavy-ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+bodyslam,Body Slam,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+boltbeak,Bolt Beak,electric,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+boltstrike,Bolt Strike,electric,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+boneclub,Bone Club,ground,extended,hammer,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+bonemerang,Bonemerang,ground,extended,boomerang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+bonerush,Bone Rush,ground,extended,hammer,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+boomburst,Boomburst,normal,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.0,pending player review
+bounce,Bounce,flying,extended,vanish,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+bouncybubble,Bouncy Bubble,water,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+branchpoke,Branch Poke,grass,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+bravebird,Brave Bird,flying,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+breakingswipe,Breaking Swipe,dragon,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+breakneckblitz,Breakneck Blitz,normal,z,rush,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+brickbreak,Brick Break,fighting,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+brine,Brine,water,extended,wave,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+brutalswing,Brutal Swing,dark,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+bubble,bubble,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+bubblebeam,bubblebeam,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+bugbite,Bug Bite,bug,staged,biting-strike,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+bugbuzz,Bug Buzz,bug,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+bulkup,Bulk Up,fighting,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+bulldoze,Bulldoze,ground,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+bulletpunch,Bullet Punch,steel,staged,heavy-punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+bulletseed,Bullet Seed,grass,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+burningbulwark,Burning Bulwark,fire,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+burningjealousy,Burning Jealousy,fire,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+burnup,Burn Up,fire,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+buzzybuzz,Buzzy Buzz,electric,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+calmmind,Calm Mind,psychic,staged,inward-focus,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+camouflage,Camouflage,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+captivate,Captivate,normal,extended,heart,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+catastropika,Catastropika,electric,z,electric_dive,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+ceaselessedge,Ceaseless Edge,dark,staged,cross-slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+celebrate,Celebrate,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+charge,Charge,electric,staged,electric-charge,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+chargebeam,Charge Beam,electric,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+charm,Charm,fairy,staged,heart-stream,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+chatter,Chatter,flying,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+chillingwater,Chilling Water,water,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+chillyreception,Chilly Reception,ice,staged,cold-front,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+chipaway,Chip Away,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+chloroblast,Chloroblast,grass,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+circlethrow,Circle Throw,fighting,extended,grip,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+clamp,Clamp,water,extended,fang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+clangingscales,Clanging Scales,dragon,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+clangoroussoul,Clangorous Soul,dragon,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+clangoroussoulblaze,Clangorous Soulblaze,dragon,z,sound_rings,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+clearsmog,Clear Smog,poison,extended,mist,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+closecombat,Close Combat,fighting,staged,2d-combo,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+coaching,Coaching,fighting,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+coil,Coil,poison,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+collisioncourse,Collision Course,fighting,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+combattorque,Combat Torque,fighting,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+cometpunch,Comet Punch,normal,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+comeuppance,Comeuppance,dark,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+confide,Confide,normal,extended,statussound,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+confuseray,Confuse Ray,ghost,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+confusion,Confusion,psychic,staged,psychic-tunnel,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+constrict,Constrict,normal,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+continentalcrush,Continental Crush,rock,z,boulder,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+conversion,Conversion,normal,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+conversion2,Conversion 2,normal,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+copycat,Copycat,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+coreenforcer,Core Enforcer,dragon,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+corkscrewcrash,Corkscrew Crash,steel,z,drill,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+corrosivegas,Corrosive Gas,poison,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+cosmicpower,Cosmic Power,psychic,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+cottonguard,Cotton Guard,grass,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+cottonspore,Cotton Spore,grass,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+counter,Counter,fighting,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+courtchange,Court Change,normal,staged,exchanging-sides,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+covet,Covet,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+crabhammer,Crabhammer,water,extended,hammer,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+craftyshield,Crafty Shield,fairy,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+crosschop,Cross Chop,fighting,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+crosspoison,Cross Poison,poison,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+crunch,Crunch,dark,extended,fang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+crushclaw,Crush Claw,normal,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+crushgrip,Crush Grip,normal,extended,grip,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+curse,Curse,ghost,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+cut,Cut,normal,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+darkestlariat,Darkest Lariat,dark,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+darkpulse,Dark Pulse,dark,elemental,individually sculpted,retain recent elemental refinement,orb,0.7,pending player review
+darkvoid,Dark Void,dark,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+dazzlinggleam,Dazzling Gleam,fairy,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+decorate,Decorate,fairy,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+defendorder,Defend Order,bug,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+defensecurl,Defense Curl,normal,staged,armor-shell,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+defog,Defog,flying,staged,clearing-mist,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+destinybond,Destiny Bond,ghost,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+detect,Detect,fighting,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+devastatingdrake,Devastating Drake,dragon,z,dragon,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+diamondstorm,Diamond Storm,rock,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.0,pending player review
+dig,Dig,ground,extended,vanish,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+direclaw,Dire Claw,poison,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+disable,Disable,normal,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+disarmingvoice,Disarming Voice,fairy,staged,sound-tunnel,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+discharge,Discharge,electric,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+dive,Dive,water,extended,vanish,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+dizzypunch,Dizzy Punch,normal,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+doodle,Doodle,normal,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+doomdesire,Doom Desire,steel,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+doubleedge,Double-Edge,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+doublehit,Double Hit,normal,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+doubleironbash,Double Iron Bash,steel,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+doublekick,Double Kick,fighting,staged,rising-kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+doubleshock,Double Shock,electric,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+doubleslap,Double Slap,normal,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+doubleteam,Double Team,normal,staged,orbit-dance,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+dracometeor,dracometeor,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+dragonascent,Dragon Ascent,flying,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+dragonbreath,Dragon Breath,dragon,staged,breath-stream,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+dragoncheer,Dragon Cheer,dragon,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+dragonclaw,Dragon Claw,dragon,staged,cross-slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+dragondance,Dragon Dance,dragon,staged,orbit-dance,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+dragondarts,Dragon Darts,dragon,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+dragonenergy,Dragon Energy,dragon,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+dragonhammer,Dragon Hammer,dragon,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+dragonpulse,Dragon Pulse,dragon,elemental,individually sculpted,retain recent elemental refinement,existing dedicated,0.7,pending player review
+dragonrage,Dragon Rage,dragon,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+dragonrush,Dragon Rush,dragon,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+dragontail,Dragon Tail,dragon,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+drainingkiss,Draining Kiss,fairy,staged,heart-stream,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+drainpunch,Drain Punch,fighting,staged,draining-punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+dreameater,Dream Eater,psychic,extended,drain,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+drillpeck,Drill Peck,flying,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+drillrun,Drill Run,ground,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+drumbeating,Drum Beating,grass,extended,hammer,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+dualchop,Dual Chop,dragon,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+dualwingbeat,Dual Wingbeat,flying,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+dynamaxcannon,Dynamax Cannon,dragon,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+dynamicpunch,Dynamic Punch,fighting,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+earthpower,Earth Power,ground,elemental,individually sculpted,retain recent elemental refinement,field,0.7,pending player review
+earthquake,Earthquake,ground,battlefield,quakes,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+echoedvoice,Echoed Voice,normal,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+eerieimpulse,Eerie Impulse,electric,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+eeriespell,Eerie Spell,psychic,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+eggbomb,Egg Bomb,normal,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.0,pending player review
+electricterrain,Electric Terrain,electric,staged,electric-field,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+electrify,Electrify,electric,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+electroball,Electro Ball,electric,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+electrodrift,Electro Drift,electric,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+electroshot,Electro Shot,electric,staged,electric-beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+electroweb,Electroweb,electric,extended,cage,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+embargo,Embargo,dark,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+ember,ember,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+encore,Encore,normal,staged,taunt-glyph,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+endeavor,Endeavor,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+endure,Endure,normal,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+energyball,Energy Ball,grass,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,projectile,0.7,pending player review
+entrainment,Entrainment,normal,extended,statussound,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+eruption,Eruption,fire,elemental,individually sculpted,retain recent elemental refinement,field,0.7,pending player review
+esperwing,Esper Wing,psychic,extended,cutwave,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+eternabeam,Eternabeam,dragon,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+expandingforce,Expanding Force,psychic,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+explosion,Explosion,normal,battlefield,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+extrasensory,Extrasensory,psychic,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+extremeevoboost,Extreme Evoboost,normal,z,evolution,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+extremespeed,Extreme Speed,normal,staged,speed-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+facade,Facade,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+fairylock,Fairy Lock,fairy,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+fairywind,Fairy Wind,fairy,staged,swirling-orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+fakeout,Fake Out,normal,staged,speed-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+faketears,Fake Tears,dark,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+falsesurrender,False Surrender,dark,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+falseswipe,False Swipe,normal,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+featherdance,Feather Dance,flying,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+feint,Feint,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+feintattack,Feint Attack,dark,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+fellstinger,Fell Stinger,bug,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+ficklebeam,Fickle Beam,dragon,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+fierydance,Fiery Dance,fire,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+fierywrath,Fiery Wrath,dark,wrath,pulse,retain continuous crimson flame wall,wave,1.65,existing presentation retained
+filletaway,Fillet Away,normal,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+finalgambit,Final Gambit,fighting,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+fireblast,Fire Blast,fire,elemental,individually sculpted,retain recent elemental refinement,beam,0.7,pending player review
+firefang,Fire Fang,fire,extended,fang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+firelash,Fire Lash,fire,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+firepledge,Fire Pledge,fire,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+firepunch,Fire Punch,fire,staged,elemental-punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+firespin,Fire Spin,fire,extended,vortex,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+firstimpression,First Impression,bug,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+fishiousrend,Fishious Rend,water,extended,fang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+fissure,Fissure,ground,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+flail,Flail,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+flameburst,Flame Burst,fire,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+flamecharge,Flame Charge,fire,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+flamethrower,flamethrower,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+flamewheel,Flame Wheel,fire,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+flareblitz,Flare Blitz,fire,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+flash,Flash,normal,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+flashcannon,flashcannon,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+flatter,Flatter,dark,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+fleurcannon,Fleur Cannon,fairy,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+fling,Fling,dark,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+flipturn,Flip Turn,water,staged,water-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+floatyfall,Floaty Fall,flying,extended,vanish,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+floralhealing,Floral Healing,fairy,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+flowershield,Flower Shield,fairy,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+flowertrick,Flower Trick,grass,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+fly,Fly,flying,extended,vanish,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+flyingpress,Flying Press,fighting,extended,kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+focusblast,focusblast,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+focusenergy,Focus Energy,normal,staged,inward-focus,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+focuspunch,Focus Punch,fighting,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+followme,Follow Me,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+forcepalm,Force Palm,fighting,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+foresight,Foresight,normal,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+forestscurse,Forest’s Curse,grass,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+foulplay,Foul Play,dark,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+freezedry,Freeze-Dry,ice,battlefield,snow,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+freezeshock,Freeze Shock,ice,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+freezingglare,Freezing Glare,psychic,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+freezyfrost,Freezy Frost,ice,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+frenzyplant,Frenzy Plant,grass,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+frostbreath,Frost Breath,ice,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+frustration,Frustration,normal,staged,speed-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+furyattack,Fury Attack,normal,staged,piercing-strike,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+furycutter,Fury Cutter,bug,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+furyswipes,Fury Swipes,normal,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+fusionbolt,Fusion Bolt,electric,extended,lightning,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+fusionflare,Fusion Flare,fire,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+futuresight,Future Sight,psychic,staged,future-eye,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+gastroacid,Gastro Acid,poison,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+geargrind,Gear Grind,steel,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+gearup,Gear Up,steel,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+genesissupernova,Genesis Supernova,psychic,z,dna_nova,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+geomancy,Geomancy,fairy,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+gigadrain,Giga Drain,grass,extended,drain,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+gigaimpact,Giga Impact,normal,staged,energy-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+gigatonhammer,Gigaton Hammer,steel,extended,hammer,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.0,pending player review
+gigavolthavoc,Gigavolt Havoc,electric,z,lightning,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+glaciallance,Glacial Lance,ice,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+glaciate,Glaciate,ice,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+glaiverush,Glaive Rush,dragon,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+glare,Glare,normal,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+glitzyglow,Glitzy Glow,psychic,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+grassknot,Grass Knot,grass,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+grasspledge,Grass Pledge,grass,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+grasswhistle,Grass Whistle,grass,extended,statussound,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+grassyglide,Grassy Glide,grass,staged,leaf-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+grassyterrain,Grassy Terrain,grass,staged,grass-field,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+gravapple,Grav Apple,grass,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+gravity,Gravity,psychic,extended,room,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+growl,Growl,normal,staged,sound-call,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+growth,Growth,normal,staged,growing-aura,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+grudge,Grudge,ghost,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+guardianofalola,Guardian of Alola,fairy,z,guardian_fist,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+guardsplit,Guard Split,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+guardswap,Guard Swap,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+guillotine,Guillotine,normal,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+gunkshot,Gunk Shot,poison,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.0,pending player review
+gust,Gust,flying,staged,wind-spiral,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+gyroball,Gyro Ball,steel,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+hail,Hail,ice,extended,weather,smooth supporting volumes; restrained status/heal/boost staging,overview,0.25,pending player review
+hammerarm,Hammer Arm,fighting,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+happyhour,Happy Hour,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+harden,Harden,normal,staged,armor-shell,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+hardpress,Hard Press,steel,extended,grip,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+haze,Haze,ice,staged,clearing-mist,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+headbutt,Headbutt,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+headcharge,Head Charge,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+headlongrush,Headlong Rush,ground,staged,heavy-ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+headsmash,Head Smash,rock,staged,heavy-ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+healbell,Heal Bell,normal,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+healblock,Heal Block,psychic,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+healingwish,Healing Wish,psychic,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+healorder,Heal Order,bug,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+healpulse,Heal Pulse,psychic,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+heartstamp,Heart Stamp,psychic,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+heartswap,Heart Swap,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+heatcrash,Heat Crash,fire,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+heatwave,Heat Wave,fire,elemental,individually sculpted,retain recent elemental refinement,field,0.7,pending player review
+heavyslam,Heavy Slam,steel,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+helpinghand,Helping Hand,normal,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+hex,Hex,ghost,staged,dark-tunnel,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+hiddenpower,Hidden Power,normal,staged,swirling-orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+highhorsepower,High Horsepower,ground,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+highjumpkick,High Jump Kick,fighting,staged,rising-kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+holdback,Hold Back,normal,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+holdhands,Hold Hands,normal,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+honeclaws,Hone Claws,dark,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+hornattack,Horn Attack,normal,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+horndrill,Horn Drill,normal,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+hornleech,Horn Leech,grass,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+howl,Howl,normal,staged,sound-call,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+hurricane,Hurricane,flying,battlefield,storm,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+hydrocannon,Hydro Cannon,water,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+hydropump,Hydro Pump,water,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+hydrosteam,Hydro Steam,water,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+hydrovortex,Hydro Vortex,water,z,water_vortex,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+hyperbeam,Hyper Beam,normal,staged,charged-beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0,pending player review
+hyperdrill,Hyper Drill,normal,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+hyperfang,Hyper Fang,normal,extended,fang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+hyperspacefury,Hyperspace Fury,dark,extended,vanish,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+hyperspacehole,Hyperspace Hole,psychic,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+hypervoice,Hyper Voice,normal,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+hypnosis,Hypnosis,psychic,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+iceball,Ice Ball,ice,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+icebeam,icebeam,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+iceburn,Ice Burn,ice,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+icefang,Ice Fang,ice,extended,fang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+icehammer,Ice Hammer,ice,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+icepunch,Ice Punch,ice,staged,elemental-punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+iceshard,iceshard,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+icespinner,Ice Spinner,ice,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+iciclecrash,Icicle Crash,ice,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+iciclespear,Icicle Spear,ice,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+icywind,Icy Wind,ice,extended,vortex,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+imprison,Imprison,psychic,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+incinerate,Incinerate,fire,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+infernalparade,Infernal Parade,ghost,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+inferno,Inferno,fire,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+infernooverdrive,Inferno Overdrive,fire,z,fire_orb,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+infestation,Infestation,bug,extended,swarm,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+ingrain,Ingrain,grass,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+instruct,Instruct,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+iondeluge,Ion Deluge,electric,extended,room,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+irondefense,Iron Defense,steel,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+ironhead,Iron Head,steel,staged,heavy-ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+irontail,Iron Tail,steel,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+ivycudgel,Ivy Cudgel,grass,extended,hammer,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+jawlock,Jaw Lock,dark,extended,fang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+jetpunch,Jet Punch,water,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+judgment,Judgment,normal,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.0,pending player review
+jumpkick,Jump Kick,fighting,extended,kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+junglehealing,Jungle Healing,grass,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+karatechop,Karate Chop,fighting,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+kinesis,Kinesis,psychic,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+kingsshield,King’s Shield,steel,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+knockoff,Knock Off,dark,staged,dark-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+kowtowcleave,Kowtow Cleave,dark,staged,cross-slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+landswrath,Land’s Wrath,ground,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+laserfocus,Laser Focus,normal,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+lashout,Lash Out,dark,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+lastresort,Last Resort,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+lastrespects,Last Respects,ghost,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+lavaplume,Lava Plume,fire,elemental,individually sculpted,retain recent elemental refinement,existing dedicated,0.7,pending player review
+leafage,Leafage,grass,staged,leaf-fan,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+leafblade,Leaf Blade,grass,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+leafstorm,Leaf Storm,grass,elemental,individually sculpted,retain recent elemental refinement,field,0.7,pending player review
+leaftornado,Leaf Tornado,grass,extended,vortex,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+leechlife,Leech Life,bug,extended,fang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+leechseed,Leech Seed,grass,staged,seed-arc,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+leer,Leer,normal,staged,taunt-glyph,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+letssnuggleforever,Let’s Snuggle Forever,fairy,z,shadow_shroud,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+lick,Lick,ghost,staged,reaching-lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+lifedew,Life Dew,water,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+lightofruin,Light of Ruin,fairy,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+lightscreen,Light Screen,psychic,staged,protective-screen,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+lightthatburnsthesky,Light That Burns the Sky,psychic,z,sun_nova,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+liquidation,Liquidation,water,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+lockon,Lock-On,normal,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+lovelykiss,Lovely Kiss,normal,extended,heart,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+lowkick,Low Kick,fighting,staged,rising-kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+lowsweep,Low Sweep,fighting,extended,kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+luckychant,Lucky Chant,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+luminacrash,Lumina Crash,psychic,extended,lightning,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+lunarblessing,Lunar Blessing,psychic,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+lunardance,Lunar Dance,psychic,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+lunge,Lunge,bug,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+lusterpurge,Luster Purge,psychic,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+machpunch,Mach Punch,fighting,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+magicalleaf,magicalleaf,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+magicaltorque,Magical Torque,fairy,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+magiccoat,Magic Coat,psychic,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+magicpowder,Magic Powder,psychic,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+magicroom,Magic Room,psychic,extended,room,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+magmastorm,Magma Storm,fire,elemental,individually sculpted,retain recent elemental refinement,field,0.7,pending player review
+magnetbomb,Magnet Bomb,steel,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+magneticflux,Magnetic Flux,electric,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+magnetrise,Magnet Rise,electric,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+magnitude,Magnitude,ground,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+makeitrain,Make It Rain,steel,battlefield,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+maliciousmoonsault,Malicious Moonsault,dark,z,moonsault,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+malignantchain,Malignant Chain,poison,extended,cage,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.0,pending player review
+matblock,Mat Block,fighting,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+matchagotcha,Matcha Gotcha,grass,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+maxairstream,Max Airstream,flying,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+maxdarkness,Max Darkness,dark,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+maxflare,Max Flare,fire,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+maxflutterby,Max Flutterby,bug,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+maxgeyser,Max Geyser,water,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+maxguard,Max Guard,normal,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+maxhailstorm,Max Hailstorm,ice,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+maxknuckle,Max Knuckle,fighting,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+maxlightning,Max Lightning,electric,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+maxmindstorm,Max Mindstorm,psychic,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+maxooze,Max Ooze,poison,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+maxovergrowth,Max Overgrowth,grass,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+maxphantasm,Max Phantasm,ghost,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+maxquake,Max Quake,ground,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+maxrockfall,Max Rockfall,rock,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+maxstarfall,Max Starfall,fairy,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+maxsteelspike,Max Steelspike,steel,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+maxstrike,Max Strike,normal,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+maxwyrmwind,Max Wyrmwind,dragon,extended,max,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+meanlook,Mean Look,normal,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+meditate,Meditate,psychic,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+mefirst,Me First,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+megadrain,Mega Drain,grass,extended,drain,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+megahorn,Megahorn,bug,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+megakick,Mega Kick,normal,extended,kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+megapunch,Mega Punch,normal,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+memento,Memento,dark,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+menacingmoonrazemaelstrom,Menacing Moonraze Maelstrom,ghost,z,moon_column,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+metalburst,Metal Burst,steel,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+metalclaw,Metal Claw,steel,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+metalsound,Metal Sound,steel,extended,statussound,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+meteorassault,Meteor Assault,fighting,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+meteorbeam,Meteor Beam,rock,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.0,pending player review
+meteormash,Meteor Mash,steel,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+metronome,Metronome,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+mightycleave,Mighty Cleave,rock,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+milkdrink,Milk Drink,normal,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+mimic,Mimic,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+mindblown,Mind Blown,fire,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+mindreader,Mind Reader,normal,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+minimize,Minimize,normal,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+miracleeye,Miracle Eye,psychic,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+mirrorcoat,Mirror Coat,psychic,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+mirrormove,Mirror Move,flying,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+mirrorshot,Mirror Shot,steel,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.0,pending player review
+mist,Mist,ice,extended,room,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+mistball,Mist Ball,psychic,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+mistyexplosion,Misty Explosion,fairy,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+mistyterrain,Misty Terrain,fairy,staged,mist-field,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+moonblast,moonblast,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+moongeistbeam,Moongeist Beam,ghost,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+moonlight,Moonlight,fairy,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+morningsun,Morning Sun,normal,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+mortalspin,Mortal Spin,poison,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+mountaingale,Mountain Gale,ice,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+mudbomb,Mud Bomb,ground,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+muddywater,Muddy Water,water,elemental,individually sculpted,retain recent elemental refinement,existing dedicated,0.7,pending player review
+mudshot,Mud Shot,ground,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+mudslap,Mud-Slap,ground,staged,arcing-bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+mudsport,Mud Sport,ground,extended,room,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+multiattack,Multi-Attack,normal,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+mysticalfire,Mystical Fire,fire,elemental,individually sculpted,retain recent elemental refinement,existing dedicated,0.7,pending player review
+mysticalpower,Mystical Power,psychic,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+nastyplot,Nasty Plot,dark,staged,thought-bubbles,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+naturalgift,Natural Gift,normal,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+naturepower,Nature Power,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+naturesmadness,Nature’s Madness,fairy,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+needlearm,Needle Arm,grass,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+neverendingnightmare,Never-Ending Nightmare,ghost,z,chains,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+nightdaze,Night Daze,dark,elemental,individually sculpted,retain recent elemental refinement,existing dedicated,0.0,pending player review
+nightmare,Nightmare,ghost,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+nightshade,Night Shade,ghost,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+nightslash,Night Slash,dark,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+nobleroar,Noble Roar,normal,extended,statussound,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+noretreat,No Retreat,fighting,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+noxioustorque,Noxious Torque,poison,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+nuzzle,Nuzzle,electric,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+oblivionwing,Oblivion Wing,flying,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.0,pending player review
+obstruct,Obstruct,dark,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+oceanicoperetta,Oceanic Operetta,water,z,ocean_orb,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+octazooka,Octazooka,water,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+octolock,Octolock,fighting,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+odorsleuth,Odor Sleuth,normal,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+ominouswind,Ominous Wind,ghost,extended,vortex,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+orderup,Order Up,dragon,extended,hammer,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+originpulse,Origin Pulse,water,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+outrage,Outrage,dragon,staged,energy-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+overdrive,Overdrive,electric,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+overheat,Overheat,fire,elemental,individually sculpted,retain recent elemental refinement,field,0.7,pending player review
+painsplit,Pain Split,normal,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+paraboliccharge,Parabolic Charge,electric,extended,drain,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+partingshot,Parting Shot,dark,extended,statussound,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+payback,Payback,dark,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+payday,Pay Day,normal,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+peck,Peck,flying,staged,piercing-strike,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+perishsong,Perish Song,normal,extended,statussound,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+petalblizzard,Petal Blizzard,grass,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+petaldance,Petal Dance,grass,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+phantomforce,Phantom Force,ghost,extended,vanish,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+photongeyser,Photon Geyser,psychic,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+pikapapow,Pika Papow,electric,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+pinmissile,Pin Missile,bug,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+plasmafists,Plasma Fists,electric,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+playnice,Play Nice,normal,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+playrough,Play Rough,fairy,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+pluck,Pluck,flying,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+poisonfang,Poison Fang,poison,extended,fang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+poisongas,Poison Gas,poison,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+poisonjab,Poison Jab,poison,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+poisonpowder,Poison Powder,poison,staged,powder-cloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+poisonsting,poisonsting,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+poisontail,Poison Tail,poison,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+pollenpuff,Pollen Puff,bug,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+poltergeist,Poltergeist,ghost,extended,cage,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+populationbomb,Population Bomb,normal,extended,swarm,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.0,pending player review
+pounce,Pounce,bug,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+pound,Pound,normal,staged,heavy-punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+powder,Powder,bug,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+powdersnow,Powder Snow,ice,battlefield,snow,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+powergem,Power Gem,rock,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+powershift,Power Shift,normal,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+powersplit,Power Split,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+powerswap,Power Swap,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+powertrick,Power Trick,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+powertrip,Power Trip,dark,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+poweruppunch,Power-Up Punch,fighting,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+powerwhip,Power Whip,grass,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+precipiceblades,Precipice Blades,ground,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+present,Present,normal,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+prismaticlaser,Prismatic Laser,psychic,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+protect,Protect,normal,staged,protective-screen,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+psybeam,Psybeam,psychic,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+psyblade,Psyblade,psychic,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+psychic,Psychic,psychic,elemental,individually sculpted,retain recent elemental refinement,orb,0.7,pending player review
+psychicfangs,Psychic Fangs,psychic,extended,fang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+psychicnoise,Psychic Noise,psychic,staged,sound-tunnel,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+psychicterrain,Psychic Terrain,psychic,staged,psychic-field,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+psychoboost,Psycho Boost,psychic,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+psychocut,Psycho Cut,psychic,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+psychoshift,Psycho Shift,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+psychup,Psych Up,normal,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+psyshieldbash,Psyshield Bash,psychic,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+psyshock,Psyshock,psychic,elemental,individually sculpted,retain recent elemental refinement,orb,0.7,pending player review
+psystrike,Psystrike,psychic,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+psywave,Psywave,psychic,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+pulverizingpancake,Pulverizing Pancake,normal,z,body_slam,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+punishment,Punishment,dark,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+purify,Purify,poison,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+pursuit,Pursuit,dark,staged,speed-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+pyroball,Pyro Ball,fire,staged,arcing-bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+quash,Quash,dark,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+quickattack,quickattack,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+quickguard,Quick Guard,fighting,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+quiverdance,Quiver Dance,bug,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+rage,Rage,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+ragefist,Rage Fist,ghost,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+ragepowder,Rage Powder,bug,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+ragingbull,Raging Bull,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+ragingfury,Raging Fury,fire,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+raindance,Rain Dance,water,extended,weather,smooth supporting volumes; restrained status/heal/boost staging,overview,0.25,pending player review
+rapidspin,Rapid Spin,normal,staged,rolling-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+razorleaf,razorleaf,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+razorshell,Razor Shell,water,staged,cross-slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+razorwind,Razor Wind,normal,extended,cutwave,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+recover,Recover,normal,staged,healing-rise,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+recycle,Recycle,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+reflect,Reflect,psychic,staged,protective-screen,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+reflecttype,Reflect Type,normal,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+refresh,Refresh,normal,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+relicsong,Relic Song,normal,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+rest,Rest,psychic,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+retaliate,Retaliate,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+return,Return,normal,staged,speed-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+revelationdance,Revelation Dance,normal,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+revenge,Revenge,fighting,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+reversal,Reversal,fighting,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+revivalblessing,Revival Blessing,normal,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+risingvoltage,Rising Voltage,electric,extended,lightning,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+roar,Roar,normal,extended,statussound,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+roaroftime,Roar of Time,dragon,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+rockblast,Rock Blast,rock,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+rockclimb,Rock Climb,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+rockpolish,Rock Polish,rock,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+rockslide,Rock Slide,rock,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+rocksmash,Rock Smash,fighting,staged,heavy-punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+rockthrow,Rock Throw,rock,staged,spinning-shards,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+rocktomb,Rock Tomb,rock,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+rockwrecker,Rock Wrecker,rock,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.0,pending player review
+roleplay,Role Play,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+rollingkick,Rolling Kick,fighting,extended,kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+rollout,Rollout,rock,staged,rolling-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+roost,Roost,flying,staged,healing-rise,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+rototiller,Rototiller,ground,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+round,Round,normal,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+ruination,Ruination,dark,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+sacredfire,Sacred Fire,fire,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+sacredsword,Sacred Sword,fighting,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+safeguard,Safeguard,normal,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+saltcure,Salt Cure,rock,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+sandattack,Sand Attack,ground,staged,powder-cloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+sandsearstorm,Sandsear Storm,ground,elemental,individually sculpted,retain recent elemental refinement,field,0.0,pending player review
+sandstorm,Sandstorm,rock,extended,weather,smooth supporting volumes; restrained status/heal/boost staging,overview,0.25,pending player review
+sandtomb,Sand Tomb,ground,extended,vortex,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+sappyseed,Sappy Seed,grass,extended,drain,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+savagespinout,Savage Spin-Out,bug,z,cocoon,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+scald,Scald,water,staged,breath-stream,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+scaleshot,Scale Shot,dragon,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+scaryface,Scary Face,normal,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+scorchingsands,Scorching Sands,ground,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+scratch,scratch,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+screech,Screech,normal,staged,sound-tunnel,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+searingshot,Searing Shot,fire,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+searingsunrazesmash,Searing Sunraze Smash,steel,z,sun_column,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+secretpower,Secret Power,normal,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+secretsword,Secret Sword,fighting,extended,cutwave,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+seedbomb,Seed Bomb,grass,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+seedflare,Seed Flare,grass,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+seismictoss,Seismic Toss,fighting,extended,grip,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+selfdestruct,Self-Destruct,normal,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+shadowball,shadowball,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+shadowbone,Shadow Bone,ghost,extended,hammer,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+shadowclaw,Shadow Claw,ghost,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+shadowforce,Shadow Force,ghost,extended,vanish,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+shadowpunch,Shadow Punch,ghost,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+shadowsneak,Shadow Sneak,ghost,extended,vanish,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+sharpen,Sharpen,normal,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+shatteredpsyche,Shattered Psyche,psychic,z,prism,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+shedtail,Shed Tail,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+sheercold,Sheer Cold,ice,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+shellsidearm,Shell Side Arm,poison,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+shellsmash,Shell Smash,normal,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+shelltrap,Shell Trap,fire,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+shelter,Shelter,steel,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+shiftgear,Shift Gear,steel,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+shockwave,Shock Wave,electric,extended,lightning,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+shoreup,Shore Up,ground,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+signalbeam,Signal Beam,bug,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.0,pending player review
+silktrap,Silk Trap,bug,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+silverwind,Silver Wind,bug,extended,vortex,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+simplebeam,Simple Beam,normal,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+sing,Sing,normal,extended,statussound,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+sinisterarrowraid,Sinister Arrow Raid,ghost,z,arrow_rain,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+sizzlyslide,Sizzly Slide,fire,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+sketch,Sketch,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+skillswap,Skill Swap,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+skittersmack,Skitter Smack,bug,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+skullbash,Skull Bash,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+skyattack,Sky Attack,flying,extended,vanish,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+skydrop,Sky Drop,flying,extended,vanish,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+skyuppercut,Sky Uppercut,fighting,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+slackoff,Slack Off,normal,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+slam,Slam,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+slash,Slash,normal,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+sleeppowder,Sleep Powder,grass,staged,powder-cloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+sleeptalk,Sleep Talk,normal,extended,statussound,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+sludge,Sludge,poison,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+sludgebomb,sludgebomb,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+sludgewave,Sludge Wave,poison,elemental,individually sculpted,retain recent elemental refinement,existing dedicated,0.0,pending player review
+smackdown,Smack Down,rock,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+smartstrike,Smart Strike,steel,extended,pierce,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+smellingsalts,Smelling Salts,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+smog,Smog,poison,extended,mist,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+smokescreen,Smokescreen,normal,staged,powder-cloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+snaptrap,Snap Trap,grass,extended,cage,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+snarl,Snarl,dark,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+snatch,Snatch,dark,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+snipeshot,Snipe Shot,water,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+snore,Snore,normal,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+snowscape,Snowscape,ice,extended,weather,smooth supporting volumes; restrained status/heal/boost staging,overview,0.25,pending player review
+soak,Soak,water,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+softboiled,Soft-Boiled,normal,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+solarbeam,Solar Beam,grass,staged,charged-beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+solarblade,Solar Blade,grass,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+sonicboom,Sonic Boom,normal,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+soulstealing7starstrike,Soul-Stealing 7-Star Strike,ghost,z,seven_stars,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+spacialrend,Spacial Rend,dragon,extended,cutwave,smooth elemental surfaces; joined delivery and outcome-gated impact,projectile,0.7,pending player review
+spark,Spark,electric,staged,electric-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+sparklingaria,Sparkling Aria,water,staged,sound-tunnel,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+sparklyswirl,Sparkly Swirl,fairy,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+spectralthief,Spectral Thief,ghost,extended,vanish,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+speedswap,Speed Swap,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+spicyextract,Spicy Extract,grass,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+spiderweb,Spider Web,bug,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+spikecannon,Spike Cannon,normal,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+spikes,Spikes,ground,staged,scattered-hazards,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+spikyshield,Spiky Shield,grass,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+spinout,Spin Out,steel,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+spiritbreak,Spirit Break,fairy,extended,hammer,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+spiritshackle,Spirit Shackle,ghost,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+spite,Spite,ghost,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+spitup,Spit Up,normal,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+splash,Splash,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+splinteredstormshards,Splintered Stormshards,rock,z,stone_rain,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+splishysplash,Splishy Splash,water,extended,wave,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+spore,Spore,grass,staged,powder-cloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+spotlight,Spotlight,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+springtidestorm,Springtide Storm,fairy,extended,vortex,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+stealthrock,Stealth Rock,rock,staged,scattered-hazards,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+steameruption,Steam Eruption,water,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+steamroller,Steamroller,bug,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+steelbeam,Steel Beam,steel,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.0,pending player review
+steelroller,Steel Roller,steel,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+steelwing,Steel Wing,steel,extended,spin,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+stickyweb,Sticky Web,bug,staged,ground-web,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+stockpile,Stockpile,normal,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+stokedsparksurfer,Stoked Sparksurfer,electric,z,electric_surf,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+stomp,Stomp,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+stompingtantrum,Stomping Tantrum,ground,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+stoneaxe,Stone Axe,rock,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+stoneedge,Stone Edge,rock,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+storedpower,Stored Power,psychic,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+stormthrow,Storm Throw,fighting,extended,grip,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+strangesteam,Strange Steam,fairy,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+strength,Strength,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+strengthsap,Strength Sap,grass,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+stringshot,String Shot,bug,staged,woven-threads,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+struggle,Struggle,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+strugglebug,Struggle Bug,bug,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+stuffcheeks,Stuff Cheeks,normal,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+stunspore,Stun Spore,grass,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+submission,Submission,fighting,extended,grip,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+substitute,Substitute,normal,staged,phase-portal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+subzeroslammer,Subzero Slammer,ice,z,ice_prison,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+suckerpunch,Sucker Punch,dark,staged,heavy-punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+sunnyday,Sunny Day,fire,extended,weather,smooth supporting volumes; restrained status/heal/boost staging,overview,0.25,pending player review
+sunsteelstrike,Sunsteel Strike,steel,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+supercellslam,Supercell Slam,electric,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+superfang,Super Fang,normal,extended,fang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+superpower,Superpower,fighting,staged,heavy-punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+supersonic,Supersonic,normal,staged,sound-tunnel,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+supersonicskystrike,Supersonic Skystrike,flying,z,sky_dive,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+surf,Surf,water,elemental,individually sculpted,retain recent elemental refinement,existing dedicated,0.7,pending player review
+surgingstrikes,Surging Strikes,water,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+swagger,Swagger,normal,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+swallow,Swallow,normal,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+sweetkiss,Sweet Kiss,fairy,extended,heart,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+sweetscent,Sweet Scent,normal,staged,powder-cloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+swift,swift,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+switcheroo,Switcheroo,dark,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+swordsdance,Swords Dance,normal,staged,sword-circle,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+synchronoise,Synchronoise,psychic,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+synthesis,Synthesis,grass,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+syrupbomb,Syrup Bomb,grass,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+tachyoncutter,Tachyon Cutter,steel,extended,cutwave,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+tackle,tackle,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+tailglow,Tail Glow,bug,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+tailslap,Tail Slap,normal,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+tailwhip,Tail Whip,normal,staged,taunt-glyph,smooth supporting volumes; restrained status/heal/boost staging,overview,0,pending player review
+tailwind,Tailwind,flying,extended,room,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+takedown,Take Down,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+takeheart,Take Heart,psychic,extended,heal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+tarshot,Tar Shot,rock,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+taunt,Taunt,dark,staged,taunt-glyph,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+tearfullook,Tearful Look,normal,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+teatime,Teatime,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+technoblast,Techno Blast,normal,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.0,pending player review
+tectonicrage,Tectonic Rage,ground,z,fissure,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+teeterdance,Teeter Dance,normal,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+telekinesis,Telekinesis,psychic,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+teleport,Teleport,psychic,staged,phase-portal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+temperflare,Temper Flare,fire,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+terablast,Tera Blast,normal,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+terastarstorm,Tera Starstorm,normal,battlefield,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+terrainpulse,Terrain Pulse,normal,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+thief,Thief,dark,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+thousandarrows,Thousand Arrows,ground,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+thousandwaves,Thousand Waves,ground,extended,wave,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+thrash,Thrash,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+throatchop,Throat Chop,dark,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+thunder,Thunder,electric,extended,lightning,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+thunderbolt,thunderbolt,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+thundercage,Thunder Cage,electric,extended,cage,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+thunderclap,Thunderclap,electric,extended,lightning,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+thunderfang,Thunder Fang,electric,extended,fang,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+thunderouskick,Thunderous Kick,fighting,extended,kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+thunderpunch,Thunder Punch,electric,staged,elemental-punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+thundershock,thundershock,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+thunderwave,Thunder Wave,electric,staged,paralysis-arcs,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+tickle,Tickle,normal,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+tidyup,Tidy Up,normal,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+topsyturvy,Topsy-Turvy,dark,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+torchsong,Torch Song,fire,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+torment,Torment,dark,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+toxic,Toxic,poison,staged,toxic-arc,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+toxicspikes,Toxic Spikes,poison,staged,scattered-hazards,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+toxicthread,Toxic Thread,poison,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+trailblaze,Trailblaze,grass,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+transform,Transform,normal,extended,ritual,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+triattack,Tri Attack,normal,extended,prism,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+trick,Trick,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+trickortreat,Trick-or-Treat,ghost,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+trickroom,Trick Room,psychic,extended,room,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+triplearrows,Triple Arrows,fighting,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+tripleaxel,Triple Axel,ice,extended,kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+tripledive,Triple Dive,water,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+triplekick,Triple Kick,fighting,extended,kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+tropkick,Trop Kick,grass,extended,kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+trumpcard,Trump Card,normal,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+twinbeam,Twin Beam,psychic,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+twineedle,Twineedle,bug,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+twinkletackle,Twinkle Tackle,fairy,z,fairy_comet,retain cinematic Z finale,existing dedicated,existing dedicated,pending player review
+twister,Twister,dragon,extended,vortex,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+upperhand,Upper Hand,fighting,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+uproar,Uproar,normal,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+uturn,U-turn,bug,staged,return-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+vacuumwave,Vacuum Wave,fighting,extended,cutwave,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+vcreate,V-create,fire,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+veeveevolley,Veevee Volley,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+venomdrench,Venom Drench,poison,extended,statuscloud,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+venoshock,Venoshock,poison,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+victorydance,Victory Dance,fighting,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+vinewhip,Vine Whip,grass,staged,reaching-lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+visegrip,Vise Grip,normal,extended,grip,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+vitalthrow,Vital Throw,fighting,extended,grip,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+voltswitch,Volt Switch,electric,staged,electric-beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
+volttackle,Volt Tackle,electric,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+wakeupslap,Wake-Up Slap,fighting,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+waterfall,Waterfall,water,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+watergun,watergun,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+waterpledge,Water Pledge,water,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+waterpulse,waterpulse,dedicated,dedicated,dedicated,retain existing dedicated choreography,existing dedicated,existing dedicated,existing presentation retained
+watershuriken,Water Shuriken,water,staged,spinning-shards,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+watersport,Water Sport,water,extended,room,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+waterspout,Water Spout,water,extended,wave,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+wavecrash,Wave Crash,water,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+weatherball,Weather Ball,normal,staged,swirling-orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
+whirlpool,Whirlpool,water,extended,vortex,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+whirlwind,Whirlwind,normal,extended,room,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+wickedblow,Wicked Blow,dark,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+wickedtorque,Wicked Torque,dark,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+wideguard,Wide Guard,rock,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+wildboltstorm,Wildbolt Storm,electric,extended,vortex,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.7,pending player review
+wildcharge,Wild Charge,electric,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+willowisp,Will-O-Wisp,fire,staged,ghost-flames,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+wingattack,Wing Attack,flying,staged,cross-slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+wish,Wish,normal,staged,wishing-star,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+withdraw,Withdraw,water,staged,armor-shell,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
+wonderroom,Wonder Room,psychic,extended,room,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+woodhammer,Wood Hammer,grass,staged,heavy-ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
+workup,Work Up,normal,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+worryseed,Worry Seed,grass,extended,seal,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
+wrap,Wrap,normal,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+wringout,Wring Out,normal,extended,pulse,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+xscissor,X-Scissor,bug,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+yawn,Yawn,normal,extended,statuswave,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
+zapcannon,Zap Cannon,electric,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.7,pending player review
+zenheadbutt,Zen Headbutt,psychic,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+zingzap,Zing Zap,electric,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
+zippyzap,Zippy Zap,electric,extended,rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review

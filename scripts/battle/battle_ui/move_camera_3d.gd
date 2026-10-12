@@ -125,7 +125,7 @@ func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
 	var aim: Vector3 = anchors.target
 	# Recipe projectiles capture their trajectory; misses must keep framing
 	# the original aim rather than following the target's dodge.
-	if effect.get_script() in [stage.ExtendedMoveEffect,stage.ElementalMoveEffect,stage.ElementalBatchEffect] and effect.launched:
+	if effect.get_script() in [stage.ExtendedMoveEffect,stage.ElementalMoveEffect,stage.ElementalBatchEffect,stage.StagedMoveEffect,stage.BattlefieldMoveEffect] and effect.launched:
 		source = effect.origin
 		aim = effect.aim
 	elif profile in ["beam", "kick"] and effect.get_script() == stage.StagedMoveEffect and effect.launched:
@@ -201,6 +201,15 @@ func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
 			_append_body(points,b)
 			_append_box(points,target_floor+Vector3.UP*1.7,authored.half)
 			direction = -forward*.4+side+Vector3.UP*float(authored.elevation)
+	if effect.get_script() in [stage.ExtendedMoveEffect,stage.StagedMoveEffect] and not ElementalBatch.DATA.has(effect.key):
+		# Fixed room for the new joined impact crown and captured projectile arc.
+		# Never follow individual lobes: that would make the camera pump.
+		if seconds >= effect.launch:
+			_append_box(points,aim,Vector3.ONE*scale_value*1.6)
+			var arc: float = effect.projectile_arc_height
+			if effect.get_script()==stage.StagedMoveEffect and effect.motif!="arcing-bomb" and effect.key!="pyroball": arc=0.0
+			if arc > 0 and Recipes.get_recipe(effect.key).family == "projectiles":
+				_append_box(points,source.lerp(aim,.5)+Vector3.UP*arc,Vector3.ONE*scale_value)
 	# Fitting a fixed shot envelope avoids camera pumping with every particle.
 	camera.transform = _fit(camera, points, direction.normalized())
 	camera.transform = camera.transform.interpolate_with(overview, smoothstep(0.88, 1.0, phase))

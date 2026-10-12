@@ -1,5 +1,7 @@
 extends "res://scripts/battle/battle_ui/move_effect_3d.gd"
 ## Explicit catalogue presentations. Solid silhouettes, native clock, no gameplay writes.
+const Cinema = preload("res://scripts/battle/battle_ui/move_cinematic_forms_3d.gd")
+var forms: RefCounted
 const Forms = preload("res://scripts/battle/battle_ui/move_volume_forms_3d.gd")
 const FieryWrath = preload("res://scripts/battle/battle_ui/fiery_wrath_forms_3d.gd")
 var wrath: RefCounted
@@ -24,7 +26,7 @@ var crescent: ArrayMesh
 var crest: ArrayMesh
 var funnel: ArrayMesh
 var solid: ShaderMaterial
-var mist_material: StandardMaterial3D
+var mist_material: ShaderMaterial
 var accent: StandardMaterial3D
 var direction := Vector3.FORWARD
 var side := Vector3.RIGHT
@@ -53,53 +55,15 @@ func _prepare() -> void:
 	box.size = Vector3.ONE
 	rock.size = Vector3.ONE
 	tooth.radial_segments = 8
-	var shader := Shader.new()
-	shader.code = """
-shader_type spatial;
-render_mode cull_disabled;
-uniform vec4 tint : source_color;
-uniform float seconds;
-uniform float luminous;
-uniform bool water = false;
-void fragment() {
- float flow = sin(UV.y*18.-seconds*7.+sin(UV.x*18.85)*.7)*.5+.5;
- float rim = pow(1.-abs(dot(normalize(NORMAL),normalize(VIEW))),2.);
- ALBEDO = mix(tint.rgb*.55,tint.rgb, .4+flow*.25+rim*.35);
- if (water) {
-  float foam = smoothstep(.78,.97,UV.y + sin(UV.x*35.-seconds*4.)*.045);
-  ALBEDO = mix(ALBEDO*.8, vec3(.78,.94,1.), foam);
- }
- EMISSION = tint.rgb*(.18+flow*.18+rim*.25)*luminous;
- ROUGHNESS = .45;
-}
-"""
-	solid = ShaderMaterial.new()
-	solid.shader = shader
-	solid.set_shader_parameter("tint", Color(str(recipe.color)))
-	solid.set_shader_parameter("water", motif=="wave" or key=="maxgeyser")
-	solid.set_shader_parameter("luminous", 1.0 if float(recipe.lighting.energy)>0 else .15)
+	forms = Cinema.new(Color(str(recipe.color)),str(recipe.type))
+	solid = forms.skin
 	accent = _material(Color(str(recipe.color)).lerp(Color.WHITE,.65),.8)
-	mist_material = _material(Color(str(recipe.color)),.12)
-	crescent = _ribbon(false)
+	mist_material = forms.haze
+	crescent = forms.blade
 	crest = _wave_mesh()
 	funnel = Forms.swept_mesh(true)
 	prepared = true
 	if key == "fierywrath": wrath = FieryWrath.new()
-
-func _ribbon(wave: bool) -> ArrayMesh:
-	var tool := SurfaceTool.new()
-	tool.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for i in 32:
-		for corner: Vector2 in [Vector2(0,0),Vector2(1,0),Vector2(1,1),Vector2(0,0),Vector2(1,1),Vector2(0,1)]:
-			var p := (i+corner.x)/32.
-			var angle := lerpf(-1.3,1.3,p)
-			var radius := 1.-corner.y*.28*sin(p*PI)
-			var point := Vector3(cos(angle),sin(angle),0)*radius
-			if wave: point = Vector3((p-.5)*4.,corner.y*(.5+sin(p*PI)),sin(corner.y*PI)*.45)
-			tool.set_uv(Vector2(p,corner.y))
-			tool.add_vertex(point)
-	tool.generate_normals()
-	return tool.commit()
 
 func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) -> bool:
 	if not prepared: _prepare()
@@ -129,7 +93,7 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 	solid.set_shader_parameter("seconds",t*float(recipe.duration_seconds))
 	edge.albedo_color.a = envelope*.75
 	accent.albedo_color.a = envelope*.8
-	mist_material.albedo_color.a = envelope*.13
+	forms.sample(t*float(recipe.duration_seconds),envelope)
 	impact_drawn = hit and bool(recipe.damaging) and after>=0
 	if wrath != null:
 		wrath.draw(self)
@@ -152,10 +116,10 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 			"mist", "statuscloud": _mist()
 			_: _field()
 	if impact_drawn:
-		var fade := 1.-smoothstep(.05,.7,after)
-		if fade>.001:
-			_piece(ring,accent,aim,Vector3.ONE*(.25+after*1.8)*fade,axis)
-			_piece(sphere,solid,aim,Vector3(.38,.1,.38)*sin(clampf(after/.4,0,1)*PI),axis)
+		var strength := clampf(float(recipe.width)*2.3,.55,1.45)
+		if motif in ["max","burst"]: strength=1.85
+		forms.impact(self,aim,after,strength,axis,bool(recipe.contact))
+
 	return true
 
 func _charge() -> void:
@@ -208,7 +172,7 @@ func _projectile() -> void:
 			_: _ball(point,size,solid)
 		# A single continuous wake, bounded by the distance already travelled.
 		var tail := projectile_point(maxf(0,p-.12),i)
-		_line(tail,point,size*.35,accent)
+		forms.tail(self,point,tail-point,size*.8,point.distance_to(tail))
 
 func _contact() -> void:
 	if flight<0:
@@ -265,6 +229,8 @@ func _pulse() -> void:
 		if motif=="drain" and hit and after>=0:
 			point=aim.lerp(origin,clampf(after*1.5,0,1));fade=envelope
 		_piece(ring,edge,point,Vector3.ONE*(.12+p*.75)*fade,axis)
+		if motif not in ["sound","statussound"]:
+			forms.plume(self,point,Vector3(.15+p*.6,.12,.15+p*.6)*fade,axis)
 		if motif in ["sound","statussound"]:
 			var note := point+Vector3.UP*.25
 			_ball(note,.08*fade,solid)
@@ -288,6 +254,7 @@ func _heal() -> void:
 	for i in 3:
 		var q := fmod(p+i/3.,1.)
 		_piece(ring,edge,recipient+Vector3.UP*(q-.5)*1.2,Vector3.ONE*(.25+q*.5)*sin(q*PI)*envelope)
+	forms.aura(self,recipient,body*.9*envelope,p)
 	var size := .18*envelope
 	_piece(box,accent,recipient+Vector3.UP*.6,Vector3(size*.55,size*2.,size*.4))
 	_piece(box,accent,recipient+Vector3.UP*.6,Vector3(size*2.,size*.55,size*.4))
@@ -296,6 +263,7 @@ func _heal() -> void:
 func _boost() -> void:
 	var q := smoothstep(0,.5,elapsed/duration)*envelope
 	_piece(ring,edge,actor_ground,Vector3.ONE*body*1.3*q)
+	forms.aura(self,center,body*q,elapsed/duration,true)
 	for i in 3:
 		var a := i*TAU/3+elapsed*1.5
 		var point := center+Vector3(cos(a),sin(elapsed*2.+i)*.15,sin(a))*body*1.2
@@ -347,6 +315,7 @@ func _ritual() -> void:
 		var point := center+Vector3(cos(a),.2,sin(a))*body*1.2
 		_piece(rock,solid,point,Vector3(.2,.35,.15)*envelope,Basis(Vector3.UP,-a))
 	_piece(ring,edge,actor_ground,Vector3.ONE*body*envelope)
+	forms.aura(self,center,body*.8*envelope,q)
 
 func _mist() -> void:
 	var q := clampf(flight,0,1)
@@ -362,7 +331,7 @@ func _weather() -> void:
 		_piece(ring,accent,point,Vector3.ONE*.7*envelope,facing)
 		return
 	if key=="sandstorm":
-		_piece(funnel,mist_material,field_center,Vector3(field_radius*.65,2.5,field_radius*.65)*envelope)
+		_piece(funnel,forms.vortex,field_center,Vector3(field_radius*.65,2.5,field_radius*.65)*envelope)
 		return
 	for i in 12:
 		var a := i*2.4
@@ -394,7 +363,9 @@ func _field() -> void:
 		"wave":
 			var point := actor_ground.lerp(ground,p)
 			_piece(crest,solid,point,Vector3(1.,1.5,1.)*fade,Basis(side,Vector3.UP,-Vector3(side.z,0,-side.x)))
-		"vortex": _piece(funnel,mist_material,ground,Vector3(1.15,2.6,1.15)*envelope,Basis(Vector3.UP,elapsed*3.))
+		"vortex":
+			_piece(funnel,forms.vortex,ground,Vector3(1.15,2.6,1.15)*envelope,Basis(Vector3.UP,elapsed*3.))
+			forms.aura(self,ground+Vector3.UP,1.1*envelope,elapsed/duration)
 		"rain":
 			for i in count:
 				var q := clampf((flight-i*.04)/maxf(.1,1.-i*.04),0,1)
@@ -405,7 +376,15 @@ func _field() -> void:
 			for i in count:
 				var point := actor_ground.lerp(ground,(i+1.)/count)
 				var rise := smoothstep(i/float(count)*.7,i/float(count)*.7+.3,p)*fade
-				_piece(tooth,solid,point+Vector3.UP*rise*.6,Vector3(.35,1.2,.35)*rise)
+				if recipe.type=="fire":
+					forms.tail(self,point,Vector3.UP,.48*rise,2.1*rise*presentation_scale)
+					forms.plume(self,point+Vector3.UP*.6*rise,Vector3(.5,.8,.5)*rise)
+				elif recipe.type=="grass":
+					_piece(crescent,solid,point+Vector3.UP*.7*rise,Vector3(.6,1.4,.6)*rise,Basis(Vector3.UP,i*.9))
+				else:
+					# Jagged joined ridges replace evenly spaced cone markers.
+					_piece(rock,solid,point+Vector3.UP*.65*rise,Vector3(.55,1.6,.42)*rise,Basis(Vector3.FORWARD,.22*sin(i*2.4)))
+					_piece(rock,solid,point+side*.25+Vector3.UP*.3*rise,Vector3(.35,.7,.5)*rise,Basis(Vector3.FORWARD,-.3))
 		"lightning":
 			var point := aim+Vector3.UP*3.5
 			for i in 8:
@@ -423,15 +402,17 @@ func _field() -> void:
 			else:
 				for i in 3:_piece(crescent,solid,point,Vector3.ONE*size,facing*Basis(Vector3.FORWARD,elapsed+i*TAU/3))
 		"max": _max_move(p,fade)
-		_: # Bounded dome for eruptions/explosions, not a particle cloud.
-			_piece(sphere,mist_material,aim,Vector3.ONE*(.2+p*1.5)*fade)
-			for i in 3:_piece(ring,solid,aim,Vector3.ONE*(.2+p*(.7+i*.2))*fade,Basis(Vector3.RIGHT,i*PI/3))
+		_: # A compact travelling core blooms only on a confirmed hit.
+			if after < 0:
+				var point := origin.lerp(aim,p)
+				_ball(point,(.08+p*.4)*fade,solid)
+				forms.tail(self,point,-direction,.2+p*.2,minf(1.2,origin.distance_to(point)))
 
 func _max_move(p: float, fade: float) -> void:
 	var size := p*fade
 	match key:
 		"maxairstream", "maxwyrmwind":
-			_piece(funnel,mist_material,ground,Vector3(1.4,3.,1.4)*size,Basis(Vector3.UP,elapsed*3.))
+			_piece(funnel,forms.vortex,ground,Vector3(1.4,3.,1.4)*size,Basis(Vector3.UP,elapsed*3.))
 		"maxrockfall", "maxhailstorm":
 			for i in 3:
 				var point := aim+side*(i-1)*.8+Vector3.UP*(1.-p)*3.5
@@ -466,7 +447,7 @@ func _max_move(p: float, fade: float) -> void:
 		"maxmindstorm":
 			for i in 3:_piece(ring,solid,aim,Vector3.ONE*(.8+i*.2)*size,facing*Basis(Vector3.UP,elapsed+i))
 		"maxflare":
-			_piece(funnel,solid,ground,Vector3(.9,3.,.9)*size,Basis(Vector3.UP,elapsed*2.))
+			_piece(funnel,forms.vortex,ground,Vector3(.9,3.,.9)*size,Basis(Vector3.UP,elapsed*2.))
 		_: _piece(ring,solid,ground,Vector3.ONE*(.2+p*2.)*fade)
 
 func _fist(point: Vector3, size: float, pose: Basis) -> void:
