@@ -248,7 +248,7 @@
 					"spawnMarker": "FromCabin",
 					"tile": {
 						"x": 14,
-						"y": 17
+						"y": 16
 					}
 				},
 				"from_main_hall": {
@@ -283,7 +283,7 @@
 					"spawnMarker": "FromElevator",
 					"tile": {
 						"x": 7,
-						"y": 7
+						"y": 8
 					}
 				}
 			},
@@ -5438,7 +5438,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/guild_base/elevator_cabin.tscn",
 				"position": {
 					"x": 240.0,
-					"y": 240.0
+					"y": 272.0
 				},
 				"spawnMarker": "FromElevator"
 			},
@@ -5470,7 +5470,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/guild_base/elevator.tscn",
 				"position": {
 					"x": 464.0,
-					"y": 560.0
+					"y": 528.0
 				},
 				"spawnMarker": "FromCabin"
 			},
@@ -5566,7 +5566,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/guild_base/elevator_cabin.tscn",
 				"position": {
 					"x": 240.0,
-					"y": 240.0
+					"y": 272.0
 				},
 				"spawnMarker": "FromElevator"
 			},

@@ -4660,7 +4660,8 @@ func _create_evolution_form_row(selector: OptionButton) -> HBoxContainer:
 	selector.custom_minimum_size = Vector2(0, 36)
 	selector.fit_to_longest_item = false
 	selector.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	var viewport_size := get_viewport().get_visible_rect().size
+	var viewport := get_viewport()
+	var viewport_size := viewport.get_visible_rect().size if viewport != null else Vector2(1280, 720)
 	selector.get_popup().max_size = Vector2i(int(minf(480, viewport_size.x - 32)), int(minf(360, viewport_size.y - 32)))
 	row.add_child(selector)
 	return row
@@ -18321,13 +18322,13 @@ func _create_trainer_card_stat_panel(title_key: String, rows: Array[Dictionary])
 
 	var margin_container := MarginContainer.new()
 	margin_container.add_theme_constant_override("margin_left", 14)
-	margin_container.add_theme_constant_override("margin_top", 10)
+	margin_container.add_theme_constant_override("margin_top", 4)
 	margin_container.add_theme_constant_override("margin_right", 14)
-	margin_container.add_theme_constant_override("margin_bottom", 10)
+	margin_container.add_theme_constant_override("margin_bottom", 4)
 	panel.add_child(margin_container)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 6)
+	layout.add_theme_constant_override("separation", 2)
 	margin_container.add_child(layout)
 
 	var title := Label.new()
@@ -18339,7 +18340,7 @@ func _create_trainer_card_stat_panel(title_key: String, rows: Array[Dictionary])
 	var row_stack := VBoxContainer.new()
 	row_stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	row_stack.alignment = BoxContainer.ALIGNMENT_CENTER
-	row_stack.add_theme_constant_override("separation", 2)
+	row_stack.add_theme_constant_override("separation", 1)
 	layout.add_child(row_stack)
 
 	for row_value: Dictionary in rows:

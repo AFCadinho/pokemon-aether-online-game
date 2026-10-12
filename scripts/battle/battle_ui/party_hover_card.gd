@@ -4,7 +4,7 @@ class_name PartyHoverCard
 
 const TYPE_ICON_PATH := "res://assets/sprites/types/%s.png"
 const CARD_WIDTH := 300.0
-const STORAGE_CARD_HEIGHT := 261.0
+const STORAGE_CARD_HEIGHT := 274.0
 const EXCHANGE_CARD_HEIGHT := 285.0
 const STORAGE_STAT_VALUE_SEPARATION := 4
 const IV_STAT_ENTRIES: Array[Array] = [

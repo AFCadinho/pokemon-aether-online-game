@@ -260,6 +260,8 @@ func _resolve_transition_id() -> String:
 	var configured_transition_id := transition_id.strip_edges()
 	if not configured_transition_id.is_empty():
 		return configured_transition_id
+	if not is_inside_tree():
+		return ""
 	var game_state := get_node_or_null("/root/GameState")
 	var current_map: Node = game_state.get("current_map") as Node if game_state != null else null
 	if current_map == null or not current_map.has_method("get_map_id"):

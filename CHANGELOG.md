@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Align Guild Base elevator arrivals with the scene's current door tiles.
+
+- Keep compact touch controls, quest trackers, Trainer Cards and Storage hover cards within their intended bounds across UI scales.
+
 - Reduce the optional desktop 3D collection to about 8.7 GB by sharing exact normal/shiny geometry in one verified model pack per eligible pair, while keeping both appearances and older release catalogs available.
 
 - Add the Akatsuki Outfit Box to Gift Store → Outfits for 450 Gems, with complete trainer and overworld previews for both models.
