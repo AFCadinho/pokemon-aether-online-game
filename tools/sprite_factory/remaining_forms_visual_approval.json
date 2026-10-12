@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "user_message": "zien er goed uit",
+  "approved_preview_sha256": "378bc595b9decebfb49637d913be932eba5c5d448a207652c8376a962f023f7d",
+  "scope": "Visual approval of the 14 displayed colour and form-state proposals; known sleep-eye and Cramorant sleep defects remain excluded.",
+  "forms": 14,
+  "runtime_approved": false,
+  "battle_approved": false,
+  "publication_approved": false,
+  "excluded_known_defects": [
+    "burmy-sandy",
+    "burmy-trash",
+    "wormadam-sandy",
+    "wormadam-trash",
+    "cramorant-gorging",
+    "cramorant-gulping"
+  ]
+}

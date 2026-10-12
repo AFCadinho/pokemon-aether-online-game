@@ -1,0 +1,961 @@
+{
+  "schema": 1,
+  "runtime_approved": false,
+  "battle_approved": false,
+  "publication_approved": false,
+  "visual_approval_sha256": "50276b10caac6acccb6d0b3030ff806faabc89104ba9019e7a7351419253ce90",
+  "forms_repaired": 6,
+  "variants": 12,
+  "newly_admitted": 0,
+  "remaining_held_forms": 35,
+  "catalog": {
+    "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/catalog.json",
+    "sha256": "668998a0d99811233c4859127679bdac10a0692f5e642bcf2169177dcf47640a"
+  },
+  "check": {
+    "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/check-final-geometry.json",
+    "sha256": "217cf57433a289ab65d0b8c43378fb8a273e87bf7af35ea8ca53dab45b82748a",
+    "summary": {
+      "attachment_checks": 37114,
+      "eye_state_checks": 3400,
+      "geometry_surfaces": 72,
+      "independent_instance_checks": 792,
+      "maximum_attachment_error": 8.45041711272643e-07,
+      "preserved_pose_checks": 45210,
+      "prey_clearance_samples": 84,
+      "runtime_approved": false
+    }
+  },
+  "source_cell_checks": 88,
+  "reports": {
+    "review-v2": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/godot-review.json",
+      "sha256": "846629994225cbcd038b3424760bddf2d3f7b9960445bbf3e7d93ffcebe2a816",
+      "renderer": "gl_compatibility",
+      "frames": 2340
+    },
+    "sleep-around-v2": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/godot-review.json",
+      "sha256": "6c342827fea533b57253b8e45598861ab6610f05541d7a80dd8bd07fa4c6ba27",
+      "renderer": "gl_compatibility",
+      "frames": 864
+    }
+  },
+  "awake_pixel_comparisons": [
+    {
+      "species": "burmy-sandy",
+      "pose": "idle-face",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "590e50197b65c012e82144a272c71b303cf70b122880c8b501b417c3c9946f47",
+      "candidate_sha256": "590e50197b65c012e82144a272c71b303cf70b122880c8b501b417c3c9946f47"
+    },
+    {
+      "species": "burmy-sandy",
+      "pose": "idle-back",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "93ae482d9f7d425da90c31348d64e8817298b468facddbdced58f555f2df400f",
+      "candidate_sha256": "93ae482d9f7d425da90c31348d64e8817298b468facddbdced58f555f2df400f"
+    },
+    {
+      "species": "burmy-sandy",
+      "pose": "idle-side",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "3540681a834d0f0142bc66e446d32b4052f7e0e049bf5233c51d56ab570c522f",
+      "candidate_sha256": "3540681a834d0f0142bc66e446d32b4052f7e0e049bf5233c51d56ab570c522f"
+    },
+    {
+      "species": "burmy-sandy",
+      "pose": "physical_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "cfd18e6322bfa6f1490f3636a2d308b97e9561a1ec5c00cd14be0672ad151cf9",
+      "candidate_sha256": "cfd18e6322bfa6f1490f3636a2d308b97e9561a1ec5c00cd14be0672ad151cf9"
+    },
+    {
+      "species": "burmy-sandy",
+      "pose": "special_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "fd26fc74a29f8cbbd062decc702e1ff7ca1423ce92f2f0f6867281db4a671d11",
+      "candidate_sha256": "fd26fc74a29f8cbbd062decc702e1ff7ca1423ce92f2f0f6867281db4a671d11"
+    },
+    {
+      "species": "burmy-sandy",
+      "pose": "damage-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "e4e73cca5d562fa3adc10cf4836cdc37df6723b6dc05b68a8b29bbdcc09c0fad",
+      "candidate_sha256": "e4e73cca5d562fa3adc10cf4836cdc37df6723b6dc05b68a8b29bbdcc09c0fad"
+    },
+    {
+      "species": "burmy-sandy",
+      "pose": "faint_start-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "ef6a0ddcf7366e02d9ef5e8594bb0bd21cfd04c84b168451ef5b350e7a66dbb0",
+      "candidate_sha256": "ef6a0ddcf7366e02d9ef5e8594bb0bd21cfd04c84b168451ef5b350e7a66dbb0"
+    },
+    {
+      "species": "burmy-sandy-shiny",
+      "pose": "idle-face",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "6ca89c0441c5c1fb6c54e94bc4f19573e182409b49eba0843eb8dd9d02b51f12",
+      "candidate_sha256": "6ca89c0441c5c1fb6c54e94bc4f19573e182409b49eba0843eb8dd9d02b51f12"
+    },
+    {
+      "species": "burmy-sandy-shiny",
+      "pose": "idle-back",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "e1c5fb7f4c059c65c03f5c6e62ecca27682be65fab36aaf7014e71999143a0b7",
+      "candidate_sha256": "e1c5fb7f4c059c65c03f5c6e62ecca27682be65fab36aaf7014e71999143a0b7"
+    },
+    {
+      "species": "burmy-sandy-shiny",
+      "pose": "idle-side",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "ee58b2ea2de3aaac1bd7f2695d7241a4734dde0c405cc5ca2be51e6ff08eb51e",
+      "candidate_sha256": "ee58b2ea2de3aaac1bd7f2695d7241a4734dde0c405cc5ca2be51e6ff08eb51e"
+    },
+    {
+      "species": "burmy-sandy-shiny",
+      "pose": "physical_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "b02655f2d605b14526eca2449c8cf7e5455b746de928a53b290981cf24906539",
+      "candidate_sha256": "b02655f2d605b14526eca2449c8cf7e5455b746de928a53b290981cf24906539"
+    },
+    {
+      "species": "burmy-sandy-shiny",
+      "pose": "special_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "3860757c1cbe060e1e8571e325e6198200e2287ca3923ed273f32a6fe234b4ad",
+      "candidate_sha256": "3860757c1cbe060e1e8571e325e6198200e2287ca3923ed273f32a6fe234b4ad"
+    },
+    {
+      "species": "burmy-sandy-shiny",
+      "pose": "damage-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "00e0bac811b21b097f5a6e7fe15ce9b3f11bf240167f93dc44aadc5928e46432",
+      "candidate_sha256": "00e0bac811b21b097f5a6e7fe15ce9b3f11bf240167f93dc44aadc5928e46432"
+    },
+    {
+      "species": "burmy-sandy-shiny",
+      "pose": "faint_start-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "1172348f9b42adfff85345f86606f230ee57053446b580da8cf969cacce41358",
+      "candidate_sha256": "1172348f9b42adfff85345f86606f230ee57053446b580da8cf969cacce41358"
+    },
+    {
+      "species": "burmy-trash",
+      "pose": "idle-face",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "a18eecd4d31333f6a9238c07e96e695e3b7907a64caccbf70cf40b83044ccfcf",
+      "candidate_sha256": "a18eecd4d31333f6a9238c07e96e695e3b7907a64caccbf70cf40b83044ccfcf"
+    },
+    {
+      "species": "burmy-trash",
+      "pose": "idle-back",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "94e3297d045962d32f17482139ced2a6422c386cc2b02b08a697fa206a7412a5",
+      "candidate_sha256": "94e3297d045962d32f17482139ced2a6422c386cc2b02b08a697fa206a7412a5"
+    },
+    {
+      "species": "burmy-trash",
+      "pose": "idle-side",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "a1e1c8a84dd322651733fc1454fb7d6da04d6557c3df6b27f9927ce5eac57de0",
+      "candidate_sha256": "a1e1c8a84dd322651733fc1454fb7d6da04d6557c3df6b27f9927ce5eac57de0"
+    },
+    {
+      "species": "burmy-trash",
+      "pose": "physical_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "92a2c6f6a26a0e0cd5ee967d158e3d2c547180fb6f3e325bf0bb105e4fbd19bf",
+      "candidate_sha256": "92a2c6f6a26a0e0cd5ee967d158e3d2c547180fb6f3e325bf0bb105e4fbd19bf"
+    },
+    {
+      "species": "burmy-trash",
+      "pose": "special_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "415ba6913f70b19157f6f5bc4b0173cfb63ebe4f9663ee69c8420b0b42610d74",
+      "candidate_sha256": "415ba6913f70b19157f6f5bc4b0173cfb63ebe4f9663ee69c8420b0b42610d74"
+    },
+    {
+      "species": "burmy-trash",
+      "pose": "damage-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "b277023577a8dafc7a26f06c9b3612fec329780d3e83a5bef295e91be17c7e9b",
+      "candidate_sha256": "b277023577a8dafc7a26f06c9b3612fec329780d3e83a5bef295e91be17c7e9b"
+    },
+    {
+      "species": "burmy-trash",
+      "pose": "faint_start-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "fce6f1a317b272e0b74142b740e7dc71637293cf28c5a3544b8e21590fa2dec8",
+      "candidate_sha256": "fce6f1a317b272e0b74142b740e7dc71637293cf28c5a3544b8e21590fa2dec8"
+    },
+    {
+      "species": "burmy-trash-shiny",
+      "pose": "idle-face",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "9190fe6a80bee7c32e49f23c21cb8d24756e9b209c6eb909246de3f5c235455f",
+      "candidate_sha256": "9190fe6a80bee7c32e49f23c21cb8d24756e9b209c6eb909246de3f5c235455f"
+    },
+    {
+      "species": "burmy-trash-shiny",
+      "pose": "idle-back",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "105a7e292617d4b186191cef4ec726e9dd871921b98b0cfa3d4f704190cf61fe",
+      "candidate_sha256": "105a7e292617d4b186191cef4ec726e9dd871921b98b0cfa3d4f704190cf61fe"
+    },
+    {
+      "species": "burmy-trash-shiny",
+      "pose": "idle-side",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "5148041d99beb6f74a91faaa9a087d99faebf183cf8bbbdf27db8dc7b243955d",
+      "candidate_sha256": "5148041d99beb6f74a91faaa9a087d99faebf183cf8bbbdf27db8dc7b243955d"
+    },
+    {
+      "species": "burmy-trash-shiny",
+      "pose": "physical_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "fc3fbd7ba69ac9c0b0edb0a32429bacd7042c20026ca478948790a09a36e4c85",
+      "candidate_sha256": "fc3fbd7ba69ac9c0b0edb0a32429bacd7042c20026ca478948790a09a36e4c85"
+    },
+    {
+      "species": "burmy-trash-shiny",
+      "pose": "special_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "3d8981d8e3342b195033d3e71a04534e55a46cb4632dedb22483fdd807a88054",
+      "candidate_sha256": "3d8981d8e3342b195033d3e71a04534e55a46cb4632dedb22483fdd807a88054"
+    },
+    {
+      "species": "burmy-trash-shiny",
+      "pose": "damage-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "047ed3fcee350ee3c5035c378c08ab6048cef2af57a8dc29ce076c0205b3959e",
+      "candidate_sha256": "047ed3fcee350ee3c5035c378c08ab6048cef2af57a8dc29ce076c0205b3959e"
+    },
+    {
+      "species": "burmy-trash-shiny",
+      "pose": "faint_start-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "ebb19b93ccc314d540d39b46e2f92d367ec552e2b936edbc130705afd5728a30",
+      "candidate_sha256": "ebb19b93ccc314d540d39b46e2f92d367ec552e2b936edbc130705afd5728a30"
+    },
+    {
+      "species": "wormadam-sandy",
+      "pose": "idle-face",
+      "changed_pixels": 1,
+      "total_pixels": 409600,
+      "source_sha256": "d007476a8606cd50db2ab168f1bead1fef1e84c854d8ec7526d99ab5615de9cb",
+      "candidate_sha256": "83c91f645f24f7891339b7aea6b710fe34a602db5b8dbbc90092ea6679004887"
+    },
+    {
+      "species": "wormadam-sandy",
+      "pose": "idle-back",
+      "changed_pixels": 2,
+      "total_pixels": 409600,
+      "source_sha256": "a851862a3614d1952979a0b50fb95305d3211dcec6188fb6c326f71ad14386a8",
+      "candidate_sha256": "5a92990e3438abc33d105152eb5b96827157b88504dac4e9ab647356c8280b3d"
+    },
+    {
+      "species": "wormadam-sandy",
+      "pose": "idle-side",
+      "changed_pixels": 2,
+      "total_pixels": 409600,
+      "source_sha256": "9b4e7a50447b8cb06560d574b07de265dd29cfef0fba153b40d14acd38ffed36",
+      "candidate_sha256": "2e055c25c30fbdc87cd29f08574b9a358b52e36deda18f229558ddcd518f229f"
+    },
+    {
+      "species": "wormadam-sandy",
+      "pose": "physical_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "a086bf458688ce322dc60c4a55c403416f3d0029fe048bcd84f0ad4eb050fde6",
+      "candidate_sha256": "a086bf458688ce322dc60c4a55c403416f3d0029fe048bcd84f0ad4eb050fde6"
+    },
+    {
+      "species": "wormadam-sandy",
+      "pose": "special_attack-front",
+      "changed_pixels": 1,
+      "total_pixels": 409600,
+      "source_sha256": "985785274760148a47cbe9223ba4db86af1ac8517cce0026b211245228f6d93c",
+      "candidate_sha256": "115970bd62819ab1b1224d3242225ef0976884e07fcbafdd559fc15b28cb1e85"
+    },
+    {
+      "species": "wormadam-sandy",
+      "pose": "damage-front",
+      "changed_pixels": 6,
+      "total_pixels": 409600,
+      "source_sha256": "06b45c62574d868b15f53593a751b7813a1e70ee480b64e352005092779e125d",
+      "candidate_sha256": "64e861d74998aaec4923267b35e2fc4a3efb07f147a911494ffe6123b92071ea"
+    },
+    {
+      "species": "wormadam-sandy",
+      "pose": "faint_start-front",
+      "changed_pixels": 2,
+      "total_pixels": 409600,
+      "source_sha256": "79521136ad5e5c7fa0fc29d6b92b425b074be55636189995c023c3017a7ccb05",
+      "candidate_sha256": "dbf3c86ba54701674317542be4ff821cdb872f143b2d5620e73b15d3558bb782"
+    },
+    {
+      "species": "wormadam-sandy-shiny",
+      "pose": "idle-face",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "ba07581bcae2b7adb0fcaf9f3ea15632b0bca9eec1a685daf7e10342d4da1bbe",
+      "candidate_sha256": "ba07581bcae2b7adb0fcaf9f3ea15632b0bca9eec1a685daf7e10342d4da1bbe"
+    },
+    {
+      "species": "wormadam-sandy-shiny",
+      "pose": "idle-back",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "0998c1987ab1a4b079221842e255d3a3c06e54be0d04019e3feac586bf103d6e",
+      "candidate_sha256": "0998c1987ab1a4b079221842e255d3a3c06e54be0d04019e3feac586bf103d6e"
+    },
+    {
+      "species": "wormadam-sandy-shiny",
+      "pose": "idle-side",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "b3b6d3316fc0736b3464f6561fec2648ce59eb9507e795c5553c5805fc1d3253",
+      "candidate_sha256": "b3b6d3316fc0736b3464f6561fec2648ce59eb9507e795c5553c5805fc1d3253"
+    },
+    {
+      "species": "wormadam-sandy-shiny",
+      "pose": "physical_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "a227bf3e9a0e0a6d0d5c64a062f9f5cd29a22fac76d35c412307db2ae732b5a6",
+      "candidate_sha256": "a227bf3e9a0e0a6d0d5c64a062f9f5cd29a22fac76d35c412307db2ae732b5a6"
+    },
+    {
+      "species": "wormadam-sandy-shiny",
+      "pose": "special_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "6ae942f3279a52aeea09e68b5dae9968515df625ca705e7dac49983c64ab832a",
+      "candidate_sha256": "6ae942f3279a52aeea09e68b5dae9968515df625ca705e7dac49983c64ab832a"
+    },
+    {
+      "species": "wormadam-sandy-shiny",
+      "pose": "damage-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "4efcf5308c602139e0fb049f6bf98ff49b44e4c53d8e582d75c5201e202fd02b",
+      "candidate_sha256": "4efcf5308c602139e0fb049f6bf98ff49b44e4c53d8e582d75c5201e202fd02b"
+    },
+    {
+      "species": "wormadam-sandy-shiny",
+      "pose": "faint_start-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "213bd23342e7f9e6c2d679053f009fb26e754cc31b743d6a633c8522fefb2a48",
+      "candidate_sha256": "213bd23342e7f9e6c2d679053f009fb26e754cc31b743d6a633c8522fefb2a48"
+    },
+    {
+      "species": "wormadam-trash",
+      "pose": "idle-face",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "1227838148aca0b3238bb9250460de3574ed3c8a10527ff7e886c58977d2202f",
+      "candidate_sha256": "1227838148aca0b3238bb9250460de3574ed3c8a10527ff7e886c58977d2202f"
+    },
+    {
+      "species": "wormadam-trash",
+      "pose": "idle-back",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "a187f0d94a57676e50525f32dcf730a06d9e21d794e4a3d5b2ed490d4ea0ccc9",
+      "candidate_sha256": "a187f0d94a57676e50525f32dcf730a06d9e21d794e4a3d5b2ed490d4ea0ccc9"
+    },
+    {
+      "species": "wormadam-trash",
+      "pose": "idle-side",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "51d91f8f76c2c712b0e6636732148c5abb1c9cc8e27353989feb6b58efdffbb2",
+      "candidate_sha256": "51d91f8f76c2c712b0e6636732148c5abb1c9cc8e27353989feb6b58efdffbb2"
+    },
+    {
+      "species": "wormadam-trash",
+      "pose": "physical_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "53328eb8791e212598a40becb587bd125f8861f117b38f31abcf9ddec3b6c69f",
+      "candidate_sha256": "53328eb8791e212598a40becb587bd125f8861f117b38f31abcf9ddec3b6c69f"
+    },
+    {
+      "species": "wormadam-trash",
+      "pose": "special_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "18ec101f3c27015f0004f2f806da0aec9823e29bc3aac1a365e440ebbccdb5f2",
+      "candidate_sha256": "18ec101f3c27015f0004f2f806da0aec9823e29bc3aac1a365e440ebbccdb5f2"
+    },
+    {
+      "species": "wormadam-trash",
+      "pose": "damage-front",
+      "changed_pixels": 1,
+      "total_pixels": 409600,
+      "source_sha256": "985e18085e8a51179d0bd608d6ac1aa48c9f2a7fcb0e5a22502a2f152f383a0b",
+      "candidate_sha256": "cc6a32e6ba5292e24f618d5544d2f4fca78a3995dff4b2a4090687a5d8cff7d3"
+    },
+    {
+      "species": "wormadam-trash",
+      "pose": "faint_start-front",
+      "changed_pixels": 1,
+      "total_pixels": 409600,
+      "source_sha256": "9279fb70b6c637a0112e2a1c8be5e49842fa020ae2693113e76d056b098646e1",
+      "candidate_sha256": "efe8ad13d768265f6f365adfc6f3ad4ccda44179216e14e036874755897ee7fb"
+    },
+    {
+      "species": "wormadam-trash-shiny",
+      "pose": "idle-face",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "65c35554a7faaf362b11d543a3353d2e38c69885c93624f25048dc68728b8ac2",
+      "candidate_sha256": "65c35554a7faaf362b11d543a3353d2e38c69885c93624f25048dc68728b8ac2"
+    },
+    {
+      "species": "wormadam-trash-shiny",
+      "pose": "idle-back",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "27b72e28a8692229a083fa7016af090194f38986ac191d1f9adf3047ee5cc99c",
+      "candidate_sha256": "27b72e28a8692229a083fa7016af090194f38986ac191d1f9adf3047ee5cc99c"
+    },
+    {
+      "species": "wormadam-trash-shiny",
+      "pose": "idle-side",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "c9f97f039ef03bb23b71daa273974ca1ec03457f847300453bc95f31baa9e0d5",
+      "candidate_sha256": "c9f97f039ef03bb23b71daa273974ca1ec03457f847300453bc95f31baa9e0d5"
+    },
+    {
+      "species": "wormadam-trash-shiny",
+      "pose": "physical_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "ab4aca2c9c0327de1f5b2590e119c6ee7a806ac9ef8d82444342f24051c3f435",
+      "candidate_sha256": "ab4aca2c9c0327de1f5b2590e119c6ee7a806ac9ef8d82444342f24051c3f435"
+    },
+    {
+      "species": "wormadam-trash-shiny",
+      "pose": "special_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "06f87f0a08fce1a2a1bbf015bd2277f629de433ff0e26252aaba07231560c53a",
+      "candidate_sha256": "06f87f0a08fce1a2a1bbf015bd2277f629de433ff0e26252aaba07231560c53a"
+    },
+    {
+      "species": "wormadam-trash-shiny",
+      "pose": "damage-front",
+      "changed_pixels": 1,
+      "total_pixels": 409600,
+      "source_sha256": "d12216445b14339539bc969b216b96e5c5977a3370b356b4db79ae8b7da553ef",
+      "candidate_sha256": "f2bc5101475f1633f8a6e367ce25a371e3271df8a46d33b39cf49c1cb4640876"
+    },
+    {
+      "species": "wormadam-trash-shiny",
+      "pose": "faint_start-front",
+      "changed_pixels": 1,
+      "total_pixels": 409600,
+      "source_sha256": "6c37a1ea7c4364b04296d6f844704c4bbd3b85ebb5289e6309e714c32ba2afb2",
+      "candidate_sha256": "88261c03f279d8597111549950ceeccdd3c04eebe8e0bc92fc7d18810d75f5bb"
+    },
+    {
+      "species": "cramorant-gorging",
+      "pose": "idle-face",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "af4a5e990b9aa6b4766ea1fb4b59d2e4cd93decd3ea79501c9cc58b1e0558657",
+      "candidate_sha256": "af4a5e990b9aa6b4766ea1fb4b59d2e4cd93decd3ea79501c9cc58b1e0558657"
+    },
+    {
+      "species": "cramorant-gorging",
+      "pose": "idle-back",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "609a6a0a42fc2733d6908a32b14f854529baada00defa77c59a46787a4322371",
+      "candidate_sha256": "609a6a0a42fc2733d6908a32b14f854529baada00defa77c59a46787a4322371"
+    },
+    {
+      "species": "cramorant-gorging",
+      "pose": "idle-side",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "27e06485bd0d8f0acccb1f2df33a38d50aacd1a49fe758f209cc6e8782b47274",
+      "candidate_sha256": "27e06485bd0d8f0acccb1f2df33a38d50aacd1a49fe758f209cc6e8782b47274"
+    },
+    {
+      "species": "cramorant-gorging",
+      "pose": "physical_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "f37c11abaafa779aade098c8ee8be7462896a7181e511140a35fb81eb4a7059b",
+      "candidate_sha256": "f37c11abaafa779aade098c8ee8be7462896a7181e511140a35fb81eb4a7059b"
+    },
+    {
+      "species": "cramorant-gorging",
+      "pose": "special_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "f4ad8749bfabfc525ccf8224648610f381a8de2a2badabaae4cc5d5de1b5bd21",
+      "candidate_sha256": "f4ad8749bfabfc525ccf8224648610f381a8de2a2badabaae4cc5d5de1b5bd21"
+    },
+    {
+      "species": "cramorant-gorging",
+      "pose": "damage-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "986c55422e8ce65e61831e555ec4437f00fc215dc31606d56006de9a9cdd6fa1",
+      "candidate_sha256": "986c55422e8ce65e61831e555ec4437f00fc215dc31606d56006de9a9cdd6fa1"
+    },
+    {
+      "species": "cramorant-gorging",
+      "pose": "faint_start-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "7488c54794375f658a3976c12ec81b452006d22428eb86f7e10ed13c94b637fd",
+      "candidate_sha256": "7488c54794375f658a3976c12ec81b452006d22428eb86f7e10ed13c94b637fd"
+    },
+    {
+      "species": "cramorant-gorging-shiny",
+      "pose": "idle-face",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "da2ceae0525a3716274abc9ddd296a9148c65736dc13f5eba256dbdb45463593",
+      "candidate_sha256": "da2ceae0525a3716274abc9ddd296a9148c65736dc13f5eba256dbdb45463593"
+    },
+    {
+      "species": "cramorant-gorging-shiny",
+      "pose": "idle-back",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "bad6712e0fedff2a196cdb291ed0fa7d000a91c25151d4a97803308e55a6d063",
+      "candidate_sha256": "bad6712e0fedff2a196cdb291ed0fa7d000a91c25151d4a97803308e55a6d063"
+    },
+    {
+      "species": "cramorant-gorging-shiny",
+      "pose": "idle-side",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "a985418879dfb1c5743dd742ec9d882b1def8dbafd2bd3c42cd477cd5a55e38e",
+      "candidate_sha256": "a985418879dfb1c5743dd742ec9d882b1def8dbafd2bd3c42cd477cd5a55e38e"
+    },
+    {
+      "species": "cramorant-gorging-shiny",
+      "pose": "physical_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "3bdad3cae466376ff22aa0f0c51fa9c0fc36c05344c269d6b658915ac5956049",
+      "candidate_sha256": "3bdad3cae466376ff22aa0f0c51fa9c0fc36c05344c269d6b658915ac5956049"
+    },
+    {
+      "species": "cramorant-gorging-shiny",
+      "pose": "special_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "003127aa95fa0b1891ae9f1c6d9c95a15afca265f7b21df39772e8e759bfd310",
+      "candidate_sha256": "003127aa95fa0b1891ae9f1c6d9c95a15afca265f7b21df39772e8e759bfd310"
+    },
+    {
+      "species": "cramorant-gorging-shiny",
+      "pose": "damage-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "b32327fb5fe7b6a1c1eda9f39e9fd6a7f8a9fda6430efbda6966e60939287ad1",
+      "candidate_sha256": "b32327fb5fe7b6a1c1eda9f39e9fd6a7f8a9fda6430efbda6966e60939287ad1"
+    },
+    {
+      "species": "cramorant-gorging-shiny",
+      "pose": "faint_start-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "48c3084e1aff3b1ffac120be0b2077404f18e6bbe7f65b8ed466b12c2fbc3ae2",
+      "candidate_sha256": "48c3084e1aff3b1ffac120be0b2077404f18e6bbe7f65b8ed466b12c2fbc3ae2"
+    },
+    {
+      "species": "cramorant-gulping",
+      "pose": "idle-face",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "ae4d7a358c33c09e8c2e60b9b04ac2570768fd84a8529ed8a5ed9ee8c55ed56e",
+      "candidate_sha256": "ae4d7a358c33c09e8c2e60b9b04ac2570768fd84a8529ed8a5ed9ee8c55ed56e"
+    },
+    {
+      "species": "cramorant-gulping",
+      "pose": "idle-back",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "c7c9b74fc996c8340aa0b44cf9b9945df0712b46e6c034ecc41f2a35f781cb5c",
+      "candidate_sha256": "c7c9b74fc996c8340aa0b44cf9b9945df0712b46e6c034ecc41f2a35f781cb5c"
+    },
+    {
+      "species": "cramorant-gulping",
+      "pose": "idle-side",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "0bbf8f7bb353e17946b6206926f5271b7be92c95ece5a96a19e811ad55dc5e8f",
+      "candidate_sha256": "0bbf8f7bb353e17946b6206926f5271b7be92c95ece5a96a19e811ad55dc5e8f"
+    },
+    {
+      "species": "cramorant-gulping",
+      "pose": "physical_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "5ac9a29a3cdf983a1d30b75f416ce2a10b99ae41ae06c81c023661b3c0abe9ce",
+      "candidate_sha256": "5ac9a29a3cdf983a1d30b75f416ce2a10b99ae41ae06c81c023661b3c0abe9ce"
+    },
+    {
+      "species": "cramorant-gulping",
+      "pose": "special_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "c8a2ffdb4c526b50c4cfebaaa976f893d08b3686d29dae61999a9fb5f2459f8d",
+      "candidate_sha256": "c8a2ffdb4c526b50c4cfebaaa976f893d08b3686d29dae61999a9fb5f2459f8d"
+    },
+    {
+      "species": "cramorant-gulping",
+      "pose": "damage-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "ad460c4833738daf1f68902b93459470d4052fd97686b01c048b66a8be992e44",
+      "candidate_sha256": "ad460c4833738daf1f68902b93459470d4052fd97686b01c048b66a8be992e44"
+    },
+    {
+      "species": "cramorant-gulping",
+      "pose": "faint_start-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "65a80e2ace8fdb2074800f2bad303ed6f435abcea776e2688706ab1e27ff57eb",
+      "candidate_sha256": "65a80e2ace8fdb2074800f2bad303ed6f435abcea776e2688706ab1e27ff57eb"
+    },
+    {
+      "species": "cramorant-gulping-shiny",
+      "pose": "idle-face",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "6c15653edc93c1e780a1e158fd3c22843b1940fee63b7cec772c4ee57554ad73",
+      "candidate_sha256": "6c15653edc93c1e780a1e158fd3c22843b1940fee63b7cec772c4ee57554ad73"
+    },
+    {
+      "species": "cramorant-gulping-shiny",
+      "pose": "idle-back",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "faf16aa007d57ac5f6313eb569fb68ee972c37507130e8fa05b649881ea9f6d1",
+      "candidate_sha256": "faf16aa007d57ac5f6313eb569fb68ee972c37507130e8fa05b649881ea9f6d1"
+    },
+    {
+      "species": "cramorant-gulping-shiny",
+      "pose": "idle-side",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "c82ae35c83e5193f43cca7199c4a4afa41e63c418470150197a06bcfc4b52893",
+      "candidate_sha256": "c82ae35c83e5193f43cca7199c4a4afa41e63c418470150197a06bcfc4b52893"
+    },
+    {
+      "species": "cramorant-gulping-shiny",
+      "pose": "physical_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "61540e872f4e86a0b172cc06d6055e8f8d030cd8c6acc3c5350a9712167777b5",
+      "candidate_sha256": "61540e872f4e86a0b172cc06d6055e8f8d030cd8c6acc3c5350a9712167777b5"
+    },
+    {
+      "species": "cramorant-gulping-shiny",
+      "pose": "special_attack-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "b49ea1029f565e3e868dcfa70b09d431ff13d1694cfc4fd9d7e4aaa001f33910",
+      "candidate_sha256": "b49ea1029f565e3e868dcfa70b09d431ff13d1694cfc4fd9d7e4aaa001f33910"
+    },
+    {
+      "species": "cramorant-gulping-shiny",
+      "pose": "damage-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "428ddcb43fdaadab59f165c0e2cdabe68ce65d75f9b199e12d813609203f655c",
+      "candidate_sha256": "428ddcb43fdaadab59f165c0e2cdabe68ce65d75f9b199e12d813609203f655c"
+    },
+    {
+      "species": "cramorant-gulping-shiny",
+      "pose": "faint_start-front",
+      "changed_pixels": 0,
+      "total_pixels": 409600,
+      "source_sha256": "0988fc9a4f84140edc2f0d15de29aa93885689177fe66c13fa7c6b1727421397",
+      "candidate_sha256": "0988fc9a4f84140edc2f0d15de29aa93885689177fe66c13fa7c6b1727421397"
+    }
+  ],
+  "gallery": {
+    "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/index.html",
+    "sha256": "27393b3c47061ea0cd24f6677851a6ae629e11240b330d15c9b14117a3dedb75",
+    "contact": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-repairs.png",
+    "contact_sha256": "b39e03536b07c0f79eadad673c4ebee9101d30629429e677f528123034b02a32"
+  },
+  "entries": {
+    "burmy-sandy": {
+      "runtime_approved": false,
+      "sleep_appearance_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/burmy-sandy.scn",
+      "runtime_sha256": "f73264d423667f8cda30b585c64b1aaa23a2e6790b37c68a41cdd6de86220cf1",
+      "approved_runtime_sha256": "ff584048848eeb6205d2921685e80879ef7f2f229f6d605998acd4d5769ca238",
+      "videos": {
+        "review-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/burmy-sandy.mp4",
+          "sha256": "1e5deb5efca8cb3d1010d60db904b8e32ee5f117f61715989ef0ab439ac6deec"
+        },
+        "sleep-around-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/burmy-sandy.mp4",
+          "sha256": "e2d50834ab1d2eb00aa1c873ee60f62c68a54c7496744ce288b9864a173b8cc6"
+        }
+      },
+      "source_cell_count": 8,
+      "pose_policy": "Source body sleep unchanged; source closed-eye atlas cell selected."
+    },
+    "burmy-sandy-shiny": {
+      "runtime_approved": false,
+      "sleep_appearance_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/burmy-sandy-shiny.scn",
+      "runtime_sha256": "e5f17680cb109118fc2a134b29db57c8d024193a93e4db147e3a4caedfd668f2",
+      "approved_runtime_sha256": "2080501ecb39547e80d039808983fc85951c66b7ef256068d373667e9fff6ca6",
+      "videos": {
+        "review-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/burmy-sandy-shiny.mp4",
+          "sha256": "aca661ee00eb4a7982c7de6ae4e2fdaa3f58d0f270e136b3184d5221c5bffe1e"
+        },
+        "sleep-around-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/burmy-sandy-shiny.mp4",
+          "sha256": "fbf349448af5b0b3934220287dadc141d0ddffe25f10dd923edf4e204b6dfcb5"
+        }
+      },
+      "source_cell_count": 8,
+      "pose_policy": "Source body sleep unchanged; source closed-eye atlas cell selected."
+    },
+    "burmy-trash": {
+      "runtime_approved": false,
+      "sleep_appearance_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/burmy-trash.scn",
+      "runtime_sha256": "2649c58e35479e1176487f6be1c9c9612af6eefee4c31e0e1b7054d95e9dd6f2",
+      "approved_runtime_sha256": "01c61f4840bd981145c02f6ce44cbe982bf28798bc5ed5edb8c4c3ce528a8093",
+      "videos": {
+        "review-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/burmy-trash.mp4",
+          "sha256": "4997524c3f3e7718aba0a9fa51e887a149f7c0f53e3ee7bfcfcb23bea4d248ee"
+        },
+        "sleep-around-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/burmy-trash.mp4",
+          "sha256": "efccac59713cd09b3e2417aee80771b4ec8ef7528f30e36299ad738fb4504f5c"
+        }
+      },
+      "source_cell_count": 8,
+      "pose_policy": "Source body sleep unchanged; source closed-eye atlas cell selected."
+    },
+    "burmy-trash-shiny": {
+      "runtime_approved": false,
+      "sleep_appearance_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/burmy-trash-shiny.scn",
+      "runtime_sha256": "2c9d8e081f7a249b4c96df16e06ef5e94d9f7c65036c5e8d6a2a3f13ac512504",
+      "approved_runtime_sha256": "cd5c63b7cc5a86edd1d665b9e8b378f115f3f273b479c0a6084264a51ef66389",
+      "videos": {
+        "review-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/burmy-trash-shiny.mp4",
+          "sha256": "758ad051663f5cdcf855814f21f03227e51f41f76d3390c1d627f264b492a4ad"
+        },
+        "sleep-around-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/burmy-trash-shiny.mp4",
+          "sha256": "ae5e29f024700ba6c23b504d0c2e7d7825fbcb94c7075e20d0e4546c40c56cd4"
+        }
+      },
+      "source_cell_count": 8,
+      "pose_policy": "Source body sleep unchanged; source closed-eye atlas cell selected."
+    },
+    "wormadam-sandy": {
+      "runtime_approved": false,
+      "sleep_appearance_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/wormadam-sandy.scn",
+      "runtime_sha256": "399f6839d5b46317a40497cc98af35a33d44b84c7bea9c70943d7d0d5f24af36",
+      "approved_runtime_sha256": "2304a96c7b6b2c00a054be686d684035665f2c5e9e3518dcdb606b6f0c675265",
+      "videos": {
+        "review-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/wormadam-sandy.mp4",
+          "sha256": "a56a67d37c6313657aab84c3b02c88c2936b2abf24ca0d98b42efb9b60339b23"
+        },
+        "sleep-around-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/wormadam-sandy.mp4",
+          "sha256": "b474ebf2673f3993e9d30aad47db5d749272c83f90a231b809e6138d6d194737"
+        }
+      },
+      "source_cell_count": 8,
+      "pose_policy": "Source body sleep unchanged; source closed-eye atlas cell selected."
+    },
+    "wormadam-sandy-shiny": {
+      "runtime_approved": false,
+      "sleep_appearance_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/wormadam-sandy-shiny.scn",
+      "runtime_sha256": "3697be79d115b2ed912adb4191a4c152a97c6c8224bdc38e5f57c68a7bb29f87",
+      "approved_runtime_sha256": "7fe222bad293ee2a39a993de96f8047d4829e9df0f9e357545fed805a97fd9f7",
+      "videos": {
+        "review-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/wormadam-sandy-shiny.mp4",
+          "sha256": "9974d84288f35baa96e547e625b8c9d563d3ed2c4d6cb5bfcf0756195736b22a"
+        },
+        "sleep-around-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/wormadam-sandy-shiny.mp4",
+          "sha256": "34f2d96681239ba0691c1933aaa751153d76335fa0ba81c585f14759434602d4"
+        }
+      },
+      "source_cell_count": 8,
+      "pose_policy": "Source body sleep unchanged; source closed-eye atlas cell selected."
+    },
+    "wormadam-trash": {
+      "runtime_approved": false,
+      "sleep_appearance_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/wormadam-trash.scn",
+      "runtime_sha256": "461311999f2359c5553e4ccf900632145b6ffdd027663fecf6088d3770d22ac2",
+      "approved_runtime_sha256": "edb2ad843a0eacea6f97b31b3d0678e6c47fa04d824878597d39116c02113087",
+      "videos": {
+        "review-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/wormadam-trash.mp4",
+          "sha256": "46abf88a89eaa068477609e17c36a6b5d7de58e8279e1d9c574dc66248fd6d82"
+        },
+        "sleep-around-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/wormadam-trash.mp4",
+          "sha256": "d64cbfe7725adf7e3f5c3289702e1dd01223701411698c01124b11e123c81af9"
+        }
+      },
+      "source_cell_count": 8,
+      "pose_policy": "Source body sleep unchanged; source closed-eye atlas cell selected."
+    },
+    "wormadam-trash-shiny": {
+      "runtime_approved": false,
+      "sleep_appearance_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/wormadam-trash-shiny.scn",
+      "runtime_sha256": "03d170a08eac7339081a9a829721c9a7ca478e16b85bb08c178dd8544c564aae",
+      "approved_runtime_sha256": "b1cb8c44f549c505317ba8f1c26e067ffc0cfa9cf6ae91dd7cfcbe3b92457244",
+      "videos": {
+        "review-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/wormadam-trash-shiny.mp4",
+          "sha256": "fc6312df5f7a0fb156d21301e7f99797dbaa2407542dd4bf36500269a0d1c749"
+        },
+        "sleep-around-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/wormadam-trash-shiny.mp4",
+          "sha256": "43a83b90a055a5027362c755d72f431f43f437c8c238ef97f60e6c056c32084a"
+        }
+      },
+      "source_cell_count": 8,
+      "pose_policy": "Source body sleep unchanged; source closed-eye atlas cell selected."
+    },
+    "cramorant-gorging": {
+      "runtime_approved": false,
+      "sleep_appearance_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/cramorant-gorging.scn",
+      "runtime_sha256": "fd07d26a1f42aa237ec5069fded9cb6cf44a0dd956b85105ebaeb77afbbde396",
+      "approved_runtime_sha256": "78fd961311d30e159b5fa47d7cb790a25bafdbc72a88655295044a1dc7e2b6e0",
+      "videos": {
+        "review-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/cramorant-gorging.mp4",
+          "sha256": "fe4bda17ee7270b2acb56b025aa45d61fbd8cda32c2141634cbcfbf06da2e0eb"
+        },
+        "sleep-around-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/cramorant-gorging.mp4",
+          "sha256": "58b1498b11b4da925311dde94ef1ab046f2f0161cdbb48fcdb0e8782701eff3f"
+        }
+      },
+      "source_cell_count": 6,
+      "pose_policy": "Keep source sleeping body and head position; retain own idle head orientation, beak opening and head/prey-relative pose, sampled at 60 Hz. This prevents the prey hanging below the feet."
+    },
+    "cramorant-gorging-shiny": {
+      "runtime_approved": false,
+      "sleep_appearance_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/cramorant-gorging-shiny.scn",
+      "runtime_sha256": "77d047bb92e075fcfe85765bcc76a9d49f5f69271772dbc79fbef00c9e4bc0d4",
+      "approved_runtime_sha256": "448968c4de231283354d85d81c193ec34366c0e2cb1fdad6f521585395deabf4",
+      "videos": {
+        "review-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/cramorant-gorging-shiny.mp4",
+          "sha256": "711377e89119fab47b89072885d6b1dbf4b1c0f74ef62fca4a50ad77c33c4f9f"
+        },
+        "sleep-around-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/cramorant-gorging-shiny.mp4",
+          "sha256": "40282fdda2fa91da4225748d9f52f9f2fcaccd1cc25d75f98563b1188fa8960a"
+        }
+      },
+      "source_cell_count": 6,
+      "pose_policy": "Keep source sleeping body and head position; retain own idle head orientation, beak opening and head/prey-relative pose, sampled at 60 Hz. This prevents the prey hanging below the feet."
+    },
+    "cramorant-gulping": {
+      "runtime_approved": false,
+      "sleep_appearance_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/cramorant-gulping.scn",
+      "runtime_sha256": "a0cb3a89edaa959a4d97a9e088c4ebf9e0c64e7b449521aa4c1b8f982c912d12",
+      "approved_runtime_sha256": "ef7f7bd03448f6cee244be911190c75d969863456e3de094f18ac3694a26eb90",
+      "videos": {
+        "review-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/cramorant-gulping.mp4",
+          "sha256": "ea113fd1c1009692e0dd97d4855be74fd0abc5925fb880461d28da6ecf8bfaba"
+        },
+        "sleep-around-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/cramorant-gulping.mp4",
+          "sha256": "c238979666a4ee1752462665ac9ecc7bad1b023817388d83a849130eab438eaa"
+        }
+      },
+      "source_cell_count": 6,
+      "pose_policy": "Keep source sleeping body and head position; retain own idle head orientation, beak opening and head/prey-relative pose, sampled at 60 Hz. This prevents the prey hanging below the feet."
+    },
+    "cramorant-gulping-shiny": {
+      "runtime_approved": false,
+      "sleep_appearance_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/cramorant-gulping-shiny.scn",
+      "runtime_sha256": "bf68098c2f4e73d87282e639eb6211153dd8eb26c997556636f0e2b35de8339f",
+      "approved_runtime_sha256": "6f633c42b893d35a5489ff713c5a0a4aebed46e25896f8be496ebc2dd7071e96",
+      "videos": {
+        "review-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/review-v2/cramorant-gulping-shiny.mp4",
+          "sha256": "0f23f43e642f0e6bfdf2ba4958db7ebd930fc36c464ea2f4c3aa4337dde2f705"
+        },
+        "sleep-around-v2": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/remaining-forms-sleep-v1/sleep-around-v2/cramorant-gulping-shiny.mp4",
+          "sha256": "853883346ea85cfadd30384e562ca30c5dcfdae537c256e53e6154a3ee140e22"
+        }
+      },
+      "source_cell_count": 6,
+      "pose_policy": "Keep source sleeping body and head position; retain own idle head orientation, beak opening and head/prey-relative pose, sampled at 60 Hz. This prevents the prey hanging below the feet."
+    }
+  },
+  "code_sha256": {
+    "remaining_forms_sleep.py": "652568f9fa70d6bf15fdb8c0bfe76448c90dd6f967fe1718c0420f07db95d169",
+    "remaining_forms_sleep_result.py": "9d237c8c582f5fff001a7e72558f57354a75cec10ac313d84cc0e3db59e2436b",
+    "remaining_forms_sleep_build.gd": "5d4f27db5df2279b3ab0859a3dbc1b687611e7fd0e6e93df6e6466124fbc91a6",
+    "remaining_forms_sleep_check.gd": "cc831515e4bc310fd343ad8758479589df0bb50639e8f81ff68d7079b4a14aa9",
+    "remaining_forms_sleep_review.gd": "c8bdcbb441163b63f462cecf56809b055d659a2f4cd7c21619d34983533977ed"
+  }
+}
