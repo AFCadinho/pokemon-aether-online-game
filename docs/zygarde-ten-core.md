@@ -1,8 +1,9 @@
 # Zygarde 10%: resultaat van de herstelpoging
 
 Vervolg: er is inmiddels een expliciet toegestane [lokale visuele proef](zygarde-ten-preview.md)
-gemaakt. Die reconstructie is nog niet toegelaten; de bronbeperkingen hieronder
-blijven van toepassing.
+gemaakt en visueel goedgekeurd. Zie de [lokale battlekwalificatie](zygarde-ten-battle.md)
+voor de actuele status. Hieronder staat de eerdere herstelpoging; de genoemde
+bronbeperkingen blijven van toepassing.
 
 **Nog niet hersteld of toegelaten.** De 17 eerder herstelde vormen blijven
 bruikbaar; het aantal resterende vormen blijft 36. Catalogi, pakketten,
