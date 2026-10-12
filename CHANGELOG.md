@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Hyper Beam, Solar Beam, Flash Cannon, Pyro Ball, Flamethrower, Thunderbolt, Electro Shot, Ice Beam, Blizzard and Hurricane individual light colours and timing. Light follows beams, cannon outlets and the fireball arc; wide storms tint the arena. Preserve animation duration, weather, camera settings and cleanup.
+
 - Add subtle purple Shadow Ball, blue-and-gold Focus Blast and moonlit Moonblast atmosphere with local orb lighting and a soft hit pulse. Preserve move timing, weather and arena lighting, restoring the original environment on completion or cancellation.
 
 - Give Shadow Ball, Focus Blast and Moonblast distinct solid energy spheres, continuous tapered wakes and focused impacts. Orbs charge small at the source and grow after release, preserving native timing and cinematic cameras.

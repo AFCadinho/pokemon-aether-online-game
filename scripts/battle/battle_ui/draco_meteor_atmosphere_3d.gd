@@ -1,6 +1,7 @@
 extends RefCounted
 ## Temporary camera-local move lighting, owned by the native move lifetime.
 ## The arena, world clock and weather resources are never recoloured in place.
+const Profiles = preload("res://scripts/battle/battle_ui/move_lighting_profiles_3d.gd")
 const BLUE := Color("081f68")
 const ORBS := {
 	"shadowball": {"tint":Color("8543c9"), "flash":Color("b67ce8"), "brightness":0.92, "energy":1.4},
@@ -24,9 +25,10 @@ var atmosphere: Environment
 var strength := 0.0
 var pulse := 0.0
 var orb_light: OmniLight3D
+var profile_lights: Array[OmniLight3D] = []
 
 func supports(key: String) -> bool:
-	return key == "dracometeor" or ORBS.has(key)
+	return key == "dracometeor" or ORBS.has(key) or Profiles.PROFILES.has(key)
 
 func begin(owner: Node) -> void:
 	suspend()
@@ -52,6 +54,11 @@ func suspend() -> void:
 		orb_light.hide()
 		orb_light.queue_free()
 	orb_light = null
+	for light in profile_lights:
+		if is_instance_valid(light):
+			light.hide()
+			light.queue_free()
+	profile_lights.clear()
 
 func apply(stage: Node) -> void:
 	if not stage.active or stage._is_hybrid_presentation() or not is_instance_valid(stage.camera) or not is_instance_valid(stage.world):
@@ -66,6 +73,10 @@ func apply(stage: Node) -> void:
 	if ORBS.has(effect.key):
 		var charge := smoothstep(effect.effect_start, maxf(effect.launch, effect.effect_start + 0.01), seconds)
 		weight = charge * (1.0 - smoothstep(effect.impact, effect.duration, seconds))
+	var lighting_sample := {}
+	if Profiles.PROFILES.has(effect.key):
+		lighting_sample = Profiles.sample(effect, seconds)
+		weight = float(lighting_sample.weight)
 	if weight <= 0.00001:
 		suspend()
 		return
@@ -85,6 +96,9 @@ func apply(stage: Node) -> void:
 	strength = weight
 	for property in LIVE_PROPERTIES:
 		atmosphere.set(property, source.get(property))
+	if not lighting_sample.is_empty():
+		_apply_profile(stage, lighting_sample)
+		return
 	if ORBS.has(effect.key):
 		_apply_orb(stage, seconds, weight)
 		return
@@ -119,20 +133,7 @@ func _apply_orb(stage: Node, seconds: float, weight: float) -> void:
 	var tint: Color = profile.tint
 	var flash: Color = profile.flash
 	var lighting := tint.lerp(flash, pulse)
-	atmosphere.ambient_light_color = source.ambient_light_color.lerp(lighting, weight * 0.25)
-	atmosphere.ambient_light_sky_contribution = source.ambient_light_sky_contribution * (1.0 - weight * 0.25)
-	atmosphere.ambient_light_energy = source.ambient_light_energy * lerpf(1.0, float(profile.brightness), weight)
-	atmosphere.background_color = source.background_color.lerp(tint, weight * 0.12)
-	if source.fog_enabled:
-		atmosphere.fog_light_color = source.fog_light_color.lerp(lighting, weight * 0.16)
-	# Keep the sky and fog shape intact; only Draco owns a full arena backdrop.
-	atmosphere.adjustment_enabled = true
-	if not source.adjustment_enabled:
-		atmosphere.adjustment_contrast = 1.0
-		atmosphere.adjustment_saturation = 1.0
-		atmosphere.adjustment_color_correction = null
-	var brightness := source.adjustment_brightness if source.adjustment_enabled else 1.0
-	atmosphere.adjustment_brightness = brightness * (lerpf(1.0, float(profile.brightness), weight) + pulse * 0.035)
+	_tint_environment(tint, lighting, float(profile.brightness), weight, 0.25)
 	if not is_instance_valid(orb_light):
 		orb_light = OmniLight3D.new()
 		orb_light.name = "MoveOrbGlow"
@@ -148,3 +149,54 @@ func _apply_orb(stage: Node, seconds: float, weight: float) -> void:
 	orb_light.light_energy = float(profile.energy) * local_weight
 	orb_light.omni_range = clampf(3.0 * effect.emission_scale, 2.5, 5.0) + pulse
 	orb_light.omni_attenuation = 1.5
+
+func _tint_environment(tint: Color, lighting: Color, brightness_scale: float, weight: float, mix_amount: float) -> void:
+	atmosphere.ambient_light_color = source.ambient_light_color.lerp(lighting, weight * mix_amount)
+	atmosphere.ambient_light_sky_contribution = source.ambient_light_sky_contribution * (1.0 - weight * mix_amount)
+	atmosphere.ambient_light_energy = source.ambient_light_energy * lerpf(1.0, brightness_scale, weight)
+	atmosphere.background_color = source.background_color.lerp(tint, weight * 0.12)
+	if source.fog_enabled:
+		atmosphere.fog_light_color = source.fog_light_color.lerp(lighting, weight * 0.16)
+	# Keep the sky and fog shape intact; only Draco owns a full arena backdrop.
+	atmosphere.adjustment_enabled = true
+	if not source.adjustment_enabled:
+		atmosphere.adjustment_contrast = 1.0
+		atmosphere.adjustment_saturation = 1.0
+		atmosphere.adjustment_color_correction = null
+	var brightness := source.adjustment_brightness if source.adjustment_enabled else 1.0
+	atmosphere.adjustment_brightness = brightness * (lerpf(1.0, brightness_scale, weight) + pulse * 0.035)
+
+func _apply_profile(stage: Node, sample: Dictionary) -> void:
+	var profile: Dictionary = sample.profile
+	pulse = float(sample.pulse)
+	_tint_environment(profile.tint, sample.color, float(profile.brightness), strength, float(profile.mix))
+	if effect.key in Profiles.FIELDS and not source.fog_enabled:
+		# A shallow distant haze for wide storms, leaving the fighters clear.
+		atmosphere.fog_enabled = true
+		atmosphere.fog_mode = Environment.FOG_MODE_DEPTH
+		atmosphere.fog_light_color = profile.tint
+		atmosphere.fog_light_energy = 0.7
+		atmosphere.fog_depth_begin = maxf(6.0, camera.position.distance_to(effect.anchors.call().target) + 2.0)
+		atmosphere.fog_depth_end = atmosphere.fog_depth_begin + 28.0
+		atmosphere.fog_depth_curve = 1.0
+		atmosphere.fog_density = strength * (0.24 if effect.key == "blizzard" else 0.18)
+		atmosphere.fog_sky_affect = strength * 0.18
+	var values: Array = sample.lights
+	while profile_lights.size() < values.size():
+		var light := OmniLight3D.new()
+		light.set_meta("battle_field_visual", true)
+		light.shadow_enabled = false
+		light.light_specular = 0.35
+		light.omni_attenuation = 1.5
+		stage.world.add_child(light)
+		profile_lights.append(light)
+	for index in profile_lights.size():
+		var light := profile_lights[index]
+		light.visible = index < values.size()
+		if not light.visible: continue
+		var value: Dictionary = values[index]
+		light.set_meta("move_light_role", value.role)
+		light.position = value.point
+		light.light_color = value.color
+		light.light_energy = float(value.energy)
+		light.omni_range = float(value.range)
