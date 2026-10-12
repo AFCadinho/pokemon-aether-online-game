@@ -1,7 +1,7 @@
 extends "res://tests/battle_dialogue_preview.gd"
 ## Offline review: --moves --capture-move-cameras [--arena=sea] [--caster=Blastoise]
 ## Narrow the review with --camera-moves=FlashCannon,HyperBeam (normalized names).
-const CAMERA_MOVES := ["Moonblast", "Hyper Beam", "Solar Beam", "Focus Blast", "Shadow Ball", "Flash Cannon", "Electro Shot", "Pyro Ball", "Blizzard", "Hurricane", "Tera Starstorm"]
+const CAMERA_MOVES := ["Moonblast", "Hyper Beam", "Solar Beam", "Focus Blast", "Shadow Ball", "Flash Cannon", "Electro Shot", "Pyro Ball", "Blizzard", "Hurricane", "Tera Starstorm", "Flamethrower", "Thunderbolt", "Ice Beam"]
 
 func _start() -> void:
 	root.get_node("SettingsManager").battle_3d_camera_motion = true
@@ -72,7 +72,7 @@ func _capture_cameras() -> void:
 				assert(Time.get_ticks_msec() < deadline, move + " recovery stalled")
 				await process_frame
 			assert(renderer.move_camera.effect == null and renderer.common_effects.is_empty())
-			assert(renderer.camera.environment == original_environment and renderer.move_atmosphere.orb_light == null)
+			assert(renderer.camera.environment == original_environment and renderer.move_atmosphere.orb_light == null and renderer.move_atmosphere.profile_lights.is_empty())
 			print("MOVE_CAMERA_PREVIEW ", move, " reverse=", reverse)
 	assert(reviewed > 0, "No matching camera moves")
 	print("MOVE_CAMERA_CHOREOGRAPHY_PREVIEW_OK moves=", reviewed, " directions=2 charge=true flight=true impact=true pause=true recovery=true offline=true")
