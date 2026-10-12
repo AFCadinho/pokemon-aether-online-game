@@ -115,6 +115,14 @@ func _run() -> void:
 	_check(stage.preview_visual.slots[0].identity.ends_with("@shiny"), "spectator side swap rebuilds mapped public rosters")
 	_check(stage.preview_visual.slots[6].side == 1 and stage.preview_visual.slots[6].nameplate.get_node("SpeciesName").text == SPECIES[0],
 		"spectator side changes place nameplates only on the mapped enemy team")
+	# Hold catalog/arena readiness to reproduce an interrupted preview import.
+	# A preview timeout must not permanently disable the selected lead models.
+	stage.set_process(false)
+	stage.loaded_path = "!preview-stall-fixture"
+	await stage.await_prepared(true, 100)
+	_check(not stage.active and not stage.preview_problem.is_empty() and not stage.preparation_failed,
+		"a stalled preview falls back without poisoning the complete battle")
+	stage.set_process(true)
 	nameplate_layer = stage.preview_visual.nameplate_layer
 	stage.clear_team_preview()
 	_check(stage.preview_visual == null and layers.all(func(layer): return not layer.visible), "lead transition clears preview synchronously")
@@ -167,11 +175,20 @@ func _run() -> void:
 	stage._set_active(true)
 	_check(stage.side_condition_visuals[0].effects.spikes.layers == 1, "returning to 3D rebuilds current hazards")
 	_check(Conditions.snapshot([{ "effectId": "toxic_spikes", "layers": 9}]).toxicspikes == 2, "hazard layers are bounded")
-	stage.set_team_preview([{ "species": "Unsupported fixture"}], [], layers)
+	stage.set_team_preview([{ "species": "Landorus-Therian"}], [], layers)
 	await process_frame
 	await process_frame
 	_check(not stage.active and layers[0].visible, "unsupported preview keeps a complete 2D fallback")
+	_check("landorus-therian" in stage.reason, "the fallback identifies the missing form without using Incarnate Landorus")
+	stage.set_process(false)
+	stage.loaded_path = "!unsupported-preview-does-not-need-a-catalog"
+	await stage.await_prepared(true, 100)
+	_check(stage.preview_problem.is_empty() and not stage.preparation_failed and "landorus-therian" in stage.reason,
+		"known unsupported previews resolve before waiting for unrelated catalog/arena work")
+	stage.set_process(true)
 	stage.clear_team_preview()
+	await stage.await_prepared(true)
+	_check(stage.handles("p1") and stage.handles("p2"), "supported leads also recover after an unsupported roster preview")
 	await _check_battle_wiring()
 	await _check_late_download(settings)
 	_cleanup(platforms, layers, previous_catalog)
