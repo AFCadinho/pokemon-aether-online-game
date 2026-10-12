@@ -145,18 +145,33 @@ func layout_now(delta := 0.0, snap := false) -> void:
 		battle.enemy_team_preview_layer.position = Vector2(area.x * 0.70, area.y * 0.39)
 	if is_instance_valid(presenter) and is_instance_valid(presenter.mode_label):
 		presenter.mode_label.hide()
+	var fixed_single_huds: bool = realtime_3d and not presenter.double_mode and not battle.coop_mode
+	var hud_scale := 0.65
+	var fixed_hud_top := 82.0
+	if fixed_single_huds:
+		# A shared screen-space row stays readable through orbit, zoom and move
+		# cinematics. Keep each card inside its own half, clear of the party rails.
+		var card_width := maxf(battle.player_hud_panel.size.x, battle.enemy_hud_panel.size.x)
+		hud_scale = minf(hud_scale, maxf(1.0, (area.x - 176.0) * 0.5) / maxf(1.0, card_width))
+		for control: Control in [header, turn, reset_camera, field_indicators]:
+			if control.visible:
+				fixed_hud_top = maxf(fixed_hud_top, control.position.y + control.size.y * control.scale.y + 12.0)
 	var occupied := Rect2()
 	for index in 2:
 		var hud: Control = battle.player_hud_panel if index == 0 else battle.enemy_hud_panel
 		var sprite_box = battle.player_sprite_box if index == 0 else battle.enemy_sprite_box
 		var badges: Control = sprite_box.single_stat_stage_panel
-		var extent := hud.size * 0.65
+		var extent := hud.size * hud_scale
 		var badge_height := maxf(badges.size.y, badges.get_combined_minimum_size().y) * 0.5 if is_instance_valid(badges) and badges.visible else 0.0
 		var model_clearance := maxf(MODEL_HUD_CLEARANCE, badge_height + HUD_LABEL_GAP + MODEL_LABEL_BODY_GAP)
 		var target := Vector2(area.x * (0.27 if index == 0 else 0.73) - extent.x * 0.5, 160)
 		var anchored_to_sprite := false
 		var model_bounds := Rect2()
-		if is_instance_valid(presenter) and presenter.active:
+		if fixed_single_huds:
+			var left := 76.0 if index == 0 else area.x * 0.5 + 12.0
+			var right := area.x * 0.5 - 12.0 if index == 0 else area.x - 76.0
+			target = Vector2(clampf(target.x, left, right - extent.x), fixed_hud_top)
+		elif is_instance_valid(presenter) and presenter.active:
 			var bounds: Rect2 = presenter._visual_rect(index)
 			if bounds.has_area():
 				var inverse := stage.get_global_transform().affine_inverse()
@@ -183,10 +198,11 @@ func layout_now(delta := 0.0, snap := false) -> void:
 		if not realtime_3d and badge_height > 0.0 and not anchored_to_sprite:
 			target.y -= badge_height + 6
 		target.x = clampf(target.x, 16, area.x - extent.x - 16)
-		target.y = clampf(target.y, 62, area.y - 230 - extent.y)
+		if not fixed_single_huds:
+			target.y = clampf(target.y, 62, area.y - 230 - extent.y)
 		if realtime_3d and anchored_to_sprite:
 			target = clear_model_hud(target, extent, model_bounds, model_clearance)
-		var position_next := hud.position.lerp(target, 1.0 - exp(-12.0 * delta)) if initialized[index] and not snap else target
+		var position_next := hud.position.lerp(target, 1.0 - exp(-12.0 * delta)) if initialized[index] and not snap and not fixed_single_huds else target
 		# Keep the HP panel above a newly revealed or rising 3D model.
 		# Easing upwards can otherwise leave it inside the model for a few frames.
 		if realtime_3d and anchored_to_sprite:
@@ -195,13 +211,14 @@ func layout_now(delta := 0.0, snap := false) -> void:
 			position_next.y = occupied.position.y - extent.y - 52
 			if position_next.y < 62:
 				position_next.y = occupied.end.y + 8
-		_place(hud, position_next, hud.size, 0.65)
+		_place(hud, position_next, hud.size, hud_scale)
 		occupied = Rect2(position_next, extent + Vector2(0, 48))
 		initialized[index] = true
 		if is_instance_valid(badges):
 			badges.set_meta("immersive_positioned", true)
 			var parent_inverse := (badges.get_parent() as CanvasItem).get_global_transform().affine_inverse()
 			var badge_scale := 0.5 * stage.get_global_transform().get_scale().y / maxf(0.01, (badges.get_parent() as CanvasItem).get_global_transform().get_scale().y)
+			badge_scale *= hud_scale / 0.65
 			_place(badges, parent_inverse * (stage.get_global_transform() * (hud.position + Vector2(0, extent.y + HUD_LABEL_GAP))), badges.size, badge_scale)
 		var effects: Control = battle.get_node("%SideFieldEffectsPanel" if index == 0 else "%SideFieldEffectsPanel2")
 		var side_rail: Control = team_preview if index == 0 else opponent_rail

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the two HP cards in 3D single battles on a fixed upper row, with your Pokémon on the left and the opponent on the right. Keep stat indicators attached and reserve space for the battle header as the window resizes.
+
 - Show readable species nameplates above the opposing Pokémon during 3D Team Preview, following their arena positions and clearing them before lead summons.
 
 - Reframe the 3D battle overview toward the Pokémon with a higher viewing angle and HUD-aware zoom limits, keeping resting models above the battle controls while preserving attack timing, cinematic shots and 2.5D framing.
