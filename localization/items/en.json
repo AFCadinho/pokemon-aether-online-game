@@ -1183,5 +1183,29 @@
   "flying-nimbus-mount-box": {
     "name": "Flying Nimbus Mount Box",
     "shortDesc": "Contains a Flying Nimbus mount. Base shiny chance: 50%."
+  },
+  "super-saiyan-4-shirt": {
+    "name": "Super Saiyan 4 (SS4) Fur",
+    "shortDesc": "Activate this SS4 item in your Bag, then equip it in Character Customization."
+  },
+  "super-saiyan-4-trousers": {
+    "name": "Super Saiyan 4 (SS4) Trousers",
+    "shortDesc": "Activate this SS4 item in your Bag, then equip it in Character Customization."
+  },
+  "super-saiyan-4-shoes": {
+    "name": "Super Saiyan 4 (SS4) Shoes",
+    "shortDesc": "Activate this SS4 item in your Bag, then equip it in Character Customization."
+  },
+  "super-saiyan-4-hair": {
+    "name": "Super Saiyan 4 (SS4) Hair",
+    "shortDesc": "Activate this SS4 item in your Bag, then equip it in Character Customization."
+  },
+  "super-saiyan-4-tail": {
+    "name": "Super Saiyan 4 (SS4) Tail",
+    "shortDesc": "Activate this SS4 item in your Bag, then equip it in Character Customization."
+  },
+  "super-saiyan-4-outfit": {
+    "name": "Super Saiyan 4 (SS4) Outfit Box",
+    "shortDesc": "Contains five separate SS4 cosmetics: fur, trousers, shoes, hair and a tail (Back). Fits male and female characters."
   }
 }

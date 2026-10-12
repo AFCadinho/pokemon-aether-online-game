@@ -104,7 +104,7 @@ func _ready() -> void:
 
 
 func _on_mount_loan_event(message: Dictionary) -> void:
-	if str(message.get("type", "")) != "guild.mount_loan.changed":
+	if str(message.get("type", "")) not in ["guild.mount_loan.changed", "loan.mount_loan.changed"]:
 		return
 	if cached_inventory_user_id != int(AuthService.current_user.get("id", 0)) or cached_inventory_session != AuthService.session_token:
 		return
@@ -130,7 +130,7 @@ func _on_mount_loan_event(message: Dictionary) -> void:
 		borrowed_mount_poll_in_flight = false
 
 
-## Mount access includes temporary Guild loans; general inventory ownership does not.
+## Mount access includes temporary player and Guild loans; general inventory ownership does not.
 func get_available_mount_item_ids() -> Array[String]:
 	var result: Array[String] = []
 	if cached_inventory_user_id <= 0 or cached_inventory_user_id != int(AuthService.current_user.get("id", 0)):
@@ -183,7 +183,7 @@ func _borrowed_mount_is_available(item: Dictionary) -> bool:
 	if (
 		revoked_mount_loan_asset_ids.has(str(item.get("loanAssetId", "")))
 		or str(item.get("category", "")) != "mounts"
-		or str(item.get("loanLenderKind", "")) != "guild"
+		or str(item.get("loanLenderKind", "")) not in ["guild", "player"]
 		or str(item.get("loanStatus", "")) != "active"
 		or int(item.get("quantity", 0)) <= 0
 	):
