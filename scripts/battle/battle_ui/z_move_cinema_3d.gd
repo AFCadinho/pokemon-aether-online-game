@@ -4,6 +4,7 @@ const DATA = preload("res://data/battle_z_cinema_3d.json")
 const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const SkystrikePath = preload("res://scripts/battle/battle_ui/skystrike_path_3d.gd")
 const SkystrikeExplosion = preload("res://scripts/battle/battle_ui/skystrike_explosion_3d.gd")
+const Climax = preload("res://scripts/battle/battle_ui/z_climax_3d.gd")
 
 static func supports(key: String) -> bool:
 	return DATA.data.moves.has(key)
@@ -63,6 +64,13 @@ static func shot(effect: Node, camera: Camera3D, context: Dictionary, seconds: f
 			# of frame or force the camera to chase individual cloud lobes.
 			_box(points,ground+Vector3.UP*2.5*scale_value,Vector3(SkystrikeExplosion.FRAME_RADIUS,3.0,SkystrikeExplosion.FRAME_RADIUS)*scale_value)
 			direction = -forward*0.5+side+Vector3.UP*0.25
+	if Climax.supports(effect.key) and seconds >= effect.impact and (effect.hit or profile.shot == "self"):
+		var finale: Dictionary = Climax.DATA.data.moves[effect.key]
+		var local_scale: float = effect._geometry_scale()
+		var center: Vector3 = context.actor_ground if profile.shot == "self" else ground
+		_box(points,center+Vector3.UP*float(finale.height)*0.45*local_scale,Climax.frame_half(effect.key)*local_scale)
+		# Stay on the same side of the battle axis and frame the complete blast.
+		direction = -forward*0.5+side+Vector3.UP*float(finale.elevation)
 	return {"points":points, "direction":direction.normalized()}
 
 static func _body(points: Array[Vector3], bounds: Dictionary) -> void:
@@ -87,6 +95,15 @@ static func lighting(effect: Node, seconds: float) -> Dictionary:
 		pulse = SkystrikeExplosion.pulse(after)
 		profile.tint = tint.lerp(flash,pulse*0.25)
 		profile.brightness = lerpf(float(authored.brightness),1.08,pulse)
+	elif Climax.supports(effect.key) and seconds >= effect.impact:
+		var finale: Dictionary = Climax.DATA.data.moves[effect.key]
+		var self_aura: bool = authored.shot == "self"
+		var burst := Climax.pulse(effect.key,after) if effect.hit or self_aura else 0.0
+		pulse = burst if not self_aura else 0.0
+		flash = Color(finale.hot)
+		profile.flash = flash
+		profile.tint = tint.lerp(Color(finale.tint),burst*0.4)
+		profile.brightness = lerpf(float(authored.brightness),1.08 if not self_aura else 1.02,burst)
 	var anchors: Dictionary = effect.anchors.call()
 	# Both Z renderers capture their path before any lunge/dodge takes place.
 	var source: Vector3 = effect.fixed_source if effect.get("fixed_source") is Vector3 else effect.origin
@@ -102,7 +119,9 @@ static func lighting(effect: Node, seconds: float) -> Dictionary:
 		lights.append({"point":source if seconds < effect.launch else point, "color":color, "energy":energy * charge, "range":4.5, "role":"z_cast"})
 	if authored.shot == "field":
 		lights.append({"point":anchors.field.center + Vector3.UP * 2.0, "color":color, "energy":energy * weight * 0.6, "range":7.0, "role":"z_field"})
+	if authored.shot == "self" and seconds >= effect.impact:
+		lights.append({"point":anchors.actor_center,"color":flash,"energy":energy*Climax.pulse(effect.key,after),"range":6.0,"role":"z_aura"})
 	if pulse > 0.001:
-		var blast: bool = effect.key == "supersonicskystrike"
+		var blast: bool = effect.key == "supersonicskystrike" or Climax.supports(effect.key)
 		lights.append({"point":aim, "color":flash, "energy":energy * pulse * (2.6 if blast else 1.0), "range":8.5 if blast else 5.0, "role":"z_impact"})
 	return {"profile":profile, "weight":weight, "pulse":pulse, "color":color, "lights":lights, "cinematic":true}

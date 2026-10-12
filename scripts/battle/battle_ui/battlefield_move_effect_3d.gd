@@ -5,6 +5,9 @@ const APPROVED_KEYS := ["earthquake", "blizzard", "bloomdoom"]
 const NEXT_KEYS := ["earthpower", "heatwave", "hurricane", "bleakwindstorm", "powdersnow", "freezedry", "explosion", "makeitrain", "terastarstorm"]
 const FIELD_KEYS := APPROVED_KEYS + NEXT_KEYS
 const VolumeForms = preload("res://scripts/battle/battle_ui/move_volume_forms_3d.gd")
+const ZClimax = preload("res://scripts/battle/battle_ui/z_climax_3d.gd")
+var cinematic_climax: RefCounted
+var climax_ground := Vector3.ZERO
 var hurricane_shell: ArrayMesh
 var hurricane_surface: ShaderMaterial
 # Existing packaged SV masks reused where a generic shock sheet is unsuitable.
@@ -44,6 +47,7 @@ func _geometry_scale() -> float:
 
 func _prepare() -> void:
 	super._prepare()
+	if key == "bloomdoom": cinematic_climax = ZClimax.new(key)
 	if key == "hurricane":
 		hurricane_shell = VolumeForms.swept_mesh(true)
 		hurricane_surface = VolumeForms.funnel_material()
@@ -264,6 +268,7 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 		field_radius=float(field.get("radius",5.8))
 		origin=points.get("actor_ground",Vector3(from.x,field_center.y,from.z))
 		aim=to
+		climax_ground=points.get("target_ground",Vector3(to.x,field_center.y,to.z))
 		forward=Vector3(to.x-from.x,0,to.z-from.z).normalized()
 		if forward.length()<.01:forward=Vector3.RIGHT
 		lateral=forward.cross(Vector3.UP).normalized()
@@ -378,13 +383,8 @@ func _bloom_field(t: float,travel: float,after: float,alpha: float,facing: Basis
 			var leaf_scale := alpha * (1.0 - smoothstep(0.92,1.0,p))
 			_piece(prism, leaf, point, Vector3(0.12,0.28,0.04) * leaf_scale, Basis(Vector3.UP,elapsed+i))
 			_line(tail,point,.025*alpha,edge)
-	if after>=0:
-		var fade := 1-clampf(after,0,1)
-		shaft_material.set_shader_parameter("opacity",fade*alpha*.6)
-		_piece(shaft_mesh,shaft_material,aim+Vector3.UP*.8,Vector3(3.1,4.8,1),facing)
-		for i in 8:
-			var a := i*TAU/8+elapsed
-			_piece(flower_mesh,petals[i%3],aim+Vector3(cos(a),after*1.4,sin(a))*(.4+after*1.6),Vector3.ONE*.18*fade,Basis(Vector3.RIGHT,a))
+	if after>=0 and hit:
+		cinematic_climax.draw(self,after,climax_ground)
 
 func _earth_power(travel: float,after: float,alpha: float,facing: Basis) -> void:
 	# Underground energy fans out, followed by staggered vents across the floor.

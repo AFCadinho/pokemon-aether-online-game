@@ -1,5 +1,7 @@
 # Z-move choreography inspired by the 2D sources
 
+This page records the original choreography pass. See [cinematic finales](z-move-cinematic-climaxes.md) for the subsequent per-move explosions, camera framing and sound layers.
+
 All 35 registered Z-moves have authored 3D staging based on their existing 2D
 JSON timelines and sampled sprite-sheet frames. Each recipe records both source
 hashes, frame count, selected release/climax frames and observed visual motifs.
@@ -80,7 +82,7 @@ ops/worktrees/slot-env SLOT -- godot --path .worktrees/SLOT/frontend \
   --script res://tests/z_move_choreography_preview.gd -- --moves
 ```
 
-The selector contains only these 35 moves. `--smoke-z` captures three phases per
+The selector contains only these 35 moves. `--smoke-z` captures five phases per
 move plus ten reversed miss/block cases with pause and camera orbit. Set
 `POKEAETHER_STAGE_OUTPUT` to a slot-local output directory. For targeted visual
 checks, `POKEAETHER_Z_PREVIEW_MOVES` accepts comma-separated normalized move keys.

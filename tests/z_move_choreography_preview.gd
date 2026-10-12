@@ -27,7 +27,7 @@ func _check_z() -> void:
 		while renderer.common_effects.is_empty() and move_busy:await process_frame
 		assert(not renderer.common_effects.is_empty(),move)
 		var effect: Node = renderer.common_effects[0]
-		for phase in [["charge",effect.launch*.75],["main",lerpf(effect.launch,effect.impact,.65)],["climax",lerpf(effect.impact,effect.duration,.20)]]:
+		for phase in [["charge",effect.launch*.75],["main",lerpf(effect.launch,effect.impact,.65)],["compression",lerpf(effect.impact,effect.duration,.08)],["climax",lerpf(effect.impact,effect.duration,.35)],["dissipation",lerpf(effect.impact,effect.duration,.65)]]:
 			while is_instance_valid(effect) and effect.elapsed<float(phase[1]):await process_frame
 			assert(is_instance_valid(effect) and effect.cursor>0,move+str(phase[0]))
 			battle.animation_router.playback_speed = 0
@@ -64,8 +64,18 @@ func _check_z() -> void:
 			root.get_texture().get_image().save_png(output.path_join(Recipes.key(move)+"-reverse-"+str(outcome)+".png"))
 			renderer.user_camera_yaw=0
 			battle.animation_router.playback_speed=1.8
+			var recovery: float = lerpf(effect.impact,effect.duration,0.35)
+			while is_instance_valid(effect) and effect.elapsed<recovery: await process_frame
+			assert(is_instance_valid(effect) and not effect.impact_drawn,"No explosion on reversed miss/block")
+			if effect.get("cinematic_climax") != null:
+				assert(effect.cinematic_climax.start_index<0,"No hit finale on reversed miss/block")
+			battle.animation_router.playback_speed=0
+			await process_frame
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png(output.path_join(Recipes.key(move)+"-reverse-"+str(outcome)+"-recovery.png"))
+			battle.animation_router.playback_speed=1.8
 			while move_busy:await process_frame
-	print("Z_RENDER_SUITE_OK moves=35 phases=105 reverse_outcomes=10 pause_orbit=true")
+	print("Z_RENDER_SUITE_OK moves=35 phases=175 reverse_outcomes=10 recovery_outcomes=true pause_orbit=true")
 	await _close_z_preview()
 
 func _close_z_preview() -> void:

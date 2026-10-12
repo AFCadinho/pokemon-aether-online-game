@@ -4603,6 +4603,15 @@
           "at_fraction": 0.72,
           "end_fraction": 0.97,
           "source_frame": 35
+        },
+        {
+          "name": "Cinematic 10000000voltthunderbolt impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 60,
+          "pitch": 108,
+          "at_fraction": 0.72,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -4617,7 +4626,7 @@
         "observed_motifs": "Electric charge, repeated bolts, final overhead discharge",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "aciddownpour": {
       "name": "Acid Downpour",
@@ -4675,6 +4684,15 @@
           "at_fraction": 0.5,
           "end_fraction": 0.75,
           "source_frame": 28
+        },
+        {
+          "name": "Cinematic aciddownpour impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 40,
+          "pitch": 76,
+          "at_fraction": 0.5,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -4689,7 +4707,7 @@
         "observed_motifs": "Poison droplets gather into a tall spiral over the target",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "alloutpummeling": {
       "name": "All-Out Pummeling",
@@ -4737,6 +4755,15 @@
           "at_fraction": 0.604651,
           "end_fraction": 0.854651,
           "source_frame": 26
+        },
+        {
+          "name": "Cinematic alloutpummeling impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 55,
+          "pitch": 90,
+          "at_fraction": 0.604651,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -4751,7 +4778,7 @@
         "observed_motifs": "Rapid fists converge, then one heavy finishing blow",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "blackholeeclipse": {
       "name": "Black Hole Eclipse",
@@ -4799,6 +4826,15 @@
           "at_fraction": 0.694118,
           "end_fraction": 0.944118,
           "source_frame": 59
+        },
+        {
+          "name": "Cinematic blackholeeclipse impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 58,
+          "pitch": 65,
+          "at_fraction": 0.694118,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -4813,7 +4849,7 @@
         "observed_motifs": "Dark orb grows inside red orbiting bands, then collapses",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "bloomdoom": {
       "name": "Bloom Doom",
@@ -4851,6 +4887,15 @@
           "at_fraction": 0.586957,
           "end_fraction": 0.836957,
           "source_frame": 20
+        },
+        {
+          "name": "Cinematic bloomdoom impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 38,
+          "pitch": 112,
+          "at_fraction": 0.586957,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -4866,7 +4911,7 @@
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
       "battlefield_staging": "arena-bloom-and-converge",
-      "presentation_review": "battlefield-staging-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "breakneckblitz": {
       "name": "Breakneck Blitz",
@@ -4884,7 +4929,17 @@
       "attachment": "body",
       "source_id": 622,
       "review": "2d-inspired-awaiting-review",
-      "audio": [],
+      "audio": [
+        {
+          "name": "Cinematic breakneckblitz impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 60,
+          "pitch": 88,
+          "at_fraction": 0.809524,
+          "end_fraction": 0.99
+        }
+      ],
       "z_choreography": {
         "style": "rush",
         "reference_path": "res://assets/battles/animations/breakneckblitz/breakneckblitz.json",
@@ -4897,7 +4952,7 @@
         "observed_motifs": "Accelerating body rush with dust and a final collision",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "catastropika": {
       "name": "Catastropika",
@@ -4955,6 +5010,15 @@
           "at_fraction": 0.72,
           "end_fraction": 0.97,
           "source_frame": 35
+        },
+        {
+          "name": "Cinematic catastropika impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 62,
+          "pitch": 110,
+          "at_fraction": 0.72,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -4969,7 +5033,7 @@
         "observed_motifs": "Charged electric ball, lunge and overhead lightning",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "clangoroussoulblaze": {
       "name": "Clangorous Soulblaze",
@@ -5007,6 +5071,15 @@
           "at_fraction": 0.666667,
           "end_fraction": 0.916667,
           "source_frame": 1
+        },
+        {
+          "name": "Cinematic clangoroussoulblaze impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 45,
+          "pitch": 98,
+          "at_fraction": 0.666667,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5021,7 +5094,7 @@
         "observed_motifs": "Repeated widening purple sound rings toward the target",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "continentalcrush": {
       "name": "Continental Crush",
@@ -5069,6 +5142,15 @@
           "at_fraction": 0.8,
           "end_fraction": 1.0,
           "source_frame": 49
+        },
+        {
+          "name": "Cinematic continentalcrush impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 72,
+          "pitch": 72,
+          "at_fraction": 0.8,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5083,7 +5165,7 @@
         "observed_motifs": "Rocks assemble overhead into a massive crushing formation",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "corkscrewcrash": {
       "name": "Corkscrew Crash",
@@ -5141,6 +5223,15 @@
           "at_fraction": 0.733333,
           "end_fraction": 0.983333,
           "source_frame": 89
+        },
+        {
+          "name": "Cinematic corkscrewcrash impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 55,
+          "pitch": 96,
+          "at_fraction": 0.733333,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5155,7 +5246,7 @@
         "observed_motifs": "Spinning metallic cone, forward drive and broken ground",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "devastatingdrake": {
       "name": "Devastating Drake",
@@ -5203,6 +5294,15 @@
           "at_fraction": 0.677419,
           "end_fraction": 0.927419,
           "source_frame": 42
+        },
+        {
+          "name": "Cinematic devastatingdrake impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 65,
+          "pitch": 83,
+          "at_fraction": 0.677419,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5217,7 +5317,7 @@
         "observed_motifs": "Winged violet dragon energy with a winding flame trail",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "extremeevoboost": {
       "name": "Extreme Evoboost",
@@ -5279,7 +5379,7 @@
         "observed_motifs": "Eight evolution colors gather around the user and converge",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "genesissupernova": {
       "name": "Genesis Supernova",
@@ -5337,6 +5437,15 @@
           "at_fraction": 0.765217,
           "end_fraction": 1.0,
           "source_frame": 88
+        },
+        {
+          "name": "Cinematic genesissupernova impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 65,
+          "pitch": 93,
+          "at_fraction": 0.765217,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5351,7 +5460,7 @@
         "observed_motifs": "Pink double helix, growing psychic orb and supernova",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "gigavolthavoc": {
       "name": "Gigavolt Havoc",
@@ -5399,6 +5508,15 @@
           "at_fraction": 0.66,
           "end_fraction": 0.91,
           "source_frame": 33
+        },
+        {
+          "name": "Cinematic gigavolthavoc impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 57,
+          "pitch": 103,
+          "at_fraction": 0.66,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5413,7 +5531,7 @@
         "observed_motifs": "Electric charge followed by a thick column of lightning",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "guardianofalola": {
       "name": "Guardian of Alola",
@@ -5451,6 +5569,15 @@
           "at_fraction": 0.560606,
           "end_fraction": 0.810606,
           "source_frame": 37
+        },
+        {
+          "name": "Cinematic guardianofalola impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 65,
+          "pitch": 74,
+          "at_fraction": 0.560606,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5465,7 +5592,7 @@
         "observed_motifs": "Floating fragments assemble into a giant golden fist",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "hydrovortex": {
       "name": "Hydro Vortex",
@@ -5513,6 +5640,15 @@
           "at_fraction": 0.72549,
           "end_fraction": 0.97549,
           "source_frame": 37
+        },
+        {
+          "name": "Cinematic hydrovortex impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 43,
+          "pitch": 90,
+          "at_fraction": 0.72549,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5527,7 +5663,7 @@
         "observed_motifs": "Water funnels spiral inward, then merge into a tall vortex",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "infernooverdrive": {
       "name": "Inferno Overdrive",
@@ -5585,6 +5721,15 @@
           "at_fraction": 0.615385,
           "end_fraction": 0.865385,
           "source_frame": 32
+        },
+        {
+          "name": "Cinematic infernooverdrive impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 70,
+          "pitch": 86,
+          "at_fraction": 0.615385,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5599,7 +5744,7 @@
         "observed_motifs": "Flame ring charges a projectile, then a large fire eruption",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "letssnuggleforever": {
       "name": "Let’s Snuggle Forever",
@@ -5657,6 +5802,15 @@
           "at_fraction": 0.734375,
           "end_fraction": 0.984375,
           "source_frame": 83
+        },
+        {
+          "name": "Cinematic letssnuggleforever impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 46,
+          "pitch": 70,
+          "at_fraction": 0.734375,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5671,7 +5825,7 @@
         "observed_motifs": "Shadow approaches, enveloping cloth shape and a flurry of blows",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "lightthatburnsthesky": {
       "name": "Light That Burns the Sky",
@@ -5719,6 +5873,15 @@
           "at_fraction": 0.725,
           "end_fraction": 0.975,
           "source_frame": 87
+        },
+        {
+          "name": "Cinematic lightthatburnsthesky impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 72,
+          "pitch": 80,
+          "at_fraction": 0.725,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5733,7 +5896,7 @@
         "observed_motifs": "Small sun grows through rotating fire rings into a huge flare",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "maliciousmoonsault": {
       "name": "Malicious Moonsault",
@@ -5791,6 +5954,15 @@
           "at_fraction": 0.603774,
           "end_fraction": 0.853774,
           "source_frame": 32
+        },
+        {
+          "name": "Cinematic maliciousmoonsault impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 65,
+          "pitch": 78,
+          "at_fraction": 0.603774,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5805,7 +5977,7 @@
         "observed_motifs": "Aerial approach and a fiery impact",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "menacingmoonrazemaelstrom": {
       "name": "Menacing Moonraze Maelstrom",
@@ -5863,6 +6035,15 @@
           "at_fraction": 0.54,
           "end_fraction": 0.79,
           "source_frame": 27
+        },
+        {
+          "name": "Cinematic menacingmoonrazemaelstrom impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 58,
+          "pitch": 72,
+          "at_fraction": 0.54,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5877,7 +6058,7 @@
         "observed_motifs": "Lunar portal, descending light column and an energy burst",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "neverendingnightmare": {
       "name": "Never-Ending Nightmare",
@@ -5925,6 +6106,15 @@
           "at_fraction": 0.684211,
           "end_fraction": 0.934211,
           "source_frame": 65
+        },
+        {
+          "name": "Cinematic neverendingnightmare impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 48,
+          "pitch": 68,
+          "at_fraction": 0.684211,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5939,7 +6129,7 @@
         "observed_motifs": "Dark ground portal, surrounding chains and spectral constriction",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "oceanicoperetta": {
       "name": "Oceanic Operetta",
@@ -5977,6 +6167,15 @@
           "at_fraction": 0.738462,
           "end_fraction": 0.988462,
           "source_frame": 48
+        },
+        {
+          "name": "Cinematic oceanicoperetta impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 40,
+          "pitch": 104,
+          "at_fraction": 0.738462,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -5991,7 +6190,7 @@
         "observed_motifs": "Musical notes accompany a growing water sphere, then a splash",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "pulverizingpancake": {
       "name": "Pulverizing Pancake",
@@ -6049,6 +6248,15 @@
           "at_fraction": 0.865169,
           "end_fraction": 1.0,
           "source_frame": 77
+        },
+        {
+          "name": "Cinematic pulverizingpancake impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 72,
+          "pitch": 70,
+          "at_fraction": 0.865169,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -6063,7 +6271,7 @@
         "observed_motifs": "Brief sleepy preparation, accelerating approach, leap and ground slam",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "savagespinout": {
       "name": "Savage Spin-Out",
@@ -6121,6 +6329,15 @@
           "at_fraction": 0.714286,
           "end_fraction": 0.964286,
           "source_frame": 60
+        },
+        {
+          "name": "Cinematic savagespinout impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 43,
+          "pitch": 112,
+          "at_fraction": 0.714286,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -6135,7 +6352,7 @@
         "observed_motifs": "Silk cocoon surrounds the target, tightens and bursts",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "searingsunrazesmash": {
       "name": "Searing Sunraze Smash",
@@ -6193,6 +6410,15 @@
           "at_fraction": 0.636364,
           "end_fraction": 0.886364,
           "source_frame": 35
+        },
+        {
+          "name": "Cinematic searingsunrazesmash impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 68,
+          "pitch": 85,
+          "at_fraction": 0.636364,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -6207,7 +6433,7 @@
         "observed_motifs": "Solar portal and a descending column wrapped in fire",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "shatteredpsyche": {
       "name": "Shattered Psyche",
@@ -6255,6 +6481,15 @@
           "at_fraction": 0.75,
           "end_fraction": 1.0,
           "source_frame": 45
+        },
+        {
+          "name": "Cinematic shatteredpsyche impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 43,
+          "pitch": 121,
+          "at_fraction": 0.75,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -6269,7 +6504,7 @@
         "observed_motifs": "Psychic ring, suspended glass-like cube, compression and shattering",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "sinisterarrowraid": {
       "name": "Sinister Arrow Raid",
@@ -6327,6 +6562,15 @@
           "at_fraction": 0.65,
           "end_fraction": 0.9,
           "source_frame": 25
+        },
+        {
+          "name": "Cinematic sinisterarrowraid impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 50,
+          "pitch": 90,
+          "at_fraction": 0.65,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -6341,7 +6585,7 @@
         "observed_motifs": "Gathered arrows descend as a dark volley",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "soulstealing7starstrike": {
       "name": "Soul-Stealing 7-Star Strike",
@@ -6399,6 +6643,15 @@
           "at_fraction": 0.714286,
           "end_fraction": 0.964286,
           "source_frame": 58
+        },
+        {
+          "name": "Cinematic soulstealing7starstrike impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 58,
+          "pitch": 88,
+          "at_fraction": 0.714286,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -6413,7 +6666,7 @@
         "observed_motifs": "Seven cyan points connect around the target before a dark finishing strike",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "splinteredstormshards": {
       "name": "Splintered Stormshards",
@@ -6451,6 +6704,15 @@
           "at_fraction": 0.666667,
           "end_fraction": 0.916667,
           "source_frame": 38
+        },
+        {
+          "name": "Cinematic splinteredstormshards impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 62,
+          "pitch": 102,
+          "at_fraction": 0.666667,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -6465,7 +6727,7 @@
         "observed_motifs": "Rocks rise around the user and shower down onto the target",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "stokedsparksurfer": {
       "name": "Stoked Sparksurfer",
@@ -6523,6 +6785,15 @@
           "at_fraction": 0.697479,
           "end_fraction": 0.947479,
           "source_frame": 83
+        },
+        {
+          "name": "Cinematic stokedsparksurfer impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 53,
+          "pitch": 116,
+          "at_fraction": 0.697479,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -6537,7 +6808,7 @@
         "observed_motifs": "Electric motion streaks and a large downward lightning column",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "subzeroslammer": {
       "name": "Subzero Slammer",
@@ -6585,6 +6856,15 @@
           "at_fraction": 0.636364,
           "end_fraction": 0.886364,
           "source_frame": 44
+        },
+        {
+          "name": "Cinematic subzeroslammer impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 50,
+          "pitch": 118,
+          "at_fraction": 0.636364,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -6599,7 +6879,7 @@
         "observed_motifs": "Icy shards converge into an ice formation that breaks apart",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "supersonicskystrike": {
       "name": "Supersonic Skystrike",
@@ -6729,6 +7009,15 @@
           "at_fraction": 0.670103,
           "end_fraction": 0.920103,
           "source_frame": 71
+        },
+        {
+          "name": "Cinematic tectonicrage impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 70,
+          "pitch": 67,
+          "at_fraction": 0.670103,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -6743,7 +7032,7 @@
         "observed_motifs": "Ground splits, dust rises and red energy erupts from the fissure",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "twinkletackle": {
       "name": "Twinkle Tackle",
@@ -6781,6 +7070,15 @@
           "at_fraction": 0.724638,
           "end_fraction": 0.974638,
           "source_frame": 50
+        },
+        {
+          "name": "Cinematic twinkletackle impact weight",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 43,
+          "pitch": 128,
+          "at_fraction": 0.724638,
+          "end_fraction": 0.99
         }
       ],
       "z_choreography": {
@@ -6795,7 +7093,7 @@
         "observed_motifs": "Fairy-colored charge, sweeping approach and a sparkling climax",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     }
   }
 }
