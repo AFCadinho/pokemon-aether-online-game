@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Offer the Kakashi Outfit Box for both genders in the Gift Store for 450 Gems, with six fixed-colour parts and the standard 450-credit bound alternative.
+
 - Refine the remaining 821 catalogue move presentations with smooth 3D surfaces, continuous trails, elemental hit volumes and quieter status auras. Add appropriate ranged camera shots and environment colours while preserving move timing, audio, confirmed outcomes and the existing dedicated, Z and recent elemental presentations.
 
 - Add the grantable Kakashi Outfit Box for both genders, with six separate cosmetics, a continuous tilted headband, trainer and overworld poses, and Dev Tools item search.
