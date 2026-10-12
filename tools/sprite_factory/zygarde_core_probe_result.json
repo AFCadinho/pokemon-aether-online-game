@@ -1,0 +1,1067 @@
+{
+  "schema": 1,
+  "species": "zygarde-10",
+  "runtime_approved": false,
+  "status": "source_shader_reference_required",
+  "source_intake_sha256": "ffd1d7508467fcb04c837130f19562b189581816a95233c963fd5c0eeabe9fbc",
+  "code_sha256": {
+    "zygarde_core_probe.py": "862cb3ee4aa47d8b862d90298f21a8dea21531a2ded8c75194ec7fa9541dccd3",
+    "zygarde_core_graph_probe.py": "29c087e8e5c2bc1b6c93cd2e3fb0b10e4bfe535d3c408a136abb5c8726d10df5"
+  },
+  "reference_graphs": {
+    "native": {
+      "source": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/import/zygarde-10/prepared.blend",
+      "source_sha256": "a491659a8dcf845b07583aff4735c92b5b05d33374d28cde2f2f71fce3adfe0f",
+      "material": "body_b_01",
+      "groups": [
+        "ColorProcess",
+        "ColorProcessemission",
+        "LayeredMaskScaling",
+        "MegaEffect",
+        "NodeGroup",
+        "PokemonShaderbyChicoEevee"
+      ],
+      "image_nodes_including_disconnected": [
+        {
+          "tree": "PokemonShaderbyChicoEevee",
+          "node": "Environment Texture",
+          "name": "fresnel_prb.png",
+          "filepath": "//../../../../../../Downloads/panorama_image.png",
+          "packed": true
+        },
+        {
+          "tree": "PokemonShaderbyChicoEevee",
+          "node": "Environment Texture.001",
+          "name": "poke_default_metal_prb.png",
+          "filepath": "//../../../../../../Downloads/panorama_image (4).png",
+          "packed": true
+        },
+        {
+          "tree": "MegaEffect",
+          "node": "Image Texture",
+          "name": "default_mega_color.png.001",
+          "filepath": "//../../../../../../../../../../../../I:/SCVI/ZA/0100F43008C44000/romfs/arc/modeluqs/system_resource/gfx2/texture/env_ikkaku/default_mega_color.png",
+          "packed": true
+        },
+        {
+          "tree": "MegaEffect",
+          "node": "Image Texture.001",
+          "name": "default_mega_flow.png.001",
+          "filepath": "//../../../../../../../../../../../../I:/SCVI/ZA/0100F43008C44000/romfs/arc/modeluqs/system_resource/gfx2/texture/env_ikkaku/default_mega_flow.png",
+          "packed": true
+        },
+        {
+          "tree": "Shader Nodetree",
+          "node": "Image Texture",
+          "name": "pm0770_11_00_body_b_fresnel_alb.png.001",
+          "filepath": "//../../za-sources/pm0770/pm0770_11_00/pm0770_11_00_body_b_fresnel_alb.png",
+          "packed": true
+        },
+        {
+          "tree": "Shader Nodetree",
+          "node": "Image Texture.001",
+          "name": "pm0770_11_00_body_b_nrm.png.001",
+          "filepath": "//../../za-sources/pm0770/pm0770_11_00/pm0770_11_00_body_b_nrm.png",
+          "packed": true
+        }
+      ],
+      "runtime_approved": false
+    },
+    "archive": {
+      "source": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/archive-sources/Gen6/pm0770.blend",
+      "source_sha256": "e7100ce0197521a9583c0157b2f6e14bd2dc24937d465d1a37b9280f3ec9879c",
+      "material": "body_b_01.001",
+      "groups": [
+        "ColorProcess",
+        "ColorProcessemission",
+        "LayeredMaskScaling",
+        "MegaEffect",
+        "NodeGroup",
+        "PokemonShaderbyChicoEevee"
+      ],
+      "image_nodes_including_disconnected": [
+        {
+          "tree": "PokemonShaderbyChicoEevee",
+          "node": "Environment Texture",
+          "name": "fresnel_prb.png",
+          "filepath": "//../../../../../../../Users/jim/Library/Application Support/Blender/4.5/Downloads/panorama_image.png",
+          "packed": true
+        },
+        {
+          "tree": "PokemonShaderbyChicoEevee",
+          "node": "Environment Texture.001",
+          "name": "poke_default_metal_prb.png",
+          "filepath": "//../../../../../../../Users/jim/Library/Application Support/Blender/4.5/Downloads/panorama_image (4).png",
+          "packed": true
+        },
+        {
+          "tree": "MegaEffect",
+          "node": "Image Texture",
+          "name": "default_mega_color.png.001",
+          "filepath": "//../../../../../../../I:/SCVI/ZA/0100F43008C44000/romfs/arc/modeluqs/system_resource/gfx2/texture/env_ikkaku/default_mega_color.png",
+          "packed": true
+        },
+        {
+          "tree": "MegaEffect",
+          "node": "Image Texture.001",
+          "name": "default_mega_flow.png.001",
+          "filepath": "//../../../../../../../I:/SCVI/ZA/0100F43008C44000/romfs/arc/modeluqs/system_resource/gfx2/texture/env_ikkaku/default_mega_flow.png",
+          "packed": true
+        },
+        {
+          "tree": "Shader Nodetree",
+          "node": "Image Texture",
+          "name": "pm0770_11_00_body_b_fresnel_alb.png.001",
+          "filepath": "//../../../../../games/switch/ModelExtraction/romFS/legendsZA_2.0/ik_pokemon/data/pm0770/pm0770_11_00/pm0770_11_00_body_b_fresnel_alb.png",
+          "packed": true
+        },
+        {
+          "tree": "Shader Nodetree",
+          "node": "Image Texture.001",
+          "name": "pm0770_11_00_body_b_nrm.png.001",
+          "filepath": "//../../../../../games/switch/ModelExtraction/romFS/legendsZA_2.0/ik_pokemon/data/pm0770/pm0770_11_00/pm0770_11_00_body_b_nrm.png",
+          "packed": true
+        }
+      ],
+      "runtime_approved": false
+    }
+  },
+  "variants": {
+    "normal": {
+      "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00.trmtr",
+      "table_sha256": "b21c2a4d46593657b33b97f03cda4a6c47ccc7ea558777767da0451f6f252344",
+      "core": {
+        "name": "body_b_01",
+        "shaders": [
+          {
+            "name": "FresnelEffect",
+            "values": {
+              "EnableBaseColorMap": "True",
+              "EnableEmissionColorMap": "False",
+              "EnableEmissionNormalMap": "False",
+              "RefractionMode": "NormalOffset",
+              "EnableLocalIBL": "True",
+              "EnableFresnelTexture": "True",
+              "EnableFresnelEmission": "False",
+              "EnableAOMap": "True",
+              "EnableNormalMap": "True",
+              "NumRequiredUV": "2"
+            }
+          }
+        ],
+        "alpha_type": "Opaque",
+        "textures": {
+          "BaseColorMap": "pm0770_11_00_body_b_fresnel_alb.bntx",
+          "NormalMap": "pm0770_11_00_body_b_nrm.bntx",
+          "BaseColorMap1": "pm0770_11_00_fresnel_alb.bntx",
+          "NormalMap1": "pm0770_11_00_fresnel_nrm.bntx",
+          "AOMap": "pm0770_11_00_body_b_ao.bntx",
+          "LocalSpecularProbe": "pm0770_11_00_fresnel_prb.bntx"
+        },
+        "colors": {
+          "BaseColor": [
+            0.9559633731842041,
+            0.08649884909391403,
+            0.17788508534431458,
+            1.0
+          ],
+          "UVScaleOffset": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "BaseColorLayer1": [
+            0.9559633731842041,
+            0.08649884909391403,
+            0.17788508534431458,
+            1.0
+          ],
+          "UVScaleOffset1": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "ParallaxUVIntensity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "EmissionColor": [
+            0.5088714957237244,
+            0.8879095315933228,
+            0.32778531312942505,
+            1.0
+          ]
+        },
+        "floats": {
+          "BaseColorMapSaturation": 1.0,
+          "NormalHeight": 1.0,
+          "NormalHeight1": 1.0,
+          "Metallic": 0.25,
+          "Roughness": 0.5,
+          "EmissionIntensity": 0.0,
+          "EmissionIntensityLayer1": 2.0,
+          "LayerMaskScale1": 1.0,
+          "LocalSpecularProbeIntensity": 1.0,
+          "FresnelAlphaMin": 0.8500000238418579,
+          "FresnelAlphaMax": 0.6000000238418579,
+          "FresnelAngleBias": 0.44999998807907104
+        }
+      },
+      "core_images": {
+        "BaseColorMap": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_body_b_fresnel_alb.png",
+          "sha256": "556672f36624355956997a672e8d4b842c416bb81eb42efeeb84c39b380a3bee",
+          "size": [
+            32,
+            32
+          ],
+          "rgba_extrema": [
+            [
+              255,
+              255
+            ],
+            [
+              255,
+              255
+            ],
+            [
+              255,
+              255
+            ],
+            [
+              255,
+              255
+            ]
+          ],
+          "constant_white": true
+        },
+        "NormalMap": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_body_b_nrm.png",
+          "sha256": "8a6dacd9f2ef6027813b2665b53ce5e835f11e6c14509eeefb3ab819ef063c12",
+          "size": [
+            512,
+            512
+          ],
+          "rgba_extrema": [
+            [
+              0,
+              254
+            ],
+            [
+              6,
+              251
+            ],
+            [
+              127,
+              254
+            ],
+            [
+              255,
+              255
+            ]
+          ],
+          "constant_white": false
+        },
+        "BaseColorMap1": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_fresnel_alb.png",
+          "sha256": "762f0b294ef685f2572b67fb2a0bf3ca8402013597c6eece7ac1dc85960392ba",
+          "size": [
+            128,
+            128
+          ],
+          "rgba_extrema": [
+            [
+              71,
+              243
+            ],
+            [
+              71,
+              243
+            ],
+            [
+              71,
+              243
+            ],
+            [
+              254,
+              255
+            ]
+          ],
+          "constant_white": false
+        },
+        "NormalMap1": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_fresnel_nrm.png",
+          "sha256": "6cfb43275c2e6c051f09637b2db6646419c9506105c05102463f6ef841651f5a",
+          "size": [
+            32,
+            32
+          ],
+          "rgba_extrema": [
+            [
+              128,
+              128
+            ],
+            [
+              128,
+              128
+            ],
+            [
+              254,
+              254
+            ],
+            [
+              255,
+              255
+            ]
+          ],
+          "constant_white": false
+        },
+        "AOMap": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_body_b_ao.png",
+          "sha256": "e5238256f74bf4e39d370643f2854040dc547b025e94a9db8d01b73bc8f9ecf8",
+          "size": [
+            256,
+            512
+          ],
+          "rgba_extrema": [
+            [
+              36,
+              255
+            ],
+            [
+              36,
+              255
+            ],
+            [
+              36,
+              255
+            ],
+            [
+              255,
+              255
+            ]
+          ],
+          "constant_white": false
+        },
+        "LocalSpecularProbe": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_fresnel_prb_0.png",
+          "sha256": "5feb357f5823b9ee06dca37739f72269d1fd62cd9f5dc9e14c43ff508978aa06",
+          "size": [
+            128,
+            128
+          ],
+          "rgba_extrema": [
+            [
+              255,
+              255
+            ],
+            [
+              255,
+              255
+            ],
+            [
+              255,
+              255
+            ],
+            [
+              255,
+              255
+            ]
+          ],
+          "constant_white": true
+        }
+      },
+      "source_profiles": [
+        {
+          "material": "body_b_00",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "body_a_00",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "body_a_01",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "eye",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "body_b_01",
+          "profile": "scvi_transparent_refraction_unimplemented",
+          "export_supported": false,
+          "reason": "Native transparency/refraction is not implemented by the opaque response profile"
+        },
+        {
+          "material": "body_a_02",
+          "profile": "scvi_transparent_refraction_unimplemented",
+          "export_supported": false,
+          "reason": "Native transparency/refraction is not implemented by the opaque response profile"
+        },
+        {
+          "material": "eff_body_c",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "eff_body_d",
+          "profile": "scvi_transparent_refraction_unimplemented",
+          "export_supported": false,
+          "reason": "Native transparency/refraction is not implemented by the opaque response profile"
+        }
+      ],
+      "core_inputs_absent_from_normal_reference_graphs": {
+        "native_import": [
+          "AOMap",
+          "BaseColorMap1",
+          "LocalSpecularProbe",
+          "NormalMap1"
+        ],
+        "biochao_archive": [
+          "AOMap",
+          "BaseColorMap1",
+          "LocalSpecularProbe",
+          "NormalMap1"
+        ]
+      },
+      "shell": {
+        "name": "body_a_02",
+        "shaders": [
+          {
+            "name": "IkCharacterTransparent",
+            "values": {
+              "EnableBaseColorMap": "True",
+              "EnableNormalMap": "True",
+              "EnableAOMap": "True",
+              "EnableAlphaTest": "False",
+              "NumMaterialLayer": "5",
+              "BaseColorMultiply": "True",
+              "EnableHairSpecular": "False",
+              "EnableEmissionLayer": "True",
+              "EnableLerpBaseColorEmission": "True",
+              "RefractionMode": "Thin",
+              "NumRequiredUV": "1"
+            }
+          },
+          {
+            "name": "IkCharacterTransparentInner",
+            "values": {
+              "EnableBaseColorMap": "True",
+              "EnableNormalMap": "True",
+              "EnableAOMap": "True",
+              "EnableAlphaTest": "Editable",
+              "NumMaterialLayer": "5",
+              "BaseColorMultiply": "Editable",
+              "EnableHairSpecular": "False",
+              "EnableEmissionLayer": "True",
+              "EnableLerpBaseColorEmission": "True",
+              "NumRequiredUV": "1"
+            }
+          }
+        ],
+        "alpha_type": "BlendPreMultiAlpha"
+      }
+    },
+    "shiny": {
+      "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_rare.trmtr",
+      "table_sha256": "dd6b2acc8a86738d322079a1e3accdfa06bc7b0443475406853ba3718c2c76ac",
+      "core": {
+        "name": "body_b_01",
+        "shaders": [
+          {
+            "name": "FresnelEffect",
+            "values": {
+              "EnableBaseColorMap": "True",
+              "EnableEmissionColorMap": "False",
+              "EnableEmissionNormalMap": "False",
+              "RefractionMode": "NormalOffset",
+              "EnableLocalIBL": "True",
+              "EnableFresnelTexture": "True",
+              "EnableFresnelEmission": "False",
+              "EnableAOMap": "True",
+              "EnableNormalMap": "True",
+              "NumRequiredUV": "2"
+            }
+          }
+        ],
+        "alpha_type": "Opaque",
+        "textures": {
+          "BaseColorMap": "pm0770_11_00_body_b_fresnel_alb.bntx",
+          "NormalMap": "pm0770_11_00_body_b_nrm.bntx",
+          "BaseColorMap1": "pm0770_11_00_fresnel_alb.bntx",
+          "NormalMap1": "pm0770_11_00_fresnel_nrm.bntx",
+          "AOMap": "pm0770_11_00_body_b_ao.bntx",
+          "LocalSpecularProbe": "pm0770_11_00_fresnel_prb.bntx"
+        },
+        "colors": {
+          "BaseColor": [
+            0.9734439849853516,
+            0.23073700070381165,
+            0.3371700048446655,
+            1.0
+          ],
+          "UVScaleOffset": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "BaseColorLayer1": [
+            0.9734439849853516,
+            0.23073700070381165,
+            0.3371700048446655,
+            1.0
+          ],
+          "UVScaleOffset1": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "ParallaxUVIntensity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "EmissionColor": [
+            0.7279999852180481,
+            0.36899998784065247,
+            0.36899998784065247,
+            1.0
+          ]
+        },
+        "floats": {
+          "BaseColorMapSaturation": 1.0,
+          "NormalHeight": 1.0,
+          "NormalHeight1": 1.0,
+          "Metallic": 0.25,
+          "Roughness": 0.5,
+          "EmissionIntensity": 0.0,
+          "EmissionIntensityLayer1": 2.0,
+          "LayerMaskScale1": 1.0,
+          "LocalSpecularProbeIntensity": 1.0,
+          "FresnelAlphaMin": 0.8500000238418579,
+          "FresnelAlphaMax": 0.6000000238418579,
+          "FresnelAngleBias": 0.44999998807907104
+        }
+      },
+      "core_images": {
+        "BaseColorMap": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_body_b_fresnel_alb.png",
+          "sha256": "556672f36624355956997a672e8d4b842c416bb81eb42efeeb84c39b380a3bee",
+          "size": [
+            32,
+            32
+          ],
+          "rgba_extrema": [
+            [
+              255,
+              255
+            ],
+            [
+              255,
+              255
+            ],
+            [
+              255,
+              255
+            ],
+            [
+              255,
+              255
+            ]
+          ],
+          "constant_white": true
+        },
+        "NormalMap": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_body_b_nrm.png",
+          "sha256": "8a6dacd9f2ef6027813b2665b53ce5e835f11e6c14509eeefb3ab819ef063c12",
+          "size": [
+            512,
+            512
+          ],
+          "rgba_extrema": [
+            [
+              0,
+              254
+            ],
+            [
+              6,
+              251
+            ],
+            [
+              127,
+              254
+            ],
+            [
+              255,
+              255
+            ]
+          ],
+          "constant_white": false
+        },
+        "BaseColorMap1": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_fresnel_alb.png",
+          "sha256": "762f0b294ef685f2572b67fb2a0bf3ca8402013597c6eece7ac1dc85960392ba",
+          "size": [
+            128,
+            128
+          ],
+          "rgba_extrema": [
+            [
+              71,
+              243
+            ],
+            [
+              71,
+              243
+            ],
+            [
+              71,
+              243
+            ],
+            [
+              254,
+              255
+            ]
+          ],
+          "constant_white": false
+        },
+        "NormalMap1": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_fresnel_nrm.png",
+          "sha256": "6cfb43275c2e6c051f09637b2db6646419c9506105c05102463f6ef841651f5a",
+          "size": [
+            32,
+            32
+          ],
+          "rgba_extrema": [
+            [
+              128,
+              128
+            ],
+            [
+              128,
+              128
+            ],
+            [
+              254,
+              254
+            ],
+            [
+              255,
+              255
+            ]
+          ],
+          "constant_white": false
+        },
+        "AOMap": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_body_b_ao.png",
+          "sha256": "e5238256f74bf4e39d370643f2854040dc547b025e94a9db8d01b73bc8f9ecf8",
+          "size": [
+            256,
+            512
+          ],
+          "rgba_extrema": [
+            [
+              36,
+              255
+            ],
+            [
+              36,
+              255
+            ],
+            [
+              36,
+              255
+            ],
+            [
+              255,
+              255
+            ]
+          ],
+          "constant_white": false
+        },
+        "LocalSpecularProbe": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_fresnel_prb_0.png",
+          "sha256": "5feb357f5823b9ee06dca37739f72269d1fd62cd9f5dc9e14c43ff508978aa06",
+          "size": [
+            128,
+            128
+          ],
+          "rgba_extrema": [
+            [
+              255,
+              255
+            ],
+            [
+              255,
+              255
+            ],
+            [
+              255,
+              255
+            ],
+            [
+              255,
+              255
+            ]
+          ],
+          "constant_white": true
+        }
+      },
+      "source_profiles": [
+        {
+          "material": "body_b_00",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "body_a_00",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "body_a_01",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "eye",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "body_b_01",
+          "profile": "scvi_transparent_refraction_unimplemented",
+          "export_supported": false,
+          "reason": "Native transparency/refraction is not implemented by the opaque response profile"
+        },
+        {
+          "material": "body_a_02",
+          "profile": "scvi_transparent_refraction_unimplemented",
+          "export_supported": false,
+          "reason": "Native transparency/refraction is not implemented by the opaque response profile"
+        },
+        {
+          "material": "eff_body_c",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "eff_body_d",
+          "profile": "scvi_transparent_refraction_unimplemented",
+          "export_supported": false,
+          "reason": "Native transparency/refraction is not implemented by the opaque response profile"
+        }
+      ],
+      "core_inputs_absent_from_normal_reference_graphs": {
+        "native_import": [
+          "AOMap",
+          "BaseColorMap1",
+          "LocalSpecularProbe",
+          "NormalMap1"
+        ],
+        "biochao_archive": [
+          "AOMap",
+          "BaseColorMap1",
+          "LocalSpecularProbe",
+          "NormalMap1"
+        ]
+      },
+      "shell": {
+        "name": "body_a_02",
+        "shaders": [
+          {
+            "name": "IkCharacterTransparent",
+            "values": {
+              "EnableBaseColorMap": "True",
+              "EnableNormalMap": "True",
+              "EnableAOMap": "True",
+              "EnableAlphaTest": "False",
+              "NumMaterialLayer": "5",
+              "BaseColorMultiply": "True",
+              "EnableHairSpecular": "False",
+              "EnableEmissionLayer": "True",
+              "EnableLerpBaseColorEmission": "True",
+              "RefractionMode": "Thin",
+              "NumRequiredUV": "1"
+            }
+          },
+          {
+            "name": "IkCharacterTransparentInner",
+            "values": {
+              "EnableBaseColorMap": "True",
+              "EnableNormalMap": "True",
+              "EnableAOMap": "True",
+              "EnableAlphaTest": "Editable",
+              "NumMaterialLayer": "5",
+              "BaseColorMultiply": "Editable",
+              "EnableHairSpecular": "False",
+              "EnableEmissionLayer": "True",
+              "EnableLerpBaseColorEmission": "True",
+              "NumRequiredUV": "1"
+            }
+          }
+        ],
+        "alpha_type": "BlendPreMultiAlpha"
+      }
+    }
+  },
+  "visibility": {
+    "idle": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_00001_battlewait01_loop.tracm",
+      "sha256": "bc0dc6b3c48dc26086030ec05620a206d644260b7f533acbd016e09e53ea1344",
+      "tracks": [
+        {
+          "target": "pm0770_11_00_core_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_body01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_offseteffb01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": false,
+          "packed_bytes": []
+        }
+      ]
+    },
+    "physical_attack": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_00400_attack01.tracm",
+      "sha256": "885a4929027cac4195442553768c996e43db190a97a6d92b2f73c613f0be178f",
+      "tracks": [
+        {
+          "target": "pm0770_11_00_core_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_body01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_offseteffb01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": false,
+          "packed_bytes": []
+        }
+      ]
+    },
+    "special_attack": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_00450_rangeattack01.tracm",
+      "sha256": "c66afcc7cb0b5ff1a4ad80842b8d2d1410354a5f88ea19d1c369496078f4ebad",
+      "tracks": [
+        {
+          "target": "pm0770_11_00_core_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_body01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_offseteffb01_mesh_shape",
+          "encoding": "framed8_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [
+            0,
+            30,
+            110
+          ],
+          "fixed_value": null,
+          "packed_bytes": [
+            2
+          ]
+        }
+      ]
+    },
+    "damage": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_00500_damage01.tracm",
+      "sha256": "b26b37b5f460a82c3b03b7d92227889069350e464eb005888fc6c54ae658bd5f",
+      "tracks": [
+        {
+          "target": "pm0770_11_00_core_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_body01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_offseteffb01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": false,
+          "packed_bytes": []
+        }
+      ]
+    },
+    "sleep": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_00281_sleep01_loop.tracm",
+      "sha256": "334d8672b6d4b020562e5d47c8a2cbab9462a3ec15b6e940bf8316e20ac9bb5e",
+      "tracks": [
+        {
+          "target": "pm0770_11_00_core_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_body01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_offseteffb01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": false,
+          "packed_bytes": []
+        }
+      ]
+    },
+    "faint_start": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_00520_down01_start.tracm",
+      "sha256": "9880e7f1ac696071d3833bac9e797201017bbf38571e90599d08d0d7d271eb60",
+      "tracks": [
+        {
+          "target": "pm0770_11_00_core_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_body01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_offseteffb01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": false,
+          "packed_bytes": []
+        }
+      ]
+    },
+    "faint_loop": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-sources/pm0770/pm0770_11_00/pm0770_11_00_00521_down01_loop.tracm",
+      "sha256": "39f3111c94795122e7f74eda5f24211cf91a164cfc2ae35d0c107ee9fcc0f78f",
+      "tracks": [
+        {
+          "target": "pm0770_11_00_core_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_body01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": true,
+          "packed_bytes": []
+        },
+        {
+          "target": "pm0770_11_00_offseteffb01_mesh_shape",
+          "encoding": "fixed_bool",
+          "time_raw": 0,
+          "value_raw": 0,
+          "frames": [],
+          "fixed_value": false,
+          "packed_bytes": []
+        }
+      ]
+    }
+  },
+  "za_shader_inventory": {
+    "listing": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/alternate-forms-batch-v1/za-listing.txt",
+    "sha256": "85d9b729f7311a86c48a176c6123c37e4be4e36980429399b9248bf2a5de544f",
+    "shader_members": []
+  },
+  "conclusion": "Both normal reference graphs omit the secondary colour/normal domains, AO and native probe. Constant-white probe data resolves the filename question, not the Fresnel/refraction formulas. The shell also needs a qualified Thin-refraction translation. Neither reference is independent proof of the original Z-A effects.",
+  "needed": "Matching Z-A FresnelEffect and IkCharacterTransparent shader semantics, or independent original-engine reference views sufficient to qualify a visual reconstruction."
+}
