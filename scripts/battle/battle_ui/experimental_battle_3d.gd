@@ -130,6 +130,9 @@ var packed := {}
 var actors: Array = [null, null, null, null]
 var players: Array = [null, null, null, null]
 var staged_mega_species := ["", "", "", ""]
+var staged_switch_species := ["", "", "", ""]
+var switch_preparing := [false, false, false, false]
+var switch_generation := [0, 0, 0, 0]
 var mega_effects := [null, null, null, null]
 var identities := ["", "", "", ""]
 var restoring := ["idle", "idle", "idle", "idle"]
@@ -744,6 +747,9 @@ func _ensure_downloaded_models(preserve_actors := false, request_preview_generat
 	for identity: String in staged_mega_species:
 		if not identity.is_empty() and identity not in needed:
 			needed.append(identity)
+	for identity: String in staged_switch_species:
+		if not identity.is_empty() and identity not in needed:
+			needed.append(identity)
 	if needed.is_empty():
 		return
 	model_downloader = get_tree().root.get_node("OnDemand3DBundleService")
@@ -857,6 +863,7 @@ func set_combatant(index: int, species: String, shiny := false, force := false) 
 	if force or species.is_empty():
 		status_conditions[index] = ""
 	staged_mega_species[index] = ""
+	_clear_switch_preparation(index)
 	_stop_transition(index)
 	combatants[index] = {"species": normalized, "shiny": shiny}
 	actor_shown[index] = true
@@ -931,6 +938,58 @@ func _sync_coop_target_highlight() -> void:
 func _combatant_key(index: int) -> String:
 	return ReviewedModels.key(combatants[index].species, combatants[index].shiny)
 
+func stage_switch_model(ident: String, species: String, shiny := false) -> void:
+	var index := actor_index(ident)
+	if index < 0 or not handles(ident):
+		return
+	_clear_switch_preparation(index)
+	var key := ReviewedModels.key(species, shiny)
+	if not ReviewedModels.supports(key):
+		return
+	staged_switch_species[index] = key
+	switch_preparing[index] = true
+	_prepare_switch_model(index, key, switch_generation[index])
+
+func _clear_switch_preparation(index: int) -> void:
+	switch_generation[index] += 1
+	staged_switch_species[index] = ""
+	switch_preparing[index] = false
+
+func _prepare_switch_model(index: int, key: String, generation: int) -> void:
+	# Only the public incoming species is staged; the outgoing actor stays intact.
+	# Warm packed scenes need neither a bundle recheck nor a catalog reload.
+	if not packed.has(key) and not catalog_entries.has(key):
+		await _ensure_downloaded_models(true)
+	if not is_inside_tree() or generation != switch_generation[index]:
+		return
+	_queue_needed_models()
+	var deadline := Time.get_ticks_msec() + 10000
+	while is_inside_tree() and generation == switch_generation[index] and not packed.has(key) and catalog_entries.has(key) and not failed_models.has(key) and not preparation_failed and not preparation_cancelled and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	if generation == switch_generation[index]:
+		switch_preparing[index] = false
+
+func await_switch_model(ident: String) -> void:
+	var index := actor_index(ident)
+	if index < 0:
+		return
+	var generation: int = switch_generation[index]
+	while is_inside_tree() and generation == switch_generation[index] and switch_preparing[index]:
+		await get_tree().process_frame
+
+func await_switch_actor(ident: String) -> void:
+	var index := actor_index(ident)
+	if index < 0:
+		return
+	if not active or not packed.has(_combatant_key(index)) or preparation_failed or preparation_cancelled:
+		await await_prepared()
+		return
+	# Entry warmup belongs to the loading cover. During a switch the arena is
+	# already rendering; resume as soon as the hidden replacement is instantiated.
+	var deadline := Time.get_ticks_msec() + 10000
+	while is_inside_tree() and active and not handles(ident) and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+
 func set_sleeping(index: int, sleeping: bool) -> void:
 	if lifecycle[index] == "fainted":
 		return
@@ -947,6 +1006,7 @@ func cancel_actions() -> void:
 	_cancel_common_effects()
 	for index in _slot_count():
 		staged_mega_species[index] = ""
+		_clear_switch_preparation(index)
 		if is_instance_valid(mega_effects[index]):
 			mega_effects[index].cancel()
 		mega_effects[index] = null
@@ -2154,6 +2214,9 @@ func _needed_species() -> Array[String]:
 	for key in staged_mega_species:
 		if key != "" and key not in needed:
 			needed.append(key)
+	for key in staged_switch_species:
+		if key != "" and key not in needed:
+			needed.append(key)
 	return needed
 
 func _actors_resolved() -> bool:
@@ -2165,6 +2228,13 @@ func _actors_resolved() -> bool:
 		if identities[index] != _combatant_key(index):
 			return false
 	return true
+
+func _active_models_pending() -> bool:
+	for index in _slot_count():
+		var key := _combatant_key(index)
+		if not key.is_empty() and not packed.has(key):
+			return true
+	return false
 
 func _queue_needed_models() -> void:
 	if preparation_cancelled or preparation_failed:
@@ -2347,6 +2417,7 @@ func _clear_actors() -> void:
 	_clear_coop_target_highlight()
 	for i in 4:
 		staged_mega_species[i] = ""
+		_clear_switch_preparation(i)
 		if is_instance_valid(mega_effects[i]):
 			mega_effects[i].cancel()
 		mega_effects[i] = null
@@ -2373,6 +2444,7 @@ func _set_active(value: bool) -> void:
 		camera_phase = 0.0
 		for i in 4:
 			staged_mega_species[i] = ""
+			_clear_switch_preparation(i)
 			if is_instance_valid(mega_effects[i]):
 				mega_effects[i].cancel()
 			mega_effects[i] = null
@@ -2694,7 +2766,9 @@ func _process(delta: float) -> void:
 	_queue_needed_models()
 	if _models_pending():
 		_import_next_model()
-		if _models_pending():
+		# Optional forms and staged replacements must not stop the already
+		# prepared actors from rendering or delay a replacement's ball throw.
+		if _models_pending() and (_preview_wants_3d() or _active_models_pending()):
 			return
 	if _preview_wants_3d():
 		_process_team_preview()

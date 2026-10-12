@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make 3D switches flow directly from recall into summon: prepare the incoming public model before recalling, close the ball during absorption and skip repeated entry warmup. Keep doubles replacements hidden until their summon releases them.
+
 - Prepare normal and shiny Urshifu Rapid Strike 3D models with their own stance and animations for the next model release, preventing this missing form from forcing battles into 2D once activated.
 
 - Identify Guild room templates by their position from the Main Hall: Room 1 on the right and Room 2 on the left, replacing confusing interior door-side labels.

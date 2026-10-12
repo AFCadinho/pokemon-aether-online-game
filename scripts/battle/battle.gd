@@ -8871,7 +8871,7 @@ func _play_switch_release(ball_item_id: String, cry_species: String, sprite_box:
 	var actor_ident := "p1" if side == "back" else "p2"
 	if is_instance_valid(animation_router.model_presenter):
 		animation_router.model_presenter.set_actor_shown(0 if side == "back" else 1, false)
-		await animation_router.model_presenter.await_prepared()
+		await animation_router.model_presenter.await_switch_actor(actor_ident)
 		if animation_router.model_presenter.handles(actor_ident):
 			if await animation_router.model_presenter.send_out(actor_ident, ball_item_id, cry_species):
 				_restore_native_summon_target_visibility(sprite_box)
@@ -10468,6 +10468,17 @@ func _render_battle_events(
 		var fallback_knock_off_message := _get_fallback_knock_off_item_message(event_data) if not has_explicit_item_events else ""
 
 		var event_type: String = str(event_data.get("type", ""))
+		var switch_stage: Node = null
+		if event_type in ["switch", "drag"] and should_play_switch_ball_animations:
+			var switch_player_id := _get_switch_event_player_id(event_data)
+			switch_stage = animation_router.model_presenter
+			if is_instance_valid(switch_stage) and _should_play_switch_ball_animation(switch_player_id):
+				var switch_ident := _get_switch_event_ident(event_data)
+				# Before state reconciliation, the active display is still the
+				# outgoing Pokémon. Resolve only the public incoming event here.
+				var switch_species := _get_switch_event_display_species(event_data, switch_ident, "")
+				switch_stage.stage_switch_model(switch_player_id, switch_species,
+					_get_switch_event_is_shiny(switch_player_id, switch_ident, switch_species))
 		if event_type == "prepare" and _prepare_event_resolves_in_same_batch(ordered_events, event_index):
 			# Showdown still emits |-prepare| for instant Solar Beam in sun (and
 			# comparable one-turn releases). The preceding move is the complete
@@ -10646,6 +10657,10 @@ func _render_battle_events(
 			var switch_player_id := _get_switch_event_player_id(event_data)
 			if should_play_switch_ball_animations:
 				await _show_switch_trainer_command(event_data, switch_player_id)
+				if is_instance_valid(switch_stage):
+					# A cold download may wait while the old Pokémon is still on the
+					# field, never in the empty gap between recall and summon.
+					await switch_stage.await_switch_model(switch_player_id)
 				await _play_switch_recall_for_event(event_data, switch_player_id)
 			_release_ordered_response_display_species_for_player(switch_player_id)
 			battle_state.apply_event_conditions([event_data])

@@ -167,10 +167,11 @@ func recall() -> bool:
 		_actor(1.0-smoothstep(0.0,1.0,p),(origin-actor_origin)*smoothstep(0.0,1.0,p))
 		_ray(target.lerp(origin,p),origin,sin(p*PI))
 		_burst(origin,p,true)
+		_open(1.0-smoothstep(0.67,1.0,p))
 	): return false
 	_actor(0.0)
 	beam.visible = false
-	return await _step(0.10,func(p: float): _open(1.0-p))
+	return true
 
 func capture(shakes: int, caught: bool) -> bool:
 	ball.position = origin
