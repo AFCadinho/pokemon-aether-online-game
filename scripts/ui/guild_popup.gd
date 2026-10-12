@@ -1219,30 +1219,32 @@ func _render_guild_home() -> void:
 	if active_guild_section == "management" and not (can_review_applications or can_manage_settings):
 		active_guild_section = "overview"
 
-	var header := HBoxContainer.new()
-	header.add_theme_constant_override("separation", 14)
-	member_content.add_child(header)
-	header.add_child(_build_guild_header_emblem(guild, is_leader))
-	var heading := VBoxContainer.new()
-	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	heading.add_theme_constant_override("separation", 5)
-	header.add_child(heading)
-	var title_row := HBoxContainer.new()
-	title_row.add_theme_constant_override("separation", 10)
-	heading.add_child(title_row)
-	var guild_name := _label(str(guild.get("name", "Your Guild")), 25, UI_TEXT)
-	guild_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	guild_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	title_row.add_child(guild_name)
-	title_row.add_child(_build_guild_role_badge(role))
-	var description := _label(str(guild.get("description", "")), 12, UI_MUTED)
-	description.name = "GuildHeaderDescription"
-	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description.max_lines_visible = 2
-	description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	description.custom_minimum_size.y = 34.0
-	heading.add_child(description)
-	header.add_child(_build_guild_header_travel_actions(guild, is_leader))
+	if active_guild_section == "overview":
+		var header := HBoxContainer.new()
+		header.name = "GuildOverviewIdentityHeader"
+		header.add_theme_constant_override("separation", 14)
+		member_content.add_child(header)
+		header.add_child(_build_guild_header_emblem(guild, is_leader))
+		var heading := VBoxContainer.new()
+		heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		heading.add_theme_constant_override("separation", 5)
+		header.add_child(heading)
+		var title_row := HBoxContainer.new()
+		title_row.add_theme_constant_override("separation", 10)
+		heading.add_child(title_row)
+		var guild_name := _label(str(guild.get("name", "Your Guild")), 25, UI_TEXT)
+		guild_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		guild_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		title_row.add_child(guild_name)
+		title_row.add_child(_build_guild_role_badge(role))
+		var description := _label(str(guild.get("description", "")), 12, UI_MUTED)
+		description.name = "GuildHeaderDescription"
+		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		description.max_lines_visible = 2
+		description.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		description.custom_minimum_size.y = 34.0
+		heading.add_child(description)
+		header.add_child(_build_guild_header_travel_actions(guild, is_leader))
 
 	_build_guild_section_navigation(can_review_applications or can_manage_settings)
 	member_status_label = _label("", 11, UI_MUTED)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show the Guild emblem, name, role, travel buttons and Guild options only on Overview, giving the other Guild tabs more space.
+
 - Keep the member Bank rights editor within the screen, with visible Save/Cancel buttons, grouped permissions and a scrollable form on smaller screens.
 
 - Give Fiery Wrath an advancing wall of animated dark flames, crimson arena lighting and dedicated framing. Strengthen Supersonic Skystrike with a higher ascent, steep dive, continuous wind trail, ascent/dive camera cuts and expanding impact waves, preserving native timing and miss/block behavior.
