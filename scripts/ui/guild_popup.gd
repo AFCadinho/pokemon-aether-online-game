@@ -6236,62 +6236,153 @@ func _open_guild_member_bank_permissions(member: Dictionary) -> void:
 	var user_id := int(member.get("userId", 0))
 	if user_id <= 0 or str(member.get("role", "recruit")) == "leader":
 		return
-	var dialog := ConfirmationDialog.new()
+	var dialog := Window.new()
 	dialog.name = "GuildMemberBankPermissionsDialog_%d" % user_id
 	dialog.title = _t("ui.guild.permissions.title", {
 		"trainer": str(member.get("displayName", member.get("username", _t("common.unknown")))),
 	})
-	dialog.ok_button_text = _t("common.save")
-	dialog.cancel_button_text = _t("common.cancel")
-	_apply_guild_confirmation_style(dialog, "primary")
+	dialog.transient = true
+	dialog.exclusive = true
+	dialog.borderless = true
+	# The form may scroll, but its minimum size must not grow the window.
+	dialog.wrap_controls = false
+	_apply_guild_window_style(dialog)
+	dialog.close_requested.connect(dialog.queue_free)
 	add_child(dialog)
-	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 8)
-	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	content.offset_left = 18
-	content.offset_top = 48
-	content.offset_right = -18
-	content.offset_bottom = -62
-	dialog.add_child(content)
+	var viewport_size := get_viewport_rect().size
+	var dialog_size := Vector2i(mini(600, maxi(280, int(viewport_size.x) - 40)), mini(520, maxi(220, int(viewport_size.y) - 40)))
+	dialog.min_size = dialog_size
+	dialog.size = dialog_size
+	dialog.unresizable = true
+	var outer := PanelContainer.new()
+	outer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	outer.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE, UI_ACCENT_SOFT, 11, 1))
+	dialog.add_child(outer)
+	var margin := MarginContainer.new()
+	_set_margins(margin, 16, 14, 16, 14)
+	outer.add_child(margin)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 12)
+	margin.add_child(layout)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 10)
+	layout.add_child(header)
+	var icon := TextureRect.new()
+	icon.texture = GUILD_MEMBER_BANK_RIGHTS_ICON
+	icon.custom_minimum_size = Vector2(24, 24)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	header.add_child(icon)
+	var title := _label(dialog.title, 16, UI_TEXT)
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title.clip_text = true
+	title.tooltip_text = dialog.title
+	header.add_child(title)
+	var close := Button.new()
+	close.name = "GuildBankPermissionsCloseButton"
+	close.text = "×"
+	_set_localized_property(close, "tooltip_text", "common.close")
+	close.custom_minimum_size = Vector2(34, 34)
+	_apply_button_style(close)
+	close.pressed.connect(dialog.queue_free)
+	header.add_child(close)
 	var explanation := _localized_label("ui.guild.permissions.hint", 11, UI_MUTED)
 	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	content.add_child(explanation)
+	layout.add_child(explanation)
+	var scroll := ScrollContainer.new()
+	scroll.name = "GuildMemberBankPermissionsScroll"
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	layout.add_child(scroll)
+	var content := VBoxContainer.new()
+	content.name = "GuildMemberBankPermissionsContent"
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.add_theme_constant_override("separation", 12)
+	scroll.add_child(content)
 	var overrides := _dictionary(member.get("bankPermissionOverrides", {}))
 	var rank_permissions := _array_from_value(member.get("rankPermissions", []))
 	var selects: Dictionary = {}
-	for permission: String in GUILD_BANK_PERMISSIONS:
-		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 10)
-		content.add_child(row)
-		var permission_label := _label(_t("ui.guild.permission.%s" % permission), 11, UI_TEXT)
-		permission_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(permission_label)
-		var select := OptionButton.new()
-		select.name = "GuildBankPermissionSelect_%s" % permission
-		select.custom_minimum_size = Vector2(230, 32)
-		select.add_item(_t(
-			"ui.guild.permissions.inherit_allowed" if rank_permissions.has(permission) else "ui.guild.permissions.inherit_denied"
-		))
-		select.set_item_metadata(0, "inherit")
-		select.add_item(_t("ui.guild.permissions.allow"))
-		select.set_item_metadata(1, "allow")
-		select.add_item(_t("ui.guild.permissions.deny"))
-		select.set_item_metadata(2, "deny")
-		var current_mode := str(overrides.get(permission, "inherit"))
-		select.select(1 if current_mode == "allow" else (2 if current_mode == "deny" else 0))
-		_apply_option_button_style(select)
-		row.add_child(select)
-		selects[permission] = select
-	dialog.confirmed.connect(_save_guild_member_bank_permissions.bind(user_id, selects, dialog))
-	dialog.canceled.connect(dialog.queue_free)
-	dialog.popup_centered(Vector2i(520, 410))
+	for group: String in ["assets", "resources"]:
+		var panel := PanelContainer.new()
+		panel.name = "GuildBankPermissions%sGroup" % group.capitalize()
+		panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER_INNER, 8, 1))
+		content.add_child(panel)
+		var group_margin := MarginContainer.new()
+		_set_margins(group_margin, 12, 10, 12, 10)
+		panel.add_child(group_margin)
+		var group_rows := VBoxContainer.new()
+		group_rows.add_theme_constant_override("separation", 8)
+		group_margin.add_child(group_rows)
+		group_rows.add_child(_localized_label("ui.guild.permissions.assets" if group == "assets" else "ui.guild.bank.resources.title", 11, UI_ACCENT))
+		for permission: String in GUILD_BANK_PERMISSIONS:
+			if permission.begins_with("resource_") != (group == "resources"):
+				continue
+			var row: BoxContainer = HBoxContainer.new() if dialog_size.x >= 520 else VBoxContainer.new()
+			row.add_theme_constant_override("separation", 10 if row is HBoxContainer else 4)
+			group_rows.add_child(row)
+			var permission_label := _label(_t("ui.guild.permission.%s" % permission), 11, UI_TEXT)
+			permission_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			permission_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			row.add_child(permission_label)
+			var select := OptionButton.new()
+			select.name = "GuildBankPermissionSelect_%s" % permission
+			select.custom_minimum_size = Vector2(230 if row is HBoxContainer else 0, 36)
+			select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			select.fit_to_longest_item = false
+			select.clip_text = true
+			select.add_item(_t(
+				"ui.guild.permissions.inherit_allowed" if rank_permissions.has(permission) else "ui.guild.permissions.inherit_denied"
+			))
+			select.set_item_metadata(0, "inherit")
+			select.add_item(_t("ui.guild.permissions.allow"))
+			select.set_item_metadata(1, "allow")
+			select.add_item(_t("ui.guild.permissions.deny"))
+			select.set_item_metadata(2, "deny")
+			var current_mode := str(overrides.get(permission, "inherit"))
+			select.select(1 if current_mode == "allow" else (2 if current_mode == "deny" else 0))
+			_apply_option_button_style(select)
+			select.focus_mode = Control.FOCUS_ALL
+			select.tooltip_text = select.get_item_text(select.selected)
+			select.item_selected.connect(func(index: int): select.tooltip_text = select.get_item_text(index))
+			row.add_child(select)
+			selects[permission] = select
+	var actions := HBoxContainer.new()
+	actions.name = "GuildBankPermissionsActions"
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", 10)
+	layout.add_child(actions)
+	var cancel := Button.new()
+	cancel.name = "GuildBankPermissionsCancelButton"
+	_set_localized_property(cancel, "text", "common.cancel")
+	cancel.custom_minimum_size = Vector2(104, 36)
+	_apply_button_style(cancel)
+	cancel.pressed.connect(dialog.queue_free)
+	cancel.focus_mode = Control.FOCUS_ALL
+	actions.add_child(cancel)
+	var save := Button.new()
+	save.name = "GuildBankPermissionsSaveButton"
+	_set_localized_property(save, "text", "common.save")
+	save.custom_minimum_size = Vector2(104, 36)
+	_apply_button_style(save, "primary")
+	save.pressed.connect(_save_guild_member_bank_permissions.bind(user_id, selects, dialog))
+	save.focus_mode = Control.FOCUS_ALL
+	actions.add_child(save)
+	dialog.window_input.connect(func(event: InputEvent):
+		if event.is_action_pressed("ui_cancel"):
+			dialog.set_input_as_handled()
+			dialog.queue_free()
+	)
+	dialog.popup_centered(dialog_size)
+	save.grab_focus.call_deferred()
 
 
 func _save_guild_member_bank_permissions(
 	user_id: int,
 	selects: Dictionary,
-	dialog: ConfirmationDialog
+	dialog: Window
 ) -> void:
+	dialog.hide()
 	var overrides: Dictionary = {}
 	for permission: String in GUILD_BANK_PERMISSIONS:
 		var select := selects.get(permission) as OptionButton

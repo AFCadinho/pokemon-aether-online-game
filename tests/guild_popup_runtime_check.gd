@@ -1284,9 +1284,9 @@ func _run() -> void:
 	if managed_actions != null:
 		managed_actions.get_popup().id_pressed.emit(GuildPopup.GUILD_MEMBER_ACTION_BANK_RIGHTS)
 		await process_frame
-	var bank_permissions_dialog := popup.find_child("GuildMemberBankPermissionsDialog_2", true, false) as ConfirmationDialog
+	var bank_permissions_dialog := popup.find_child("GuildMemberBankPermissionsDialog_2", true, false) as Window
 	_check(bank_permissions_dialog != null and bank_permissions_dialog.visible, "member Guild Bank rights open in a dedicated dialog")
-	_check_dialog_styled(bank_permissions_dialog, "Guild Bank permissions dialog")
+	_check(bank_permissions_dialog != null and bank_permissions_dialog.borderless and not bank_permissions_dialog.wrap_controls, "Bank rights uses its own compact Guild window header")
 	var borrow_permission_select := popup.find_child("GuildBankPermissionSelect_bank_borrow", true, false) as OptionButton
 	var resource_withdraw_select := popup.find_child("GuildBankPermissionSelect_resource_withdraw", true, false) as OptionButton
 	_check(
@@ -1296,8 +1296,21 @@ func _run() -> void:
 	)
 	_check(resource_withdraw_select != null, "leaders can block a member's Resources withdrawal access")
 	if bank_permissions_dialog != null:
-		bank_permissions_dialog.canceled.emit()
+		var initial_permissions_size := bank_permissions_dialog.size
+		for frame: int in range(8):
+			await process_frame
+		_check(bank_permissions_dialog.size == initial_permissions_size and bank_permissions_dialog.size.y <= 520, "Bank rights dialog keeps a bounded height across layout updates")
+		var permissions_scroll := bank_permissions_dialog.find_child("GuildMemberBankPermissionsScroll", true, false) as ScrollContainer
+		_check(permissions_scroll != null and permissions_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED, "Bank rights scroll only the form when content needs more room")
+		_check(bank_permissions_dialog.find_child("GuildBankPermissionsAssetsGroup", true, false) != null and bank_permissions_dialog.find_child("GuildBankPermissionsResourcesGroup", true, false) != null, "Bank rights group item and Pokemon permissions separately from Resources")
+		var save_rect := (bank_permissions_dialog.find_child("GuildBankPermissionsSaveButton", true, false) as Button).get_global_rect()
+		var cancel_rect := (bank_permissions_dialog.find_child("GuildBankPermissionsCancelButton", true, false) as Button).get_global_rect()
+		_check(save_rect.end.y <= bank_permissions_dialog.size.y and cancel_rect.end.y <= bank_permissions_dialog.size.y, "Bank rights Save and Cancel stay inside the dialog")
+		_check(permissions_scroll.get_global_rect().end.y <= save_rect.position.y, "Bank rights footer stays outside the scrollable permissions")
+		(bank_permissions_dialog.find_child("GuildBankPermissionsCancelButton", true, false) as Button).pressed.emit()
 		await process_frame
+		await _check_compact_bank_permissions(packed, Vector2i(480, 360))
+		await _check_compact_bank_permissions(packed, Vector2i(360, 640))
 	if managed_actions != null:
 		managed_actions.get_popup().id_pressed.emit(GuildPopup.GUILD_MEMBER_ACTION_KICK)
 		await process_frame
@@ -1724,6 +1737,40 @@ func _option_has_metadata(select: OptionButton, value: String) -> bool:
 		if str(select.get_item_metadata(item_index)) == value:
 			return true
 	return false
+
+
+func _check_compact_bank_permissions(packed: PackedScene, viewport_size: Vector2i) -> void:
+	var viewport := SubViewport.new()
+	viewport.size = viewport_size
+	viewport.gui_embed_subwindows = true
+	root.add_child(viewport)
+	var compact_popup := packed.instantiate() as GuildPopup
+	viewport.add_child(compact_popup)
+	await process_frame
+	compact_popup._open_guild_member_bank_permissions({
+		"userId": 99, "displayName": "Compact", "role": "member",
+		"rankPermissions": ["bank_borrow"], "bankPermissionOverrides": {"bank_deposit": "allow"},
+	})
+	for frame: int in range(8):
+		await process_frame
+	var dialog := compact_popup.find_child("GuildMemberBankPermissionsDialog_99", true, false) as Window
+	_check(dialog != null and dialog.size.x <= viewport_size.x and dialog.size.y <= viewport_size.y, "Bank rights fits a %s viewport" % viewport_size)
+	if dialog != null:
+		var scroll := dialog.find_child("GuildMemberBankPermissionsScroll", true, false) as ScrollContainer
+		var save_rect := (dialog.find_child("GuildBankPermissionsSaveButton", true, false) as Button).get_global_rect()
+		_check(save_rect.end.y <= dialog.size.y and dialog.position.y + save_rect.end.y <= viewport_size.y, "Save remains visible at %s" % viewport_size)
+		_check(scroll.get_global_rect().end.y <= save_rect.position.y and scroll.get_v_scroll_bar().max_value > scroll.get_v_scroll_bar().page, "compact Bank rights scrolls permission rows above the fixed footer")
+		_check(dialog.find_children("GuildBankPermissionSelect_*", "OptionButton", true, false).size() == 6, "compact Bank rights retains all six editable permissions")
+		for permission: String in GuildPopup.GUILD_BANK_PERMISSIONS:
+			var select := dialog.find_child("GuildBankPermissionSelect_%s" % permission, true, false) as OptionButton
+			_check(select.get_global_rect().end.x <= dialog.size.x, "%s fits the compact form width" % permission)
+		var escape := InputEventAction.new()
+		escape.action = "ui_cancel"
+		escape.pressed = true
+		dialog.window_input.emit(escape)
+		await process_frame
+		_check(not is_instance_valid(dialog), "Escape closes the compact Bank rights editor")
+	viewport.free()
 
 
 func _check_dialog_styled(dialog: ConfirmationDialog, label: String) -> void:

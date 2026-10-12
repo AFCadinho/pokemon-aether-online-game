@@ -2622,6 +2622,7 @@
   "ui.guild.permissions.action_tooltip": "Defina permissões pessoais do Banco da Guilda para este membro.",
   "ui.guild.permissions.title": "Permissões do Banco da Guilda · {trainer}",
   "ui.guild.permissions.hint": "As permissões do cargo são o padrão. Escolha Permitir ou Negar apenas para criar uma exceção.",
+  "ui.guild.permissions.assets": "Itens e Pokémon",
   "ui.guild.permissions.inherit_allowed": "Herdar do cargo · Permitido",
   "ui.guild.permissions.inherit_denied": "Herdar do cargo · Negado",
   "ui.guild.permissions.allow": "Permitir pessoalmente",

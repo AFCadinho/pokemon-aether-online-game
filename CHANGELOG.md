@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the member Bank rights editor within the screen, with visible Save/Cancel buttons, grouped permissions and a scrollable form on smaller screens.
+
 - Show the same mount, cosmetic and special-item icons in Guild Bank storage as in the Bag. Search your own donation items and resources by name, with the query preserved after refreshes and donations.
 
 - Prepare normal and shiny Landorus-Therian, Thundurus-Therian and Tornadus-Therian 3D models, with their own animations, for the next model release.

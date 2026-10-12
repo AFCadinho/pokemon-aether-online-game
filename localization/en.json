@@ -2656,6 +2656,7 @@
   "ui.guild.permissions.action_tooltip": "Set personal Guild Bank permissions for this member.",
   "ui.guild.permissions.title": "Guild Bank permissions · {trainer}",
   "ui.guild.permissions.hint": "Rank rights are the default. Choose Allow or Deny only when this member needs an exception.",
+  "ui.guild.permissions.assets": "Items & Pokémon",
   "ui.guild.permissions.inherit_allowed": "Inherit from rank · Allowed",
   "ui.guild.permissions.inherit_denied": "Inherit from rank · Denied",
   "ui.guild.permissions.allow": "Allow personally",
