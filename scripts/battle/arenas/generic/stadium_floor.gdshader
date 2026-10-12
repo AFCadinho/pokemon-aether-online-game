@@ -1,4 +1,6 @@
 shader_type spatial;
+// Keep arena lights from producing white highlights as the battle camera orbits.
+render_mode specular_disabled;
 varying vec2 p;
 void vertex() { p = (MODEL_MATRIX*vec4(VERTEX,1.0)).xz; }
 void fragment() {
@@ -20,6 +22,7 @@ void fragment() {
 	}
 	ALBEDO = vec3(0.022,0.017,0.05);
 	EMISSION = vec3(0.20,0.05,0.48)*(line*0.6+pool) + vec3(0.43,0.24,0.65)*max(rings,center) + vec3(0.42,0.28,0.85)*moving_pool;
-	ROUGHNESS = 0.24;
-	METALLIC = 0.55;
+	ROUGHNESS = 1.0;
+	METALLIC = 0.0;
+	SPECULAR = 0.0;
 }
