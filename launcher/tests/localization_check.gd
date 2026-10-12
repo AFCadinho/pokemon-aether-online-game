@@ -3,6 +3,7 @@ extends SceneTree
 const NewsLocalizationService := preload("res://scripts/news_localization_service.gd")
 const LanguageSelectorStyle := preload("res://scripts/language_selector_style.gd")
 const ServerHealthService := preload("res://scripts/server_health_service.gd")
+const V13Release := preload("res://data/approved_3d_release_v13.json")
 
 var failed := false
 
@@ -139,9 +140,33 @@ func _run() -> void:
 			"sizeBytes": 30, "sha256": "ef".repeat(32)}
 		_check(bool(launcher.call("_can_bootstrap_launcher_update", future_manifest,
 			"Asset bundle release set is not approved.")), "newer launcher may bootstrap an unknown approved bundle set")
+		_check(bool(launcher.call("_can_bootstrap_launcher_update", future_manifest,
+			"Asset bundle release index differs from the approved pinned revisions.")),
+			"newer launcher may bootstrap a new revision with an already approved release set")
+		var v13_pin: Dictionary = V13Release.data.index
+		var same_set_new_pin: Dictionary = valid_manifest.duplicate(true)
+		same_set_new_pin["launcher"] = future_manifest["launcher"].duplicate(true)
+		same_set_new_pin["assetBundleIndex"] = {
+			"schema": 1,
+			"kind": "pokeaether-release-asset-index",
+			"revision": V13Release.data.revision,
+			"url": "https://updates.example/" + str(v13_pin.object_key),
+			"objectBaseUrl": "https://updates.example",
+			"sha256": "12".repeat(32),
+			"sizeBytes": v13_pin.size_bytes,
+			"requiredAssetIds": V13Release.data.requiredAssetIds.duplicate(),
+		}
+		var same_set_error := str(launcher.call("_validate_download_manifest", same_set_new_pin))
+		_check(same_set_error == "Asset bundle release index differs from the approved pinned revisions.",
+			"same model IDs with a changed index pin report the bootstrapable revision mismatch")
+		_check(bool(launcher.call("_can_bootstrap_launcher_update", same_set_new_pin, same_set_error)),
+			"same model IDs with a changed index pin offer only the newer launcher")
 		future_manifest["launcher"]["version"] = "0.0.0"
 		_check(not bool(launcher.call("_can_bootstrap_launcher_update", future_manifest,
 			"Asset bundle release set is not approved.")), "same or older launcher cannot bypass bundle validation")
+		_check(not bool(launcher.call("_can_bootstrap_launcher_update", future_manifest,
+			"Asset bundle release index differs from the approved pinned revisions.")),
+			"same or older launcher cannot bypass a changed pinned revision")
 		future_manifest["launcher"]["version"] = "999.0.0"
 		_check(not bool(launcher.call("_can_bootstrap_launcher_update", future_manifest,
 			"Asset bundle index integrity metadata is invalid.")), "malformed bundle metadata cannot bootstrap")

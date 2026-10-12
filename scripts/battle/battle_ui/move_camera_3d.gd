@@ -1,8 +1,16 @@
 extends RefCounted
-## Draco Meteor shots follow the VFX's native clock, including pause/recovery.
+## Shots follow the VFX's native clock, including pause and recovery.
+const PROFILES := {
+	"dracometeor":"meteor", "moonblast":"moon", "focusblast":"orb", "shadowball":"orb",
+	"hyperbeam":"beam", "solarbeam":"beam", "flashcannon":"beam", "electroshot":"beam",
+	"pyroball":"kick", "blizzard":"field", "hurricane":"field", "terastarstorm":"field",
+}
 var effect: Node
 var actor := ""
 var target := ""
+
+func supports(key: String) -> bool:
+	return PROFILES.has(key)
 
 func begin(owner: Node, source: String, destination: String) -> void:
 	effect = owner
@@ -20,6 +28,9 @@ func apply(stage: Node) -> void:
 	var seconds: float = effect.clock.call()
 	var p := clampf(seconds / effect.duration, 0.0, 1.0)
 	if p >= 1.0: return
+	if effect.key != "dracometeor":
+		_apply_catalog(stage, seconds, p)
+		return
 	var a: Dictionary = stage._move_bounds(actor)
 	var b: Dictionary = stage._move_bounds(target)
 	var anchors: Dictionary = effect.anchors.call()
@@ -64,6 +75,95 @@ func apply(stage: Node) -> void:
 	camera.look_at(focus)
 	# Finish inside the move lifetime; preserve the player's orbit and zoom.
 	camera.transform = camera.transform.interpolate_with(overview, smoothstep(0.88, 1.0, p))
+
+func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
+	var profile: String = PROFILES.get(effect.key, "")
+	if profile.is_empty(): return
+	var a: Dictionary = stage._move_bounds(actor)
+	var b: Dictionary = stage._move_bounds(target)
+	var anchors: Dictionary = effect.anchors.call()
+	var forward: Vector3 = b.position - a.position
+	forward.y = 0.0
+	if forward.length_squared() < 0.01: return
+	forward = forward.normalized()
+	var side := forward.cross(Vector3.UP).normalized()
+	var camera: Camera3D = stage.camera
+	var overview := camera.transform
+	var points: Array[Vector3] = []
+	var direction := forward + side * 0.72 + Vector3.UP * 0.2
+	var scale_value: float = effect.presentation_scale
+	var source: Vector3 = anchors.source
+	var aim: Vector3 = anchors.target
+	# Recipe projectiles capture their trajectory; misses must keep framing
+	# the original aim rather than following the target's dodge.
+	if profile in ["beam", "kick"] and effect.get_script() == stage.StagedMoveEffect and effect.launched:
+		source = effect.origin
+		aim = effect.aim
+	elif profile in ["moon", "orb"] and effect.launched:
+		source = effect.launch_origin
+	if profile == "field":
+		var field: Dictionary = anchors.field
+		var center: Vector3 = effect.field_center if effect.captured else field.center
+		var radius: float = effect.field_radius if effect.captured else field.radius
+		var height_value := 6.0 if effect.key == "terastarstorm" else 3.5
+		_append_box(points, center + Vector3.UP * height_value * 0.5, Vector3(radius + 0.6, height_value * 0.5, radius + 0.6))
+		# Starstorm's final burst is centered on its victim, not field center.
+		if effect.key == "terastarstorm":
+			_append_box(points, effect.aim, Vector3(radius + 0.5, 1.5, radius + 0.5))
+		_append_body(points, a)
+		_append_body(points, b)
+		direction = -forward * 0.55 + side + Vector3.UP * 0.8
+	elif seconds < effect.launch:
+		_append_body(points, a)
+		for emitter: Vector3 in anchors.get("sources", [source]):
+			_append_box(points, emitter, Vector3.ONE * maxf(0.5, scale_value * effect.emission_scale * 0.7))
+		if profile == "moon":
+			var moon: Vector3 = anchors.moon_source + Vector3.UP * (1.35 + 0.3 * (scale_value - 1.0))
+			_append_box(points, moon, Vector3.ONE * scale_value * 0.5)
+	else:
+		_append_body(points, b)
+		_append_box(points, aim, Vector3.ONE * scale_value * 1.05)
+		if profile == "beam":
+			_append_body(points, a)
+			for emitter: Vector3 in anchors.get("sources", [source]):
+				_append_box(points, emitter, Vector3.ONE * scale_value * effect.emission_scale * 0.7)
+			# A side angle keeps the complete beam and multiple emitters legible.
+			direction = -forward * 0.25 + side + Vector3.UP * 0.3
+		else:
+			_append_box(points, source, Vector3.ONE * scale_value * effect.emission_scale * 0.7)
+			direction = -forward * 0.75 + side + Vector3.UP * 0.25
+			if profile == "kick":
+				_append_box(points, source.lerp(aim, 0.5) + Vector3.UP * effect.projectile_arc_height, Vector3.ONE * scale_value * effect.emission_scale * 0.8)
+				_append_body(points, a)
+	# Fitting a fixed shot envelope avoids camera pumping with every particle.
+	camera.transform = _fit(camera, points, direction.normalized())
+	camera.transform = camera.transform.interpolate_with(overview, smoothstep(0.88, 1.0, phase))
+
+func _append_body(points: Array[Vector3], bounds: Dictionary) -> void:
+	var half := Vector3(float(bounds.radius), float(bounds.height) * 0.5, float(bounds.radius))
+	_append_box(points, bounds.position + Vector3.UP * half.y, half)
+
+func _append_box(points: Array[Vector3], center: Vector3, half: Vector3) -> void:
+	for x in [-1.0, 1.0]:
+		for y in [-1.0, 1.0]:
+			for z in [-1.0, 1.0]:
+				points.append(center + half * Vector3(x, y, z))
+
+func _fit(camera: Camera3D, points: Array[Vector3], direction: Vector3) -> Transform3D:
+	var box := AABB(points[0], Vector3.ZERO)
+	for point in points: box = box.expand(point)
+	var focus := box.get_center()
+	var basis := Basis.looking_at(-direction)
+	var size := camera.get_viewport().get_visible_rect().size
+	var aspect := size.x / maxf(size.y, 1.0)
+	var tangent := tan(deg_to_rad(camera.fov) * 0.5)
+	var horizontal := tangent if camera.keep_aspect == Camera3D.KEEP_WIDTH else tangent * aspect
+	var vertical := tangent / aspect if camera.keep_aspect == Camera3D.KEEP_WIDTH else tangent
+	var distance := 3.0
+	for point in points:
+		var local := basis.inverse() * (point - focus)
+		distance = maxf(distance, local.z + maxf((absf(local.x) + 0.35) / maxf(horizontal, 0.01), (absf(local.y) + 0.35) / maxf(vertical, 0.01)))
+	return Transform3D(basis, focus + direction * distance)
 
 func _distance(camera: Camera3D, radius: float) -> float:
 	# Godot keeps vertical FOV by default. Account for narrow viewports too.
