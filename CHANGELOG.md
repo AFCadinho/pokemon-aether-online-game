@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Supersonic Skystrike a cinematic hit explosion: a compressed white-blue core, expanding rolling blast cloud and floor pressure wave, wider impact framing, a brief camera recoil and a deeper explosion sound. Preserve its duration and suppress the blast on misses and blocks.
+
 - Brighten the matte 3D stadium floor with a muted purple-grey base and a subtle even glow, and soften the lower battle UI shading while keeping white floor reflections disabled.
 
 - Restore stat boosts, drops and Pokémon effect indicators after 3D lead summons and switches, including AI Sparring and PvP battles started from Team Preview.

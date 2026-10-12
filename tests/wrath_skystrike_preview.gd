@@ -23,6 +23,9 @@ func _start() -> void:
 				var effect: Node = renderer.create_move_effect(move,actor,target,{"show_impact":outcome=="hit","result":outcome})
 				effect.clock = func(): return sample_seconds
 				var samples := [effect.launch*0.75,lerpf(effect.launch,effect.impact,0.25),lerpf(effect.launch,effect.impact,0.5),lerpf(effect.launch,effect.impact,0.82),lerpf(effect.impact,effect.duration,0.15)]
+				if move == "supersonicskystrike":
+					for fraction in [0.025,0.085,0.23,0.40,0.65,0.90]: samples.append(lerpf(effect.impact,effect.duration,fraction))
+					samples.sort()
 				for phase in samples.size():
 					sample_seconds = samples[phase]
 					var slot: int = renderer.actor_index(actor)
@@ -39,7 +42,7 @@ func _start() -> void:
 				await process_frame
 				renderer._action("idle",renderer.actor_index(actor))
 				assert(renderer.common_effects.is_empty() and renderer.move_camera.effect==null and renderer.move_atmosphere.effect==null)
-	print("WRATH_SKYSTRIKE_PREVIEW_OK moves=2 directions=2 outcomes=3 phases=5")
+	print("WRATH_SKYSTRIKE_PREVIEW_OK moves=2 directions=2 outcomes=3 skystrike_explosion_phases=7")
 	host.release()
 	host.queue_free()
 	host = null
