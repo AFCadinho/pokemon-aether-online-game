@@ -148,8 +148,9 @@ func _init() -> void:
 			"guild_base_player_floor:from_room_4",
 			"guild_base_player_room:from_floor",
 			"guild_base_right_room:from_main_hall",
+			"kanto_pewter_city_museum:from_admission",
 		],
-		"Aether Clash previews and ownerless Guild Base templates are excluded from safe player teleports"
+		"Previews, ownerless Guild Base templates and the paid museum hall are excluded from safe player teleports"
 	)
 	_expect(areas.has("kanto_route_2_gate"), "Inherited transition building is registered")
 	_expect(
