@@ -100,6 +100,10 @@
             "Irelia_Trousers": {
               "path": "res://assets/battles/trainers/player/male/irelia/Trousers.png",
               "scale": 1.0
+            },
+            "Kakashi_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/kakashi/Trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -185,6 +189,10 @@
             },
             "Irelia_Shoes": {
               "path": "res://assets/battles/trainers/player/male/irelia/Shoes.png",
+              "scale": 1.0
+            },
+            "Kakashi_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/kakashi/Shoes.png",
               "scale": 1.0
             }
           }
@@ -273,6 +281,10 @@
             "Irelia_Shirt": {
               "path": "res://assets/battles/trainers/player/male/irelia/Shirt.png",
               "scale": 1.0
+            },
+            "Kakashi_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/kakashi/Shirt.png",
+              "scale": 1.0
             }
           }
         },
@@ -327,6 +339,10 @@
             "Irelia_Hair": {
               "path": "res://assets/battles/trainers/player/male/irelia/Hair.png",
               "scale": 1.0
+            },
+            "Kakashi_Hair": {
+              "path": "res://assets/battles/trainers/player/male/kakashi/Hair.png",
+              "scale": 1.0
             }
           }
         },
@@ -360,6 +376,11 @@
             "Irelia_Circlet": {
               "path": "res://assets/battles/trainers/player/male/irelia/Headgear.png",
               "scale": 1.0
+            },
+            "Kakashi_Headgear": {
+              "path": "res://assets/battles/trainers/player/male/kakashi/Headgear.png",
+              "scale": 1.0,
+              "draw_after": "facegear"
             }
           }
         },
@@ -388,6 +409,10 @@
             },
             "EmeraldLuchador_Mask": {
               "path": "res://assets/battles/trainers/player/male/emerald_luchador/Mask.png",
+              "scale": 1.0
+            },
+            "Kakashi_Mask": {
+              "path": "res://assets/battles/trainers/player/male/kakashi/Mask.png",
               "scale": 1.0
             }
           }
@@ -515,6 +540,10 @@
             "Irelia_Trousers": {
               "path": "res://assets/battles/trainers/player/female/irelia/Trousers.png",
               "scale": 1.0
+            },
+            "Kakashi_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/kakashi/Trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -601,6 +630,10 @@
             "Irelia_Shoes": {
               "path": "res://assets/battles/trainers/player/female/irelia/Shoes.png",
               "scale": 1.0
+            },
+            "Kakashi_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/kakashi/Shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -682,6 +715,10 @@
             "Irelia_Shirt": {
               "path": "res://assets/battles/trainers/player/female/irelia/Shirt.png",
               "scale": 1.0
+            },
+            "Kakashi_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/kakashi/Shirt.png",
+              "scale": 1.0
             }
           }
         },
@@ -733,6 +770,10 @@
             "Irelia_Hair": {
               "path": "res://assets/battles/trainers/player/female/irelia/Hair.png",
               "scale": 1.0
+            },
+            "Kakashi_Hair": {
+              "path": "res://assets/battles/trainers/player/female/kakashi/Hair.png",
+              "scale": 1.0
             }
           }
         },
@@ -757,6 +798,11 @@
             "Irelia_Circlet": {
               "path": "res://assets/battles/trainers/player/female/irelia/Headgear.png",
               "scale": 1.0
+            },
+            "Kakashi_Headgear": {
+              "path": "res://assets/battles/trainers/player/female/kakashi/Headgear.png",
+              "scale": 1.0,
+              "draw_after": "facegear"
             }
           }
         },
@@ -789,6 +835,10 @@
             },
             "EmeraldLuchador_Mask": {
               "path": "res://assets/battles/trainers/player/female/emerald_luchador/Mask.png",
+              "scale": 1.0
+            },
+            "Kakashi_Mask": {
+              "path": "res://assets/battles/trainers/player/female/kakashi/Mask.png",
               "scale": 1.0
             }
           }

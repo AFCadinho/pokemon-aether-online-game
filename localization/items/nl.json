@@ -1239,5 +1239,33 @@
   "irelia-outfit": {
     "name": "Irelia Outfitbox",
     "shortDesc": "Bevat zes losse cosmetics: tuniek, broek, laarzen, haar, voorhoofdsieraad en zwevende messen (Back). Voor male en female."
+  },
+  "kakashi-shirt": {
+    "name": "Kakashi Vest",
+    "shortDesc": "Activeer dit Kakashi-onderdeel in je tas en draag het via Character Customization."
+  },
+  "kakashi-trousers": {
+    "name": "Kakashi Broek",
+    "shortDesc": "Activeer dit Kakashi-onderdeel in je tas en draag het via Character Customization."
+  },
+  "kakashi-shoes": {
+    "name": "Kakashi Sandalen",
+    "shortDesc": "Activeer dit Kakashi-onderdeel in je tas en draag het via Character Customization."
+  },
+  "kakashi-hair": {
+    "name": "Kakashi Haar",
+    "shortDesc": "Activeer dit Kakashi-onderdeel in je tas en draag het via Character Customization."
+  },
+  "kakashi-headband": {
+    "name": "Kakashi Hoofdband",
+    "shortDesc": "Activeer dit Kakashi-onderdeel in je tas en draag het via Character Customization."
+  },
+  "kakashi-mask": {
+    "name": "Kakashi Masker",
+    "shortDesc": "Activeer dit Kakashi-onderdeel in je tas en draag het via Character Customization."
+  },
+  "kakashi-outfit": {
+    "name": "Kakashi Outfitbox",
+    "shortDesc": "Bevat zes losse cosmetics: vest, broek, sandalen, haar, hoofdband en masker. Voor male en female."
   }
 }

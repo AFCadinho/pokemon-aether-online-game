@@ -64,6 +64,17 @@ static func build_layers(appearance_state: Dictionary) -> Array[Dictionary]:
 		var layer := _resolve_part_layer(gender_data, appearance_state, gender, category)
 		if not layer.is_empty():
 			layers.append(layer)
+	# A lowered forehead protector can overlap a face mask. Respect an authored
+	# relative order without changing other outfits or the normal slot order.
+	for layer: Dictionary in layers.duplicate():
+		var after := str(layer.get("draw_after", ""))
+		if after.is_empty():
+			continue
+		for target: Dictionary in layers:
+			if str(target.get("category", "")) == after and layers.find(layer) < layers.find(target):
+				layers.erase(layer)
+				layers.insert(layers.find(target) + 1, layer)
+				break
 	return layers
 
 
@@ -156,6 +167,7 @@ static func _resolve_part_layer(
 		"category": category,
 		"part_id": resolved_id,
 		"requested_part_id": selected_id,
+		"draw_after": str(part.get("draw_after", "")),
 		"texture": texture,
 		"scale": float(part.get("scale", 1.0)),
 		"fallback": used_fallback,

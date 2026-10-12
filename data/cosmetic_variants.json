@@ -570,6 +570,165 @@
         }
       ]
     },
+    "kakashi-hair": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "hair",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Kakashi_Hair"
+        }
+      ]
+    },
+    "kakashi-headband": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "headgear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Kakashi_Headgear"
+        }
+      ]
+    },
+    "kakashi-mask": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "facegear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Kakashi_Mask"
+        }
+      ]
+    },
+    "kakashi-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Kakashi_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Kakashi_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Kakashi_Shoes"
+        },
+        {
+          "category": "hair",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Kakashi_Hair"
+        },
+        {
+          "category": "headgear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Kakashi_Headgear"
+        },
+        {
+          "category": "facegear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Kakashi_Mask"
+        }
+      ]
+    },
+    "kakashi-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Kakashi_Shirt"
+        }
+      ]
+    },
+    "kakashi-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Kakashi_Shoes"
+        }
+      ]
+    },
+    "kakashi-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Kakashi_Trousers"
+        }
+      ]
+    },
     "lucario-aura-fighter-outfit": {
       "bundle": true,
       "genders": [
@@ -1484,6 +1643,13 @@
           "male": "Irelia_Trousers"
         }
       },
+      "Kakashi_Trousers": {
+        "item_id": "kakashi-trousers",
+        "render_variants": {
+          "female": "Kakashi_Trousers",
+          "male": "Kakashi_Trousers"
+        }
+      },
       "LucarioAuraFighter_Trousers": {
         "item_id": "lucario-aura-fighter-trousers",
         "render_variants": {
@@ -1572,6 +1738,13 @@
           "male": "EmeraldLuchador_Mask"
         }
       },
+      "Kakashi_Mask": {
+        "item_id": "kakashi-mask",
+        "render_variants": {
+          "female": "Kakashi_Mask",
+          "male": "Kakashi_Mask"
+        }
+      },
       "LugiaSkyCaptain_Goggles": {
         "item_id": "lugia-sky-captain-goggles",
         "render_variants": {
@@ -1595,6 +1768,13 @@
           "male": "Irelia_Hair"
         }
       },
+      "Kakashi_Hair": {
+        "item_id": "kakashi-hair",
+        "render_variants": {
+          "female": "Kakashi_Hair",
+          "male": "Kakashi_Hair"
+        }
+      },
       "SS4_Hair": {
         "item_id": "super-saiyan-4-hair",
         "render_variants": {
@@ -1616,6 +1796,13 @@
         "render_variants": {
           "female": "Irelia_Circlet",
           "male": "Irelia_Circlet"
+        }
+      },
+      "Kakashi_Headgear": {
+        "item_id": "kakashi-headband",
+        "render_variants": {
+          "female": "Kakashi_Headgear",
+          "male": "Kakashi_Headgear"
         }
       },
       "TeamRocket_Cap": {
@@ -1660,6 +1847,13 @@
         "render_variants": {
           "female": "Irelia_Shoes",
           "male": "Irelia_Shoes"
+        }
+      },
+      "Kakashi_Shoes": {
+        "item_id": "kakashi-shoes",
+        "render_variants": {
+          "female": "Kakashi_Shoes",
+          "male": "Kakashi_Shoes"
         }
       },
       "LucarioAuraFighter_Shoes": {
@@ -1746,6 +1940,13 @@
         "render_variants": {
           "female": "Irelia_Shirt",
           "male": "Irelia_Shirt"
+        }
+      },
+      "Kakashi_Shirt": {
+        "item_id": "kakashi-shirt",
+        "render_variants": {
+          "female": "Kakashi_Shirt",
+          "male": "Kakashi_Shirt"
         }
       },
       "LucarioAuraFighter_Shirt": {
