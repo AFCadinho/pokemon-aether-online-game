@@ -1,0 +1,19 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_cbudi"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_r80u0"]
+
+[node name="DesignCafeTableSet" type="Node2D" unique_id=1571403780]
+texture_filter = 1
+script = ExtResource("1_cbudi")
+furniture_id = "design_cafe_table_set"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1143418132]
+position = Vector2(0, -192)
+tile_map_data = PackedByteArray("AAAAAAAAAAAPABYAAAABAAAAAAAAABcAAAACAAAAAAAAABcAAAADAAAAAAABABcAAAAFAAAAAAAJABUAAAAAAAEAAAACABcAAAABAAEAAAADABcAAAACAAEAAAADABcAAAADAAEAAAAEABcAAAAFAAEAAAANABUAAAAAAAIAAAANAA4AAAABAAIAAAAOAA4AAAACAAIAAAAOAA4AAAADAAIAAAAPAA4AAAAEAAIAAAAJAA0AAAAFAAIAAAABABYAAAAAAAMAAAAEAA8AAAABAAMAAAAFAA8AAAACAAMAAAAFAA8AAAADAAMAAAAGAA8AAAAFAAMAAAAJABUAAAAAAAQAAAALAA8AAAABAAQAAAAMAA8AAAACAAQAAAAMAA8AAAADAAQAAAANAA8AAAAEAAQAAAAJAA0AAAAFAAQAAAANABUAAAAFAAUAAAABABYAAAA=")
+tile_set = ExtResource("2_r80u0")
+
+[node name="ArtLayer1" type="TileMapLayer" parent="." unique_id=680691428]
+position = Vector2(0, -192)
+tile_map_data = PackedByteArray("AAADAAIAAAAFABQAAAAAAAMAAAAFABQAAAA=")
+tile_set = ExtResource("2_r80u0")

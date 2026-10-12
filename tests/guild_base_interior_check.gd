@@ -39,8 +39,8 @@ func _run() -> void:
 	var world: Node = load("res://scripts/world/world.gd").new()
 	world._configure_authorized_map_instance(rooms["main_hall"], {"mapId": "guild_base:kanto_vermilion_city:7:main_hall"})
 	_check(rooms["main_hall"].guild_id == 7, "World applies the authorized instance to the loaded template")
-	var mirrored_bounds: Dictionary = world._get_map_visual_bounds(rooms["right_room"])
-	_check(mirrored_bounds.get("valid", false) and mirrored_bounds.get("rect") == Rect2(0, 0, 736, 608), "the mirrored room keeps correct camera limits")
+	var room_bounds: Dictionary = world._get_map_visual_bounds(rooms["right_room"])
+	_check(room_bounds.get("valid", false) and room_bounds.get("rect") == Rect2(0, 0, 736, 608), "the room keeps correct camera limits")
 	world.free()
 	var cabin: Node2D = rooms["elevator_cabin"]
 	_check(cabin.get_node("Visual/LiftControls").position == Vector2(10, 12), "the cabin preserves the authored control panel offset")

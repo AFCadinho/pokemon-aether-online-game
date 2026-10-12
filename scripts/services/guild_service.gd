@@ -1139,3 +1139,9 @@ func _cache_base_identity(identity: Dictionary) -> void:
 		return
 	base_identities[owner_id] = identity.duplicate(true)
 	base_identity_changed.emit(identity)
+
+func base_design_library(owner_id: int) -> Dictionary:
+	return await _base_furniture_request("/%d/designs" % owner_id, HTTPClient.METHOD_GET, {})
+
+func change_base_design(owner_id: int, payload: Dictionary) -> Dictionary:
+	return await _base_furniture_request("/%d/designs" % owner_id, HTTPClient.METHOD_POST, payload)

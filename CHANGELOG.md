@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add named Guild room designs, manager donation of permanent room-specific templates, and zoomable Gift Store previews. Guild Café (Room 1, door left) and Grand Lounge (Room 2, door right) cost 350 Gems each. Correct the room visual mapping without mirroring the designs.
+
 - Give 3D Draco Meteor a deep-blue cinematic sky and distant haze that builds with the charge and fades after the meteor rain, preserving the arena's weather and lighting. Restore complete charge glows and correctly animated impact smoke instead of cropped texture quadrants.
 
 - Give Draco Meteor cinematic 3D camera shots during charge, ascent and meteor rain, returning to the player's view after the move; respects the camera motion setting.

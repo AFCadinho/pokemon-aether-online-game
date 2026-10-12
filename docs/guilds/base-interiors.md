@@ -42,7 +42,7 @@ ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend 
   /home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/guild_base
 ```
 
-The right room mirrors its visual so its entrance faces the main hall. Gameplay
+Room 1 is the right-hand room with a left door; Room 2 is the left-hand room with a right door. Both visuals use their authored orientation. Gameplay
 coordinates stay local to the room scene. Layer names and original artist TMXs
 are preserved; the lift's final foreground layer is exposed to the runtime's
 existing object depth sorter. Runtime collision preserves the authored lobby
@@ -65,7 +65,7 @@ grid cell (six on small tables, eight on large tables) and follow the table
 when moved. Occupied cells show a red preview instead of jumping to another
 cell. Returning a table returns its decorations too.
 
-The catalog contains 129 reusable scenes in `scenes/world/guild_base/furniture/`,
+The catalog contains 136 reusable scenes in `scenes/world/guild_base/furniture/`,
 organized into ten categories. Alongside the original 24 designs, it includes
 colored seating, glass and wooden tables, bookcases and dressers, single and
 double beds, plants, tabletop decorations, rugs and decorative laboratory
@@ -89,7 +89,7 @@ ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend 
 
 Keep `data/guild_base_furniture.json` byte-identical to the account-service
 catalog. The first visit initializes a finite starter inventory once. Catalog
-version 2 seeds missing furniture IDs on the first subsequent visit or edit,
+version 3 seeds missing furniture IDs on the first subsequent visit or edit,
 under the same Guild lock as layout saves. It preserves existing totals,
 including zero, unknown legacy inventory IDs, layouts, revisions and leases.
 Both side rooms draw from the shared inventory. This version does not buy
@@ -228,3 +228,57 @@ Backend migration `0327_guild_base_visits` adds the Guild access policy and one
 request/visit row per player. Focused checks: `tests/guild_base_visits_check.gd`,
 `tests.test_guild_base_visits`, and the disposable PostgreSQL
 `tests.test_guild_base_visits_postgres.PostgresGuildVisitTests`.
+
+
+## Saved room designs and Gift Store templates
+
+The Guild Manager's **Room designs** page selects Room 1 (right-hand room,
+left door) or Room 2 (left-hand room, right door), then **Own designs** or
+**Purchased templates**. Any member can preview designs or donate a compatible
+Bag item. Applying, saving, updating, renaming and deleting require existing
+Guild decorating rights. Names describe snapshots independently of the active
+room's location name. Each Guild may keep 20 named snapshots per room.
+
+Each Store offer costs **350 Gems**, delivers a tradeable Bag item, and is
+excluded from personal card credit under the Guild-product policy. Donation
+names the receiving Guild in a confirmation, consumes one item and grants the
+permanent unlock and its furniture stock once. It never changes the active
+room immediately; duplicate donations leave the Bag item intact. Ownership
+survives member departure and leader changes. Layouts stay room-specific.
+
+Applying a design validates the room revision, all shared furniture stock,
+movement/door geometry, recent player positions, and the absence of a live
+editing lease. The previous active layout becomes the room's recovery copy;
+**Restore previous** swaps it back through the same validation. Save as new and
+Update design capture authoritative layouts, never client-authored items.
+Library revisions serialize changes under the same Guild lock as furnishing.
+Migration **0329_guild_room_designs** adds JSONB library storage with an empty
+safe default. Existing layouts and stock are retained.
+
+Both the Store and manager use `guild_room_design_preview.gd`, an isolated
+modal art viewport with mouse-wheel/button zoom, drag pan and Fit room. It has
+no gameplay entities, world transitions or network actions. Store thumbnails
+are rendered from the exact same terrain and furniture catalog as the viewer
+and applied layout. The Café kitchen, upper dining area, corner table and
+Lounge statue benches/planter bench are editable composite furniture pieces,
+with layered art preserved for correct transparent overlaps.
+
+To rebuild these two specific authored designs in an assigned slot:
+
+```sh
+python tools/import_guild_room_designs.py '<artist/interior/guild_base>' ../backend
+python tools/import_guild_base_furniture.py '<artist/tilesets/inside/Indoors Tileset.tsx>'
+# Run each Godot command through ops/worktrees/slot-env SLOT:
+godot --headless --path FRONTEND --import
+godot --headless --path FRONTEND --script res://tools/import_guild_base_furniture.gd -- design_
+godot --headless --path FRONTEND --script res://tools/import_guild_base_visuals.gd -- '<artist/interior/guild_base>' left_room,right_room
+godot --path FRONTEND --script res://tools/render_guild_room_templates.gd
+```
+
+Future templates add stable item IDs and a room key to the mirrored
+`guild_room_designs.json` catalogs, product/item metadata, all locales, and
+runtime-rendered thumbnails. The importer for the two initial TMXs deliberately
+requires every decoration tile to map, preventing an incomplete paid preset.
+Focused checks: `guild_room_designs_check.gd`, the Guild furnishing/interior
+checks, `tests.test_guild_room_designs`, Store Gem tests and
+`tests.test_guild_room_designs_postgres.PostgresGuildDesignTests`.

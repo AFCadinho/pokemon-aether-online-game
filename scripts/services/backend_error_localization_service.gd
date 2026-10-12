@@ -12,6 +12,12 @@ const CATALOG_PATHS: Dictionary = {
 
 const CODE_TO_KEY: Dictionary = {
 	"guild_base_room_name_invalid": "ui.guild_base.visits.room_name_invalid",
+	"guild_design_wrong_room": "ui.guild_design.wrong_room",
+	"guild_design_already_owned": "ui.guild_design.already_owned",
+	"guild_design_name_required": "ui.guild_design.name_required",
+	"guild_design_limit": "ui.guild_design.limit",
+	"guild_design_not_found": "ui.guild_design.not_found",
+	"guild_design_manager_required": "ui.guild_design.manager_required",
 	"guild_base_identity_required": "ui.guild_base.error.access",
 	"WORLD_TRANSITION_ACTIVITY_BLOCKED": "backend.error.action_blocked",
 	"guild_base_not_owned": "ui.guild.base.not_owned",

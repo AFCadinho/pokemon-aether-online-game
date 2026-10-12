@@ -271,6 +271,26 @@ const CATALOG: Array[Dictionary] = [
 		"guild_emblem_template": true,
 	},
 	{
+		"id": "guild-room-1-template",
+		"name": "Guild Café · Room 1",
+		"description": "Room 1, door left. Receive a Bag item and donate it at the Guild Manager to permanently unlock this editable design for your Guild.",
+		"price": 350,
+		"icon": preload("res://assets/items/icons/ROOM1TEMPLATE.svg"),
+		"categories": ["guilds"],
+		"badge": "GUILD UNLOCK",
+		"guild_room_template": true,
+	},
+	{
+		"id": "guild-room-2-template",
+		"name": "Grand Lounge · Room 2",
+		"description": "Room 2, door right. Receive a Bag item and donate it at the Guild Manager to permanently unlock this editable design for your Guild.",
+		"price": 350,
+		"icon": preload("res://assets/items/icons/ROOM2TEMPLATE.svg"),
+		"categories": ["guilds"],
+		"badge": "GUILD UNLOCK",
+		"guild_room_template": true,
+	},
+	{
 		"id": "thor-outfit",
 		"name": "Thor Outfit Box",
 		"description": "Four fixed-colour items for male and female trainers: armor, trousers, boots and a hammer with its moving cape and electric sparks. Open the box in your Bag.",
@@ -1153,6 +1173,8 @@ var character_preview_direction := "down"
 var character_preview_direction_buttons: Dictionary = {}
 var character_preview_color_buttons: Dictionary = {}
 var character_preview_colors: Dictionary = {}
+var room_preview_button: Button
+var room_preview_window: Window
 var mount_preview_controls: HBoxContainer
 var mount_preview_shiny_toggle: Button
 var mount_preview_animation_toggle: Button
@@ -1409,6 +1431,9 @@ func open_store() -> void:
 
 
 func close_store() -> void:
+	if is_instance_valid(room_preview_window):
+		room_preview_window.hide()
+		room_preview_window.queue_free()
 	store_dragging = false
 	if currency_info_dialog != null:
 		currency_info_dialog.hide_dialog()
@@ -2157,6 +2182,15 @@ func _create_character_preview_panel() -> Control:
 	character_preview_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport_container.add_child(character_preview_viewport)
 
+	room_preview_button = Button.new()
+	room_preview_button.name = "GuildRoomPreviewButton"
+	room_preview_button.text = _t("ui.guild_design.preview")
+	room_preview_button.visible = false
+	room_preview_button.custom_minimum_size.y = 34
+	_apply_text_button_style(room_preview_button, UI_CYAN)
+	room_preview_button.pressed.connect(_open_room_preview)
+	layout.add_child(room_preview_button)
+
 	character_preview_direction_row = HBoxContainer.new()
 	character_preview_direction_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	character_preview_direction_row.add_theme_constant_override("separation", 3)
@@ -2851,6 +2885,7 @@ func _refresh_character_preview() -> void:
 		child.queue_free()
 
 	mount_preview_controls.visible = false
+	room_preview_button.visible = false
 	character_preview_mode_row.visible = false
 	var item := _catalog_item(selected_item_id)
 	if not _mount_box_mount_id(selected_item_id).is_empty():
@@ -2869,6 +2904,22 @@ func _refresh_character_preview() -> void:
 		character_preview_note_label.text = _t("ui.store.preview.choose_item")
 		character_preview_direction_row.visible = false
 		character_preview_palette.visible = false
+		return
+	if bool(item.get("guild_room_template", false)):
+		var thumbnail := Sprite2D.new()
+		thumbnail.name = "GuildRoomStorePreview"
+		thumbnail.texture = load("res://assets/guild_base/templates/%s.png" % selected_item_id)
+		thumbnail.position = Vector2(PREVIEW_VIEWPORT_SIZE) * 0.5
+		thumbnail.scale = Vector2.ONE * minf(PREVIEW_VIEWPORT_SIZE.x / 544.0, PREVIEW_VIEWPORT_SIZE.y / 480.0)
+		thumbnail.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		character_preview_viewport.add_child(thumbnail)
+		character_preview_eyebrow_label.text = _t("ui.store.preview.for_guild")
+		character_preview_title_label.text = _item_name(item)
+		character_preview_note_label.text = _t("ui.guild_design.room_1" if selected_item_id == "guild-room-1-template" else "ui.guild_design.room_2")
+		character_preview_direction_row.visible = false
+		character_preview_palette.visible = false
+		room_preview_button.visible = true
+		room_preview_button.text = _t("ui.guild_design.preview")
 		return
 	if bool(item.get("guild_emblem_template", false)):
 		var emblem_sprite := Sprite2D.new()
@@ -3988,3 +4039,17 @@ func _style_mount_preview_toggle(button: Button, label_key: String, accent: Colo
 	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, accent, 8, 1))
 	button.add_theme_stylebox_override("hover_pressed", _button_style(background.lightened(0.06), accent, 8, 1))
 	button.add_theme_stylebox_override("focus", _button_style(Color.TRANSPARENT, accent, 8, 2))
+
+
+func _open_room_preview() -> void:
+	if is_instance_valid(room_preview_window):
+		room_preview_window.grab_focus()
+		return
+	var designs: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/guild_room_designs.json"))
+	for design: Dictionary in designs.templates:
+		if str(design.id) == selected_item_id:
+			var viewer := preload("res://scripts/ui/guild_room_design_preview.gd").new()
+			room_preview_window = viewer
+			add_child(viewer)
+			viewer.open_preview(str(design.roomKey), design.items, _item_name(_catalog_item(selected_item_id)))
+			return

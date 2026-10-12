@@ -1,0 +1,19 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_8p4cf"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_uorxk"]
+
+[node name="DesignStatueBenchLeft" type="Node2D" unique_id=979578525]
+texture_filter = 1
+script = ExtResource("1_8p4cf")
+furniture_id = "design_statue_bench_left"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=2107633014]
+position = Vector2(0, -96)
+tile_map_data = PackedByteArray("AAAAAAAAAAANAA4AAAABAAAAAAAOAA4AAAACAAAAAAAOAA4AAAADAAAAAAAOAA4AAAAEAAAAAAAPAA4AAAAFAAAAAAAOAAgAAAAAAAEAAAALAA8AAAABAAEAAAAMAA8AAAACAAEAAAAMAA8AAAADAAEAAAAMAA8AAAAEAAEAAAANAA8AAAAAAAIAAAAJAAkAAAAEAAIAAAAHAAkAAAA=")
+tile_set = ExtResource("2_uorxk")
+
+[node name="ArtLayer1" type="TileMapLayer" parent="." unique_id=1110531647]
+position = Vector2(0, -96)
+tile_map_data = PackedByteArray("AAADAAAAAAAMAAgAAAAEAAAAAAANAAgAAAAAAAEAAAAGAAkAAAADAAEAAAACAAkAAAAEAAEAAAADAAkAAAA=")
+tile_set = ExtResource("2_uorxk")

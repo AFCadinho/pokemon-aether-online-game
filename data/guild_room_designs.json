@@ -1,0 +1,433 @@
+{
+  "version": 1,
+  "templates": [
+    {
+      "id": "guild-room-1-template",
+      "name": "Guild Caf\u00e9",
+      "roomKey": "right_room",
+      "roomNumber": 1,
+      "door": "left",
+      "items": [
+        {
+          "id": "c5e47f76-f7cb-54b9-9bc5-3163a1d6420f",
+          "furnitureId": "design_kitchen_counter",
+          "x": 4,
+          "y": 4,
+          "width": 9,
+          "height": 4,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "7246fb67-532c-55ec-9bfd-266195aa783f",
+          "furnitureId": "design_cafe_table_set",
+          "x": 13,
+          "y": 4,
+          "width": 6,
+          "height": 4,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "a9b79866-eb11-5b19-b21e-5b2423e57657",
+          "furnitureId": "design_cafe_corner_table",
+          "x": 4,
+          "y": 12,
+          "width": 4,
+          "height": 3,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "6c1e12dd-7ce0-5e60-84ee-4b6f441bedd4",
+          "furnitureId": "red_carpet",
+          "x": 4,
+          "y": 8,
+          "width": 15,
+          "height": 3,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "416415ad-f28b-5674-a759-734276300af8",
+          "furnitureId": "table_small",
+          "x": 10,
+          "y": 13,
+          "width": 3,
+          "height": 2,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "ed5c5e2b-d7fe-541b-9ff8-17bbb90f41aa",
+          "furnitureId": "table_small",
+          "x": 15,
+          "y": 13,
+          "width": 3,
+          "height": 2,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "3f75ea59-7f3d-574c-abff-50ab4a1cb7b7",
+          "furnitureId": "plant",
+          "x": 6,
+          "y": 11,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "d530713e-f513-5910-8313-9c4db6ab5030",
+          "furnitureId": "plant",
+          "x": 11,
+          "y": 11,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "3346e239-abc6-573a-93eb-60cb45424c23",
+          "furnitureId": "plant",
+          "x": 18,
+          "y": 11,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "51827fd4-6626-5136-a10b-a8a0272474f4",
+          "furnitureId": "stool",
+          "x": 9,
+          "y": 12,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "46ddb650-4ac6-5d94-aa34-effd26b62363",
+          "furnitureId": "stool",
+          "x": 14,
+          "y": 12,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "9126cdb8-29c0-5edf-b1df-d38a0cad0b5a",
+          "furnitureId": "stool",
+          "x": 8,
+          "y": 14,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "2bd481a3-6782-5f8b-b181-bf01eea7c755",
+          "furnitureId": "stool",
+          "x": 13,
+          "y": 14,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "cdf57153-5867-5c1e-8f1d-bb7245414980",
+          "furnitureId": "stool",
+          "x": 18,
+          "y": 14,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "a950bdd9-2d7c-5f38-b14a-71183e390c38",
+          "furnitureId": "flowers",
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "parentId": "416415ad-f28b-5674-a759-734276300af8",
+          "slot": 0
+        },
+        {
+          "id": "4f1c30bd-aa0d-58be-88e7-2d3de746410d",
+          "furnitureId": "flowers",
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "parentId": "ed5c5e2b-d7fe-541b-9ff8-17bbb90f41aa",
+          "slot": 0
+        },
+        {
+          "id": "103d1348-5e9c-5f02-bc4a-dfc4b8d7497f",
+          "furnitureId": "plate",
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "parentId": "416415ad-f28b-5674-a759-734276300af8",
+          "slot": 2
+        },
+        {
+          "id": "197b6cc5-f4ff-54b6-b4af-b0510972997b",
+          "furnitureId": "plate",
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1,
+          "parentId": "ed5c5e2b-d7fe-541b-9ff8-17bbb90f41aa",
+          "slot": 1
+        }
+      ]
+    },
+    {
+      "id": "guild-room-2-template",
+      "name": "Grand Lounge",
+      "roomKey": "left_room",
+      "roomNumber": 2,
+      "door": "right",
+      "items": [
+        {
+          "id": "dba4807b-c793-5845-b670-5debc0cf7468",
+          "furnitureId": "design_statue_bench_left",
+          "x": 4,
+          "y": 4,
+          "width": 5,
+          "height": 3,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "5bbb7e0d-0592-5c47-90b8-511035221b56",
+          "furnitureId": "design_statue_bench_right",
+          "x": 14,
+          "y": 4,
+          "width": 5,
+          "height": 3,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "6ef8a8da-52a1-5472-8a60-7581cc9424ab",
+          "furnitureId": "design_planter_bench",
+          "x": 5,
+          "y": 14,
+          "width": 13,
+          "height": 2,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "cab6c206-770e-5eb8-9e27-fa80739dfe9d",
+          "furnitureId": "striped_carpet",
+          "x": 4,
+          "y": 6,
+          "width": 3,
+          "height": 7,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "64d3015d-c69d-5add-9393-a880ba685297",
+          "furnitureId": "striped_carpet",
+          "x": 10,
+          "y": 6,
+          "width": 3,
+          "height": 7,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "5f907088-c83d-52bc-9b80-461d5ddf3dac",
+          "furnitureId": "striped_carpet",
+          "x": 16,
+          "y": 6,
+          "width": 3,
+          "height": 7,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "fa2395ca-0a32-5778-8ee0-8e9ebc421578",
+          "furnitureId": "design_red_runner",
+          "x": 7,
+          "y": 6,
+          "width": 3,
+          "height": 7,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "efa300fa-5059-5602-9ccd-3b43c23ba1ba",
+          "furnitureId": "design_red_runner",
+          "x": 13,
+          "y": 6,
+          "width": 3,
+          "height": 7,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "e4a16d95-78c9-5702-b4e0-e19afccddcbe",
+          "furnitureId": "fireplace",
+          "x": 9,
+          "y": 4,
+          "width": 5,
+          "height": 2,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "ace7680b-32cd-509a-9022-44bc2dfa705b",
+          "furnitureId": "statue_left",
+          "x": 8,
+          "y": 11,
+          "width": 1,
+          "height": 2,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "f131244a-6bb9-5991-b48e-b8b79e26fce4",
+          "furnitureId": "statue_right",
+          "x": 14,
+          "y": 11,
+          "width": 1,
+          "height": 2,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "5e459cf7-43b6-5ac4-9519-fd463b88502b",
+          "furnitureId": "pillar",
+          "x": 4,
+          "y": 12,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "2c344899-2c89-5b2c-a857-db9867b17e8b",
+          "furnitureId": "pillar",
+          "x": 18,
+          "y": 12,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "e5fccd00-dbf5-58ac-9c65-04257c13de4c",
+          "furnitureId": "bench_start",
+          "x": 4,
+          "y": 14,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "7a6e53b0-b042-566d-b34d-278e6d038a18",
+          "furnitureId": "bench_end",
+          "x": 18,
+          "y": 14,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "a2123288-74be-5a7c-9ce2-4f5a7af19060",
+          "furnitureId": "wall_lamp",
+          "x": 5,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "ee0c53f4-8fe9-56a7-8635-585f8c7e541c",
+          "furnitureId": "wall_lamp",
+          "x": 7,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "0f139f3d-15ae-5608-82f3-8a89fd6727de",
+          "furnitureId": "wall_lamp",
+          "x": 15,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "2d275759-b55b-5255-b338-de9e9035c223",
+          "furnitureId": "wall_lamp",
+          "x": 17,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "c56fb374-3f4d-57ba-81a9-a304714594e4",
+          "furnitureId": "wall_plaque",
+          "x": 6,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "f61d2950-c883-56f9-9ff4-58d11017b410",
+          "furnitureId": "wall_plaque",
+          "x": 8,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "9c33a26f-d131-536d-8aa0-a664d5822014",
+          "furnitureId": "wall_plaque",
+          "x": 14,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        },
+        {
+          "id": "186359e5-f0be-569b-bcfc-b1c2d192d81d",
+          "furnitureId": "wall_plaque",
+          "x": 16,
+          "y": 4,
+          "width": 1,
+          "height": 1,
+          "parentId": null,
+          "slot": null
+        }
+      ]
+    }
+  ]
+}
