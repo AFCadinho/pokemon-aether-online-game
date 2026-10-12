@@ -30,7 +30,7 @@ func _run() -> void:
 	store.call("_select_category", "mounts")
 	_check(store.mount_mode_bar.visible and store.active_mount_mode == "land", "Mounts opens with Land selected")
 	_check(store.product_buttons.size() == 22 and not store.product_buttons.has("primal-kyogre-mount-box"), "Land lists the twenty-two land boxes only")
-	var new_prices := {"giratina_origin": 1000, "ho_oh": 750, "yveltal": 1000, "miraidon": 750, "reshiram": 750, "metagross": 750, "salamence": 750, "zekrom": 750, "palkia": 750, "dialga": 750, "arcanine": 500, "aerodactyl": 500, "toucannon": 500, "latios": 750, "latias": 750, "caterpie": 250, "flying_nimbus": 500}
+	var new_prices := {"giratina_origin": 1000, "ho_oh": 750, "yveltal": 1000, "miraidon": 750, "reshiram": 750, "metagross": 750, "salamence": 750, "zekrom": 1000, "palkia": 750, "dialga": 750, "arcanine": 500, "aerodactyl": 500, "toucannon": 500, "latios": 750, "latias": 750, "caterpie": 250, "flying_nimbus": 500}
 	for id: String in new_prices:
 		var box_id := id.replace("_", "-") + "-mount-box"
 		_check(store.product_buttons.has(box_id), id + " box is listed in Land")

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Set the Zekrom Mount Box Gift Store price to 1,000 Aether Gems.
+
 - Add the Flying Nimbus Mount Box to Gift Store → Mounts → Land for 500 Aether Gems, with normal and dark shiny previews.
 
 - Add the dark blue and violet Shiny Flying Nimbus mount with a matching moving cloud trail, available through admin grants.
