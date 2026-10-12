@@ -6647,6 +6647,16 @@
           "at_fraction": 0.622642,
           "end_fraction": 0.872642,
           "source_frame": 46
+        },
+        {
+          "name": "Skystrike pressure blast",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 90,
+          "at_fraction": 0.622642,
+          "end_fraction": 0.98,
+          "source_frame": 66
         }
       ],
       "z_choreography": {
@@ -6661,7 +6671,7 @@
         "observed_motifs": "Upward launch, fast descending aerial streaks and impact",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
       },
-      "presentation_review": "current-presentation-user-approved"
+      "presentation_review": "implemented-pending-player-review"
     },
     "tectonicrage": {
       "name": "Tectonic Rage",

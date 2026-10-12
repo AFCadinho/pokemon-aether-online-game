@@ -3,6 +3,7 @@ extends RefCounted
 const DATA = preload("res://data/battle_z_cinema_3d.json")
 const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const SkystrikePath = preload("res://scripts/battle/battle_ui/skystrike_path_3d.gd")
+const SkystrikeExplosion = preload("res://scripts/battle/battle_ui/skystrike_explosion_3d.gd")
 
 static func supports(key: String) -> bool:
 	return DATA.data.moves.has(key)
@@ -57,6 +58,11 @@ static func shot(effect: Node, camera: Camera3D, context: Dictionary, seconds: f
 		_box(points, ground + Vector3.UP * float(profile.height) * 0.5, Vector3(radius, float(profile.height) * 0.5, radius))
 		if bool(recipe.contact): _body(points, a)
 		direction = -forward * 0.7 + side + Vector3.UP * maxf(0.2, float(profile.elevation) * 0.6)
+		if effect.key == "supersonicskystrike" and effect.hit:
+			# Reserve the entire pressure front; the explosion must not grow out
+			# of frame or force the camera to chase individual cloud lobes.
+			_box(points,ground+Vector3.UP*2.5*scale_value,Vector3(SkystrikeExplosion.FRAME_RADIUS,3.0,SkystrikeExplosion.FRAME_RADIUS)*scale_value)
+			direction = -forward*0.5+side+Vector3.UP*0.25
 	return {"points":points, "direction":direction.normalized()}
 
 static func _body(points: Array[Vector3], bounds: Dictionary) -> void:
@@ -77,6 +83,10 @@ static func lighting(effect: Node, seconds: float) -> Dictionary:
 	var after := clampf((seconds - effect.impact) / maxf(effect.duration - effect.impact, 0.01), 0.0, 1.0)
 	var weight := charge * (1.0 - smoothstep(0.0, 1.0, after))
 	var pulse := sin(clampf(after / 0.45, 0.0, 1.0) * PI) if effect.hit and bool(recipe.damaging) else 0.0
+	if effect.key == "supersonicskystrike" and effect.hit and seconds >= effect.impact:
+		pulse = SkystrikeExplosion.pulse(after)
+		profile.tint = tint.lerp(flash,pulse*0.25)
+		profile.brightness = lerpf(float(authored.brightness),1.08,pulse)
 	var anchors: Dictionary = effect.anchors.call()
 	# Both Z renderers capture their path before any lunge/dodge takes place.
 	var source: Vector3 = effect.fixed_source if effect.get("fixed_source") is Vector3 else effect.origin
@@ -93,5 +103,6 @@ static func lighting(effect: Node, seconds: float) -> Dictionary:
 	if authored.shot == "field":
 		lights.append({"point":anchors.field.center + Vector3.UP * 2.0, "color":color, "energy":energy * weight * 0.6, "range":7.0, "role":"z_field"})
 	if pulse > 0.001:
-		lights.append({"point":aim, "color":flash, "energy":energy * pulse, "range":5.0, "role":"z_impact"})
+		var blast: bool = effect.key == "supersonicskystrike"
+		lights.append({"point":aim, "color":flash, "energy":energy * pulse * (2.6 if blast else 1.0), "range":8.5 if blast else 5.0, "role":"z_impact"})
 	return {"profile":profile, "weight":weight, "pulse":pulse, "color":color, "lights":lights, "cinematic":true}

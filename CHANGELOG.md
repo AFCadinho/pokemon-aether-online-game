@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Supersonic Skystrike a cinematic hit explosion: a compressed white-blue core, expanding rolling blast cloud and floor pressure wave, wider impact framing, a brief camera recoil and a deeper explosion sound. Preserve its duration and suppress the blast on misses and blocks.
+
 - Keep the member Bank rights editor within the screen, with visible Save/Cancel buttons, grouped permissions and a scrollable form on smaller screens.
 
 - Give Fiery Wrath an advancing wall of animated dark flames, crimson arena lighting and dedicated framing. Strengthen Supersonic Skystrike with a higher ascent, steep dive, continuous wind trail, ascent/dive camera cuts and expanding impact waves, preserving native timing and miss/block behavior.

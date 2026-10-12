@@ -3,6 +3,8 @@ extends "res://scripts/battle/battle_ui/family_move_effect_3d.gd"
 ## Per-move source frames and hashes live beside each choreography in the recipe.
 const Forms = preload("res://scripts/battle/battle_ui/z_move_forms_3d.gd")
 const SkystrikePath = preload("res://scripts/battle/battle_ui/skystrike_path_3d.gd")
+const SkystrikeExplosion = preload("res://scripts/battle/battle_ui/skystrike_explosion_3d.gd")
+var skystrike_explosion: RefCounted
 var style := ""
 var dark: StandardMaterial3D
 var accent: StandardMaterial3D
@@ -27,6 +29,7 @@ func _prepare() -> void:
 	sphere.rings = 20
 	ring.rings = 48
 	style = str(recipe.z_choreography.style)
+	if style == "sky_dive": skystrike_explosion = SkystrikeExplosion.new()
 	var kind := 1 if style in ["water_vortex", "ocean_orb"] else 2 if style in ["boulder", "stone_rain", "fissure"] else 3 if style == "drill" else 4 if style == "ice_prison" else 0
 	if style == "fire_orb": kind = 5
 	surface = Forms.material(Color(str(recipe.color)), kind, style in ["water_vortex", "acid_column"])
@@ -415,12 +418,10 @@ func _skystrike_scene(points: Dictionary, charge: float, after: float, alpha: fl
 		var fade := 1.0-smoothstep(0.0,0.7,after)
 		var forward := (aim-fixed_center).normalized()
 		# Residual air dissipates on a miss too, without a hit flash or ground slam.
-		_piece(wake,wake_surface,aim+forward*after*1.5,Vector3(radius,1.5,radius)*fade,Forms.Volume.along(-forward))
+		var wake_fade := fade*(1.0-smoothstep(0.0,0.08,after)) if hit else fade
+		_piece(wake,wake_surface,aim+forward*after*1.5,Vector3(radius,1.5,radius)*wake_fade,Forms.Volume.along(-forward))
 		if not hit: return
-		for i in 3:
-			var reach := (0.5+after*(5.0+i*2.0))*fade
-			_piece(ring,accent,fixed_ground+Vector3.UP*(0.08+i*0.16),Vector3(reach,0.5,reach))
-		_piece(sphere,glow,aim,Vector3(1.7,0.7,1.7)*(0.5+after)*fade)
+		skystrike_explosion.draw(self,after)
 
 func _field_choreography(charge: float, flight: float, after: float, alpha: float, _facing: Basis, _side: Vector3) -> void:
 	# The atmosphere supplies arena-scale colour. Keep geometry concentrated on
