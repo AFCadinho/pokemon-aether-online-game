@@ -1740,6 +1740,7 @@ func _run() -> void:
 	popup.close()
 	await _check_compact_member_actions(packed, Vector2i(480, 360))
 	await _check_compact_member_actions(packed, Vector2i(360, 640))
+	await _check_expanding_bank_previews(packed)
 	quit(1 if failed else 0)
 
 
@@ -1857,6 +1858,48 @@ func _check_compact_member_actions(packed: PackedScene, viewport_size: Vector2i)
 			_check(not is_instance_valid(dialog), "Escape dismisses %s without confirming" % action)
 	if localization_manager != null:
 		localization_manager.set_locale(old_locale)
+	viewport.free()
+
+
+func _check_expanding_bank_previews(packed: PackedScene) -> void:
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1200, 1100)
+	root.add_child(viewport)
+	var popup := packed.instantiate() as GuildPopup
+	viewport.add_child(popup)
+	await process_frame
+	popup.show_debug_member_preview()
+	popup.open()
+	popup.custom_minimum_size = Vector2.ZERO
+	popup._show_guild_section("bank")
+	for category: String in ["items", "resources", "pokemon"]:
+		popup._on_guild_bank_category_opened(category)
+		var previous_height := 0.0
+		for height: int in [700, 900, 560]:
+			popup.size.y = height
+			for frame: int in range(8):
+				await process_frame
+			var workspace := popup.find_child("GuildBankWorkspace", true, false) as Control
+			var columns := popup.find_child("GuildBank%sPreviewColumns" % category.capitalize(), true, false) as GridContainer
+			var page_scroll := popup.member_content.get_parent() as ScrollContainer
+			_check(is_equal_approx(workspace.get_global_rect().end.y, popup.member_content.get_global_rect().end.y) and popup.member_content.size.y >= page_scroll.size.y, "%s uses the available tab height at %s pixels" % [category, height])
+			var bottom_padding := (workspace.get_child(0) as MarginContainer).get_theme_constant("margin_bottom") + workspace.get_theme_stylebox("panel").get_margin(SIDE_BOTTOM)
+			_check(is_equal_approx(columns.get_global_rect().end.y, workspace.get_global_rect().end.y - bottom_padding), "%s storage columns fill their workspace down to its bottom margin" % category)
+			_check(is_equal_approx((columns.get_child(0) as Control).size.y, columns.size.y) and is_equal_approx((columns.get_child(1) as Control).size.y, columns.size.y), "%s gives stored and donation lists the same available height" % category)
+			if height == 900:
+				_check(columns.size.y >= previous_height + 190, "%s shows more list space when the popup grows" % category)
+			elif height == 560:
+				_check(columns.size.y < previous_height, "%s contracts its lists when the popup shrinks" % category)
+			previous_height = columns.size.y
+			for list_scroll: ScrollContainer in columns.find_children("*", "ScrollContainer", true, false):
+				_check(columns.get_global_rect().encloses(list_scroll.get_global_rect()) and list_scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED, "%s keeps list scrolling inside the expanded columns" % category)
+	popup.guild_bank_state["inventory"] = []
+	popup._on_guild_bank_category_opened("items")
+	for frame: int in range(8):
+		await process_frame
+	var empty_columns := popup.find_child("GuildBankItemsPreviewColumns", true, false) as GridContainer
+	_check(is_equal_approx((empty_columns.get_child(1) as Control).size.y, empty_columns.size.y), "an empty donation list still fills the available column height")
+	_check(popup.find_child("GuildBankItemsDonationSearchInput", true, false) != null, "expanded empty donation lists retain their search field")
 	viewport.free()
 
 
