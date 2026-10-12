@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show server-wide System notices for wild Ultra Rare, Legendary and Shiny encounters and their outcomes in every chat except Help.
+
 - Identify Guild room templates by their position from the Main Hall: Room 1 on the right and Room 2 on the left, replacing confusing interior door-side labels.
 
 - Offer the Irelia Outfit Box for both genders in the Gift Store for 450 Gems, with six fixed-colour parts and the standard 450-credit bound alternative.
