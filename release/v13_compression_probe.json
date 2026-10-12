@@ -1,0 +1,1529 @@
+{
+  "candidate_motion_comparisons": 1956,
+  "complete": true,
+  "configurations": [
+    {
+      "block_size": 262144,
+      "decode_seconds_single_pass": 1.548621905994878,
+      "encoding_seconds": 17.05286337396501,
+      "level": 9,
+      "pack_bytes": 201852142,
+      "saved_bytes": 140,
+      "saved_percent": 6.93576503674187e-05
+    },
+    {
+      "block_size": 262144,
+      "decode_seconds_single_pass": 2.2956342619872885,
+      "encoding_seconds": 114.9117111430096,
+      "level": 15,
+      "pack_bytes": 179502249,
+      "saved_bytes": 22350033,
+      "saved_percent": 11.072469817309273
+    },
+    {
+      "block_size": 262144,
+      "decode_seconds_single_pass": 2.0565239549941907,
+      "encoding_seconds": 386.6428387569831,
+      "level": 19,
+      "pack_bytes": 176860740,
+      "saved_bytes": 24991542,
+      "saved_percent": 12.381104514835261
+    },
+    {
+      "block_size": 1048576,
+      "decode_seconds_single_pass": 1.5010564839685685,
+      "encoding_seconds": 15.671441693004454,
+      "level": 9,
+      "pack_bytes": 199263656,
+      "saved_bytes": 2588626,
+      "saved_percent": 1.2824358359248111
+    },
+    {
+      "block_size": 1048576,
+      "decode_seconds_single_pass": 1.7660424830173724,
+      "encoding_seconds": 82.54556817502453,
+      "level": 15,
+      "pack_bytes": 193303111,
+      "saved_bytes": 8549171,
+      "saved_percent": 4.235360093674833
+    },
+    {
+      "block_size": 1048576,
+      "decode_seconds_single_pass": 1.9436542249859485,
+      "encoding_seconds": 337.44472196300376,
+      "level": 19,
+      "pack_bytes": 171489778,
+      "saved_bytes": 30362504,
+      "saved_percent": 15.041942404198338
+    }
+  ],
+  "engine_appearance_loads": 360,
+  "engine_processes": 60,
+  "engine_summary": [
+    {
+      "appearances": 40,
+      "label": "b1048576-l19",
+      "load_instantiate_median_ms": 42.099000000000004,
+      "load_instantiate_p95_ms": 137.701,
+      "pairs": 20,
+      "peak_process_rss_max_bytes": 379842560,
+      "peak_process_rss_median_bytes": 137119744.0
+    },
+    {
+      "appearances": 40,
+      "label": "b262144-l19",
+      "load_instantiate_median_ms": 40.216,
+      "load_instantiate_p95_ms": 128.811,
+      "pairs": 20,
+      "peak_process_rss_max_bytes": 379510784,
+      "peak_process_rss_median_bytes": 135245824.0
+    },
+    {
+      "appearances": 40,
+      "label": "baseline",
+      "load_instantiate_median_ms": 35.3585,
+      "load_instantiate_p95_ms": 126.986,
+      "pairs": 20,
+      "peak_process_rss_max_bytes": 379568128,
+      "peak_process_rss_median_bytes": 135452672.0
+    }
+  ],
+  "evidence": {
+    "directory": ".tmp/v13-compression-v1",
+    "engine_report_sha256": "231e8ae0e40c2e9f8b99434ab2831abb29a50696ae3ec9b921663e6f04ec675f",
+    "measurement_report_sha256": "1999ae4bd336049c78e05f36b383e6a3bb01542c006018b94c72d536746d2865",
+    "selection_sha256": "92d861a7d58fbd185ffdb09987fcdc7d0fb63e2d5be001c09172bd195c382e7f",
+    "source_sha256": {
+      "tools/probe_v13_compression.py": "ba86c27d53bcb8638003ad129fb31eaf825ddbdbea28aaf347dcf41643eb5a43",
+      "tools/sprite_factory/v13_compression_check.gd": "8b56f37a6dc6921ad696ff6ad5aaefdf2d0b09ed202d4c39f81bfa04cae3ebf5",
+      "tools/test_probe_v13_compression.py": "85966c1877b1c6a8fadcf5500d359edcff8afd3faccd6cb9736048355c5c8bd4"
+    }
+  },
+  "exact_decoded_roundtrips": 3036,
+  "godot": "4.6.2-stable (official)",
+  "libzstd": "1.5.7",
+  "limitations": [
+    "This deliberately varied 20-pair sample is not a whole-catalog savings estimate.",
+    "Linux headless Godot only: no GPU/rendered battles, Windows/macOS or physical Android runtime checks.",
+    "Three uncached resource loads per appearance, warm filesystem; other workspace tasks may be active. Diagnostic, not a battle/FPS or cross-platform performance certification.",
+    "1 MiB PCK blocks require a versioned production validator change before any rollout.",
+    "Candidate payload hashes require a newly bound catalog and matching client release before publication."
+  ],
+  "native_members": 506,
+  "pairs": [
+    {
+      "asset_id": "pokemon_3d:aromatisse:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 24,
+          "semantic_sha256": "e0d82f05663613f74599a42e8165457dcc963c2cd97ca8b1528270ec69c63975",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 24,
+          "semantic_sha256": "d3988fd989099dd42236c2cdfc94818220dfb43421f4e04e43cad0ec97833a66",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 3235680,
+          "pack_sha256": "1df9a4d54a862aaf5fff82f0799d6564e5a04125a907441b497e715e745c8b6f"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 2976992,
+          "pack_sha256": "873ee20771da5ceba3daecb523d47eb0bdc45287671dad00d708c3ea883cd9ea"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 2951168,
+          "pack_sha256": "cabbb70f067480fc3391789493face32d66a6caed5e2556a8cfbc630a684b4f1"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 3170272,
+          "pack_sha256": "2eecbe4d376262378e22fc1080d3c454e08a5ea566e38f739c0fa03da8ccb5dc"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 3130656,
+          "pack_sha256": "06ce9e746efa18d569d46f9490236b7e8e4fdb96b927d157a5707a98d2c1b979"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 2902784,
+          "pack_sha256": "f84c5990e1da02c2aabf871921c603b4453dc66d87ba731cc1a9023a611eaaf3"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 27,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 3235680,
+      "source_sha256": "1df9a4d54a862aaf5fff82f0799d6564e5a04125a907441b497e715e745c8b6f"
+    },
+    {
+      "asset_id": "pokemon_3d:castform:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 18,
+          "semantic_sha256": "c7b8827ec363b22c7d669b862d758a8d796c081a41f7ab2989ccd8301b11ff1d",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 18,
+          "semantic_sha256": "8e1b8b27cc840146f2c8be662408fbf3274081e7dfa4a41b39ee16dfe58e52e4",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 152936,
+          "pack_sha256": "d7746e044d61a41c8a8aa30cf8758584c68494437ee54d793b079e5e2f85fcb9"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 145288,
+          "pack_sha256": "5c43c0e870f0ecb334563de7777ebd5393ce061546925d4c8c143fe237bbde66"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 143912,
+          "pack_sha256": "7010a1b0a0367e4eea7d6bdb1d4a2d2b25c240f6c9ca39c3accc43882eaf043c"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 149160,
+          "pack_sha256": "861eb4182b09c3f2d2c1a01937d94413369b6b594da38511acd683a6877af854"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 143688,
+          "pack_sha256": "508050c2413cfd04296915bcad06fa10a2b9d684f05453c9db51aa349e08e13c"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 135976,
+          "pack_sha256": "cab8d2d9258fd9b90e368374b7e9b8062b519f5e6e488b64b99cbb2916d25b8e"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 13,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 152936,
+      "source_sha256": "d7746e044d61a41c8a8aa30cf8758584c68494437ee54d793b079e5e2f85fcb9"
+    },
+    {
+      "asset_id": "pokemon_3d:chansey:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "f0c41e0ab96409715755ff79f2b9672086f7a28e33bb601108fe48f90f8097f6",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "de67917c1d0444c56626cebfcc211c3752ee0a6c153db9c146d0730b34465ec9",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 9050508,
+          "pack_sha256": "c53cffac589a3908a98a1cee3c1f5f5614240457c2062ebc73be0e9710b4e6f2"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 8070892,
+          "pack_sha256": "9587bc9a36a26b228bea37070e4c7abc7d49e6844296594bfa42f45d6f749feb"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 7955404,
+          "pack_sha256": "259471b30fee71bb5398895414a332023c528410d2874e8bc356c8bbbc326326"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 8988940,
+          "pack_sha256": "9735d19d13efbfa43ec232b29572d84ee11ebe7deaa540ecbc8cd957aadfe739"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 8804588,
+          "pack_sha256": "7711e3540ec9d44d27aa2ce0213b240569cdc6acb400c757b2aa801128a92db0"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 7783948,
+          "pack_sha256": "4296a18afae2b89157029d893363a5811f91a46701815df23c617412b35ca4ab"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 22,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 9050508,
+      "source_sha256": "c53cffac589a3908a98a1cee3c1f5f5614240457c2062ebc73be0e9710b4e6f2"
+    },
+    {
+      "asset_id": "pokemon_3d:charizard:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "4aac35f06e54d58eaf714712c7d058439ffde58100eab8d54045f94a400eb80c",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "e708bf03f639ccb2d2c292bd3a82d42af5af677bd62645bb343f3b9824a63fff",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 11764384,
+          "pack_sha256": "a8b9dc9c38be918238ff9b4bc3b4d788b9c07ac496abbc752cd50384214e8a05"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 10553312,
+          "pack_sha256": "b33e65c952350f61df67aed66983ff53f6e1a6c57ae2748f3ed3a7fe0b538b9c"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 10412672,
+          "pack_sha256": "707e0a367689c154c2f95ce23df19d880b571f787db24a6330921ae314b898e5"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 11552960,
+          "pack_sha256": "cd36c41cffe84a1205d26b5bbfb2711dde17afd0861ff53078a1d7901186a786"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 11230304,
+          "pack_sha256": "891313f4b2358549cf98705adf1463ced9467fc8d7951602ac5b73f45f641d1a"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 10043808,
+          "pack_sha256": "e12c0b3dc343f4768c80f227dada42fbb9bb606b3eb99f1ad2190eb7b6b1f467"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 35,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 11764384,
+      "source_sha256": "a8b9dc9c38be918238ff9b4bc3b4d788b9c07ac496abbc752cd50384214e8a05"
+    },
+    {
+      "asset_id": "pokemon_3d:clamperl:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 18,
+          "semantic_sha256": "66a7c761f581979da91887e5ecec0ab7371c565e4ab2140ccc86c40d9c68ec97",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 18,
+          "semantic_sha256": "54a48bd676c466cfb1c38fb196b87b0be9b607c43ca1cd77d4b4b02076a2f640",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 426832,
+          "pack_sha256": "ac86a48cc417133136783972a56c3350da682111d78dbd6fd52b39d133918f75"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 387792,
+          "pack_sha256": "e253fe33eb733ad7e235b8222a6f02b58ff2d51fa7fd1a3fd62b28627375f0ee"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 383248,
+          "pack_sha256": "71971f3b9b393575bf3feb00bacc68eb62a5c84086e4cc553659c2cfabf436a6"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 333040,
+          "pack_sha256": "7c081e767103f5846f42647c6bf3983cc3d1ee6f6551dd117dcab4a7c8a7b9c0"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 320496,
+          "pack_sha256": "2d64c038a11aff58acd5e1e9fca4e099ece24fc651dc13b3d30b18562ab042e1"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 297488,
+          "pack_sha256": "05073bf4fa4e947e5cda950e4cf1553d245024e0b127e2c897047ca5e76ba245"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 15,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 426832,
+      "source_sha256": "ac86a48cc417133136783972a56c3350da682111d78dbd6fd52b39d133918f75"
+    },
+    {
+      "asset_id": "pokemon_3d:darkrai:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 24,
+          "semantic_sha256": "f7d8587f8562091e9dc48537e16848fc70a204eed44d4be3b012379409b33b02",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 24,
+          "semantic_sha256": "021c7eec3202d8fca20f6d2f00ff01a8196f7b49b887300ebb48e31165a54d73",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 6581660,
+          "pack_sha256": "5ae710b1b362f5bf047e14bbeb52560c0bd3687c20c8c78a8aaff1a629c7e77e"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 6132316,
+          "pack_sha256": "135d591d4e2dc6e06fb5a7ce092338f66fb3b8f35c3c6a513ec8eb6387cba18a"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 5937948,
+          "pack_sha256": "8709e42c30a6537572ab34db55e08c170c42919812ec78c943fe27696fdea3c8"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 6470332,
+          "pack_sha256": "2fa8dad62ef1370c1d713d06754685ef0c3e22e218ed9ac95f9def916ec1768e"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 6358236,
+          "pack_sha256": "4be940afa3e23542e8cd8cff2f49e4930d99b48f8f33aee878482534acdad87d"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 5851836,
+          "pack_sha256": "c0c9b1c4f83371002b277a958567791e5a470021f78ab33a1b81f2afa8bd7d44"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 18,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 6581660,
+      "source_sha256": "5ae710b1b362f5bf047e14bbeb52560c0bd3687c20c8c78a8aaff1a629c7e77e"
+    },
+    {
+      "asset_id": "pokemon_3d:deoxys:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 21,
+          "semantic_sha256": "7d57cbc0d8f2a554facf4343c5288e89f8753198c3d28bed6a6272a9f877da57",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 21,
+          "semantic_sha256": "f9bb53fa6ce18290d994e36b106b9ef7353ba7f77c84e030cbacec925fef5f10",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 4117320,
+          "pack_sha256": "1aef464b1ec3ec2dfb3e392b356754c9b090be97d6b186944a6f520d8a7fd2f3"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 3772584,
+          "pack_sha256": "4acf16a4938b1290e552a89ffec22616fd72b37446f9411611dedaaee5509188"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 3717672,
+          "pack_sha256": "02a627354021d8af06fa40e8eba6cc38bcbdd8d20a9d8b1d975533d3caace390"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 4042472,
+          "pack_sha256": "a614ce1bcc2922e4077cb2ec6d51ce5f5d43127b06bb6adb42be7b289fe456e5"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 3974600,
+          "pack_sha256": "76211fa60ed66951cb05678eb7f29b76374d1aea3b3871a9c48acab7d2b1aa2d"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 3670056,
+          "pack_sha256": "1a2d8ff95baa9859b6372553824145635ce1a733feca3ff157ec29b4b20d4035"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 29,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 4117320,
+      "source_sha256": "1aef464b1ec3ec2dfb3e392b356754c9b090be97d6b186944a6f520d8a7fd2f3"
+    },
+    {
+      "asset_id": "pokemon_3d:grimer:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "349ba7ba0f1df6235b98e828eaa442ba9cb56b06aff0b4759ff49a92e86386f2",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "b061f899eeb091e7000880136e009c4343515b5acd6e54a4387a74033564c9b0",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 10434128,
+          "pack_sha256": "17e53c3352b1b88c4c0dd6d0b4f803281d14ac2f37d1b14423ef3c0e47446472"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 9580336,
+          "pack_sha256": "d4891cf3fba36f888fdf39d5754d6f173bb4b6da21cc0361b33f8a2e4c8bdd19"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 9482096,
+          "pack_sha256": "f1296ecba2d117183b66f3010a4ff9047f791611e4c88953406afb5b9140d5bd"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 10147856,
+          "pack_sha256": "526a181c30793bd4cdc630c9d4d9c1324f5828838d19670f4c9a38f11e433660"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 9962352,
+          "pack_sha256": "41a7984816de327f594e696ecdd3b87da2dea91f9183ef0a46a3fe02149bc390"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 9233904,
+          "pack_sha256": "9c3ab0ebae5c6421020d8231ece0570303d0b8776169b10987fa0149e238af65"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 24,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 1,
+      "source_bytes": 10434128,
+      "source_sha256": "17e53c3352b1b88c4c0dd6d0b4f803281d14ac2f37d1b14423ef3c0e47446472"
+    },
+    {
+      "asset_id": "pokemon_3d:hydreigon:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "fd07ade253304399e6c5c81c523f72aa88b9e07ff4ab7ff0d6862100074bcc90",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "90e75bf544395cc1ffe038465b06709b90e9599ae1620185af4cbbf219a6e958",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 15088172,
+          "pack_sha256": "be149d776e466a42dac13782d81a7ce0767efcd06ba4a625a594bc10aa1d9545"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 13408172,
+          "pack_sha256": "b537836271b5f3a1616486484fef96fa83f9ad5a4bc6ed2e8d3e17ec48a4bc0e"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 13263692,
+          "pack_sha256": "0f9de8ea4a09ba77a1e6d6b32fd37ff34680c4c8fb2c53ae27194d7acad5ef9c"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 14834412,
+          "pack_sha256": "5c132114b5532e7a1bfda7d2f72d890d2af42a0f91db8db0e96eba72fc9cb445"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 14491436,
+          "pack_sha256": "eacfa3a4ace4b32910f5958208bacca8218c3728818d6619a3947056af4978ad"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 12891148,
+          "pack_sha256": "a606fb84f887cc800f30df8b222330cca3283e31a865632da87c982bab37d74e"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 30,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 15088172,
+      "source_sha256": "be149d776e466a42dac13782d81a7ce0767efcd06ba4a625a594bc10aa1d9545"
+    },
+    {
+      "asset_id": "pokemon_3d:ledyba:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 18,
+          "semantic_sha256": "a93725b580a770d149278753a109d5878ea488aee27fb70b5728dce3fbf05849",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 18,
+          "semantic_sha256": "972b90ff6a08ce94f044454270f68de6cf405d71808b0edf248be20abc2bfaf8",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 677572,
+          "pack_sha256": "85fa76c6e3f6f1f96c76a0b34e2cb533f312cb06f9db5d0c5b65d7d0fdf77fdd"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 625060,
+          "pack_sha256": "eb0dced0303ca30ec50eee7e515ab2ea1aeda25430e96ee35317d0050714e6e5"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 609284,
+          "pack_sha256": "35e9f9ef9ffda38d643381fed55c0a47f5190e1377a2b38bfa8ca3c90db356ad"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 636324,
+          "pack_sha256": "9cd40fdf995f39db210ac932ba4bcbead8f3744e8378aa8eed4d0892bda21381"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 613284,
+          "pack_sha256": "5abd8c4683b674cb81c09be02b422b1af43d9d1ca61eed0508d7295a35267b3a"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 564676,
+          "pack_sha256": "4c32dffd6fc68cf4f885e7b20557cc3dd96c79d160b5f144d77026f780a4f6cc"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 20,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 677572,
+      "source_sha256": "85fa76c6e3f6f1f96c76a0b34e2cb533f312cb06f9db5d0c5b65d7d0fdf77fdd"
+    },
+    {
+      "asset_id": "pokemon_3d:lickilicky:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 24,
+          "semantic_sha256": "ed76d28ca7f9574bdf9040f6fb0088fdf72c1877044b54ade7de83b5c5075705",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 24,
+          "semantic_sha256": "8bda06c63c8d98d66ceff494b4bbc90a0013554c5cc4275161d86e7fbb557e53",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 2721084,
+          "pack_sha256": "80f2f05f21113bc65fc1f89b8c390286af5db6de45a6fcd3384cabfad83c58a1"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 2557916,
+          "pack_sha256": "868585aed2abff6c42620042dfb5cdeeb98734109a01278e51a910b0299f8eef"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 2510876,
+          "pack_sha256": "2a28dba99820e01831600a236398181fe9d631686eb51172c262cc6c240e333f"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 2657596,
+          "pack_sha256": "c1f79c9d7430c08feb73df2e5c4a7e043379d88a899316198d709922dace76d3"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 2632860,
+          "pack_sha256": "0b3f8c1f5c40e995c09caf6fef80c7e5fb9b6edfdc6fa22c27d055400a82d7e0"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 2499132,
+          "pack_sha256": "0841394f029df4d957138a7928a7171db98c50bf08b7815ae2e9d99fc8b19152"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 11,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 1,
+      "source_bytes": 2721084,
+      "source_sha256": "80f2f05f21113bc65fc1f89b8c390286af5db6de45a6fcd3384cabfad83c58a1"
+    },
+    {
+      "asset_id": "pokemon_3d:marshadow:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 24,
+          "semantic_sha256": "7276d5c579ae1915810dfade79a58974bc053154dff832f82996d5e7c863da99",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 24,
+          "semantic_sha256": "b6edc3298a0cd3aa215955bc53a399a193b29759cfa6831c1a90e5aa2e7effac",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 31846746,
+          "pack_sha256": "acb75be0fa5c37d6ba44a8ca425f6b18200444388f0f55d51a7f090e45973733"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 28018517,
+          "pack_sha256": "352873b525345895a419264d069d30504ecccd3e9abf91e6b457b36dc6204340"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 27287888,
+          "pack_sha256": "b4e11c24029f47ebaad57a8bda42df14b480649fe693a0494112eec4a457846b"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 32145332,
+          "pack_sha256": "b291ae80f87f04e0f76e8026ef1fb006a104dfa5c8c7874304db2a6785e75600"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 29809651,
+          "pack_sha256": "5fbbc902a15573f116e3cb9e07d3e6b5d0f1ff684ead8bb7893f5bebe35e5a79"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 25794718,
+          "pack_sha256": "007a1e1220d52fdad14631d32310d95ed684017b19ffe6b0784fe31d49cabc14"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "zip",
+      "native_members": 2,
+      "production_validator": {
+        "b1048576-l19": "ZIP: PCK validator not applicable",
+        "b262144-l19": "ZIP: PCK validator not applicable",
+        "baseline": "ZIP: PCK validator not applicable"
+      },
+      "schema": 1,
+      "source_bytes": 31846886,
+      "source_sha256": "7ce4ebeeb36d530a2e81201cae0b720048dc0f4efa70cee309ab347a1560c73c"
+    },
+    {
+      "asset_id": "pokemon_3d:munchlax:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 24,
+          "semantic_sha256": "9136b56367e11bce62323ca550631cc914b2a6a60dbfa8be7131076fd2805a71",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 24,
+          "semantic_sha256": "761b03d964b8ea6106d2f6d0ea5edc0a74361001563204b69a714587fae6575a",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 5816188,
+          "pack_sha256": "11ae6ff89916edb6ca02d5434c366327113356e6cc88f854f275c79ccc4a1bdd"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 5047420,
+          "pack_sha256": "6150d6e9b7e98bc37046bdf8fcdb5472869138fea25c939a63cf8d58c803c89a"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 4932188,
+          "pack_sha256": "a14e3134fef94646c8be869374b13b5b9727ab4188b78e09716ce770b837b628"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 5732156,
+          "pack_sha256": "54e4f065538c1f140e3339b46e9fe7ccce487255e6f5a21f407750a2e99ff788"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 5526748,
+          "pack_sha256": "c794a037f8bd49b9fca1cacfd3cc38be2e2f61d8ba43ca0558f1cdd4b707fc8b"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 4851164,
+          "pack_sha256": "e5e141cf070a1f11af2bd3c754fda39de4571ce147244ca9a942686f6d5d8408"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 18,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 5816188,
+      "source_sha256": "11ae6ff89916edb6ca02d5434c366327113356e6cc88f854f275c79ccc4a1bdd"
+    },
+    {
+      "asset_id": "pokemon_3d:perrserker:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "9a9692577b6572ffc368e80a8b9a6c221b8b093e26c44e3dc78621a5bda97c85",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "9dcadaced808ccf5d7ba998ac121dbd48a90da644070f7cbdb74ff8dd0035f6a",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 17072532,
+          "pack_sha256": "7eea57f271e79f9e04f6000a1453ef8858c5596cce3557c857836f081965ca96"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 14849172,
+          "pack_sha256": "1a9d4074006a6d040ab82b73d4322a16bae3c29b85d662ad832f31813a3ab1ce"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 14741620,
+          "pack_sha256": "e59c64c4cfbec9dbd17422db59ba52a7634becb97580885bb1dfc17ae777176e"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 16694356,
+          "pack_sha256": "aeb9108929b76e7c41c3c59aa6ef787bc29fdf256144e74b6affdcefc8a57901"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 16361940,
+          "pack_sha256": "bcc8a73817d78e2faa08558a9de843adbca53de6657927ddb287ba2563e2cc0d"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 14316788,
+          "pack_sha256": "ee77440864bd658ee30a35e2adf00266bcec396abe6a66c7c1f9e52deb298926"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 40,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 17072532,
+      "source_sha256": "7eea57f271e79f9e04f6000a1453ef8858c5596cce3557c857836f081965ca96"
+    },
+    {
+      "asset_id": "pokemon_3d:pinsir:mega",
+      "baseline_appearances": [
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "06ea0d98ccfc3f13e8acb8cf77157367f0d2d357bcf94aac22765d4a51d02ba1",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "de94735d12528437897512b1c295005a773462193db0d2369dcc77512d6eeec3",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 2537080,
+          "pack_sha256": "0a2c7f247a378f1330200e6c5f425c171cbfd214627be437bb20366ed4765665"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 2415640,
+          "pack_sha256": "1cfbd51d3d7c4f8d9797b3ed8051a1dc8b1036da64fd3d0e629cfc4c72555134"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 2383736,
+          "pack_sha256": "b14c5d9d7073ae3cb1ab57afe876382644d343a7e69c68f85f2ab652fca00acb"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 2504760,
+          "pack_sha256": "3bb36bee2085a16237745cb328cfdd352c50d5e460086766b37287e7b227ef61"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 2472408,
+          "pack_sha256": "8ed3ac352fb73cbe9032589963d14f2543757a9d47112b2b4073f61615c791b1"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 2356952,
+          "pack_sha256": "88f867b718a299b31facd83044dc7652f5dc7102e545f3669d265150e79418e7"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 25,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 2537080,
+      "source_sha256": "0a2c7f247a378f1330200e6c5f425c171cbfd214627be437bb20366ed4765665"
+    },
+    {
+      "asset_id": "pokemon_3d:quaquaval:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "47ca2b5548e445256f8fd0991c555f03b31ebef1aba10600a3a640a20fad35a4",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "4ecc229ec929b30e37466a670461e3fd29146e2aff83729dc516f0cc39e4882f",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 33094296,
+          "pack_sha256": "a3e7d43d026983677681dee33d888e65768ff7f72ff0e53460597226292af597"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 29061912,
+          "pack_sha256": "a869d6ca63d428ac6c2179d15707d6d4fe7069932dbfdaabb0b91100ac32087e"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 28795064,
+          "pack_sha256": "2e346bc8495df76e02debb20590e341511a7f7dda7fa4db6dea4b64f78d3028b"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 32710584,
+          "pack_sha256": "8b7f5d9d9b403c25e3185a576f90673d4ee8fda7efac1aa8d9af72a0a573fbb2"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 32167736,
+          "pack_sha256": "d8850a7c953965ad32c1acea9fb9cee8fe00bcf7f2e80bb6925ca69946d5ae67"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 28056856,
+          "pack_sha256": "64c89902a78bbb1f76f848121ad1d81846108bc57008a1ed86062e8b4be35749"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 65,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 33094296,
+      "source_sha256": "a3e7d43d026983677681dee33d888e65768ff7f72ff0e53460597226292af597"
+    },
+    {
+      "asset_id": "pokemon_3d:shinx:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "de0436e0d8c9b0f61daf22ea71013c94e3208a03a28d75ceaca62ad40808c62a",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "58a6b70c2d7a6a30da699fe756cc89afba79da8407e32fb094c86c8b0cab9b86",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 15002332,
+          "pack_sha256": "5599e53d7c4d5a753baf752d90efb9bebb87987049b5a9354e3c3399e85f4ee6"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 13326684,
+          "pack_sha256": "5c7d26f8d4ff5f2d0fdba8ee5b3e98cc7ce7bd2506e4d2e469f79a0c5bdee3bb"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 13157468,
+          "pack_sha256": "721d249ae576fef333432a9ca34986e795128d229fe68429971f420280e886e4"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 14861500,
+          "pack_sha256": "c6b620d2fbf3170d0c1ded59d9c1d017c706460c58be1b77258eea47b447ee5d"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 14541372,
+          "pack_sha256": "290fef009a7c5448553b806c0c14f24e582151ac0366327162080290feeb247a"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 12860188,
+          "pack_sha256": "ba4a52db049a6d5c45bf2e5b6ca3e6cd6f61660bdf643037848682899833d7ac"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 34,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 15002332,
+      "source_sha256": "5599e53d7c4d5a753baf752d90efb9bebb87987049b5a9354e3c3399e85f4ee6"
+    },
+    {
+      "asset_id": "pokemon_3d:spewpa:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "7f1b392224782bd639db24d39141ff7836860f0c4db232b3fa15adfaa45dec14",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "fc7f9ebde4eda392538c04cbb8f6a643df4dd9e0d8f62a28bf0bc8a0b3039289",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 15176536,
+          "pack_sha256": "9e47f80391b7aeb9331cc107a19893544e51a292b2f335cacf3be45c188c2cf8"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 13408888,
+          "pack_sha256": "e3783e3cc78aa71f3155a1e0555478f27182ac6c3c360fa0313b7b746ee822e0"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 13289592,
+          "pack_sha256": "3d22adc09a1ef91540e062565e6fc152155d852cd96ed4b96c26afe5ccf5388b"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 14825048,
+          "pack_sha256": "063818c548d351ccfaabc074f273af91d971d72138243412633fd185b297fdb0"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 14424984,
+          "pack_sha256": "c2ee362ad525e86abf5b86c23bec1c55cbe05016b4e1e92307cf509711f27fb1"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 12894040,
+          "pack_sha256": "c8b8c35a0ac70803790668423900df7cc12693c48a2cb766e6820bfdaaf46ab0"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 33,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 15176536,
+      "source_sha256": "9e47f80391b7aeb9331cc107a19893544e51a292b2f335cacf3be45c188c2cf8"
+    },
+    {
+      "asset_id": "pokemon_3d:tyranitar:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "e68ce41144b595da2a3d9b7b354090565e15305bf4e173a8dbfc9f265be31616",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 27,
+          "semantic_sha256": "9490fbf9ea5ccaea170f0c63b09b46c396741bda659cd97a5004fd0591279e65",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 13694860,
+          "pack_sha256": "dc77c1320a1aed16ab2d462e5500ec56024a25159272d481848cf739871df960"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 12119820,
+          "pack_sha256": "d35509984e3f06dd54372b8657473dc8b6f78252a696166da98f4eb15c92b67d"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 11968108,
+          "pack_sha256": "1f9ac1cdb8a9d066cf6714f320d8bf77c5a7da7395cd76bb183a200cb3014505"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 13485292,
+          "pack_sha256": "2d2dc9e35fd910db5a402ce27bf1c77c6beec4651be97179f2dfa64d5996bf30"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 13113996,
+          "pack_sha256": "851134070d5f02f596a3747da736829d715554af10531512d3bd3523c08b0fc3"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 11598444,
+          "pack_sha256": "e29f718e1da80b3031d9ecdca4d59598a1caeefe28f4e4cb667b339f0e44acf1"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 30,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 13694860,
+      "source_sha256": "dc77c1320a1aed16ab2d462e5500ec56024a25159272d481848cf739871df960"
+    },
+    {
+      "asset_id": "pokemon_3d:tyrogue:base",
+      "baseline_appearances": [
+        {
+          "motion_samples": 24,
+          "semantic_sha256": "b6832ac2e4ddaac19f38f9338ece994eb3456f963c9d88d89779d4e5b713870c",
+          "variant": "normal"
+        },
+        {
+          "motion_samples": 24,
+          "semantic_sha256": "34d52c3bfa06da376805bc01b3dd0ddc18280334fc0a3f995dddef6f904316a2",
+          "variant": "shiny"
+        }
+      ],
+      "configurations": [
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 9,
+          "pack_bytes": 3361296,
+          "pack_sha256": "3a6c191e7669058437171864b930fda2b7b97f2aa6f850665c2c5e2a06f63d0c"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 15,
+          "pack_bytes": 3043536,
+          "pack_sha256": "08bd68e07fbfac14f6968321ec5c6b63817896a19ae3265d70464334c5ec1ddf"
+        },
+        {
+          "block_size": 262144,
+          "existing_pck_codec_supported": true,
+          "level": 19,
+          "pack_bytes": 2937104,
+          "pack_sha256": "ff638e87da6114b7c0d492d02b97b179721f4612451ed138e5e4167190a69853"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 9,
+          "pack_bytes": 3321264,
+          "pack_sha256": "08e31975c9d3bebb976c5c0bf554f1ae0d003d6150d346dfff370efc79ceac69"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 15,
+          "pack_bytes": 3221776,
+          "pack_sha256": "bb0fd8f5998fc5dc6a0dcda3c5fc840d125400c268fb2cca0d18dd9e7f24d162"
+        },
+        {
+          "block_size": 1048576,
+          "existing_pck_codec_supported": false,
+          "level": 19,
+          "pack_bytes": 2885872,
+          "pack_sha256": "26e112cf6cb557df9c03dc39856dae08e4d2305ca0a8e7b9c74d1eedd9556950"
+        }
+      ],
+      "engine_semantics_and_motion_match": true,
+      "format": "pck",
+      "native_members": 15,
+      "production_validator": {
+        "b1048576-l19": "Model-pair decoded size/codec mismatch.",
+        "b262144-l19": "",
+        "baseline": ""
+      },
+      "schema": 2,
+      "source_bytes": 3361296,
+      "source_sha256": "3a6c191e7669058437171864b930fda2b7b97f2aa6f850665c2c5e2a06f63d0c"
+    }
+  ],
+  "production_approved": false,
+  "prototype_only": true,
+  "r2_changed": false,
+  "sample_source_bytes": 201852282,
+  "schema": 1,
+  "selection_method": "17 schema-2 (3 fixed cases plus 14 size-stratified seed 20261012); 2 schema-1 quartile cases; largest retained ZIP. Not a random whole-catalog estimate.",
+  "source_commit": "e8580e80ed84f80c075de13d54426c30af8e5541",
+  "v13_metadata_sha256": "3a7860f938c4a7aa9be979dc83a1d731b375c3b6c689e7d6fe9ea0eb4d776342",
+  "validation": {
+    "all_original_pack_pins_rechecked": true,
+    "current_pck_validator_accepts_all_19_selected_pcks_at_256_kib": true,
+    "focused_python_tests": 7,
+    "larger_pck_blocks_rejected_by_current_validator_as_expected": true
+  }
+}

@@ -1171,5 +1171,17 @@
   "guild-room-2-template": {
     "name": "Grand Lounge · Sala 2",
     "shortDesc": "Sala 2, porta à direita. Receba um item na Bag e doe-o ao Guild Manager para desbloquear este projeto editável permanentemente para sua Guild."
+  },
+  "flying-nimbus-mount": {
+    "name": "Montaria Nuvem Voadora",
+    "shortDesc": "Desbloqueia a Nuvem Voadora como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "shiny-flying-nimbus-mount": {
+    "name": "Montaria Nuvem Voadora Shiny",
+    "shortDesc": "Desbloqueia a Nuvem Voadora Shiny escura como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "flying-nimbus-mount-box": {
+    "name": "Caixa de montaria Nuvem Voadora",
+    "shortDesc": "Contém uma montaria Nuvem Voadora. Chance shiny inicial: 50%."
   }
 }

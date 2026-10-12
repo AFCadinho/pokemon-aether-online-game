@@ -17,6 +17,7 @@ func _run() -> void:
 	for base: String in IDS:
 		all_ids.append(base + "_shiny")
 	all_ids.append("metagross_black_gold")
+	all_ids.append("flying_nimbus")
 	all_ids.append("caterpie")
 	all_ids.append("caterpie_shiny")
 	for id: String in all_ids:

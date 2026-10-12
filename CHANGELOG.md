@@ -4,6 +4,16 @@
 
 - Keep a failed or stalled 3D Team Preview from disabling 3D for supported battle leads, resolve unsupported previews immediately, and safely release preview models between render frames.
 
+- Add the Flying Nimbus Mount Box to Gift Store → Mounts → Land for 500 Aether Gems, with normal and dark shiny previews.
+
+- Add the dark blue and violet Shiny Flying Nimbus mount with a matching moving cloud trail, available through admin grants.
+
+- Add distinct transparent pixel-art inventory icons for Emberite, Voltite, Glacite, Astralite and Aetherium Ore.
+
+- Keep the two HP cards in 3D single battles on a fixed upper row, with your Pokémon on the left and the opponent on the right. Keep stat indicators attached and reserve space for the battle header as the window resizes.
+
+- Add the grantable Flying Nimbus land mount with the approved golden cloud, seated rider, gentle hover and a short moving cloud trail.
+
 - Show readable species nameplates above the opposing Pokémon during 3D Team Preview, following their arena positions and clearing them before lead summons.
 
 - Reframe the 3D battle overview toward the Pokémon with a higher viewing angle and HUD-aware zoom limits, keeping resting models above the battle controls while preserving attack timing, cinematic shots and 2.5D framing.

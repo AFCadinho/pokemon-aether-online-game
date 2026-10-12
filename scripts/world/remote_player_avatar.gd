@@ -7,6 +7,7 @@ const TouchContextGesture := preload("res://scripts/ui/mobile/touch_context_gest
 const MountHoverVisual := preload("res://scripts/world/mount_hover_visual.gd")
 const MountVisualDepth := preload("res://scripts/world/mount_visual_depth.gd")
 const MountWaterContact := preload("res://scripts/world/mount_water_contact.gd")
+const MountNimbusTrail := preload("res://scripts/world/mount_nimbus_trail.gd")
 const MountTurboEffect := preload("res://scripts/world/mount_turbo_effect.gd")
 
 signal interaction_requested(player_state: Dictionary, world_position: Vector2)
@@ -190,6 +191,7 @@ var look_node: Node2D
 var mount_sprite: AnimatedSprite2D
 var mount_foreground_sprite: AnimatedSprite2D
 var mount_water_contact: MountWaterContact
+var mount_nimbus_trail: MountNimbusTrail
 var mount_turbo_effect: MountTurboEffect
 var rider_node: Node2D
 var mount_hover_visual: MountHoverVisual
@@ -826,6 +828,7 @@ func _create_visual() -> void:
 func _sync_mount_visual() -> void:
 	_sync_mount_water_contact()
 	_sync_mount_turbo_effect()
+	_sync_mount_nimbus_trail()
 	_update_mount_hover(0.0)
 	if mount_sprite == null:
 		return
@@ -941,6 +944,18 @@ func _sync_mounted_rider_frame() -> void:
 		sprite.pause()
 
 
+func _sync_mount_nimbus_trail() -> void:
+	if mount_foreground_sprite == null or mount_sprite == null:
+		return
+	var definition := MountService.get_mount_definition(current_mount_id)
+	if mount_nimbus_trail == null and str(definition.get("movementEffect", "")) == "nimbus_trail":
+		mount_nimbus_trail = MountNimbusTrail.new()
+		mount_nimbus_trail.name = "MountNimbusTrail"
+		mount_sprite.add_child(mount_nimbus_trail)
+	if mount_nimbus_trail != null:
+		mount_nimbus_trail.configure(definition, mount_sprite)
+
+
 func _sync_mount_turbo_effect() -> void:
 	if mount_foreground_sprite == null or mount_sprite == null:
 		return
@@ -978,6 +993,8 @@ func _sync_mount_foreground_frame() -> void:
 		mount_water_contact.sync_frame(mount_sprite)
 	if mount_turbo_effect != null:
 		mount_turbo_effect.sync_frame(mount_sprite)
+	if mount_nimbus_trail != null:
+		mount_nimbus_trail.sync_frame(mount_sprite)
 
 
 func _sync_mount_rider_delta() -> void:

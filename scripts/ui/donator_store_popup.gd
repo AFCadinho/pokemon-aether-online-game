@@ -825,6 +825,15 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "MOUNT BOX",
 	},
 	{
+		"id": "flying-nimbus-mount-box",
+		"name": "Flying Nimbus Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_flying_nimbus",
+		"price": 500,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT BOX",
+	},
+	{
 		"id": "latios-mount-box",
 		"name": "Latios Mount Box",
 		"description_key": "ui.shiny_tracker.mounts.store_description_latios",
