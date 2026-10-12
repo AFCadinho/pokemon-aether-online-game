@@ -234,7 +234,9 @@ request/visit row per player. Focused checks: `tests/guild_base_visits_check.gd`
 
 The Guild Manager's **Room designs** page selects Room 1 (right-hand room,
 left door) or Room 2 (left-hand room, right door), then **Own designs** or
-**Purchased templates**. Any member can preview designs or donate a compatible
+**Purchased templates**. Player-facing labels describe the position from the
+Main Hall (Room 1 on the right, Room 2 on the left), rather than the door inside
+the room. Any member can preview designs or donate a compatible
 Bag item. Applying, saving, updating, renaming and deleting require existing
 Guild decorating rights. Names describe snapshots independently of the active
 room's location name. Each Guild may keep 20 named snapshots per room.

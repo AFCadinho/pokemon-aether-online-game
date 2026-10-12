@@ -273,7 +273,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "guild-room-1-template",
 		"name": "Guild Café · Room 1",
-		"description": "Room 1, door left. Receive a Bag item and donate it at the Guild Manager to permanently unlock this editable design for your Guild.",
+		"description": "Room 1, to the right of the Main Hall. Receive a Bag item and donate it at the Guild Manager to permanently unlock this editable design for your Guild.",
 		"price": 350,
 		"icon": preload("res://assets/items/icons/ROOM1TEMPLATE.svg"),
 		"categories": ["guilds"],
@@ -283,7 +283,7 @@ const CATALOG: Array[Dictionary] = [
 	{
 		"id": "guild-room-2-template",
 		"name": "Grand Lounge · Room 2",
-		"description": "Room 2, door right. Receive a Bag item and donate it at the Guild Manager to permanently unlock this editable design for your Guild.",
+		"description": "Room 2, to the left of the Main Hall. Receive a Bag item and donate it at the Guild Manager to permanently unlock this editable design for your Guild.",
 		"price": 350,
 		"icon": preload("res://assets/items/icons/ROOM2TEMPLATE.svg"),
 		"categories": ["guilds"],
