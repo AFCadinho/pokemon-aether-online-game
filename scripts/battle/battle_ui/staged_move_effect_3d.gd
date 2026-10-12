@@ -1,6 +1,10 @@
 extends "res://scripts/battle/battle_ui/family_move_effect_3d.gd"
 ## World-space staging for the remaining ordinary moves. Outcomes stay event-owned.
 const STAGING = preload("res://data/battle_move_staging_3d.json")
+const VolumeForms = preload("res://scripts/battle/battle_ui/move_volume_forms_3d.gd")
+var energy_body: ShaderMaterial
+var energy_tail: ShaderMaterial
+var tail_mesh: ArrayMesh
 var profile: Dictionary
 var motif := ""
 var field_center := Vector3.ZERO
@@ -54,6 +58,11 @@ func _prepare() -> void:
 	profile=STAGING.data.moves[key]
 	motif=str(profile.motif)
 	weight=float(profile.weight)
+	if key in ["hyperbeam", "pyroball"]:
+		energy_body = VolumeForms.energy_material(key == "pyroball")
+	if key == "pyroball":
+		energy_tail = VolumeForms.tail_material()
+		tail_mesh = VolumeForms.swept_mesh(false)
 	tooth.radial_segments=16
 	pearl=_material(Color(str(recipe.color)).lerp(Color.WHITE,.65),.8)
 	edge.vertex_color_use_as_albedo=true
@@ -133,6 +142,10 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 	edge.albedo_color.a=envelope*.7;core.albedo_color.a=envelope*.9;glow.albedo_color.a=envelope*.08;pearl.albedo_color.a=envelope*.8
 	surface.set_shader_parameter("seconds",elapsed);surface.set_shader_parameter("opacity",envelope*.65)
 	soft.set_shader_parameter("opacity",envelope*.5)
+	if energy_body != null:
+		energy_body.set_shader_parameter("seconds", t * float(recipe.duration_seconds))
+	if energy_tail != null:
+		energy_tail.set_shader_parameter("seconds", t * float(recipe.duration_seconds))
 	if key=="closecombat":
 		_close_combat(t,envelope,facing)
 	elif recipe.contact:
@@ -144,6 +157,9 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 	elif recipe.family=="self":_self_stage(center,t,flight,after,envelope,facing)
 	else:_field_stage(center,t,flight,after,envelope,facing,side)
 	impact_drawn=hit and bool(recipe.damaging) and after>=0
+	if key in ["hyperbeam", "pyroball"]:
+		if impact_drawn: _solid_impact(after, facing, axis)
+		return true
 	if impact_drawn:
 		var fade := 1-clampf(after,0,1)
 		_source_sprite(aim,(1.3+after)*weight,"combo_blue" if key=="closecombat" else "1",clampf(after,0,1),fade*.65,facing)
@@ -232,6 +248,9 @@ func _contact_stage(from: Vector3,center: Vector3,flight: float,after: float,alp
 
 func _beam_stage(from: Vector3,flight: float,after: float,alpha: float,facing: Basis,axis: Basis) -> void:
 	if emission_end >= 0 and elapsed >= emission_end: return
+	if key == "hyperbeam":
+		_hyper_beam(flight, after, facing)
+		return
 	var charge := charge_progress()
 	for source: Vector3 in emission_sources:
 		if flight<0:
@@ -247,19 +266,26 @@ func _beam_stage(from: Vector3,flight: float,after: float,alpha: float,facing: B
 		if emission_end >= 0:
 			fade = (1-smoothstep(impact,emission_end,elapsed))*smoothstep(0,.12,flight)
 		var width := (.18 if motif=="breath-stream" else .25)*weight*fade*emission_scale
-		_line(source,end,width,surface);_line(source,end,width*.32,pearl)
+		_tapered_beam(source,end,width,surface,source.distance_to(aim))
+		_tapered_beam(source,end,width*.32,pearl,source.distance_to(aim))
 		for i in 12:
 			var q := fmod(elapsed*1.2+i/12.0,1.)*p
 			var point := source.lerp(end,q)
 			var spin := elapsed*7+i*.7
-			var offset := (axis.x*cos(spin)+axis.z*sin(spin))*width*1.7
-			_source_sprite(point+offset,.48*emission_scale,_cast_art(),fmod(elapsed+i*.1,1),alpha*fade*.55,facing,spin)
-			if i%3==0:_piece(ring,edge,point,Vector3.ONE*width*(1.5+q),axis)
+			var spread := _beam_radius_fraction(source.distance_to(point), source.distance_to(aim))
+			var offset := (axis.x*cos(spin)+axis.z*sin(spin))*width*1.7*spread
+			_source_sprite(point+offset,.48*emission_scale*spread,_cast_art(),fmod(elapsed+i*.1,1),alpha*fade*.55,facing,spin)
+			if i%3==0:_piece(ring,edge,point,Vector3.ONE*width*(1.5+q)*spread,axis)
 		if motif=="electric-beam":
 			for i in 6:
-				_line(source.lerp(end,i/6.)+axis.x*sin(i*3+elapsed*30)*.15*emission_scale,source.lerp(end,(i+1)/6.)+axis.x*sin((i+1)*3+elapsed*30)*.15*emission_scale,.03*emission_scale*fade,pearl)
+				var q0 := i / 6.0
+				var q1 := (i + 1) / 6.0
+				_line(source.lerp(end,q0)+axis.x*sin(i*3+elapsed*30)*.15*emission_scale*q0,source.lerp(end,q1)+axis.x*sin((i+1)*3+elapsed*30)*.15*emission_scale*q1,.03*emission_scale*fade,pearl)
 
 func _projectile_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
+	if key == "pyroball":
+		_pyro_ball(flight, after, facing)
+		return
 	var charge := charge_progress()
 	if flight<0:
 		_piece(soft_quad,soft,origin,Vector3.ONE*(.4+charge)*weight*emission_scale,facing)
@@ -287,6 +313,51 @@ func _projectile_stage(flight: float,after: float,alpha: float,facing: Basis,sid
 
 func _projectile_arc_offset(fraction: float) -> float:
 	return sin(fraction*PI)*projectile_arc_height
+
+func _hyper_beam(flight: float, after: float, facing: Basis) -> void:
+	var charge := charge_progress()
+	for source: Vector3 in emission_sources:
+		if flight < 0:
+			var size := 0.3 * smoothstep(0, 1, charge) * emission_scale
+			_ball(source, size, energy_body)
+			_piece(soft_quad, soft, source, Vector3.ONE * size * 3.0, facing)
+			continue
+		var fade := 1.0 - smoothstep(0.05, 0.65, after)
+		if emission_end >= 0: fade = 1.0 - smoothstep(impact, emission_end, elapsed)
+		var width := 0.28 * weight * emission_scale * fade * smoothstep(0, 0.10, flight)
+		var tip := source.lerp(aim, clampf(flight, 0, 1))
+		var length := source.distance_to(tip)
+		if length < 0.001 or width < 0.001: continue
+		# One continuous, round shaft. No orbiting stars or repeated hoop sprites.
+		var tip_radius := _tapered_beam(source, tip, width, energy_body, source.distance_to(aim))
+		_ball(tip, tip_radius, energy_body)
+		_piece(soft_quad, soft, source, Vector3.ONE * width * 0.9, facing)
+
+func _pyro_ball(flight: float, after: float, facing: Basis) -> void:
+	if after >= 0: return # The solid ball breaks on impact instead of lingering inside its victim.
+	var fraction := smoothstep(0, 1, clampf(flight, 0, 1))
+	var point := origin if flight < 0 else origin.lerp(aim, fraction) + Vector3.UP * _projectile_arc_offset(fraction)
+	var charge := smoothstep(0, 0.9, charge_progress()) if flight < 0 else 1.0
+	# A kickable ball at the foot; the flame grows only once it has left the caster.
+	var radius := lerpf(0.16, 0.42, smoothstep(0, 0.35, maxf(flight, 0))) * emission_scale * charge
+	if radius < 0.001: return
+	_piece(sphere, energy_body, point, Vector3.ONE * radius, Basis(Vector3(1, 0.3, 0.2).normalized(), elapsed / duration * 18.0))
+	_piece(soft_quad, soft, point, Vector3.ONE * radius * 3.2, facing)
+	if flight < 0: return
+	var tangent := aim - origin + Vector3.UP * PI * cos(fraction * PI) * projectile_arc_height
+	var length := minf(1.35 * emission_scale, origin.distance_to(point))
+	# A single tapered flame follows the arc tangent; it cannot cross the caster at release.
+	_piece(tail_mesh, energy_tail, point, Vector3(radius * 0.9, length, radius * 0.9), VolumeForms.along(-tangent), true)
+
+func _solid_impact(after: float, facing: Basis, axis: Basis) -> void:
+	var pulse := sin(clampf(after / 0.32, 0, 1) * PI)
+	if pulse > 0.001:
+		_piece(sphere, energy_body, aim, Vector3(0.75, 0.22, 0.75) * pulse * weight, axis)
+		_piece(soft_quad, soft, aim, Vector3.ONE * (1.4 + after) * pulse, facing)
+	# One pressure front communicates the contact; the native damage reaction owns the hit.
+	var fade := 1.0 - smoothstep(0.08, 0.65, after)
+	if fade > 0.001:
+		_piece(ring, edge, aim, Vector3.ONE * (0.25 + after * 2.2) * weight * fade, axis)
 
 func _wave_stage(flight: float,after: float,alpha: float,facing: Basis,side: Vector3,axis: Basis) -> void:
 	if motif=="heart-stream":_status_stage(flight,after,alpha,facing,side,axis);return

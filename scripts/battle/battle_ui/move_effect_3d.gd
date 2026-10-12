@@ -63,6 +63,7 @@ var tube := CylinderMesh.new()
 var tooth := CylinderMesh.new()
 var cursor := 0
 var emission_sources: Array = []
+var beam_meshes := {}
 
 func _init() -> void:
 	# Sample attachment poses after the stage has applied its actor transforms.
@@ -232,6 +233,26 @@ func _line(a: Vector3, b: Vector3, width: float, material: Material) -> void:
 	var y := delta.normalized()
 	var x := y.cross(Vector3.UP if absf(y.y) < 0.95 else Vector3.RIGHT).normalized()
 	_piece(tube, material, (a+b)*0.5, Vector3(width, delta.length()+width*0.65, width), Basis(x,y,x.cross(y)), true)
+
+func _beam_radius_fraction(distance: float, reach: float) -> float:
+	# Keep the outlet narrow, including while the leading tip is still near the mouth.
+	return lerpf(0.14, 1.0, smoothstep(0.0, maxf(1.5, reach * 0.75), distance))
+
+func _tapered_beam(a: Vector3, b: Vector3, width: float, material: Material, reach: float) -> float:
+	var delta := b - a
+	if delta.length() < 0.001 or width <= 0.001: return 0.0
+	if not beam_meshes.has(cursor):
+		var shape := CylinderMesh.new()
+		shape.height = 1.0
+		shape.radial_segments = 24
+		shape.bottom_radius = 0.14
+		beam_meshes[cursor] = shape
+	var mesh: CylinderMesh = beam_meshes[cursor]
+	mesh.top_radius = _beam_radius_fraction(delta.length(), reach)
+	var y := delta.normalized()
+	var x := y.cross(Vector3.UP if absf(y.y) < 0.95 else Vector3.RIGHT).normalized()
+	_piece(mesh, material, (a+b)*0.5, Vector3(width, delta.length(), width), Basis(x,y,x.cross(y)), true)
+	return width * mesh.top_radius
 
 func _process(_delta: float) -> void:
 	if done: return
