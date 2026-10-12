@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make 3D switches flow directly from recall into summon: prepare the incoming public model before recalling, close the ball during absorption and skip repeated entry warmup. Keep doubles replacements hidden until their summon releases them.
+
 - Make Guild room designs easier to navigate with explained empty states, selection-specific preview/apply/donation actions, a More actions menu, separate save/rename dialogs and a scrollable management page on smaller screens. Show only unlocked templates or matching items in your Bag.
 
 - Refine the male Irelia rear hairstyle with cleaner locks and a shorter nape, and cover rear scalp gaps for both models during walking, fishing and riding.

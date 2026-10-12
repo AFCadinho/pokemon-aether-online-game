@@ -1754,14 +1754,18 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 				_native_fainted_models.erase(controller)
 				_native_captured_controllers.erase(controller)
 				if model != null and controller in SLOTS:
-					if SettingsManager.battle_animations and model.handles(controller):
-						await model.recall(controller)
 					var details := str(event.get("details", ""))
-					model.set_combatant(model.actor_index(controller), details.split(",")[0].strip_edges(),
-						details.to_lower().contains("shiny"), true)
-					await model.await_prepared()
+					var incoming_species := details.split(",")[0].strip_edges()
+					var incoming_shiny := details.to_lower().contains("shiny")
 					if SettingsManager.battle_animations and model.handles(controller):
+						model.stage_switch_model(controller, incoming_species, incoming_shiny)
+						await model.await_switch_model(controller)
+						await model.recall(controller)
+					model.set_combatant(model.actor_index(controller), incoming_species, incoming_shiny, true)
+					if SettingsManager.battle_animations:
 						model.set_actor_shown(model.actor_index(controller), false)
+					await model.await_switch_actor(controller)
+					if SettingsManager.battle_animations and model.handles(controller):
 						await model.send_out(controller)
 				_set_native_status(controller, "")
 			"-status":
