@@ -29,8 +29,7 @@ var sideways := Vector3.RIGHT
 
 func _init() -> void:
 	super._init()
-	sprite_shader.code = sprite_shader.code.replace("void fragment() {", "uniform bool quarter_mask = false;\nuniform float atlas_rows = 1.0;\nvoid fragment() {")
-	sprite_shader.code = sprite_shader.code.replace("vec2 uv = vec2((UV.x + floor(frame_index)) / frames, UV.y);", "float columns = frames / atlas_rows;\nvec2 uv = (UV + vec2(mod(floor(frame_index), columns), floor(frame_index / columns))) / vec2(columns, atlas_rows);\nif (quarter_mask) uv = vec2(1.0) - abs(UV * 2.0 - vec2(1.0));")
+	sprite_shader = preload("res://scripts/battle/battle_ui/draco_meteor_sprite.gdshader")
 	meteor.radius = 1.0
 	meteor.height = 2.0
 	meteor.radial_segments = 9
