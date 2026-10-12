@@ -4,6 +4,8 @@
 
 - Add the Irelia Outfit Box for both player models, with six separate cosmetics, revised overworld hair, trainer art and authored walking/fishing/riding sheets.
 
+- Let Guild Bank item, resource and Pokémon donation overviews use the available tab height, showing more rows while keeping each list scrollable.
+
 - Give Guild rank changes, leadership transfers and member removal compact Aether dialogs with clear headings, padded messages and visible actions on smaller screens.
 
 - Give Supersonic Skystrike a cinematic hit explosion: a compressed white-blue core, expanding rolling blast cloud and floor pressure wave, wider impact framing, a brief camera recoil and a deeper explosion sound. Preserve its duration and suppress the blast on misses and blocks.
