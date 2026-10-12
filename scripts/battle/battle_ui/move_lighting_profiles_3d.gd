@@ -140,4 +140,4 @@ static func _sample_extension(effect: Node, seconds: float) -> Dictionary:
 		var point: Vector3 = points.get("actor_center",origin) if recipe.contact or recipe.target=="actor" else origin.lerp(aim,flight)
 		_add(lights,point,tint,energy*weight*.65,2.5,"cast")
 	if pulse>.001:_add(lights,aim,profile.flash,energy*pulse,3.,"impact")
-	return {"weight":weight,"pulse":pulse,"lights":lights,"color":tint.lerp(profile.flash,pulse*.25),"profile":profile}
+	return {"weight":weight,"pulse":pulse,"lights":lights,"color":tint.lerp(profile.flash,pulse*.25),"profile":profile,"cinematic":effect.key=="fierywrath"}

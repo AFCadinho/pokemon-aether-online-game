@@ -10,6 +10,7 @@ const SPECIES := ["Dragonite", "Pikachu", "Garchomp", "Charizard", "Blastoise", 
 var stage: Node
 var failed := false
 var originals := {}
+var original_profile_bounds := {}
 var fixture_paths: Array[String] = []
 
 class DownloadProbe extends Node:
@@ -27,6 +28,8 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	await process_frame
+	root.size = Vector2i(1920, 1080)
 	var settings := root.get_node("SettingsManager")
 	settings.battle_presentation_mode = "3d"
 	settings.battle_3d_arena = "classic"
@@ -85,6 +88,7 @@ func _run() -> void:
 		for rect: Rect2 in plates:
 			_check(not rect.intersects(slot.nameplate.get_rect()), "projected enemy nameplates do not overlap")
 		plates.append(slot.nameplate.get_rect())
+	await _check_nameplate_clearance(settings)
 	var nameplate_layer: Control = stage.preview_visual.nameplate_layer
 	var preview: Node = stage.preview_visual
 	stage.set_team_preview(_team(false), _team(true), layers)
@@ -276,6 +280,55 @@ func _team(shiny: bool) -> Array:
 	for species in SPECIES: result.append({"species": species, "shiny": shiny})
 	return result
 
+func _check_nameplate_clearance(settings: Node) -> void:
+	var original_size: Vector2 = stage.size
+	var original_scale: float = settings.ui_scale
+	var original_yaw: float = stage.user_camera_yaw
+	var original_pitch: float = stage.user_camera_pitch
+	for dimensions in [Vector2(960, 540), Vector2(1280, 720), Vector2(640, 360)]:
+		stage.size = dimensions
+		for angle in [Vector2.ZERO, Vector2(0.35, 0.1), Vector2(-0.35, -0.1)]:
+			stage.user_camera_yaw = angle.x
+			stage.user_camera_pitch = angle.y
+			settings.ui_scale = 125.0 if dimensions.x == 1280 else 100.0
+			await process_frame
+			await process_frame
+			var model_rects: Array[Rect2] = []
+			# Independently project each mesh's corners, including its depth.
+			for slot in stage.preview_visual.slots:
+				for mesh in slot.actor.find_children("*", "MeshInstance3D", true, false):
+					if not mesh.is_visible_in_tree(): continue
+					var box: AABB = mesh.get_aabb()
+					var rect := Rect2()
+					for corner in 8:
+						var point: Vector3 = mesh.global_transform * box.get_endpoint(corner)
+						var projected: Vector2 = stage.camera.unproject_position(point) * stage.size / Vector2(stage.viewport.size)
+						rect = Rect2(projected, Vector2.ZERO) if corner == 0 else rect.expand(projected)
+					model_rects.append(rect)
+				if slot.identity.begins_with("dragonite"):
+					# The measured animation reaches beyond this fixture's mesh.
+					var envelope := AABB(Vector3(-0.5, 0.0, -0.5), Vector3(1.0, 3.0, 1.0))
+					var rect := Rect2()
+					for corner in 8:
+						var point: Vector3 = slot.actor.global_transform * envelope.get_endpoint(corner)
+						var projected: Vector2 = stage.camera.unproject_position(point) * stage.size / Vector2(stage.viewport.size)
+						rect = Rect2(projected, Vector2.ZERO) if corner == 0 else rect.expand(projected)
+					model_rects.append(rect)
+			var cards: Array[Rect2] = []
+			for slot in stage.preview_visual.slots:
+				if slot.side != 1: continue
+				_check(slot.nameplate.visible, "all six names remain visible at supported preview sizes and camera angles")
+				var rect: Rect2 = slot.nameplate.get_rect()
+				_check(not model_rects.any(func(model: Rect2): return model.intersects(rect)), "names do not cover either team's models")
+				_check(not cards.any(func(other: Rect2): return other.intersects(rect)), "names remain separated while orbiting and resizing")
+				cards.append(rect)
+	stage.size = original_size
+	stage.user_camera_yaw = original_yaw
+	stage.user_camera_pitch = original_pitch
+	settings.ui_scale = original_scale
+	await process_frame
+	await process_frame
+
 func _make_fixture() -> String:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(FIXTURE))
 	var entries := []
@@ -293,6 +346,7 @@ func _make_fixture() -> String:
 			shape.height = 2.0 if species != "Venusaur" else 7.0
 			shape.radius = 0.4 if species != "Venusaur" else 2.0
 			mesh.mesh = shape
+			if species == "Charizard": mesh.scale = Vector3(3.0, 0.45, 5.0)
 			mesh.position.y = shape.height * 0.5
 			var material := StandardMaterial3D.new()
 			material.albedo_color = Color("71d9cd") if shiny else Color("ecb86c")
@@ -308,6 +362,11 @@ func _make_fixture() -> String:
 			player.owner = actor
 			var library := AnimationLibrary.new()
 			var profile: Dictionary = Registry.DATA.data.profiles[models[identity].profile]
+			var profile_key: String = models[identity].profile
+			if not original_profile_bounds.has(profile_key):
+				original_profile_bounds[profile_key] = {"present": profile.has("bounds"), "value": profile.get("bounds", {}).duplicate(true)}
+			# These synthetic meshes must not inherit real Pokémon pose envelopes.
+			profile.bounds = {"idle": {"min": [-0.5, 0.0, -0.5], "size": [1.0, 3.0, 1.0]}} if species == "Dragonite" else {}
 			for action: String in profile.action_timing:
 				var animation := Animation.new()
 				animation.length = float(profile.action_timing[action].frames) / 60.0
@@ -343,6 +402,10 @@ func _cleanup(platforms: Array, layers: Array, previous_catalog: String) -> void
 	Cache.clear()
 	var models: Dictionary = Registry.DATA.data.models
 	for identity in originals: models[identity] = originals[identity]
+	for key in original_profile_bounds:
+		var profile: Dictionary = Registry.DATA.data.profiles[key]
+		if original_profile_bounds[key].present: profile.bounds = original_profile_bounds[key].value
+		else: profile.erase("bounds")
 	for path in fixture_paths: DirAccess.remove_absolute(path)
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(FIXTURE))
 	if previous_catalog.is_empty(): OS.unset_environment("POKEAETHER_MODEL_CATALOG")

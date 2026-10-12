@@ -4,6 +4,12 @@
 
 - Keep the member Bank rights editor within the screen, with visible Save/Cancel buttons, grouped permissions and a scrollable form on smaller screens.
 
+- Give Fiery Wrath an advancing wall of animated dark flames, crimson arena lighting and dedicated framing. Strengthen Supersonic Skystrike with a higher ascent, steep dive, continuous wind trail, ascent/dive camera cuts and expanding impact waves, preserving native timing and miss/block behavior.
+
+- Remove bright white reflections from the 3D stadium floor at every camera angle while keeping its purple markings and animated accent lighting.
+
+- Keep the lower 3D battle controls readable over bright arena reflections with a soft screen-fixed navy backdrop that scales with the UI, plus a more opaque action message panel.
+
 - Show the same mount, cosmetic and special-item icons in Guild Bank storage as in the Bag. Search your own donation items and resources by name, with the query preserved after refreshes and donations.
 
 - Prepare normal and shiny Landorus-Therian, Thundurus-Therian and Tornadus-Therian 3D models, with their own animations, for the next model release.
@@ -31,6 +37,8 @@
 - Add the grantable Flying Nimbus land mount with the approved golden cloud, seated rider, gentle hover and a short moving cloud trail.
 
 - Show readable species nameplates above the opposing Pokémon during 3D Team Preview, following their arena positions and clearing them before lead summons.
+
+- Keep compact 3D Team Preview nameplates above the full model silhouette and clear of both teams' Pokémon as the camera or screen size changes.
 
 - Keep a failed or stalled 3D Team Preview from disabling 3D for supported battle leads, resolve unsupported previews immediately, and safely release preview models between render frames.
 

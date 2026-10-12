@@ -324,12 +324,12 @@
     },
     "supersonicskystrike": {
       "shot": "air",
-      "tint": "35475d",
+      "tint": "17395f",
       "flash": "d6f4ff",
-      "brightness": 0.91,
-      "mix": 0.42,
-      "energy": 1.15,
-      "height": 3.7,
+      "brightness": 0.84,
+      "mix": 0.62,
+      "energy": 1.65,
+      "height": 5.5,
       "elevation": 0.18
     },
     "tectonicrage": {
