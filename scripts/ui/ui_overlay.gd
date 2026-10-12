@@ -25149,6 +25149,8 @@ func _bag_item_can_assign_to_hotbar(item: Dictionary) -> bool:
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
 
 func _bag_item_use_action_label(item: Dictionary) -> String:
+	if str(item.get("useAction", "")) == "donate_guild_room_template":
+		return LocalizationManager.text("ui.guild_design.at_manager")
 	if _bag_item_can_use_from_bag(item):
 		return LocalizationManager.text("ui.bag.action.use")
 	var use_action := str(item.get("useAction", "")).strip_edges()

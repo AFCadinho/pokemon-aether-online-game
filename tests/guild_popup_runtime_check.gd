@@ -1141,7 +1141,7 @@ func _run() -> void:
 	_check(popup.find_child("GuildLogSearchField", true, false) != null, "Guild log search has a visible field label")
 	_check(popup.find_child("GuildLogActionField", true, false) != null, "Guild log action choice has a visible field label")
 	_check(log_search != null, "Guild logs expose a search field")
-	_check(log_action_filter != null and log_action_filter.item_count == 10 and _option_has_metadata(log_action_filter, "base_room_renamed"), "Guild history exposes its relevant action filters")
+	_check(log_action_filter != null and log_action_filter.item_count == 12 and _option_has_metadata(log_action_filter, "base_room_renamed"), "Guild history exposes its relevant action filters")
 	var renamed_room_text := popup._guild_log_entry_text("guild", {"action": "base_room_renamed", "actor": "Leader", "details": {"roomKey": "left_room", "name": "Guild Lounge"}})
 	_check(renamed_room_text.contains("Leader") and renamed_room_text.contains("Left Room") and renamed_room_text.contains("Guild Lounge"), "Guild history identifies the renamed room, new name, and leader")
 	var reset_room_text := popup._guild_log_entry_text("guild", {"action": "base_room_renamed", "actor": "Leader", "details": {"roomKey": "right_room", "name": ""}})

@@ -21,6 +21,7 @@ var lock_owner: StringName
 var debounce: Timer
 var visitor_page: VBoxContainer
 var names_page: VBoxContainer
+var designs_page: VBoxContainer
 var name_fields: Dictionary = {}
 var name_buttons: Array[Button] = []
 var room_status: Label
@@ -66,7 +67,7 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 	if management:
 		var tabs := HBoxContainer.new()
 		column.add_child(tabs)
-		for page: String in ["visitors", "room_names"]:
+		for page: String in ["visitors", "room_names", "room_designs"]:
 			var tab := Button.new()
 			tab.text = _t(page)
 			tab.toggle_mode = true
@@ -133,6 +134,10 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 	actions.add_child(decline)
 	if management:
 		_build_room_names(column, identity)
+		designs_page = preload("res://scripts/ui/guild_room_design_library.gd").new()
+		designs_page.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		column.add_child(designs_page)
+		designs_page.configure(service, guild_id)
 		_show_page("visitors")
 	var close := Button.new()
 	close.text = get_node("/root/LocalizationManager").text("common.close")
@@ -146,7 +151,7 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 	_render()
 
 func refresh() -> void:
-	if busy or closed or (is_instance_valid(names_page) and names_page.visible):
+	if busy or closed or not visitor_page.visible:
 		return
 	busy = true
 	var response: Dictionary = await service.base_visit_requests(guild_id) if host else await service.base_visit_directory(registrar_id, search.text)
@@ -218,6 +223,10 @@ func _show_page(page: String) -> void:
 	names_page.visible = page == "room_names"
 	navigation[0].set_pressed_no_signal(visitor_page.visible)
 	navigation[1].set_pressed_no_signal(names_page.visible)
+	designs_page.visible = page == "room_designs"
+	navigation[2].set_pressed_no_signal(designs_page.visible)
+	if designs_page.visible:
+		designs_page.refresh()
 
 func _update_room_controls() -> void:
 	var can_edit := bool(data.get("canManage", false)) and not busy
@@ -340,6 +349,12 @@ func _set_policy(index: int) -> void:
 		status.text = ErrorText.message(result)
 
 func _input(event: InputEvent) -> void:
+	for dialog: Node in find_children("*", "Control", true, false):
+		if dialog is AetherConfirmationDialog and dialog.visible:
+			return
+	for window: Node in find_children("*", "Window", true, false):
+		if window.visible:
+			return
 	if event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		_finish({})
