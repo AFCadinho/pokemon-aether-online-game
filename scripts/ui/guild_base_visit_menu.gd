@@ -22,6 +22,7 @@ var debounce: Timer
 var visitor_page: VBoxContainer
 var names_page: VBoxContainer
 var designs_page: VBoxContainer
+var designs_scroll: ScrollContainer
 var name_fields: Dictionary = {}
 var name_buttons: Array[Button] = []
 var room_status: Label
@@ -44,7 +45,10 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(center)
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(minf(540, get_viewport().get_visible_rect().size.x - 24), minf(540, get_viewport().get_visible_rect().size.y - 24))
+	var management := host and not identity.is_empty()
+	panel.name = "GuildBaseManagementPanel"
+	_fit_panel(panel, management)
+	get_viewport().size_changed.connect(_fit_panel.bind(panel, management))
 	var skin := preload("res://scripts/ui/guild_base_room_directory.gd").new()
 	panel.theme = skin._theme()
 	panel.theme.set_stylebox("panel", "ItemList", skin._style(Color("#08141e"), Color("#355466")))
@@ -59,7 +63,6 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 	column.add_theme_constant_override("separation", 12)
 	panel.add_child(column)
 	var title := Label.new()
-	var management := host and not identity.is_empty()
 	title.text = _t("manager_title" if management else "host_title" if host else "guard_title")
 	title.add_theme_color_override("font_color", Color("#f6cf72"))
 	title.add_theme_font_size_override("font_size", 23)
@@ -134,12 +137,20 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 	actions.add_child(decline)
 	if management:
 		_build_room_names(column, identity)
+		designs_scroll = ScrollContainer.new()
+		designs_scroll.name = "RoomDesignScroll"
+		designs_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		designs_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		designs_scroll.follow_focus = true
+		column.add_child(designs_scroll)
 		designs_page = preload("res://scripts/ui/guild_room_design_library.gd").new()
+		designs_page.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		designs_page.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		column.add_child(designs_page)
+		designs_scroll.add_child(designs_page)
 		designs_page.configure(service, guild_id)
 		_show_page("visitors")
 	var close := Button.new()
+	close.name = "CloseGuildBaseManagement"
 	close.text = get_node("/root/LocalizationManager").text("common.close")
 	close.pressed.connect(func(): _finish({}))
 	column.add_child(close)
@@ -149,6 +160,10 @@ func open(guild_service: Node, initial: Dictionary, registrar := "", owner_id :=
 	timer.timeout.connect(refresh)
 	add_child(timer)
 	_render()
+
+func _fit_panel(panel: PanelContainer, management: bool) -> void:
+	var viewport_size := get_viewport().get_visible_rect().size
+	panel.custom_minimum_size = Vector2(minf(640 if management else 540, viewport_size.x - 24), minf(620 if management else 540, viewport_size.y - 24))
 
 func refresh() -> void:
 	if busy or closed or not visitor_page.visible:
@@ -224,6 +239,7 @@ func _show_page(page: String) -> void:
 	navigation[0].set_pressed_no_signal(visitor_page.visible)
 	navigation[1].set_pressed_no_signal(names_page.visible)
 	designs_page.visible = page == "room_designs"
+	designs_scroll.visible = designs_page.visible
 	navigation[2].set_pressed_no_signal(designs_page.visible)
 	if designs_page.visible:
 		designs_page.refresh()
