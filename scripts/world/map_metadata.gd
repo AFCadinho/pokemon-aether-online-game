@@ -20,6 +20,12 @@ const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.
 @export_enum("grass", "water", "cave", "ss_anne") var battle_environment_id := "grass"
 @export_group("")
 @export_enum("outdoor", "indoor", "dark") var lighting_profile := "outdoor"
+@export_group("Cave visibility")
+# Matching groups preserve Flash across floors; an empty group has no sight mask.
+@export var cave_visibility_group_id := ""
+@export_range(16.0, 512.0, 1.0) var cave_visibility_radius := 96.0
+@export_range(1.0, 64.0, 1.0) var cave_visibility_feather := 12.0
+@export_group("")
 @export_enum("outdoor", "disabled") var weather_profile := "outdoor"
 @export_range(0.0, 1.0, 0.01) var grass_encounter_chance := 0.0
 @export_range(0.0, 1.0, 0.01) var cave_encounter_chance := 0.0
@@ -101,6 +107,16 @@ func get_music_profile_id() -> String:
 
 func get_lighting_profile() -> String:
 	return lighting_profile
+
+
+func get_cave_visibility_settings() -> Dictionary:
+	if cave_visibility_group_id.strip_edges().is_empty():
+		return {}
+	return {
+		"groupId": cave_visibility_group_id.strip_edges(),
+		"radius": cave_visibility_radius,
+		"feather": cave_visibility_feather,
+	}
 
 
 func get_weather_profile() -> String:

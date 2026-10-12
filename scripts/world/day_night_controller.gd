@@ -22,6 +22,7 @@ var _world_time_service: Node
 var _creator_lighting_override_active := false
 var _creator_hour := -1.0
 var _creator_exposure := 1.0
+var _cave_flash_lit := false
 
 @onready var world_canvas_modulate: CanvasModulate = get_node_or_null(canvas_modulate_path) as CanvasModulate
 
@@ -57,6 +58,13 @@ func set_lighting_profile(profile: String) -> void:
 	_refresh_lighting()
 
 
+func set_cave_flash_lit(lit: bool) -> void:
+	if _cave_flash_lit == lit:
+		return
+	_cave_flash_lit = lit
+	_refresh_lighting()
+
+
 func set_creator_lighting_override(hour: float = -1.0, exposure: float = 1.0) -> void:
 	_creator_lighting_override_active = true
 	_creator_hour = hour
@@ -78,7 +86,7 @@ func _refresh_lighting() -> void:
 	var color := DAY_COLOR
 	var night_intensity := 0.0
 	if current_lighting_profile == LIGHTING_PROFILE_DARK:
-		color = NIGHT_COLOR
+		color = DAY_COLOR if _cave_flash_lit else NIGHT_COLOR
 		night_intensity = 1.0
 	elif current_lighting_profile == LIGHTING_PROFILE_OUTDOOR:
 		var seconds_since_midnight: float = _get_seconds_since_midnight()
