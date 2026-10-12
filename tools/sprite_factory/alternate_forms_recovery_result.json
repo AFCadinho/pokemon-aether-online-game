@@ -1,0 +1,1353 @@
+{
+  "schema": 1,
+  "scope": "All original 109 holds reconsidered; local integration only",
+  "previous_result_sha256": "c13f19125028e2bc22bfb363d09bca62832f8068c36437398626b6a67cbb2952",
+  "qualification_sha256": "3ec4f8ef82200a71fafde2e3970b42f107ba9b97554a1e00074670da7a523fab",
+  "summary": {
+    "held": 53,
+    "prepared_not_selected": 56
+  },
+  "entries": [
+    {
+      "species": "araquanid-totem",
+      "family": "Araquanid",
+      "national_dex": 752,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "burmy-sandy",
+      "family": "Burmy",
+      "national_dex": 412,
+      "resource": "pm0412_12_00",
+      "status": "held",
+      "stage": "source-shiny-material",
+      "reason": "Own geometry, motions and normal material source exist; shiny material reconstruction has not been verified.",
+      "archive_source": {
+        "archive": "Biochao/Gen4.zip",
+        "member": "pm0412.blend",
+        "crc32": "1652914e",
+        "sha256": "fdd59caa838866b909a066f66e82ac8f9ee51cec4056a75ef3bf22ae3144c292"
+      }
+    },
+    {
+      "species": "burmy-trash",
+      "family": "Burmy",
+      "national_dex": 412,
+      "resource": "pm0412_13_00",
+      "status": "held",
+      "stage": "source-shiny-material",
+      "reason": "Own geometry, motions and normal material source exist; shiny material reconstruction has not been verified.",
+      "archive_source": {
+        "archive": "Biochao/Gen4.zip",
+        "member": "pm0412.blend",
+        "crc32": "1652914e",
+        "sha256": "fdd59caa838866b909a066f66e82ac8f9ee51cec4056a75ef3bf22ae3144c292"
+      }
+    },
+    {
+      "species": "castform-rainy",
+      "family": "Castform",
+      "national_dex": 351,
+      "resource": "pm0351_13",
+      "status": "held",
+      "stage": "source-motion",
+      "reason": "Own archived rig exists, but inspected actions do not provide the required complete battle, sleep and faint set.",
+      "archive_source": {
+        "archive": "Biochao/Gen3.zip",
+        "member": "pm0351.blend",
+        "crc32": "011b4a38",
+        "sha256": "a00c50cdce74085ac5b202d9162606d3e8e6504fbe35a157ee62f534287ef7ab"
+      }
+    },
+    {
+      "species": "castform-snowy",
+      "family": "Castform",
+      "national_dex": 351,
+      "resource": "pm0351_14",
+      "status": "held",
+      "stage": "source-motion",
+      "reason": "Own archived rig exists, but inspected actions do not provide the required complete battle, sleep and faint set.",
+      "archive_source": {
+        "archive": "Biochao/Gen3.zip",
+        "member": "pm0351.blend",
+        "crc32": "011b4a38",
+        "sha256": "a00c50cdce74085ac5b202d9162606d3e8e6504fbe35a157ee62f534287ef7ab"
+      }
+    },
+    {
+      "species": "castform-sunny",
+      "family": "Castform",
+      "national_dex": 351,
+      "resource": "pm0351_12",
+      "status": "held",
+      "stage": "source-motion",
+      "reason": "Own archived rig exists, but inspected actions do not provide the required complete battle, sleep and faint set.",
+      "archive_source": {
+        "archive": "Biochao/Gen3.zip",
+        "member": "pm0351.blend",
+        "crc32": "011b4a38",
+        "sha256": "a00c50cdce74085ac5b202d9162606d3e8e6504fbe35a157ee62f534287ef7ab"
+      }
+    },
+    {
+      "species": "cherrim-sunshine",
+      "family": "Cherrim",
+      "national_dex": 421,
+      "resource": "pm0421_12_00",
+      "status": "held",
+      "stage": "source-shiny-material",
+      "reason": "Own geometry, motions and normal material source exist; shiny material reconstruction has not been verified.",
+      "archive_source": {
+        "archive": "Biochao/Gen4.zip",
+        "member": "pm0421.blend",
+        "crc32": "fb7216e0",
+        "sha256": "bd921c9095747c6a56aba5a69dfb352e01a3ef9cd95f20159b609902a54da726"
+      }
+    },
+    {
+      "species": "cramorant-gorging",
+      "family": "Cramorant",
+      "national_dex": 845,
+      "resource": "pm0917_13_00",
+      "status": "held",
+      "stage": "source-visibility",
+      "reason": "Identical base/form skeleton and sleep compatibility proved. Archived export renders both Arrokuda and Pikachu; matching visibility/eye animation is missing. No appearance approval.",
+      "archive_source": {
+        "archive": "Biochao/Gen8.zip",
+        "member": "pm0917.blend",
+        "crc32": "099a68cf",
+        "sha256": "8eb44902446d0e22dd42bdb55b3d5940ab7fbe7f2429bff4655847d55814546f"
+      }
+    },
+    {
+      "species": "cramorant-gulping",
+      "family": "Cramorant",
+      "national_dex": 845,
+      "resource": "pm0917_12_00",
+      "status": "held",
+      "stage": "source-visibility",
+      "reason": "Identical base/form skeleton and sleep compatibility proved. Archived export renders both Arrokuda and Pikachu; matching visibility/eye animation is missing. No appearance approval.",
+      "archive_source": {
+        "archive": "Biochao/Gen8.zip",
+        "member": "pm0917.blend",
+        "crc32": "099a68cf",
+        "sha256": "8eb44902446d0e22dd42bdb55b3d5940ab7fbe7f2429bff4655847d55814546f"
+      }
+    },
+    {
+      "species": "eevee-starter",
+      "family": "Eevee",
+      "national_dex": 133,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "eternatus-eternamax",
+      "family": "Eternatus",
+      "national_dex": 890,
+      "resource": "pm0940_81_00",
+      "status": "held",
+      "stage": "source-motion",
+      "reason": "Own archived rig exists, but inspected actions do not provide the required complete battle, sleep and faint set.",
+      "archive_source": {
+        "archive": "Biochao/Gen8.zip",
+        "member": "pm0940_81.blend",
+        "crc32": "5d8603f5",
+        "sha256": "909a1af5ac822abf4ffda2b060212b8ffb9b4a35352a398a7370665cb23cb46a"
+      }
+    },
+    {
+      "species": "gourgeist-large",
+      "family": "Gourgeist",
+      "national_dex": 711,
+      "resource": null,
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release."
+    },
+    {
+      "species": "gourgeist-small",
+      "family": "Gourgeist",
+      "national_dex": 711,
+      "resource": null,
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release."
+    },
+    {
+      "species": "gourgeist-super",
+      "family": "Gourgeist",
+      "national_dex": 711,
+      "resource": null,
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release."
+    },
+    {
+      "species": "greninja-ash",
+      "family": "Greninja",
+      "national_dex": 658,
+      "resource": null,
+      "status": "held",
+      "stage": "source-motion",
+      "reason": "Own pm0725_ash.blend found with model_skeleton rig, but no complete battle/sleep/faint action set in inspected archive."
+    },
+    {
+      "species": "groudon-primal",
+      "family": "Groudon",
+      "national_dex": 383,
+      "resource": "pm0383_51_00",
+      "status": "held",
+      "stage": "source-motion",
+      "reason": "Own native Z-A geometry and battle motions found, but no complete own-source sleep/rest motion in the inspected banks. Base-form motion compatibility is unverified."
+    },
+    {
+      "species": "gumshoos-totem",
+      "family": "Gumshoos",
+      "national_dex": 735,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "kommo-o-totem",
+      "family": "Kommo-o",
+      "national_dex": 784,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "kyogre-primal",
+      "family": "Kyogre",
+      "national_dex": 382,
+      "resource": "pm0382_51_00",
+      "status": "held",
+      "stage": "source-motion",
+      "reason": "Own native Z-A geometry and battle motions found, but no complete own-source sleep/rest motion in the inspected banks. Base-form motion compatibility is unverified.",
+      "archive_source": {
+        "archive": "Biochao/Gen3.zip",
+        "member": "pm0382_51.blend",
+        "crc32": "a7df7c9f",
+        "sha256": "be18091dee4e373e5421987ca49224a6508f46425f9b63e8e3aee93a562d34c0"
+      }
+    },
+    {
+      "species": "lurantis-totem",
+      "family": "Lurantis",
+      "national_dex": 754,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "mimikyu-busted-totem",
+      "family": "Mimikyu",
+      "national_dex": 778,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "mimikyu-totem",
+      "family": "Mimikyu",
+      "national_dex": 778,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "minior-blue",
+      "family": "Minior",
+      "national_dex": 774,
+      "resource": null,
+      "status": "held",
+      "stage": "source-visibility",
+      "reason": "Native scalar/colour palette decoded. The Blue-core trial exported own archived actions but also renders meteor shell/fragments. This source route lacks verified form visibility; the other Minior forms remain held without appearance approval."
+    },
+    {
+      "species": "minior-green",
+      "family": "Minior",
+      "national_dex": 774,
+      "resource": null,
+      "status": "held",
+      "stage": "source-visibility",
+      "reason": "Native scalar/colour palette decoded. The Blue-core trial exported own archived actions but also renders meteor shell/fragments. This source route lacks verified form visibility; the other Minior forms remain held without appearance approval."
+    },
+    {
+      "species": "minior-indigo",
+      "family": "Minior",
+      "national_dex": 774,
+      "resource": null,
+      "status": "held",
+      "stage": "source-visibility",
+      "reason": "Native scalar/colour palette decoded. The Blue-core trial exported own archived actions but also renders meteor shell/fragments. This source route lacks verified form visibility; the other Minior forms remain held without appearance approval."
+    },
+    {
+      "species": "minior-meteor",
+      "family": "Minior",
+      "national_dex": 774,
+      "resource": null,
+      "status": "held",
+      "stage": "source-visibility",
+      "reason": "Native scalar/colour palette decoded. The Blue-core trial exported own archived actions but also renders meteor shell/fragments. This source route lacks verified form visibility; the other Minior forms remain held without appearance approval."
+    },
+    {
+      "species": "minior-orange",
+      "family": "Minior",
+      "national_dex": 774,
+      "resource": null,
+      "status": "held",
+      "stage": "source-visibility",
+      "reason": "Native scalar/colour palette decoded. The Blue-core trial exported own archived actions but also renders meteor shell/fragments. This source route lacks verified form visibility; the other Minior forms remain held without appearance approval."
+    },
+    {
+      "species": "minior-violet",
+      "family": "Minior",
+      "national_dex": 774,
+      "resource": null,
+      "status": "held",
+      "stage": "source-visibility",
+      "reason": "Native scalar/colour palette decoded. The Blue-core trial exported own archived actions but also renders meteor shell/fragments. This source route lacks verified form visibility; the other Minior forms remain held without appearance approval."
+    },
+    {
+      "species": "minior-yellow",
+      "family": "Minior",
+      "national_dex": 774,
+      "resource": null,
+      "status": "held",
+      "stage": "source-visibility",
+      "reason": "Native scalar/colour palette decoded. The Blue-core trial exported own archived actions but also renders meteor shell/fragments. This source route lacks verified form visibility; the other Minior forms remain held without appearance approval."
+    },
+    {
+      "species": "necrozma-dawn-wings",
+      "family": "Necrozma",
+      "national_dex": 800,
+      "resource": "pm0865_13_00",
+      "status": "held",
+      "stage": "source-effect-animation",
+      "reason": "Own archived rig and actions exist; corresponding native effect-material animation binding remains incomplete.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0865.blend",
+        "crc32": "008e3d84",
+        "sha256": "a8c775648ad16332ded1498004eb620ca1b3baba6974e8f4310522567c62f82c"
+      }
+    },
+    {
+      "species": "necrozma-dusk-mane",
+      "family": "Necrozma",
+      "national_dex": 800,
+      "resource": "pm0865_12_00",
+      "status": "held",
+      "stage": "source-effect-animation",
+      "reason": "Own archived rig and actions exist; corresponding native effect-material animation binding remains incomplete.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0865.blend",
+        "crc32": "008e3d84",
+        "sha256": "a8c775648ad16332ded1498004eb620ca1b3baba6974e8f4310522567c62f82c"
+      }
+    },
+    {
+      "species": "necrozma-ultra",
+      "family": "Necrozma",
+      "national_dex": 800,
+      "resource": "pm0800_14_00",
+      "status": "held",
+      "stage": "source-motion",
+      "reason": "Own archived rig exists, but inspected actions do not provide the required complete battle, sleep and faint set.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0800.blend",
+        "crc32": "e0b07161",
+        "sha256": "14511357de8886b59c7109b60ea960603ad040cd61ac0be834ff6b199e6b9d6c"
+      }
+    },
+    {
+      "species": "ogerpon-cornerstone-tera",
+      "family": "Ogerpon",
+      "national_dex": 1017,
+      "resource": null,
+      "status": "held",
+      "stage": "source-variant-binding",
+      "reason": "Tera configuration and related 99-resource geometry exist; exact form geometry, motion and shader-state bindings remain unverified."
+    },
+    {
+      "species": "ogerpon-hearthflame-tera",
+      "family": "Ogerpon",
+      "national_dex": 1017,
+      "resource": null,
+      "status": "held",
+      "stage": "source-variant-binding",
+      "reason": "Tera configuration and related 99-resource geometry exist; exact form geometry, motion and shader-state bindings remain unverified."
+    },
+    {
+      "species": "ogerpon-teal-tera",
+      "family": "Ogerpon",
+      "national_dex": 1017,
+      "resource": null,
+      "status": "held",
+      "stage": "source-variant-binding",
+      "reason": "Tera configuration and related 99-resource geometry exist; exact form geometry, motion and shader-state bindings remain unverified."
+    },
+    {
+      "species": "ogerpon-wellspring-tera",
+      "family": "Ogerpon",
+      "national_dex": 1017,
+      "resource": null,
+      "status": "held",
+      "stage": "source-variant-binding",
+      "reason": "Tera configuration and related 99-resource geometry exist; exact form geometry, motion and shader-state bindings remain unverified."
+    },
+    {
+      "species": "pichu-spiky-eared",
+      "family": "Pichu",
+      "national_dex": 172,
+      "resource": null,
+      "status": "held",
+      "stage": "source-model",
+      "reason": "No matching costume or Spiky-eared source model found in the inspected Biochao, SCVI and Z-A archives."
+    },
+    {
+      "species": "pikachu-belle",
+      "family": "Pikachu",
+      "national_dex": 25,
+      "resource": null,
+      "status": "held",
+      "stage": "source-model",
+      "reason": "No matching costume or Spiky-eared source model found in the inspected Biochao, SCVI and Z-A archives."
+    },
+    {
+      "species": "pikachu-cosplay",
+      "family": "Pikachu",
+      "national_dex": 25,
+      "resource": null,
+      "status": "held",
+      "stage": "source-model",
+      "reason": "No matching costume or Spiky-eared source model found in the inspected Biochao, SCVI and Z-A archives."
+    },
+    {
+      "species": "pikachu-libre",
+      "family": "Pikachu",
+      "national_dex": 25,
+      "resource": null,
+      "status": "held",
+      "stage": "source-model",
+      "reason": "No matching costume or Spiky-eared source model found in the inspected Biochao, SCVI and Z-A archives."
+    },
+    {
+      "species": "pikachu-phd",
+      "family": "Pikachu",
+      "national_dex": 25,
+      "resource": null,
+      "status": "held",
+      "stage": "source-model",
+      "reason": "No matching costume or Spiky-eared source model found in the inspected Biochao, SCVI and Z-A archives."
+    },
+    {
+      "species": "pikachu-pop-star",
+      "family": "Pikachu",
+      "national_dex": 25,
+      "resource": null,
+      "status": "held",
+      "stage": "source-model",
+      "reason": "No matching costume or Spiky-eared source model found in the inspected Biochao, SCVI and Z-A archives."
+    },
+    {
+      "species": "pikachu-rock-star",
+      "family": "Pikachu",
+      "national_dex": 25,
+      "resource": null,
+      "status": "held",
+      "stage": "source-model",
+      "reason": "No matching costume or Spiky-eared source model found in the inspected Biochao, SCVI and Z-A archives."
+    },
+    {
+      "species": "pikachu-starter",
+      "family": "Pikachu",
+      "national_dex": 25,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "poltchageist-artisan",
+      "family": "Poltchageist",
+      "national_dex": 1012,
+      "resource": null,
+      "status": "held",
+      "stage": "source-variant-binding",
+      "reason": "DLC geometry exists, but complete motion resources and positive variant/stamp binding are missing from the inspected route."
+    },
+    {
+      "species": "pumpkaboo-large",
+      "family": "Pumpkaboo",
+      "national_dex": 710,
+      "resource": null,
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release."
+    },
+    {
+      "species": "pumpkaboo-small",
+      "family": "Pumpkaboo",
+      "national_dex": 710,
+      "resource": null,
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release."
+    },
+    {
+      "species": "pumpkaboo-super",
+      "family": "Pumpkaboo",
+      "national_dex": 710,
+      "resource": null,
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release."
+    },
+    {
+      "species": "ribombee-totem",
+      "family": "Ribombee",
+      "national_dex": 743,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "rockruff-dusk",
+      "family": "Rockruff",
+      "national_dex": 744,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "rotom-fan",
+      "family": "Rotom",
+      "national_dex": 479,
+      "resource": "pm0479_15_00",
+      "status": "held",
+      "stage": "source-shader",
+      "reason": "Detailed base and mask textures use different native resolutions. A separately sampled effect shader and its runtime validation are required; texture resampling is not accepted as lossless."
+    },
+    {
+      "species": "salazzle-totem",
+      "family": "Salazzle",
+      "national_dex": 758,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "sawsbuck-autumn",
+      "family": "Sawsbuck",
+      "national_dex": 586,
+      "resource": "pm0586_13_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release."
+    },
+    {
+      "species": "sawsbuck-summer",
+      "family": "Sawsbuck",
+      "national_dex": 586,
+      "resource": "pm0586_12_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release."
+    },
+    {
+      "species": "sawsbuck-winter",
+      "family": "Sawsbuck",
+      "national_dex": 586,
+      "resource": "pm0586_14_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release."
+    },
+    {
+      "species": "silvally-bug",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_17",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_17.blend",
+        "crc32": "24d43105",
+        "sha256": "4215672f36483f2be04c8d8fcba311b36dfe530446b0497b09ade414f15bc106"
+      }
+    },
+    {
+      "species": "silvally-dark",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_27",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_27.blend",
+        "crc32": "179ccc6e",
+        "sha256": "801a84d83953dc7c7f5928f4c08f9060da93d9536411a38fbcbe85324586ca68"
+      }
+    },
+    {
+      "species": "silvally-dragon",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_26",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_26.blend",
+        "crc32": "d6bbc568",
+        "sha256": "eaf891a6997e3f390c261ad8d928544deb4f3f23c814665e679fc913a27ea06b"
+      }
+    },
+    {
+      "species": "silvally-electric",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_23",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_23.blend",
+        "crc32": "f200b7b1",
+        "sha256": "b87bdec254e0a23b5f088d7dea49d3c1a0acd8c9478563cad68a88203c81194c"
+      }
+    },
+    {
+      "species": "silvally-fairy",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_28",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_28.blend",
+        "crc32": "eee756c2",
+        "sha256": "beb1585afda9e04518f234d8441eb81ca1ecdd18a0251edc949e7a51a13b88d3"
+      }
+    },
+    {
+      "species": "silvally-fighting",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_12",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_12.blend",
+        "crc32": "2b0489c2",
+        "sha256": "28d670680c71f6697512e6ca29811ec954490ac6d02450506916251fb01c241a"
+      }
+    },
+    {
+      "species": "silvally-fire",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_20",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_20.blend",
+        "crc32": "5e21600c",
+        "sha256": "f7f59fdd5473b3f10a96f3c5fd76885570f2a017fb08dd596e019d7287e8062e"
+      }
+    },
+    {
+      "species": "silvally-flying",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_13",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_13.blend",
+        "crc32": "16a1a429",
+        "sha256": "c2e27e471d05f28e77dee47ae29df37cae997184f65ae87ff50d123f84be957a"
+      }
+    },
+    {
+      "species": "silvally-ghost",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_18",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_18.blend",
+        "crc32": "0b13ad40",
+        "sha256": "c50fc5400f0b9c6716c7d6d0849df2b0c70e0412a475df54a0badb87e2418fef"
+      }
+    },
+    {
+      "species": "silvally-grass",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_22",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_22.blend",
+        "crc32": "e616cf35",
+        "sha256": "466a4d443dee61d088c26818faa94e6220b19615a1b44b6bd0b054e75703ef27"
+      }
+    },
+    {
+      "species": "silvally-ground",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_15",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_15.blend",
+        "crc32": "f8fd57e1",
+        "sha256": "cbdda1904b4aab466f3b7dbd5ae668f0963d9c30aec0114846f5047a30abe743"
+      }
+    },
+    {
+      "species": "silvally-ice",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_25",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_25.blend",
+        "crc32": "9d8af278",
+        "sha256": "8b1c7d8258791c12c99cbd431ee679b742c4e6b83698159fec1653308e72f44f"
+      }
+    },
+    {
+      "species": "silvally-poison",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_14",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_14.blend",
+        "crc32": "6572e6ee",
+        "sha256": "e7999f7a767fc631b97dfbcc30356e5a92850880be1da4d23a021488359b47b4"
+      }
+    },
+    {
+      "species": "silvally-psychic",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_24",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_24.blend",
+        "crc32": "600f645c",
+        "sha256": "7870574cc73a7a288e74036e06998ed0d10a4d7a14f7ccc5929864270f6b84bf"
+      }
+    },
+    {
+      "species": "silvally-rock",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_16",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_16.blend",
+        "crc32": "a7b539a9",
+        "sha256": "0ecd0e3bc41494f48cbafe6699b6899c9f28ab4515e300f8c67da0a66473a2e6"
+      }
+    },
+    {
+      "species": "silvally-steel",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_19",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_19.blend",
+        "crc32": "6f2db57e",
+        "sha256": "5910d6f616de357031a1d4bb365ca718858ea19b535d5af8b98ac0b770726f2a"
+      }
+    },
+    {
+      "species": "silvally-water",
+      "family": "Silvally",
+      "national_dex": 773,
+      "resource": "pm0862_21",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen7.zip",
+        "member": "pm0862_21.blend",
+        "crc32": "21875f10",
+        "sha256": "cba6a30c1a54d325fe246645ef9f9e78d05e06e917d4bddfb87daf467696e132"
+      }
+    },
+    {
+      "species": "sinistcha-masterpiece",
+      "family": "Sinistcha",
+      "national_dex": 1013,
+      "resource": null,
+      "status": "held",
+      "stage": "source-variant-binding",
+      "reason": "DLC geometry exists, but complete motion resources and positive variant/stamp binding are missing from the inspected route."
+    },
+    {
+      "species": "squawkabilly-blue",
+      "family": "Squawkabilly",
+      "national_dex": 931,
+      "resource": "pm1064_11_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release."
+    },
+    {
+      "species": "squawkabilly-white",
+      "family": "Squawkabilly",
+      "national_dex": 931,
+      "resource": "pm1064_11_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release."
+    },
+    {
+      "species": "squawkabilly-yellow",
+      "family": "Squawkabilly",
+      "national_dex": 931,
+      "resource": "pm1064_11_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release."
+    },
+    {
+      "species": "togedemaru-totem",
+      "family": "Togedemaru",
+      "national_dex": 777,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "unown-b",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_12_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_12.blend",
+        "crc32": "36b59839",
+        "sha256": "fa77fa6bc5fe10935c861dd2aecf3bd9720e8610402069a75113adfea92caecb"
+      }
+    },
+    {
+      "species": "unown-c",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_13_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_13.blend",
+        "crc32": "8923d7bd",
+        "sha256": "1c5b3271cd5bf02214534eda7b49dfce3c5dc118845b456aa7b36cb952da150c"
+      }
+    },
+    {
+      "species": "unown-d",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_14_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_14.blend",
+        "crc32": "0149e023",
+        "sha256": "61870af6e3d50fdc9f2171c8cf5dbd5edcc4a6708ab77bdca118cfafab1dcc25"
+      }
+    },
+    {
+      "species": "unown-e",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_15_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_15.blend",
+        "crc32": "6adbad51",
+        "sha256": "221842bd1bdee09f128fd47d5208fb9fd7bc0075f75ba2a3456a55d74c4afc40"
+      }
+    },
+    {
+      "species": "unown-exclamation",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_37_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_37.blend",
+        "crc32": "6552a935",
+        "sha256": "a0a6893ef43d0942582b2c5e7b723a284c2e70e382fad35d85b9a37b0268a3b8"
+      }
+    },
+    {
+      "species": "unown-f",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_16_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_16.blend",
+        "crc32": "03f54ec8",
+        "sha256": "7319fbc4af80a6ea8d405169d944ec775da381f7c55405bacd353e563c44feb0"
+      }
+    },
+    {
+      "species": "unown-g",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_17_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_17.blend",
+        "crc32": "dce8e866",
+        "sha256": "84ebc318c36f1a5f0f949d5c0e02c39bf53e1604d1cf8ae7a00c757eb0f6ede1"
+      }
+    },
+    {
+      "species": "unown-h",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_18_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_18.blend",
+        "crc32": "75df85e7",
+        "sha256": "6c1af17bb85aed0fcfc7784db22a7b968cf019eac7691d6db21f01669f08760f"
+      }
+    },
+    {
+      "species": "unown-i",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_19_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_19.blend",
+        "crc32": "2189c1cc",
+        "sha256": "fea9b527714565d064a15fb6e6b8aa06a5f066b3d2aee0bb4cb93416b5e9e7f9"
+      }
+    },
+    {
+      "species": "unown-j",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_20_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_20.blend",
+        "crc32": "c72cade0",
+        "sha256": "4f6167211a6f9fd9de2cf24ad574e02e2ba9da60e43362d1c39f353ab906e8c5"
+      }
+    },
+    {
+      "species": "unown-k",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_21_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_21.blend",
+        "crc32": "7aeeb48b",
+        "sha256": "4113a4cefc27993d3ab87a2075def75a330fa06c98f7d5cb6bcc312fb82c8370"
+      }
+    },
+    {
+      "species": "unown-l",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_22_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_22.blend",
+        "crc32": "94d0a618",
+        "sha256": "dd64f5cfef2b750e9330b8c3d1c615f091e31891ebdc81db0d9e3ffa623e9b07"
+      }
+    },
+    {
+      "species": "unown-m",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_23_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_23.blend",
+        "crc32": "3d3e22ba",
+        "sha256": "284796c986f895939c2512d5e0a5fc2edd0d2d116565373c2423cc60b1d6998e"
+      }
+    },
+    {
+      "species": "unown-n",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_24_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_24.blend",
+        "crc32": "0916d6d0",
+        "sha256": "87e5c60e1cf74f538d83db2fc110fc6d5ccd38af8e9ee524adf570f0908cd178"
+      }
+    },
+    {
+      "species": "unown-o",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_25_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_25.blend",
+        "crc32": "5066db2e",
+        "sha256": "e9f129c56cb64c6fcf311ad16bf0fa7ea8c029e764bc9e7e69d67a812a237f31"
+      }
+    },
+    {
+      "species": "unown-p",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_26_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_26.blend",
+        "crc32": "2ac01d09",
+        "sha256": "df6b6c60f7110642812835f23e653dda4aee9ccbf5587b1904146df23169f241"
+      }
+    },
+    {
+      "species": "unown-q",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_27_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_27.blend",
+        "crc32": "6194c882",
+        "sha256": "50db2c471879cb8ff1e286ecee09d1c28ca6a47b7cb15066cbe3b495065e3567"
+      }
+    },
+    {
+      "species": "unown-question",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_38_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_38.blend",
+        "crc32": "cb6d2a9f",
+        "sha256": "dc4c546d8d4729c051d756c7bea4608568b300f73d4a7b0ed0dd2d70f5b186ba"
+      }
+    },
+    {
+      "species": "unown-r",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_28_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_28.blend",
+        "crc32": "c5909340",
+        "sha256": "c0e6a05462110c541e924de1d645bb0972315f1ef541f0a2141f942ce4e657c7"
+      }
+    },
+    {
+      "species": "unown-s",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_29_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_29.blend",
+        "crc32": "e31e2d9a",
+        "sha256": "440e97366c89a9600a4d595e30774bd8bd77f9b193912346122d4ceec1965b8f"
+      }
+    },
+    {
+      "species": "unown-t",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_30_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_30.blend",
+        "crc32": "fd707d8c",
+        "sha256": "0c49a16eac0514b8c946686a2f68daba9f57da93f5c3c647b9f62f4151d605be"
+      }
+    },
+    {
+      "species": "unown-u",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_31_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_31.blend",
+        "crc32": "bed6ecd3",
+        "sha256": "50718208b3719dee36da3a25c152e30726ff546415ab7ad750a035d851ce8cfc"
+      }
+    },
+    {
+      "species": "unown-v",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_32_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_32.blend",
+        "crc32": "cff5f585",
+        "sha256": "a306443951da4f07971451cec157c8b346609b68451d08a89b864287cd6cf5b4"
+      }
+    },
+    {
+      "species": "unown-w",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_33_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_33.blend",
+        "crc32": "f394cf42",
+        "sha256": "028f4b440869a34d296d8dea7805703fa15fedc307d2307bb4246b13a7b62778"
+      }
+    },
+    {
+      "species": "unown-x",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_34_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_34.blend",
+        "crc32": "624cebb9",
+        "sha256": "f860aa597464fa10da24207a79b022216ae4204042017dc03ed7087f79de0f34"
+      }
+    },
+    {
+      "species": "unown-y",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_35_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_35.blend",
+        "crc32": "a01a3c02",
+        "sha256": "e2a13cbc3c187da6698fd190df7189ec3d57c33fd12638d8cef0d75fe8a56962"
+      }
+    },
+    {
+      "species": "unown-z",
+      "family": "Unown",
+      "national_dex": 201,
+      "resource": "pm0201_36_00",
+      "status": "prepared_not_selected",
+      "stage": "recovery-qualified",
+      "reason": "Normal and shiny qualified locally; awaiting a selected model release.",
+      "archive_source": {
+        "archive": "Biochao/Gen2.zip",
+        "member": "pm0201_36.blend",
+        "crc32": "d1d3aa6d",
+        "sha256": "2e9983652fe9b8b508ca2b243e020c207c7c7e4a11dcc76da11498c9849232d3"
+      }
+    },
+    {
+      "species": "vikavolt-totem",
+      "family": "Vikavolt",
+      "national_dex": 738,
+      "resource": null,
+      "status": "held",
+      "stage": "source-identity-scale",
+      "reason": "No verified shared-base identity and scale mapping for this form. Base geometry alone is insufficient for admission."
+    },
+    {
+      "species": "wormadam-sandy",
+      "family": "Wormadam",
+      "national_dex": 413,
+      "resource": "pm0413_12_00",
+      "status": "held",
+      "stage": "source-shiny-material",
+      "reason": "Own geometry, motions and normal material source exist; shiny material reconstruction has not been verified.",
+      "archive_source": {
+        "archive": "Biochao/Gen4.zip",
+        "member": "pm0413.blend",
+        "crc32": "5840bb61",
+        "sha256": "5729ba9d76a38f5136b8d6538342e07ebbfb8648b94879a65cf83e17cd1f1a05"
+      }
+    },
+    {
+      "species": "wormadam-trash",
+      "family": "Wormadam",
+      "national_dex": 413,
+      "resource": "pm0413_13_00",
+      "status": "held",
+      "stage": "source-shiny-material",
+      "reason": "Own geometry, motions and normal material source exist; shiny material reconstruction has not been verified.",
+      "archive_source": {
+        "archive": "Biochao/Gen4.zip",
+        "member": "pm0413.blend",
+        "crc32": "5840bb61",
+        "sha256": "5729ba9d76a38f5136b8d6538342e07ebbfb8648b94879a65cf83e17cd1f1a05"
+      }
+    },
+    {
+      "species": "xerneas-neutral",
+      "family": "Xerneas",
+      "national_dex": 716,
+      "resource": null,
+      "status": "held",
+      "stage": "source-state-material",
+      "reason": "Own Z-A resources found; neutral/default versus battle material-increment and back-effect state binding remains unverified."
+    },
+    {
+      "species": "zygarde-10",
+      "family": "Zygarde",
+      "national_dex": 718,
+      "resource": "pm0770_11_00",
+      "status": "held",
+      "stage": "source-shader",
+      "reason": "Native Fresnel/probe texture binding is unverified; a static colour substitution cannot preserve the authored material.",
+      "archive_source": {
+        "archive": "Biochao/Gen6.zip",
+        "member": "pm0770.blend",
+        "crc32": "191b83af",
+        "sha256": "e7100ce0197521a9583c0157b2f6e14bd2dc24937d465d1a37b9280f3ec9879c"
+      }
+    }
+  ]
+}
