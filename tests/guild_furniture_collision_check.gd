@@ -75,8 +75,8 @@ func _run() -> void:
 	mask.name = "FloorVisibilityMask"
 	room.add_child(mask)
 	root.add_child(room)
-	_check(Catalog.validate(room, [table, _placement("stool", 8, 11)]) == "", "Another piece fits in the unpainted part of the footprint")
-	_check(Catalog.validate(room, [table, _placement("stool", 6, 10)]) == "overlap", "Painted cells still reject overlapping furniture")
+	_check(Catalog.validate(room, [table, _placement("bin_full", 8, 11)]) == "", "Another piece fits in the unpainted part of the footprint")
+	_check(Catalog.validate(room, [table, _placement("bin_full", 6, 10)]) == "overlap", "Painted cells still reject overlapping furniture")
 	var placed := Furniture.instantiate_placement(room, table, [table])
 	room.add_child(placed)
 	_check(not placed.get_node("Collision").visible, "The authoring overlay stays hidden during play")

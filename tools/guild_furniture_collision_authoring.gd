@@ -64,7 +64,7 @@ static func default_backend_path() -> String:
 	return project.get_base_dir().path_join(sibling).path_join("account-service/catalogs/guild_base_furniture.json")
 
 
-static func export_catalogs(backend_path: String, check := false, frontend_catalog_path := CATALOG_PATH) -> Dictionary:
+static func export_catalogs(backend_path: String, check := false, frontend_catalog_path := CATALOG_PATH, layers := {}) -> Dictionary:
 	var frontend_path := ProjectSettings.globalize_path(frontend_catalog_path)
 	backend_path = ProjectSettings.globalize_path(backend_path)
 	if backend_path.simplify_path() == frontend_path.simplify_path():
@@ -78,6 +78,7 @@ static func export_catalogs(backend_path: String, check := false, frontend_catal
 		return {"success": false, "error": "Frontend and backend catalogs differ. Reconcile them before exporting collision."}
 	var count := 0
 	var changes := 0
+	var writes := {}
 	for spec: Dictionary in catalog.items:
 		var packed := ResourceLoader.load(str(spec.scenePath), "PackedScene", ResourceLoader.CACHE_MODE_IGNORE) as PackedScene
 		if packed == null:
@@ -86,7 +87,23 @@ static func export_catalogs(backend_path: String, check := false, frontend_catal
 		if str(scene.get("furniture_id")) != str(spec.id):
 			scene.free()
 			return {"success": false, "error": "Furniture ID does not match the catalog: " + str(spec.scenePath)}
-		var result := read_cells(scene.get_node_or_null("Collision") as TileMapLayer, spec)
+		var collision := scene.get_node_or_null("Collision") as TileMapLayer
+		if layers.has(str(spec.id)):
+			var edited := layers[str(spec.id)] as TileMapLayer
+			if collision == null or edited == null:
+				scene.free()
+				return {"success": false, "error": "Missing source or edited Collision layer: " + str(spec.id)}
+			collision.position = edited.position
+			collision.tile_map_data = edited.tile_map_data
+		var result := read_cells(collision, spec)
+		if bool(result.success) and layers.has(str(spec.id)) and not check:
+			var packed_scene := PackedScene.new()
+			var temporary := "user://guild-collision-%d-%s.tscn" % [OS.get_process_id(), str(spec.id)]
+			if packed_scene.pack(scene) != OK or ResourceSaver.save(packed_scene, temporary) != OK:
+				scene.free()
+				return {"success": false, "error": "Could not prepare furniture scene: " + str(spec.id)}
+			writes[ProjectSettings.globalize_path(str(spec.scenePath))] = FileAccess.get_file_as_string(temporary)
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
 		scene.free()
 		if not bool(result.success):
 			return {"success": false, "error": str(spec.id) + ": " + str(result.error)}
@@ -97,36 +114,49 @@ static func export_catalogs(backend_path: String, check := false, frontend_catal
 		count += 1
 	if check:
 		return {"success": changes == 0, "count": count, "changed": changes, "error": "%d collision layers need exporting." % changes}
-	if changes > 0:
+	if changes > 0 or not writes.is_empty():
 		var text := JSON.stringify(catalog, "  ", false) + "\n"
-		# Stage both complete files before replacing either catalog.
-		for path: String in [frontend_path, backend_path]:
-			var file := FileAccess.open(path + ".collision-export.tmp", FileAccess.WRITE)
-			if file == null:
-				_remove_staged(frontend_path, backend_path)
-				return {"success": false, "error": "Cannot write collision catalog: " + path}
-			file.store_string(text)
-			file.flush()
-			var error := file.get_error()
-			file.close()
-			if error != OK:
-				_remove_staged(frontend_path, backend_path)
-				return {"success": false, "error": "Could not finish writing collision catalog: " + path}
-		for path: String in [frontend_path, backend_path]:
-			if DirAccess.rename_absolute(path + ".collision-export.tmp", path) != OK:
-				# Restore the identical original catalogs if a paired replacement fails.
-				for restore: String in [frontend_path, backend_path]:
-					var file := FileAccess.open(restore, FileAccess.WRITE)
-					if file != null:
-						file.store_string(original_text)
-						file.close()
-				_remove_staged(frontend_path, backend_path)
-				return {"success": false, "error": "Could not replace collision catalog: " + path}
+		writes[frontend_path] = text
+		writes[backend_path] = text
+		var saved := write_files(writes)
+		if not bool(saved.success):
+			return saved
 	return {"success": true, "count": count, "changed": changes}
 
 
-static func _remove_staged(frontend_path: String, backend_path: String) -> void:
-	for path: String in [frontend_path, backend_path]:
+static func write_files(writes: Dictionary) -> Dictionary:
+	# Stage every scene and both catalogs before replacing any source file.
+	var originals := {}
+	for path: String in writes:
+		originals[path] = FileAccess.get_file_as_string(path) if FileAccess.file_exists(path) else null
+		var file := FileAccess.open(path + ".collision-export.tmp", FileAccess.WRITE)
+		if file == null:
+			_remove_staged(writes)
+			return {"success": false, "error": "Cannot write collision file: " + path}
+		file.store_string(str(writes[path]))
+		file.flush()
+		var error := file.get_error()
+		file.close()
+		if error != OK:
+			_remove_staged(writes)
+			return {"success": false, "error": "Could not finish writing collision file: " + path}
+	for path: String in writes:
+		if DirAccess.rename_absolute(path + ".collision-export.tmp", path) != OK:
+			for restore: String in originals:
+				if originals[restore] == null:
+					DirAccess.remove_absolute(restore)
+					continue
+				var file := FileAccess.open(restore, FileAccess.WRITE)
+				if file != null:
+					file.store_string(str(originals[restore]))
+					file.close()
+			_remove_staged(writes)
+			return {"success": false, "error": "Could not replace collision file: " + path}
+	return {"success": true}
+
+
+static func _remove_staged(writes: Dictionary) -> void:
+	for path: String in writes:
 		if FileAccess.file_exists(path + ".collision-export.tmp"):
 			DirAccess.remove_absolute(path + ".collision-export.tmp")
 

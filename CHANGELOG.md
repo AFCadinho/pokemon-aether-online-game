@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add complete editable Guild Café and Grand Lounge scenes for painting shared furniture collision in room context. Make all coloured floor cushions and the cushions inside Café furniture walkable.
+
 - Let artists paint Guild furniture collision in each scene’s Collision TileMapLayer and export it to both catalogs from Godot. Use the painted cells for walking, placement overlap, player occupancy and route checks, preserve them during visual imports and keep existing room layouts compatible.
 
 - Give incoming Guild invitations a prominent Guild emblem, a gold invitation card and a clear Join Guild action. Style Guild departure with the compact Aether confirmation layout.

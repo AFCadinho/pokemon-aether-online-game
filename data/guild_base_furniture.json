@@ -323,18 +323,14 @@
         0,
         -32
       ],
-      "blocksMovement": true,
+      "blocksMovement": false,
       "starterQuantity": 24,
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
       "scenePath": "res://scenes/world/guild_base/furniture/stool.tscn",
-      "collisionCells": [
-        [
-          0,
-          0
-        ]
-      ]
+      "collisionCells": [],
+      "drawOnFloor": true
     },
     {
       "id": "plant",
@@ -2013,18 +2009,14 @@
         0,
         -32
       ],
-      "blocksMovement": true,
+      "blocksMovement": false,
       "starterQuantity": 12,
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
       "scenePath": "res://scenes/world/guild_base/furniture/stool_cyan.tscn",
-      "collisionCells": [
-        [
-          0,
-          0
-        ]
-      ]
+      "collisionCells": [],
+      "drawOnFloor": true
     },
     {
       "id": "stool_blue",
@@ -2047,18 +2039,14 @@
         0,
         -32
       ],
-      "blocksMovement": true,
+      "blocksMovement": false,
       "starterQuantity": 12,
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
       "scenePath": "res://scenes/world/guild_base/furniture/stool_blue.tscn",
-      "collisionCells": [
-        [
-          0,
-          0
-        ]
-      ]
+      "collisionCells": [],
+      "drawOnFloor": true
     },
     {
       "id": "stool_green",
@@ -2081,18 +2069,14 @@
         0,
         -32
       ],
-      "blocksMovement": true,
+      "blocksMovement": false,
       "starterQuantity": 12,
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
       "scenePath": "res://scenes/world/guild_base/furniture/stool_green.tscn",
-      "collisionCells": [
-        [
-          0,
-          0
-        ]
-      ]
+      "collisionCells": [],
+      "drawOnFloor": true
     },
     {
       "id": "stool_pink",
@@ -2115,18 +2099,14 @@
         0,
         -32
       ],
-      "blocksMovement": true,
+      "blocksMovement": false,
       "starterQuantity": 12,
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
       "scenePath": "res://scenes/world/guild_base/furniture/stool_pink.tscn",
-      "collisionCells": [
-        [
-          0,
-          0
-        ]
-      ]
+      "collisionCells": [],
+      "drawOnFloor": true
     },
     {
       "id": "table_round_wood",
@@ -6526,10 +6506,6 @@
           0
         ],
         [
-          8,
-          0
-        ],
-        [
           0,
           1
         ],
@@ -6559,10 +6535,6 @@
         ],
         [
           7,
-          1
-        ],
-        [
-          8,
           1
         ],
         [
@@ -6598,10 +6570,6 @@
           2
         ],
         [
-          8,
-          2
-        ],
-        [
           0,
           3
         ],
@@ -6631,10 +6599,6 @@
         ],
         [
           7,
-          3
-        ],
-        [
-          8,
           3
         ]
       ]
@@ -6831,10 +6795,6 @@
           0
         ],
         [
-          4,
-          0
-        ],
-        [
           5,
           0
         ],
@@ -6855,10 +6815,6 @@
           1
         ],
         [
-          4,
-          1
-        ],
-        [
           5,
           1
         ],
@@ -6879,10 +6835,6 @@
           2
         ],
         [
-          4,
-          2
-        ],
-        [
           5,
           2
         ],
@@ -6900,10 +6852,6 @@
         ],
         [
           3,
-          3
-        ],
-        [
-          4,
           3
         ],
         [
@@ -6998,10 +6946,6 @@
       "scenePath": "res://scenes/world/guild_base/furniture/design_cafe_corner_table.tscn",
       "collisionCells": [
         [
-          0,
-          0
-        ],
-        [
           1,
           0
         ],
@@ -7014,10 +6958,6 @@
           0
         ],
         [
-          0,
-          1
-        ],
-        [
           1,
           1
         ],
@@ -7028,10 +6968,6 @@
         [
           3,
           1
-        ],
-        [
-          0,
-          2
         ],
         [
           1,
