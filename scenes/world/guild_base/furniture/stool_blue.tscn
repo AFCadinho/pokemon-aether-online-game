@@ -17,7 +17,7 @@ tile_set = ExtResource("2_n0i5a")
 [node name="Collision" type="TileMapLayer" parent="." unique_id=2132227017]
 z_index = 10
 position = Vector2(0, -32)
-tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255)
 tile_set = ExtResource("3_n0i5a")
 collision_enabled = false
 navigation_enabled = false

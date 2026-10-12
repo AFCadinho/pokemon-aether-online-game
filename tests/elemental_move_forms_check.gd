@@ -2,6 +2,15 @@ extends "res://tests/move_camera_choreography_check.gd"
 const Elemental = preload("res://scripts/battle/battle_ui/elemental_move_effect_3d.gd")
 const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 
+func _test_moves() -> Array:
+	return Elemental.MOVE_KEYS
+
+func _test_renderer() -> Script:
+	return Elemental
+
+func _piece_budget() -> int:
+	return 32
+
 func _sample(slot: int, effect: Node, seconds: float) -> void:
 	stage.players[slot].seek(seconds,true)
 	stage._update_move_contacts()
@@ -20,7 +29,7 @@ func _run() -> void:
 	stage.world.add_child(environment)
 	for doubles in [false,true]:
 		stage.double_mode = doubles
-		for move in Elemental.MOVE_KEYS:
+		for move in _test_moves():
 			for slot in (4 if doubles else 2):
 				for outcome in ["hit","miss","block"]:
 					stage._update_camera(0)
@@ -31,13 +40,13 @@ func _run() -> void:
 					var timing: Dictionary = stage.move_timing(move,actor)
 					assert(is_equal_approx(timing.frames/60/stage.players[slot].get_playing_speed(),float(Recipes.get_recipe(move).duration_seconds)))
 					var effect: Node = stage.create_move_effect(move,actor,target,{"show_impact":outcome=="hit","result":outcome})
-					assert(effect.get_script()==Elemental)
+					assert(effect.get_script()==_test_renderer())
 					effect.set_process(false)
 					stage.players[slot].speed_scale = 0
 					assert(stage.move_camera.effect==effect and stage.move_atmosphere.effect==effect)
 					for seconds in [effect.launch*.7,lerpf(effect.launch,effect.impact,.25),lerpf(effect.launch,effect.impact,.75),lerpf(effect.impact,effect.duration,.1),lerpf(effect.impact,effect.duration,.35),lerpf(effect.impact,effect.duration,.65)]:
 						_sample(slot,effect,seconds)
-						assert(effect.cursor<32)
+						assert(effect.cursor<_piece_budget())
 						assert(effect.impact_drawn==(outcome=="hit" and seconds>=effect.impact))
 						if seconds>=effect.impact and outcome!="hit":
 							assert(effect.cursor==effect.impact_start_index,"No impact geometry on miss/block")
@@ -74,7 +83,7 @@ func _run() -> void:
 					assert(stage.camera.transform.is_equal_approx(overview))
 					await get_tree().process_frame
 	router.playback_speed = 8
-	for move in Elemental.MOVE_KEYS:
+	for move in _test_moves():
 		await router.play_move_animation(move,"p1","p2",{"stop_at_impact":true,"show_impact":true})
 		await router.finish_3d_impact_damage("p2")
 		assert(stage.common_effects.is_empty() and stage.move_camera.effect==null and stage.camera.environment==null)
@@ -83,5 +92,5 @@ func _run() -> void:
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("ELEMENTAL_FORMS_OK moves=5 singles_doubles=true outcomes=3 native_timing=true framing=true pause=true weather=true camera_toggle=true cleanup=true")
+	print("ELEMENTAL_FORMS_OK moves=",_test_moves().size()," singles_doubles=true outcomes=3 native_timing=true framing=true pause=true weather=true camera_toggle=true cleanup=true")
 	get_tree().quit()

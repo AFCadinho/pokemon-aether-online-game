@@ -1,0 +1,429 @@
+[gd_scene format=4]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/guild_base_right_room/guild_base_right_room.visual.tscn" id="1_epau6"]
+[ext_resource type="PackedScene" path="res://scenes/world/guild_base/furniture/design_kitchen_counter.tscn" id="2_xxjab"]
+[ext_resource type="PackedScene" path="res://scenes/world/guild_base/furniture/design_cafe_table_set.tscn" id="3_c7f2s"]
+[ext_resource type="PackedScene" path="res://scenes/world/guild_base/furniture/design_cafe_corner_table.tscn" id="4_mgo4y"]
+[ext_resource type="PackedScene" path="res://scenes/world/guild_base/furniture/red_carpet.tscn" id="5_3jkae"]
+[ext_resource type="PackedScene" path="res://scenes/world/guild_base/furniture/table_small.tscn" id="6_pndol"]
+[ext_resource type="PackedScene" path="res://scenes/world/guild_base/furniture/flowers.tscn" id="7_otyl1"]
+[ext_resource type="PackedScene" path="res://scenes/world/guild_base/furniture/plate.tscn" id="8_bfpum"]
+[ext_resource type="PackedScene" path="res://scenes/world/guild_base/furniture/plant.tscn" id="9_xmbe7"]
+[ext_resource type="PackedScene" path="res://scenes/world/guild_base/furniture/stool.tscn" id="10_cstxa"]
+
+[node name="Room1Template" type="Node2D" unique_id=676713468]
+editor_description = "Paint Furniture/<piece>/Collision, then Project > Tools > Export Guild Furniture Collision. Collision changes apply to every use of that furniture. Layout positions come from guild_room_designs.json."
+texture_filter = 1
+metadata/guild_room_template = "guild-room-1-template"
+
+[node name="RoomVisual" type="Node2D" parent="." unique_id=1701500996 instance=ExtResource("1_epau6")]
+metadata/pao_generated_visual = true
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/guild_base/Guild Base Room 1 - Empty.tmx"
+metadata/tiled_visual_map = {
+"height": 19,
+"orientation": "orthogonal",
+"render_order": "right-down",
+"tile_height": 32,
+"tile_width": 32,
+"tiled_version": "1.12.2",
+"version": "1.10",
+"width": 23
+}
+
+[node name="Furniture" type="Node2D" parent="." unique_id=1197256330]
+
+[node name="DesignKitchenCounter_01" parent="Furniture" unique_id=2133735757 instance=ExtResource("2_xxjab")]
+editor_description = "Collision edits affect all design_kitchen_counter furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 255
+z_as_relative = false
+position = Vector2(128, 256)
+metadata/placement = {
+"furnitureId": "design_kitchen_counter",
+"height": 4.0,
+"id": "c5e47f76-f7cb-54b9-9bc5-3163a1d6420f",
+"parentId": null,
+"slot": null,
+"width": 9.0,
+"x": 4.0,
+"y": 4.0
+}
+metadata/collision_baseline = [[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [3.0, 0.0], [4.0, 0.0], [5.0, 0.0], [6.0, 0.0], [7.0, 0.0], [0.0, 1.0], [1.0, 1.0], [2.0, 1.0], [3.0, 1.0], [4.0, 1.0], [5.0, 1.0], [6.0, 1.0], [7.0, 1.0], [0.0, 2.0], [1.0, 2.0], [2.0, 2.0], [3.0, 2.0], [4.0, 2.0], [5.0, 2.0], [6.0, 2.0], [7.0, 2.0], [0.0, 3.0], [1.0, 3.0], [2.0, 3.0], [3.0, 3.0], [4.0, 3.0], [5.0, 3.0], [6.0, 3.0], [7.0, 3.0]]
+
+[node name="Collision" parent="Furniture/DesignKitchenCounter_01" index="3" unique_id=423531428]
+z_index = 4095
+z_as_relative = false
+
+[node name="DesignCafeTableSet_02" parent="Furniture" unique_id=313636968 instance=ExtResource("3_c7f2s")]
+editor_description = "Collision edits affect all design_cafe_table_set furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 255
+z_as_relative = false
+position = Vector2(416, 256)
+metadata/placement = {
+"furnitureId": "design_cafe_table_set",
+"height": 4.0,
+"id": "7246fb67-532c-55ec-9bfd-266195aa783f",
+"parentId": null,
+"slot": null,
+"width": 6.0,
+"x": 13.0,
+"y": 4.0
+}
+metadata/collision_baseline = [[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [3.0, 0.0], [5.0, 0.0], [0.0, 1.0], [1.0, 1.0], [2.0, 1.0], [3.0, 1.0], [5.0, 1.0], [0.0, 2.0], [1.0, 2.0], [2.0, 2.0], [3.0, 2.0], [5.0, 2.0], [0.0, 3.0], [1.0, 3.0], [2.0, 3.0], [3.0, 3.0], [5.0, 3.0]]
+
+[node name="Collision" parent="Furniture/DesignCafeTableSet_02" index="3" unique_id=263469684]
+z_index = 4095
+z_as_relative = false
+
+[node name="DesignCafeCornerTable_03" parent="Furniture" unique_id=460837158 instance=ExtResource("4_mgo4y")]
+editor_description = "Collision edits affect all design_cafe_corner_table furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 479
+z_as_relative = false
+position = Vector2(128, 480)
+metadata/placement = {
+"furnitureId": "design_cafe_corner_table",
+"height": 3.0,
+"id": "a9b79866-eb11-5b19-b21e-5b2423e57657",
+"parentId": null,
+"slot": null,
+"width": 4.0,
+"x": 4.0,
+"y": 12.0
+}
+metadata/collision_baseline = [[1.0, 0.0], [2.0, 0.0], [3.0, 0.0], [1.0, 1.0], [2.0, 1.0], [3.0, 1.0], [1.0, 2.0], [2.0, 2.0], [3.0, 2.0]]
+
+[node name="Collision" parent="Furniture/DesignCafeCornerTable_03" index="3" unique_id=1693368180]
+z_index = 4095
+z_as_relative = false
+
+[node name="RedCarpet_04" parent="Furniture" unique_id=1653239536 instance=ExtResource("5_3jkae")]
+editor_description = "Collision edits affect all red_carpet furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 2
+z_as_relative = false
+position = Vector2(128, 352)
+metadata/placement = {
+"furnitureId": "red_carpet",
+"height": 3.0,
+"id": "6c1e12dd-7ce0-5e60-84ee-4b6f441bedd4",
+"parentId": null,
+"slot": null,
+"width": 15.0,
+"x": 4.0,
+"y": 8.0
+}
+metadata/collision_baseline = []
+
+[node name="Visual" parent="Furniture/RedCarpet_04" index="0" unique_id=292564113]
+tile_map_data = PackedByteArray("AAAAAAAAAAACAAEAAAABAAAAAAADAAEAAAACAAAAAAADAAEAAAAAAAEAAAAIAAEAAAABAAEAAAAJAAEAAAACAAEAAAAJAAEAAAAAAAIAAAAOAAEAAAABAAIAAAAPAAEAAAACAAIAAAAPAAEAAAADAAAAAAADAAEAAAAEAAAAAAADAAEAAAAFAAAAAAADAAEAAAAGAAAAAAADAAEAAAAHAAAAAAADAAEAAAAIAAAAAAADAAEAAAAJAAAAAAADAAEAAAAKAAAAAAADAAEAAAALAAAAAAADAAEAAAAMAAAAAAADAAEAAAANAAAAAAADAAEAAAAOAAAAAAAEAAEAAAADAAEAAAAJAAEAAAAEAAEAAAAJAAEAAAAFAAEAAAAJAAEAAAAGAAEAAAAJAAEAAAAHAAEAAAAJAAEAAAAIAAEAAAAJAAEAAAAJAAEAAAAJAAEAAAAKAAEAAAAJAAEAAAALAAEAAAAJAAEAAAAMAAEAAAAJAAEAAAANAAEAAAAJAAEAAAAOAAEAAAAKAAEAAAADAAIAAAAPAAEAAAAEAAIAAAAPAAEAAAAFAAIAAAAPAAEAAAAGAAIAAAAPAAEAAAAHAAIAAAAPAAEAAAAIAAIAAAAPAAEAAAAJAAIAAAAPAAEAAAAKAAIAAAAPAAEAAAALAAIAAAAPAAEAAAAMAAIAAAAPAAEAAAANAAIAAAAPAAEAAAAOAAIAAAAAAAIAAAA=")
+
+[node name="Collision" parent="Furniture/RedCarpet_04" index="1" unique_id=745867895]
+z_index = 4095
+z_as_relative = false
+
+[node name="TableSmall_05" parent="Furniture" unique_id=588414150 instance=ExtResource("6_pndol")]
+editor_description = "Collision edits affect all table_small furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 479
+z_as_relative = false
+position = Vector2(320, 480)
+metadata/placement = {
+"furnitureId": "table_small",
+"height": 2.0,
+"id": "416415ad-f28b-5674-a759-734276300af8",
+"parentId": null,
+"slot": null,
+"width": 3.0,
+"x": 10.0,
+"y": 13.0
+}
+metadata/collision_baseline = [[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [0.0, 1.0], [1.0, 1.0], [2.0, 1.0]]
+
+[node name="Collision" parent="Furniture/TableSmall_05" index="1" unique_id=174656959]
+z_index = 4095
+z_as_relative = false
+
+[node name="Flowers_15" parent="Furniture/TableSmall_05" unique_id=23721349 instance=ExtResource("7_otyl1")]
+editor_description = "Collision edits affect all flowers furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 1
+position = Vector2(32, -32)
+metadata/placement = {
+"furnitureId": "flowers",
+"height": 1.0,
+"id": "a950bdd9-2d7c-5f38-b14a-71183e390c38",
+"parentId": "416415ad-f28b-5674-a759-734276300af8",
+"slot": 0.0,
+"width": 1.0,
+"x": 0.0,
+"y": 0.0
+}
+metadata/collision_baseline = []
+
+[node name="Collision" parent="Furniture/TableSmall_05/Flowers_15" index="1" unique_id=1220784956]
+z_index = 4095
+z_as_relative = false
+
+[node name="Plate_17" parent="Furniture/TableSmall_05" unique_id=1495138699 instance=ExtResource("8_bfpum")]
+editor_description = "Collision edits affect all plate furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 1
+position = Vector2(0, -64)
+metadata/placement = {
+"furnitureId": "plate",
+"height": 1.0,
+"id": "103d1348-5e9c-5f02-bc4a-dfc4b8d7497f",
+"parentId": "416415ad-f28b-5674-a759-734276300af8",
+"slot": 2.0,
+"width": 1.0,
+"x": 0.0,
+"y": 0.0
+}
+metadata/collision_baseline = []
+
+[node name="Collision" parent="Furniture/TableSmall_05/Plate_17" index="1" unique_id=975886715]
+z_index = 4095
+z_as_relative = false
+
+[node name="TableSmall_06" parent="Furniture" unique_id=1460537321 instance=ExtResource("6_pndol")]
+editor_description = "Collision edits affect all table_small furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 479
+z_as_relative = false
+position = Vector2(480, 480)
+metadata/placement = {
+"furnitureId": "table_small",
+"height": 2.0,
+"id": "ed5c5e2b-d7fe-541b-9ff8-17bbb90f41aa",
+"parentId": null,
+"slot": null,
+"width": 3.0,
+"x": 15.0,
+"y": 13.0
+}
+metadata/collision_baseline = [[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [0.0, 1.0], [1.0, 1.0], [2.0, 1.0]]
+
+[node name="Collision" parent="Furniture/TableSmall_06" index="1" unique_id=174656959]
+z_index = 4095
+z_as_relative = false
+
+[node name="Flowers_16" parent="Furniture/TableSmall_06" unique_id=849363338 instance=ExtResource("7_otyl1")]
+editor_description = "Collision edits affect all flowers furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 1
+position = Vector2(32, -32)
+metadata/placement = {
+"furnitureId": "flowers",
+"height": 1.0,
+"id": "4f1c30bd-aa0d-58be-88e7-2d3de746410d",
+"parentId": "ed5c5e2b-d7fe-541b-9ff8-17bbb90f41aa",
+"slot": 0.0,
+"width": 1.0,
+"x": 0.0,
+"y": 0.0
+}
+metadata/collision_baseline = []
+
+[node name="Collision" parent="Furniture/TableSmall_06/Flowers_16" index="1" unique_id=1220784956]
+z_index = 4095
+z_as_relative = false
+
+[node name="Plate_18" parent="Furniture/TableSmall_06" unique_id=956099709 instance=ExtResource("8_bfpum")]
+editor_description = "Collision edits affect all plate furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 1
+position = Vector2(64, -32)
+metadata/placement = {
+"furnitureId": "plate",
+"height": 1.0,
+"id": "197b6cc5-f4ff-54b6-b4af-b0510972997b",
+"parentId": "ed5c5e2b-d7fe-541b-9ff8-17bbb90f41aa",
+"slot": 1.0,
+"width": 1.0,
+"x": 0.0,
+"y": 0.0
+}
+metadata/collision_baseline = []
+
+[node name="Collision" parent="Furniture/TableSmall_06/Plate_18" index="1" unique_id=975886715]
+z_index = 4095
+z_as_relative = false
+
+[node name="Plant_07" parent="Furniture" unique_id=147971926 instance=ExtResource("9_xmbe7")]
+editor_description = "Collision edits affect all plant furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 383
+z_as_relative = false
+position = Vector2(192, 384)
+metadata/placement = {
+"furnitureId": "plant",
+"height": 1.0,
+"id": "3f75ea59-7f3d-574c-abff-50ab4a1cb7b7",
+"parentId": null,
+"slot": null,
+"width": 1.0,
+"x": 6.0,
+"y": 11.0
+}
+metadata/collision_baseline = [[0.0, 0.0]]
+
+[node name="Collision" parent="Furniture/Plant_07" index="1" unique_id=186395472]
+z_index = 4095
+z_as_relative = false
+
+[node name="Plant_08" parent="Furniture" unique_id=1687949415 instance=ExtResource("9_xmbe7")]
+editor_description = "Collision edits affect all plant furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 383
+z_as_relative = false
+position = Vector2(352, 384)
+metadata/placement = {
+"furnitureId": "plant",
+"height": 1.0,
+"id": "d530713e-f513-5910-8313-9c4db6ab5030",
+"parentId": null,
+"slot": null,
+"width": 1.0,
+"x": 11.0,
+"y": 11.0
+}
+metadata/collision_baseline = [[0.0, 0.0]]
+
+[node name="Collision" parent="Furniture/Plant_08" index="1" unique_id=186395472]
+z_index = 4095
+z_as_relative = false
+
+[node name="Plant_09" parent="Furniture" unique_id=979942973 instance=ExtResource("9_xmbe7")]
+editor_description = "Collision edits affect all plant furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 383
+z_as_relative = false
+position = Vector2(576, 384)
+metadata/placement = {
+"furnitureId": "plant",
+"height": 1.0,
+"id": "3346e239-abc6-573a-93eb-60cb45424c23",
+"parentId": null,
+"slot": null,
+"width": 1.0,
+"x": 18.0,
+"y": 11.0
+}
+metadata/collision_baseline = [[0.0, 0.0]]
+
+[node name="Collision" parent="Furniture/Plant_09" index="1" unique_id=186395472]
+z_index = 4095
+z_as_relative = false
+
+[node name="Stool_10" parent="Furniture" unique_id=1089957081 instance=ExtResource("10_cstxa")]
+editor_description = "Collision edits affect all stool furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 2
+z_as_relative = false
+position = Vector2(288, 416)
+metadata/placement = {
+"furnitureId": "stool",
+"height": 1.0,
+"id": "51827fd4-6626-5136-a10b-a8a0272474f4",
+"parentId": null,
+"slot": null,
+"width": 1.0,
+"x": 9.0,
+"y": 12.0
+}
+metadata/collision_baseline = []
+
+[node name="Collision" parent="Furniture/Stool_10" index="1" unique_id=800463275]
+z_index = 4095
+z_as_relative = false
+
+[node name="Stool_11" parent="Furniture" unique_id=433432186 instance=ExtResource("10_cstxa")]
+editor_description = "Collision edits affect all stool furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 2
+z_as_relative = false
+position = Vector2(448, 416)
+metadata/placement = {
+"furnitureId": "stool",
+"height": 1.0,
+"id": "46ddb650-4ac6-5d94-aa34-effd26b62363",
+"parentId": null,
+"slot": null,
+"width": 1.0,
+"x": 14.0,
+"y": 12.0
+}
+metadata/collision_baseline = []
+
+[node name="Collision" parent="Furniture/Stool_11" index="1" unique_id=800463275]
+z_index = 4095
+z_as_relative = false
+
+[node name="Stool_12" parent="Furniture" unique_id=428677139 instance=ExtResource("10_cstxa")]
+editor_description = "Collision edits affect all stool furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 2
+z_as_relative = false
+position = Vector2(256, 480)
+metadata/placement = {
+"furnitureId": "stool",
+"height": 1.0,
+"id": "9126cdb8-29c0-5edf-b1df-d38a0cad0b5a",
+"parentId": null,
+"slot": null,
+"width": 1.0,
+"x": 8.0,
+"y": 14.0
+}
+metadata/collision_baseline = []
+
+[node name="Collision" parent="Furniture/Stool_12" index="1" unique_id=800463275]
+z_index = 4095
+z_as_relative = false
+
+[node name="Stool_13" parent="Furniture" unique_id=1014573221 instance=ExtResource("10_cstxa")]
+editor_description = "Collision edits affect all stool furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 2
+z_as_relative = false
+position = Vector2(416, 480)
+metadata/placement = {
+"furnitureId": "stool",
+"height": 1.0,
+"id": "2bd481a3-6782-5f8b-b181-bf01eea7c755",
+"parentId": null,
+"slot": null,
+"width": 1.0,
+"x": 13.0,
+"y": 14.0
+}
+metadata/collision_baseline = []
+
+[node name="Collision" parent="Furniture/Stool_13" index="1" unique_id=800463275]
+z_index = 4095
+z_as_relative = false
+
+[node name="Stool_14" parent="Furniture" unique_id=921734660 instance=ExtResource("10_cstxa")]
+editor_description = "Collision edits affect all stool furniture, including other templates. Repeated copies are synchronized on export."
+z_index = 2
+z_as_relative = false
+position = Vector2(576, 480)
+metadata/placement = {
+"furnitureId": "stool",
+"height": 1.0,
+"id": "cdf57153-5867-5c1e-8f1d-bb7245414980",
+"parentId": null,
+"slot": null,
+"width": 1.0,
+"x": 18.0,
+"y": 14.0
+}
+metadata/collision_baseline = []
+
+[node name="Collision" parent="Furniture/Stool_14" index="1" unique_id=800463275]
+z_index = 4095
+z_as_relative = false
+
+[editable path="Furniture/DesignKitchenCounter_01"]
+[editable path="Furniture/DesignCafeTableSet_02"]
+[editable path="Furniture/DesignCafeCornerTable_03"]
+[editable path="Furniture/RedCarpet_04"]
+[editable path="Furniture/TableSmall_05"]
+[editable path="Furniture/TableSmall_05/Flowers_15"]
+[editable path="Furniture/TableSmall_05/Plate_17"]
+[editable path="Furniture/TableSmall_06"]
+[editable path="Furniture/TableSmall_06/Flowers_16"]
+[editable path="Furniture/TableSmall_06/Plate_18"]
+[editable path="Furniture/Plant_07"]
+[editable path="Furniture/Plant_08"]
+[editable path="Furniture/Plant_09"]
+[editable path="Furniture/Stool_10"]
+[editable path="Furniture/Stool_11"]
+[editable path="Furniture/Stool_12"]
+[editable path="Furniture/Stool_13"]
+[editable path="Furniture/Stool_14"]

@@ -22,7 +22,7 @@ func configure(map: Node2D, value: Dictionary, preview := false) -> void:
 	var rectangle := Catalog.footprint(placement)
 	position = Vector2(rectangle.position.x, rectangle.end.y) * 32
 	z_as_relative = false
-	z_index = 2 if str(spec.category) == "floor" or (str(spec.placement) == "wall" and not bool(spec.blocksMovement)) else clampi(int(position.y) - 1, -4096, 4094)
+	z_index = 2 if bool(spec.get("drawOnFloor", false)) or str(spec.category) == "floor" or (str(spec.placement) == "wall" and not bool(spec.blocksMovement)) else clampi(int(position.y) - 1, -4096, 4094)
 	if bool(spec.resizable):
 		var visual := get_node("Visual") as TileMapLayer
 		visual.clear()

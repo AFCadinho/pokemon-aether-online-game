@@ -98,6 +98,49 @@ empty. The marker layer is independent of the art TileSet. Tabletop decorations
 inherit their parent’s floor collision; paint the table instead. Nonempty
 Collision layers on surface decorations are rejected during export.
 
+The complete **Guild Café / Room 1** and **Grand Lounge / Room 2** authoring
+scenes are `scenes/world/guild_base/templates/guild-room-1-template.tscn` and
+`guild-room-2-template.tscn`. They show the exact terrain, placed furniture,
+resized carpets and attached tabletop decorations from the template catalog.
+Expand **Furniture → <piece> → Collision** and paint while seeing the rest of
+the room. Editable Children is already enabled. These scenes are editor views;
+the runtime still builds Guild rooms from saved placements, so players can
+continue rearranging individual pieces.
+
+Use the same **Export Guild Furniture Collision** menu with a template open.
+The tool saves that scene, exports edited masks to the original furniture
+scenes and both paired catalogs, then synchronizes repeated copies in the open
+template. A shape belongs to the furniture type everywhere, including other
+room templates. Edit one copy or give all edited copies the same shape;
+contradictory drawings are rejected before any source file changes. Templates
+retain their layout from `guild_room_designs.json`; moving, scaling or changing
+the placement metadata is rejected by the collision export. The tool saves
+only the current scene and reads saved source furniture, not unsaved changes
+in other open tabs. Export those first. If a saved source changed since a
+template was built, unedited collision is refreshed on export, while conflicting
+new template edits are rejected. Open the source scene or refresh the template
+before drawing again.
+
+Resizable carpets show their full-size collision in the template, but still
+share a nine-slice mask: all repeated cells of an edge/centre must agree.
+Tabletop decorations inherit their table's floor collision. Floor cushions
+(`stool`, `stool_cyan`, `stool_blue`, `stool_green`, `stool_pink`) are walkable
+in all rooms and draw below characters standing on them. The Café's composite kitchen/table pieces also leave their
+embedded cushions and approach spaces clear; other solid parts stay blocked.
+This permits standing on cushions and does not add a new sitting animation.
+
+After exporting any pending drawings, rebuild editor scenes from updated
+catalogs (for example after importing new TMX layouts) with:
+
+```sh
+ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend \
+  --script res://tools/create_guild_room_template_scenes.gd
+```
+
+Rebuilding replaces these generated authoring views, so export pending
+collision edits first. It does not change layouts or the original furniture
+scenes. Rebuild after source art imports to refresh resized carpet overrides.
+
 Save edited furniture scenes and choose **Project → Tools → Export Guild
 Furniture Collision**. The tool saves the current furniture scene, checks all
 saved Collision layers, then updates both paired catalogs. It does not save
