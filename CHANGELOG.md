@@ -4,6 +4,8 @@
 
 - Show the same mount, cosmetic and special-item icons in Guild Bank storage as in the Bag. Search your own donation items and resources by name, with the query preserved after refreshes and donations.
 
+- Prepare normal and shiny Landorus-Therian, Thundurus-Therian and Tornadus-Therian 3D models, with their own animations, for the next model release.
+
 - Add the Super Saiyan 4 (SS4) Outfit Box to Gift Store → Cosmetics → Outfits for 450 Gems, with complete male/female trainer and overworld previews.
 
 - Lend tradeable land and Surf mounts directly to nearby players. Select mounts alongside held items, see player-loan deadlines in the mount selector, and safely stop riding or switch Surf mounts when the loan ends.
