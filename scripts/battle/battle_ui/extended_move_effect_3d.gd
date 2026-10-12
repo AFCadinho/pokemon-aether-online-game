@@ -1,6 +1,8 @@
 extends "res://scripts/battle/battle_ui/move_effect_3d.gd"
 ## Explicit catalogue presentations. Solid silhouettes, native clock, no gameplay writes.
 const Forms = preload("res://scripts/battle/battle_ui/move_volume_forms_3d.gd")
+const FieryWrath = preload("res://scripts/battle/battle_ui/fiery_wrath_forms_3d.gd")
+var wrath: RefCounted
 var recipe: Dictionary
 var motif := ""
 var launched := false
@@ -82,6 +84,7 @@ void fragment() {
 	crest = _wave_mesh()
 	funnel = Forms.swept_mesh(true)
 	prepared = true
+	if key == "fierywrath": wrath = FieryWrath.new()
 
 func _ribbon(wave: bool) -> ArrayMesh:
 	var tool := SurfaceTool.new()
@@ -128,6 +131,9 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 	accent.albedo_color.a = envelope*.8
 	mist_material.albedo_color.a = envelope*.13
 	impact_drawn = hit and bool(recipe.damaging) and after>=0
+	if wrath != null:
+		wrath.draw(self)
+		return true
 	if motif in ["ram","rush","punch","kick","slash","fang","pierce","lash","spin","hammer","grip","vanish"]: _contact()
 	else:
 		match motif:

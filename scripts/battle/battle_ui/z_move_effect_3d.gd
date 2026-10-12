@@ -2,6 +2,7 @@ extends "res://scripts/battle/battle_ui/family_move_effect_3d.gd"
 ## Authored 3D interpretations of the existing 2D Z-move storyboards.
 ## Per-move source frames and hashes live beside each choreography in the recipe.
 const Forms = preload("res://scripts/battle/battle_ui/z_move_forms_3d.gd")
+const SkystrikePath = preload("res://scripts/battle/battle_ui/skystrike_path_3d.gd")
 var style := ""
 var dark: StandardMaterial3D
 var accent: StandardMaterial3D
@@ -104,12 +105,13 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 		"sound_rings": _sound_scene(flight,after,envelope,axis)
 		"evolution": _evolution_scene(charge,flight,after,envelope,facing)
 		"fissure": _fissure_scene(flight,after,envelope,facing,side)
+		"sky_dive": _skystrike_scene(points,charge,after,envelope)
 		_: _body_scene(from,points.get("actor_center",from),charge,flight,after,envelope,facing,side,axis)
 	_field_choreography(charge,flight,after,envelope,facing,side)
 	# One final gameplay beat; the preceding barrage/spiral is only choreography.
 	if hit and bool(recipe.damaging) and after>=0:
 		impact_drawn = true
-		_climax(aim,fixed_ground,after,facing,side)
+		if style != "sky_dive": _climax(aim,fixed_ground,after,facing,side)
 	return true
 
 func _bolt(a: Vector3,b: Vector3,width: float,seed_value: float,mat: Material) -> void:
@@ -390,6 +392,35 @@ func _climax(target: Vector3, ground: Vector3, after: float, _facing: Basis, _si
 	if flash > 0.001: _piece(sphere, pale, target, Vector3.ONE * (0.3 + after * 3.0) * flash)
 	for i in 2:
 		_piece(ring, edge, ground + Vector3.UP * 0.04 * i, Vector3.ONE * (0.45 + after * (1.4 + i * 0.3)) * fade)
+
+func _skystrike_scene(points: Dictionary, charge: float, after: float, alpha: float) -> void:
+	var center: Vector3 = points.actor_center
+	var radius := clampf(float(points.actor_radius),0.65,1.4)
+	if elapsed < launch:
+		for i in 2:
+			_piece(ring,accent,fixed_actor_ground+Vector3.UP*(0.1+charge*(0.5+i*0.6)),Vector3.ONE*(radius+0.2+i*0.2)*alpha)
+		return
+	if after < 0:
+		var progress := clampf((elapsed-launch)/maxf(impact*0.96-launch,0.01),0,1)
+		var velocity := SkystrikePath.direction(progress,aim-fixed_center)
+		if velocity.is_zero_approx(): velocity = (aim-fixed_center).normalized()
+		var basis := Forms.Volume.along(-velocity)
+		# A single swept air envelope follows the actual moving model, including
+		# its vertical ascent and diving direction; it never replaces the model.
+		_piece(wake,wake_surface,center-velocity*radius*0.2,Vector3(radius,2.8,radius)*alpha,basis)
+		_piece(funnel,wake_surface,center+velocity*radius,Vector3(radius*0.9,1.2,radius*0.9)*alpha,basis)
+		for i in 2:
+			_piece(ring,accent,center-velocity*(0.3+i*1.1),Vector3.ONE*(radius+0.12+i*0.25)*alpha,basis)
+	else:
+		var fade := 1.0-smoothstep(0.0,0.7,after)
+		var forward := (aim-fixed_center).normalized()
+		# Residual air dissipates on a miss too, without a hit flash or ground slam.
+		_piece(wake,wake_surface,aim+forward*after*1.5,Vector3(radius,1.5,radius)*fade,Forms.Volume.along(-forward))
+		if not hit: return
+		for i in 3:
+			var reach := (0.5+after*(5.0+i*2.0))*fade
+			_piece(ring,accent,fixed_ground+Vector3.UP*(0.08+i*0.16),Vector3(reach,0.5,reach))
+		_piece(sphere,glow,aim,Vector3(1.7,0.7,1.7)*(0.5+after)*fade)
 
 func _field_choreography(charge: float, flight: float, after: float, alpha: float, _facing: Basis, _side: Vector3) -> void:
 	# The atmosphere supplies arena-scale colour. Keep geometry concentrated on

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Fiery Wrath an advancing wall of animated dark flames, crimson arena lighting and dedicated framing. Strengthen Supersonic Skystrike with a higher ascent, steep dive, continuous wind trail, ascent/dive camera cuts and expanding impact waves, preserving native timing and miss/block behavior.
+
 - Show the same mount, cosmetic and special-item icons in Guild Bank storage as in the Bag. Search your own donation items and resources by name, with the query preserved after refreshes and donations.
 
 - Prepare normal and shiny Landorus-Therian, Thundurus-Therian and Tornadus-Therian 3D models, with their own animations, for the next model release.
