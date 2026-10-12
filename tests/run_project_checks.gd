@@ -196,6 +196,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/map_blocker_index_check.gd",
 	"res://tests/overlay_layout_performance_check.gd",
 	"res://tests/world_access_catalog_generation_check.gd",
+	"res://tests/pewter_museum_scene_check.gd",
 	"res://tests/cerulean_cave_power_plant_transition_check.gd",
 	"res://tests/route5_saffron_gate_transition_check.gd",
 	"res://tests/saffron_city_connections_check.gd",
