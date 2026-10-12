@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Organize the Gift Store Guilds category into themed Emblems and Rooms tabs, with search, filters and sorting scoped to the selected tab.
+
 - Keep fainted Pokémon in their 3D resting pose until the replacement switch recalls them and summons the next Pokémon, without a 2D faint fallback. Apply the resting pose immediately when battle animations are disabled.
 
 - Add the Irelia Outfit Box for both player models, with six separate cosmetics, revised overworld hair, trainer art and authored walking/fishing/riding sheets.
