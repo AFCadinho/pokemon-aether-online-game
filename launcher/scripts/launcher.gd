@@ -1161,8 +1161,13 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 
 
 func _can_bootstrap_launcher_update(candidate: Dictionary, validation_error: String) -> bool:
-	if validation_error != "Asset bundle release set is not approved.":
+	if validation_error not in [
+		"Asset bundle release set is not approved.",
+		"Asset bundle release index differs from the approved pinned revisions.",
+	]:
 		return false
+	# A same-ID release can still have a new revision, digest, size, or object key.
+	# In that case the launcher must update first, without queueing game/content files.
 	var update: Variant = candidate.get("launcher", {})
 	if not update is Dictionary:
 		return false
