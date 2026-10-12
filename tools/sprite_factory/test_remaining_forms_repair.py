@@ -57,7 +57,8 @@ class RemainingForms(unittest.TestCase):
         self.assertEqual(len(r['shared_forms']['forms']),13)
 
     def test_existing_models_and_profiles_are_unchanged(self):
-        names=set(self.receipt['forms'])
+        # The later Zygarde admission has its own exact baseline regression.
+        names=set(self.receipt['forms']) | {'zygarde-10'}
         for key in ('models','profiles'):
             previous={n:v for n,v in self.registry[key].items() if n.removesuffix('@shiny') not in names}
             self.assertEqual(canonical(previous),self.result['previous_registry'][key+'_sha256'])

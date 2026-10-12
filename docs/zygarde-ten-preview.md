@@ -1,5 +1,7 @@
 # Zygarde 10% — lokale visuele proef
 
+Vervolg: de gebruiker heeft deze preview goedgekeurd. De [lokale battlekwalificatie](zygarde-ten-battle.md) beschrijft de daaropvolgende toelating. Hieronder staat het oorspronkelijke previewverslag.
+
 Er is nu een werkende **lokale proefversie voor normal en shiny**. Dit is de
 visuele reconstructie waarvoor na het brononderzoek toestemming is gegeven.
 De proef is niet toegelaten tot de gamecatalogus, niet gepubliceerd en niet

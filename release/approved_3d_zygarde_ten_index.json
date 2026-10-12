@@ -1,0 +1,307 @@
+{
+  "schema": 1,
+  "kind": "pokeaether-optional-asset-index",
+  "catalog_revision": "zygarde-ten-local-v1",
+  "runtime_contract": {
+    "pokemon_3d": 2,
+    "godot": "4.6"
+  },
+  "assets": [
+    {
+      "asset_id": "pokemon_3d:zygarde-10:base",
+      "species_id": "zygarde-10",
+      "form_id": "base",
+      "version": 1,
+      "dependencies": [],
+      "appearances": [
+        {
+          "variant": "normal",
+          "runtime_identity": "zygarde-10",
+          "runtime_path": "models/normal.scn",
+          "runtime_sha256": "c7d80ce1965bd4c30e54b9e46b7f086558e5612a0361f54765136ebf26baec23",
+          "bytes": 1518742,
+          "source_sha256": "e43abd9b1f8217cef3b1abda89d17274f1e714fdd3b834bbb555475eb4c2daec",
+          "cache_source_bytes": 4841719,
+          "semantic_sha256": "86862b72c1e5e6420b827201b5e7354bff112e054635e175236101c291b436e0"
+        },
+        {
+          "variant": "shiny",
+          "runtime_identity": "zygarde-10@shiny",
+          "runtime_path": "models/shiny.scn",
+          "runtime_sha256": "5d99bdb18b9d5991dd364b5acf6814257d9fc09c1417330171bef6ef1fd732c7",
+          "bytes": 1518867,
+          "source_sha256": "71c604ac35d71d0e9e6806a386c35644822b05e6a77efa24e7ef96c744bcd9e9",
+          "cache_source_bytes": 5118226,
+          "semantic_sha256": "077543d2489b2db7151bff45a995a39537380e471d0652a3eb9f701f61c495ff"
+        }
+      ],
+      "format": "model-pair-pck-v1",
+      "national_dex": 718,
+      "pair_manifest": {
+        "schema": 1,
+        "kind": "pokeaether-model-pair",
+        "asset_id": "pokemon_3d:zygarde-10:base",
+        "species_id": "zygarde-10",
+        "form_id": "base",
+        "version": 1,
+        "dependencies": [],
+        "appearances": [
+          {
+            "variant": "normal",
+            "runtime_identity": "zygarde-10",
+            "runtime_path": "models/normal.scn",
+            "runtime_sha256": "c7d80ce1965bd4c30e54b9e46b7f086558e5612a0361f54765136ebf26baec23",
+            "bytes": 1518742,
+            "source_sha256": "e43abd9b1f8217cef3b1abda89d17274f1e714fdd3b834bbb555475eb4c2daec",
+            "cache_source_bytes": 4841719,
+            "semantic_sha256": "86862b72c1e5e6420b827201b5e7354bff112e054635e175236101c291b436e0"
+          },
+          {
+            "variant": "shiny",
+            "runtime_identity": "zygarde-10@shiny",
+            "runtime_path": "models/shiny.scn",
+            "runtime_sha256": "5d99bdb18b9d5991dd364b5acf6814257d9fc09c1417330171bef6ef1fd732c7",
+            "bytes": 1518867,
+            "source_sha256": "71c604ac35d71d0e9e6806a386c35644822b05e6a77efa24e7ef96c744bcd9e9",
+            "cache_source_bytes": 5118226,
+            "semantic_sha256": "077543d2489b2db7151bff45a995a39537380e471d0652a3eb9f701f61c495ff"
+          }
+        ],
+        "resource_root": "res://pokemon-pairs/790208a4adde1f32cba0ffb8a76ac8f92c7b43656014749c447a7f29fd392199",
+        "files": [
+          {
+            "path": "models/normal.scn",
+            "bytes": 1518742,
+            "sha256": "c7d80ce1965bd4c30e54b9e46b7f086558e5612a0361f54765136ebf26baec23",
+            "decoded_bytes": 3973517
+          },
+          {
+            "path": "models/shiny.scn",
+            "bytes": 1518867,
+            "sha256": "5d99bdb18b9d5991dd364b5acf6814257d9fc09c1417330171bef6ef1fd732c7",
+            "decoded_bytes": 3973559
+          },
+          {
+            "path": "textures/01e79c788326652a8cbfdce24066639124b384571ec33f8bbe96e0e4080dc627.res",
+            "bytes": 255951,
+            "sha256": "7122630b2945f998a25dc0034623c8ad93031e42e7238c3b6ccce61943f8aaa6",
+            "decoded_bytes": 1398562
+          },
+          {
+            "path": "textures/0d66a70114d8ffa9af885b1510ea553c7df47559934e077428166f45286cee9b.res",
+            "bytes": 294,
+            "sha256": "4d5b8b6a2f0a06446f4bd35adec5ad5b5c99787288d3206d1df061ff32f8cf55",
+            "decoded_bytes": 12787
+          },
+          {
+            "path": "textures/0db59f62f63724178eb331c42f6f0de653b67fe8c4f021f88654f7d9298b5beb.res",
+            "bytes": 4078,
+            "sha256": "d9b2837b2556f95c3323d174db55c9b1a51598befc9dbd6d5844d1cbefcb9d85",
+            "decoded_bytes": 66031
+          },
+          {
+            "path": "textures/0db9c17648f241af1f088f3c50615c4c960991d22589682502b87f30eceec429.res",
+            "bytes": 400,
+            "sha256": "7c820f9fd1f87fdd43e2919549ad7c8718d719482d65b0f421513b4d64935495",
+            "decoded_bytes": 98809
+          },
+          {
+            "path": "textures/147d018a70c343b5e5f86313b6d168fa005a0e145a39d51eb5c99de5b9e634b5.res",
+            "bytes": 713,
+            "sha256": "2f16a804d629d78107d8fe95baeed0edc32c9b7cc62268c017cc779d54c2dff7",
+            "decoded_bytes": 25082
+          },
+          {
+            "path": "textures/14c366d1354c8baac98c368f8cca3e7d2422fe79578d055e79b9b75d8ccd47be.res",
+            "bytes": 275,
+            "sha256": "075f163862163839b5faef117760574625dd15961f1c284e891203c3bf7ddba9",
+            "decoded_bytes": 5922
+          },
+          {
+            "path": "textures/18f1774604fcdfdbf42241da250f208a1bc6f290e736514a62629d015586d49f.res",
+            "bytes": 92682,
+            "sha256": "20ad101ec712b7bc20391de0f69023587d24fa1c414dcda825a157e9c3a5dc40",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/1fdfd1be6e36a3cc709640be57c567f295373f243ce847b079090d0e2c1df450.res",
+            "bytes": 109208,
+            "sha256": "96534b36ffa9c69b476458ba77762075e69551f271294fa7f0c18072dff15764",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/2617e52d30cad6d50fbdab265274996eeee99d639f360fd7aefc1f465af9ec64.res",
+            "bytes": 287,
+            "sha256": "9f737c99a59c3be14e798199ba4ec9538aa879be4cd415275ea9eb7b7b68b4f6",
+            "decoded_bytes": 33267
+          },
+          {
+            "path": "textures/2b27e750710f6ec67c2db6ff850538602c06e960ecbf1d7f64e0bc4d8b735ea7.res",
+            "bytes": 299,
+            "sha256": "909b42f6d12a737d1cba45a5b6845b66f729566c5ef40faa17cde52d7895d7ff",
+            "decoded_bytes": 4594
+          },
+          {
+            "path": "textures/2e834eb6bb106b0c49dbae2010001a2262fc3b3fa5cdf2ea289b330a3620aea3.res",
+            "bytes": 115191,
+            "sha256": "8e1858ef85920ec88c127702431c27ef473065f37da3a31e2bc94e451cebf709",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/52acac2f337631ee82e73aac6aa7eda4277a2c39070df32103e9ed3ffb60cf49.res",
+            "bytes": 77200,
+            "sha256": "91c816b33c9ad5896864e47d96328bd54ffe2d06891c4c9018c9e6f9b163baf1",
+            "decoded_bytes": 3146233
+          },
+          {
+            "path": "textures/53936f26ded3daeeb676e820343c22ec0f021938f74e90d6090e918cc13fdf17.res",
+            "bytes": 10721,
+            "sha256": "4a50aa713f058e440ac2cb20a5afb878042f4b7983e3becd071279811d420fcf",
+            "decoded_bytes": 87842
+          },
+          {
+            "path": "textures/612e7afdf6dd8f379bfff7ad8025586fdcfd5be50fceb9c591ce0cf367f89a97.res",
+            "bytes": 290,
+            "sha256": "302856473acaf54ed9b6d586147c2010c73130dddadd46b99a76b12966bcd07c",
+            "decoded_bytes": 4594
+          },
+          {
+            "path": "textures/6353c601cbb2d379499bb88d09fab18702e7986019dc0e59d12330ab163eec70.res",
+            "bytes": 83192,
+            "sha256": "b33bfe731a9c971f6044114b1dafc73f1d1834b50309640f12d2485091e7ee37",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/747f622c3342349f2c6916cfbb118a3592d31addcc859c5c5b572bba10e6be87.res",
+            "bytes": 295,
+            "sha256": "589d36d2931fa99c926f6aa08b29ab596c0b4351d678ed19bd65ec2b0d31e2d1",
+            "decoded_bytes": 12787
+          },
+          {
+            "path": "textures/7ad712c0f4289fdfe8595e2f3077df663bf696da7cfa0056ff710b32def78a27.res",
+            "bytes": 83331,
+            "sha256": "89dacd240404d6f2b2482b7bb925e2ae7f60ca4f834677d39246ec7ad1bf6bc4",
+            "decoded_bytes": 3146233
+          },
+          {
+            "path": "textures/802ecde32230b88041dba0557c7394c13cc36622d6cb1da79e7fbc582c70fcb8.res",
+            "bytes": 276,
+            "sha256": "98d5e97306685c0ea038c21e1225ab056e4a5a8f308ebbbc60e2ad64dca45e62",
+            "decoded_bytes": 87842
+          },
+          {
+            "path": "textures/894973de73a41856927839e72b6a99cef92d8257320c81da5aa0ce3ff29e74db.res",
+            "bytes": 289,
+            "sha256": "981e57274429a4899c415c2a44befb3c3d1bc9ff9a31cbbd8c0b30562a87ff6d",
+            "decoded_bytes": 16876
+          },
+          {
+            "path": "textures/981a1e7f6bd51697524366c89d5ab7c23bb0b5ef2af4e18b3201705fe5f1730a.res",
+            "bytes": 139196,
+            "sha256": "e6df0fed1859f0729ca98a9c250701d320d33c8b3898c39752f6bf60f809e6b8",
+            "decoded_bytes": 1049074
+          },
+          {
+            "path": "textures/9bcf4df05112f5221e927af0541b2a01a8f4f12cfc066e8320ca4f5c9739fbb4.res",
+            "bytes": 301,
+            "sha256": "8d267d5aa8303a4037b7e659bed58f7e262bec1feafe162e096658678b4c6203",
+            "decoded_bytes": 4594
+          },
+          {
+            "path": "textures/9c88b6d53e4ff094f1479ae6a81a27f63a769bdd1b8e3bb23234086ebb874084.res",
+            "bytes": 113561,
+            "sha256": "e5cfca0f0b737ada7ab5e299711e6ad20562fdfe98f0fd705cb117601606c9a1",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/9ee3a8983252625fd6bdff401caa1dd819d0d821ff7fd63dfccc4a7d0409537b.res",
+            "bytes": 272,
+            "sha256": "adc6dd464b1e0fe93991fa1f145bf4abc69861903671dbf85b0908fc252dedf0",
+            "decoded_bytes": 5922
+          },
+          {
+            "path": "textures/ae65949289c2802a6fac16a776f052476f72bc5cfe779438989ef472b818df8c.res",
+            "bytes": 167631,
+            "sha256": "2ed6c003f9b6dff533c06528c2e34d916d1591772a1b95a97fb30b020c3b8836",
+            "decoded_bytes": 1049074
+          },
+          {
+            "path": "textures/afe5c6042c784cc3e737becbd23115eec04c20b16e0f9738a78eef7165e171b7.res",
+            "bytes": 76817,
+            "sha256": "4d481cd1ac0c0db0dd65fb3fa811f1e94d9e1c3344eab7387bf3d4880a096141",
+            "decoded_bytes": 3146233
+          },
+          {
+            "path": "textures/b1fc980af4c2b85b4698d9b72cebaaaa86cb0c95905ae7a321f824b458f5b1d9.res",
+            "bytes": 66599,
+            "sha256": "3b0a9b9ad59b69d60baa3a3dcd27ff08961517a277d360551ee0d197d3814d3e",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/b2755879c0830b38766cecc99499c43849d72ebb6b308ac5babc8fec7f5eb19e.res",
+            "bytes": 76823,
+            "sha256": "c02dd978af84ede6123d7f6d10d1b58df44116faba706985ed968650c87d51d8",
+            "decoded_bytes": 3146233
+          },
+          {
+            "path": "textures/bfe893839a976d17d83bfeaa6c2c4d6302cb6fd0c384b6b1689b8fca87e7ad8a.res",
+            "bytes": 77200,
+            "sha256": "08c1e7a9fa40843b2d0e7da3c2bc06d002dc1afadaa7a4967349fd195b8f440e",
+            "decoded_bytes": 3146233
+          },
+          {
+            "path": "textures/cfe2ce92e26ca5797a871524f9efe3e82614d032abbe4fbb1601ed3bd31d5343.res",
+            "bytes": 713,
+            "sha256": "afbf823e35693b24b66ebf79da5275e7f33d512ce380e57465e34c1d522d76f9",
+            "decoded_bytes": 25082
+          },
+          {
+            "path": "textures/d705182514529664d39f41537c8604dd8d2a37b8d67806933763fb8d060cc43c.res",
+            "bytes": 82760,
+            "sha256": "b3e5c37ad5f735c7d38f289df510dbc8140040378b4a86e908432ba9b52260c7",
+            "decoded_bytes": 3146233
+          },
+          {
+            "path": "textures/daf927dfda1a44f7a2506eec09668648ec8998a431fdd27e016dbff4796ebb1d.res",
+            "bytes": 289,
+            "sha256": "dda9defb695c2df6f27b2ca8e3e94784c44cba5e513ec5e83099efe916859590",
+            "decoded_bytes": 16876
+          },
+          {
+            "path": "textures/df793f6d5a1e13eb50ad4a406f6f155a66ffc958e711e1e0fe58a934d837ef65.res",
+            "bytes": 114201,
+            "sha256": "b848cec349ca57b91ded14ef13a0c9cf0e61e79124e97be4c2562dc408100f6c",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/e6a872419a28ae7c21038e4c78436630970848c9653a8f63163532530e028dd4.res",
+            "bytes": 939,
+            "sha256": "d244250c3f608b955918488542e408483a95967e6a61acc2d5e96b387fa8594c",
+            "decoded_bytes": 4595
+          },
+          {
+            "path": "textures/f3326585e52163745b6cdef0ffe7ac0e7ab6956e4e68c7b86eeedf787e93dc11.res",
+            "bytes": 56427,
+            "sha256": "d0454085d55e2d21ae9834e0bbc0b2e24a6ca9a53d472232550bdcd814cf3333",
+            "decoded_bytes": 699514
+          },
+          {
+            "path": "textures/f6736819f19eb33aaef9f105e2fe9f0f291707c082153b451b7ca38f196f70ce.res",
+            "bytes": 127028,
+            "sha256": "dde8ab93ca08e0105755089284e242eb05a514fd440732766b09ed5e502af4f6",
+            "decoded_bytes": 4194802
+          },
+          {
+            "path": "textures/ffe2826395aaac19bc973c2ad7a879af253d4ce5c0e940744009c62d1e4d3191.res",
+            "bytes": 412,
+            "sha256": "676b4b44ec9e2c83a0b939d6f32ad569318dca32149b5e696a85e64f597310e8",
+            "decoded_bytes": 98809
+          }
+        ]
+      },
+      "sha256": "ff0d44ff10b3ac52d53a91b187faa7e9c2968de731f00ebfb0aba258c2cf1b8d",
+      "size_bytes": 4992392,
+      "object_key": "optional-assets/pokemon_3d/zygarde-10/base/v1-ff0d44ff10b3ac52d53a91b187faa7e9c2968de731f00ebfb0aba258c2cf1b8d.pck"
+    }
+  ]
+}
