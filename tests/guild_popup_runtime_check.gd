@@ -802,11 +802,12 @@ func _run() -> void:
 	if pokemon_deposit != null:
 		pokemon_deposit.pressed.emit()
 		await process_frame
-	var donation_dialog := popup.find_child("GuildBankDonationConfirmationDialog", true, false) as ConfirmationDialog
+	var donation_dialog := popup.find_child("GuildBankDonationConfirmationDialog", true, false) as AetherConfirmationDialog
 	_check(donation_dialog != null and donation_dialog.visible, "depositing a Pokémon confirms permanent Guild ownership")
-	_check_dialog_styled(donation_dialog, "Guild Bank donation confirmation")
+	_check(donation_dialog != null and donation_dialog.message_label.text.contains("Venusaur") and donation_dialog.message_label.text.contains("Guild property"), "Pokémon donation identifies the Pokémon and explains permanent ownership")
+	await _check_member_action_dialog(donation_dialog, "Guild Bank donation confirmation")
 	if donation_dialog != null:
-		donation_dialog.canceled.emit()
+		donation_dialog.cancel_button.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildBankPokemonPreview", true, false) != null, "closing full Pokémon Vault preserves its donation overview")
 	var bank_back := popup.find_child("GuildBankBackButton", true, false) as Button
@@ -1741,6 +1742,7 @@ func _run() -> void:
 	await _check_compact_member_actions(packed, Vector2i(480, 360))
 	await _check_compact_member_actions(packed, Vector2i(360, 640))
 	await _check_expanding_bank_previews(packed)
+	await _check_storage_availability(packed)
 	quit(1 if failed else 0)
 
 
@@ -1836,13 +1838,14 @@ func _check_compact_member_actions(packed: PackedScene, viewport_size: Vector2i)
 	compact_popup.show_debug_member_preview()
 	compact_popup.open()
 	var member := {"userId": 99, "displayName": "Trainer Met Een Lange Naam", "role": "captain"}
-	for action: String in ["rank", "transfer", "kick"]:
+	for action: String in ["rank", "transfer", "kick", "donate"]:
 		match action:
 			"rank": compact_popup._open_guild_member_rank_dialog(member)
 			"transfer": compact_popup._open_guild_leadership_transfer_dialog(member)
 			"kick": compact_popup._open_guild_member_kick_dialog(member)
+			"donate": compact_popup._confirm_guild_bank_donation("Basculegion Mount ×2", func(): pass)
 		var dialog := compact_popup.get_children().filter(func(child: Node): return child is AetherConfirmationDialog).back() as AetherConfirmationDialog
-		await _check_member_action_dialog(dialog, "%s at %s in Dutch" % [action, viewport_size], action != "rank")
+		await _check_member_action_dialog(dialog, "%s at %s in Dutch" % [action, viewport_size], action in ["transfer", "kick"])
 		if action == "rank":
 			var select := dialog.find_child("GuildMemberRankSelect_99", true, false) as OptionButton
 			_check(select != null and str(select.get_item_metadata(select.selected)) == "captain", "compact rank editor preserves the selected rank")
@@ -1901,6 +1904,92 @@ func _check_expanding_bank_previews(packed: PackedScene) -> void:
 	_check(is_equal_approx((empty_columns.get_child(1) as Control).size.y, empty_columns.size.y), "an empty donation list still fills the available column height")
 	_check(popup.find_child("GuildBankItemsDonationSearchInput", true, false) != null, "expanded empty donation lists retain their search field")
 	viewport.free()
+
+
+func _check_availability(root_node: Node, node_name: String, text: String, color: Color) -> void:
+	var badge := root_node.find_child(node_name, true, false) as PanelContainer
+	var label := root_node.find_child("%sLabel" % node_name, true, false) as Label
+	_check(badge != null and label != null and label.text == text and label.get_theme_color("font_color").is_equal_approx(color), "%s displays %s in its availability colour" % [node_name, text])
+	_check(badge != null and badge.mouse_filter == Control.MOUSE_FILTER_IGNORE, "%s does not intercept asset selection" % node_name)
+
+
+func _check_storage_availability(packed: PackedScene) -> void:
+	var popup := packed.instantiate() as GuildPopup
+	root.add_child(popup)
+	await process_frame
+	popup.show_debug_member_preview()
+	popup.open()
+	popup.guild_bank_state["items"] = [
+		{"itemId": "arcanine-mount", "name": "Arcanine Mount", "quantity": 2, "availableQuantity": 1, "borrowedQuantity": 1, "lendable": true},
+		{"itemId": "basculegion-mount", "name": "Basculegion Mount", "quantity": 1, "availableQuantity": 0, "borrowedQuantity": 1, "lendable": true},
+		{"itemId": "leftovers", "name": "Leftovers", "quantity": 1, "lendable": true},
+	]
+	popup.guild_bank_state["inventory"] = [{"itemId": "basculegion-mount", "name": "Basculegion Mount", "quantity": 2}]
+	popup._show_guild_section("bank")
+	popup._on_guild_bank_category_opened("items")
+	await process_frame
+	_check_availability(popup, "GuildBankItemAvailability_arcanine-mount", "Available", GuildPopup.UI_SUCCESS)
+	_check_availability(popup, "GuildBankItemAvailability_basculegion-mount", "Unavailable", GuildPopup.UI_ERROR)
+	_check_availability(popup, "GuildBankItemAvailability_leftovers", "Available", GuildPopup.UI_SUCCESS)
+	var deposit := popup.find_child("GuildBankItemDepositButton_basculegion-mount", true, false) as Button
+	deposit.pressed.emit()
+	await process_frame
+	var donation := popup.find_child("GuildBankDonationConfirmationDialog", true, false) as AetherConfirmationDialog
+	_check(donation != null and donation.message_label.text.contains("Basculegion Mount ×1") and not donation.message_label.text.contains("basculegion-mount"), "item donation shows the display name and chosen quantity")
+	_check(donation != null and donation.accent_icon.texture == popup._guild_bank_item_icon("basculegion-mount"), "item donation shows the same icon as the Bag")
+	await _check_member_action_dialog(donation, "item donation confirmation")
+	donation.cancel_button.pressed.emit()
+	await process_frame
+	popup._show_guild_item_storage_window("items")
+	await process_frame
+	var storage := popup.find_child("GuildItemsStorageWindow", true, false) as Window
+	_check_availability(storage, "GuildItemsStorageAvailability_arcanine-mount", "Available", GuildPopup.UI_SUCCESS)
+	_check_availability(storage, "GuildItemsStorageAvailability_basculegion-mount", "Unavailable", GuildPopup.UI_ERROR)
+	popup._select_guild_item_storage_entry("items", "basculegion-mount")
+	await process_frame
+	_check_availability(storage, "GuildBankItemAvailability_basculegion-mount", "Unavailable", GuildPopup.UI_ERROR)
+	_check((storage.find_child("GuildBankItemWithdrawButton_basculegion-mount", true, false) as Button).disabled and (storage.find_child("GuildBankItemBorrowButton_basculegion-mount", true, false) as Button).disabled, "unavailable item badges agree with disabled storage actions")
+	popup.guild_bank_state["items"][1]["availableQuantity"] = 1
+	popup.guild_bank_state["items"][1]["borrowedQuantity"] = 0
+	popup.guild_bank_state["access"]["canWithdraw"] = false
+	popup._render_guild_home()
+	await process_frame
+	_check_availability(storage, "GuildItemsStorageAvailability_basculegion-mount", "Available", GuildPopup.UI_SUCCESS)
+	_check_availability(storage, "GuildBankItemAvailability_basculegion-mount", "Available", GuildPopup.UI_SUCCESS)
+	_check((storage.find_child("GuildBankItemWithdrawButton_basculegion-mount", true, false) as Button).disabled, "stock availability remains separate from personal withdrawal rights")
+	storage.queue_free()
+	await process_frame
+	var pokemon := (popup.guild_bank_state["pokemon"][0] as Dictionary).duplicate(true)
+	pokemon["isBorrowed"] = true
+	pokemon["borrowedBy"] = "Maple"
+	popup.guild_bank_state["pokemon"] = [pokemon]
+	popup._on_guild_bank_category_opened("pokemon")
+	await process_frame
+	_check_availability(popup, "GuildBankPokemonAvailability_21", "On loan", GuildPopup.UI_WARNING)
+	popup._show_guild_pokemon_vault_window()
+	await process_frame
+	var vault := popup.find_child("GuildPokemonVaultWindow", true, false) as Window
+	_check_availability(vault, "GuildPokemonVaultAvailability_21", "On loan", GuildPopup.UI_WARNING)
+	_check_availability(vault, "GuildPokemonVaultSelectedAvailability", "On loan", GuildPopup.UI_WARNING)
+	popup.guild_bank_state["pokemon"][0]["isBorrowed"] = false
+	popup._render_guild_home()
+	await process_frame
+	_check_availability(vault, "GuildPokemonVaultAvailability_21", "Available", GuildPopup.UI_SUCCESS)
+	_check_availability(vault, "GuildPokemonVaultSelectedAvailability", "Available", GuildPopup.UI_SUCCESS)
+	vault.queue_free()
+	await process_frame
+	var confirmed: Array = []
+	popup._confirm_guild_bank_donation("Arcanine Mount ×1", func(): confirmed.append(true))
+	donation = popup.find_child("GuildBankDonationConfirmationDialog", true, false) as AetherConfirmationDialog
+	donation.cancel_button.pressed.emit()
+	await process_frame
+	_check(confirmed.is_empty(), "cancelling a donation never runs its transfer action")
+	popup._confirm_guild_bank_donation("Arcanine Mount ×1", func(): confirmed.append(true))
+	donation = popup.find_child("GuildBankDonationConfirmationDialog", true, false) as AetherConfirmationDialog
+	donation.confirm_button.pressed.emit()
+	await process_frame
+	_check(confirmed.size() == 1 and not is_instance_valid(donation), "confirming a donation runs its transfer action once and closes")
+	popup.free()
 
 
 func _check_dialog_styled(dialog: ConfirmationDialog, label: String) -> void:

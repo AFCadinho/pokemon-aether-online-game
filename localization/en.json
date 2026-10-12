@@ -2699,6 +2699,7 @@
   "ui.guild.bank.search.your_resources": "Search your Bag resources",
   "ui.guild.bank.donation.search_empty": "No items in your Bag match your search.",
   "ui.guild.bank.filter.all": "All assets",
+  "ui.guild.bank.availability.on_loan": "On loan",
   "ui.guild.bank.filter.available": "Available",
   "ui.guild.bank.filter.borrowed": "Borrowed",
   "ui.guild.bank.filter.unavailable": "Unavailable",
