@@ -1,20 +1,18 @@
-[gd_scene format=3]
+[gd_scene format=4 uid="uid://cqssdweeh347i"]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/pewter_museum/pewter_museum.visual.tscn" id="visual"]
-[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="metadata"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="exit"]
-[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="collision_marker"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue_npc"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
+[ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="gate_npc"]
+[ext_resource type="SpriteFrames" uid="uid://dew17ac2tan52" path="res://assets/npcs/classes/gentleman_frames.tres" id="gentleman"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="collision_marker"]
-
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue_npc"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_f_frames.tres" id="scientist_f"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_m_frames.tres" id="scientist_m"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="school_kid_m"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="gentleman"]
-
-[ext_resource type="PackedScene" path="res://scenes/npcs/gate_npc.tscn" id="gate_npc"]
-[ext_resource type="Script" path="res://scripts/world/npcs/museum_admission_npc.gd" id="museum_admission"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
+[ext_resource type="Script" uid="uid://c3jutuhwsygsi" path="res://scripts/world/npcs/museum_admission_npc.gd" id="museum_admission"]
+[ext_resource type="SpriteFrames" uid="uid://b8fh81or510qb" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="school_kid_m"]
+[ext_resource type="SpriteFrames" uid="uid://ckxh3g37blbkj" path="res://assets/npcs/classes/scientist_f_frames.tres" id="scientist_f"]
+[ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="scientist_m"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/pewter_museum/pewter_museum.visual.tscn" id="visual"]
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(64, 32)
@@ -28,7 +26,7 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("collision_atlas")
 
-[node name="PewterMuseum" type="Node2D"]
+[node name="PewterMuseum" type="Node2D" unique_id=1127820806]
 script = ExtResource("metadata")
 map_id = "kanto_pewter_city_museum"
 map_region_name = "Kanto"
@@ -43,27 +41,34 @@ lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.pewter_city"
 
-[node name="Visual" parent="." instance=ExtResource("visual")]
+[node name="Visual" parent="." unique_id=421992835 instance=ExtResource("visual")]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1721499453]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("floor_mask")
-floor_regions = {&"ground_floor": Rect2(0, 0, 1088, 768)}
+floor_regions = {
+&"ground_floor": Rect2(0, 0, 1088, 768)
+}
 follow_player_floor = false
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=208084086]
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1195086746]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1529457413]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1223880848]
+
+[node name="Entities" type="Node2D" parent="." unique_id=1294226640]
 z_index = 5
 y_sort_enabled = true
 
-[node name="Players" type="Node2D" parent="Entities"]
-[node name="NPCs" type="Node2D" parent="Entities"]
-[node name="MuseumAttendantIris" parent="Entities/NPCs" instance=ExtResource("gate_npc")]
+[node name="Players" type="Node2D" parent="Entities" unique_id=1720256626]
+
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=14010959]
+
+[node name="MuseumAttendantIris" parent="Entities/NPCs" unique_id=434805657 instance=ExtResource("gate_npc")]
 position = Vector2(400, 528)
 script = ExtResource("museum_admission")
 guard_role = "transition_guard"
@@ -71,58 +76,58 @@ guarded_transition_id = "kanto_pewter_city_museum__to_exhibits"
 requires_party_pokemon = false
 npc_id = "kanto_pewter_museum_attendant_iris"
 npc_definition_id = "trainer_class_scientist_f"
-portrait_id = "showdown_scientistf_gen6"
-mugshot = null
 display_name = "Museum Attendant Iris"
 npc_sprite_frames = ExtResource("scientist_f")
-facing_direction = Vector2(0, 1)
+portrait_id = "showdown_scientistf_gen6"
+mugshot = null
 
-[node name="CuratorElara" parent="Entities/NPCs" instance=ExtResource("dialogue_npc")]
+[node name="CuratorElara" parent="Entities/NPCs" unique_id=561345088 instance=ExtResource("dialogue_npc")]
 position = Vector2(752, 432)
 npc_id = "kanto_pewter_museum_curator_elara"
 npc_definition_id = "trainer_class_scientist_f"
 display_name = "Curator Elara"
-npc_sprite_frames = ExtResource("scientist_f")
 facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("scientist_f")
 
-[node name="ResearcherOwen" parent="Entities/NPCs" instance=ExtResource("dialogue_npc")]
+[node name="ResearcherOwen" parent="Entities/NPCs" unique_id=1905482328 instance=ExtResource("dialogue_npc")]
 position = Vector2(272, 336)
 npc_id = "kanto_pewter_museum_researcher_owen"
 npc_definition_id = "trainer_class_scientist_m"
 display_name = "Fossil Researcher Owen"
-npc_sprite_frames = ExtResource("scientist_m")
 facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("scientist_m")
 
-[node name="VisitorFinn" parent="Entities/NPCs" instance=ExtResource("dialogue_npc")]
+[node name="VisitorFinn" parent="Entities/NPCs" unique_id=1516008843 instance=ExtResource("dialogue_npc")]
 position = Vector2(528, 432)
 npc_id = "kanto_pewter_museum_visitor_finn"
 npc_definition_id = "trainer_class_school_kid_m"
 display_name = "Young Visitor Finn"
-npc_sprite_frames = ExtResource("school_kid_m")
 facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("school_kid_m")
 
-[node name="CollectorHugo" parent="Entities/NPCs" instance=ExtResource("dialogue_npc")]
+[node name="CollectorHugo" parent="Entities/NPCs" unique_id=990451074 instance=ExtResource("dialogue_npc")]
 position = Vector2(688, 240)
 npc_id = "kanto_pewter_museum_collector_hugo"
 npc_definition_id = "trainer_class_gentleman"
 display_name = "Collector Hugo"
-npc_sprite_frames = ExtResource("gentleman")
 facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("gentleman")
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=487535147]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=443618743]
 
-[node name="FromPewterCity" type="Marker2D" parent="Spawns"]
+[node name="Spawns" type="Node2D" parent="." unique_id=1335372235]
+
+[node name="FromPewterCity" type="Marker2D" parent="Spawns" unique_id=646366430]
 position = Vector2(432, 624)
 
-[node name="FromAdmission" type="Marker2D" parent="Spawns"]
+[node name="FromAdmission" type="Marker2D" parent="Spawns" unique_id=2145131323]
 position = Vector2(432, 464)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=572447345]
 
-[node name="ToPewterCity" type="Area2D" parent="Exits"]
+[node name="ToPewterCity" type="Area2D" parent="Exits" unique_id=971338291]
 position = Vector2(416, 720)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"
@@ -130,14 +135,15 @@ target_spawn_name = "FromMuseum"
 transition_id = "kanto_pewter_city_museum__to_pewter_city"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPewterCity"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPewterCity" unique_id=1140578123]
 shape = SubResource("shape_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToPewterCity" instance=ExtResource("hint")]
+[node name="DoorTransitionHint" parent="Exits/ToPewterCity" unique_id=953681266 instance=ExtResource("hint")]
+z_as_relative = false
 tile_footprint = Vector2i(2, 1)
 flow_direction = "down"
 
-[node name="ToExhibits" type="Area2D" parent="Exits"]
+[node name="ToExhibits" type="Area2D" parent="Exits" unique_id=1251710198]
 editor_description = "Authorization-only passage between the blue barriers. Iris handles payment; this area must not auto-teleport visitors who walk back through it."
 position = Vector2(416, 496)
 script = ExtResource("exit")
@@ -146,12 +152,12 @@ target_spawn_name = "FromAdmission"
 transition_id = "kanto_pewter_city_museum__to_exhibits"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToExhibits"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToExhibits" unique_id=893609290]
 shape = SubResource("shape_exit")
 
-[node name="Tiles" type="Node2D" parent="."]
+[node name="Tiles" type="Node2D" parent="." unique_id=998867852]
 
-[node name="Collision" type="TileMapLayer" parent="Tiles"]
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=189462326]
 editor_description = "Museum boundaries, fossil displays, reception and furniture. Keep the south carpet and both exit tiles clear."
 visible = false
 z_index = 4096
