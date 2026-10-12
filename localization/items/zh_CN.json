@@ -1163,5 +1163,13 @@
   "akatsuki-outfit": {
     "name": "晓组织服装礼盒",
     "shortDesc": "包含四件独立外观：长袍、长裤、凉鞋和护额。男女角色均可使用。在背包中打开礼盒。"
+  },
+  "guild-room-1-template": {
+    "name": "Guild Café · 房间1",
+    "shortDesc": "房间1，门在左侧。购买后获得背包物品，在公会管理员处捐赠，为公会永久解锁此可编辑设计。"
+  },
+  "guild-room-2-template": {
+    "name": "Grand Lounge · 房间2",
+    "shortDesc": "房间2，门在右侧。购买后获得背包物品，在公会管理员处捐赠，为公会永久解锁此可编辑设计。"
   }
 }

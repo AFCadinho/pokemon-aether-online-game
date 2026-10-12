@@ -1163,5 +1163,13 @@
   "akatsuki-outfit": {
     "name": "Akatsuki Caixa de Traje",
     "shortDesc": "Contém quatro itens separados: manto longo, calças, sandálias e bandana. Serve para ambos os gêneros. Abra a caixa na Bolsa."
+  },
+  "guild-room-1-template": {
+    "name": "Guild Café · Sala 1",
+    "shortDesc": "Sala 1, porta à esquerda. Receba um item na Bag e doe-o ao Guild Manager para desbloquear este projeto editável permanentemente para sua Guild."
+  },
+  "guild-room-2-template": {
+    "name": "Grand Lounge · Sala 2",
+    "shortDesc": "Sala 2, porta à direita. Receba um item na Bag e doe-o ao Guild Manager para desbloquear este projeto editável permanentemente para sua Guild."
   }
 }

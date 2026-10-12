@@ -24,15 +24,24 @@ for item in catalog["items"]:
     assert len(item["tiles"]) == height and all(len(row) == width for row in item["tiles"]), item["id"]
     assert all(dimension > 0 for dimension in item["footprint"]), item["id"]
     assert not item["resizable"] or (width, height) == (3, 3), "Resizable rugs require nine-slice art"
-gids = sorted({gid for item in catalog["items"] for row in item["tiles"] for gid in row if gid})
-assert all(isinstance(gid, int) and 0 < gid <= int(tsx.get("tilecount")) for gid in gids), "Source tile outside tileset"
+wanted = {gid for item in catalog["items"] for layer in item.get("artLayers", [item["tiles"]]) for row in layer for gid in row if gid}
+existing = json.loads((root / "data/guild_base_furniture_atlas.json").read_text())
+gids = [int(gid) for gid in sorted(existing, key=lambda gid: existing[gid][1] * 16 + existing[gid][0]) if int(gid) in wanted]
+gids += sorted(wanted - set(gids))
+assert all(isinstance(gid, int) and 0 < (gid & 0x0fffffff) <= int(tsx.get("tilecount")) for gid in gids), "Source tile outside tileset"
 columns = 16
 atlas = Image.new("RGBA", (columns*32, ((len(gids)+columns-1)//columns)*32))
 images = {}
 for index, gid in enumerate(gids):
-    tile = gid-1
+    tile = (gid & 0x0fffffff)-1
     x, y = (tile % source_columns)*32, (tile // source_columns)*32
     images[gid] = source.crop((x, y, x+32, y+32))
+    if gid & 0x20000000:
+        images[gid] = images[gid].transpose(Image.Transpose.TRANSPOSE)
+    if gid & 0x80000000:
+        images[gid] = images[gid].transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+    if gid & 0x40000000:
+        images[gid] = images[gid].transpose(Image.Transpose.FLIP_TOP_BOTTOM)
     atlas.paste(images[gid], ((index % columns)*32, (index // columns)*32))
 folder = root / "assets/guild_base/furniture"
 folder.mkdir(parents=True, exist_ok=True)
@@ -42,10 +51,11 @@ icons.mkdir(exist_ok=True)
 for item in catalog["items"]:
     width, height = item["visualSize"]
     icon = Image.new("RGBA", (width*32, height*32))
-    for y, row in enumerate(item["tiles"]):
-        for x, gid in enumerate(row):
-            if gid:
-                icon.paste(images[gid], (x*32, y*32))
+    for layer in item.get("artLayers", [item["tiles"]]):
+        for y, row in enumerate(layer):
+            for x, gid in enumerate(row):
+                if gid:
+                    icon.alpha_composite(images[gid], (x*32, y*32))
     icon.save(icons / (item["id"]+".png"))
 tile_set = ['[gd_resource type="TileSet" load_steps=3 format=3]',
     '[ext_resource type="Texture2D" path="res://assets/guild_base/furniture/tiles.png" id="1_texture"]',

@@ -638,6 +638,9 @@ texture_region_size = Vector2i(32, 32)
 8:39/0 = 0
 9:39/0 = 0
 10:39/0 = 0
+11:39/0 = 0
+12:39/0 = 0
+13:39/0 = 0
 [resource]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("atlas")

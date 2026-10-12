@@ -1163,5 +1163,13 @@
   "akatsuki-outfit": {
     "name": "Akatsuki Outfit Box",
     "shortDesc": "Contains four separate items: a long robe, trousers, sandals and headband. Fits both genders. Open the box in your Bag."
+  },
+  "guild-room-1-template": {
+    "name": "Guild Café · Room 1",
+    "shortDesc": "Room 1, door left. Receive a Bag item and donate it at the Guild Manager to permanently unlock this editable design for your Guild."
+  },
+  "guild-room-2-template": {
+    "name": "Grand Lounge · Room 2",
+    "shortDesc": "Room 2, door right. Receive a Bag item and donate it at the Guild Manager to permanently unlock this editable design for your Guild."
   }
 }

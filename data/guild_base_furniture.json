@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "tileSize": 32,
   "maxRoomItems": 96,
   "rooms": {
@@ -13,7 +13,7 @@
         ],
         [
           19,
-          7,
+          8,
           1,
           3
         ]
@@ -34,12 +34,12 @@
       ],
       "entrance": [
         19,
-        8
+        9
       ],
       "reservedRects": [
         [
           18,
-          7,
+          8,
           2,
           3
         ]
@@ -61,7 +61,7 @@
         ],
         [
           3,
-          7,
+          8,
           1,
           3
         ]
@@ -82,12 +82,12 @@
       ],
       "entrance": [
         3,
-        8
+        9
       ],
       "reservedRects": [
         [
           3,
-          7,
+          8,
           2,
           3
         ]
@@ -4954,6 +4954,907 @@
       "surfaceSlots": [],
       "resizable": false,
       "scenePath": "res://scenes/world/guild_base/furniture/lab_console.tscn"
+    },
+    {
+      "id": "design_red_runner",
+      "nameKey": "ui.guild_base.furniture.design_red_runner",
+      "category": "floor",
+      "tiles": [
+        [
+          2634,
+          2634,
+          2634
+        ],
+        [
+          2642,
+          2642,
+          2642
+        ],
+        [
+          2650,
+          2650,
+          2650
+        ]
+      ],
+      "footprint": [
+        3,
+        3
+      ],
+      "visualSize": [
+        3,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": false,
+      "starterQuantity": 4,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": true,
+      "scenePath": "res://scenes/world/guild_base/furniture/design_red_runner.tscn"
+    },
+    {
+      "id": "design_kitchen_counter",
+      "nameKey": "ui.guild_base.furniture.design_kitchen_counter",
+      "category": "kitchen",
+      "tiles": [
+        [
+          0,
+          3232,
+          0,
+          0,
+          3232,
+          0,
+          0,
+          3232,
+          0
+        ],
+        [
+          3734,
+          4212,
+          4213,
+          3755,
+          3756,
+          3754,
+          3671,
+          4056,
+          0
+        ],
+        [
+          3742,
+          4220,
+          4221,
+          3763,
+          3764,
+          3762,
+          3688,
+          4064,
+          3799
+        ],
+        [
+          3750,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3688,
+          4048,
+          0
+        ],
+        [
+          3727,
+          3695,
+          3695,
+          3695,
+          3695,
+          3695,
+          3696,
+          4056,
+          3799
+        ],
+        [
+          3703,
+          3703,
+          3703,
+          3703,
+          3703,
+          3703,
+          3704,
+          4064,
+          0
+        ]
+      ],
+      "artLayers": [
+        [
+          [
+            0,
+            3232,
+            0,
+            0,
+            3232,
+            0,
+            0,
+            3232,
+            0
+          ],
+          [
+            3734,
+            4212,
+            4213,
+            3755,
+            3756,
+            3754,
+            3671,
+            4056,
+            0
+          ],
+          [
+            3742,
+            4220,
+            4221,
+            3763,
+            3764,
+            3762,
+            3688,
+            4064,
+            3799
+          ],
+          [
+            3750,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3688,
+            4048,
+            0
+          ],
+          [
+            3727,
+            3695,
+            3695,
+            3695,
+            3695,
+            3695,
+            3696,
+            4056,
+            3799
+          ],
+          [
+            3703,
+            3703,
+            3703,
+            3703,
+            3703,
+            3703,
+            3704,
+            4064,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            4048,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3719,
+            0,
+            0,
+            0,
+            0,
+            0,
+            4030,
+            0,
+            0
+          ],
+          [
+            3695,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2147487679,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "footprint": [
+        9,
+        4
+      ],
+      "visualSize": [
+        9,
+        6
+      ],
+      "visualOffset": [
+        0,
+        -192
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/design_kitchen_counter.tscn"
+    },
+    {
+      "id": "design_cafe_table_set",
+      "nameKey": "ui.guild_base.furniture.design_cafe_table_set",
+      "category": "seating",
+      "tiles": [
+        [
+          4116,
+          4117,
+          4117,
+          4118,
+          0,
+          4048
+        ],
+        [
+          4124,
+          4125,
+          4125,
+          4126,
+          0,
+          4056
+        ],
+        [
+          3825,
+          3826,
+          3826,
+          3827,
+          3799,
+          4064
+        ],
+        [
+          3833,
+          3834,
+          3834,
+          3835,
+          0,
+          4048
+        ],
+        [
+          3841,
+          3842,
+          3842,
+          3843,
+          3799,
+          4056
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          4064
+        ]
+      ],
+      "artLayers": [
+        [
+          [
+            4116,
+            4117,
+            4117,
+            4118,
+            0,
+            4048
+          ],
+          [
+            4124,
+            4125,
+            4125,
+            4126,
+            0,
+            4056
+          ],
+          [
+            3825,
+            3826,
+            3826,
+            3827,
+            3799,
+            4064
+          ],
+          [
+            3833,
+            3834,
+            3834,
+            3835,
+            0,
+            4048
+          ],
+          [
+            3841,
+            3842,
+            3842,
+            3843,
+            3799,
+            4056
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            4064
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            4004,
+            0,
+            0
+          ],
+          [
+            4004,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "footprint": [
+        6,
+        4
+      ],
+      "visualSize": [
+        6,
+        6
+      ],
+      "visualOffset": [
+        0,
+        -192
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/design_cafe_table_set.tscn"
+    },
+    {
+      "id": "design_cafe_corner_table",
+      "nameKey": "ui.guild_base.furniture.design_cafe_corner_table",
+      "category": "seating",
+      "tiles": [
+        [
+          3799,
+          3825,
+          3826,
+          3827
+        ],
+        [
+          0,
+          3833,
+          3834,
+          3835
+        ],
+        [
+          0,
+          3841,
+          3842,
+          3843
+        ]
+      ],
+      "artLayers": [
+        [
+          [
+            3799,
+            3825,
+            3826,
+            3827
+          ],
+          [
+            0,
+            3833,
+            3834,
+            3835
+          ],
+          [
+            0,
+            3841,
+            3842,
+            3843
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            4081,
+            0
+          ],
+          [
+            0,
+            0,
+            4089,
+            4004
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "footprint": [
+        4,
+        3
+      ],
+      "visualSize": [
+        4,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/design_cafe_corner_table.tscn"
+    },
+    {
+      "id": "design_statue_bench_left",
+      "nameKey": "ui.guild_base.furniture.design_statue_bench_left",
+      "category": "seating",
+      "tiles": [
+        [
+          3825,
+          3826,
+          3826,
+          3826,
+          3827,
+          3339
+        ],
+        [
+          3841,
+          3842,
+          3842,
+          3842,
+          3843,
+          0
+        ],
+        [
+          3359,
+          0,
+          0,
+          0,
+          3354,
+          0
+        ]
+      ],
+      "artLayers": [
+        [
+          [
+            3825,
+            3826,
+            3826,
+            3826,
+            3827,
+            3339
+          ],
+          [
+            3841,
+            3842,
+            3842,
+            3842,
+            3843,
+            0
+          ],
+          [
+            3359,
+            0,
+            0,
+            0,
+            3354,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            3337,
+            3338,
+            0
+          ],
+          [
+            3351,
+            0,
+            0,
+            3345,
+            3346,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "footprint": [
+        5,
+        3
+      ],
+      "visualSize": [
+        6,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/design_statue_bench_left.tscn"
+    },
+    {
+      "id": "design_statue_bench_right",
+      "nameKey": "ui.guild_base.furniture.design_statue_bench_right",
+      "category": "seating",
+      "tiles": [
+        [
+          3340,
+          3825,
+          3826,
+          3826,
+          3826,
+          3827
+        ],
+        [
+          0,
+          3841,
+          3842,
+          3842,
+          3842,
+          3843
+        ],
+        [
+          0,
+          3357,
+          0,
+          0,
+          0,
+          3359
+        ]
+      ],
+      "artLayers": [
+        [
+          [
+            3340,
+            3825,
+            3826,
+            3826,
+            3826,
+            3827
+          ],
+          [
+            0,
+            3841,
+            3842,
+            3842,
+            3842,
+            3843
+          ],
+          [
+            0,
+            3357,
+            0,
+            0,
+            0,
+            3359
+          ]
+        ],
+        [
+          [
+            0,
+            3341,
+            3342,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            3349,
+            3350,
+            0,
+            0,
+            3351
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "footprint": [
+        5,
+        3
+      ],
+      "visualSize": [
+        6,
+        3
+      ],
+      "visualOffset": [
+        -32,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/design_statue_bench_right.tscn"
+    },
+    {
+      "id": "design_planter_bench",
+      "nameKey": "ui.guild_base.furniture.design_planter_bench",
+      "category": "seating",
+      "tiles": [
+        [
+          3826,
+          3826,
+          3826,
+          3826,
+          3826,
+          3826,
+          3826,
+          3826,
+          3826,
+          3826,
+          3826,
+          3826,
+          3826
+        ],
+        [
+          3842,
+          3842,
+          3842,
+          3842,
+          3842,
+          3842,
+          3842,
+          3842,
+          3842,
+          3842,
+          3842,
+          3842,
+          3842
+        ],
+        [
+          4064,
+          0,
+          4064,
+          0,
+          4064,
+          0,
+          4064,
+          0,
+          4064,
+          0,
+          4064,
+          0,
+          4064
+        ]
+      ],
+      "artLayers": [
+        [
+          [
+            3826,
+            3826,
+            3826,
+            3826,
+            3826,
+            3826,
+            3826,
+            3826,
+            3826,
+            3826,
+            3826,
+            3826,
+            3826
+          ],
+          [
+            3842,
+            3842,
+            3842,
+            3842,
+            3842,
+            3842,
+            3842,
+            3842,
+            3842,
+            3842,
+            3842,
+            3842,
+            3842
+          ],
+          [
+            4064,
+            0,
+            4064,
+            0,
+            4064,
+            0,
+            4064,
+            0,
+            4064,
+            0,
+            4064,
+            0,
+            4064
+          ]
+        ],
+        [
+          [
+            4048,
+            0,
+            4048,
+            0,
+            4048,
+            0,
+            4048,
+            0,
+            4048,
+            0,
+            4048,
+            0,
+            4048
+          ],
+          [
+            4056,
+            0,
+            4056,
+            0,
+            4056,
+            0,
+            4056,
+            0,
+            4056,
+            0,
+            4056,
+            0,
+            4056
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "footprint": [
+        13,
+        2
+      ],
+      "visualSize": [
+        13,
+        3
+      ],
+      "visualOffset": [
+        0,
+        -96
+      ],
+      "blocksMovement": true,
+      "starterQuantity": 2,
+      "placement": "floor",
+      "surfaceSlots": [],
+      "resizable": false,
+      "scenePath": "res://scenes/world/guild_base/furniture/design_planter_bench.tscn"
     }
   ],
   "source": {

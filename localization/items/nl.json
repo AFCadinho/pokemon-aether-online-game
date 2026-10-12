@@ -1163,5 +1163,13 @@
   "akatsuki-outfit": {
     "name": "Akatsuki Outfitbox",
     "shortDesc": "Bevat vier losse onderdelen: een lange robe, broek, sandalen en hoofdband. Geschikt voor beide geslachten. Open de box in je Bag."
+  },
+  "guild-room-1-template": {
+    "name": "Guild Café · Kamer 1",
+    "shortDesc": "Kamer 1, deur links. Je ontvangt een Bag-item. Lever het bij de Guild Manager in om dit bewerkbare ontwerp permanent voor je guild te unlocken."
+  },
+  "guild-room-2-template": {
+    "name": "Grand Lounge · Kamer 2",
+    "shortDesc": "Kamer 2, deur rechts. Je ontvangt een Bag-item. Lever het bij de Guild Manager in om dit bewerkbare ontwerp permanent voor je guild te unlocken."
   }
 }

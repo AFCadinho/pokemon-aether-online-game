@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_gfwhp"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_ig144"]
+
+[node name="DesignRedRunner" type="Node2D" unique_id=1342253041]
+texture_filter = 1
+script = ExtResource("1_gfwhp")
+furniture_id = "design_red_runner"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=2065960443]
+position = Vector2(0, -96)
+tile_map_data = PackedByteArray("AAAAAAAAAAADAAEAAAABAAAAAAADAAEAAAACAAAAAAADAAEAAAAAAAEAAAAJAAEAAAABAAEAAAAJAAEAAAACAAEAAAAJAAEAAAAAAAIAAAAPAAEAAAABAAIAAAAPAAEAAAACAAIAAAAPAAEAAAA=")
+tile_set = ExtResource("2_ig144")

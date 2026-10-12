@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3 uid="uid://ca5ym80gh0rum"]
+[gd_resource type="TileSet" format=3]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_left_room/assets/guild_base_left_room.visual.tileset.compact_source_1_0.texture.res" id="1_pyvtn"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_left_room/assets/guild_base_left_room.visual.tileset.compact_source_1025_0.texture.res" id="2_3s0my"]
@@ -40,5 +40,5 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_l0yvt")
 sources/1 = SubResource("TileSetAtlasSource_nsd1j")
-metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/guild_base/Guild Base Room 1 - Empty.tmx"
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/guild_base/Guild Base Room 2 - Empty.tmx"
 metadata/tiled_compact_atlas_version = 1

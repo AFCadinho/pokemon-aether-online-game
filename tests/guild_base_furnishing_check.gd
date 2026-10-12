@@ -167,7 +167,7 @@ func _run() -> void:
 					_check(visual.get_cell_atlas_coords(Vector2i(x, y)) == Vector2i(coords[0], coords[1]), "scene uses the correct source tile: " + str(spec.id))
 		var icon: Texture2D = load("res://assets/guild_base/furniture/icons/%s.png" % str(spec.id))
 		_check(icon != null and icon.get_size() == Vector2(spec.visualSize[0], spec.visualSize[1]) * 32, "complete catalog icon: " + str(spec.id))
-		var value := _item("catalog_item", str(spec.id), 8, 4 if str(spec.placement) == "wall" else 8)
+		var value := _item("catalog_item", str(spec.id), 5 if int(spec.footprint[0]) > 11 else 8, 4 if str(spec.placement) == "wall" else 8)
 		var layout: Array = [value]
 		if str(spec.placement) == "surface":
 			value.merge({"x": 0, "y": 0, "parentId": "parent", "slot": 0}, true)
