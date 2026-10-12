@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Draco Meteor cinematic 3D camera shots during charge, ascent and meteor rain, returning to the player's view after the move; respects the camera motion setting.
+
 - Align Guild Base elevator arrivals with the scene's current door tiles.
 
 - Keep compact touch controls, quest trackers, Trainer Cards and Storage hover cards within their intended bounds across UI scales.
