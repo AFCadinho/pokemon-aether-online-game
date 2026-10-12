@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "species": "zygarde-10",
+  "status": "local_visual_preview",
+  "runtime_approved": false,
+  "release_approved": false,
+  "published": false,
+  "platform": "Linux",
+  "renderers": {
+    "Compatibility": {
+      "report": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/zygarde-preview-v1/review-v4/godot-review.json",
+      "sha256": "404450c4180a8d025416106bc9cfc2c735777598adb7fc64758ea1605e8413e4",
+      "video": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/zygarde-preview-v1/preview.mp4",
+      "video_sha256": "9587b6800a9c7e26e0096c242f02c7394d4ac64d6b261a0f76a8e780e37d65b3",
+      "video_frames": 446,
+      "visibility_samples": 4906,
+      "material_samples": 4906
+    },
+    "Mobile": {
+      "report": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/zygarde-preview-v1/review-mobile-v4/godot-review.json",
+      "sha256": "45235fbf7233b1e3035c57971fcf7fa7024788b72556be9424c623800684a308",
+      "video": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/zygarde-preview-v1/preview-mobile.mp4",
+      "video_sha256": "62f3035a5ce7a8a609b317421a871add7ae76581dbc4bdf63187f65d93673703",
+      "video_frames": 446,
+      "visibility_samples": 4906,
+      "material_samples": 4906
+    }
+  },
+  "source_glb_sha256": "f04f0aa9a5e6593612666fed42a634c40ec46f48c2022f6dd910b5798fea6a01",
+  "stage_sha256": "29ee3359bc18330ef48708e1b14f0949e6b9689db0abac3de250c7cbce85d14e",
+  "geometry_motion_signatures": [
+    "deac561414e7dd694acb9dc436de16d50d65e0f54d7b426c854a0df88772f5e0",
+    "deac561414e7dd694acb9dc436de16d50d65e0f54d7b426c854a0df88772f5e0"
+  ],
+  "interpretations": [
+    "Core: source colour and normal domains, view-dependent fifth-power Fresnel with source bias; formula is a reconstruction.",
+    "Core normal-offset distortion strength 0.015 UV units is authored for this preview, not recovered from the source.",
+    "The one exported white probe is sampled as a constant local reflection response; cubemap layout is not inferred.",
+    "Shell: native albedo alpha and Godot screen-space thin refraction at authored strength 0.01.",
+    "Layered emission and eyes use the existing PBR translation; original-engine equivalence is not claimed.",
+    "Source emission-power and additive-opacity curves are retained; equal layer powers are verified before combining their masks.",
+    "Additive effects retain source visibility timing; no geometry or skeletal animation replacement."
+  ],
+  "code_sha256": {
+    "tools/sprite_factory/zygarde_preview.py": "7c0678508c5578c5f114c877d9d9ac49216f78a9f1551c53fc7354d08dcbd60a",
+    "tools/sprite_factory/zygarde_preview_gallery.py": "44a7d8cfc9285cadea741d94757c7e876d0e6bd2680cf0c66ddad73b6153c05b",
+    "tools/sprite_factory/zygarde_preview_build.gd": "fc6811b270e74a6e49e6975f37bca3e2f02da76831f9a356da040fd07b357104",
+    "tools/sprite_factory/zygarde_preview_review.gd": "2c179114c69ece3803672e036b5eb08a17fb1d1a8501c6dcd29d811e00f1ea2b",
+    "tools/sprite_factory/zygarde_preview_core.gdshader": "8eb018066c977b495e04d28cd37d15389540093037261d7d3191f94cac5b553f",
+    "tools/sprite_factory/zygarde_preview_shell.gdshader": "3fa062dd4ae323b4a120647a0015a5724c76a02f8984049cdbef1847377aa144"
+  },
+  "poster": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/zygarde-preview-v1/preview.png",
+  "poster_sha256": "6c593ac2f597c85d69f4bceb86c2ded98de03be2f489df240b7b6974e3ce2168",
+  "gallery": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/zygarde-preview-v1/preview.html",
+  "gallery_sha256": "b80637a4cf65926be8a823e8af191b23b6a83a33abd759815c3b32db0836a504"
+}

@@ -1,5 +1,9 @@
 # Zygarde 10%: resultaat van de herstelpoging
 
+Vervolg: er is inmiddels een expliciet toegestane [lokale visuele proef](zygarde-ten-preview.md)
+gemaakt. Die reconstructie is nog niet toegelaten; de bronbeperkingen hieronder
+blijven van toepassing.
+
 **Nog niet hersteld of toegelaten.** De 17 eerder herstelde vormen blijven
 bruikbaar; het aantal resterende vormen blijft 36. Catalogi, pakketten,
 release-indexen en R2 zijn bij deze poging niet gewijzigd.
