@@ -62,7 +62,16 @@ func _run() -> void:
 	_check(load("res://scripts/ui/ui_overlay.gd").can_instantiate(), "Bag and hotbar guard dispatch compile")
 	locked.serverTime = now + 5
 	service.apply_state(locked)
-	service.apply_state({"locked": false, "battleId": "", "serverTime": now + 6})
+	service.deadline_msec = Time.get_ticks_msec() - 1
+	service.polling = true
+	service.submitting = true
+	service._process(0)
+	_check(not service.logged_out and paused, "local timer does not discard a pending last-second answer")
+	service.apply_state({"locked": false, "battleId": "wild-check", "serverTime": now + 6})
+	_check(not service.logged_out and not paused, "server accepts a timely answer even after local countdown reaches zero")
+	locked.serverTime = now + 7
+	service.apply_state(locked)
+	service.apply_state({"locked": false, "battleId": "", "serverTime": now + 8})
 	_check(service.logged_out and not paused, "server timeout cleanup logs out even when the realtime notice was missed")
 	service.queue_free()
 	await process_frame

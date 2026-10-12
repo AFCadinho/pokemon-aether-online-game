@@ -85,10 +85,9 @@ func _process(delta: float) -> void:
 		var seconds := maxi(0, ceili(float(deadline_msec - Time.get_ticks_msec()) / 1000.0))
 		countdown.text = LocalizationManager.text("ui.encounter_guard.timer", {"seconds": seconds})
 		for button: Button in grid.get_children():
-			button.disabled = submitting or int(guard.get("attemptsRemaining", 0)) == 0 or Time.get_ticks_msec() < retry_msec or choices.has(str(button.get_meta("option_id", "")))
-		if seconds == 0:
-			_logout()
-			return
+			button.disabled = seconds == 0 or submitting or int(guard.get("attemptsRemaining", 0)) == 0 or Time.get_ticks_msec() < retry_msec or choices.has(str(button.get_meta("option_id", "")))
+		# The server decides whether a last-second submission arrived in time.
+		# Continue polling at zero; do not discard a pending accepted answer.
 	elapsed += delta
 	if elapsed >= 2.0 and not polling and not submitting:
 		elapsed = 0.0
