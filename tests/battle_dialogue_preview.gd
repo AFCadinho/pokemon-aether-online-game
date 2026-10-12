@@ -454,7 +454,7 @@ func _build_move_controls() -> void:
 	move_picker = OptionButton.new()
 	for move in FIRST_MOVES: move_picker.add_item(move)
 	var recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
-	for recipe: Dictionary in recipes.DATA.data.moves.values(): move_picker.add_item(str(recipe.name))
+	for recipe: Dictionary in recipes.all_recipes().values(): move_picker.add_item(str(recipe.name))
 	toolbar.add_child(move_picker)
 	var row := HBoxContainer.new()
 	toolbar.add_child(row)

@@ -1,5 +1,6 @@
 extends RefCounted
 ## Individually authored lighting beats sampled from the existing native VFX clock.
+const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const PROFILES := {
 	"hyperbeam": {"tint":Color("ffc477"), "flash":Color("fff4d6"), "brightness":0.96, "energy":1.45, "range":3.6, "mix":0.24},
 	"solarbeam": {"tint":Color("c9ed76"), "flash":Color("ffffce"), "brightness":1.025, "energy":1.15, "range":3.8, "mix":0.28},
@@ -25,6 +26,7 @@ static func emission_end(effect: Node) -> float:
 	return effect.impact
 
 static func sample(effect: Node, seconds: float) -> Dictionary:
+	if Recipes.EXTENSIONS.data.moves.has(effect.key): return _sample_extension(effect, seconds)
 	var profile: Dictionary = PROFILES[effect.key]
 	var points: Dictionary = effect.anchors.call()
 	var origin: Vector3 = points.source
@@ -102,3 +104,38 @@ static func sample(effect: Node, seconds: float) -> Dictionary:
 static func _add(lights: Array[Dictionary], point: Vector3, color: Color, energy: float, reach: float, role: String) -> void:
 	if energy <= 0.0001: return
 	lights.append({"point":point, "color":color, "energy":energy, "range":reach, "role":role})
+
+static func supports(key: String) -> bool:
+	return PROFILES.has(key) or float(Recipes.get_recipe(key).get("lighting", {}).get("energy", 0.0)) > 0.0
+
+static func _sample_extension(effect: Node, seconds: float) -> Dictionary:
+	var recipe: Dictionary = Recipes.get_recipe(effect.key)
+	var tint := Color(str(recipe.color))
+	var config: Dictionary = recipe.lighting
+	var profile := {"tint":tint,"flash":tint.lerp(Color.WHITE,.55),"brightness":float(config.brightness),"mix":float(config.mix),"energy":float(config.energy)}
+	var charge := smoothstep(effect.effect_start,maxf(effect.launch,effect.effect_start+.01),seconds)
+	var flight := clampf((seconds-effect.launch)/maxf(effect.impact-effect.launch,.01),0,1)
+	var after: float = (seconds-effect.impact)/maxf(effect.duration-effect.impact,.01)
+	var weight := charge*(1.-smoothstep(0,1.,after))
+	var pulse := sin(clampf(after/.4,0,1)*PI) if effect.hit and bool(recipe.damaging) else 0.0
+	var points: Dictionary = effect.anchors.call()
+	var origin: Vector3 = effect.origin if effect.launched else points.source
+	var aim: Vector3 = effect.aim if effect.launched else points.target
+	var lights: Array[Dictionary] = []
+	var energy := float(config.energy)
+	if recipe.family=="beams":
+		var fade := 1.-smoothstep(effect.impact,effect.emission_end,seconds)
+		if seconds < effect.emission_end:
+			for emitter: Vector3 in points.get("sources",[origin]).slice(0,2):
+				_add(lights,emitter.lerp(aim,flight*.5),tint,energy*charge*fade,3.,"beam")
+	elif recipe.family=="projectiles":
+		if seconds < effect.impact:
+			var point := origin.lerp(aim,flight)+Vector3.UP*sin(flight*PI)*float(recipe.arc)
+			_add(lights,point,tint,energy*charge,3.,"projectile")
+	elif recipe.family=="field":
+		_add(lights,effect.field_center+Vector3.UP*1.6,tint,energy*weight,6.,"field")
+	else:
+		var point: Vector3 = points.get("actor_center",origin) if recipe.contact or recipe.target=="actor" else origin.lerp(aim,flight)
+		_add(lights,point,tint,energy*weight*.65,2.5,"cast")
+	if pulse>.001:_add(lights,aim,profile.flash,energy*pulse,3.,"impact")
+	return {"weight":weight,"pulse":pulse,"lights":lights,"color":tint.lerp(profile.flash,pulse*.25),"profile":profile}

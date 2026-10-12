@@ -30,7 +30,7 @@ const PROFILES := {
 		"cannons": [["left_feeler_b_02", Vector3(0.261, 0, 0)], ["right_feeler_b_02", Vector3(0.261, 0, 0)]],
 	},
 }
-const MOVE_OVERRIDES := {"blastoise": {"scald": "cannons", "hydrovortex": "cannons", "watergun": "cannons", "bubblebeam": "cannons", "icebeam": "cannons", "flashcannon": "cannons"}, "pikachu": {"thundershock": "electric_body", "thunderbolt": "electric_body"}}
+const MOVE_OVERRIDES := {"blastoise": {"hydropump": "cannons", "hydrocannon": "cannons", "scald": "cannons", "hydrovortex": "cannons", "watergun": "cannons", "bubblebeam": "cannons", "icebeam": "cannons", "flashcannon": "cannons"}, "pikachu": {"thundershock": "electric_body", "thunderbolt": "electric_body"}}
 const CACHE_META := &"move_attachment_bindings"
 
 static func action_for(identity: String, move_key: String, available_actions: Dictionary) -> String:
