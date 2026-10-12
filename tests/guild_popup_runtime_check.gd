@@ -4,6 +4,11 @@ var failed := false
 var private_message_user: Dictionary = {}
 var trainer_card_user: Dictionary = {}
 
+class RecordingGuildPopup extends GuildPopup:
+	var recorded_actions: Array[Dictionary] = []
+	func _run_guild_bank_action(method: String, arguments: Array, asset_type: String) -> void:
+		recorded_actions.append({"method": method, "arguments": arguments.duplicate(), "assetType": asset_type})
+
 
 func _init() -> void:
 	call_deferred("_run")
@@ -736,7 +741,7 @@ func _run() -> void:
 	popup._render_guild_home()
 	await process_frame
 	var pokemon_withdraw := popup.find_child("GuildBankPokemonWithdrawButton_21", true, false) as Button
-	_check(pokemon_withdraw != null and pokemon_withdraw.text == "Withdraw", "authorized ranks retain permanent Guild withdrawal")
+	_check(pokemon_withdraw != null and pokemon_withdraw.text == "Withdraw permanently", "authorized ranks retain clearly labelled permanent Guild withdrawal")
 	var pokemon_borrow := popup.find_child("GuildBankPokemonBorrowButton_21", true, false) as Button
 	_check(pokemon_borrow != null and pokemon_borrow.text == "Borrow" and not pokemon_borrow.disabled, "available Guild-owned Pokémon expose borrowing without ownership transfer")
 	popup.guild_bank_state["loanUsage"]["borrowedPokemon"] = 6
@@ -1743,6 +1748,7 @@ func _run() -> void:
 	await _check_compact_member_actions(packed, Vector2i(360, 640))
 	await _check_expanding_bank_previews(packed)
 	await _check_storage_availability(packed)
+	await _check_bank_action_confirmations()
 	quit(1 if failed else 0)
 
 
@@ -1990,6 +1996,106 @@ func _check_storage_availability(packed: PackedScene) -> void:
 	await process_frame
 	_check(confirmed.size() == 1 and not is_instance_valid(donation), "confirming a donation runs its transfer action once and closes")
 	popup.free()
+
+
+func _check_bank_action_confirmations() -> void:
+	var popup := RecordingGuildPopup.new()
+	root.add_child(popup)
+	await process_frame
+	popup.show_debug_member_preview()
+	popup.open()
+	popup.guild_bank_state["loanDurationSeconds"] = 10800
+	popup._show_guild_section("bank")
+	popup._on_guild_bank_category_opened("items")
+	popup._show_guild_item_storage_window("items")
+	for frame: int in range(8):
+		await process_frame
+	var storage := popup.find_child("GuildItemsStorageWindow", true, false) as Window
+	var withdraw := storage.find_child("GuildBankItemWithdrawButton_leftovers", true, false) as Button
+	var borrow := storage.find_child("GuildBankItemBorrowButton_leftovers", true, false) as Button
+	var quantity := (storage.find_child("GuildBankItemRow_leftovers", true, false).find_children("*", "SpinBox", true, false)[0]) as SpinBox
+	_check(borrow.get_global_rect().position.y - withdraw.get_global_rect().end.y >= 24, "permanent withdrawal and borrowing sit on separate rows with a divider")
+	_check(_button_background_is(withdraw, GuildPopup.UI_SECONDARY_BACKGROUND) and _button_background_is(borrow, GuildPopup.UI_PRIMARY_BACKGROUND), "withdrawal and borrowing have distinct action colours")
+	quantity.value = 2
+	borrow.pressed.emit()
+	await process_frame
+	var dialog := storage.find_child("GuildBankBorrowConfirmationDialog", true, false) as AetherConfirmationDialog
+	_check(dialog != null and dialog.visible and dialog.get_parent() == storage and storage.exclusive, "borrowing confirms above the full storage and blocks background interaction")
+	_check(dialog != null and dialog.message_label.text.contains("Leftovers ×2") and dialog.message_label.text.contains("3 hours") and dialog.message_label.text.contains("Guild Leader or Captain") and dialog.message_label.text.contains("at any time"), "borrowing explains the asset, quantity, actual Guild duration and early recall")
+	_check(popup.recorded_actions.is_empty(), "clicking Borrow sends no request before confirmation")
+	dialog.cancel_button.pressed.emit()
+	await process_frame
+	_check(popup.recorded_actions.is_empty() and not storage.exclusive, "cancelling borrowing sends no request and restores the storage")
+	borrow.pressed.emit()
+	dialog = storage.find_child("GuildBankBorrowConfirmationDialog", true, false) as AetherConfirmationDialog
+	quantity.value = 3
+	dialog.confirm_button.pressed.emit()
+	await process_frame
+	_check(popup.recorded_actions.size() == 1 and popup.recorded_actions[0]["method"] == "borrow_bank_item" and popup.recorded_actions[0]["arguments"] == ["leftovers", 2], "confirming Borrow submits exactly the displayed item and quantity once")
+	_check(not is_instance_valid(dialog) and not storage.exclusive, "confirmed borrowing closes the confirmation and restores the storage")
+	withdraw.pressed.emit()
+	dialog = storage.find_child("GuildBankWithdrawConfirmationDialog", true, false) as AetherConfirmationDialog
+	_check(dialog != null and dialog.message_label.text.contains("personal property") and dialog.message_label.text.contains("no loan duration") and dialog.message_label.text.contains("cannot recall"), "permanent withdrawal explains ownership and the absence of a loan or Guild recall")
+	_check(popup.recorded_actions.size() == 1, "clicking Withdraw sends no request before confirmation")
+	var escape := InputEventAction.new()
+	escape.action = "ui_cancel"
+	escape.pressed = true
+	dialog._unhandled_input(escape)
+	await process_frame
+	_check(popup.recorded_actions.size() == 1 and not is_instance_valid(dialog) and not storage.exclusive, "Escape cancels withdrawal without a transfer")
+	withdraw.pressed.emit()
+	dialog = storage.find_child("GuildBankWithdrawConfirmationDialog", true, false) as AetherConfirmationDialog
+	dialog.confirm_button.pressed.emit()
+	await process_frame
+	_check(popup.recorded_actions.size() == 2 and popup.recorded_actions[1]["method"] == "withdraw_bank_item" and popup.recorded_actions[1]["arguments"] == ["leftovers", 3], "confirming Withdraw submits the selected item quantity once")
+	storage.queue_free()
+	await process_frame
+	popup._on_guild_bank_category_opened("pokemon")
+	popup._show_guild_pokemon_vault_window()
+	await process_frame
+	var vault := popup.find_child("GuildPokemonVaultWindow", true, false) as Window
+	for action: String in ["borrow", "withdraw"]:
+		var button := vault.find_child("GuildBankPokemon%sButton_21" % action.capitalize(), true, false) as Button
+		button.pressed.emit()
+		dialog = vault.find_child("GuildBank%sConfirmationDialog" % action.capitalize(), true, false) as AetherConfirmationDialog
+		_check(dialog != null and dialog.visible and dialog.get_parent() == vault and dialog.message_label.text.contains("Blastoise"), "%s confirms the selected Pokémon above the Vault" % action)
+		var previous_count := popup.recorded_actions.size()
+		_check(previous_count == (2 if action == "borrow" else 3), "%s Pokémon sends no request before confirmation" % action)
+		dialog.confirm_button.pressed.emit()
+		await process_frame
+		_check(popup.recorded_actions.size() == previous_count + 1 and popup.recorded_actions.back()["method"] == "%s_bank_pokemon" % action and popup.recorded_actions.back()["arguments"] == [21], "%s Pokémon submits the displayed Pokémon once" % action)
+	vault.queue_free()
+	await process_frame
+	popup.guild_bank_state.erase("loanDurationSeconds")
+	popup.guild_home["guild"]["loanDurationSeconds"] = 21600
+	popup._confirm_guild_bank_asset_action("borrow", "Leftovers ×1", func(): pass, popup._guild_bank_item_icon("leftovers"), "items")
+	dialog = popup.find_child("GuildBankBorrowConfirmationDialog", true, false) as AetherConfirmationDialog
+	_check(dialog.message_label.text.contains("6 hours"), "borrowing falls back to the current Guild settings when the bank duration is absent")
+	dialog.cancel_button.pressed.emit()
+	await process_frame
+	_check(popup._guild_loan_duration_label(3600) == "1 hour", "one-hour loans use a readable singular duration")
+	popup.free()
+	var localization := root.get_node("LocalizationManager")
+	localization.set_locale("nl")
+	for viewport_size: Vector2i in [Vector2i(480, 360), Vector2i(360, 640)]:
+		var viewport := SubViewport.new()
+		viewport.size = viewport_size
+		root.add_child(viewport)
+		var compact := RecordingGuildPopup.new()
+		viewport.add_child(compact)
+		await process_frame
+		compact.show_debug_member_preview()
+		compact.open()
+		for action: String in ["borrow", "withdraw"]:
+			compact._confirm_guild_bank_asset_action(action, "Basculegion Mount ×2", func(): pass, compact._guild_bank_item_icon("basculegion-mount"), "items")
+			dialog = compact.find_child("GuildBank%sConfirmationDialog" % action.capitalize(), true, false) as AetherConfirmationDialog
+			for frame: int in range(8):
+				await process_frame
+			_check(dialog.get_viewport_rect().encloses(dialog.panel.get_global_rect()) and dialog.panel.get_global_rect().encloses(dialog.confirm_button.get_global_rect()), "%s confirmation and its buttons fit %s in Dutch" % [action, viewport_size])
+			dialog.cancel_button.pressed.emit()
+			await process_frame
+		viewport.free()
+	localization.set_locale("en")
 
 
 func _check_dialog_styled(dialog: ConfirmationDialog, label: String) -> void:
