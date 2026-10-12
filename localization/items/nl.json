@@ -1166,11 +1166,11 @@
   },
   "guild-room-1-template": {
     "name": "Guild Café · Kamer 1",
-    "shortDesc": "Kamer 1, deur links. Je ontvangt een Bag-item. Lever het bij de Guild Manager in om dit bewerkbare ontwerp permanent voor je guild te unlocken."
+    "shortDesc": "Kamer 1, rechts van de hoofdhal. Je ontvangt een Bag-item. Lever het bij de Guild Manager in om dit bewerkbare ontwerp permanent voor je guild te unlocken."
   },
   "guild-room-2-template": {
     "name": "Grand Lounge · Kamer 2",
-    "shortDesc": "Kamer 2, deur rechts. Je ontvangt een Bag-item. Lever het bij de Guild Manager in om dit bewerkbare ontwerp permanent voor je guild te unlocken."
+    "shortDesc": "Kamer 2, links van de hoofdhal. Je ontvangt een Bag-item. Lever het bij de Guild Manager in om dit bewerkbare ontwerp permanent voor je guild te unlocken."
   },
   "flying-nimbus-mount": {
     "name": "Flying Nimbus-mount",

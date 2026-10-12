@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Identify Guild room templates by their position from the Main Hall: Room 1 on the right and Room 2 on the left, replacing confusing interior door-side labels.
+
 - Offer the Irelia Outfit Box for both genders in the Gift Store for 450 Gems, with six fixed-colour parts and the standard 450-credit bound alternative.
 
 - Refine Dark Pulse, Surf, Blizzard, Earth Power and Overheat with continuous 3D energy fronts, breaking water, rolling snow, ground ruptures and billowing fire. Add individually coloured atmosphere and framing while preserving native speed, sound and hit/miss/block handling.
@@ -108,7 +110,7 @@
 
 - Give Hyper Beam a continuous energy shaft, Pyro Ball a solid rotating fireball and tapered flame, Hurricane a flowing wind funnel, and Draco Meteor larger rocky cores with clearer tails and heavier impacts. Beam attacks now leave the mouth or cannon narrowly and widen toward their target; preserve move timing and cinematic cameras.
 
-- Add named Guild room designs, manager donation of permanent room-specific templates, and zoomable Gift Store previews. Guild Café (Room 1, door left) and Grand Lounge (Room 2, door right) cost 350 Gems each. Correct the room visual mapping without mirroring the designs.
+- Add named Guild room designs, manager donation of permanent room-specific templates, and zoomable Gift Store previews. Guild Café (Room 1, right of the Main Hall) and Grand Lounge (Room 2, left of the Main Hall) cost 350 Gems each. Correct the room visual mapping without mirroring the designs.
 
 - Add cinematic 3D charge and attack camera shots for Moonblast, Hyper Beam, Solar Beam, Focus Blast, Shadow Ball, Flash Cannon, Electro Shot and Pyro Ball, plus wide field shots for Blizzard, Hurricane and Tera Starstorm. Shots follow existing move timing, respect camera motion settings and restore the player's view.
 
