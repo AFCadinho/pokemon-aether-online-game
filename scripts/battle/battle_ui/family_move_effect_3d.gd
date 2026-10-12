@@ -1,6 +1,10 @@
 extends "res://scripts/battle/battle_ui/source_move_effect_3d.gd"
-## First-pass move choreography. Source masks are from SV; motion is authored here.
+## Authored move choreography. Ordinary moves use smooth procedural volumes;
+## Z choreography retains its source-art bindings.
 ## Damage, persistent conditions, healing and field state remain event-owned.
+const Cinema = preload("res://scripts/battle/battle_ui/move_cinematic_forms_3d.gd")
+var forms: RefCounted
+var volume_accents: Array[ShaderMaterial] = []
 const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const Art = preload("res://scripts/battle/battle_ui/move_recipe_sources_3d.gd")
 var recipe: Dictionary
@@ -50,6 +54,28 @@ void fragment() {
 	surface.shader = shader
 	surface.set_shader_parameter("mask",Art.TEXTURES[art[0].path])
 	surface.set_shader_parameter("tint",Color(str(recipe.color)))
+
+	if recipe.family != "z":
+		forms = Cinema.new(Color(str(recipe.color)),"ghost" if key=="willowisp" else str(recipe.type))
+		surface = forms.skin
+
+func _source_sprite(point: Vector3, size: float, id: String, phase: float, alpha: float, facing: Basis, rotation_value := 0.0, aspect := Vector2.ONE) -> void:
+	if forms == null:
+		super._source_sprite(point,size,id,phase,alpha,facing,rotation_value,aspect)
+		return
+	if size < .001 or alpha < .001: return
+	# Small supporting accents now have smooth depth and soft edges. Main
+	# deliveries use continuous geometry in Staged; no camera-facing source atlas.
+	while volume_accents.size() <= cursor: volume_accents.append(null)
+	if volume_accents[cursor] == null: volume_accents[cursor] = forms.haze.duplicate()
+	var mat := volume_accents[cursor]
+	var tint := Color(str(recipe.color))
+	if id == "combo_red": tint = Color("ff3155")
+	elif id == "combo_blue": tint = Color("258fff")
+	mat.set_shader_parameter("tint",tint)
+	mat.set_shader_parameter("seconds",elapsed)
+	mat.set_shader_parameter("opacity",alpha)
+	_piece(sphere,mat,point,Vector3(aspect.x,aspect.y,.55)*size*.5,facing*Basis(Vector3.FORWARD,rotation_value))
 
 func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) -> bool:
 	if recipe.is_empty(): _prepare()
