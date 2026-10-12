@@ -12,10 +12,12 @@ propagate binding to every component. Gender changes retain ownership and
 resolve each item to the corresponding model. No role restriction or Store
 offer is configured.
 
-All 56 PNGs are byte-identical to Irelia revision 3; see
+All 56 PNGs are byte-identical to Irelia revision 4; see
 `irelia_asset_hashes.json`. Revision 3 simplifies the overworld blades into broader, five-colour silhouettes
-and restores the right-facing hair coverage around the native ear. Trainer
-art and all clothing are unchanged.
+and restores the right-facing hair coverage around the native ear. Revision 4
+also covers rear scalp gaps with the original hair mask in every walking,
+fishing and riding frame. Other directions, trainer art and all clothing
+are unchanged.
 Trainer images are 160×160. Overworld images are 256×256 with four 64×64 frames
 per direction (down, left, right, up), including walking, fishing and riding.
 Other movement styles use existing appearance fallbacks. Both the circlet and
