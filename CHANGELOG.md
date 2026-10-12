@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make Irelia overworld blades clearer at sprite scale and cover the exposed scalp around the right-facing ear for both genders.
+
 - Style item and Pokémon donations with compact Aether confirmations, showing the asset name and icon. Add coloured availability badges to Guild storage rows, grid tiles and selected assets, including Pokémon on loan.
 
 - Organize the Gift Store Guilds category into themed Emblems and Rooms tabs, with search, filters and sorting scoped to the selected tab.
