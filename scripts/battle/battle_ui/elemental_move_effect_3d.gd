@@ -40,6 +40,12 @@ func _geometry_scale() -> float:
 	# Field volumes use metres, independent of emitter anatomy or recipe magnification.
 	return 1.0
 
+func _palette() -> Array:
+	return PALETTES[key]
+
+func _surface_kind() -> int:
+	return MOVE_KEYS.find(key)
+
 func _prepare() -> void:
 	recipe = RecipeCatalog.get_recipe(key)
 	sphere.radial_segments = 48
@@ -116,9 +122,9 @@ void fragment() {
 """
 	surface = ShaderMaterial.new()
 	surface.shader = shader
-	surface.set_shader_parameter("low_color",PALETTES[key][0])
-	surface.set_shader_parameter("high_color",PALETTES[key][1])
-	surface.set_shader_parameter("kind",MOVE_KEYS.find(key))
+	surface.set_shader_parameter("low_color",_palette()[0])
+	surface.set_shader_parameter("high_color",_palette()[1])
+	surface.set_shader_parameter("kind",_surface_kind())
 	hot = surface.duplicate()
 	hot.set_shader_parameter("bright",true)
 	water_body = surface.duplicate()

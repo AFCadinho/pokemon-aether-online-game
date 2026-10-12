@@ -22,6 +22,7 @@ const IceBeamMoveEffect = preload("res://scripts/battle/battle_ui/ice_beam_move_
 const MoveRecipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const ZMoveEffect = preload("res://scripts/battle/battle_ui/z_move_effect_3d.gd")
 const SkystrikePath = preload("res://scripts/battle/battle_ui/skystrike_path_3d.gd")
+const ElementalBatchEffect = preload("res://scripts/battle/battle_ui/elemental_batch_effect_3d.gd")
 const ElementalMoveEffect = preload("res://scripts/battle/battle_ui/elemental_move_effect_3d.gd")
 const ExtendedMoveEffect = preload("res://scripts/battle/battle_ui/extended_move_effect_3d.gd")
 const StagedMoveEffect = preload("res://scripts/battle/battle_ui/staged_move_effect_3d.gd")
@@ -1496,7 +1497,9 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 	var timing := move_timing(move, actor)
 	if timing.is_empty(): return null
 	var effect: Node3D
-	if MoveEffect.move_key(move) in ElementalMoveEffect.MOVE_KEYS:
+	if ElementalBatchEffect.Profiles.DATA.has(MoveEffect.move_key(move)):
+		effect = ElementalBatchEffect.new()
+	elif MoveEffect.move_key(move) in ElementalMoveEffect.MOVE_KEYS:
 		effect = ElementalMoveEffect.new()
 	elif MoveEffect.move_key(move) in BattlefieldMoveEffect.FIELD_KEYS:
 		effect = BattlefieldMoveEffect.new()

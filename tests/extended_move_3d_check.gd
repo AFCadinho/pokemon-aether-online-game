@@ -36,7 +36,7 @@ func _run() -> void:
 				assert(cue.at_seconds>=0 and cue.event.end_seconds<=plan.duration_seconds)
 				assert(FileAccess.file_exists(plan.sound_paths[cue.event.name]))
 			var effect: Node = stage.create_move_effect(move,actor,"" if recipe.target=="actor" else target,{"show_impact":bool(recipe.damaging)})
-			assert(is_instance_valid(effect) and effect.get_script()==(Stage.ElementalMoveEffect if move in Stage.ElementalMoveEffect.MOVE_KEYS else Extended),move)
+			assert(is_instance_valid(effect) and effect.get_script()==(Stage.ElementalBatchEffect if Stage.ElementalBatchEffect.Profiles.DATA.has(move) else Stage.ElementalMoveEffect if move in Stage.ElementalMoveEffect.MOVE_KEYS else Extended),move)
 			if recipe.contact: assert(not stage.move_contacts[slot].is_empty(),move)
 			effect.cancel()
 			await get_tree().process_frame
@@ -46,7 +46,7 @@ func _run() -> void:
 				seconds=0
 				var sign_value := -1. if reverse else 1.
 				var points := {"source":Vector3(-2*sign_value,1,0),"target":Vector3(2*sign_value,1,0),"radius":.6,"actor_center":Vector3(-2*sign_value,1,0),"actor_ground":Vector3(-2*sign_value,.04,0),"target_ground":Vector3(2*sign_value,.04,0)}
-				var effect: Node = Stage.ElementalMoveEffect.new() if move in Stage.ElementalMoveEffect.MOVE_KEYS else Extended.new()
+				var effect: Node = Stage.ElementalBatchEffect.new() if Stage.ElementalBatchEffect.Profiles.DATA.has(move) else Stage.ElementalMoveEffect.new() if move in Stage.ElementalMoveEffect.MOVE_KEYS else Extended.new()
 				stage.world.add_child(effect)
 				effect.start(move,{"frames":60.,"launch_frame":float(recipe.launch_fraction)*60.,"impact_frame":float(recipe.impact_fraction)*60.},{"show_impact":outcome=="hit" and recipe.damaging,"result":outcome},func():return seconds,func():return points,func():return true)
 				effect.set_process(false)

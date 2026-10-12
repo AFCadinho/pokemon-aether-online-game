@@ -17,7 +17,7 @@ func _run() -> void:
 					var target := "p%d" % ((slot^1)+1)
 					stage.start_move_action(actor,move)
 					var effect: Node=stage.create_move_effect(move,actor,target,{"show_impact":true})
-					assert(effect.get_script()==(Stage.ElementalMoveEffect if move in Stage.ElementalMoveEffect.MOVE_KEYS else Stage.BattlefieldMoveEffect))
+					assert(effect.get_script()==(Stage.ElementalBatchEffect if Stage.ElementalBatchEffect.Profiles.DATA.has(move) else Stage.ElementalMoveEffect if move in Stage.ElementalMoveEffect.MOVE_KEYS else Stage.BattlefieldMoveEffect))
 					assert(effect.field_center.is_equal_approx(field.center))
 					effect.cancel()
 					await get_tree().process_frame
@@ -25,7 +25,7 @@ func _run() -> void:
 		var recipe := Recipes.get_recipe(move)
 		for result in ["hit","miss","block"]:
 			seconds=0
-			var effect: Node=Stage.ElementalMoveEffect.new() if move in Stage.ElementalMoveEffect.MOVE_KEYS else Stage.BattlefieldMoveEffect.new()
+			var effect: Node=Stage.ElementalBatchEffect.new() if Stage.ElementalBatchEffect.Profiles.DATA.has(move) else Stage.ElementalMoveEffect.new() if move in Stage.ElementalMoveEffect.MOVE_KEYS else Stage.BattlefieldMoveEffect.new()
 			stage.world.add_child(effect)
 			var points := {"source":Vector3(-3,1,0),"target":Vector3(3,1,0),"radius":.6,"field":{"center":Vector3(0,.055,0),"radius":5.8}}
 			effect.start(move,{"frames":60,"launch_frame":recipe.launch_fraction*60,"impact_frame":recipe.impact_fraction*60},{"show_impact":result=="hit","result":result},func():return seconds,func():return points,func():return true)
