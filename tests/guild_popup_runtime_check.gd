@@ -816,12 +816,48 @@ func _run() -> void:
 			"lendable": true,
 		})
 	popup.guild_bank_state["items"] = scale_bank_items
+	var original_donation_items: Array = popup.guild_bank_state["inventory"].duplicate(true)
+	for donation_item: Dictionary in popup.guild_bank_state["inventory"]:
+		if str(donation_item.get("itemId", "")) == "exp-share":
+			donation_item["quantity"] = 4
+	for mount_item: String in ["arcanine-mount", "drednaw-mount", "flying-nimbus-mount"]:
+		popup.guild_bank_state["inventory"].append({"itemId": mount_item, "name": mount_item, "quantity": 2, "category": "mounts"})
 	if items_action != null:
 		items_action.pressed.emit()
 		await process_frame
 	_check(popup.find_child("GuildBankItemsPreview", true, false) != null, "Item Storage opens with a scalable donation overview")
 	_check(popup.find_child("GuildBankItemWithdrawButton_scale-item-0", true, false) == null, "Item Storage overview hides Guild withdrawal controls")
 	_check(popup.find_child("GuildBankItemDepositButton_exp-share", true, false) != null, "Item Storage overview keeps direct Bag donations available")
+	var donation_search := popup.find_child("GuildBankItemsDonationSearchInput", true, false) as LineEdit
+	_check(donation_search != null and donation_search.clear_button_enabled, "personal Bag donations have their own clearable search field")
+	var donation_exp_row := popup.find_child("GuildBankItemRow_exp-share", true, false) as Control
+	var donation_amount := donation_exp_row.find_children("*", "SpinBox", true, false)[0] as SpinBox
+	donation_amount.value = 3
+	var unknown_icon := load("res://assets/items/icons/000.png") as Texture2D
+	for icon_item: String in ["arcanine-mount", "drednaw-mount", "flying-nimbus-mount", "arcanine-mount-box", "alola-stone", "tm-flamethrower", "aether-credit-voucher-100"]:
+		var resolved := popup._guild_bank_item_icon(icon_item)
+		_check(resolved != null and resolved != unknown_icon, "%s uses its dedicated shared item icon" % icon_item)
+	if donation_search != null:
+		donation_search.text = "  DREDNAW  "
+		donation_search.text_changed.emit(donation_search.text)
+		_check(not donation_exp_row.visible and (popup.find_child("GuildBankItemRow_drednaw-mount", true, false) as Control).visible, "donation search trims spaces and matches names without case sensitivity")
+		_check((popup.find_child("GuildBankItemRow_scale-item-0", true, false) as Control).visible, "personal donation search leaves Guild-owned items visible")
+		donation_search.text = "exp-share"
+		donation_search.text_changed.emit(donation_search.text)
+		_check(donation_exp_row.visible and donation_amount.value == 3, "searching item IDs preserves the selected donation quantity")
+		donation_search.text = "no-such-bag-item"
+		donation_search.text_changed.emit(donation_search.text)
+		_check((popup.find_child("GuildBankItemsDonationSearchEmpty", true, false) as Label).visible, "empty donation searches explain that no Bag items match")
+		donation_search.text = "Nimbus"
+		donation_search.text_changed.emit(donation_search.text)
+		popup._render_guild_home()
+		await process_frame
+		donation_search = popup.find_child("GuildBankItemsDonationSearchInput", true, false) as LineEdit
+		_check(donation_search.text == "Nimbus" and not (popup.find_child("GuildBankItemRow_exp-share", true, false) as Control).visible, "donation search survives Guild Bank refreshes")
+		donation_search.text = ""
+		donation_search.text_changed.emit(donation_search.text)
+		_check((popup.find_child("GuildBankItemRow_exp-share", true, false) as Control).visible and not (popup.find_child("GuildBankItemsDonationSearchEmpty", true, false) as Label).visible, "clearing donation search restores personal items")
+	popup.guild_bank_state["inventory"] = original_donation_items
 	var scale_item_scroll := popup.find_child("GuildBankItemListScroll", true, false) as ScrollContainer
 	_check(
 		scale_item_scroll != null

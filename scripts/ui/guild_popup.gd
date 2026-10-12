@@ -19,6 +19,7 @@ const GUILD_BROWSE_ICON: Texture2D = preload("res://assets/ui/icons/guild_browse
 const MORE_ACTIONS_ICON: Texture2D = preload("res://assets/ui/icons/more.svg")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 const TrainerAvatarPreviewScript := preload("res://scripts/ui/trainer_avatar_preview.gd")
+const ITEM_ICON_RESOLVER := preload("res://scripts/services/item_icon_resolver.gd")
 const CREATION_COST := 100000
 const REQUIRED_BADGES := 3
 const GUILD_EMBLEM_SIZE := 32
@@ -181,6 +182,7 @@ var guild_bank_asset_search_query := ""
 var guild_bank_asset_filter := "all"
 var guild_pokemon_vault_selected_id := 0
 var guild_item_storage_selected_ids: Dictionary = {"items": "", "resources": ""}
+var guild_bank_donation_search_queries: Dictionary = {"items": "", "resources": ""}
 var guild_bank_state: Dictionary = {}
 var is_loading_guild_bank := false
 var is_guild_bank_action_in_flight := false
@@ -4472,7 +4474,7 @@ func _build_guild_item_list(
 	readonly: bool = false
 ) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(0, 190)
+	panel.custom_minimum_size = Vector2(0, 240 if action == "deposit" else 190)
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.add_theme_stylebox_override("panel", _panel_style(Color("#07131ff2"), UI_BORDER_INNER, 8, 1))
 	var margin := MarginContainer.new()
@@ -4482,6 +4484,19 @@ func _build_guild_item_list(
 	content.add_theme_constant_override("separation", 6)
 	margin.add_child(content)
 	content.add_child(_localized_label(title_key, 10, UI_ACCENT))
+	var donation_category := "resources" if is_resource else "items"
+	var donation_search: LineEdit
+	if action == "deposit":
+		donation_search = LineEdit.new()
+		donation_search.name = "GuildBank%sDonationSearchInput" % donation_category.capitalize()
+		_set_localized_property(donation_search, "placeholder_text", "ui.guild.bank.search.your_%s" % donation_category)
+		donation_search.text = str(guild_bank_donation_search_queries.get(donation_category, ""))
+		donation_search.clear_button_enabled = true
+		donation_search.editable = not items.is_empty()
+		donation_search.custom_minimum_size.y = 32
+		donation_search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_apply_line_edit_style(donation_search)
+		content.add_child(donation_search)
 	if items.is_empty():
 		var empty_key := "ui.guild.bank.empty"
 		if action == "deposit":
@@ -4515,7 +4530,29 @@ func _build_guild_item_list(
 		if not item_value is Dictionary:
 			continue
 		rows.add_child(_build_guild_item_row(item_value as Dictionary, action, is_resource, readonly))
+	if donation_search != null:
+		var empty := _localized_label("ui.guild.bank.donation.search_empty", 11, UI_MUTED)
+		empty.name = "GuildBank%sDonationSearchEmpty" % donation_category.capitalize()
+		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		content.add_child(empty)
+		donation_search.text_changed.connect(_on_guild_bank_donation_search_changed.bind(donation_category, rows, empty))
+		_on_guild_bank_donation_search_changed(donation_search.text, donation_category, rows, empty)
 	return panel
+
+
+func _on_guild_bank_donation_search_changed(query: String, category: String, rows: VBoxContainer, empty: Label) -> void:
+	guild_bank_donation_search_queries[category] = query
+	var normalized := query.strip_edges().to_lower()
+	var visible_count := 0
+	for row: Node in rows.get_children():
+		var card := row as Control
+		card.visible = normalized.is_empty() or str(card.get_meta("guild_bank_search_text", "")).contains(normalized)
+		if card.visible:
+			visible_count += 1
+	var scroll := rows.get_parent() as ScrollContainer
+	scroll.visible = visible_count > 0
+	scroll.scroll_vertical = 0
+	empty.visible = visible_count == 0
 
 
 func _build_guild_item_row(
@@ -5595,15 +5632,9 @@ func _guild_bank_pokemon_name(pokemon: Dictionary) -> String:
 
 
 func _guild_bank_item_icon(item_id: String) -> Texture2D:
-	var normalized := item_id.strip_edges().to_upper().replace("-", "").replace("_", "").replace(" ", "")
-	for path: String in [
-		"res://assets/items/icons/%s.png" % normalized,
-		"res://assets/items/icons/%s.png" % item_id.strip_edges(),
-		"res://assets/items/icons/000.png",
-	]:
-		if ResourceLoader.exists(path):
-			return load(path) as Texture2D
-	return null
+	var auth := get_node_or_null("/root/AuthService")
+	var gender := str(auth.current_user.get("gender", "male")) if auth != null else "male"
+	return ITEM_ICON_RESOLVER.load_icon(item_id, "", "", gender)
 
 
 func _guild_bank_pokemon_icon(pokemon: Dictionary) -> Texture2D:
