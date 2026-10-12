@@ -78,6 +78,20 @@ func run() -> void:
 	assert(not actor.get_node("tool_mesh").visible and copy.get_node("tool_mesh").visible)
 	actor.free()
 	copy.free()
+	for source_name: String in ["body_meshShape", "other_meshShape", "body_meshshape"]:
+		actor = fixture()
+		root.add_child(actor)
+		var data := manifest()
+		for clip: Dictionary in data.clips.values():
+			for track: Dictionary in clip.tracks:
+				if track.mesh == "body_mesh": track.source_target = source_name
+		if source_name == "body_meshShape":
+			assert(pack.apply(actor, data, "a".repeat(64)), pack.failure)
+			verify(actor)
+		else:
+			assert(not pack.apply(actor, data, "a".repeat(64)))
+			assert(actor.get_node("AnimationPlayer").get_animation("idle").get_track_count() == 0)
+		actor.free()
 	for fault in ["hash", "missing_mesh", "missing_clip", "bad_clock", "bad_key", "duplicate"]:
 		actor = fixture()
 		root.add_child(actor)

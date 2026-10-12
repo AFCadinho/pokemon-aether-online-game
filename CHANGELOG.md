@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare normal and shiny 3D models for 120 additional forms for the next model release, with native animations and compact pair packs; fix eight model-name aliases that prevented existing models from being found.
+
 - Make 3D switches flow directly from recall into summon: prepare the incoming public model before recalling, close the ball during absorption and skip repeated entry warmup. Keep doubles replacements hidden until their summon releases them.
 
 - Prepare normal and shiny Urshifu Rapid Strike 3D models with their own stance and animations for the next model release, preventing this missing form from forcing battles into 2D once activated.

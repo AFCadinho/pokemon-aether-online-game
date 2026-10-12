@@ -15,7 +15,11 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 ALIASES = {'meowstic-f-mega': 'meowstic-m-mega',
-           'mr.-mime-galar': 'mr-mime-galar', 'mrmime-galar': 'mr-mime-galar'}
+           'mr.-mime-galar': 'mr-mime-galar', 'mrmime-galar': 'mr-mime-galar',
+           'charizard-megax': 'charizard-mega-x', 'charizard-megay': 'charizard-mega-y',
+           'mewtwo-megax': 'mewtwo-mega-x', 'mewtwo-megay': 'mewtwo-mega-y',
+           'landorus-incarnate': 'landorus', 'thundurus-incarnate': 'thundurus',
+           'tornadus-incarnate': 'tornadus', 'meloetta-aria': 'meloetta'}
 
 
 def read(path):
@@ -75,7 +79,8 @@ def audit(backend):
             assert identity not in active
             active[identity] = asset['asset_id']
     prepared = {}
-    for relative in ['release/approved_3d_therian_index.json', 'release/approved_3d_urshifu_index.json']:
+    for relative in ['release/approved_3d_therian_index.json', 'release/approved_3d_urshifu_index.json',
+                     'release/approved_3d_alternate_forms_index.json']:
         for asset in read(ROOT / relative)['assets']:
             for appearance in asset['appearances']:
                 identity = appearance['runtime_identity']
@@ -122,7 +127,7 @@ process.stdout.write(JSON.stringify(result));'''
         'scripts/services/model_pair_pilot.gd', 'data/approved_3d_release_v13.json',
         'release/approved_3d_bundles_v13_index.json', 'data/model_pair_catalog.json',
         'data/model_pair_geometry_catalog.json', 'release/approved_3d_therian_index.json',
-        'release/approved_3d_urshifu_index.json']
+        'release/approved_3d_urshifu_index.json', 'release/approved_3d_alternate_forms_index.json']
     sdroot = backend / 'showdown-api/node_modules/pokemon-showdown'
     return {'schema': 1, 'snapshot_date': date.today().isoformat(), 'scope': 'Local species coverage; pinned selected v13, no live R2 check or visual review',
         'frontend_revision': revision(ROOT), 'backend_revision': revision(backend),
@@ -200,8 +205,10 @@ if __name__ == '__main__':
     sys.dont_write_bytecode = True
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--backend', type=Path, required=True)
+    parser.add_argument('--json-output', type=Path, default=ROOT / 'tools/sprite_factory/alternate_model_coverage_audit.json')
+    parser.add_argument('--markdown-output', type=Path, default=ROOT / 'docs/alternate-model-coverage-audit.md')
     args = parser.parse_args()
     result = audit(args.backend.resolve())
-    (ROOT / 'tools/sprite_factory/alternate_model_coverage_audit.json').write_text(json.dumps(result, indent=2, ensure_ascii=False) + '\n')
-    (ROOT / 'docs/alternate-model-coverage-audit.md').write_text(markdown(result))
+    args.json_output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + '\n')
+    args.markdown_output.write_text(markdown(result))
     print(json.dumps(result['summary'], indent=2))

@@ -111,7 +111,8 @@ def visibility(row, entry, motion_dir):
         clip = entry['animations'][action]
         if abs((spec['frames'] - 1) / spec['fps'] - clip['duration']) > 1e-5:
             raise ValueError('Raw visibility clock differs: ' + action)
-        tracks = [{'mesh': mesh_name(t['target']), 'source_target': t['target'],
+        aliases = row.get('visibility_target_aliases', {})
+        tracks = [{'mesh': aliases[t['target']] if t['target'] in aliases else mesh_name(t['target']), 'source_target': t['target'],
                    'keys': keys(t, spec['frames'], spec['fps'],
                                 dynamic_review=row.get('dynamic_visibility_review', False),
                                 full_frame_review=row.get('dynamic_visibility_review', False))}
@@ -146,7 +147,7 @@ def fire_colour(material, directory):
     return output.getvalue()
 
 
-def material(row, source_root, work):
+def material(row, source_root, work, *, static_effect_colour=None):
     source = work / 'export' / row['species'] / 'model.glb'
     exported = read(source.with_name('export.json'))
     export_job = read(source.with_name('job.json'))
@@ -226,20 +227,26 @@ def material(row, source_root, work):
             for effect in effects:
                 material = next(m for m in doc['materials'] if m['name'] == effect['material'])
                 png = folder / (effect['material'] + '-color.png')
-                png.write_bytes(fire_colour(material_rows[effect['material']], table.parent))
+                preserve_static = static_effect_colour is not None
+                if preserve_static and not effect.get('static_source_material'):
+                    raise ValueError('Static reconstruction requires proven source-static effects')
+                colour = static_effect_colour if preserve_static else fire_colour
+                png.write_bytes(colour(material_rows[effect['material']], table.parent))
                 effect['color'] = {'path': str(png), 'sha256': sha(png)}
                 # The generic normal-displacement approximation tears these
                 # thin, skinned flame surfaces. Retain their native skeletal
                 # movement and source UV colour animation for visual review.
-                effect['authored_surface_review'] = {
-                    'mode': 'native_skeletal_fire_without_auxiliary_normal_displacement',
-                    'source_height': effect['height'],
-                    'reason': 'Height-zero diagnostic retains connected flames; double-sided rendering does not',
-                    'visual_approved': False}
-                effect['height'] = 0.0
+                if not preserve_static:
+                    effect['authored_surface_review'] = {
+                        'mode': 'native_skeletal_fire_without_auxiliary_normal_displacement',
+                        'source_height': effect['height'],
+                        'reason': 'Height-zero diagnostic retains connected flames; double-sided rendering does not',
+                        'visual_approved': False}
+                    effect['height'] = 0.0
                 matches = [p for m in doc['meshes'] for p in m['primitives']
                            if p.get('material') == doc['materials'].index(material)]
-                if not matches or any('TEXCOORD_1' not in p['attributes'] for p in matches):
+                uv = 'TEXCOORD_1' if not preserve_static or effect['use_uv2'] else 'TEXCOORD_0'
+                if not matches or any(uv not in p['attributes'] for p in matches):
                     raise ValueError('Native effect second UV is missing')
             entry['material_effects'] = {'schema': 1, 'glb_sha256': entry['glb_sha256'],
                                          'records': effects,

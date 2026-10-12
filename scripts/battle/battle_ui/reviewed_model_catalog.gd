@@ -3,6 +3,12 @@ extends RefCounted
 const DATA = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.json")
 const SCREENED = preload("res://scripts/battle/battle_ui/screened_model_catalog.json")
 const PairPilot = preload("res://scripts/services/model_pair_pilot.gd")
+const FORM_NAME_ALIASES := {
+	"charizard-megax": "charizard-mega-x", "charizard-megay": "charizard-mega-y",
+	"mewtwo-megax": "mewtwo-mega-x", "mewtwo-megay": "mewtwo-mega-y",
+	"landorus-incarnate": "landorus", "thundurus-incarnate": "thundurus",
+	"tornadus-incarnate": "tornadus", "meloetta-aria": "meloetta",
+}
 
 static func key(species: String, shiny: bool) -> String:
 	var normalized := species.to_lower().replace(" ", "-")
@@ -17,6 +23,7 @@ static func canonical_identity(identity: String) -> String:
 		base = "meowstic-m-mega"
 	if base in ["mr.-mime-galar", "mrmime-galar"]:
 		base = "mr-mime-galar"
+	base = FORM_NAME_ALIASES.get(base, base)
 	return base + ("@shiny" if shiny else "")
 
 static func aliases_for(identity: String) -> Array[String]:
@@ -26,6 +33,11 @@ static func aliases_for(identity: String) -> Array[String]:
 	if base == "mr-mime-galar":
 		var suffix := "@shiny" if identity.ends_with("@shiny") else ""
 		return ["mr.-mime-galar" + suffix, "mrmime-galar" + suffix]
+	var named: Array[String] = []
+	for alias: String in FORM_NAME_ALIASES:
+		if FORM_NAME_ALIASES[alias] == base:
+			named.append(alias + ("@shiny" if identity.ends_with("@shiny") else ""))
+	if not named.is_empty(): return named
 	return []
 
 static func add_alias_entries(entries: Dictionary) -> void:
