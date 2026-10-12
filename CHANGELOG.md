@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Brighten the matte 3D stadium floor with a muted purple-grey base and a subtle even glow, and soften the lower battle UI shading while keeping white floor reflections disabled.
+
 - Restore stat boosts, drops and Pokémon effect indicators after 3D lead summons and switches, including AI Sparring and PvP battles started from Team Preview.
 
 - Show the Guild emblem, name, role, travel buttons and Guild options only on Overview, giving the other Guild tabs more space.
