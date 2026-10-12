@@ -1207,5 +1207,33 @@
   "super-saiyan-4-outfit": {
     "name": "Super Saiyan 4 (SS4) Caixa de Traje",
     "shortDesc": "Contém cinco cosméticos SS4 separados: pelagem, calças, sapatos, cabelo e cauda (Costas). Serve para personagens masculinos e femininos."
+  },
+  "irelia-shirt": {
+    "name": "Irelia Túnica",
+    "shortDesc": "Ative este item de Irelia na Bolsa e equipe-o na personalização do personagem."
+  },
+  "irelia-trousers": {
+    "name": "Irelia Calças",
+    "shortDesc": "Ative este item de Irelia na Bolsa e equipe-o na personalização do personagem."
+  },
+  "irelia-shoes": {
+    "name": "Irelia Botas",
+    "shortDesc": "Ative este item de Irelia na Bolsa e equipe-o na personalização do personagem."
+  },
+  "irelia-hair": {
+    "name": "Irelia Cabelo",
+    "shortDesc": "Ative este item de Irelia na Bolsa e equipe-o na personalização do personagem."
+  },
+  "irelia-circlet": {
+    "name": "Irelia Diadema",
+    "shortDesc": "Ative este item de Irelia na Bolsa e equipe-o na personalização do personagem."
+  },
+  "irelia-blades": {
+    "name": "Irelia Lâminas Flutuantes",
+    "shortDesc": "Ative este item de Irelia na Bolsa e equipe-o na personalização do personagem."
+  },
+  "irelia-outfit": {
+    "name": "Irelia Caixa de Traje",
+    "shortDesc": "Contém seis cosméticos separados: túnica, calças, botas, cabelo, diadema e lâminas flutuantes (Costas). Para personagens masculinos e femininos."
   }
 }

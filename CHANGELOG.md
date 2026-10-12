@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Irelia Outfit Box for both player models, with six separate cosmetics, revised overworld hair, trainer art and authored walking/fishing/riding sheets.
+
 - Let Guild Bank item, resource and Pokémon donation overviews use the available tab height, showing more rows while keeping each list scrollable.
 
 - Give Guild rank changes, leadership transfers and member removal compact Aether dialogs with clear headings, padded messages and visible actions on smaller screens.
