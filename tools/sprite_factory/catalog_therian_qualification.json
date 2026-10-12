@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "forms": [
+    "landorus-therian",
+    "thundurus-therian",
+    "tornadus-therian"
+  ],
+  "models": 6,
+  "reviewer": "assistant",
+  "scope": "Local Linux Godot 4.6.2; native appearance, battle placement, animation transitions, delivery and shared textures",
+  "published": false,
+  "release_approved": false,
+  "runtime_approved": true,
+  "source_intake_sha256": "4b13ef83c4e4a93d2efe0a6e8771a744cd86c11ef351a9c032bd08a6cb038212",
+  "bundle_index_sha256": "b5c0eac122d5fc1cd6bfdee9bafc607919ee9e460a45fcf99959955af021d283",
+  "bundle_size_bytes": 28395980,
+  "pixel_exact_frames": 72,
+  "sharing": "Textures shared within each normal/shiny pair; independent scenes retain animated eye materials",
+  "visual_review": "Assistant inspected all six idle-front appearances, normal back/attack/sleep/faint poses, and both battle cameras including shiny and grounded rest.",
+  "evidence_sha256": {
+    "runtime/report.json": "8e31409c0c5661c4fc8738c3dec5e5143ca62036dbd18c287fafbba6b7aba75b",
+    "runtime-fixture.json": "d1da9fc35e39f0c4b52b2eabfd6e703322624eb7e8e3f956ab8736378b664151",
+    "appearance/godot-review.json": "c279289acc55429513cdcd3fc73ca3e9d805c3ba6baff307417470913a614134",
+    "transitions.json": "f615820e6f982f1df5b357018f0c4b54b101aa0c8d38e8194f37b1b4dcaf8541",
+    "battle/placement.json": "b646701a214ce7782a29e226cf52e406b83633e5514ac61f00ffe83b90121ba4",
+    "battle/final-v2/battle-review.json": "cf0b4174efbdb659e4bc308dafbca10046b920c4a9334d6fc89e5265ff013c5f",
+    "shared/validated/receipts.jsonl": "f6c675e80475316a46ea782a56460b72d3ca4dcf49abed6710365b49b9b93d8a",
+    "shared/pixel-comparison.json": "da13b0ec8df079b425de6dff161650e6065a550fc0ff59b8973c6159242b32ba",
+    "shared/render-qualified/report.json": "e8be9195822ec3b221241545a7cb2bf6cb11f59aa707783f57862100eccf00fd",
+    "runtime-check.log": "303b3b57fa61e6850aa944dcb8fc8c30eb97f80a8b4588007e2aa98d084437be",
+    "shared-runtime-check.log": "303b3b57fa61e6850aa944dcb8fc8c30eb97f80a8b4588007e2aa98d084437be",
+    "admitted-check.log": "303b3b57fa61e6850aa944dcb8fc8c30eb97f80a8b4588007e2aa98d084437be"
+  },
+  "remaining": [
+    "Include three packs in the next selected model index",
+    "Release certification and publication"
+  ],
+  "admitted_registry_check_passed": true,
+  "code_sha256": {
+    "tools/sprite_factory/catalog_therian_delivery.py": "0fda92d8d1ebd1707d74b92c2f058fa3c845222b9ee0a84de6abeef26c41e598",
+    "tools/sprite_factory/catalog_therian_models.py": "09b414b4c47728bfdc07bfa29abd3973444c5c8928aa59ff63180b738ac90990",
+    "tools/sprite_factory/catalog_therian_pair_render.gd": "0c7f13fb5bd79fecc696881d88c794d736ab5f39e921adf3d13a44ae576d6b9c",
+    "tools/sprite_factory/catalog_therian_battle_review.gd": "dcbad05339eb0d4531c6283e0d17c36b19cb73e625ec6379bc2330a3173086b2",
+    "tests/battle_3d_therian_check.gd": "7c2ba24231b78fe6bb9eddaa23628c426b2a2bf110caab4cf2e9cac5cbe0e186"
+  }
+}

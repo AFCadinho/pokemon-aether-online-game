@@ -1,0 +1,813 @@
+{
+  "schema": 1,
+  "source_root": "/run/media/adinho/AFC_Adinho/3d_models",
+  "scope": "Three Therian forms, normal and shiny, local candidates only",
+  "entries": [
+    {
+      "species": "tornadus-therian",
+      "national_dex": 641,
+      "form_id": "therian",
+      "resource": "pm0641_12_00",
+      "actions": {
+        "idle": "pm0641_12_00_20001_battlewait01_loop",
+        "physical_attack": "pm0641_12_00_20400_attack01",
+        "physical_attack_2": "pm0641_12_00_20410_attack02",
+        "special_attack": "pm0641_12_00_20450_rangeattack01",
+        "damage": "pm0641_12_00_20500_damage01",
+        "sleep": "pm0641_12_00_00281_sleep01_loop",
+        "faint_start": "pm0641_12_00_20520_down01_start",
+        "faint_loop": "pm0641_12_00_20521_down01_loop"
+      },
+      "identity_evidence": "SCVI pmXXXX_12_00 source icon visually inspected as the Therian form; distinct from Incarnate pmXXXX_11_00.",
+      "identity_reviewer": "assistant",
+      "scvi_files": [
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/icon/pm0641_12_00_00_big.png",
+          "bytes": 20033,
+          "sha256": "398ac169539398cde24fbad27e192f03b1b5f613c190ecd1538b78062371b21b"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00.trmbf",
+          "bytes": 269524,
+          "sha256": "6be65b035804800c842899014727c984d3e403e15c4ebfe008ab02e9a5a52415"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00.trmdl",
+          "bytes": 372,
+          "sha256": "96179cacf2bccd2a259e2cd301315a2ea2ab2d0d0e6d8c9619188842fb1fc6f6"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00.trmsh",
+          "bytes": 4028,
+          "sha256": "2aaf5c61a0344869c999c7359cd7c2707b22640bd80d9c60015eb6eada8aa6fd"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00.trmtr",
+          "bytes": 10628,
+          "sha256": "ad79d8bb1023c746fbfe3ca0f4b987e67a490fd6051a3392a8ec34efb0348cf9"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00.trskl",
+          "bytes": 24120,
+          "sha256": "5b49c9199e54b63666149bfcb07b552ea78597d2c22b8b9fa89d98813b9b10e3"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_00.png",
+          "bytes": 5394,
+          "sha256": "3b7c59989faf3aa4b4fdc2de7b3bb3323b587e6ad1ef940cf251aa60ff749f84"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_00_big.png",
+          "bytes": 20033,
+          "sha256": "398ac169539398cde24fbad27e192f03b1b5f613c190ecd1538b78062371b21b"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_a_00_lym.png",
+          "bytes": 109651,
+          "sha256": "b1f1b525eadb33ea29029bc04b524f411898695e451c0663b20bd19903f2f3ba"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_a_01_lym.png",
+          "bytes": 143,
+          "sha256": "d72a3e5b8f57f7076728bd891c6183236ff27499f2e0fdd0b178ecb416236486"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_a_alb.png",
+          "bytes": 916624,
+          "sha256": "0b19aef6cda6164a9e6a0073ae39f21d5e4a1f1084fce71e805983b2d0edd2f5"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_a_ao.png",
+          "bytes": 414067,
+          "sha256": "82cf7ec025ddc759027db3637ba41669fd6d74dbe74e2c44e00a17a77ec68301"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_a_nrm.png",
+          "bytes": 354074,
+          "sha256": "8d2bb5a43fa8d44a420d4932e23503e13a837c6fc6ba8d2befb66eb4f4475343"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_a_rare_alb.png",
+          "bytes": 934798,
+          "sha256": "d3f28b303f32088b81a7f6e84a8fb997e50bb336d8c24f287dd17d5f52f815e4"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_a_rgn.png",
+          "bytes": 463650,
+          "sha256": "86aef842ccce6565be87e5516ec395585aa298be5d6672e6cc6ca398297a63e8"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_b_00_lym.png",
+          "bytes": 9529,
+          "sha256": "ea59b7de0878e330c72bb910082cb3f286ec970d57d67dd15af1e0a031f24b3e"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_b_01_lym.png",
+          "bytes": 105,
+          "sha256": "723ea44df307a57c662d97d0bc91a946d00b8adc87e901732ec291a2a6aab7f0"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_b_alb.png",
+          "bytes": 774584,
+          "sha256": "ac3e51fd2da45243928d655262b01b1b939b17bbf18c758f316595d84a22c144"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_b_ao.png",
+          "bytes": 388285,
+          "sha256": "748f9c2d9741bd4026b3b23d2fb36fa22d8cfd835ade95d0b6c933dfa3fea4c5"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_b_nrm.png",
+          "bytes": 320575,
+          "sha256": "2fe9e8c1ea9430722026ee8b6d74ab41f0722107358dfb49c2154fe056178713"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_b_rare_alb.png",
+          "bytes": 776000,
+          "sha256": "1be11530e6844809efca8a754208c50dc68266b53fc9c9097016875db21d8952"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_b_rgn.png",
+          "bytes": 376568,
+          "sha256": "a78f1ea313c688bfa159bdbef5abc8ab511e8b5a62c8052e9ece53db77be33c4"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_body_msk.png",
+          "bytes": 102,
+          "sha256": "5206eab31746540ec694e956084dcb36608c10d01d0c6fa1f61427cfae19a43a"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_eye2_nrm.png",
+          "bytes": 8238,
+          "sha256": "2206ae95bcb7cbc968a4a0ac946743ec69d56005cec70756ecf3b5ef759591f1"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_eye_alb.png",
+          "bytes": 107,
+          "sha256": "556672f36624355956997a672e8d4b842c416bb81eb42efeeb84c39b380a3bee"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_eye_lym.png",
+          "bytes": 2899,
+          "sha256": "9fca2bb2d2c8414bc0be663bc3b795e0333109f66418d9ee3b055d9c846409df"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_eye_msk.png",
+          "bytes": 1279,
+          "sha256": "bf859870dad777a2b294938d47884b69890548566fa80eb7915f9128ed94dcda"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_eye_nrm.png",
+          "bytes": 9363,
+          "sha256": "6b7c7009d33364049a71aa3f64d2b87813acfa7d12dd1ad8064b748e5be28d27"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_lod1.trmbf",
+          "bytes": 173828,
+          "sha256": "b9b2c06e66310690883cb9d71a64dc736ad44f09dcab66496d16fd1c77dfce5e"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_lod1.trmsh",
+          "bytes": 4020,
+          "sha256": "97369d21b15dfe2fdf5ce9d5cbe7e7ca44ee7648b9a41847876479eb335258fc"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_lod2.trmbf",
+          "bytes": 84816,
+          "sha256": "9b8ee5e5ab139d7c51d2bb40775624d4e904aa3d270f3fc16cdf7bfbd3d7b372"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_lod2.trmsh",
+          "bytes": 3972,
+          "sha256": "04534ef98865a5557915d9db312450cc49942f0dfdf5bde7fd5f1b7549e6b97e"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0641/pm0641_12_00/pm0641_12_00_rare.trmtr",
+          "bytes": 10460,
+          "sha256": "4d081980322f079eadece07f82352451dc09d29057822a3039a430626298f6c2"
+        }
+      ],
+      "selected_motion_files": [
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20001_battlewait01_loop.tranm",
+          "bytes": 33092,
+          "sha256": "f21ce15e91c0da98319b19ee2c0d1ea8acc32cd428da1ea4d3e8bf55c5be233c"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20001_battlewait01_loop.tracm",
+          "bytes": 1180,
+          "sha256": "16e05ef1cf5d152369a7c6df150d056c9460c3ff9257722f5b9b3a79fc8a0ea7"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20400_attack01.tranm",
+          "bytes": 54948,
+          "sha256": "f14ab22272c7796d93a05b054ca0a701d2162fc98c724059b3df4426120bef08"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20400_attack01.tracm",
+          "bytes": 5312,
+          "sha256": "36038753fbdf6bb44edae2c21719a22525eacffe5dc6010a55bc73eb83e4ffd4"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20410_attack02.tranm",
+          "bytes": 69948,
+          "sha256": "90e8b3dcfca50aa27fa9661296f39c9a2d649a6aaff599bf025bf0bbff5a855b"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20410_attack02.tracm",
+          "bytes": 7600,
+          "sha256": "174f400058faccc78f24417c3d6021e28c68caa23d1cbcdb2cb903189590505c"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20450_rangeattack01.tranm",
+          "bytes": 103364,
+          "sha256": "1109612f8842dcb2357ba94500008411b4c4e07ff22598710f0bb5b30208a301"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20450_rangeattack01.tracm",
+          "bytes": 4112,
+          "sha256": "ba042dbbe30e897c5ed992fe9ac27f456144a59c228c740e7688031feeeb74de"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20500_damage01.tranm",
+          "bytes": 42340,
+          "sha256": "f5c18b5f682540996107709d70f0c33a7773db3219775a99762800511dccc51d"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20500_damage01.tracm",
+          "bytes": 1752,
+          "sha256": "ef4a0df1ad6614701aa61ee31515a568346346528cd95f716c21754f9a808ab9"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_00281_sleep01_loop.tranm",
+          "bytes": 15276,
+          "sha256": "7350453f7a828a20dae49e87e22e43981b1cccc8358bc4711ad6a11bdd4b5448"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_00281_sleep01_loop.tracm",
+          "bytes": 1180,
+          "sha256": "4c511db27b5768884c041266431fad20268c7383c710f2a3274b284e8c445c99"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20520_down01_start.tranm",
+          "bytes": 61356,
+          "sha256": "60261c4bb475e1204b1e6515f5a2b393300262ab2b1aa0ec40dbdebae85fc0cb"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20520_down01_start.tracm",
+          "bytes": 2880,
+          "sha256": "1b5e9c6494555a874a775db6e9966fda8d82da6cbcf989bdb92150ef78d60122"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20521_down01_loop.tranm",
+          "bytes": 38996,
+          "sha256": "2eb166370c3896854570172f0d4ebdf69b019b28f9614aee6453ebebf4b9693c"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0641/pm0641_12_00/pm0641_12_00_20521_down01_loop.tracm",
+          "bytes": 1244,
+          "sha256": "35e5b924233729a56f83d9cbaa676fee48d8e6d417a1b98228f2de0790bd6aa7"
+        }
+      ],
+      "rare_texture_replacements": [],
+      "material_profiles": [],
+      "restore_source_albedo_bindings": true,
+      "dynamic_visibility_review": true,
+      "runtime_approved": false
+    },
+    {
+      "species": "thundurus-therian",
+      "national_dex": 642,
+      "form_id": "therian",
+      "resource": "pm0642_12_00",
+      "actions": {
+        "idle": "pm0642_12_00_20001_battlewait01_loop",
+        "physical_attack": "pm0642_12_00_20400_attack01",
+        "physical_attack_2": "pm0642_12_00_20410_attack02",
+        "special_attack": "pm0642_12_00_20450_rangeattack01",
+        "damage": "pm0642_12_00_20500_damage01",
+        "sleep": "pm0642_12_00_20281_sleep01_loop",
+        "faint_start": "pm0642_12_00_20520_down01_start",
+        "faint_loop": "pm0642_12_00_20521_down01_loop"
+      },
+      "identity_evidence": "SCVI pmXXXX_12_00 source icon visually inspected as the Therian form; distinct from Incarnate pmXXXX_11_00.",
+      "identity_reviewer": "assistant",
+      "scvi_files": [
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/icon/pm0642_12_00_00_big.png",
+          "bytes": 25235,
+          "sha256": "612f01b7e70f57316a340c699743d3528e90953d7b24684b181d39de85c4173f"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00.trmbf",
+          "bytes": 238400,
+          "sha256": "fb1ce1df5d4e40e30924f2bbb59dfefb14376a8e12237f94f5becf77f67a005f"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00.trmdl",
+          "bytes": 380,
+          "sha256": "dea04414db0de6b52518c0873e325a30e961e9d441a096ffa4ad221306481d5e"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00.trmsh",
+          "bytes": 4156,
+          "sha256": "8d635c53d9d3e9bb43e5748a6df742d31e191904181960b37deb41eddb626650"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00.trmtr",
+          "bytes": 10628,
+          "sha256": "d75ba9e9997e2dd45694135efc1258eaca6444fbed1612b730b7640a8798c48d"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00.trskl",
+          "bytes": 20064,
+          "sha256": "d83e21d70257d0c464789bb0509fa9912fc7acd9fe4ac9a6a2d7f85a96d44d99"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_00.png",
+          "bytes": 7233,
+          "sha256": "b8c1f2a7988e8dac8024767013df1c071c8a9cf4066b7e09904d669200592d28"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_00_big.png",
+          "bytes": 25235,
+          "sha256": "612f01b7e70f57316a340c699743d3528e90953d7b24684b181d39de85c4173f"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_a_alb.png",
+          "bytes": 802767,
+          "sha256": "25fb8a0b560a53ac2592e8dd8b7d853ad5bb0dfa3c7f9a437c5550ef85ac956b"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_a_ao.png",
+          "bytes": 127047,
+          "sha256": "f4a3903f40026fb1c8f24af4c0a8fe6969a94eac46c4a3fe8867e4b78f61602c"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_a_lym.png",
+          "bytes": 43828,
+          "sha256": "8588c5584613857f1c002d402e69265466c051810ea5c3eed93064a33cce4383"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_a_nrm.png",
+          "bytes": 364972,
+          "sha256": "aaafc963174ed60234d95d9ac9ee8480082e21d764cc5dc5c12fa8c70240d962"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_a_rare_alb.png",
+          "bytes": 913773,
+          "sha256": "9abdb5d9e24b47699e816579f7a68db1dacb0d3cd49be40ffb4ab6e3bd8074bb"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_a_rgn.png",
+          "bytes": 343946,
+          "sha256": "dc01184e78888c7cbd1f3eadbd92e18c934f212eff62c6f683102f3f7987b6a2"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_b_00_lym.png",
+          "bytes": 54450,
+          "sha256": "7de8726f59e6247aa1a8be07bbdef37eab0514b9189312a1d13784da053d5a35"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_b_01_lym.png",
+          "bytes": 105,
+          "sha256": "723ea44df307a57c662d97d0bc91a946d00b8adc87e901732ec291a2a6aab7f0"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_b_alb.png",
+          "bytes": 831145,
+          "sha256": "1964f7611c059a96bc00f006ed24962b6530e0ac4f9d375d41367549eaa70bc7"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_b_ao.png",
+          "bytes": 128182,
+          "sha256": "2f0576f0f0027f1ef587230ca56d95c2c331256c641282552ae8ac2c2400b3a8"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_b_nrm.png",
+          "bytes": 361488,
+          "sha256": "8d5bc2311926d37827032e59eeee73aacbde008af5b38fdd2279d7c330845425"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_b_rare_alb.png",
+          "bytes": 843065,
+          "sha256": "19ebec48165898de666b2440d8d8a7bb0aa3f923f4ef1e7a8f1203def059d874"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_b_rgn.png",
+          "bytes": 601327,
+          "sha256": "3b226f84921614bde26e95a0f4c2c5a9a2e930bbfd131ebed8e6f8182c53df9e"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_body_msk.png",
+          "bytes": 102,
+          "sha256": "5206eab31746540ec694e956084dcb36608c10d01d0c6fa1f61427cfae19a43a"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_eye2_nrm.png",
+          "bytes": 7315,
+          "sha256": "cc37b784246dccaf7d6618d5a66dd78a0960ee2eae5e42d09f221daf31e5e7f1"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_eye_alb.png",
+          "bytes": 107,
+          "sha256": "556672f36624355956997a672e8d4b842c416bb81eb42efeeb84c39b380a3bee"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_eye_lym.png",
+          "bytes": 1707,
+          "sha256": "79e5b4d80e7b6b13c24264b94fa5883c73cc849e4b265498a1d8c748aaac51e7"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_eye_msk.png",
+          "bytes": 965,
+          "sha256": "47cdc5a86e30b10059566698c1614fff3f88505a3499acaf559af6d03917206b"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_eye_nrm.png",
+          "bytes": 7445,
+          "sha256": "30c28c340706a2d400bc609ca1646d59aec4f2e441dffec63740f833c6b99f10"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_lod1.trmbf",
+          "bytes": 56240,
+          "sha256": "91bf99c0ea79a5e2de3114082c71f70269561e5cb3dcecb2ab6f524be9ad3824"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_lod1.trmsh",
+          "bytes": 4156,
+          "sha256": "2450e3179641df98535a083d410504ec6dd251558719ba7c14aff2373d999366"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_lod2.trmbf",
+          "bytes": 52016,
+          "sha256": "e0e6b7f8e2328c7660cecb1b2311dbaf7f19c8866c05b88989e5a557e0d00235"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_lod2.trmsh",
+          "bytes": 4188,
+          "sha256": "1d7713b0f83fb7eb4712a5b77ef5e50e6307b0ccb00d51bcba2ca127e8e3d8eb"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0642/pm0642_12_00/pm0642_12_00_rare.trmtr",
+          "bytes": 10640,
+          "sha256": "e00987c0331a886b97648329ab8716d005b54c647c833563210007faa11e278b"
+        }
+      ],
+      "selected_motion_files": [
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20001_battlewait01_loop.tranm",
+          "bytes": 27316,
+          "sha256": "566e8ee7b4ddbeaf7a117a89da20f8c704a4ba4a6e2eb93f4641065348156515"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20001_battlewait01_loop.tracm",
+          "bytes": 608,
+          "sha256": "5162ef69cfb1632e70b4e5a1fe12609c48c452fc05e53ccb119f7cb1ed462709"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20400_attack01.tranm",
+          "bytes": 53216,
+          "sha256": "c18a45dd6c2698c0e3a0df285699541872a3c920d34bab9a60afbe2f6367f34c"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20400_attack01.tracm",
+          "bytes": 3648,
+          "sha256": "6cd995677b431701572f05f76a35d9f001823c42909e0e2a13cf525d6e1e787d"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20410_attack02.tranm",
+          "bytes": 43240,
+          "sha256": "5e544fd2a6a8ef37646e31220e01a157e0b4af9bab5b57c421f85ffc8434b3a2"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20410_attack02.tracm",
+          "bytes": 3128,
+          "sha256": "df395490811836e2c01ccefb89ca6ee6d7525fcc6b8b0268cd97e1e2abd246c0"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20450_rangeattack01.tranm",
+          "bytes": 75180,
+          "sha256": "fc1d916327b42ef44b5d5fc8cdd08e125d2dc3126b47fed7aa8a666964fd7a02"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20450_rangeattack01.tracm",
+          "bytes": 1992,
+          "sha256": "73165e16a0c3b1633b94b739392b2e4b3397beedee48192a312f74bb860bb985"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20500_damage01.tranm",
+          "bytes": 24968,
+          "sha256": "05dd2846d59b97ca0b42a52dd76d8eccda1e7fe9010b47fc72a13f7308ef3acc"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20500_damage01.tracm",
+          "bytes": 1552,
+          "sha256": "4032cd7add4e0ddc6c07c57ce98a3d8dbc686763e75097f91915e012228c9171"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20281_sleep01_loop.tranm",
+          "bytes": 32364,
+          "sha256": "26519981fc84e1a902a5a2ac4318e7975c74400bbfe0f525656da3fa1a98a824"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20281_sleep01_loop.tracm",
+          "bytes": 1268,
+          "sha256": "b4e0ab843d5650971704dbdc7e2b71f0f03e0b81824db34b14bbe943d23fbed9"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20520_down01_start.tranm",
+          "bytes": 47388,
+          "sha256": "b8fb636c1c899d49a8fbfe655248d24cd5191c0410dcba80e7848aac69198cd1"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20520_down01_start.tracm",
+          "bytes": 2992,
+          "sha256": "ec091a6f5e7aefdc33c7d482ccb21c4f8ec9b5addeb67e8bb9853ecbf6649424"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20521_down01_loop.tranm",
+          "bytes": 28852,
+          "sha256": "2ae6a27fed4b4567dd6ba63f1c22de4ca31d1a1d84996b834ee60a1b68e75107"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0642/pm0642_12_00/pm0642_12_00_20521_down01_loop.tracm",
+          "bytes": 1268,
+          "sha256": "5dc4cb62aaff1bc1849d9b0cf4b617085a9bb5de0c7f1fb619bf8e063d3e2e33"
+        }
+      ],
+      "rare_texture_replacements": [],
+      "material_profiles": [],
+      "restore_source_albedo_bindings": true,
+      "dynamic_visibility_review": true,
+      "runtime_approved": false
+    },
+    {
+      "species": "landorus-therian",
+      "national_dex": 645,
+      "form_id": "therian",
+      "resource": "pm0645_12_00",
+      "actions": {
+        "idle": "pm0645_12_00_20001_battlewait01_loop",
+        "physical_attack": "pm0645_12_00_20400_attack01",
+        "physical_attack_2": "pm0645_12_00_20410_attack02",
+        "special_attack": "pm0645_12_00_20450_rangeattack01",
+        "damage": "pm0645_12_00_20500_damage01",
+        "sleep": "pm0645_12_00_20281_sleep01_loop",
+        "faint_start": "pm0645_12_00_20520_down01_start",
+        "faint_loop": "pm0645_12_00_20521_down01_loop"
+      },
+      "identity_evidence": "SCVI pmXXXX_12_00 source icon visually inspected as the Therian form; distinct from Incarnate pmXXXX_11_00.",
+      "identity_reviewer": "assistant",
+      "scvi_files": [
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/icon/pm0645_12_00_00_big.png",
+          "bytes": 22873,
+          "sha256": "d41bf53dedb0e0d9e0ff7d4ac7786087bcae157a66e93b968aad91f1aac54872"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00.trmbf",
+          "bytes": 227824,
+          "sha256": "9d638c70c8e852c5abecd510e90fe7ed37dd58b09027751d13787fa0ee0291b6"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00.trmdl",
+          "bytes": 380,
+          "sha256": "e285ae70dbe6e9cd29e6f00b8cd5e58497e858218d3b3608f7c7c1e89a0eff79"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00.trmsh",
+          "bytes": 2100,
+          "sha256": "bd0800c46671be8fe2c9f00c6d3deacba44ba848031804a2ffc745fae9ac91b6"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00.trmtr",
+          "bytes": 12048,
+          "sha256": "081de2b3429b4874c18a28a5ec6461004aa9a554efc9b8f5baeddb87fec08640"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00.trskl",
+          "bytes": 13944,
+          "sha256": "527f936eb8eb5d92c006215e88d6e4d2c68ac52cdacaa8d4c25c14212a04886a"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_00.png",
+          "bytes": 6225,
+          "sha256": "760219933ca0902366fe907c599fd9b3e798709e03efe00b3b401191b09b2df6"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_00_big.png",
+          "bytes": 22873,
+          "sha256": "d41bf53dedb0e0d9e0ff7d4ac7786087bcae157a66e93b968aad91f1aac54872"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_a_00_lym.png",
+          "bytes": 35734,
+          "sha256": "84d89bf070c16f86f2b12cbb7cc776b93c4187ceaad47c496ed1d170a7a5774f"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_a_01_lym.png",
+          "bytes": 105,
+          "sha256": "723ea44df307a57c662d97d0bc91a946d00b8adc87e901732ec291a2a6aab7f0"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_a_alb.png",
+          "bytes": 928892,
+          "sha256": "cf740f6d77308cfb3fc51107b9eaddc8aeb8f41edd2c75454731f32c2a35b615"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_a_ao.png",
+          "bytes": 102436,
+          "sha256": "dc1708e45bfda7a91f714f44282b2717cb708c83b078dfd34bf8390e438ea41a"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_a_nrm.png",
+          "bytes": 347699,
+          "sha256": "9285799bda2853bd28611fd110563d42e1a8d6db9406ef387dd44d4cb0010a11"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_a_rare_alb.png",
+          "bytes": 1069223,
+          "sha256": "57a2a6f060b2b4d18047b68ed08eb04bf2153d3b439b7c6e61e3e21ce2053262"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_a_rgn.png",
+          "bytes": 478069,
+          "sha256": "a6cbd56c753d28f607ca25398f52ee1549b495c0d636b9f3f49d2997a02b0612"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_b_alb.png",
+          "bytes": 956488,
+          "sha256": "3f09b04a8877420075a7b958de0b098b8255f998e6720ef2e2b0ce0be352d864"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_b_ao.png",
+          "bytes": 53510,
+          "sha256": "5aca33b47ce60ca58786a3853669961fb9cca017f8bd7f05f4b775db7473d754"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_b_lym.png",
+          "bytes": 42404,
+          "sha256": "905d5ada3e058bf85596ab27388de34d4fb822fa18d88074b74ddb484cc20ec8"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_b_nrm.png",
+          "bytes": 361459,
+          "sha256": "7109590eb164a69bf3219f0c2d8f899aeda76864e55d6584a5762412208f0ce4"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_b_rare_alb.png",
+          "bytes": 987624,
+          "sha256": "49ff5d715fbad0c78e825ce823b927a70449260eec86a31c27ef47dbd6329132"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_b_rgn.png",
+          "bytes": 576295,
+          "sha256": "c6ac6145533fb60c0d88c6952438e11da3915f0ed5fd3f0a821c271642af58bf"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_body_msk.png",
+          "bytes": 102,
+          "sha256": "5206eab31746540ec694e956084dcb36608c10d01d0c6fa1f61427cfae19a43a"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_eye2_nrm.png",
+          "bytes": 7405,
+          "sha256": "4524ad778263bc5682140e4fc68e6d97da0b8d4fbf4aafa49cb5d192eae91845"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_eye_alb.png",
+          "bytes": 107,
+          "sha256": "556672f36624355956997a672e8d4b842c416bb81eb42efeeb84c39b380a3bee"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_eye_lym.png",
+          "bytes": 2410,
+          "sha256": "48241f4a618c3280e3707196d11673399b4cc4a7d216f24cc4ed0963ad4b0312"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_eye_msk.png",
+          "bytes": 1014,
+          "sha256": "6817b8f654e4cca1bdb1c1ac4abecd410dc9f4b9d20fb1fbef6bdb67becdd5d4"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_eye_nrm.png",
+          "bytes": 9080,
+          "sha256": "437587e2f0bdf2088700ea8b056ffa5fd4c1e305377469ebf4bd4f95e50ccf82"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_lod1.trmbf",
+          "bytes": 58628,
+          "sha256": "f5a78ffad7da4e553bca3a8733a792254ee2486f3e1f33763420180f5e571ddb"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_lod1.trmsh",
+          "bytes": 2124,
+          "sha256": "07c37792fc6bdb3090bf33f188be639e7d06a3ee9a088d04a01aac49326d1b88"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_lod2.trmbf",
+          "bytes": 71884,
+          "sha256": "ed65609ec3a99b512b0d10f2d228214fe827f5b08ea80c3d6c9f39b332097c1d"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_lod2.trmsh",
+          "bytes": 2092,
+          "sha256": "f5fe5db2fde1a15791a58d4e179be4930a45160a6b1e8597f2fd1e68d61b04f1"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0645/pm0645_12_00/pm0645_12_00_rare.trmtr",
+          "bytes": 11848,
+          "sha256": "d59b11ee7e71538e3b2fadbd4a6b56e501141e59116f7361f0628d58269469f3"
+        }
+      ],
+      "selected_motion_files": [
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20001_battlewait01_loop.tranm",
+          "bytes": 20364,
+          "sha256": "5ff955f9b2b595a4027c8faf35e5067b738b1eb968bc684aaec368e3958c724c"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20001_battlewait01_loop.tracm",
+          "bytes": 288,
+          "sha256": "da391bcc35ed045c5563aa049ad02a4cd2586dbf07ba5df5c31aaa5b9e5f8152"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20400_attack01.tranm",
+          "bytes": 49696,
+          "sha256": "691c0d25b5b41a951999ea36bf13f732ef8d37f716d93e4a173d63875312bc31"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20400_attack01.tracm",
+          "bytes": 4820,
+          "sha256": "83429db8a06ffd611049894fa87eb9505e2b21ef538bb5cb3b3e6a9dc8f7bf76"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20410_attack02.tranm",
+          "bytes": 53560,
+          "sha256": "0379ca7ec418f8fb9681024637021ca772518a1f3315fe4609d09adb0598a98e"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20410_attack02.tracm",
+          "bytes": 3760,
+          "sha256": "b3081b397cccea91b80ff4c5ef86602a549bb5e8559ea2b2c27e17566ce96a77"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20450_rangeattack01.tranm",
+          "bytes": 52648,
+          "sha256": "6e71e5ababd25ca40c689455c8ed7a393fd55faf314b44c4708854033e7de53b"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20450_rangeattack01.tracm",
+          "bytes": 2320,
+          "sha256": "c3dbb7de0360253ff6fa9dc44eea1cd7b95d1589f78d98e1cfa3796012d8d77f"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20500_damage01.tranm",
+          "bytes": 17780,
+          "sha256": "09bfcf75738b709d4200eb0ac52e5153cc8920612f2a424fe09f5bd2cdb2d2d5"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20500_damage01.tracm",
+          "bytes": 1120,
+          "sha256": "cbb6458fffcad763e65258c1e241f1d768a4dbde8901c39a7c02e17213809830"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20281_sleep01_loop.tranm",
+          "bytes": 30708,
+          "sha256": "2a8a0f2020c7876e9f137ed384754340df688782098d3ae211bf03795c0c85e2"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20281_sleep01_loop.tracm",
+          "bytes": 956,
+          "sha256": "1ec5de3e87b9353f685f3c3c2811bebdda567aa4087979807a54d059b0774b6f"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20520_down01_start.tranm",
+          "bytes": 33916,
+          "sha256": "95f2766861191eb8c2f3863a49231ec039a5d32315ce30ed637c1d4c9dfe0126"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20520_down01_start.tracm",
+          "bytes": 3200,
+          "sha256": "3d9d617c8d8aa18848d1687629d99e34028055f2d1ce4dbe82a297620d818f0a"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20521_down01_loop.tranm",
+          "bytes": 17632,
+          "sha256": "c0a47f12beb1098b3e6e696843663e7d2730655a7b264f96b94e61ae9b7c2dd9"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0645/pm0645_12_00/pm0645_12_00_20521_down01_loop.tracm",
+          "bytes": 956,
+          "sha256": "8b1be48e6ea515a9b26430e22b61b3fb777588231615f47fbfe0314a9143c88c"
+        }
+      ],
+      "rare_texture_replacements": [],
+      "material_profiles": [],
+      "restore_source_albedo_bindings": true,
+      "dynamic_visibility_review": true,
+      "runtime_approved": false
+    }
+  ]
+}

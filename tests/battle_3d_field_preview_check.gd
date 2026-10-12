@@ -175,15 +175,15 @@ func _run() -> void:
 	stage._set_active(true)
 	_check(stage.side_condition_visuals[0].effects.spikes.layers == 1, "returning to 3D rebuilds current hazards")
 	_check(Conditions.snapshot([{ "effectId": "toxic_spikes", "layers": 9}]).toxicspikes == 2, "hazard layers are bounded")
-	stage.set_team_preview([{ "species": "Landorus-Therian"}], [], layers)
+	stage.set_team_preview([{ "species": "Landorus-Unknown"}], [], layers)
 	await process_frame
 	await process_frame
 	_check(not stage.active and layers[0].visible, "unsupported preview keeps a complete 2D fallback")
-	_check("landorus-therian" in stage.reason, "the fallback identifies the missing form without using Incarnate Landorus")
+	_check("landorus-unknown" in stage.reason, "the fallback identifies the missing form without using Incarnate Landorus")
 	stage.set_process(false)
 	stage.loaded_path = "!unsupported-preview-does-not-need-a-catalog"
 	await stage.await_prepared(true, 100)
-	_check(stage.preview_problem.is_empty() and not stage.preparation_failed and "landorus-therian" in stage.reason,
+	_check(stage.preview_problem.is_empty() and not stage.preparation_failed and "landorus-unknown" in stage.reason,
 		"known unsupported previews resolve before waiting for unrelated catalog/arena work")
 	stage.set_process(true)
 	stage.clear_team_preview()
