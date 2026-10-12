@@ -1,0 +1,282 @@
+[
+  {
+    "source": "male/trainer/Shirt.png",
+    "game": "assets/battles/trainers/player/male/irelia/Shirt.png",
+    "sha256": "d42fe81fd1a0acd6273852639f57017d78f44fd5b96dd2801423b27f22e63603"
+  },
+  {
+    "source": "male/overworld/Walking/Shirt.png",
+    "game": "assets/player/male/top/Irelia_Shirt.png",
+    "sha256": "77ef6ca0ec99544cff5d1a6af7ff1bb801f2cf423533da6d6b66bcc3d6683522"
+  },
+  {
+    "source": "male/overworld/Fishing/Shirt.png",
+    "game": "assets/player/male/top/fish/Irelia_Shirt_fish.png",
+    "sha256": "46e3a85b08ea5d46f0d1cbb111fea015e027d3942f8d7263b61e46e44c60612d"
+  },
+  {
+    "source": "male/overworld/Riding/Shirt.png",
+    "game": "assets/player/male/top/ride/Irelia_Shirt_ride.png",
+    "sha256": "54a531f5fda573f51a22ef5d08276a226cacf2dfffa8700dc827c2ceefbe7fec"
+  },
+  {
+    "source": "male/trainer/Trousers.png",
+    "game": "assets/battles/trainers/player/male/irelia/Trousers.png",
+    "sha256": "071ab5f5f68b99e0984da942b2e620863605ac73431990a92a3d117e8b09b09c"
+  },
+  {
+    "source": "male/overworld/Walking/Trousers.png",
+    "game": "assets/player/male/bottom/Irelia_Trousers.png",
+    "sha256": "93e0e1a24b28310ec8a1d0bbd2b49b6dabac8db4b38dbfa1733542d8a7f6ba66"
+  },
+  {
+    "source": "male/overworld/Fishing/Trousers.png",
+    "game": "assets/player/male/bottom/fish/Irelia_Trousers_fish.png",
+    "sha256": "e902af10648866421bccfcf5e8a13729e132f638a19d9cb52efed37dc971311d"
+  },
+  {
+    "source": "male/overworld/Riding/Trousers.png",
+    "game": "assets/player/male/bottom/ride/Irelia_Trousers_ride.png",
+    "sha256": "bc436b3a69ff6905558477e8291f7c603dd3d04ec225dc5686be60348550d985"
+  },
+  {
+    "source": "male/trainer/Shoes.png",
+    "game": "assets/battles/trainers/player/male/irelia/Shoes.png",
+    "sha256": "3a7431854a1237b5c2f3072b17675b31cb7177babbf48f27cb4fdff5787e8399"
+  },
+  {
+    "source": "male/overworld/Walking/Shoes.png",
+    "game": "assets/player/male/shoes/Irelia_Shoes.png",
+    "sha256": "6fd48f67f1d5f6b87cc05e281c7362055c5c7d8847d4d5b3744861622754ad5d"
+  },
+  {
+    "source": "male/overworld/Fishing/Shoes.png",
+    "game": "assets/player/male/shoes/fish/Irelia_Shoes_fish.png",
+    "sha256": "0799acef361dc50a0e56c1804668587c5edbc4e6c1daf4570cfd730af079da24"
+  },
+  {
+    "source": "male/overworld/Riding/Shoes.png",
+    "game": "assets/player/male/shoes/ride/Irelia_Shoes_ride.png",
+    "sha256": "038dbb128acfebcbd2120988396f5cc721c9197c966578da7c947d50668a7f69"
+  },
+  {
+    "source": "male/trainer/Hair.png",
+    "game": "assets/battles/trainers/player/male/irelia/Hair.png",
+    "sha256": "e8187e844f1689b55ee89723a2f4b1386996bdcee5350020af1d83a27d446dc8"
+  },
+  {
+    "source": "male/overworld/Walking/Hair.png",
+    "game": "assets/player/male/hair/Irelia_Hair.png",
+    "sha256": "1af961249a07f8033904f6f0fe3ebf446df79d4f5b7f5a5b821877d30ff2bacd"
+  },
+  {
+    "source": "male/overworld/Fishing/Hair.png",
+    "game": "assets/player/male/hair/fish/Irelia_Hair_fish.png",
+    "sha256": "6a007ce81d5b2ca03816b13529bddf567b49f73b022a1f2ed235702def8a244b"
+  },
+  {
+    "source": "male/overworld/Riding/Hair.png",
+    "game": "assets/player/male/hair/ride/Irelia_Hair_ride.png",
+    "sha256": "46d657cc4fa33a8c0159eac48840c301feab4b1fbd52b0f533082841ac715e35"
+  },
+  {
+    "source": "male/trainer/Headgear.png",
+    "game": "assets/battles/trainers/player/male/irelia/Headgear.png",
+    "sha256": "f33b5840074160d68155ef7003c197dc6592eb37ed38b0a9ec02869416e6d6aa"
+  },
+  {
+    "source": "male/overworld/Walking/Headgear.png",
+    "game": "assets/player/male/headgear/Irelia_Circlet.png",
+    "sha256": "4edf9cba5ef43d9c053b63427e3713a88b9bc4cf9ae16bb42da4ab9dfe233575"
+  },
+  {
+    "source": "male/overworld/Fishing/Headgear.png",
+    "game": "assets/player/male/headgear/fish/Irelia_Circlet_fish.png",
+    "sha256": "0b5f39f19c1020deb1322ac0855d64d15bdc7b30a5bf9a3e8148a9da74ae840b"
+  },
+  {
+    "source": "male/overworld/Riding/Headgear.png",
+    "game": "assets/player/male/headgear/ride/Irelia_Circlet_ride.png",
+    "sha256": "8c9db7e2b1570faa9a7d879feb4c80ed63bf39b4297109fb4c928dfe1dc655cf"
+  },
+  {
+    "source": "male/trainer/BackRear.png",
+    "game": "assets/battles/trainers/player/male/irelia/BackRear.png",
+    "sha256": "98aa8f1d1ee419a030d39b86df7d8207fb167ffb04f674a7b29f428cfe300df0"
+  },
+  {
+    "source": "male/overworld/Walking/BackRear.png",
+    "game": "assets/player/male/cape/Irelia_Blades.png",
+    "sha256": "f02397a883973f44d57b157ca34c46fe4355bdab07311d9a24f33848647504b0"
+  },
+  {
+    "source": "male/overworld/Fishing/BackRear.png",
+    "game": "assets/player/male/cape/fish/Irelia_Blades_fish.png",
+    "sha256": "06da1163cbd5cb41d20090a03ad79d5d256e8a872dca4e0dfaa1f1f5d1979f65"
+  },
+  {
+    "source": "male/overworld/Riding/BackRear.png",
+    "game": "assets/player/male/cape/ride/Irelia_Blades_ride.png",
+    "sha256": "a2567a7861261fd28a95ef31558b91ebcc20409989d72e034e87aaec98d47670"
+  },
+  {
+    "source": "male/trainer/BackFront.png",
+    "game": "assets/battles/trainers/player/male/irelia/BackFront.png",
+    "sha256": "3b2e6eac48076f216003be0d52e818fa4715a39f67284b6efda8ae35e6c80c3e"
+  },
+  {
+    "source": "male/overworld/Walking/BackFront.png",
+    "game": "assets/player/male/cape_overlay/Irelia_Blades.png",
+    "sha256": "e8dca67101c6d9a1b6a7511927a2ba0359dbd9ea71a9588098415026b4e79d49"
+  },
+  {
+    "source": "male/overworld/Fishing/BackFront.png",
+    "game": "assets/player/male/cape_overlay/fish/Irelia_Blades_fish.png",
+    "sha256": "2ae079b4e871634beb826e4e949785ab6e4dac558f25309a99c3e295e8a650a4"
+  },
+  {
+    "source": "male/overworld/Riding/BackFront.png",
+    "game": "assets/player/male/cape_overlay/ride/Irelia_Blades_ride.png",
+    "sha256": "caa989d8761379e868833e05e07769d7ca42a74863a63c2ec02c95d1a6f348e8"
+  },
+  {
+    "source": "female/trainer/Shirt.png",
+    "game": "assets/battles/trainers/player/female/irelia/Shirt.png",
+    "sha256": "dd7dcea0266d2398e84cf3e11fed4b45fd6f72cf7d73b78996814ccd06dd6aa3"
+  },
+  {
+    "source": "female/overworld/Walking/Shirt.png",
+    "game": "assets/player/female/top/Irelia_Shirt.png",
+    "sha256": "a6986c5e71ade1ac438073dc5a2c7466ac82d55e8c4f95916eae6fc07548737b"
+  },
+  {
+    "source": "female/overworld/Fishing/Shirt.png",
+    "game": "assets/player/female/top/fish/Irelia_Shirt_fish.png",
+    "sha256": "5f126e1c8e6249529536a73e7b49dd0a759debf153d831484c498cf118a8f555"
+  },
+  {
+    "source": "female/overworld/Riding/Shirt.png",
+    "game": "assets/player/female/top/ride/Irelia_Shirt_ride.png",
+    "sha256": "334d4485e686eacad1530caec7115d6dd8a2ee26a89f48e746853e6a2f13a8f1"
+  },
+  {
+    "source": "female/trainer/Trousers.png",
+    "game": "assets/battles/trainers/player/female/irelia/Trousers.png",
+    "sha256": "28e4bfb260004baeebdded8d632cf593e40eb92b3e10e39f44acb9068326d9a1"
+  },
+  {
+    "source": "female/overworld/Walking/Trousers.png",
+    "game": "assets/player/female/bottom/Irelia_Trousers.png",
+    "sha256": "afbcd09a22729cb0d9fc6d832cf098f1d0411d82c25aeac65ae0a315814c5da3"
+  },
+  {
+    "source": "female/overworld/Fishing/Trousers.png",
+    "game": "assets/player/female/bottom/fish/Irelia_Trousers_fish.png",
+    "sha256": "0bdd2a191e7745c4e1103b5978a5ff3e7b6e2cfe13951980d193c7c568324b8e"
+  },
+  {
+    "source": "female/overworld/Riding/Trousers.png",
+    "game": "assets/player/female/bottom/ride/Irelia_Trousers_ride.png",
+    "sha256": "1fbd8808c3359d3c49f59e08c7f9a4b0bba088a176ab13e769c0a3c8e615fb97"
+  },
+  {
+    "source": "female/trainer/Shoes.png",
+    "game": "assets/battles/trainers/player/female/irelia/Shoes.png",
+    "sha256": "a8e402a740dabe4b547365828e85feff4aa921149f3eba84e36fb43a3ae6e5f9"
+  },
+  {
+    "source": "female/overworld/Walking/Shoes.png",
+    "game": "assets/player/female/shoes/Irelia_Shoes.png",
+    "sha256": "33b6da72365388dd008ff770b746aae6f219254778af3047f7a8a59e2b28071b"
+  },
+  {
+    "source": "female/overworld/Fishing/Shoes.png",
+    "game": "assets/player/female/shoes/fish/Irelia_Shoes_fish.png",
+    "sha256": "445af47dddd52277488bba7fbf3d373e3c5450963314166cfdaeec72ed08d06b"
+  },
+  {
+    "source": "female/overworld/Riding/Shoes.png",
+    "game": "assets/player/female/shoes/ride/Irelia_Shoes_ride.png",
+    "sha256": "cca26a1467626d838ae134ba3f3065dad0c4229a458bf9df264bc6ffbe128883"
+  },
+  {
+    "source": "female/trainer/Hair.png",
+    "game": "assets/battles/trainers/player/female/irelia/Hair.png",
+    "sha256": "78ff4caedf74edebea6b0a6d24257393d54f58dc2ceaaeaee55ae6a9dbaa1567"
+  },
+  {
+    "source": "female/overworld/Walking/Hair.png",
+    "game": "assets/player/female/hair/Irelia_Hair.png",
+    "sha256": "baa9ac26b3e4a260bfcf564fdf6b63e2322889d5c53a6dc090d82b79099f3c7c"
+  },
+  {
+    "source": "female/overworld/Fishing/Hair.png",
+    "game": "assets/player/female/hair/fish/Irelia_Hair_fish.png",
+    "sha256": "40b2d4592c01c40515b5719c716d7e6f5061e6959c605d405c9512e31bfdd6e4"
+  },
+  {
+    "source": "female/overworld/Riding/Hair.png",
+    "game": "assets/player/female/hair/ride/Irelia_Hair_ride.png",
+    "sha256": "882a83902e9a4ac22cb9f0841b58d944e12edceac5c04f746684ff2b6c876956"
+  },
+  {
+    "source": "female/trainer/Headgear.png",
+    "game": "assets/battles/trainers/player/female/irelia/Headgear.png",
+    "sha256": "2a6343b2f51e5828c02c72c9cc0fb285bc2bbc347a140efa6be7e99194c397e1"
+  },
+  {
+    "source": "female/overworld/Walking/Headgear.png",
+    "game": "assets/player/female/headgear/Irelia_Circlet.png",
+    "sha256": "50b500add0489f2e16542c59ec47ffd64b274f7de1435240530efd1362dcfd19"
+  },
+  {
+    "source": "female/overworld/Fishing/Headgear.png",
+    "game": "assets/player/female/headgear/fish/Irelia_Circlet_fish.png",
+    "sha256": "286b1b740d3a11e05aeb1b318e66c19a23052ce829b900354d93601c0aaf94d6"
+  },
+  {
+    "source": "female/overworld/Riding/Headgear.png",
+    "game": "assets/player/female/headgear/ride/Irelia_Circlet_ride.png",
+    "sha256": "60cf48c3e72e15f3527dbbe09ee5ccde4e9f7eba3b9e055d74033cb5be6763a9"
+  },
+  {
+    "source": "female/trainer/BackRear.png",
+    "game": "assets/battles/trainers/player/female/irelia/BackRear.png",
+    "sha256": "98aa8f1d1ee419a030d39b86df7d8207fb167ffb04f674a7b29f428cfe300df0"
+  },
+  {
+    "source": "female/overworld/Walking/BackRear.png",
+    "game": "assets/player/female/cape/Irelia_Blades.png",
+    "sha256": "f02397a883973f44d57b157ca34c46fe4355bdab07311d9a24f33848647504b0"
+  },
+  {
+    "source": "female/overworld/Fishing/BackRear.png",
+    "game": "assets/player/female/cape/fish/Irelia_Blades_fish.png",
+    "sha256": "06da1163cbd5cb41d20090a03ad79d5d256e8a872dca4e0dfaa1f1f5d1979f65"
+  },
+  {
+    "source": "female/overworld/Riding/BackRear.png",
+    "game": "assets/player/female/cape/ride/Irelia_Blades_ride.png",
+    "sha256": "4c94cd0eb09d1aca8a60f63b455e068a2e5ce4caf9b58c6c17a9618179f107d2"
+  },
+  {
+    "source": "female/trainer/BackFront.png",
+    "game": "assets/battles/trainers/player/female/irelia/BackFront.png",
+    "sha256": "3b2e6eac48076f216003be0d52e818fa4715a39f67284b6efda8ae35e6c80c3e"
+  },
+  {
+    "source": "female/overworld/Walking/BackFront.png",
+    "game": "assets/player/female/cape_overlay/Irelia_Blades.png",
+    "sha256": "e8dca67101c6d9a1b6a7511927a2ba0359dbd9ea71a9588098415026b4e79d49"
+  },
+  {
+    "source": "female/overworld/Fishing/BackFront.png",
+    "game": "assets/player/female/cape_overlay/fish/Irelia_Blades_fish.png",
+    "sha256": "2ae079b4e871634beb826e4e949785ab6e4dac558f25309a99c3e295e8a650a4"
+  },
+  {
+    "source": "female/overworld/Riding/BackFront.png",
+    "game": "assets/player/female/cape_overlay/ride/Irelia_Blades_ride.png",
+    "sha256": "caa989d8761379e868833e05e07769d7ca42a74863a63c2ec02c95d1a6f348e8"
+  }
+]

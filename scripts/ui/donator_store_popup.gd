@@ -1147,6 +1147,9 @@ var active_category := "featured"
 var active_mount_mode := "land"
 var mount_mode_bar: HBoxContainer
 var mount_mode_buttons: Dictionary = {}
+var active_guild_subcategory := "emblems"
+var guild_subcategory_bar: HBoxContainer
+var guild_subcategory_buttons: Dictionary = {}
 var active_cosmetic_filter_group := "all"
 var active_cosmetic_subcategory := "all"
 var active_cosmetic_gender_filter := "mine"
@@ -1833,6 +1836,7 @@ func _create_catalog_area() -> Control:
 	layout.add_child(_create_hero_panel())
 	layout.add_child(_create_cosmetic_subcategory_bar())
 	layout.add_child(_create_mount_mode_bar())
+	layout.add_child(_create_guild_subcategory_bar())
 
 	var catalog_header := HBoxContainer.new()
 	catalog_header.add_theme_constant_override("separation", 8)
@@ -1965,6 +1969,50 @@ func _order_catalog_by_popularity_then_price(items: Array[Dictionary]) -> Array[
 	other_items.sort_custom(_catalog_item_before_by_price_desc)
 	popular_items.append_array(other_items)
 	return popular_items
+
+
+func _create_guild_subcategory_bar() -> HBoxContainer:
+	guild_subcategory_bar = HBoxContainer.new()
+	guild_subcategory_bar.name = "GuildSubcategoryTabs"
+	guild_subcategory_bar.visible = false
+	guild_subcategory_bar.add_theme_constant_override("separation", 6)
+	var group := ButtonGroup.new()
+	for subcategory: String in ["emblems", "rooms"]:
+		var button := Button.new()
+		button.name = "GuildSubcategory_" + subcategory
+		button.custom_minimum_size = Vector2(110, 34)
+		button.toggle_mode = true
+		button.button_group = group
+		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		button.pressed.connect(_select_guild_subcategory.bind(subcategory))
+		guild_subcategory_bar.add_child(button)
+		guild_subcategory_buttons[subcategory] = button
+	return guild_subcategory_bar
+
+
+func _refresh_guild_subcategory_bar() -> void:
+	if guild_subcategory_bar == null:
+		return
+	guild_subcategory_bar.visible = active_category == "guilds"
+	for subcategory: String in guild_subcategory_buttons:
+		var button: Button = guild_subcategory_buttons[subcategory]
+		button.text = _t("ui.store.guilds.subcategory." + subcategory)
+		button.set_pressed_no_signal(subcategory == active_guild_subcategory)
+		_apply_cosmetic_subcategory_style(button, subcategory == active_guild_subcategory)
+
+
+func _select_guild_subcategory(subcategory: String) -> void:
+	if subcategory not in ["emblems", "rooms"]:
+		return
+	active_guild_subcategory = subcategory
+	selected_item_id = ""
+	catalog_search_text = ""
+	catalog_search_input.set_block_signals(true)
+	catalog_search_input.text = ""
+	catalog_search_input.set_block_signals(false)
+	_refresh_guild_subcategory_bar()
+	_reset_selection_footer()
+	_render_products()
 
 
 func _create_mount_mode_bar() -> HBoxContainer:
@@ -2434,6 +2482,7 @@ func _select_category(category_id: String) -> void:
 		hero_description_label.tooltip_text = _t("ui.store.featured.explanation") if active_category == "featured" else ""
 	_refresh_cosmetic_subcategory_bar()
 	_refresh_mount_mode_bar()
+	_refresh_guild_subcategory_bar()
 	_reset_selection_footer()
 	_render_products()
 
@@ -2551,6 +2600,10 @@ func _render_products() -> void:
 			continue
 		if active_category == "mounts" and Mounts.get_mount_movement_mode(_mount_box_mount_id(str(item.get("id", "")))) != active_mount_mode:
 			continue
+		if active_category == "guilds":
+			var template_key := "guild_room_template" if active_guild_subcategory == "rooms" else "guild_emblem_template"
+			if not bool(item.get(template_key, false)):
+				continue
 		if not _item_matches_catalog_search(item):
 			continue
 		if not _matches_catalog_filter(item):

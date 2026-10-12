@@ -411,6 +411,165 @@
         }
       ]
     },
+    "irelia-blades": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "cape",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Irelia_Blades"
+        }
+      ]
+    },
+    "irelia-circlet": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "headgear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Irelia_Circlet"
+        }
+      ]
+    },
+    "irelia-hair": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "hair",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Irelia_Hair"
+        }
+      ]
+    },
+    "irelia-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Irelia_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Irelia_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Irelia_Shoes"
+        },
+        {
+          "category": "hair",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Irelia_Hair"
+        },
+        {
+          "category": "headgear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Irelia_Circlet"
+        },
+        {
+          "category": "cape",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Irelia_Blades"
+        }
+      ]
+    },
+    "irelia-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Irelia_Shirt"
+        }
+      ]
+    },
+    "irelia-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Irelia_Shoes"
+        }
+      ]
+    },
+    "irelia-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Irelia_Trousers"
+        }
+      ]
+    },
     "lucario-aura-fighter-outfit": {
       "bundle": true,
       "genders": [
@@ -1318,6 +1477,13 @@
           "male": "EmeraldLuchador_Trousers"
         }
       },
+      "Irelia_Trousers": {
+        "item_id": "irelia-trousers",
+        "render_variants": {
+          "female": "Irelia_Trousers",
+          "male": "Irelia_Trousers"
+        }
+      },
       "LucarioAuraFighter_Trousers": {
         "item_id": "lucario-aura-fighter-trousers",
         "render_variants": {
@@ -1376,6 +1542,13 @@
           "male": "EmeraldLuchador_Wings"
         }
       },
+      "Irelia_Blades": {
+        "item_id": "irelia-blades",
+        "render_variants": {
+          "female": "Irelia_Blades",
+          "male": "Irelia_Blades"
+        }
+      },
       "SS4_Tail": {
         "item_id": "super-saiyan-4-tail",
         "render_variants": {
@@ -1415,6 +1588,13 @@
       }
     },
     "hair": {
+      "Irelia_Hair": {
+        "item_id": "irelia-hair",
+        "render_variants": {
+          "female": "Irelia_Hair",
+          "male": "Irelia_Hair"
+        }
+      },
       "SS4_Hair": {
         "item_id": "super-saiyan-4-hair",
         "render_variants": {
@@ -1429,6 +1609,13 @@
         "render_variants": {
           "female": "Akatsuki_Headband",
           "male": "Akatsuki_Headband"
+        }
+      },
+      "Irelia_Circlet": {
+        "item_id": "irelia-circlet",
+        "render_variants": {
+          "female": "Irelia_Circlet",
+          "male": "Irelia_Circlet"
         }
       },
       "TeamRocket_Cap": {
@@ -1466,6 +1653,13 @@
         "render_variants": {
           "female": "EmeraldLuchador_Shoes",
           "male": "EmeraldLuchador_Shoes"
+        }
+      },
+      "Irelia_Shoes": {
+        "item_id": "irelia-shoes",
+        "render_variants": {
+          "female": "Irelia_Shoes",
+          "male": "Irelia_Shoes"
         }
       },
       "LucarioAuraFighter_Shoes": {
@@ -1545,6 +1739,13 @@
         "render_variants": {
           "female": "EmeraldLuchador_Shirt",
           "male": "EmeraldLuchador_Shirt"
+        }
+      },
+      "Irelia_Shirt": {
+        "item_id": "irelia-shirt",
+        "render_variants": {
+          "female": "Irelia_Shirt",
+          "male": "Irelia_Shirt"
         }
       },
       "LucarioAuraFighter_Shirt": {

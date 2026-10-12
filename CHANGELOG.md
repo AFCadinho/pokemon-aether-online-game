@@ -4,6 +4,16 @@
 
 - Give the other 34 Z-moves individual cinematic finales: elemental explosions, water crowns, heavy rock eruptions, ice and psychic fractures, dark implosions and a rising self-aura for Extreme Evoboost. Coordinate impact framing, lighting, camera recoil and sound while preserving move timing and the approved Supersonic Skystrike effect.
 
+- Style item and Pokémon donations with compact Aether confirmations, showing the asset name and icon. Add coloured availability badges to Guild storage rows, grid tiles and selected assets, including Pokémon on loan.
+
+- Organize the Gift Store Guilds category into themed Emblems and Rooms tabs, with search, filters and sorting scoped to the selected tab.
+
+- Keep fainted wild Pokémon lying in their 3D doubles slots until the battle closes, including reconnects and disabled animations; keep captured Pokémon off the field and preserve Trainer replacement summons.
+
+- Keep fainted Pokémon in their 3D resting pose until the replacement switch recalls them and summons the next Pokémon, without a 2D faint fallback. Apply the resting pose immediately when battle animations are disabled.
+
+- Add the Irelia Outfit Box for both player models, with six separate cosmetics, revised overworld hair, trainer art and authored walking/fishing/riding sheets.
+
 - Let Guild Bank item, resource and Pokémon donation overviews use the available tab height, showing more rows while keeping each list scrollable.
 
 - Give Guild rank changes, leadership transfers and member removal compact Aether dialogs with clear headings, padded messages and visible actions on smaller screens.

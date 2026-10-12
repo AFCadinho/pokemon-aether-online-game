@@ -97,6 +97,8 @@ var _model_anchored_sprites: Dictionary = {}
 var _model_roster_key := ""
 var _model_roster_preparing := false
 var _model_highlight_active := false
+var _native_fainted_models: Dictionary = {}
+var _native_captured_controllers: Dictionary = {}
 
 
 func _ready() -> void:
@@ -509,8 +511,31 @@ func _prepare_model_roster() -> void:
 		var requested := _model_roster_key
 		await model.await_prepared()
 		if requested == _model_roster_key:
+			_sync_native_fainted_models()
 			break
 	_model_roster_preparing = false
+
+
+func _remember_native_captures(events: Array) -> void:
+	for event: Dictionary in events:
+		if event.get("kind") == "coopcapture" and bool(event.get("caught", false)):
+			var target := str(event.get("target", ""))
+			if target in SLOTS:
+				_native_captured_controllers[target] = true
+
+
+func _sync_native_fainted_models() -> void:
+	if not is_inside_tree() or SettingsManager.battle_presentation_mode != "3d":
+		return
+	var model: Node = _model_presenter()
+	if model == null:
+		return
+	for controller: String in _native_fainted_models:
+		var index: int = model.actor_index(controller)
+		if model.handles(controller) and model._combatant_key(index) == _native_fainted_models[controller]:
+			# Ordered playback already holds its faint pose. Reconnects and
+			# disabled animations apply that pose once the model is ready.
+			model.hold_fainted_pose(controller)
 
 
 func _sync_model_sprite_anchors() -> void:
@@ -545,6 +570,8 @@ func _sync() -> void:
 		_finished_return_started = false
 		_returning_to_world = false
 		_finished_return_retry_available = false
+		_native_fainted_models.clear()
+		_native_captured_controllers.clear()
 		_epoch += 1
 		_effects.cancel()
 		if _native_move_router != null:
@@ -742,6 +769,17 @@ func _pokemon_name_for_command(controller: String) -> String:
 
 
 func _apply_native_positions(snapshot: Dictionary) -> void:
+	_native_fainted_models.clear()
+	_remember_native_captures(snapshot.get("events", []))
+	# Current servers distinguish captures directly; older servers can still
+	# use the public event history/cache above. Never retain private receipts.
+	for position: Dictionary in snapshot.get("positions", []):
+		if position.has("captured"):
+			var controller := str(position.get("controller", ""))
+			if bool(position.captured):
+				_native_captured_controllers[controller] = true
+			else:
+				_native_captured_controllers.erase(controller)
 	_native_turn.set_turn(int(snapshot.get("turn", 0)))
 	_apply_native_field(snapshot)
 	var own_team: Array = snapshot.get("ownTeam", [])
@@ -827,7 +865,20 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 		var model: Node = _model_presenter()
 		if model != null:
 			for row_index in 2:
-				model.set_combatant(model.actor_index(controllers[row_index]), species[row_index], shiny[row_index])
+				var controller: String = controllers[row_index]
+				var position: Dictionary = active.get(controller, {})
+				var fainted := bool(position.get("fainted", false))
+				var model_species := species[row_index]
+				if SettingsManager.battle_presentation_mode == "3d" and fainted:
+					# The sprite fallback remains empty; native wild faints stay
+					# on the floor until the screen closes or a Trainer switches.
+					model_species = str(position.get("details", "")).split(",")[0].strip_edges()
+				if _native_captured_controllers.has(controller):
+					model_species = "" # Server captures also mark their slot fainted.
+				var index: int = model.actor_index(controller)
+				model.set_combatant(index, model_species, shiny[row_index])
+				if fainted and not model_species.is_empty():
+					_native_fainted_models[controller] = model._combatant_key(index)
 		for controller: String in controllers:
 			var position: Dictionary = active.get(controller, {})
 			_set_native_status(controller, str(position.get("status", "")) if not position.get("fainted", false) else "")
@@ -841,6 +892,7 @@ func _apply_native_positions(snapshot: Dictionary) -> void:
 		if roster_key != _model_roster_key:
 			_model_roster_key = roster_key
 			_prepare_model_roster.call_deferred()
+	_sync_native_fainted_models()
 	_position_coop_stat_overlays.call_deferred()
 
 
@@ -1669,6 +1721,7 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 		var controller := str(event.get("actor", ""))
 		match str(event.get("kind", "")):
 			"coopcapture":
+				_remember_native_captures([event])
 				_capture_target_controller = str(event.get("target", ""))
 				if SettingsManager.battle_animations:
 					await _play_native_capture_preview(str(event.get("itemId", "poke-ball")), event)
@@ -1698,6 +1751,8 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 					await model.play_action(controller, "faint_start")
 				_set_native_status(controller, "")
 			"switch", "drag", "replace":
+				_native_fainted_models.erase(controller)
+				_native_captured_controllers.erase(controller)
 				if model != null and controller in SLOTS:
 					if SettingsManager.battle_animations and model.handles(controller):
 						await model.recall(controller)

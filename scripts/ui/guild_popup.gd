@@ -3791,7 +3791,7 @@ func _build_guild_pokemon_vault_slot(entry: Dictionary) -> Button:
 	var button := Button.new()
 	button.name = "GuildPokemonVaultSlot_%d" % pokemon_id
 	button.text = ""
-	button.custom_minimum_size = Vector2(100, 108)
+	button.custom_minimum_size = Vector2(100, 132)
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.tooltip_text = _t("ui.guild.bank.pokemon.select", {"pokemon": _guild_bank_pokemon_name(pokemon)})
@@ -3827,10 +3827,14 @@ func _build_guild_pokemon_vault_slot(entry: Dictionary) -> Button:
 	name.clip_text = true
 	name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	stack.add_child(name)
-	var status := _t("ui.guild.bank.pokemon.grid_borrowed", {"level": int(pokemon.get("level", 1))}) if bool(entry.get("isBorrowed", false)) else _t("ui.guild.bank.pokemon.grid_level", {"level": int(pokemon.get("level", 1))})
-	var status_label := _label(status, 9, UI_WARNING if bool(entry.get("isBorrowed", false)) else UI_MUTED)
+	var status_label := _label(_t("ui.guild.bank.pokemon.grid_level", {"level": int(pokemon.get("level", 1))}), 9, UI_MUTED)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stack.add_child(status_label)
+	stack.add_child(_build_guild_bank_availability_badge(
+		"borrowed" if bool(entry.get("isBorrowed", false)) else "available",
+		"GuildPokemonVaultAvailability_%d" % pokemon_id,
+		true
+	))
 	return button
 
 
@@ -3866,6 +3870,11 @@ func _render_guild_pokemon_vault_selection(detail: VBoxContainer) -> void:
 	level.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	detail.add_child(level)
 	var borrowed := bool(entry.get("isBorrowed", false))
+	var availability := _build_guild_bank_availability_badge(
+		"borrowed" if borrowed else "available", "GuildPokemonVaultSelectedAvailability"
+	)
+	availability.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	detail.add_child(availability)
 	var ownership := _label(
 		_t("ui.guild.bank.pokemon.borrowed_by", {"trainer": str(entry.get("borrowedBy", _t("common.unknown")))})
 		if borrowed else _t("ui.guild.bank.pokemon.deposited_by", {"trainer": str(entry.get("depositedBy", _t("common.unknown")))}),
@@ -4209,7 +4218,7 @@ func _build_guild_item_storage_slot(entry: Dictionary, category: String) -> Butt
 	var button := Button.new()
 	button.name = "%sSlot_%s" % [_guild_item_storage_window_prefix(category), item_id]
 	button.text = ""
-	button.custom_minimum_size = Vector2(100, 104)
+	button.custom_minimum_size = Vector2(100, 128)
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.tooltip_text = item_name
@@ -4247,6 +4256,11 @@ func _build_guild_item_storage_slot(entry: Dictionary, category: String) -> Butt
 	var quantity := _label("×%d" % int(entry.get("quantity", 0)), 9, UI_MUTED if available > 0 else UI_WARNING)
 	quantity.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	stack.add_child(quantity)
+	stack.add_child(_build_guild_bank_availability_badge(
+		"available" if available > 0 else "unavailable",
+		"%sAvailability_%s" % [_guild_item_storage_window_prefix(category), item_id],
+		true
+	))
 	return button
 
 
@@ -4562,6 +4576,26 @@ func _on_guild_bank_donation_search_changed(query: String, category: String, row
 	empty.visible = visible_count == 0
 
 
+func _build_guild_bank_availability_badge(state: String, node_name: String, compact := false) -> PanelContainer:
+	var color := UI_SUCCESS if state == "available" else (UI_WARNING if state == "borrowed" else UI_ERROR)
+	var key := "ui.guild.bank.availability.on_loan" if state == "borrowed" else "ui.guild.bank.filter.%s" % state
+	var badge := PanelContainer.new()
+	badge.name = node_name
+	badge.size_flags_horizontal = Control.SIZE_SHRINK_CENTER if compact else Control.SIZE_SHRINK_BEGIN
+	badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	badge.add_theme_stylebox_override("panel", _panel_style(Color(color, 0.12), Color(color, 0.65), 6, 1))
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_set_margins(margin, 4 if compact else 8, 2 if compact else 3, 4 if compact else 8, 2 if compact else 3)
+	badge.add_child(margin)
+	var label := _localized_label(key, 8 if compact else 10, color)
+	label.name = "%sLabel" % node_name
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_child(label)
+	return badge
+
+
 func _build_guild_item_row(
 	item: Dictionary,
 	action: String,
@@ -4623,6 +4657,10 @@ func _build_guild_item_row(
 	detail.name = "GuildBankItemDetail_%s" % item_id
 	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	item_info.add_child(detail)
+	if action != "deposit":
+		header.add_child(_build_guild_bank_availability_badge(
+			"available" if available > 0 else "unavailable", "GuildBankItemAvailability_%s" % item_id
+		))
 	if readonly:
 		return card
 	var controls := HBoxContainer.new()
@@ -4661,9 +4699,9 @@ func _build_guild_item_row(
 		"GuildBank%s%sButton_%s" % ["Resource" if is_resource else "Item", action.capitalize(), str(item.get("itemId", "item"))],
 		"ui.guild.bank.donate" if action == "deposit" else "ui.guild.bank.withdraw",
 		allowed,
-		_on_guild_bank_resource_action.bind(action, str(item.get("itemId", "")), quantity)
+		_on_guild_bank_resource_action.bind(action, str(item.get("itemId", "")), quantity, item_name)
 		if is_resource
-		else _on_guild_bank_item_action.bind(action, str(item.get("itemId", "")), quantity),
+		else _on_guild_bank_item_action.bind(action, str(item.get("itemId", "")), quantity, item_name),
 		"" if allowed else unavailable_tooltip
 	))
 	if action == "withdraw" and not is_resource:
@@ -4793,6 +4831,10 @@ func _build_guild_pokemon_row(entry: Dictionary, is_bank: bool, readonly: bool =
 	var filter_states: Array[String] = []
 	filter_states.append("available" if not is_bank or not is_borrowed else "borrowed")
 	row.set_meta("guild_bank_filter_states", filter_states)
+	if is_bank:
+		identity.add_child(_build_guild_bank_availability_badge(
+			"borrowed" if is_borrowed else "available", "GuildBankPokemonAvailability_%d" % pokemon_id
+		))
 	if readonly:
 		identity.add_child(_label(
 			_t("ui.guild.bank.pokemon.borrowed_by", {
@@ -5512,27 +5554,29 @@ func _on_guild_bank_money_action(action: String, amount_input: SpinBox) -> void:
 	await _run_guild_bank_action("%s_bank_money" % action, [amount], "money")
 
 
-func _on_guild_bank_item_action(action: String, item_id: String, quantity_input: SpinBox) -> void:
+func _on_guild_bank_item_action(action: String, item_id: String, quantity_input: SpinBox, item_name: String = "") -> void:
 	var quantity := int(quantity_input.value) if quantity_input != null else 0
 	if item_id == "" or quantity <= 0:
 		return
 	if action == "deposit":
 		_confirm_guild_bank_donation(
-			"%s ×%d" % [_guild_bank_item_name(item_id, item_id), quantity],
-			_run_guild_bank_action.bind("deposit_bank_item", [item_id, quantity], "item")
+			"%s ×%d" % [_guild_bank_item_name(item_id, item_name if item_name != "" else item_id), quantity],
+			_run_guild_bank_action.bind("deposit_bank_item", [item_id, quantity], "item"),
+			_guild_bank_item_icon(item_id)
 		)
 		return
 	await _run_guild_bank_action("%s_bank_item" % action, [item_id, quantity], "item")
 
 
-func _on_guild_bank_resource_action(action: String, item_id: String, quantity_input: SpinBox) -> void:
+func _on_guild_bank_resource_action(action: String, item_id: String, quantity_input: SpinBox, item_name: String = "") -> void:
 	var quantity := int(quantity_input.value) if quantity_input != null else 0
 	if item_id == "" or quantity <= 0:
 		return
 	if action == "deposit":
 		_confirm_guild_bank_donation(
-			"%s ×%d" % [_guild_bank_item_name(item_id, item_id), quantity],
-			_run_guild_bank_action.bind("deposit_bank_resource", [item_id, quantity], "resource")
+			"%s ×%d" % [_guild_bank_item_name(item_id, item_name if item_name != "" else item_id), quantity],
+			_run_guild_bank_action.bind("deposit_bank_resource", [item_id, quantity], "resource"),
+			_guild_bank_item_icon(item_id)
 		)
 		return
 	await _run_guild_bank_action("withdraw_bank_resource", [item_id, quantity], "resource")
@@ -5544,7 +5588,8 @@ func _on_guild_bank_pokemon_action(action: String, pokemon_id: int, pokemon: Dic
 	if action == "deposit":
 		_confirm_guild_bank_donation(
 			_guild_bank_pokemon_name(pokemon),
-			_run_guild_bank_action.bind("deposit_bank_pokemon", [pokemon_id], "pokemon")
+			_run_guild_bank_action.bind("deposit_bank_pokemon", [pokemon_id], "pokemon"),
+			_guild_bank_pokemon_icon(pokemon)
 		)
 		return
 	var service_method := "deposit_bank_pokemon" if action == "return" else "%s_bank_pokemon" % action
@@ -5558,19 +5603,18 @@ func _on_guild_bank_loan_action(action: String, asset_id: String) -> void:
 	await _run_guild_bank_action(method, [asset_id], "loan")
 
 
-func _confirm_guild_bank_donation(asset_name: String, confirmed_action: Callable) -> void:
-	var dialog := ConfirmationDialog.new()
-	dialog.name = "GuildBankDonationConfirmationDialog"
-	dialog.title = _t("ui.guild.bank.donation.confirm_title")
-	dialog.dialog_text = _t("ui.guild.bank.donation.confirm", {"asset": asset_name})
-	dialog.ok_button_text = _t("ui.guild.bank.donation.action")
-	dialog.cancel_button_text = _t("common.cancel")
-	_apply_guild_confirmation_style(dialog, "primary")
+func _confirm_guild_bank_donation(asset_name: String, confirmed_action: Callable, asset_icon: Texture2D = GUILD_ICON) -> void:
+	var dialog := _build_guild_action_dialog(
+		"GuildBankDonationConfirmationDialog",
+		_t("ui.guild.bank.donation.confirm_title"),
+		_t("ui.guild.bank.donation.confirm", {"asset": asset_name}),
+		_t("ui.guild.bank.donation.action"),
+		asset_icon
+	)
+	dialog.accent_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	dialog.confirmed.connect(confirmed_action, CONNECT_ONE_SHOT)
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
-	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
-	add_child(dialog)
-	dialog.popup_centered(Vector2i(470, 190))
+	dialog.popup_centered(Vector2i(520, 220))
 
 
 func _run_guild_bank_action(method: String, arguments: Array, asset_type: String) -> void:
@@ -6063,7 +6107,7 @@ func _on_guild_member_action_selected(action_id: int, member: Dictionary) -> voi
 			_open_guild_leadership_transfer_dialog(member)
 
 
-func _build_guild_member_action_dialog(
+func _build_guild_action_dialog(
 	dialog_name: String,
 	title: String,
 	message: String,
@@ -6108,7 +6152,7 @@ func _open_guild_leadership_transfer_dialog(member: Dictionary) -> void:
 	if user_id <= 0 or str(member.get("role", "recruit")) == "leader":
 		return
 	var trainer_name := str(member.get("displayName", member.get("username", _t("common.unknown"))))
-	var dialog := _build_guild_member_action_dialog(
+	var dialog := _build_guild_action_dialog(
 		"GuildLeadershipTransferDialog_%d" % user_id,
 		_t("ui.guild.leadership.transfer_title"),
 		_t("ui.guild.leadership.transfer_confirm", {"trainer": trainer_name}),
@@ -6154,7 +6198,7 @@ func _open_guild_member_kick_dialog(member: Dictionary) -> void:
 	if user_id <= 0:
 		return
 	var trainer_name := str(member.get("displayName", member.get("username", _t("common.unknown"))))
-	var dialog := _build_guild_member_action_dialog(
+	var dialog := _build_guild_action_dialog(
 		"GuildMemberKickDialog_%d" % user_id,
 		_t("ui.guild.member.kick_title"),
 		_t("ui.guild.member.kick_confirm", {"trainer": trainer_name}),
@@ -6242,7 +6286,7 @@ func _open_guild_member_rank_dialog(member: Dictionary) -> void:
 	var user_id := int(member.get("userId", 0))
 	if user_id <= 0 or str(member.get("role", "recruit")) == "leader":
 		return
-	var dialog := _build_guild_member_action_dialog(
+	var dialog := _build_guild_action_dialog(
 		"GuildMemberRankDialog_%d" % user_id,
 		_t("ui.guild.member.change_rank_title", {
 			"trainer": str(member.get("displayName", member.get("username", _t("common.unknown")))),

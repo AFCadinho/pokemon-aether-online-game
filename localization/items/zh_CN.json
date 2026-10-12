@@ -1207,5 +1207,33 @@
   "super-saiyan-4-outfit": {
     "name": "Super Saiyan 4 (SS4) 套装礼盒",
     "shortDesc": "包含五件独立的SS4外观：毛皮、长裤、鞋子、发型和尾巴（背部）。适用于男性和女性角色。"
+  },
+  "irelia-shirt": {
+    "name": "Irelia 战衣",
+    "shortDesc": "在背包中激活此 Irelia 饰品，然后在角色自定义中装备。"
+  },
+  "irelia-trousers": {
+    "name": "Irelia 长裤",
+    "shortDesc": "在背包中激活此 Irelia 饰品，然后在角色自定义中装备。"
+  },
+  "irelia-shoes": {
+    "name": "Irelia 长靴",
+    "shortDesc": "在背包中激活此 Irelia 饰品，然后在角色自定义中装备。"
+  },
+  "irelia-hair": {
+    "name": "Irelia 发型",
+    "shortDesc": "在背包中激活此 Irelia 饰品，然后在角色自定义中装备。"
+  },
+  "irelia-circlet": {
+    "name": "Irelia 头饰",
+    "shortDesc": "在背包中激活此 Irelia 饰品，然后在角色自定义中装备。"
+  },
+  "irelia-blades": {
+    "name": "Irelia 浮空刀刃",
+    "shortDesc": "在背包中激活此 Irelia 饰品，然后在角色自定义中装备。"
+  },
+  "irelia-outfit": {
+    "name": "Irelia 时装礼盒",
+    "shortDesc": "包含六件独立饰品：战衣、长裤、长靴、发型、头饰和浮空刀刃（背部）。适用于男性和女性角色。"
   }
 }
