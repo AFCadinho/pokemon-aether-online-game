@@ -4,6 +4,10 @@ Approved by the user on **2026-10-06**: all **194 currently implemented 3D moves
 including the red/blue Close Combat revision. The current animation round is complete.
 Further changes are individual refinements driven by real gameplay feedback.
 
+The subsequent [707-move extension](extended-move-presentations.md) adds gameplay
+catalogue coverage. Those presentations remain **pending player review**; this
+approval register still covers only the original 194.
+
 This approval covers the 193-key 2D animation catalog plus Bubble Beam. It does
 not claim bespoke effects for every gameplay move or approve future additions.
 It is presentation approval, not release certification or deployment authorization.
