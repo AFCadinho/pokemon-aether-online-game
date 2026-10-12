@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Let older launchers install a newer launcher build when an approved 3D catalog keeps its asset set but changes its pinned index.
+
 - Align Guild Base elevator arrivals with the scene's current door tiles.
 
 - Keep compact touch controls, quest trackers, Trainer Cards and Storage hover cards within their intended bounds across UI scales.
