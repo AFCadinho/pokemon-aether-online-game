@@ -67,17 +67,17 @@
   {
     "source": "male/overworld/Walking/Hair.png",
     "game": "assets/player/male/hair/Irelia_Hair.png",
-    "sha256": "0a176ce11b344db98f28e960266f5745af7c38581775afbf314d59532e28efa4"
+    "sha256": "25de8d43c971bff67d8f7ec676e97dbe9a2f47f6cc320d5bfd04f6bd312c1135"
   },
   {
     "source": "male/overworld/Fishing/Hair.png",
     "game": "assets/player/male/hair/fish/Irelia_Hair_fish.png",
-    "sha256": "e9c8986a344804ccd18afb93e4ecb04be966e1be3bd28d28a5c53b42bdea50fe"
+    "sha256": "aa7575f2950c63c632810fc22fe652a2a8d90273ad2cd6b5295e78d7a0dff16c"
   },
   {
     "source": "male/overworld/Riding/Hair.png",
     "game": "assets/player/male/hair/ride/Irelia_Hair_ride.png",
-    "sha256": "185b4764cc3da8ed6783ef329249167e399be5daa6e51980e9880fb727f21a98"
+    "sha256": "a0844049a3d9fd13b8500cdb49875b47fc7e4a520670bb649dc4217d09a41e5d"
   },
   {
     "source": "male/trainer/Headgear.png",
