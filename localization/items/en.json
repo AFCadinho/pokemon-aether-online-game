@@ -1179,5 +1179,9 @@
   "shiny-flying-nimbus-mount": {
     "name": "Shiny Flying Nimbus Mount",
     "shortDesc": "Unlocks the dark Shiny Flying Nimbus as a land mount. Requires a Mount License for the current region."
+  },
+  "flying-nimbus-mount-box": {
+    "name": "Flying Nimbus Mount Box",
+    "shortDesc": "Contains a Flying Nimbus mount. Base shiny chance: 50%."
   }
 }

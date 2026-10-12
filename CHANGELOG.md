@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Flying Nimbus Mount Box to Gift Store → Mounts → Land for 500 Aether Gems, with normal and dark shiny previews.
+
 - Add the dark blue and violet Shiny Flying Nimbus mount with a matching moving cloud trail, available through admin grants.
 
 - Add distinct transparent pixel-art inventory icons for Emberite, Voltite, Glacite, Astralite and Aetherium Ore.

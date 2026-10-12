@@ -29,8 +29,8 @@ func _run() -> void:
 	store.apply_store_state({"gems": 1000, "gift_voucher_balance": 1000}, {"items": items})
 	store.call("_select_category", "mounts")
 	_check(store.mount_mode_bar.visible and store.active_mount_mode == "land", "Mounts opens with Land selected")
-	_check(store.product_buttons.size() == 21 and not store.product_buttons.has("primal-kyogre-mount-box"), "Land lists the twenty-one land boxes only")
-	var new_prices := {"giratina_origin": 1000, "ho_oh": 750, "yveltal": 1000, "miraidon": 750, "reshiram": 750, "metagross": 750, "salamence": 750, "zekrom": 750, "palkia": 750, "dialga": 750, "arcanine": 500, "aerodactyl": 500, "toucannon": 500, "latios": 750, "latias": 750, "caterpie": 250}
+	_check(store.product_buttons.size() == 22 and not store.product_buttons.has("primal-kyogre-mount-box"), "Land lists the twenty-two land boxes only")
+	var new_prices := {"giratina_origin": 1000, "ho_oh": 750, "yveltal": 1000, "miraidon": 750, "reshiram": 750, "metagross": 750, "salamence": 750, "zekrom": 750, "palkia": 750, "dialga": 750, "arcanine": 500, "aerodactyl": 500, "toucannon": 500, "latios": 750, "latias": 750, "caterpie": 250, "flying_nimbus": 500}
 	for id: String in new_prices:
 		var box_id := id.replace("_", "-") + "-mount-box"
 		_check(store.product_buttons.has(box_id), id + " box is listed in Land")
@@ -117,15 +117,15 @@ func _run() -> void:
 	store.mount_mode_buttons.land.pressed.emit()
 	_check(store.selected_item_id.is_empty() and store.catalog_search_text.is_empty(), "Switching modes clears stale selection and search")
 	_check(not store.mount_preview_controls.visible, "Switching modes clears the previous mount preview")
-	_check(store.product_buttons.size() == 21, "Returning to Land restores its products")
+	_check(store.product_buttons.size() == 22, "Returning to Land restores its products")
 	for locale: String in ["nl", "pt_BR", "zh_CN", "en"]:
 		root.get_node("LocalizationManager").set_locale(locale)
 		_check(not store.mount_mode_buttons.land.text.begins_with("ui."), "Tab labels are translated")
 	store.call("_select_category", "charms")
 	_check(not store.mount_mode_bar.visible, "Mount tabs stay hidden outside Mounts")
 	store.call("_select_category", "mounts")
-	store.call("_select_mount_mode", "surf")
-	store.call("_select_product", "gyarados-mount-box")
+	store.call("_select_mount_mode", "land")
+	store.call("_select_product", "flying-nimbus-mount-box")
 	store.call("_select_character_preview_direction", "left")
 	store.mount_preview_shiny_toggle.button_pressed = true
 	for i in range(5):

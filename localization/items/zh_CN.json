@@ -1179,5 +1179,9 @@
   "shiny-flying-nimbus-mount": {
     "name": "异色筋斗云坐骑",
     "shortDesc": "解锁深色的异色筋斗云陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "flying-nimbus-mount-box": {
+    "name": "筋斗云坐骑箱",
+    "shortDesc": "包含一只筋斗云坐骑。初始异色概率：50%。"
   }
 }
