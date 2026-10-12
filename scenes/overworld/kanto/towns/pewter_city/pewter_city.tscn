@@ -27,6 +27,7 @@
 [ext_resource type="SpriteFrames" uid="uid://bgt5h7r4aixq5" path="res://assets/npcs/classes/black_belt_frames.tres" id="31_black_belt"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="32_daily_rock"]
 
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(64, 36)
 

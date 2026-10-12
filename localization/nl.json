@@ -1,4 +1,8 @@
 {
+  "npc.museum.admission_paid": "Je hebt al betaald voor dit bezoek. Veel plezier bij de tentoonstellingen!",
+  "npc.museum.admission_prompt": "De entree van het museum is gratis. Toegang tot de tentoonstellingen achter de blauwe balken kost {fee} Pokédollars voor dit bezoek. Wil je betalen?",
+  "npc.museum.admission_pay": "Betaal {fee} Pokédollars",
+  "npc.museum.admission_cancel": "Misschien later",
   "ui.store.badge.training": "TRAINING",
   "ui.store.category.held-items.label": "Training Items",
   "ui.store.category.held-items.description": "Items voor het trainen van je Pokémon tijdens wilde gevechten.",

@@ -4,6 +4,12 @@
 
 - Show readable species nameplates above the opposing Pokémon during 3D Team Preview, following their arena positions and clearing them before lead summons.
 
+- Reframe the 3D battle overview toward the Pokémon with a higher viewing angle and HUD-aware zoom limits, keeping resting models above the battle controls while preserving attack timing, cinematic shots and 2.5D framing.
+
+- Move Iris inside the Pewter Museum beside the blue barriers: enter the lobby for free and pay 100 Pokédollars to access the exhibits for that visit.
+
+- Populate the Pewter Museum of Science with four dialogue NPCs and an entrance attendant offering admission for 100 Pokédollars per visit. Confirm payment before entering; leaving is free.
+
 - Show battle preparation and Pokémon download progress when entering 3D AI Sparring or PvP, prepare Team Preview before revealing the field, and start battle music once the arena is visible.
 
 - Retire obsolete v11 model downloads after a verified full offline backup; keep every v13 model and reused ZIP available. Older clients requesting retired models must update.

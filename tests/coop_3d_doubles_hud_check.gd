@@ -156,10 +156,11 @@ func _run() -> void:
 	var saved_identity: String = model.identities[0]
 	var focus_test_camera := Camera3D.new()
 	focus_test_camera.fov = ArenaCatalog.CAMERA_FOV
-	stage.add_child(focus_test_camera)
 	var focus_test_viewport := SubViewport.new()
 	focus_test_viewport.size = root.size
 	stage.add_child(focus_test_viewport)
+	# Match the renderer's viewport, rather than the window's scaled UI canvas.
+	focus_test_viewport.add_child(focus_test_camera)
 	model.camera = focus_test_camera
 	model.viewport = focus_test_viewport
 	model.active = true
