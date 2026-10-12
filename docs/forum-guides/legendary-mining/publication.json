@@ -1,0 +1,41 @@
+{
+  "topicId": 59,
+  "postId": 66,
+  "version": 5,
+  "author": "adinho",
+  "categoryId": 20,
+  "category": "Exploration & Activities",
+  "contentSha256": "4760b525fcfea2fe03546dd070cec8c03bd4e4fc8695907dc486737204203624",
+  "imageCount": 4,
+  "uploadIds": [
+    215,
+    216
+  ],
+  "upcomingUpdateNotice": true,
+  "url": "https://forums.pokeaether.com/t/official-rock-smash-guide/59",
+  "publishedAt": "2026-10-12T09:07:33.023152+00:00",
+  "gameplayDeployment": "pending; changes are merged locally for the next gameplay release",
+  "publicJsonChecked": true,
+  "publicPageChecked": true,
+  "verifiedAt": "2026-10-12T09:09:01.809065+00:00",
+  "images": [
+    {
+      "filename": "59-02-sell-all-confirmation.png",
+      "id": 215,
+      "url": "/uploads/default/original/1X/3ea94849e2036fb0ebcce3c9d3a8afb27b83e0ef.png",
+      "shortUrl": "upload://8WkhUS5qGwlUPh1cvuSNlXspqtF.png",
+      "width": 1088,
+      "height": 768,
+      "sha256": "fcf55647689454ed4f16ab144a60e2b59470e1e47fa19819919d4c2d6d8f8764"
+    },
+    {
+      "filename": "59-03-legendary-mining-rewards.png",
+      "id": 216,
+      "url": "/uploads/default/original/1X/1abe6adad57ffb7087191cd586a283dcdf0db5a9.png",
+      "shortUrl": "upload://3OAnEZRU6QT19RW8j5amQr7S0pX.png",
+      "width": 668,
+      "height": 690,
+      "sha256": "2289f0682c7f78f6b6941130c633c59be40d57ca2a0aef8c8c3c6e9f8b0dbb6b"
+    }
+  ]
+}

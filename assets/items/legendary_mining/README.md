@@ -4,7 +4,7 @@ These original ore icons were generated with the built-in image_gen tool with a 
 
 ![Ore icons in tier order, enlarged above and at inventory size below](preview.png)
 
-| Tier | Item ID | Name | Color | Sale value | Planned chance per rock |
+| Tier | Item ID | Name | Color | Sale value | Base chance per rock |
 | --- | --- | --- | --- | ---: | ---: |
 | 1 | emberite-ore | Emberite Ore | Orange/red | 10,000 | 1% |
 | 2 | voltite-ore | Voltite Ore | Gold/yellow | 25,000 | 0.75% |
@@ -12,7 +12,7 @@ These original ore icons were generated with the built-in image_gen tool with a 
 | 4 | astralite-ore | Astralite Ore | Violet | 100,000 | 0.35% |
 | 5 | aetherium-ore | Aetherium Ore | Turquoise/gold | 250,000 | 0.25% |
 
-Canonical item definitions are in the paired backend's pokemon-data/data/items/legendary-mining-ores.json. This asset task defines names, tiers, sale values and icons. Rock-specific loot, bad-luck protection and the museum buyer are not implemented yet; the planned chances above are design targets, not active drop rates.
+Canonical item definitions are in the paired backend's pokemon-data/data/items/legendary-mining-ores.json. Rock-specific bonus loot, persistent tier 4–5 bad-luck protection and Hugo's confirmed museum sale are implemented in the paired gameplay services for the next release. The chance column lists base rates before personal protection.
 
 ## Generation prompts
 

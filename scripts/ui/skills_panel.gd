@@ -1453,6 +1453,7 @@ func _create_target_row(target: Dictionary) -> Control:
 			"location": _text(str(target.get("locationKey", ""))),
 			"level": int(target.get("requiredLevel", 1)),
 		})
+		detail_label.text += " · " + _text("ui.skills.rock_smash.rock.mining_tier", {"tier": int(target.get("miningTier", 1))})
 	else:
 		detail_label.text = _text("ui.skills.thieving.target.detail", {
 			"type": _text("ui.skills.thieving.target_type.%s" % str(target.get("npcType", "civilian"))),

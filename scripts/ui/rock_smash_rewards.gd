@@ -24,7 +24,7 @@ func _ready() -> void:
 	add_theme_constant_override("separation", 8)
 	category = OptionButton.new()
 	category.name = "RewardCategory"
-	for key in ["items", "fossils", "money_xp"]:
+	for key in ["items", "fossils", "money_xp", "legendary_mining"]:
 		category.add_item(_text(key))
 	_style_option(category)
 	category.item_selected.connect(func(_index: int): _render())
@@ -116,7 +116,7 @@ func _control_style(background: Color, border: Color) -> StyleBoxFlat:
 
 func show_for_level(level: int) -> void:
 	for index in range(category.item_count):
-		category.set_item_text(index, _text(["items", "fossils", "money_xp"][index]))
+		category.set_item_text(index, _text(["items", "fossils", "money_xp", "legendary_mining"][index]))
 	preview.text = _text("preview")
 	retry.text = _text("retry")
 	player_level = level
@@ -155,6 +155,18 @@ func _render() -> void:
 	var context := _text("level", {"level": level})
 	if level > player_level:
 		context += " · " + _text("locked")
+	if category.selected == 3:
+		summary.text = context + "\n" + _text("mining_summary")
+		for ore: Dictionary in catalog.get("legendaryMining", []):
+			var item_id := str(ore.get("itemId", ""))
+			var title := _text("mining_tier", {"tier": int(ore.get("tier", 1)), "level": int(ore.get("requiredLevel", 1))})
+			title += "\n" + ItemLocalization.display_name(item_id, item_id.replace("-", " ").capitalize())
+			if int(ore.get("requiredLevel", 1)) > player_level:
+				title += " · " + _text("locked")
+			_row(title, _percent(float(ore.get("chancePercent", 0))) + "\n" + _text("mining_value", {"money": int(ore.get("sellPrice", 0))}), item_id)
+		_row(_text("mining_buyer"), _text("mining_buyer_location"))
+		_row(_text("mining_protection"), _text("mining_protection_detail"))
+		return
 	if category.selected == 2:
 		summary.text = context + "\n" + _text("guaranteed")
 		for rock: Dictionary in catalog.get("rocks", []):

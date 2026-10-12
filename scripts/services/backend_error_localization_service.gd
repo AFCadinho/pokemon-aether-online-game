@@ -345,6 +345,8 @@ const CODE_TO_KEY: Dictionary = {
 	"rock_smash_context_mismatch": "backend.error.rock_smash_unavailable",
 	"rock_smash_too_far": "backend.error.rock_smash_too_far",
 	"rock_smash_request_required": "backend.error.request_invalid",
+	"museum_ore_quote_changed": "backend.error.museum_ore_quote_changed",
+	"museum_ore_buyer_unavailable": "backend.error.museum_ore_buyer_unavailable",
 	"gameplay_reset_blocked": "backend.error.gameplay_reset_blocked",
 	"gift_code_invalid": "ui.gift_code.error.invalid",
 	"gift_code_inactive": "ui.gift_code.error.inactive",

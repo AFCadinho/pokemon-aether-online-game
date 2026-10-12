@@ -42,6 +42,16 @@ func _run() -> void:
 	rewards._render()
 	_check(rewards.rows.get_child_count() == 3, "Money and XP include boost and guild context")
 	rewards.catalog["fossils"] = []
+	rewards.catalog["legendaryMining"] = [
+		{"tier": 1, "requiredLevel": 1, "itemId": "emberite-ore", "chancePercent": 1, "sellPrice": 10000},
+		{"tier": 5, "requiredLevel": 75, "itemId": "aetherium-ore", "chancePercent": 0.2625, "sellPrice": 250000},
+	]
+	rewards.category.select(3)
+	rewards._render()
+	_check(rewards.rows.get_child_count() == 4, "Legendary Mining shows ores, buyer and protection")
+	var mining_labels: Array = rewards.rows.get_child(1).find_children("*", "Label", true, false)
+	_check(mining_labels[0].text.contains("Aetherium Ore") and mining_labels[0].text.contains("75"), "Ore rows identify the rock tier requirement")
+	_check(mining_labels[1].text.contains("0.2625%") and mining_labels[1].text.contains("250000"), "Ore rows show personal chance and sale value")
 	rewards.category.select(1)
 	rewards._render()
 	_check(rewards.rows.get_child_count() == 1, "Locked fossils have an explanation")

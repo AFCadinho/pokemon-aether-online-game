@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Connect Legendary Mining Drops to Rock Smash's rock tiers, show their chances and values in Skills, and let Collector Hugo buy all ores after confirmation at the Pewter Museum counter. Update the forum guide for the upcoming release.
+
 - Give all 35 Z-moves individual cinematic camera and environment-colour profiles while preserving their attack and audio timing. Replace enlarged sprite clouds with smooth 3D attack forms, including flowing vortices, an energy dragon and a fiery orb; restore the battle camera and weather after each move.
 
 - Set the Zekrom Mount Box Gift Store price to 1,000 Aether Gems.
