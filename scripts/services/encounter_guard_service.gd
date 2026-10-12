@@ -21,7 +21,6 @@ var prompt: Label
 var countdown: Label
 var feedback: Label
 var grid: GridContainer
-var badge: Label
 var previously_paused := false
 
 
@@ -30,11 +29,6 @@ func _ready() -> void:
 	layer = CanvasLayer.new()
 	layer.layer = 2000
 	add_child(layer)
-	badge = Label.new()
-	badge.position = Vector2(16, 84)
-	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layer.add_child(badge)
-	badge.hide()
 	backdrop = ColorRect.new()
 	backdrop.color = Color(0.025, 0.035, 0.065, 0.94)
 	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -77,7 +71,7 @@ func _process(delta: float) -> void:
 		session_token = AuthService.session_token
 		guard = {}
 		_hide_lock()
-		badge.hide()
+		charge_changed.emit()
 		elapsed = 2.0
 	if not AuthService.is_authenticated():
 		return
@@ -125,8 +119,6 @@ func apply_state(value: Dictionary) -> void:
 		_logout()
 		return
 	guard = value.duplicate(true)
-	badge.text = LocalizationManager.text("ui.encounter_guard.remaining", {"count": int(guard.get("remaining", 0))})
-	badge.visible = bool(guard.get("active", false))
 	charge_changed.emit()
 	if bool(guard.get("expired", false)):
 		_logout()
@@ -143,7 +135,6 @@ func _show_lock() -> void:
 		previously_paused = get_tree().paused
 		get_tree().paused = true
 		backdrop.show()
-		badge.hide()
 	grid.show()
 	var remaining_seconds := maxf(0, float(guard.get("expiresAt", 0)) - float(guard.get("serverTime", Time.get_unix_time_from_system())))
 	deadline_msec = Time.get_ticks_msec() + int(remaining_seconds * 1000)
@@ -186,7 +177,6 @@ func _show_partner_wait() -> void:
 		previously_paused = get_tree().paused
 		get_tree().paused = true
 		backdrop.show()
-	badge.hide()
 	challenge_id = ""
 	grid.hide()
 	prompt.text = LocalizationManager.text("ui.encounter_guard.partner")
@@ -232,6 +222,7 @@ func _logout() -> void:
 	guard = {}
 	AuthService.set_pending_login_notice(LocalizationManager.text("ui.encounter_guard.expired"))
 	AuthService.clear_session()
+	charge_changed.emit()
 	_hide_lock()
 	get_tree().paused = false
 	get_tree().change_scene_to_file(LOGIN_SCENE)
