@@ -12,6 +12,11 @@ func _run() -> void:
 	stage.world=Node3D.new();stage.viewport.add_child(stage.world)
 	stage.camera=Camera3D.new();stage.world.add_child(stage.camera)
 	stage.camera.fov=Arenas.CAMERA_FOV
+	stage.visual_bounds.fixture = {"idle":{"min":[-0.5,0,-0.5],"size":[1,4,1]}}
+	for index in 4:
+		stage.actors[index] = Node3D.new()
+		stage.world.add_child(stage.actors[index])
+		stage.identities[index] = "fixture"
 	var samples := 0
 	for arena in Arenas.IDS:
 		stage.arena_id=arena
@@ -23,8 +28,7 @@ func _run() -> void:
 			var single := stage.camera.transform
 			var home := Arenas.camera_home(arena)
 			var target := Arenas.camera_target(arena)
-			assert(is_equal_approx(single.origin.distance_to(target),home.distance_to(target)))
-			assert(is_equal_approx(single.origin.y,home.y))
+			assert(single.basis.z.y >= (home-target).normalized().y, "Overview looks down toward the combatants")
 			# The viewer is now closer to their own side of the combat axis.
 			assert(single.origin.x<home.x-3.)
 			for index in 2:
@@ -38,7 +42,13 @@ func _run() -> void:
 			stage.reset_user_camera();stage._update_camera(0)
 			assert(stage.camera.transform.is_equal_approx(single))
 			stage.double_mode=true;stage._update_camera(0)
-			assert(stage.camera.position.is_equal_approx(target+(home-target)*1.45),"Doubles keep their original framing")
+			var view := home-target
+			view.y = 0.0
+			var camera_view := stage.camera.basis.z
+			camera_view.y = 0.0
+			assert(camera_view.normalized().is_equal_approx(view.normalized()), "Doubles keep their team-row viewing direction")
+			for point in Stage.OverviewCamera.resting_points(stage):
+				assert(Stage.OverviewCamera.SAFE_RECT.grow(0.0001).has_point(stage.camera.unproject_position(point) / Vector2(dimensions)))
 			samples+=1
 	# Hybrid backgrounds retain their fixed orthographic framing.
 	settings.battle_presentation_mode="2.5d"
@@ -46,5 +56,5 @@ func _run() -> void:
 	assert(stage.camera.projection==Camera3D.PROJECTION_ORTHOGONAL)
 	assert(stage.camera.position.is_equal_approx(Vector3(0,5.5,16)))
 	stage.free();await process_frame
-	print("SINGLES_CAMERA_OK samples=",samples," reset=true orbit=true doubles_preserved=true hybrid_preserved=true")
+	print("SINGLES_CAMERA_OK samples=",samples," reset=true orbit=true doubles_direction_preserved=true hud_safe=true hybrid_preserved=true")
 	quit()

@@ -71,6 +71,7 @@ var forest_pool: Node
 var user_camera_yaw := 0.0
 var user_camera_pitch := 0.0
 var user_camera_zoom := 1.0
+const OverviewCamera = preload("res://scripts/battle/battle_ui/overview_camera_3d.gd")
 var move_camera := preload("res://scripts/battle/battle_ui/move_camera_3d.gd").new()
 var move_atmosphere := preload("res://scripts/battle/battle_ui/draco_meteor_atmosphere_3d.gd").new()
 var coop_camera_focus_enabled := false
@@ -2522,6 +2523,12 @@ func _update_camera(delta: float) -> void:
 	if _preview_wants_3d():
 		target.y = _position(0).y + 1.0
 		offset.y = maxf(offset.y * 1.8, 7.5)
+	else:
+		# Aim at the combatants instead of the stadium's upper stands. A steeper
+		# overview exposes the floor and leaves the foreground Pokémon above HUD.
+		target.y = _position(0).y + 1.2
+		offset.y = maxf(offset.y, Vector2(offset.x, offset.z).length() * 0.38)
+		offset *= 0.84
 	var focus_ready: bool = (
 		coop_camera_focus_enabled
 		and coop_camera_focus_index >= 0
@@ -2542,6 +2549,8 @@ func _update_camera(delta: float) -> void:
 	offset *= user_camera_zoom * (1.1 if _preview_wants_3d() else (1.45 if double_mode else 1.0)) * (1.0 - focus_mix * 0.13)
 	camera.position = target + offset
 	camera.look_at(target)
+	if not _preview_wants_3d():
+		camera.transform = OverviewCamera.fit(camera, OverviewCamera.resting_points(self), target, offset, OverviewCamera.safe_rect(self))
 	if settings.battle_3d_camera_motion and active:
 		move_camera.apply(self)
 	move_atmosphere.apply(self)
