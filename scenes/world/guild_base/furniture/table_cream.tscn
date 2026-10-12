@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_qer7i"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_hf5fh"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_hf5fh"]
 
-[node name="TableCream" type="Node2D" unique_id=84588179]
+[node name="TableCream" type="Node2D" unique_id=1083896737]
 texture_filter = 1
 script = ExtResource("1_qer7i")
 furniture_id = "table_cream"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=1788180209]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1423459319]
 position = Vector2(0, -96)
 tile_map_data = PackedByteArray("AAAAAAAAAAACABAAAAABAAAAAAADABAAAAACAAAAAAAEABAAAAAAAAEAAAAIABAAAAABAAEAAAAJABAAAAACAAEAAAAKABAAAAAAAAIAAAAOABAAAAABAAIAAAAPABAAAAACAAIAAAAAABEAAAA=")
 tile_set = ExtResource("2_hf5fh")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=335704358]
+z_index = 10
+position = Vector2(0, -64)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAA=")
+tile_set = ExtResource("3_hf5fh")
+collision_enabled = false
+navigation_enabled = false

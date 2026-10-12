@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_segw3"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_bcqjf"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_bcqjf"]
 
-[node name="ArmchairPink" type="Node2D" unique_id=56975405]
+[node name="ArmchairPink" type="Node2D" unique_id=1438984667]
 texture_filter = 1
 script = ExtResource("1_segw3")
 furniture_id = "armchair_pink"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=548841085]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=820975123]
 position = Vector2(0, -96)
 tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 11, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 11, 0, 0, 0, 0, 0, 2, 0, 0, 0, 12, 0, 11, 0, 0, 0)
 tile_set = ExtResource("2_bcqjf")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1464498516]
+z_index = 10
+position = Vector2(0, -32)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+tile_set = ExtResource("3_bcqjf")
+collision_enabled = false
+navigation_enabled = false

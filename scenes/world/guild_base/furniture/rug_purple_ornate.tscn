@@ -2,13 +2,21 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_cerh0"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_gaies"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_gaies"]
 
-[node name="RugPurpleOrnate" type="Node2D" unique_id=99096703]
+[node name="RugPurpleOrnate" type="Node2D" unique_id=1867539150]
 texture_filter = 1
 script = ExtResource("1_cerh0")
 furniture_id = "rug_purple_ornate"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=253798901]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=561074638]
 position = Vector2(0, -160)
 tile_map_data = PackedByteArray("AAAAAAAAAAAJAAUAAAABAAAAAAAKAAUAAAACAAAAAAALAAUAAAADAAAAAAAMAAUAAAAAAAEAAAAAAAYAAAABAAEAAAABAAYAAAACAAEAAAACAAYAAAADAAEAAAADAAYAAAAAAAIAAAAEAAYAAAABAAIAAAAFAAYAAAACAAIAAAAGAAYAAAADAAIAAAAHAAYAAAAAAAMAAAAIAAYAAAABAAMAAAAJAAYAAAACAAMAAAAKAAYAAAADAAMAAAALAAYAAAAAAAQAAAAMAAYAAAABAAQAAAANAAYAAAACAAQAAAAOAAYAAAADAAQAAAAPAAYAAAA=")
 tile_set = ExtResource("2_gaies")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1330666765]
+z_index = 10
+position = Vector2(0, -160)
+tile_set = ExtResource("3_gaies")
+collision_enabled = false
+navigation_enabled = false

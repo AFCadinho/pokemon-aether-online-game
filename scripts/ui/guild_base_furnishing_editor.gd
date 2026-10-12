@@ -582,7 +582,7 @@ func _candidate_error(value: Dictionary) -> String:
 		for actor: Node in actors:
 			if actor is Node2D:
 				var position: Vector2 = actor.call("get_persistent_world_position") if actor.has_method("get_persistent_world_position") else actor.global_position
-				if Catalog.footprint(value).has_point(Vector2i((room.to_local(position)/32).floor())):
+				if Vector2i((room.to_local(position)/32).floor()) in Catalog.movement_cells(value):
 					return "player_occupied"
 	return ""
 

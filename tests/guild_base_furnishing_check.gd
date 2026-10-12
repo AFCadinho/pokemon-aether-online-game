@@ -151,7 +151,7 @@ func _run() -> void:
 	mirrored.free()
 	var container: Node = map.get_node("Entities/Furniture")
 	var placed: Node2D = container.get_child(0)
-	_check(placed.get_child_count() == 2, "tabletop decoration is parented to its table")
+	_check(placed.get_node_or_null("Collision") != null and placed.get_child_count() == 3, "tabletop decoration is parented beside the table's visual and authoring collision")
 	_check(Blocking.is_position_blocked_by_character(map, Vector2(176, 336)), "furniture participates in the player's existing movement blockers")
 	_check(not Blocking.is_position_blocked_by_character(map, Vector2(176, 304)), "the raised artwork does not block the tile above the footprint")
 	for spec: Dictionary in Catalog.load_data().items:
@@ -213,7 +213,8 @@ func _run() -> void:
 	moved.x = 9
 	await editor._commit(editor._candidate_items(moved))
 	placed = container.get_child(0)
-	_check(placed.position.x == 288 and placed.get_child(1).placement.parentId == "table", "moving a table keeps its decoration attached")
+	var decorations := placed.get_children().filter(func(child: Node): return child.has_method("configure_surface"))
+	_check(placed.position.x == 288 and decorations.size() == 1 and decorations[0].placement.parentId == "table", "moving a table keeps its decoration attached")
 	_check(service.state.inventory.table_small == 5, "moving does not consume another copy")
 	var old_count: int = service.state.items.size()
 	service.save_fails = true

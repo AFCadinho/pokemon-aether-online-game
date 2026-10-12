@@ -164,7 +164,33 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_small.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_small.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "table_large",
@@ -240,7 +266,41 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_large.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_large.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ]
     },
     {
       "id": "stool",
@@ -268,7 +328,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/stool.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/stool.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "plant",
@@ -302,7 +368,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/plant.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/plant.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "statue_left",
@@ -342,7 +414,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/statue_left.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/statue_left.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ]
     },
     {
       "id": "statue_right",
@@ -382,7 +464,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/statue_right.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/statue_right.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ]
     },
     {
       "id": "pillar",
@@ -413,7 +505,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/pillar.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/pillar.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "bench_start",
@@ -444,7 +542,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bench_start.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bench_start.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "bench_middle",
@@ -475,7 +579,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bench_middle.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bench_middle.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "bench_end",
@@ -506,7 +616,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bench_end.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bench_end.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "bar_horizontal",
@@ -537,7 +653,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bar_horizontal.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bar_horizontal.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "bar_vertical",
@@ -565,7 +687,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bar_vertical.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bar_vertical.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "bar_corner",
@@ -596,7 +724,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bar_corner.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bar_corner.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "fridge",
@@ -630,7 +764,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/fridge.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/fridge.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "sink",
@@ -665,7 +805,21 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/sink.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/sink.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ]
     },
     {
       "id": "cupboard",
@@ -698,7 +852,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/cupboard.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/cupboard.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "fireplace",
@@ -751,7 +915,49 @@
       "placement": "wall",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/fireplace.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/fireplace.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ]
     },
     {
       "id": "painting",
@@ -788,7 +994,8 @@
       "placement": "wall",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/painting.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/painting.tscn",
+      "collisionCells": []
     },
     {
       "id": "wall_lamp",
@@ -816,7 +1023,8 @@
       "placement": "wall",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/wall_lamp.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/wall_lamp.tscn",
+      "collisionCells": []
     },
     {
       "id": "wall_plaque",
@@ -844,7 +1052,8 @@
       "placement": "wall",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/wall_plaque.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/wall_plaque.tscn",
+      "collisionCells": []
     },
     {
       "id": "flowers",
@@ -875,7 +1084,8 @@
       "placement": "surface",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/flowers.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/flowers.tscn",
+      "collisionCells": []
     },
     {
       "id": "plate",
@@ -903,7 +1113,8 @@
       "placement": "surface",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/plate.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/plate.tscn",
+      "collisionCells": []
     },
     {
       "id": "red_carpet",
@@ -943,7 +1154,8 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": true,
-      "scenePath": "res://scenes/world/guild_base/furniture/red_carpet.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/red_carpet.tscn",
+      "collisionCells": []
     },
     {
       "id": "striped_carpet",
@@ -983,7 +1195,8 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": true,
-      "scenePath": "res://scenes/world/guild_base/furniture/striped_carpet.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/striped_carpet.tscn",
+      "collisionCells": []
     },
     {
       "id": "sofa_blue",
@@ -1016,7 +1229,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/sofa_blue.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/sofa_blue.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "sofa_red",
@@ -1049,7 +1272,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/sofa_red.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/sofa_red.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "sofa_white",
@@ -1082,7 +1315,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/sofa_white.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/sofa_white.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "sofa_brown",
@@ -1115,7 +1358,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/sofa_brown.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/sofa_brown.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "sofa_pink",
@@ -1148,7 +1401,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/sofa_pink.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/sofa_pink.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "sofa_purple",
@@ -1181,7 +1444,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/sofa_purple.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/sofa_purple.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "armchair_blue",
@@ -1215,7 +1488,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/armchair_blue.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/armchair_blue.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "armchair_red",
@@ -1249,7 +1528,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/armchair_red.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/armchair_red.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "armchair_white",
@@ -1283,7 +1568,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/armchair_white.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/armchair_white.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "armchair_brown",
@@ -1317,7 +1608,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/armchair_brown.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/armchair_brown.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "armchair_pink",
@@ -1351,7 +1648,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/armchair_pink.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/armchair_pink.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "armchair_purple",
@@ -1385,7 +1688,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/armchair_purple.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/armchair_purple.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "chair_brown_left",
@@ -1416,7 +1725,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chair_brown_left.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_brown_left.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "chair_brown_right",
@@ -1447,7 +1762,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chair_brown_right.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_brown_right.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "chair_white_left",
@@ -1478,7 +1799,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chair_white_left.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_white_left.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "chair_white_right",
@@ -1509,7 +1836,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chair_white_right.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_white_right.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "chair_red_left",
@@ -1540,7 +1873,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chair_red_left.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_red_left.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "chair_red_right",
@@ -1571,7 +1910,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chair_red_right.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_red_right.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "chair_cyan_left",
@@ -1602,7 +1947,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chair_cyan_left.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_cyan_left.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "chair_cyan_right",
@@ -1633,7 +1984,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chair_cyan_right.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chair_cyan_right.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "stool_cyan",
@@ -1661,7 +2018,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/stool_cyan.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/stool_cyan.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "stool_blue",
@@ -1689,7 +2052,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/stool_blue.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/stool_blue.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "stool_green",
@@ -1717,7 +2086,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/stool_green.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/stool_green.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "stool_pink",
@@ -1745,7 +2120,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/stool_pink.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/stool_pink.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "table_round_wood",
@@ -1810,7 +2191,33 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_round_wood.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_round_wood.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "table_round_white",
@@ -1875,7 +2282,33 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_round_white.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_round_white.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "table_red",
@@ -1940,7 +2373,33 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_red.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_red.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "table_cream",
@@ -2005,7 +2464,33 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_cream.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_cream.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "table_light_wood",
@@ -2070,7 +2555,33 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_light_wood.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_light_wood.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "table_glass_gray",
@@ -2135,7 +2646,33 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_glass_gray.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_glass_gray.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "table_glass_blue",
@@ -2200,7 +2737,33 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_glass_blue.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_glass_blue.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "table_low_wood",
@@ -2248,7 +2811,21 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_low_wood.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_low_wood.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ]
     },
     {
       "id": "table_low_orange",
@@ -2296,7 +2873,21 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_low_orange.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_low_orange.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ]
     },
     {
       "id": "table_runner_red",
@@ -2361,7 +2952,33 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_runner_red.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_runner_red.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "table_side_wood",
@@ -2404,7 +3021,17 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_side_wood.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_side_wood.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ]
     },
     {
       "id": "table_side_gray",
@@ -2447,7 +3074,17 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_side_gray.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_side_gray.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ]
     },
     {
       "id": "table_side_blue",
@@ -2490,7 +3127,17 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/table_side_blue.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/table_side_blue.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ]
     },
     {
       "id": "bookcase_gray",
@@ -2523,7 +3170,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_gray.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_gray.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "bookcase_red",
@@ -2560,7 +3217,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_red.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_red.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "bookcase_colorful",
@@ -2597,7 +3264,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_colorful.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_colorful.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "bookcase_teal",
@@ -2628,7 +3305,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_teal.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_teal.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "bookcase_gold",
@@ -2659,7 +3342,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_gold.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_gold.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "bookcase_silver",
@@ -2690,7 +3379,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_silver.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_silver.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "bookcase_pink",
@@ -2721,7 +3416,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_pink.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bookcase_pink.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "locker",
@@ -2752,7 +3453,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/locker.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/locker.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "dresser_brown",
@@ -2794,7 +3501,17 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/dresser_brown.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/dresser_brown.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "chest_brown",
@@ -2827,7 +3544,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chest_brown.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chest_brown.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "dresser_pink",
@@ -2869,7 +3596,17 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/dresser_pink.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/dresser_pink.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "chest_pink",
@@ -2902,7 +3639,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chest_pink.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chest_pink.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "dresser_dark_wood",
@@ -2944,7 +3691,17 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/dresser_dark_wood.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/dresser_dark_wood.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "chest_dark_wood",
@@ -2977,7 +3734,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chest_dark_wood.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chest_dark_wood.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "dresser_light_wood",
@@ -3019,7 +3786,17 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/dresser_light_wood.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/dresser_light_wood.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "chest_light_wood",
@@ -3052,7 +3829,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chest_light_wood.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chest_light_wood.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "dresser_white",
@@ -3094,7 +3881,17 @@
         ]
       ],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/dresser_white.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/dresser_white.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "chest_white",
@@ -3127,7 +3924,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/chest_white.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/chest_white.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "bed_single_blue",
@@ -3167,7 +3974,25 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_blue.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_blue.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_double_blue",
@@ -3207,7 +4032,33 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_blue.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_blue.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_single_pink",
@@ -3247,7 +4098,25 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_pink.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_pink.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_double_pink",
@@ -3287,7 +4156,33 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_pink.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_pink.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_single_brown",
@@ -3327,7 +4222,25 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_brown.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_brown.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_double_brown",
@@ -3367,7 +4280,33 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_brown.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_brown.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_single_plum",
@@ -3407,7 +4346,25 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_plum.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_plum.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_double_plum",
@@ -3447,7 +4404,33 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_plum.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_plum.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_single_taupe",
@@ -3487,7 +4470,25 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_taupe.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_taupe.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_double_taupe",
@@ -3527,7 +4528,33 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_taupe.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_taupe.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_single_green",
@@ -3567,7 +4594,25 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_green.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_green.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_double_green",
@@ -3607,7 +4652,33 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_green.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_green.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_single_gold",
@@ -3647,7 +4718,25 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_gold.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_single_gold.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
     },
     {
       "id": "bed_double_gold",
@@ -3687,7 +4776,33 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_gold.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bed_double_gold.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ]
     },
     {
       "id": "bamboo_left",
@@ -3721,7 +4836,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bamboo_left.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bamboo_left.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "bamboo_right",
@@ -3755,7 +4876,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bamboo_right.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bamboo_right.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "palm_left",
@@ -3789,7 +4916,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/palm_left.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/palm_left.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "flower_bush_pink",
@@ -3817,7 +4950,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/flower_bush_pink.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_bush_pink.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "flower_bush_blue",
@@ -3845,7 +4984,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/flower_bush_blue.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_bush_blue.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "flower_bush_purple",
@@ -3873,7 +5018,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/flower_bush_purple.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_bush_purple.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "floor_lamp",
@@ -3907,7 +5058,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/floor_lamp.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/floor_lamp.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "bin_empty",
@@ -3938,7 +5095,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bin_empty.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bin_empty.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "bin_full",
@@ -3969,7 +5132,13 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bin_full.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bin_full.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ]
+      ]
     },
     {
       "id": "flower_pot_orange",
@@ -3997,7 +5166,8 @@
       "placement": "surface",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/flower_pot_orange.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_pot_orange.tscn",
+      "collisionCells": []
     },
     {
       "id": "flower_pot_pink",
@@ -4025,7 +5195,8 @@
       "placement": "surface",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/flower_pot_pink.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_pot_pink.tscn",
+      "collisionCells": []
     },
     {
       "id": "flower_pot_blue",
@@ -4053,7 +5224,8 @@
       "placement": "surface",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/flower_pot_blue.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_pot_blue.tscn",
+      "collisionCells": []
     },
     {
       "id": "flower_pot_purple",
@@ -4081,7 +5253,8 @@
       "placement": "surface",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/flower_pot_purple.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/flower_pot_purple.tscn",
+      "collisionCells": []
     },
     {
       "id": "bouquet_blue",
@@ -4109,7 +5282,8 @@
       "placement": "surface",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bouquet_blue.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bouquet_blue.tscn",
+      "collisionCells": []
     },
     {
       "id": "bouquet_yellow",
@@ -4137,7 +5311,8 @@
       "placement": "surface",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/bouquet_yellow.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/bouquet_yellow.tscn",
+      "collisionCells": []
     },
     {
       "id": "books_paper",
@@ -4165,7 +5340,8 @@
       "placement": "surface",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/books_paper.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/books_paper.tscn",
+      "collisionCells": []
     },
     {
       "id": "books_blue",
@@ -4193,7 +5369,8 @@
       "placement": "surface",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/books_blue.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/books_blue.tscn",
+      "collisionCells": []
     },
     {
       "id": "books_green",
@@ -4221,7 +5398,8 @@
       "placement": "surface",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/books_green.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/books_green.tscn",
+      "collisionCells": []
     },
     {
       "id": "wall_screen",
@@ -4256,7 +5434,8 @@
       "placement": "wall",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/wall_screen.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/wall_screen.tscn",
+      "collisionCells": []
     },
     {
       "id": "carpet_purple",
@@ -4296,7 +5475,8 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": true,
-      "scenePath": "res://scenes/world/guild_base/furniture/carpet_purple.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/carpet_purple.tscn",
+      "collisionCells": []
     },
     {
       "id": "carpet_cream",
@@ -4336,7 +5516,8 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": true,
-      "scenePath": "res://scenes/world/guild_base/furniture/carpet_cream.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/carpet_cream.tscn",
+      "collisionCells": []
     },
     {
       "id": "carpet_mint",
@@ -4376,7 +5557,8 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": true,
-      "scenePath": "res://scenes/world/guild_base/furniture/carpet_mint.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/carpet_mint.tscn",
+      "collisionCells": []
     },
     {
       "id": "carpet_lavender",
@@ -4416,7 +5598,8 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": true,
-      "scenePath": "res://scenes/world/guild_base/furniture/carpet_lavender.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/carpet_lavender.tscn",
+      "collisionCells": []
     },
     {
       "id": "rug_green_round",
@@ -4456,7 +5639,8 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/rug_green_round.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/rug_green_round.tscn",
+      "collisionCells": []
     },
     {
       "id": "rug_blue_round",
@@ -4496,7 +5680,8 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/rug_blue_round.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/rug_blue_round.tscn",
+      "collisionCells": []
     },
     {
       "id": "rug_green_ornate",
@@ -4551,7 +5736,8 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/rug_green_ornate.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/rug_green_ornate.tscn",
+      "collisionCells": []
     },
     {
       "id": "rug_purple_ornate",
@@ -4606,7 +5792,8 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/rug_purple_ornate.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/rug_purple_ornate.tscn",
+      "collisionCells": []
     },
     {
       "id": "rug_blue_welcome",
@@ -4641,7 +5828,8 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/rug_blue_welcome.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/rug_blue_welcome.tscn",
+      "collisionCells": []
     },
     {
       "id": "display_pod_green",
@@ -4681,7 +5869,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_green.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_green.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "display_pod_blue",
@@ -4721,7 +5919,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_blue.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_blue.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "display_pod_yellow",
@@ -4761,7 +5969,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_yellow.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_yellow.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "display_pod_pink",
@@ -4801,7 +6019,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_pink.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_pink.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "display_pod_gray",
@@ -4841,7 +6069,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_gray.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_gray.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "display_pod_purple",
@@ -4881,7 +6119,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_purple.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_purple.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "display_pod_white",
@@ -4916,7 +6164,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_white.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/display_pod_white.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "lab_console",
@@ -4953,7 +6211,17 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/lab_console.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/lab_console.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
     },
     {
       "id": "design_red_runner",
@@ -4993,7 +6261,8 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": true,
-      "scenePath": "res://scenes/world/guild_base/furniture/design_red_runner.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/design_red_runner.tscn",
+      "collisionCells": []
     },
     {
       "id": "design_kitchen_counter",
@@ -5222,7 +6491,153 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/design_kitchen_counter.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/design_kitchen_counter.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          8,
+          3
+        ]
+      ]
     },
     {
       "id": "design_cafe_table_set",
@@ -5397,7 +6812,105 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/design_cafe_table_set.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/design_cafe_table_set.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          3
+        ]
+      ]
     },
     {
       "id": "design_cafe_corner_table",
@@ -5482,7 +6995,57 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/design_cafe_corner_table.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/design_cafe_corner_table.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ]
+      ]
     },
     {
       "id": "design_statue_bench_left",
@@ -5585,7 +7148,69 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/design_statue_bench_left.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/design_statue_bench_left.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ]
+      ]
     },
     {
       "id": "design_statue_bench_right",
@@ -5688,7 +7313,69 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/design_statue_bench_right.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/design_statue_bench_right.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ]
+      ]
     },
     {
       "id": "design_planter_bench",
@@ -5854,7 +7541,113 @@
       "placement": "floor",
       "surfaceSlots": [],
       "resizable": false,
-      "scenePath": "res://scenes/world/guild_base/furniture/design_planter_bench.tscn"
+      "scenePath": "res://scenes/world/guild_base/furniture/design_planter_bench.tscn",
+      "collisionCells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          9,
+          0
+        ],
+        [
+          10,
+          0
+        ],
+        [
+          11,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ]
+      ]
     }
   ],
   "source": {

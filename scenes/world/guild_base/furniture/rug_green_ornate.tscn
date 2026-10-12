@@ -2,13 +2,21 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_isqs7"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_xwmwd"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_xwmwd"]
 
-[node name="RugGreenOrnate" type="Node2D" unique_id=995505753]
+[node name="RugGreenOrnate" type="Node2D" unique_id=1050384258]
 texture_filter = 1
 script = ExtResource("1_isqs7")
 furniture_id = "rug_green_ornate"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=2002499607]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1727395387]
 position = Vector2(0, -160)
 tile_map_data = PackedByteArray("AAAAAAAAAAAGAAMAAAABAAAAAAAHAAMAAAACAAAAAAAIAAMAAAADAAAAAAAJAAMAAAAAAAEAAAANAAMAAAABAAEAAAAOAAMAAAACAAEAAAAPAAMAAAADAAEAAAAAAAQAAAAAAAIAAAAEAAQAAAABAAIAAAAFAAQAAAACAAIAAAAGAAQAAAADAAIAAAAHAAQAAAAAAAMAAAALAAQAAAABAAMAAAAMAAQAAAACAAMAAAANAAQAAAADAAMAAAAOAAQAAAAAAAQAAAACAAUAAAABAAQAAAADAAUAAAACAAQAAAAEAAUAAAADAAQAAAAFAAUAAAA=")
 tile_set = ExtResource("2_xwmwd")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1487739063]
+z_index = 10
+position = Vector2(0, -160)
+tile_set = ExtResource("3_xwmwd")
+collision_enabled = false
+navigation_enabled = false

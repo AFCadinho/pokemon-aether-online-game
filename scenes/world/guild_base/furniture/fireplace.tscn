@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_lonaq"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_utxl7"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_utxl7"]
 
-[node name="Fireplace" type="Node2D" unique_id=1690452568]
+[node name="Fireplace" type="Node2D" unique_id=967850673]
 texture_filter = 1
 script = ExtResource("1_lonaq")
 furniture_id = "fireplace"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=2113091031]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=2055249795]
 position = Vector2(0, -128)
 tile_map_data = PackedByteArray("AAAAAAAAAAAIAAcAAAABAAAAAAAJAAcAAAACAAAAAAAKAAcAAAADAAAAAAALAAcAAAAEAAAAAAAMAAcAAAAAAAEAAAANAAcAAAABAAEAAAAOAAcAAAACAAEAAAAPAAcAAAADAAEAAAAAAAgAAAAEAAEAAAABAAgAAAAAAAIAAAACAAgAAAABAAIAAAADAAgAAAACAAIAAAAEAAgAAAADAAIAAAAFAAgAAAAEAAIAAAAGAAgAAAAAAAMAAAAHAAgAAAABAAMAAAAIAAgAAAACAAMAAAAJAAgAAAADAAMAAAAKAAgAAAAEAAMAAAALAAgAAAA=")
 tile_set = ExtResource("2_utxl7")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=463597874]
+z_index = 10
+position = Vector2(0, -64)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAAEAAEAAAAAAAAAAAA=")
+tile_set = ExtResource("3_utxl7")
+collision_enabled = false
+navigation_enabled = false

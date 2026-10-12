@@ -2,13 +2,21 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_bmxqs"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_bm72a"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_bm72a"]
 
-[node name="Painting" type="Node2D" unique_id=1319021574]
+[node name="Painting" type="Node2D" unique_id=142096534]
 texture_filter = 1
 script = ExtResource("1_bmxqs")
 furniture_id = "painting"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=2111010230]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1038068434]
 position = Vector2(0, -96)
 tile_map_data = PackedByteArray("AAAAAAAAAAAPABYAAAABAAAAAAAAABcAAAACAAAAAAAAABcAAAADAAAAAAABABcAAAAAAAEAAAACABcAAAABAAEAAAADABcAAAACAAEAAAADABcAAAADAAEAAAAEABcAAAA=")
 tile_set = ExtResource("2_bm72a")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1778926884]
+z_index = 10
+position = Vector2(0, -32)
+tile_set = ExtResource("3_bm72a")
+collision_enabled = false
+navigation_enabled = false

@@ -71,9 +71,10 @@ colored seating, glass and wooden tables, bookcases and dressers, single and
 double beds, plants, tabletop decorations, rugs and decorative laboratory
 capsules. These are decoration assets; lab displays do not provide gameplay
 services. Tables and low dressers provide surface slots. Regular furniture
-blocks its movement footprint; rugs remain walkable.
-Each uses a `TileMapLayer` with a compact shared atlas, a movement footprint and
-the existing character-blocking protocol. Tall art renders above its footprint;
+uses its exported painted collision; the initial masks match the existing
+movement footprints and rugs remain walkable.
+Each uses a `TileMapLayer` with a compact shared atlas, a painted tile collision
+mask and the existing character-blocking protocol. Tall art renders above its footprint;
 the player remains sorted by feet. The original decorated TMXs are references,
 not preplaced layouts. Their selected tiles can be rebuilt without editing the
 artist sources. The shared indoor sheet credits Akizakura16, Shiny570 and
@@ -86,6 +87,48 @@ ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend 
 ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend \
   --script res://tools/import_guild_base_furniture.gd
 ```
+
+Artist-authored furniture collision lives in the **Collision** `TileMapLayer`
+of each `scenes/world/guild_base/furniture/*.tscn` scene. Open the scene in Godot,
+select Collision and paint or erase the red 32×32 marker tile. The existing
+rectangles are seeded as a starting point; the layer remains visible in the
+editor and is hidden during play and room previews. Paint the floor tiles that
+should block walking, leaving the spaces between legs or separate components
+empty. The marker layer is independent of the art TileSet. Tabletop decorations
+inherit their parent’s floor collision; paint the table instead. Nonempty
+Collision layers on surface decorations are rejected during export.
+
+Save edited furniture scenes and choose **Project → Tools → Export Guild
+Furniture Collision**. The tool saves the current furniture scene, checks all
+saved Collision layers, then updates both paired catalogs. It does not save
+unrelated open scenes. The paired backend is resolved next to the frontend
+worktree. A missing backend, mismatched catalogs, transformed/misaligned
+Collision layer, or collision outside the artwork stops export before changes.
+Restart the game and account service after export to load the updated catalogs.
+The command-line equivalent is:
+
+```sh
+ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend \
+  --script res://tools/export_guild_furniture_collision.gd
+```
+
+Use `-- --check` for a read-only comparison of scenes and catalogs. A nonstandard
+backend path can be supplied with `--backend=/absolute/path/to/guild_base_furniture.json`.
+`collisionCells` holds integer tile offsets relative to the placement’s top-left;
+`blocksMovement` is derived from whether the painted mask is empty. Footprint,
+placement dimensions and art offsets retain their existing meanings, so saved
+layouts and templates do not need dimension migrations. The runtime movement,
+placement previews, player occupancy checks and server route validation all use
+these same cells. Resizable rugs stretch painted corners/edges/centre with the
+same nine-slice rule as the art.
+
+The visual scene importer preserves existing Collision layers. The template
+importer also preserves previously exported masks for its `design_*` composite
+parts. Furniture collision changes do not require editing the artist TMX or
+manually duplicating JSON values. Arbitrary physics polygons within a tile are
+not sampled: movement uses the game’s 32×32 tile grid. Enclosed free floor still
+fails the existing route check; mark inaccessible solid furniture interiors as
+blocked or leave a connected walkway.
 
 Keep `data/guild_base_furniture.json` byte-identical to the account-service
 catalog. The first visit initializes a finite starter inventory once. Catalog

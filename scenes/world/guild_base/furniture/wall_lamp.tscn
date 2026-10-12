@@ -2,13 +2,21 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_jje1t"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_p37od"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_p37od"]
 
-[node name="WallLamp" type="Node2D" unique_id=1792012469]
+[node name="WallLamp" type="Node2D" unique_id=642180264]
 texture_filter = 1
 script = ExtResource("1_jje1t")
 furniture_id = "wall_lamp"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=1977876946]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=2024936416]
 position = Vector2(0, -96)
 tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0)
 tile_set = ExtResource("2_p37od")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1313462558]
+z_index = 10
+position = Vector2(0, -32)
+tile_set = ExtResource("3_p37od")
+collision_enabled = false
+navigation_enabled = false

@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_i8x3r"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_3fltx"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_3fltx"]
 
-[node name="BedSingleGreen" type="Node2D" unique_id=1261701083]
+[node name="BedSingleGreen" type="Node2D" unique_id=1707626864]
 texture_filter = 1
 script = ExtResource("1_i8x3r")
 furniture_id = "bed_single_green"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=1792372503]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1049227411]
 position = Vector2(-16, -96)
 tile_map_data = PackedByteArray("AAAAAAAAAAANAB4AAAABAAAAAAAOAB4AAAACAAAAAAAPAB4AAAAAAAEAAAADAB8AAAABAAEAAAAEAB8AAAACAAEAAAAFAB8AAAAAAAIAAAAJAB8AAAABAAIAAAAKAB8AAAACAAIAAAALAB8AAAA=")
 tile_set = ExtResource("2_3fltx")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=640527360]
+z_index = 10
+position = Vector2(0, -64)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAA=")
+tile_set = ExtResource("3_3fltx")
+collision_enabled = false
+navigation_enabled = false

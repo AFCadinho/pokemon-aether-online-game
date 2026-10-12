@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_knpop"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_5fupu"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_5fupu"]
 
-[node name="DisplayPodGreen" type="Node2D" unique_id=1647989305]
+[node name="DisplayPodGreen" type="Node2D" unique_id=327119128]
 texture_filter = 1
 script = ExtResource("1_knpop")
 furniture_id = "display_pod_green"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=48486947]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1783436378]
 position = Vector2(-16, -96)
 tile_map_data = PackedByteArray("AAAAAAAAAAAJACMAAAABAAAAAAAKACMAAAACAAAAAAALACMAAAAAAAEAAAABACQAAAABAAEAAAACACQAAAACAAEAAAADACQAAAAAAAIAAAAJACQAAAABAAIAAAAKACQAAAACAAIAAAALACQAAAA=")
 tile_set = ExtResource("2_5fupu")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1232007864]
+z_index = 10
+position = Vector2(0, -32)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=")
+tile_set = ExtResource("3_5fupu")
+collision_enabled = false
+navigation_enabled = false
