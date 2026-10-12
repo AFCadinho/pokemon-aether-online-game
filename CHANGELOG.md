@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Encounter Guard to the Bag and hotbar, with a remaining-encounter indicator and a blocking visual symbol challenge for rare wild spawns. Support co-op waiting and logout when the 60-second deadline expires.
+
 - Let artists paint Guild furniture collision in each scene’s Collision TileMapLayer and export it to both catalogs from Godot. Use the painted cells for walking, placement overlap, player occupancy and route checks, preserve them during visual imports and keep existing room layouts compatible.
 
 - Give incoming Guild invitations a prominent Guild emblem, a gold invitation card and a clear Join Guild action. Style Guild departure with the compact Aether confirmation layout.

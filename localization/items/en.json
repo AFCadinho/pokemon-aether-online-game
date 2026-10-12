@@ -1,4 +1,8 @@
 {
+  "encounter-guard": {
+    "name": "Encounter Guard",
+    "shortDesc": "Protects up to 3,000 wild encounters. Consumed on your first Ultra Rare, Legendary or Shiny: unlock within 60 seconds or the encounter ends and you are logged out."
+  },
   "aether-power-band": {
     "name": "Aether Power Band",
     "shortDesc": "Held: Receives EVs from each defeated wild Pokémon even without participating, plus 10 per stat that Pokémon yields. EV limits apply. Does not share EXP. Untradeable. One purchase per account."

@@ -760,7 +760,7 @@ func use_inventory_item(item_id: String, quantity: int = 1) -> Dictionary:
 
 	var headers := GatewayApiConfig.get_json_headers()
 	var request_key := "%s:%s" % [int(AuthService.current_user.get("id", 0)), normalized_item_id]
-	var is_replayable_use := normalized_item_id in RepelService.REPEL_ITEMS or normalized_item_id.trim_suffix("-bound").ends_with("-mount-box") or normalized_item_id.begins_with("aether-credit-voucher-")
+	var is_replayable_use := normalized_item_id == "encounter-guard" or normalized_item_id in RepelService.REPEL_ITEMS or normalized_item_id.trim_suffix("-bound").ends_with("-mount-box") or normalized_item_id.begins_with("aether-credit-voucher-")
 	if is_replayable_use:
 		if not inventory_use_pending_requests.has(request_key):
 			inventory_use_pending_requests[request_key] = {"id": _new_request_id(), "quantity": quantity}
@@ -795,6 +795,9 @@ func use_inventory_item(item_id: String, quantity: int = 1) -> Dictionary:
 	# Non-Repel item responses explicitly contain JSON null. Dictionary.get's
 	# default only handles an absent key, and int(null) aborts this response.
 	var repel_steps: Variant = body.get("repelSteps")
+	var encounter_guard := _dictionary_from_value(body.get("encounterGuard", {}))
+	if not encounter_guard.is_empty():
+		EncounterGuardService.apply_state(encounter_guard)
 	return {
 		"success": true,
 		"itemId": str(body.get("itemId", normalized_item_id)),
@@ -804,6 +807,7 @@ func use_inventory_item(item_id: String, quantity: int = 1) -> Dictionary:
 		"repelSteps": 0 if repel_steps == null else int(repel_steps),
 		"addedRepelSteps": int(body.get("addedRepelSteps", 0)),
 		"usedRepelItems": int(body.get("usedRepelItems", 0)),
+		"encounterGuard": encounter_guard,
 		"wallet": wallet,
 		"grantedItems": _array_from_value(body.get("grantedItems", [])),
 		"mountBox": mount_box,

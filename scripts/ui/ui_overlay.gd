@@ -25392,6 +25392,17 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 	if INVENTORY_ITEM_USE_POLICY.overworld_consumable_action(item) == "recharge_repel":
 		_show_repel_refill_dialog(item)
 		return
+	if INVENTORY_ITEM_USE_POLICY.overworld_consumable_action(item) == "activate_encounter_guard":
+		var result: Dictionary = await InventoryService.use_inventory_item(item_id)
+		if not bool(result.get("success", false)):
+			_add_chat_message(str(result.get("error", LocalizationManager.text("ui.encounter_guard.failed"))))
+			return
+		bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
+		InventoryService.apply_inventory_items(result.get("inventory", []))
+		_refresh_bag_items()
+		_refresh_bag_detail()
+		_add_chat_message(LocalizationManager.text("ui.encounter_guard.activated"))
+		return
 	if use_action == "trainer_name_change":
 		_show_trainer_name_change_popup()
 		return
@@ -35525,7 +35536,7 @@ func _on_hotbar_slot_pressed(slot_index: int) -> void:
 	if entry_type == "item":
 		for item: Dictionary in bag_inventory_items:
 			if _normalize_item_id(str(item.get("id", ""))) == _normalize_item_id(entry_id):
-				if INVENTORY_ITEM_USE_POLICY.is_overworld_consumable(item):
+				if INVENTORY_ITEM_USE_POLICY.overworld_consumable_action(item) == "recharge_repel":
 					await _recharge_repel_item(item)
 				else:
 					await _on_bag_item_selected(item)
