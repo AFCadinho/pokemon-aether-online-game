@@ -4,6 +4,8 @@ Approved by the user on **2026-10-06**: all **194 currently implemented 3D moves
 including the red/blue Close Combat revision. The current animation round is complete.
 Further changes are individual refinements driven by real gameplay feedback.
 
+The subsequent [five elemental refinements](elemental-move-refinements.md) update Dark Pulse, Surf, Blizzard, Earth Power and Overheat; these new presentations are pending player review.
+
 The subsequent [cinematic Z finales](z-move-cinematic-climaxes.md) revise 34 Z-moves; those new finales are pending player review. Supersonic Skystrike is the approved reference for that pass.
 
 The subsequent [707-move extension](extended-move-presentations.md) adds gameplay
@@ -32,7 +34,7 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | Bite | `bite` | Approved |
 | Black Hole Eclipse | `blackholeeclipse` | Original approved; new finale pending |
 | Bleakwind Storm | `bleakwindstorm` | Approved |
-| Blizzard | `blizzard` | Approved |
+| Blizzard | `blizzard` | Original approved; new refinement pending |
 | Bloom Doom | `bloomdoom` | Original approved; new finale pending |
 | Body Press | `bodypress` | Approved |
 | Breakneck Blitz | `breakneckblitz` | Original approved; new finale pending |
@@ -52,7 +54,7 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | Continental Crush | `continentalcrush` | Original approved; new finale pending |
 | Corkscrew Crash | `corkscrewcrash` | Original approved; new finale pending |
 | Court Change | `courtchange` | Approved |
-| Dark Pulse | `darkpulse` | Approved |
+| Dark Pulse | `darkpulse` | Original approved; new refinement pending |
 | Defense Curl | `defensecurl` | Approved |
 | Defog | `defog` | Approved |
 | Devastating Drake | `devastatingdrake` | Original approved; new finale pending |
@@ -65,7 +67,7 @@ documents and recipe `review` fields describe their creation/provenance phase;
 | Dragon Dance | `dragondance` | Approved |
 | Drain Punch | `drainpunch` | Approved |
 | Draining Kiss | `drainingkiss` | Approved |
-| Earth Power | `earthpower` | Approved |
+| Earth Power | `earthpower` | Original approved; new refinement pending |
 | Earthquake | `earthquake` | Approved |
 | Electric Terrain | `electricterrain` | Approved |
 | Electro Shot | `electroshot` | Approved |

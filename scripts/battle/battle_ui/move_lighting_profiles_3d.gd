@@ -2,6 +2,13 @@ extends RefCounted
 ## Individually authored lighting beats sampled from the existing native VFX clock.
 const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const ZCinema = preload("res://scripts/battle/battle_ui/z_move_cinema_3d.gd")
+const ELEMENTAL := {
+	"darkpulse": {"tint":Color("67388e"),"flash":Color("d8b0ee"),"brightness":.82,"energy":.8,"range":4.,"mix":.34},
+	"surf": {"tint":Color("409abe"),"flash":Color("cef6ff"),"brightness":.95,"energy":.65,"range":6.,"mix":.28},
+	"blizzard": {"tint":Color("91bdd7"),"flash":Color("e5f9ff"),"brightness":.94,"energy":.65,"range":7.,"mix":.42},
+	"earthpower": {"tint":Color("b36d32"),"flash":Color("ffdc93"),"brightness":.92,"energy":1.1,"range":4.5,"mix":.25},
+	"overheat": {"tint":Color("dc4e23"),"flash":Color("ffe0a0"),"brightness":.90,"energy":1.35,"range":4.5,"mix":.35},
+}
 const PROFILES := {
 	"hyperbeam": {"tint":Color("ffc477"), "flash":Color("fff4d6"), "brightness":0.96, "energy":1.45, "range":3.6, "mix":0.24},
 	"solarbeam": {"tint":Color("c9ed76"), "flash":Color("ffffce"), "brightness":1.025, "energy":1.15, "range":3.8, "mix":0.28},
@@ -27,6 +34,7 @@ static func emission_end(effect: Node) -> float:
 	return effect.impact
 
 static func sample(effect: Node, seconds: float) -> Dictionary:
+	if effect.key in ELEMENTAL: return _sample_elemental(effect,seconds)
 	if ZCinema.supports(effect.key): return ZCinema.lighting(effect, seconds)
 	if Recipes.EXTENSIONS.data.moves.has(effect.key): return _sample_extension(effect, seconds)
 	var profile: Dictionary = PROFILES[effect.key]
@@ -108,7 +116,7 @@ static func _add(lights: Array[Dictionary], point: Vector3, color: Color, energy
 	lights.append({"point":point, "color":color, "energy":energy, "range":reach, "role":role})
 
 static func supports(key: String) -> bool:
-	return ZCinema.supports(key) or PROFILES.has(key) or float(Recipes.get_recipe(key).get("lighting", {}).get("energy", 0.0)) > 0.0
+	return ELEMENTAL.has(key) or ZCinema.supports(key) or PROFILES.has(key) or float(Recipes.get_recipe(key).get("lighting", {}).get("energy", 0.0)) > 0.0
 
 static func _sample_extension(effect: Node, seconds: float) -> Dictionary:
 	var recipe: Dictionary = Recipes.get_recipe(effect.key)
@@ -141,3 +149,21 @@ static func _sample_extension(effect: Node, seconds: float) -> Dictionary:
 		_add(lights,point,tint,energy*weight*.65,2.5,"cast")
 	if pulse>.001:_add(lights,aim,profile.flash,energy*pulse,3.,"impact")
 	return {"weight":weight,"pulse":pulse,"lights":lights,"color":tint.lerp(profile.flash,pulse*.25),"profile":profile,"cinematic":effect.key=="fierywrath"}
+
+static func _sample_elemental(effect: Node, seconds: float) -> Dictionary:
+	var profile: Dictionary = ELEMENTAL[effect.key]
+	var points: Dictionary = effect.anchors.call()
+	var charge := smoothstep(effect.effect_start,maxf(effect.effect_start+.01,effect.launch),seconds)
+	var flight := clampf((seconds-effect.launch)/maxf(.01,effect.impact-effect.launch),0,1)
+	var after: float = (seconds-effect.impact)/maxf(.01,effect.duration-effect.impact)
+	var weight := charge*(1.-smoothstep(.2,1.,after))
+	var pulse := smoothstep(0,.08,after)*(1.-smoothstep(.15,.55,after)) if effect.hit else 0.0
+	var start: Vector3 = effect.origin if effect.captured else points.source
+	var end: Vector3 = effect.aim if effect.captured else points.target
+	var point := start.lerp(end,flight)
+	if effect.key == "earthpower": point = point*Vector3(1,0,1)+Vector3.UP*.25
+	if effect.key in ["blizzard","surf"]: point = effect.field_center+Vector3.UP*1.6
+	var lights: Array[Dictionary] = []
+	_add(lights,point,profile.tint,profile.energy*weight,profile.range,"field" if effect.key in ["surf","blizzard"] else "cast")
+	if pulse > .001: _add(lights,end,profile.flash,profile.energy*pulse,profile.range,"impact")
+	return {"weight":weight,"pulse":pulse,"lights":lights,"color":profile.tint.lerp(profile.flash,pulse*.35),"profile":profile,"cinematic":true}

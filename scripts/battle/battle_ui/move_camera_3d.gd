@@ -5,6 +5,7 @@ const ZCinema = preload("res://scripts/battle/battle_ui/z_move_cinema_3d.gd")
 const PROFILES := {
 	"dracometeor":"meteor", "moonblast":"moon", "focusblast":"orb", "shadowball":"orb",
 	"hyperbeam":"beam", "solarbeam":"beam", "flashcannon":"beam", "electroshot":"beam",
+	"darkpulse":"orb", "surf":"field", "earthpower":"orb", "overheat":"orb",
 	"pyroball":"kick", "blizzard":"field", "hurricane":"field", "terastarstorm":"field",
 }
 var effect: Node
@@ -123,7 +124,7 @@ func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
 	var aim: Vector3 = anchors.target
 	# Recipe projectiles capture their trajectory; misses must keep framing
 	# the original aim rather than following the target's dodge.
-	if effect.get_script() == stage.ExtendedMoveEffect and effect.launched:
+	if effect.get_script() in [stage.ExtendedMoveEffect,stage.ElementalMoveEffect] and effect.launched:
 		source = effect.origin
 		aim = effect.aim
 	elif profile in ["beam", "kick"] and effect.get_script() == stage.StagedMoveEffect and effect.launched:
@@ -171,6 +172,23 @@ func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
 		if seconds >= effect.launch:
 			_append_box(points,anchors.target_ground+Vector3.UP*1.5,Vector3(3.2,1.8,3.2))
 			direction = -forward*0.4+side+Vector3.UP*0.25
+	if effect.key in stage.ElementalMoveEffect.MOVE_KEYS:
+		# Fixed envelopes include displaced surfaces and the complete impact volume.
+		if effect.key not in ["surf", "blizzard"]:
+			points.clear()
+			_append_body(points,a)
+			var start: Vector3 = effect.origin if effect.captured else source
+			var end: Vector3 = effect.aim if effect.captured else aim
+			_append_box(points,start,Vector3(1.6,2.5,1.6))
+			if seconds >= effect.launch:
+				_append_body(points,b)
+				_append_box(points,end,Vector3(2.8,3.0,2.8))
+				direction = -forward*.4+side+Vector3.UP*(.55 if effect.key=="earthpower" else .22)
+		else:
+			direction = -forward*.4+side+Vector3.UP*.42
+		if effect.key == "surf":
+			_append_box(points,anchors.actor_ground+Vector3.UP*1.3,Vector3(3.3,1.7,3.3))
+			_append_box(points,anchors.target_ground+Vector3.UP*1.3,Vector3(3.3,1.7,3.3))
 	# Fitting a fixed shot envelope avoids camera pumping with every particle.
 	camera.transform = _fit(camera, points, direction.normalized())
 	camera.transform = camera.transform.interpolate_with(overview, smoothstep(0.88, 1.0, phase))
