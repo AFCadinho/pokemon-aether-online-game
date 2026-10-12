@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refine the male Irelia rear hairstyle with cleaner locks and a shorter nape, and cover rear scalp gaps for both models during walking, fishing and riding.
+
 - Separate permanent Guild Bank withdrawals from borrowing and confirm both item and Pokémon actions. Explain permanent ownership for withdrawals, the current Guild loan duration for borrowing, and early recall by authorized Guild Leaders or Captains.
 
 - Make Irelia overworld blades clearer at sprite scale and cover the exposed scalp around the right-facing ear for both genders.

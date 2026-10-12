@@ -67,17 +67,17 @@
   {
     "source": "male/overworld/Walking/Hair.png",
     "game": "assets/player/male/hair/Irelia_Hair.png",
-    "sha256": "e64c64c376c55d2a45aaef82c17b0a92412c9860d175c7ca885e1fdb6fd7807c"
+    "sha256": "25de8d43c971bff67d8f7ec676e97dbe9a2f47f6cc320d5bfd04f6bd312c1135"
   },
   {
     "source": "male/overworld/Fishing/Hair.png",
     "game": "assets/player/male/hair/fish/Irelia_Hair_fish.png",
-    "sha256": "5d9923e6ace32ab3e199ae92d9035313b861ef9880c724a23519906dd554bd41"
+    "sha256": "aa7575f2950c63c632810fc22fe652a2a8d90273ad2cd6b5295e78d7a0dff16c"
   },
   {
     "source": "male/overworld/Riding/Hair.png",
     "game": "assets/player/male/hair/ride/Irelia_Hair_ride.png",
-    "sha256": "56bcd08e2b1efb433562227cb0245f620784ac6374a00d21dd7899585e86d691"
+    "sha256": "a0844049a3d9fd13b8500cdb49875b47fc7e4a520670bb649dc4217d09a41e5d"
   },
   {
     "source": "male/trainer/Headgear.png",
@@ -207,17 +207,17 @@
   {
     "source": "female/overworld/Walking/Hair.png",
     "game": "assets/player/female/hair/Irelia_Hair.png",
-    "sha256": "2281fe7227f1bfa2b61ba6691643fccb16ff51790768f7a50d5b25b06c33b1c5"
+    "sha256": "3e8bf39cfbe893e836c0cc4962e7e536a024b73e4d37184d4ad882b7f15c7891"
   },
   {
     "source": "female/overworld/Fishing/Hair.png",
     "game": "assets/player/female/hair/fish/Irelia_Hair_fish.png",
-    "sha256": "63da30da443c869853f77d21d1605a96e534857c4860e0e14460e1b6950d37f5"
+    "sha256": "731ad28dbd8e37b1392052a3dffe7ba8a7572c7fb2e6dbdf8bc269d1aa52af57"
   },
   {
     "source": "female/overworld/Riding/Hair.png",
     "game": "assets/player/female/hair/ride/Irelia_Hair_ride.png",
-    "sha256": "11ca5e49aa498d77b04a89ad359e6ce88b35321638b7d5070f81a49bcece6621"
+    "sha256": "8f437e5a3ae0fa89aebd9c6a903828170e13e1c7114d48b8b12860c9818bc51c"
   },
   {
     "source": "female/trainer/Headgear.png",
