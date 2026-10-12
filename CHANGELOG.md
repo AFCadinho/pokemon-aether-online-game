@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Populate the Pewter Museum of Science with four dialogue NPCs and an entrance attendant offering admission for 100 Pokédollars per visit. Confirm payment before entering; leaving is free.
+
 - Show battle preparation and Pokémon download progress when entering 3D AI Sparring or PvP, prepare Team Preview before revealing the field, and start battle music once the arena is visible.
 
 - Retire obsolete v11 model downloads after a verified full offline backup; keep every v13 model and reused ZIP available. Older clients requesting retired models must update.

@@ -1,4 +1,7 @@
 {
+  "npc.museum.admission_prompt": "欢迎来到深灰科学博物馆！每次参观的门票为{fee}宝可元。要入馆吗？",
+  "npc.museum.admission_pay": "支付{fee}宝可元",
+  "npc.museum.admission_cancel": "下次再来",
   "ui.store.badge.training": "训练",
   "ui.store.category.held-items.label": "训练道具",
   "ui.store.category.held-items.description": "用于在野生对战中训练宝可梦的道具。",
