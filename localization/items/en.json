@@ -1175,5 +1175,9 @@
   "flying-nimbus-mount": {
     "name": "Flying Nimbus Mount",
     "shortDesc": "Unlocks Flying Nimbus as a land mount. Requires a Mount License for the current region."
+  },
+  "shiny-flying-nimbus-mount": {
+    "name": "Shiny Flying Nimbus Mount",
+    "shortDesc": "Unlocks the dark Shiny Flying Nimbus as a land mount. Requires a Mount License for the current region."
   }
 }

@@ -15,8 +15,9 @@ SEATS = ((32, 38), (29, 39), (35, 33), (32, 36))
 CUTOFFS = (44, 44, 38, 42)
 
 
-def build():
-    source = Image.open(FOLDER / 'source.png').convert('RGBA')
+def build(mount_id="flying_nimbus"):
+    folder = FOLDER.with_name(mount_id)
+    source = Image.open(folder / 'source.png').convert('RGBA')
     assert source.size == (1254, 1254)
     layers = {key: Image.new('RGBA', (768, 768)) for key in ('mount', 'foreground', 'rider_mask')}
     offsets = {}
@@ -50,16 +51,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
-    layers, offsets = build()
     catalog = json.loads((ROOT / 'data/mounts.json').read_text())
-    assert catalog['mounts']['flying_nimbus']['riderOffsets'] == offsets
-    for name, art in layers.items():
-        target = FOLDER / (name + '.png')
-        if args.check:
-            actual = Image.open(target).convert('RGBA')
-            assert actual.size == art.size and actual.tobytes() == art.tobytes(), name
-        else:
-            art.save(target)
+    for mount_id in ('flying_nimbus', 'flying_nimbus_shiny'):
+        layers, offsets = build(mount_id)
+        assert catalog['mounts'][mount_id]['riderOffsets'] == offsets
+        for name, art in layers.items():
+            target = FOLDER.with_name(mount_id) / (name + '.png')
+            if args.check:
+                actual = Image.open(target).convert('RGBA')
+                assert actual.size == art.size and actual.tobytes() == art.tobytes(), str(target)
+            else:
+                art.save(target)
     print('Flying Nimbus artwork and seats: PASS')
 
 
