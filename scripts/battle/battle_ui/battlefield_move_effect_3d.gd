@@ -298,7 +298,7 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 		"makeitrain":_coin_rain(travel,after,envelope,facing)
 		"terastarstorm":_star_storm(travel,after,envelope,facing)
 	impact_drawn=hit and after>=0
-	if impact_drawn and key != "hurricane":
+	if impact_drawn and key not in ["hurricane", "bloomdoom"]:
 		var fade := 1-clampf(after,0,1)
 		_source_sprite(aim,1.8+after,"1",clampf(after,0,1),fade*.7,facing)
 		for i in 6:
@@ -375,7 +375,8 @@ func _bloom_field(t: float,travel: float,after: float,alpha: float,facing: Basis
 			var p := smoothstep(0,1,clampf(travel*1.18-i*.025,0,1))
 			var point := start.lerp(aim,p)+Vector3.UP*sin(p*PI)*1.8
 			var tail := start.lerp(aim,maxf(0,p-.06))+Vector3.UP*sin(maxf(0,p-.06)*PI)*1.8
-			_source_sprite(point,.45,"0",p,alpha*(1-smoothstep(.92,1,p))*.75,facing,i)
+			var leaf_scale := alpha * (1.0 - smoothstep(0.92,1.0,p))
+			_piece(prism, leaf, point, Vector3(0.12,0.28,0.04) * leaf_scale, Basis(Vector3.UP,elapsed+i))
 			_line(tail,point,.025*alpha,edge)
 	if after>=0:
 		var fade := 1-clampf(after,0,1)

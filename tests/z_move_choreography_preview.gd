@@ -3,12 +3,13 @@ const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 func _start() -> void:
 	left_species = "Dragonite"
 	await super._start()
+	root.get_node("SettingsManager").battle_3d_camera_motion = true
 	move_picker.clear()
 	var subset := OS.get_environment("POKEAETHER_Z_PREVIEW_MOVES").split(",",false)
 	for recipe: Dictionary in Recipes.DATA.data.moves.values():
 		if recipe.has("z_choreography") and (subset.is_empty() or Recipes.key(str(recipe.name)) in subset):move_picker.add_item(str(recipe.name))
-	root.title = "PokeAether — 35 Z-moves, opbouw uit 2D"
-	status.text = "35 nieuwe Z-uitwerkingen: opbouw, eigen hoofdvorm en climax. Draai de camera en test ook ontwijken."
+	root.title = "PokeAether — 35 cinematic Z-moves"
+	status.text = "Z-moves: volle 3D-vormen, eigen belichting en camerashots. Test ook ontwijken."
 	print("Z_CHOREOGRAPHY_PREVIEW_READY moves=",move_picker.item_count)
 	if "--smoke-z" in OS.get_cmdline_user_args():await _check_z()
 func _check_z() -> void:
@@ -17,6 +18,7 @@ func _check_z() -> void:
 	assert(not output.is_empty())
 	DirAccess.make_dir_recursive_absolute(output)
 	var renderer = battle.animation_router.model_presenter
+	toolbar.get_parent().hide()
 	battle.animation_router.playback_speed = 1.8
 	for i in move_picker.item_count:
 		move_picker.select(i)
@@ -28,15 +30,18 @@ func _check_z() -> void:
 		for phase in [["charge",effect.launch*.75],["main",lerpf(effect.launch,effect.impact,.65)],["climax",lerpf(effect.impact,effect.duration,.20)]]:
 			while is_instance_valid(effect) and effect.elapsed<float(phase[1]):await process_frame
 			assert(is_instance_valid(effect) and effect.cursor>0,move+str(phase[0]))
+			battle.animation_router.playback_speed = 0
+			await process_frame
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(output.path_join(Recipes.key(move)+"-"+str(phase[0])+".png"))
+			battle.animation_router.playback_speed = 1.8
 		while move_busy:await process_frame
 		assert(renderer.common_effects.is_empty(),move)
 		print("Z_RENDER_OK ",move)
 	move_reverse.button_pressed = true
 	if not OS.get_environment("POKEAETHER_Z_PREVIEW_MOVES").is_empty():
 		print("Z_RENDER_SUBSET_OK moves=",move_picker.item_count)
-		quit()
+		await _close_z_preview()
 		return
 	for move in ["Black Hole Eclipse","Corkscrew Crash","Oceanic Operetta","Supersonic Skystrike","Shattered Psyche"]:
 		for i in move_picker.item_count:
@@ -61,4 +66,13 @@ func _check_z() -> void:
 			battle.animation_router.playback_speed=1.8
 			while move_busy:await process_frame
 	print("Z_RENDER_SUITE_OK moves=35 phases=105 reverse_outcomes=10 pause_orbit=true")
+	await _close_z_preview()
+
+func _close_z_preview() -> void:
+	battle.animation_router.cancel_render()
+	host.release()
+	host.queue_free()
+	host = null
+	await process_frame
+	await process_frame
 	quit()
