@@ -194,7 +194,7 @@ static func source_digest(identity: String, digest: String) -> String:
 	return digest
 
 static func entry_asset(entry: Dictionary) -> Dictionary:
-	var identity := str(entry.get("species", "")).trim_suffix("@shiny")
+	var identity := preload("res://scripts/battle/battle_ui/shared_form_models.gd").canonical_species(str(entry.get("species", "")).trim_suffix("@shiny"))
 	if entry.get("variant") == "shiny" or str(entry.get("species", "")).ends_with("@shiny"):
 		identity += "@shiny"
 	var asset := asset_for(identity, str(entry.get("runtime_sha256", "")))

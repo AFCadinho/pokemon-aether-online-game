@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare Artisan Poltchageist, Masterpiece Sinistcha, Fan Rotom and Neutral Xerneas in normal/shiny 3D pairs; share existing models for 13 starter, Totem and Rockruff forms while preserving Totem scale and Mimikyu’s busted state.
+
 - Simplify Encounter Guard unlocks to one click on the symbol matching an example, with retries while the original minute continues counting down.
 
 - Restore 56 alternate-form 3D model pairs for the next model release: Unown letters and punctuation, Silvally types, Squawkabilly colours, Pumpkaboo/Gourgeist sizes and Sawsbuck seasons. Preserve distinct battle sizes and retain explicit holds for incomplete source models.

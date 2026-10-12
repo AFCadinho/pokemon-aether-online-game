@@ -48,6 +48,8 @@ static func _fire_valid(material: ShaderMaterial) -> bool:
 	return true
 
 static func valid(material: Material) -> bool:
+	if preload("res://scripts/battle/battle_ui/material_layered_static.gd").valid(material):
+		return true
 	if material is ShaderMaterial and material.shader != null and material.shader.code == FIRE_SHADER.code:
 		return _fire_valid(material)
 	if not material is ShaderMaterial or material.get_meta(META, 0) != 1 or material.shader == null or material.shader.code not in [SHADER.code, SAMPLED_SHADER.code, STATIC_SHADER.code, RIM_SMOKE_SHADER.code, LIT_SHADER.code]:

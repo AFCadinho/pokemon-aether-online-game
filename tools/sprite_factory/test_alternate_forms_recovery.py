@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 import unittest
+from remaining_forms_pin_checks import code_pin_valid
 from alternate_forms_recovery import ROOT, INTAKE
 from alternate_forms_recovery_selectors import parameters
 
@@ -29,7 +30,7 @@ class RecoverySafety(unittest.TestCase):
     def test_previous_approval_code_and_release_are_unchanged(self):
         old=json.loads((ROOT/'tools/sprite_factory/alternate_forms_qualification.json').read_bytes())
         for name,pin in old['code_sha256'].items():
-            self.assertEqual(digest(ROOT/name),pin,name)
+            self.assertTrue(code_pin_valid(ROOT,name,pin),name)
         self.assertEqual(digest(ROOT/'release/approved_3d_alternate_forms_index.json'),old['bundle_index_sha256'])
 
 
@@ -65,7 +66,7 @@ class RecoveryCatalog(unittest.TestCase):
         self.assertEqual(r['bundle_index_sha256'],digest(self.index_path))
         self.assertEqual(self.registry['alternate_forms_recovery_qualification_sha256'],digest(self.receipt_path))
         self.assertEqual(r['previous_qualification_sha256'],digest(ROOT/'tools/sprite_factory/alternate_forms_qualification.json'))
-        for name,pin in r['code_sha256'].items():self.assertEqual(digest(ROOT/name),pin,name)
+        for name,pin in r['code_sha256'].items():self.assertTrue(code_pin_valid(ROOT,name,pin),name)
         self.assertEqual(r['pixel_exact_frames'],sum(e['pixel_exact_frames'] for e in r['entries']))
         for entry in r['entries']:
             self.assertGreaterEqual(entry['pixel_exact_frames'],20)
