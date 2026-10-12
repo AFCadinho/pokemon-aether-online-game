@@ -1183,5 +1183,29 @@
   "flying-nimbus-mount-box": {
     "name": "筋斗云坐骑箱",
     "shortDesc": "包含一只筋斗云坐骑。初始异色概率：50%。"
+  },
+  "super-saiyan-4-shirt": {
+    "name": "Super Saiyan 4 (SS4) 毛皮",
+    "shortDesc": "在背包中激活此SS4物品，然后在角色自定义中装备。"
+  },
+  "super-saiyan-4-trousers": {
+    "name": "Super Saiyan 4 (SS4) 长裤",
+    "shortDesc": "在背包中激活此SS4物品，然后在角色自定义中装备。"
+  },
+  "super-saiyan-4-shoes": {
+    "name": "Super Saiyan 4 (SS4) 鞋子",
+    "shortDesc": "在背包中激活此SS4物品，然后在角色自定义中装备。"
+  },
+  "super-saiyan-4-hair": {
+    "name": "Super Saiyan 4 (SS4) 发型",
+    "shortDesc": "在背包中激活此SS4物品，然后在角色自定义中装备。"
+  },
+  "super-saiyan-4-tail": {
+    "name": "Super Saiyan 4 (SS4) 尾巴",
+    "shortDesc": "在背包中激活此SS4物品，然后在角色自定义中装备。"
+  },
+  "super-saiyan-4-outfit": {
+    "name": "Super Saiyan 4 (SS4) 套装礼盒",
+    "shortDesc": "包含五件独立的SS4外观：毛皮、长裤、鞋子、发型和尾巴（背部）。适用于男性和女性角色。"
   }
 }

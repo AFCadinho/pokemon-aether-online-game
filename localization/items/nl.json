@@ -1183,5 +1183,29 @@
   "flying-nimbus-mount-box": {
     "name": "Flying Nimbus-mountbox",
     "shortDesc": "Bevat een Flying Nimbus-mount. Shiny-basiskans: 50%."
+  },
+  "super-saiyan-4-shirt": {
+    "name": "Super Saiyan 4 (SS4) Vacht",
+    "shortDesc": "Activeer dit SS4-onderdeel in je tas en draag het via Character Customization."
+  },
+  "super-saiyan-4-trousers": {
+    "name": "Super Saiyan 4 (SS4) Broek",
+    "shortDesc": "Activeer dit SS4-onderdeel in je tas en draag het via Character Customization."
+  },
+  "super-saiyan-4-shoes": {
+    "name": "Super Saiyan 4 (SS4) Schoenen",
+    "shortDesc": "Activeer dit SS4-onderdeel in je tas en draag het via Character Customization."
+  },
+  "super-saiyan-4-hair": {
+    "name": "Super Saiyan 4 (SS4) Haar",
+    "shortDesc": "Activeer dit SS4-onderdeel in je tas en draag het via Character Customization."
+  },
+  "super-saiyan-4-tail": {
+    "name": "Super Saiyan 4 (SS4) Staart",
+    "shortDesc": "Activeer dit SS4-onderdeel in je tas en draag het via Character Customization."
+  },
+  "super-saiyan-4-outfit": {
+    "name": "Super Saiyan 4 (SS4) Outfitbox",
+    "shortDesc": "Bevat vijf losse SS4-cosmetics: vacht, broek, schoenen, haar en een staart (Back). Geschikt voor mannelijke en vrouwelijke personages."
   }
 }

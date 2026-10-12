@@ -1183,5 +1183,29 @@
   "flying-nimbus-mount-box": {
     "name": "Caixa de montaria Nuvem Voadora",
     "shortDesc": "Contém uma montaria Nuvem Voadora. Chance shiny inicial: 50%."
+  },
+  "super-saiyan-4-shirt": {
+    "name": "Super Saiyan 4 (SS4) Pelagem",
+    "shortDesc": "Ative este item SS4 na Bolsa e equipe-o na Personalização de Personagem."
+  },
+  "super-saiyan-4-trousers": {
+    "name": "Super Saiyan 4 (SS4) Calças",
+    "shortDesc": "Ative este item SS4 na Bolsa e equipe-o na Personalização de Personagem."
+  },
+  "super-saiyan-4-shoes": {
+    "name": "Super Saiyan 4 (SS4) Sapatos",
+    "shortDesc": "Ative este item SS4 na Bolsa e equipe-o na Personalização de Personagem."
+  },
+  "super-saiyan-4-hair": {
+    "name": "Super Saiyan 4 (SS4) Cabelo",
+    "shortDesc": "Ative este item SS4 na Bolsa e equipe-o na Personalização de Personagem."
+  },
+  "super-saiyan-4-tail": {
+    "name": "Super Saiyan 4 (SS4) Cauda",
+    "shortDesc": "Ative este item SS4 na Bolsa e equipe-o na Personalização de Personagem."
+  },
+  "super-saiyan-4-outfit": {
+    "name": "Super Saiyan 4 (SS4) Caixa de Traje",
+    "shortDesc": "Contém cinco cosméticos SS4 separados: pelagem, calças, sapatos, cabelo e cauda (Costas). Serve para personagens masculinos e femininos."
   }
 }
