@@ -4,6 +4,8 @@
 
 - Add distinct transparent pixel-art inventory icons for Emberite, Voltite, Glacite, Astralite and Aetherium Ore.
 
+- Keep the two HP cards in 3D single battles on a fixed upper row, with your Pokémon on the left and the opponent on the right. Keep stat indicators attached and reserve space for the battle header as the window resizes.
+
 - Add the grantable Flying Nimbus land mount with the approved golden cloud, seated rider, gentle hover and a short moving cloud trail.
 
 - Show readable species nameplates above the opposing Pokémon during 3D Team Preview, following their arena positions and clearing them before lead summons.
