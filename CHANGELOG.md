@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep fainted Pokémon in their 3D resting pose until the replacement switch recalls them and summons the next Pokémon, without a 2D faint fallback. Apply the resting pose immediately when battle animations are disabled.
+
 - Add the Irelia Outfit Box for both player models, with six separate cosmetics, revised overworld hair, trainer art and authored walking/fishing/riding sheets.
 
 - Let Guild Bank item, resource and Pokémon donation overviews use the available tab height, showing more rows while keeping each list scrollable.

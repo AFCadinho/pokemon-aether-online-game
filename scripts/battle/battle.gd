@@ -17616,6 +17616,19 @@ func _update_active_sprite_box(
 	if active_species == "":
 		active_species = _get_active_display_species(player_id).strip_edges()
 	if field_slot_empty or force_switch_hidden:
+		# Canonical 0 HP can arrive before the faint event, and the forced-switch
+		# UI refreshes again afterwards. Keep the existing native actor through
+		# both boundaries: it must faint in 3D, hold its final pose, then be
+		# recalled by the ordered switch event before its replacement is staged.
+		if (
+			SettingsManager.battle_presentation_mode == "3d"
+			and battle_state.is_active_pokemon_fainted(player_id)
+			and is_instance_valid(animation_router.model_presenter)
+			and animation_router.model_presenter.handles(player_id)
+		):
+			if not SettingsManager.battle_animations:
+				animation_router.model_presenter.hold_fainted_pose(player_id)
+			return
 		if is_instance_valid(animation_router.model_presenter):
 			animation_router.model_presenter.set_combatant(0 if player_id == "p1" else 1, "")
 		if sprite_box.has_method("clear_pokemon"):

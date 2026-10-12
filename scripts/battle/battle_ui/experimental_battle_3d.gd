@@ -1657,6 +1657,24 @@ func play_action(ident: String, action: String) -> void:
 		if players[actor_index(ident)].has_animation("faint_loop") and entries[identities[actor_index(ident)]].action_timing.has("faint_loop"):
 			_action("faint_loop", actor_index(ident))
 
+func hold_fainted_pose(ident: String) -> void:
+	# With animations disabled, apply the resting faint pose without playing
+	# the fall. A 0-HP snapshot must never leave a standing model on the field.
+	if not handles(ident):
+		return
+	var index := actor_index(ident)
+	if lifecycle[index] == "fainted":
+		return
+	_action("faint_start", index)
+	if current_actions[index] != "faint_start":
+		return
+	players[index].seek(players[index].current_animation_length, true, true)
+	lifecycle[index] = "fainted"
+	if players[index].has_animation("faint_loop") and entries[identities[index]].action_timing.has("faint_loop"):
+		_action("faint_loop", index)
+		players[index].seek(0.0, true, true)
+	players[index].pause()
+
 func _stop_transition(index: int) -> void:
 	transition_generation[index] += 1
 	if is_instance_valid(ball_effects[index]):
