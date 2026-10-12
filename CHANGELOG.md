@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Let artists paint Guild furniture collision in each scene’s Collision TileMapLayer and export it to both catalogs from Godot. Use the painted cells for walking, placement overlap, player occupancy and route checks, preserve them during visual imports and keep existing room layouts compatible.
+
 - Give incoming Guild invitations a prominent Guild emblem, a gold invitation card and a clear Join Guild action. Style Guild departure with the compact Aether confirmation layout.
 
 - Show server-wide System notices for wild Ultra Rare, Legendary and Shiny encounters and their outcomes in every chat except Help.

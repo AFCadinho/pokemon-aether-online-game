@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_q7v6v"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_xc811"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_xc811"]
 
-[node name="ChestBrown" type="Node2D" unique_id=264995359]
+[node name="ChestBrown" type="Node2D" unique_id=913611149]
 texture_filter = 1
 script = ExtResource("1_q7v6v")
 furniture_id = "chest_brown"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=616203445]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=508340731]
 position = Vector2(0, -64)
 tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 33, 0, 0, 0, 1, 0, 0, 0, 0, 0, 4, 0, 33, 0, 0, 0, 0, 0, 1, 0, 0, 0, 7, 0, 33, 0, 0, 0, 1, 0, 1, 0, 0, 0, 8, 0, 33, 0, 0, 0)
 tile_set = ExtResource("2_xc811")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=367235625]
+z_index = 10
+position = Vector2(0, -32)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+tile_set = ExtResource("3_xc811")
+collision_enabled = false
+navigation_enabled = false

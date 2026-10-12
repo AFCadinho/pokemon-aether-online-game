@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_16jso"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_vwiwi"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_vwiwi"]
 
-[node name="DisplayPodPink" type="Node2D" unique_id=1877909711]
+[node name="DisplayPodPink" type="Node2D" unique_id=185686769]
 texture_filter = 1
 script = ExtResource("1_16jso")
 furniture_id = "display_pod_pink"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=300731176]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=329990633]
 position = Vector2(-16, -96)
 tile_map_data = PackedByteArray("AAAAAAAAAAAEACUAAAABAAAAAAAFACUAAAACAAAAAAAGACUAAAAAAAEAAAAKACUAAAABAAEAAAALACUAAAACAAEAAAAMACUAAAAAAAIAAAAAACYAAAABAAIAAAABACYAAAACAAIAAAACACYAAAA=")
 tile_set = ExtResource("2_vwiwi")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=2136908581]
+z_index = 10
+position = Vector2(0, -32)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=")
+tile_set = ExtResource("3_vwiwi")
+collision_enabled = false
+navigation_enabled = false

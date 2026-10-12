@@ -1,0 +1,12 @@
+[gd_resource type="TileSet" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/guild_base/furniture/collision_marker.svg" id="1_marker"]
+
+[sub_resource type="TileSetAtlasSource" id="source"]
+texture = ExtResource("1_marker")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("source")

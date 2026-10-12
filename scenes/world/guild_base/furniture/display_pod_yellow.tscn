@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_lph7a"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_unfs3"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_unfs3"]
 
-[node name="DisplayPodYellow" type="Node2D" unique_id=1785534570]
+[node name="DisplayPodYellow" type="Node2D" unique_id=142431344]
 texture_filter = 1
 script = ExtResource("1_lph7a")
 furniture_id = "display_pod_yellow"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=567729664]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1138385149]
 position = Vector2(-16, -96)
 tile_map_data = PackedByteArray("AAAAAAAAAAABACUAAAABAAAAAAACACUAAAACAAAAAAADACUAAAAAAAEAAAAHACUAAAABAAEAAAAIACUAAAACAAEAAAAJACUAAAAAAAIAAAANACUAAAABAAIAAAAOACUAAAACAAIAAAAPACUAAAA=")
 tile_set = ExtResource("2_unfs3")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1692798093]
+z_index = 10
+position = Vector2(0, -32)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=")
+tile_set = ExtResource("3_unfs3")
+collision_enabled = false
+navigation_enabled = false

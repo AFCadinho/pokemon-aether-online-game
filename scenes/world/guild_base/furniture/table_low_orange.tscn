@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_721ej"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_gta5n"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_gta5n"]
 
-[node name="TableLowOrange" type="Node2D" unique_id=360947126]
+[node name="TableLowOrange" type="Node2D" unique_id=1937341397]
 texture_filter = 1
 script = ExtResource("1_721ej")
 furniture_id = "table_low_orange"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=334271454]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=944018652]
 position = Vector2(0, -64)
 tile_map_data = PackedByteArray("AAAAAAAAAAAKABQAAAABAAAAAAALABQAAAACAAAAAAAMABQAAAAAAAEAAAABABUAAAABAAEAAAACABUAAAACAAEAAAADABUAAAA=")
 tile_set = ExtResource("2_gta5n")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=872380483]
+z_index = 10
+position = Vector2(0, -32)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAA=")
+tile_set = ExtResource("3_gta5n")
+collision_enabled = false
+navigation_enabled = false

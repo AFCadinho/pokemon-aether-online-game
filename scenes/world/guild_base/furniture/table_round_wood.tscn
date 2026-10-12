@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_n7wys"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_vtwf1"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_vtwf1"]
 
-[node name="TableRoundWood" type="Node2D" unique_id=2055319578]
+[node name="TableRoundWood" type="Node2D" unique_id=1708822832]
 texture_filter = 1
 script = ExtResource("1_n7wys")
 furniture_id = "table_round_wood"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=1155183092]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=828594462]
 position = Vector2(0, -96)
 tile_map_data = PackedByteArray("AAAAAAAAAAALAA0AAAABAAAAAAAMAA0AAAACAAAAAAANAA0AAAAAAAEAAAABAA4AAAABAAEAAAACAA4AAAACAAEAAAADAA4AAAAAAAIAAAAHAA4AAAABAAIAAAAIAA4AAAACAAIAAAAJAA4AAAA=")
 tile_set = ExtResource("2_vtwf1")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=914122158]
+z_index = 10
+position = Vector2(0, -64)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAA=")
+tile_set = ExtResource("3_vtwf1")
+collision_enabled = false
+navigation_enabled = false

@@ -2,13 +2,21 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_km6vg"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_3ute3"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_3ute3"]
 
-[node name="BouquetBlue" type="Node2D" unique_id=1838969442]
+[node name="BouquetBlue" type="Node2D" unique_id=508097136]
 texture_filter = 1
 script = ExtResource("1_km6vg")
 furniture_id = "bouquet_blue"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=1669255428]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=83031046]
 position = Vector2(0, -32)
 tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 22, 0, 0, 0)
 tile_set = ExtResource("2_3ute3")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1105279186]
+z_index = 10
+position = Vector2(0, -32)
+tile_set = ExtResource("3_3ute3")
+collision_enabled = false
+navigation_enabled = false

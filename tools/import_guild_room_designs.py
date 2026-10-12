@@ -12,6 +12,7 @@ SOURCE = Path(sys.argv[1])
 BACKEND = Path(sys.argv[2])
 catalog = json.loads((ROOT / 'data/guild_base_furniture.json').read_text())
 generated_ids = {'design_kitchen_counter', 'design_cafe_table_set', 'design_cafe_corner_table', 'design_statue_bench_left', 'design_statue_bench_right', 'design_planter_bench', 'design_red_runner'}
+authored_collision = {s['id']: s['collisionCells'] for s in catalog['items'] if 'collisionCells' in s}
 catalog['items'] = [s for s in catalog['items'] if s['id'] not in generated_ids]
 
 def layers(path):
@@ -32,11 +33,17 @@ def take(grid, key, x, y, width, height, foot, offset):
     art_layers=[[[v[n] if n<len(v) else 0 for v in row] for row in stacks] for n in range(layer_count)]
     tiles=art_layers[0]
     spec = dict(id=key,nameKey='ui.guild_base.furniture.'+key,category='kitchen' if 'kitchen' in key else 'seating',tiles=tiles,artLayers=art_layers,footprint=foot,visualSize=[width,height],visualOffset=offset,blocksMovement=True,starterQuantity=2,placement='floor',surfaceSlots=[],resizable=False,scenePath=f'res://scenes/world/guild_base/furniture/{key}.tscn')
+    if key in authored_collision:
+        spec['collisionCells'] = authored_collision[key]
+        spec['blocksMovement'] = bool(spec['collisionCells'])
     catalog['items'].append(spec)
     return spec,x,y,width,height
 
 runner = dict(next(s for s in catalog['items'] if s['id']=='red_carpet'))
 runner.update(id='design_red_runner',nameKey='ui.guild_base.furniture.design_red_runner',tiles=[[2634]*3,[2642]*3,[2650]*3],scenePath='res://scenes/world/guild_base/furniture/design_red_runner.tscn')
+if runner['id'] in authored_collision:
+    runner['collisionCells'] = authored_collision[runner['id']]
+    runner['blocksMovement'] = bool(runner['collisionCells'])
 catalog['items'].append(runner)
 presets=[]
 for number, room, title in [(1,'right_room','Guild Café'),(2,'left_room','Grand Lounge')]:

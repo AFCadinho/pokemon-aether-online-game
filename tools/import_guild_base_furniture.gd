@@ -2,6 +2,7 @@ extends SceneTree
 
 const Catalog := preload("res://scripts/world/guild_base_furniture_catalog.gd")
 const Furniture := preload("res://scripts/world/guild_base_furniture.gd")
+const CollisionAuthoring := preload("res://tools/guild_furniture_collision_authoring.gd")
 
 func _init() -> void:
 	var data := Catalog.load_data()
@@ -11,6 +12,9 @@ func _init() -> void:
 	for item: Dictionary in data.items:
 		if not str(item.id).begins_with(prefix):
 			continue
+		var collision_layer := CollisionAuthoring.load_existing_layer(str(item.scenePath))
+		if collision_layer == null:
+			collision_layer = CollisionAuthoring.create_layer(item)
 		var root := Node2D.new()
 		root.name = str(item.id).to_pascal_case()
 		root.set_script(Furniture)
@@ -31,6 +35,8 @@ func _init() -> void:
 						visual.set_cell(Vector2i(x, y), 0, Vector2i(coordinates[0], coordinates[1]))
 			root.add_child(visual)
 			visual.owner = root
+		root.add_child(collision_layer)
+		collision_layer.owner = root
 		var packed := PackedScene.new()
 		packed.pack(root)
 		var error := ResourceSaver.save(packed, str(item.scenePath))

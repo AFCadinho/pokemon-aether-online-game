@@ -2,13 +2,22 @@
 
 [ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_02aub"]
 [ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_u035f"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/collision.tileset.tres" id="3_u035f"]
 
-[node name="FlowerBushPink" type="Node2D" unique_id=75584325]
+[node name="FlowerBushPink" type="Node2D" unique_id=1191701872]
 texture_filter = 1
 script = ExtResource("1_02aub")
 furniture_id = "flower_bush_pink"
 
-[node name="Visual" type="TileMapLayer" parent="." unique_id=1529545556]
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1998694153]
 position = Vector2(0, -32)
 tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 22, 0, 0, 0)
 tile_set = ExtResource("2_u035f")
+
+[node name="Collision" type="TileMapLayer" parent="." unique_id=1924127827]
+z_index = 10
+position = Vector2(0, -32)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+tile_set = ExtResource("3_u035f")
+collision_enabled = false
+navigation_enabled = false
