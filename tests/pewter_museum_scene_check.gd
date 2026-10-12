@@ -36,13 +36,30 @@ func _run() -> void:
 		_check(not occupied.has(tile), "museum NPC positions do not overlap")
 		occupied[tile] = true
 		_check(not npc.npc_id.is_empty() and npc.npc_sprite_frames != null, "museum NPC has metadata and sprite " + npc.name)
-	_check(occupied.size() == 4, "four museum dialogue NPCs are present")
-	var attendant := city.get_node("Entities/NPCs/MuseumAttendantIris")
-	_check(attendant.guarded_transition_id == "kanto_pewter_city__to_museum"
-		and not attendant.is_gate_open() and not attendant.requires_party_pokemon, "admission is guarded on every visit")
-	_check(attendant.guards_world_position(Vector2(1392, 368)), "attendant intercepts walking into museum")
-	_check(not attendant.guards_world_position(Vector2(1392, 432)), "return arrival is outside the payment gate")
-	_check(city_collision.get_cell_source_id(city_collision.local_to_map(attendant.position)) == -1, "attendant stands on clear floor")
+	_check(occupied.size() == 5, "four museum dialogue NPCs and an indoor attendant are present")
+	_check(not city.has_node("Entities/NPCs/MuseumAttendantIris"), "outdoor entrance has no payment guard")
+	var attendant := museum.get_node("Entities/NPCs/MuseumAttendantIris")
+	_check(attendant.position == Vector2(400, 528) and attendant.guarded_transition_id == "kanto_pewter_city_museum__to_exhibits"
+		and not attendant.is_gate_open() and not attendant.requires_party_pokemon, "Iris guards the passage at the blue barriers")
+	for cell in [Vector2i(12, 15), Vector2i(13, 15)]:
+		_check(attendant.guards_world_position(Vector2(cell) * 32 + Vector2(16, 16)), "both barrier lanes are guarded")
+	_check(not attendant.guards_world_position(Vector2(432, 624)), "free lobby arrival is outside the payment gate")
+	var unpaid_occupied := occupied.duplicate()
+	unpaid_occupied[Vector2i(12, 15)] = true
+	unpaid_occupied[Vector2i(13, 15)] = true
+	var unpaid_reachable := _reachable_cells(museum_collision, Vector2i(13, 19), unpaid_occupied)
+	_check(unpaid_reachable.has(Vector2i(13, 22)) and not unpaid_reachable.has(Vector2i(13, 14)),
+		"unpaid visitors can reach the exit but cannot bypass the blue barriers")
+	attendant.transition_access = {"allowed": true}
+	attendant.transition_access_resolved = true
+	attendant._sync_guard_presence()
+	_check(attendant.is_gate_open() and attendant.visible and not attendant.guards_world_position(Vector2(432, 496)),
+		"payment opens the passage while Iris remains visible")
+	var passage := museum.get_node("Exits/ToExhibits")
+	_check(passage.target_scene_path == MUSEUM and passage.target_spawn_name == "FromAdmission"
+		and not passage.is_connected("body_entered", Callable(passage, "_on_body_entered")),
+		"authorized passage stays within museum and does not auto-teleport returning visitors")
+	_check(museum.get_node("Spawns/FromAdmission").position == Vector2(432, 464), "paid arrival is beyond the blue barriers")
 	var cancelled = load("res://tests/fixtures/pewter_museum_cancelled_admission.gd").new()
 	await cancelled._offer_admission()
 	_check(cancelled.offered_fee == 100 and cancelled.pending_admission_state.is_empty(), "cancelling admission never starts paid travel")
@@ -81,7 +98,8 @@ func _run() -> void:
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	_check(catalog.areas[museum.map_id].scenePath == MUSEUM and catalog.areas[museum.map_id].areaType == "interior", "museum registered as playable interior")
 	for entry in [["kanto_pewter_city__to_museum", museum.map_id, "FromPewterCity", Vector2(432, 624)],
-		["kanto_pewter_city_museum__to_pewter_city", city.map_id, "FromMuseum", Vector2(1392, 432)]]:
+		["kanto_pewter_city_museum__to_pewter_city", city.map_id, "FromMuseum", Vector2(1392, 432)],
+		["kanto_pewter_city_museum__to_exhibits", museum.map_id, "FromAdmission", Vector2(432, 464)]]:
 		var transition: Dictionary = catalog.transitions.get(entry[0], {})
 		_check(transition.get("destinationAreaId") == entry[1]
 			and transition.get("destination", {}).get("spawnMarker") == entry[2]

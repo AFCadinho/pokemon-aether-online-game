@@ -34,8 +34,7 @@ func _apply_pending_admission() -> void:
 
 
 func is_gate_open() -> bool:
-	# Every new visit needs consent and a server-side payment.
-	return false
+	return transition_access_resolved and bool(transition_access.get("allowed", false))
 
 
 func _sync_guard_presence() -> void:
@@ -55,6 +54,9 @@ func _offer_admission() -> void:
 	var checked := await _refresh_transition_access(true)
 	if not bool(checked.get("success", false)):
 		await GameErrorDialogService.show_response(checked)
+		return
+	if bool(transition_access.get("allowed", false)):
+		await show_dialogue([LocalizationManager.text("npc.museum.admission_paid")])
 		return
 	if str(transition_access.get("reasonCode", "")) != "ENTRY_FEE_REQUIRED":
 		await _show_transition_denied_dialogue(transition_access)
@@ -87,6 +89,10 @@ func _offer_admission() -> void:
 	if pending_admission_state.is_empty():
 		world.call("cancel_authorized_teleport")
 		await GameErrorDialogService.show_report_to_staff_message()
+		return
+	transition_access = response.get("access", {})
+	transition_access_resolved = true
+	_sync_guard_presence()
 
 
 func _confirm_admission(fee: int) -> bool:
