@@ -239,6 +239,15 @@ Bag item. Applying, saving, updating, renaming and deleting require existing
 Guild decorating rights. Names describe snapshots independently of the active
 room's location name. Each Guild may keep 20 named snapshots per room.
 
+**Save current room…** opens a separate name dialog on **Own designs**. Selecting
+a saved design reveals **View room**, **Apply** and **More actions**; that menu
+contains rename, replace with the current room and delete. These changes no
+longer share a persistent name field. Empty lists explain how to save or buy a
+design. **Purchased templates** lists only the selected room's Guild unlocks
+and templates currently in the player's Bag. An item in the Bag offers
+**Donate item**; an unlocked template offers **Apply**. The management content
+scrolls on smaller screens, with **Close** kept outside the scrolling page.
+
 Each Store offer costs **350 Gems**, delivers a tradeable Bag item, and is
 excluded from personal card credit under the Guild-product policy. Donation
 names the receiving Guild in a confirmation, consumes one item and grants the

@@ -402,6 +402,7 @@ func _run() -> void:
 		"thor-outfit": 550,
 		"emerald-luchador-outfit": 450,
 		"akatsuki-outfit": 450,
+		"irelia-outfit": 450,
 		"aether-voyager-outfit": 350,
 		"rotom-engineer-outfit": 350,
 		"celebi-forest-ranger-outfit": 350,
