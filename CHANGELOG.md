@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Offer the Irelia Outfit Box for both genders in the Gift Store for 450 Gems, with six fixed-colour parts and the standard 450-credit bound alternative.
+
 - Refine Dark Pulse, Surf, Blizzard, Earth Power and Overheat with continuous 3D energy fronts, breaking water, rolling snow, ground ruptures and billowing fire. Add individually coloured atmosphere and framing while preserving native speed, sound and hit/miss/block handling.
 
 - Make Guild room designs easier to navigate with explained empty states, selection-specific preview/apply/donation actions, a More actions menu, separate save/rename dialogs and a scrollable management page on smaller screens. Show only unlocked templates or matching items in your Bag.
