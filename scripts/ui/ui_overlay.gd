@@ -326,9 +326,9 @@ const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
 const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
 ## Battle trainer art is authored on a half-resolution pixel grid: most 160px
 ## layers contain 2x2 logical pixels, while legacy 80px parts use layer scale
-## 2. Keep the final transform on half steps so every logical pixel occupies a
-## whole number of display pixels instead of alternating widths.
-const TRAINER_CARD_ART_SCALE_STEP := 0.5
+## 2. Use one half-step scale for every outfit so small differences in hair or
+## accessories cannot shrink the whole trainer by a full pixel-scale step.
+const TRAINER_CARD_ART_SCALE := 1.5
 const TRAINER_CARD_ART_WITH_COMPANION_SCALE := 1.0
 const TRAINER_CARD_APPEARANCE_VIEWPORT_SIZE := Vector2i(194, 248)
 const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(97, 142)
@@ -17244,15 +17244,13 @@ func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictio
 		sprite.scale = Vector2.ONE * float(layer.get("scale", 1.0))
 		art.add_child(sprite)
 		var used := texture.get_image().get_used_rect()
+		if not used.has_area():
+			continue # Empty overlays have no visible bounds to center or align.
 		var visible_rect := Rect2((Vector2(used.position) - texture.get_size() * 0.5) * sprite.scale, Vector2(used.size) * sprite.scale)
 		visible_rect.position.x = -visible_rect.end.x
 		bounds = visible_rect if bounds.size == Vector2.ZERO else bounds.merge(visible_rect)
 	if bounds.has_area():
-		var factor := minf(144.0 / bounds.size.x, 222.0 / bounds.size.y)
-		var pixel_scale := maxf(
-			TRAINER_CARD_ART_SCALE_STEP,
-			floorf(factor / TRAINER_CARD_ART_SCALE_STEP) * TRAINER_CARD_ART_SCALE_STEP
-		)
+		var pixel_scale := TRAINER_CARD_ART_SCALE
 		art.scale = Vector2.ONE * pixel_scale
 		art.position = (Vector2(92, 248) - Vector2(bounds.get_center().x, bounds.end.y) * pixel_scale).round()
 	var profile := own_trainer_card_data if preview_name == "TrainerCardBattlePreview" else card
@@ -17263,6 +17261,8 @@ func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictio
 			var trainer_scale := minf(art.scale.x, TRAINER_CARD_ART_WITH_COMPANION_SCALE)
 			art.scale = Vector2.ONE * trainer_scale
 			art.position = (Vector2(48, 238) - Vector2(bounds.get_center().x, bounds.end.y) * trainer_scale).round()
+			# Keep wider accessories inside the left edge beside the companion.
+			art.position.x = roundf(maxf(art.position.x, 4.0 - bounds.position.x * trainer_scale))
 			art.z_index = 1
 			var companion := Sprite2D.new()
 			companion.name = "FavoritePokemon"
