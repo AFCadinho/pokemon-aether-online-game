@@ -47,12 +47,18 @@ const DEFAULT_FEMALE_EYES_ID := "Eyes"
 const DEFAULT_FEMALE_EYEBROWS_ID := "Eyebrows"
 const EYEBROWS_BY_HAIR_ID := {
 	"male:Hair": DEFAULT_MALE_EYEBROWS_ID,
+	"male:Irelia_Hair": DEFAULT_MALE_EYEBROWS_ID,
+	"male:Kakashi_Hair": DEFAULT_MALE_EYEBROWS_ID,
+	"male:SS4_Hair": DEFAULT_MALE_EYEBROWS_ID,
 	"male:Adinho_Hair": "Adinho_Eyebrows",
 	"male:IronFanton_Hair": DEFAULT_MALE_EYEBROWS_ID,
 	"male:Aether_Male_Hair_01": DEFAULT_MALE_EYEBROWS_ID,
 	"male:Aether_Male_Hair_02": DEFAULT_MALE_EYEBROWS_ID,
 	"male:Aether_Male_Hair_03": DEFAULT_MALE_EYEBROWS_ID,
 	"female:Hair": DEFAULT_FEMALE_EYEBROWS_ID,
+	"female:Irelia_Hair": DEFAULT_FEMALE_EYEBROWS_ID,
+	"female:Kakashi_Hair": DEFAULT_FEMALE_EYEBROWS_ID,
+	"female:SS4_Hair": DEFAULT_FEMALE_EYEBROWS_ID,
 	"female:TeamRocketFemale_Hair": DEFAULT_FEMALE_EYEBROWS_ID,
 	"female:Aether_Blossom_Hair": DEFAULT_FEMALE_EYEBROWS_ID,
 	"female:Aether_Blossom_Hair_Chroma": DEFAULT_FEMALE_EYEBROWS_ID,

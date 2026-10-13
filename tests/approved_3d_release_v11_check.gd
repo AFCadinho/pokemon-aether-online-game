@@ -30,6 +30,8 @@ func descriptor(release: Dictionary) -> Dictionary:
 		"sha256": pin.sha256, "sizeBytes": pin.size_bytes, "requiredAssetIds": release.requiredAssetIds.duplicate()}
 
 func _run() -> void:
+	# This regression selects historical v10/v11/v12 pins deliberately.
+	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST", "0")
 	var old_path := ProjectSettings.globalize_path("res://release/approved_3d_bundles_v10_index.json")
 	var new_path := ProjectSettings.globalize_path("res://release/approved_3d_bundles_v11_index.json")
 	assert(FileAccess.get_sha256(old_path) == V10.data.index.sha256)

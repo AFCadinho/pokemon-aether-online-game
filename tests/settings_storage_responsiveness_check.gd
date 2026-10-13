@@ -19,6 +19,13 @@ func _init() -> void:
 
 
 func _run() -> void:
+	# A retained model catalog starts asynchronous history verification on boot.
+	# Let that independent operation finish before testing an idle cache.
+	var model_service := root.get_node("OnDemand3DBundleService")
+	var startup_deadline := Time.get_ticks_msec() + 30000
+	while model_service._busy and Time.get_ticks_msec() < startup_deadline:
+		await process_frame
+	_check(not model_service._busy, "startup model verification completes before the idle-storage fixture")
 	var settings_scene := load(SETTINGS_SCENE) as PackedScene
 	var baseline_started := Time.get_ticks_usec()
 	var baseline_sprites: int = root.get_node("WebPokemonSpriteService").desktop_disk_bytes()
@@ -101,7 +108,6 @@ func _run() -> void:
 	menu._input(escape)
 	_check(menu.visible and not menu.storage_confirm_dialog.visible and FileAccess.file_exists(legacy_models.path_join("objects/pikachu/model.scn")),
 		"Escape dismisses only the confirmation without deleting files")
-	var model_service := root.get_node("OnDemand3DBundleService")
 	model_service._busy = true
 	menu._process(0.6)
 	_check(menu.model_storage_button.disabled and "downloads" in menu.model_storage_hint.text,
