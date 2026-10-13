@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare normal/shiny 3D pairs for Sandy/Trash Burmy and Wormadam, Sunshine Cherrim, seven Minior forms and both Cramorant prey forms, preserving the reviewed colours and repaired sleep poses.
+
 - Prepare normal and shiny Zygarde 10% for the next model release, with the visually approved core reconstruction and independent attack glow for simultaneous combatants.
 
 - Prepare Artisan Poltchageist, Masterpiece Sinistcha, Fan Rotom and Neutral Xerneas in normal/shiny 3D pairs; share existing models for 13 starter, Totem and Rockruff forms while preserving Totem scale and Mimikyu’s busted state.

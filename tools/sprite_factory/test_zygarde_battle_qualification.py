@@ -32,7 +32,8 @@ class ZygardeQualification(unittest.TestCase):
             self.assertEqual(registry['models'][a['runtime_identity']]['sha256'],a['source_sha256'])
             self.assertEqual(registry['models'][a['runtime_identity']]['profile'],'zygarde-10')
         for kind in ('models','profiles'):
-            before={k:v for k,v in registry[kind].items() if k.removesuffix('@shiny')!='zygarde-10'}
+            later=set(read(HERE/'remaining_fourteen_qualification.json')['entries'])
+            before={k:v for k,v in registry[kind].items() if k.removesuffix('@shiny') not in later | {'zygarde-10'}}
             self.assertEqual(canonical(before),r['previous_registry'][kind+'_sha256'])
 
 
