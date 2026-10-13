@@ -7078,7 +7078,7 @@
   "ui.nature_specialist.neutral": "(Neutra)",
   "ui.nature_specialist.pending": "Uma confirmação anterior está pendente. Repita-a antes de escolher outro Pokémon.",
   "ui.aethering.title": "Aethering",
-  "ui.aethering.help": "Mantenha seu Pokémon favorito e desenvolva seus IVs. Escolha dois Pokémon com um Egg Group em comum. IVs iguais permanecem; IVs diferentes sem proteção são sorteados de 0 a 31. Cada Pokémon pode proteger um atributo diferente com uma Wing.",
+  "ui.aethering.help": "Mantenha seu Pokémon favorito e desenvolva seus IVs. Escolha dois Pokémon da sua Party com um Egg Group em comum. Mova os Pokémon do PC para sua Party primeiro. IVs iguais permanecem; IVs diferentes sem proteção são sorteados de 0 a 31. Cada Pokémon pode proteger um atributo diferente com uma Wing.",
   "ui.aethering.refresh": "Atualizar",
   "ui.aethering.preview": "Ver prévia",
   "ui.aethering.confirm": "Confirmar Aethering",
@@ -7170,5 +7170,6 @@
   "ui.aethering.reason.money_reserved_for_trade": "Dinheiro reservado para troca.",
   "ui.aethering.reason.aethering_session_changed": "A sessão mudou. Abra Aethering na conta original para consultar a confirmação.",
   "ui.aethering.next_donor": "Próximo Donor",
-  "ui.aethering.merchant": "Vendedor de Wings"
+  "ui.aethering.merchant": "Vendedor de Wings",
+  "ui.aethering.reason.aethering_party_required": "Aethering requer dois Pokémon próprios na sua Party. Use o PC próximo para mover Pokémon para sua Party."
 }

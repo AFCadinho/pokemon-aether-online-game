@@ -7078,7 +7078,7 @@
   "ui.nature_specialist.neutral": "(Neutral)",
   "ui.nature_specialist.pending": "An earlier confirmation is unresolved. Retry it before choosing another Pokemon.",
   "ui.aethering.title": "Aethering",
-  "ui.aethering.help": "Keep your favorite Pokémon and develop its IVs. Choose two Pokémon sharing an Egg Group. Equal IVs stay; different unlocked IVs reroll from 0 to 31. Each Pokémon can lock one different stat with a Wing.",
+  "ui.aethering.help": "Keep your favorite Pokémon and develop its IVs. Choose two of your own Party Pokémon sharing an Egg Group. Move PC Pokémon into your Party first. Equal IVs stay; different unlocked IVs reroll from 0 to 31. Each Pokémon can lock one different stat with a Wing.",
   "ui.aethering.refresh": "Refresh",
   "ui.aethering.preview": "Preview",
   "ui.aethering.confirm": "Confirm Aethering",
@@ -7170,5 +7170,6 @@
   "ui.aethering.reason.money_reserved_for_trade": "Money reserved for trade.",
   "ui.aethering.reason.aethering_session_changed": "Session changed. Reopen Aethering on the original account to retrieve its confirmation.",
   "ui.aethering.next_donor": "Next Donor",
-  "ui.aethering.merchant": "Wing Merchant"
+  "ui.aethering.merchant": "Wing Merchant",
+  "ui.aethering.reason.aethering_party_required": "Aethering requires two of your own Pokémon in your Party. Use the nearby PC to move Pokémon into your Party."
 }

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Select Aethering Recipients and Donors exclusively from your own Party. Bring at least two Pokémon using the nearby Daycare PC; previews are revalidated after Party moves or swaps.
+
 - Add the Nature Specialist to Pokémon Centers with Party/PC selection, nature/stat comparisons, server prices, paid confirmation and seven-day availability. Details and Exchange distinguish original nature from the treated effect.
 
 - Draw existing forest grass from near to far in experimental Android 3D to reduce GPU work, retaining its density, geometry, textures and 4x anti-aliasing.
