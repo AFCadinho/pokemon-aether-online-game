@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Avoid drawing arena scenery twice for experimental Android 3D material lighting, while retaining its shadow casters and the full main arena.
+
 - Use Vulkan/Mobile for explicit experimental Android 3D exports to avoid the native Adreno shader-link crash observed during battle moves.
 
 - Avoid native pose baking for Android 3D move placement and include the last safe move presentation phase in crash reports to help diagnose device-specific failures.

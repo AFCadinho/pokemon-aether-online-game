@@ -113,7 +113,23 @@ func _build_pass(light_pass: bool) -> Dictionary:
 	if outdoor != null:
 		outdoor.irradiance_only = light_pass
 	world.add_child(arena)
+	if light_pass and OS.has_feature("android") and OS.has_feature("android_3d_experimental") and not OS.has_feature("android_3d_full_response_scene"):
+		_response_shadow_geometry(arena)
 	return {"viewport":viewport,"world":world,"camera":camera,"arena":arena,"base":world.get_children()}
+
+static func _response_shadow_geometry(node: Node) -> void:
+	# Only actor pixels are sampled from the irradiance texture. Keep scenery
+	# in its shadow maps, without drawing its colour a second time. Grass is
+	# authored as a non-caster. Zero layers affect only that geometry, so a
+	# non-caster parent cannot accidentally hide a casting child. Double-sided
+	# casters retain their mode: SHADOWS_ONLY cannot express double-sided casting.
+	if node is GeometryInstance3D:
+		if node.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+			node.layers = 0
+		elif node.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_ON:
+			node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+	for child in node.get_children():
+		_response_shadow_geometry(child)
 
 func acquire(client: Node) -> Dictionary:
 	if not ready_for_battle or (borrower != null and borrower.get_ref() != null):

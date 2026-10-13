@@ -125,6 +125,13 @@ in the build record. Omitting the flag keeps the ordinary Android 2D export
 on Compatibility. For a local GPU-driver comparison, combine the flag with
 `--android-renderer gl_compatibility`. Project settings are restored afterward.
 
+For local performance investigation, add `--performance-probe`. It enables
+numeric per-viewport CPU/GPU timing records in Android logcat, without battle
+identities or automatic telemetry. `--full-response-scene` retains the old
+complete scenery drawing in the irradiance pass as a labeled control. These
+flags are restricted to the local experimental helper. See
+[physical phone measurements](../docs/android-phone-performance.md).
+
 Before USB installation, compare the installed package's signing identity
 with the candidate and retain its data directory identity for verification.
 Install the verified APK with `adb install --no-incremental -r APK`, then check
