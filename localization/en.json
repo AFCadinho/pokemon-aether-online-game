@@ -1444,6 +1444,7 @@
   "ui.settings.terminology.english": "English names",
   "ui.settings.terminology.localized": "Translated names",
   "ui.settings.enable_move_animations": "Enable Move Animations",
+  "ui.settings.android_move_camera": "3D camera shots during moves",
   "ui.settings.enable_weather_effects": "Enable Weather Effects",
   "ui.settings.enable_terrain_effects": "Enable Terrain Effects",
   "ui.settings.display_own_name": "Display own name",

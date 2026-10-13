@@ -3,12 +3,12 @@ extends "res://tests/battle_move_effects_3d_check.gd"
 func _run() -> void:
 	_setup()
 	SettingsManager.battle_presentation_mode = "3d"
-	SettingsManager.battle_3d_camera_motion = true
+	_set_motion(true)
 	stage.camera = Camera3D.new()
 	stage.world.add_child(stage.camera)
 	stage.camera.fov = 48.0
 	stage.user_camera_yaw = 0.4
-	stage.user_camera_zoom = 0.85
+	stage.user_camera_zoom = _camera_zoom()
 	stage._update_camera(0.0)
 	var overview: Transform3D = stage.camera.transform
 	for slot in 4:
@@ -42,7 +42,7 @@ func _run() -> void:
 			assert(stage.move_camera.effect == null)
 			await get_tree().process_frame
 	# Disabled motion and flat 2.5D never take cinematic shots.
-	SettingsManager.battle_3d_camera_motion = false
+	_set_motion(false)
 	stage._update_camera(0.0)
 	var static_view: Transform3D = stage.camera.transform
 	stage.start_move_action("p1", "Draco Meteor")
@@ -51,7 +51,7 @@ func _run() -> void:
 	_sample(0, effect, 0.6)
 	assert(stage.camera.transform.is_equal_approx(static_view))
 	SettingsManager.battle_presentation_mode = "2.5d"
-	SettingsManager.battle_3d_camera_motion = true
+	_set_motion(true)
 	stage._update_camera(0.0)
 	assert(stage.camera.projection == Camera3D.PROJECTION_ORTHOGONAL)
 	effect.cancel()
@@ -92,3 +92,9 @@ func _run() -> void:
 func _sample(slot: int, effect: Node, phase: float) -> void:
 	stage.players[slot].seek(effect.duration * phase, true)
 	stage._update_camera(0.0)
+
+func _set_motion(enabled: bool) -> void:
+	SettingsManager.battle_3d_camera_motion = enabled
+
+func _camera_zoom() -> float:
+	return 0.85

@@ -2,6 +2,26 @@
 
 ## Android touch camera and bounded move preparation
 
+Android move shots use the independent `android_3d_move_camera` preference,
+enabled when an older profile has no value for it. Previously, all move shots
+required `battle_3d_camera_motion`, which defaults off and whose control was
+desktop-only. The experimental Android Graphics page now exposes a localized
+move-shot switch with persistent opt-out. The idle-camera preference and
+desktop behavior are unchanged. Existing charge/release/impact shots reuse
+their native effect clock and return to the Android close-up and manual orbit.
+Offline Android checks cover Draco Meteor plus eleven catalog moves, singles
+and doubles, hit/miss/immune, pause, recovery, cancellation, substitutes and
+disabled shots. The settings check covers older profiles and saved opt-out.
+The GPU isolation fixture explicitly disables both camera preferences so
+rendering comparisons retain their fixed view.
+
+USB trial `0.3.109-3d-perf.7` (code 37, source `e93dcdd19`) passed the signed
+ARM64 Mobile demand-export checks and was installed over the existing game.
+It retains the published v14 model pin and leaves move warmup disabled. Android
+Draco Meteor, Android catalog choreography, settings persistence, desktop
+Draco Meteor and desktop catalog choreography checks passed. Physical shot
+appearance and recovery are awaiting the user's battle check.
+
 Android first fits an overview, then applies the requested zoom to that
 transform. A conservative unposed mesh envelope must not undo pinch zoom:
 the first physical camera trial still looked too distant even at its limit.

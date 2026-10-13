@@ -43,6 +43,7 @@ var language_options_button: OptionButton
 var battle_presentation_options: OptionButton
 var battle_presentation_hint: Label
 var battle_camera_motion_toggle: CheckBox
+var android_move_camera_toggle: CheckBox
 var sprite_storage_button: Button
 var model_storage_button: Button
 var sprite_storage_hint: Label
@@ -325,6 +326,8 @@ func _apply_settings_to_controls() -> void:
 				battle_presentation_options.select(index)
 	if battle_camera_motion_toggle != null:
 		battle_camera_motion_toggle.button_pressed = SettingsManager.battle_3d_camera_motion
+	if android_move_camera_toggle != null:
+		android_move_camera_toggle.button_pressed = SettingsManager.android_3d_move_camera
 	battle_animations_check_box.button_pressed = SettingsManager.battle_animations
 	weather_effects_check_box.button_pressed = SettingsManager.weather_effects
 	terrain_effects_check_box.button_pressed = SettingsManager.terrain_effects
@@ -499,6 +502,8 @@ func _setup_tabs() -> void:
 		presentation_hint.text = LocalizationManager.text("ui.visual_choice.android.settings_hint") if SettingsManager.is_android_3d_experimental() else "2.5D and 3D share models. If a model is unavailable, the battle uses 2D sprites."
 		presentation_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		general_tab.add_child(_create_labeled_control_row(presentation_label, battle_presentation_options, presentation_hint))
+		if SettingsManager.is_android_3d_experimental():
+			_create_android_move_camera_toggle(graphics_tab)
 	if not OS.has_feature("web") and not OS.has_feature("mobile"):
 		battle_camera_motion_toggle = CheckBox.new()
 		battle_camera_motion_toggle.name = "BattleCameraMotionToggle"
@@ -834,6 +839,16 @@ func _create_tab_content(
 	content.add_theme_constant_override("separation", 14)
 	page.add_child(content)
 	return content
+
+
+func _create_android_move_camera_toggle(container: Control) -> void:
+	android_move_camera_toggle = CheckBox.new()
+	android_move_camera_toggle.name = "AndroidMoveCameraToggle"
+	android_move_camera_toggle.button_pressed = SettingsManager.android_3d_move_camera
+	android_move_camera_toggle.toggled.connect(func(enabled):
+		if not loading_controls:
+			SettingsManager.set_android_3d_move_camera(enabled))
+	container.add_child(_create_toggle_setting(android_move_camera_toggle, "ui.settings.android_move_camera"))
 
 
 func _create_labeled_control_row(
