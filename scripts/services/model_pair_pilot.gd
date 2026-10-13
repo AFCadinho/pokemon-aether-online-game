@@ -23,18 +23,23 @@ static func geometry_enabled() -> bool:
 	return production_enabled() or (OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_GEOMETRY_TEST") == "1")
 
 static func production_enabled() -> bool:
+	var experimental_android := OS.has_feature("android") and OS.has_feature("android_3d_experimental") and not OS.has_feature("web")
 	if OS.is_debug_build():
 		var override := OS.get_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST")
 		if not override.is_empty():
 			return override == "1"
 		# Local desktop play must use the published collection too: most of the
 		# old v11/v12 ZIPs have been retired. Explicit diagnostics keep their pins.
-		if not OS.has_feature("editor"):
+		if not OS.has_feature("editor") and not experimental_android:
 			return false
 		for mode in ["GEOMETRY_TEST", "QUALIFIED_TEST", "CATALOG_TEST", "PILOT"]:
 			if OS.get_environment("POKEAETHER_SHARED_MODEL_" + mode) == "1":
 				return false
-	return OS.has_feature("windows") or OS.has_feature("linuxbsd") or OS.has_feature("macos")
+	return allows_production(OS.has_feature("web"), OS.has_feature("android"), OS.has_feature("android_3d_experimental"),
+		OS.has_feature("windows") or OS.has_feature("linuxbsd") or OS.has_feature("macos"))
+
+static func allows_production(web: bool, android: bool, experimental: bool, desktop: bool) -> bool:
+	return not web and (experimental if android else desktop)
 
 static func catalog_enabled() -> bool:
 	return OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_CATALOG_TEST") == "1"

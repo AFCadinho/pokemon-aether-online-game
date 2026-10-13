@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore the optional experimental Android 3D choice using the current shared normal/shiny model collection, including the newly added alternate forms. Keep 2D recommended and verify every model download is available before building.
+
 ## 0.3.108
 
 - Restore matching eyebrows for Irelia, Kakashi and SS4 hairstyles for both genders.

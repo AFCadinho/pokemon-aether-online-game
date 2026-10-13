@@ -14,13 +14,12 @@ Only choosing 3D downloads the optional Android battlefield art. This happens
 during session preparation or when changing to 3D in Settings. SHA-256 and exact
 length checks cover both the downloaded ZIP and its extracted PCK before use.
 The installed PCK is reused, and the ZIP is removed after successful install.
-The same existing approved v11 model index supplies normal/shiny models and
+The current approved v14 model index supplies shared normal/shiny models and
 anticipated battle forms on demand. Team prefetch avoids downloading every
 encounter in a map. There is no separate launcher on Android.
 
-The experiment renders the 3D layer at at most 960 × 540, retaining aspect
-ratio and leaving the UI at its normal resolution. This is a rendering limit,
-not a reduction of mesh or source texture detail. If a foreground 3D session
+The experiment preserves the existing native-resolution Compatibility renderer
+and full model and texture detail. If a foreground 3D session
 ends unexpectedly, the next launch saves 2D and tells the player they can retry
 3D in Settings. Ordinary Android background termination is not treated as a
 crash. Existing local crash reports include device/renderer/experiment details;
@@ -28,7 +27,11 @@ the player can copy a report to staff. No automatic telemetry was added.
 
 ## Publication prerequisites
 
-Release 0.3.102 enables the experiment in the signed Android build (version code 19). Both existing and new Android players receive the choice once; choosing 2D is recommended.
+Release 0.3.109 restores the experiment in the signed Android build using the
+same 1,420 approved normal/shiny pairs as desktop. Existing consent and saved
+choices are preserved; players without Android consent receive the choice once.
+Choosing 2D is recommended. The GitHub candidate must use a version code higher
+than the current public Android release.
 
 `data/android_3d_experiment.json` pins the immutable arena object. The already
 generated source archive is retained in the assigned slot at:
@@ -47,8 +50,13 @@ generated source archive is retained in the assigned slot at:
 
 The exact Android arena archive was published on 2026-10-07 and its public
 archive and extracted PCK passed the pinned size and SHA-256 checks. The public
-v11 model index also passes its exact hash check; existing v11 models do not
-need republishing. The candidate build repeats this public verification:
+arena pin remains unchanged. Historical v11/v12 model indexes must not be used:
+their old ZIP objects may have been retired. The candidate verifies the v14
+index's exact hash, resolves its shared-pack references against the compiled
+catalog, checks all 1,420 objects are available with the pinned sizes, and repeats
+the arena archive and extracted PCK hash checks. Full v14 GET hashes were checked
+by the model publication receipt. No duplicate Android model collection is
+published. Run the public preflight with:
 
 ```sh
 python3 tools/verify_android_3d_assets.py --public
