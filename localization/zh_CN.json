@@ -7078,7 +7078,7 @@
   "ui.nature_specialist.neutral": "（无能力变化）",
   "ui.nature_specialist.pending": "上一次确认结果尚未确定。请先重试，再选择其他宝可梦。",
   "ui.aethering.title": "Aethering",
-  "ui.aethering.help": "Keep your favorite Pokémon and develop its IVs. Choose two Pokémon sharing an Egg Group. Equal IVs stay; different unlocked IVs reroll from 0 to 31. Each Pokémon can lock one different stat with a Wing.",
+  "ui.aethering.help": "Keep your favorite Pokémon and develop its IVs. 选择队伍中两只属于你且拥有共同蛋组的宝可梦。请先将电脑中的宝可梦移入队伍。 Equal IVs stay; different unlocked IVs reroll from 0 to 31. Each Pokémon can lock one different stat with a Wing.",
   "ui.aethering.refresh": "Refresh",
   "ui.aethering.preview": "Preview",
   "ui.aethering.confirm": "Confirm Aethering",
@@ -7170,5 +7170,6 @@
   "ui.aethering.reason.money_reserved_for_trade": "Money reserved for trade.",
   "ui.aethering.reason.aethering_session_changed": "Session changed. Reopen Aethering on the original account to retrieve its confirmation.",
   "ui.aethering.next_donor": "Next Donor",
-  "ui.aethering.merchant": "Wing 商人"
+  "ui.aethering.merchant": "Wing 商人",
+  "ui.aethering.reason.aethering_party_required": "Aethering 需要队伍中至少两只属于你的宝可梦。请使用旁边的电脑将宝可梦移入队伍。"
 }

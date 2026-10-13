@@ -46,7 +46,6 @@ var close_button: Button
 var refresh_button: Button
 var picker: VBoxContainer
 var search: LineEdit
-var location_filter: OptionButton
 var picker_list: ItemList
 var picker_rows: Array = []
 var results: RichTextLabel
@@ -117,10 +116,6 @@ func _build() -> void:
 	search.custom_minimum_size.y = 40
 	search.text_changed.connect(func(_value: String): _render_picker())
 	filters.add_child(search)
-	location_filter = OptionButton.new()
-	location_filter.custom_minimum_size.y = 40
-	location_filter.item_selected.connect(func(_index: int): _render_picker())
-	filters.add_child(location_filter)
 	filters.add_child(_button("×", func(): picker.hide()))
 	picker_list = ItemList.new()
 	picker_list.custom_minimum_size.y = 230
@@ -230,11 +225,6 @@ func _localize() -> void:
 	donor_select.text = _t("choose_donor")
 	next_donor_button.text = _t("next_donor")
 	search.placeholder_text = _t("search")
-	var selected := location_filter.selected
-	location_filter.clear()
-	for key in ["all", "party", "pc"]:
-		location_filter.add_item(_t(key))
-	location_filter.select(maxi(selected, 0))
 
 func _locale_changed(_locale: String) -> void:
 	_localize()
@@ -275,7 +265,7 @@ func refresh() -> void:
 		plan.clear()
 	var response := await AetheringService.load_candidates()
 	if bool(response.get("success", false)):
-		candidates = response["data"].get("candidates", [])
+		candidates = response["data"].get("candidates", []).filter(func(entry: Dictionary): return entry.get("location", {}).get("type") == "party")
 		wing_availability.clear()
 		for wing: Dictionary in response["data"].get("wingInventory", []):
 			wing_availability[str(wing["itemId"])] = int(wing["availableQuantity"])
@@ -290,6 +280,8 @@ func refresh() -> void:
 	resources_ready = bool(inventory.get("success", false)) and bool(wallet.get("success", false)) and bool(response.get("success", false))
 	if not resources_ready:
 		status.text = _t("refresh_failed")
+	elif candidates.size() < 2 and AetheringService.pending.is_empty():
+		status.text = _t("reason.aethering_party_required")
 	busy = false
 	_render()
 	_render_picker()
@@ -312,6 +304,8 @@ static func compatible(left: Dictionary, right: Dictionary) -> bool:
 	return false
 
 func _reason(entry: Dictionary, is_donor: bool) -> String:
+	if entry.get("location", {}).get("type") != "party":
+		return _t("reason.aethering_party_required")
 	if is_donor and int(entry.get("pokemonId", 0)) == int(recipient.get("pokemonId", -1)):
 		return _t("same_pokemon")
 	var code: String = str(entry.get("donorBlockedReason" if is_donor else "recipientBlockedReason", ""))
@@ -377,7 +371,7 @@ func _render_picker() -> void:
 		return _name(a).naturalnocasecmp_to(_name(b)) < 0)
 	for entry: Dictionary in sorted:
 		var location: String = str(entry.get("location", {}).get("type", ""))
-		if location_filter.selected == 1 and location != "party" or location_filter.selected == 2 and location != "box":
+		if location != "party":
 			continue
 		var description := "%s · %s · %s" % [_name(entry), _location(entry), _groups(entry)]
 		if not search.text.is_empty() and not (description + str(entry.get("pokemon", {}).get("species", ""))).to_lower().contains(search.text.to_lower()):
@@ -488,11 +482,11 @@ func _update_buttons() -> void:
 	donor_options.disabled = frozen or donor.is_empty()
 	refresh_button.disabled = busy or confirmation_open
 	close_button.disabled = busy or confirmation_open
-	preview_button.disabled = frozen or not resources_ready or recipient.is_empty() or donor.is_empty()
+	preview_button.disabled = frozen or not resources_ready or candidates.size() < 2 or recipient.is_empty() or donor.is_empty()
 	confirm_button.disabled = busy or confirmation_open or plan.is_empty()
 	confirm_button.text = _t("retry") if unresolved else _t("confirm")
 	next_donor_button.visible = not last_result.is_empty()
-	next_donor_button.disabled = frozen or recipient.is_empty()
+	next_donor_button.disabled = frozen or candidates.size() < 2 or recipient.is_empty()
 
 func _preview() -> void:
 	if preview_button.disabled:
@@ -565,12 +559,19 @@ func _execute() -> void:
 		busy = false
 		await refresh()
 		status.text = _t("success") if resources_ready else _t("success") + "\n" + _t("refresh_failed")
+		if resources_ready and candidates.size() < 2:
+			status.text += "\n" + _t("reason.aethering_party_required")
 		scroll.ensure_control_visible.call_deferred(results)
 	else:
-		status.text = _error(response) if AetheringService.pending.is_empty() else _t("unresolved")
+		var message := _error(response) if AetheringService.pending.is_empty() else _t("unresolved")
 		if AetheringService.pending.is_empty():
 			plan.clear()
 		busy = false
+		var detail: Variant = response.get("body", {}).get("detail", {})
+		if detail is Dictionary and str(detail.get("code", "")) in ["aethering_preview_stale", "aethering_party_required"]:
+			await PlayerPartyStateService.refresh_party()
+			await refresh()
+		status.text = message
 	_render()
 
 func _render_result() -> void:

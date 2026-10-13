@@ -7078,7 +7078,7 @@
   "ui.nature_specialist.neutral": "(Neutraal)",
   "ui.nature_specialist.pending": "Een eerdere bevestiging is nog niet afgerond. Probeer die opnieuw vóór je een andere Pokémon kiest.",
   "ui.aethering.title": "Aethering",
-  "ui.aethering.help": "Behoud je favoriete Pokémon en ontwikkel zijn IVs. Kies twee Pokémon met een gedeelde Egg Group. Gelijke IVs blijven; verschillende ongelockte IVs worden opnieuw gerold van 0 tot 31. Elke Pokémon kan één andere stat locken met een Wing.",
+  "ui.aethering.help": "Behoud je favoriete Pokémon en ontwikkel zijn IVs. Kies twee eigen Pokémon uit je Party met een gedeelde Egg Group. Verplaats PC-Pokémon eerst naar je Party. Gelijke IVs blijven; verschillende ongelockte IVs worden opnieuw gerold van 0 tot 31. Elke Pokémon kan één andere stat locken met een Wing.",
   "ui.aethering.refresh": "Verversen",
   "ui.aethering.preview": "Preview bekijken",
   "ui.aethering.confirm": "Aethering bevestigen",
@@ -7170,5 +7170,6 @@
   "ui.aethering.reason.money_reserved_for_trade": "Geld gereserveerd voor een trade.",
   "ui.aethering.reason.aethering_session_changed": "Sessie gewijzigd. Open Aethering op het oorspronkelijke account om de bevestiging opnieuw op te vragen.",
   "ui.aethering.next_donor": "Nieuwe Donor",
-  "ui.aethering.merchant": "Wingverkoper"
+  "ui.aethering.merchant": "Wingverkoper",
+  "ui.aethering.reason.aethering_party_required": "Aethering vereist twee eigen Pokémon in je Party. Gebruik de PC hiernaast om Pokémon naar je Party te verplaatsen."
 }

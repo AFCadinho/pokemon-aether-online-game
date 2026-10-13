@@ -6,12 +6,17 @@ in the paired backend's `docs/aethering_backend.md`.
 
 The picker uses the authenticated read-only `/game/aethering/candidates`
 projection rather than trying to infer protected origins from client snapshots.
-Party/PC filtering, search, shared Egg Groups and protection reasons are shown.
+Only Party Pokémon are selectable for either role; PC Pokémon must be moved
+into the Party first using the nearby PC. Search, shared Egg Groups and
+protection reasons are shown. At least two own Party Pokémon are required.
 Eligible donors sort first, then matching 31/0 IVs, other matches and perfect
 stats. This sort changes no gameplay rules. Preview/confirmation recheck all
 server eligibility and resources; the picker is advisory.
 
-Lock choices invalidate the preview. Each Pokémon has at most one optional lock,
+Lock choices invalidate the preview. The server also fingerprints Party-slot
+update timestamps, so moves and swaps (including a round trip) require a new
+preview. Unconfirmed previews from the former Party/PC rules must be refreshed;
+completed receipts remain safely replayable. Each Pokémon has at most one optional lock,
 with the other Pokémon's lock stat disabled. The comparison shows only existing
 IVs until a server preview arrives; no client roll or mutation is generated.
 
@@ -49,7 +54,7 @@ Run Godot only through the workspace `ops/worktrees/slot-env` wrapper:
   `AETHERING_TEST_POSTGRES_URL`; run isolated runtime work with `runtime-lock`.
 
 The HTTP integration test buys all six Wings with an active Blessing, previews
-Party/PC Pokémon, confirms a shiny donor, recovers a deliberately lost committed
+two Party Pokémon, rejects PC IDs, confirms a shiny donor, recovers a deliberately lost committed
 response and an expired-auth retry, checks one charge/audit, then rejects a stale
 preview without a second consumption. A graphical run also exports desktop and
 compact-viewport screenshots under `/tmp`. The fixture replaces authentication
