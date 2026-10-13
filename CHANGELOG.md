@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Nature Specialist to Pokémon Centers with Party/PC selection, nature/stat comparisons, server prices, paid confirmation and seven-day availability. Details and Exchange distinguish original nature from the treated effect.
+
 - Draw existing forest grass from near to far in experimental Android 3D to reduce GPU work, retaining its density, geometry, textures and 4x anti-aliasing.
 
 - Prepare model release v15: save another 198 MB by sharing geometry and animations within 111 normal/shiny pairs, preserving all reviewed detail, colours, poses and alternate forms.
