@@ -79,6 +79,16 @@ Settings, crash reporting, arena contracts and Mega-form prefetch are retained.
 Python release checks confirm explicit feature stamping/removal and unchanged
 Compatibility renderer. Local archive verification passes.
 
+The v14 follow-up verifies the actual Android feature guards select all 1,420
+current pairs, without a production diagnostic override. The optional
+`POKEAETHER_ANDROID_3D_DOWNLOAD_SMOKE=1` mode of
+`tests/android_3d_model_release_check.gd` exercises the real downloader, full
+pack admission, native scene/animation loading and cache reuse for both
+appearances of Hydreigon, Tyranitar, Therian Landorus and Rapid Strike Urshifu.
+Run this diagnostic with the Compatibility renderer, not the headless Dummy
+renderer. The Linux diagnostic passes; it does not qualify physical Android
+GPU performance. Ordinary project checks leave this network diagnostic disabled.
+
 The separate ARM64 `android-visual-choice` diagnostic exports these choice
 checks into its own package, `com.pokeaether.androidvisualchoiceqa`, without
 production login or updater activity. It can be reproduced from the workspace:
