@@ -5,6 +5,8 @@ class Sink extends Logger:
 		if kind != Logger.ERROR_TYPE_WARNING: tree.call_deferred("quit", 2)
 var sink := Sink.new()
 const Pair = preload("res://scripts/services/model_pair_pack.gd")
+const Pilot = preload("res://scripts/services/model_pair_pilot.gd")
+const LauncherPilot = preload("res://launcher/scripts/model_pair_pilot.gd")
 func _init() -> void:
 	sink.tree = self
 	OS.add_logger(sink)
@@ -39,6 +41,11 @@ func _init() -> void:
 	candidate.pair_manifest.files[-1].bytes = minimum + 1
 	assert(Pair.budget(candidate, "normal") > minimum, "Cache budget includes shared geometry")
 	assert(FileAccess.get_file_as_bytes("res://scripts/services/model_pair_pack.gd") == FileAccess.get_file_as_bytes("res://launcher/scripts/model_pair_pack.gd"))
-	assert(FileAccess.get_file_as_bytes("res://scripts/services/model_pair_pilot.gd") == FileAccess.get_file_as_bytes("res://launcher/scripts/model_pair_pilot.gd"))
+	# Platform eligibility and game form aliases intentionally differ. The
+	# compiled release and exact expanded assets must still agree.
+	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST", "1")
+	OS.unset_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION")
+	assert(Pilot.release() == LauncherPilot.release())
+	assert(Pilot.catalog() == LauncherPilot.catalog())
 	print("SHARED_GEOMETRY_CONTRACT_OK schema_1_compatibility schema_2_paths flat_graph cache_budget launcher_parity")
 	quit()

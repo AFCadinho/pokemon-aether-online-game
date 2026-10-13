@@ -4,6 +4,8 @@
 
 - Draw existing forest grass from near to far in experimental Android 3D to reduce GPU work, retaining its density, geometry, textures and 4x anti-aliasing.
 
+- Prepare model release v15: save another 198 MB by sharing geometry and animations within 111 normal/shiny pairs, preserving all reviewed detail, colours, poses and alternate forms.
+
 - Keep trainer sprites at a consistent size across outfits in the own and public Trainer Card Overview, including Kakashi and SS4.
 
 - Develop your own Pokémon through Aethering at the Route 5 Daycare: Party/PC selection, server previews, Wing IV locks, permanent donor confirmation and results with safe retries. Buy the six Wings there for 10,000 Pokédollars each without Blessing discounts; Wings no longer train EVs.

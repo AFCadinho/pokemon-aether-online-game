@@ -9,8 +9,8 @@ from urllib.request import Request, urlopen
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-RELEASE_PATH = ROOT / "data/approved_3d_release_v14.json"
-CATALOG_PATH = ROOT / "data/model_pair_release_v14_catalog.json"
+RELEASE_PATH = ROOT / "data/approved_3d_release_v15.json"
+CATALOG_PATH = ROOT / "data/model_pair_release_v15_catalog.json"
 
 
 def public_request(key, method="GET"):
@@ -57,7 +57,7 @@ def model_assets(index, release, catalog):
 
 
 def verify_model_asset(asset):
-    # The v14 publication receipt already verifies full GET hashes. Recheck
+    # The v15 publication receipt already verifies full GET hashes. Recheck
     # availability here too: a valid historical index can outlive retired packs.
     with urlopen(public_request(asset["object_key"], "HEAD"), timeout=30) as response:
         if int(response.headers.get("Content-Length", -1)) != int(asset["size_bytes"]):
