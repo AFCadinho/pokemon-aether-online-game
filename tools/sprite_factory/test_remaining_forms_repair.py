@@ -58,7 +58,7 @@ class RemainingForms(unittest.TestCase):
 
     def test_existing_models_and_profiles_are_unchanged(self):
         # The later Zygarde admission has its own exact baseline regression.
-        names=set(self.receipt['forms']) | {'zygarde-10'}
+        names=set(self.receipt['forms']) | {'zygarde-10'} | set(read(HERE/'remaining_fourteen_qualification.json')['entries'])
         for key in ('models','profiles'):
             previous={n:v for n,v in self.registry[key].items() if n.removesuffix('@shiny') not in names}
             self.assertEqual(canonical(previous),self.result['previous_registry'][key+'_sha256'])
