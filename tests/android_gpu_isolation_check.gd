@@ -2,6 +2,7 @@ extends SceneTree
 ## Separate debug APK: production arena/models, fixed workload, reversible controls.
 const Stage = preload("res://scripts/battle/battle_ui/experimental_battle_3d.gd")
 const Pair = preload("res://scripts/services/model_pair_pilot.gd")
+const Pool = preload("res://scripts/battle/arenas/shared/environment_pool.gd")
 const Stats = preload("res://scripts/battle/battle_ui/android_3d_performance_probe.gd")
 const REPORT := "user://android-gpu-details.json"
 const MATRIX := ["baseline", "no_grass", "baseline", "no_shadows", "baseline", "msaa_2", "baseline", "msaa_off", "baseline"]
@@ -195,6 +196,20 @@ func _run() -> void:
 		_finish(); return
 	dimensions = root.size
 	report.render_size = [dimensions.x, dimensions.y]
+	# Normal gameplay prepares this session-owned pool before entering a battle.
+	# Require the same path so the optimized response pass is actually exercised.
+	pool = Pool.prepare(root, settings.get_battle_3d_forest_manifest(), dimensions, "forest")
+	if not _check(pool != null, "Production environment pool created"):
+		_finish(); return
+	var pool_deadline := Time.get_ticks_msec() + 120000
+	while not pool.ready_for_battle and not pool.failed and Time.get_ticks_msec() < pool_deadline:
+		await process_frame
+	if not _check(pool.ready_for_battle, "Production environment pool prepared"):
+		_finish(); return
+	for data in pool.passes:
+		var light: Node = data.arena.get_node("OutdoorLighting")
+		light.set_process(false)
+		light.apply_seconds(43200.0)
 	canvas = SubViewport.new()
 	canvas.size = dimensions
 	canvas.render_target_update_mode = SubViewport.UPDATE_ALWAYS
@@ -211,6 +226,8 @@ func _run() -> void:
 	stage.set_combatant(0, "Charizard")
 	stage.set_combatant(1, "Dragonite")
 	await stage.await_prepared(true, 60000)
+	report.preparation = {"active": stage.active, "phase": stage.preparation_phase,
+		"reason": stage.reason, "arena": stage.arena_id, "pooled": not stage.forest_lease.is_empty()}
 	if not _check(stage.active and stage.handles("p1") and stage.handles("p2") and not stage.forest_lease.is_empty(), "Production forest and actors prepared"):
 		_finish(); return
 	pool = stage.forest_pool
