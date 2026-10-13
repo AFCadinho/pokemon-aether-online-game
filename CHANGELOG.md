@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Use Vulkan/Mobile for explicit experimental Android 3D exports to avoid the native Adreno shader-link crash observed during battle moves.
+
 - Avoid native pose baking for Android 3D move placement and include the last safe move presentation phase in crash reports to help diagnose device-specific failures.
 
 ## 0.3.109

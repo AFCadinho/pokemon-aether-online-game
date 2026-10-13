@@ -61,6 +61,10 @@ def prepare(project: Path, presets: Path, version: str, code: int, build_id: str
         if experimental_3d:
             features.append("android_3d_experimental")
         replace_setting(presets, "preset.7", "custom_features", json.dumps(",".join(features)))
+    # Adreno's Compatibility shader linker can crash natively during 3D moves.
+    # Keep Vulkan scoped to builds that explicitly enable the 3D experiment.
+    replace_setting(project, "rendering", "renderer/rendering_method.mobile",
+                    json.dumps("mobile" if experimental_3d else "gl_compatibility"))
     replace_setting(project, "application", "config/version", json.dumps(version))
     replace_setting(project, "application", "config/build_id", json.dumps(build_id))
     replace_setting(project, "application", "config/android_version_code", str(code))

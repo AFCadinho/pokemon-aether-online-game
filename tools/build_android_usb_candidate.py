@@ -33,10 +33,12 @@ def main():
     parser.add_argument("--experimental-3d", action="store_true",
                         help="Enable the explicit Android 3D experiment for this local test APK")
     parser.add_argument("--android-renderer", choices=["gl_compatibility", "mobile"],
-                        default="gl_compatibility", help="Local experimental 3D renderer comparison")
+                        help="Override the experimental 3D default (mobile/Vulkan) for a local comparison")
     parser.add_argument("--architecture", choices=["arm64-v8a", "x86_64"], default="arm64-v8a",
                         help="Use x86_64 for an accelerated desktop Android emulator")
     args = parser.parse_args()
+    if args.android_renderer is None:
+        args.android_renderer = "mobile" if args.experimental_3d else "gl_compatibility"
     if args.android_renderer != "gl_compatibility" and not args.experimental_3d:
         parser.error("Renderer comparisons require --experimental-3d")
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:

@@ -3,8 +3,9 @@
 The 2026-10-13 phone report from build
 `edaf9480d3f7d46369abb3e21d770fe18e8c7156-38426600297-1` identifies
 `CRASH_NATIVE`, status 11, on SM-S938B / Adreno 830 / Compatibility / Godot
-4.6.2. The user observes the crash for every selected move. There is no native
-stack trace and no physical device connected locally; the cause is unconfirmed.
+4.6.2. The user observes the crash for every selected move. At the initial
+investigation no native stack or physical device was available; the phone
+follow-up below establishes the failing native path and a tested workaround.
 
 One shared move path calls `_effect_bounds` for source and destination anchors.
 Older reviewed profiles without idle bounds previously baked their live skeleton
@@ -82,3 +83,22 @@ output directory. Run it through `slot-env`. Before each draw, the probe closes
 final `android-move-shader-results.json` are readable using `adb shell run-as`
 for this separate debug package. The probe APK has no internet permission.
 The ordinary game and its downloaded/user data are not reset.
+
+The signed full-game candidate `2a30adf78-3d-usb-20261013-2`
+(`0.3.109-3d-usb.2`, code 30) uses Mobile/Vulkan. Its startup log confirms
+Vulkan 1.3.284 / Forward Mobile / Qualcomm Adreno 830. The user repeated the
+3D battle test and confirmed that moves no longer crash. The app process
+remained alive, with no new fatal signals in the Android crash buffer after
+the test. The same signing identity, app ID and data directory were retained.
+
+`android_release.prepare(..., experimental_3d=True)` now selects Mobile/Vulkan;
+ordinary Android exports select Compatibility. The USB helper follows that
+default and retains an explicit Compatibility override for comparison. No
+official release, publication, promotion or complete release certification
+was performed. This is a successful SM-S938B battle smoke test, not certification
+of other Android GPUs or all battle/model/effect combinations. Full visual
+parity, switches and subsequent battles still need broader assessment.
+
+The existing startup `can_process` / `!is_inside_tree()` warning also appears
+with Vulkan. It did not accompany a fatal signal in the successful test and
+remains a separate issue; it is not evidence for the shader-link crash cause.

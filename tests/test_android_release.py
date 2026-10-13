@@ -95,7 +95,7 @@ class AndroidReleaseTests(unittest.TestCase):
         with TemporaryDirectory() as directory:
             project = Path(directory) / "project.godot"
             presets = Path(directory) / "export_presets.cfg"
-            project.write_text('[application]\nconfig/version="old"\nconfig/build_id="old"\nconfig/android_version_code=2\nconfig/android_asset_build_id=""\nconfig/android_test_compatible_build_id=""\n')
+            project.write_text('[application]\nconfig/version="old"\nconfig/build_id="old"\nconfig/android_version_code=2\nconfig/android_asset_build_id=""\nconfig/android_test_compatible_build_id=""\n[rendering]\nrenderer/rendering_method.mobile="gl_compatibility"\n')
             presets.write_text('[preset.7.options]\nversion/code=2\nversion/name="old"\npackage/unique_name="com.pokeaether.game"\n')
             with self.assertRaisesRegex(ValueError, "greater than 2"):
                 prepare(project, presets, "0.3.84-alpha.3", 2, "build-3")
@@ -107,7 +107,7 @@ class AndroidReleaseTests(unittest.TestCase):
             self.assertEqual(setting(presets, "preset.7.options", "version/code"), "3")
             self.assertEqual(setting(presets, "preset.7.options", "version/name"), '"0.3.84-alpha.3"')
 
-    def test_experimental_android_is_explicit_and_does_not_change_renderer(self) -> None:
+    def test_experimental_android_uses_vulkan_and_standard_export_restores_compatibility(self) -> None:
         with TemporaryDirectory() as directory:
             project = Path(directory) / "project.godot"
             presets = Path(directory) / "export_presets.cfg"
@@ -115,7 +115,7 @@ class AndroidReleaseTests(unittest.TestCase):
             presets.write_text('[preset.7]\ncustom_features="keep_this_feature"\n[preset.7.options]\nversion/code=2\nversion/name="old"\npackage/unique_name="com.pokeaether.game"\n')
             prepare(project, presets, "0.3.101", 3, "beta-3", experimental_3d=True)
             self.assertEqual(json.loads(setting(presets, "preset.7", "custom_features")), "keep_this_feature,android_3d_experimental")
-            self.assertEqual(setting(project, "rendering", "renderer/rendering_method.mobile"), '"gl_compatibility"')
+            self.assertEqual(setting(project, "rendering", "renderer/rendering_method.mobile"), '"mobile"')
             prepare(project, presets, "0.3.102", 4, "standard-4")
             self.assertEqual(json.loads(setting(presets, "preset.7", "custom_features")), "keep_this_feature")
             self.assertEqual(setting(project, "rendering", "renderer/rendering_method.mobile"), '"gl_compatibility"')
