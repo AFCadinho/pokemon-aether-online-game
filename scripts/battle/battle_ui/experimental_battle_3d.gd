@@ -139,6 +139,13 @@ var identities := ["", "", "", ""]
 var restoring := ["idle", "idle", "idle", "idle"]
 var loaded_path := "!unloaded"
 var active := false
+
+func _ready() -> void:
+	if OS.has_feature("android") and OS.has_feature("android_3d_performance_probe"):
+		var probe := preload("res://scripts/battle/battle_ui/android_3d_performance_probe.gd").new()
+		probe.stage = self
+		add_child(probe)
+
 const WeatherEffect = preload("res://scripts/battle/battle_ui/weather_effect_3d.gd")
 var weather_condition := ""
 var weather_effect: Node3D
