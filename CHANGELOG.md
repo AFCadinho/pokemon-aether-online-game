@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Speed up Android 3D battle entry with installed assets by reusing the current verified shared-model handoff and shortening its fade. Reduce the render wait for previously drawn models while keeping final camera framing and cold-load integrity checks.
+- Start the Android 3D battle fade as soon as the arena is drawn, while battle data and Pokémon prepare. Keep one stable close-up overview as models appear, and retain touch zoom and move-camera shots. Speed up local preparation by reusing fresh verification and expanding only the required assets, with cold-load integrity checks preserved.
 
 - Keep the overworld visible while Android 3D battles prepare, then fade directly into the ready battle with its final zoom. Lift cinematic move shots above foreground grass and arena props to keep their focus visible.
 

@@ -125,6 +125,7 @@ var hover_offsets := [0.0, 0.0, 0.0, 0.0]
 var arena_preparing := false
 var entry_arena_requested := false
 var entry_arena_visible := false
+var android_entry_camera_points: Array[Vector3] = []
 var material_response: Node
 var boxes: Array = []
 var platforms: Array = []
@@ -556,12 +557,30 @@ func cancel_preparation() -> void:
 
 
 func begin_entry_arena() -> void:
-	# The host may show the empty desktop arena before the response/models.
+	# The host may show the empty arena before the response/models.
 	# This never claims a combatant is ready and never exposes sprite placeholders.
 	entry_arena_requested = true
 	if is_instance_valid(mode_label):
 		mode_label.hide()
 	_set_active(active)
+
+func _android_entry_reference() -> Dictionary:
+	# Framing only: reserve both slots using the known local lead's compiled
+	# envelope. No disk asset is admitted and no opponent is guessed or drawn.
+	var reference := {"placement": {"scale": 1.0, "yaw_degrees": 0.0}, "bounds": {}}
+	var save := get_node_or_null("/root/PlayerSave")
+	if save == null: return reference
+	for pokemon: Pokemon in save.party:
+		if pokemon == null or pokemon.current_hp <= 0: continue
+		var identity := ReviewedModels.canonical_identity(ReviewedModels.key(pokemon.species, pokemon.shiny))
+		var model: Dictionary = ReviewedModels.DATA.data.models.get(identity, ReviewedModels.SCREENED.data.models.get(identity, {}))
+		var digest := str(model.get("sha256", ""))
+		var reviewed: Dictionary = ReviewedModels.resolve(identity, digest) if not digest.is_empty() else {}
+		if not reviewed.is_empty():
+			reference.bounds = reviewed.get("bounds", {})
+			reference.placement = ModelPlacement.resolve({"species": identity, "placement": reviewed.placement}, reviewed.get("grounding", {}), digest)
+		break
+	return reference
 
 
 func finish_entry_arena() -> void:
@@ -2788,6 +2807,12 @@ func _update_camera(delta: float) -> void:
 	camera.look_at(target)
 	if not _preview_wants_3d():
 		var points := OverviewCamera.resting_points(self)
+		if uses_android_camera() and entry_arena_requested and android_entry_camera_points.is_empty():
+			android_entry_camera_points = OverviewCamera.resting_points(self, _android_entry_reference())
+		if uses_android_camera() and not android_entry_camera_points.is_empty():
+			# The same reserved envelopes survive response, import and summon.
+			# Touch orbit/zoom and move shots still operate on this stable overview.
+			points = android_entry_camera_points
 		var fit_offset := offset / maxf(user_camera_zoom, 0.001) if uses_android_camera() else offset
 		camera.transform = OverviewCamera.fit(camera, points, target, fit_offset, OverviewCamera.safe_rect(self))
 		if uses_android_camera():

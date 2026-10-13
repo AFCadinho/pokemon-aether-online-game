@@ -37,12 +37,12 @@ static func zoom_overview(camera: Camera3D, overview: Transform3D, focus: Vector
 	var factor := maxf(zoom, minimum / maxf(distance, 0.001))
 	return Transform3D(overview.basis, focus + (overview.origin - focus) * factor)
 
-static func resting_points(stage: Node) -> Array[Vector3]:
+static func resting_points(stage: Node, reference: Dictionary = {}) -> Array[Vector3]:
 	var points: Array[Vector3] = []
 	for index in stage._slot_count():
 		# Reserve every battle slot while models load or a partner is switching.
 		var identity: String = stage.identities[index]
-		var data: Dictionary = stage.visual_bounds.get(identity, {}).get("idle", {})
+		var data: Dictionary = reference.get("bounds", {}).get("idle", {}) if not reference.is_empty() else stage.visual_bounds.get(identity, {}).get("idle", {})
 		var box: AABB
 		if not data.is_empty():
 			box = AABB(Vector3(data.min[0], data.min[1], data.min[2]), Vector3(data.size[0], data.size[1], data.size[2]))
@@ -51,7 +51,7 @@ static func resting_points(stage: Node) -> Array[Vector3]:
 				stage._effect_bounds(index) # Populate the existing per-model fallback cache.
 			box = stage.fallback_effect_bounds.get(identity, AABB())
 			if not box.has_volume(): box = AABB(Vector3(-0.5, 0, -0.5), Vector3(1, 2, 1))
-		var placement: Dictionary = stage.placements.get(identity, {})
+		var placement: Dictionary = reference.get("placement", {}) if not reference.is_empty() else stage.placements.get(identity, {})
 		var scale_value := float(placement.get("scale", 1.0))
 		var home: Vector3 = stage._position(index)
 		home.y += float(placement.get("lift", 0.0)) + float(placement.get("hover_height", 0.0))

@@ -47,9 +47,29 @@ versus 9 ms for two requested assets afterwards; this is not a phone timing.
 The host probe also records the wait for authoritative combatants/setup before
 presenter preparation, to isolate the remaining delay.
 
+USB trial `0.3.109-3d-perf.10` (code 40, source `a0ccd7d77`) reduced two warm
+preparing windows to 202–205 ms, including 144–161 ms of downloader checking.
+Complete entry remained 1448–1620 ms for those samples, with 1080–1249 ms spent
+waiting for combatants/setup before presenter preparation. Another repeat with
+additional local work took 1985 ms. The user still found the transition slow.
+
+The fullscreen Android entry now fades the real arena after two drawn frames,
+independently of the authoritative battle response and model downloads. Actions
+and intro remain locked until complete preparation. Its overview reserves both
+slots using the known local lead's compiled resting envelope and placement,
+with the ordinary slot envelope when no reviewed local lead is available. These
+points remain fixed for that encounter; actual opponents are never guessed or
+drawn from this reference. Pinch/orbit and cinematic shots still use their normal
+camera controls. Very different opponent envelopes can crop at this close-up;
+touch zoom remains available once the battle is ready. Team Preview uses its
+existing roster camera. This preserves one opening zoom while allowing the field
+to appear during the request wait. No model integrity gate is bypassed.
+`ANDROID_BATTLE_ENTRY` measures the completed visual fade; the separate numeric
+`ANDROID_BATTLE_READY` records when preparation actually releases battle input.
+
 World-entry preparation now preserves an explicitly supplied overworld
 snapshot instead of replacing it with the lobby's dark loading backdrop.
-Android still waits for the real model camera fit, then uses the same layered
+The Android arena now uses its stable reserved overview for an early layered
 fullscreen fade. Entries without a world snapshot retain their loading screen.
 The held-download check verifies snapshot retention and, under native Mobile
 rendering, the actual green world-image pixels during response/model waits.
