@@ -118,6 +118,10 @@ This requires no asset publication. Project/export settings and the
 slot's editor settings are restored after export. The helper never installs,
 launches or publishes the APK.
 
+Pass `--experimental-3d` when locally testing the optional Android 3D renderer.
+The helper records this choice in the build record; omitting it keeps the
+ordinary Android 2D export policy.
+
 Before USB installation, compare the installed package's signing identity
 with the candidate and retain its data directory identity for verification.
 Install the verified APK with `adb install --no-incremental -r APK`, then check

@@ -30,6 +30,8 @@ def main():
     parser.add_argument("--compatible-build-id", required=True)
     parser.add_argument("--asset-build-id", required=True)
     parser.add_argument("--certificate", required=True)
+    parser.add_argument("--experimental-3d", action="store_true",
+                        help="Enable the explicit Android 3D experiment for this local test APK")
     parser.add_argument("--architecture", choices=["arm64-v8a", "x86_64"], default="arm64-v8a",
                         help="Use x86_64 for an accelerated desktop Android emulator")
     args = parser.parse_args()
@@ -48,7 +50,8 @@ def main():
     try:
         prepare_assets(ROOT)
         subprocess.run(["python3", str(ROOT / "android_updater/setup_build_template.py"), str(args.templates / "android_source.zip")], check=True)
-        prepare(project, presets, args.version, args.code, args.build_id, args.compatible_build_id)
+        prepare(project, presets, args.version, args.code, args.build_id, args.compatible_build_id,
+                experimental_3d=args.experimental_3d)
         for architecture in ["armeabi-v7a", "arm64-v8a", "x86", "x86_64"]:
             replace_setting(presets, "preset.7.options", "architectures/" + architecture,
                             "true" if architecture == args.architecture else "false")
@@ -72,6 +75,7 @@ def main():
         record["sourceCommit"] = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
         record["assetBuildId"] = args.asset_build_id
         record["architecture"] = args.architecture
+        record["experimentalAndroid3D"] = args.experimental_3d
         (output / "local-usb-build-record.json").write_text(json.dumps(record, indent=2) + "\n")
         print("Verified local USB candidate:", apk)
     finally:
