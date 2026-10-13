@@ -22,6 +22,16 @@ PACKAGE = "com.pokeaether.androidgpuqa"
 MATRIX = ["baseline", "no_grass", "baseline", "no_shadows", "baseline", "msaa_2", "baseline", "msaa_off", "baseline"]
 
 
+def require_debug_manifest(raw):
+    # Godot's built-in template uses a boolean uses-feature/required value
+    # that legacy aapt badging rejects. xmltree preserves its actual types.
+    package = re.search(r'^    A: package="([^"]+)"', raw, re.M)
+    application = re.search(r'^    E: application[^\n]*\n((?:      A:[^\n]*\n)+)', raw, re.M)
+    debug = application and re.search(r'^      A: android:debuggable\(0x0101000f\)=\(type 0x12\)0xffffffff$', application[1], re.M)
+    if not package or package[1] != PACKAGE or not debug:
+        raise ValueError("Require the exact separate debuggable diagnostic package")
+
+
 def validate(details, fixture):
     errors = []
     if details.get("run_id") != fixture["run_id"]:
@@ -94,9 +104,8 @@ def main():
     output.relative_to(ROOT / ".tmp")
     output.mkdir(parents=True, exist_ok=False)
     aapt = sorted((Path.home() / "Android/Sdk/build-tools").glob("*/aapt"))[-1]
-    badging = subprocess.check_output([str(aapt), "dump", "badging", str(apk)], text=True)
-    if not re.search(r"^package: name='" + re.escape(PACKAGE) + "'", badging, re.M) or "application-debuggable" not in badging:
-        raise ValueError("Require the exact separate debuggable diagnostic package")
+    manifest = subprocess.check_output([str(aapt), "dump", "xmltree", str(apk), "AndroidManifest.xml"], text=True)
+    require_debug_manifest(manifest)
     with zipfile.ZipFile(apk) as archive:
         architectures = {name.split("/")[1] for name in archive.namelist() if name.startswith("lib/")}
     if architectures != {"arm64-v8a"}:

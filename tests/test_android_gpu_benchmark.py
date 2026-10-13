@@ -1,10 +1,17 @@
 import copy
 import unittest
 
-from tools.run_android_gpu_benchmark import MATRIX, comparisons, validate
+from tools.run_android_gpu_benchmark import MATRIX, comparisons, validate, require_debug_manifest
 
 
 class GPUResultValidationTests(unittest.TestCase):
+    def test_only_separate_debug_package_may_be_installed(self):
+        raw = ('  E: manifest (line=2)\n    A: package="com.pokeaether.androidgpuqa"\n'
+               '    E: application (line=22)\n      A: android:debuggable(0x0101000f)=(type 0x12)0xffffffff\n')
+        require_debug_manifest(raw)
+        for invalid in [raw.replace("androidgpuqa", "game"), raw.replace("0xffffffff", "0x0"), raw.replace("debuggable", "other")]:
+            with self.assertRaises(ValueError): require_debug_manifest(invalid)
+
     def setUp(self):
         self.fixture = {"run_id": "fresh", "rounds": 2, "phase_seconds": 15}
         order = MATRIX + list(reversed(MATRIX)) + ["moves_first", "moves_repeat"]
