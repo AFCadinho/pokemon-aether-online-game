@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Avoid native pose baking for Android 3D move placement and include the last safe move presentation phase in crash reports to help diagnose device-specific failures.
+
 ## 0.3.109
 
 - Restore the optional experimental Android 3D choice using the current shared normal/shiny model collection, including the newly added alternate forms. Keep 2D recommended and verify every model download is available before building.

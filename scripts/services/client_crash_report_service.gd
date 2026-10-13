@@ -9,6 +9,10 @@ const SESSION_STATE_PATH := "user://diagnostics/client_session_state.json"
 const LATEST_REPORT_PATH := "user://diagnostics/latest_crash_report.txt"
 const MAX_LOG_READ_BYTES := 64 * 1024
 const MAX_DIAGNOSTIC_LINES := 180
+const ANDROID_3D_MOVE_PHASES := [
+	"audio_setup", "model_start", "model_ready", "effect_setup",
+	"effect_start", "effect_ready", "move_wait", "move_complete",
+]
 const ANDROID_EXIT_REASONS := {
 	0: "UNKNOWN", 1: "EXIT_SELF", 2: "SIGNALED", 3: "LOW_MEMORY",
 	4: "CRASH", 5: "CRASH_NATIVE", 6: "ANR", 7: "INITIALIZATION_FAILURE",
@@ -106,6 +110,17 @@ func _record_android_visual_choice() -> void:
 		return
 	var settings := get_node_or_null("/root/SettingsManager")
 	_current_session_state["experimentalAndroid3D"] = settings != null and settings.is_android_3d_experimental() and settings.battle_presentation_mode == "3d"
+	_write_json_file(SESSION_STATE_PATH, _current_session_state)
+
+
+func record_android_3d_move_phase(phase: String) -> void:
+	# Only fixed code phases, never species, moves, actors or battle payloads.
+	# Close the file before entering native code so SIGSEGV cannot lose the marker.
+	if not OS.has_feature("android") or _current_session_state.is_empty() or _session_ended:
+		return
+	if phase not in ANDROID_3D_MOVE_PHASES:
+		return
+	_current_session_state["android3DMovePhase"] = phase
 	_write_json_file(SESSION_STATE_PATH, _current_session_state)
 
 
@@ -283,6 +298,9 @@ func _build_crash_report(previous_state: Dictionary) -> String:
 		"Source log: %s" % source_name,
 	])
 	var native_exit: Variant = previous_state.get("androidExitInfo", {})
+	var move_phase := str(previous_state.get("android3DMovePhase", ""))
+	if move_phase in ANDROID_3D_MOVE_PHASES:
+		report_lines.append("Last Android 3D move phase: %s" % move_phase)
 	if native_exit is Dictionary and not native_exit.is_empty():
 		var reason := int(native_exit.get("reason", 0))
 		report_lines.append("Android exit reason: %s (%d)" % [ANDROID_EXIT_REASONS.get(reason, "UNKNOWN"), reason])

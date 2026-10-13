@@ -188,6 +188,8 @@ func play_attack_tween_for_actor(actor_ident: String, move_name: String = "") ->
 			return
 		var pilot: Dictionary = model_presenter.move_timing(move_name, actor_ident) if model_presenter.has_method("move_timing") else {}
 		var audio: Node
+		if model_presenter.has_method("_record_android_move_phase"):
+			model_presenter._record_android_move_phase("audio_setup")
 		if model_presenter.has_method("can_present_move") and model_presenter.can_present_move(move_name) and not pilot.is_empty():
 			var key := NativeMoveEffect.move_key(move_name)
 			var plan := NativeMoveEffect.audio_plan(audio_catalog.get_plan("move", NativeMoveEffect.audio_source_key(key)), pilot)
@@ -258,7 +260,11 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 						_release_3d_audio(audio, not effect.cancelled and owned_generation == render_generation), CONNECT_ONE_SHOT)
 		else:
 			_release_3d_audio(audio)
+		if model_presenter.has_method("_record_android_move_phase"):
+			model_presenter._record_android_move_phase("move_wait")
 		await move_presentation_3d.play_move(model_presenter, move_name, actor_ident, _target_ident, playback_options, null, effect)
+		if owned_generation == render_generation and uses_realtime_3d() and model_presenter.has_method("_record_android_move_phase"):
+			model_presenter._record_android_move_phase("move_complete")
 		return
 
 	var move_key: String = _normalize_move_name(move_name)
