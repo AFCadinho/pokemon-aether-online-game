@@ -22,6 +22,10 @@ PACKAGE = "com.pokeaether.androidgpuqa"
 MATRIX = ["baseline", "no_grass", "baseline", "no_shadows", "baseline", "msaa_2", "baseline", "msaa_off", "baseline"]
 
 
+def matrix(fixture):
+    return ["baseline", "grass_early_cutout", "baseline"] if fixture.get("candidate") == "grass_early_cutout" else MATRIX
+
+
 def require_debug_manifest(raw):
     # Godot's built-in template uses a boolean uses-feature/required value
     # that legacy aapt badging rejects. xmltree preserves its actual types.
@@ -40,7 +44,8 @@ def validate(details, fixture):
         errors.append("Incomplete workload or engine/check errors")
     expected = []
     for index in range(fixture["rounds"]):
-        expected.extend(reversed(MATRIX) if index % 2 else MATRIX)
+        order = matrix(fixture)
+        expected.extend(reversed(order) if index % 2 else order)
     expected += ["moves_first", "moves_repeat"]
     phases = details.get("phases", [])
     if [row.get("variant") for row in phases] != expected:
@@ -49,7 +54,7 @@ def validate(details, fixture):
     if len(set(labels)) != len(labels):
         errors.append("Duplicate phase labels")
     for row in phases:
-        if not re.fullmatch(r"\d+:\d+:(baseline|no_grass|no_shadows|msaa_2|msaa_off|moves_first|moves_repeat)", str(row.get("label"))):
+        if not re.fullmatch(r"\d+:\d+:(baseline|no_grass|no_shadows|msaa_2|msaa_off|grass_early_cutout|moves_first|moves_repeat)", str(row.get("label"))):
             errors.append("Invalid artifact label")
         if not fixture["phase_seconds"] <= row.get("seconds", 0) < fixture["phase_seconds"] + 5:
             errors.append("Incomplete or stalled phase")
@@ -61,7 +66,7 @@ def validate(details, fixture):
             errors.append("GPU timestamps unavailable")
         if not all(isinstance(row.get(key), list) and len(row[key]) == 4 for key in ["pipeline_start", "pipeline_end"]):
             errors.append("Missing pipeline counters")
-        elif row.get("variant") in MATRIX and row["pipeline_start"] != row["pipeline_end"]:
+        elif row.get("variant") in matrix(fixture) and row["pipeline_start"] != row["pipeline_end"]:
             errors.append("Idle timing includes pipeline compilation")
         for view in ["main", "response"]:
             item = row.get("viewports", {}).get(view, {})
@@ -75,7 +80,7 @@ def comparisons(details):
     rows = details["phases"]
     output = []
     for index, row in enumerate(rows):
-        if row["variant"] not in ["no_grass", "no_shadows", "msaa_2", "msaa_off"]:
+        if row["variant"] not in ["no_grass", "no_shadows", "msaa_2", "msaa_off", "grass_early_cutout"]:
             continue
         before, after = rows[index - 1], rows[index + 1]
         baseline = (before["timings"]["main_gpu_ms"]["p50"] + after["timings"]["main_gpu_ms"]["p50"]) / 2
@@ -94,6 +99,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--phase-seconds", type=int, choices=[10, 15, 20], default=15)
     parser.add_argument("--rounds", type=int, choices=[1, 2], default=2)
+    parser.add_argument("--candidate", choices=["grass_early_cutout"])
     args = parser.parse_args()
     if os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run through the assigned slot-env")
@@ -128,6 +134,7 @@ def main():
     if shell("getprop ro.kernel.qemu") == "1":
         raise ValueError("Emulator is not a physical performance result")
     fixture = {"schema": 1, "run_id": uuid.uuid4().hex, "phase_seconds": args.phase_seconds, "rounds": args.rounds}
+    if args.candidate: fixture["candidate"] = args.candidate
     report = {"schema": 1, "package": PACKAGE, "fixture": fixture, "health": [], "errors": [], "usable": False,
               "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
               "source_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT)),
@@ -142,7 +149,7 @@ def main():
     started = time.monotonic()
     pid = None
     last_phase = None
-    deadline = 900 + (len(MATRIX) * args.rounds + 2) * (args.phase_seconds + 4)
+    deadline = 900 + (len(matrix(fixture)) * args.rounds + 2) * (args.phase_seconds + 4)
     details = None
     try:
         while time.monotonic() - started < deadline:
