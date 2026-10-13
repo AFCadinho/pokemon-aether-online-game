@@ -12,6 +12,7 @@ signal ball_cue(ident: String, key: String)
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const MegaEvolutionEffect = preload("res://scripts/battle/battle_ui/mega_evolution_effect_3d.gd")
 const MoveEffect = preload("res://scripts/battle/battle_ui/move_effect_3d.gd")
+var android_move_warmup := preload("res://scripts/battle/battle_ui/android_move_warmup.gd").new()
 const SourceMoveEffect = preload("res://scripts/battle/battle_ui/source_move_effect_3d.gd")
 const ContactMoveEffect = preload("res://scripts/battle/battle_ui/contact_move_effect_3d.gd")
 const ElectricMoveEffect = preload("res://scripts/battle/battle_ui/electric_move_effect_3d.gd")
@@ -87,11 +88,20 @@ var coop_target_outline_material: ShaderMaterial
 const SINGLE_CAMERA_YAW := -35.0 * PI / 180.0
 const USER_CAMERA_ZOOM_MIN := 0.72
 const USER_CAMERA_ZOOM_MAX := 1.45
+const ANDROID_CAMERA_ZOOM_MIN := 0.50
+const ANDROID_CAMERA_ZOOM_MAX := 1.60
+const ANDROID_CAMERA_ZOOM_DEFAULT := 0.86
+
+func uses_android_camera() -> bool:
+	return OS.has_feature("android")
+
+func camera_zoom_limits() -> Vector2:
+	return Vector2(ANDROID_CAMERA_ZOOM_MIN, ANDROID_CAMERA_ZOOM_MAX) if uses_android_camera() else Vector2(USER_CAMERA_ZOOM_MIN, USER_CAMERA_ZOOM_MAX)
 
 func reset_user_camera() -> void:
 	user_camera_yaw = 0.0
 	user_camera_pitch = 0.0
-	user_camera_zoom = 1.0
+	user_camera_zoom = ANDROID_CAMERA_ZOOM_DEFAULT if uses_android_camera() else 1.0
 
 func _release_forest() -> void:
 	if forest_lease.is_empty():
@@ -141,6 +151,7 @@ var loaded_path := "!unloaded"
 var active := false
 
 func _ready() -> void:
+	reset_user_camera()
 	if OS.has_feature("android") and OS.has_feature("android_3d_performance_probe"):
 		var probe := preload("res://scripts/battle/battle_ui/android_3d_performance_probe.gd").new()
 		probe.stage = self
@@ -533,6 +544,7 @@ func _preparation_progress() -> Array:
 	return [loaded_path,pending_entries.size(),loading_path,progress,ArenaCatalog.forest_progress(),pool.phase if pool != null else -1,active,identities.duplicate(),_blocking_pipelines()]
 
 func cancel_preparation() -> void:
+	android_move_warmup.clear()
 	preparation_cancelled = true
 	warming_render = false
 	entry_arena_requested = false
@@ -691,6 +703,17 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 			_set_active(false)
 			return
 		await get_tree().process_frame
+
+func prepare_android_move_effects(available: Array = []) -> void:
+	if not android_move_warmup.allows(OS.has_feature("android"), OS.has_feature("android_3d_experimental"), RenderingServer.get_current_rendering_method() == "mobile"):
+		return
+	if _preview_wants_3d() or preparation_cancelled or preparation_failed: return
+	var metrics: Dictionary = await android_move_warmup.prepare(self, available)
+	if not is_instance_valid(self) or not is_inside_tree() or preparation_cancelled: return
+	preparation_metrics["move_warm_ms"] = metrics.elapsed_ms
+	preparation_metrics["move_warm_effects"] = metrics.effects
+	if OS.has_feature("android_3d_performance_probe"):
+		print("ANDROID_3D_MOVE_WARM ", JSON.stringify(metrics))
 
 
 func _reuses_rendered_models() -> bool:
@@ -1495,23 +1518,8 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 		"actor_ground":Vector3(a.position.x,_position(actor_index(actor)).y+0.04,a.position.z),
 		"target_ground":Vector3(b.position.x,_position(actor_index(target)).y+0.04,b.position.z)}
 
-func create_move_effect(move: String, actor: String, target: String, options: Dictionary) -> Node:
-	if not can_present_move(move): return null
-	_record_android_move_phase("effect_setup")
+func new_move_effect(move: String) -> Node3D:
 	var recipe := MoveRecipes.get_recipe(move)
-	if recipe.get("target", "") == "actor": target = actor
-	elif not handles(target) and recipe.get("family", "") == "field":
-		# Side/field events may have no explicit combatant target.
-		for slot in _slot_count():
-			var candidate := "p%d" % (slot+1)
-			if slot%2!=actor_index(actor)%2 and _move_visual(candidate)!=null:
-				target = candidate
-				break
-	var source := _move_visual(actor)
-	var destination := _move_visual(target)
-	if source == null or destination == null: return null
-	var timing := move_timing(move, actor)
-	if timing.is_empty(): return null
 	var effect: Node3D
 	if ElementalBatchEffect.Profiles.DATA.has(MoveEffect.move_key(move)):
 		effect = ElementalBatchEffect.new()
@@ -1545,6 +1553,26 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 		effect = LeafMoveEffect.new()
 	else:
 		effect = SourceMoveEffect.new() if MoveEffect.move_key(move) in ["ember", "watergun"] else MoveEffect.new()
+	return effect
+
+func create_move_effect(move: String, actor: String, target: String, options: Dictionary) -> Node:
+	if not can_present_move(move): return null
+	_record_android_move_phase("effect_setup")
+	var recipe := MoveRecipes.get_recipe(move)
+	if recipe.get("target", "") == "actor": target = actor
+	elif not handles(target) and recipe.get("family", "") == "field":
+		# Side/field events may have no explicit combatant target.
+		for slot in _slot_count():
+			var candidate := "p%d" % (slot+1)
+			if slot%2!=actor_index(actor)%2 and _move_visual(candidate)!=null:
+				target = candidate
+				break
+	var source := _move_visual(actor)
+	var destination := _move_visual(target)
+	if source == null or destination == null: return null
+	var timing := move_timing(move, actor)
+	if timing.is_empty(): return null
+	var effect := new_move_effect(move)
 	world.add_child(effect)
 	effect.view_camera = camera
 	common_effects.append(effect)

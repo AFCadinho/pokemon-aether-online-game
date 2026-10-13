@@ -169,6 +169,7 @@ static func _p99(values: Array) -> float:
 static func valid_fixture(value: Variant) -> bool:
 	if not value is Dictionary or value.get("schema") != 1:
 		return false
+	if not value.get("warm_moves", false) is bool: return false
 	var seconds: Variant = value.get("phase_seconds")
 	var rounds: Variant = value.get("rounds")
 	if typeof(seconds) not in [TYPE_FLOAT, TYPE_INT] or typeof(rounds) not in [TYPE_FLOAT, TYPE_INT]:
@@ -295,6 +296,10 @@ func _run() -> void:
 			if not report.failures.is_empty() or not sink.errors.is_empty():
 				_finish(); return
 	stage.playback_speed = 1.0
+	if bool(fixture.get("warm_moves", false)):
+		_control(str(fixture.get("candidate", "baseline")))
+		_marker("move_warmup")
+		report["move_warmup"] = await stage.android_move_warmup.prepare(stage)
 	await _observe("moves_first", int(fixture.rounds), true)
 	await _observe("moves_repeat", int(fixture.rounds), true)
 	_restore()

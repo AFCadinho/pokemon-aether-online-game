@@ -28,6 +28,15 @@ class GPUResultValidationTests(unittest.TestCase):
         self.assertEqual(validate(self.details, self.fixture), [])
         self.assertEqual(len(comparisons(self.details)), 8)
 
+    def test_requested_warmup_must_complete_all_representative_effects(self):
+        fixture = {**self.fixture, "warm_moves": True}
+        self.assertIn("Representative move warmup incomplete", validate(self.details, fixture))
+        details = copy.deepcopy(self.details)
+        details["move_warmup"] = {"effects": 3, "bounded": False, "elapsed_ms": 250}
+        self.assertEqual(validate(details, fixture), [])
+        details["move_warmup"]["bounded"] = True
+        self.assertIn("Representative move warmup incomplete", validate(details, fixture))
+
     def test_bounded_candidate_sequence_uses_matching_controls(self):
         for candidate in ["grass_early_cutout", "grass_front_to_back"]:
             fixture = {**self.fixture, "candidate": candidate}

@@ -292,6 +292,14 @@ func _reveal_when_prepared(token: int) -> void:
 		await presenter.await_prepared(not early_arena_requested)
 	if released or token != generation or not is_inside_tree():
 		return
+	if presenter != null and presenter.active and not presenter.preparation_cancelled:
+		var available: Array = []
+		if battle.battle_state != null:
+			available = battle.battle_state.get_available_moves(battle.local_state_player_id)
+		# Hidden samples may also prepare an early visible arena without showing
+		# an attack, moving its camera or revealing send-out actors.
+		await presenter.prepare_android_move_effects(available)
+	if released or token != generation or not is_inside_tree(): return
 	if presenter != null and (presenter.preparation_failed or not presenter.active) and settings.battle_presentation_mode in ["2.5d", "3d"]:
 		_prepare_2d_fallback()
 		if released or token != generation or not is_inside_tree():

@@ -38,6 +38,10 @@ def require_debug_manifest(raw):
 
 def validate(details, fixture):
     errors = []
+    if fixture.get("warm_moves"):
+        warm = details.get("move_warmup", {})
+        if warm.get("effects") != 3 or warm.get("bounded") or not isinstance(warm.get("elapsed_ms"), (int, float)):
+            errors.append("Representative move warmup incomplete")
     if details.get("run_id") != fixture["run_id"]:
         errors.append("Stale or foreign report")
     if not details.get("complete") or details.get("failures") or details.get("engine_errors"):
@@ -100,6 +104,7 @@ def main():
     parser.add_argument("--phase-seconds", type=int, choices=[10, 15, 20], default=15)
     parser.add_argument("--rounds", type=int, choices=[1, 2], default=2)
     parser.add_argument("--candidate", choices=["grass_early_cutout", "grass_front_to_back"])
+    parser.add_argument("--warm-moves", action="store_true", help="Prepare hidden representative VFX before the first move phase")
     args = parser.parse_args()
     if os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run through the assigned slot-env")
@@ -135,6 +140,7 @@ def main():
         raise ValueError("Emulator is not a physical performance result")
     fixture = {"schema": 1, "run_id": uuid.uuid4().hex, "phase_seconds": args.phase_seconds, "rounds": args.rounds}
     if args.candidate: fixture["candidate"] = args.candidate
+    if args.warm_moves: fixture["warm_moves"] = True
     report = {"schema": 1, "package": PACKAGE, "fixture": fixture, "health": [], "errors": [], "usable": False,
               "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
               "source_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT)),

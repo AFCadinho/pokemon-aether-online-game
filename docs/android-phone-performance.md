@@ -1,5 +1,38 @@
 # Physical Android 3D performance measurements
 
+## Android touch camera and bounded move preparation
+
+Android uses a nearer overview default (distance factor 0.86) and a wider
+safe frame, while the existing model-envelope fit keeps Pokémon above the
+responsive move controls. Distance limits are 0.50–1.60; model fit can stop
+the camera before that distance for large models. The reset button restores
+the Android default. Desktop framing and 0.72–1.45 limits remain unchanged.
+One finger rotates an idle camera; two fingers pinch to zoom. Buttons, chat,
+the loading cover and attacks in any singles/doubles slot block gestures.
+Touch cancellation, focus loss, a third finger and lifting one pinch finger
+end the gesture without rotating the remaining finger. Emulated mouse events
+do not rotate a second time; an ordinary mouse wheel still zooms.
+
+Before entry is marked prepared, experimental Android Mobile builds sample
+a maximum of eight hidden move effects on the real battle world. Currently
+available own moves take priority, followed by the measured common physical,
+flame and electric effects. Five charge/flight/impact samples instantiate lazy
+geometry and materials, without playing actor animations, sounds or camera
+shots. Preparation checks a 1,500 ms budget between samples (an individual
+driver compilation may exceed it). Hidden resources remain alive until the
+presenter is released, so this trades a small bounded allocation and entry
+work for a chance to avoid first-use stalls; it does not prove every move is
+warm or reduce overall memory use. Cancellation releases retained effects.
+This follows Godot's
+[pipeline instancing guidance](https://docs.godotengine.org/en/4.6/tutorials/performance/pipeline_compilations.html#pipeline-precompilation-instancing).
+
+`run_android_gpu_benchmark.py --warm-moves` records the hidden common-effect
+preparation before the first move phase; a bounded/incomplete preparation
+invalidates that comparison. The diagnostic and explicit local USB
+`--model-revision v14` flag pin the already published collection, independently
+of the qualified v15 collection on development. Normal releases still select
+v15. No model assets are published by either tool.
+
 ## Automatic GPU isolation on one physical phone
 
 The `android-gpu` export suite creates the separate debug package

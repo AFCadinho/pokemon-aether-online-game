@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Start Android 3D battles closer to the Pokémon, with one-finger camera rotation and two-finger pinch zoom. Prepare a bounded set of move effects before entry without playing attacks or sounds.
+
 - Draw existing forest grass from near to far in experimental Android 3D to reduce GPU work, retaining its density, geometry, textures and 4x anti-aliasing.
 
 - Prepare model release v15: save another 198 MB by sharing geometry and animations within 111 normal/shiny pairs, preserving all reviewed detail, colours, poses and alternate forms.

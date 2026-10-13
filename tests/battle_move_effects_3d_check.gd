@@ -20,9 +20,11 @@ var router: Router
 var complete := false
 var misses := 0
 func _ready() -> void: _run.call_deferred()
+func _make_stage() -> Node:
+	return Stage.new()
 func _setup() -> void:
 	SettingsManager.battle_animations = true
-	stage = Stage.new()
+	stage = _make_stage()
 	add_child(stage)
 	stage.set_process(false)
 	stage.active = true

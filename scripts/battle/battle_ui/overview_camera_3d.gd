@@ -3,6 +3,7 @@ extends RefCounted
 ## Off-centre framing uses a camera transform, so cinematic shots do not inherit
 ## a projection offset or a changed FOV.
 const SAFE_RECT := Rect2(0.14, 0.18, 0.72, 0.55)
+const ANDROID_SAFE_RECT := Rect2(0.06, 0.14, 0.88, 0.63)
 
 static func fit(camera: Camera3D, points: Array[Vector3], focus: Vector3, offset: Vector3, safe: Rect2 = SAFE_RECT) -> Transform3D:
 	var basis := Basis.looking_at(-offset.normalized())
@@ -53,7 +54,7 @@ static func resting_points(stage: Node) -> Array[Vector3]:
 	return points
 
 static func safe_rect(stage: Control) -> Rect2:
-	var safe := SAFE_RECT
+	var safe := ANDROID_SAFE_RECT if stage.uses_android_camera() else SAFE_RECT
 	if stage.size.y <= 0.0 or stage.get_parent() == null: return safe
 	# Read layout, not visibility: hiding the move buttons during an attack must
 	# not zoom the camera. Reserve extra room when UI scaling raises the prompt.

@@ -34,6 +34,8 @@ def main():
                         help="Enable the explicit Android 3D experiment for this local test APK")
     parser.add_argument("--performance-probe", action="store_true",
                         help="Log numeric render timings in this local experimental 3D APK")
+    parser.add_argument("--model-revision", choices=["current", "v14"], default="current",
+                        help="Pin the published v14 collection for a local USB rendering comparison")
     parser.add_argument("--full-response-scene", action="store_true",
                         help="Performance control: draw the old complete scenery in the response pass")
     parser.add_argument("--android-renderer", choices=["gl_compatibility", "mobile"],
@@ -43,6 +45,8 @@ def main():
     args = parser.parse_args()
     if args.performance_probe and not args.experimental_3d:
         parser.error("Performance probing requires --experimental-3d")
+    if args.model_revision != "current" and not args.experimental_3d:
+        parser.error("Model pinning requires --experimental-3d")
     if args.full_response_scene and not args.performance_probe:
         parser.error("The full response scene control requires --performance-probe")
     if args.android_renderer is None:
@@ -66,6 +70,9 @@ def main():
         subprocess.run(["python3", str(ROOT / "android_updater/setup_build_template.py"), str(args.templates / "android_source.zip")], check=True)
         prepare(project, presets, args.version, args.code, args.build_id, args.compatible_build_id,
                 experimental_3d=args.experimental_3d)
+        if args.model_revision == "v14":
+            features = json.loads(setting(presets, "preset.7", "custom_features"))
+            replace_setting(presets, "preset.7", "custom_features", json.dumps(features + ",android_3d_local_v14"))
         if args.performance_probe:
             features = json.loads(setting(presets, "preset.7", "custom_features"))
             replace_setting(presets, "preset.7", "custom_features",
@@ -97,6 +104,7 @@ def main():
         record["assetBuildId"] = args.asset_build_id
         record["architecture"] = args.architecture
         record["experimentalAndroid3D"] = args.experimental_3d
+        record["modelRevision"] = args.model_revision
         record["androidRenderer"] = args.android_renderer
         record["performanceProbe"] = args.performance_probe
         record["fullResponseScene"] = args.full_response_scene

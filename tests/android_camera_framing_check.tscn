@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/android_camera_framing_check.gd" id="1"]
+
+[node name="AndroidCameraFramingCheck" type="Node"]
+script = ExtResource("1")

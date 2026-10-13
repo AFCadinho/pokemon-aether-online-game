@@ -54,6 +54,10 @@ static func enabled() -> bool:
 	return geometry_enabled() or qualified_enabled() or catalog_enabled() or (OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_PILOT") == "1")
 
 static func production_revision() -> String:
+	# USB renderer comparisons keep the already published model collection.
+	# The normal release still selects v15; neither flag publishes assets.
+	if OS.has_feature("android") and OS.has_feature("android_3d_experimental") and (OS.has_feature("android_3d_local_v14") or (OS.is_debug_build() and OS.has_feature("android_gpu_isolation"))):
+		return "v14"
 	if OS.is_debug_build():
 		var revision := OS.get_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION")
 		if revision in ["v13", "v14"]:
