@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Route 1's exterior visual from its updated Tiled source.
+
 - Refresh the Route 5 Daycare interior visual from its updated Tiled source.
 
 - Select Aethering Recipients and Donors exclusively from your own Party. Bring at least two Pokémon using the nearby Daycare PC; previews are revalidated after Party moves or swaps.
