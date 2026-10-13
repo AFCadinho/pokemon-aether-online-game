@@ -11,6 +11,9 @@
 
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_visibility_mask"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/aethering_npc.tscn" id="aethering"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/market_attendant_npc.tscn" id="wings"]
+
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
 
@@ -79,6 +82,19 @@ texture_filter = 1
 position = Vector2(-48, -80)
 texture = ExtResource("7_pc_visual")
 centered = false
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="AetherResearcher" parent="Entities/NPCs" instance=ExtResource("aethering")]
+position = Vector2(176, 368)
+facing_direction = Vector2(0, 1)
+
+[node name="WingMerchant" parent="Entities/NPCs" instance=ExtResource("wings")]
+position = Vector2(432, 400)
+npc_definition_id = "kanto_route_5_wing_merchant"
+market_id = "daycare_wing_merchant"
+display_name = ""
+facing_direction = Vector2(0, 1)
 
 [node name="Tiles" type="Node2D" parent="."]
 

@@ -517,12 +517,6 @@ const EV_ITEM_EFFECTS := {
 	"calcium": {"stat": "spa", "potency": 10},
 	"zinc": {"stat": "spd", "potency": 10},
 	"carbos": {"stat": "spe", "potency": 10},
-	"health-wing": {"stat": "hp", "potency": 1},
-	"muscle-wing": {"stat": "atk", "potency": 1},
-	"resist-wing": {"stat": "def", "potency": 1},
-	"genius-wing": {"stat": "spa", "potency": 1},
-	"clever-wing": {"stat": "spd", "potency": 1},
-	"swift-wing": {"stat": "spe", "potency": 1},
 }
 const EV_REDUCING_BERRY_STATS := {
 	"pomeg-berry": "hp",
@@ -547,6 +541,7 @@ const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.sv
 const AETHER_ATELIER_POPUP_SCENE := preload("res://scenes/interface/aether_atelier_popup.tscn")
 const BANK_POPUP_SCENE := preload("res://scenes/interface/bank_popup.tscn")
 const MOVE_MENTOR_POPUP_SCENE := preload("res://scenes/interface/move_mentor_popup.tscn")
+const AETHERING_POPUP_SCENE := preload("res://scenes/interface/aethering_popup.tscn")
 const MOVE_DELETER_POPUP_SCENE := preload("res://scenes/interface/move_deleter_popup.tscn")
 const GIFT_VOUCHER_BALANCE_DIALOG_SCENE := preload("res://scenes/interface/gift_voucher_balance_dialog.tscn")
 const SHINY_TRACKER_POPUP_SCENE := preload("res://scenes/interface/shiny_tracker_popup.tscn")
@@ -1372,6 +1367,7 @@ var aether_atelier_popup: AetherAtelierPopup
 var bank_popup: BankPopup
 var move_mentor_popup
 var move_deleter_popup
+var aethering_popup
 var gift_voucher_balance_dialog: GiftVoucherBalanceDialog
 var shiny_tracker_popup: ShinyTrackerPopup
 var market_popup: PanelContainer
@@ -4011,6 +4007,7 @@ func _apply_ui_z_index_policy() -> void:
 		bank_popup,
 		move_mentor_popup,
 		move_deleter_popup,
+		aethering_popup,
 	]
 	for context_value: Variant in pokemon_summary_open_cards.values():
 		var context: Dictionary = context_value as Dictionary
@@ -4092,6 +4089,7 @@ func _priority_overlay_panels() -> Array[Control]:
 		bank_popup,
 		move_mentor_popup,
 		move_deleter_popup,
+		aethering_popup,
 	]
 	if quest_journal_view != null:
 		panels.append(quest_journal_view.get_journal_panel())
@@ -23875,6 +23873,8 @@ func _apply_market_context_copy() -> void:
 		return
 	var player_is_selling := market_mode == "player_sells"
 	var market_name := str(market_context.get("name", "")).strip_edges()
+	if str(market_context.get("id", "")) == "daycare_wing_merchant":
+		market_name = LocalizationManager.text("ui.aethering.merchant")
 	if player_is_selling:
 		market_title_label.text = (
 			LocalizationManager.text("ui.market.title.named_buyer", {"market": market_name})
@@ -32699,6 +32699,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": bank_popup, "close": Callable(self, "_hide_bank")},
 		{"panel": move_mentor_popup, "close": Callable(self, "_hide_move_mentor")},
 		{"panel": move_deleter_popup, "close": Callable(self, "_hide_move_deleter")},
+		{"panel": aethering_popup, "close": Callable(aethering_popup, "close_popup")},
 		{"panel": pc_popup, "close": Callable(self, "_on_pc_close_button_pressed")},
 		{"panel": bag_popup, "close": Callable(self, "_hide_bag_popup_for_escape")},
 		{"panel": public_trainer_card_popup, "close": Callable(self, "_hide_public_trainer_card")},
@@ -54529,3 +54530,24 @@ func _trace_nearby_pve_spectate(event: String, fields: Dictionary = {}) -> void:
 	payload["event"] = event
 	payload["ticksMs"] = Time.get_ticks_msec()
 	print("[NearbyPveSpectate] %s" % JSON.stringify(payload))
+
+
+func open_aethering() -> void:
+	if aethering_popup == null:
+		aethering_popup = AETHERING_POPUP_SCENE.instantiate()
+		root_control.add_child(aethering_popup)
+		_set_ui_panel_base_z(aethering_popup)
+		aethering_popup.closed.connect(func(): _deactivate_ui_panel(aethering_popup))
+		aethering_popup.completed.connect(_on_aethering_completed)
+	_activate_ui_panel(aethering_popup)
+	aethering_popup.open_aethering()
+
+func _on_aethering_completed(_result: Dictionary) -> void:
+	refresh_money_display()
+	bag_inventory_items = _normalize_bag_inventory_items(InventoryService.cached_inventory_items)
+	bag_inventory_loaded = InventoryService.inventory_loaded
+	_refresh_bag_items()
+	pc_all_boxes.clear()
+	pc_current_box.clear()
+	if pc_popup != null and pc_popup.visible:
+		await _refresh_pc_state(true)

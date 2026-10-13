@@ -1267,5 +1267,35 @@
   "kakashi-outfit": {
     "name": "Kakashi Caixa de Traje",
     "shortDesc": "Contém seis cosméticos separados: colete, calças, sandálias, cabelo, bandana e máscara. Para personagens masculinos e femininos."
+  },
+  "health-wing": {
+    "name": "Health Wing",
+    "shortDesc": "Consumida no Aethering para proteger o IV de HP do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente.",
+    "flavorText": "Consumida no Aethering para proteger o IV de HP do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente."
+  },
+  "muscle-wing": {
+    "name": "Muscle Wing",
+    "shortDesc": "Consumida no Aethering para proteger o IV de Attack do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente.",
+    "flavorText": "Consumida no Aethering para proteger o IV de Attack do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente."
+  },
+  "resist-wing": {
+    "name": "Resist Wing",
+    "shortDesc": "Consumida no Aethering para proteger o IV de Defense do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente.",
+    "flavorText": "Consumida no Aethering para proteger o IV de Defense do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente."
+  },
+  "genius-wing": {
+    "name": "Genius Wing",
+    "shortDesc": "Consumida no Aethering para proteger o IV de Sp. Attack do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente.",
+    "flavorText": "Consumida no Aethering para proteger o IV de Sp. Attack do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente."
+  },
+  "clever-wing": {
+    "name": "Clever Wing",
+    "shortDesc": "Consumida no Aethering para proteger o IV de Sp. Defense do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente.",
+    "flavorText": "Consumida no Aethering para proteger o IV de Sp. Defense do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente."
+  },
+  "swift-wing": {
+    "name": "Swift Wing",
+    "shortDesc": "Consumida no Aethering para proteger o IV de Speed do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente.",
+    "flavorText": "Consumida no Aethering para proteger o IV de Speed do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente."
   }
 }
