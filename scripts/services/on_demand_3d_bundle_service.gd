@@ -253,7 +253,14 @@ func ensure_models(identities: Array[String], source_catalog: String) -> Diction
 
 func _installed_models(identities: Array[String], source_catalog: String) -> Dictionary:
 	var release := _selected_release()
-	var index := _read_local_index(_local_index_path(release), release)
+	var asset_ids: Array[String] = []
+	for identity in identities:
+		var asset_id := asset_id_for_identity(identity)
+		if asset_id in release.requiredAssetIds and asset_id not in asset_ids:
+			asset_ids.append(asset_id)
+	if asset_ids.is_empty():
+		return {}
+	var index := _read_local_index(_local_index_path(release), release, asset_ids)
 	if index.is_empty():
 		return {} # Initial installs and missing indexes use the normal downloader.
 	var expected := {}
@@ -540,13 +547,21 @@ func _local_index_path(release: Dictionary) -> String:
 	return ROOT.path_join("index-%s.json" % pin.sha256)
 
 
-func _read_local_index(path: String, release: Dictionary) -> Dictionary:
+func _read_local_index(path: String, release: Dictionary, asset_ids: Array[String] = []) -> Dictionary:
 	var pin: Dictionary = release.index
 	if not _valid_file(path, int(pin.size_bytes), str(pin.sha256)):
 		return {}
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 	if not parsed is Dictionary or not parsed.get("assets") is Array or parsed.get("catalog_revision") != release.revision:
 		return {}
+	if not asset_ids.is_empty():
+		# The full pinned index is still hashed. Only expand trusted pair manifests
+		# needed by this encounter, rather than copying the entire release cohort.
+		var selected: Array = []
+		for row: Variant in parsed.assets:
+			if row is Dictionary and str(row.get("asset_id", "")) in asset_ids:
+				selected.append(row)
+		parsed.assets = selected
 	return PairPilot.expand_index(parsed)
 
 

@@ -15,6 +15,7 @@ var loading_progress: ProgressBar
 var loading_backdrop: ColorRect
 var loading_entry_requested := false
 var mounted_at_msec := 0
+var entry_setup_wait_ms := 0
 const FADE_SECONDS := 0.18
 const MIN_FADE_FRAMES := 12
 const WARM_ANDROID_FADE_SECONDS := 0.12
@@ -291,6 +292,7 @@ func _reveal_when_prepared(token: int) -> void:
 			await get_tree().process_frame
 	if released or token != generation or not is_inside_tree():
 		return
+	entry_setup_wait_ms = Time.get_ticks_msec() - mounted_at_msec
 	if presenter != null:
 		# Once the arena is visible, hidden send-out actors must stay hidden.
 		await presenter.await_prepared(not early_arena_requested)
@@ -382,7 +384,7 @@ func _reveal_cover() -> void:
 	reveal_tween = create_tween()
 	reveal_tween.tween_property(self, "fade_progress", 1.0, fade_seconds).set_trans(Tween.TRANS_LINEAR)
 	# A slow mount/upload frame must not consume the whole entrance tween.
-	# Advance only after presenting a frame, with at least twelve blend steps.
+	# Advance only after presenting a frame, with the selected minimum blend steps.
 	reveal_tween.pause()
 	while not released and reveal_tween.is_valid() and fade_progress < 1.0:
 		await get_tree().process_frame
@@ -399,6 +401,7 @@ func _reveal_cover() -> void:
 		outgoing_snapshot.texture = null
 		if OS.has_feature("android_3d_performance_probe"):
 			print("ANDROID_BATTLE_ENTRY ", JSON.stringify({"ready_ms": ready_ms,
+				"setup_wait_ms": entry_setup_wait_ms,
 				"fade_ms": Time.get_ticks_msec() - fade_started, "total_ms": Time.get_ticks_msec() - mounted_at_msec,
 				"cached_assets": warm_android, "fade_frames": fade_frames}))
 		_finish_entry_if_ready()

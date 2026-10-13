@@ -45,6 +45,16 @@ func _run() -> void:
 	file.store_string(JSON.stringify(rows))
 	file.close()
 	var service := Service.new()
+	var index_path := directory.path_join("shared/index.json")
+	var index_pin := {"revision": index.catalog_revision, "index": {
+		"size_bytes": FileAccess.open(index_path, FileAccess.READ).get_length(),
+		"sha256": FileAccess.get_sha256(index_path)}}
+	var subset: Array[String] = [str(asset.asset_id)]
+	var full: Dictionary = service._read_local_index(index_path, index_pin)
+	var selected: Dictionary = service._read_local_index(index_path, index_pin, subset)
+	assert(selected.assets.size() == 1 and selected.assets[0] == full.assets[0])
+	index_pin.index.sha256 = "0".repeat(64)
+	assert(service._read_local_index(index_path, index_pin, subset).is_empty())
 	Cache.clear()
 	for cycle in 2:
 		var stage := Stage.new()

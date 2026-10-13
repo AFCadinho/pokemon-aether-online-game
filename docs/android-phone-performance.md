@@ -28,6 +28,25 @@ The native real-pack handoff check covers normal/shiny appearances, mismatched
 receipts, cold after-load inspection and warm RAM reuse. Held-download camera
 entry and fullscreen fade/handoff/cancellation checks remain focused guards.
 
+USB trial `0.3.109-3d-perf.9` (code 39, source `f677962de`) passed signed
+ARM64 Mobile export checks and was installed on the SM-S938B without clearing
+game data. It retains v14 models and disabled move warmup. Four physical entries
+recorded 3195/1924/2067/1979 ms from host mount through completed fade. Repeat
+preparation took 576–632 ms, including 536–560 ms of downloader checking;
+presenter validation was zero with two fresh pair handoffs. The repeat fades
+took 158–168 ms. The user still found entry slow, so reducing fade alone was
+insufficient. Time outside these preparation/fade phases is not yet attributed
+to network or scene setup.
+
+Installed-model checks now hash the complete pinned index, but expand only the
+assets needed by the encounter. The local v14 pin reuses its already owned
+compiled trusted cohort rather than reparsing the large JSON on every entry.
+No disk verification receipt is kept across encounters. A desktop v14 probe
+measured approximately 393 ms per complete-index read before these changes
+versus 9 ms for two requested assets afterwards; this is not a phone timing.
+The host probe also records the wait for authoritative combatants/setup before
+presenter preparation, to isolate the remaining delay.
+
 World-entry preparation now preserves an explicitly supplied overworld
 snapshot instead of replacing it with the lobby's dark loading backdrop.
 Android still waits for the real model camera fit, then uses the same layered
@@ -54,8 +73,8 @@ The 35 Z-move choreography regressions also passed.
 USB trial `0.3.109-3d-perf.8` (code 38, source `55273e8c0`) passed signed
 ARM64 Mobile export checks and was installed without clearing game data. It
 retains v14 models, the close-up camera and move shots, with warmup disabled.
-The physical overworld fade and grass-shot appearance are awaiting the user's
-repeat test on the grassfield.
+The user confirmed the physical overworld fade and grass-shot appearance on
+the grassfield; the remaining feedback concerns entry latency with local assets.
 
 Android move shots use the independent `android_3d_move_camera` preference,
 enabled when an older profile has no value for it. Previously, all move shots
