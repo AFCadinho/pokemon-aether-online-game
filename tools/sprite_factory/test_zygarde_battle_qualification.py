@@ -33,6 +33,11 @@ class ZygardeQualification(unittest.TestCase):
             self.assertEqual(registry['models'][a['runtime_identity']]['profile'],'zygarde-10')
         for kind in ('models','profiles'):
             later=set(read(HERE/'remaining_fourteen_qualification.json')['entries'])
+            if 'final_twenty_one_qualification_sha256' in registry:
+                final=read(HERE/'final_twenty_one_qualification.json')
+                self.assertEqual(registry['final_twenty_one_qualification_sha256'],sha(HERE/'final_twenty_one_qualification.json'))
+                self.assertEqual(set(final['entries']),set(read(HERE/'remaining_fourteen_qualification.json')['remaining_species']))
+                later.update(final['entries'])
             before={k:v for k,v in registry[kind].items() if k.removesuffix('@shiny') not in later | {'zygarde-10'}}
             self.assertEqual(canonical(before),r['previous_registry'][kind+'_sha256'])
 

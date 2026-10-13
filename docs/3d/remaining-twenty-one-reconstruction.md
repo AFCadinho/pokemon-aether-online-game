@@ -1,5 +1,8 @@
 # Remaining 21 forms: authored reconstruction previews
 
+Historical preview checkpoint. The subsequent admission and its evidence are
+documented in [final-twenty-one-qualification.md](final-twenty-one-qualification.md).
+
 The user authorized reconstructing missing geometry, animation and effects after
 confirming that Biochao, SCVI and Legends Z-A are the available sources. This
 checkpoint provides normal and shiny local previews for all 21 forms. It does

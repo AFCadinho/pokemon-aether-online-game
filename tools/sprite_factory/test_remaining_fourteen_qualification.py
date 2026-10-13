@@ -44,8 +44,14 @@ class FourteenQualification(unittest.TestCase):
                 row=registry['models'][appearance['runtime_identity']]
                 self.assertEqual(row['sha256'],appearance['source_sha256'])
                 self.assertEqual(row['profile'],name)
+        later=set()
+        if 'final_twenty_one_qualification_sha256' in registry:
+            final=read(HERE/'final_twenty_one_qualification.json')
+            self.assertEqual(registry['final_twenty_one_qualification_sha256'],sha(HERE/'final_twenty_one_qualification.json'))
+            later=set(final['entries'])
+            self.assertEqual(later,set(receipt['remaining_species']))
         for key in ('models','profiles'):
-            before={n:v for n,v in registry[key].items() if n.removesuffix('@shiny') not in NAMES}
+            before={n:v for n,v in registry[key].items() if n.removesuffix('@shiny') not in set(NAMES)|later}
             self.assertEqual(canonical(before),receipt['previous_registry'][key+'_sha256'])
 
 
