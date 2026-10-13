@@ -232,11 +232,14 @@ func _run() -> void:
 		_finish(); return
 	pool = stage.forest_pool
 	for data in pool.passes:
-		var grass: Node3D = data.arena.get_node_or_null("SharedForestGrass")
-		if grass != null: original_grass.append([grass, grass.visible])
+		var grasses: Array[Node] = data.arena.find_children("SharedForestGrass", "", true, false)
+		if _check(grasses.size() == 1, "One grass graph in each authored arena hierarchy"):
+			original_grass.append([grasses[0], grasses[0].visible])
 		_collect_lights(data.world)
 		original_msaa.append([data.viewport, data.viewport.msaa_3d])
 	_check(original_grass.size() == 2, "Both original grass graphs present")
+	if not report.failures.is_empty():
+		_finish(); return
 	if not original_grass.is_empty():
 		var grass_facts := {"batches": 0, "instances": 0, "shader": ""}
 		for child in original_grass[0][0].get_children():
