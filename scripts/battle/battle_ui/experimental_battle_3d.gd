@@ -2756,7 +2756,8 @@ func _update_camera(delta: float) -> void:
 			for index in _slot_count(): centers.append(_position(index) + Vector3.UP * 1.2)
 			var zoom := user_camera_zoom * (4.0 / 3.0 if double_mode else 1.0)
 			camera.transform = OverviewCamera.zoom_overview(camera, camera.transform, target, zoom, centers)
-	if settings.battle_3d_camera_motion and active:
+	var move_camera_enabled: bool = settings.android_3d_move_camera if uses_android_camera() else settings.battle_3d_camera_motion
+	if move_camera_enabled and active:
 		move_camera.apply(self)
 	move_atmosphere.apply(self)
 

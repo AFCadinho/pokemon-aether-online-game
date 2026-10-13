@@ -5,13 +5,13 @@ const MOVES := ["Moonblast", "Hyper Beam", "Solar Beam", "Focus Blast", "Shadow 
 func _run() -> void:
 	_setup()
 	SettingsManager.battle_presentation_mode = "3d"
-	SettingsManager.battle_3d_camera_motion = true
+	_set_motion(true)
 	stage.camera = Camera3D.new()
 	stage.world.add_child(stage.camera)
 	stage.camera.fov = 48.0
 	stage.user_camera_yaw = 0.4
 	stage.user_camera_pitch = 0.12
-	stage.user_camera_zoom = 0.85
+	stage.user_camera_zoom = _camera_zoom()
 	for doubles in [false, true]:
 		stage.double_mode = doubles
 		stage._update_camera(0.0)
@@ -52,10 +52,10 @@ func _run() -> void:
 						assert(not stage.camera.transform.is_equal_approx(charge), move + " cuts after charge")
 					_sample(slot, effect, lerpf(effect.impact, effect.duration, 0.2))
 					_in_frame(anchors.target, move + " impact")
-					SettingsManager.battle_3d_camera_motion = false
+					_set_motion(false)
 					stage._update_camera(0.0)
 					assert(stage.camera.transform.is_equal_approx(overview), "Disabled camera motion")
-					SettingsManager.battle_3d_camera_motion = true
+					_set_motion(true)
 					_sample(slot, effect, effect.duration * 0.9999)
 					assert(stage.camera.position.distance_to(overview.origin) < 0.01, "Smooth recovery")
 					effect.cancel()
@@ -134,3 +134,9 @@ func _check_portrait_framing() -> void:
 		for point in points:
 			assert(Rect2(Vector2.ZERO, Vector2(viewport.size)).has_point(camera.unproject_position(point)), "Portrait field framing")
 	viewport.queue_free()
+
+func _set_motion(enabled: bool) -> void:
+	SettingsManager.battle_3d_camera_motion = enabled
+
+func _camera_zoom() -> float:
+	return 0.85

@@ -1410,6 +1410,7 @@
   "ui.settings.terminology.english": "英文名",
   "ui.settings.terminology.localized": "翻译名称",
   "ui.settings.enable_move_animations": "启用移动动画",
+  "ui.settings.android_move_camera": "招式期间的3D镜头切换",
   "ui.settings.enable_weather_effects": "启用天气效果",
   "ui.settings.enable_terrain_effects": "启用地形效果",
   "ui.settings.display_own_name": "显示自己的姓名",

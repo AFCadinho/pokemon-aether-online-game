@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Enable move-specific 3D camera shots on Android, including Draco Meteor's charge and meteor rain. Add a separate Graphics toggle while keeping the idle camera steady and restoring the player's zoom after moves.
+
 - Start Android 3D battles closer to the Pokémon, with one-finger camera rotation and two-finger pinch zoom.
   Keep the opening covered until the real Pokémon camera frame is ready, avoiding an initial zoom change as models appear.
 
