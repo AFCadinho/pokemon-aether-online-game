@@ -118,6 +118,13 @@ This requires no asset publication. Project/export settings and the
 slot's editor settings are restored after export. The helper never installs,
 launches or publishes the APK.
 
+Pass `--experimental-3d` when locally testing the optional Android 3D renderer.
+Experimental Android 3D exports use Mobile/Vulkan to avoid the observed Adreno
+Compatibility shader-link crash. The helper records the feature and renderer
+in the build record. Omitting the flag keeps the ordinary Android 2D export
+on Compatibility. For a local GPU-driver comparison, combine the flag with
+`--android-renderer gl_compatibility`. Project settings are restored afterward.
+
 Before USB installation, compare the installed package's signing identity
 with the candidate and retain its data directory identity for verification.
 Install the verified APK with `adb install --no-incremental -r APK`, then check
