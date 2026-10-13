@@ -4,6 +4,7 @@ const Stage = preload("res://scripts/battle/battle_ui/experimental_battle_3d.gd"
 const Pair = preload("res://scripts/services/model_pair_pilot.gd")
 const Pool = preload("res://scripts/battle/arenas/shared/environment_pool.gd")
 const Cutout = preload("res://scripts/battle/arenas/shared/android_grass_cutout.gd")
+const DrawOrder = preload("res://scripts/battle/arenas/shared/android_grass_draw_order.gd")
 const Stats = preload("res://scripts/battle/battle_ui/android_3d_performance_probe.gd")
 const REPORT := "user://android-gpu-details.json"
 const MATRIX := ["baseline", "no_grass", "baseline", "no_shadows", "baseline", "msaa_2", "baseline", "msaa_off", "baseline"]
@@ -17,6 +18,7 @@ var original_grass: Array = []
 var original_lights: Array = []
 var original_msaa: Array = []
 var original_materials: Array = []
+var original_batches: Array = []
 var dimensions := Vector2i.ZERO
 class ErrorSink extends Logger:
 	var errors: Array[String] = []
@@ -57,6 +59,8 @@ func _restore() -> void:
 		if is_instance_valid(row[0]): row[0].msaa_3d = row[1]
 	for row in original_materials:
 		if is_instance_valid(row[0]): row[0].material_override = row[1]
+	for row in original_batches:
+		if is_instance_valid(row[0]): row[0].multimesh = row[1]
 
 func _control(variant: String) -> void:
 	_restore()
@@ -69,6 +73,8 @@ func _control(variant: String) -> void:
 			row[0].msaa_3d = Viewport.MSAA_2X if variant == "msaa_2" else Viewport.MSAA_DISABLED
 	elif variant == "grass_early_cutout":
 		for row in original_materials: row[0].material_override = row[2]
+	elif variant == "grass_front_to_back":
+		for row in original_batches: row[0].multimesh = row[2]
 	for row in original_grass:
 		_check(row[0].visible == (false if variant == "no_grass" else row[1]), "Grass control restored")
 	for row in original_lights:
@@ -78,6 +84,8 @@ func _control(variant: String) -> void:
 		_check(row[0].msaa_3d == expected, "MSAA control restored")
 	for row in original_materials:
 		_check(row[0].material_override == (row[2] if variant == "grass_early_cutout" else row[1]), "Grass material control restored")
+	for row in original_batches:
+		_check(row[0].multimesh == (row[2] if variant == "grass_front_to_back" else row[1]), "Grass geometry control restored")
 
 func _collect_lights(node: Node) -> void:
 	if node is Light3D:
@@ -169,7 +177,7 @@ static func valid_fixture(value: Variant) -> bool:
 	if float(seconds) not in [10.0, 15.0, 20.0] or float(rounds) not in [1.0, 2.0]:
 		return false
 	var run_id: Variant = value.get("run_id")
-	return value.get("candidate", "") in ["", "grass_early_cutout"] and run_id is String and RegEx.create_from_string("^[0-9a-f]{32}$").search(run_id) != null
+	return value.get("candidate", "") in ["", "grass_early_cutout", "grass_front_to_back"] and run_id is String and RegEx.create_from_string("^[0-9a-f]{32}$").search(run_id) != null
 
 func _run() -> void:
 	OS.add_logger(sink)
@@ -258,6 +266,14 @@ func _run() -> void:
 					if not _check(materials[original] != null, "Approved grass shader matches cutout candidate"):
 						_finish(); return
 					original_materials.append([child, original, materials[original]])
+	if fixture.get("candidate", "") == "grass_front_to_back":
+		# Response grass is already excluded. Change only visible main geometry.
+		for child in original_grass[0][0].get_children():
+			if child is MultiMeshInstance3D:
+				var point: Vector3 = child.to_local(stage.camera.global_position)
+				original_batches.append([child, child.multimesh, DrawOrder.ordered(child.multimesh, point)])
+		if not _check(not original_batches.is_empty(), "Main grass batches reordered"):
+			_finish(); return
 	if not original_grass.is_empty():
 		var grass_facts := {"batches": 0, "instances": 0, "shader": ""}
 		for child in original_grass[0][0].get_children():
@@ -272,7 +288,7 @@ func _run() -> void:
 	stage.playback_speed = 0.0
 	RenderingServer.global_shader_parameter_set("wind_speed", 0.0)
 	for round_index in int(fixture.rounds):
-		var order := ["baseline", "grass_early_cutout", "baseline"] if fixture.get("candidate", "") == "grass_early_cutout" else MATRIX.duplicate()
+		var order := ["baseline", fixture.candidate, "baseline"] if not fixture.get("candidate", "").is_empty() else MATRIX.duplicate()
 		if round_index % 2 == 1: order.reverse()
 		for variant: String in order:
 			await _observe(variant, round_index)

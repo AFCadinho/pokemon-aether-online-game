@@ -23,7 +23,7 @@ MATRIX = ["baseline", "no_grass", "baseline", "no_shadows", "baseline", "msaa_2"
 
 
 def matrix(fixture):
-    return ["baseline", "grass_early_cutout", "baseline"] if fixture.get("candidate") == "grass_early_cutout" else MATRIX
+    return ["baseline", fixture["candidate"], "baseline"] if fixture.get("candidate") else MATRIX
 
 
 def require_debug_manifest(raw):
@@ -54,7 +54,7 @@ def validate(details, fixture):
     if len(set(labels)) != len(labels):
         errors.append("Duplicate phase labels")
     for row in phases:
-        if not re.fullmatch(r"\d+:\d+:(baseline|no_grass|no_shadows|msaa_2|msaa_off|grass_early_cutout|moves_first|moves_repeat)", str(row.get("label"))):
+        if not re.fullmatch(r"\d+:\d+:(baseline|no_grass|no_shadows|msaa_2|msaa_off|grass_early_cutout|grass_front_to_back|moves_first|moves_repeat)", str(row.get("label"))):
             errors.append("Invalid artifact label")
         if not fixture["phase_seconds"] <= row.get("seconds", 0) < fixture["phase_seconds"] + 5:
             errors.append("Incomplete or stalled phase")
@@ -80,7 +80,7 @@ def comparisons(details):
     rows = details["phases"]
     output = []
     for index, row in enumerate(rows):
-        if row["variant"] not in ["no_grass", "no_shadows", "msaa_2", "msaa_off", "grass_early_cutout"]:
+        if row["variant"] not in ["no_grass", "no_shadows", "msaa_2", "msaa_off", "grass_early_cutout", "grass_front_to_back"]:
             continue
         before, after = rows[index - 1], rows[index + 1]
         baseline = (before["timings"]["main_gpu_ms"]["p50"] + after["timings"]["main_gpu_ms"]["p50"]) / 2
@@ -99,7 +99,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--phase-seconds", type=int, choices=[10, 15, 20], default=15)
     parser.add_argument("--rounds", type=int, choices=[1, 2], default=2)
-    parser.add_argument("--candidate", choices=["grass_early_cutout"])
+    parser.add_argument("--candidate", choices=["grass_early_cutout", "grass_front_to_back"])
     args = parser.parse_args()
     if os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run through the assigned slot-env")
