@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Move the Nature Specialist to the Route 5 Daycare alongside the Aether Researcher and Wing Merchant; remove it from Pokémon Centers.
+
 - Refresh Route 1's exterior visual from its updated Tiled source.
 
 - Refresh the Route 5 Daycare interior visual from its updated Tiled source.
