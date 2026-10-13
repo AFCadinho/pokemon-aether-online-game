@@ -2,6 +2,9 @@
 import json
 import unittest
 from zygarde_battle_admission import ROOT,HERE,RECEIPT,INDEX,GAME,LAUNCHER,canonical,sha,read
+import sys
+sys.path.insert(0,str(ROOT/"tools"))
+from package_approved_3d_release_v14 import historical_registry
 
 
 class ZygardeQualification(unittest.TestCase):
@@ -21,7 +24,7 @@ class ZygardeQualification(unittest.TestCase):
         for path,digest in r['code_sha256'].items(): self.assertEqual(sha(ROOT/path),digest,path)
 
     def test_exact_pair_and_previous_registry_unchanged(self):
-        r=read(RECEIPT);registry=read(GAME)
+        r=read(RECEIPT);registry=historical_registry(read(GAME))
         self.assertEqual(GAME.read_bytes(),LAUNCHER.read_bytes())
         self.assertEqual(registry['zygarde_ten_qualification_sha256'],sha(RECEIPT))
         self.assertEqual(sha(INDEX),r['bundle_index_sha256'])

@@ -2,6 +2,9 @@
 import hashlib,json,tempfile,unittest
 from pathlib import Path
 from final_twenty_one_admission import ROOT,HERE,RECEIPT,INDEX,GAME,LAUNCHER,NAMES,read,sha,canonical,clean_log
+import sys
+sys.path.insert(0,str(ROOT/"tools"))
+from package_approved_3d_release_v14 import historical_registry
 
 class FinalFormsQualification(unittest.TestCase):
     def test_complete_batch_and_evidence_identity(self):
@@ -24,7 +27,7 @@ class FinalFormsQualification(unittest.TestCase):
             self.assertIn('admitted-check-'+name+'.log',r['evidence_sha256'])
 
     def test_only_these_twenty_one_pairs_are_added(self):
-        r=read(RECEIPT);registry=read(GAME)
+        r=read(RECEIPT);registry=historical_registry(read(GAME))
         self.assertEqual(GAME.read_bytes(),LAUNCHER.read_bytes())
         self.assertEqual(registry['final_twenty_one_qualification_sha256'],sha(RECEIPT))
         previous={**registry}

@@ -4,6 +4,9 @@ import hashlib
 import json
 import unittest
 from remaining_twenty_one_result import RECEIPT,REGISTRIES,validate,read,sha,ROOT,HERE
+import sys
+sys.path.insert(0,str(ROOT/"tools"))
+from package_approved_3d_release_v14 import historical_registry
 
 
 class ReconstructionReview(unittest.TestCase):
@@ -14,7 +17,7 @@ class ReconstructionReview(unittest.TestCase):
         self.assertEqual(r['previous_qualification_sha256'],sha(HERE/'remaining_fourteen_qualification.json'))
         self.assertEqual(REGISTRIES[0].read_bytes(),REGISTRIES[1].read_bytes())
         for path,digest in r['registries_sha256'].items():
-            registry=read(ROOT/path)
+            registry=historical_registry(read(ROOT/path))
             if 'final_twenty_one_qualification_sha256' in registry:
                 final=read(HERE/'final_twenty_one_qualification.json')
                 self.assertEqual(registry.pop('final_twenty_one_qualification_sha256'),sha(HERE/'final_twenty_one_qualification.json'))

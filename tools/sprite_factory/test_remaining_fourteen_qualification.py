@@ -1,6 +1,9 @@
 """Guard additive admission, approved scene identity and untouched earlier models."""
 import unittest
 from remaining_fourteen_admission import ROOT,HERE,RECEIPT,INDEX,GAME,LAUNCHER,NAMES,canonical,read,sha
+import sys
+sys.path.insert(0,str(ROOT/"tools"))
+from package_approved_3d_release_v14 import historical_registry
 
 
 class FourteenQualification(unittest.TestCase):
@@ -29,7 +32,7 @@ class FourteenQualification(unittest.TestCase):
             if name.startswith('cramorant-'):self.assertEqual(row['approved_preview_pixel_exact_frames'],20)
 
     def test_exact_additive_catalog_and_pair_contract(self):
-        receipt=read(RECEIPT);registry=read(GAME)
+        receipt=read(RECEIPT);registry=historical_registry(read(GAME))
         self.assertEqual(GAME.read_bytes(),LAUNCHER.read_bytes())
         self.assertEqual(registry['remaining_fourteen_qualification_sha256'],sha(RECEIPT))
         self.assertEqual(sha(INDEX),receipt['bundle_index_sha256'])

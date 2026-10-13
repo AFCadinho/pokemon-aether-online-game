@@ -9,6 +9,9 @@ from remaining_forms_pin_checks import code_pin_valid
 
 ROOT=Path(__file__).resolve().parents[2]
 HERE=Path(__file__).parent
+import sys
+sys.path.insert(0,str(ROOT/'tools'))
+from package_approved_3d_release_v14 import historical_registry
 
 
 def read(path): return json.loads(path.read_bytes())
@@ -21,7 +24,7 @@ class RemainingForms(unittest.TestCase):
     def setUpClass(cls):
         cls.receipt=read(HERE/'remaining_forms_repair_qualification.json')
         cls.result=read(HERE/'remaining_forms_repair_result.json')
-        cls.registry=read(ROOT/'scripts/battle/battle_ui/reviewed_model_catalog.json')
+        cls.registry=historical_registry(read(ROOT/'scripts/battle/battle_ui/reviewed_model_catalog.json'))
 
     def test_exact_scope_and_honest_remaining_total(self):
         selected=read(HERE/'remaining_forms_repair_intake.json')['entries']
@@ -72,7 +75,13 @@ class RemainingForms(unittest.TestCase):
     def test_current_source_and_code_pins(self):
         r=self.receipt
         self.assertEqual(sha(HERE/'remaining_forms_repair_intake.json'),r['source_intake_sha256'])
-        for path,pin in r['code_sha256'].items(): self.assertEqual(sha(ROOT/path),pin,path)
+        for path,pin in r['code_sha256'].items():
+            if path=='scripts/services/model_pair_pilot.gd' and sha(ROOT/path)!=pin:
+                release=read(ROOT/'release/approved_3d_v14_binding.json')
+                self.assertTrue(release['runtime_approved'])
+                self.assertEqual(release['code_bindings'][path]['previous_sha256'],pin)
+                self.assertEqual(release['code_bindings'][path]['sha256'],sha(ROOT/path))
+            else:self.assertEqual(sha(ROOT/path),pin,path)
         self.assertEqual(self.result['qualification_sha256'],sha(HERE/'remaining_forms_repair_qualification.json'))
 
     def test_historical_pin_does_not_accept_unqualified_changes(self):

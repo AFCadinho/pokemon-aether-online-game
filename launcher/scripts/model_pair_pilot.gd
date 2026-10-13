@@ -1,16 +1,20 @@
 extends RefCounted
 ## Pinned shared-model catalogs for production and local qualification.
 const DATA = preload("res://data/model_pair_pilot.json")
-const PRODUCTION = preload("res://data/approved_3d_release_v13.json")
+const PRODUCTION = preload("res://data/approved_3d_release_v14.json")
+const LEGACY_PRODUCTION = preload("res://data/approved_3d_release_v13.json")
+const RELEASE_CATALOG_PATH := "res://data/model_pair_release_v14_catalog.json"
 const CATALOG_PATH := "res://data/model_pair_catalog.json"
 const QUALIFIED_PATH := "res://data/model_pair_qualified.json"
 const GEOMETRY_PATH := "res://data/model_pair_geometry.json"
 const GEOMETRY_CATALOG_PATH := "res://data/model_pair_geometry_catalog.json"
-const PRODUCTION_PATH := "res://data/approved_3d_bundles_v13_index.json"
+const PRODUCTION_PATH := "res://data/approved_3d_bundles_v14_index.json"
+const LEGACY_PRODUCTION_PATH := "res://data/approved_3d_bundles_v13_index.json"
 const REFERENCE_FORMAT := "model-pair-ref-v1"
 static var _catalog := {}
 static var _qualified_catalog := {}
 static var _geometry_catalog := {}
+static var _production_catalog := {}
 static var _lookups := {}
 static var _catalog_mutex := Mutex.new()
 static var _lookup_mutex := Mutex.new()
@@ -41,9 +45,12 @@ static func qualified_enabled() -> bool:
 static func enabled() -> bool:
 	return geometry_enabled() or qualified_enabled() or catalog_enabled() or (OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_PILOT") == "1")
 
+static func production_v14() -> bool:
+	return production_enabled() and not (OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION") == "v13")
+
 static func data_path() -> String:
 	if production_enabled():
-		return PRODUCTION_PATH
+		return PRODUCTION_PATH if production_v14() else LEGACY_PRODUCTION_PATH
 	if geometry_enabled():
 		return GEOMETRY_PATH
 	if qualified_enabled():
@@ -51,6 +58,13 @@ static func data_path() -> String:
 	return CATALOG_PATH if catalog_enabled() else "res://data/model_pair_pilot.json"
 
 static func catalog() -> Dictionary:
+	if production_v14():
+		_catalog_mutex.lock()
+		if _production_catalog.is_empty():
+			_production_catalog = _expand_index(load(PRODUCTION_PATH).data, load(RELEASE_CATALOG_PATH).data)
+		var production := _production_catalog
+		_catalog_mutex.unlock()
+		return production
 	if not catalog_enabled() and not qualified_enabled() and not geometry_enabled():
 		return DATA.data
 	_catalog_mutex.lock()
@@ -77,7 +91,7 @@ static func catalog() -> Dictionary:
 
 static func release() -> Dictionary:
 	if production_enabled():
-		return PRODUCTION.data
+		return PRODUCTION.data if production_v14() else LEGACY_PRODUCTION.data
 	if not enabled():
 		return {}
 	var path := data_path()
@@ -97,7 +111,10 @@ static func asset_for(identity: String, digest: String) -> Dictionary:
 	_lookup_mutex.lock()
 	if not _lookups.has(path):
 		var lookup := {}
-		for asset: Dictionary in catalog().assets:
+		var admitted: Array = catalog().assets.duplicate()
+		if production_v14():
+			admitted.append_array(_legacy_trusted().assets)
+		for asset: Dictionary in admitted:
 			if asset.get("format") == "model-pair-pck-v1":
 				lookup["asset:" + str(asset.asset_id) + ":" + str(asset.sha256)] = asset
 				for appearance: Dictionary in asset.appearances:
@@ -111,6 +128,15 @@ static func reference_asset(reference: Variant) -> Dictionary:
 	if not reference is Dictionary or reference.size() != 2 or not reference.get("asset_id") is String or not reference.get("sha256") is String:
 		return {}
 	return asset_for("asset:" + reference.asset_id, reference.sha256)
+
+static func _legacy_trusted() -> Dictionary:
+	var merged: Dictionary = load(CATALOG_PATH).data.duplicate(true)
+	var positions := {}
+	for i in merged.assets.size(): positions[merged.assets[i].asset_id] = i
+	for asset: Dictionary in load(GEOMETRY_CATALOG_PATH).data.assets:
+		if positions.has(asset.asset_id): merged.assets[positions[asset.asset_id]] = asset
+		else: merged.assets.append(asset)
+	return merged
 
 static func _expand_index(value: Dictionary, trusted: Dictionary) -> Dictionary:
 	if not value.get("assets") is Array:
@@ -133,6 +159,8 @@ static func _expand_index(value: Dictionary, trusted: Dictionary) -> Dictionary:
 
 static func expand_index(value: Dictionary) -> Dictionary:
 	# References are meaningful only against the currently compiled opt-in set.
+	if enabled() and value.get("catalog_revision") == LEGACY_PRODUCTION.data.revision:
+		return _expand_index(value, _legacy_trusted())
 	return _expand_index(value, catalog() if enabled() else {})
 
 static func compact_entries(entries: Array) -> Array:
