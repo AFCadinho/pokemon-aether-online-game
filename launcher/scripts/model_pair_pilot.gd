@@ -1,14 +1,17 @@
 extends RefCounted
 ## Pinned shared-model catalogs for production and local qualification.
 const DATA = preload("res://data/model_pair_pilot.json")
-const PRODUCTION = preload("res://data/approved_3d_release_v14.json")
+const PRODUCTION = preload("res://data/approved_3d_release_v15.json")
+const PREVIOUS_PRODUCTION = preload("res://data/approved_3d_release_v14.json")
 const LEGACY_PRODUCTION = preload("res://data/approved_3d_release_v13.json")
-const RELEASE_CATALOG_PATH := "res://data/model_pair_release_v14_catalog.json"
+const RELEASE_CATALOG_PATH := "res://data/model_pair_release_v15_catalog.json"
+const PREVIOUS_CATALOG_PATH := "res://data/model_pair_release_v14_catalog.json"
 const CATALOG_PATH := "res://data/model_pair_catalog.json"
 const QUALIFIED_PATH := "res://data/model_pair_qualified.json"
 const GEOMETRY_PATH := "res://data/model_pair_geometry.json"
 const GEOMETRY_CATALOG_PATH := "res://data/model_pair_geometry_catalog.json"
-const PRODUCTION_PATH := "res://data/approved_3d_bundles_v14_index.json"
+const PRODUCTION_PATH := "res://data/approved_3d_bundles_v15_index.json"
+const PREVIOUS_PRODUCTION_PATH := "res://data/approved_3d_bundles_v14_index.json"
 const LEGACY_PRODUCTION_PATH := "res://data/approved_3d_bundles_v13_index.json"
 const REFERENCE_FORMAT := "model-pair-ref-v1"
 static var _catalog := {}
@@ -45,12 +48,22 @@ static func qualified_enabled() -> bool:
 static func enabled() -> bool:
 	return geometry_enabled() or qualified_enabled() or catalog_enabled() or (OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_PILOT") == "1")
 
+static func production_revision() -> String:
+	if OS.is_debug_build():
+		var revision := OS.get_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION")
+		if revision in ["v13", "v14"]:
+			return revision
+	return "v15"
+
 static func production_v14() -> bool:
-	return production_enabled() and not (OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION") == "v13")
+	return production_enabled() and production_revision() == "v14"
+
+static func production_current() -> bool:
+	return production_enabled() and production_revision() != "v13"
 
 static func data_path() -> String:
 	if production_enabled():
-		return PRODUCTION_PATH if production_v14() else LEGACY_PRODUCTION_PATH
+		return LEGACY_PRODUCTION_PATH if production_revision() == "v13" else (PREVIOUS_PRODUCTION_PATH if production_v14() else PRODUCTION_PATH)
 	if geometry_enabled():
 		return GEOMETRY_PATH
 	if qualified_enabled():
@@ -58,11 +71,13 @@ static func data_path() -> String:
 	return CATALOG_PATH if catalog_enabled() else "res://data/model_pair_pilot.json"
 
 static func catalog() -> Dictionary:
-	if production_v14():
+	if production_current():
 		_catalog_mutex.lock()
-		if _production_catalog.is_empty():
-			_production_catalog = _expand_index(load(PRODUCTION_PATH).data, load(RELEASE_CATALOG_PATH).data)
-		var production := _production_catalog
+		var revision := production_revision()
+		if not _production_catalog.has(revision):
+			var trusted_path := PREVIOUS_CATALOG_PATH if production_v14() else RELEASE_CATALOG_PATH
+			_production_catalog[revision] = _expand_index(load(data_path()).data, load(trusted_path).data)
+		var production: Dictionary = _production_catalog[revision]
 		_catalog_mutex.unlock()
 		return production
 	if not catalog_enabled() and not qualified_enabled() and not geometry_enabled():
@@ -91,7 +106,7 @@ static func catalog() -> Dictionary:
 
 static func release() -> Dictionary:
 	if production_enabled():
-		return PRODUCTION.data if production_v14() else LEGACY_PRODUCTION.data
+		return LEGACY_PRODUCTION.data if production_revision() == "v13" else (PREVIOUS_PRODUCTION.data if production_v14() else PRODUCTION.data)
 	if not enabled():
 		return {}
 	var path := data_path()
@@ -112,7 +127,8 @@ static func asset_for(identity: String, digest: String) -> Dictionary:
 	if not _lookups.has(path):
 		var lookup := {}
 		var admitted: Array = catalog().assets.duplicate()
-		if production_v14():
+		if production_current():
+			admitted.append_array(load(PREVIOUS_CATALOG_PATH).data.assets)
 			admitted.append_array(_legacy_trusted().assets)
 		for asset: Dictionary in admitted:
 			if asset.get("format") == "model-pair-pck-v1":
@@ -161,6 +177,8 @@ static func expand_index(value: Dictionary) -> Dictionary:
 	# References are meaningful only against the currently compiled opt-in set.
 	if enabled() and value.get("catalog_revision") == LEGACY_PRODUCTION.data.revision:
 		return _expand_index(value, _legacy_trusted())
+	if enabled() and value.get("catalog_revision") == PREVIOUS_PRODUCTION.data.revision:
+		return _expand_index(value, load(PREVIOUS_CATALOG_PATH).data)
 	return _expand_index(value, catalog() if enabled() else {})
 
 static func compact_entries(entries: Array) -> Array:

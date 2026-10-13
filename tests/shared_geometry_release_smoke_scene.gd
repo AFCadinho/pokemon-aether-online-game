@@ -1,7 +1,7 @@
 extends Node
 const Pilot = preload("res://scripts/services/model_pair_pilot.gd")
 const Service = preload("res://scripts/services/on_demand_3d_bundle_service.gd")
-const Pin = preload("res://data/approved_3d_release_v14.json")
+const Pin = preload("res://data/approved_3d_release_v15.json")
 
 func _ready() -> void:
 	if OS.is_debug_build() or not Pilot.production_enabled():

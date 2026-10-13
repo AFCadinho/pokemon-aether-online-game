@@ -10,7 +10,7 @@ class Android3DAssetsTests(unittest.TestCase):
     def setUp(self):
         self.release = json.loads(assets.RELEASE_PATH.read_text())
         self.catalog = json.loads(assets.CATALOG_PATH.read_text())
-        self.index = json.loads((assets.ROOT / "data/approved_3d_bundles_v14_index.json").read_text())
+        self.index = json.loads((assets.ROOT / "data/approved_3d_bundles_v15_index.json").read_text())
         self.descriptor = json.loads((assets.ROOT / "data/android_3d_experiment.json").read_text())
 
     def test_current_experiment_covers_all_shared_and_zip_pairs(self):
@@ -18,7 +18,7 @@ class Android3DAssetsTests(unittest.TestCase):
         rows = assets.model_assets(self.index, self.release, self.catalog)
         self.assertEqual(len(rows), 1420)
         self.assertEqual(sum(row["object_key"].endswith(".pck") for row in rows), 1365)
-        self.assertEqual(sum(row["size_bytes"] for row in rows), 8993498070)
+        self.assertEqual(sum(row["size_bytes"] for row in rows), 8795326138)
 
     def test_missing_or_changed_reference_is_rejected(self):
         for catalog in [dict(self.catalog, assets=self.catalog["assets"][1:]), copy.deepcopy(self.catalog)]:
