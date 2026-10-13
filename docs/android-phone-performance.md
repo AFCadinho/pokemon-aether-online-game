@@ -1,5 +1,52 @@
 # Physical Android 3D performance measurements
 
+## Automatic GPU isolation on one physical phone
+
+The `android-gpu` export suite creates the separate debug package
+`com.pokeaether.androidgpuqa`, using production Mobile rendering, the pinned
+v14 model catalog and the Android forest pack. It requires ARM64 and ordinary
+Android frame pacing. It neither updates nor clears the installed game.
+Use a fresh output directory beneath the assigned frontend's `.tmp`:
+
+```sh
+POKEAETHER_TEMPORARY_SLOT_D=1 ops/worktrees/slot-env slot-d -- python3 \
+  .worktrees/slot-d/frontend/tools/export_battle_entry_web_qa.py \
+  --suite android-gpu --platform android --android-renderer mobile \
+  --sdk /home/adinho/Android/Sdk \
+  --output .worktrees/slot-d/frontend/.tmp/android-gpu/export
+POKEAETHER_TEMPORARY_SLOT_D=1 ops/worktrees/slot-env slot-d -- python3 \
+  .worktrees/slot-d/frontend/tools/run_android_gpu_benchmark.py \
+  --serial RFCY10TYKDH \
+  --apk .worktrees/slot-d/frontend/.tmp/android-gpu/export/android-gpu-benchmark.apk \
+  --output .worktrees/slot-d/frontend/.tmp/android-gpu/run-1
+```
+
+Keep the phone unlocked and the diagnostic foreground. The fixed scene uses
+Charizard and Dragonite, noon lighting, frozen idle poses/wind and a stationary
+camera. Each variant restores original controls, warms for three seconds and
+samples for 15 seconds by default. Disabling grass, disabling light shadows,
+2x MSAA and no MSAA are **diagnostic variations**, not game quality changes.
+Baselines surround each variation; a second round reverses their order.
+Two concluding phases repeat physical, Flamethrower and Thunderbolt effects.
+The fixture supports only one/two rounds and 10/15/20-second phases.
+
+Device-side process-frame intervals avoid the finite SurfaceFlinger history
+loss observed during USB move captures. These report **engine FPS**, not
+actual presented FPS. Per-viewport GPU/CPU timestamps, native raster, draw
+calls, pipeline counters and a frame image accompany each phase. Zero GPU
+timestamps invalidate the comparison. The host records sampled PSS/RSS,
+battery temperature, thermal status, PID and foreground health. Critical
+thermal status, process loss, stale run IDs, missing phases, engine errors,
+short sampling and failed raster/MSAA restoration invalidate the run.
+
+Compare a variation with both adjacent baseline medians and inspect baseline
+drift and the corresponding health samples. Reversed rounds reduce ordering
+bias; they cannot eliminate thermal or driver scheduling effects. The separate
+app isolates the renderer and does not reproduce full-game HUD/network costs,
+full-session memory, every model/move or other Android GPUs. Render timestamp
+instrumentation may add overhead. Images are captured outside timing phases.
+Benchmark asset and shader caches remain owned by this diagnostic package.
+
 Use `tools/measure_android_battle.py` through the assigned `slot-env` with an
 explicit physical serial, bounded duration, phase label and fresh slot-local
 `.tmp` output directory. It measures the installed full game without changing
