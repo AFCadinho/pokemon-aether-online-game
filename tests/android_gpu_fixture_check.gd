@@ -3,6 +3,14 @@ const Probe = preload("res://tests/android_gpu_isolation_check.gd")
 const Cutout = preload("res://scripts/battle/arenas/shared/android_grass_cutout.gd")
 const DrawOrder = preload("res://scripts/battle/arenas/shared/android_grass_draw_order.gd")
 func _init() -> void:
+	_run.call_deferred()
+
+func _run() -> void:
+	await process_frame
+	if RenderingServer.get_rendering_device() == null:
+		push_error("GPU fixture resource checks require the native Mobile renderer")
+		quit(1)
+		return
 	var fixture: Dictionary = JSON.parse_string('{"schema":1,"run_id":"0123456789abcdef0123456789abcdef","phase_seconds":15,"rounds":2}')
 	assert(Probe.valid_fixture(fixture), "Host integer JSON parses as Godot float numbers")
 	fixture.candidate = "grass_early_cutout"
@@ -39,6 +47,7 @@ func _init() -> void:
 		batch.set_instance_transform(index, Transform3D(Basis.IDENTITY, Vector3(0, 0, [10, 1, 0][index])))
 		batch.set_instance_color(index, Color(index * 0.25, 0, 0, 1))
 		batch.set_instance_custom_data(index, Color(0, index * 0.25, 0, 1))
+	await process_frame
 	var ordered := DrawOrder.ordered(batch, Vector3.ZERO)
 	assert(ordered.mesh == batch.mesh and ordered.visible_instance_count == 2, "Preserve mesh and visible population")
 	assert(ordered.get_instance_transform(0) == batch.get_instance_transform(1) and ordered.get_instance_transform(1) == batch.get_instance_transform(0), "Near visible instances drawn first")
