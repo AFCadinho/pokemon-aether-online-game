@@ -18,7 +18,12 @@ import uuid
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGE = "com.pokeaether.androidgpuqa"
+try:
+    from .android_gpu_package import package_for_root
+except ImportError:
+    from android_gpu_package import package_for_root
+
+PACKAGE = package_for_root(ROOT)
 MATRIX = ["baseline", "no_grass", "baseline", "no_shadows", "baseline", "msaa_2", "baseline", "msaa_off", "baseline"]
 
 

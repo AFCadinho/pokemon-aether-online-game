@@ -32,6 +32,10 @@ invalidates that comparison. The diagnostic and explicit local USB
 `--model-revision v14` flag pin the already published collection, independently
 of the qualified v15 collection on development. Normal releases still select
 v15. No model assets are published by either tool.
+New diagnostics use a slot-specific package such as
+`com.pokeaether.androidgpuqa.slot_a`, because isolated worktrees can own
+different debug signing keys. Existing diagnostic packages/data are retained;
+the collector verifies the exact current-slot package and its debug flag.
 
 ## Automatic GPU isolation on one physical phone
 

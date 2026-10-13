@@ -133,7 +133,8 @@ def main():
     if android_gpu:
         title = "Android GPU Isolation"
         app_name = "PokeAether GPU Benchmark"
-        package = "com.pokeaether.androidgpuqa"
+        from android_gpu_package import package_for_root
+        package = package_for_root(ROOT)
         report_name = "android-gpu-results.json"
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run slot exports through ops/worktrees/slot-env SLOT -- COMMAND")
