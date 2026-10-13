@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare the final 21 alternate-form normal/shiny 3D pairs for the next model release, including weather Castform, Ash-Greninja, Primals, Necrozma fusions, Eternamax, Ogerpon Tera masks and costumed Pikachu/Pichu.
+
 - Prepare normal/shiny 3D pairs for Sandy/Trash Burmy and Wormadam, Sunshine Cherrim, seven Minior forms and both Cramorant prey forms, preserving the reviewed colours and repaired sleep poses.
 
 - Prepare normal and shiny Zygarde 10% for the next model release, with the visually approved core reconstruction and independent attack glow for simultaneous combatants.

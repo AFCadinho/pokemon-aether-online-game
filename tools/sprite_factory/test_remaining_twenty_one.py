@@ -1,5 +1,7 @@
 """Reject false completion and engine failures hidden by a successful process exit."""
 import copy
+import hashlib
+import json
 import unittest
 from remaining_twenty_one_result import RECEIPT,REGISTRIES,validate,read,sha,ROOT,HERE
 
@@ -11,7 +13,16 @@ class ReconstructionReview(unittest.TestCase):
         self.assertEqual((r['forms_previewed'],r['appearances_previewed'],r['forms_admitted'],r['remaining_forms']),(21,42,0,21))
         self.assertEqual(r['previous_qualification_sha256'],sha(HERE/'remaining_fourteen_qualification.json'))
         self.assertEqual(REGISTRIES[0].read_bytes(),REGISTRIES[1].read_bytes())
-        for path,digest in r['registries_sha256'].items():self.assertEqual(sha(ROOT/path),digest)
+        for path,digest in r['registries_sha256'].items():
+            registry=read(ROOT/path)
+            if 'final_twenty_one_qualification_sha256' in registry:
+                final=read(HERE/'final_twenty_one_qualification.json')
+                self.assertEqual(registry.pop('final_twenty_one_qualification_sha256'),sha(HERE/'final_twenty_one_qualification.json'))
+                names=set(read(HERE/'remaining_fourteen_qualification.json')['remaining_species'])
+                self.assertEqual(set(final['entries']),names)
+                for key in ['models','profiles']:registry[key]={n:v for n,v in registry[key].items() if n.removesuffix('@shiny') not in names}
+            actual=hashlib.sha256((json.dumps(registry,indent='\t',allow_nan=False)+'\n').encode()).hexdigest()
+            self.assertEqual(actual,digest)
         for path,digest in r['code_sha256'].items():self.assertEqual(sha(ROOT/path),digest)
         expected=set(read(HERE/'remaining_fourteen_qualification.json')['remaining_species'])
         self.assertEqual({e['base_species'] for e in r['entries']},expected)
