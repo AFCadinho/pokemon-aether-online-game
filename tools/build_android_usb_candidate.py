@@ -32,9 +32,13 @@ def main():
     parser.add_argument("--certificate", required=True)
     parser.add_argument("--experimental-3d", action="store_true",
                         help="Enable the explicit Android 3D experiment for this local test APK")
+    parser.add_argument("--android-renderer", choices=["gl_compatibility", "mobile"],
+                        default="gl_compatibility", help="Local experimental 3D renderer comparison")
     parser.add_argument("--architecture", choices=["arm64-v8a", "x86_64"], default="arm64-v8a",
                         help="Use x86_64 for an accelerated desktop Android emulator")
     args = parser.parse_args()
+    if args.android_renderer != "gl_compatibility" and not args.experimental_3d:
+        parser.error("Renderer comparisons require --experimental-3d")
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run through ops/worktrees/slot-env SLOT -- COMMAND")
     for name in ["GODOT_ANDROID_KEYSTORE_RELEASE_PATH", "GODOT_ANDROID_KEYSTORE_RELEASE_USER", "GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD"]:
@@ -52,6 +56,8 @@ def main():
         subprocess.run(["python3", str(ROOT / "android_updater/setup_build_template.py"), str(args.templates / "android_source.zip")], check=True)
         prepare(project, presets, args.version, args.code, args.build_id, args.compatible_build_id,
                 experimental_3d=args.experimental_3d)
+        replace_setting(project, "rendering", "renderer/rendering_method.mobile",
+                        json.dumps(args.android_renderer))
         for architecture in ["armeabi-v7a", "arm64-v8a", "x86", "x86_64"]:
             replace_setting(presets, "preset.7.options", "architectures/" + architecture,
                             "true" if architecture == args.architecture else "false")
@@ -76,6 +82,7 @@ def main():
         record["assetBuildId"] = args.asset_build_id
         record["architecture"] = args.architecture
         record["experimentalAndroid3D"] = args.experimental_3d
+        record["androidRenderer"] = args.android_renderer
         (output / "local-usb-build-record.json").write_text(json.dumps(record, indent=2) + "\n")
         print("Verified local USB candidate:", apk)
     finally:

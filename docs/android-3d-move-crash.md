@@ -53,3 +53,32 @@ fixture also passed with a real Compatibility/OpenGL render on AMD Radeon/Mesa.
 The move fixtures emitted the slot cache's existing shared-model verification
 warning during startup; there were no move script/engine errors. No Android APK,
 release certification, promotion or publication was performed for this task.
+
+## Physical phone follow-up, 2026-10-13
+
+ADB access to the SM-S938B supplied the original native crash buffer. Official
+Godot 4.6.2 ARM64 template-release symbols match the library's Build ID
+`a1dc416352711900`. PC `0x201c14c` resolves to
+`ShaderGLES3::_compile_specialization`, `shader_gles3.cpp:424`, at
+`glLinkProgram`. The preceding driver frames are in Qualcomm's `libllvm-qgl.so`
+and `libGLESv2_adreno.so`. This is a driver crash during shader linking, not a
+pose-baking stack.
+
+The signed full-game USB candidate `ddfebe45d-3d-usb-20261013-1`
+(`0.3.109-3d-usb.1`, code 29) retained app ID 10377 and the game's data directory.
+Its new report recorded `move_wait`, and the move crashed at the same native PCs.
+Avoiding pose baking alone does not resolve the reported phone crash.
+
+A separate offline ARM64 debug app, `com.pokeaether.androidmoveprobe`, passed all
+24 base move effects at creation, launch and impact on this phone's actual
+Compatibility renderer. It uses synthetic BoxMesh actors and a directional
+light, without real battle models or the production arena. It does not prove
+the complete battle rendering combinations safe.
+
+Reproduce that scoped probe with `tools/export_battle_entry_web_qa.py --suite
+android-moves --platform android`, explicit ARM64 SDK/JDK paths and a slot-local
+output directory. Run it through `slot-env`. Before each draw, the probe closes
+`user://android-move-shader-marker.json`; its synthetic move/phase values and the
+final `android-move-shader-results.json` are readable using `adb shell run-as`
+for this separate debug package. The probe APK has no internet permission.
+The ordinary game and its downloaded/user data are not reset.

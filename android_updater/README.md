@@ -121,6 +121,9 @@ launches or publishes the APK.
 Pass `--experimental-3d` when locally testing the optional Android 3D renderer.
 The helper records this choice in the build record; omitting it keeps the
 ordinary Android 2D export policy.
+For a local GPU-driver comparison, combine it with `--android-renderer mobile`
+to test Vulkan. The project setting is restored afterward and the chosen
+renderer is recorded; this does not change the ordinary release renderer.
 
 Before USB installation, compare the installed package's signing identity
 with the candidate and retain its data directory identity for verification.

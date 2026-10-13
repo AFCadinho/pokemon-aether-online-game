@@ -24,7 +24,7 @@ def rewrite_fixture_paths(source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     global CHECKS, FIXTURES
-    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark", "android-visual-choice"], default="battle-entry")
+    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-moves", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark", "android-visual-choice"], default="battle-entry")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--platform", choices=["web", "android"], default="web")
     parser.add_argument("--sdk", type=Path)
@@ -44,6 +44,7 @@ def main():
         CHECKS = ["android_3d_platform_check", "android_visual_choice_check"]
         FIXTURES = ["visual_choice_platform_settings", "android_visual_choice_dialog"]
     android_arenas = args.suite == "android-arenas"
+    android_moves = args.suite == "android-moves"
     android_budget = args.suite == "android-battle-budget"
     android_textures = args.suite == "android-textures"
     android_tab = args.suite == "android-tab-benchmark"
@@ -54,18 +55,20 @@ def main():
         parser.error("Android texture and model-pair diagnostics require --android-renderer mobile")
     if args.outdoor_colour_baseline and not (android_budget and args.android_renderer == "gl_compatibility"):
         parser.error("Outdoor colour baseline is limited to the separate GLES battle diagnostic")
-    renderer_diagnostic = android_arenas or android_budget or android_textures or android_pairs
+    renderer_diagnostic = android_arenas or android_budget or android_textures or android_pairs or android_moves
     if args.android_renderer != "gl_compatibility" and not renderer_diagnostic:
         parser.error("--android-renderer is limited to the separate Android arena/battle budget diagnostic")
     if args.emulator_frame_pacing_off and (not renderer_diagnostic or args.architecture != "x86_64"):
         parser.error("Frame-pacing workaround is limited to the x86_64 arena/battle emulator diagnostic")
-    android_3d = args.suite in {"android-3d", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark"}
+    android_3d = args.suite in {"android-3d", "android-moves", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark"}
     if android_3d:
         if args.platform != "android":
             parser.error("3D pilot requires the native Android debug runtime")
         CHECKS = ["model_pair_bundle_check"] if android_pairs else ["android_texture_residency_check" if android_textures else ("android_battle_budget_check" if android_budget else ("android_arena_asset_check" if android_arenas else "android_3d_pilot_check"))]
         if android_tab:
             CHECKS.append("android_tab_benchmark_check")
+        if android_moves:
+            CHECKS = ["android_move_shader_check"]
         FIXTURES = []
         if android_arenas:
             FIXTURES = ["compatibility_outdoor_colour_probe"]
@@ -117,6 +120,11 @@ def main():
         app_name = "PokeAether Android Visual Choice Test"
         package = "com.pokeaether.androidvisualchoiceqa"
         report_name = "android-visual-choice-results.json"
+    if android_moves:
+        title = "Android Move Shader Probe"
+        app_name = "PokeAether Move Shader Probe"
+        package = "com.pokeaether.androidmoveprobe"
+        report_name = "android-move-shader-results.json"
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run slot exports through ops/worktrees/slot-env SLOT -- COMMAND")
     output = args.output.resolve()
@@ -160,6 +168,14 @@ def main():
         for name in FIXTURES:
             source = (ROOT / f"tests/fixtures/{name}.gd").read_text()
             (generated / f"{name}.gd").write_text(rewrite_fixture_paths(source))
+        if android_moves:
+            for helper in ["battle_move_effects_3d_check", "android_3d_move_execution_check"]:
+                source = (ROOT / f"tests/{helper}.gd").read_text()
+                source = source.replace("res://tests/battle_move_effects_3d_check.gd", "res://scripts/battle_entry_qa_generated/battle_move_effects_3d_check.gd")
+                (generated / f"{helper}.gd").write_text(source)
+            source = (ROOT / "tests/fixtures/android_move_shader_stage_fixture.gd").read_text()
+            source = source.replace("res://tests/android_3d_move_execution_check.gd", "res://scripts/battle_entry_qa_generated/android_3d_move_execution_check.gd")
+            (generated / "android_move_shader_stage_fixture.gd").write_text(source)
         if android_textures:
             (generated / "texture_ctex_reader.gd").write_text((ROOT / "tools/sprite_factory/texture_ctex_reader.gd").read_text())
         if android_pairs:
@@ -174,6 +190,8 @@ def main():
             source = re.sub(r"(?<![\w.])(process_frame|physics_frame)\b", r"get_tree().\1", source)
             source = re.sub(r"(?<![\w.])create_timer\(", "get_tree().create_timer(", source)
             source = rewrite_fixture_paths(source)
+            if android_moves:
+                source = source.replace("res://tests/fixtures/android_move_shader_stage_fixture.gd", "res://scripts/battle_entry_qa_generated/android_move_shader_stage_fixture.gd")
             if android_textures:
                 source = source.replace("res://tools/sprite_factory/texture_ctex_reader.gd", "res://scripts/battle_entry_qa_generated/texture_ctex_reader.gd")
             if android_pairs:
@@ -218,7 +236,7 @@ def main():
                 if service == 'client_crash_report_service':
                     wrapper.write_text(wrapper.read_text() + 'func _enter_tree() -> void:\n\tpass\n')
                 config = config.replace('res://scripts/services/' + service + '.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
-            if android_3d and not (android_arenas or android_textures or android_pairs):
+            if android_3d and not (android_arenas or android_textures or android_pairs or android_moves):
                 wrapper = generated / "pilot_model_service.gd"
                 wrapper.write_text('extends "res://scripts/services/on_demand_3d_bundle_service.gd"\nvar completed_downloads: Array[Dictionary] = []\nfunc _selected_release() -> Dictionary:\n\treturn RELEASE_V11.data\nfunc _publish_verified_download(absolute: String, expected: int, digest: String) -> String:\n\tvar error := super._publish_verified_download(absolute, expected, digest)\n\tif error.is_empty():\n\t\tcompleted_downloads.append({"file": absolute.get_file(), "bytes": expected, "sha256": digest})\n\treturn error\n')
                 config = config.replace('res://scripts/services/on_demand_3d_bundle_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
@@ -268,7 +286,7 @@ def main():
                 selected = re.sub(r'^version/name=.*$', 'version/name="' + release_version + '-3d-pilot.1"', selected, flags=re.M)
             if android_choice:
                 selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_experimental"', selected, flags=re.M)
-            if mobile_collapse:
+            if mobile_collapse or android_moves:
                 selected = selected.replace('permissions/internet=true', 'permissions/internet=false')
                 selected = selected.replace('permissions/access_network_state=true', 'permissions/access_network_state=false')
             editor_settings = Path(os.environ["XDG_CONFIG_HOME"]) / "godot/editor_settings-4.6.tres"
@@ -295,6 +313,8 @@ def main():
                 android_file = "android-tab-benchmark.apk"
             if android_choice:
                 android_file = "android-visual-choice.apk"
+            if android_moves:
+                android_file = "android-move-probe.apk"
             command += ["--export-debug", title, str(output / ("index.html" if args.platform == "web" else android_file))]
             subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
         print(f"{title} {args.platform} diagnostic exported:", output)
