@@ -31,6 +31,8 @@ func prepare_grass_order(camera: Camera3D) -> void:
 		return
 	grass_order_prepared = true
 	var began := Time.get_ticks_msec()
+	var batches := 0
+	var instances := 0
 	for grass: Node in passes[0].arena.find_children("SharedForestGrass", "", true, false):
 		for child in grass.get_children():
 			if not child is MultiMeshInstance3D or not child.material_override is ShaderMaterial:
@@ -41,7 +43,11 @@ func prepare_grass_order(camera: Camera3D) -> void:
 			if shader == null or not shader.code.contains("ALPHA_SCISSOR_THRESHOLD = alpha_threshold;") or shader.code.contains("INSTANCE_ID") or not shader.code.contains("depth_draw_opaque"):
 				continue
 			child.multimesh = GrassOrder.ordered(child.multimesh, child.to_local(camera.global_position))
+			batches += 1
+			instances += child.multimesh.instance_count
 	grass_order_preparation_ms = Time.get_ticks_msec() - began
+	if OS.has_feature("android_3d_performance_probe"):
+		print("ANDROID_3D_GRASS_ORDER ms=", grass_order_preparation_ms, " batches=", batches, " instances=", instances)
 
 func discard_when_unused() -> void:
 	# An Android player can return to 2D while the current battle still owns us.
