@@ -24,7 +24,7 @@ def rewrite_fixture_paths(source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     global CHECKS, FIXTURES
-    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-moves", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark", "android-visual-choice"], default="battle-entry")
+    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-moves", "android-gpu", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark", "android-visual-choice"], default="battle-entry")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--platform", choices=["web", "android"], default="web")
     parser.add_argument("--sdk", type=Path)
@@ -45,6 +45,9 @@ def main():
         FIXTURES = ["visual_choice_platform_settings", "android_visual_choice_dialog"]
     android_arenas = args.suite == "android-arenas"
     android_moves = args.suite == "android-moves"
+    android_gpu = args.suite == "android-gpu"
+    if android_gpu and (args.platform != "android" or args.architecture != "arm64-v8a" or args.android_renderer != "mobile" or args.emulator_frame_pacing_off):
+        parser.error("GPU isolation requires physical ARM64 Android, Mobile and ordinary frame pacing")
     android_budget = args.suite == "android-battle-budget"
     android_textures = args.suite == "android-textures"
     android_tab = args.suite == "android-tab-benchmark"
@@ -55,12 +58,12 @@ def main():
         parser.error("Android texture and model-pair diagnostics require --android-renderer mobile")
     if args.outdoor_colour_baseline and not (android_budget and args.android_renderer == "gl_compatibility"):
         parser.error("Outdoor colour baseline is limited to the separate GLES battle diagnostic")
-    renderer_diagnostic = android_arenas or android_budget or android_textures or android_pairs or android_moves
+    renderer_diagnostic = android_arenas or android_budget or android_textures or android_pairs or android_moves or android_gpu
     if args.android_renderer != "gl_compatibility" and not renderer_diagnostic:
         parser.error("--android-renderer is limited to the separate Android arena/battle budget diagnostic")
     if args.emulator_frame_pacing_off and (not renderer_diagnostic or args.architecture != "x86_64"):
         parser.error("Frame-pacing workaround is limited to the x86_64 arena/battle emulator diagnostic")
-    android_3d = args.suite in {"android-3d", "android-moves", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark"}
+    android_3d = args.suite in {"android-3d", "android-moves", "android-gpu", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark"}
     if android_3d:
         if args.platform != "android":
             parser.error("3D pilot requires the native Android debug runtime")
@@ -69,6 +72,8 @@ def main():
             CHECKS.append("android_tab_benchmark_check")
         if android_moves:
             CHECKS = ["android_move_shader_check"]
+        if android_gpu:
+            CHECKS = ["android_gpu_isolation_check"]
         FIXTURES = []
         if android_arenas:
             FIXTURES = ["compatibility_outdoor_colour_probe"]
@@ -125,6 +130,11 @@ def main():
         app_name = "PokeAether Move Shader Probe"
         package = "com.pokeaether.androidmoveprobe"
         report_name = "android-move-shader-results.json"
+    if android_gpu:
+        title = "Android GPU Isolation"
+        app_name = "PokeAether GPU Benchmark"
+        package = "com.pokeaether.androidgpuqa"
+        report_name = "android-gpu-results.json"
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run slot exports through ops/worktrees/slot-env SLOT -- COMMAND")
     output = args.output.resolve()
@@ -200,7 +210,7 @@ def main():
             (generated / f"{name}.gd").write_text(source)
         paths = [f"res://scripts/battle_entry_qa_generated/{name}.gd" for name in CHECKS]
         runner = "extends Node\nfunc _ready() -> void:\n\tvar origin := str(JavaScriptBridge.eval(\"window.location.origin\", true)) if OS.has_feature(\"web\") else \"http://127.0.0.1:8091\"\n\tWebPokemonSpriteService._release_config_cache = {\"spriteStyles\": {\"animated\": {\"front\": origin + \"/qa-sprites/front\", \"back\": origin + \"/qa-sprites/back\"}}}\n\tWebHomeIconService._catalog = {\"normal\": {}, \"shiny\": {}}\n\t_run.call_deferred()\nfunc _run() -> void:\n\tvar results := {}\n"
-        if android_pairs or android_choice:
+        if android_pairs or android_choice or android_gpu:
             # The resource-only suite does not render/download sprites. Avoid
             # coupling its runner to unrelated presentation autoload globals.
             runner = "extends Node\nfunc _ready() -> void:\n\t_run.call_deferred()\nfunc _run() -> void:\n\tvar results := {}\n"
@@ -236,7 +246,7 @@ def main():
                 if service == 'client_crash_report_service':
                     wrapper.write_text(wrapper.read_text() + 'func _enter_tree() -> void:\n\tpass\n')
                 config = config.replace('res://scripts/services/' + service + '.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
-            if android_3d and not (android_arenas or android_textures or android_pairs or android_moves):
+            if android_3d and not (android_arenas or android_textures or android_pairs or android_moves or android_gpu):
                 wrapper = generated / "pilot_model_service.gd"
                 wrapper.write_text('extends "res://scripts/services/on_demand_3d_bundle_service.gd"\nvar completed_downloads: Array[Dictionary] = []\nfunc _selected_release() -> Dictionary:\n\treturn RELEASE_V11.data\nfunc _publish_verified_download(absolute: String, expected: int, digest: String) -> String:\n\tvar error := super._publish_verified_download(absolute, expected, digest)\n\tif error.is_empty():\n\t\tcompleted_downloads.append({"file": absolute.get_file(), "bytes": expected, "sha256": digest})\n\treturn error\n')
                 config = config.replace('res://scripts/services/on_demand_3d_bundle_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
@@ -282,6 +292,8 @@ def main():
             selected = selected.replace('package/name="PokeAether"', 'package/name="' + app_name + '"')
             if android_3d:
                 selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot' + (',android_arena_pilot' if android_arenas else '') + (',android_battle_budget' if android_budget else '') + (',android_battle_budget_gl' if android_budget and args.android_renderer == 'gl_compatibility' else '') + (',android_outdoor_colour_baseline' if args.outdoor_colour_baseline else '') + (',android_texture_residency' if android_textures else '') + (',android_model_pairs' if android_pairs else '') + (',android_tab_benchmark' if android_tab else '') + '"', selected, flags=re.M)
+                if android_gpu:
+                    selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_experimental,android_gpu_isolation"', selected, flags=re.M)
                 release_version = re.search(r'^config/version="([^"]+)"$', originals[project].decode(), re.M).group(1)
                 selected = re.sub(r'^version/name=.*$', 'version/name="' + release_version + '-3d-pilot.1"', selected, flags=re.M)
             if android_choice:
@@ -315,6 +327,8 @@ def main():
                 android_file = "android-visual-choice.apk"
             if android_moves:
                 android_file = "android-move-probe.apk"
+            if android_gpu:
+                android_file = "android-gpu-benchmark.apk"
             command += ["--export-debug", title, str(output / ("index.html" if args.platform == "web" else android_file))]
             subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
         print(f"{title} {args.platform} diagnostic exported:", output)

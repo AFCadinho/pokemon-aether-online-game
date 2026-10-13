@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Draw existing forest grass from near to far in experimental Android 3D to reduce GPU work, retaining its density, geometry, textures and 4x anti-aliasing.
+
 - Prepare model release v15: save another 198 MB by sharing geometry and animations within 111 normal/shiny pairs, preserving all reviewed detail, colours, poses and alternate forms.
 
 - Keep trainer sprites at a consistent size across outfits in the own and public Trainer Card Overview, including Kakashi and SS4.
