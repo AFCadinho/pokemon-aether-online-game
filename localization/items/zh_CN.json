@@ -1267,5 +1267,35 @@
   "kakashi-outfit": {
     "name": "卡卡西时装礼盒",
     "shortDesc": "包含六件独立饰品：马甲、长裤、凉鞋、发型、护额和面罩。适用于男性和女性角色。"
+  },
+  "health-wing": {
+    "name": "Health Wing",
+    "shortDesc": "在 Aethering 中消耗，保留接收方的 HP 个体值或转移供给方的该个体值。无法直接使用。",
+    "flavorText": "在 Aethering 中消耗，保留接收方的 HP 个体值或转移供给方的该个体值。无法直接使用。"
+  },
+  "muscle-wing": {
+    "name": "Muscle Wing",
+    "shortDesc": "在 Aethering 中消耗，保留接收方的 Attack 个体值或转移供给方的该个体值。无法直接使用。",
+    "flavorText": "在 Aethering 中消耗，保留接收方的 Attack 个体值或转移供给方的该个体值。无法直接使用。"
+  },
+  "resist-wing": {
+    "name": "Resist Wing",
+    "shortDesc": "在 Aethering 中消耗，保留接收方的 Defense 个体值或转移供给方的该个体值。无法直接使用。",
+    "flavorText": "在 Aethering 中消耗，保留接收方的 Defense 个体值或转移供给方的该个体值。无法直接使用。"
+  },
+  "genius-wing": {
+    "name": "Genius Wing",
+    "shortDesc": "在 Aethering 中消耗，保留接收方的 Sp. Attack 个体值或转移供给方的该个体值。无法直接使用。",
+    "flavorText": "在 Aethering 中消耗，保留接收方的 Sp. Attack 个体值或转移供给方的该个体值。无法直接使用。"
+  },
+  "clever-wing": {
+    "name": "Clever Wing",
+    "shortDesc": "在 Aethering 中消耗，保留接收方的 Sp. Defense 个体值或转移供给方的该个体值。无法直接使用。",
+    "flavorText": "在 Aethering 中消耗，保留接收方的 Sp. Defense 个体值或转移供给方的该个体值。无法直接使用。"
+  },
+  "swift-wing": {
+    "name": "Swift Wing",
+    "shortDesc": "在 Aethering 中消耗，保留接收方的 Speed 个体值或转移供给方的该个体值。无法直接使用。",
+    "flavorText": "在 Aethering 中消耗，保留接收方的 Speed 个体值或转移供给方的该个体值。无法直接使用。"
   }
 }

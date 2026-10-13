@@ -139,6 +139,13 @@ var identities := ["", "", "", ""]
 var restoring := ["idle", "idle", "idle", "idle"]
 var loaded_path := "!unloaded"
 var active := false
+
+func _ready() -> void:
+	if OS.has_feature("android") and OS.has_feature("android_3d_performance_probe"):
+		var probe := preload("res://scripts/battle/battle_ui/android_3d_performance_probe.gd").new()
+		probe.stage = self
+		add_child(probe)
+
 const WeatherEffect = preload("res://scripts/battle/battle_ui/weather_effect_3d.gd")
 var weather_condition := ""
 var weather_effect: Node3D
@@ -594,6 +601,9 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 	while is_inside_tree():
 		var now := Time.get_ticks_usec()
 		if active and not _models_pending() and _actors_resolved():
+			if is_instance_valid(forest_pool) and not forest_lease.is_empty() and not _preview_wants_3d() and not _needed_species().is_empty():
+				# Prepare once under the battle cover, after actual actor framing.
+				forest_pool.prepare_grass_order(camera)
 			if warm_started == 0:
 				warm_started = now
 			else:

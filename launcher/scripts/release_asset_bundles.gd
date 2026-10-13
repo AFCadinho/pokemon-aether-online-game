@@ -13,6 +13,7 @@ const V11 = preload("res://data/approved_3d_release_v11.json")
 const V12 = preload("res://data/approved_3d_release_v12.json")
 const V13 = preload("res://data/approved_3d_release_v13.json")
 const V14 = preload("res://data/approved_3d_release_v14.json")
+const V15 = preload("res://data/approved_3d_release_v15.json")
 const PairPilot = preload("model_pair_pilot.gd")
 
 const DESCRIPTOR_SCHEMA := 1
@@ -94,7 +95,7 @@ static func descriptor_error(descriptor: Dictionary) -> String:
 
 
 static func _pinned_releases() -> Array[Dictionary]:
-	var result: Array[Dictionary] = [V14.data, V13.data, V12.data, V11.data, V10.data, V9.data, V8.data, V7.data, V6.data, V5.data]
+	var result: Array[Dictionary] = [V15.data, V14.data, V13.data, V12.data, V11.data, V10.data, V9.data, V8.data, V7.data, V6.data, V5.data]
 	if PairPilot.enabled():
 		result.append(PairPilot.release())
 	return result

@@ -25,7 +25,7 @@ func _run() -> void:
  var adapter:=Adapter.new(output.path_join("store"),output.path_join("indexes"));adapter.store.prune_previous_models=false
  var old_pin:=descriptor(Old.data);var new_pin:=descriptor(New.data)
  assert(adapter.accept_index(old_pin,Pilot.LEGACY_PRODUCTION_PATH,false).error.is_empty())
- assert(adapter.accept_index(new_pin,Pilot.PRODUCTION_PATH,false).error.is_empty())
+ assert(adapter.accept_index(new_pin,Pilot.PREVIOUS_PRODUCTION_PATH,false).error.is_empty())
  var old_index:=adapter.cached_index(old_pin);var new_index:=adapter.cached_index(new_pin)
  assert(old_index.assets.size()==1200 and new_index.assets.size()==1420)
  var report: Dictionary={"complete":false,"phase":phase,"pairs":config.previous.size(),"new_pairs":config.additional.size()}

@@ -2,6 +2,7 @@ extends Node
 ## One world-session-owned pair of arena passes. Never stores battle state.
 const Catalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
 const Response = preload("res://scripts/battle/battle_ui/material_response.gd")
+const GrassOrder = preload("res://scripts/battle/arenas/shared/android_grass_draw_order.gd")
 static var current: WeakRef
 var arena_id := "forest"
 var passes: Array[Dictionary] = []
@@ -17,6 +18,36 @@ var last_pipelines: Array = []
 var memory_before := 0.0
 var retained_render_bytes := 0.0
 var discard_requested := false
+var grass_order_prepared := false
+var grass_order_preparation_ms := 0
+
+static func allows_grass_order(android: bool, experimental: bool, mobile: bool, diagnostic: bool) -> bool:
+	return android and experimental and mobile and not diagnostic
+
+func prepare_grass_order(camera: Camera3D) -> void:
+	if grass_order_prepared or arena_id != "forest" or passes.is_empty() or camera == null:
+		return
+	if not allows_grass_order(OS.has_feature("android"), OS.has_feature("android_3d_experimental"), RenderingServer.get_current_rendering_method() == "mobile", OS.has_feature("android_gpu_isolation")):
+		return
+	grass_order_prepared = true
+	var began := Time.get_ticks_msec()
+	var batches := 0
+	var instances := 0
+	for grass: Node in passes[0].arena.find_children("SharedForestGrass", "", true, false):
+		for child in grass.get_children():
+			if not child is MultiMeshInstance3D or not child.material_override is ShaderMaterial:
+				continue
+			var shader: Shader = child.material_override.shader
+			# Only the authored opaque cutout. Transparent/instance-ID shaders
+			# would attach meaning to order and must retain their original buffers.
+			if shader == null or not shader.code.contains("ALPHA_SCISSOR_THRESHOLD = alpha_threshold;") or shader.code.contains("INSTANCE_ID") or not shader.code.contains("depth_draw_opaque"):
+				continue
+			child.multimesh = GrassOrder.ordered(child.multimesh, child.to_local(camera.global_position))
+			batches += 1
+			instances += child.multimesh.instance_count
+	grass_order_preparation_ms = Time.get_ticks_msec() - began
+	if OS.has_feature("android_3d_performance_probe"):
+		print("ANDROID_3D_GRASS_ORDER ms=", grass_order_preparation_ms, " batches=", batches, " instances=", instances)
 
 func discard_when_unused() -> void:
 	# An Android player can return to 2D while the current battle still owns us.
@@ -113,7 +144,23 @@ func _build_pass(light_pass: bool) -> Dictionary:
 	if outdoor != null:
 		outdoor.irradiance_only = light_pass
 	world.add_child(arena)
+	if light_pass and OS.has_feature("android") and OS.has_feature("android_3d_experimental") and not OS.has_feature("android_3d_full_response_scene"):
+		_response_shadow_geometry(arena)
 	return {"viewport":viewport,"world":world,"camera":camera,"arena":arena,"base":world.get_children()}
+
+static func _response_shadow_geometry(node: Node) -> void:
+	# Only actor pixels are sampled from the irradiance texture. Keep scenery
+	# in its shadow maps, without drawing its colour a second time. Grass is
+	# authored as a non-caster. Zero layers affect only that geometry, so a
+	# non-caster parent cannot accidentally hide a casting child. Double-sided
+	# casters retain their mode: SHADOWS_ONLY cannot express double-sided casting.
+	if node is GeometryInstance3D:
+		if node.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+			node.layers = 0
+		elif node.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_ON:
+			node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+	for child in node.get_children():
+		_response_shadow_geometry(child)
 
 func acquire(client: Node) -> Dictionary:
 	if not ready_for_battle or (borrower != null and borrower.get_ref() != null):

@@ -1,0 +1,68 @@
+{
+  "archives_verified": 1420,
+  "artifacts": {
+    "engine-job.json": {
+      "path": ".tmp/cross-form-resource-audit-v2/engine-job.json",
+      "sha256": "6fe286b84b6b8160517eab1d1984bb08c9b0c034e7c5299f414f134f140e9a75",
+      "size_bytes": 6453873
+    },
+    "engine-report.json": {
+      "path": ".tmp/cross-form-resource-audit-v2/engine-report.json",
+      "sha256": "d152f806c22f9c07c609999ca820680b8c7664651d7b0e33643186bf5bd18271",
+      "size_bytes": 2298201
+    },
+    "inventory.json": {
+      "path": ".tmp/cross-form-resource-audit-v2/inventory.json",
+      "sha256": "bece56eba50cb24aaa9eb9b0f1e676c4a57f41970e9f867cd3a14e95646c6b71",
+      "size_bytes": 9886095
+    },
+    "report.json": {
+      "path": ".tmp/cross-form-resource-audit-v2/report.json",
+      "sha256": "c3ef76c2ffb856f88facb894e3519fb12fcf2bca2d15f8c7442e26c2f286b701",
+      "size_bytes": 10075591
+    }
+  },
+  "by_category": {
+    "libraries": 7855991,
+    "meshes": 561460,
+    "skins": 26343,
+    "textures": 294431257
+  },
+  "byte_identical_cross_pair_groups": 0,
+  "candidate_member_bytes": 302875051,
+  "cohorts": {
+    "0": 55,
+    "1": 334,
+    "2": 1031
+  },
+  "complete": true,
+  "embedded_cross_pair_match_groups": {
+    "libraries": 2,
+    "meshes": 115,
+    "skins": 35
+  },
+  "embedded_pairs_verified": 389,
+  "embedded_resource_objects": 6649,
+  "engine_godot": "4.6.2-stable (official)",
+  "engine_job_sha256": "6fe286b84b6b8160517eab1d1984bb08c9b0c034e7c5299f414f134f140e9a75",
+  "engine_report_sha256": "d152f806c22f9c07c609999ca820680b8c7664651d7b0e33643186bf5bd18271",
+  "engine_script_sha256": "073616ea7a71f1148e243aa70e1cd0e221971173b0e55906686ed5dbcb572613",
+  "external_resources": 30680,
+  "implementation_sha256": "117b9f46c350bde0d3e03511afda52f5b1b1abcee7e71e9977d5ebf73f3eec3b",
+  "limitations": [
+    "Compressed member-byte opportunity, not measured replacement archive or guaranteed savings.",
+    "Production loader requires each dependency to stay inside its pair namespace; sharing needs a versioned loader/launcher format.",
+    "Strict full resource signatures exclude paths and scene-unique labels but preserve names, locality, pixels/mipmaps and all other stored properties.",
+    "Embedded resources are semantically inventoried, but their matches have no measured standalone archive saving and are excluded from the member-byte total.",
+    "Immutable resource files differ even with matching semantic signatures; this is not simple object deletion.",
+    "No rewritten scenes, rendered battles, runtime lifetime qualification, remote publication or cleanup."
+  ],
+  "production_approved": false,
+  "revision": "approved-pokemon-3d-v14",
+  "schema": 1,
+  "scope": "Offline archive admission and Linux resource semantics; compressed member-byte opportunity, no replacement archives or rollout.",
+  "semantic_cross_pair_groups": 551,
+  "source_bytes": 8993498070,
+  "source_metadata_sha256": "947bc89c94b0cf646cde1926934ab411c13d0b5ebd734deb02dcce2c7e7c4dda",
+  "verified_resource_occurrences": 3275
+}

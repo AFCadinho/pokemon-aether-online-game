@@ -326,9 +326,9 @@ const TRAINER_CARD_AVATAR_POSITION := Vector2(80, 112)
 const TRAINER_CARD_AVATAR_SCALE := Vector2(2.7, 2.7)
 ## Battle trainer art is authored on a half-resolution pixel grid: most 160px
 ## layers contain 2x2 logical pixels, while legacy 80px parts use layer scale
-## 2. Keep the final transform on half steps so every logical pixel occupies a
-## whole number of display pixels instead of alternating widths.
-const TRAINER_CARD_ART_SCALE_STEP := 0.5
+## 2. Use one half-step scale for every outfit so small differences in hair or
+## accessories cannot shrink the whole trainer by a full pixel-scale step.
+const TRAINER_CARD_ART_SCALE := 1.5
 const TRAINER_CARD_ART_WITH_COMPANION_SCALE := 1.0
 const TRAINER_CARD_APPEARANCE_VIEWPORT_SIZE := Vector2i(194, 248)
 const TRAINER_CARD_APPEARANCE_AVATAR_POSITION := Vector2(97, 142)
@@ -517,12 +517,6 @@ const EV_ITEM_EFFECTS := {
 	"calcium": {"stat": "spa", "potency": 10},
 	"zinc": {"stat": "spd", "potency": 10},
 	"carbos": {"stat": "spe", "potency": 10},
-	"health-wing": {"stat": "hp", "potency": 1},
-	"muscle-wing": {"stat": "atk", "potency": 1},
-	"resist-wing": {"stat": "def", "potency": 1},
-	"genius-wing": {"stat": "spa", "potency": 1},
-	"clever-wing": {"stat": "spd", "potency": 1},
-	"swift-wing": {"stat": "spe", "potency": 1},
 }
 const EV_REDUCING_BERRY_STATS := {
 	"pomeg-berry": "hp",
@@ -547,6 +541,7 @@ const MARKET_INTERFACE_ICON: Texture2D = preload("res://assets/ui/market_shop.sv
 const AETHER_ATELIER_POPUP_SCENE := preload("res://scenes/interface/aether_atelier_popup.tscn")
 const BANK_POPUP_SCENE := preload("res://scenes/interface/bank_popup.tscn")
 const MOVE_MENTOR_POPUP_SCENE := preload("res://scenes/interface/move_mentor_popup.tscn")
+const AETHERING_POPUP_SCENE := preload("res://scenes/interface/aethering_popup.tscn")
 const MOVE_DELETER_POPUP_SCENE := preload("res://scenes/interface/move_deleter_popup.tscn")
 const GIFT_VOUCHER_BALANCE_DIALOG_SCENE := preload("res://scenes/interface/gift_voucher_balance_dialog.tscn")
 const SHINY_TRACKER_POPUP_SCENE := preload("res://scenes/interface/shiny_tracker_popup.tscn")
@@ -1373,6 +1368,7 @@ var bank_popup: BankPopup
 var nature_specialist_popup
 var move_mentor_popup
 var move_deleter_popup
+var aethering_popup
 var gift_voucher_balance_dialog: GiftVoucherBalanceDialog
 var shiny_tracker_popup: ShinyTrackerPopup
 var market_popup: PanelContainer
@@ -4013,6 +4009,7 @@ func _apply_ui_z_index_policy() -> void:
 		nature_specialist_popup,
 		move_mentor_popup,
 		move_deleter_popup,
+		aethering_popup,
 	]
 	for context_value: Variant in pokemon_summary_open_cards.values():
 		var context: Dictionary = context_value as Dictionary
@@ -4095,6 +4092,7 @@ func _priority_overlay_panels() -> Array[Control]:
 		nature_specialist_popup,
 		move_mentor_popup,
 		move_deleter_popup,
+		aethering_popup,
 	]
 	if quest_journal_view != null:
 		panels.append(quest_journal_view.get_journal_panel())
@@ -17249,15 +17247,13 @@ func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictio
 		sprite.scale = Vector2.ONE * float(layer.get("scale", 1.0))
 		art.add_child(sprite)
 		var used := texture.get_image().get_used_rect()
+		if not used.has_area():
+			continue # Empty overlays have no visible bounds to center or align.
 		var visible_rect := Rect2((Vector2(used.position) - texture.get_size() * 0.5) * sprite.scale, Vector2(used.size) * sprite.scale)
 		visible_rect.position.x = -visible_rect.end.x
 		bounds = visible_rect if bounds.size == Vector2.ZERO else bounds.merge(visible_rect)
 	if bounds.has_area():
-		var factor := minf(144.0 / bounds.size.x, 222.0 / bounds.size.y)
-		var pixel_scale := maxf(
-			TRAINER_CARD_ART_SCALE_STEP,
-			floorf(factor / TRAINER_CARD_ART_SCALE_STEP) * TRAINER_CARD_ART_SCALE_STEP
-		)
+		var pixel_scale := TRAINER_CARD_ART_SCALE
 		art.scale = Vector2.ONE * pixel_scale
 		art.position = (Vector2(92, 248) - Vector2(bounds.get_center().x, bounds.end.y) * pixel_scale).round()
 	var profile := own_trainer_card_data if preview_name == "TrainerCardBattlePreview" else card
@@ -17268,6 +17264,8 @@ func _populate_trainer_card_battle_art(viewport: SubViewport, appearance: Dictio
 			var trainer_scale := minf(art.scale.x, TRAINER_CARD_ART_WITH_COMPANION_SCALE)
 			art.scale = Vector2.ONE * trainer_scale
 			art.position = (Vector2(48, 238) - Vector2(bounds.get_center().x, bounds.end.y) * trainer_scale).round()
+			# Keep wider accessories inside the left edge beside the companion.
+			art.position.x = roundf(maxf(art.position.x, 4.0 - bounds.position.x * trainer_scale))
 			art.z_index = 1
 			var companion := Sprite2D.new()
 			companion.name = "FavoritePokemon"
@@ -23903,6 +23901,8 @@ func _apply_market_context_copy() -> void:
 		return
 	var player_is_selling := market_mode == "player_sells"
 	var market_name := str(market_context.get("name", "")).strip_edges()
+	if str(market_context.get("id", "")) == "daycare_wing_merchant":
+		market_name = LocalizationManager.text("ui.aethering.merchant")
 	if player_is_selling:
 		market_title_label.text = (
 			LocalizationManager.text("ui.market.title.named_buyer", {"market": market_name})
@@ -32728,6 +32728,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": nature_specialist_popup, "close": Callable(self, "_hide_nature_specialist")},
 		{"panel": move_mentor_popup, "close": Callable(self, "_hide_move_mentor")},
 		{"panel": move_deleter_popup, "close": Callable(self, "_hide_move_deleter")},
+		{"panel": aethering_popup, "close": Callable(aethering_popup, "close_popup")},
 		{"panel": pc_popup, "close": Callable(self, "_on_pc_close_button_pressed")},
 		{"panel": bag_popup, "close": Callable(self, "_hide_bag_popup_for_escape")},
 		{"panel": public_trainer_card_popup, "close": Callable(self, "_hide_public_trainer_card")},
@@ -54558,3 +54559,24 @@ func _trace_nearby_pve_spectate(event: String, fields: Dictionary = {}) -> void:
 	payload["event"] = event
 	payload["ticksMs"] = Time.get_ticks_msec()
 	print("[NearbyPveSpectate] %s" % JSON.stringify(payload))
+
+
+func open_aethering() -> void:
+	if aethering_popup == null:
+		aethering_popup = AETHERING_POPUP_SCENE.instantiate()
+		root_control.add_child(aethering_popup)
+		_set_ui_panel_base_z(aethering_popup)
+		aethering_popup.closed.connect(func(): _deactivate_ui_panel(aethering_popup))
+		aethering_popup.completed.connect(_on_aethering_completed)
+	_activate_ui_panel(aethering_popup)
+	aethering_popup.open_aethering()
+
+func _on_aethering_completed(_result: Dictionary) -> void:
+	refresh_money_display()
+	bag_inventory_items = _normalize_bag_inventory_items(InventoryService.cached_inventory_items)
+	bag_inventory_loaded = InventoryService.inventory_loaded
+	_refresh_bag_items()
+	pc_all_boxes.clear()
+	pc_current_box.clear()
+	if pc_popup != null and pc_popup.visible:
+		await _refresh_pc_state(true)

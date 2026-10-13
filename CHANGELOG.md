@@ -4,6 +4,16 @@
 
 - Add the Nature Specialist to Pokémon Centers with Party/PC selection, nature/stat comparisons, server prices, paid confirmation and seven-day availability. Details and Exchange distinguish original nature from the treated effect.
 
+- Draw existing forest grass from near to far in experimental Android 3D to reduce GPU work, retaining its density, geometry, textures and 4x anti-aliasing.
+
+- Prepare model release v15: save another 198 MB by sharing geometry and animations within 111 normal/shiny pairs, preserving all reviewed detail, colours, poses and alternate forms.
+
+- Keep trainer sprites at a consistent size across outfits in the own and public Trainer Card Overview, including Kakashi and SS4.
+
+- Develop your own Pokémon through Aethering at the Route 5 Daycare: Party/PC selection, server previews, Wing IV locks, permanent donor confirmation and results with safe retries. Buy the six Wings there for 10,000 Pokédollars each without Blessing discounts; Wings no longer train EVs.
+
+- Avoid drawing arena scenery twice for experimental Android 3D material lighting, while retaining its shadow casters and the full main arena.
+
 - Use Vulkan/Mobile for explicit experimental Android 3D exports to avoid the native Adreno shader-link crash observed during battle moves.
 
 - Avoid native pose baking for Android 3D move placement and include the last safe move presentation phase in crash reports to help diagnose device-specific failures.

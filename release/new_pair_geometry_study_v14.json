@@ -1,0 +1,99 @@
+{
+  "artifacts": {
+    ".tmp/new-pair-geometry-v1/audit/report.json": {
+      "sha256": "ffd24b90d317a5ca0e0239a66e3e3fb2d1cfbe376f0d491fd205365593fda997",
+      "size_bytes": 3075673
+    },
+    ".tmp/new-pair-geometry-v1/build/report.json": {
+      "sha256": "79e2033b428982d3cbd561b3975685c170b31392f64d6f3c8e3a4b8921c51dae",
+      "size_bytes": 1396709
+    },
+    ".tmp/new-pair-geometry-v1/gpu-receipt.json": {
+      "sha256": "c7a8002c96423182e4491de8f28d98f32ab6f896be5fbbf4b1007d63ca4090ba",
+      "size_bytes": 718
+    },
+    ".tmp/new-pair-geometry-v1/render-final/report.json": {
+      "sha256": "4606588768cdf8e562700c4689f6e336607d3d9194d0ff376bf46a4cdc36f86d",
+      "size_bytes": 72960
+    },
+    ".tmp/new-pair-geometry-v1/render-v2/input.json": {
+      "sha256": "502786d3a274af96c318821c463250085c9cb65ec6757318f9802a4c18afba64",
+      "size_bytes": 56816
+    }
+  },
+  "audited_pairs": 220,
+  "complete": true,
+  "decoded_members_byte_exact": 2537,
+  "diagnostic_execution": {
+    "audio": "Dummy for restarted native processes and final renderer; real gl_compatibility graphics throughout",
+    "failed_attempts_retained": true,
+    "render_script_sha256": "3821555ddb2fc6494ebfc13aed3b9721cc35cd5664287a07d0cbce8433089d30",
+    "wrapper_sha256": "bb4d61644938dbe51e750c0ce2b054f63a7183b4089d0e3dca63c86be563f9b6"
+  },
+  "eligible_baseline_bytes": 615841324,
+  "eligible_candidate_bytes": 417669392,
+  "eligible_pairs": 111,
+  "execution_driver_sha256": "34468c27464a1de1b3628b6ca5cfe51f69382605ffdef77009605d2c2fee5b18",
+  "gpu": {
+    "acceptance": "Exact whole-frame equality to first or repeated source; no pixel tolerance. Same rule as qualify_shared_model_catalog.compare.",
+    "appearances": 8,
+    "candidate_frames": 80,
+    "complete": true,
+    "device": "AMD Radeon Graphics (radeonsi, renoir, ACO, DRM 3.64, 6.18.49-1-MANJARO)",
+    "pairs": 4,
+    "pixels_exact": true,
+    "production_approved": false,
+    "prototype_only": true,
+    "render_clock_implementation_sha256": "3821555ddb2fc6494ebfc13aed3b9721cc35cd5664287a07d0cbce8433089d30",
+    "render_report_sha256": "4606588768cdf8e562700c4689f6e336607d3d9194d0ff376bf46a4cdc36f86d",
+    "renderer": "gl_compatibility",
+    "schema": 1,
+    "source_control_frames_differing": 2,
+    "verifier_sha256": "ada21ee6c06d714f640d7dbcee134f4e50e7ca12ba6a911d8b39fea88405aaec"
+  },
+  "held_pairs": 109,
+  "hold_reason_counts": {
+    "material_mesh_or_method_animation_tracks": 109,
+    "scene_local_or_dependent_resource": 4
+  },
+  "implementation_commit": "934e158c5",
+  "inputs": {
+    "data/model_pair_release_v14_catalog.json": "92a7ee43c4fda06348da97a53df93fcda21eeb2f68d15471575c53b6833520ed",
+    "release/approved_3d_bundles_v14.json": "947bc89c94b0cf646cde1926934ab411c13d0b5ebd734deb02dcce2c7e7c4dda",
+    "release/approved_3d_v14_binding.json": "3b6ac5d5d691b80a343d071083d20c69a0cb21c10fa959536ba9c354bc295647",
+    "scripts/services/model_pair_pack.gd": "e01753aea1bc62872485dfa9a33356bc5f2ac04b2eb04c1485c669690a9ed698",
+    "tools/audit_cross_form_resources.py": "117b9f46c350bde0d3e03511afda52f5b1b1abcee7e71e9977d5ebf73f3eec3b",
+    "tools/audit_shared_geometry.py": "e1e10b783f0203770491f29fc4fbaecdc29edd7729404c0a10433a6756b924af",
+    "tools/probe_v13_compression.py": "b129fa4c62495df16d4c2d8c939e57498c1fae0dc39cd4f709169335903c4abe",
+    "tools/sprite_factory/model_geometry_audit.gd": "26aede92b016dadba70551b81d891003679e4848e1fa185941850a02859a489f",
+    "tools/sprite_factory/model_texture_audit.gd": "b44ffe3f50c310a429e573a2d7f5c1c3be2e5123567da75aedeecc3e1673c882",
+    "tools/sprite_factory/model_texture_render_probe.gd": "623386f78ef2bc4dfc1596d6f1c4adca18c9893c82f1369c7019803dada679fb",
+    "tools/sprite_factory/native_resource_compression_probe.py": "1f468fcd344edc000040200da8ba4cf57f6fd439b831120bf499edaba3a28174",
+    "tools/sprite_factory/new_pair_geometry_build.gd": "73632045d1f2c2fcfb32e9e632950e54fa4c294dd3571fec94c1aa8a52237382",
+    "tools/sprite_factory/new_pair_geometry_render.gd": "eead7bf5e437802bb5edc959a73b5f10fcc90bf3e8c84d32795944a746801bb2",
+    "tools/sprite_factory/shared_geometry_catalog_probe.gd": "91a718c48051aea9e93ff7e6cbaba00d5b9086feb89c9c030c3ecb346c99b4e0",
+    "tools/sprite_factory/shared_geometry_collection.gd": "48c3b3abc83a26897bf26144a0b581c7db7700fd58a05ae8a85b9d35f1fe0c23",
+    "tools/sprite_factory/shared_geometry_prototype.gd": "354f8ac6e5b4683721bdda31e859d2dcd14e3aa9141952df12def0d64cdedf3f",
+    "tools/study_new_pair_geometry.py": "1b58359855174cdee32c00711bde4337e762b10af2ada78b2724ed1a76f7e5ff"
+  },
+  "limitations": [
+    "Measured selected download archives; current live collection remains 8.99 GB.",
+    "All 111 native pairs qualified structurally and at sampled animation states; GPU frames cover four selected pairs only.",
+    "Whole-frame equality to original or repeated-original, matching existing acceptance; two original control frames differ.",
+    "Raw model controls, not compiled game/launcher catalog binding, full battle/presenter/installation upgrade/rollback certification or Windows/macOS/physical Android tests.",
+    "109 material-animation pairs retain original complete archives; no sharing guard was bypassed."
+  ],
+  "motion_samples": 5274,
+  "other_material_animation_held_pairs": 11,
+  "pairs_built": 111,
+  "pairs_smaller": 111,
+  "production_approved": false,
+  "prototype_only": true,
+  "saved_download_bytes": 198171932,
+  "schema": 1,
+  "scope": "Offline v14 new-pair complete-pack study. No R2, compiled catalog or player rollout.",
+  "selected_collection_bytes": 8795326138,
+  "source_cohort_bytes": 1334349732,
+  "source_collection_bytes": 8993498070,
+  "uv_only_held_pairs": 98
+}

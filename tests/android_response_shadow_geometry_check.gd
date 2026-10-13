@@ -1,0 +1,30 @@
+extends SceneTree
+const Pool = preload("res://scripts/battle/arenas/shared/environment_pool.gd")
+
+func _init() -> void:
+	var arena := Node3D.new()
+	var grass := MeshInstance3D.new()
+	grass.mesh = BoxMesh.new()
+	grass.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	arena.add_child(grass)
+	var nested_caster := MeshInstance3D.new()
+	nested_caster.mesh = BoxMesh.new()
+	grass.add_child(nested_caster)
+	var double_sided := MeshInstance3D.new()
+	double_sided.mesh = BoxMesh.new()
+	double_sided.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
+	arena.add_child(double_sided)
+	var main: Node3D = arena.duplicate()
+	Pool._response_shadow_geometry(arena)
+	assert(grass.layers == 0 and grass.visible)
+	assert(grass.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF)
+	assert(nested_caster.layers == 1 and nested_caster.visible)
+	assert(nested_caster.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY)
+	assert(double_sided.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED)
+	assert(main.get_child(0).layers == 1 and main.get_child(0).visible)
+	assert(main.get_child(0).get_child(0).cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_ON)
+	assert(main.get_child(0).mesh == grass.mesh)
+	arena.free()
+	main.free()
+	print("ANDROID_RESPONSE_SHADOW_GEOMETRY_CHECK PASS")
+	quit()

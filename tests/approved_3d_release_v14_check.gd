@@ -24,13 +24,13 @@ func descriptor(pin: Dictionary) -> Dictionary:
 
 func _run() -> void:
  OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST","1")
- OS.unset_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION")
+ OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION","v14")
  var index: Dictionary = Pilot.catalog()
  assert(index==LauncherPilot.catalog())
  print("V14_INDEX_DIAGNOSTIC size=",index.assets.size()," error=",Index.validate(index))
  assert(index.assets.size()==1420 and Index.validate(index).is_empty())
  assert(Pilot.release()==Pin.data and LauncherPilot.release()==Pin.data)
- assert(FileAccess.get_sha256(Pilot.PRODUCTION_PATH)==Pin.data.index.sha256)
+ assert(FileAccess.get_sha256(Pilot.PREVIOUS_PRODUCTION_PATH)==Pin.data.index.sha256)
  var service:=Service.new()
  assert(service._selected_release()==Pin.data)
  assert(Release.descriptor_error(descriptor(Pin.data)).is_empty())
@@ -50,7 +50,7 @@ func _run() -> void:
  assert(not Release.descriptor_error(bad).is_empty())
  bad=descriptor(Pin.data);bad.requiredAssetIds=Old.data.requiredAssetIds
  assert(not Release.descriptor_error(bad).is_empty())
- var compact: Dictionary=load(Pilot.PRODUCTION_PATH).data.duplicate(true)
+ var compact: Dictionary=load(Pilot.PREVIOUS_PRODUCTION_PATH).data.duplicate(true)
  compact.assets[0].sha256="0".repeat(64)
  assert(Pilot.expand_index(compact).is_empty())
  for name in ["landorus-therian","urshifu-rapid-strike","greninja-ash","pikachu-rock-star"]:
