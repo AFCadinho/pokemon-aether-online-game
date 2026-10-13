@@ -145,10 +145,12 @@ jobs:
       - name: Import Godot assets and run Android checks
         run: |
           set -o pipefail
+          python3 -m unittest tests.test_android_3d_assets tests.test_android_release
           ./godot --headless --import --quit >/tmp/godot-import-first.log 2>&1 || true
           ./godot --headless --import --quit 2>&1 | tee /tmp/godot-import.log
           ./godot --headless --path . --script res://tests/android_apk_update_check.gd
           ./godot --headless --path . --script res://tests/android_3d_platform_check.gd
+          ./godot --headless --path . --script res://tests/android_3d_model_release_check.gd
           ./godot --headless --path . --script res://tests/android_visual_choice_check.gd
           ./godot --headless --path . --script res://tests/android_home_sprite_pack_check.gd
           ./godot --headless --path . --script res://tests/android_music_pack_check.gd

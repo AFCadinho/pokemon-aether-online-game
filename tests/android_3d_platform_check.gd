@@ -1,6 +1,11 @@
 extends SceneTree
 const Platform = preload("res://scripts/battle/battle_ui/model_platform.gd")
+const PairPilot = preload("res://scripts/services/model_pair_pilot.gd")
 func _init() -> void:
+	assert(PairPilot.allows_production(false, false, false, true))
+	assert(PairPilot.allows_production(false, true, true, false), "Experimental Android selects current shared models")
+	assert(not PairPilot.allows_production(false, true, false, true), "A desktop diagnostic cannot bypass ordinary Android gating")
+	assert(not PairPilot.allows_production(true, true, true, true), "Browser cannot select native shared packs")
 	assert(Platform.allows(false, false, false, false, false))
 	assert(not Platform.allows(false, true, true, false, true), "Regular Android remains 2D")
 	assert(not Platform.allows(false, true, true, true, false), "Release Android cannot enable the debug pilot")

@@ -369,8 +369,6 @@ func _selected_release() -> Dictionary:
 	# An unpublished local preparation never changes network selection.
 	if _v12_publication_verified():
 		return RELEASE_V12.data
-	if OS.has_feature("android") and OS.has_feature("android_3d_experimental"):
-		return RELEASE_V11.data # The experimental candidate gate verifies publication.
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path():
 		for release: Dictionary in [RELEASE_V12.data, RELEASE_V11.data, RELEASE_V10.data, RELEASE_V9.data, RELEASE_V8.data]:
