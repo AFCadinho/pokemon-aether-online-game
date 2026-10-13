@@ -38,5 +38,41 @@ func _run() -> void:
 		assert(not asset.is_empty() and asset.appearances.size() == 2, "Normal and shiny share a verified download")
 	assert(root.get_node("SettingsManager").supports_3d_presentation())
 	service.free()
+	if OS.get_environment("POKEAETHER_ANDROID_3D_DOWNLOAD_SMOKE") == "1":
+		await _check_public_downloads()
 	print("ANDROID_3D_MODEL_RELEASE_OK revision=v14 pairs=1420 shared_normal_shiny=true")
 	quit()
+
+func _check_public_downloads() -> void:
+	# Explicit diagnostic only; normal project checks never download model packs.
+	# Exercise the real Android-tagged downloader, pack admission and cache reuse.
+	var identities: Array[String] = ["hydreigon", "hydreigon@shiny", "tyranitar", "tyranitar@shiny",
+		"landorus-therian", "landorus-therian@shiny", "urshifu-rapid-strike", "urshifu-rapid-strike@shiny"]
+	var downloader := root.get_node("OnDemand3DBundleService")
+	var result: Dictionary = await downloader.ensure_models(identities, "")
+	assert(str(result.get("error", "missing result")).is_empty(), str(result))
+	var count := 0
+	var pack := preload("res://scripts/services/model_pair_pack.gd")
+	for entry: Dictionary in downloader._catalog(str(result.path)):
+		var identity := str(entry.species) + ("@shiny" if entry.variant == "shiny" else "")
+		if identity not in identities:
+			continue
+		var asset := PairPilot.entry_asset(entry)
+		assert(not asset.is_empty(), identity)
+		var checked: Dictionary = await downloader.verify_shared_entry(entry)
+		assert(str(checked.error).is_empty(), str(checked))
+		assert(pack.mount_checked(str(entry.pack_path), asset, checked.checked).is_empty())
+		var scene := ResourceLoader.load(str(entry.runtime_path), "PackedScene", ResourceLoader.CACHE_MODE_IGNORE) as PackedScene
+		assert(scene != null, identity)
+		var actor := scene.instantiate()
+		root.add_child(actor)
+		await process_frame
+		assert(not actor.find_children("*", "AnimationPlayer", true, false).is_empty(), identity)
+		actor.queue_free()
+		await process_frame
+		count += 1
+	assert(count == identities.size())
+	var cached: Dictionary = await downloader.ensure_models(identities, str(result.path))
+	assert(cached.get("error") == "" and cached.get("catalog_changed") == false)
+	assert(cached.get("verified_models", {}).size() == identities.size())
+	print("ANDROID_3D_PUBLIC_DOWNLOAD_OK appearances=8 pairs=4 native_scenes=true cached_no_download=true")
