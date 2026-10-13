@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep trainer sprites at a consistent size across outfits in the own and public Trainer Card Overview, including Kakashi and SS4.
+
 - Develop your own Pokémon through Aethering at the Route 5 Daycare: Party/PC selection, server previews, Wing IV locks, permanent donor confirmation and results with safe retries. Buy the six Wings there for 10,000 Pokédollars each without Blessing discounts; Wings no longer train EVs.
 
 - Avoid drawing arena scenery twice for experimental Android 3D material lighting, while retaining its shadow casters and the full main arena.
