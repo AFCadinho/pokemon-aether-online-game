@@ -207,6 +207,8 @@ func _run() -> void:
 	settings.battle_presentation_mode = "3d"
 	settings.battle_3d_arena = "forest"
 	settings.battle_3d_camera_motion = false
+	# Isolation comparisons keep the same camera during moves as well as idle.
+	settings.android_3d_move_camera = false
 	root.get_node("WorldTimeService").set_debug_time(12)
 	var environment := root.get_node("Android3DEnvironmentService")
 	if not _check((await environment.ensure_ready()).is_empty(), "Pinned production arena available"):
