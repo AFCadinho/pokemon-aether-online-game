@@ -2,6 +2,35 @@
 
 ## Android touch camera and bounded move preparation
 
+World-entry preparation now preserves an explicitly supplied overworld
+snapshot instead of replacing it with the lobby's dark loading backdrop.
+Android still waits for the real model camera fit, then uses the same layered
+fullscreen fade. Entries without a world snapshot retain their loading screen.
+The held-download check verifies snapshot retention and, under native Mobile
+rendering, the actual green world-image pixels during response/model waits.
+
+Move shots prepare a static arena-bound index under the entry cover. The
+clearance helper protects the first three metres (at most 60%) of the sightline
+above grass batches, with a 0.4-unit wind margin, and raises the camera above
+upright props along the focus ray. Flat ground and hidden geometry are excluded.
+Clear shots keep their authored pose; a lift beyond twelve units uses the
+prepared overview. Clearance blends out with native shot recovery and changes
+neither FOV, materials, visibility, geometry, shadow casting nor move timing.
+This is shared by Android and desktop cinematic shots. Bounding boxes are
+conservative, so gaps within an object can cause more clearance than necessary.
+Native Mobile checks verified real MultiMesh bounds, preserved focus, visible
+arena objects and overview fallback; normal/Draco shot regressions passed on
+both camera policies.
+Bounds use Godot's documented
+[VisualInstance3D bounding boxes](https://docs.godotengine.org/en/4.6/classes/class_visualinstance3d.html#class-visualinstance3d-method-get-aabb).
+The 35 Z-move choreography regressions also passed.
+
+USB trial `0.3.109-3d-perf.8` (code 38, source `55273e8c0`) passed signed
+ARM64 Mobile export checks and was installed without clearing game data. It
+retains v14 models, the close-up camera and move shots, with warmup disabled.
+The physical overworld fade and grass-shot appearance are awaiting the user's
+repeat test on the grassfield.
+
 Android move shots use the independent `android_3d_move_camera` preference,
 enabled when an older profile has no value for it. Previously, all move shots
 required `battle_3d_camera_motion`, which defaults off and whose control was
@@ -19,8 +48,10 @@ USB trial `0.3.109-3d-perf.7` (code 37, source `e93dcdd19`) passed the signed
 ARM64 Mobile demand-export checks and was installed over the existing game.
 It retains the published v14 model pin and leaves move warmup disabled. Android
 Draco Meteor, Android catalog choreography, settings persistence, desktop
-Draco Meteor and desktop catalog choreography checks passed. Physical shot
-appearance and recovery are awaiting the user's battle check.
+Draco Meteor and desktop catalog choreography checks passed. The user confirmed
+physical shots work, then reported foreground grass obstructing charge shots
+and a dark world-to-battle preparation interval. The snapshot preservation and
+general cinematic clearance changes above address those follow-ups.
 
 Android first fits an overview, then applies the requested zoom to that
 transform. A conservative unposed mesh envelope must not undo pinch zoom:

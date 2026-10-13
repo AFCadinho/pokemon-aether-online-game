@@ -197,8 +197,8 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_
 	loading_message_after_ms = Time.get_ticks_msec() + 500
 	var settings := get_node("/root/SettingsManager")
 	loading_entry_requested = transition_style == WildEncounterTransition.STYLE_FULLSCREEN_FADE and settings.battle_presentation_mode in ["2.5d", "3d"] and preload("res://scripts/battle/battle_ui/model_platform.gd").supported()
-	loading_backdrop.visible = loading_entry_requested
-	if loading_entry_requested:
+	loading_backdrop.visible = loading_entry_requested and snapshot == null
+	if loading_entry_requested and snapshot == null:
 		# Replace the lobby snapshot immediately, including local model validation
 		# and render warmup, then fade directly from this screen to the ready arena.
 		outgoing_snapshot.texture = null

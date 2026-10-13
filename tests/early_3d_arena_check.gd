@@ -27,6 +27,14 @@ func _init() -> void:
 func _make_host() -> Control:
 	return load("res://scenes/battle/battle_screen_host.tscn").instantiate()
 
+func _check_world_pixels() -> void:
+	if DisplayServer.get_name() == "headless": return
+	await RenderingServer.frame_post_draw
+	var image := root.get_texture().get_image()
+	var pixel := image.get_pixel(image.get_width() / 2, image.get_height() / 2)
+	_check(Vector3(pixel.r, pixel.g, pixel.b).distance_to(Vector3(0.12, 0.45, 0.22)) < 0.025,
+		"Mobile renderer presents the world snapshot while battle models are held")
+
 func _run() -> void:
 	var settings := root.get_node("SettingsManager")
 	settings.battle_presentation_mode = "3d"
@@ -42,6 +50,9 @@ func _run() -> void:
 	probe.catalog = _make_fixture()
 	root.add_child(probe)
 	Cache.clear()
+	var world_image := Image.create(16, 16, false, Image.FORMAT_RGBA8)
+	world_image.fill(Color(0.12, 0.45, 0.22))
+	var world_snapshot := ImageTexture.create_from_image(world_image)
 	# Use the actual map-owned environment pool, including its shader warmup.
 	var pool := Pool.prepare(root, settings.get_battle_3d_forest_manifest(), Vector2i(960, 540), settings.battle_3d_arena)
 	_check(pool != null, "arena source is available")
@@ -59,7 +70,9 @@ func _run() -> void:
 		root.add_child(host)
 		var battle = load("res://scenes/battle/battle.tscn").instantiate()
 		host.prewarm_battle(battle)
-		host.mount(battle, null, WildEncounterTransition.STYLE_FULLSCREEN_FADE)
+		host.mount(battle, null, WildEncounterTransition.STYLE_FULLSCREEN_FADE, false, world_snapshot)
+		_check(host.outgoing_snapshot.texture == world_snapshot and not host.loading_backdrop.visible,
+			"3D preparation preserves the outgoing overworld without a dark loading backdrop")
 		battle.prepare_pending_entry(&"grass")
 		var started := Time.get_ticks_msec()
 		host.reveal_pending_entry()
@@ -75,6 +88,8 @@ func _run() -> void:
 			for frame in 10: await process_frame
 			_check(host.fade_progress == 0.0 and not host.entry_arena_ready and not host.preparation_ready and host.get_node("Cover").visible,
 				"Android keeps the initial field covered until real model framing is ready")
+			_check(host.outgoing_snapshot.texture == world_snapshot, "held Android entry still shows the overworld")
+			await _check_world_pixels()
 		else:
 			_check(host.fade_progress == 1.0 and host.entry_arena_ready and not host.preparation_ready,
 				"the existing desktop fade finishes before a response or model load")
@@ -101,7 +116,10 @@ func _run() -> void:
 			await process_frame
 		for frame in 10:
 			await process_frame
-			if covered_entry: _check(host.fade_progress == 0.0 and host.get_node("Cover").visible, "held model loading cannot reveal provisional Android framing")
+			if covered_entry:
+				_check(host.fade_progress == 0.0 and host.get_node("Cover").visible, "held model loading cannot reveal provisional Android framing")
+				_check(host.outgoing_snapshot.texture == world_snapshot and not host.loading_backdrop.visible,
+					"slow model loading retains the world image instead of a black screen")
 			_check(stage.viewport == retained_viewport and stage.is_visible_in_tree(), "arena stays visible throughout local model preparation")
 			_check(is_equal_approx(stage.modulate.a, 1.0), "model preparation keeps the arena opaque")
 			_check(battle.player_sprite_box.model_sprites_hidden and battle.enemy_sprite_box.model_sprites_hidden, "sprite frame refresh cannot flash a 2D Pokémon")
@@ -109,6 +127,7 @@ func _run() -> void:
 			"normal and shiny leads plus their possible Mega forms are requested: %s" % str(probe.requested))
 		_check(not waiting.finished and battle.battle_input_locked and not battle.battle_actions_ready and battle.has_meta("battle_screen_preparing"), "early fade does not release the intro or first-turn controls")
 		_check(not host.loading_label.is_visible_in_tree(), "local preparation stays quiet on the arena")
+		if covered_entry: await _check_world_pixels()
 		await _capture("loading-%d" % round_index)
 		probe.finish_download.emit()
 		deadline = Time.get_ticks_msec() + 10000

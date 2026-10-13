@@ -613,6 +613,7 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 	while is_inside_tree():
 		var now := Time.get_ticks_usec()
 		if active and not _models_pending() and _actors_resolved():
+			move_camera.clearance.prepare(arena_root)
 			if is_instance_valid(forest_pool) and not forest_lease.is_empty() and not _preview_wants_3d() and not _needed_species().is_empty():
 				# Prepare once under the battle cover, after actual actor framing.
 				forest_pool.prepare_grass_order(camera)
