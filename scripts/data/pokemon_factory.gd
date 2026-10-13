@@ -62,6 +62,10 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 	pokemon.can_evolve = bool(data.get("canEvolve", data.get("can_evolve", false)))
 	pokemon.hidden_ability = _get_bool_option(data, ["hiddenAbility", "hidden_ability"])
 	pokemon.special_lineage = _get_string_option(data, ["specialLineage", "special_lineage"]).strip_edges().to_lower().replace("_", "-").replace(" ", "-")
+	var effective_value: Variant = data.get("effectiveNature", "")
+	pokemon.effective_nature = str(effective_value) if effective_value is String else ""
+	var treatment_value: Variant = data.get("natureTreatment", {})
+	pokemon.nature_treatment = treatment_value.duplicate(true) if treatment_value is Dictionary else {}
 	pokemon.borrowed = _get_bool_option(data, ["borrowed", "isBorrowed", "is_borrowed"])
 	var loan_value: Variant = data.get("loan", {})
 	pokemon.loan = (loan_value as Dictionary).duplicate(true) if loan_value is Dictionary else {}

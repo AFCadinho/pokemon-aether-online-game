@@ -1370,6 +1370,7 @@ var trainer_name_change_confirm_button: Button
 var trainer_name_change_in_progress := false
 var aether_atelier_popup: AetherAtelierPopup
 var bank_popup: BankPopup
+var nature_specialist_popup
 var move_mentor_popup
 var move_deleter_popup
 var gift_voucher_balance_dialog: GiftVoucherBalanceDialog
@@ -4009,6 +4010,7 @@ func _apply_ui_z_index_policy() -> void:
 		settings_menu,
 		guild_popup,
 		bank_popup,
+		nature_specialist_popup,
 		move_mentor_popup,
 		move_deleter_popup,
 	]
@@ -4090,6 +4092,7 @@ func _priority_overlay_panels() -> Array[Control]:
 		pc_popup,
 		guild_popup,
 		bank_popup,
+		nature_specialist_popup,
 		move_mentor_popup,
 		move_deleter_popup,
 	]
@@ -23704,6 +23707,31 @@ func _hide_bank() -> void:
 	bank_popup.visible = false
 	_deactivate_ui_panel(bank_popup)
 
+func _pokemon_nature_display(pokemon: Pokemon) -> String:
+	var natural := _localized_nature_name(pokemon.nature)
+	if pokemon.effective_nature.is_empty():
+		return natural
+	return LocalizationManager.text("ui.nature_specialist.details", {"original":natural, "effective":_localized_nature_name(pokemon.get_effective_nature())})
+
+
+func open_nature_specialist() -> void:
+	if nature_specialist_popup == null:
+		nature_specialist_popup = preload("res://scenes/interface/nature_specialist_popup.tscn").instantiate()
+		root_control.add_child(nature_specialist_popup)
+		_set_ui_panel_base_z(nature_specialist_popup)
+		nature_specialist_popup.closed.connect(_hide_nature_specialist)
+	nature_specialist_popup.visible = true
+	_activate_ui_panel(nature_specialist_popup)
+	nature_specialist_popup.open_specialist()
+
+func _hide_nature_specialist() -> void:
+	if nature_specialist_popup == null or nature_specialist_popup.busy:
+		return
+	nature_specialist_popup.confirmation.hide_dialog()
+	nature_specialist_popup.visible = false
+	_deactivate_ui_panel(nature_specialist_popup)
+
+
 func open_move_mentor() -> void:
 	_setup_move_mentor_popup()
 	if move_mentor_popup == null:
@@ -27680,8 +27708,8 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 	if ability_stack != null:
 		_set_readonly_summary_detail_hover(ability_label, ability_label.text, ability_tooltip, POKEMON_SUMMARY_ACCENT)
 	var nature_label := nodes.get("nature_label") as Label
-	nature_label.text = _localized_nature_name(pokemon.nature)
-	var nature_tooltip := _get_pokemon_summary_nature_tooltip(pokemon.nature)
+	nature_label.text = _pokemon_nature_display(pokemon)
+	var nature_tooltip := _get_pokemon_summary_nature_tooltip(pokemon.get_effective_nature())
 	nature_label.tooltip_text = nature_tooltip
 	var nature_stack := nodes.get("nature_stack") as VBoxContainer
 	if nature_stack != null:
@@ -27754,7 +27782,7 @@ func _refresh_readonly_pokemon_summary(pokemon: Pokemon) -> void:
 		stat_value_label.tooltip_text = total_stat_tooltip
 		iv_label.tooltip_text = iv_tooltip
 		ev_label.tooltip_text = ev_tooltip
-		var nature_role := _get_pokemon_summary_nature_stat_role(pokemon.nature, stat_id)
+		var nature_role := _get_pokemon_summary_nature_stat_role(pokemon.get_effective_nature(), stat_id)
 		stat_value_label.add_theme_color_override("font_color", (
 			POKEMON_SUMMARY_NATURE_BOOST_COLOR if nature_role == "boosted"
 			else (POKEMON_SUMMARY_NATURE_DROP_COLOR if nature_role == "lowered" else UI_TEXT)
@@ -28590,13 +28618,13 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 	))
 	info_grid.add_child(_create_summary_field_card(
 		LocalizationManager.text("ui.pokemon_summary.nature"),
-		_localized_nature_name(pokemon.nature),
+		_pokemon_nature_display(pokemon),
 		Color("#f2cf78"),
 		false,
 		148.0,
 		Color(0, 0, 0, 0),
 		Color(0, 0, 0, 0),
-		_get_pokemon_summary_nature_tooltip(pokemon.nature)
+		_get_pokemon_summary_nature_tooltip(pokemon.get_effective_nature())
 	))
 	info_grid.add_child(_create_summary_field_card(
 		LocalizationManager.text("ui.pokemon_summary.location"),
@@ -28625,7 +28653,7 @@ func _render_pokemon_summary_general(pokemon: Pokemon) -> void:
 		var stat_color: Color = stat.get("color", UI_BORDER_FOCUS) as Color
 		var value_color := Color(0, 0, 0, 0)
 		var border_color := Color(0, 0, 0, 0)
-		var nature_role: String = _get_pokemon_summary_nature_stat_role(pokemon.nature, stat_id)
+		var nature_role: String = _get_pokemon_summary_nature_stat_role(pokemon.get_effective_nature(), stat_id)
 		if nature_role == "boosted":
 			stat_color = POKEMON_SUMMARY_NATURE_BOOST_COLOR
 			value_color = POKEMON_SUMMARY_NATURE_BOOST_COLOR
@@ -32697,6 +32725,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": dev_actions_popup, "close": Callable(self, "_hide_dev_actions_popup_for_escape")},
 		{"panel": aether_atelier_popup, "close": Callable(self, "_hide_aether_atelier")},
 		{"panel": bank_popup, "close": Callable(self, "_hide_bank")},
+		{"panel": nature_specialist_popup, "close": Callable(self, "_hide_nature_specialist")},
 		{"panel": move_mentor_popup, "close": Callable(self, "_hide_move_mentor")},
 		{"panel": move_deleter_popup, "close": Callable(self, "_hide_move_deleter")},
 		{"panel": pc_popup, "close": Callable(self, "_on_pc_close_button_pressed")},

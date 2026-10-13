@@ -135,6 +135,17 @@ var price_spin: SpinBox
 var total_price_label: Label
 
 
+func _nature_display(asset: Dictionary) -> String:
+	var original := str(asset.get("nature", "—"))
+	if asset.get("natureTreatment") != null:
+		var manager := get_node_or_null("/root/LocalizationManager")
+		var effective := str(asset.get("effectiveNature",original))
+		if manager != null:
+			return str(manager.call("text", "ui.nature_specialist.details", {"original":original, "effective":effective}))
+		return "%s · Treated: %s" % [original, effective]
+	return original
+
+
 func _ready() -> void:
 	custom_minimum_size = EXCHANGE_SIZE
 	size = EXCHANGE_SIZE
@@ -2667,7 +2678,7 @@ func _entry_subtitle(entry: Dictionary, kind: String) -> String:
 		if _entry_asset_type(entry, kind) == "pokemon":
 			return _t("ui.exchange.pokemon_summary", {
 				"level": int(asset.get("level", 1)),
-				"nature": str(asset.get("nature", "—")),
+				"nature": _nature_display(asset),
 			})
 		return _t("ui.exchange.owned", {"quantity": int(asset.get("quantity", 1))})
 	var status := str(entry.get("status", "active"))
@@ -2719,7 +2730,7 @@ func _asset_detail_text(asset: Dictionary, asset_type: String) -> String:
 		return description if not description.is_empty() else _t("ui.exchange.item_description")
 	var parts: Array[String] = [
 		_t("ui.exchange.detail.level", {"value": int(asset.get("level", 1))}),
-		_t("ui.exchange.detail.nature", {"value": str(asset.get("nature", "—"))}),
+		_t("ui.exchange.detail.nature", {"value": _nature_display(asset)}),
 		_t("ui.exchange.detail.ability", {"value": str(asset.get("ability", "—"))}),
 	]
 	var ivs := _dictionary(asset.get("ivs", {}))

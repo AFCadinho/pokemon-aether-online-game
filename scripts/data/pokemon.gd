@@ -15,6 +15,8 @@ var item: String
 var ability: String
 var hidden_ability: bool
 var nature: String
+var effective_nature: String = ""
+var nature_treatment: Dictionary = {}
 var location: String
 var origin: Dictionary
 var ball_item_id: String
@@ -149,6 +151,9 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 
+func get_effective_nature() -> String:
+	return effective_nature if not effective_nature.is_empty() else nature
+
 func to_battle_dict() -> Dictionary:
 	ensure_instance_id()
 
@@ -160,6 +165,8 @@ func to_battle_dict() -> Dictionary:
 		"ability": ability,
 		"hiddenAbility": hidden_ability,
 		"nature": nature,
+		"effectiveNature": get_effective_nature(),
+		"natureTreatment": nature_treatment,
 		"happiness": happiness,
 		"evs": evs,
 		"storedEvs": stored_evs,
