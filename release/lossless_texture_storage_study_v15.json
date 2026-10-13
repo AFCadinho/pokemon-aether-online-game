@@ -1,0 +1,274 @@
+{
+  "artifacts": {
+    ".tmp/lossless-texture-storage-full-v2/configuration.json": {
+      "sha256": "5e9465f12930133ce3a07e6828cee60b677b14e7df681de891efabe6abdafb4c",
+      "size_bytes": 8368
+    },
+    ".tmp/lossless-texture-storage-full-v2/report.json": {
+      "sha256": "f67e2e04a48c6d7cd9b0b4e376c33ba468a48faf12b3a9b5f1c1b835d4ad4c4d",
+      "size_bytes": 984587
+    },
+    ".tmp/lossless-texture-storage-v1/debug-webp-decoded.png": {
+      "sha256": "0aa1d3405913696b38e3ac53f54ff76fea96d254d2c0b1c2efc4d7b4183aa795",
+      "size_bytes": 81630
+    },
+    ".tmp/lossless-texture-storage-v1/debug-webp-source.png": {
+      "sha256": "d584986d16e40b0b433d963f16d939daa689b5c2531e15edd38a97d3cc529c90",
+      "size_bytes": 81647
+    },
+    ".tmp/lossless-texture-storage-v1/debug-webp.log": {
+      "sha256": "7aa98dd6db13d86479faf3df32cef0115ddaff020f58e81ff3c21e8367353376",
+      "size_bytes": 539
+    },
+    ".tmp/lossless-texture-storage-v1/debug-webp.webp": {
+      "sha256": "352a9c4517eea378a808ee12f76ec85c3e76ebc41034d55c3e5a51757a281e9a",
+      "size_bytes": 39046
+    },
+    ".tmp/lossless-texture-storage-v1/duplication-retained.log": {
+      "sha256": "c0b09a5842f2c9e839b18b4ddaec41faf56114da1d695261150f04afa00acaf6",
+      "size_bytes": 352
+    },
+    ".tmp/lossless-texture-storage-v1/duplication.log": {
+      "sha256": "4b6005bb40d3a3b2fc0eeca69677743c782633a9ef06a2bd7a98dfe9412d72d5",
+      "size_bytes": 5170
+    },
+    ".tmp/lossless-texture-storage-v1/unit-final.log": {
+      "sha256": "a07db944492fae6769dd02bc502ec75af2ba551ce90ac28241be4c98b37335c8",
+      "size_bytes": 381
+    },
+    ".tmp/strict-webp-texture-full-v1/report.json": {
+      "sha256": "506f12a8420d7e07a7843580385a7c2db7477e447ccfb0ef99cdf6802e966e61",
+      "size_bytes": 401501
+    }
+  },
+  "baseline_collection_bytes": 8795326138,
+  "baseline_revision": "approved-pokemon-3d-v15",
+  "cold_gpu_pairs_verified": 20,
+  "complete": true,
+  "duplication_diagnostic": {
+    "buffers_retained_exact_duplicates": 20,
+    "default_case_qualified": false,
+    "default_exact_duplicates": 0,
+    "portable_textures": 20,
+    "production_loader_changed": false,
+    "retained_case_focused_pass": true
+  },
+  "excluded_zip_pairs": 55,
+  "execution_drivers": {
+    "tools/resume_lossless_texture_storage.py": "191c0a0ed15c256136e0771f23f38ce3df82d3e13ffcc1fe72becc85d3362080",
+    "tools/resume_strict_webp_texture_storage.py": "f87ff093699f7a7c1b005f666587ac8f218bd41b873c669ac7050a6c037e9c8a"
+  },
+  "external_texture_bytes": 6677897476,
+  "geometry_pairs": 16,
+  "godot_best_sample_bytes": 136250276,
+  "godot_webp_rejected_textures": 45,
+  "inputs": {
+    "data/model_pair_release_v15_catalog.json": "a4bd63d0652e2880b05934947b96e7988a2b43298b5879c01fee1b71bac2f5b4",
+    "release/approved_3d_bundles_v15.json": "ea5929fd61cecfc4c607d8a1a2a9a3e4581cd5626a271e28311ed2a5acb45c26",
+    "release/approved_3d_v15_binding.json": "d7beb0e1d97313a80bfd10e79d36f2a4c3442ae58a4991490f4e05177c4cbb42",
+    "scripts/services/model_pair_pack.gd": "e01753aea1bc62872485dfa9a33356bc5f2ac04b2eb04c1485c669690a9ed698",
+    "tools/probe_v13_compression.py": "b129fa4c62495df16d4c2d8c939e57498c1fae0dc39cd4f709169335903c4abe",
+    "tools/sprite_factory/lossless_texture_storage_probe.gd": "59b006da4a5148102d06ebd585e8487a75468415be0bd0b3d326a7fc8db532f4",
+    "tools/sprite_factory/lossless_texture_storage_unit.gd": "359b7f59370002510080fd02b6010f48f1278d599c46b373a40a6996b49cd6bd",
+    "tools/sprite_factory/model_texture_audit.gd": "b44ffe3f50c310a429e573a2d7f5c1c3be2e5123567da75aedeecc3e1673c882",
+    "tools/sprite_factory/native_resource_compression_probe.py": "1f468fcd344edc000040200da8ba4cf57f6fd439b831120bf499edaba3a28174",
+    "tools/sprite_factory/shared_geometry_collection.gd": "48c3b3abc83a26897bf26144a0b581c7db7700fd58a05ae8a85b9d35f1fe0c23",
+    "tools/sprite_factory/strict_webp_texture_storage.gd": "9341e19605b33889da580bc7ee11ca5ac6b8f02cdb385da2045e1efc06c3c2be",
+    "tools/study_lossless_texture_storage.py": "76ccb2129c58b1a905f8249e612a5e24145f17d4b1719002bf7adc962b1dc0dd",
+    "tools/study_strict_webp_texture_storage.py": "39f2e7d5566c198daed82f39afd1a161a8058713248b111f30ded3828d5959b1"
+  },
+  "kind": "pokeaether-lossless-texture-storage-study",
+  "limitations": [
+    "Varied diagnostic sample, not a measured complete collection saving.",
+    "No new active runtime/catalog/R2/build or production approval.",
+    "Private candidates retain old virtual namespaces; rollout requires new scene hashes/namespaces and client pins.",
+    "Full corrected battle/preview pixels, actor lifetime/cache/duplication, memory/load times and other native platforms remain unqualified."
+  ],
+  "motion_samples": 1014,
+  "near_opaque_alpha_diagnostic": {
+    "decoded_raw_sha256": "125bc6395eaa3029aa052a0ea11bffc2749ce59dde2700f18d67f6ab9b9f7de2",
+    "godot_decoded_alpha_255_pixels": 262144,
+    "independent_decoder_confirmed": true,
+    "source_alpha_254_pixels": 44,
+    "source_alpha_255_pixels": 262100,
+    "source_raw_sha256": "42f76caf0318d5a484b0aa299ce1507e5e5cf63bb394a27c0b557844e857256e"
+  },
+  "non_texture_native_members_byte_exact": true,
+  "original_sample_bytes": 163388228,
+  "pairs": 20,
+  "pairs_receipts": [
+    {
+      "asset_id": "pokemon_3d:alcremie-caramel-swirl:base",
+      "candidate_bytes": 4259968,
+      "engine_report_sha256": "7b70ea1e632356dc2f8b0c78d973366234aaaf57960c18a098de9d3385f1171b",
+      "selected_bytes": 4259968,
+      "sha256": "df0b855313ee02d3a91fe68da18b24fb5e5dd81e52dd6b5ff872e733c89c7c01",
+      "source_bytes": 5607072
+    },
+    {
+      "asset_id": "pokemon_3d:appletun:base",
+      "candidate_bytes": 6160288,
+      "engine_report_sha256": "fe03e0d39c842879e1488ee95e9d09e3ca8606e5f085fbc2bb364f297454db48",
+      "selected_bytes": 6160288,
+      "sha256": "25b555ba76626022dc208b6a9f23634554c71b438cc2c6ee7c737b1188497fbf",
+      "source_bytes": 8326080
+    },
+    {
+      "asset_id": "pokemon_3d:arboliva:base",
+      "candidate_bytes": 8481820,
+      "engine_report_sha256": "65a25ccb369ca59ec1b24a822294e72a3c5d2663d3227bff0b6e356a2ff2a918",
+      "selected_bytes": 8481820,
+      "sha256": "c620375cbef78ef7fd3d55243c73934985ef60cd481f20050537ec196a824bee",
+      "source_bytes": 10689212
+    },
+    {
+      "asset_id": "pokemon_3d:cetoddle:base",
+      "candidate_bytes": 3555256,
+      "engine_report_sha256": "ff3aa3ed29baf04555b0a19811d2809eb981f1fce85d19a431d9cb2caf42ae8d",
+      "selected_bytes": 3555256,
+      "sha256": "025e1d2310c6c801224306aab9946a75efded6a38490e5089cd0b2cd151a216d",
+      "source_bytes": 4471448
+    },
+    {
+      "asset_id": "pokemon_3d:dudunsparce-three-segment:base",
+      "candidate_bytes": 4333132,
+      "engine_report_sha256": "76cbf84536fbcc723b05829dfbc305042464683c51518fee0e1bbd13f0d12cf7",
+      "selected_bytes": 4333132,
+      "sha256": "f43815f14212e433ab52d402e74623a2ae8ba87c286f34cb579b3648bee12c77",
+      "source_bytes": 4987628
+    },
+    {
+      "asset_id": "pokemon_3d:eelektrik:base",
+      "candidate_bytes": 5059340,
+      "engine_report_sha256": "9945f062a43bb3cf420eaf10adeaf098ba44a883885b992ff6166c1fe67e10b5",
+      "selected_bytes": 5059340,
+      "sha256": "deda1f17fa937be7ad945fe33e15011433decfafacfa41f41965b0d8af2d23a6",
+      "source_bytes": 6311948
+    },
+    {
+      "asset_id": "pokemon_3d:graveler-alola:base",
+      "candidate_bytes": 5208540,
+      "engine_report_sha256": "db7b5affb79878b5623b67df1e1dc20c06c6f8b7761f42cfa894d67aaecf1f3a",
+      "selected_bytes": 5208540,
+      "sha256": "85c0c9e62d9daa5786cf59ec52a1d582028486bdfe148da916288766c2e4f09f",
+      "source_bytes": 6628572
+    },
+    {
+      "asset_id": "pokemon_3d:hydreigon:base",
+      "candidate_bytes": 10025836,
+      "engine_report_sha256": "4a9a64f15257f23e132bd2409f5d539e081b0320c23dd41c4c796ec513f9d5db",
+      "selected_bytes": 10025836,
+      "sha256": "1a58b6da2e86ae3b75e9ecc13efb3d3a9babe44d3044d54f11c6e7a1dd65fa6c",
+      "source_bytes": 13263692
+    },
+    {
+      "asset_id": "pokemon_3d:landorus-therian:base",
+      "candidate_bytes": 8703788,
+      "engine_report_sha256": "da94cae9aba496d1779351ead1bbd1da50135907006e003c322691ac1a0aa10f",
+      "selected_bytes": 8703788,
+      "sha256": "9bae39d2000d11f0f091e4a3a9e72495641d0f4847c30938184368c1b0560228",
+      "source_bytes": 10308300
+    },
+    {
+      "asset_id": "pokemon_3d:lickilicky:base",
+      "candidate_bytes": 2376636,
+      "engine_report_sha256": "f80767309b763bb7e461f16c8023bbde38aebffcb478018e929199ebdf9c218c",
+      "selected_bytes": 2376636,
+      "sha256": "838ce92ee0b8f586604a7410517cf44e244cb0e3e3f4f716527bbfa3d3e53e35",
+      "source_bytes": 2510876
+    },
+    {
+      "asset_id": "pokemon_3d:meltan:base",
+      "candidate_bytes": 707784,
+      "engine_report_sha256": "717b701c0c2cad95c105e0093b02d589b2b12b5ef9c7c19b959c75a2ae3ac6cf",
+      "selected_bytes": 707784,
+      "sha256": "77252c0bc9a999308be9a895dc1ce8f290ff0dc40c3f835d73a3fab6e049c16d",
+      "source_bytes": 773480
+    },
+    {
+      "asset_id": "pokemon_3d:quaquaval:base",
+      "candidate_bytes": 22871256,
+      "engine_report_sha256": "774257219144e653d6adb794d90faf58186f5dc9d5016f145d84221b6ea1cff4",
+      "selected_bytes": 22871256,
+      "sha256": "9ce927294c0b75b78aaac78b50f21943feb2d97c9987c1b51eedd72f342a3977",
+      "source_bytes": 28795064
+    },
+    {
+      "asset_id": "pokemon_3d:sableye:mega",
+      "candidate_bytes": 2429384,
+      "engine_report_sha256": "dc3f39074266ed2266c7e266949718851b193295ac038878ade6e6d11ecc5f85",
+      "selected_bytes": 2429384,
+      "sha256": "afc34cf2baa8dace64575cd5058e17e86254db59cce2c7b56b1d4d86aefede19",
+      "source_bytes": 2536168
+    },
+    {
+      "asset_id": "pokemon_3d:silvally-ground:base",
+      "candidate_bytes": 3731456,
+      "engine_report_sha256": "ac814c7c86030cd96af2c093f4ccb506963c40fc97a9339ededd0c66b114ceb0",
+      "selected_bytes": 3731456,
+      "sha256": "c31f33637030d0a3bb81a18db9cfddab3671598072a89861a32bdb4abbf92fa5",
+      "source_bytes": 3947904
+    },
+    {
+      "asset_id": "pokemon_3d:sinistcha-masterpiece:base",
+      "candidate_bytes": 9341292,
+      "engine_report_sha256": "da8faabfe76f122a276fb3ae510f2e91d1965caf24eb27080afb7f08e9a1698b",
+      "selected_bytes": 9341292,
+      "sha256": "4d50d228d1b62d411b1387d25b4842c17b97ff4ddbb6f8c80165cd5310fe205d",
+      "source_bytes": 10489964
+    },
+    {
+      "asset_id": "pokemon_3d:skarmory:mega",
+      "candidate_bytes": 3983372,
+      "engine_report_sha256": "86d1430e827a5db8c4b4c2c5b2feadadd4086351467c787af80f414ce9cd0336",
+      "selected_bytes": 3983372,
+      "sha256": "1d02b2323f16fb93af3d45320e75483ba33e17e2c8a3cd0ce384ca7278f97be9",
+      "source_bytes": 4359564
+    },
+    {
+      "asset_id": "pokemon_3d:tyranitar:base",
+      "candidate_bytes": 9133708,
+      "engine_report_sha256": "aecc583764ca1f9b573cf4e975b581706ee069af34abaf1ad29a695f18038beb",
+      "selected_bytes": 9133708,
+      "sha256": "1a383a0f7d620fafde7e921f52a47df39198c512b908e36aecb35a77213b6a40",
+      "source_bytes": 11968108
+    },
+    {
+      "asset_id": "pokemon_3d:unown-b:base",
+      "candidate_bytes": 783552,
+      "engine_report_sha256": "1b79ed3a2eef347ab97b8c06bf78275eaa1c65e8b59cb68639b766d651fb49c7",
+      "selected_bytes": 783552,
+      "sha256": "bbfea56541e79a025eacb215ba6a2f358e5d3c0f6ef381a3a9554f2bd5731ef2",
+      "source_bytes": 845248
+    },
+    {
+      "asset_id": "pokemon_3d:ursaring:base",
+      "candidate_bytes": 11004652,
+      "engine_report_sha256": "f36c40d04164d454c76630fb79ef1e076baf26cf9b038308870bfa726dd52029",
+      "selected_bytes": 11004652,
+      "sha256": "2c21b6239ef30b2d5b01e961fdf578cc2fd6306b9f0402f5f6b1f14817a24b16",
+      "source_bytes": 14352460
+    },
+    {
+      "asset_id": "pokemon_3d:urshifu-rapid-strike:base",
+      "candidate_bytes": 11069776,
+      "engine_report_sha256": "6902c784b2822ac9892bc6d8c80725bd0b030d32ded63b890f134f1d8163fd4c",
+      "selected_bytes": 11069776,
+      "sha256": "c9699f9194537adb9459022812d6bc99f640d1ce8a7736b64005dc500cd2ba0d",
+      "source_bytes": 12215440
+    }
+  ],
+  "pillow_webp": "1.6.0",
+  "pixels_and_stored_mips_exact": true,
+  "platform": "Linux Godot 4.6.2 / Compatibility / AMD; Dummy audio",
+  "png_sample_bytes": 176239108,
+  "production_approved": false,
+  "prototype_only": true,
+  "required_saving_to_below_7GB": 1795326139,
+  "saved_sample_bytes": 30167392,
+  "schema": 1,
+  "stored_image_levels": 1262,
+  "strict_best_sample_bytes": 133220836,
+  "texture_only_pairs": 4,
+  "textures": 382
+}
