@@ -21,6 +21,15 @@ conservative, so gaps within an object can cause more clearance than necessary.
 Native Mobile checks verified real MultiMesh bounds, preserved focus, visible
 arena objects and overview fallback; normal/Draco shot regressions passed on
 both camera policies.
+Bounds use Godot's documented
+[VisualInstance3D bounding boxes](https://docs.godotengine.org/en/4.6/classes/class_visualinstance3d.html#class-visualinstance3d-method-get-aabb).
+The 35 Z-move choreography regressions also passed.
+
+USB trial `0.3.109-3d-perf.8` (code 38, source `55273e8c0`) passed signed
+ARM64 Mobile export checks and was installed without clearing game data. It
+retains v14 models, the close-up camera and move shots, with warmup disabled.
+The physical overworld fade and grass-shot appearance are awaiting the user's
+repeat test on the grassfield.
 
 Android move shots use the independent `android_3d_move_camera` preference,
 enabled when an older profile has no value for it. Previously, all move shots
