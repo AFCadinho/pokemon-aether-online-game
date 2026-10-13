@@ -5,6 +5,10 @@
 - Start Android 3D battles closer to the Pokémon, with one-finger camera rotation and two-finger pinch zoom.
   Keep the opening covered until the real Pokémon camera frame is ready, avoiding an initial zoom change as models appear.
 
+- Move the Nature Specialist to the Route 5 Daycare alongside the Aether Researcher and Wing Merchant; remove it from Pokémon Centers.
+
+- Refresh Route 1's exterior visual from its updated Tiled source.
+
 - Refresh the Route 5 Daycare interior visual from its updated Tiled source.
 
 - Select Aethering Recipients and Donors exclusively from your own Party. Bring at least two Pokémon using the nearby Daycare PC; previews are revalidated after Party moves or swaps.

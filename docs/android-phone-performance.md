@@ -70,6 +70,15 @@ reported a zoom change between the empty opening field and loaded Pokémon.
 The covered entry policy addresses that follow-up. No publication or release
 certification took place.
 
+Trial `0.3.109-3d-perf.6` (code 36, source `2442c2a5e`) passed signed ARM64
+Mobile export checks and was installed by USB without clearing game data.
+The user confirmed that the opening camera is immediately correct and a move
+still works. Numeric camera logging showed zoom 0.60, FOV 48 and two slots.
+One previously observed Godot `can_process` condition (`node.cpp:902`) remains
+in the log; this run did not reproduce the native move crash. Offline Android
+covered-entry, desktop early-arena and fullscreen fade/handoff/cancellation
+checks passed. This remains evidence from one physical device.
+
 `run_android_gpu_benchmark.py --warm-moves` records the hidden common-effect
 preparation before the first move phase; a bounded/incomplete preparation
 invalidates that comparison. The diagnostic and explicit local USB

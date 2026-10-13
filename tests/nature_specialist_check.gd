@@ -17,8 +17,19 @@ func _run() -> void:
 	_check(packed != null, "Pokemon Center loads")
 	if packed:
 		var center := packed.instantiate()
-		_check(center.get_node_or_null("Entities/NPCs/NatureSpecialist") != null, "Nature NPC inherited by Pokemon Centers")
+		_check(center.get_node_or_null("Entities/NPCs/NatureSpecialist") == null, "Nature NPC is absent from Pokemon Centers")
 		center.free()
+	var daycare := load("res://scenes/overworld/kanto/routes/route5/daycare.tscn") as PackedScene
+	_check(daycare != null, "Daycare loads")
+	if daycare:
+		var interior := daycare.instantiate()
+		var specialist := interior.get_node_or_null("Entities/NPCs/NatureSpecialist")
+		_check(specialist != null and specialist.npc_definition_id == "kanto_route_5_nature_specialist", "Nature NPC is wired to its Daycare definition")
+		if specialist:
+			var collision := interior.get_node("Tiles/Collision") as TileMapLayer
+			var cell := collision.local_to_map(specialist.position)
+			_check(collision.get_cell_source_id(cell) == -1 and collision.get_cell_source_id(cell + Vector2i.DOWN) == -1, "Daycare specialist has a clear approach tile")
+		interior.free()
 	var popup := load("res://scenes/interface/nature_specialist_popup.tscn") as PackedScene
 	_check(popup != null, "Nature Specialist interface loads")
 	if popup:
