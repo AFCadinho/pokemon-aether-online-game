@@ -9,8 +9,8 @@ var retained := {}
 var busy := false
 var generation := 0
 
-static func allows(android: bool, experimental: bool, mobile: bool) -> bool:
-	return android and experimental and mobile
+static func allows(android: bool, experimental: bool, mobile: bool, local_trial := false) -> bool:
+	return android and experimental and mobile and local_trial
 
 static func selected_moves(available: Array) -> Array[String]:
 	var result: Array[String] = []

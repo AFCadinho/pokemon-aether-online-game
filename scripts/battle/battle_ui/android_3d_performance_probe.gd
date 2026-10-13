@@ -85,6 +85,12 @@ func _emit(now: int) -> void:
 	record.erase("timings")
 	# Godot's Android stdout truncates long lines. Keep each JSON record small.
 	print("ANDROID_3D_PERFORMANCE ", JSON.stringify(record))
+	if stage.active and is_instance_valid(stage.camera):
+		var focus: Vector3 = stage.ArenaCatalog.camera_target(stage.arena_id)
+		focus.y = stage._position(0).y + 1.2
+		print("ANDROID_3D_CAMERA ", JSON.stringify({"zoom": stage.user_camera_zoom,
+			"distance": stage.camera.position.distance_to(focus), "fov": stage.camera.fov,
+			"slots": stage._slot_count()}))
 	for key in timings:
 		var values: Dictionary = timings[key]
 		for field in ["p50", "p95", "max"]:

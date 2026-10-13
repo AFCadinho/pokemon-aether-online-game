@@ -36,6 +36,8 @@ def main():
                         help="Log numeric render timings in this local experimental 3D APK")
     parser.add_argument("--model-revision", choices=["current", "v14"], default="current",
                         help="Pin the published v14 collection for a local USB rendering comparison")
+    parser.add_argument("--move-warmup", action="store_true",
+                        help="Local experiment only: prepare bounded hidden VFX before entry")
     parser.add_argument("--full-response-scene", action="store_true",
                         help="Performance control: draw the old complete scenery in the response pass")
     parser.add_argument("--android-renderer", choices=["gl_compatibility", "mobile"],
@@ -47,6 +49,8 @@ def main():
         parser.error("Performance probing requires --experimental-3d")
     if args.model_revision != "current" and not args.experimental_3d:
         parser.error("Model pinning requires --experimental-3d")
+    if args.move_warmup and not args.experimental_3d:
+        parser.error("Move warmup requires --experimental-3d")
     if args.full_response_scene and not args.performance_probe:
         parser.error("The full response scene control requires --performance-probe")
     if args.android_renderer is None:
@@ -73,6 +77,9 @@ def main():
         if args.model_revision == "v14":
             features = json.loads(setting(presets, "preset.7", "custom_features"))
             replace_setting(presets, "preset.7", "custom_features", json.dumps(features + ",android_3d_local_v14"))
+        if args.move_warmup:
+            features = json.loads(setting(presets, "preset.7", "custom_features"))
+            replace_setting(presets, "preset.7", "custom_features", json.dumps(features + ",android_3d_move_warmup"))
         if args.performance_probe:
             features = json.loads(setting(presets, "preset.7", "custom_features"))
             replace_setting(presets, "preset.7", "custom_features",
@@ -105,6 +112,7 @@ def main():
         record["architecture"] = args.architecture
         record["experimentalAndroid3D"] = args.experimental_3d
         record["modelRevision"] = args.model_revision
+        record["moveWarmup"] = args.move_warmup
         record["androidRenderer"] = args.android_renderer
         record["performanceProbe"] = args.performance_probe
         record["fullResponseScene"] = args.full_response_scene

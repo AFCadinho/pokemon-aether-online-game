@@ -88,9 +88,9 @@ var coop_target_outline_material: ShaderMaterial
 const SINGLE_CAMERA_YAW := -35.0 * PI / 180.0
 const USER_CAMERA_ZOOM_MIN := 0.72
 const USER_CAMERA_ZOOM_MAX := 1.45
-const ANDROID_CAMERA_ZOOM_MIN := 0.50
+const ANDROID_CAMERA_ZOOM_MIN := 0.30
 const ANDROID_CAMERA_ZOOM_MAX := 1.60
-const ANDROID_CAMERA_ZOOM_DEFAULT := 0.86
+const ANDROID_CAMERA_ZOOM_DEFAULT := 0.60
 
 func uses_android_camera() -> bool:
 	return OS.has_feature("android")
@@ -705,7 +705,7 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 		await get_tree().process_frame
 
 func prepare_android_move_effects(available: Array = []) -> void:
-	if not android_move_warmup.allows(OS.has_feature("android"), OS.has_feature("android_3d_experimental"), RenderingServer.get_current_rendering_method() == "mobile"):
+	if not android_move_warmup.allows(OS.has_feature("android"), OS.has_feature("android_3d_experimental"), RenderingServer.get_current_rendering_method() == "mobile", OS.has_feature("android_3d_move_warmup")):
 		return
 	if _preview_wants_3d() or preparation_cancelled or preparation_failed: return
 	var metrics: Dictionary = await android_move_warmup.prepare(self, available)
@@ -2740,11 +2740,22 @@ func _update_camera(delta: float) -> void:
 	offset = offset.rotated(Vector3.UP,user_camera_yaw)
 	var right := offset.cross(Vector3.UP).normalized()
 	offset = offset.rotated(right,user_camera_pitch)
-	offset *= user_camera_zoom * (1.1 if _preview_wants_3d() else (1.45 if double_mode else 1.0)) * (1.0 - focus_mix * 0.13)
+	var overview_zoom := 1.0 if _preview_wants_3d() and uses_android_camera() else user_camera_zoom
+	offset *= overview_zoom * (1.1 if _preview_wants_3d() else (1.45 if double_mode else 1.0)) * (1.0 - focus_mix * 0.13)
 	camera.position = target + offset
 	camera.look_at(target)
 	if not _preview_wants_3d():
-		camera.transform = OverviewCamera.fit(camera, OverviewCamera.resting_points(self), target, offset, OverviewCamera.safe_rect(self))
+		var points := OverviewCamera.resting_points(self)
+		var fit_offset := offset / maxf(user_camera_zoom, 0.001) if uses_android_camera() else offset
+		camera.transform = OverviewCamera.fit(camera, points, target, fit_offset, OverviewCamera.safe_rect(self))
+		if uses_android_camera():
+			# A conservative bind-pose envelope can be much larger than the
+			# visible idle model. Fit the overview first, then let touch zoom
+			# actually change distance instead of being undone by that envelope.
+			var centers: Array[Vector3] = []
+			for index in _slot_count(): centers.append(_position(index) + Vector3.UP * 1.2)
+			var zoom := user_camera_zoom * (4.0 / 3.0 if double_mode else 1.0)
+			camera.transform = OverviewCamera.zoom_overview(camera, camera.transform, target, zoom, centers)
 	if settings.battle_3d_camera_motion and active:
 		move_camera.apply(self)
 	move_atmosphere.apply(self)

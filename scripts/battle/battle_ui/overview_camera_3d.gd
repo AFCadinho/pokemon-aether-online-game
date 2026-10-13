@@ -26,6 +26,17 @@ static func fit(camera: Camera3D, points: Array[Vector3], focus: Vector3, offset
 		distance = maxf(distance, (-local.y / vertical - low.y * local.z) / (center.y - low.y))
 	return Transform3D(basis, focus + basis.z * distance - basis.x * center.x * horizontal * distance - basis.y * center.y * vertical * distance)
 
+static func zoom_overview(camera: Camera3D, overview: Transform3D, focus: Vector3, zoom: float, centers: Array[Vector3]) -> Transform3D:
+	# Keep the focus at the same screen position while changing distance. Close
+	# views intentionally may crop limbs; keep battle-slot centres in front of
+	# the near plane so pinching cannot travel through a combatant's centre.
+	var distance := (overview.origin - focus).dot(overview.basis.z)
+	var minimum := camera.near + 0.9
+	for point in centers:
+		minimum = maxf(minimum, (overview.basis.inverse() * (point - focus)).z + camera.near + 0.9)
+	var factor := maxf(zoom, minimum / maxf(distance, 0.001))
+	return Transform3D(overview.basis, focus + (overview.origin - focus) * factor)
+
 static func resting_points(stage: Node) -> Array[Vector3]:
 	var points: Array[Vector3] = []
 	for index in stage._slot_count():

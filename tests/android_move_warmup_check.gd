@@ -17,9 +17,10 @@ func _run() -> void:
 	var actions: Array = stage.current_actions.duplicate()
 	var lifecycles: Array = stage.lifecycle.duplicate()
 	var positions: Array = stage.actors.map(func(actor): return actor.transform)
-	assert(Warmup.allows(true, true, true))
+	assert(Warmup.allows(true, true, true, true))
+	assert(not Warmup.allows(true, true, true), "No automatic warmup in ordinary experimental builds")
 	for flags in [[false, true, true], [true, false, true], [true, true, false]]:
-		assert(not Warmup.allows(flags[0], flags[1], flags[2]))
+		assert(not Warmup.allows(flags[0], flags[1], flags[2], true))
 	assert(Warmup.selected_moves([{"id": "flamethrower"}, {"name": "Thunderbolt"}, "FLAMETHROWER", "unknown"]) == ["flamethrower", "thunderbolt", "tackle"])
 	assert(Warmup.selected_moves(Effect.KEYS).size() == Warmup.LIMIT)
 	var metrics: Dictionary = await stage.android_move_warmup.prepare(stage)
@@ -37,6 +38,14 @@ func _run() -> void:
 	await get_tree().process_frame
 	assert(stage.android_move_warmup.retained.is_empty())
 	assert(stage.world.get_child_count() == 5, "All temporary VFX nodes released")
+	for move in ["Recover", "Dragon Dance", "Earthquake", "Fire Blast", "Draco Meteor", "Supersonic Skystrike", "Dark Pulse", "Ice Beam"]:
+		var key: String = Effect.move_key(move)
+		var own: Dictionary = await stage.android_move_warmup.prepare(stage, [move])
+		assert(own.effects > 0 and stage.android_move_warmup.retained.has(key), "Own moves have priority, across renderer families")
+		assert(stage.android_move_warmup.retained.size() <= Warmup.LIMIT)
+		assert(stage.current_actions == actions and stage.lifecycle == lifecycles and camera.transform == original_camera)
+		stage.android_move_warmup.clear()
+		await get_tree().process_frame
 	_prepare_then_finish()
 	await get_tree().process_frame
 	stage.cancel_preparation()

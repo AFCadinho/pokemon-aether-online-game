@@ -26,6 +26,7 @@ func _clear_pointer() -> void:
 func _may_rotate(presenter: Node) -> bool:
 	if get_node("/root/SettingsManager").battle_presentation_mode != "3d":
 		return false
+	if presenter.uses_android_camera() and presenter.preview_enabled: return false
 	# Screen-space attack effects use captured anchors: keep those shots stable.
 	if not presenter.active: return false
 	for index in presenter._slot_count():

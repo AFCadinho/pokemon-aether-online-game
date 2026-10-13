@@ -2,18 +2,22 @@
 
 ## Android touch camera and bounded move preparation
 
-Android uses a nearer overview default (distance factor 0.86) and a wider
-safe frame, while the existing model-envelope fit keeps Pokémon above the
-responsive move controls. Distance limits are 0.50–1.60; model fit can stop
-the camera before that distance for large models. The reset button restores
-the Android default. Desktop framing and 0.72–1.45 limits remain unchanged.
+Android first fits an overview, then applies the requested zoom to that
+transform. A conservative unposed mesh envelope must not undo pinch zoom:
+the first physical camera trial still looked too distant even at its limit.
+The new default distance factor is 0.60 (0.80 for doubles); limits are
+0.30–1.60 before the doubles factor. A near-plane guard keeps slot centres
+in front of the camera. Close views may crop large Pokémon; zooming out
+restores a complete overview. Reset restores the nearer Android default.
+The HUD remains fixed. Desktop framing and 0.72–1.45 limits remain unchanged.
 One finger rotates an idle camera; two fingers pinch to zoom. Buttons, chat,
 the loading cover and attacks in any singles/doubles slot block gestures.
 Touch cancellation, focus loss, a third finger and lifting one pinch finger
 end the gesture without rotating the remaining finger. Emulated mouse events
 do not rotate a second time; an ordinary mouse wheel still zooms.
 
-Before entry is marked prepared, experimental Android Mobile builds sample
+Before entry is marked prepared, explicitly opted-in local Android Mobile
+USB trials (`--move-warmup`) sample
 a maximum of eight hidden move effects on the real battle world. Currently
 available own moves take priority, followed by the measured common physical,
 flame and electric effects. Five charge/flight/impact samples instantiate lazy
@@ -25,6 +29,34 @@ work for a chance to avoid first-use stalls; it does not prove every move is
 warm or reduce overall memory use. Cancellation releases retained effects.
 This follows Godot's
 [pipeline instancing guidance](https://docs.godotengine.org/en/4.6/tutorials/performance/pipeline_compilations.html#pipeline-precompilation-instancing).
+
+The 2026-10-13 comparison used one unchanged diagnostic APK, native
+2340 × 1080 / 4x MSAA, v14 Charizard/Dragonite and sorted grass during moves.
+Each of the control / warmed / control runs completed with usable reports,
+unchanged foreground/PID, no engine errors and zero frames over 100 ms.
+
+| Run | First move max frame | Repeated move max frame | Peak sampled PSS |
+| --- | ---: | ---: | ---: |
+| Control 1 | 97.80 ms | 38.26 ms | 2,087 MiB |
+| Warmed | 47.53 ms | 41.76 ms | 2,134 MiB |
+| Control 2 | 42.05 ms | 42.59 ms | 2,081 MiB |
+
+Preparing the three representative effects took 446 ms, with 10 surface
+pipeline compilations and no draw compilations. First-use moves still added
+14 surface / 2 draw compilations in all three runs. The warmed run therefore
+does not show a repeatable advantage over the subsequent control; cache and
+thermal effects remain confounded. Battery temperature rose from 28.2°C to
+35.5°C across the series, thermal status 0 → 2. Peak PSS differs between
+sessions, so the table is not an exact allocation measurement. Warmup remains
+disabled by default rather than adding entry work and retained resources to
+every Android battle. Raw evidence stays in `.tmp/android-touch-warm/moves-*`.
+
+Local full-game trial `0.3.109-3d-perf.4` (code 34, runtime source `e3ea09ab8`)
+predates this opt-in gate and includes the warmup prototype. It uses the
+published v14 collection, preserved game userdata, and passed signed ARM64
+Mobile demand-export checks. The user confirmed pinch input works but that
+the first camera change was still too distant; the post-fit close-up revision
+addresses that feedback. No publication or release certification took place.
 
 `run_android_gpu_benchmark.py --warm-moves` records the hidden common-effect
 preparation before the first move phase; a bounded/incomplete preparation
