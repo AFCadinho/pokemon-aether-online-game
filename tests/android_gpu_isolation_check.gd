@@ -97,7 +97,7 @@ func _record(samples: Dictionary, key: String, value: float) -> void:
 	samples[key].append(value)
 
 func _observe(variant: String, round_index: int, moves := false) -> void:
-	_control(variant if not moves else "baseline")
+	_control(variant if not moves else str(fixture.get("candidate", "baseline")))
 	var label := "%d:%d:%s" % [round_index, report.phases.size(), variant]
 	_marker("warm:" + label)
 	var until := Time.get_ticks_msec() + 3000

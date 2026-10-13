@@ -2,6 +2,7 @@ extends SceneTree
 const Probe = preload("res://tests/android_gpu_isolation_check.gd")
 const Cutout = preload("res://scripts/battle/arenas/shared/android_grass_cutout.gd")
 const DrawOrder = preload("res://scripts/battle/arenas/shared/android_grass_draw_order.gd")
+const Pool = preload("res://scripts/battle/arenas/shared/environment_pool.gd")
 func _init() -> void:
 	_run.call_deferred()
 
@@ -11,6 +12,9 @@ func _run() -> void:
 		push_error("GPU fixture resource checks require the native Mobile renderer")
 		quit(1)
 		return
+	assert(Pool.allows_grass_order(true, true, true, false), "Experimental Android Mobile enabled")
+	for flags in [[false, true, true, false], [true, false, true, false], [true, true, false, false], [true, true, true, true]]:
+		assert(not Pool.allows_grass_order(flags[0], flags[1], flags[2], flags[3]), "Keep other platforms and diagnostic baseline unchanged")
 	var fixture: Dictionary = JSON.parse_string('{"schema":1,"run_id":"0123456789abcdef0123456789abcdef","phase_seconds":15,"rounds":2}')
 	assert(Probe.valid_fixture(fixture), "Host integer JSON parses as Godot float numbers")
 	fixture.candidate = "grass_early_cutout"

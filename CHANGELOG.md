@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Draw existing forest grass from near to far in experimental Android 3D to reduce GPU work, retaining its density, geometry, textures and 4x anti-aliasing.
+
 - Avoid drawing arena scenery twice for experimental Android 3D material lighting, while retaining its shadow casters and the full main arena.
 
 - Use Vulkan/Mobile for explicit experimental Android 3D exports to avoid the native Adreno shader-link crash observed during battle moves.

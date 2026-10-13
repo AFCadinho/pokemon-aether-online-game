@@ -47,6 +47,84 @@ full-session memory, every model/move or other Android GPUs. Render timestamp
 instrumentation may add overhead. Images are captured outside timing phases.
 Benchmark asset and shader caches remain owned by this diagnostic package.
 
+`--candidate grass_early_cutout` and `--candidate grass_front_to_back` run
+shorter baseline/candidate/baseline rounds. They respectively test early alpha
+rejection with explicit noise gradients and ordering visible grass instances
+from near to far. The latter preserves hidden instances, per-instance colours
+and custom data; the former retains all original material uniforms. These
+The early-cutout helper remains diagnostic-only. The measured instance-order
+optimization is enabled for experimental Android Mobile forest battles, once
+per prepared arena under the battle cover, using the first actual actor camera
+framing. Standard Android, Compatibility, desktop and diagnostic baselines
+retain their original order. The diagnostic controls deliberately override the
+production optimization to compare original and sorted buffers.
+Run `tests/android_gpu_fixture_check.gd` with the **native Mobile renderer**
+through `slot-env` (without `--headless`). The dummy renderer cannot validate
+actual MultiMesh instance attributes. Python report checks run with
+`python3 -m unittest tests.test_android_gpu_benchmark`.
+
+## SM-S938B GPU isolation, 2026-10-13
+
+Diagnostic APK from `d081db636`, 2340 × 1080, Mobile, pinned v14 Charizard /
+Dragonite and production Android forest pool. Both 15-second rounds completed,
+with restored controls, valid GPU timestamps, no idle blocking-pipeline growth,
+unchanged PID/foreground and no engine errors. Adjacent baseline medians:
+
+| Variation | Main GPU reduction, round 1 | Round 2 |
+| --- | ---: | ---: |
+| No grass | 82.2% | 86.3% |
+| No light shadows | 28.6% | 21.6% |
+| 2x MSAA | -1.4% | 4.7% |
+| No MSAA | 10.1% | 10.1% |
+
+The authored main grass graph contains 95,757 instances in 256 batches. Main
+GPU p50 was initially 27.07 ms, later about 35–36 ms. Without grass it stayed
+near 4.94 ms in both rounds. Baseline drift reached 13.6% around the first
+2x-MSAA phase, so that first comparison is confounded. The second MSAA round
+had negligible adjacent baseline drift. Removing grass is isolation evidence,
+not an acceptable appearance-preserving optimization.
+
+The complete run took about 379 seconds of sampled foreground operation;
+battery temperature rose from 27.9°C to 36.9°C, final thermal status was 2,
+and sampled peak PSS was 2,251.33 MiB. Engine FPS initially measured 34.9 and
+fell to about 27 on later idle baselines. These are renderer-only engine
+intervals, not measured full-game presented FPS or memory savings.
+
+First move execution had two frames above 100 ms (max 180.03 ms); the repeat
+had none (max 57.76 ms). Both phases completed without a native crash, but
+pipeline counters grew in both. Repeating this small move sequence does not
+prove every move shader is warm or every battle is smooth.
+
+The early-cutout candidate from `61e740f43` completed both rounds and moves
+without engine errors. It measured +4.2% / -9.7% main GPU reduction, with
+16.2% / 13.1% baseline drift. It has no repeatable demonstrated benefit and
+is not enabled in the game. Its image differences were small (about 0.03%
+of pixels), similar to baseline frame variation; this is not an all-model
+visual certification. Local raw reports and images remain in the assigned
+slot's `.tmp/android-gpu/run-6` and `cutout-1`, not tracked in Git.
+
+The near-to-far candidate (`ee437a894`, diagnostic caller from `3b3d80f1b`)
+completed both rounds at native raster and 4x MSAA with no engine errors or
+idle pipeline growth. Main GPU p50 fell from adjacent baseline averages
+29.71 / 35.18 ms to 17.55 / 21.65 ms: **41.0% / 38.4% less GPU time**.
+Candidate engine FPS measured 52.8 / 43.0, versus neighboring baselines
+33.5–30.8 / 27.2–27.3. The second pair had essentially zero baseline drift.
+Full-scene image differences were 0.055% / 0.054% of pixels (mean absolute
+RGB error ~0.004 on a 0–255 scale), versus baseline variation 0.024% / 0.021%.
+Reordering cutout cards can change which card wins at equal-depth overlaps;
+this is not a claim of bit-identical pixels. All original visible/hidden
+transforms, colours and custom data remain present; the native resource check
+asserts those contracts. Raw evidence is in `.tmp/android-gpu/order-1`.
+
+The production change sorts only main-pass forest grass and retains its
+original material/shader, shadows, density, mesh and textures. The response
+pass remains the earlier shadows-only implementation. The preparation copies
+instance attributes before reordering, adds buffers rather than saving memory,
+and does not sort each battle frame. Other arenas, camera orbits, GPUs and
+low-memory devices need separate measurements. The first order diagnostic's
+move phases restored baseline buffers; the concluding optimized move check
+must be evaluated separately.
+
 Use `tools/measure_android_battle.py` through the assigned `slot-env` with an
 explicit physical serial, bounded duration, phase label and fresh slot-local
 `.tmp` output directory. It measures the installed full game without changing
