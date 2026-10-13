@@ -53,5 +53,11 @@
     "bundle_count": 1200,
     "download_bytes": 19863374075,
     "installed_bytes": 19863404982
+  },
+  "3d_v14": {
+    "index_sha256": "bf35e61db76246cdbc5b454d8b6ec70be4c011ac7fdef58c5bf7eec1a2617c83",
+    "bundle_count": 1420,
+    "download_bytes": 8993498070,
+    "installed_bytes": 8993479480
   }
 }
