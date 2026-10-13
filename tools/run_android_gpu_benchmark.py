@@ -135,6 +135,7 @@ def main():
               "device": {key: shell("getprop " + key) for key in ["ro.product.model", "ro.build.version.sdk", "ro.board.platform"]}}
     print(device("install", "--no-incremental", "-r", str(apk), timeout=120).decode(), flush=True)
     shell("am force-stop " + PACKAGE)
+    shell("run-as " + PACKAGE + " mkdir -p files")
     shell("run-as " + PACKAGE + " rm -f files/android-gpu-details.json files/android-gpu-results.json files/android-gpu-phase.json")
     device("shell", "run-as " + PACKAGE + " sh -c " + shlex.quote("cat > files/android-gpu-fixture.json"), data=json.dumps(fixture).encode())
     shell("am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p " + PACKAGE)
