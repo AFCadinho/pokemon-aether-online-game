@@ -1267,5 +1267,35 @@
   "kakashi-outfit": {
     "name": "Kakashi Outfit Box",
     "shortDesc": "Contains six separate cosmetics: vest, trousers, sandals, hair, headband and mask. Fits male and female characters."
+  },
+  "health-wing": {
+    "name": "Health Wing",
+    "shortDesc": "Consumed during Aethering to protect the Recipient’s HP IV or transfer the Donor’s HP IV. Cannot be used directly.",
+    "flavorText": "Consumed during Aethering to protect the Recipient’s HP IV or transfer the Donor’s HP IV. Cannot be used directly."
+  },
+  "muscle-wing": {
+    "name": "Muscle Wing",
+    "shortDesc": "Consumed during Aethering to protect the Recipient’s Attack IV or transfer the Donor’s Attack IV. Cannot be used directly.",
+    "flavorText": "Consumed during Aethering to protect the Recipient’s Attack IV or transfer the Donor’s Attack IV. Cannot be used directly."
+  },
+  "resist-wing": {
+    "name": "Resist Wing",
+    "shortDesc": "Consumed during Aethering to protect the Recipient’s Defense IV or transfer the Donor’s Defense IV. Cannot be used directly.",
+    "flavorText": "Consumed during Aethering to protect the Recipient’s Defense IV or transfer the Donor’s Defense IV. Cannot be used directly."
+  },
+  "genius-wing": {
+    "name": "Genius Wing",
+    "shortDesc": "Consumed during Aethering to protect the Recipient’s Sp. Attack IV or transfer the Donor’s Sp. Attack IV. Cannot be used directly.",
+    "flavorText": "Consumed during Aethering to protect the Recipient’s Sp. Attack IV or transfer the Donor’s Sp. Attack IV. Cannot be used directly."
+  },
+  "clever-wing": {
+    "name": "Clever Wing",
+    "shortDesc": "Consumed during Aethering to protect the Recipient’s Sp. Defense IV or transfer the Donor’s Sp. Defense IV. Cannot be used directly.",
+    "flavorText": "Consumed during Aethering to protect the Recipient’s Sp. Defense IV or transfer the Donor’s Sp. Defense IV. Cannot be used directly."
+  },
+  "swift-wing": {
+    "name": "Swift Wing",
+    "shortDesc": "Consumed during Aethering to protect the Recipient’s Speed IV or transfer the Donor’s Speed IV. Cannot be used directly.",
+    "flavorText": "Consumed during Aethering to protect the Recipient’s Speed IV or transfer the Donor’s Speed IV. Cannot be used directly."
   }
 }
