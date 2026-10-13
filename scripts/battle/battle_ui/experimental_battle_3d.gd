@@ -1112,7 +1112,12 @@ func _effect_bounds(index: int) -> Dictionary:
 			if actor is MeshInstance3D: meshes.append(actor)
 			for mesh: MeshInstance3D in meshes:
 				if mesh.mesh == null or not mesh.is_visible_in_tree(): continue
-				var posed: Mesh = mesh.bake_mesh_from_current_skeleton_pose() if mesh.skin != null else mesh.mesh
+				# Android move anchors must not read GPU vertex/skin buffers back
+				# through the native pose baker. Prefer reviewed idle bounds above;
+				# older models use their stored mesh AABB without touching geometry.
+				var posed: Mesh = mesh.mesh
+				if mesh.skin != null and not OS.has_feature("android"):
+					posed = mesh.bake_mesh_from_current_skeleton_pose()
 				if posed == null: posed = mesh.mesh
 				var mesh_box: AABB = (actor.global_transform.affine_inverse() * mesh.global_transform) * posed.get_aabb()
 				box = box.merge(mesh_box) if box.has_volume() else mesh_box
@@ -1482,6 +1487,7 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 
 func create_move_effect(move: String, actor: String, target: String, options: Dictionary) -> Node:
 	if not can_present_move(move): return null
+	_record_android_move_phase("effect_setup")
 	var recipe := MoveRecipes.get_recipe(move)
 	if recipe.get("target", "") == "actor": target = actor
 	elif not handles(target) and recipe.get("family", "") == "field":
@@ -1540,6 +1546,7 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 		positions = _fixed_target_move_anchors.bind(actor, target, move, aim.target, aim.radius, aim.get("target_ground"))
 	if MoveEffect.move_key(move) in ContactMoveEffect.CONTACT_KEYS or MoveRecipes.contact(move):
 		_start_move_contact(actor, target, timing, effect)
+	_record_android_move_phase("effect_start")
 	effect.start(move, timing, options, bind_action_clock(actor), positions,
 		func(): return active and _move_visual(actor) == source and _move_visual(target) == destination)
 	if (move_camera.supports(MoveEffect.move_key(move)) or move_atmosphere.supports(MoveEffect.move_key(move))) and not effect.done and is_instance_valid(camera):
@@ -1553,10 +1560,18 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 			if active and is_instance_valid(camera):
 				_update_camera(0.0), CONNECT_ONE_SHOT)
 		_update_camera(0.0)
+	_record_android_move_phase("effect_ready")
 	return effect
+
+func _record_android_move_phase(phase: String) -> void:
+	if not OS.has_feature("android") or not is_inside_tree(): return
+	var diagnostics := get_node_or_null("/root/ClientCrashReportService")
+	if diagnostics != null:
+		diagnostics.record_android_3d_move_phase(phase)
 
 func start_move_action(ident: String, move: String) -> void:
 	if handles(ident):
+		_record_android_move_phase("model_start")
 		var index := actor_index(ident)
 		var max_seconds := 0.0 if MoveEffect.supports(move) else MoveEffect.MODEL_ONLY_MAX_SECONDS
 		var duration_override := MoveEffect.presentation_seconds(move)
@@ -1565,6 +1580,7 @@ func start_move_action(ident: String, move: String) -> void:
 		if MoveEffect.supports(move) and players[index] != null:
 			players[index].seek(0.0, true)
 			players[index].advance(0.0)
+		_record_android_move_phase("model_ready")
 
 func prepare_mega_form(ident: String, species: String, shiny: bool, timeout_ms := 5000) -> bool:
 	var index := actor_index(ident)

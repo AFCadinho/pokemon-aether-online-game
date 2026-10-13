@@ -103,6 +103,7 @@ func _init() -> void:
 	service.free()
 	_check_mobile_lifecycle()
 	_check_android_exit_reasons()
+	_check_android_move_phases()
 
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var parsed: Variant = JSON.parse_string(
@@ -183,4 +184,22 @@ func _check_android_exit_reasons() -> void:
 	var report := probe._build_crash_report({"startedAt": "test", "lifecycle": "private account details", "androidExitInfo": {"reason": 5, "status": 6, "importance": 100, "pssKiB": 1000, "rssKiB": 2000, "description": "private team", "trace": "secret trace"}})
 	_check(report.contains("Android exit reason: CRASH_NATIVE (5)") and report.contains("1000 / 2000"), "Reports include the safe native reason and process memory figures")
 	_check(not report.contains("private account details") and not report.contains("private team") and not report.contains("secret trace"), "Free-form Android and lifecycle payloads cannot enter a report")
+	probe.free()
+
+func _check_android_move_phases() -> void:
+	ProjectSettings.set_setting("_custom_features", "mobile,android,android_3d_experimental")
+	var probe := SessionProbe.new()
+	probe._current_session_state = {"schemaVersion": 1, "cleanShutdown": false}
+	probe.record_android_3d_move_phase("model_start")
+	_check(probe.saved_state.get("android3DMovePhase") == "model_start", "The last native move phase is persisted before a crash")
+	probe.record_android_3d_move_phase("private move and team payload")
+	_check(probe.saved_state.get("android3DMovePhase") == "model_start", "Free-form move data cannot enter the persistent phase marker")
+	var report := probe._build_crash_report(probe.saved_state)
+	_check(report.contains("Last Android 3D move phase: model_start"), "A native crash report includes the safe code phase")
+	var untrusted := probe.saved_state.duplicate()
+	untrusted.android3DMovePhase = "private move and team payload"
+	_check(not probe._build_crash_report(untrusted).contains(untrusted.android3DMovePhase), "Report generation rejects untrusted phase data too")
+	probe._session_ended = true
+	probe.record_android_3d_move_phase("move_complete")
+	_check(probe.saved_state.android3DMovePhase == "model_start", "Late move callbacks cannot change a closed session")
 	probe.free()
