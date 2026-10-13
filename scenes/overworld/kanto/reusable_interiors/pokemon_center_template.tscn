@@ -17,7 +17,6 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/banker_npc.tscn" id="13_banker"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="20_transition_hint"]
 
-[ext_resource type="PackedScene" path="res://scenes/npcs/nature_specialist_npc.tscn" id="14_nature_specialist"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y5qkb"]
 texture = ExtResource("2_ehdw6")
@@ -151,11 +150,6 @@ manual_interaction_reach_tiles = 2
 
 [node name="MoveDeleter" parent="Entities/NPCs" unique_id=253649550 instance=ExtResource("12_move_deleter")]
 position = Vector2(656, 464)
-
-[node name="NatureSpecialist" parent="Entities/NPCs" instance=ExtResource("14_nature_specialist")]
-position = Vector2(496, 464)
-facing_direction = Vector2(0, 1)
-manual_interaction_reach_tiles = 2
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1615845431]
 

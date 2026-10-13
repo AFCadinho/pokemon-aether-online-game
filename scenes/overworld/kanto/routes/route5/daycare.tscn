@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_collision"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/pokemon_pc_interactable.tscn" id="6_pc"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/aethering_npc.tscn" id="aethering"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/nature_specialist_npc.tscn" id="nature_specialist"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_visibility_mask"]
 [ext_resource type="PackedScene" uid="uid://cnektxhofuvol" path="res://scenes/npcs/market_attendant_npc.tscn" id="wings"]
 
@@ -82,6 +83,11 @@ market_id = "daycare_wing_merchant"
 npc_definition_id = "kanto_route_5_wing_merchant"
 display_name = ""
 facing_direction = Vector2(0, 1)
+
+[node name="NatureSpecialist" parent="Entities/NPCs" instance=ExtResource("nature_specialist")]
+position = Vector2(272, 400)
+facing_direction = Vector2(0, 1)
+manual_interaction_reach_tiles = 2
 
 [node name="Tiles" type="Node2D" parent="." unique_id=353665864]
 visible = false
