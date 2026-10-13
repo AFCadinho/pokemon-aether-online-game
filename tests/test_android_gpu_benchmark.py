@@ -28,6 +28,20 @@ class GPUResultValidationTests(unittest.TestCase):
         self.assertEqual(validate(self.details, self.fixture), [])
         self.assertEqual(len(comparisons(self.details)), 8)
 
+    def test_bounded_candidate_sequence_uses_matching_controls(self):
+        for candidate in ["grass_early_cutout", "grass_front_to_back"]:
+            fixture = {**self.fixture, "candidate": candidate}
+            details = copy.deepcopy(self.details)
+            order = ["baseline", candidate, "baseline"] * 2 + ["moves_first", "moves_repeat"]
+            details["phases"] = copy.deepcopy(self.details["phases"][:8])
+            for index, (row, variant) in enumerate(zip(details["phases"], order)):
+                row.update(label=f"0:{index}:{variant}", variant=variant)
+                for view in row["viewports"].values(): view["msaa"] = 2
+            self.assertEqual(validate(details, fixture), [])
+            self.assertEqual(len(comparisons(details)), 2)
+            details["phases"][1]["variant"] = "no_grass"
+            self.assertIn("Unexpected phase sequence", validate(details, fixture))
+
     def test_stale_partial_and_foreign_artifacts_are_rejected(self):
         for mutation in [lambda x: x.update(run_id="old"), lambda x: x.update(complete=False),
                          lambda x: x["phases"].pop(), lambda x: x["phases"][0].update(label="../../private")]:

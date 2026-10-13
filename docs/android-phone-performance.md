@@ -125,6 +125,22 @@ low-memory devices need separate measurements. The first order diagnostic's
 move phases restored baseline buffers; the concluding optimized move check
 must be evaluated separately.
 
+The concluding 10-second-phase check in `.tmp/android-gpu/optimized-moves`
+kept sorted buffers active for both move sequences. It completed without
+engine errors or process/foreground changes. Its idle candidate reduced main
+GPU p50 by 38.3% with negligible baseline drift. First/repeat move execution
+had 1 / 0 frames above 100 ms (max 126.76 / 38.77 ms). Blocking pipeline
+counters still grew in both; shader prewarming remains a separate opportunity.
+The shorter phase duration and different thermal state prevent a direct
+full-session stutter-rate comparison with the original 15-second move phases.
+
+Signed full-game local USB build `0.3.109-3d-perf.3`, code 33, comes from
+`267155510`, retains the existing asset/compatibility build ID and release
+certificate, uses ARM64 Mobile and enables numeric performance diagnostics.
+The Android demand-export checks passed. This local build has not been
+published or certified as a release; full-game player testing complements
+the separate renderer workload.
+
 Use `tools/measure_android_battle.py` through the assigned `slot-env` with an
 explicit physical serial, bounded duration, phase label and fresh slot-local
 `.tmp` output directory. It measures the installed full game without changing

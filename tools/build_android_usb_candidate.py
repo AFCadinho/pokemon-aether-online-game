@@ -85,7 +85,7 @@ def main():
         environment["ANDROID_HOME"] = str(args.sdk.resolve())
         environment["GRADLE_USER_HOME"] = str(ROOT.parent / ".runtime/gradle")
         with (output / "export.log").open("w") as log:
-            subprocess.run(["godot", "--headless", "--path", str(ROOT), "--export-release", "Android Internal Alpha", str(apk)], env=environment, stdout=log, stderr=subprocess.STDOUT, check=True)
+            subprocess.run(["godot", "--headless", "--log-file", str(output / "engine-export.log"), "--path", str(ROOT), "--export-release", "Android Internal Alpha", str(apk)], env=environment, stdout=log, stderr=subprocess.STDOUT, check=True)
         with zipfile.ZipFile(apk) as archive:
             verify(ROOT, [name.removeprefix("assets/") for name in archive.namelist() if name.startswith("assets/")])
             libraries = [name for name in archive.namelist() if name.startswith("lib/") and name.endswith(".so")]
