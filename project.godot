@@ -16,7 +16,7 @@ run/main_scene="uid://duw5e076ulb3"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://assets/ui/logo.png"
 config/build_id="0.3.81-66ca54100"
-config/android_version_code=24
+config/android_version_code=23
 config/android_asset_build_id=""
 config/android_test_compatible_build_id=""
 
