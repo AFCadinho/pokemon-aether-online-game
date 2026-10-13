@@ -13,6 +13,8 @@ var effect: Node
 var actor := ""
 var target := ""
 var z_context := {}
+var shot_focus := Vector3.ZERO
+var clearance := preload("res://scripts/battle/battle_ui/cinematic_camera_clearance.gd").new()
 
 func supports(key: String) -> bool:
 	return ElementalBatch.DATA.has(key) or ZCinema.supports(key) or PROFILES.has(key) or not Recipes.get_recipe(key).get("camera", "").is_empty()
@@ -56,6 +58,7 @@ func apply(stage: Node) -> void:
 			recovery_start = maxf(0.86,lerpf(effect.impact/effect.duration,1.0,0.72))
 		var recovery := smoothstep(recovery_start,1.0,p)
 		stage.camera.transform = pose.interpolate_with(overview, recovery)
+		_clear_view(stage, overview, 1.0 - recovery)
 		return
 	if effect.key != "dracometeor":
 		_apply_catalog(stage, seconds, p)
@@ -102,8 +105,10 @@ func apply(stage: Node) -> void:
 		position = focus + (-forward * 0.9 + side * 0.85 + Vector3.UP * 0.3).normalized() * _distance(camera, radius)
 	camera.position = position
 	camera.look_at(focus)
+	shot_focus = focus
 	# Finish inside the move lifetime; preserve the player's orbit and zoom.
 	camera.transform = camera.transform.interpolate_with(overview, smoothstep(0.88, 1.0, p))
+	_clear_view(stage, overview, 1.0 - smoothstep(0.88, 1.0, p))
 
 func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
 	var profile: String = ElementalBatch.DATA.get(effect.key,{}).get("camera",PROFILES.get(effect.key, Recipes.get_recipe(effect.key).get("camera", "")))
@@ -213,6 +218,11 @@ func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
 	# Fitting a fixed shot envelope avoids camera pumping with every particle.
 	camera.transform = _fit(camera, points, direction.normalized())
 	camera.transform = camera.transform.interpolate_with(overview, smoothstep(0.88, 1.0, phase))
+	_clear_view(stage, overview, 1.0 - smoothstep(0.88, 1.0, phase))
+
+func _clear_view(stage: Node, overview: Transform3D, weight: float) -> void:
+	clearance.prepare(stage.arena_root)
+	clearance.apply(stage.camera, shot_focus, overview, weight)
 
 func _append_body(points: Array[Vector3], bounds: Dictionary) -> void:
 	var half := Vector3(float(bounds.radius), float(bounds.height) * 0.5, float(bounds.radius))
@@ -228,6 +238,7 @@ func _fit(camera: Camera3D, points: Array[Vector3], direction: Vector3) -> Trans
 	var box := AABB(points[0], Vector3.ZERO)
 	for point in points: box = box.expand(point)
 	var focus := box.get_center()
+	shot_focus = focus
 	var basis := Basis.looking_at(-direction)
 	var size := camera.get_viewport().get_visible_rect().size
 	var aspect := size.x / maxf(size.y, 1.0)
