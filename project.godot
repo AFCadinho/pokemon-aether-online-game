@@ -22,6 +22,8 @@ config/android_test_compatible_build_id=""
 
 [autoload]
 
+AetheringService="*res://scripts/services/aethering_service.gd"
+
 GameState="*uid://bvq8eki10oc8g"
 WorldTimeService="*res://scripts/services/world_time_service.gd"
 PlayerSave="*uid://x788vwp521n4"

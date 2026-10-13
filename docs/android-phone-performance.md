@@ -51,7 +51,7 @@ Benchmark asset and shader caches remain owned by this diagnostic package.
 shorter baseline/candidate/baseline rounds. They respectively test early alpha
 rejection with explicit noise gradients and ordering visible grass instances
 from near to far. The latter preserves hidden instances, per-instance colours
-and custom data; the former retains all original material uniforms. These
+and custom data; the former retains all original material uniforms.
 The early-cutout helper remains diagnostic-only. The measured instance-order
 optimization is enabled for experimental Android Mobile forest battles, once
 per prepared arena under the battle cover, using the first actual actor camera
@@ -140,6 +140,15 @@ certificate, uses ARM64 Mobile and enables numeric performance diagnostics.
 The Android demand-export checks passed. This local build has not been
 published or certified as a release; full-game player testing complements
 the separate renderer workload.
+
+The user played moves in this full-game build and confirmed that it looks
+good. Its safe numeric log confirms the production ordering hook prepared
+all 256 batches / 95,757 instances once in 197 ms under the battle cover.
+A subsequent active sample reports main GPU p50 19.14 ms / p95 20.09 ms and
+response GPU p50 0.681 ms / p95 0.735 ms. This is supporting integration
+evidence, not a controlled before/after full-game FPS comparison or an
+explicit user confirmation of smoother play. Only allowlisted numeric
+diagnostics were retained in `.tmp/android-gpu/production-perf3-safe-numeric.log`.
 
 Use `tools/measure_android_battle.py` through the assigned `slot-env` with an
 explicit physical serial, bounded duration, phase label and fresh slot-local

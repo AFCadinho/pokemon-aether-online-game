@@ -1267,5 +1267,35 @@
   "kakashi-outfit": {
     "name": "Kakashi Outfitbox",
     "shortDesc": "Bevat zes losse cosmetics: vest, broek, sandalen, haar, hoofdband en masker. Voor male en female."
+  },
+  "health-wing": {
+    "name": "Health Wing",
+    "shortDesc": "Wordt verbruikt bij Aethering om de HP-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken.",
+    "flavorText": "Wordt verbruikt bij Aethering om de HP-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken."
+  },
+  "muscle-wing": {
+    "name": "Muscle Wing",
+    "shortDesc": "Wordt verbruikt bij Aethering om de Attack-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken.",
+    "flavorText": "Wordt verbruikt bij Aethering om de Attack-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken."
+  },
+  "resist-wing": {
+    "name": "Resist Wing",
+    "shortDesc": "Wordt verbruikt bij Aethering om de Defense-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken.",
+    "flavorText": "Wordt verbruikt bij Aethering om de Defense-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken."
+  },
+  "genius-wing": {
+    "name": "Genius Wing",
+    "shortDesc": "Wordt verbruikt bij Aethering om de Sp. Attack-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken.",
+    "flavorText": "Wordt verbruikt bij Aethering om de Sp. Attack-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken."
+  },
+  "clever-wing": {
+    "name": "Clever Wing",
+    "shortDesc": "Wordt verbruikt bij Aethering om de Sp. Defense-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken.",
+    "flavorText": "Wordt verbruikt bij Aethering om de Sp. Defense-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken."
+  },
+  "swift-wing": {
+    "name": "Swift Wing",
+    "shortDesc": "Wordt verbruikt bij Aethering om de Speed-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken.",
+    "flavorText": "Wordt verbruikt bij Aethering om de Speed-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken."
   }
 }
