@@ -24,11 +24,12 @@ func _run() -> void:
 		quit(1)
 		return
 	var original := _entry(1, ["ground", "fairy"], "party", {"hp": 31, "atk": 31, "def": 15, "spa": 0, "spd": 31, "spe": 22})
-	var good := _entry(2, ["ground"], "box", {"hp": 31, "atk": 12, "def": 31, "spa": 0, "spd": 31, "spe": 12})
+	var good := _entry(2, ["ground"], "party", {"hp": 31, "atk": 12, "def": 31, "spa": 0, "spd": 31, "spe": 12})
 	var bad := _entry(3, ["water2"], "party", {})
-	var protected := _entry(4, ["ground"], "box", {}, false)
+	var protected := _entry(4, ["ground"], "party", {}, false)
 	protected["donorBlockedReason"] = "aethering_donor_held_item"
-	popup.candidates = [bad, good, original, protected]
+	var boxed := _entry(5, ["ground"], "box", good["pokemon"]["ivs"])
+	popup.candidates = [bad, good, original, protected, boxed]
 	popup.recipient = original
 	popup.resources_ready = true
 	popup._render()
@@ -40,21 +41,31 @@ func _run() -> void:
 	if popup.picker_rows.is_empty():
 		quit(1)
 		return
+	_check(popup.picker_rows.all(func(entry: Dictionary): return entry["location"]["type"] == "party"), "PC candidates never appear in picker")
 	_check(popup.picker_rows[0]["pokemonId"] == 2, "Compatible donors sorted before unavailable candidates")
 	popup._pick(0)
-	_check(popup.donor["pokemonId"] == 2, "PC Donor selection")
+	_check(popup.donor["pokemonId"] == 2, "Party Donor selection")
 	popup._open_picker(false)
 	for index in range(popup.picker_rows.size()):
 		if popup.picker_rows[index]["pokemonId"] == 2:
 			popup._pick(index)
 			break
-	_check(popup.recipient["pokemonId"] == 2 and popup.recipient["location"]["type"] == "box", "PC Recipient selection")
+	_check(popup.recipient["pokemonId"] == 2 and popup.recipient["location"]["type"] == "party", "Party Recipient selection")
 	popup._open_picker(false)
 	for index in range(popup.picker_rows.size()):
 		if popup.picker_rows[index]["pokemonId"] == 1:
 			popup._pick(index)
 			break
 	_check(popup.recipient["pokemonId"] == 1 and popup.donor.is_empty(), "Party Recipient selection invalidates Donor")
+	for role in [false, true]:
+		popup.choosing_donor = role
+		popup.picker_rows = [boxed]
+		popup._pick(0)
+		_check(popup.recipient["pokemonId"] == 1 and popup.donor.is_empty(), "PC selection callback rejected for role " + str(role))
+	popup.candidates = [original]
+	popup._render()
+	_check(popup.preview_button.disabled, "One Party Pokémon cannot preview")
+	popup.candidates = [original, good]
 	popup.donor = good
 	popup._lock_changed(2, false)
 	_check(popup.donor_options.is_item_disabled(2), "Same-stat Donor lock disabled")

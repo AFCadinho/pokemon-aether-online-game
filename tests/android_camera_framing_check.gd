@@ -70,6 +70,13 @@ func _run() -> void:
 	assert(not gesture._may_rotate(stage), "Roster selection keeps its touches")
 	gesture.queue_free()
 	stage.preview_enabled = false
+	var probe := preload("res://scripts/battle/battle_ui/android_3d_performance_probe.gd").new()
+	probe.stage = stage
+	add_child(probe)
+	probe.set_process(false)
+	probe.samples = {"engine_frame_ms": [16.0]}
+	probe._emit(Time.get_ticks_usec())
+	probe.queue_free()
 	router.cancel_render()
 	router.release_threaded_resource_requests()
 	router = null

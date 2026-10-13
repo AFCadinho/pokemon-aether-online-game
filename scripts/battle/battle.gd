@@ -1523,7 +1523,7 @@ func _apply_temporary_form_party_hover_data(
 				int(hover_data.get("level", saved_pokemon.level)),
 				hover_data.get("ivs", saved_pokemon.ivs),
 				hover_data.get("evs", saved_pokemon.evs),
-				str(hover_data.get("nature", saved_pokemon.nature))
+				str(hover_data.get("effectiveNature", saved_pokemon.get_effective_nature()))
 			)
 		return
 
@@ -1543,7 +1543,7 @@ func _apply_temporary_form_party_hover_data(
 			int(hover_data.get("level", saved_pokemon.level)),
 			hover_data.get("ivs", saved_pokemon.ivs),
 			hover_data.get("evs", saved_pokemon.evs),
-			str(hover_data.get("nature", saved_pokemon.nature))
+			str(hover_data.get("effectiveNature", saved_pokemon.get_effective_nature()))
 		)
 
 func _get_party_hover_temporary_display_species(display_data: Dictionary) -> String:
@@ -3587,7 +3587,7 @@ func _get_damage_calc_viewer_stats_by_ref(snapshot: Dictionary) -> Dictionary:
 			if base_stats_value is Dictionary and not (base_stats_value as Dictionary).is_empty():
 				var ivs_value: Variant = saved_pokemon.ivs if saved_pokemon != null else display_data.get("ivs", {})
 				var evs_value: Variant = saved_pokemon.evs if saved_pokemon != null else display_data.get("evs", {})
-				var nature := saved_pokemon.nature if saved_pokemon != null else str(display_data.get("nature", ""))
+				var nature := saved_pokemon.get_effective_nature() if saved_pokemon != null else str(display_data.get("nature", ""))
 				stats = BATTLE_OWNED_FORM_PROJECTION.merge_stats(
 					stats,
 					_calculate_battle_stats(base_stats_value, level, ivs_value, evs_value, nature)

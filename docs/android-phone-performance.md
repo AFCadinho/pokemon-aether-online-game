@@ -16,6 +16,14 @@ Touch cancellation, focus loss, a third finger and lifting one pinch finger
 end the gesture without rotating the remaining finger. Emulated mouse events
 do not rotate a second time; an ordinary mouse wheel still zooms.
 
+Android keeps pending 3D entries covered until the actual models and their
+camera fit are prepared. The pooled arena still prepares underneath, but its
+empty-field camera is never revealed before the final close-up. Downloads can
+show the existing delayed progress message; cached preparation stays quiet.
+Send-out visibility, cancellation, fallback and Team Preview retain their
+existing readiness paths. The held-download entry check verifies that the
+first visible camera transform remains unchanged throughout the reveal.
+
 Before entry is marked prepared, explicitly opted-in local Android Mobile
 USB trials (`--move-warmup`) sample
 a maximum of eight hidden move effects on the real battle world. Currently
@@ -55,8 +63,12 @@ Local full-game trial `0.3.109-3d-perf.4` (code 34, runtime source `e3ea09ab8`)
 predates this opt-in gate and includes the warmup prototype. It uses the
 published v14 collection, preserved game userdata, and passed signed ARM64
 Mobile demand-export checks. The user confirmed pinch input works but that
-the first camera change was still too distant; the post-fit close-up revision
-addresses that feedback. No publication or release certification took place.
+the first camera change was still too distant. Trial `0.3.109-3d-perf.5`
+(code 35, source `3944dde3b`) applies the post-fit close-up and disables move
+warmup. The user confirmed that the Pokémon are now much better framed, then
+reported a zoom change between the empty opening field and loaded Pokémon.
+The covered entry policy addresses that follow-up. No publication or release
+certification took place.
 
 `run_android_gpu_benchmark.py --warm-moves` records the hidden common-effect
 preparation before the first move phase; a bounded/incomplete preparation
