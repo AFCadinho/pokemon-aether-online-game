@@ -149,6 +149,19 @@ static func _p99(values: Array) -> float:
 	ordered.sort()
 	return float(ordered[maxi(0, ceili(ordered.size() * .99) - 1)]) if not ordered.is_empty() else 0.0
 
+static func valid_fixture(value: Variant) -> bool:
+	if not value is Dictionary or value.get("schema") != 1:
+		return false
+	var seconds: Variant = value.get("phase_seconds")
+	var rounds: Variant = value.get("rounds")
+	if typeof(seconds) not in [TYPE_FLOAT, TYPE_INT] or typeof(rounds) not in [TYPE_FLOAT, TYPE_INT]:
+		return false
+	# JSON numbers are floats; Array membership distinguishes int and float.
+	if float(seconds) not in [10.0, 15.0, 20.0] or float(rounds) not in [1.0, 2.0]:
+		return false
+	var run_id: Variant = value.get("run_id")
+	return run_id is String and RegEx.create_from_string("^[0-9a-f]{32}$").search(run_id) != null
+
 func _run() -> void:
 	OS.add_logger(sink)
 	if not _check(OS.has_feature("android_gpu_isolation") and OS.has_feature("android") and OS.is_debug_build(), "Dedicated physical debug benchmark only"):
@@ -157,7 +170,7 @@ func _run() -> void:
 	if not _check(file != null, "Bounded benchmark fixture supplied"):
 		_finish(); return
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
-	if not _check(parsed is Dictionary and parsed.get("schema") == 1 and parsed.get("phase_seconds") in [10,15,20] and parsed.get("rounds") in [1,2] and parsed.get("run_id") is String, "Valid fixture contract"):
+	if not _check(valid_fixture(parsed), "Valid fixture contract"):
 		_finish(); return
 	fixture = parsed
 	report.run_id = fixture.run_id
