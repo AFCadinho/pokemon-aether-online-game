@@ -241,7 +241,7 @@ func _run() -> void:
 		"Town Map interiors use a browser-safe icon"
 	)
 	popup._refresh_details("kanto_pewter_city")
-	_check(popup.detail_interiors_container.get_child_count() == 4, "Pewter City lists all accessible interiors")
+	_check(popup.detail_interiors_container.get_child_count() == 5, "Pewter City lists its gym, two houses, museum and Pokémon Center")
 	var pewter_connections: Array[String] = []
 	for connection_control: Control in popup.detail_connections_container.get_children():
 		if connection_control is Button:

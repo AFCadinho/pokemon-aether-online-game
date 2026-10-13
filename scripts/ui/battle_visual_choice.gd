@@ -123,7 +123,9 @@ func refresh_locale() -> void:
 		if mode == "3d" and DOWNLOAD_INFO.data.has("3d_v10"):
 			var downloader := get_tree().root.get_node_or_null("OnDemand3DBundleService")
 			var revision := "" if downloader == null else str(downloader._selected_release().revision)
-			if revision in ["approved-pokemon-3d-v11", "approved-pokemon-3d-v12"]:
+			if revision == "approved-pokemon-3d-v14":
+				info = DOWNLOAD_INFO.data["3d_v14"]
+			elif revision in ["approved-pokemon-3d-v11", "approved-pokemon-3d-v12"]:
 				info = DOWNLOAD_INFO.data["3d_v11"]
 			elif revision != "approved-pokemon-3d-v13":
 				info = DOWNLOAD_INFO.data["3d_v10"]

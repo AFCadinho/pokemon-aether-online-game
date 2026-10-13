@@ -2127,7 +2127,9 @@
 			"locationGroupId": "kanto_pewter_city",
 			"locationGroupLabel": "Pewter City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://cqssdweeh347i"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn",
 			"spawnPoints": {
 				"from_admission": {
@@ -7027,7 +7029,9 @@
 		"kanto_pewter_city__to_museum": {
 			"destination": {
 				"mapId": "kanto_pewter_city_museum",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cqssdweeh347i"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn",
 				"position": {
 					"x": 432.0,
@@ -7137,7 +7141,9 @@
 		"kanto_pewter_city_museum__to_exhibits": {
 			"destination": {
 				"mapId": "kanto_pewter_city_museum",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cqssdweeh347i"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn",
 				"position": {
 					"x": 432.0,

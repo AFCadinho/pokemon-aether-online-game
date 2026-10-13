@@ -27,8 +27,8 @@ PACKS = {
 def pins(revision="v11"):
     index_path = ROOT / f"release/approved_3d_bundles_{revision}_index.json"
     index = json.loads(index_path.read_text())
-    if revision == "v13":
-        index = {"assets": json.loads((ROOT / "release/approved_3d_bundles_v13.json").read_text())["bundles"]}
+    if revision in ("v13", "v14"):
+        index = {"assets": json.loads((ROOT / f"release/approved_3d_bundles_{revision}.json").read_text())["bundles"]}
     workflow = (ROOT / ".github/workflows/deploy-desktop-r2.yml").read_text()
     packs = {}
     for key, directory in PACKS.items():
@@ -66,22 +66,23 @@ def main():
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--bundle-dir", type=Path, action="append", default=[])
     parser.add_argument("--archives-report", type=Path)
-    parser.add_argument("--revision", choices=["v10", "v11", "v13"], default="v13")
+    parser.add_argument("--revision", choices=["v10", "v11", "v13", "v14"], default="v13")
     args = parser.parse_args()
     index, packs, digest = pins(args.revision)
     model_download = sum(asset["size_bytes"] for asset in index["assets"])
     if args.check:
         data = json.loads(OUTPUT.read_text())
+        selected = data["3d_v14" if args.revision == "v14" else "3d"]
         assert data["schema"] == 1
-        assert data["3d"]["index_sha256"] == digest, "Regenerate chooser sizes for the new approved index."
-        assert data["3d"]["download_bytes"] == model_download
-        assert data["3d"]["bundle_count"] == len(index["assets"])
-        assert data["3d"]["installed_bytes"] > 0
+        assert selected["index_sha256"] == digest, "Regenerate chooser sizes for the new approved index."
+        assert selected["download_bytes"] == model_download
+        assert selected["bundle_count"] == len(index["assets"])
+        assert selected["installed_bytes"] > 0
         if args.revision in ("v11", "v13"):
             previous, _, previous_digest = pins("v10")
             assert data["3d_v10"]["index_sha256"] == previous_digest
             assert data["3d_v10"]["download_bytes"] == sum(a["size_bytes"] for a in previous["assets"])
-            assert data["3d_v10"]["installed_bytes"] > data["3d"]["installed_bytes"]
+            assert data["3d_v10"]["installed_bytes"] > selected["installed_bytes"]
         if args.revision == "v13":
             previous, _, previous_digest = pins("v11")
             assert data["3d_v11"]["index_sha256"] == previous_digest
@@ -102,6 +103,13 @@ def main():
             paths[source.name] = source
     with ThreadPoolExecutor(max_workers=6) as pool:
         model_installed = sum(pool.map(lambda asset: measure_archive(asset, paths), index["assets"]))
+    if args.revision == "v14":
+        data = json.loads(OUTPUT.read_text())
+        data["3d_v14"] = {"index_sha256": digest, "bundle_count": len(index["assets"]),
+                          "download_bytes": model_download, "installed_bytes": model_installed}
+        OUTPUT.write_text(json.dumps(data, indent=2) + "\n")
+        print(f"Measured {len(index['assets'])} v14 bundles; retained historical chooser sizes.")
+        return
     for directory, pack in packs.items():
         files = [p for p in (ROOT / "assets/sprites/pokemon" / directory).rglob("*")
                  if p.is_file() and p.suffix != ".import" and not p.name.startswith(".")]

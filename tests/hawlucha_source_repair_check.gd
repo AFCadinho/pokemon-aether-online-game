@@ -10,6 +10,8 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	# Exercise the historical v11-to-v12 source repair independently of v14.
+	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST", "0")
 	var path := "res://release/approved_3d_bundles_v12_index.json"
 	var current: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
 	var previous: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://release/approved_3d_bundles_v11_index.json"))

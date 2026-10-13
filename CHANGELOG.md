@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.3.108
+
+- Restore matching eyebrows for Irelia, Kakashi and SS4 hairstyles for both genders.
+
+- Add normal/shiny 3D models for 220 alternate forms, including the Therian trio, Rapid Strike Urshifu, weather Castform, Ash-Greninja, Primals, Necrozma fusions, Ogerpon masks and costumed Pikachu/Pichu.
+
+- Reduce the existing 3D collection by another 1.03 GB with lossless compression, retaining all model detail, textures and animations.
+
 - Prepare the final 21 alternate-form normal/shiny 3D pairs for the next model release, including weather Castform, Ash-Greninja, Primals, Necrozma fusions, Eternamax, Ogerpon Tera masks and costumed Pikachu/Pichu.
 
 - Prepare normal/shiny 3D pairs for Sandy/Trash Burmy and Wormadam, Sunshine Cherrim, seven Minior forms and both Cramorant prey forms, preserving the reviewed colours and repaired sleep poses.
