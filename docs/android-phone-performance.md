@@ -63,7 +63,7 @@ observed FPS, p50 83.23 ms, p95 99.88 ms, p99 108.20 ms, max 116.52 ms.
 Different battles, caches and thermal states make this a second baseline,
 not evidence of an optimization speedup.
 
-## First optimization under test
+## First optimization and physical results
 
 The response pass provides actor irradiance, yet previously drew the complete
 arena colour again. Experimental Android 3D now changes only its independently
@@ -73,6 +73,39 @@ Children of non-casters remain visible so their shadows cannot be lost.
 The main arena, authored meshes/textures, model materials, actors, native
 resolution and 4x MSAA are retained. Desktop and ordinary Android are unchanged.
 The local `--full-response-scene` control permits repeat comparisons.
+
+Signed `0.3.109-3d-perf.2` (code 32, source `876cfa2e6`) retained the game's
+data directory and passed a user-confirmed idle battle capture: 1,667 intervals,
+27.76 observed FPS, p50 33.29 ms, p95 49.94 ms, p99 49.94 ms, max 58.26 ms,
+zero intervals above 100 ms, zero history/empty gaps. Early active records show
+response GPU p50 0.744 ms / p95 0.790 ms and main GPU p50 28.543 ms /
+p95 29.132 ms. Both viewports remain 2339 × 1081 / 4x MSAA. Draw calls are
+about 1,377. Short probe JSON records parse completely, with no truncated lines.
+
+This is a large reduction of response-pass cost, not an exact whole-game
+speedup factor: battle contents, cache and initial thermal state vary between
+the three captures. Peak sampled PSS remains 2,562.39 MiB; no memory reduction
+is demonstrated. Battery temperature rose 34.9°C → 38.6°C and Android thermal
+status 1 → 3 during the optimized idle capture. Subsequent active records
+include substantially longer main-pass GPU times. The root cause of each slow
+frame is not established by these snapshots; heat and effect workloads need
+separate controlled follow-up. Sustained 30/60 FPS is not established.
+
+The user then played several turns. A 90-second mixed capture retained the
+same PID and foreground app, but lost finite frame history twice. Its `usable`
+result is false, so its aggregate FPS is excluded from performance claims.
+The installed test app remains code 32; no official publication or release
+certification took place. Player confirmation of full visual parity was not
+received; "played" confirms the test action, not every requested visual check.
+
+Focused geometry checks retain nested casters and double-sided casting without
+mutating the main arena or its shared meshes. The native desktop Mobile/Vulkan
+synthetic actor test compares 1,257 lit actor-core irradiance pixels with zero
+differences, rejecting blank/constant images. It excludes scenery boundaries
+and does not certify complete Pokémon images, mobile driver parity or all
+shadows. Bounds, 24-move/four-slot execution and material-response checks pass;
+19 focused Python asset/release/measurement tests pass. The execution fixture
+retains its existing slot-cache model verification warning.
 
 Retest idle, moves, switches and repeat battle entry on the same phone. Review
 actor lighting and edges around occluding scenery: multisample boundary pixels
