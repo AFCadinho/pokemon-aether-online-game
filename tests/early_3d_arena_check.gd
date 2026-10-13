@@ -24,9 +24,13 @@ var originals := {}
 func _init() -> void:
 	_run.call_deferred()
 
+func _make_host() -> Control:
+	return load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+
 func _run() -> void:
 	var settings := root.get_node("SettingsManager")
 	settings.battle_presentation_mode = "3d"
+	settings.battle_3d_camera_motion = false
 	settings.battle_3d_catalog_path = ""
 	var requested_arena := OS.get_environment("POKEAETHER_TEST_ENTRY_ARENA")
 	settings.battle_3d_arena = requested_arena if not requested_arena.is_empty() else "stadium"
@@ -51,7 +55,7 @@ func _run() -> void:
 	for round_index in 2:
 		OS.unset_environment("POKEAETHER_MODEL_CATALOG")
 		probe.requested.clear()
-		var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+		var host = _make_host()
 		root.add_child(host)
 		var battle = load("res://scenes/battle/battle.tscn").instantiate()
 		host.prewarm_battle(battle)
@@ -59,15 +63,21 @@ func _run() -> void:
 		battle.prepare_pending_entry(&"grass")
 		var started := Time.get_ticks_msec()
 		host.reveal_pending_entry()
+		var covered_entry: bool = host.waits_for_final_camera()
 		deadline = started + 3000
-		while host.fade_progress < 1.0 and Time.get_ticks_msec() < deadline:
+		while not covered_entry and host.fade_progress < 1.0 and Time.get_ticks_msec() < deadline:
 			await process_frame
 			if host.fade_progress > 0.0:
 				_check(is_equal_approx(battle.animation_router.model_presenter.modulate.a, 1.0),
 					"the 3D arena is opaque from the first frame of the entry fade")
 		var stage: Node = battle.animation_router.model_presenter
-		_check(host.fade_progress == 1.0 and host.entry_arena_ready and not host.preparation_ready,
-			"the existing fade finishes before a response or model load")
+		if covered_entry:
+			for frame in 10: await process_frame
+			_check(host.fade_progress == 0.0 and not host.entry_arena_ready and not host.preparation_ready and host.get_node("Cover").visible,
+				"Android keeps the initial field covered until real model framing is ready")
+		else:
+			_check(host.fade_progress == 1.0 and host.entry_arena_ready and not host.preparation_ready,
+				"the existing desktop fade finishes before a response or model load")
 		_check(stage.viewport == pool.passes[0].viewport and stage.is_visible_in_tree(), "entry reuses the already drawn arena")
 		_check(is_equal_approx(stage.modulate.a, 1.0), "pending entry never exposes the 2D field beneath a transparent arena")
 		_check(stage.actors[0] == null and stage.actors[1] == null, "pending entry has no placeholder actors")
@@ -91,6 +101,7 @@ func _run() -> void:
 			await process_frame
 		for frame in 10:
 			await process_frame
+			if covered_entry: _check(host.fade_progress == 0.0 and host.get_node("Cover").visible, "held model loading cannot reveal provisional Android framing")
 			_check(stage.viewport == retained_viewport and stage.is_visible_in_tree(), "arena stays visible throughout local model preparation")
 			_check(is_equal_approx(stage.modulate.a, 1.0), "model preparation keeps the arena opaque")
 			_check(battle.player_sprite_box.model_sprites_hidden and battle.enemy_sprite_box.model_sprites_hidden, "sprite frame refresh cannot flash a 2D Pokémon")
@@ -101,8 +112,18 @@ func _run() -> void:
 		await _capture("loading-%d" % round_index)
 		probe.finish_download.emit()
 		deadline = Time.get_ticks_msec() + 10000
+		var visible_camera: Transform3D
+		var captured_camera := false
 		while not waiting.finished and Time.get_ticks_msec() < deadline:
+			if covered_entry and host.fade_progress > 0.0 and is_instance_valid(stage.camera):
+				if not captured_camera:
+					visible_camera = stage.camera.transform
+					captured_camera = true
+				else:
+					_check(stage.camera.transform.is_equal_approx(visible_camera), "Android uses one camera transform throughout entry reveal")
 			await process_frame
+		if covered_entry:
+			_check(captured_camera and stage.camera.transform.is_equal_approx(visible_camera), "first visible and prepared Android camera positions agree")
 		_check(waiting.finished and host.preparation_ready and not host.get_node("Cover").visible, "verified models release the normal intro readiness gate")
 		_check(stage.viewport == retained_viewport and stage.handles("p1") and stage.handles("p2"), "ready actors use the original arena with no rebuild")
 		_check(stage.actors[0].visible and stage.actors[1].visible and not stage.warming_render, "both real actors appear in their actual entry visibility")
@@ -135,7 +156,7 @@ func _run() -> void:
 
 func _check_empty_preview(pool: Node) -> void:
 	OS.unset_environment("POKEAETHER_MODEL_CATALOG")
-	var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+	var host = _make_host()
 	root.add_child(host)
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	host.mount(battle, null, WildEncounterTransition.STYLE_FULLSCREEN_FADE)
@@ -159,7 +180,7 @@ func _check_empty_preview(pool: Node) -> void:
 func _check_cancelled_entry(probe: DownloadProbe, pool: Node) -> void:
 	OS.unset_environment("POKEAETHER_MODEL_CATALOG")
 	probe.requested.clear()
-	var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+	var host = _make_host()
 	root.add_child(host)
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	host.mount(battle, null, WildEncounterTransition.STYLE_FULLSCREEN_FADE)

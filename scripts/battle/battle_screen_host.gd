@@ -292,6 +292,14 @@ func _reveal_when_prepared(token: int) -> void:
 		await presenter.await_prepared(not early_arena_requested)
 	if released or token != generation or not is_inside_tree():
 		return
+	if presenter != null and presenter.active and not presenter.preparation_cancelled:
+		var available: Array = []
+		if battle.battle_state != null:
+			available = battle.battle_state.get_available_moves(battle._get_local_state_player_id())
+		# Hidden samples may also prepare an early visible arena without showing
+		# an attack, moving its camera or revealing send-out actors.
+		await presenter.prepare_android_move_effects(available)
+	if released or token != generation or not is_inside_tree(): return
 	if presenter != null and (presenter.preparation_failed or not presenter.active) and settings.battle_presentation_mode in ["2.5d", "3d"]:
 		_prepare_2d_fallback()
 		if released or token != generation or not is_inside_tree():
@@ -304,6 +312,9 @@ func _reveal_when_prepared(token: int) -> void:
 	_finish_entry_if_ready()
 
 
+func waits_for_final_camera() -> bool:
+	return OS.has_feature("android") and get_node("/root/SettingsManager").battle_presentation_mode == "3d" and preload("res://scripts/battle/battle_ui/model_platform.gd").supported()
+
 func reveal_pending_entry() -> void:
 	# The already prepared empty arena provides feedback for early world entries.
 	loading_entry_requested = false
@@ -311,9 +322,15 @@ func reveal_pending_entry() -> void:
 	if settings.battle_presentation_mode == "3d" and preload("res://scripts/battle/battle_ui/model_platform.gd").supported():
 		var presenter := battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")
 		if presenter != null:
-			early_arena_requested = true
 			reveal_requested = true
 			presenter.begin_entry_arena()
+			if waits_for_final_camera():
+				# Prepare the pooled field behind the outgoing world image. The
+				# Android close-up needs the real model envelopes before its first
+				# visible frame; an empty-field fade would show a second zoom later.
+				loading_message_after_ms = Time.get_ticks_msec() + 500
+			else:
+				early_arena_requested = true
 			return
 	if settings.battle_presentation_mode in ["2.5d", "3d"] and preload("res://scripts/battle/battle_ui/model_platform.gd").supported():
 		# Keep the outgoing world visible until both models and the arena are
@@ -345,6 +362,8 @@ func _apply_entry_fade() -> void:
 
 func _reveal_cover() -> void:
 	if released or reveal_tween != null:
+		return
+	if waits_for_final_camera() and not preparation_ready:
 		return
 	loading_label.get_parent().hide()
 	reveal_tween = create_tween()

@@ -76,7 +76,7 @@ func _emit(now: int) -> void:
 			record[key + "_msaa"] = view.msaa_3d
 	# Preparation dictionaries contain model names; allow only fixed numeric keys.
 	var prep := {}
-	for key in ["elapsed_ms", "forest_load_ms", "catalog_read_ms", "model_validation_ms", "arena_build_ms", "actor_build_ms", "render_warm_ms"]:
+	for key in ["elapsed_ms", "forest_load_ms", "catalog_read_ms", "model_validation_ms", "arena_build_ms", "actor_build_ms", "render_warm_ms", "move_warm_ms", "move_warm_effects"]:
 		var value: Variant = stage.preparation_metrics.get(key)
 		if value is float or value is int:
 			prep[key] = value
@@ -85,6 +85,12 @@ func _emit(now: int) -> void:
 	record.erase("timings")
 	# Godot's Android stdout truncates long lines. Keep each JSON record small.
 	print("ANDROID_3D_PERFORMANCE ", JSON.stringify(record))
+	if stage.active and is_instance_valid(stage.camera):
+		var focus: Vector3 = stage.ArenaCatalog.camera_target(stage.arena_id)
+		focus.y = stage._position(0).y + 1.2
+		print("ANDROID_3D_CAMERA ", JSON.stringify({"zoom": stage.user_camera_zoom,
+			"distance": stage.camera.position.distance_to(focus), "fov": stage.camera.fov,
+			"slots": stage._slot_count()}))
 	for key in timings:
 		var values: Dictionary = timings[key]
 		for field in ["p50", "p95", "max"]:

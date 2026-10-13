@@ -1,16 +1,25 @@
 import copy
 import unittest
 
-from tools.run_android_gpu_benchmark import MATRIX, comparisons, validate, require_debug_manifest
+from tools.run_android_gpu_benchmark import MATRIX, PACKAGE, comparisons, validate, require_debug_manifest
+from tools.android_gpu_package import package_for_root
+from pathlib import Path
 
 
 class GPUResultValidationTests(unittest.TestCase):
     def test_only_separate_debug_package_may_be_installed(self):
-        raw = ('  E: manifest (line=2)\n    A: package="com.pokeaether.androidgpuqa"\n'
+        raw = ('  E: manifest (line=2)\n    A: package="' + PACKAGE + '"\n'
                '    E: application (line=22)\n      A: android:debuggable(0x0101000f)=(type 0x12)0xffffffff\n')
         require_debug_manifest(raw)
         for invalid in [raw.replace("androidgpuqa", "game"), raw.replace("0xffffffff", "0x0"), raw.replace("debuggable", "other")]:
             with self.assertRaises(ValueError): require_debug_manifest(invalid)
+
+    def test_worktree_packages_keep_existing_debug_userdata_independent(self):
+        a = package_for_root(Path('/workspace/.worktrees/slot-a/frontend'))
+        d = package_for_root(Path('/workspace/.worktrees/slot-d/frontend'))
+        self.assertNotEqual(a, d)
+        self.assertEqual(a, 'com.pokeaether.androidgpuqa.slot_a')
+        self.assertEqual(package_for_root(Path('/workspace/frontend')), 'com.pokeaether.androidgpuqa')
 
     def setUp(self):
         self.fixture = {"run_id": "fresh", "rounds": 2, "phase_seconds": 15}
@@ -27,6 +36,15 @@ class GPUResultValidationTests(unittest.TestCase):
     def test_complete_counterbalanced_workload(self):
         self.assertEqual(validate(self.details, self.fixture), [])
         self.assertEqual(len(comparisons(self.details)), 8)
+
+    def test_requested_warmup_must_complete_all_representative_effects(self):
+        fixture = {**self.fixture, "warm_moves": True}
+        self.assertIn("Representative move warmup incomplete", validate(self.details, fixture))
+        details = copy.deepcopy(self.details)
+        details["move_warmup"] = {"effects": 3, "bounded": False, "elapsed_ms": 250}
+        self.assertEqual(validate(details, fixture), [])
+        details["move_warmup"]["bounded"] = True
+        self.assertIn("Representative move warmup incomplete", validate(details, fixture))
 
     def test_bounded_candidate_sequence_uses_matching_controls(self):
         for candidate in ["grass_early_cutout", "grass_front_to_back"]:

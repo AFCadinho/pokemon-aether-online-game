@@ -3,6 +3,7 @@ extends RefCounted
 ## Off-centre framing uses a camera transform, so cinematic shots do not inherit
 ## a projection offset or a changed FOV.
 const SAFE_RECT := Rect2(0.14, 0.18, 0.72, 0.55)
+const ANDROID_SAFE_RECT := Rect2(0.06, 0.14, 0.88, 0.63)
 
 static func fit(camera: Camera3D, points: Array[Vector3], focus: Vector3, offset: Vector3, safe: Rect2 = SAFE_RECT) -> Transform3D:
 	var basis := Basis.looking_at(-offset.normalized())
@@ -24,6 +25,17 @@ static func fit(camera: Camera3D, points: Array[Vector3], focus: Vector3, offset
 		distance = maxf(distance, (local.y / vertical + high.y * local.z) / (high.y - center.y))
 		distance = maxf(distance, (-local.y / vertical - low.y * local.z) / (center.y - low.y))
 	return Transform3D(basis, focus + basis.z * distance - basis.x * center.x * horizontal * distance - basis.y * center.y * vertical * distance)
+
+static func zoom_overview(camera: Camera3D, overview: Transform3D, focus: Vector3, zoom: float, centers: Array[Vector3]) -> Transform3D:
+	# Keep the focus at the same screen position while changing distance. Close
+	# views intentionally may crop limbs; keep battle-slot centres in front of
+	# the near plane so pinching cannot travel through a combatant's centre.
+	var distance := (overview.origin - focus).dot(overview.basis.z)
+	var minimum := camera.near + 0.9
+	for point in centers:
+		minimum = maxf(minimum, (overview.basis.inverse() * (point - focus)).z + camera.near + 0.9)
+	var factor := maxf(zoom, minimum / maxf(distance, 0.001))
+	return Transform3D(overview.basis, focus + (overview.origin - focus) * factor)
 
 static func resting_points(stage: Node) -> Array[Vector3]:
 	var points: Array[Vector3] = []
@@ -53,7 +65,7 @@ static func resting_points(stage: Node) -> Array[Vector3]:
 	return points
 
 static func safe_rect(stage: Control) -> Rect2:
-	var safe := SAFE_RECT
+	var safe := ANDROID_SAFE_RECT if stage.uses_android_camera() else SAFE_RECT
 	if stage.size.y <= 0.0 or stage.get_parent() == null: return safe
 	# Read layout, not visibility: hiding the move buttons during an attack must
 	# not zoom the camera. Reserve extra room when UI scaling raises the prompt.
