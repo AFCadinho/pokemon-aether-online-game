@@ -515,8 +515,11 @@ func _verified_entry(entries: Array, identity: String, expected_digest: String) 
 		var digest := str(entry.get("runtime_sha256", ""))
 		if key == identity and digest == expected_digest and entry.has("pair_asset"):
 			var asset := PairPilot.entry_asset(entry)
-			if not asset.is_empty() and not ReviewedModels.resolve(identity, digest).is_empty() and str(PairPack.inspect(str(entry.pack_path), asset).error).is_empty():
-				return {"path": model_path, "sha256": digest, "bytes": int(entry.bytes), "pack_sha256": asset.sha256}
+			if not asset.is_empty() and not ReviewedModels.resolve(identity, digest).is_empty():
+				var checked := PairPack.inspect(str(entry.pack_path), asset)
+				if str(checked.error).is_empty():
+					return {"path": model_path, "sha256": digest, "bytes": int(entry.bytes), "pack_sha256": asset.sha256,
+						"pair_check": checked}
 			continue
 		if key == identity and digest == expected_digest and not ReviewedModels.resolve(identity, digest).is_empty() and _valid_file(model_path, int(entry.get("bytes", 0)), digest):
 			return {"path": model_path, "sha256": digest, "bytes": int(entry.bytes)}

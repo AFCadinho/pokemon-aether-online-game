@@ -415,6 +415,7 @@ var import_times_ms := {}
 var model_cache_hits := 0
 var download_verified_files := {}
 var verified_model_cache_hits := 0
+var verified_pair_handoff_hits := 0
 var catalog_read_ms := 0.0
 var model_validation_ms := 0.0
 var arena_build_ms := 0.0
@@ -584,6 +585,7 @@ func battle_download_progress() -> Dictionary:
 func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 	# Only the opaque screen host may temporarily expose hidden summon actors.
 	# Reuse these exact viewports/materials after reveal; do not rebuild them.
+	var entry_started := Time.get_ticks_usec()
 	if render_under_cover:
 		warming_render = true
 	if _preview_wants_3d():
@@ -595,6 +597,7 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 			await get_tree().process_frame
 	else:
 		await _ensure_downloaded_models()
+	var download_check_ms := (Time.get_ticks_usec() - entry_started) / 1000.0
 	if preparation_cancelled or preparation_failed or not is_inside_tree():
 		warming_render = false
 		return
@@ -628,7 +631,9 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 			last_progress = progress.duplicate(true)
 		preparation_metrics = {"elapsed_ms":Time.get_ticks_msec()-started,"phase":preparation_phase,"forest_load_ms":ArenaCatalog.forest_load_ms,
 			"model_cache_hits": model_cache_hits, "catalog_read_ms": catalog_read_ms, "model_validation_ms": model_validation_ms,
-			"arena_build_ms": arena_build_ms, "actor_build_ms": actor_build_ms, "model_import_ms": import_times_ms.duplicate()}
+			"arena_build_ms": arena_build_ms, "actor_build_ms": actor_build_ms, "model_import_ms": import_times_ms.duplicate(),
+			"download_check_ms": download_check_ms, "entry_elapsed_ms": (now - entry_started) / 1000.0,
+			"verified_pair_handoff_hits": verified_pair_handoff_hits, "cached_assets": not download_verified_files.is_empty()}
 		var pipeline_delta := _blocking_pipelines()
 		for index in pipeline_delta.size():
 			pipeline_delta[index] -= pipeline_start[index]
@@ -678,13 +683,14 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 						quiet_frames += 1
 					last_draw = drawn
 					last_sample = sample
-					var required_frames := 2 if _reuses_rendered_models() else 5
+					var warm_reuse := _reuses_rendered_models()
+					var required_frames := (1 if uses_android_camera() else 2) if warm_reuse else 5
 					if quiet_frames >= required_frames:
 						if DisplayServer.get_name() != "headless":
 							for identity: String in identities:
 								var entry: Dictionary = entries.get(identity, {})
 								ModelCache.mark_rendered(str(entry.get("_resource_cache_key", "")), _render_reuse_key())
-						preparation_metrics["warm_reuse"] = required_frames == 2
+						preparation_metrics["warm_reuse"] = warm_reuse
 						preparation_metrics["verified_model_cache_hits"] = verified_model_cache_hits
 						warming_render = false
 						# Restore actual send-out visibility before fading the cover.
@@ -2134,6 +2140,7 @@ func _load_catalog(path: String, preserve_actors := false) -> void:
 	model_cache_hits = 0
 	download_verified_files.clear()
 	verified_model_cache_hits = 0
+	verified_pair_handoff_hits = 0
 	catalog_read_ms = 0.0
 	model_validation_ms = 0.0
 	catalog_entries.clear()
@@ -2369,6 +2376,12 @@ func _import_next_model() -> void:
 			if pending_entries.is_empty():
 				return
 			loading_entry = pending_entries.pop_front()
+		# The current entry's downloader supplies a full inspected pair receipt.
+		# Avoid starting a duplicate disk read while that handoff is in flight.
+		if loading_entry.has("pair_asset") and is_instance_valid(model_downloader) and integrity_read == null:
+			return
+		if not loading_entry.has("_verified_runtime_hash"):
+			_reuse_checked_pair(loading_entry)
 		if not loading_entry.has("_verified_runtime_hash"):
 			_reuse_checked_resource(loading_entry)
 		if not loading_entry.has("_verified_runtime_hash"):
@@ -2440,6 +2453,34 @@ func _import_next_model() -> void:
 	loading_entry.clear()
 	loading_scene = null
 
+
+func _reuse_checked_pair(entry: Dictionary) -> void:
+	if integrity_read != null or not entry.has("pair_asset"):
+		return
+	var pilot := preload("res://scripts/services/model_pair_pilot.gd")
+	var pair: Dictionary = pilot.entry_asset(entry)
+	if pair.is_empty(): return
+	var identity := ReviewedModels.canonical_identity(str(entry.species))
+	var verified: Dictionary = download_verified_files.get(identity, {})
+	var digest := str(verified.get("sha256", ""))
+	if not (entry.get("_reviewed_model", false) or entry.get("_screened_model", false)) or ReviewedModels.resolve(identity, digest).is_empty(): return
+	if digest != str(entry.runtime_sha256) or int(verified.get("bytes", 0)) != int(entry.bytes): return
+	if str(verified.get("path", "")) != str(entry.runtime_path) or str(verified.get("pack_sha256", "")) != str(pair.sha256): return
+	var receipt: Dictionary = verified.get("pair_check", {})
+	if not str(receipt.get("error", "invalid")).is_empty() or receipt.get("manifest") != pair.pair_manifest or receipt.get("sha256") != pair.sha256 or receipt.get("path") != ProjectSettings.globalize_path(str(entry.pack_path)):
+		return
+	# This is the before-load check from the current downloader operation,
+	# never a catalog field or a saved-session receipt. Cold imports still run
+	# the full after-load integrity read; RAM reuse requires the bound LRU key.
+	var check := IntegrityRead.new()
+	check.digest = digest
+	check.bytes = int(verified.bytes)
+	check.pair_check = receipt
+	entry["_pair_asset"] = pair
+	if _finish_validation(entry, check):
+		verified_pair_handoff_hits += 1
+		if ModelCache.fetch(str(entry.get("_resource_cache_key", ""))) != null:
+			verified_model_cache_hits += 1
 
 func _reuse_checked_resource(entry: Dictionary) -> void:
 	# The downloader just checked the entire file. Only an already admitted,

@@ -14,8 +14,11 @@ var loading_label: Label
 var loading_progress: ProgressBar
 var loading_backdrop: ColorRect
 var loading_entry_requested := false
+var mounted_at_msec := 0
 const FADE_SECONDS := 0.18
 const MIN_FADE_FRAMES := 12
+const WARM_ANDROID_FADE_SECONDS := 0.12
+const WARM_ANDROID_FADE_FRAMES := 6
 var outgoing_snapshot: TextureRect
 @onready var content: Control = $Content
 @onready var backdrop: ColorRect = $Content/Backdrop
@@ -188,6 +191,7 @@ func prewarm_battle(instance: Control, immersive := true) -> void:
 	content.add_child(battle)
 
 func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_style := WildEncounterTransition.STYLE_WILD, force_immersive := false, snapshot: Texture2D = null) -> void:
+	mounted_at_msec = Time.get_ticks_msec()
 	var already_prepared := battle == instance and instance.get_parent() == content
 	process_mode = Node.PROCESS_MODE_INHERIT
 	show()
@@ -366,8 +370,17 @@ func _reveal_cover() -> void:
 	if waits_for_final_camera() and not preparation_ready:
 		return
 	loading_label.get_parent().hide()
+	var fade_seconds := FADE_SECONDS
+	var fade_frames := MIN_FADE_FRAMES
+	var presenter = battle.animation_router.model_presenter if is_instance_valid(battle) else null
+	var warm_android: bool = preparation_ready and is_instance_valid(presenter) and presenter.active and presenter.uses_android_camera() and get_node("/root/SettingsManager").battle_presentation_mode == "3d" and presenter.preparation_metrics.get("cached_assets", false)
+	if warm_android:
+		fade_seconds = WARM_ANDROID_FADE_SECONDS
+		fade_frames = WARM_ANDROID_FADE_FRAMES
+	var fade_started := Time.get_ticks_msec()
+	var ready_ms := fade_started - mounted_at_msec
 	reveal_tween = create_tween()
-	reveal_tween.tween_property(self, "fade_progress", 1.0, FADE_SECONDS).set_trans(Tween.TRANS_LINEAR)
+	reveal_tween.tween_property(self, "fade_progress", 1.0, fade_seconds).set_trans(Tween.TRANS_LINEAR)
 	# A slow mount/upload frame must not consume the whole entrance tween.
 	# Advance only after presenting a frame, with at least twelve blend steps.
 	reveal_tween.pause()
@@ -375,7 +388,7 @@ func _reveal_cover() -> void:
 		await get_tree().process_frame
 		if released or not reveal_tween.is_valid():
 			return
-		var step := minf(get_process_delta_time(), FADE_SECONDS / float(MIN_FADE_FRAMES))
+		var step := minf(get_process_delta_time(), fade_seconds / float(fade_frames))
 		reveal_tween.custom_step(maxf(step, 0.0001))
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
@@ -384,6 +397,10 @@ func _reveal_cover() -> void:
 		content.modulate.a = 1.0
 		backdrop.color.a = 1.0
 		outgoing_snapshot.texture = null
+		if OS.has_feature("android_3d_performance_probe"):
+			print("ANDROID_BATTLE_ENTRY ", JSON.stringify({"ready_ms": ready_ms,
+				"fade_ms": Time.get_ticks_msec() - fade_started, "total_ms": Time.get_ticks_msec() - mounted_at_msec,
+				"cached_assets": warm_android, "fade_frames": fade_frames}))
 		_finish_entry_if_ready()
 
 

@@ -2,6 +2,32 @@
 
 ## Android touch camera and bounded move preparation
 
+The user confirmed that trial `0.3.109-3d-perf.8` clears foreground grass and
+keeps the world-to-battle fade, but reported that entry still feels slow with
+installed assets. Its numeric logs recorded preparing windows of 2.106 s for
+the first entry and 0.849 s for the repeat. The repeated sample had 130 ms of
+presenter model validation, 80 ms of render warmup, 2 ms of actor construction
+and negligible arena construction. `forest_load_ms` is a historical session
+value, not a second forest load. These are preparation windows, not complete
+network-plus-entry timings.
+
+The downloader now hands its fresh full shared-pack inspection to the
+presenter. Qualified runtime identity, bytes, namespace, manifest, physical
+path and pack hash must match. Local catalogs cannot supply this receipt.
+Cold imports retain their full after-load verification; RAM reuse still uses
+the bounded hash/pack/timing cache key. Importing waits for the current pair
+handoff instead of starting a duplicate inspection concurrently. No session
+stat-based verification cache or larger RAM cache is introduced.
+Previously rendered Android resources in the same pooled viewport need one
+stable render sample instead of two, followed by restoration of summon
+visibility. Installed, verified Android assets use a 0.12 s fade with at least
+six blend steps; desktop and download/fallback entry retain the existing fade.
+The explicit USB probe records downloader/entry duration and numeric host
+ready/fade/total timings to distinguish network waiting from local work.
+The native real-pack handoff check covers normal/shiny appearances, mismatched
+receipts, cold after-load inspection and warm RAM reuse. Held-download camera
+entry and fullscreen fade/handoff/cancellation checks remain focused guards.
+
 World-entry preparation now preserves an explicitly supplied overworld
 snapshot instead of replacing it with the lobby's dark loading backdrop.
 Android still waits for the real model camera fit, then uses the same layered
