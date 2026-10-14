@@ -539,6 +539,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/hotbar_shortcut_check.gd",
 	"res://tests/player_hotbar_check.gd",
 	"res://tests/player_hotbar_interactive_check.gd",
+	"res://tests/player_hotbar_responsive_check.gd",
 	"res://tests/pokemon_summary_loan_remaining_check.gd",
 	"res://tests/legacy_market_cleanup_check.gd",
 	"res://tests/project_check_runner_timeout_check.gd",
