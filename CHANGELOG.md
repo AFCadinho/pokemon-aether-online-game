@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restyle Daycare with Aether cards, clear training inputs, custom tabs and action buttons, progress bars and a recoverable loading error view.
+
 - Let desktop development builds record the chosen idle 3D battle camera with Ctrl+Shift+C for camera-framing feedback.
 
 - Widen the desktop 3D starting view slightly (5%) while retaining the close-up angle, stable fade and the approved Android camera.
