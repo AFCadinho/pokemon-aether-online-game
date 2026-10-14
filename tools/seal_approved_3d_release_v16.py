@@ -8,6 +8,7 @@ from study_lossless_texture_storage import ROOT, sha
 
 CODE = ['scripts/services/model_pair_pilot.gd', 'launcher/scripts/model_pair_pilot.gd',
     'scripts/services/model_pair_pack.gd', 'launcher/scripts/model_pair_pack.gd',
+    'scripts/services/asset_bundle_index.gd',
     'scripts/services/on_demand_3d_bundle_service.gd', 'launcher/scripts/asset_bundle_index.gd',
     'launcher/scripts/asset_bundle_store.gd', 'launcher/scripts/release_asset_bundles.gd',
     'launcher/scripts/bulk_asset_downloads.gd', 'scripts/battle/battle_ui/experimental_battle_3d.gd',
@@ -40,8 +41,13 @@ def seal(native, runtime, launcher_log):
             flow['cold_pool_requests'] == 3 and flow['corruption_repaired'] and flow['partial_failure_rejected'] and flow['launcher_handoff'], 'Incomplete runtime qualification')
     require(flow['battles'] == 16 and flow['previews'] == 32, 'Presenter coverage incomplete')
     for name, expected in full['inputs'].items():
-        path = (native / name).resolve()
-        require(path.is_relative_to(ROOT) and sha(path) == expected, 'Native source changed: ' + name)
+        # Task slots are parked after integration. Validate their exact tested
+        # source bytes against this release checkout, not the parked branch.
+        relative = name.split('/native-project/', 1)[1]
+        path = ROOT / relative
+        if relative == 'assets/models/New Unity Project/Assets/ob0301_00_body_col.png':
+            path = ROOT / 'assets/models/battle/substitute/ob0301_00_body_col.png'
+        require(path.is_file() and sha(path) == expected, 'Native source changed: ' + relative)
     for name, expected in full['driver_inputs'].items():
         require(sha(ROOT / name) == expected, 'Native driver changed: ' + name)
     for name, expected in flow['inputs'].items():

@@ -12,6 +12,7 @@ const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_ca
 const DesktopAssetStorage = preload("res://scripts/services/desktop_asset_storage.gd")
 const ModelPlatform = preload("res://scripts/battle/battle_ui/model_platform.gd")
 const PairPack = preload("res://scripts/services/model_pair_pack.gd")
+const BundleIndex = preload("res://scripts/services/asset_bundle_index.gd")
 const PairPilot = preload("res://scripts/services/model_pair_pilot.gd")
 const BASE_URL := "https://updates.pokeaether.com/"
 const ROOT := "user://on-demand-3d-v1"
@@ -319,11 +320,11 @@ func _ensure_models(identities: Array[String], source_catalog: String) -> Dictio
 		return plan
 	var missing: Array[String] = plan.asset_ids
 	var ordered: Array[String] = []
-	var indexed: Dictionary = await _run_storage_work(preload("res://launcher/scripts/asset_bundle_index.gd").by_id.bind(index))
+	var indexed: Dictionary = await _run_storage_work(BundleIndex.by_id.bind(index))
 	if indexed.is_empty() and int(index.get("runtime_contract", {}).get("pokemon_3d", 0)) == 3:
 		return {"error": "Shared 3D content index failed validation."}
 	for asset_id in missing:
-		if indexed.has(asset_id): preload("res://launcher/scripts/asset_bundle_index.gd")._append_dependencies(asset_id, indexed, ordered)
+		if indexed.has(asset_id): BundleIndex._append_dependencies(asset_id, indexed, ordered)
 		else: ordered.append(asset_id)
 	for asset_id in ordered:
 		var asset: Dictionary = _indexed_asset(index, asset_id)

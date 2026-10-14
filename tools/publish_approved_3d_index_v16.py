@@ -3,6 +3,7 @@
 import argparse
 from concurrent.futures import ThreadPoolExecutor
 import datetime
+import hashlib
 from pathlib import Path
 import subprocess
 
@@ -74,6 +75,7 @@ def main():
     parser.add_argument('--sources', type=Path)
     parser.add_argument('--credentials', type=Path)
     parser.add_argument('--apply', action='store_true')
+    parser.add_argument('--requalify-receipt', action='store_true', help='Rebind unchanged published payloads after a qualified consumer-only release fix')
     parser.add_argument('--workers', type=int, choices=range(1, 9), default=6)
     args = parser.parse_args()
     meta = validate_local()
@@ -120,7 +122,17 @@ def main():
     else:
         require(receipt.exists(), 'Upload retained archives locally before CI publication')
         historical = read(receipt)
-        require(historical['binding_sha256'] == sha(ROOT / 'release/approved_3d_v16_binding.json') and historical['content_index'] == meta['index'], 'Wrong publication receipt')
+        require(historical['content_index'] == meta['index'], 'Wrong published index')
+        if args.requalify_receipt:
+            previous_bytes = subprocess.check_output(['git', '-C', str(ROOT), 'show', 'HEAD:release/approved_3d_v16_binding.json'])
+            require(hashlib.sha256(previous_bytes).hexdigest() == historical['binding_sha256'], 'Original publication binding is not the retained commit')
+            import json
+            previous_binding = json.loads(previous_bytes)
+            current_binding = read(ROOT / 'release/approved_3d_v16_binding.json')
+            for field in ['revision', 'bundle_index_sha256', 'trusted_catalog_sha256', 'native_qualification_sha256', 'assembly_sha256']:
+                require(previous_binding[field] == current_binding[field], 'Payload qualification changed: ' + field)
+        else:
+            require(historical['binding_sha256'] == sha(ROOT / 'release/approved_3d_v16_binding.json'), 'Wrong publication binding')
         rows = historical['bundles']
         require(len(rows) == 1421, 'Incomplete publication receipt')
         for row, proof in zip(meta['bundles'], rows, strict=True):
@@ -132,7 +144,8 @@ def main():
     write(receipt, {'schema': 1, 'revision': meta['revision'], 'content_index': meta['index'],
         'binding_sha256': sha(ROOT / 'release/approved_3d_v16_binding.json'), 'bundles': rows,
         'index_verification': proof, 'active_manifest_activated': False, 'manifest_snapshots': before,
-        'verified_at_utc': datetime.datetime.now(datetime.UTC).isoformat()})
+        'verified_at_utc': datetime.datetime.now(datetime.UTC).isoformat(),
+        'previous_runtime_binding_sha256': historical['binding_sha256'] if args.requalify_receipt and not args.sources else None})
     print('V16_PUBLICATION_COMPLETE archives=1421 manifest_activated=false', flush=True)
 
 
