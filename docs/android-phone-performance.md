@@ -19,6 +19,15 @@ and exclusion of attack/preview samples. This adds measurement only: Android's
 approved zoom and angle defaults remain unchanged until a preferred stand is
 reviewed. No release certification or publication was performed.
 
+On 2026-10-14 the user selected a preferred mobile overview in perf.13 and left
+the battle idle for capture. Three consecutive five-second samples agreed on
+zoom `0.60`, yaw `-0.235828125` rad (`-13.511956°`) and pitch `-0.12` rad
+(`-6.875494°`), with FOV 48°, two slots and distance 9.115517. These are orbit
+offsets from the base overview; the pose is not an absolute preset for every
+arena or model envelope. This selects the same zoom with a different viewing
+angle, at the existing lower pitch limit. The measurement is recorded for
+review; it does not yet change the Android starting/reset defaults.
+
 ## Android touch camera and bounded move preparation
 
 The user confirmed that trial `0.3.109-3d-perf.8` clears foreground grass and
