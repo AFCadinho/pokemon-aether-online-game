@@ -47,9 +47,14 @@ var next_donor_button: Button
 var scroll: ScrollContainer
 var close_button: Button
 var refresh_button: Button
-var picker: VBoxContainer
-var search: LineEdit
-var picker_list: ItemList
+var picker: Control
+var picker_panel: PanelContainer
+var picker_title: Label
+var picker_hint: Label
+var picker_cancel: Button
+var picker_grid: GridContainer
+var picker_buttons: Array[Button] = []
+var picker_compact := false
 var picker_rows: Array = []
 var results: RichTextLabel
 
@@ -75,6 +80,7 @@ func _fit() -> void:
 	var target := Vector2(minf(920, available.x - 24), minf(690, available.y - 24))
 	size = target
 	position = (available - target) / 2.0
+	_fit_picker()
 
 func _build() -> void:
 	var margin := MarginContainer.new()
@@ -114,23 +120,7 @@ func _build() -> void:
 	donor_select = _button("", _open_picker.bind(true))
 	donor_details.add_child(donor_select)
 	donor_options = _locks(donor_details, true)
-	picker = VBoxContainer.new()
-	picker.visible = false
-	content.add_child(picker)
-	var filters := HBoxContainer.new()
-	picker.add_child(filters)
-	search = LineEdit.new()
-	search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	search.custom_minimum_size.y = 40
-	search.text_changed.connect(func(_value: String): _render_picker())
-	filters.add_child(search)
-	filters.add_child(_button("×", func(): picker.hide()))
-	picker_list = ItemList.new()
-	picker_list.custom_minimum_size.y = 230
-	picker_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	picker_list.fixed_icon_size = Vector2i(40, 40)
-	picker_list.item_selected.connect(_pick)
-	picker.add_child(picker_list)
+	_build_picker()
 	grid = GridContainer.new()
 	grid.columns = 4
 	grid.add_theme_constant_override("h_separation", 14)
@@ -245,7 +235,7 @@ func _localize() -> void:
 	recipient_select.text = _t("choose_recipient")
 	donor_select.text = _t("choose_donor")
 	next_donor_button.text = _t("next_donor")
-	search.placeholder_text = _t("search")
+	picker_cancel.text = LocalizationManager.text("common.cancel")
 
 func _locale_changed(_locale: String) -> void:
 	_localize()
@@ -275,6 +265,7 @@ func close_popup() -> void:
 	if busy or confirmation_open:
 		return
 	visible = false
+	picker.hide()
 	preview_timer.stop()
 	closed.emit()
 
@@ -346,10 +337,83 @@ func _open_picker(is_donor: bool) -> void:
 	if busy or confirmation_open or not AetheringService.pending.is_empty():
 		return
 	choosing_donor = is_donor
+	preview_timer.stop()
 	picker.show()
-	search.text = ""
+	_fit_picker()
 	_render_picker()
-	scroll.ensure_control_visible.call_deferred(picker)
+	_update_buttons()
+
+func _build_picker() -> void:
+	picker = Control.new()
+	picker.name = "PartyPicker"
+	picker.top_level = true
+	picker.z_index = 4096
+	picker.mouse_filter = Control.MOUSE_FILTER_STOP
+	picker.hide()
+	add_child(picker)
+	var shade := ColorRect.new()
+	shade.color = Color(0.0, 0.02, 0.04, 0.8)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	picker.add_child(shade)
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	picker.add_child(center)
+	picker_panel = PanelContainer.new()
+	var panel_style := StyleBoxFlat.new()
+	panel_style.bg_color = Color("07101c")
+	panel_style.border_color = CYAN.darkened(0.4)
+	panel_style.set_border_width_all(2)
+	panel_style.set_corner_radius_all(14)
+	for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
+		panel_style.set_content_margin(side, 12)
+	picker_panel.add_theme_stylebox_override("panel", panel_style)
+	center.add_child(picker_panel)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 10)
+	picker_panel.add_child(stack)
+	var header := HBoxContainer.new()
+	stack.add_child(header)
+	picker_title = _label("", CYAN, 20)
+	header.add_child(picker_title)
+	header.add_child(_button("×", _close_picker))
+	picker_hint = _label("", MUTED, 12)
+	stack.add_child(picker_hint)
+	picker_grid = GridContainer.new()
+	picker_grid.columns = 6
+	picker_grid.add_theme_constant_override("h_separation", 8)
+	picker_grid.add_theme_constant_override("v_separation", 8)
+	stack.add_child(picker_grid)
+	picker_cancel = _button("", _close_picker)
+	stack.add_child(picker_cancel)
+
+func _fit_picker() -> void:
+	if picker == null:
+		return
+	var available := get_viewport_rect().size
+	picker.global_position = Vector2.ZERO
+	picker.size = available
+	picker_panel.custom_minimum_size.x = minf(1120, available.x - 24)
+	var columns := 6 if available.x >= 900 else 3 if available.x >= 500 else 2
+	var compact := available.y < 700 or columns == 2
+	var changed := picker_grid.columns != columns or picker_compact != compact
+	picker_grid.columns = columns
+	picker_compact = compact
+	picker_hint.visible = not compact
+	if changed and picker.visible:
+		_render_picker()
+
+func _close_picker() -> void:
+	picker.hide()
+	_update_buttons()
+	if is_visible_in_tree():
+		(donor_select if choosing_donor else recipient_select).grab_focus()
+	if plan.is_empty():
+		_schedule_preview()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if picker.visible and event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		_close_picker()
 
 func _name(entry: Dictionary) -> String:
 	var pokemon: Dictionary = entry.get("pokemon", {})
@@ -369,47 +433,125 @@ func _location(entry: Dictionary) -> String:
 	var location: Dictionary = entry.get("location", {})
 	return _t("party") if location.get("type") == "party" else _t("box", {"number": int(location.get("boxIndex", 0)) + 1})
 
-static func donor_score(entry: Dictionary, target: Dictionary) -> int:
-	var values: Dictionary = entry.get("pokemon", {}).get("ivs", {})
-	var original: Dictionary = target.get("pokemon", {}).get("ivs", {})
-	var score := 0
-	for stat: String in STATS:
-		if values.get(stat, -1) == original.get(stat, -2):
-			score += 100 if int(values.get(stat, -1)) in [0, 31] else 10
-		if int(values.get(stat, -1)) == 31:
-			score += 1
-	return score
-
 func _render_picker() -> void:
-	if picker_list == null:
+	if picker_grid == null:
 		return
-	picker_list.clear()
-	picker_rows.clear()
-	var sorted := candidates.duplicate()
-	sorted.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var allowed_a := _reason(a, choosing_donor).is_empty()
-		var allowed_b := _reason(b, choosing_donor).is_empty()
-		if allowed_a != allowed_b:
-			return allowed_a
-		if choosing_donor and donor_score(a, recipient) != donor_score(b, recipient):
-			return donor_score(a, recipient) > donor_score(b, recipient)
-		return _name(a).naturalnocasecmp_to(_name(b)) < 0)
-	for entry: Dictionary in sorted:
-		var location: String = str(entry.get("location", {}).get("type", ""))
-		if location != "party":
-			continue
-		var description := "%s · %s · %s" % [_name(entry), _location(entry), _groups(entry)]
-		if not search.text.is_empty() and not (description + str(entry.get("pokemon", {}).get("species", ""))).to_lower().contains(search.text.to_lower()):
-			continue
-		var reason := _reason(entry, choosing_donor)
-		if not reason.is_empty():
-			description += " — " + reason
+	picker_title.text = _t("choose_donor" if choosing_donor else "choose_recipient")
+	picker_hint.text = _t("picker.hint")
+	var focused_slot := picker_buttons.find(get_viewport().gui_get_focus_owner())
+	for child: Node in picker_grid.get_children():
+		picker_grid.remove_child(child)
+		child.queue_free()
+	picker_buttons.clear()
+	picker_rows = [{}, {}, {}, {}, {}, {}]
+	for entry: Dictionary in candidates:
+		var location: Dictionary = entry.get("location", {})
+		var slot := int(location.get("partySlot", -1))
+		if location.get("type") == "party" and slot >= 0 and slot < 6:
+			picker_rows[slot] = entry
+	for slot in range(6):
+		var entry: Dictionary = picker_rows[slot]
+		var reason := _t("picker.empty") if entry.is_empty() else _reason(entry, choosing_donor)
+		var button := _button("", _picker_pressed.bind(slot, int(entry.get("pokemonId", 0))))
+		button.custom_minimum_size = Vector2(0, (108 if get_viewport_rect().size.y >= 500 else 96) if picker_compact else 220)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.disabled = not reason.is_empty() or busy or not AetheringService.pending.is_empty()
+		picker_grid.add_child(button)
+		picker_buttons.append(button)
+		var content := VBoxContainer.new()
+		content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		content.offset_left = 6
+		content.offset_right = -6
+		content.offset_top = 6
+		content.offset_bottom = -6
+		content.add_theme_constant_override("separation", 2)
+		button.add_child(content)
+		var caption := _label(_t("picker.slot", {"number": slot + 1}), MUTED, 10 if picker_compact else 12)
+		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		content.add_child(caption)
+		var sprite := TextureRect.new()
+		var sprite_size := (48 if get_viewport_rect().size.y >= 500 else 36) if picker_compact else 64
+		sprite.custom_minimum_size = Vector2(0, sprite_size)
+		sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var pokemon: Dictionary = entry.get("pokemon", {})
-		var sprite := PokemonAssets.load_home_sprite(str(pokemon.get("speciesId", pokemon.get("species", ""))), bool(entry.get("shiny", false)))
-		var index := picker_list.add_item(description, sprite)
-		picker_list.set_item_disabled(index, not reason.is_empty())
-		picker_list.set_item_tooltip(index, description + "\n" + str(pokemon.get("ivs", {})))
-		picker_rows.append(entry)
+		if not entry.is_empty():
+			sprite.texture = PokemonAssets.load_home_sprite(str(pokemon.get("speciesId", pokemon.get("species", ""))), bool(entry.get("shiny", false)))
+			if not reason.is_empty():
+				sprite.modulate.a = 0.45
+		content.add_child(sprite)
+		var name_label := _label(_t("picker.empty") if entry.is_empty() else _name(entry), MUTED if entry.is_empty() else CYAN, 12 if picker_compact else 14)
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		name_label.max_lines_visible = 1 if picker_compact else 2
+		name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		content.add_child(name_label)
+		if not picker_compact:
+			var groups := _label(_groups(entry), MUTED, 12)
+			groups.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			groups.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			groups.max_lines_visible = 1
+			groups.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+			content.add_child(groups)
+			var values: Dictionary = pokemon.get("ivs", {})
+			var perfect := 0
+			var zeros := 0
+			for stat: String in STATS:
+				perfect += 1 if values.get(stat, -1) == 31 else 0
+				zeros += 1 if values.get(stat, -1) == 0 else 0
+			var ivs := _label("%d×31%s" % [perfect, " · %d×0" % zeros if zeros > 0 else ""] if not entry.is_empty() else "—", GREEN, 12)
+			ivs.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			ivs.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			content.add_child(ivs)
+		var availability := reason
+		if reason.is_empty():
+			availability = _t("picker.compatible" if choosing_donor else "picker.available")
+		elif picker_compact and not entry.is_empty():
+			if choosing_donor and entry.get("pokemonId") == recipient.get("pokemonId"):
+				availability = _t("picker.recipient")
+			elif entry.get("donorBlockedReason") == "aethering_donor_held_item" and choosing_donor:
+				availability = _t("picker.held_item")
+			elif choosing_donor and entry.get("donorBlockedReason") in ["aethering_donor_protected", "starter_pokemon_protected", "aethering_guild_bank_protected"]:
+				availability = _t("picker.protected")
+			elif choosing_donor and str(entry.get("donorBlockedReason", "")) not in ["", "<null>"]:
+				availability = _t("unavailable")
+			elif choosing_donor and not compatible(recipient, entry):
+				availability = _t("picker.incompatible")
+			else:
+				availability = _t("unavailable")
+		var state_label := _label(availability, GREEN if reason.is_empty() else MUTED if entry.is_empty() else RED, 10 if picker_compact else 12)
+		state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		state_label.max_lines_visible = 1 if picker_compact else 2
+		state_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		content.add_child(state_label)
+		var tooltip: Array[String] = []
+		if entry.is_empty():
+			tooltip.append(_t("picker.empty"))
+		else:
+			tooltip.append(_name(entry))
+			tooltip.append(_groups(entry))
+		if not reason.is_empty():
+			tooltip.append(reason)
+		for stat: String in STATS:
+			if pokemon.get("ivs", {}).has(stat):
+				tooltip.append("%s: %d" % [_stat(stat), int(pokemon["ivs"][stat])])
+		button.tooltip_text = "\n".join(tooltip)
+	if picker.is_visible_in_tree():
+		if focused_slot >= 0 and not picker_buttons[focused_slot].disabled:
+			picker_buttons[focused_slot].grab_focus()
+		else:
+			for button: Button in picker_buttons:
+				if not button.disabled:
+					button.grab_focus()
+					break
+
+func _picker_pressed(slot: int, pokemon_id: int) -> void:
+	if slot >= 0 and slot < picker_rows.size() and int(picker_rows[slot].get("pokemonId", 0)) == pokemon_id:
+		_pick(slot)
 
 func _pick(index: int) -> void:
 	if busy or confirmation_open or not AetheringService.pending.is_empty() or index < 0 or index >= picker_rows.size():
@@ -429,6 +571,8 @@ func _pick(index: int) -> void:
 	picker.hide()
 	status.text = _t("ready")
 	_render()
+	if is_visible_in_tree():
+		donor_select.grab_focus()
 	scroll.ensure_control_visible.call_deferred(cards)
 	_schedule_preview()
 
@@ -451,7 +595,7 @@ func _lock_changed(index: int, is_donor: bool) -> void:
 	_schedule_preview()
 
 func _schedule_preview() -> void:
-	if not visible or busy or confirmation_open or not AetheringService.pending.is_empty():
+	if not visible or picker.visible or busy or confirmation_open or not AetheringService.pending.is_empty():
 		return
 	if not resources_ready or recipient.is_empty() or donor.is_empty():
 		return
@@ -533,15 +677,15 @@ func _wing_count(item_id: String) -> int:
 
 func _update_buttons() -> void:
 	var unresolved := not AetheringService.pending.is_empty()
-	var frozen := busy or unresolved or confirmation_open
+	var frozen := busy or unresolved or confirmation_open or picker.visible
 	recipient_select.disabled = frozen
 	donor_select.disabled = frozen or recipient.is_empty()
 	recipient_options.disabled = frozen or recipient.is_empty()
 	donor_options.disabled = frozen or donor.is_empty()
 	no_wings_button.disabled = frozen
 	no_wings_button.visible = recipient_lock != null or donor_lock != null
-	refresh_button.disabled = busy or confirmation_open
-	close_button.disabled = busy or confirmation_open
+	refresh_button.disabled = busy or confirmation_open or picker.visible
+	close_button.disabled = busy or confirmation_open or picker.visible
 	preview_button.disabled = frozen or not resources_ready or candidates.size() < 2 or recipient.is_empty() or donor.is_empty()
 	var block_reason := _confirm_block_reason()
 	confirm_button.disabled = not block_reason.is_empty()
@@ -555,6 +699,8 @@ func _confirm_block_reason() -> String:
 		return _t("checking")
 	if confirmation_open:
 		return _t("confirm_title")
+	if picker.visible:
+		return _t("picker.hint")
 	if not AetheringService.pending.is_empty():
 		return ""
 	if not resources_ready:

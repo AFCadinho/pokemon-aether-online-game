@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Select Aethering Pokémon from a separate popup with six Party slots, clear eligibility states and a responsive layout instead of a scrolling list.
+
 - Keep the Daycare frame at a fixed desktop size across training modes, quotes, tabs and loading states, while fitting smaller viewports.
 
 - Present Aethering through an Aether Keeper with matching mystical sprite, portrait and ritual dialogue; clarify that Wings are optional and add a button to remove both IV locks.

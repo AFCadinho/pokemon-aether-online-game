@@ -62,8 +62,8 @@ func _run() -> void:
 	for selection in [{"donor": false, "id": info["recipientId"]}, {"donor": true, "id": info["donorId"]}]:
 		popup._open_picker(selection["donor"])
 		for index in range(popup.picker_rows.size()):
-			if popup.picker_rows[index]["pokemonId"] == selection["id"]:
-				popup._pick(index)
+			if popup.picker_rows[index].get("pokemonId") == selection["id"]:
+				popup.picker_buttons[index].pressed.emit()
 				break
 	await _automatic_preview()
 	_check(not popup.plan.is_empty(), "Selecting a Donor automatically requests a real server preview")
