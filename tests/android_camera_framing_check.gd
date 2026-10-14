@@ -10,6 +10,7 @@ func _run() -> void:
 	SettingsManager.battle_presentation_mode = "3d"
 	SettingsManager.battle_3d_camera_motion = false
 	assert(is_equal_approx(stage.user_camera_zoom, 0.60))
+	assert(is_equal_approx(stage.user_camera_yaw, -0.235828125) and is_equal_approx(stage.user_camera_pitch, -0.12), "Android starts at the measured mobile angle")
 	assert(stage.camera_zoom_limits() == Vector2(0.3, 1.6))
 	var view := SubViewport.new()
 	add_child(view)
@@ -57,8 +58,19 @@ func _run() -> void:
 	stage.user_camera_zoom = 0.3
 	stage._update_camera(0.0)
 	assert(stage.camera.position.distance_to(focus) < starting.origin.distance_to(focus), "Pinch zoom must not be undone by model-envelope fitting")
+	stage.user_camera_yaw = -0.235828125
+	stage.user_camera_pitch = -0.12
+	stage.user_camera_zoom = 0.60
+	stage._update_camera(0.0)
+	var preferred: Transform3D = stage.camera.transform
+	stage.user_camera_yaw = 1.1
+	stage.user_camera_pitch = 0.4
+	stage.user_camera_zoom = 0.9
+	stage._update_camera(0.0)
 	stage.reset_user_camera()
-	assert(stage.user_camera_yaw == 0 and stage.user_camera_pitch == 0 and is_equal_approx(stage.user_camera_zoom, 0.60))
+	assert(is_equal_approx(stage.user_camera_yaw, -0.235828125) and is_equal_approx(stage.user_camera_pitch, -0.12) and is_equal_approx(stage.user_camera_zoom, 0.60))
+	stage._update_camera(0.0)
+	assert(stage.camera.transform.is_equal_approx(preferred), "Reset reproduces the manually selected mobile view")
 	stage.preview_enabled = true
 	stage._update_camera(0.0)
 	var preview: Transform3D = stage.camera.transform

@@ -25,8 +25,11 @@ zoom `0.60`, yaw `-0.235828125` rad (`-13.511956°`) and pitch `-0.12` rad
 (`-6.875494°`), with FOV 48°, two slots and distance 9.115517. These are orbit
 offsets from the base overview; the pose is not an absolute preset for every
 arena or model envelope. This selects the same zoom with a different viewing
-angle, at the existing lower pitch limit. The measurement is recorded for
-review; it does not yet change the Android starting/reset defaults.
+angle, at the existing lower pitch limit. After user approval, these measured
+offsets now define Android's starting/reset view. Desktop retains its separately
+approved defaults, Team Preview retains its neutral roster camera, and attack
+shots recover to the chosen mobile view. The stable entry reference applies
+this angle from the first drawn arena frame, without waiting for model arrival.
 
 ## Android touch camera and bounded move preparation
 
