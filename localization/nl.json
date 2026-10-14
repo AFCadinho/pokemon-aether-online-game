@@ -1623,6 +1623,8 @@
   "ui.pokemon_summary.tab.stats": "Statistieken",
   "ui.pokemon_summary.tab.moves": "Aanvallen",
   "ui.pokemon_summary.ivs.title": "Individuele waarden",
+  "ui.pokemon_summary.aethering.label": "Aethering",
+  "ui.pokemon_summary.aethering.tooltip": "Geslaagde Aetherings waarbij deze Pokémon de ontvanger was, ook als de IVs gelijk bleven. Deze geschiedenis blijft bij de Pokémon na een trade.",
   "ui.pokemon_summary.origin.gift": "Cadeau",
   "ui.pokemon_summary.origin.caught": "Gevangen",
   "ui.pokemon_summary.origin.generated": "Gegenereerd",

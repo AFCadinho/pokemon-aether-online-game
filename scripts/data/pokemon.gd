@@ -27,6 +27,8 @@ var shiny: bool
 var evs: Dictionary
 var stored_evs: Dictionary
 var ivs: Dictionary
+# Server-provided history metadata, never used to authorize a mutation.
+var aethering_count := 0
 var stats: Dictionary
 var moves: Array
 var types: Array
@@ -250,6 +252,7 @@ func to_persistence_dict() -> Dictionary:
 	pokemon_data["ballItemId"] = ball_item_id
 	if caught_ball_item_id != "":
 		pokemon_data["caughtBallItemId"] = caught_ball_item_id
+	pokemon_data["aetheringCount"] = aethering_count
 	pokemon_data["borrowed"] = borrowed
 	if not loan.is_empty():
 		pokemon_data["loan"] = loan.duplicate(true)

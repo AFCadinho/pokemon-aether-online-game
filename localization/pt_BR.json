@@ -1589,6 +1589,8 @@
   "ui.pokemon_summary.tab.stats": "Atributos",
   "ui.pokemon_summary.tab.moves": "Movimentos",
   "ui.pokemon_summary.ivs.title": "Valores Individuais",
+  "ui.pokemon_summary.aethering.label": "Aethering",
+  "ui.pokemon_summary.aethering.tooltip": "Aetherings bem-sucedidos recebidos por este Pokémon, incluindo resultados sem mudança nos IVs. Este histórico permanece com o Pokémon após trocas.",
   "ui.pokemon_summary.origin.gift": "Presente",
   "ui.pokemon_summary.origin.caught": "Capturado",
   "ui.pokemon_summary.origin.generated": "Gerado",
