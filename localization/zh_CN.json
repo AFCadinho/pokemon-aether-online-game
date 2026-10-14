@@ -7063,7 +7063,7 @@
   "ui.guild_design.confirm_restore": "恢复上一布局？当前布局将成为恢复副本。",
   "ui.shiny_tracker.mounts.store_description_flying_nimbus": "包含一只筋斗云坐骑。初始异色概率：50%。",
   "ui.nature_specialist.title": "性格专家",
-  "ui.nature_specialist.explanation": "改善同行队伍中特别的宝可梦。每七天可付费调整一次，原本性格永久保留。",
+  "ui.nature_specialist.explanation": "改善同行队伍中特别的宝可梦，原本性格永久保留。",
   "ui.nature_specialist.no_pokemon": "同行队伍中没有宝可梦，请先使用附近的电脑。",
   "ui.nature_specialist.preview": "比较能力",
   "ui.nature_specialist.confirm": "确认治疗",
@@ -7290,5 +7290,8 @@
   "ui.nature_specialist.reason.rental_set_locked": "此租借队伍不可修改",
   "ui.nature_specialist.reason.pokemon_stored_in_guild_bank": "已存入公会仓库",
   "ui.nature_specialist.reason.guild_bank_pokemon_borrowed": "从公会仓库借用",
-  "ui.nature_specialist.reason.pokemon_holder_changed": "当前由其他玩家持有"
+  "ui.nature_specialist.reason.pokemon_holder_changed": "当前由其他玩家持有",
+  "ui.nature_specialist.choose_different": "请选择不同的性格以比较能力。",
+  "ui.nature_specialist.iv_details": "显示或隐藏个体值详情",
+  "ui.nature_specialist.party_count": "可调整：{eligible}/{total}"
 }

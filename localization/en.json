@@ -7063,7 +7063,7 @@
   "ui.guild_design.confirm_restore": "Restore the previous room layout? The current layout will become the recovery copy.",
   "ui.shiny_tracker.mounts.store_description_flying_nimbus": "Contains a Flying Nimbus mount. Base shiny chance: 50%.",
   "ui.nature_specialist.title": "Nature Specialist",
-  "ui.nature_specialist.explanation": "Care for a special Pokémon in your Party. One paid treatment per seven days; its original nature stays unchanged.",
+  "ui.nature_specialist.explanation": "Care for a special Party Pokémon; its original nature stays unchanged.",
   "ui.nature_specialist.no_pokemon": "No Pokémon in your Party. Use the nearby PC first.",
   "ui.nature_specialist.preview": "Compare stats",
   "ui.nature_specialist.confirm": "Confirm treatment",
@@ -7266,7 +7266,7 @@
   "ui.nature_specialist.stat_comparison": "STAT COMPARISON",
   "ui.nature_specialist.stat": "Stat",
   "ui.nature_specialist.before": "Current",
-  "ui.nature_specialist.after": "After treatment",
+  "ui.nature_specialist.after": "After",
   "ui.nature_specialist.difference": "Change",
   "ui.nature_specialist.price_label": "TREATMENT FEE",
   "ui.nature_specialist.wallet_label": "Wallet",
@@ -7290,5 +7290,8 @@
   "ui.nature_specialist.reason.rental_set_locked": "Rental set cannot be changed",
   "ui.nature_specialist.reason.pokemon_stored_in_guild_bank": "Stored in the Guild Bank",
   "ui.nature_specialist.reason.guild_bank_pokemon_borrowed": "Borrowed from the Guild Bank",
-  "ui.nature_specialist.reason.pokemon_holder_changed": "Held by another player"
+  "ui.nature_specialist.reason.pokemon_holder_changed": "Held by another player",
+  "ui.nature_specialist.choose_different": "Choose a different nature to compare its stats.",
+  "ui.nature_specialist.iv_details": "Show or hide IV details",
+  "ui.nature_specialist.party_count": "Eligible: {eligible}/{total}"
 }

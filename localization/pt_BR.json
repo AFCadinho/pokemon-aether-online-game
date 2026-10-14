@@ -7063,7 +7063,7 @@
   "ui.guild_design.confirm_restore": "Restaurar o layout anterior? O layout atual será preservado como cópia de recuperação.",
   "ui.shiny_tracker.mounts.store_description_flying_nimbus": "Contém uma montaria Nuvem Voadora. Chance shiny inicial: 50%.",
   "ui.nature_specialist.title": "Especialista em Naturezas",
-  "ui.nature_specialist.explanation": "Cuide de um Pokémon especial da sua equipe. Um tratamento pago a cada sete dias; a natureza original é preservada.",
+  "ui.nature_specialist.explanation": "Cuide de um Pokémon especial da equipe; a natureza original é preservada.",
   "ui.nature_specialist.no_pokemon": "Nenhum Pokémon na equipe. Use o PC próximo primeiro.",
   "ui.nature_specialist.preview": "Comparar atributos",
   "ui.nature_specialist.confirm": "Confirmar tratamento",
@@ -7266,7 +7266,7 @@
   "ui.nature_specialist.stat_comparison": "COMPARAÇÃO DE STATS",
   "ui.nature_specialist.stat": "Stat",
   "ui.nature_specialist.before": "Atual",
-  "ui.nature_specialist.after": "Após tratamento",
+  "ui.nature_specialist.after": "Depois",
   "ui.nature_specialist.difference": "Mudança",
   "ui.nature_specialist.price_label": "CUSTO DO TRATAMENTO",
   "ui.nature_specialist.wallet_label": "Carteira",
@@ -7290,5 +7290,8 @@
   "ui.nature_specialist.reason.rental_set_locked": "Este conjunto alugado não pode ser alterado",
   "ui.nature_specialist.reason.pokemon_stored_in_guild_bank": "Guardado no Banco da Guilda",
   "ui.nature_specialist.reason.guild_bank_pokemon_borrowed": "Emprestado pelo Banco da Guilda",
-  "ui.nature_specialist.reason.pokemon_holder_changed": "Em posse de outro jogador"
+  "ui.nature_specialist.reason.pokemon_holder_changed": "Em posse de outro jogador",
+  "ui.nature_specialist.choose_different": "Escolha outra natureza para comparar os atributos.",
+  "ui.nature_specialist.iv_details": "Mostrar ou ocultar detalhes de IVs",
+  "ui.nature_specialist.party_count": "Elegíveis: {eligible}/{total}"
 }
