@@ -4,6 +4,16 @@
 
 - Select Aethering Pokémon from a separate popup with six Party slots, clear eligibility states and a responsive layout instead of a scrolling list.
 
+- Show three hotbar slots per page on small touch screens, reducing its height while keeping all eight shortcuts available through three pages.
+
+- Show the running client's game version on the login and saved-session screens in the selected language.
+
+- Restyle the Nature Specialist with Pokémon and IV details, clear stat comparisons, custom dropdowns, readable prices and responsive controls; give the specialist a green gardener overworld and portrait.
+
+- Compact the Daycare window with responsive columns, content-based height and collapsible EV settings. Give its Trainer the matching Pokémon Breeder overworld sprite and dialogue portrait.
+
+- Enable gentle idle camera movement in Android 3D battles around the chosen viewing angle, with a separate Graphics switch and saved opt-out. Keep loading, Team Preview and attack framing steady.
+
 - Keep the Daycare frame at a fixed desktop size across training modes, quotes, tabs and loading states, while fitting smaller viewports.
 
 - Present Aethering through an Aether Keeper with matching mystical sprite, portrait and ritual dialogue; clarify that Wings are optional and add a button to remove both IV locks.

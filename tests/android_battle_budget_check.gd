@@ -182,6 +182,7 @@ func _run() -> void:
 	settings.battle_presentation_mode = "3d"
 	settings.battle_3d_arena = "forest"
 	settings.battle_3d_camera_motion = false
+	settings.android_3d_idle_camera_motion = false
 	settings.battle_3d_catalog_path = ""
 	settings._manual_model_catalog_this_session = false
 	await _observe("autoloads")

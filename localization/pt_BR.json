@@ -1411,6 +1411,7 @@
   "ui.settings.terminology.localized": "Nomes traduzidos",
   "ui.settings.enable_move_animations": "Ativar animações de golpes",
   "ui.settings.android_move_camera": "Enquadramentos 3D durante os golpes",
+  "ui.settings.android_idle_camera": "Movimento suave da câmera 3D",
   "ui.settings.enable_weather_effects": "Ativar efeitos climáticos",
   "ui.settings.enable_terrain_effects": "Ativar efeitos de terreno",
   "ui.settings.display_own_name": "Exibir meu nome",
@@ -7256,5 +7257,17 @@
   "backend.error.daycare_preview_expired": "Este orçamento expirou. Calcule um novo orçamento.",
   "backend.error.daycare_preview_stale": "O Pokémon, armazenamento ou limite mudou. Calcule um novo orçamento.",
   "backend.error.daycare_busy": "Está em curso outra alteração. Tente novamente com segurança.",
-  "backend.error.daycare_player_busy": "Termine a atividade atual antes de usar a creche."
+  "backend.error.daycare_player_busy": "Termine a atividade atual antes de usar a creche.",
+  "ui.nature_specialist.daycare": "DAYCARE DA ROTA 5 · CUIDADO ESPECIAL",
+  "ui.nature_specialist.pokemon_label": "SEU POKÉMON",
+  "ui.nature_specialist.target_label": "ESCOLHA O NOVO EFEITO NAS STATS",
+  "ui.nature_specialist.stat_comparison": "COMPARAÇÃO DE STATS",
+  "ui.nature_specialist.stat": "Stat",
+  "ui.nature_specialist.before": "Atual",
+  "ui.nature_specialist.after": "Após tratamento",
+  "ui.nature_specialist.difference": "Mudança",
+  "ui.nature_specialist.price_label": "CUSTO DO TRATAMENTO",
+  "ui.nature_specialist.wallet_label": "Carteira",
+  "ui.nature_specialist.ready": "Disponível · um tratamento a cada sete dias",
+  "ui.nature_specialist.comparison_hint": "Compare as stats para revisar a natureza escolhida antes de pagar."
 }

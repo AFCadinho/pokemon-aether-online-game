@@ -35,6 +35,7 @@ const STARTUP_HEALTH_MAX_RETRIES := 2
 @onready var forgot_password_link_button: LinkButton = $Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/ForgotPasswordLinkButton
 @onready var login_card: PanelContainer = $Background/Shell/MainSplit/LoginColumn/LoginCard
 @onready var saved_session_card: PanelContainer = $Background/Shell/MainSplit/LoginColumn/SavedSessionCard
+@onready var client_version_label: Label = $Background/Shell/MainSplit/LoginColumn/ClientVersionLabel
 @onready var saved_display_name_label: Label = $Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/TrainerInfoLayout/SavedDisplayNameLabel
 @onready var saved_username_label: Label = $Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/TrainerCard/TrainerMargin/TrainerLayout/TrainerInfoLayout/SavedUsernameLabel
 @onready var saved_status_label: Label = $Background/Shell/MainSplit/LoginColumn/SavedSessionCard/SavedSessionMargin/SavedSessionLayout/SavedStatusLabel
@@ -121,6 +122,7 @@ func _ready() -> void:
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	LocalizationManager.localize_tree(self)
+	_update_client_version_label()
 	_apply_language_options_to_control()
 	_set_server_status_checking()
 	_setup_background_video()
@@ -241,6 +243,7 @@ func _on_locale_changed(_locale: String) -> void:
 	if is_instance_valid(battle_visual_choice):
 		battle_visual_choice.refresh_locale()
 	LocalizationManager.localize_tree(self)
+	_update_client_version_label()
 	_apply_language_options_to_control()
 	login_button.text = (
 		LocalizationManager.text("ui.login.signing_in")
@@ -267,6 +270,15 @@ func _on_locale_changed(_locale: String) -> void:
 		_render_news_items([])
 	else:
 		_render_localized_news()
+
+
+func _update_client_version_label() -> void:
+	var version := str(ProjectSettings.get_setting("application/config/version", "")).strip_edges()
+	client_version_label.text = (
+		LocalizationManager.text("ui.settings.about.version", {"version": version})
+		if version != "" and version != "dev"
+		else LocalizationManager.text("ui.settings.about.alpha_build")
+	)
 
 
 func _on_language_selected(index: int) -> void:
