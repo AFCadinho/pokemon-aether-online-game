@@ -34,7 +34,9 @@ only in the diagnostic export. It uses the real HUD with an active quest,
 all five quick buttons, personal buffs and the trainer card. It selects test
 pages through HUD methods and sends **no automated pointer or Android input**.
 Its scale picker and normal page arrows remain available for manual testing.
-Hand-operated paging is a separate check from the geometry assertions.
+The player also confirmed that hand-operated paging works, while reporting
+that the arrows are very small. Arrow size and touch comfort remain a usability
+limitation of the existing pager; this placement correction does not enlarge it.
 
 The normal game package and its data are retained. This is focused offline HUD
 QA; logged-in gameplay and release certification were not exercised. No APK or
