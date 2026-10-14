@@ -60,20 +60,29 @@ func _run() -> void:
 		var hook := dadinho.get_node("StoryHook")
 		_check(str(hook.get("interaction_id")) == "kanto_route_5_dadinho_potential", "Dadinho exposes his server-authorized lesson")
 		_check(str(hook.get("entity_id")) == str(dadinho.get("npc_id")), "the story hook and NPC use the same identity")
+		_check(bool(dadinho.get("preload_quest_markers")), "Dadinho loads his quest marker before interaction")
+		dadinho.call("_apply_npc_metadata", {
+			"questMarkers": [{"questId": "discover_pokemon_potential", "stepId": "meet_dadinho", "statuses": ["active"]}],
+		})
 		var story := root.get_node("StoryService")
 		story.call("reset_story")
 		_check(not dadinho.visible, "Dadinho is absent before Misty is defeated")
 		story.call("apply_story", {"revision": 1, "quests": [
 			{"questId": "challenge_cerulean_gym", "status": "completed"},
-			{"questId": "discover_pokemon_potential", "status": "active"},
+			{"questId": "discover_pokemon_potential", "questType": "main", "status": "active", "steps": [{"stepId": "meet_dadinho", "status": "active"}]},
 		]})
 		_check(dadinho.visible, "Dadinho appears after the Cascade Badge")
+		var marker := dadinho.get_node_or_null("QuestMarker") as Control
+		_check(marker != null and marker.visible, "Dadinho shows the quest icon while his lesson is active")
+		var icon := dadinho.get_node_or_null("QuestMarker/Icon") as TextureRect
+		_check(icon != null and icon.texture == load("res://assets/ui/main_quest_marker.svg"), "Dadinho uses the main quest icon")
 		story.call("apply_story", {"revision": 2, "quests": [
 			{"questId": "challenge_cerulean_gym", "status": "completed"},
-			{"questId": "discover_pokemon_potential", "status": "completed"},
+			{"questId": "discover_pokemon_potential", "questType": "main", "status": "completed", "steps": [{"stepId": "meet_dadinho", "status": "completed"}]},
 			{"questId": "board_ss_anne", "status": "active"},
 		]})
 		_check(dadinho.visible, "Dadinho remains available to remind ship-bound players")
+		_check(marker != null and not marker.visible, "Dadinho hides the quest icon after completing his lesson")
 		story.call("apply_story", {"revision": 3, "quests": [
 			{"questId": "challenge_cerulean_gym", "status": "completed"},
 			{"questId": "board_ss_anne", "status": "completed"},

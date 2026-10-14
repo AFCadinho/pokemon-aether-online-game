@@ -343,6 +343,7 @@ z_index = 5
 [node name="Dadinho" parent="Entities/NPCs" instance=ExtResource("dialogue_npc_scene")]
 position = Vector2(592, 1168)
 npc_id = "kanto_route_5_dadinho"
+preload_quest_markers = true
 display_name = "Dadinho"
 npc_sprite_frames = ExtResource("dadinho_frames")
 mugshot = ExtResource("dadinho_mugshot")
