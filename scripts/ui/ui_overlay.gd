@@ -40,6 +40,7 @@ const HOTBAR_TRACKER_GAP := 16.0
 const HOTBAR_PAGE_SIZE := 4
 const HOTBAR_COMPACT_PAGE_SIZE := 3
 const HOTBAR_COMPACT_GRID_HEIGHT := 172.0
+const HOTBAR_TOUCH_COMPACT_GRID_HEIGHT := 150.0
 const HOTBAR_COMPACT_SCREEN_SHORT_SIDE := 600.0
 const RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS := 10.0
 const PVP_QUEUE_POLL_INTERVAL_SECONDS := 1.0
@@ -805,6 +806,8 @@ var hotbar_layout_horizontal_shift := 0.0
 var hotbar_previous_page_button: Button
 var hotbar_next_page_button: Button
 var hotbar_page_label: Label
+var hotbar_page_controls: HBoxContainer
+var hotbar_touch_page_button: Button
 var dev_pokemon_popup_mode: int = DevPokemonPopupMode.POKEMON
 var dev_encounter_metadata: Dictionary = {}
 var dev_map_encounter_mode := false
@@ -4011,6 +4014,7 @@ func _apply_ui_z_index_policy() -> void:
 		party_panel,
 		player_status_panel,
 		hotkey_sidebar_panel,
+		hotbar_touch_page_button,
 		donator_store_popup,
 		bag_popup,
 		pokemon_summary_popup,
@@ -13709,6 +13713,7 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 		party_panel,
 		player_status_panel,
 		hotkey_sidebar_panel,
+		hotbar_touch_page_button,
 		donator_store_popup,
 		bag_popup,
 		trainer_card_popup,
@@ -13797,6 +13802,7 @@ func _set_hotkey_sidebar_position(position: Vector2) -> void:
 	hotbar_layout_horizontal_shift = 0.0
 	_update_hotkey_sidebar_collapse_side()
 	_position_collapsible_button("hotkey_sidebar")
+	_invalidate_collapsible_layout()
 
 func _update_hotkey_sidebar_collapse_side() -> void:
 	var state: Dictionary = collapsible_panels.get("hotkey_sidebar", {})
@@ -32414,6 +32420,9 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 	if panel_id == "options":
 		_refresh_socials_attention_badge()
 	_position_collapsible_button(panel_id)
+	if panel_id == "hotkey_sidebar":
+		_refresh_hotbar_pager_ui()
+		_invalidate_collapsible_layout()
 	if panel_id in ["actions", "dex_actions"]:
 		_refresh_quest_tracker_layout()
 
@@ -32448,6 +32457,7 @@ func _position_collapsible_buttons() -> void:
 	_position_chat_resize_button()
 	_fit_native_global_buff_dock()
 	_fit_collapse_touch_controls()
+	_position_hotbar_touch_navigation()
 
 
 func _fit_native_global_buff_dock() -> void:
@@ -35529,6 +35539,19 @@ func _setup_player_hotbar() -> void:
 		hotbar_previous_page_button.pressed.connect(_change_hotbar_page.bind(-1))
 	if hotbar_next_page_button != null:
 		hotbar_next_page_button.pressed.connect(_change_hotbar_page.bind(1))
+	hotbar_page_controls = hotkey_sidebar_panel.get_node_or_null("MarginContainer/Layout/PageControls") as HBoxContainer
+	hotbar_touch_page_button = Button.new()
+	hotbar_touch_page_button.name = "HotbarPageButton"
+	hotbar_touch_page_button.focus_mode = Control.FOCUS_NONE
+	root_control.add_child(hotbar_touch_page_button)
+	_apply_button_style(hotbar_touch_page_button, "primary")
+	for state: String in ["normal", "hover", "pressed", "focus"]:
+		var style := hotbar_touch_page_button.get_theme_stylebox(state) as StyleBoxFlat
+		style.content_margin_left = 2.0
+		style.content_margin_right = 2.0
+		style.content_margin_top = 2.0
+		style.content_margin_bottom = 2.0
+	hotbar_touch_page_button.pressed.connect(_change_hotbar_page.bind(1))
 	for slot_index in range(8):
 		var slot := slot_stack.get_node_or_null("Slot%s" % (slot_index + 1)) as PanelContainer
 		if slot == null:
@@ -35587,12 +35610,42 @@ func _refresh_hotbar_layout() -> void:
 	var screen_size := Vector2(get_window().size) / TouchTargetSize.pixel_density()
 	var compact := WindowFit.is_touch_ui() and minf(screen_size.x, screen_size.y) < HOTBAR_COMPACT_SCREEN_SHORT_SIDE
 	var page_size := HOTBAR_COMPACT_PAGE_SIZE if compact else HOTBAR_PAGE_SIZE
-	if page_size == hotbar_page_size:
+	if page_size != hotbar_page_size:
+		var first_visible_slot := hotbar_current_page * hotbar_page_size
+		hotbar_page_size = page_size
+		_set_hotbar_page(first_visible_slot / hotbar_page_size)
+	_refresh_hotbar_pager_ui()
+	var swipe_enabled := _uses_touch_hotbar_navigation()
+	for button: Control in hotbar_buttons:
+		var gesture := button.get_node("TouchContextGesture")
+		gesture.horizontal_swipe_handler = _change_hotbar_page if swipe_enabled else Callable()
+		gesture.horizontal_swipe_distance = 24.0 / TouchTargetSize.screen_scale(root_control).x
+
+
+func _uses_touch_hotbar_navigation() -> bool:
+	return is_inside_tree() and WindowFit.is_touch_ui() and not WindowFit.is_mobile_browser_ui()
+
+
+func _position_hotbar_touch_navigation() -> void:
+	if hotbar_touch_page_button == null or not hotbar_touch_page_button.visible:
 		return
-	var first_visible_slot := hotbar_current_page * hotbar_page_size
-	hotbar_page_size = page_size
-	_set_hotbar_page(first_visible_slot / hotbar_page_size)
-	_invalidate_collapsible_layout()
+	var occupied: Array[Rect2] = []
+	for state: Dictionary in collapsible_panels.values():
+		for control: Control in [state["panel"], state["button"]]:
+			if control.visible:
+				occupied.append(control.get_rect())
+	for control: Control in [chat_tabs_panel, global_buffs_panel, personal_buffs_panel, settings_button, mount_button, skills_button, donator_store_button, my_powers_button]:
+		if control.visible:
+			occupied.append(control.get_rect())
+	if quest_journal_view != null:
+		for control: Control in [quest_journal_view.tracker_panel, quest_journal_view.side_tracker_panel, quest_journal_view.tracker_collapse_button]:
+			if control.visible:
+				occupied.append(_collapse_touch_rect(control))
+	var gap := 4.0 / TouchTargetSize.screen_scale(root_control).x
+	var bar := hotkey_sidebar_panel.get_rect()
+	var button_size := hotbar_touch_page_button.size
+	var desired := Rect2(Vector2(bar.position.x - button_size.x - gap, bar.end.y - button_size.y), button_size)
+	hotbar_touch_page_button.position = TouchTargetSize.fit_rect(desired, Rect2(Vector2.ZERO, root_control.size), occupied, gap).position
 
 
 func _hotbar_page_count() -> int:
@@ -35600,6 +35653,8 @@ func _hotbar_page_count() -> int:
 
 
 func _hotbar_grid_height() -> float:
+	if hotbar_page_size == HOTBAR_COMPACT_PAGE_SIZE and _uses_touch_hotbar_navigation():
+		return HOTBAR_TOUCH_COMPACT_GRID_HEIGHT
 	return HOTBAR_COMPACT_GRID_HEIGHT if hotbar_page_size == HOTBAR_COMPACT_PAGE_SIZE else HOTBAR_GRID_HEIGHT
 
 
@@ -35622,6 +35677,17 @@ func _set_hotbar_page(page_index: int) -> void:
 
 
 func _refresh_hotbar_pager_ui() -> void:
+	var native_touch := _uses_touch_hotbar_navigation()
+	if hotbar_page_controls != null:
+		hotbar_page_controls.visible = not native_touch
+	if hotbar_touch_page_button != null:
+		hotbar_touch_page_button.visible = native_touch and hotkey_sidebar_panel.is_visible_in_tree()
+		hotbar_touch_page_button.text = "%d/%d ›" % [hotbar_current_page + 1, _hotbar_page_count()]
+		if native_touch:
+			hotbar_touch_page_button.custom_minimum_size = TouchTargetSize.size_for(hotbar_touch_page_button, Vector2.ZERO)
+			hotbar_touch_page_button.add_theme_font_size_override("font_size", TouchTargetSize.font_size_for(hotbar_touch_page_button, 11, 11.0))
+			TouchTargetSize.compact_button_style(hotbar_touch_page_button, Vector2(36, 22) / TouchTargetSize.screen_scale(hotbar_touch_page_button))
+			hotbar_touch_page_button.size = hotbar_touch_page_button.get_combined_minimum_size()
 	if hotbar_page_label != null:
 		hotbar_page_label.text = "%d/%d" % [hotbar_current_page + 1, _hotbar_page_count()]
 	if hotbar_previous_page_button != null:

@@ -8,6 +8,7 @@ var checks := 0
 var failures: Array[String] = []
 var samples: Array[Dictionary] = []
 var manual := false
+var last_manual_page := -1
 var toolbar: PanelContainer
 
 
@@ -45,14 +46,15 @@ func _run() -> void:
 			overlay._set_hotbar_page(page)
 			await _settle()
 			await _sample(percentage, page)
+		overlay.hotbar_touch_page_button.pressed.emit()
+		_check(overlay.hotbar_current_page == 0, "one page button wraps from three to one")
 	_check(samples.size() == 9, "all nine screenshot samples completed")
 	root.get_node("SettingsManager").set_ui_scale(75)
 	overlay._set_hotbar_page(0)
 	await _settle()
 	manual = true
 	_build_toolbar()
-	overlay.hotbar_previous_page_button.pressed.connect(_record_manual_page)
-	overlay.hotbar_next_page_button.pressed.connect(_record_manual_page)
+	overlay.hotbar_touch_page_button.pressed.connect(_record_manual_page)
 	_write_report()
 	print("HOTBAR_PHONE_QA: %d checks, %d failures" % [checks, failures.size()])
 	quit(0 if failures.is_empty() else 1)
@@ -60,6 +62,12 @@ func _run() -> void:
 
 func _quick_buttons() -> Array[Control]:
 	return [overlay.donator_store_button, overlay.settings_button, overlay.mount_button, overlay.skills_button, overlay.my_powers_button]
+
+
+func _process(_delta: float) -> void:
+	if manual and overlay.hotbar_current_page != last_manual_page:
+		last_manual_page = overlay.hotbar_current_page
+		_write_report()
 
 
 func _settle() -> void:
@@ -77,15 +85,31 @@ func _sample(percentage: int, page: int) -> void:
 	_check(overlay.hotbar_page_label.text == "%d/3" % (page + 1), "three-page indicator")
 	var hotbar := _screen_rect(overlay.hotkey_sidebar_panel)
 	_check(Rect2(Vector2.ZERO, Vector2(root.size)).grow(1).encloses(hotbar), "hotbar within screen")
+	var pager := _screen_rect(overlay.hotbar_touch_page_button)
+	var density := Target.pixel_density()
+	_check(overlay.hotbar_touch_page_button.visible and not overlay.hotbar_page_controls.visible, "single native page button")
+	_check(overlay.hotbar_touch_page_button.text == "%d/3 ›" % (page + 1), "readable page button label")
+	_check(pager.size.x / density >= 48.0 and pager.size.y / density >= 48.0, "48 dp page target")
+	_check(float(overlay.hotbar_touch_page_button.get_theme_font_size("font_size")) * Target.screen_scale(overlay.hotbar_touch_page_button).y >= 11.0, "readable page text")
+	var style := overlay.hotbar_touch_page_button.get_theme_stylebox("normal") as StyleBoxFlat
+	var visual := Rect2(Vector2.ZERO, overlay.hotbar_touch_page_button.size).grow_individual(style.expand_margin_left, style.expand_margin_top, style.expand_margin_right, style.expand_margin_bottom)
+	_check((visual.size * Target.screen_scale(overlay.hotbar_touch_page_button)).is_equal_approx(Vector2(36, 22)), "compact 36 by 22 dp visible page label")
+	_check(Rect2(Vector2.ZERO, Vector2(root.size)).grow(1).encloses(pager), "page button within screen")
+	_check(not pager.intersects(hotbar), "page button clears the item slots")
+	_check(overlay.is_point_over_visible_ui(overlay.hotbar_touch_page_button.get_global_rect().get_center()), "page button blocks world movement")
 	var buttons: Dictionary = {}
 	for button: Control in _quick_buttons() + [overlay.personal_buffs_panel, overlay.player_status_panel]:
 		var rect := _screen_rect(button)
 		buttons[button.name] = _rect_data(rect)
 		_check(not hotbar.intersects(rect), "hotbar and pager clear %s at %d%% page %d" % [button.name, percentage, page + 1])
+		_check(not pager.intersects(rect), "page button clears " + button.name)
+	for state: Dictionary in overlay.collapsible_panels.values():
+		if state["button"].visible:
+			_check(not pager.intersects(_screen_rect(state["button"])), "page button clears collapse arrow")
 	var screenshot := "hotbar-%d-page-%d.png" % [percentage, page + 1]
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png("user://" + screenshot)
-	samples.append({"scale": percentage, "page": page + 1, "visibleSlots": visible_slots, "hotbar": _rect_data(hotbar), "quickButtons": buttons, "screenshot": screenshot})
+	samples.append({"scale": percentage, "page": page + 1, "visibleSlots": visible_slots, "hotbar": _rect_data(hotbar), "pageButton": _rect_data(pager), "pageButtonWidthDp": pager.size.x / density, "pageButtonHeightDp": pager.size.y / density, "quickButtons": buttons, "screenshot": screenshot})
 
 
 func _screen_rect(control: Control) -> Rect2:
@@ -109,7 +133,7 @@ func _build_toolbar() -> void:
 	var box := VBoxContainer.new()
 	toolbar.add_child(box)
 	var label := Label.new()
-	label.text = "Hotbar: %d controles, %d fouten\nProbeer de pijltjes rechts handmatig." % [checks, failures.size()]
+	label.text = "Hotbar: %d controles, %d fouten\nTik op de paginaknop of veeg over een slot." % [checks, failures.size()]
 	label.add_theme_font_size_override("font_size", 16)
 	box.add_child(label)
 	var row := HBoxContainer.new()

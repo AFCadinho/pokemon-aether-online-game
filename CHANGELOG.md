@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replace the tiny native Android hotbar arrows with one readable page button and a 48 dp touch target; swipe left or right across a slot to change pages without using its item.
+
 - Add an Official Daycare forum guide covering training, Aethering, Wings and Nature treatments, with links from all three Daycare service windows.
 
 - Keep the compact Android hotbar and its page arrows clear of the bottom-right quick buttons, buffs and trainer card at larger UI scales.

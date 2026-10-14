@@ -11,6 +11,9 @@ var target: Control
 var input_handler: Callable
 var context_handler: Callable
 var tap_handler: Callable
+var horizontal_swipe_handler: Callable
+var horizontal_swipe_distance := 24.0
+var swipe_moved := false
 var pending := false
 var held := false
 var cancelled := false
@@ -71,6 +74,7 @@ func _begin() -> void:
 	pending = true
 	held = false
 	cancelled = false
+	swipe_moved = false
 	duration = 0.0
 	set_process(true)
 	set_process_input(true)
@@ -82,6 +86,8 @@ func _process(delta: float) -> void:
 	if target != null and (not target.is_visible_in_tree() or (target is BaseButton and target.disabled)):
 		pending = false
 		cancelled = true
+		return
+	if swipe_moved:
 		return
 	duration += delta
 	if duration < HOLD_SECONDS:
@@ -163,6 +169,21 @@ func _input(event: InputEvent) -> void:
 	if not event is InputEventMouse or event.device != InputEvent.DEVICE_ID_EMULATION:
 		return
 	if event is InputEventMouseMotion:
+		if pending and not tracking_touch and horizontal_swipe_handler.is_valid():
+			var displacement: Vector2 = event.position - start_position
+			if absf(displacement.x) > MOVE_TOLERANCE and absf(displacement.x) > absf(displacement.y):
+				swipe_moved = true
+				if absf(displacement.x) >= horizontal_swipe_distance:
+					pending = false
+					cancelled = true
+					horizontal_swipe_handler.call(1 if displacement.x < 0.0 else -1)
+				get_viewport().set_input_as_handled()
+				return
+			if swipe_moved:
+				pending = false
+				cancelled = true
+				get_viewport().set_input_as_handled()
+				return
 		if pending and not tracking_touch and event.position.distance_to(start_position) > MOVE_TOLERANCE:
 			# Hand the original press back to Godot, then let this motion and its
 			# release use the existing native/custom drag path.
@@ -176,7 +197,7 @@ func _input(event: InputEvent) -> void:
 			# whether a short world tap should interact.
 			get_viewport().set_input_as_handled()
 			return
-		var was_tap: bool = pending and not tracking_touch and not event.canceled
+		var was_tap: bool = pending and not tracking_touch and not swipe_moved and not event.canceled
 		var position: Vector2 = event.position
 		_finish()
 		if was_tap:
@@ -218,6 +239,7 @@ func _finish() -> void:
 	held = false
 	cancelled = false
 	tracking_touch = false
+	swipe_moved = false
 	set_process(false)
 	set_process_input(false)
 
