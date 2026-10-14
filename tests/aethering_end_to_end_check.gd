@@ -35,6 +35,9 @@ func _automatic_preview() -> void:
 	await _idle()
 
 func _run() -> void:
+	var collector = load("res://tests/aethering_completion_feedback_check.gd").MessageCollector.new()
+	root.add_child(collector)
+	collector.add_to_group("ui_overlay")
 	var info := await _fixture("/fixture")
 	if info.is_empty():
 		push_error("Run with isolated tests/aethering_daycare_fixture_app.py")
@@ -90,11 +93,11 @@ func _run() -> void:
 	_check(popup.plan["stats"]["hp"]["mode"] == "recipient_lock" and popup.plan["stats"]["spd"]["mode"] == "donor_lock", "Both lock modes shown")
 	if DisplayServer.get_name() != "headless":
 		await process_frame
-		await RenderingServer.frame_post_draw
+		RenderingServer.force_draw()
 		root.get_texture().get_image().save_png("/tmp/aethering-preview-desktop.png")
 		popup.donor_options.show_popup()
 		await process_frame
-		await RenderingServer.frame_post_draw
+		RenderingServer.force_draw()
 		root.get_texture().get_image().save_png("/tmp/aethering-preview-dropdown.png")
 		popup.donor_options.get_popup().hide()
 	popup._ask_confirm()
@@ -108,6 +111,7 @@ func _run() -> void:
 	dialog.confirmed.emit()
 	await _idle()
 	_check(not api.get("pending").is_empty(), "Lost committed response retains retry receipt")
+	_check(collector.messages.is_empty(), "Lost response does not announce an unconfirmed success")
 	var request_id: String = api.get("pending")["requestId"]
 	var after_commit := await _fixture("/fixture")
 	_check(after_commit["audits"] == 1 and after_commit["money"] == 30000, "One actual atomic consumption after lost response")
@@ -115,6 +119,7 @@ func _run() -> void:
 	await popup._ask_confirm()
 	await _idle()
 	_check(api.get("pending").get("requestId", "") == request_id, "Auth expiry retains unresolved UUID")
+	_check(collector.messages.is_empty(), "Auth failure does not announce success")
 	auth.set("session_token", "aethering-disposable-ui-fixture")
 	await popup._ask_confirm()
 	await _idle()
@@ -123,7 +128,14 @@ func _run() -> void:
 	_check(popup._find(int(info["donorId"])).is_empty(), "Consumed Party Donor removed from picker")
 	_check(popup._wing_count("health-wing") == 2 and popup._wing_count("clever-wing") == 2, "Only selected Wings consumed and inventory refreshed")
 	_check(root.get_node("PlayerSave").get("money") == 30000, "Wallet refreshed after successful replay")
-	_check(popup.results.visible and popup.results.text.contains("→"), "Real IV result displayed")
+	_check(popup.result_panel.visible and popup.results.visible and popup.result_grid.get_child_count() == 28, "Real IV result displayed")
+	_check(collector.messages.size() == 1 and collector.messages[0].contains("Aethering"), "Recovered commit announces success exactly once")
+	popup._publish_result_feedback()
+	popup._render_result()
+	await popup.refresh()
+	_check(collector.messages.size() == 1, "Replay, rerender and resource refresh do not repeat completion feedback")
+	_check(popup.result_before.get("hp") == 10 and popup.result_before.get("spd") == 10, "Original preview IVs retained after replay")
+	var successful_before: Dictionary = popup.result_before.duplicate(true)
 	# A new donor can be selected immediately. Stale preview must not charge.
 	popup.donor = popup._find(int(info["nextDonorId"]))
 	popup.recipient_lock = null
@@ -135,6 +147,8 @@ func _run() -> void:
 	api.call("begin_confirmation", popup.plan, {"recipient": popup.recipient, "donor": popup.donor})
 	await popup._execute()
 	_check(popup.plan.is_empty() and api.get("pending").is_empty(), "Stale preview discarded without retrying a new roll")
+	_check(collector.messages.size() == 1, "Rejected stale preview produces no completion message")
+	_check(popup.result_before == successful_before, "Failed later rituals preserve the previous successful comparison")
 	var final_state := await _fixture("/fixture")
 	_check(final_state["audits"] == 1 and final_state["money"] == 30000, "No double consumption or cost after replay/stale preview")
 	if not DisplayServer.get_name() == "headless":
@@ -142,7 +156,7 @@ func _run() -> void:
 		popup._render()
 		popup.status.text = popup._t("success")
 		await process_frame
-		await RenderingServer.frame_post_draw
+		RenderingServer.force_draw()
 		root.get_texture().get_image().save_png("/tmp/aethering-desktop.png")
 		var window_fit := root.get_node("WindowFit")
 		var resize_handler := Callable(window_fit, "apply_ui_scale")
@@ -168,5 +182,6 @@ func _run() -> void:
 	auth.set("session_token", "")
 	auth.set("current_user", {})
 	popup.free()
+	collector.free()
 	print("AETHERING END TO END failures: ", failures)
 	quit(1 if failures else 0)

@@ -10,7 +10,19 @@ const GREEN := Color("70d6a1")
 const RED := Color("ef7085")
 const STAT_COLORS: Array[Color] = [Color("70d6a1"), Color("ef9b78"), Color("e4c66c"), Color("9ba9ef"), Color("c697df"), Color("69d8e7")]
 var guide_button: Button
-var pokemon_select: OptionButton
+var pokemon_select: Button
+var selected_index := -1
+var party_entries: Array = []
+var picker: Control
+var picker_panel: PanelContainer
+var picker_grid: GridContainer
+var picker_hint: Label
+var picker_title: Label
+var picker_cancel: Button
+var picker_close: Button
+var picker_rows: Array = []
+var picker_buttons: Array[Button] = []
+var picker_compact := false
 var exp_check: CheckBox
 var ev_check: CheckBox
 var level_input: SpinBox
@@ -209,11 +221,10 @@ func _ready() -> void:
 	var selection_card := _card(pokemon_column)
 	var selection_title := _label(_t("choose_pokemon"), selection_card)
 	selection_title.add_theme_color_override("font_color", CYAN)
-	pokemon_select = OptionButton.new()
+	pokemon_select = _button(_t("choose_pokemon"), selection_card, _open_picker)
 	pokemon_select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_select.clip_text = true
-	pokemon_select.item_selected.connect(_pokemon_changed)
-	selection_card.add_child(pokemon_select)
+	_build_picker()
 	current_label = _label("", selection_card)
 	current_label.add_theme_color_override("font_color", MUTED)
 	current_label.add_theme_font_size_override("font_size", 12)
@@ -316,7 +327,6 @@ func _ready() -> void:
 	confirmation = preload("res://scenes/interface/aether_confirmation_dialog.tscn").instantiate() as AetherConfirmationDialog
 	add_child(confirmation)
 	confirmation.confirmed.connect(_confirm)
-	confirmation.style_option_button(pokemon_select)
 	confirmation.style_spin_box(level_input)
 	confirmation.style_checkbox(exp_check)
 	confirmation.style_checkbox(ev_check)
@@ -369,8 +379,10 @@ func _fit_window() -> void:
 	# Keep the same frame across modes, quotes, tabs and loading states.
 	size.y = minf(720, screen.y - 32)
 	position = (screen - size) * 0.5
+	_fit_picker()
 
 func open_daycare() -> void:
+	picker.hide()
 	visible = true
 	generation += 1
 	quote.clear()
@@ -381,14 +393,15 @@ func close_popup() -> void:
 		return
 	generation += 1
 	confirmation.hide_dialog()
+	picker.hide()
 	visible = false
 	closed.emit()
 
 func _set_busy(value: bool) -> void:
 	busy = value
-	var pending := not DaycareService.pending_request.is_empty()
-	pokemon_select.disabled = value or pending or entries.is_empty()
-	var current_level := int(entries[pokemon_select.selected].get("pokemon", {}).get("level", 1)) if not entries.is_empty() else 100
+	var pending := not DaycareService.pending_request.is_empty() or picker.visible
+	pokemon_select.disabled = value or pending or party_entries.is_empty()
+	var current_level := int(entries[selected_index].get("pokemon", {}).get("level", 1)) if not entries.is_empty() else 100
 	exp_check.disabled = value or pending or entries.is_empty() or current_level >= daycare_cap
 	ev_check.disabled = value or pending or entries.is_empty()
 	ev_details.visible = ev_check.button_pressed
@@ -397,12 +410,14 @@ func _set_busy(value: bool) -> void:
 		(ev_inputs[stat] as SpinBox).editable = not value and not pending and ev_check.button_pressed and not entries.is_empty()
 	preview_button.disabled = value or pending or entries.is_empty() or jobs.size() >= 6 or not (exp_check.button_pressed or ev_check.button_pressed)
 	confirm_button.disabled = value or pending or quote.is_empty()
-	close_button.disabled = value
-	refresh_button.disabled = value
-	retry_button.visible = pending
+	close_button.disabled = value or picker.visible
+	refresh_button.disabled = value or picker.visible
+	retry_button.visible = not DaycareService.pending_request.is_empty()
 	retry_button.disabled = value
 	_tab_changed(tabs.current_tab)
 	_tick()
+	if picker.visible:
+		_render_picker()
 
 func _load_state() -> void:
 	if busy:
@@ -420,26 +435,26 @@ func _load_state() -> void:
 	_set_busy(false)
 
 func _apply_state(data: Dictionary) -> void:
+	var previous_id := _entry_id(entries[selected_index]) if selected_index >= 0 and selected_index < entries.size() else 0
 	state_loaded = true
-	entries = data.get("pokemon", []).filter(func(entry: Dictionary) -> bool: return str(entry.get("location", {}).get("type", "")) == "party")
+	entries = data.get("pokemon", []).filter(_is_party_entry)
+	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a["location"]["partySlot"]) < int(b["location"]["partySlot"]))
+	party_entries = data.get("party", data.get("pokemon", [])).filter(_is_party_entry)
+	selected_index = -1 if entries.is_empty() else 0
+	for index in range(entries.size()):
+		if _entry_id(entries[index]) == previous_id:
+			selected_index = index
 	jobs = data.get("jobs", [])
-	training_form.visible = not entries.is_empty()
-	training_notice.get_parent().visible = entries.is_empty()
+	training_form.visible = not party_entries.is_empty()
+	training_notice.get_parent().visible = party_entries.is_empty()
 	notice_label.text = _t("no_pokemon")
 	notice_label.add_theme_color_override("font_color", MUTED)
 	daycare_cap = int(data.get("daycareLevelCap", 5))
 	clock_ticks = Time.get_ticks_msec()
-	pokemon_select.clear()
-	for entry: Dictionary in entries:
-		var p: Dictionary = entry.get("pokemon", {})
-		var location: Dictionary = entry.get("location", {})
-		var place := _t("party_slot", {"slot": int(location.get("partySlot", 0)) + 1}) if str(location.get("type", "")) == "party" else _t("box_slot", {"box": int(location.get("boxIndex", 0)) + 1, "slot": int(location.get("slotIndex", 0)) + 1})
-		pokemon_select.add_item("%s · Lv.%s · %s" % [_name(p), _number(p.get("level", 1)), place])
-	if entries.is_empty():
-		pokemon_select.add_item(_t("no_pokemon"))
 	_clear_quote()
 	_pokemon_changed(0)
 	_build_jobs()
+	_render_picker()
 	_status(_t("state", {"count": jobs.size(), "money": _number(data.get("money", 0)), "cap": daycare_cap}))
 	if not DaycareService.pending_request.is_empty():
 		_status(_t("pending"))
@@ -451,9 +466,14 @@ func _name(pokemon: Dictionary) -> String:
 func _pokemon_changed(_index: int) -> void:
 	_clear_quote()
 	if entries.is_empty():
+		pokemon_select.text = _t("choose_pokemon")
+		exp_check.set_pressed_no_signal(false)
+		ev_check.set_pressed_no_signal(false)
 		current_label.text = _t("no_pokemon")
+		_set_busy(busy)
 		return
-	var p: Dictionary = entries[pokemon_select.selected].get("pokemon", {})
+	var p: Dictionary = entries[selected_index].get("pokemon", {})
+	pokemon_select.text = "%s · Lv.%s · %s" % [_name(p), _number(p.get("level", 1)), _t("party_slot", {"slot": int(entries[selected_index]["location"]["partySlot"]) + 1})]
 	var level := int(p.get("level", 1))
 	level_input.max_value = max(daycare_cap, level)
 	level_input.min_value = level
@@ -478,7 +498,7 @@ func _targets_changed(_value: Variant) -> void:
 func _selection() -> Dictionary:
 	if entries.is_empty():
 		return {}
-	var p: Dictionary = entries[pokemon_select.selected].get("pokemon", {})
+	var p: Dictionary = entries[selected_index].get("pokemon", {})
 	var selection := {"pokemonId": int(p.get("ownedPokemonId", p.get("pokemonId", 0)))}
 	if exp_check.button_pressed:
 		selection["targetLevel"] = int(level_input.value)
@@ -490,7 +510,7 @@ func _selection() -> Dictionary:
 	return selection
 
 func _preview() -> void:
-	if busy or entries.is_empty():
+	if busy or picker.visible or entries.is_empty():
 		return
 	if ev_check.button_pressed:
 		var total := 0
@@ -519,7 +539,7 @@ func _show_quote(data: Dictionary) -> void:
 	var exp_selected := bool(data.get("expSelected", exp_check.button_pressed))
 	var ev_selected := bool(data.get("evSelected", ev_check.button_pressed))
 	if exp_selected:
-		var current_level := int(entries[pokemon_select.selected].get("pokemon", {}).get("level", 1)) if not entries.is_empty() else 1
+		var current_level := int(entries[selected_index].get("pokemon", {}).get("level", 1)) if not entries.is_empty() else 1
 		lines.append(_t("summary_exp", {"start": _number(data.get("startLevel", current_level)), "level": _number(data.get("targetLevel", 1)), "experience": _number(data.get("requiredExperience", 0)), "time": _duration(int(data.get("expDurationSeconds", 0)))}))
 	else:
 		lines.append(_t("summary_no_exp", {"level": _number(data.get("targetLevel", 1))}))
@@ -546,13 +566,13 @@ func _show_quote(data: Dictionary) -> void:
 	_status(_t("review"))
 
 func _ask_confirm() -> void:
-	if busy or quote.is_empty():
+	if busy or picker.visible or quote.is_empty():
 		return
 	confirmation.configure(_t("title"), _t("confirmation", {"price": _number(quote.get("price", 0)), "time": _duration(int(quote.get("durationSeconds", 0)))}), _t("deposit"), LocalizationManager.text("common.cancel"))
 	confirmation.popup_centered()
 
 func _confirm() -> void:
-	if busy or quote.is_empty():
+	if busy or picker.visible or quote.is_empty():
 		return
 	confirmation.hide_dialog()
 	_set_busy(true)
@@ -664,3 +684,192 @@ func _tick() -> void:
 
 func _duration(seconds: int) -> String:
 	return "%02d:%02d:%02d" % [int(seconds / 3600), int((seconds % 3600) / 60), seconds % 60]
+
+static func _entry_id(entry: Dictionary) -> int:
+	var pokemon: Dictionary = entry.get("pokemon", {})
+	return int(pokemon.get("ownedPokemonId", pokemon.get("pokemonId", 0)))
+
+static func _is_party_entry(entry: Dictionary) -> bool:
+	var location: Dictionary = entry.get("location", {})
+	return location.get("type") == "party" and int(location.get("partySlot", -1)) >= 0 and int(location.get("partySlot", -1)) < 6
+
+func _picker_reason(entry: Dictionary) -> String:
+	if entry.is_empty():
+		return _t("picker.empty")
+	if not bool(entry.get("eligible", true)):
+		var code := str(entry.get("blockedReason", ""))
+		var key := "ui.daycare.picker.reason." + code
+		var translated := LocalizationManager.text(key)
+		return _t("picker.unavailable") if translated == key else translated
+	for candidate: Dictionary in entries:
+		if _entry_id(candidate) == _entry_id(entry):
+			return ""
+	return _t("picker.unavailable")
+
+func _picker_label(text_value: String, color: Color, font_size: int) -> Label:
+	var label := Label.new()
+	label.text = text_value
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_font_size_override("font_size", font_size)
+	return label
+
+func _build_picker() -> void:
+	picker = Control.new()
+	picker.name = "PartyPicker"
+	picker.top_level = true
+	picker.z_index = 4096
+	picker.mouse_filter = Control.MOUSE_FILTER_STOP
+	picker.hide()
+	add_child(picker)
+	var shade := ColorRect.new()
+	shade.color = Color(0.0, 0.02, 0.04, 0.8)
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	picker.add_child(shade)
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	picker.add_child(center)
+	picker_panel = PanelContainer.new()
+	picker_panel.add_theme_stylebox_override("panel", _surface(Color("07101c"), CYAN.darkened(0.4), 12))
+	center.add_child(picker_panel)
+	var stack := VBoxContainer.new()
+	stack.add_theme_constant_override("separation", 8)
+	picker_panel.add_child(stack)
+	var header := HBoxContainer.new()
+	stack.add_child(header)
+	picker_title = _label(_t("choose_pokemon"), header)
+	picker_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	picker_title.clip_text = true
+	picker_title.add_theme_font_size_override("font_size", 20)
+	picker_title.add_theme_color_override("font_color", CYAN)
+	picker_close = _button("×", header, _close_picker)
+	picker_close.tooltip_text = LocalizationManager.text("common.close")
+	picker_hint = _label(_t("picker.hint"), stack)
+	picker_hint.add_theme_color_override("font_color", MUTED)
+	picker_hint.add_theme_font_size_override("font_size", 12)
+	picker_grid = GridContainer.new()
+	picker_grid.add_theme_constant_override("h_separation", 8)
+	picker_grid.add_theme_constant_override("v_separation", 8)
+	stack.add_child(picker_grid)
+	picker_cancel = _button(LocalizationManager.text("common.cancel"), stack, _close_picker)
+
+func _fit_picker() -> void:
+	if picker == null:
+		return
+	var screen := get_viewport_rect().size
+	picker.global_position = Vector2.ZERO
+	picker.size = screen
+	picker_panel.custom_minimum_size.x = minf(1120, screen.x - 24)
+	var columns := 6 if screen.x >= 900 else 3 if screen.x >= 500 else 2
+	var compact := screen.y < 700 or columns == 2
+	var changed := picker_grid.columns != columns or picker_compact != compact
+	picker_grid.columns = columns
+	picker_compact = compact
+	picker_hint.visible = not compact
+	if changed and picker.visible:
+		_render_picker()
+
+func _open_picker() -> void:
+	if busy or not state_loaded or party_entries.is_empty() or not DaycareService.pending_request.is_empty() or confirmation.visible:
+		return
+	picker.show()
+	_fit_picker()
+	_set_busy(busy)
+
+func _close_picker() -> void:
+	picker.hide()
+	_set_busy(busy)
+	if is_visible_in_tree() and not pokemon_select.disabled:
+		pokemon_select.grab_focus()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if picker.visible and event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		_close_picker()
+
+func _render_picker() -> void:
+	var focused_slot := picker_buttons.find(get_viewport().gui_get_focus_owner())
+	for child: Node in picker_grid.get_children():
+		picker_grid.remove_child(child)
+		child.queue_free()
+	picker_buttons.clear()
+	picker_rows = [{}, {}, {}, {}, {}, {}]
+	for entry: Dictionary in party_entries:
+		picker_rows[int(entry["location"]["partySlot"])] = entry
+	picker_title.text = _t("choose_pokemon")
+	picker_hint.text = _t("picker.hint")
+	picker_cancel.text = LocalizationManager.text("common.cancel")
+	for slot in range(6):
+		var entry: Dictionary = picker_rows[slot]
+		var reason := _picker_reason(entry)
+		var selected := not entry.is_empty() and selected_index >= 0 and _entry_id(entry) == _entry_id(entries[selected_index])
+		var button := _button("", picker_grid, _picker_pressed.bind(slot, _entry_id(entry)))
+		_style_button(button, selected)
+		button.custom_minimum_size = Vector2(0, (126 if get_viewport_rect().size.y >= 500 else 104) if picker_compact else 220)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.disabled = not reason.is_empty() or busy or not DaycareService.pending_request.is_empty()
+		picker_buttons.append(button)
+		var content := VBoxContainer.new()
+		content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		content.offset_left = 6
+		content.offset_right = -6
+		content.offset_top = 6
+		content.offset_bottom = -6
+		content.add_theme_constant_override("separation", 2)
+		button.add_child(content)
+		content.add_child(_picker_label(_t("party_slot", {"slot": slot + 1}), MUTED, 10 if picker_compact else 12))
+		var pokemon: Dictionary = entry.get("pokemon", {})
+		var sprite := TextureRect.new()
+		sprite.custom_minimum_size.y = (40 if get_viewport_rect().size.y >= 500 else 24) if picker_compact else 64
+		sprite.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if not entry.is_empty():
+			sprite.texture = PokemonAssets.load_home_sprite(str(pokemon.get("speciesId", pokemon.get("species", ""))), bool(pokemon.get("shiny", false)))
+			sprite.modulate.a = 1.0 if reason.is_empty() else 0.45
+		content.add_child(sprite)
+		var name_label := _picker_label(_t("picker.empty") if entry.is_empty() else _name(pokemon) + (" ★" if pokemon.get("shiny", false) else ""), MUTED if entry.is_empty() else CYAN, 12 if picker_compact else 14)
+		name_label.max_lines_visible = 1 if picker_compact else 2
+		name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		content.add_child(name_label)
+		content.add_child(_picker_label("—" if entry.is_empty() else _t("picker.level", {"level": _number(pokemon.get("level", 1))}), MUTED, 10 if picker_compact else 12))
+		var state_label := _picker_label(reason if not reason.is_empty() else _t("picker.selected" if selected else "picker.available"), GREEN if reason.is_empty() else MUTED if entry.is_empty() else RED, 10 if picker_compact else 12)
+		state_label.max_lines_visible = 1 if picker_compact else 2
+		state_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		content.add_child(state_label)
+		button.tooltip_text = _t("picker.empty") if entry.is_empty() else "\n".join([_name(pokemon), _t("party_slot", {"slot": slot + 1}), _t("picker.level", {"level": _number(pokemon.get("level", 1))}), reason])
+	var focus_order: Array[Button] = [picker_close]
+	for button: Button in picker_buttons:
+		if not button.disabled:
+			focus_order.append(button)
+	focus_order.append(picker_cancel)
+	for index in range(focus_order.size()):
+		var button := focus_order[index]
+		button.focus_next = button.get_path_to(focus_order[(index + 1) % focus_order.size()])
+		button.focus_previous = button.get_path_to(focus_order[(index - 1 + focus_order.size()) % focus_order.size()])
+	if picker.is_visible_in_tree():
+		if focused_slot >= 0 and not picker_buttons[focused_slot].disabled:
+			picker_buttons[focused_slot].grab_focus()
+		else:
+			(focus_order[1] if focus_order.size() > 2 else picker_cancel).grab_focus()
+
+func _picker_pressed(slot: int, expected_id: int) -> void:
+	if busy or not picker.visible or not DaycareService.pending_request.is_empty() or slot < 0 or slot >= picker_rows.size():
+		return
+	var entry: Dictionary = picker_rows[slot]
+	if _entry_id(entry) != expected_id or not _picker_reason(entry).is_empty():
+		return
+	for index in range(entries.size()):
+		if _entry_id(entries[index]) == expected_id:
+			var changed := selected_index != index
+			selected_index = index
+			picker.hide()
+			if changed:
+				_pokemon_changed(index)
+			_set_busy(busy)
+			pokemon_select.grab_focus()
+			return

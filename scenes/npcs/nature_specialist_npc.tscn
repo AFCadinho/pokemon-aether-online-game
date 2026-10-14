@@ -12,15 +12,15 @@ region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_left"]
 atlas = ExtResource("3_gardener")
-region = Rect2(0, 128, 64, 64)
+region = Rect2(0, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_right"]
 atlas = ExtResource("3_gardener")
-region = Rect2(0, 192, 64, 64)
+region = Rect2(0, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_up"]
 atlas = ExtResource("3_gardener")
-region = Rect2(0, 64, 64, 64)
+region = Rect2(0, 192, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gardener"]
 animations = [{

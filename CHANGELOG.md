@@ -2,13 +2,20 @@
 
 ## Unreleased
 
-- Make Android hotbar paging easier with one page counter inside its frame, extra invisible touch padding and left/right swipes that keep ordinary slot taps intact.
+- Make completed Aethering immediately visible with before/after IVs, gains and losses, a short system message and one confirmation sound, including recovered confirmations.
+- Choose Daycare training Pokémon in a separate six-slot Party popup, ordered by their actual Party slots, with Pokémon art, levels and unavailable-member reasons.
+
+- Make Android hotbar paging easier with one styled page counter inside its frame, extra invisible touch padding and left/right swipes that keep ordinary slot taps intact.
 
 - Add an Official Daycare forum guide covering training, Aethering, Wings and Nature treatments, with links from all three Daycare service windows.
 
 - Keep the compact Android hotbar and its page arrows clear of the bottom-right quick buttons, buffs and trainer card at larger UI scales.
 
 - Compact the Nature Specialist for desktop and mobile with a horizontal stat comparison, optional IV details and pinned payment actions. Explain unchanged nature selections before requesting a comparison.
+
+- Correct the Nature Specialist's left, right and up sprite rows so the Daycare's configured left-facing direction displays correctly.
+
+- Highlight the current-to-selected effective nature beside the Nature Specialist's fee and include both natures in the final paid confirmation; keep its guide/header compact on narrow screens.
 
 - Show each training Pokémon's icon beside its name and goals in the Daycare, including the matching shiny appearance.
 
