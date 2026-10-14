@@ -3,6 +3,7 @@ extends RefCounted
 var arena_ref: WeakRef
 var grass: Array[AABB] = []
 var props: Array[AABB] = []
+var prop_batches: Array[Dictionary] = []
 const MARGIN := 0.4
 const MAX_LIFT := 12.0
 
@@ -11,6 +12,7 @@ func prepare(arena: Node3D) -> void:
 		return
 	grass.clear()
 	props.clear()
+	prop_batches.clear()
 	arena_ref = weakref(arena) if is_instance_valid(arena) else null
 	if is_instance_valid(arena):
 		_collect(arena, false)
@@ -19,7 +21,20 @@ func _collect(node: Node, is_grass: bool) -> void:
 	if node is Node3D and not node.is_visible_in_tree():
 		return
 	is_grass = is_grass or node.name == "SharedForestGrass"
-	if node is MeshInstance3D or node is MultiMeshInstance3D:
+	if node is MultiMeshInstance3D and not is_grass and node.multimesh != null and node.multimesh.mesh is BoxMesh:
+		# Stadium walls, stairs and overhead beams share one draw batch. Its
+		# combined bounds fill the empty space between them, including the court.
+		var boxes: Array[AABB] = []
+		var batch: MultiMesh = node.multimesh
+		var count := batch.instance_count if batch.visible_instance_count<0 else mini(batch.instance_count,batch.visible_instance_count)
+		for i in count:
+			var box: AABB = node.global_transform*batch.get_instance_transform(i)*batch.mesh.get_aabb()
+			if box.size.y>.35: boxes.append(box.grow(MARGIN))
+		if not boxes.is_empty():
+			var bounds := boxes[0]
+			for box in boxes: bounds=bounds.merge(box)
+			prop_batches.append({"bounds":bounds,"boxes":boxes})
+	elif node is MeshInstance3D or node is MultiMeshInstance3D:
 		var box: AABB = node.global_transform * node.get_aabb()
 		# Flat ground/water is the shot's floor, not an upright obstruction.
 		if box.size.y > 0.35 and node.name != "MeshTerrain":
@@ -29,7 +44,7 @@ func _collect(node: Node, is_grass: bool) -> void:
 		_collect(child, is_grass)
 
 func apply(camera: Camera3D, focus: Vector3, overview: Transform3D, weight: float) -> void:
-	if weight <= 0.0 or (grass.is_empty() and props.is_empty()):
+	if weight <= 0.0 or (grass.is_empty() and props.is_empty() and prop_batches.is_empty()):
 		return
 	var original := camera.transform
 	var eye := original.origin
@@ -45,15 +60,11 @@ func apply(camera: Camera3D, focus: Vector3, overview: Transform3D, weight: floa
 		for fraction in [interval.x, interval.y]:
 			var t: float = fraction * lens_fraction
 			minimum = maxf(minimum, (box.end.y - focus.y * t) / (1.0 - t))
-	for box in props:
-		if box.end.x < minf(eye.x, focus.x) or box.position.x > maxf(eye.x, focus.x) or box.end.z < minf(eye.z, focus.z) or box.position.z > maxf(eye.z, focus.z):
-			continue
-		var interval := _xz_interval(box, eye, focus)
-		if interval.x < 0.0 or box.has_point(focus):
-			continue
-		for t in [interval.x, interval.y]:
-			if t < 0.995:
-				minimum = maxf(minimum, (box.end.y - focus.y * t) / (1.0 - t))
+	minimum = maxf(minimum,_prop_minimum(props,eye,focus))
+	for batch in prop_batches:
+		var bounds: AABB = batch.bounds
+		if bounds.intersects_segment(eye,focus)!=null:
+			minimum = maxf(minimum,_prop_minimum(batch.boxes,eye,focus))
 	if minimum <= eye.y + 0.001:
 		return
 	if minimum > eye.y + MAX_LIFT:
@@ -64,6 +75,17 @@ func apply(camera: Camera3D, focus: Vector3, overview: Transform3D, weight: floa
 	camera.position.y = minimum + 0.05
 	camera.look_at(focus)
 	camera.transform = original.interpolate_with(camera.transform, weight)
+
+static func _prop_minimum(boxes: Array[AABB], eye: Vector3, focus: Vector3) -> float:
+	var minimum := eye.y
+	for box in boxes:
+		# Roofs above the complete ray are not camera obstructions.
+		if box.has_point(focus) or box.intersects_segment(eye,focus)==null: continue
+		var interval := _xz_interval(box,eye,focus)
+		for t in [interval.x,interval.y]:
+			if t>=0 and t<.995:
+				minimum=maxf(minimum,(box.end.y-focus.y*t)/(1.-t))
+	return minimum
 
 static func _xz_interval(box: AABB, start: Vector3, finish: Vector3) -> Vector2:
 	var low := 0.0

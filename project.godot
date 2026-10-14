@@ -22,6 +22,7 @@ config/android_test_compatible_build_id=""
 
 [autoload]
 
+DaycareService="*res://scripts/services/daycare_service.gd"
 NatureSpecialistService="*res://scripts/services/nature_specialist_service.gd"
 AetheringService="*res://scripts/services/aethering_service.gd"
 GameState="*uid://bvq8eki10oc8g"

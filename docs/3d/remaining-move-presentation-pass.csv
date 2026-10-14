@@ -634,7 +634,7 @@ roaroftime,Roar of Time,dragon,extended,beam,smooth elemental surfaces; joined d
 rockblast,Rock Blast,rock,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
 rockclimb,Rock Climb,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
 rockpolish,Rock Polish,rock,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
-rockslide,Rock Slide,rock,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+rockslide,Rock Slide,rock,extended,rain,five authored tumbling boulders; grounded debris and dust; native impact recoil,rockfall,0.25,pending player review
 rocksmash,Rock Smash,fighting,staged,heavy-punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
 rockthrow,Rock Throw,rock,staged,spinning-shards,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
 rocktomb,Rock Tomb,rock,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review

@@ -216,7 +216,19 @@ func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
 			if arc > 0 and Recipes.get_recipe(effect.key).family == "projectiles":
 				_append_box(points,source.lerp(aim,.5)+Vector3.UP*arc,Vector3.ONE*scale_value)
 	# Fitting a fixed shot envelope avoids camera pumping with every particle.
+	if effect.key == "rockslide" and seconds >= effect.launch:
+		points.clear()
+		_append_body(points,b)
+		# Separate fixed fall/impact shots: follow the landing without tracking
+		# individual rocks, and keep ground debris above the dialogue area.
+		var height: float = effect.RockSlide.fall_height(effect)+1.5 if seconds<effect.impact else 3.8
+		_append_box(points,effect.ground+Vector3.UP*height*.5,Vector3(3.5,height*.5,3.5))
+		direction = -forward*.5+side+Vector3.UP*(.3 if seconds<effect.impact else .5)
 	camera.transform = _fit(camera, points, direction.normalized())
+	if effect.key == "rockslide" and effect.hit and seconds >= effect.impact:
+		var after: float = (seconds-effect.impact)/maxf(.01,effect.duration-effect.impact)
+		var recoil: Vector2 = effect.RockSlide.recoil(after)
+		camera.position += camera.basis.x*recoil.x+camera.basis.y*recoil.y
 	camera.transform = camera.transform.interpolate_with(overview, smoothstep(0.88, 1.0, phase))
 	_clear_view(stage, overview, 1.0 - smoothstep(0.88, 1.0, phase))
 
