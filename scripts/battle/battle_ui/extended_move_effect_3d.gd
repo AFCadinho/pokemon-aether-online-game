@@ -5,8 +5,10 @@ var forms: RefCounted
 const Forms = preload("res://scripts/battle/battle_ui/move_volume_forms_3d.gd")
 const FieryWrath = preload("res://scripts/battle/battle_ui/fiery_wrath_forms_3d.gd")
 const RockSlide = preload("res://scripts/battle/battle_ui/rock_slide_forms_3d.gd")
+const RockGround = preload("res://scripts/battle/battle_ui/rock_ground_forms_3d.gd")
 var wrath: RefCounted
 var rock_slide: RefCounted
+var rock_ground: RefCounted
 var recipe: Dictionary
 var motif := ""
 var launched := false
@@ -67,6 +69,10 @@ func _prepare() -> void:
 	prepared = true
 	if key == "fierywrath": wrath = FieryWrath.new()
 	if key == "rockslide": rock_slide = RockSlide.new()
+	if key in RockGround.KEYS: rock_ground = RockGround.new()
+
+func _geometry_scale() -> float:
+	return 1.0 if key in RockGround.KEYS else super._geometry_scale()
 
 func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) -> bool:
 	if not prepared: _prepare()
@@ -103,6 +109,9 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 		return true
 	if rock_slide != null:
 		rock_slide.draw(self)
+		return true
+	if rock_ground != null:
+		rock_ground.draw(self)
 		return true
 	if motif in ["ram","rush","punch","kick","slash","fang","pierce","lash","spin","hammer","grip","vanish"]: _contact()
 	else:
