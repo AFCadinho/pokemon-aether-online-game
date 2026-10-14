@@ -76,7 +76,7 @@ func _emit(now: int) -> void:
 			record[key + "_msaa"] = view.msaa_3d
 	# Preparation dictionaries contain model names; allow only fixed numeric keys.
 	var prep := {}
-	for key in ["elapsed_ms", "forest_load_ms", "catalog_read_ms", "model_validation_ms", "arena_build_ms", "actor_build_ms", "render_warm_ms", "move_warm_ms", "move_warm_effects"]:
+	for key in ["elapsed_ms", "forest_load_ms", "catalog_read_ms", "model_validation_ms", "arena_build_ms", "actor_build_ms", "render_warm_ms", "move_warm_ms", "move_warm_effects", "download_check_ms", "entry_elapsed_ms", "verified_pair_handoff_hits"]:
 		var value: Variant = stage.preparation_metrics.get(key)
 		if value is float or value is int:
 			prep[key] = value

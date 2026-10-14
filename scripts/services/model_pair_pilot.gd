@@ -187,7 +187,9 @@ static func expand_index(value: Dictionary) -> Dictionary:
 	if enabled() and value.get("catalog_revision") == LEGACY_PRODUCTION.data.revision:
 		return _expand_index(value, _legacy_trusted())
 	if enabled() and value.get("catalog_revision") == PREVIOUS_PRODUCTION.data.revision:
-		return _expand_index(value, load(PREVIOUS_CATALOG_PATH).data)
+		# A pinned v14 USB build already owns this exact immutable compiled cohort.
+		# Reuse it instead of reparsing its large JSON for every cached encounter.
+		return _expand_index(value, catalog() if production_v14() else load(PREVIOUS_CATALOG_PATH).data)
 	return _expand_index(value, catalog() if enabled() else {})
 
 static func compact_entries(entries: Array) -> Array:

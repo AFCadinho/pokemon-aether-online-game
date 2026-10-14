@@ -2,12 +2,111 @@
 
 ## Android touch camera and bounded move preparation
 
+The user confirmed that trial `0.3.109-3d-perf.8` clears foreground grass and
+keeps the world-to-battle fade, but reported that entry still feels slow with
+installed assets. Its numeric logs recorded preparing windows of 2.106 s for
+the first entry and 0.849 s for the repeat. The repeated sample had 130 ms of
+presenter model validation, 80 ms of render warmup, 2 ms of actor construction
+and negligible arena construction. `forest_load_ms` is a historical session
+value, not a second forest load. These are preparation windows, not complete
+network-plus-entry timings.
+
+The downloader now hands its fresh full shared-pack inspection to the
+presenter. Qualified runtime identity, bytes, namespace, manifest, physical
+path and pack hash must match. Local catalogs cannot supply this receipt.
+Cold imports retain their full after-load verification; RAM reuse still uses
+the bounded hash/pack/timing cache key. Importing waits for the current pair
+handoff instead of starting a duplicate inspection concurrently. No session
+stat-based verification cache or larger RAM cache is introduced.
+Previously rendered Android resources in the same pooled viewport need one
+stable render sample instead of two, followed by restoration of summon
+visibility. Installed, verified Android assets use a 0.12 s fade with at least
+six blend steps; desktop and download/fallback entry retain the existing fade.
+The explicit USB probe records downloader/entry duration and numeric host
+ready/fade/total timings to distinguish network waiting from local work.
+The native real-pack handoff check covers normal/shiny appearances, mismatched
+receipts, cold after-load inspection and warm RAM reuse. Held-download camera
+entry and fullscreen fade/handoff/cancellation checks remain focused guards.
+
+USB trial `0.3.109-3d-perf.9` (code 39, source `f677962de`) passed signed
+ARM64 Mobile export checks and was installed on the SM-S938B without clearing
+game data. It retains v14 models and disabled move warmup. Four physical entries
+recorded 3195/1924/2067/1979 ms from host mount through completed fade. Repeat
+preparation took 576–632 ms, including 536–560 ms of downloader checking;
+presenter validation was zero with two fresh pair handoffs. The repeat fades
+took 158–168 ms. The user still found entry slow, so reducing fade alone was
+insufficient. Time outside these preparation/fade phases is not yet attributed
+to network or scene setup.
+
+Installed-model checks now hash the complete pinned index, but expand only the
+assets needed by the encounter. The local v14 pin reuses its already owned
+compiled trusted cohort rather than reparsing the large JSON on every entry.
+No disk verification receipt is kept across encounters. A desktop v14 probe
+measured approximately 393 ms per complete-index read before these changes
+versus 9 ms for two requested assets afterwards; this is not a phone timing.
+The host probe also records the wait for authoritative combatants/setup before
+presenter preparation, to isolate the remaining delay.
+
+USB trial `0.3.109-3d-perf.10` (code 40, source `a0ccd7d77`) reduced two warm
+preparing windows to 202–205 ms, including 144–161 ms of downloader checking.
+Complete entry remained 1448–1620 ms for those samples, with 1080–1249 ms spent
+waiting for combatants/setup before presenter preparation. Another repeat with
+additional local work took 1985 ms. The user still found the transition slow.
+
+The fullscreen Android entry now fades the real arena after two drawn frames,
+independently of the authoritative battle response and model downloads. Actions
+and intro remain locked until complete preparation. Its overview reserves both
+slots using the known local lead's compiled resting envelope and placement,
+with the ordinary slot envelope when no reviewed local lead is available. These
+points remain fixed for that encounter; actual opponents are never guessed or
+drawn from this reference. Pinch/orbit and cinematic shots still use their normal
+camera controls. Very different opponent envelopes can crop at this close-up;
+touch zoom remains available once the battle is ready. Team Preview uses its
+existing roster camera. This preserves one opening zoom while allowing the field
+to appear during the request wait. No model integrity gate is bypassed.
+`ANDROID_BATTLE_ENTRY` measures the completed visual fade; the separate numeric
+`ANDROID_BATTLE_READY` records when preparation actually releases battle input.
+
+USB trial `0.3.109-3d-perf.11` (code 41, source `080f6299e`) passed signed
+ARM64 Mobile export checks and was installed without clearing game data.
+The first export attempt lost its Gradle daemon during workstation memory
+pressure; rebuilding with one worker and a smaller heap succeeded. The user
+confirmed the early fade works, but found the reference overview too close.
+The repeated fades began at 271–326 ms and completed at 510–581 ms while battle
+input remained locked for preparation. Two warm input-ready totals were
+1435/1704 ms; another entry requiring additional assets remained visually open
+while preparation continued to 3718 ms. No script errors were recorded, with
+the existing `can_process` engine condition still present once.
+
+Resting camera logs showed 6.84 units at default zoom in perf.11 versus 9.15
+in the previously accepted perf.10 view (both FOV 48, zoom 0.60, two slots).
+The early reference overview now increases its pre-zoom distance by 4/3,
+restoring approximately 9.12 units for the measured view. Only this early Android
+reference uses the correction; the touch limits/default and non-entry cameras
+are unchanged. It applies from the first arena frame and remains fixed through
+model preparation, with native move shots retaining their own poses/recovery.
+
+USB trial `0.3.109-3d-perf.12` (code 42, source `0326c1674`) passed signed
+ARM64 Mobile export checks and was installed without clearing game data. The
+user confirmed the faster transition, comfortable zoom and move behavior.
+Its resting camera measured 9.116 units, FOV 48, zoom 0.60, two slots. The first
+entry after restart began its fade at 557 ms and completed at 907 ms; the warm
+repeat began at 259 ms and completed at 445 ms. Preparation separately released
+input at 3006/1624 ms, so the visible fade no longer waits for that work.
+There were no recorded script errors; the existing `can_process` condition
+appeared once. These are individual SM-S938B observations, not a controlled
+benchmark or evidence for other Android devices. Cold terrain, new models and
+authoritative request/setup still take time, with the normal integrity gates
+and input readiness preserved.
+
 World-entry preparation now preserves an explicitly supplied overworld
 snapshot instead of replacing it with the lobby's dark loading backdrop.
-Android still waits for the real model camera fit, then uses the same layered
+The Android arena now uses its stable reserved overview for an early layered
 fullscreen fade. Entries without a world snapshot retain their loading screen.
-The held-download check verifies snapshot retention and, under native Mobile
-rendering, the actual green world-image pixels during response/model waits.
+The entry checks verify snapshot handoff, an opaque early arena during held
+responses/downloads, and identical Android opening/model-ready camera transforms
+under native Mobile rendering. The desktop entry and fullscreen fade/cancellation
+guards also pass, together with touch camera and Draco Meteor camera regressions.
 
 Move shots prepare a static arena-bound index under the entry cover. The
 clearance helper protects the first three metres (at most 60%) of the sightline
@@ -28,8 +127,8 @@ The 35 Z-move choreography regressions also passed.
 USB trial `0.3.109-3d-perf.8` (code 38, source `55273e8c0`) passed signed
 ARM64 Mobile export checks and was installed without clearing game data. It
 retains v14 models, the close-up camera and move shots, with warmup disabled.
-The physical overworld fade and grass-shot appearance are awaiting the user's
-repeat test on the grassfield.
+The user confirmed the physical overworld fade and grass-shot appearance on
+the grassfield; the remaining feedback concerns entry latency with local assets.
 
 Android move shots use the independent `android_3d_move_camera` preference,
 enabled when an older profile has no value for it. Previously, all move shots

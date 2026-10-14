@@ -14,8 +14,12 @@ var loading_label: Label
 var loading_progress: ProgressBar
 var loading_backdrop: ColorRect
 var loading_entry_requested := false
+var mounted_at_msec := 0
+var entry_setup_wait_ms := 0
 const FADE_SECONDS := 0.18
 const MIN_FADE_FRAMES := 12
+const WARM_ANDROID_FADE_SECONDS := 0.12
+const WARM_ANDROID_FADE_FRAMES := 6
 var outgoing_snapshot: TextureRect
 @onready var content: Control = $Content
 @onready var backdrop: ColorRect = $Content/Backdrop
@@ -188,6 +192,7 @@ func prewarm_battle(instance: Control, immersive := true) -> void:
 	content.add_child(battle)
 
 func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_style := WildEncounterTransition.STYLE_WILD, force_immersive := false, snapshot: Texture2D = null) -> void:
+	mounted_at_msec = Time.get_ticks_msec()
 	var already_prepared := battle == instance and instance.get_parent() == content
 	process_mode = Node.PROCESS_MODE_INHERIT
 	show()
@@ -287,6 +292,7 @@ func _reveal_when_prepared(token: int) -> void:
 			await get_tree().process_frame
 	if released or token != generation or not is_inside_tree():
 		return
+	entry_setup_wait_ms = Time.get_ticks_msec() - mounted_at_msec
 	if presenter != null:
 		# Once the arena is visible, hidden send-out actors must stay hidden.
 		await presenter.await_prepared(not early_arena_requested)
@@ -313,7 +319,7 @@ func _reveal_when_prepared(token: int) -> void:
 
 
 func waits_for_final_camera() -> bool:
-	return OS.has_feature("android") and get_node("/root/SettingsManager").battle_presentation_mode == "3d" and preload("res://scripts/battle/battle_ui/model_platform.gd").supported()
+	return OS.has_feature("android") and not early_arena_requested and get_node("/root/SettingsManager").battle_presentation_mode == "3d" and preload("res://scripts/battle/battle_ui/model_platform.gd").supported()
 
 func reveal_pending_entry() -> void:
 	# The already prepared empty arena provides feedback for early world entries.
@@ -324,13 +330,10 @@ func reveal_pending_entry() -> void:
 		if presenter != null:
 			reveal_requested = true
 			presenter.begin_entry_arena()
-			if waits_for_final_camera():
-				# Prepare the pooled field behind the outgoing world image. The
-				# Android close-up needs the real model envelopes before its first
-				# visible frame; an empty-field fade would show a second zoom later.
-				loading_message_after_ms = Time.get_ticks_msec() + 500
-			else:
-				early_arena_requested = true
+			# Android reserves one stable overview before its first visible frame.
+			# Fade the actual field while response/model preparation continues.
+			early_arena_requested = true
+			loading_message_after_ms = Time.get_ticks_msec() + 500
 			return
 	if settings.battle_presentation_mode in ["2.5d", "3d"] and preload("res://scripts/battle/battle_ui/model_platform.gd").supported():
 		# Keep the outgoing world visible until both models and the arena are
@@ -366,16 +369,25 @@ func _reveal_cover() -> void:
 	if waits_for_final_camera() and not preparation_ready:
 		return
 	loading_label.get_parent().hide()
+	var fade_seconds := FADE_SECONDS
+	var fade_frames := MIN_FADE_FRAMES
+	var presenter = battle.animation_router.model_presenter if is_instance_valid(battle) else null
+	var warm_android: bool = is_instance_valid(presenter) and presenter.uses_android_camera() and get_node("/root/SettingsManager").battle_presentation_mode == "3d" and ((early_arena_requested and entry_arena_ready) or (preparation_ready and presenter.active and presenter.preparation_metrics.get("cached_assets", false)))
+	if warm_android:
+		fade_seconds = WARM_ANDROID_FADE_SECONDS
+		fade_frames = WARM_ANDROID_FADE_FRAMES
+	var fade_started := Time.get_ticks_msec()
+	var ready_ms := fade_started - mounted_at_msec
 	reveal_tween = create_tween()
-	reveal_tween.tween_property(self, "fade_progress", 1.0, FADE_SECONDS).set_trans(Tween.TRANS_LINEAR)
+	reveal_tween.tween_property(self, "fade_progress", 1.0, fade_seconds).set_trans(Tween.TRANS_LINEAR)
 	# A slow mount/upload frame must not consume the whole entrance tween.
-	# Advance only after presenting a frame, with at least twelve blend steps.
+	# Advance only after presenting a frame, with the selected minimum blend steps.
 	reveal_tween.pause()
 	while not released and reveal_tween.is_valid() and fade_progress < 1.0:
 		await get_tree().process_frame
 		if released or not reveal_tween.is_valid():
 			return
-		var step := minf(get_process_delta_time(), FADE_SECONDS / float(MIN_FADE_FRAMES))
+		var step := minf(get_process_delta_time(), fade_seconds / float(fade_frames))
 		reveal_tween.custom_step(maxf(step, 0.0001))
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
@@ -384,6 +396,12 @@ func _reveal_cover() -> void:
 		content.modulate.a = 1.0
 		backdrop.color.a = 1.0
 		outgoing_snapshot.texture = null
+		if OS.has_feature("android_3d_performance_probe"):
+			print("ANDROID_BATTLE_ENTRY ", JSON.stringify({"ready_ms": ready_ms,
+				"setup_wait_ms": entry_setup_wait_ms,
+				"fade_ms": Time.get_ticks_msec() - fade_started, "total_ms": Time.get_ticks_msec() - mounted_at_msec,
+				"cached_assets": is_instance_valid(presenter) and presenter.preparation_metrics.get("cached_assets", false),
+				"early_arena": early_arena_requested, "preparation_ready": preparation_ready, "fade_frames": fade_frames}))
 		_finish_entry_if_ready()
 
 
@@ -392,6 +410,9 @@ func _finish_entry_if_ready() -> void:
 	# fade. Only complete preparation releases the intro and first-turn input.
 	if released or not preparation_ready or fade_progress < 1.0:
 		return
+	if $Cover.visible and OS.has_feature("android_3d_performance_probe"):
+		print("ANDROID_BATTLE_READY ", JSON.stringify({"total_ms": Time.get_ticks_msec() - mounted_at_msec,
+			"setup_wait_ms": entry_setup_wait_ms, "early_arena": early_arena_requested}))
 	$Cover.hide()
 	loading_label.get_parent().hide()
 	if is_instance_valid(battle):
