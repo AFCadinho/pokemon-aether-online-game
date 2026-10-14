@@ -227,7 +227,7 @@ func accept_bundle(index: Dictionary, asset_id: String, downloaded_path: String)
 	if not error.is_empty():
 		return {"error": error}
 	if (asset_id not in RELEASE_ASSET_IDS and asset_id not in _v5_ids() and asset_id not in _v6_ids()
-			and asset_id not in V14.data.requiredAssetIds and asset_id not in _v7_ids() and asset_id not in _v8_ids() and asset_id not in _v9_ids() and asset_id not in _v10_ids()):
+			and asset_id not in PairPilot.release().get("requiredAssetIds", []) and asset_id not in V15.data.requiredAssetIds and asset_id not in V14.data.requiredAssetIds and asset_id not in _v7_ids() and asset_id not in _v8_ids() and asset_id not in _v9_ids() and asset_id not in _v10_ids()):
 		return {"error": "Asset bundle is outside the approved release set."}
 	return store.install_archive(index, asset_id, downloaded_path)
 
@@ -303,7 +303,7 @@ func _bundle_jobs(index: Dictionary, descriptor: Dictionary) -> Dictionary:
 			"sha256": str(asset.sha256),
 			"size_bytes": int(asset.size_bytes),
 			"file_name": object_key.get_file(),
-			"label": str(asset.species_id) + " 3D models",
+			"label": "Shared 3D textures" if asset.get("format") == preload("model_pair_pack.gd").TEXTURE_FORMAT else str(asset.species_id) + " 3D models",
 		})
 	return {"error": "", "jobs": result, "unchanged": plan.unchanged}
 
@@ -344,6 +344,10 @@ func _release_index_error(index: Dictionary, descriptor: Dictionary = {}) -> Str
 		if asset_id not in expected or asset_id in seen or form not in ["base", "mega", "mega-x", "mega-y", "mega-z"]:
 			return "Asset bundle index contains an unapproved asset."
 		seen.append(asset_id)
+		if asset.get("format") == preload("model_pair_pack.gd").TEXTURE_FORMAT:
+			if PairPilot.asset_for("asset:" + asset_id, str(asset.sha256)) != asset:
+				return "Shared texture pack is not release-approved."
+			continue
 		var appearances: Variant = asset.get("appearances")
 		if not appearances is Array or appearances.size() != 2:
 			return "Approved Pokemon bundle must contain normal and shiny appearances."

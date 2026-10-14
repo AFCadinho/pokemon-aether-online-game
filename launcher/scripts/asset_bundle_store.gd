@@ -128,7 +128,12 @@ func install_archives(index: Dictionary, archives: Dictionary) -> Dictionary:
 	var indexed := Index.by_id(index)
 	var next := state().duplicate(true)
 	var installed: Dictionary = next.get("assets", {}).duplicate(true)
+	var ordered: Array[String] = []
 	for asset_id: String in archives:
+		if indexed.has(asset_id): Index._append_dependencies(asset_id, indexed, ordered)
+		else: return {"error": "Asset is absent from the index."}
+	for asset_id: String in ordered:
+		if not archives.has(asset_id): continue
 		if not indexed.has(asset_id) or not archives[asset_id] is String:
 			return {"error": "Asset is absent from the index or archive path is invalid."}
 		var prepared := _prepare_archive(indexed[asset_id], archives[asset_id], installed)
@@ -223,7 +228,7 @@ func _collection_pointers() -> Dictionary:
 
 
 func _object_manifest(asset: Dictionary) -> Dictionary:
-	if asset.get("format") == PairPack.FORMAT:
+	if PairPack.is_pack(asset):
 		var checked := PairPack.object_check(_objects_root().path_join(str(asset.sha256)), asset)
 		return checked.manifest if str(checked.error).is_empty() else {}
 	var manifest := _read_json(_objects_root().path_join(str(asset.sha256)).path_join("bundle.json"))
@@ -255,13 +260,17 @@ func _prepare_archive(asset: Dictionary, archive_path: String, installed: Dictio
 	for dependency: String in asset.get("dependencies", []):
 		if not installed.has(dependency):
 			return {"error": "Asset dependency is not installed: " + dependency}
+	if PairPack.is_pack(asset):
+		for pool: Dictionary in asset.pair_manifest.get("texture_pools", []):
+			if installed.get(pool.asset_id, {}).get("archive_sha256") != pool.sha256:
+				return {"error": "Shared texture dependency checksum differs from its model."}
 	var archive := FileAccess.open(archive_path, FileAccess.READ)
 	if archive == null or archive.get_length() != int(asset.size_bytes) or archive.get_length() > MAX_ARCHIVE:
 		return {"error": "Bundle archive size mismatch."}
 	archive.close()
 	if FileAccess.get_sha256(archive_path) != str(asset.sha256):
 		return {"error": "Bundle archive checksum mismatch."}
-	if asset.get("format") == PairPack.FORMAT:
+	if PairPack.is_pack(asset):
 		if not _space_available(root, int(asset.size_bytes) + 32 * 1024 * 1024):
 			return {"error": "Not enough free space to install 3D models."}
 		return PairPack.install(archive_path, asset, _objects_root().path_join(str(asset.sha256)), not _models_in_use())
@@ -435,7 +444,7 @@ func _models_in_use() -> bool:
 
 func _owns_model_object(digest: String, manifest: Dictionary) -> bool:
 	var path := _objects_root().path_join(digest)
-	if manifest.get("format") == PairPack.FORMAT:
+	if PairPack.is_pack(manifest):
 		return manifest.get("sha256") == digest and str(PairPack.object_check(path, manifest).error).is_empty()
 	var directory := DirAccess.open(path)
 	if directory == null or directory.get_files() != PackedStringArray(["bundle.json"]) or directory.get_directories() != PackedStringArray(["models"]) or directory.is_link("bundle.json") or directory.is_link("models"):
@@ -473,7 +482,7 @@ func _state_entry(asset: Dictionary, manifest: Dictionary) -> Dictionary:
 		"dependencies": asset.get("dependencies", []).duplicate(),
 		"appearances": manifest.appearances.duplicate(true),
 	}
-	if asset.get("format") == PairPack.FORMAT:
+	if PairPack.is_pack(asset):
 		entry["pair_asset"] = asset.duplicate(true)
 	return entry
 
@@ -545,7 +554,7 @@ func _validate_object(archive_sha256: String, expected_manifest := {}) -> bool:
 	if object_directory == null or object_directory.is_link("bundle.json"):
 		return false
 	var manifest := _read_json(directory.path_join("bundle.json"))
-	if manifest.get("format") == PairPack.FORMAT:
+	if PairPack.is_pack(manifest):
 		return manifest.get("sha256") == archive_sha256 and (expected_manifest.is_empty() or expected_manifest == manifest.pair_manifest) and str(PairPack.object_check(directory, manifest).error).is_empty()
 	if manifest.is_empty() or (not expected_manifest.is_empty() and manifest != expected_manifest):
 		return false
@@ -664,6 +673,12 @@ func _validate_generation_metadata(generation: String) -> bool:
 			return false
 		if object_manifest.get("dependencies", []) != asset.get("dependencies", []) or object_manifest.get("appearances", []) != asset.get("appearances", []):
 			return false
+	for asset: Dictionary in state_data.assets.values():
+		for dependency: String in asset.get("dependencies", []):
+			if not state_data.assets.has(dependency): return false
+		if asset.get("pair_asset") is Dictionary:
+			for pool: Dictionary in asset.pair_asset.pair_manifest.get("texture_pools", []):
+				if state_data.assets.get(pool.asset_id, {}).get("pair_asset") != pool: return false
 	var catalog_path := directory.path_join("runtime-catalog.json")
 	var catalog_file := FileAccess.open(catalog_path, FileAccess.READ)
 	if catalog_file == null or catalog_file.get_length() > MAX_STATE_JSON:
@@ -687,7 +702,7 @@ func _validate_generation_metadata(generation: String) -> bool:
 				return false
 		if int(parsed[index].get("runtime_schema", 0)) != 1 or int(parsed[index].get("bytes", 0)) != int(expected[index].bytes):
 			return false
-		for field in ["pack_path", "pair_asset"]:
+		for field in ["pack_path", "pair_asset", "texture_packs"]:
 			if parsed[index].get(field) != expected[index].get(field):
 				return false
 	return true

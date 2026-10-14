@@ -2,7 +2,10 @@
 
 ## Unreleased
 
+- Prepare game and launcher model downloads for shared texture bundles, preserving each form’s appearance and repairing missing or damaged required downloads.
+
 - Make completed Aethering immediately visible with before/after IVs, gains and losses, a short system message and one confirmation sound, including recovered confirmations.
+
 - Choose Daycare training Pokémon in a separate six-slot Party popup, ordered by their actual Party slots, with Pokémon art, levels and unavailable-member reasons.
 
 - Make Android hotbar paging easier with one styled page counter inside its frame, extra invisible touch padding and left/right swipes that keep ordinary slot taps intact.

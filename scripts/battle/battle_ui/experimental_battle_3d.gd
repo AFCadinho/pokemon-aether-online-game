@@ -466,7 +466,7 @@ class IntegrityRead extends RefCounted:
 			start(str(entry.runtime_path))
 	func _read_pair() -> void:
 		var started := Time.get_ticks_usec()
-		pair_check = PairPack.inspect(path, pair_asset)
+		pair_check = PairPack.inspect_entry(pair_entry, pair_asset)
 		if str(pair_check.get("error", "invalid")).is_empty():
 			digest = str(pair_entry.runtime_sha256)
 			bytes = int(pair_entry.bytes)

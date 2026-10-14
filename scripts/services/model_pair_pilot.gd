@@ -13,6 +13,7 @@ const GEOMETRY_CATALOG_PATH := "res://data/model_pair_geometry_catalog.json"
 const PRODUCTION_PATH := "res://data/approved_3d_bundles_v15_index.json"
 const PREVIOUS_PRODUCTION_PATH := "res://data/approved_3d_bundles_v14_index.json"
 const LEGACY_PRODUCTION_PATH := "res://data/approved_3d_bundles_v13_index.json"
+const TEXTURE_CATALOG_PATH := "res://data/model_texture_pilot_catalog.json"
 const REFERENCE_FORMAT := "model-pair-ref-v1"
 static var _catalog := {}
 static var _qualified_catalog := {}
@@ -22,8 +23,11 @@ static var _lookups := {}
 static var _catalog_mutex := Mutex.new()
 static var _lookup_mutex := Mutex.new()
 
+static func textures_enabled() -> bool:
+	return OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_TEXTURE_TEST") == "1"
+
 static func geometry_enabled() -> bool:
-	return production_enabled() or (OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_GEOMETRY_TEST") == "1")
+	return textures_enabled() or production_enabled() or (OS.is_debug_build() and OS.get_environment("POKEAETHER_SHARED_MODEL_GEOMETRY_TEST") == "1")
 
 static func production_enabled() -> bool:
 	var experimental_android := OS.has_feature("android") and OS.has_feature("android_3d_experimental") and not OS.has_feature("web")
@@ -35,7 +39,7 @@ static func production_enabled() -> bool:
 		# old v11/v12 ZIPs have been retired. Explicit diagnostics keep their pins.
 		if not OS.has_feature("editor") and not experimental_android:
 			return false
-		for mode in ["GEOMETRY_TEST", "QUALIFIED_TEST", "CATALOG_TEST", "PILOT"]:
+		for mode in ["TEXTURE_TEST", "GEOMETRY_TEST", "QUALIFIED_TEST", "CATALOG_TEST", "PILOT"]:
 			if OS.get_environment("POKEAETHER_SHARED_MODEL_" + mode) == "1":
 				return false
 	return allows_production(OS.has_feature("web"), OS.has_feature("android"), OS.has_feature("android_3d_experimental"),
@@ -71,6 +75,7 @@ static func production_current() -> bool:
 	return production_enabled() and production_revision() != "v13"
 
 static func data_path() -> String:
+	if textures_enabled(): return TEXTURE_CATALOG_PATH
 	if production_enabled():
 		return LEGACY_PRODUCTION_PATH if production_revision() == "v13" else (PREVIOUS_PRODUCTION_PATH if production_v14() else PRODUCTION_PATH)
 	if geometry_enabled():
@@ -80,6 +85,7 @@ static func data_path() -> String:
 	return CATALOG_PATH if catalog_enabled() else "res://data/model_pair_pilot.json"
 
 static func catalog() -> Dictionary:
+	if textures_enabled(): return load(TEXTURE_CATALOG_PATH).data
 	if production_current():
 		_catalog_mutex.lock()
 		var revision := production_revision()
@@ -114,7 +120,7 @@ static func catalog() -> Dictionary:
 	return result
 
 static func release() -> Dictionary:
-	if production_enabled():
+	if production_enabled() and not textures_enabled():
 		return LEGACY_PRODUCTION.data if production_revision() == "v13" else (PREVIOUS_PRODUCTION.data if production_v14() else PRODUCTION.data)
 	if not enabled():
 		return {}
@@ -140,7 +146,7 @@ static func asset_for(identity: String, digest: String) -> Dictionary:
 			admitted.append_array(load(PREVIOUS_CATALOG_PATH).data.assets)
 			admitted.append_array(_legacy_trusted().assets)
 		for asset: Dictionary in admitted:
-			if asset.get("format") == "model-pair-pck-v1":
+			if asset.get("format") in ["model-pair-pck-v1", "model-texture-pck-v1"]:
 				lookup["asset:" + str(asset.asset_id) + ":" + str(asset.sha256)] = asset
 				for appearance: Dictionary in asset.appearances:
 					lookup[str(appearance.runtime_identity) + ":" + str(appearance.runtime_sha256)] = asset
@@ -177,7 +183,7 @@ static func _expand_index(value: Dictionary, trusted: Dictionary) -> Dictionary:
 		if row.get("format") != REFERENCE_FORMAT:
 			continue
 		var asset: Dictionary = by_id.get(row.get("asset_id", ""), {})
-		if row.size() != 3 or asset.get("format") != "model-pair-pck-v1" or row.get("sha256") != asset.get("sha256"):
+		if row.size() != 3 or asset.get("format") not in ["model-pair-pck-v1", "model-texture-pck-v1"] or row.get("sha256") != asset.get("sha256"):
 			return {}
 		result.assets[position] = asset.duplicate(true)
 	return result
@@ -255,7 +261,7 @@ static func entry_asset(entry: Dictionary) -> Dictionary:
 	if entry.get("variant") == "shiny" or str(entry.get("species", "")).ends_with("@shiny"):
 		identity += "@shiny"
 	var asset := asset_for(identity, str(entry.get("runtime_sha256", "")))
-	if asset.is_empty() or entry.get("pair_asset") != asset or not str(entry.get("pack_path", "")).is_absolute_path():
+	if asset.is_empty() or entry.get("pair_asset") != asset or not preload("res://scripts/services/model_pair_pack.gd").texture_paths_valid(entry, asset) or not str(entry.get("pack_path", "")).is_absolute_path():
 		return {}
 	for appearance: Dictionary in asset.appearances:
 		if appearance.runtime_identity == identity:

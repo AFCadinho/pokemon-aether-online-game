@@ -132,7 +132,7 @@ func verify_shared_entry(entry: Dictionary) -> Dictionary:
 	var asset := PairPilot.entry_asset(entry)
 	if asset.is_empty():
 		return {"error": "Shared 3D model has no qualified binding."}
-	var checked: Dictionary = await _run_storage_work(PairPack.inspect.bind(str(entry.pack_path), asset))
+	var checked: Dictionary = await _run_storage_work(PairPack.inspect_entry.bind(entry.duplicate(true), asset))
 	return {"error": str(checked.error), "asset": asset, "checked": checked}
 
 
@@ -318,7 +318,14 @@ func _ensure_models(identities: Array[String], source_catalog: String) -> Dictio
 	if not str(plan.get("error", "")).is_empty():
 		return plan
 	var missing: Array[String] = plan.asset_ids
+	var ordered: Array[String] = []
+	var indexed: Dictionary = await _run_storage_work(preload("res://launcher/scripts/asset_bundle_index.gd").by_id.bind(index))
+	if indexed.is_empty() and int(index.get("runtime_contract", {}).get("pokemon_3d", 0)) == 3:
+		return {"error": "Shared 3D content index failed validation."}
 	for asset_id in missing:
+		if indexed.has(asset_id): preload("res://launcher/scripts/asset_bundle_index.gd")._append_dependencies(asset_id, indexed, ordered)
+		else: ordered.append(asset_id)
+	for asset_id in ordered:
 		var asset: Dictionary = _indexed_asset(index, asset_id)
 		if asset.is_empty():
 			return {"error": "Approved 3D model is missing from the content index."}
@@ -523,7 +530,7 @@ func _verified_entry(entries: Array, identity: String, expected_digest: String) 
 		if key == identity and digest == expected_digest and entry.has("pair_asset"):
 			var asset := PairPilot.entry_asset(entry)
 			if not asset.is_empty() and not ReviewedModels.resolve(identity, digest).is_empty():
-				var checked := PairPack.inspect(str(entry.pack_path), asset)
+				var checked := PairPack.inspect_entry(entry, asset)
 				if str(checked.error).is_empty():
 					return {"path": model_path, "sha256": digest, "bytes": int(entry.bytes), "pack_sha256": asset.sha256,
 						"pair_check": checked}
@@ -593,7 +600,7 @@ func _install_asset(asset: Dictionary) -> Dictionary:
 	var id := str(asset.get("asset_id", ""))
 	var parts := id.split(":")
 	var size := int(asset.get("size_bytes", 0))
-	var extension := ".pck" if asset.get("format") == PairPack.FORMAT else ".zip"
+	var extension := ".pck" if PairPack.is_pack(asset) else ".zip"
 	if parts.size() != 3 or not key.begins_with("optional-assets/pokemon_3d/%s/%s/" % [parts[1], parts[2]]) or not key.ends_with(extension) or key.contains("..") or size < 1 or size > MAX_ARCHIVE_BYTES:
 		return {"error": "Approved 3D bundle metadata is invalid."}
 	if extension == ".pck" and PairPilot.enabled():
@@ -601,13 +608,18 @@ func _install_asset(asset: Dictionary) -> Dictionary:
 		if local_root.is_absolute_path():
 			var local_path := local_root.path_join(key.get_file())
 			return await _run_storage_work(_unpack_asset.bind(asset.duplicate(true), local_path))
+	if asset.get("format") == PairPack.TEXTURE_FORMAT:
+		var directory := ProjectSettings.globalize_path(ROOT.path_join("objects").path_join(sha))
+		var checked: Dictionary = await _run_storage_work(PairPack.object_check.bind(directory, asset))
+		if str(checked.error).is_empty(): return {"error": "", "entries": []}
+	var label: String = "Shared 3D textures" if asset.get("format") == PairPack.TEXTURE_FORMAT else parts[1]
 	var zip_path := ROOT.path_join("downloads").path_join(sha + extension)
 	var valid: bool = await _run_storage_work(_valid_file.bind(zip_path, size, sha))
 	if not valid:
-		var error := await _fetch(BASE_URL + key, zip_path, size, sha, MAX_ARCHIVE_BYTES, parts[1])
+		var error := await _fetch(BASE_URL + key, zip_path, size, sha, MAX_ARCHIVE_BYTES, label)
 		if not error.is_empty():
 			return {"error": error}
-	active_label = "Installing %s…" % parts[1]
+	active_label = "Installing %s…" % label
 	return await _run_storage_work(_install_verified_archive.bind(asset.duplicate(true), zip_path))
 
 
@@ -623,7 +635,9 @@ func _unpack_asset(asset: Dictionary, zip_path: String) -> Dictionary:
 	var parts := str(asset.get("asset_id", "")).split(":")
 	if parts.size() != 3 or not _valid_file(zip_path, int(asset.get("size_bytes", 0)), sha):
 		return {"error": "Approved 3D bundle failed verification."}
-	if asset.get("format") == PairPack.FORMAT:
+	if PairPack.is_pack(asset):
+		if PairPilot.asset_for("asset:" + str(asset.asset_id), str(asset.sha256)) != asset:
+			return {"error": "Shared 3D pack has no qualified binding."}
 		for appearance: Dictionary in asset.get("appearances", []):
 			if PairPilot.asset_for(str(appearance.runtime_identity), str(appearance.runtime_sha256)) != asset or ReviewedModels.resolve(str(appearance.runtime_identity), str(appearance.runtime_sha256)).is_empty():
 				return {"error": "Shared 3D model has no qualified binding."}
@@ -636,7 +650,12 @@ func _unpack_asset(asset: Dictionary, zip_path: String) -> Dictionary:
 		var installed := PairPack.install(zip_path, asset, object_root)
 		if not str(installed.error).is_empty():
 			return installed
-		return {"error": "", "entries": PairPack.catalog_entries(asset, object_root)}
+		var runtime_entries := PairPack.catalog_entries(asset, object_root)
+		if asset.get("format") == PairPack.FORMAT:
+			for entry: Dictionary in runtime_entries:
+				var checked := PairPack.inspect_entry(entry, asset)
+				if not str(checked.error).is_empty(): return {"error": str(checked.error)}
+		return {"error": "", "entries": runtime_entries}
 	var reader := ZIPReader.new()
 	if reader.open(zip_path) != OK:
 		return {"error": "Could not open the approved 3D bundle."}
@@ -728,6 +747,12 @@ func _prune_unused_models(entries: Array, index: Dictionary, storage_root: Strin
 		var path := ProjectSettings.globalize_path(str(entry.get("pack_path", entry.get("runtime_path", "")))).simplify_path()
 		if path.begins_with(objects_root + "/"):
 			referenced[path.get_base_dir().get_file()] = true
+		var texture_paths: Variant = entry.get("texture_packs", {})
+		if not texture_paths is Dictionary: return result
+		for texture_path: Variant in texture_paths.values():
+			if not texture_path is String: return result
+			var shared := ProjectSettings.globalize_path(str(texture_path)).simplify_path()
+			if shared.begins_with(objects_root + "/"): referenced[shared.get_base_dir().get_file()] = true
 	# Preserve completed and partial members of an interrupted current download.
 	for asset: Variant in index.assets:
 		if asset is Dictionary:
@@ -756,7 +781,7 @@ func _prune_unused_models(entries: Array, index: Dictionary, storage_root: Strin
 	for entry: Dictionary in entries:
 		if entry.has("pair_asset"):
 			var pair := PairPilot.entry_asset(entry)
-			if pair.is_empty() or not str(PairPack.inspect(str(entry.get("pack_path", "")), pair).error).is_empty():
+			if pair.is_empty() or not str(PairPack.inspect_entry(entry, pair).error).is_empty():
 				result.error = "Current shared model failed verification; previous files kept."
 				return result
 			continue
