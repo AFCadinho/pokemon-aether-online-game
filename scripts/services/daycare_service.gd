@@ -7,7 +7,18 @@ var pending_account_id := ""
 
 func state() -> Dictionary:
 	_reset_for_account()
+	# NPC interaction can beat the periodic world autosave. The visit guard
+	# must see the position at the counter before the catalog request starts.
+	var saved := await _save_interaction_position()
+	if not bool(saved.get("success", false)):
+		return saved
 	return await _request("", HTTPClient.METHOD_GET, {})
+
+func _save_interaction_position() -> Dictionary:
+	var world: Node = GameState.get_world()
+	if world != null and world.has_method("save_current_player_state_now"):
+		return await world.call("save_current_player_state_now")
+	return {"success": true}
 
 func preview(selection: Dictionary) -> Dictionary:
 	_reset_for_account()

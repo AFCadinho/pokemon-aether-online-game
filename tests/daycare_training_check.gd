@@ -1,4 +1,14 @@
 extends SceneTree
+
+class PositionWorld extends Node:
+	var events: Array[String] = []
+	var result := {"success": true}
+	func save_current_player_state_now() -> Dictionary:
+		events.append("save_started")
+		await get_tree().process_frame
+		events.append("save_finished")
+		return result
+
 var failures := 0
 func _init() -> void:
 	call_deferred("_run")
@@ -7,6 +17,22 @@ func _check(ok: bool, message: String) -> void:
 		push_error(message)
 		failures += 1
 func _run() -> void:
+	var position_events: Array[String] = []
+	var position_world := PositionWorld.new()
+	position_world.events = position_events
+	root.add_child(position_world)
+	position_world.add_to_group("world")
+	var position_service = load("res://tests/support/fake_daycare_position_service.gd").new()
+	position_service.events = position_events
+	root.add_child(position_service)
+	await position_service.state()
+	_check(position_events == ["save_started", "save_finished", "catalog_requested"], "Daycare waits for the counter position to save before requesting its catalog")
+	position_events.clear()
+	position_world.result = {"success": false, "error": "Position save blocked"}
+	var save_failure: Dictionary = await position_service.state()
+	_check(not save_failure.get("success", true) and save_failure.get("error") == "Position save blocked" and not "catalog_requested" in position_events, "A blocked position save stops Daycare loading and preserves its error")
+	position_service.free()
+	position_world.free()
 	if OS.get_environment("DAYCARE_CAPTURE") != "1":
 		_check(load("res://scripts/ui/ui_overlay.gd") != null, "Daycare integrates with the overlay")
 	var daycare := load("res://scenes/overworld/kanto/routes/route5/daycare.tscn") as PackedScene
