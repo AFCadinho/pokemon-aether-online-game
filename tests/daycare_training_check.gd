@@ -17,6 +17,8 @@ func _check(ok: bool, message: String) -> void:
 		push_error(message)
 		failures += 1
 func _run() -> void:
+	var localization := root.get_node("LocalizationManager")
+	localization.set_locale("en")
 	var position_events: Array[String] = []
 	var position_world := PositionWorld.new()
 	position_world.events = position_events
@@ -65,10 +67,11 @@ func _run() -> void:
 		panel.call("_show_load_error", "Something went wrong")
 		panel.call("_set_busy", false)
 		_check(not panel.training_form.visible and panel.training_notice.get_parent().visible and not panel.refresh_button.disabled, "Initial load failure offers Refresh without an empty form")
-		panel.call("_apply_state", {"pokemon": [{"pokemon": {"ownedPokemonId": 12, "species": "Pikachu", "level": 10, "experience": 1000, "evs": {"atk": 12}, "storedEvs": {"spe": 40}}, "location": {"type": "party", "partySlot": 0}}], "jobs": [], "money": 100000, "daycareLevelCap": 25})
+		panel.call("_apply_state", {"pokemon": [{"pokemon": {"ownedPokemonId": 12, "species": "Pikachu", "level": 10.0, "experience": 1000.0, "evs": {"atk": 12}, "storedEvs": {"spe": 40.0}}, "location": {"type": "party", "partySlot": 0}}, {"pokemon": {"ownedPokemonId": 13, "species": "Dratini", "level": 10}, "location": {"type": "box", "boxIndex": 0, "slotIndex": 0}}], "jobs": [], "money": 100000, "daycareLevelCap": 25})
 		_check(panel.training_form.visible and not panel.training_notice.get_parent().visible, "Successful refresh restores the training form")
 		_check(panel.confirm_button.has_theme_stylebox_override("disabled") and panel.tabs.get_tab_bar().has_theme_stylebox_override("tab_selected"), "Actions and tabs use Aether styles")
 		_check(panel.pokemon_select.item_count == 1 and "Pikachu" in panel.pokemon_select.get_item_text(0), "Pokemon selection shows the authoritative catalog")
+		_check("10.0" not in panel.pokemon_select.get_item_text(0) and "40.0" not in panel.current_label.text, "Party selection and stored EV values do not show JSON decimal suffixes")
 		_check(panel.level_input.get_parent().get_combined_minimum_size().y < 64, "Target-level row does not wrap one character per line")
 		_check(panel.level_input.max_value == 25 and panel.level_input.min_value == 10, "EXP target respects the Daycare story cap")
 		panel.exp_check.button_pressed = false
@@ -80,11 +83,15 @@ func _run() -> void:
 		panel.ev_check.button_pressed = false
 		selection = panel.call("_selection")
 		_check(selection.has("targetLevel") and not selection.has("targetEvs"), "EXP-only request omits EV training")
-		panel.call("_show_quote", {"previewId": "quote", "price": 13100, "requiredExperience": 0, "requiredEvs": 252, "durationSeconds": 486, "expDurationSeconds": 0, "evDurationSeconds": 486, "targetLevel": 10, "targetEvs": {"atk": 252}})
+		panel.call("_show_quote", {"previewId": "quote", "price": 1323.0, "requiredExperience": 16447.0, "requiredEvs": 0.0, "durationSeconds": 105, "expSelected": true, "evSelected": true, "startLevel": 29.0, "targetLevel": 35.0, "targetEvs": {"spa": 252.0, "spe": 252.0}, "priceBreakdown": {"start": 500.0, "experience": 823.0, "evs": 0.0}})
+		_check(panel.quote_price.text == "1,323 ₽" and "29 → 35" in panel.quote_label.text and "35.0" not in panel.quote_label.text, "Training summary presents whole-number cost and level change")
+		_check(localization.text("ui.daycare.summary_ev_reached") in panel.quote_label.text, "Zero new EVs explains that the EV targets are already reached")
+		panel.call("_show_quote", {"previewId": "quote", "price": 13100, "requiredExperience": 0, "requiredEvs": 252, "durationSeconds": 486, "expDurationSeconds": 0, "evDurationSeconds": 486, "expSelected": false, "evSelected": true, "targetLevel": 10, "targetEvs": {"atk": 252}, "consumeStoredEvs": {"spe": 40}})
+		_check("40" in panel.quote_label.text and localization.text("ui.daycare.summary_no_exp", {"level": "10"}) in panel.quote_label.text, "EV-only summary distinguishes stored EV use and unchanged EXP")
 		panel.call("_set_busy", false)
 		_check(panel.quote_card.visible, "Server quote has its own visible card")
 		panel.call("_ask_confirm")
-		_check(panel.confirmation.visible and "13100" in panel.confirmation.message_label.text, "Paid confirmation displays the server quote")
+		_check(panel.confirmation.visible and panel.call("_number", 13100) in panel.confirmation.message_label.text and panel.confirm_button.text == localization.text("ui.daycare.deposit"), "Start training confirmation displays the server price")
 		panel.confirmation.hide_dialog()
 		var api := root.get_node("DaycareService")
 		api.pending_request = {"kind": "deposit", "path": "/confirm", "payload": {"previewId": "quote", "requestId": "retry"}}
@@ -117,7 +124,7 @@ func _run() -> void:
 			panel.ev_inputs["atk"].value = 252
 			panel.ev_inputs["spe"].value = 252
 			panel.ev_inputs["hp"].value = 6
-			panel.call("_show_quote", {"previewId": "quote", "price": 75950, "requiredExperience": 999000, "requiredEvs": 510, "durationSeconds": 6354, "expDurationSeconds": 6354, "evDurationSeconds": 983, "targetLevel": 100, "targetEvs": {"atk": 252, "spe": 252, "hp": 6}})
+			panel.call("_show_quote", {"previewId": "quote", "price": 75950.0, "requiredExperience": 999000.0, "requiredEvs": 510.0, "durationSeconds": 6354, "expDurationSeconds": 6354, "evDurationSeconds": 983, "expSelected": true, "evSelected": true, "startLevel": 10, "targetLevel": 100, "targetEvs": {"atk": 252, "spe": 252, "hp": 6}, "priceBreakdown": {"start": 500, "experience": 49950, "evs": 25500}})
 			panel.call("_set_busy", false)
 			for frame in range(4):
 				await process_frame

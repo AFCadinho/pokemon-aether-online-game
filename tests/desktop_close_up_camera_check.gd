@@ -18,7 +18,7 @@ func _run() -> void:
 	add_child(android)
 	android.set_process(false)
 	assert(android.user_camera_zoom == 0.60, "Android retains the approved default")
-	assert(android.user_camera_yaw == 0.0 and android.user_camera_pitch == 0.0, "Android retains its approved angle")
+	assert(is_equal_approx(android.user_camera_yaw, -0.235828125) and is_equal_approx(android.user_camera_pitch, -0.12), "Android uses its separately measured angle")
 	android.camera = Camera3D.new()
 	view.add_child(android.camera)
 	android.camera.fov = 48.0
