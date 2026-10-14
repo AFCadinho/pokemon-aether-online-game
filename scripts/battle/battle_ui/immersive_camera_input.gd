@@ -4,6 +4,7 @@ var dragging := false
 var touches := {}
 var touch_active := false
 var pinch_distance := 0.0
+const CAMERA_CAPTURE_PATH := "user://battle_camera_capture.json"
 
 func _presenter() -> Node:
 	return battle.animation_router.model_presenter if is_instance_valid(battle) else null
@@ -57,6 +58,9 @@ func _can_start(point: Vector2, check_hover := true) -> bool:
 	return true
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.ctrl_pressed and event.shift_pressed and event.keycode == KEY_C:
+		_capture_camera()
+		return
 	if event is InputEventScreenTouch:
 		var owned := touch_active and touches.has(event.index)
 		dragging = false
@@ -125,6 +129,46 @@ func _input(event: InputEvent) -> void:
 			return
 		_rotate_by(presenter, event.relative)
 		get_viewport().set_input_as_handled()
+
+func _capture_camera() -> bool:
+	# Local desktop development aid. Never capture a move shot or chat input.
+	if not OS.is_debug_build() or OS.has_feature("android") or OS.has_feature("web"):
+		return false
+	var focused := get_viewport().gui_get_focus_owner()
+	if focused is LineEdit or focused is TextEdit:
+		return false
+	var presenter := _presenter()
+	if not is_instance_valid(presenter) or not _may_rotate(presenter) or presenter.preview_enabled:
+		return false
+	if not is_instance_valid(presenter.camera) or is_instance_valid(presenter.move_camera.effect):
+		return false
+	var host := battle.get_parent().get_parent()
+	if host.has_node("Cover") and host.get_node("Cover").visible:
+		return false
+	var camera: Camera3D = presenter.camera
+	var camera_view := camera.get_viewport()
+	# Fixed numeric fields only: no names, teams, battle IDs or account state.
+	var record := {"schema_version": 1, "zoom": presenter.user_camera_zoom,
+		"yaw_radians": presenter.user_camera_yaw, "pitch_radians": presenter.user_camera_pitch,
+		"yaw_degrees": rad_to_deg(presenter.user_camera_yaw), "pitch_degrees": rad_to_deg(presenter.user_camera_pitch),
+		"fov_degrees": camera.fov,
+		"camera_position": [camera.position.x, camera.position.y, camera.position.z],
+		"camera_rotation_degrees": [camera.rotation_degrees.x, camera.rotation_degrees.y, camera.rotation_degrees.z],
+		"render_size": [camera_view.get_visible_rect().size.x, camera_view.get_visible_rect().size.y],
+		"screen_size": [get_viewport().get_visible_rect().size.x, get_viewport().get_visible_rect().size.y]}
+	var log_rail := battle.get_node_or_null("%BattleLogRail") as Control
+	if log_rail != null and log_rail.is_visible_in_tree():
+		var rect := log_rail.get_global_rect()
+		record.battle_log_rect = [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
+	var file := FileAccess.open(CAMERA_CAPTURE_PATH, FileAccess.WRITE)
+	if file == null:
+		push_warning("Could not save the desktop camera measurement.")
+		return false
+	file.store_string(JSON.stringify(record, "\t") + "\n")
+	file.close()
+	print("DESKTOP_BATTLE_CAMERA_CAPTURE ", JSON.stringify(record))
+	get_viewport().set_input_as_handled()
+	return true
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:

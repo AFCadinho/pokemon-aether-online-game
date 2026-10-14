@@ -98,11 +98,58 @@ func _run() -> void:
 	wheel.button_index = MOUSE_BUTTON_WHEEL_DOWN
 	gesture._input(wheel)
 	assert(is_equal_approx(stage.user_camera_zoom, 0.63))
+	# Capture the chosen runtime stand, rather than the starting defaults.
+	stage.camera = Camera3D.new()
+	stage.world.add_child(stage.camera)
+	stage.camera.position = Vector3(3, 4, 5)
+	stage.camera.rotation_degrees = Vector3(-15, 20, 0)
+	stage.camera.fov = 48.0
+	stage.user_camera_zoom = 0.72
+	stage.user_camera_yaw = 0.4
+	stage.user_camera_pitch = 0.08
+	var pose: Transform3D = stage.camera.transform
+	var log_rail := Control.new()
+	log_rail.name = "BattleLogRail"
+	battle.add_child(log_rail)
+	log_rail.owner = battle
+	log_rail.unique_name_in_owner = true
+	log_rail.position = Vector2(10, 320)
+	log_rail.size = Vector2(240, 260)
+	var key := InputEventKey.new()
+	key.keycode = KEY_C
+	key.pressed = true
+	key.ctrl_pressed = true
+	key.shift_pressed = true
+	gesture._input(key)
+	var captured: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(Gesture.CAMERA_CAPTURE_PATH))
+	assert(is_equal_approx(captured.zoom, 0.72) and is_equal_approx(captured.yaw_radians, 0.4) and is_equal_approx(captured.pitch_radians, 0.08))
+	assert(captured.camera_position == [3.0, 4.0, 5.0] and captured.fov_degrees == 48.0)
+	assert(captured.battle_log_rect == [10.0, 320.0, 240.0, 260.0])
+	assert(captured.size() == 12, "Only numeric camera and layout fields are recorded")
+	assert(stage.camera.transform == pose and stage.user_camera_zoom == 0.72, "Capturing never changes the chosen camera")
+	var saved := FileAccess.get_file_as_string(Gesture.CAMERA_CAPTURE_PATH)
+	stage.user_camera_zoom = 0.80
+	stage.current_actions[0] = "special_attack"
+	assert(not gesture._capture_camera(), "Attack shots cannot replace the idle camera measurement")
+	stage.current_actions[0] = "idle"
+	cover.show()
+	assert(not gesture._capture_camera(), "Loading cannot replace the measurement")
+	cover.hide()
+	stage.preview_enabled = true
+	assert(not gesture._capture_camera(), "Team Preview cannot replace the measurement")
+	stage.preview_enabled = false
+	var chat := LineEdit.new()
+	battle.add_child(chat)
+	chat.grab_focus()
+	assert(not gesture._capture_camera(), "Chat keyboard input does not record the camera")
+	chat.release_focus()
+	assert(saved == FileAccess.get_file_as_string(Gesture.CAMERA_CAPTURE_PATH))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(Gesture.CAMERA_CAPTURE_PATH))
 	host.queue_free()
 	router.cancel_render()
 	router.release_threaded_resource_requests()
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("ANDROID_TOUCH_CAMERA_PASS pinch=true orbit=true clamps=true ui=true cancel=true desktop=true")
+	print("ANDROID_TOUCH_CAMERA_PASS pinch=true orbit=true clamps=true ui=true cancel=true desktop=true camera_capture=true")
 	get_tree().quit()
