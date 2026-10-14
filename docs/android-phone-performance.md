@@ -86,6 +86,19 @@ reference uses the correction; the touch limits/default and non-entry cameras
 are unchanged. It applies from the first arena frame and remains fixed through
 model preparation, with native move shots retaining their own poses/recovery.
 
+USB trial `0.3.109-3d-perf.12` (code 42, source `0326c1674`) passed signed
+ARM64 Mobile export checks and was installed without clearing game data. The
+user confirmed the faster transition, comfortable zoom and move behavior.
+Its resting camera measured 9.116 units, FOV 48, zoom 0.60, two slots. The first
+entry after restart began its fade at 557 ms and completed at 907 ms; the warm
+repeat began at 259 ms and completed at 445 ms. Preparation separately released
+input at 3006/1624 ms, so the visible fade no longer waits for that work.
+There were no recorded script errors; the existing `can_process` condition
+appeared once. These are individual SM-S938B observations, not a controlled
+benchmark or evidence for other Android devices. Cold terrain, new models and
+authoritative request/setup still take time, with the normal integrity gates
+and input readiness preserved.
+
 World-entry preparation now preserves an explicitly supplied overworld
 snapshot instead of replacing it with the lobby's dark loading backdrop.
 The Android arena now uses its stable reserved overview for an early layered
