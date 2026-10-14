@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make the Daycare Wing Merchant reachable across the counter and show both Aethering NPC nameplates immediately in the selected language.
+
 - Restyle Daycare with Aether cards, clear training inputs, custom tabs and action buttons, progress bars and a recoverable loading error view.
 
 - Let desktop development builds record the chosen idle 3D battle camera with Ctrl+Shift+C for camera-framing feedback.

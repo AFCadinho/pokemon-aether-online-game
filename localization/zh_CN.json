@@ -7171,6 +7171,7 @@
   "ui.aethering.reason.money_reserved_for_trade": "Money reserved for trade.",
   "ui.aethering.reason.aethering_session_changed": "Session changed. Reopen Aethering on the original account to retrieve its confirmation.",
   "ui.aethering.next_donor": "Next Donor",
+  "ui.aethering.researcher": "以太研究员",
   "ui.aethering.merchant": "Wing 商人",
   "ui.aethering.reason.aethering_party_required": "Aethering 需要队伍中至少两只属于你的宝可梦。请使用旁边的电脑将宝可梦移入队伍。",
   "ui.daycare.choose_pokemon": "选择宝可梦",
