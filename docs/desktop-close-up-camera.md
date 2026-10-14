@@ -1,12 +1,16 @@
 # Shared desktop and Android 3D overview
 
-Desktop now uses the Android close-up policy: default zoom 0.60, limits
+Desktop now uses the Android close-up policy with a slightly wider starting
+view: default zoom 0.63 (5% farther than 0.60); Android stays at 0.60. Both use limits
 0.30–1.60, the same three-quarter singles direction and wider resting-frame
 region. The logical HUD still reserves prompt/move-button space. The camera
 fits resting envelopes first, then applies zoom; wheel input can actually move
 closer without model-envelope fitting undoing it. Zooming out retains a complete
 overview. Camera reset restores the close-up default. Large limbs can crop at
 close zoom, as on Android; slot centres remain in front of the near plane.
+The desktop default was adjusted after the user's screenshot/reference feedback.
+The yaw, pitch and FOV are unchanged. Roster framing is normalized by the current
+platform's default, so the small battle-camera adjustment does not zoom the roster.
 
 Pending fullscreen entries reserve one overview from the local lead's compiled
 resting profile, with the existing neutral envelope if no profile is available.

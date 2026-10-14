@@ -50,7 +50,7 @@ func _run() -> void:
 	assert(is_equal_approx(stage.user_camera_yaw, -0.12))
 	var yaw: float = stage.user_camera_yaw
 	touch(1, Vector2(420, 210))
-	drag(1, Vector2(520, 210))
+	drag(1, Vector2(540, 210))
 	assert(is_equal_approx(stage.user_camera_zoom, stage.camera_zoom_limits().x), "Spreading fingers zooms in and clamps")
 	assert(stage.user_camera_yaw == yaw, "Pinching does not orbit")
 	drag(1, Vector2(345, 210))
@@ -94,10 +94,10 @@ func _run() -> void:
 	wheel.pressed = true
 	wheel.position = Vector2(300, 200)
 	gesture._input(wheel)
-	assert(is_equal_approx(stage.user_camera_zoom, 0.54), "Wheel zoom works from the shared close-up default")
+	assert(is_equal_approx(stage.user_camera_zoom, 0.567), "Wheel zoom works from the slightly wider desktop default")
 	wheel.button_index = MOUSE_BUTTON_WHEEL_DOWN
 	gesture._input(wheel)
-	assert(is_equal_approx(stage.user_camera_zoom, 0.60))
+	assert(is_equal_approx(stage.user_camera_zoom, 0.63))
 	host.queue_free()
 	router.cancel_render()
 	router.release_threaded_resource_requests()
