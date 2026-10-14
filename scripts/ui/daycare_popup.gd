@@ -2,12 +2,14 @@ class_name DaycarePopup
 extends PanelContainer
 
 signal closed
+const ExternalLinks := preload("res://scripts/core/external_links.gd")
 const STATS: Array[String] = ["hp", "atk", "def", "spa", "spd", "spe"]
 const CYAN := Color("69d8e7")
 const MUTED := Color("9eb3c5")
 const GREEN := Color("70d6a1")
 const RED := Color("ef7085")
 const STAT_COLORS: Array[Color] = [Color("70d6a1"), Color("ef9b78"), Color("e4c66c"), Color("9ba9ef"), Color("c697df"), Color("69d8e7")]
+var guide_button: Button
 var pokemon_select: OptionButton
 var exp_check: CheckBox
 var ev_check: CheckBox
@@ -155,6 +157,9 @@ func _ready() -> void:
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 24)
 	title.add_theme_color_override("font_color", CYAN)
+	title.clip_text = true
+	guide_button = _button(LocalizationManager.text("ui.daycare.forum_guide"), header, ExternalLinks.open_daycare_guide)
+	guide_button.tooltip_text = LocalizationManager.text("ui.daycare.forum_guide_hint")
 	refresh_button = _button(_t("refresh"), header, _load_state)
 	close_button = _button("×", header, close_popup)
 	close_button.tooltip_text = LocalizationManager.text("common.close")

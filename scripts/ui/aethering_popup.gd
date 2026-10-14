@@ -4,6 +4,8 @@ extends PanelContainer
 signal closed
 signal completed(result: Dictionary)
 
+const ExternalLinks := preload("res://scripts/core/external_links.gd")
+
 const STATS := ["hp", "atk", "def", "spa", "spd", "spe"]
 const WINGS := ["health-wing", "muscle-wing", "resist-wing", "genius-wing", "clever-wing", "swift-wing"]
 const CONFIRM_DIALOG := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
@@ -12,6 +14,7 @@ const MUTED := Color("91a4b7")
 const GREEN := Color("70d6a1")
 const RED := Color("ef7085")
 
+var guide_button: Button
 var candidates: Array = []
 var wing_availability: Dictionary = {}
 var recipient: Dictionary = {}
@@ -95,6 +98,10 @@ func _build() -> void:
 	title = _label("", CYAN, 23)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(title)
+	title.autowrap_mode = TextServer.AUTOWRAP_OFF
+	title.clip_text = true
+	guide_button = _button("", ExternalLinks.open_daycare_guide)
+	header.add_child(guide_button)
 	refresh_button = _button("", refresh)
 	header.add_child(refresh_button)
 	close_button = _button("×", close_popup)
@@ -225,6 +232,8 @@ func _stat(stat: String) -> String:
 	return _t("stat." + stat)
 
 func _localize() -> void:
+	guide_button.text = LocalizationManager.text("ui.daycare.forum_guide")
+	guide_button.tooltip_text = LocalizationManager.text("ui.daycare.forum_guide_hint")
 	title.text = _t("title")
 	help_label.text = _t("help")
 	refresh_button.text = _t("refresh")
