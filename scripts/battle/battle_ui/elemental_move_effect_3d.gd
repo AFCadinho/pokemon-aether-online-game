@@ -174,22 +174,37 @@ func _draw_source_move(from: Vector3, to: Vector3, _right: Vector3, _up: Vector3
 func _dark_pulse() -> void:
 	var axis := Basis(lateral,forward,lateral.cross(forward))
 	if elapsed < launch:
-		_piece(sphere,surface,origin,Vector3.ONE*lerpf(.08,.38,charge_progress()))
+		_dark_pulse_piece(sphere,surface,origin,Vector3.ONE*lerpf(.08,.38,charge_progress()),Basis.IDENTITY,actor_ground.y)
 		return
 	if after < 0:
 		var point := origin.lerp(aim,flight)
 		var radius := lerpf(.22,1.15,smoothstep(0,.6,flight))
 		# A dense folded pressure front, with a connected taper behind it.
-		_piece(sphere,surface,point,Vector3(radius,.22,radius),axis)
-		_piece(ring,hot,point-forward*.06,Vector3(radius*.85,.3,radius*.85),axis)
-		_piece(sphere,surface,point-forward*.28,Vector3(radius*.7,.48,radius*.7),axis)
+		var floor_y := lerpf(actor_ground.y,ground.y,flight)
+		_dark_pulse_piece(sphere,surface,point,Vector3(radius,.22,radius),axis,floor_y)
+		_dark_pulse_piece(ring,hot,point-forward*.06,Vector3(radius*.85,.3,radius*.85),axis,floor_y)
+		_dark_pulse_piece(sphere,surface,point-forward*.28,Vector3(radius*.7,.48,radius*.7),axis,floor_y)
 	impact_start_index = cursor
 	if after >= 0 and hit:
 		impact_drawn = true
 		var grow := smoothstep(0,.24,after)
 		var fade := 1.-smoothstep(.25,.85,after)
-		_piece(sphere,surface,aim,Vector3(1.25,.25,1.25)*(1.+grow*.5)*fade,axis)
-		_piece(ring,hot,aim,Vector3(1.1+grow, .18,1.1+grow)*fade,axis)
+		_dark_pulse_piece(sphere,surface,aim,Vector3(1.25,.25,1.25)*(1.+grow*.5)*fade,axis,ground.y)
+		_dark_pulse_piece(ring,hot,aim,Vector3(1.1+grow, .18,1.1+grow)*fade,axis,ground.y)
+
+func _dark_pulse_piece(mesh: Mesh, material: Material, point: Vector3, dimensions: Vector3, axis: Basis, floor_y: float) -> void:
+	# Keep the centre on the anatomical emitter/target. A low target gets a
+	# wider, flatter pressure front rather than half a ring buried in the floor.
+	# Include the shader's maximum normal displacement in the clearance bounds.
+	var bounds := mesh.get_aabb().grow(.055)
+	var basis := axis * Basis.from_scale(dimensions)
+	var depth := 0.0
+	for corner in 8:
+		depth = maxf(depth,-(basis*bounds.get_endpoint(corner)).y)
+	var clearance := maxf(.001,point.y-floor_y-.015)
+	if depth > clearance:
+		basis = basis.scaled(Vector3(1,clearance/depth,1))
+	_piece(mesh,material,point,Vector3.ONE,basis)
 
 func _surf() -> void:
 	var charge := charge_progress()
