@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add six parallel, offline Daycare training places on Route 5 with independent EXP/EV targets, story caps, server quotes, paid confirmation and individual pickup.
+
 - Start the Android 3D battle fade as soon as the arena is drawn, while battle data and Pokémon prepare. Keep one stable close-up overview as models appear, and retain touch zoom and move-camera shots. Speed up local preparation by reusing fresh verification and expanding only the required assets, with cold-load integrity checks preserved.
 
 - Keep Dark Pulse's charge, travelling pressure front and impact above the arena floor, adapting vertical growth to low emitters and targets while preserving its aim and width.
