@@ -779,7 +779,7 @@
       "family": "field",
       "variant": "eruption",
       "type": "rock",
-      "color": "b8a07c",
+      "color": "d4b775",
       "contact": false,
       "target": "target",
       "gameplay_target": "normal",
@@ -816,9 +816,9 @@
       ],
       "presentation_review": "implemented-pending-player-review",
       "lighting": {
-        "energy": 0.0,
-        "mix": 0.0,
-        "brightness": 1.0
+        "energy": 0.65,
+        "mix": 0.3,
+        "brightness": 0.88
       },
       "source_reference": {
         "directory": "ew0246",
@@ -830,7 +830,9 @@
           "ew0246_df_hit01.ptcl"
         ],
         "usage": "shape-and-phase-reference; authored geometry, no SV timeline conversion"
-      }
+      },
+      "camera": "rock-ground",
+      "cinematic_environment": true
     },
     "appleacid": {
       "name": "Apple Acid",
@@ -4014,9 +4016,9 @@
       ],
       "presentation_review": "implemented-pending-player-review",
       "lighting": {
-        "energy": 0.0,
-        "mix": 0.0,
-        "brightness": 1.0
+        "energy": 0.25,
+        "mix": 0.2,
+        "brightness": 0.92
       },
       "source_reference": {
         "directory": "ew0523",
@@ -4028,7 +4030,9 @@
           "ew0523_smoke01_sml.ptcl"
         ],
         "usage": "shape-and-phase-reference; authored geometry, no SV timeline conversion"
-      }
+      },
+      "camera": "rock-ground",
+      "cinematic_environment": true
     },
     "bulletseed": {
       "name": "Bullet Seed",
@@ -23995,7 +23999,7 @@
       "family": "field",
       "variant": "eruption",
       "type": "ground",
-      "color": "bf8955",
+      "color": "e8793d",
       "contact": false,
       "target": "target",
       "gameplay_target": "allAdjacentFoes",
@@ -24023,9 +24027,9 @@
       ],
       "presentation_review": "implemented-pending-player-review",
       "lighting": {
-        "energy": 0.0,
-        "mix": 0.0,
-        "brightness": 1.0
+        "energy": 0.9,
+        "mix": 0.32,
+        "brightness": 0.84
       },
       "source_reference": {
         "directory": "ew0619",
@@ -24039,7 +24043,8 @@
         ],
         "usage": "shape-and-phase-reference; authored geometry, no SV timeline conversion"
       },
-      "camera": "field"
+      "camera": "rock-ground",
+      "cinematic_environment": true
     },
     "present": {
       "name": "Present",
@@ -26024,9 +26029,9 @@
       ],
       "presentation_review": "implemented-pending-player-review",
       "lighting": {
-        "energy": 0.0,
-        "mix": 0.0,
-        "brightness": 1.0
+        "energy": 0.22,
+        "mix": 0.14,
+        "brightness": 0.96
       },
       "source_reference": {
         "directory": "ew0350",
@@ -26035,7 +26040,9 @@
           "ew0350_at_rock.ptcl"
         ],
         "usage": "shape-and-phase-reference; authored geometry, no SV timeline conversion"
-      }
+      },
+      "camera": "rock-ground",
+      "cinematic_environment": true
     },
     "rockclimb": {
       "name": "Rock Climb",
@@ -26217,9 +26224,9 @@
       ],
       "presentation_review": "implemented-pending-player-review",
       "lighting": {
-        "energy": 0.0,
-        "mix": 0.0,
-        "brightness": 1.0
+        "energy": 0.25,
+        "mix": 0.2,
+        "brightness": 0.89
       },
       "source_reference": {
         "directory": "ew0317",
@@ -26228,7 +26235,9 @@
           "ew0317_df_hit.ptcl"
         ],
         "usage": "shape-and-phase-reference; authored geometry, no SV timeline conversion"
-      }
+      },
+      "camera": "rock-ground",
+      "cinematic_environment": true
     },
     "rockwrecker": {
       "name": "Rock Wrecker",
@@ -31352,9 +31361,9 @@
       ],
       "presentation_review": "implemented-pending-player-review",
       "lighting": {
-        "energy": 0.0,
-        "mix": 0.0,
-        "brightness": 1.0
+        "energy": 0.3,
+        "mix": 0.22,
+        "brightness": 0.9
       },
       "source_reference": {
         "directory": "ew0444",
@@ -31367,7 +31376,8 @@
         ],
         "usage": "shape-and-phase-reference; authored geometry, no SV timeline conversion"
       },
-      "camera": "field"
+      "camera": "rock-ground",
+      "cinematic_environment": true
     },
     "storedpower": {
       "name": "Stored Power",

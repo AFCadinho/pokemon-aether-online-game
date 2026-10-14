@@ -224,10 +224,35 @@ func _apply_catalog(stage: Node, seconds: float, phase: float) -> void:
 		var height: float = effect.RockSlide.fall_height(effect)+1.5 if seconds<effect.impact else 3.8
 		_append_box(points,effect.ground+Vector3.UP*height*.5,Vector3(3.5,height*.5,3.5))
 		direction = -forward*.5+side+Vector3.UP*(.3 if seconds<effect.impact else .5)
+	if effect.key in stage.ExtendedMoveEffect.RockGround.KEYS:
+		points.clear()
+		_append_body(points,a if seconds<effect.launch else b)
+		var start: Vector3 = effect.actor_ground
+		var end: Vector3 = effect.ground
+		if seconds<effect.launch:
+			_append_box(points,source,Vector3(1.4,1.5,1.4))
+			_append_box(points,start+Vector3.UP*.5,Vector3(1.4,.5,1.4))
+		elif effect.key=="rocktomb":
+			var height: float = effect.RockSlide.fall_height(effect)+2.5 if seconds<effect.impact else 3.2
+			_append_box(points,end+Vector3.UP*height*.5,Vector3(2.8,height*.5,2.8))
+		else:
+			# Fixed envelopes encompass the complete delivery and impact; no rock tracking.
+			_append_box(points,start+Vector3.UP*1.3,Vector3(2.6,1.3,2.6))
+			_append_box(points,source+Vector3.UP*.4,Vector3(1.6,1.6,1.6))
+			_append_box(points,aim+Vector3.UP*.4,Vector3(1.6,1.6,1.6))
+			var height := 4.6 if effect.key=="precipiceblades" else 3.2
+			_append_box(points,end+Vector3.UP*height*.5,Vector3(3.,height*.5,3.))
+			direction = -forward*.4+side+Vector3.UP*.48
+		if effect.key=="rocktomb" and seconds>=effect.launch:
+			direction = -forward*.5+side+Vector3.UP*(.3 if seconds<effect.impact else .5)
 	camera.transform = _fit(camera, points, direction.normalized())
 	if effect.key == "rockslide" and effect.hit and seconds >= effect.impact:
 		var after: float = (seconds-effect.impact)/maxf(.01,effect.duration-effect.impact)
 		var recoil: Vector2 = effect.RockSlide.recoil(after)
+		camera.position += camera.basis.x*recoil.x+camera.basis.y*recoil.y
+	if effect.key in stage.ExtendedMoveEffect.RockGround.KEYS and effect.hit and seconds>=effect.impact:
+		var after: float = (seconds-effect.impact)/maxf(.01,effect.duration-effect.impact)
+		var recoil: Vector2 = stage.ExtendedMoveEffect.RockSlide.recoil(after)*(.8 if effect.key=="precipiceblades" else .45)
 		camera.position += camera.basis.x*recoil.x+camera.basis.y*recoil.y
 	camera.transform = camera.transform.interpolate_with(overview, smoothstep(0.88, 1.0, phase))
 	_clear_view(stage, overview, 1.0 - smoothstep(0.88, 1.0, phase))

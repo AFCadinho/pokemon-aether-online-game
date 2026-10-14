@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Rock Tomb, Stone Edge, Rock Blast, Ancient Power, Bulldoze and Precipice Blades distinct solid-rock choreography, wider impacts, cinematic cameras and earthy environment lighting while preserving native timing and audio.
+
 - Limit Daycare enrollment to Party Pokémon and clarify the training summary with total cost, completion time, EXP/EV goals, stored EV use and a Start training action. Display whole numbers without decimal suffixes.
 
 - Save the player's counter position before opening or refreshing Daycare, preventing proximity failures while the periodic autosave is still pending.

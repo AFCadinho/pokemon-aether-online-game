@@ -19,7 +19,7 @@ alluringvoice,Alluring Voice,fairy,extended,sound,smooth elemental surfaces; joi
 allyswitch,Ally Switch,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
 amnesia,Amnesia,psychic,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
 anchorshot,Anchor Shot,steel,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
-ancientpower,Ancient Power,rock,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+ancientpower,Ancient Power,rock,extended,eruption,six levitating stones; arcing convergence and amber aura,rock-ground,0.65,implemented-pending-player-review
 appleacid,Apple Acid,grass,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
 aquacutter,Aqua Cutter,water,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
 aquajet,Aqua Jet,water,staged,water-rush,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
@@ -94,7 +94,7 @@ bubblebeam,bubblebeam,dedicated,dedicated,dedicated,retain existing dedicated ch
 bugbite,Bug Bite,bug,staged,biting-strike,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
 bugbuzz,Bug Buzz,bug,extended,sound,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
 bulkup,Bulk Up,fighting,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
-bulldoze,Bulldoze,ground,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+bulldoze,Bulldoze,ground,extended,eruption,wide low soil front; rolling dust and solid slabs,rock-ground,0.25,implemented-pending-player-review
 bulletpunch,Bullet Punch,steel,staged,heavy-punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.32,pending player review
 bulletseed,Bullet Seed,grass,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
 burningbulwark,Burning Bulwark,fire,extended,shield,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
@@ -578,7 +578,7 @@ powertrick,Power Trick,psychic,extended,exchange,smooth supporting volumes; rest
 powertrip,Power Trip,dark,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
 poweruppunch,Power-Up Punch,fighting,extended,punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
 powerwhip,Power Whip,grass,extended,lash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
-precipiceblades,Precipice Blades,ground,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+precipiceblades,Precipice Blades,ground,extended,eruption,volcanic path and tall heated pinnacle crown,rock-ground,0.9,implemented-pending-player-review
 present,Present,normal,extended,bomb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
 prismaticlaser,Prismatic Laser,psychic,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
 protect,Protect,normal,staged,protective-screen,smooth supporting volumes; restrained status/heal/boost staging,overview,0.32,pending player review
@@ -631,13 +631,13 @@ revivalblessing,Revival Blessing,normal,extended,heal,smooth supporting volumes;
 risingvoltage,Rising Voltage,electric,extended,lightning,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
 roar,Roar,normal,extended,statussound,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
 roaroftime,Roar of Time,dragon,extended,beam,smooth elemental surfaces; joined delivery and outcome-gated impact,beam,0.7,pending player review
-rockblast,Rock Blast,rock,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+rockblast,Rock Blast,rock,extended,shard,five solid tumbling rocks; narrow launch and rapid volley,rock-ground,0.22,implemented-pending-player-review
 rockclimb,Rock Climb,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
 rockpolish,Rock Polish,rock,extended,boost,smooth supporting volumes; restrained status/heal/boost staging,overview,0.0,pending player review
 rockslide,Rock Slide,rock,extended,rain,five authored tumbling boulders; grounded debris and dust; native impact recoil,rockfall,0.25,pending player review
 rocksmash,Rock Smash,fighting,staged,heavy-punch,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
 rockthrow,Rock Throw,rock,staged,spinning-shards,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0,pending player review
-rocktomb,Rock Tomb,rock,extended,rain,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
+rocktomb,Rock Tomb,rock,extended,rain,four heavy enclosing blocks; staggered fall and low debris,rock-ground,0.25,implemented-pending-player-review
 rockwrecker,Rock Wrecker,rock,extended,shard,smooth elemental surfaces; joined delivery and outcome-gated impact,orb,0.0,pending player review
 roleplay,Role Play,psychic,extended,exchange,smooth supporting volumes; restrained status/heal/boost staging,overview,0.7,pending player review
 rollingkick,Rolling Kick,fighting,extended,kick,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
@@ -760,7 +760,7 @@ stokedsparksurfer,Stoked Sparksurfer,electric,z,electric_surf,retain cinematic Z
 stomp,Stomp,normal,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
 stompingtantrum,Stomping Tantrum,ground,extended,ram,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
 stoneaxe,Stone Axe,rock,extended,slash,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
-stoneedge,Stone Edge,rock,extended,eruption,smooth elemental surfaces; joined delivery and outcome-gated impact,field,0.0,pending player review
+stoneedge,Stone Edge,rock,extended,eruption,advancing fault and broad seven-blade stone fan,rock-ground,0.3,implemented-pending-player-review
 storedpower,Stored Power,psychic,extended,orb,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
 stormthrow,Storm Throw,fighting,extended,grip,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.0,pending player review
 strangesteam,Strange Steam,fairy,extended,burst,smooth elemental surfaces; joined delivery and outcome-gated impact,overview,0.7,pending player review
