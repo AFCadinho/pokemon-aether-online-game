@@ -61,3 +61,22 @@ until the player chooses. Publish Android only after its signed candidate passes
 Keep the previous compatible game/launcher manifests and model objects for
 rollback. This release does not delete old model objects. Retirement requires
 a separate reviewed reference and compatibility plan after observation.
+
+## Release export and public delivery checks
+
+The actual Linux release template selects v16 with diagnostic environment
+flags disabled by the release build. The game owns its index helper under
+`scripts/services/asset_bundle_index.gd`; its bytes match the launcher helper.
+Keeping this dependency inside the game project fixes the exporter omission
+caused by the nested launcher project. The full compiled-index cold/restart
+checks passed again after this consumer-only fix. The existing full native
+model proof remains valid because the payloads and native reader stayed exact.
+
+All 1,421 archives and the immutable index passed public GET hashes and HEAD
+sizes. Their publication receipt was rebound to the qualified consumer fix
+only after checking the retained committed binding, unchanged payload pins and
+native proof, fresh public HEAD checks and an exact index GET. Live manifests
+remained unchanged. A separate real HTTP check loaded eight appearances for
+Hydreigon, Tyranitar and two pooled Minior forms, and verified cached reuse.
+Two missing historical Garchomp fixtures in the owned QA cache triggered
+conservative history-retention warnings; all requested new models verified.
