@@ -314,8 +314,8 @@ def main():
             editor_settings.write_text('[gd_resource type="EditorSettings" format=3]\n[resource]\nexport/android/android_sdk_path = "' + str(args.sdk.resolve()) + '"\nexport/android/java_sdk_path = "' + str(args.java.resolve()) + '"\n')
         presets.write_text(preset + "\n" + selected)
         with (output / "export.log").open("w") as log:
-            if android_3d:
-                scripts = paths.copy() if android_pairs else [paths[0]]
+            if android_3d or mobile_hotbar:
+                scripts = ([paths[0]] if mobile_hotbar else (paths.copy() if android_pairs else [paths[0]]))
                 if android_pairs:
                     scripts.append("res://scripts/battle_entry_qa_generated/runner.gd")
                 for script in scripts:

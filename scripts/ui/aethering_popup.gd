@@ -33,7 +33,8 @@ var result_before: Dictionary = {}
 
 var title: Label
 var help_label: Label
-var cards: HBoxContainer
+var cards: BoxContainer
+var actions: BoxContainer
 var recipient_details: VBoxContainer
 var donor_details: VBoxContainer
 var recipient_select: Button
@@ -59,6 +60,9 @@ var picker_grid: GridContainer
 var picker_buttons: Array[Button] = []
 var picker_compact := false
 var picker_rows: Array = []
+var result_panel: PanelContainer
+var result_grid: GridContainer
+var result_details: Label
 var results: RichTextLabel
 
 func _ready() -> void:
@@ -80,6 +84,9 @@ func _ready() -> void:
 
 func _fit() -> void:
 	var available := get_viewport_rect().size
+	_apply_header_layout()
+	cards.vertical = available.x < 500
+	actions.vertical = available.x < 500
 	var target := Vector2(minf(920, available.x - 24), minf(690, available.y - 24))
 	size = target
 	position = (available - target) / 2.0
@@ -115,8 +122,41 @@ func _build() -> void:
 	content.add_theme_constant_override("separation", 10)
 	scroll.add_child(content)
 	help_label = _label("", MUTED)
+	# Completed IVs are the first thing visible, before the next ritual's controls.
+	result_panel = PanelContainer.new()
+	var result_style := StyleBoxFlat.new()
+	result_style.bg_color = Color("0b2426")
+	result_style.border_color = GREEN
+	result_style.set_border_width_all(2)
+	result_style.set_corner_radius_all(10)
+	result_style.content_margin_left = 12
+	result_style.content_margin_right = 12
+	result_style.content_margin_top = 10
+	result_style.content_margin_bottom = 10
+	result_panel.add_theme_stylebox_override("panel", result_style)
+	content.add_child(result_panel)
+	var result_layout := VBoxContainer.new()
+	result_layout.add_theme_constant_override("separation", 8)
+	result_panel.add_child(result_layout)
+	results = RichTextLabel.new()
+	# Nicknames must remain plain text, including any BBCode-looking characters.
+	results.bbcode_enabled = false
+	results.fit_content = true
+	results.scroll_active = false
+	results.add_theme_font_size_override("normal_font_size", 17)
+	results.add_theme_color_override("default_color", GREEN)
+	result_layout.add_child(results)
+	result_grid = GridContainer.new()
+	result_grid.columns = 4
+	result_grid.add_theme_constant_override("h_separation", 10)
+	result_grid.add_theme_constant_override("v_separation", 6)
+	result_layout.add_child(result_grid)
+	result_details = _label("", MUTED)
+	result_layout.add_child(result_details)
+	result_panel.hide()
+	results.hide()
 	content.add_child(help_label)
-	cards = HBoxContainer.new()
+	cards = BoxContainer.new()
 	cards.add_theme_constant_override("separation", 12)
 	content.add_child(cards)
 	recipient_details = _card(cards, CYAN)
@@ -140,16 +180,9 @@ func _build() -> void:
 	no_wings_button = _button("", _without_wings)
 	no_wings_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	wing_row.add_child(no_wings_button)
-	results = RichTextLabel.new()
-	results.bbcode_enabled = true
-	results.fit_content = true
-	results.scroll_active = false
-	results.add_theme_font_size_override("normal_font_size", 15)
-	results.visible = false
-	content.add_child(results)
 	status = _label("", MUTED)
 	layout.add_child(status)
-	var actions := HBoxContainer.new()
+	actions = BoxContainer.new()
 	layout.add_child(actions)
 	preview_button = _button("", _preview)
 	preview_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -158,6 +191,7 @@ func _build() -> void:
 	confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	actions.add_child(confirm_button)
 	next_donor_button = _button("", _open_picker.bind(true))
+	next_donor_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	actions.add_child(next_donor_button)
 	_localize()
 
@@ -231,12 +265,20 @@ func _t(key: String, values: Dictionary = {}) -> String:
 func _stat(stat: String) -> String:
 	return _t("stat." + stat)
 
+func _apply_header_layout() -> void:
+	if guide_button == null or refresh_button == null:
+		return
+	var compact := get_viewport_rect().size.x < 500
+	guide_button.text = "?" if compact else LocalizationManager.text("ui.daycare.forum_guide")
+	guide_button.tooltip_text = LocalizationManager.text("ui.daycare.forum_guide_hint")
+	refresh_button.text = "↻" if compact else _t("refresh")
+	refresh_button.tooltip_text = _t("refresh")
+
 func _localize() -> void:
-	guide_button.text = LocalizationManager.text("ui.daycare.forum_guide")
+	_apply_header_layout()
 	guide_button.tooltip_text = LocalizationManager.text("ui.daycare.forum_guide_hint")
 	title.text = _t("title")
 	help_label.text = _t("help")
-	refresh_button.text = _t("refresh")
 	preview_button.text = _t("preview")
 	no_wings_button.text = _t("without_wings")
 	no_wings_button.tooltip_text = _t("optional_wings")
@@ -577,6 +619,7 @@ func _pick(index: int) -> void:
 		donor = {}
 		last_result.clear()
 		results.hide()
+		result_panel.hide()
 	picker.hide()
 	status.text = _t("ready")
 	_render()
@@ -674,6 +717,8 @@ func _render() -> void:
 	wing_stock.text = _t("cost", {"money": PlayerSave.money}) + "\n" + " · ".join(stock)
 	if not plan.is_empty():
 		wing_stock.text += "\n" + _t("preview_ready", {"expires": str(plan.get("expiresAt", "")).substr(11, 5) + " UTC"})
+	result_panel.visible = not last_result.is_empty() and donor.is_empty()
+	grid.visible = not result_panel.visible
 	_update_buttons()
 
 func _wing_count(item_id: String) -> int:
@@ -700,7 +745,10 @@ func _update_buttons() -> void:
 	confirm_button.disabled = not block_reason.is_empty()
 	confirm_button.tooltip_text = block_reason
 	confirm_button.text = _t("retry") if unresolved else _t("confirm")
-	next_donor_button.visible = not last_result.is_empty()
+	var showing_result := not last_result.is_empty() and donor.is_empty()
+	preview_button.visible = not showing_result
+	confirm_button.visible = not showing_result
+	next_donor_button.visible = showing_result
 	next_donor_button.disabled = frozen or candidates.size() < 2 or recipient.is_empty()
 
 func _confirm_block_reason() -> String:
@@ -788,10 +836,11 @@ func _ask_confirm() -> void:
 func _execute() -> void:
 	busy = true
 	_update_buttons()
-	result_before = AetheringService.pending.get("context", {}).get("recipient", {}).get("pokemon", {}).get("ivs", {}).duplicate(true)
+	var before := _snapshot_result_before(AetheringService.pending)
 	var response := await AetheringService.confirm_pending()
 	if bool(response.get("success", false)):
 		last_result = response["data"]
+		result_before = before
 		# Quantity-only receipts are not full Bag metadata. Refresh normal readers.
 		PlayerSave.replace_party_from_state(last_result.get("party", []))
 		PlayerSave.money = int(last_result.get("money", PlayerSave.money))
@@ -803,7 +852,11 @@ func _execute() -> void:
 		candidates = candidates.filter(func(entry: Dictionary): return int(entry.get("pokemonId", 0)) != removed_id)
 		if not recipient.is_empty():
 			recipient["pokemon"] = last_result.get("recipient", {})
+		status.text = _t("success")
 		_render_result()
+		_render()
+		scroll.set_deferred("scroll_vertical", 0)
+		_publish_result_feedback()
 		completed.emit(last_result)
 		await PlayerPartyStateService.refresh_party()
 		busy = false
@@ -811,7 +864,7 @@ func _execute() -> void:
 		status.text = _t("success") if resources_ready else _t("success") + "\n" + _t("refresh_failed")
 		if resources_ready and candidates.size() < 2:
 			status.text += "\n" + _t("reason.aethering_party_required")
-		scroll.ensure_control_visible.call_deferred(results)
+		scroll.set_deferred("scroll_vertical", 0)
 	else:
 		var message := _error(response) if AetheringService.pending.is_empty() else _t("unresolved")
 		if AetheringService.pending.is_empty():
@@ -825,17 +878,75 @@ func _execute() -> void:
 		status.text = message
 	_render()
 
+func _snapshot_result_before(receipt: Dictionary) -> Dictionary:
+	var before: Dictionary = {}
+	var sources: Dictionary = receipt.get("plan", {}).get("stats", {})
+	var fallback: Dictionary = receipt.get("context", {}).get("recipient", {}).get("pokemon", {}).get("ivs", {})
+	for stat: String in STATS:
+		var value: Variant = sources.get(stat, {}).get("recipientIV", fallback.get(stat))
+		if value != null:
+			before[stat] = int(value)
+	return before
+
+func _result_counts() -> Dictionary:
+	var counts := {"improved": 0, "worsened": 0, "unchanged": 0}
+	for stat: String in STATS:
+		if not result_before.has(stat) or not last_result.get("ivs", {}).has(stat):
+			continue
+		var delta := int(last_result["ivs"][stat]) - int(result_before[stat])
+		counts["improved" if delta > 0 else "worsened" if delta < 0 else "unchanged"] += 1
+	return counts
+
+func _result_summary() -> String:
+	var counts := _result_counts()
+	return _t("result_unchanged") if int(counts["unchanged"]) == 6 else _t("result_counts", counts)
+
+func _publish_result_feedback() -> void:
+	# A recovered replay is the player's first confirmed success too. Deduplicate
+	# by the server audit, rather than suppressing every replay response.
+	if not AetheringService.claim_completion_notice(last_result):
+		return
+	var name := _name({"pokemon": last_result.get("recipient", {})})
+	get_tree().call_group("ui_overlay", "add_system_message", _t("completion_message", {"name": name, "summary": _result_summary()}))
+	SfxManager.play("aethering_complete")
+
 func _render_result() -> void:
 	if last_result.is_empty():
+		result_panel.hide()
+		results.hide()
 		return
-	var lines: Array[String] = [_t("result")]
+	var name := _name({"pokemon": last_result.get("recipient", recipient.get("pokemon", {}))})
+	results.text = _t("result_title", {"name": name}) + "\n" + _result_summary()
+	for child: Node in result_grid.get_children():
+		result_grid.remove_child(child)
+		child.queue_free()
+	for caption in [_t("stat"), _t("result_before"), _t("result_after"), _t("result_change")]:
+		result_grid.add_child(_label(caption, MUTED, 12))
 	for stat: String in STATS:
-		var before := int(result_before.get(stat, 0))
-		var after := int(last_result.get("ivs", {}).get(stat, 0))
-		var delta := after - before
+		var before: Variant = result_before.get(stat)
+		var after: Variant = last_result.get("ivs", {}).get(stat)
+		var delta := int(after) - int(before) if before != null and after != null else 0
 		var color := RED if delta < 0 else GREEN if delta > 0 else MUTED
-		lines.append("[color=#%s]%s: %d → %d  (%+d)[/color]" % [color.to_html(false), _stat(stat), before, after, delta])
-	results.text = "\n".join(lines)
+		var stat_label := _label(_stat(stat), CYAN)
+		stat_label.custom_minimum_size.x = 70
+		result_grid.add_child(stat_label)
+		var before_label := _label(str(int(before)) if before != null else "—", MUTED)
+		before_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		result_grid.add_child(before_label)
+		var after_label := _label(str(int(after)) if after != null else "—", Color.WHITE, 17)
+		after_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		result_grid.add_child(after_label)
+		var change := "—"
+		if before != null and after != null:
+			change = "↑ +%d" % delta if delta > 0 else "↓ %d" % delta if delta < 0 else "= 0"
+		var change_label := _label(change, color, 16)
+		change_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		result_grid.add_child(change_label)
+	var wings := 0
+	for item: Dictionary in last_result.get("consumedWings", []):
+		wings += int(item.get("quantity", 0))
+	result_details.text = _t("result_details", {"cost": int(last_result.get("processCost", 10000)), "wings": wings})
+	result_panel.visible = donor.is_empty()
 	results.show()
 
 func _error(response: Dictionary) -> String:

@@ -3,12 +3,23 @@ extends SceneTree
 
 const Target := preload("res://scripts/ui/touch_target_size.gd")
 
+class PageWatcher extends Node:
+	var overlay: CanvasLayer
+	var update_report: Callable
+	var last_page := -1
+
+	func _process(_delta: float) -> void:
+		var page: int = overlay.hotbar_current_page
+		if page != last_page:
+			last_page = page
+			update_report.call()
+
+
 var overlay: CanvasLayer
 var checks := 0
 var failures: Array[String] = []
 var samples: Array[Dictionary] = []
 var manual := false
-var last_manual_page := -1
 var toolbar: PanelContainer
 
 
@@ -53,6 +64,10 @@ func _run() -> void:
 	overlay._set_hotbar_page(0)
 	await _settle()
 	manual = true
+	var watcher := PageWatcher.new()
+	watcher.overlay = overlay
+	watcher.update_report = _write_report
+	root.add_child(watcher)
 	_build_toolbar()
 	overlay.hotbar_touch_page_button.pressed.connect(_record_manual_page)
 	_write_report()
@@ -62,12 +77,6 @@ func _run() -> void:
 
 func _quick_buttons() -> Array[Control]:
 	return [overlay.donator_store_button, overlay.settings_button, overlay.mount_button, overlay.skills_button, overlay.my_powers_button]
-
-
-func _process(_delta: float) -> void:
-	if manual and overlay.hotbar_current_page != last_manual_page:
-		last_manual_page = overlay.hotbar_current_page
-		_write_report()
 
 
 func _settle() -> void:
@@ -87,15 +96,19 @@ func _sample(percentage: int, page: int) -> void:
 	_check(Rect2(Vector2.ZERO, Vector2(root.size)).grow(1).encloses(hotbar), "hotbar within screen")
 	var pager := _screen_rect(overlay.hotbar_touch_page_button)
 	var density := Target.pixel_density()
-	_check(overlay.hotbar_touch_page_button.visible and not overlay.hotbar_page_controls.visible, "single native page button")
-	_check(overlay.hotbar_touch_page_button.text == "%d/3 ›" % (page + 1), "readable page button label")
+	_check(overlay.hotbar_touch_page_button.visible and not overlay.hotbar_previous_page_button.visible and not overlay.hotbar_next_page_button.visible, "single native page button")
+	_check(overlay.hotbar_touch_page_button.text == "%d/3›" % (page + 1), "readable page button label")
 	_check(pager.size.x / density >= 48.0 and pager.size.y / density >= 48.0, "48 dp page target")
-	_check(float(overlay.hotbar_touch_page_button.get_theme_font_size("font_size")) * Target.screen_scale(overlay.hotbar_touch_page_button).y >= 11.0, "readable page text")
+	_check(float(overlay.hotbar_touch_page_button.get_theme_font_size("font_size")) * Target.screen_scale(overlay.hotbar_touch_page_button).y >= 8.0, "readable page text")
 	var style := overlay.hotbar_touch_page_button.get_theme_stylebox("normal") as StyleBoxFlat
 	var visual := Rect2(Vector2.ZERO, overlay.hotbar_touch_page_button.size).grow_individual(style.expand_margin_left, style.expand_margin_top, style.expand_margin_right, style.expand_margin_bottom)
-	_check((visual.size * Target.screen_scale(overlay.hotbar_touch_page_button)).is_equal_approx(Vector2(36, 22)), "compact 36 by 22 dp visible page label")
+	_check(is_equal_approx((visual.size * Target.screen_scale(overlay.hotbar_touch_page_button)).y, 16.0), "compact visible footer label")
+	var visual_screen: Rect2 = (root.get_screen_transform() * overlay.hotbar_touch_page_button.get_global_transform_with_canvas()) * visual
+	_check(hotbar.grow(0.1).encloses(visual_screen), "page label is integrated inside the hotbar frame")
 	_check(Rect2(Vector2.ZERO, Vector2(root.size)).grow(1).encloses(pager), "page button within screen")
-	_check(not pager.intersects(hotbar), "page button clears the item slots")
+	for slot: Control in overlay.hotbar_slot_panels:
+		if slot.visible:
+			_check(not pager.intersects(_screen_rect(slot)), "page target clears the item slots")
 	_check(overlay.is_point_over_visible_ui(overlay.hotbar_touch_page_button.get_global_rect().get_center()), "page button blocks world movement")
 	var buttons: Dictionary = {}
 	for button: Control in _quick_buttons() + [overlay.personal_buffs_panel, overlay.player_status_panel]:

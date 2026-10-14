@@ -140,7 +140,7 @@ func _run() -> void:
 	popup.last_result = {"ivs": {"hp": 31, "atk": 31, "def": 18, "spa": 0, "spd": 31, "spe": 9}}
 	popup.result_before = original["pokemon"]["ivs"]
 	popup._render_result()
-	_check(popup.results.text.contains("(+3)") and popup.results.text.contains("(-13)"), "Actual IV gains and losses shown")
+	_check((popup.result_grid.get_child(15) as Label).text.contains("+3") and (popup.result_grid.get_child(27) as Label).text.contains("-13"), "Actual IV gains and losses shown")
 	for locale in ["en", "nl", "pt_BR"]:
 		root.get_node("LocalizationManager").call("set_locale", locale)
 		_check(not popup.help_label.text.begins_with("ui."), "Localized instructions " + locale)
