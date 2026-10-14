@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Start desktop 3D battles at the player-reviewed camera angle and zoom, and restore that view on camera reset.
+
 - Restyle Daycare with Aether cards, clear training inputs, custom tabs and action buttons, progress bars and a recoverable loading error view.
 
 - Let desktop development builds record the chosen idle 3D battle camera with Ctrl+Shift+C for camera-framing feedback.
