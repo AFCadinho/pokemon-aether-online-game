@@ -7074,7 +7074,7 @@
   "ui.nature_specialist.current": "Original: {original} · Effective: {effective}",
   "ui.nature_specialist.proposed": "New effect: {nature} · Price: {price} ₽",
   "ui.nature_specialist.review": "Review the stat changes before confirming.",
-  "ui.nature_specialist.confirmation": "Apply {nature} for {price} ₽? Your next treatment will be available in seven days. The original nature and trade binding stay unchanged.",
+  "ui.nature_specialist.confirmation": "Change the effective nature from {old_nature} to {nature} for {price} ₽? Your next treatment will be available in seven days. The original nature and trade binding stay unchanged.",
   "ui.nature_specialist.success": "Treatment complete.",
   "ui.nature_specialist.details": "{original} · Treated: {effective}",
   "ui.nature_specialist.neutral": "(Neutral)",

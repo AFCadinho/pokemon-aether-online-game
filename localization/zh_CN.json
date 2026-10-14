@@ -7074,7 +7074,7 @@
   "ui.nature_specialist.current": "原始：{original} · 生效：{effective}",
   "ui.nature_specialist.proposed": "新效果：{nature} · 价格：{price} ₽",
   "ui.nature_specialist.review": "确认前请检查能力变化。",
-  "ui.nature_specialist.confirmation": "花费 {price} ₽ 应用 {nature}？七天后可再次治疗。原始性格和交易限制保持不变。",
+  "ui.nature_specialist.confirmation": "花费 {price} ₽ 将生效性格从 {old_nature} 改为 {nature}？七天后可再次治疗。原始性格和交易限制保持不变。",
   "ui.nature_specialist.success": "治疗完成。",
   "ui.nature_specialist.details": "{original} · 已治疗：{effective}",
   "ui.nature_specialist.neutral": "（无能力变化）",

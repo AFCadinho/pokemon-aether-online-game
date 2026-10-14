@@ -7074,7 +7074,7 @@
   "ui.nature_specialist.current": "Original: {original} · Efetiva: {effective}",
   "ui.nature_specialist.proposed": "Novo efeito: {nature} · Preço: {price} ₽",
   "ui.nature_specialist.review": "Confira os atributos antes de confirmar.",
-  "ui.nature_specialist.confirmation": "Aplicar {nature} por {price} ₽? O próximo tratamento ficará disponível em sete dias. A natureza original e as restrições de troca permanecem.",
+  "ui.nature_specialist.confirmation": "Alterar a natureza efetiva de {old_nature} para {nature} por {price} ₽? O próximo tratamento ficará disponível em sete dias. A natureza original e as restrições de troca permanecem.",
   "ui.nature_specialist.success": "Tratamento concluído.",
   "ui.nature_specialist.details": "{original} · Tratado: {effective}",
   "ui.nature_specialist.neutral": "(Neutra)",

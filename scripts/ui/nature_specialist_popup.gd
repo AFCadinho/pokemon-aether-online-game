@@ -34,6 +34,7 @@ var pokemon_image: TextureRect
 var pokemon_name: Label
 var pokemon_info: Label
 var nature_info: Label
+var nature_transition: Label
 var iv_values: Dictionary = {}
 var stat_values: Dictionary = {}
 var price_label: Label
@@ -45,6 +46,7 @@ var content_scroll: ScrollContainer
 var stats_panel: PanelContainer
 var iv_toggle: Button
 var action_buttons: BoxContainer
+var service_badge: PanelContainer
 
 func _ready() -> void:
 	add_theme_stylebox_override("panel", _box(Color("07121ffb"), Color("395b70"), 14, 14))
@@ -55,6 +57,7 @@ func _ready() -> void:
 	header.add_theme_constant_override("separation", 12)
 	layout.add_child(header)
 	var badge := PanelContainer.new()
+	service_badge = badge
 	badge.add_theme_stylebox_override("panel", _box(Color("173829"), Color("39614a"), 12, 8))
 	header.add_child(badge)
 	var mint := TextureRect.new()
@@ -190,11 +193,19 @@ func _ready() -> void:
 	payment.add_child(price_label)
 	wallet_label = _label("", MUTED, 12)
 	payment.add_child(wallet_label)
+	var review := VBoxContainer.new()
+	review.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	review.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	footer.add_child(review)
+	nature_transition = _label("", ACCENT, 16)
+	nature_transition.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	nature_transition.hide()
+	review.add_child(nature_transition)
 	status_label = _label("", MUTED, 12)
 	status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	status_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	footer.add_child(status_label)
+	review.add_child(status_label)
 	var buttons := BoxContainer.new()
 	action_buttons = buttons
 	buttons.add_theme_constant_override("separation", 10)
@@ -216,7 +227,13 @@ func _ready() -> void:
 
 func _fit() -> void:
 	var available := get_viewport_rect().size
-	action_buttons.vertical = available.x < 480
+	var narrow := available.x < 480
+	action_buttons.vertical = narrow
+	service_badge.visible = not narrow
+	guide_button.text = "?" if narrow else LocalizationManager.text("ui.daycare.forum_guide")
+	guide_button.custom_minimum_size.x = 44
+	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART if narrow else TextServer.AUTOWRAP_OFF
+	title_label.clip_text = not narrow
 	var target := Vector2(minf(700, available.x-24), minf(640, available.y-24))
 	custom_minimum_size = Vector2.ZERO
 	size = target
@@ -316,6 +333,7 @@ func _localize() -> void:
 		section_labels[key].text = _t(key)
 	close_button.tooltip_text = LocalizationManager.text("common.close")
 	iv_toggle.tooltip_text = _t("iv_details")
+	nature_transition.tooltip_text = _t("target_label")
 	preview_button.text = _t("preview")
 	confirm_button.text = _t("confirm")
 	quote_hint.text = _t("comparison_hint")
@@ -451,6 +469,7 @@ func _blocked_reason(entry: Dictionary) -> String:
 
 func _selection_changed(_index: int) -> void:
 	quote.clear()
+	nature_transition.hide()
 	quote_hint.text = _t("comparison_hint")
 	if not entries.is_empty():
 		var entry: Dictionary = entries[pokemon_select.selected]
@@ -474,6 +493,8 @@ func _selection_changed(_index: int) -> void:
 		else:
 			if not _has_new_effect():
 				quote_hint.text = _t("choose_different")
+			else:
+				_show_nature_transition(p.get("effectiveNature",p.get("nature","")),nature_select.get_item_metadata(nature_select.selected))
 			if not cooldown:
 				status_label.text = _t("ready")
 	else:
@@ -514,11 +535,16 @@ func _render_stats(before: Dictionary, after: Dictionary) -> void:
 
 func _show_quote(data: Dictionary) -> void:
 	quote = data
+	_show_nature_transition(quote.get("oldNature",""),quote.get("newNature",""))
 	_render_stats(quote.get("oldStats",{}),quote.get("newStats",{}))
 	price_label.text = _money(quote.get("price",0)) + " ₽"
 	quote_hint.text = _nature(quote.get("oldNature","")) + " → " + _nature(quote.get("newNature",""))
 	status_label.text = _t("review")
 	_reveal_comparison.call_deferred()
+
+func _show_nature_transition(previous: Variant, target: Variant) -> void:
+	nature_transition.text = _nature(previous) + " → " + _nature(target)
+	nature_transition.visible = not str(previous).is_empty() and not str(target).is_empty()
 
 func _ask_confirm() -> void:
 	if busy:
@@ -526,7 +552,7 @@ func _ask_confirm() -> void:
 	if not NatureSpecialistService.pending_request.is_empty():
 		await _confirm()
 	elif not quote.is_empty():
-		confirmation.configure(_t("title"), _t("confirmation", {"nature":_nature(quote.get("newNature","")), "price":_money(quote.get("price",0))}), _t("confirm"), LocalizationManager.text("common.cancel"))
+		confirmation.configure(_t("title"), _t("confirmation", {"old_nature":_nature(quote.get("oldNature","")), "nature":_nature(quote.get("newNature","")), "price":_money(quote.get("price",0))}), _t("confirm"), LocalizationManager.text("common.cancel"))
 		confirmation.popup_centered(Vector2i(600,280))
 
 func _confirm() -> void:
