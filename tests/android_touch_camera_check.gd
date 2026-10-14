@@ -88,13 +88,16 @@ func _run() -> void:
 	gesture._notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
 	assert(gesture.touches.is_empty() and not gesture.dragging)
 	# Mouse wheel remains available on desktop.
-	stage.user_camera_zoom = 1.0
+	stage.reset_user_camera()
 	var wheel := InputEventMouseButton.new()
 	wheel.button_index = MOUSE_BUTTON_WHEEL_UP
 	wheel.pressed = true
 	wheel.position = Vector2(300, 200)
 	gesture._input(wheel)
-	assert(is_equal_approx(stage.user_camera_zoom, 0.9))
+	assert(is_equal_approx(stage.user_camera_zoom, 0.54), "Wheel zoom works from the shared close-up default")
+	wheel.button_index = MOUSE_BUTTON_WHEEL_DOWN
+	gesture._input(wheel)
+	assert(is_equal_approx(stage.user_camera_zoom, 0.60))
 	host.queue_free()
 	router.cancel_render()
 	router.release_threaded_resource_requests()

@@ -33,7 +33,7 @@ func _check_world_pixels() -> void:
 	var image := root.get_texture().get_image()
 	var pixel := image.get_pixel(image.get_width() / 2, image.get_height() / 2)
 	_check(Vector3(pixel.r, pixel.g, pixel.b).distance_to(Vector3(0.12, 0.45, 0.22)) < 0.025,
-		"Mobile renderer presents the world snapshot while battle models are held")
+		"Renderer presents the outgoing world before the early field reveal")
 
 func _run() -> void:
 	var settings := root.get_node("SettingsManager")
@@ -74,13 +74,17 @@ func _run() -> void:
 		_check(host.outgoing_snapshot.texture == world_snapshot and not host.loading_backdrop.visible,
 			"3D preparation preserves the outgoing overworld without a dark loading backdrop")
 		battle.prepare_pending_entry(&"grass")
+		await _check_world_pixels()
 		var started := Time.get_ticks_msec()
 		host.reveal_pending_entry()
 		var covered_entry: bool = host.waits_for_final_camera()
+		var blend_levels: Array[float] = []
 		deadline = started + 3000
 		while not covered_entry and host.fade_progress < 1.0 and Time.get_ticks_msec() < deadline:
 			await process_frame
 			if host.fade_progress > 0.0:
+				if host.fade_progress < 1.0 and (blend_levels.is_empty() or absf(blend_levels.back() - host.fade_progress) > 0.001):
+					blend_levels.append(host.fade_progress)
 				_check(is_equal_approx(battle.animation_router.model_presenter.modulate.a, 1.0),
 					"the 3D arena is opaque from the first frame of the entry fade")
 		var stage: Node = battle.animation_router.model_presenter
@@ -93,10 +97,11 @@ func _run() -> void:
 		else:
 			_check(host.fade_progress == 1.0 and host.entry_arena_ready and not host.preparation_ready,
 				"the existing desktop fade finishes before a response or model load")
+			_check(blend_levels.size() >= 4, "Ready 3D entry keeps multiple visible blend steps rather than cutting to the field")
 		_check(stage.viewport == pool.passes[0].viewport and stage.is_visible_in_tree(), "entry reuses the already drawn arena")
 		_check(is_equal_approx(stage.modulate.a, 1.0), "pending entry never exposes the 2D field beneath a transparent arena")
 		_check(stage.actors[0] == null and stage.actors[1] == null, "pending entry has no placeholder actors")
-		var stable_early_camera: bool = stage.uses_android_camera() and not covered_entry
+		var stable_early_camera: bool = not covered_entry
 		var opening_camera: Transform3D = stage.camera.transform
 		await _capture("pending-%d" % round_index)
 		var retained_viewport: SubViewport = stage.viewport
@@ -119,7 +124,7 @@ func _run() -> void:
 		for frame in 10:
 			await process_frame
 			if stable_early_camera:
-				_check(stage.camera.transform.is_equal_approx(opening_camera), "Android early camera remains fixed while authoritative leads and held models arrive")
+				_check(stage.camera.transform.is_equal_approx(opening_camera), "Early camera remains fixed while authoritative leads and held models arrive")
 			if covered_entry:
 				_check(host.fade_progress == 0.0 and host.get_node("Cover").visible, "held model loading cannot reveal provisional Android framing")
 				_check(host.outgoing_snapshot.texture == world_snapshot and not host.loading_backdrop.visible,
@@ -150,7 +155,7 @@ func _run() -> void:
 		_check(waiting.finished and host.preparation_ready and not host.get_node("Cover").visible, "verified models release the normal intro readiness gate")
 		_check(stage.viewport == retained_viewport and stage.handles("p1") and stage.handles("p2"), "ready actors use the original arena with no rebuild")
 		if stable_early_camera:
-			_check(stage.camera.transform.is_equal_approx(opening_camera), "Android opening and model-ready overview agree without a zoom jump")
+			_check(stage.camera.transform.is_equal_approx(opening_camera), "Opening and model-ready overview agree without a zoom jump")
 		_check(stage.actors[0].visible and stage.actors[1].visible and not stage.warming_render, "both real actors appear in their actual entry visibility")
 		if round_index == 1:
 			_check(stage.model_cache_hits >= 2, "repeated encounter reuses the prepared models")

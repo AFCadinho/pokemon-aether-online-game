@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give desktop 3D battles the same close-up overview, zoom range and stable opening camera as Android. Fade the drawn battlefield in while battle data and Pokémon prepare, retaining grass/prop clearance during attack camera shots and mouse-wheel zoom.
+
 - Spread Rock Slide's boulders across a wider landing area, with matching dust, debris and camera framing.
 
 - Give Rock Slide five heavy, tumbling boulders, grounded debris and rolling dust, with a dedicated falling-rock camera shot, restrained earth-toned lighting and a brief hit recoil at the existing move speed.

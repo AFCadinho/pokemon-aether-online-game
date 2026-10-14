@@ -32,6 +32,11 @@ func _run() -> void:
 			# The viewer is now closer to their own side of the combat axis.
 			assert(single.origin.x<home.x-3.)
 			for index in 2:
+				assert(not stage.camera.is_position_behind(stage._position(index) + Vector3.UP * 1.2), "Close-up retains both combatant centres")
+			# The close-up may crop large limbs; wheel zoom-out keeps a full HUD-safe view.
+			stage.user_camera_zoom = stage.USER_CAMERA_ZOOM_MAX
+			stage._update_camera(0)
+			for index in 2:
 				var foot: Vector2=stage.camera.unproject_position(stage._position(index))
 				var head: Vector2=stage.camera.unproject_position(stage._position(index)+Vector3.UP*4.)
 				assert(Rect2(Vector2(40,40),Vector2(dimensions)-Vector2(80,80)).has_point(foot))
@@ -47,8 +52,10 @@ func _run() -> void:
 			var camera_view := stage.camera.basis.z
 			camera_view.y = 0.0
 			assert(camera_view.normalized().is_equal_approx(view.normalized()), "Doubles keep their team-row viewing direction")
+			stage.user_camera_zoom = stage.USER_CAMERA_ZOOM_MAX
+			stage._update_camera(0)
 			for point in Stage.OverviewCamera.resting_points(stage):
-				assert(Stage.OverviewCamera.SAFE_RECT.grow(0.0001).has_point(stage.camera.unproject_position(point) / Vector2(dimensions)))
+				assert(Stage.OverviewCamera.safe_rect(stage).grow(0.0001).has_point(stage.camera.unproject_position(point) / Vector2(dimensions)))
 			samples+=1
 	# Hybrid backgrounds retain their fixed orthographic framing.
 	settings.battle_presentation_mode="2.5d"
