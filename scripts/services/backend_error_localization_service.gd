@@ -11,6 +11,7 @@ const CATALOG_PATHS: Dictionary = {
 }
 
 const CODE_TO_KEY: Dictionary = {
+	"daycare_party_only": "backend.error.daycare_party_only",
 	"daycare_visit_required": "backend.error.daycare_visit_required",
 	"daycare_party_required": "backend.error.daycare_party_required",
 	"daycare_level_cap": "backend.error.daycare_level_cap",
