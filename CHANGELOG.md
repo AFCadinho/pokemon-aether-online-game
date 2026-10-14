@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Compact the Daycare window with responsive columns, content-based height and collapsible EV settings. Give its Trainer the matching Pokémon Breeder overworld sprite and dialogue portrait.
+
 - Automatically show server-checked Aethering IV outcomes, with question marks for random stats and clear missing-Wing requirements; style both IV-lock dropdowns.
 
 - Start Android 3D battles at the player-reviewed mobile camera angle, retain the approved zoom, and restore this view on camera reset and after attack shots.
