@@ -88,7 +88,8 @@ var coop_target_outline_material: ShaderMaterial
 const SINGLE_CAMERA_YAW := -35.0 * PI / 180.0
 const USER_CAMERA_ZOOM_MIN := 0.30
 const USER_CAMERA_ZOOM_MAX := 1.60
-const USER_CAMERA_ZOOM_DEFAULT := 0.60
+const USER_CAMERA_ZOOM_DEFAULT := 0.63
+const ANDROID_CAMERA_ZOOM_DEFAULT := 0.60
 const ENTRY_OVERVIEW_DISTANCE_FACTOR := 4.0 / 3.0
 
 func uses_android_camera() -> bool:
@@ -97,10 +98,13 @@ func uses_android_camera() -> bool:
 func camera_zoom_limits() -> Vector2:
 	return Vector2(USER_CAMERA_ZOOM_MIN, USER_CAMERA_ZOOM_MAX)
 
+func camera_zoom_default() -> float:
+	return ANDROID_CAMERA_ZOOM_DEFAULT if uses_android_camera() else USER_CAMERA_ZOOM_DEFAULT
+
 func reset_user_camera() -> void:
 	user_camera_yaw = 0.0
 	user_camera_pitch = 0.0
-	user_camera_zoom = USER_CAMERA_ZOOM_DEFAULT
+	user_camera_zoom = camera_zoom_default()
 
 func _release_forest() -> void:
 	if forest_lease.is_empty():
@@ -2801,7 +2805,7 @@ func _update_camera(delta: float) -> void:
 	var right := offset.cross(Vector3.UP).normalized()
 	offset = offset.rotated(right,user_camera_pitch)
 	# Team Preview retains its full roster view at the new close-up default.
-	var overview_zoom := 1.0 if _preview_wants_3d() and uses_android_camera() else user_camera_zoom / (USER_CAMERA_ZOOM_DEFAULT if _preview_wants_3d() else 1.0)
+	var overview_zoom := 1.0 if _preview_wants_3d() and uses_android_camera() else user_camera_zoom / (camera_zoom_default() if _preview_wants_3d() else 1.0)
 	offset *= overview_zoom * (1.1 if _preview_wants_3d() else (1.45 if double_mode else 1.0)) * (1.0 - focus_mix * 0.13)
 	camera.position = target + offset
 	camera.look_at(target)
