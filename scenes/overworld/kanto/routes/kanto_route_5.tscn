@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://ded6hbiskrxtb"]
 
-[ext_resource type="PackedScene" uid="uid://dh782ogm887qd" path="res://generated/tiled_visuals/route_5/route_5.visual.tscn" id="1_visual"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_5/route_5.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="4_8otmp"]
