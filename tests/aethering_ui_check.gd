@@ -32,6 +32,7 @@ func _run() -> void:
 	popup.candidates = [bad, good, original, protected, boxed]
 	popup.recipient = original
 	popup.resources_ready = true
+	root.get_node("PlayerSave").set("money", 100000)
 	popup._render()
 	_check(popup.compatible(original, good), "Both Recipient Egg Groups count")
 	_check(not popup.compatible(original, bad), "Incompatible groups blocked")
@@ -73,7 +74,30 @@ func _run() -> void:
 	_check(popup.donor_lock == null, "Duplicate lock callback cannot change selection")
 	popup._lock_changed(5, true)
 	_check(popup.recipient_lock == "atk" and popup.donor_lock == "spd", "Two independent locks selected")
+	popup.wing_availability = {"muscle-wing": 0, "clever-wing": 0}
+	popup.stat_preview = {"stats": {"atk": {"mode": "recipient_lock", "guaranteedIV": 31}, "spd": {"mode": "donor_lock", "guaranteedIV": 31}, "spe": {"mode": "reroll", "guaranteedIV": null}, "spa": {"mode": "equal", "guaranteedIV": 0}}}
+	popup.stat_preview["stats"]["hp"] = {"mode": "reroll", "guaranteedIV": null, "recipientIV": 30, "donorIV": 7}
+	popup._render()
+	_check(popup.confirm_button.disabled and popup.confirm_button.tooltip_text.contains("Muscle Wing") and popup.confirm_button.tooltip_text.contains("Clever Wing"), "Missing Wings explain why confirm is disabled")
+	_check((popup.grid.get_child(11) as Label).text.begins_with("31"), "Server-provided protected value visible without executable preview")
+	_check((popup.grid.get_child(27) as Label).text.begins_with("?"), "Unknown reroll displayed as question mark")
+	_check((popup.grid.get_child(19) as Label).text.begins_with("0"), "Guaranteed zero IV remains visible")
+	_check((popup.grid.get_child(5) as Label).text == "30" and (popup.grid.get_child(6) as Label).text == "7", "Authoritative preview sources override stale candidate IVs")
+	_check(popup.recipient_options.has_theme_stylebox_override("normal") and popup.recipient_options.get_popup().has_theme_stylebox_override("panel"), "Dropdown button and popup share custom styling")
+	popup.wing_availability = {"muscle-wing": 1, "clever-wing": 1}
+	popup._render()
+	_check(popup.confirm_button.disabled, "Advisory comparison without preview ID cannot enable confirmation")
 	popup.plan = {"previewId": "11111111-1111-4111-8111-111111111111", "shinyDonor": true, "requiredWings": [{"itemId": "muscle-wing", "quantity": 1}, {"itemId": "clever-wing", "quantity": 1}], "stats": {"hp": {"mode": "equal", "guaranteedIV": 31}, "atk": {"mode": "recipient_lock", "guaranteedIV": 31}, "spd": {"mode": "donor_lock", "guaranteedIV": 31}, "spe": {"mode": "reroll", "guaranteedIV": null}}}
+	popup._render()
+	_check(not popup.confirm_button.disabled, "Valid preview plus Wings and money enables confirmation")
+	root.get_node("PlayerSave").set("money", 9999)
+	popup._render()
+	_check(popup.confirm_button.disabled, "Insufficient money blocks confirmation clearly")
+	root.get_node("PlayerSave").set("money", 100000)
+	popup.wing_availability["clever-wing"] = 0
+	popup._render()
+	_check(popup.confirm_button.disabled and popup.confirm_button.tooltip_text.contains("Clever Wing"), "One of two required Wings missing blocks confirmation")
+	popup.wing_availability["clever-wing"] = 1
 	popup._render()
 	popup._ask_confirm()
 	await process_frame

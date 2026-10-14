@@ -30,6 +30,10 @@ func _idle() -> void:
 		await create_timer(0.02).timeout
 	_check(false, "UI operation finishes within timeout")
 
+func _automatic_preview() -> void:
+	await create_timer(0.3).timeout
+	await _idle()
+
 func _run() -> void:
 	var info := await _fixture("/fixture")
 	if info.is_empty():
@@ -55,8 +59,27 @@ func _run() -> void:
 	_check(popup._find(int(info["boxedId"])).is_empty(), "Real server excludes PC Pokémon from picker")
 	var rejected: Dictionary = await api.call("preview", {"recipientId": int(info["recipientId"]), "donorId": int(info["boxedId"])})
 	_check(not rejected.get("success", false) and rejected.get("body", {}).get("detail", {}).get("code") == "aethering_party_required", "Direct PC ID cannot bypass Party-only rule")
-	popup.recipient = popup._find(int(info["recipientId"]))
-	popup.donor = popup._find(int(info["donorId"]))
+	for selection in [{"donor": false, "id": info["recipientId"]}, {"donor": true, "id": info["donorId"]}]:
+		popup._open_picker(selection["donor"])
+		for index in range(popup.picker_rows.size()):
+			if popup.picker_rows[index]["pokemonId"] == selection["id"]:
+				popup._pick(index)
+				break
+	await _automatic_preview()
+	_check(not popup.plan.is_empty(), "Selecting a Donor automatically requests a real server preview")
+	_check((popup.grid.get_child(7) as Label).text.begins_with("?"), "Server random outcome displayed as question mark")
+	await _fixture("/fixture/missing-wings", HTTPClient.METHOD_POST)
+	popup._lock_changed(2, false)
+	popup._lock_changed(3, true)
+	await popup.refresh()
+	await _automatic_preview()
+	_check(popup.plan.is_empty() and not popup.stat_preview.is_empty(), "Missing Wings retain a non-executable server comparison")
+	_check((popup.grid.get_child(11) as Label).text.begins_with("10") and (popup.grid.get_child(15) as Label).text.begins_with("20"), "Both prospective locks show server-guaranteed values without Wings")
+	_check(popup.confirm_button.disabled and popup.status.text.contains("Muscle Wing") and popup.status.text.contains("Resist Wing"), "Missing Wing names explain disabled confirmation")
+	await _fixture("/fixture/restore-wings", HTTPClient.METHOD_POST)
+	await popup.refresh()
+	await _automatic_preview()
+	_check(not popup.plan.is_empty() and not popup.confirm_button.disabled, "Restored Wings enable confirmation after automatic revalidation")
 	popup.recipient_lock = "hp"
 	popup.donor_lock = "spd"
 	popup._render()
@@ -65,6 +88,15 @@ func _run() -> void:
 	await popup._preview()
 	_check(not popup.plan.is_empty() and popup.plan["processCost"] == 10000, "Real server preview without client RNG")
 	_check(popup.plan["stats"]["hp"]["mode"] == "recipient_lock" and popup.plan["stats"]["spd"]["mode"] == "donor_lock", "Both lock modes shown")
+	if DisplayServer.get_name() != "headless":
+		await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png("/tmp/aethering-preview-desktop.png")
+		popup.donor_options.show_popup()
+		await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png("/tmp/aethering-preview-dropdown.png")
+		popup.donor_options.get_popup().hide()
 	popup._ask_confirm()
 	await process_frame
 	var dialog: AetherConfirmationDialog
@@ -128,7 +160,9 @@ func _run() -> void:
 		print("COMPACT dimensions ", popup.size, " minimum=", popup.get_combined_minimum_size(), " viewport=", popup.get_viewport_rect().size)
 		_check(popup.size.x <= 640 and popup.size.y <= 360, "Compact viewport fits without horizontal overflow")
 		await process_frame
-		await RenderingServer.frame_post_draw
+		# A resized test window may stop drawing when the desktop changes focus.
+		# Draw explicitly instead of waiting indefinitely for a visible-window signal.
+		RenderingServer.force_draw()
 		root.get_texture().get_image().save_png("/tmp/aethering-compact.png")
 	api.call("clear_pending")
 	auth.set("session_token", "")

@@ -17,6 +17,8 @@ var wing_availability: Dictionary = {}
 var recipient: Dictionary = {}
 var donor: Dictionary = {}
 var plan: Dictionary = {}
+var stat_preview: Dictionary = {}
+var preview_timer: Timer
 var recipient_lock: Variant = null
 var donor_lock: Variant = null
 var resources_ready := false
@@ -58,6 +60,11 @@ func _ready() -> void:
 	style.set_corner_radius_all(14)
 	add_theme_stylebox_override("panel", style)
 	_build()
+	preview_timer = Timer.new()
+	preview_timer.one_shot = true
+	preview_timer.wait_time = 0.2
+	preview_timer.timeout.connect(_preview)
+	add_child(preview_timer)
 	get_viewport().size_changed.connect(_fit)
 	LocalizationManager.locale_changed.connect(_locale_changed)
 	_fit()
@@ -179,6 +186,12 @@ func _card(parent: Node, color: Color) -> VBoxContainer:
 func _locks(parent: Node, is_donor: bool) -> OptionButton:
 	var options := OptionButton.new()
 	options.custom_minimum_size.y = 42
+	options.fit_to_longest_item = false
+	options.clip_text = true
+	options.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	LanguageSelectorStyle.configure(options)
+	options.add_theme_color_override("font_color", Color("eef5fb"))
+	options.get_popup().add_theme_color_override("font_color", Color("eef5fb"))
 	options.item_selected.connect(_lock_changed.bind(is_donor))
 	parent.add_child(options)
 	return options
@@ -254,6 +267,7 @@ func close_popup() -> void:
 	if busy or confirmation_open:
 		return
 	visible = false
+	preview_timer.stop()
 	closed.emit()
 
 func refresh() -> void:
@@ -263,6 +277,8 @@ func refresh() -> void:
 	_update_buttons()
 	if AetheringService.pending.is_empty():
 		plan.clear()
+		stat_preview.clear()
+		preview_timer.stop()
 	var response := await AetheringService.load_candidates()
 	if bool(response.get("success", false)):
 		candidates = response["data"].get("candidates", []).filter(func(entry: Dictionary): return entry.get("location", {}).get("type") == "party")
@@ -286,6 +302,7 @@ func refresh() -> void:
 	_render()
 	_render_picker()
 	completed.emit({"refreshOnly": true})
+	_schedule_preview()
 
 func _find(id: int) -> Dictionary:
 	for entry: Dictionary in candidates:
@@ -393,6 +410,7 @@ func _pick(index: int) -> void:
 	if not _reason(entry, choosing_donor).is_empty():
 		return
 	plan.clear()
+	stat_preview.clear()
 	if choosing_donor:
 		donor = entry
 	else:
@@ -404,6 +422,7 @@ func _pick(index: int) -> void:
 	status.text = _t("ready")
 	_render()
 	scroll.ensure_control_visible.call_deferred(cards)
+	_schedule_preview()
 
 func _lock_changed(index: int, is_donor: bool) -> void:
 	if busy or confirmation_open or not AetheringService.pending.is_empty():
@@ -419,13 +438,24 @@ func _lock_changed(index: int, is_donor: bool) -> void:
 	else:
 		recipient_lock = stat
 	plan.clear()
+	stat_preview.clear()
 	_render()
+	_schedule_preview()
+
+func _schedule_preview() -> void:
+	if not visible or busy or confirmation_open or not AetheringService.pending.is_empty():
+		return
+	if not resources_ready or recipient.is_empty() or donor.is_empty():
+		return
+	status.text = _t("checking")
+	preview_timer.start()
 
 func _populate_locks(options: OptionButton, selected: Variant, other: Variant) -> void:
 	options.clear()
 	options.add_item(_t("no_lock"))
 	for stat: String in STATS:
-		options.add_item(_stat(stat))
+		var wing_id: String = WINGS[STATS.find(stat)]
+		options.add_item("%s · %s: %d" % [_stat(stat), ItemLocalization.display_name(wing_id), _wing_count(wing_id)])
 		options.set_item_disabled(options.item_count - 1, other == stat)
 	options.select(0 if selected == null else STATS.find(selected) + 1)
 
@@ -446,15 +476,24 @@ func _render() -> void:
 	for caption in [_t("stat"), _t("recipient"), _t("donor"), _t("outcome")]:
 		grid.add_child(_label(caption, MUTED))
 	for stat: String in STATS:
-		var left: Variant = recipient.get("pokemon", {}).get("ivs", {}).get(stat)
-		var right: Variant = donor.get("pokemon", {}).get("ivs", {}).get(stat)
+		var entry: Dictionary = plan.get("stats", stat_preview.get("stats", {})).get(stat, {})
+		var left: Variant = entry.get("recipientIV", recipient.get("pokemon", {}).get("ivs", {}).get(stat))
+		var right: Variant = entry.get("donorIV", donor.get("pokemon", {}).get("ivs", {}).get(stat))
 		grid.add_child(_label(_stat(stat), CYAN))
 		grid.add_child(_label(str(int(left)) if left != null else "—", GREEN if left == right and left != null else Color.WHITE))
 		grid.add_child(_label(str(int(right)) if right != null else "—", GREEN if left == right and left != null else Color.WHITE))
-		var entry: Dictionary = plan.get("stats", {}).get(stat, {})
 		var mode: String = str(entry.get("mode", ""))
-		var outcome := _t("needs_preview") if entry.is_empty() else _t("mode." + mode, {"value": int(entry.get("guaranteedIV", 0)) if entry.get("guaranteedIV") != null else ""})
-		grid.add_child(_label(outcome, MUTED if entry.is_empty() else RED if mode == "reroll" else GREEN))
+		var outcome := "—" if entry.is_empty() else "?" if mode == "reroll" else str(int(entry["guaranteedIV"]))
+		var result_label := _label(outcome, MUTED if entry.is_empty() else RED if mode == "reroll" else GREEN, 16)
+		if not entry.is_empty():
+			result_label.tooltip_text = _t("mode." + mode, {"value": entry.get("guaranteedIV", "")})
+			if mode in ["recipient_lock", "donor_lock"]:
+				result_label.text += " · " + _t("kept" if mode == "recipient_lock" else "transferred")
+			elif mode == "equal":
+				result_label.text += " · " + _t("equal")
+			else:
+				result_label.text += " · " + _t("random")
+		grid.add_child(result_label)
 	var stock: Array[String] = []
 	for index in range(STATS.size()):
 		var count := _wing_count(WINGS[index])
@@ -483,28 +522,62 @@ func _update_buttons() -> void:
 	refresh_button.disabled = busy or confirmation_open
 	close_button.disabled = busy or confirmation_open
 	preview_button.disabled = frozen or not resources_ready or candidates.size() < 2 or recipient.is_empty() or donor.is_empty()
-	confirm_button.disabled = busy or confirmation_open or plan.is_empty()
+	var block_reason := _confirm_block_reason()
+	confirm_button.disabled = not block_reason.is_empty()
+	confirm_button.tooltip_text = block_reason
 	confirm_button.text = _t("retry") if unresolved else _t("confirm")
 	next_donor_button.visible = not last_result.is_empty()
 	next_donor_button.disabled = frozen or candidates.size() < 2 or recipient.is_empty()
 
+func _confirm_block_reason() -> String:
+	if busy:
+		return _t("checking")
+	if confirmation_open:
+		return _t("confirm_title")
+	if not AetheringService.pending.is_empty():
+		return ""
+	if not resources_ready:
+		return _t("refresh_failed")
+	if recipient.is_empty() or donor.is_empty():
+		return _t("select_both")
+	if PlayerSave.money < 10000:
+		return _t("reason.aethering_insufficient_money")
+	var missing: Array[String] = []
+	for stat: Variant in [recipient_lock, donor_lock]:
+		if stat != null and _wing_count(WINGS[STATS.find(stat)]) < 1:
+			missing.append(ItemLocalization.display_name(WINGS[STATS.find(stat)]))
+	if not missing.is_empty():
+		return _t("missing_named_wings", {"wings": ", ".join(missing)})
+	if str(plan.get("previewId", "")).is_empty():
+		return _t("needs_preview")
+	return ""
+
 func _preview() -> void:
 	if preview_button.disabled:
 		return
+	preview_timer.stop()
 	busy = true
 	_update_buttons()
 	plan.clear()
+	stat_preview.clear()
+	status.text = _t("checking")
 	var response := await AetheringService.preview({"recipientId": recipient["pokemonId"], "donorId": donor["pokemonId"], "recipientLock": recipient_lock, "donorLock": donor_lock})
 	if bool(response.get("success", false)):
 		plan = response["data"]
 		status.text = _t("warning")
 	else:
+		var detail: Variant = response.get("body", {}).get("detail", {})
+		if detail is Dictionary:
+			stat_preview = detail.get("ivPreview", {})
 		status.text = _error(response)
 	busy = false
 	_render()
+	var reason := _confirm_block_reason()
+	if not reason.is_empty() and reason != _t("needs_preview") and not stat_preview.is_empty():
+		status.text = reason
 
 func _ask_confirm() -> void:
-	if busy or confirmation_open or plan.is_empty():
+	if not _confirm_block_reason().is_empty():
 		return
 	if not AetheringService.pending.is_empty():
 		await _execute()
@@ -548,6 +621,7 @@ func _execute() -> void:
 		PlayerSave.money = int(last_result.get("money", PlayerSave.money))
 		donor.clear()
 		plan.clear()
+		stat_preview.clear()
 		donor_lock = null
 		var removed_id := int(last_result.get("donorId", 0))
 		candidates = candidates.filter(func(entry: Dictionary): return int(entry.get("pokemonId", 0)) != removed_id)
@@ -566,6 +640,7 @@ func _execute() -> void:
 		var message := _error(response) if AetheringService.pending.is_empty() else _t("unresolved")
 		if AetheringService.pending.is_empty():
 			plan.clear()
+			stat_preview.clear()
 		busy = false
 		var detail: Variant = response.get("body", {}).get("detail", {})
 		if detail is Dictionary and str(detail.get("code", "")) in ["aethering_preview_stale", "aethering_party_required"]:
@@ -593,6 +668,8 @@ func _error(response: Dictionary) -> String:
 		return _t("missing_wings")
 	if detail is Dictionary:
 		var code := str(detail.get("code", ""))
+		if code == "aethering_missing_wings":
+			return _t("missing_wings")
 		var key := "reason." + code
 		var localized := _t(key)
 		if localized != "ui.aethering." + key:
