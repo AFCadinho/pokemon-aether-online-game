@@ -10,6 +10,7 @@ size = Vector2(48, 48)
 script = ExtResource("1")
 npc_definition_id = "kanto_route_5_aethering_researcher"
 display_name = ""
+localized_display_name_key = "ui.aethering.researcher"
 facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("2")
 

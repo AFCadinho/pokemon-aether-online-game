@@ -4,6 +4,8 @@
 
 - Show specific localized Daycare errors instead of a generic loading failure.
 
+- Make the Daycare Wing Merchant reachable across the counter and show both Aethering NPC nameplates immediately in the selected language.
+
 - Start desktop 3D battles at the player-reviewed camera angle and zoom, and restore that view on camera reset.
 
 - Restyle Daycare with Aether cards, clear training inputs, custom tabs and action buttons, progress bars and a recoverable loading error view.
