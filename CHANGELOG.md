@@ -2,55 +2,19 @@
 
 ## Unreleased
 
-- Keep the fully zoomed-out 3D gym camera clear of ceiling beams.
+## 0.3.110
 
-- Reduce the complete 3D model collection below 7 GB without changing decoded textures or animations; Android builds offer experimental 3D with a 2D option.
-
-- Prepare game and launcher model downloads for shared texture bundles, preserving each form’s appearance and repairing missing or damaged required downloads.
-
-- Make completed Aethering immediately visible with before/after IVs, gains and losses, a short system message and one confirmation sound, including recovered confirmations.
+### Daycare training and guides
 
 - Choose Daycare training Pokémon in a separate six-slot Party popup, ordered by their actual Party slots, with Pokémon art, levels and unavailable-member reasons.
 
-- Make Android hotbar paging easier with one styled page counter inside its frame, extra invisible touch padding and left/right swipes that keep ordinary slot taps intact.
-
 - Add an Official Daycare forum guide covering training, Aethering, Wings and Nature treatments, with links from all three Daycare service windows.
-
-- Keep the compact Android hotbar and its page arrows clear of the bottom-right quick buttons, buffs and trainer card at larger UI scales.
-
-- Compact the Nature Specialist for desktop and mobile with a horizontal stat comparison, optional IV details and pinned payment actions. Explain unchanged nature selections before requesting a comparison.
-
-- Correct the Nature Specialist's left, right and up sprite rows so the Daycare's configured left-facing direction displays correctly.
-
-- Highlight the current-to-selected effective nature beside the Nature Specialist's fee and include both natures in the final paid confirmation; keep its guide/header compact on narrow screens.
 
 - Show each training Pokémon's icon beside its name and goals in the Daycare, including the matching shiny appearance.
 
-- Restrict the Nature Specialist to your Party. Show all Party members in slot order, with explicit reasons for unavailable Pokémon instead of silently hiding them.
-
-- Select Aethering Pokémon from a separate popup with six Party slots, clear eligibility states and a responsive layout instead of a scrolling list.
-
-- Show three hotbar slots per page on small touch screens, reducing its height while keeping all eight shortcuts available through three pages.
-
-- Show the running client's game version on the login and saved-session screens in the selected language.
-
-- Restyle the Nature Specialist with Pokémon and IV details, clear stat comparisons, custom dropdowns, readable prices and responsive controls; give the specialist a green gardener overworld and portrait.
-
 - Compact the Daycare window with responsive columns and collapsible EV settings. Give its Trainer the matching Pokémon Breeder overworld sprite and dialogue portrait.
-
-- Enable gentle idle camera movement in Android 3D battles around the chosen viewing angle, with a separate Graphics switch and saved opt-out. Keep loading, Team Preview and attack framing steady.
 
 - Keep the Daycare frame at a fixed desktop size across training modes, quotes, tabs and loading states, while fitting smaller viewports.
-
-- Present Aethering through an Aether Keeper with matching mystical sprite, portrait and ritual dialogue; clarify that Wings are optional and add a button to remove both IV locks.
-
-- Compact the Daycare window with responsive columns and collapsible EV settings. Give its Trainer the matching Pokémon Breeder overworld sprite and dialogue portrait.
-
-- Give Rock Tomb, Stone Edge, Rock Blast, Ancient Power, Bulldoze and Precipice Blades distinct solid-rock choreography, wider impacts, cinematic cameras and earthy environment lighting while preserving native timing and audio.
-
-- Automatically show server-checked Aethering IV outcomes, with question marks for random stats and clear missing-Wing requirements; style both IV-lock dropdowns.
-
-- Start Android 3D battles at the player-reviewed mobile camera angle, retain the approved zoom, and restore this view on camera reset and after attack shots.
 
 - Limit Daycare enrollment to Party Pokémon and clarify the training summary with total cost, completion time, EXP/EV goals, stored EV use and a Start training action. Display whole numbers without decimal suffixes.
 
@@ -58,11 +22,55 @@
 
 - Show specific localized Daycare errors instead of a generic loading failure.
 
+- Restyle Daycare with Aether cards, clear training inputs, custom tabs and action buttons, progress bars and a recoverable loading error view.
+
+- Add six parallel, offline Daycare training places on Route 5 with independent EXP/EV targets, story caps, server quotes, paid confirmation and individual pickup.
+
+- Refresh the Route 5 Daycare interior visual from its updated Tiled source.
+
+### Aethering and Wings
+
+- Make completed Aethering immediately visible with before/after IVs, gains and losses, a short system message and one confirmation sound, including recovered confirmations.
+
+- Select Aethering Pokémon from a separate popup with six Party slots, clear eligibility states and a responsive layout instead of a scrolling list.
+
+- Present Aethering through an Aether Keeper with matching mystical sprite, portrait and ritual dialogue; clarify that Wings are optional and add a button to remove both IV locks.
+
+- Automatically show server-checked Aethering IV outcomes, with question marks for random stats and clear missing-Wing requirements; style both IV-lock dropdowns.
+
 - Make the Daycare Wing Merchant reachable across the counter and show both Aethering NPC nameplates immediately in the selected language.
 
-- Start desktop 3D battles at the player-reviewed camera angle and zoom, and restore that view on camera reset.
+- Select Aethering Recipients and Donors exclusively from your own Party. Bring at least two Pokémon using the nearby Daycare PC; previews are revalidated after Party moves or swaps.
 
-- Restyle Daycare with Aether cards, clear training inputs, custom tabs and action buttons, progress bars and a recoverable loading error view.
+- Develop your own Pokémon through Aethering at the Route 5 Daycare: Party/PC selection, server previews, Wing IV locks, permanent donor confirmation and results with safe retries. Buy the six Wings there for 10,000 Pokédollars each without Blessing discounts; Wings no longer train EVs.
+
+### Nature Specialist
+
+- Compact the Nature Specialist for desktop and mobile with a horizontal stat comparison, optional IV details and pinned payment actions. Explain unchanged nature selections before requesting a comparison.
+
+- Correct the Nature Specialist's left, right and up sprite rows so the Daycare's configured left-facing direction displays correctly.
+
+- Highlight the current-to-selected effective nature beside the Nature Specialist's fee and include both natures in the final paid confirmation; keep its guide/header compact on narrow screens.
+
+- Restrict the Nature Specialist to your Party. Show all Party members in slot order, with explicit reasons for unavailable Pokémon instead of silently hiding them.
+
+- Restyle the Nature Specialist with Pokémon and IV details, clear stat comparisons, custom dropdowns, readable prices and responsive controls; give the specialist a green gardener overworld and portrait.
+
+- Move the Nature Specialist to the Route 5 Daycare alongside the Aether Researcher and Wing Merchant; remove it from Pokémon Centers.
+
+- Add the Nature Specialist to Pokémon Centers with Party/PC selection, nature/stat comparisons, server prices, paid confirmation and seven-day availability. Details and Exchange distinguish original nature from the treated effect.
+
+### 3D battles and performance
+
+- Keep the fully zoomed-out 3D gym camera clear of ceiling beams.
+
+- Enable gentle idle camera movement in Android 3D battles around the chosen viewing angle, with a separate Graphics switch and saved opt-out. Keep loading, Team Preview and attack framing steady.
+
+- Give Rock Tomb, Stone Edge, Rock Blast, Ancient Power, Bulldoze and Precipice Blades distinct solid-rock choreography, wider impacts, cinematic cameras and earthy environment lighting while preserving native timing and audio.
+
+- Start Android 3D battles at the player-reviewed mobile camera angle, retain the approved zoom, and restore this view on camera reset and after attack shots.
+
+- Start desktop 3D battles at the player-reviewed camera angle and zoom, and restore that view on camera reset.
 
 - Let desktop development builds record the chosen idle 3D battle camera with Ctrl+Shift+C for camera-framing feedback.
 
@@ -75,8 +83,6 @@
 - Give Rock Slide five heavy, tumbling boulders, grounded debris and rolling dust, with a dedicated falling-rock camera shot, restrained earth-toned lighting and a brief hit recoil at the existing move speed.
   Keep cinematic stadium shots from incorrectly reverting to the overview because of empty gaps between batched scenery or roofs above the camera's sightline.
 
-- Add six parallel, offline Daycare training places on Route 5 with independent EXP/EV targets, story caps, server quotes, paid confirmation and individual pickup.
-
 - Start the Android 3D battle fade as soon as the arena is drawn, while battle data and Pokémon prepare. Keep one stable close-up overview as models appear, and retain touch zoom and move-camera shots. Speed up local preparation by reusing fresh verification and expanding only the required assets, with cold-load integrity checks preserved.
 
 - Keep Dark Pulse's charge, travelling pressure front and impact above the arena floor, adapting vertical growth to low emitters and targets while preserving its aim and width.
@@ -88,29 +94,37 @@
 - Start Android 3D battles closer to the Pokémon, with one-finger camera rotation and two-finger pinch zoom.
   Keep the opening zoom stable as models appear.
 
-- Move the Nature Specialist to the Route 5 Daycare alongside the Aether Researcher and Wing Merchant; remove it from Pokémon Centers.
-
-- Refresh Route 1's exterior visual from its updated Tiled source.
-
-- Refresh the Route 5 Daycare interior visual from its updated Tiled source.
-
-- Select Aethering Recipients and Donors exclusively from your own Party. Bring at least two Pokémon using the nearby Daycare PC; previews are revalidated after Party moves or swaps.
-
-- Add the Nature Specialist to Pokémon Centers with Party/PC selection, nature/stat comparisons, server prices, paid confirmation and seven-day availability. Details and Exchange distinguish original nature from the treated effect.
-
 - Draw existing forest grass from near to far in experimental Android 3D to reduce GPU work, retaining its density, geometry, textures and 4x anti-aliasing.
-
-- Prepare model release v15: save another 198 MB by sharing geometry and animations within 111 normal/shiny pairs, preserving all reviewed detail, colours, poses and alternate forms.
-
-- Keep trainer sprites at a consistent size across outfits in the own and public Trainer Card Overview, including Kakashi and SS4.
-
-- Develop your own Pokémon through Aethering at the Route 5 Daycare: Party/PC selection, server previews, Wing IV locks, permanent donor confirmation and results with safe retries. Buy the six Wings there for 10,000 Pokédollars each without Blessing discounts; Wings no longer train EVs.
 
 - Avoid drawing arena scenery twice for experimental Android 3D material lighting, while retaining its shadow casters and the full main arena.
 
 - Use Vulkan/Mobile for explicit experimental Android 3D exports to avoid the native Adreno shader-link crash observed during battle moves.
 
 - Avoid native pose baking for Android 3D move placement and include the last safe move presentation phase in crash reports to help diagnose device-specific failures.
+
+### 3D models and downloads
+
+- Reduce the complete 3D model collection below 7 GB without changing decoded textures or animations; Android builds offer experimental 3D with a 2D option.
+
+- Prepare game and launcher model downloads for shared texture bundles, preserving each form’s appearance and repairing missing or damaged required downloads.
+
+- Prepare model release v15: save another 198 MB by sharing geometry and animations within 111 normal/shiny pairs, preserving all reviewed detail, colours, poses and alternate forms.
+
+### Android controls
+
+- Make Android hotbar paging easier with one styled page counter inside its frame, extra invisible touch padding and left/right swipes that keep ordinary slot taps intact.
+
+- Keep the compact Android hotbar and its page arrows clear of the bottom-right quick buttons, buffs and trainer card at larger UI scales.
+
+- Show three hotbar slots per page on small touch screens, reducing its height while keeping all eight shortcuts available through three pages.
+
+### Interface and world
+
+- Show the running client's game version on the login and saved-session screens in the selected language.
+
+- Refresh Route 1's exterior visual from its updated Tiled source.
+
+- Keep trainer sprites at a consistent size across outfits in the own and public Trainer Card Overview, including Kakashi and SS4.
 
 ## 0.3.109
 
