@@ -8,6 +8,8 @@
 
 - Compact the Nature Specialist for desktop and mobile with a horizontal stat comparison, optional IV details and pinned payment actions. Explain unchanged nature selections before requesting a comparison.
 
+- Correct the Nature Specialist's left, right and up sprite rows so the Daycare's configured left-facing direction displays correctly.
+
 - Show each training Pokémon's icon beside its name and goals in the Daycare, including the matching shiny appearance.
 
 - Restrict the Nature Specialist to your Party. Show all Party members in slot order, with explicit reasons for unavailable Pokémon instead of silently hiding them.
