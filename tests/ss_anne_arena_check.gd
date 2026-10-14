@@ -74,7 +74,10 @@ func _run() -> void:
 					for mesh in meshes:
 						var inverse := mesh.global_transform.affine_inverse()
 						var bounds := mesh.get_aabb()
-						assert(not bounds.grow(0.12).has_point(inverse * camera), "Camera intersects " + str(mesh.get_path()))
+						# Express camera clearance in world metres, not scaled unit-box metres.
+						var clearance := Vector3.ONE * 0.12 / mesh.global_transform.basis.get_scale().abs()
+						var camera_bounds := AABB(bounds.position - clearance, bounds.size + clearance * 2.0)
+						assert(not camera_bounds.has_point(inverse * camera), "Camera intersects " + str(mesh.get_path()))
 						for side in 2:
 							for height in [0.5, 2.0, 4.0]:
 								var aim := Arenas.spawn(side) + Vector3(0, height, 0)
