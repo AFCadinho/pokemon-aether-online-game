@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Enable gentle idle camera movement in Android 3D battles around the chosen viewing angle, with a separate Graphics switch and saved opt-out. Keep loading, Team Preview and attack framing steady.
+
 - Automatically show server-checked Aethering IV outcomes, with question marks for random stats and clear missing-Wing requirements; style both IV-lock dropdowns.
 
 - Start Android 3D battles at the player-reviewed mobile camera angle, retain the approved zoom, and restore this view on camera reset and after attack shots.

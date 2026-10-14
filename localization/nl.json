@@ -1445,6 +1445,7 @@
   "ui.settings.terminology.localized": "Vertaalde namen",
   "ui.settings.enable_move_animations": "Aanvalsanimaties inschakelen",
   "ui.settings.android_move_camera": "3D-camerashots tijdens aanvallen",
+  "ui.settings.android_idle_camera": "Rustige 3D-camerabeweging",
   "ui.settings.enable_weather_effects": "Weereffecten inschakelen",
   "ui.settings.enable_terrain_effects": "Terreineffecten inschakelen",
   "ui.settings.display_own_name": "Eigen naam weergeven",

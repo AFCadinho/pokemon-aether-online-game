@@ -9,6 +9,7 @@ func _run() -> void:
 	_setup()
 	SettingsManager.battle_presentation_mode = "3d"
 	SettingsManager.battle_3d_camera_motion = false
+	SettingsManager.android_3d_idle_camera_motion = false
 	assert(is_equal_approx(stage.user_camera_zoom, 0.60))
 	assert(is_equal_approx(stage.user_camera_yaw, -0.235828125) and is_equal_approx(stage.user_camera_pitch, -0.12), "Android starts at the measured mobile angle")
 	assert(stage.camera_zoom_limits() == Vector2(0.3, 1.6))
@@ -82,6 +83,45 @@ func _run() -> void:
 	assert(not gesture._may_rotate(stage), "Roster selection keeps its touches")
 	gesture.queue_free()
 	stage.preview_enabled = false
+	# The Android idle arc shares desktop amplitude/speed around the chosen orbit.
+	stage.reset_user_camera()
+	SettingsManager.android_3d_idle_camera_motion = true
+	stage.entry_arena_requested = true
+	stage._update_camera(0.0)
+	var opening: Transform3D = stage.camera.transform
+	stage._update_camera(2.0)
+	assert(stage.camera_phase == 0.0 and stage.camera.transform.is_equal_approx(opening), "The entry angle stays fixed while battle data is pending")
+	stage.entry_arena_requested = false
+	stage.preview_enabled = true
+	stage._update_camera(2.0)
+	assert(stage.camera_phase == 0.0, "Team Preview does not drift")
+	stage.preview_enabled = false
+	stage.pending_entries.append("fixture")
+	stage._update_camera(2.0)
+	assert(stage.camera_phase == 0.0, "Model preparation does not drift")
+	stage.pending_entries.clear()
+	stage._update_camera(1.0)
+	var drifting: Transform3D = stage.camera.transform
+	assert(is_equal_approx(stage.camera_phase, 0.22) and not drifting.is_equal_approx(opening), "Android gently moves even when the desktop motion preference is off")
+	assert(is_equal_approx(stage.user_camera_yaw, -0.235828125) and is_equal_approx(stage.user_camera_pitch, -0.12) and is_equal_approx(stage.user_camera_zoom, 0.60), "The arc preserves the selected orbit and zoom")
+	stage.current_actions[0] = "special_attack"
+	stage._update_camera(2.0)
+	assert(is_equal_approx(stage.camera_phase, 0.22) and stage.camera.transform.is_equal_approx(drifting), "An attack freezes the overview's automatic arc")
+	stage.current_actions[0] = "idle"
+	stage.double_mode = true
+	stage.current_actions[2] = "special_attack"
+	stage._update_camera(2.0)
+	assert(is_equal_approx(stage.camera_phase, 0.22), "A partner's attack also freezes the arc")
+	stage.current_actions[2] = "idle"
+	stage.double_mode = false
+	stage.reset_user_camera()
+	stage._update_camera(0.0)
+	assert(stage.camera_phase == 0.0 and stage.camera.transform.is_equal_approx(opening), "Reset restarts the idle arc at the chosen angle")
+	stage._update_camera(1.0)
+	assert(is_equal_approx(stage.camera_phase, 0.22), "Reset retains the enabled motion preference")
+	SettingsManager.android_3d_idle_camera_motion = false
+	stage._update_camera(1.0)
+	assert(stage.camera_phase == 0.0 and stage.camera.transform.is_equal_approx(opening), "Disabling idle motion restores the chosen static view")
 	var probe := preload("res://scripts/battle/battle_ui/android_3d_performance_probe.gd").new()
 	probe.stage = stage
 	add_child(probe)
@@ -110,5 +150,5 @@ func _run() -> void:
 	stage.queue_free()
 	view.queue_free()
 	await get_tree().process_frame
-	print("ANDROID_CAMERA_FRAMING_PASS samples=%d closer=true singles=true doubles=true large_models=true reset=true measurement=true" % samples)
+	print("ANDROID_CAMERA_FRAMING_PASS samples=%d closer=true singles=true doubles=true large_models=true reset=true measurement=true idle_motion=true" % samples)
 	get_tree().quit()

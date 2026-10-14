@@ -78,6 +78,7 @@ var immersive_chat_height := 420.0
 var battle_3d_forest_manifest := ""
 var battle_3d_camera_motion := false
 var android_3d_move_camera := true
+var android_3d_idle_camera_motion := true
 var weather_effects := true
 var terrain_effects := true
 var display_own_name := true
@@ -190,6 +191,7 @@ func load_settings() -> void:
 	battle_3d_arena = "auto"
 	battle_3d_camera_motion = bool(data.get("battle_3d_camera_motion", false))
 	android_3d_move_camera = bool(data.get("android_3d_move_camera", true))
+	android_3d_idle_camera_motion = bool(data.get("android_3d_idle_camera_motion", true))
 	weather_effects = bool(data.get("weather_effects", weather_effects))
 	terrain_effects = bool(data.get("terrain_effects", terrain_effects))
 	display_own_name = bool(data.get("display_own_name", display_own_name))
@@ -290,6 +292,7 @@ func save_settings() -> bool:
 		"battle_3d_forest_manifest": battle_3d_forest_manifest,
 		"battle_3d_camera_motion": battle_3d_camera_motion,
 		"android_3d_move_camera": android_3d_move_camera,
+		"android_3d_idle_camera_motion": android_3d_idle_camera_motion,
 		"weather_effects": weather_effects,
 		"terrain_effects": terrain_effects,
 		"display_own_name": display_own_name,
@@ -476,6 +479,13 @@ func set_android_3d_move_camera(enabled: bool) -> void:
 	if android_3d_move_camera == enabled:
 		return
 	android_3d_move_camera = enabled
+	_save_and_emit()
+
+
+func set_android_3d_idle_camera_motion(enabled: bool) -> void:
+	if android_3d_idle_camera_motion == enabled:
+		return
+	android_3d_idle_camera_motion = enabled
 	_save_and_emit()
 
 

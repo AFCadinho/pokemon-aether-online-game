@@ -1,5 +1,17 @@
 # Physical Android 3D performance measurements
 
+Android now enables the same gentle idle-camera arc as desktop around its
+approved manual orbit/zoom. Its own `android_3d_idle_camera_motion` preference
+defaults to true for new and existing profiles that lack the key. The localized
+Graphics switch **Gentle 3D camera movement** saves an explicit opt-out separately
+from Android move shots and the desktop motion preference. Disabling the arc
+restores the chosen static view; it does not disable move shots. Android advances
+the arc only while the battle is active with visible, resting actors, after
+entry/model/render preparation. Team Preview, preparation and any actor's action
+hold its phase. It reuses the existing camera update without extra rendering
+passes or scenery scans. Fixed-camera benchmark fixtures explicitly disable the
+new preference so their workload remains reproducible.
+
 The explicit local USB performance probe's `ANDROID_3D_CAMERA` record now also
 includes the selected orbit yaw/pitch (radians and degrees), actual numeric
 camera pose and an `idle` flag. It emits alongside the existing five-second
