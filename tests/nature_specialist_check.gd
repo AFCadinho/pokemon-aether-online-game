@@ -42,13 +42,19 @@ func _run() -> void:
 		root.add_child(panel)
 		await process_frame
 		_check(panel.get("confirm_button") != null and panel.get("nature_select") != null, "Selection and confirmation controls exist")
-		panel.call("_apply_state", {"pokemon":[{"pokemon":{"ownedPokemonId":123.0,"level":50.0,"species":"Pikachu","nature":"Hardy","shiny":true,"ivs":{"hp":31.0,"spe":31.0}},"price":2500000,"rarity":"uncommon"}],"natures":[{"name":"Hardy"},{"name":"Jolly","boosted_stat":"spe","lowered_stat":"spa"}],"serverTime":"2026-10-13T12:00:00+00:00","nextAvailableAt":null,"money":10000000})
+		panel.call("_apply_state", {"pokemon":[{"pokemon":{"ownedPokemonId":123.0,"level":50.0,"species":"Pikachu","nature":"Hardy","shiny":true,"ivs":{"hp":31.0,"spe":31.0}},"price":2500000,"rarity":"uncommon","eligible":true,"location":{"type":"party","partySlot":0}}],"natures":[{"name":"Hardy"},{"name":"Jolly","boosted_stat":"spe","lowered_stat":"spa"}],"serverTime":"2026-10-13T12:00:00+00:00","nextAvailableAt":null,"money":10000000})
 		_check("Pikachu" in panel.pokemon_select.get_item_text(0) and "2,500,000" in panel.pokemon_select.get_item_text(0), "Server-priced selection shows species rather than boolean values")
 		_check(".0" not in panel.pokemon_select.get_item_text(0) and ".0" not in panel.iv_values["hp"].text, "JSON floats render as integer IDs, levels and IVs")
 		_check(panel.pokemon_select.has_theme_stylebox_override("normal") and panel.pokemon_select.get_popup().has_theme_stylebox_override("panel"), "Selection and opened popup use custom styling")
 		_check(panel.nature_select.get_popup().has_theme_icon_override("radio_checked"), "Dropdown indicators use PokeAether art")
 		_check(panel.close_button.tooltip_text == root.get_node("LocalizationManager").text("common.close"), "Close action uses an existing translated key")
+		_check(panel.preview_button.disabled and "different nature" in panel.quote_hint.text, "Current nature explains why comparison is unavailable without sending a request")
+		_check(not panel.iv_values["hp"].get_parent().visible, "Optional IV details start collapsed")
+		panel.iv_toggle.set_pressed(true)
+		_check(panel.iv_values["hp"].get_parent().visible, "IV details remain available on demand")
 		panel.nature_select.select(1)
+		panel.call("_selection_changed",1)
+		_check(not panel.preview_button.disabled, "A different effective nature permits server comparison")
 		panel.call("_show_quote", {"previewId":"test-preview","originalNature":"Hardy","oldNature":"Hardy","newNature":"Jolly","price":2500000,"oldStats":{"spe":100,"spa":60},"newStats":{"spe":110,"spa":54}})
 		panel.call("_set_busy", false)
 		_check(panel.stat_values["spe"][0].text == "100" and panel.stat_values["spa"][0].text == "60" and panel.stat_values["spa"][1].text == "54", "Server stat comparison displays both effects")
@@ -71,6 +77,30 @@ func _run() -> void:
 		nature_service.call("_reset_for_account")
 		_check(nature_service.pending_request.is_empty(), "Pending confirmation cannot cross an account switch")
 		var sample_state: Dictionary = panel.cached_state.duplicate(true)
+		var minted_state: Dictionary = sample_state.duplicate(true)
+		minted_state["pokemon"][0]["pokemon"]["effectiveNature"] = "Jolly"
+		panel.call("_apply_state",minted_state)
+		_check(panel.preview_button.disabled, "Unchanged selection compares against the effective nature after an earlier treatment")
+		panel.nature_select.select(0)
+		panel.call("_selection_changed",0)
+		_check(not panel.preview_button.disabled, "Restoring the original stat effect is a valid new selection")
+		_check(root.get_node("BackendErrorLocalization").call("message",{"body":{"detail":{"code":"nature_unchanged"}}}) == localization.text("ui.nature_specialist.choose_different"), "Server unchanged errors have an actionable translated message")
+		var rows: Array = [{"pokemon":{"ownedPokemonId":55,"species":"Venusaur","level":100,"nature":"Hardy"},"price":2000000,"location":{"type":"box","boxIndex":0,"slotIndex":11}}]
+		for position in [5,3,4,2,1,0]:
+			var p: Dictionary = {"ownedPokemonId":100+position,"species":"Tyranitar" if position==0 else "Magikarp","level":20-position,"nature":"Hardy"}
+			rows.append({"pokemon":p,"price":125000,"eligible":position not in [2,4],"blockedReason":"nature_not_ot" if position==2 else ("nature_protected" if position==4 else null),"location":{"type":"party","partySlot":position}})
+		panel.call("_apply_state", {"pokemon":rows,"natures":[{"name":"Hardy"}],"money":1000000,"serverTime":"2026-10-14T12:00:00+00:00","nextAvailableAt":null})
+		_check(panel.entries.size()==6 and panel.pokemon_select.item_count==6, "All six Party members remain visible and PC Venusaur is excluded")
+		for position in range(6):
+			_check(panel.pokemon_select.get_item_metadata(position)==100+position, "Picker follows Party slot order")
+		_check(panel.pokemon_select.is_item_disabled(2) and panel.pokemon_select.is_item_disabled(4), "Ineligible Party members are disabled rather than hidden")
+		_check("OT" in panel.pokemon_select.get_item_text(2) and "Test" in panel.pokemon_select.get_item_text(4), "Unavailable entries explain their protection reason")
+		_check(panel.pokemon_select.selected==0 and "Party 1" in panel.pokemon_info.text, "Selected card identifies the actual Party slot")
+		for row: Dictionary in rows:
+			row["eligible"]=false
+			row["blockedReason"]="nature_not_ot"
+		panel.call("_apply_state", {"pokemon":rows,"natures":[{"name":"Hardy"}],"money":1000000,"serverTime":"2026-10-14T12:00:00+00:00","nextAvailableAt":null})
+		_check(panel.entries.size()==6 and panel.preview_button.disabled and panel.confirm_button.disabled, "All-blocked Party stays visible without permitting treatment")
 		panel.free()
 		var small_viewport := SubViewport.new()
 		small_viewport.size = Vector2i(520,700)
@@ -85,6 +115,16 @@ func _run() -> void:
 		_check(small_panel.size.x <= 520 and small_panel.size.y <= 700, "Popup fits compact viewports")
 		var last_stat: Label = small_panel.stat_values["spe"][2]
 		_check(last_stat.get_global_rect().end.y <= small_panel.content_scroll.get_global_rect().end.y, "Preview scrolls the entire stat comparison into view on compact screens")
+		for viewport_size: Vector2i in [Vector2i(1000,960),Vector2i(360,640),Vector2i(320,568),Vector2i(960,480),Vector2i(640,360)]:
+			small_viewport.size = viewport_size
+			for locale: String in ["en","nl","pt_BR","zh_CN"]:
+				localization.set_locale(locale)
+				small_panel.call("_fit")
+				for _frame in range(6): await process_frame
+				_check(small_panel.size.y <= minf(640,viewport_size.y-24), "Compact height fits portrait and landscape: " + str(viewport_size) + locale)
+				_check(small_panel.size.x <= viewport_size.x-24, "Narrow mobile content stays within the viewport")
+				_check(small_panel.confirm_button.get_global_rect().end.y <= small_panel.get_global_rect().end.y, "Payment actions stay inside the panel at every size")
+				_check(last_stat.get_global_rect().end.x <= small_panel.content_scroll.get_global_rect().end.x, "All six stat columns fit without horizontal scrolling")
 		small_viewport.free()
 	localization.set_locale(original_locale)
 	quit(1 if failed else 0)
