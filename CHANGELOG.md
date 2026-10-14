@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add an Official Daycare forum guide covering training, Aethering, Wings and Nature treatments, with links from all three Daycare service windows.
+
 - Show each training Pokémon's icon beside its name and goals in the Daycare, including the matching shiny appearance.
 
 - Restrict the Nature Specialist to your Party. Show all Party members in slot order, with explicit reasons for unavailable Pokémon instead of silently hiding them.

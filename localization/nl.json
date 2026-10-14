@@ -7207,6 +7207,8 @@
   "ui.daycare.summary_no_evs": "EV’s blijven gelijk.",
   "ui.daycare.summary_costs": "Kostenopbouw: Start {start} ₽ · EXP {exp} ₽ · EV’s {ev} ₽",
   "backend.error.daycare_party_only": "Haal deze Pokémon uit de PC naar je party voordat je de training start.",
+  "ui.daycare.forum_guide": "Forumgids",
+  "ui.daycare.forum_guide_hint": "Open de Daycare-forumgids (Engels): training, IVs en Natures.",
   "ui.daycare.title": "Pokémon Daycare",
   "ui.daycare.explanation": "Kies een Pokémon uit je party. Maximaal zes kunnen offline trainen. EXP- en EV-training lopen tegelijk en stoppen bij je doelen.",
   "ui.daycare.new_training": "Nieuwe training",

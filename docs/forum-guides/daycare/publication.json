@@ -1,0 +1,117 @@
+{
+  "topic_id": 113,
+  "post_id": 120,
+  "title": "Daycare — Training, IVs and Natures",
+  "url": "https://forums.pokeaether.com/t/daycare-training-ivs-and-natures/113",
+  "category_id": 13,
+  "author": "adinho",
+  "published_at": "2026-10-14T03:50:03Z",
+  "raw_sha256": "21ef33cbbff765fb7651a14ac3e9f13f1ebc14ab53b903f5197af1dd7c78731c",
+  "screenshots": [
+    {
+      "id": 217,
+      "filename": "01-training.png",
+      "short_url": "upload://zdBzopq30prEkuYknxugnC7CHoq.png",
+      "url": "/uploads/default/original/1X/f6d5d29ff33bbb8f3a2154cb51d00edf62f67dd6.png",
+      "width": 864,
+      "height": 744,
+      "source_sha256": "9507c2f9714c64c67458e850670c7af88e3b64ef49666e415737ad0997b11f89"
+    },
+    {
+      "id": 218,
+      "filename": "02-training-places.png",
+      "short_url": "upload://ywrF2NRuhKXmmtAmOsCMicdDgh1.png",
+      "url": "/uploads/default/original/1X/f1f4d9f36877f46b54faac977cc68f806a7781f7.png",
+      "width": 864,
+      "height": 744,
+      "source_sha256": "89a8ca4a5d05dbeea224223afbed0a9e0e8797e4a8ea5a39b52c96afb3dd12d3"
+    },
+    {
+      "id": 219,
+      "filename": "03-aethering.png",
+      "short_url": "upload://53AKoWxN8CmBe8I2GeGGF5D1zqR.png",
+      "url": "/uploads/default/original/1X/2372d640290ff2e0e2b867c11a2510bd78e2f015.png",
+      "width": 944,
+      "height": 714,
+      "source_sha256": "92f4ddb45290d00a528460992e9ecdaba58c175941ee7472486129ea54aab484"
+    },
+    {
+      "id": 220,
+      "filename": "04-nature.png",
+      "short_url": "upload://85jKBqbggO8EDcaaptBEz4pgoae.png",
+      "url": "/uploads/default/original/1X/38ab4d5ea73f65c2bfeb49f1a0ecebe8385aa72a.png",
+      "width": 744,
+      "height": 864,
+      "source_sha256": "bb51a67fa9d7071235501bef2d8a0cbd66c56009682b9b64c7d7696f48a3f014"
+    }
+  ],
+  "preview": {
+    "images": 4,
+    "tables": 4,
+    "headings": [
+      "Find the right NPC",
+      "Offline EXP and EV training",
+      "Start training",
+      "What the targets mean",
+      "Price and time",
+      "Up to six Pokémon, including while offline",
+      "Aethering: change IVs",
+      "What happens to each IV?",
+      "Wings are optional",
+      "Eligibility and what you keep",
+      "Nature Specialist: choose a stat effect",
+      "Which Pokémon can be treated?",
+      "One treatment per account every seven days",
+      "Default prices",
+      "Helpful guides"
+    ]
+  },
+  "verification": {
+    "checkedAt": "2026-10-14T03:51:05.958578+00:00",
+    "anonymousHtmlStatus": 200,
+    "anonymousTopicJsonStatus": 200,
+    "categoryId": 13,
+    "author": "adinho",
+    "cookedImages": 4,
+    "cookedTables": 4,
+    "upcomingNoticePresent": true,
+    "images": [
+      {
+        "filename": "01-training.png",
+        "status": 200,
+        "size": [
+          864,
+          744
+        ],
+        "pixelsMatchOriginal": true
+      },
+      {
+        "filename": "02-training-places.png",
+        "status": 200,
+        "size": [
+          864,
+          744
+        ],
+        "pixelsMatchOriginal": true
+      },
+      {
+        "filename": "03-aethering.png",
+        "status": 200,
+        "size": [
+          944,
+          714
+        ],
+        "pixelsMatchOriginal": true
+      },
+      {
+        "filename": "04-nature.png",
+        "status": 200,
+        "size": [
+          744,
+          864
+        ],
+        "pixelsMatchOriginal": true
+      }
+    ]
+  }
+}

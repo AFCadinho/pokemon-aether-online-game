@@ -2,6 +2,8 @@ class_name NatureSpecialistPopup
 extends PanelContainer
 
 signal closed
+const ExternalLinks := preload("res://scripts/core/external_links.gd")
+var guide_button: Button
 var pokemon_select: OptionButton
 var nature_select: OptionButton
 var status_label: Label
@@ -68,6 +70,10 @@ func _ready() -> void:
 	heading.add_child(title_label)
 	var subtitle := _section("daycare", ACCENT)
 	heading.add_child(subtitle)
+	title_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	title_label.clip_text = true
+	guide_button = _button("", ExternalLinks.open_daycare_guide)
+	header.add_child(guide_button)
 	close_button = _button("×", close_specialist)
 	close_button.custom_minimum_size = Vector2(40,40)
 	header.add_child(close_button)
@@ -284,6 +290,8 @@ func _nature(value: Variant) -> String:
 	return ContentLocalization.nature_name(name.to_lower(), name)
 
 func _localize() -> void:
+	guide_button.text = LocalizationManager.text("ui.daycare.forum_guide")
+	guide_button.tooltip_text = LocalizationManager.text("ui.daycare.forum_guide_hint")
 	title_label.text = _t("title")
 	explanation_label.text = _t("explanation")
 	for key: String in section_labels:

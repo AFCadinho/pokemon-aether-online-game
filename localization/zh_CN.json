@@ -7207,6 +7207,8 @@
   "ui.daycare.summary_no_evs": "努力值保持不变。",
   "ui.daycare.summary_costs": "费用明细：基础 {start} ₽ · 经验值 {exp} ₽ · 努力值 {ev} ₽",
   "backend.error.daycare_party_only": "开始训练前，请先将这只宝可梦从电脑移入队伍。",
+  "ui.daycare.forum_guide": "论坛指南",
+  "ui.daycare.forum_guide_hint": "打开培育屋论坛指南（英文）：训练、个体值与性格。",
   "ui.daycare.title": "宝可梦培育屋",
   "ui.daycare.explanation": "选择队伍中的宝可梦。最多六只可同时离线训练，经验值与努力值训练同时进行，达到目标后停止。",
   "ui.daycare.new_training": "新训练",
