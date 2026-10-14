@@ -53,22 +53,30 @@ static func models_plan(service: RefCounted, descriptor: Dictionary, game_catalo
 			return {"error": session.error, "jobs": []}
 		jobs.assign(plan.jobs.filter(func(job: Dictionary): return str(job.id) in session.downloads))
 	return {"error": "", "jobs": jobs, "total_bytes": bytes_in(jobs),
-		"available": index.assets.size() - requested.size(), "count": index.assets.size(),
+		"available": index.assets.filter(func(asset: Dictionary): return asset.get("format") != PairPack.TEXTURE_FORMAT).size() - requested.filter(func(id: String): return by_id[id].get("format") != PairPack.TEXTURE_FORMAT).size(),
+		"count": index.assets.filter(func(asset: Dictionary): return asset.get("format") != PairPack.TEXTURE_FORMAT).size(),
 		"collection": session}
 
 static func _available(asset: Dictionary, entries: Dictionary) -> bool:
+	if asset.get("format") == PairPack.TEXTURE_FORMAT:
+		for entry: Dictionary in entries.values():
+			var paths: Variant = entry.get("texture_packs", {})
+			if not paths is Dictionary: continue
+			var path: Variant = paths.get(asset.sha256, "")
+			if path is String and path.is_absolute_path() and str(PairPack.inspect(path, asset).error).is_empty(): return true
+		return false
 	if asset.get("appearances", []).is_empty():
 		return false
 	if asset.get("format") == PairPack.FORMAT:
 		var path := ""
 		for appearance: Dictionary in asset.appearances:
 			var entry: Dictionary = entries.get(str(appearance.runtime_identity), {})
-			if entry.get("pair_asset") != asset or entry.get("runtime_sha256") != appearance.runtime_sha256 or entry.get("runtime_schema") != 1 or entry.get("bytes") != appearance.bytes or entry.get("runtime_path") != str(asset.pair_manifest.resource_root).path_join(appearance.runtime_path):
+			if not PairPack.texture_paths_valid(entry, asset) or entry.get("pair_asset") != asset or entry.get("runtime_sha256") != appearance.runtime_sha256 or entry.get("runtime_schema") != 1 or entry.get("bytes") != appearance.bytes or entry.get("runtime_path") != str(asset.pair_manifest.resource_root).path_join(appearance.runtime_path):
 				return false
 			if not path.is_empty() and entry.get("pack_path") != path:
 				return false
 			path = str(entry.get("pack_path", ""))
-		return path.is_absolute_path() and str(PairPack.inspect(path, asset).error).is_empty()
+		return path.is_absolute_path() and str(PairPack.inspect_entry({"pack_path": path, "texture_packs": entries[str(asset.appearances[0].runtime_identity)].get("texture_packs", {})}, asset).error).is_empty()
 	for appearance: Dictionary in asset.appearances:
 		var entry: Dictionary = entries.get(str(appearance.runtime_identity), {})
 		var path := str(entry.get("runtime_path", ""))

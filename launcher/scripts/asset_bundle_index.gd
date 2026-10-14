@@ -51,7 +51,7 @@ static func validate(index: Dictionary) -> String:
 	if not index.get("catalog_revision") is String or str(index.catalog_revision).strip_edges().is_empty():
 		return "Asset index has no catalog revision."
 	var contract: Variant = index.get("runtime_contract")
-	if not contract is Dictionary or (contract.get("pokemon_3d") != 1 and contract.get("pokemon_3d") != 2) or contract.get("godot") != "4.6":
+	if not contract is Dictionary or (contract.get("pokemon_3d") != 1 and contract.get("pokemon_3d") != 2 and contract.get("pokemon_3d") != 3) or contract.get("godot") != "4.6":
 		return "Unsupported runtime contract."
 	var assets: Variant = index.get("assets")
 	if not assets is Array or assets.is_empty() or assets.size() > MAX_ASSETS:
@@ -80,16 +80,18 @@ static func validate(index: Dictionary) -> String:
 			return "Asset archive size is invalid."
 		if not _hex(str(asset.get("sha256", ""))) or not safe_object_key(str(asset.get("object_key", ""))):
 			return "Asset archive identity is invalid."
-		if asset.get("format", "zip") == PairPack.FORMAT:
-			if contract.pokemon_3d != 2 or not str(asset.object_key).ends_with(".pck"):
+		if PairPack.is_pack(asset):
+			if (contract.pokemon_3d != 2 and contract.pokemon_3d != 3) or not str(asset.object_key).ends_with(".pck"):
 				return "Model-pair PCK requires runtime contract 2."
 			var pair_error := PairPack.metadata_error(asset)
 			if not pair_error.is_empty():
 				return pair_error
+			if (asset.get("format") == PairPack.TEXTURE_FORMAT or asset.pair_manifest.get("schema") == 3) and contract.pokemon_3d != 3:
+				return "Shared texture packs require runtime contract 3."
 		elif asset.get("format", "zip") != "zip" or not str(asset.object_key).ends_with(".zip"):
 			return "Unsupported asset bundle format."
 		var appearances: Variant = asset.get("appearances")
-		if not appearances is Array or appearances.is_empty() or appearances.size() > 8:
+		if not appearances is Array or (appearances.is_empty() and asset.get("format") != PairPack.TEXTURE_FORMAT) or appearances.size() > 8:
 			return "Pokémon bundle has an invalid appearance list."
 		var variants := {}
 		for appearance_value: Variant in appearances:
@@ -121,6 +123,16 @@ static func validate(index: Dictionary) -> String:
 		for dependency: String in ids[asset_id].get("dependencies", []):
 			if not ids.has(dependency):
 				return "Asset dependency is absent from the index."
+	for asset: Dictionary in ids.values():
+		if PairPack.is_pack(asset):
+			var pool_ids := []
+			for pool: Dictionary in asset.pair_manifest.get("texture_pools", []):
+				if ids.get(pool.asset_id) != pool:
+					return "Shared texture pack differs from the model's pinned dependency."
+				pool_ids.append(pool.asset_id)
+			for dependency: String in asset.dependencies:
+				if ids[dependency].get("format") == PairPack.TEXTURE_FORMAT and dependency not in pool_ids:
+					return "Shared texture dependency has no exact model binding."
 	if _has_dependency_cycle(ids):
 		return "Asset dependencies contain a cycle."
 	return ""

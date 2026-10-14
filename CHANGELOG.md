@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare game and launcher model downloads for shared texture bundles, preserving each form’s appearance and repairing missing or damaged required downloads.
+
 - Choose Daycare training Pokémon in a separate six-slot Party popup, ordered by their actual Party slots, with Pokémon art, levels and unavailable-member reasons.
 
 - Replace the tiny native Android hotbar arrows with one readable page button and a 48 dp touch target; swipe left or right across a slot to change pages without using its item.

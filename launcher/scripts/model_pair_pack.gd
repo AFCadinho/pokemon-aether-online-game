@@ -3,6 +3,11 @@ extends RefCounted
 ## Inspect the physical pack before mounting; never extract a second model copy.
 const FORMAT := "model-pair-pck-v1"
 const KIND := "pokeaether-model-pair"
+const TEXTURE_FORMAT := "model-texture-pck-v1"
+const TEXTURE_KIND := "pokeaether-model-textures"
+
+static func is_pack(asset: Dictionary) -> bool:
+	return asset.get("format") in [FORMAT, TEXTURE_FORMAT]
 const MAX_PACK := 536870912
 const MAX_MEMBER := 134217728
 const MAX_FILES := 128
@@ -24,10 +29,11 @@ static func integer(value: Variant, maximum: int) -> bool:
 	return (value is int or value is float) and is_finite(float(value)) and value == floor(float(value)) and value > 0 and value <= maximum
 
 static func metadata_error(asset: Dictionary) -> String:
-	if asset.get("format") != FORMAT or not hex(asset.get("sha256")) or not integer(asset.get("size_bytes"), MAX_PACK):
+	if not is_pack(asset) or not hex(asset.get("sha256")) or not integer(asset.get("size_bytes"), MAX_PACK):
 		return "Invalid model-pair pack identity."
 	var manifest: Variant = asset.get("pair_manifest")
-	if not manifest is Dictionary or not integer(manifest.get("schema"), 2) or manifest.get("kind") != KIND:
+	var texture_pool: bool = asset.get("format") == TEXTURE_FORMAT
+	if not manifest is Dictionary or not integer(manifest.get("schema"), 1 if texture_pool else 3) or manifest.get("kind") != (TEXTURE_KIND if texture_pool else KIND):
 		return "Invalid model-pair manifest."
 	for field in ["asset_id", "species_id", "form_id", "version", "dependencies", "appearances"]:
 		if manifest.get(field) != asset.get(field):
@@ -36,7 +42,7 @@ static func metadata_error(asset: Dictionary) -> String:
 	if not resource_root.begins_with("res://pokemon-pairs/") or not hex(resource_root.trim_prefix("res://pokemon-pairs/")):
 		return "Invalid model-pair resource_root."
 	var files: Variant = manifest.get("files")
-	if not files is Array or files.size() < 2 or files.size() >= MAX_FILES:
+	if not files is Array or files.size() < (1 if texture_pool else 2) or files.size() >= MAX_FILES:
 		return "Invalid model-pair file table."
 	var declared := {}
 	var folders := "textures" if manifest.schema == 1 else "textures|meshes|skins|libraries"
@@ -46,14 +52,37 @@ static func metadata_error(asset: Dictionary) -> String:
 		if not row is Dictionary:
 			return "Invalid model-pair file."
 		var path := str(row.get("path", ""))
-		if pattern.search(path) == null or declared.has(path) or not hex(row.get("sha256")) or not integer(row.get("bytes"), MAX_MEMBER) or row.bytes < 24:
+		if (texture_pool and not path.begins_with("textures/")) or pattern.search(path) == null or declared.has(path) or not hex(row.get("sha256")) or not integer(row.get("bytes"), MAX_MEMBER) or row.bytes < 24:
 			return "Invalid or duplicate model-pair member."
 		if not integer(row.get("decoded_bytes"), MAX_PACK):
 			return "Unbounded decoded model resource."
 		declared[path] = row
 		total += int(row.bytes)
-	if total > MAX_PACK or not declared.has("models/normal.scn") or not declared.has("models/shiny.scn"):
+	if total > MAX_PACK or (not texture_pool and (not declared.has("models/normal.scn") or not declared.has("models/shiny.scn"))):
 		return "Model-pair payload is incomplete or too large."
+	var texture_pools: Variant = manifest.get("texture_pools", [])
+	if not texture_pools is Array or texture_pools.size() > 16:
+		return "Invalid shared texture dependency table."
+	if texture_pool:
+		if asset.get("dependencies") != [] or asset.get("appearances") != [] or not texture_pools.is_empty():
+			return "A shared texture pack must be a data-only leaf."
+		return ""
+	if manifest.schema < 3 and not texture_pools.is_empty():
+		return "Shared texture dependencies require model-pair schema 3."
+	var expected_dependencies := []
+	var pool_roots := {resource_root: true}
+	for pool: Variant in texture_pools:
+		if not pool is Dictionary or pool.get("format") != TEXTURE_FORMAT or not metadata_error(pool).is_empty():
+			return "Invalid shared texture pack binding."
+		if pool.asset_id in expected_dependencies or pool_roots.has(pool.pair_manifest.resource_root):
+			return "Duplicate shared texture pack binding."
+		expected_dependencies.append(pool.asset_id)
+		pool_roots[pool.pair_manifest.resource_root] = true
+	if not asset.get("dependencies") is Array:
+		return "Invalid model-pair dependencies."
+	for dependency: String in expected_dependencies:
+		if dependency not in asset.dependencies:
+			return "Shared texture dependencies differ from their exact bindings."
 	var appearances: Variant = manifest.get("appearances")
 	if not appearances is Array or appearances.size() != 2:
 		return "A model pair requires normal and shiny."
@@ -356,6 +385,25 @@ static func object_check(directory: String, asset: Dictionary) -> Dictionary:
 		return _failure("Invalid model-pair object manifest.")
 	return inspect(directory.path_join("model-pair.pck"), asset)
 
+static func texture_paths_valid(entry: Dictionary, asset: Dictionary) -> bool:
+	var paths: Variant = entry.get("texture_packs", {})
+	if not paths is Dictionary or paths.size() != asset.pair_manifest.get("texture_pools", []).size(): return false
+	for pool: Dictionary in asset.pair_manifest.get("texture_pools", []):
+		if not paths.get(pool.sha256) is String or not str(paths[pool.sha256]).is_absolute_path(): return false
+	return true
+
+static func inspect_entry(entry: Dictionary, asset: Dictionary) -> Dictionary:
+	var checked := inspect(str(entry.get("pack_path", "")), asset)
+	if not str(checked.error).is_empty(): return checked
+	if not texture_paths_valid(entry, asset): return _failure("Shared texture paths differ from the pinned dependencies.")
+	var textures := {}
+	for pool: Dictionary in asset.pair_manifest.get("texture_pools", []):
+		var receipt := inspect(str(entry.texture_packs[pool.sha256]), pool)
+		if not str(receipt.error).is_empty(): return _failure("Shared texture pack failed verification: " + str(receipt.error))
+		textures[pool.sha256] = receipt
+	if not textures.is_empty(): checked["texture_checks"] = textures
+	return checked
+
 static func catalog_entries(asset: Dictionary, directory: String) -> Array:
 	var result := []
 	for appearance: Dictionary in asset.appearances:
@@ -363,6 +411,11 @@ static func catalog_entries(asset: Dictionary, directory: String) -> Array:
 			"runtime_schema": 1, "runtime_path": str(asset.pair_manifest.resource_root).path_join(appearance.runtime_path),
 			"runtime_sha256": appearance.runtime_sha256, "bytes": appearance.bytes,
 			"pack_path": ProjectSettings.globalize_path(directory.path_join("model-pair.pck")), "pair_asset": asset.duplicate(true)})
+	if not asset.pair_manifest.get("texture_pools", []).is_empty():
+		var paths := {}
+		for pool: Dictionary in asset.pair_manifest.texture_pools:
+			paths[pool.sha256] = ProjectSettings.globalize_path(directory.get_base_dir().path_join(pool.sha256).path_join("model-pair.pck"))
+		for entry: Dictionary in result: entry["texture_packs"] = paths.duplicate()
 	return result
 
 static func budget(asset: Dictionary, variant: String) -> int:
@@ -373,6 +426,8 @@ static func budget(asset: Dictionary, variant: String) -> int:
 	for appearance: Dictionary in asset.appearances:
 		if appearance.variant == variant:
 			bytes = maxi(bytes, int(appearance.cache_source_bytes))
+	for pool: Dictionary in asset.pair_manifest.get("texture_pools", []):
+		bytes += int(pool.size_bytes) # Conservative per-scene cache admission.
 	return bytes
 
 static func dependency_allowed(schema: int, source: String, target: String) -> bool:
@@ -381,13 +436,27 @@ static func dependency_allowed(schema: int, source: String, target: String) -> b
 	if not source.begins_with("models/"):
 		return false
 	var folder := target.get_slice("/", 0)
-	return folder == "textures" if schema == 1 else schema == 2 and folder in ["textures", "meshes", "skins", "libraries"]
+	return folder == "textures" if schema == 1 else schema in [2, 3] and folder in ["textures", "meshes", "skins", "libraries"]
 
 static func mount_checked(path: String, asset: Dictionary, checked: Dictionary) -> String:
 	if not Thread.is_main_thread():
 		return "Model-pair mounting requires the main thread."
 	if not str(checked.get("error", "invalid")).is_empty() or checked.get("manifest") != asset.get("pair_manifest") or checked.get("sha256") != asset.get("sha256") or checked.get("path") != ProjectSettings.globalize_path(path):
 		return "Model-pair pack was not verified."
+	var shared_paths := {}
+	var expected_pools: Array = asset.pair_manifest.get("texture_pools", [])
+	var receipts: Variant = checked.get("texture_checks", {})
+	if not receipts is Dictionary or receipts.size() != expected_pools.size():
+		return "Shared texture packs were not verified."
+	for pool: Dictionary in expected_pools:
+		var receipt: Dictionary = receipts.get(pool.sha256, {})
+		var error := mount_checked(str(receipt.get("path", "")), pool, receipt)
+		if not error.is_empty(): return "Shared texture pack: " + error
+		for row: Dictionary in pool.pair_manifest.files:
+			shared_paths[str(pool.pair_manifest.resource_root).path_join(row.path)] = true
+	# Portable resources discard the codec buffer at first load by default.
+	# Preserve it before any native resource load so scene/material copies work.
+	PortableCompressedTexture2D.set_keep_all_compressed_buffers(true)
 	var resource_root: String = asset.pair_manifest.resource_root
 	var digest: String = asset.sha256
 	if namespaces.has(resource_root) and namespaces[resource_root] != digest:
@@ -410,13 +479,15 @@ static func mount_checked(path: String, asset: Dictionary, checked: Dictionary) 
 		for dependency: String in ResourceLoader.get_dependencies(resource_root.path_join(row.path)):
 			var target := dependency.get_slice("::", 2) if dependency.contains("::") else dependency
 			if not target.begins_with(resource_root + "/"):
+				if int(asset.pair_manifest.schema) == 3 and str(row.path).begins_with("models/") and shared_paths.has(target):
+					continue
 				return "Model-pair dependency escapes its resource_root."
 			var relative := target.trim_prefix(resource_root + "/")
 			if not dependency_allowed(int(asset.pair_manifest.schema), row.path, relative) or not checked.members.has(relative):
 				return "Invalid model-pair dependency graph."
 			referenced[relative] = true
 	for name: String in checked.members:
-		if name != "bundle.json" and not name.begins_with("models/") and not referenced.has(name):
+		if asset.get("format") != TEXTURE_FORMAT and name != "bundle.json" and not name.begins_with("models/") and not referenced.has(name):
 			return "Unreferenced model-pair resource."
 	closed[digest] = true
 	return ""
