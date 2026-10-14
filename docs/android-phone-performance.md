@@ -31,6 +31,16 @@ approved defaults, Team Preview retains its neutral roster camera, and attack
 shots recover to the chosen mobile view. The stable entry reference applies
 this angle from the first drawn arena frame, without waiting for model arrival.
 
+USB trial `0.3.109-3d-perf.14` (code 44, source `2e66b3b5b`) passed signed
+ARM64 Mobile export and demand-asset checks and was installed over perf.13 on
+the connected SM-S938B without clearing data. It retains the published asset
+pin, local v14 models, disabled move warmup and numeric USB diagnostics.
+Focused checks passed for Android framing/reset (216 cases), desktop/Android
+framing parity and neutral Team Preview (108 cases), Android Draco Meteor
+charge/release/pause/recovery/cancellation, and held-response/model entry with
+the stable opening angle. These checks use local fixtures; physical appearance
+still requires player confirmation in the new build.
+
 ## Android touch camera and bounded move preparation
 
 The user confirmed that trial `0.3.109-3d-perf.8` clears foreground grass and
