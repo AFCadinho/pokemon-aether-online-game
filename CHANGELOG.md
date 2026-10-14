@@ -4,6 +4,8 @@
 
 - Restrict the Nature Specialist to your Party. Show all Party members in slot order, with explicit reasons for unavailable Pokémon instead of silently hiding them.
 
+- Show three hotbar slots per page on small touch screens, reducing its height while keeping all eight shortcuts available through three pages.
+
 - Show the running client's game version on the login and saved-session screens in the selected language.
 
 - Restyle the Nature Specialist with Pokémon and IV details, clear stat comparisons, custom dropdowns, readable prices and responsive controls; give the specialist a green gardener overworld and portrait.
