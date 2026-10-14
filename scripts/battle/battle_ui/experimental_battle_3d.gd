@@ -91,6 +91,7 @@ const USER_CAMERA_ZOOM_MAX := 1.45
 const ANDROID_CAMERA_ZOOM_MIN := 0.30
 const ANDROID_CAMERA_ZOOM_MAX := 1.60
 const ANDROID_CAMERA_ZOOM_DEFAULT := 0.60
+const ANDROID_ENTRY_OVERVIEW_DISTANCE_FACTOR := 4.0 / 3.0
 
 func uses_android_camera() -> bool:
 	return OS.has_feature("android")
@@ -2816,6 +2817,10 @@ func _update_camera(delta: float) -> void:
 		var fit_offset := offset / maxf(user_camera_zoom, 0.001) if uses_android_camera() else offset
 		camera.transform = OverviewCamera.fit(camera, points, target, fit_offset, OverviewCamera.safe_rect(self))
 		if uses_android_camera():
+			if not android_entry_camera_points.is_empty():
+				# The early local-lead reference is narrower than fitting both real
+				# combatants. Restore the approved close-up's viewing distance.
+				camera.position = target + (camera.position - target) * ANDROID_ENTRY_OVERVIEW_DISTANCE_FACTOR
 			# A conservative bind-pose envelope can be much larger than the
 			# visible idle model. Fit the overview first, then let touch zoom
 			# actually change distance instead of being undone by that envelope.

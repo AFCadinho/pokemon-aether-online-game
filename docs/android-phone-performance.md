@@ -67,12 +67,33 @@ to appear during the request wait. No model integrity gate is bypassed.
 `ANDROID_BATTLE_ENTRY` measures the completed visual fade; the separate numeric
 `ANDROID_BATTLE_READY` records when preparation actually releases battle input.
 
+USB trial `0.3.109-3d-perf.11` (code 41, source `080f6299e`) passed signed
+ARM64 Mobile export checks and was installed without clearing game data.
+The first export attempt lost its Gradle daemon during workstation memory
+pressure; rebuilding with one worker and a smaller heap succeeded. The user
+confirmed the early fade works, but found the reference overview too close.
+The repeated fades began at 271–326 ms and completed at 510–581 ms while battle
+input remained locked for preparation. Two warm input-ready totals were
+1435/1704 ms; another entry requiring additional assets remained visually open
+while preparation continued to 3718 ms. No script errors were recorded, with
+the existing `can_process` engine condition still present once.
+
+Resting camera logs showed 6.84 units at default zoom in perf.11 versus 9.15
+in the previously accepted perf.10 view (both FOV 48, zoom 0.60, two slots).
+The early reference overview now increases its pre-zoom distance by 4/3,
+restoring approximately 9.12 units for the measured view. Only this early Android
+reference uses the correction; the touch limits/default and non-entry cameras
+are unchanged. It applies from the first arena frame and remains fixed through
+model preparation, with native move shots retaining their own poses/recovery.
+
 World-entry preparation now preserves an explicitly supplied overworld
 snapshot instead of replacing it with the lobby's dark loading backdrop.
 The Android arena now uses its stable reserved overview for an early layered
 fullscreen fade. Entries without a world snapshot retain their loading screen.
-The held-download check verifies snapshot retention and, under native Mobile
-rendering, the actual green world-image pixels during response/model waits.
+The entry checks verify snapshot handoff, an opaque early arena during held
+responses/downloads, and identical Android opening/model-ready camera transforms
+under native Mobile rendering. The desktop entry and fullscreen fade/cancellation
+guards also pass, together with touch camera and Draco Meteor camera regressions.
 
 Move shots prepare a static arena-bound index under the entry cover. The
 clearance helper protects the first three metres (at most 60%) of the sightline

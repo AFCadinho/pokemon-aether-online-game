@@ -4,12 +4,12 @@
 
 - Start the Android 3D battle fade as soon as the arena is drawn, while battle data and Pokémon prepare. Keep one stable close-up overview as models appear, and retain touch zoom and move-camera shots. Speed up local preparation by reusing fresh verification and expanding only the required assets, with cold-load integrity checks preserved.
 
-- Keep the overworld visible while Android 3D battles prepare, then fade directly into the ready battle with its final zoom. Lift cinematic move shots above foreground grass and arena props to keep their focus visible.
+- Keep the overworld visible until the Android 3D field is available, then fade directly into the field with a stable opening zoom. Lift cinematic move shots above foreground grass and arena props to keep their focus visible.
 
 - Enable move-specific 3D camera shots on Android, including Draco Meteor's charge and meteor rain. Add a separate Graphics toggle while keeping the idle camera steady and restoring the player's zoom after moves.
 
 - Start Android 3D battles closer to the Pokémon, with one-finger camera rotation and two-finger pinch zoom.
-  Keep the opening covered until the real Pokémon camera frame is ready, avoiding an initial zoom change as models appear.
+  Keep the opening zoom stable as models appear.
 
 - Move the Nature Specialist to the Route 5 Daycare alongside the Aether Researcher and Wing Merchant; remove it from Pokémon Centers.
 
