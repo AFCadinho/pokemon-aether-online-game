@@ -13,7 +13,7 @@ func _check(value: bool, message: String) -> void:
 		print("PASS: " + message)
 
 func _entry(id: int, groups: Array, location: String, values: Dictionary, allowed := true) -> Dictionary:
-	return {"pokemonId": id, "pokemon": {"speciesId": "eevee", "species": "eevee", "nickname": "Example " + str(id), "ivs": values}, "location": {"type": location, "boxIndex": 1}, "eggGroups": groups, "recipientAllowed": true, "donorAllowed": allowed, "donorBlockedReason": null, "shiny": false}
+	return {"pokemonId": id, "pokemon": {"speciesId": "eevee", "species": "eevee", "nickname": "Example " + str(id), "ivs": values}, "location": {"type": location, "partySlot": id - 1, "boxIndex": 1}, "eggGroups": groups, "recipientAllowed": true, "donorAllowed": allowed, "donorBlockedReason": null, "shiny": false}
 
 func _run() -> void:
 	var popup = load("res://scenes/interface/aethering_popup.tscn").instantiate()
@@ -42,19 +42,34 @@ func _run() -> void:
 	if popup.picker_rows.is_empty():
 		quit(1)
 		return
-	_check(popup.picker_rows.all(func(entry: Dictionary): return entry["location"]["type"] == "party"), "PC candidates never appear in picker")
-	_check(popup.picker_rows[0]["pokemonId"] == 2, "Compatible donors sorted before unavailable candidates")
-	popup._pick(0)
+	_check(popup.picker_rows.all(func(entry: Dictionary): return entry.is_empty() or entry["location"]["type"] == "party"), "PC candidates never appear in picker")
+	_check(popup.picker_rows.size() == 6 and popup.picker_buttons.size() == 6, "Picker shows all six Party slots")
+	_check(popup.picker.top_level and popup.picker.get_parent() == popup, "Picker opens outside the scrolling comparison")
+	_check(popup.picker_rows[0]["pokemonId"] == 1 and popup.picker_rows[1]["pokemonId"] == 2, "Party order is retained regardless of input order")
+	_check(popup.picker_buttons[0].disabled and not popup.picker_buttons[1].disabled, "Recipient cannot be chosen as its own Donor")
+	_check(popup.picker_buttons[2].disabled and popup.picker_buttons[3].disabled, "Incompatible and held-item Donors are disabled")
+	_check(popup.picker_buttons[4].disabled and popup.picker_buttons[5].disabled, "Empty Party slots are visible and disabled")
+	var replacement := good.duplicate(true)
+	replacement["pokemonId"] = 99
+	popup.picker_rows[1] = replacement
+	popup.picker_buttons[1].pressed.emit()
+	_check(popup.donor.is_empty(), "Old slot button cannot select a replacement Pokémon")
+	popup.picker_rows[1] = good
+	popup.picker_buttons[1].pressed.emit()
 	_check(popup.donor["pokemonId"] == 2, "Party Donor selection")
+	_check(not popup.picker.visible, "Selection closes the modal picker")
+	popup._open_picker(true)
+	popup._close_picker()
+	_check(popup.donor["pokemonId"] == 2, "Cancel preserves the current selection")
 	popup._open_picker(false)
 	for index in range(popup.picker_rows.size()):
-		if popup.picker_rows[index]["pokemonId"] == 2:
+		if popup.picker_rows[index].get("pokemonId") == 2:
 			popup._pick(index)
 			break
 	_check(popup.recipient["pokemonId"] == 2 and popup.recipient["location"]["type"] == "party", "Party Recipient selection")
 	popup._open_picker(false)
 	for index in range(popup.picker_rows.size()):
-		if popup.picker_rows[index]["pokemonId"] == 1:
+		if popup.picker_rows[index].get("pokemonId") == 1:
 			popup._pick(index)
 			break
 	_check(popup.recipient["pokemonId"] == 1 and popup.donor.is_empty(), "Party Recipient selection invalidates Donor")
