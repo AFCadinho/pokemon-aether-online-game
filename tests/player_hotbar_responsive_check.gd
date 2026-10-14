@@ -1,5 +1,6 @@
 extends SceneTree
 
+const Target := preload("res://scripts/ui/touch_target_size.gd")
 var failures := 0
 var checks := 0
 
@@ -26,12 +27,15 @@ func _run() -> void:
 	var phone_height: float = overlay.hotkey_sidebar_panel.size.y
 	_check(phone_height < 219.0 and phone_height >= overlay.hotkey_sidebar_panel.get_combined_minimum_size().y, "phone hotbar shrinks without clipping its contents")
 	var initial_right: float = overlay.hotkey_sidebar_panel.get_rect().end.x
+	_check_touch_navigation(overlay)
+	await _check_touch_paging(overlay)
 	for button: Control in [overlay.settings_button, overlay.mount_button, overlay.skills_button, overlay.donator_store_button, overlay.my_powers_button]:
 		button.show()
 	overlay.quest_journal_view.has_main_tracker = true
 	overlay.quest_journal_view._layout_trackers()
 	root.content_scale_factor = 1.875
 	await _settle()
+	_check_touch_navigation(overlay)
 	for button: Control in [overlay.settings_button, overlay.mount_button, overlay.skills_button, overlay.donator_store_button, overlay.my_powers_button]:
 		_check(not overlay.hotkey_sidebar_panel.get_global_rect().intersects(button.get_global_rect()), "zoomed phone hotbar clears " + button.name)
 	_check(overlay.hotbar_layout_horizontal_shift > 0.0, "crowded hotbar moves beside the quick buttons")
@@ -70,6 +74,7 @@ func _run() -> void:
 	await _settle()
 	_check_page(overlay, [0, 1, 2, 3], "1/2")
 	_check(overlay.hotbar_buttons.size() == 8, "all eight persistent bindings remain available")
+	_check(not overlay.hotbar_touch_page_button.visible and overlay.hotbar_page_controls.visible, "desktop restores its original pager")
 	overlay.queue_free()
 	await process_frame
 	print("player_hotbar_responsive_check: %d checks, %d failures" % [checks, failures])
@@ -79,6 +84,95 @@ func _run() -> void:
 func _settle() -> void:
 	for frame in 8:
 		await process_frame
+
+
+func _check_touch_navigation(overlay: CanvasLayer) -> void:
+	var button: Button = overlay.hotbar_touch_page_button
+	var dp_size := button.size * Target.screen_scale(button)
+	_check(button.visible and not overlay.hotbar_page_controls.visible, "native HUD uses one visible page button")
+	_check(dp_size.x >= 48.0 and dp_size.y >= 48.0, "page button has a 48 dp target")
+	_check(float(button.get_theme_font_size("font_size")) * Target.screen_scale(button).y >= 11.0, "page text stays readable independently of UI zoom")
+	var style := button.get_theme_stylebox("normal") as StyleBoxFlat
+	var visual := Rect2(Vector2.ZERO, button.size).grow_individual(style.expand_margin_left, style.expand_margin_top, style.expand_margin_right, style.expand_margin_bottom)
+	_check((visual.size * Target.screen_scale(button)).is_equal_approx(Vector2(36, 22)), "page button draws a compact pill inside its larger touch target")
+	_check(Rect2(Vector2.ZERO, overlay.root_control.size).grow(0.1).encloses(button.get_rect()), "page button stays within the viewport")
+	_check(overlay.is_point_over_visible_ui(button.get_global_rect().get_center()), "page button blocks world movement")
+	for state: Dictionary in overlay.collapsible_panels.values():
+		for control: Control in [state["panel"], state["button"]]:
+			if control.visible:
+				_check(not button.get_global_rect().intersects(control.get_global_rect()), "page button clears " + control.name)
+	for control: Control in [overlay.personal_buffs_panel, overlay.settings_button, overlay.mount_button, overlay.skills_button, overlay.donator_store_button, overlay.my_powers_button]:
+		if control.visible:
+			_check(not button.get_global_rect().intersects(control.get_global_rect()), "page button clears " + control.name)
+
+
+func _check_touch_paging(overlay: CanvasLayer) -> void:
+	var page_button: Button = overlay.hotbar_touch_page_button
+	var point := page_button.get_global_rect().get_center()
+	Input.set_emulate_mouse_from_touch(true)
+	_touch(true, point)
+	_touch(false, point)
+	_check_page(overlay, [3, 4, 5], "2/3")
+	page_button.pressed.emit()
+	page_button.pressed.emit()
+	_check_page(overlay, [0, 1, 2], "1/3")
+	_check(page_button.text == "1/3 ›", "one page button wraps back to the first page")
+	var activations: Array[int] = []
+	for slot: BaseButton in overlay.hotbar_buttons:
+		slot.pressed.connect(func() -> void: activations.append(1))
+	point = overlay.hotbar_buttons[0].get_global_rect().get_center()
+	_touch(true, point)
+	_touch(false, point)
+	_check(activations.size() == 1, "ordinary native slot tap activates once")
+	var distance := 30.0 / Target.screen_scale(overlay.root_control).x
+	_touch(true, point)
+	_drag(point - Vector2(distance, 0), Vector2(-distance, 0))
+	_touch(false, point - Vector2(distance, 0))
+	_check_page(overlay, [3, 4, 5], "2/3")
+	_check(activations.size() == 1 and not root.gui_is_dragging(), "swipe changes page without using or dragging an item")
+	point = overlay.hotbar_buttons[3].get_global_rect().get_center()
+	_touch(true, point)
+	_drag(point + Vector2(distance, 0), Vector2(distance, 0))
+	_touch(false, point + Vector2(distance, 0))
+	_check_page(overlay, [0, 1, 2], "1/3")
+	point = overlay.hotbar_buttons[0].get_global_rect().get_center()
+	_touch(true, point)
+	_drag(point - Vector2(distance * 0.5, 0), Vector2(-distance * 0.5, 0))
+	_touch(false, point - Vector2(distance * 0.5, 0))
+	_check(activations.size() == 1 and overlay.hotbar_current_page == 0, "short cancelled swipe does not use the slot or change pages")
+	_touch(true, point)
+	var gesture: Node = overlay.hotbar_buttons[0].get_node("TouchContextGesture")
+	gesture._process(0.51)
+	_check(gesture.held and activations.size() == 1, "stationary slot hold keeps its context action")
+	_touch(false, point)
+	await process_frame
+	_check(activations.size() == 1 and overlay.hotbar_current_page == 0, "releasing a slot hold does not use an item or change page")
+	overlay.collapsible_panels["hotkey_sidebar"]["button"].pressed.emit()
+	await _settle()
+	_check(not page_button.visible, "collapsing hotbar hides its separate page button")
+	overlay.collapsible_panels["hotkey_sidebar"]["button"].pressed.emit()
+	await _settle()
+	_check(page_button.visible, "reopening hotbar restores the page button")
+
+
+func _touch(pressed: bool, point: Vector2) -> void:
+	var event := InputEventScreenTouch.new()
+	event.index = 0
+	event.window_id = root.get_window_id()
+	event.position = root.get_final_transform() * point
+	event.pressed = pressed
+	Input.parse_input_event(event)
+	Input.flush_buffered_events()
+
+
+func _drag(point: Vector2, relative: Vector2) -> void:
+	var event := InputEventScreenDrag.new()
+	event.index = 0
+	event.window_id = root.get_window_id()
+	event.position = root.get_final_transform() * point
+	event.relative = root.get_final_transform().basis_xform(relative)
+	Input.parse_input_event(event)
+	Input.flush_buffered_events()
 
 
 func _check_page(overlay: CanvasLayer, expected: Array, label: String) -> void:
