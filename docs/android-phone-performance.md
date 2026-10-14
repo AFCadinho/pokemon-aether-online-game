@@ -12,6 +12,16 @@ hold its phase. It reuses the existing camera update without extra rendering
 passes or scenery scans. Fixed-camera benchmark fixtures explicitly disable the
 new preference so their workload remains reproducible.
 
+USB trial `0.3.109-3d-perf.15` (code 45, source `f915190ab`) passed signed ARM64
+Mobile export and demand-asset checks and was installed over perf.14 on the
+SM-S938B without clearing data. It retains the published asset pin, local v14
+models and disabled move warmup. Focused checks passed for preference migration,
+independent persistent switches, 216 Android framing cases plus idle/pause/reset
+behavior, 108 desktop/Android framing cases, held-model entry, Draco Meteor and
+eleven catalog camera profiles. All four camera-switch translations parse.
+These checks use local fixtures; physical motion and switch behavior still
+require confirmation in the installed build.
+
 The explicit local USB performance probe's `ANDROID_3D_CAMERA` record now also
 includes the selected orbit yaw/pitch (radians and degrees), actual numeric
 camera pose and an `idle` flag. It emits alongside the existing five-second
