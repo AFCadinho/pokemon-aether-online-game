@@ -42,7 +42,7 @@ func _run() -> void:
 		root.add_child(panel)
 		await process_frame
 		_check(panel.get("confirm_button") != null and panel.get("nature_select") != null, "Selection and confirmation controls exist")
-		panel.call("_apply_state", {"pokemon":[{"pokemon":{"ownedPokemonId":123.0,"level":50.0,"species":"Pikachu","nature":"Hardy","shiny":true,"ivs":{"hp":31.0,"spe":31.0}},"price":2500000,"rarity":"uncommon"}],"natures":[{"name":"Hardy"},{"name":"Jolly","boosted_stat":"spe","lowered_stat":"spa"}],"serverTime":"2026-10-13T12:00:00+00:00","nextAvailableAt":null,"money":10000000})
+		panel.call("_apply_state", {"pokemon":[{"pokemon":{"ownedPokemonId":123.0,"level":50.0,"species":"Pikachu","nature":"Hardy","shiny":true,"ivs":{"hp":31.0,"spe":31.0}},"price":2500000,"rarity":"uncommon","eligible":true,"location":{"type":"party","partySlot":0}}],"natures":[{"name":"Hardy"},{"name":"Jolly","boosted_stat":"spe","lowered_stat":"spa"}],"serverTime":"2026-10-13T12:00:00+00:00","nextAvailableAt":null,"money":10000000})
 		_check("Pikachu" in panel.pokemon_select.get_item_text(0) and "2,500,000" in panel.pokemon_select.get_item_text(0), "Server-priced selection shows species rather than boolean values")
 		_check(".0" not in panel.pokemon_select.get_item_text(0) and ".0" not in panel.iv_values["hp"].text, "JSON floats render as integer IDs, levels and IVs")
 		_check(panel.pokemon_select.has_theme_stylebox_override("normal") and panel.pokemon_select.get_popup().has_theme_stylebox_override("panel"), "Selection and opened popup use custom styling")
@@ -71,6 +71,22 @@ func _run() -> void:
 		nature_service.call("_reset_for_account")
 		_check(nature_service.pending_request.is_empty(), "Pending confirmation cannot cross an account switch")
 		var sample_state: Dictionary = panel.cached_state.duplicate(true)
+		var rows: Array = [{"pokemon":{"ownedPokemonId":55,"species":"Venusaur","level":100,"nature":"Hardy"},"price":2000000,"location":{"type":"box","boxIndex":0,"slotIndex":11}}]
+		for position in [5,3,4,2,1,0]:
+			var p: Dictionary = {"ownedPokemonId":100+position,"species":"Tyranitar" if position==0 else "Magikarp","level":20-position,"nature":"Hardy"}
+			rows.append({"pokemon":p,"price":125000,"eligible":position not in [2,4],"blockedReason":"nature_not_ot" if position==2 else ("nature_protected" if position==4 else null),"location":{"type":"party","partySlot":position}})
+		panel.call("_apply_state", {"pokemon":rows,"natures":[{"name":"Hardy"}],"money":1000000,"serverTime":"2026-10-14T12:00:00+00:00","nextAvailableAt":null})
+		_check(panel.entries.size()==6 and panel.pokemon_select.item_count==6, "All six Party members remain visible and PC Venusaur is excluded")
+		for position in range(6):
+			_check(panel.pokemon_select.get_item_metadata(position)==100+position, "Picker follows Party slot order")
+		_check(panel.pokemon_select.is_item_disabled(2) and panel.pokemon_select.is_item_disabled(4), "Ineligible Party members are disabled rather than hidden")
+		_check("OT" in panel.pokemon_select.get_item_text(2) and "Test" in panel.pokemon_select.get_item_text(4), "Unavailable entries explain their protection reason")
+		_check(panel.pokemon_select.selected==0 and "Party 1" in panel.pokemon_info.text, "Selected card identifies the actual Party slot")
+		for row: Dictionary in rows:
+			row["eligible"]=false
+			row["blockedReason"]="nature_not_ot"
+		panel.call("_apply_state", {"pokemon":rows,"natures":[{"name":"Hardy"}],"money":1000000,"serverTime":"2026-10-14T12:00:00+00:00","nextAvailableAt":null})
+		_check(panel.entries.size()==6 and panel.preview_button.disabled and panel.confirm_button.disabled, "All-blocked Party stays visible without permitting treatment")
 		panel.free()
 		var small_viewport := SubViewport.new()
 		small_viewport.size = Vector2i(520,700)
