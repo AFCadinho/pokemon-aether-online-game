@@ -88,7 +88,9 @@ var coop_target_outline_material: ShaderMaterial
 const SINGLE_CAMERA_YAW := -35.0 * PI / 180.0
 const USER_CAMERA_ZOOM_MIN := 0.30
 const USER_CAMERA_ZOOM_MAX := 1.60
-const USER_CAMERA_ZOOM_DEFAULT := 0.63
+const USER_CAMERA_ZOOM_DEFAULT := 0.70
+const USER_CAMERA_YAW_DEFAULT := -0.164250014305115
+const USER_CAMERA_PITCH_DEFAULT := -0.0156436738967895
 const ANDROID_CAMERA_ZOOM_DEFAULT := 0.60
 const ENTRY_OVERVIEW_DISTANCE_FACTOR := 4.0 / 3.0
 
@@ -101,9 +103,15 @@ func camera_zoom_limits() -> Vector2:
 func camera_zoom_default() -> float:
 	return ANDROID_CAMERA_ZOOM_DEFAULT if uses_android_camera() else USER_CAMERA_ZOOM_DEFAULT
 
+func camera_yaw_default() -> float:
+	return 0.0 if uses_android_camera() else USER_CAMERA_YAW_DEFAULT
+
+func camera_pitch_default() -> float:
+	return 0.0 if uses_android_camera() else USER_CAMERA_PITCH_DEFAULT
+
 func reset_user_camera() -> void:
-	user_camera_yaw = 0.0
-	user_camera_pitch = 0.0
+	user_camera_yaw = camera_yaw_default()
+	user_camera_pitch = camera_pitch_default()
 	user_camera_zoom = camera_zoom_default()
 
 func _release_forest() -> void:
@@ -2801,9 +2809,12 @@ func _update_camera(delta: float) -> void:
 		# Keep the partner and both opponents visible while giving the local
 		# Trainer a closer, over-the-shoulder view during their decision.
 		target = target.lerp(_position(coop_camera_focus_index) + Vector3(0, 1.2, 0), focus_mix * 0.35)
-	offset = offset.rotated(Vector3.UP,user_camera_yaw)
+	# Keep the roster's neutral view independent of the chosen battle defaults.
+	var yaw := user_camera_yaw - (camera_yaw_default() if _preview_wants_3d() else 0.0)
+	var pitch := user_camera_pitch - (camera_pitch_default() if _preview_wants_3d() else 0.0)
+	offset = offset.rotated(Vector3.UP,yaw)
 	var right := offset.cross(Vector3.UP).normalized()
-	offset = offset.rotated(right,user_camera_pitch)
+	offset = offset.rotated(right,pitch)
 	# Team Preview retains its full roster view at the new close-up default.
 	var overview_zoom := 1.0 if _preview_wants_3d() and uses_android_camera() else user_camera_zoom / (camera_zoom_default() if _preview_wants_3d() else 1.0)
 	offset *= overview_zoom * (1.1 if _preview_wants_3d() else (1.45 if double_mode else 1.0)) * (1.0 - focus_mix * 0.13)
