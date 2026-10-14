@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh the Underground Path entrance visuals on Routes 5, 6, 7 and 8 from their updated Tiled sources.
+
 - Show Dadinho’s main quest icon outside the Route 5 Daycare while his IV and nature lesson is active.
 
 - Meet Dadinho outside the Route 5 Daycare after Misty for an introduction to IVs and natures before continuing to the S.S. Anne.
