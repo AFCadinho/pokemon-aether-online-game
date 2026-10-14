@@ -271,6 +271,7 @@ func _run() -> void:
 	settings.battle_presentation_mode = "3d"
 	settings.battle_3d_arena = "forest"
 	settings.battle_3d_camera_motion = false
+	settings.android_3d_idle_camera_motion = false
 	status = Label.new()
 	status.position = Vector2(20, 20)
 	status.add_theme_font_size_override("font_size", 20)

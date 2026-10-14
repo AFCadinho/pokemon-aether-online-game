@@ -5,6 +5,7 @@ func _make_stage() -> Node:
 
 func _set_motion(enabled: bool) -> void:
 	SettingsManager.battle_3d_camera_motion = false
+	SettingsManager.android_3d_idle_camera_motion = false
 	SettingsManager.android_3d_move_camera = enabled
 
 func _camera_zoom() -> float:

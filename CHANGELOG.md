@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Enable gentle idle camera movement in Android 3D battles around the chosen viewing angle, with a separate Graphics switch and saved opt-out. Keep loading, Team Preview and attack framing steady.
+
 - Keep the Daycare frame at a fixed desktop size across training modes, quotes, tabs and loading states, while fitting smaller viewports.
 
 - Present Aethering through an Aether Keeper with matching mystical sprite, portrait and ritual dialogue; clarify that Wings are optional and add a button to remove both IV locks.
