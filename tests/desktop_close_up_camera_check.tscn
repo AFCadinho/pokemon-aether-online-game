@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/desktop_close_up_camera_check.gd" id="1"]
+
+[node name="DesktopCloseUpCameraCheck" type="Node"]
+script = ExtResource("1")

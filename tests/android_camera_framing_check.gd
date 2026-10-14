@@ -36,15 +36,15 @@ func _run() -> void:
 								for point in Stage.OverviewCamera.resting_points(stage):
 									assert(Stage.OverviewCamera.ANDROID_SAFE_RECT.grow(0.0001).has_point(stage.camera.unproject_position(point) / Vector2(dimensions)), "Zooming out retains a complete overview")
 							samples += 1
-	# Prove that the wider mobile frame actually allows a closer camera.
+	# The shared close-up region permits a nearer fit than the conservative frame.
 	view.size = Vector2i(2340, 1080)
 	stage.double_mode = false
 	var points: Array[Vector3] = Stage.OverviewCamera.resting_points(stage)
 	var focus := Vector3(0, 1.2, 0)
 	var offset := Vector3(2, 1, 3)
-	var desktop: Transform3D = Stage.OverviewCamera.fit(stage.camera, points, focus, offset)
-	var mobile: Transform3D = Stage.OverviewCamera.fit(stage.camera, points, focus, offset, Stage.OverviewCamera.ANDROID_SAFE_RECT)
-	assert(mobile.origin.distance_to(focus) < desktop.origin.distance_to(focus))
+	var conservative: Transform3D = Stage.OverviewCamera.fit(stage.camera, points, focus, offset)
+	var close_up: Transform3D = Stage.OverviewCamera.fit(stage.camera, points, focus, offset, Stage.OverviewCamera.CLOSE_UP_SAFE_RECT)
+	assert(close_up.origin.distance_to(focus) < conservative.origin.distance_to(focus))
 	stage.user_camera_yaw = 0.0
 	stage.user_camera_pitch = 0.0
 	stage.user_camera_zoom = 1.0

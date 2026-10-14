@@ -18,18 +18,21 @@ func _run() -> void:
 				stage.double_mode = doubles
 				for model_size in [Vector3(1, 2, 1), Vector3(5, 6, 4)]:
 					stage.visual_bounds.fixture.idle.size = [model_size.x, model_size.y, model_size.z]
-					for zoom in [0.72, 1.0, 1.45]:
+					for zoom in [0.30, 0.60, 1.60]:
 						stage.user_camera_zoom = zoom
 						for yaw in [0.0, 1.3, -2.4]:
 							stage.user_camera_yaw = yaw
 							for pitch in [-0.12, 0.65]:
 								stage.user_camera_pitch = pitch
 								stage._update_camera(0.0)
-								var safe: Rect2 = Stage.OverviewCamera.SAFE_RECT
-								for point in Stage.OverviewCamera.resting_points(stage):
-									var pixel: Vector2 = stage.camera.unproject_position(point)
-									assert(not stage.camera.is_position_behind(point))
-									assert(safe.grow(0.0001).has_point(pixel / Vector2(dimensions)), "Model must stay above the controls at maximum zoom")
+								for index in stage._slot_count():
+									assert(not stage.camera.is_position_behind(stage._position(index) + Vector3.UP * 1.2), "Close-up keeps every slot centre in front of the camera")
+								if zoom == 1.60:
+									var safe: Rect2 = Stage.OverviewCamera.safe_rect(stage)
+									for point in Stage.OverviewCamera.resting_points(stage):
+										var pixel: Vector2 = stage.camera.unproject_position(point)
+										assert(not stage.camera.is_position_behind(point))
+										assert(safe.grow(0.0001).has_point(pixel / Vector2(dimensions)), "Zooming out retains the complete resting envelope above controls")
 								samples += 1
 	# A lunge, dodge, pose or recall shrink must not pull the overview with it.
 	var overview: Transform3D = stage.camera.transform

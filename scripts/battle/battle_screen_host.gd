@@ -18,8 +18,8 @@ var mounted_at_msec := 0
 var entry_setup_wait_ms := 0
 const FADE_SECONDS := 0.18
 const MIN_FADE_FRAMES := 12
-const WARM_ANDROID_FADE_SECONDS := 0.12
-const WARM_ANDROID_FADE_FRAMES := 6
+const READY_3D_FADE_SECONDS := 0.12
+const READY_3D_FADE_FRAMES := 6
 var outgoing_snapshot: TextureRect
 @onready var content: Control = $Content
 @onready var backdrop: ColorRect = $Content/Backdrop
@@ -330,7 +330,7 @@ func reveal_pending_entry() -> void:
 		if presenter != null:
 			reveal_requested = true
 			presenter.begin_entry_arena()
-			# Android reserves one stable overview before its first visible frame.
+			# Reserve one stable overview before its first visible frame.
 			# Fade the actual field while response/model preparation continues.
 			early_arena_requested = true
 			loading_message_after_ms = Time.get_ticks_msec() + 500
@@ -372,10 +372,10 @@ func _reveal_cover() -> void:
 	var fade_seconds := FADE_SECONDS
 	var fade_frames := MIN_FADE_FRAMES
 	var presenter = battle.animation_router.model_presenter if is_instance_valid(battle) else null
-	var warm_android: bool = is_instance_valid(presenter) and presenter.uses_android_camera() and get_node("/root/SettingsManager").battle_presentation_mode == "3d" and ((early_arena_requested and entry_arena_ready) or (preparation_ready and presenter.active and presenter.preparation_metrics.get("cached_assets", false)))
-	if warm_android:
-		fade_seconds = WARM_ANDROID_FADE_SECONDS
-		fade_frames = WARM_ANDROID_FADE_FRAMES
+	var ready_3d: bool = is_instance_valid(presenter) and get_node("/root/SettingsManager").battle_presentation_mode == "3d" and ((early_arena_requested and entry_arena_ready) or (preparation_ready and presenter.active and presenter.preparation_metrics.get("cached_assets", false)))
+	if ready_3d:
+		fade_seconds = READY_3D_FADE_SECONDS
+		fade_frames = READY_3D_FADE_FRAMES
 	var fade_started := Time.get_ticks_msec()
 	var ready_ms := fade_started - mounted_at_msec
 	reveal_tween = create_tween()

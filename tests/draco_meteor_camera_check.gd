@@ -97,4 +97,4 @@ func _set_motion(enabled: bool) -> void:
 	SettingsManager.battle_3d_camera_motion = enabled
 
 func _camera_zoom() -> float:
-	return 0.85
+	return Stage.USER_CAMERA_ZOOM_DEFAULT

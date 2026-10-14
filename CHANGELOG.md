@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give desktop 3D battles the same close-up overview, zoom range and stable opening camera as Android. Fade the drawn battlefield in while battle data and Pokémon prepare, retaining grass/prop clearance during attack camera shots and mouse-wheel zoom.
+
 - Start the Android 3D battle fade as soon as the arena is drawn, while battle data and Pokémon prepare. Keep one stable close-up overview as models appear, and retain touch zoom and move-camera shots. Speed up local preparation by reusing fresh verification and expanding only the required assets, with cold-load integrity checks preserved.
 
 - Keep Dark Pulse's charge, travelling pressure front and impact above the arena floor, adapting vertical growth to low emitters and targets while preserving its aim and width.

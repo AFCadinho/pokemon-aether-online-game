@@ -86,23 +86,21 @@ var coop_target_highlight_actor: Node3D
 var coop_target_original_overlays: Dictionary = {}
 var coop_target_outline_material: ShaderMaterial
 const SINGLE_CAMERA_YAW := -35.0 * PI / 180.0
-const USER_CAMERA_ZOOM_MIN := 0.72
-const USER_CAMERA_ZOOM_MAX := 1.45
-const ANDROID_CAMERA_ZOOM_MIN := 0.30
-const ANDROID_CAMERA_ZOOM_MAX := 1.60
-const ANDROID_CAMERA_ZOOM_DEFAULT := 0.60
-const ANDROID_ENTRY_OVERVIEW_DISTANCE_FACTOR := 4.0 / 3.0
+const USER_CAMERA_ZOOM_MIN := 0.30
+const USER_CAMERA_ZOOM_MAX := 1.60
+const USER_CAMERA_ZOOM_DEFAULT := 0.60
+const ENTRY_OVERVIEW_DISTANCE_FACTOR := 4.0 / 3.0
 
 func uses_android_camera() -> bool:
 	return OS.has_feature("android")
 
 func camera_zoom_limits() -> Vector2:
-	return Vector2(ANDROID_CAMERA_ZOOM_MIN, ANDROID_CAMERA_ZOOM_MAX) if uses_android_camera() else Vector2(USER_CAMERA_ZOOM_MIN, USER_CAMERA_ZOOM_MAX)
+	return Vector2(USER_CAMERA_ZOOM_MIN, USER_CAMERA_ZOOM_MAX)
 
 func reset_user_camera() -> void:
 	user_camera_yaw = 0.0
 	user_camera_pitch = 0.0
-	user_camera_zoom = ANDROID_CAMERA_ZOOM_DEFAULT if uses_android_camera() else 1.0
+	user_camera_zoom = USER_CAMERA_ZOOM_DEFAULT
 
 func _release_forest() -> void:
 	if forest_lease.is_empty():
@@ -126,7 +124,7 @@ var hover_offsets := [0.0, 0.0, 0.0, 0.0]
 var arena_preparing := false
 var entry_arena_requested := false
 var entry_arena_visible := false
-var android_entry_camera_points: Array[Vector3] = []
+var entry_camera_points: Array[Vector3] = []
 var material_response: Node
 var boxes: Array = []
 var platforms: Array = []
@@ -565,7 +563,7 @@ func begin_entry_arena() -> void:
 		mode_label.hide()
 	_set_active(active)
 
-func _android_entry_reference() -> Dictionary:
+func _entry_camera_reference() -> Dictionary:
 	# Framing only: reserve both slots using the known local lead's compiled
 	# envelope. No disk asset is admitted and no opponent is guessed or drawn.
 	var reference := {"placement": {"scale": 1.0, "yaw_degrees": 0.0}, "bounds": {}}
@@ -2802,32 +2800,31 @@ func _update_camera(delta: float) -> void:
 	offset = offset.rotated(Vector3.UP,user_camera_yaw)
 	var right := offset.cross(Vector3.UP).normalized()
 	offset = offset.rotated(right,user_camera_pitch)
-	var overview_zoom := 1.0 if _preview_wants_3d() and uses_android_camera() else user_camera_zoom
+	# Team Preview retains its full roster view at the new close-up default.
+	var overview_zoom := 1.0 if _preview_wants_3d() and uses_android_camera() else user_camera_zoom / (USER_CAMERA_ZOOM_DEFAULT if _preview_wants_3d() else 1.0)
 	offset *= overview_zoom * (1.1 if _preview_wants_3d() else (1.45 if double_mode else 1.0)) * (1.0 - focus_mix * 0.13)
 	camera.position = target + offset
 	camera.look_at(target)
 	if not _preview_wants_3d():
 		var points := OverviewCamera.resting_points(self)
-		if uses_android_camera() and entry_arena_requested and android_entry_camera_points.is_empty():
-			android_entry_camera_points = OverviewCamera.resting_points(self, _android_entry_reference())
-		if uses_android_camera() and not android_entry_camera_points.is_empty():
+		if entry_arena_requested and entry_camera_points.is_empty():
+			entry_camera_points = OverviewCamera.resting_points(self, _entry_camera_reference())
+		if not entry_camera_points.is_empty():
 			# The same reserved envelopes survive response, import and summon.
 			# Touch orbit/zoom and move shots still operate on this stable overview.
-			points = android_entry_camera_points
-		var fit_offset := offset / maxf(user_camera_zoom, 0.001) if uses_android_camera() else offset
+			points = entry_camera_points
+		var fit_offset := offset / maxf(user_camera_zoom, 0.001)
 		camera.transform = OverviewCamera.fit(camera, points, target, fit_offset, OverviewCamera.safe_rect(self))
-		if uses_android_camera():
-			if not android_entry_camera_points.is_empty():
-				# The early local-lead reference is narrower than fitting both real
-				# combatants. Restore the approved close-up's viewing distance.
-				camera.position = target + (camera.position - target) * ANDROID_ENTRY_OVERVIEW_DISTANCE_FACTOR
-			# A conservative bind-pose envelope can be much larger than the
-			# visible idle model. Fit the overview first, then let touch zoom
-			# actually change distance instead of being undone by that envelope.
-			var centers: Array[Vector3] = []
-			for index in _slot_count(): centers.append(_position(index) + Vector3.UP * 1.2)
-			var zoom := user_camera_zoom * (4.0 / 3.0 if double_mode else 1.0)
-			camera.transform = OverviewCamera.zoom_overview(camera, camera.transform, target, zoom, centers)
+		if not entry_camera_points.is_empty():
+			# The early local-lead reference is narrower than fitting both real
+			# combatants. Retain the approved close-up's viewing distance.
+			camera.position = target + (camera.position - target) * ENTRY_OVERVIEW_DISTANCE_FACTOR
+		# Fit the resting overview first, then apply wheel/touch zoom without
+		# letting conservative model envelopes undo the chosen close-up.
+		var centers: Array[Vector3] = []
+		for index in _slot_count(): centers.append(_position(index) + Vector3.UP * 1.2)
+		var zoom := user_camera_zoom * (4.0 / 3.0 if double_mode else 1.0)
+		camera.transform = OverviewCamera.zoom_overview(camera, camera.transform, target, zoom, centers)
 	var move_camera_enabled: bool = settings.android_3d_move_camera if uses_android_camera() else settings.battle_3d_camera_motion
 	if move_camera_enabled and active:
 		move_camera.apply(self)
