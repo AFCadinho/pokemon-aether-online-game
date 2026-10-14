@@ -598,7 +598,23 @@ func _build_jobs() -> void:
 		var card := _card(job_container)
 		var p: Dictionary = job.get("pokemon", {})
 		var plan: Dictionary = job.get("plan", {})
-		var title := _label(_t("job_title", {"place": int(job.get("bed", 0)) + 1, "pokemon": _name(p), "level": _number(plan.get("targetLevel", 1))}), card)
+		var header := HBoxContainer.new()
+		header.add_theme_constant_override("separation", 12)
+		card.add_child(header)
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(64, 64)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		icon.texture = PokemonAssets.load_party_icon(str(p.get("speciesId", p.get("species_id", p.get("species", "")))), bool(p.get("shiny", false)))
+		header.add_child(icon)
+		var details := VBoxContainer.new()
+		details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		details.add_theme_constant_override("separation", 5)
+		header.add_child(details)
+		var title := _label(_t("job_title", {"place": int(job.get("bed", 0)) + 1, "pokemon": _name(p), "level": _number(plan.get("targetLevel", 1))}), details)
 		title.add_theme_color_override("font_color", CYAN)
 		var goal: Array[String] = []
 		if bool(plan.get("expSelected", false)):
@@ -608,10 +624,10 @@ func _build_jobs() -> void:
 			for stat: String in STATS:
 				spread.append("%s %s" % [stat.to_upper(), _number(plan.get("targetEvs", {}).get(stat, 0))])
 			goal.append("EV: " + " · ".join(spread))
-		var goal_label := _label("\n".join(goal), card)
+		var goal_label := _label("\n".join(goal), details)
 		goal_label.add_theme_color_override("font_color", MUTED)
 		goal_label.add_theme_font_size_override("font_size", 12)
-		var countdown := _label("", card)
+		var countdown := _label("", details)
 		var progress := ProgressBar.new()
 		progress.show_percentage = false
 		progress.custom_minimum_size.y = 8
@@ -621,7 +637,7 @@ func _build_jobs() -> void:
 		card.add_child(progress)
 		var pickup := _button(_t("pickup"), card, _pickup.bind(str(job.get("id", ""))))
 		_style_button(pickup, true)
-		job_views.append({"job": job, "countdown": countdown, "progress": progress, "pickup": pickup})
+		job_views.append({"job": job, "icon": icon, "countdown": countdown, "progress": progress, "pickup": pickup})
 	if jobs.is_empty():
 		var empty := _label(_t("no_jobs"), _card(job_container))
 		empty.add_theme_color_override("font_color", MUTED)

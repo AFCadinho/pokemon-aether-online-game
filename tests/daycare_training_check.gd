@@ -113,11 +113,16 @@ func _run() -> void:
 		api.call("_reset_for_account")
 		_check(api.pending_request.is_empty(), "Pending Daycare request cannot cross an account switch")
 		var test_jobs: Array = []
+		var job_species: Array[String] = ["magikarp", "pikachu", "eevee", "bulbasaur", "charmander", "squirtle"]
 		for i in range(6):
-			test_jobs.append({"id": "job%s" % i, "bed": i, "pokemon": {"species": "Pikachu"}, "remainingSeconds": 0 if i == 0 else 90, "plan": {"targetLevel": 50, "expSelected": true, "evSelected": true, "durationSeconds": 100, "targetEvs": {"atk": 252, "spe": 252}}})
+			test_jobs.append({"id": "job%s" % i, "bed": i, "pokemon": {"speciesId": job_species[i], "species": job_species[i].capitalize(), "nickname": "Goldie" if i == 0 else null, "shiny": i == 1}, "remainingSeconds": 0 if i == 0 else 90, "plan": {"targetLevel": 50, "expSelected": true, "evSelected": true, "durationSeconds": 100, "targetEvs": {"atk": 252, "spe": 252}}})
 		panel.call("_apply_state", {"pokemon": [], "jobs": test_jobs, "money": 100, "daycareLevelCap": 50})
 		panel.call("_set_busy", false)
 		_check(panel.job_views.size() == 6 and panel.preview_button.disabled, "Six parallel places render and block another deposit")
+		for i in range(6):
+			var icon: TextureRect = panel.job_views[i]["icon"]
+			_check(icon.texture != null and icon.texture == PokemonAssets.load_party_icon(job_species[i], i == 1), "Daycare icon uses the species and shiny state for place %s" % (i + 1))
+			_check(icon.expand_mode == TextureRect.EXPAND_IGNORE_SIZE and icon.custom_minimum_size == Vector2(64, 64), "Large source textures do not expand the Daycare card")
 		_check(not panel.job_views[0]["pickup"].disabled and panel.job_views[1]["pickup"].disabled, "Only completed Pokemon can be picked up individually")
 		_check(not panel.training_form.visible and panel.training_notice.get_parent().visible, "Empty catalog shows a helpful message")
 		_check(panel.job_views[0]["progress"].has_theme_stylebox_override("fill"), "Training progress uses the custom Aether style")

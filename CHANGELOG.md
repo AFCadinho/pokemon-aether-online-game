@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show each training Pokémon's icon beside its name and goals in the Daycare, including the matching shiny appearance.
+
 - Show three hotbar slots per page on small touch screens, reducing its height while keeping all eight shortcuts available through three pages.
 
 - Show the running client's game version on the login and saved-session screens in the selected language.
