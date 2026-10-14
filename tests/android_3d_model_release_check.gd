@@ -1,7 +1,7 @@
 extends SceneTree
 const PairPilot = preload("res://scripts/services/model_pair_pilot.gd")
 const Service = preload("res://scripts/services/on_demand_3d_bundle_service.gd")
-const Pin = preload("res://data/approved_3d_release_v15.json")
+const Pin = preload("res://data/approved_3d_release_v16.json")
 const Experiment = preload("res://data/android_3d_experiment.json")
 class ErrorSink extends Logger:
 	var tree: SceneTree
@@ -24,9 +24,9 @@ func _run() -> void:
 	assert(PairPilot.production_enabled(), "Android experiment uses published shared models without a diagnostic override")
 	assert(PairPilot.release() == Pin.data and Experiment.data.model_release == Pin.data.revision)
 	var service := Service.new()
-	assert(service._selected_release() == Pin.data, "Legacy v12 repair receipt cannot override experimental Android v15")
+	assert(service._selected_release() == Pin.data, "Legacy v12 repair receipt cannot override experimental Android v16")
 	var index := PairPilot.catalog()
-	assert(index.assets.size() == 1420)
+	assert(index.assets.size() == 1421)
 	for identity in ["hydreigon@shiny", "tyranitar", "landorus-therian", "urshifu-rapid-strike"]:
 		var entry: Dictionary = {}
 		for asset: Dictionary in index.assets:
@@ -40,7 +40,7 @@ func _run() -> void:
 	service.free()
 	if OS.get_environment("POKEAETHER_ANDROID_3D_DOWNLOAD_SMOKE") == "1":
 		await _check_public_downloads()
-	print("ANDROID_3D_MODEL_RELEASE_OK revision=v15 pairs=1420 shared_normal_shiny=true")
+	print("ANDROID_3D_MODEL_RELEASE_OK revision=v16 pairs=1420 shared_normal_shiny=true")
 	quit()
 
 func _check_public_downloads() -> void:

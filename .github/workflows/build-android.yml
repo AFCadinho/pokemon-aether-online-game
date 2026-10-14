@@ -5,17 +5,17 @@ on:
     inputs:
       version_name:
         description: Android release version
-        default: "0.3.87"
+        default: "0.3.110"
         required: true
         type: string
       version_code:
-        description: New integer Android version code (next release uses 5)
-        default: 5
+        description: New integer Android version code (next release uses 29)
+        default: 29
         required: true
         type: number
       experimental_3d:
         description: Offer experimental 3D after the optional Android assets are published
-        default: false
+        default: true
         required: true
         type: boolean
 

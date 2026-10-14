@@ -1,6 +1,9 @@
 extends RefCounted
 ## Pinned shared-model catalogs for production and local qualification.
 const DATA = preload("res://data/model_pair_pilot.json")
+const NEW_PRODUCTION = preload("res://data/approved_3d_release_v16.json")
+const NEW_CATALOG_PATH := "res://data/model_pair_release_v16_catalog.json"
+const NEW_PRODUCTION_PATH := "res://data/approved_3d_bundles_v16_index.json"
 const PRODUCTION = preload("res://data/approved_3d_release_v15.json")
 const PREVIOUS_PRODUCTION = preload("res://data/approved_3d_release_v14.json")
 const LEGACY_PRODUCTION = preload("res://data/approved_3d_release_v13.json")
@@ -59,14 +62,14 @@ static func enabled() -> bool:
 
 static func production_revision() -> String:
 	# USB renderer comparisons keep the already published model collection.
-	# The normal release still selects v15; neither flag publishes assets.
+	# The normal release selects v16; neither flag publishes assets.
 	if OS.has_feature("android") and OS.has_feature("android_3d_experimental") and (OS.has_feature("android_3d_local_v14") or (OS.is_debug_build() and OS.has_feature("android_gpu_isolation"))):
 		return "v14"
 	if OS.is_debug_build():
 		var revision := OS.get_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION")
-		if revision in ["v13", "v14"]:
+		if revision in ["v13", "v14", "v15"]:
 			return revision
-	return "v15"
+	return "v16"
 
 static func production_v14() -> bool:
 	return production_enabled() and production_revision() == "v14"
@@ -77,6 +80,7 @@ static func production_current() -> bool:
 static func data_path() -> String:
 	if textures_enabled(): return TEXTURE_CATALOG_PATH
 	if production_enabled():
+		if production_revision() == "v16": return NEW_PRODUCTION_PATH
 		return LEGACY_PRODUCTION_PATH if production_revision() == "v13" else (PREVIOUS_PRODUCTION_PATH if production_v14() else PRODUCTION_PATH)
 	if geometry_enabled():
 		return GEOMETRY_PATH
@@ -90,7 +94,7 @@ static func catalog() -> Dictionary:
 		_catalog_mutex.lock()
 		var revision := production_revision()
 		if not _production_catalog.has(revision):
-			var trusted_path := PREVIOUS_CATALOG_PATH if production_v14() else RELEASE_CATALOG_PATH
+			var trusted_path := NEW_CATALOG_PATH if revision == "v16" else (PREVIOUS_CATALOG_PATH if production_v14() else RELEASE_CATALOG_PATH)
 			_production_catalog[revision] = _expand_index(load(data_path()).data, load(trusted_path).data)
 		var production: Dictionary = _production_catalog[revision]
 		_catalog_mutex.unlock()
@@ -121,6 +125,7 @@ static func catalog() -> Dictionary:
 
 static func release() -> Dictionary:
 	if production_enabled() and not textures_enabled():
+		if production_revision() == "v16": return NEW_PRODUCTION.data
 		return LEGACY_PRODUCTION.data if production_revision() == "v13" else (PREVIOUS_PRODUCTION.data if production_v14() else PRODUCTION.data)
 	if not enabled():
 		return {}
@@ -143,6 +148,7 @@ static func asset_for(identity: String, digest: String) -> Dictionary:
 		var lookup := {}
 		var admitted: Array = catalog().assets.duplicate()
 		if production_current():
+			admitted.append_array(load(RELEASE_CATALOG_PATH).data.assets)
 			admitted.append_array(load(PREVIOUS_CATALOG_PATH).data.assets)
 			admitted.append_array(_legacy_trusted().assets)
 		for asset: Dictionary in admitted:
@@ -192,6 +198,8 @@ static func expand_index(value: Dictionary) -> Dictionary:
 	# References are meaningful only against the currently compiled opt-in set.
 	if enabled() and value.get("catalog_revision") == LEGACY_PRODUCTION.data.revision:
 		return _expand_index(value, _legacy_trusted())
+	if enabled() and value.get("catalog_revision") == PRODUCTION.data.revision:
+		return _expand_index(value, load(RELEASE_CATALOG_PATH).data)
 	if enabled() and value.get("catalog_revision") == PREVIOUS_PRODUCTION.data.revision:
 		# A pinned v14 USB build already owns this exact immutable compiled cohort.
 		# Reuse it instead of reparsing its large JSON for every cached encounter.

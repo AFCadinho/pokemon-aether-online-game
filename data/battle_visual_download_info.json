@@ -65,5 +65,11 @@
     "download_bytes": 8795326138,
     "index_sha256": "b438c19ce4f8aec767f0248c38da3a32dbc0001b4ec8b76f808f726433c548bd",
     "installed_bytes": 8795307548
+  },
+  "3d_v16": {
+    "index_sha256": "d6bed9622354c77de2ab76846a1b5d616f85717bfb18978d4ecad695852d4033",
+    "bundle_count": 1420,
+    "download_bytes": 6989696054,
+    "installed_bytes": 6989677464
   }
 }
