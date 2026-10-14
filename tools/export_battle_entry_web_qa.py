@@ -24,7 +24,7 @@ def rewrite_fixture_paths(source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     global CHECKS, FIXTURES
-    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-moves", "android-gpu", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark", "android-visual-choice"], default="battle-entry")
+    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "mobile-hotbar", "coop-sprites", "android-3d", "android-moves", "android-gpu", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark", "android-visual-choice"], default="battle-entry")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--platform", choices=["web", "android"], default="web")
     parser.add_argument("--sdk", type=Path)
@@ -35,7 +35,8 @@ def main():
     parser.add_argument("--architecture", choices=["arm64-v8a", "x86_64"], default="arm64-v8a")
     parser.add_argument("--outdoor-colour-baseline", action="store_true", help="Disable the candidate ONLY inside a separate Compatibility battle diagnostic APK")
     args = parser.parse_args()
-    mobile_collapse = args.suite == "mobile-collapse"
+    mobile_hotbar = args.suite == "mobile-hotbar"
+    mobile_collapse = args.suite in {"mobile-collapse", "mobile-hotbar"}
     coop_sprites = args.suite == "coop-sprites"
     android_choice = args.suite == "android-visual-choice"
     if android_choice:
@@ -80,7 +81,7 @@ def main():
     if mobile_collapse:
         if args.platform != "android":
             parser.error("Mobile collapse QA uses the native Android runtime")
-        CHECKS = ["mobile_collapse_phone_check"]
+        CHECKS = ["player_hotbar_phone_check" if mobile_hotbar else "mobile_collapse_phone_check"]
         FIXTURES = []
     if coop_sprites:
         CHECKS = ["coop_sprite_platform_check"]
@@ -89,6 +90,11 @@ def main():
     app_name = "PokeAether Mobile Collapse QA" if mobile_collapse else "PokeAether Entry QA"
     package = "com.pokeaether.mobilecollapseqa" if mobile_collapse else "com.pokeaether.battleentryqa"
     report_name = "mobile-collapse-qa-results.json" if mobile_collapse else "battle-entry-qa-results.json"
+    if mobile_hotbar:
+        title = "Mobile Hotbar QA"
+        app_name = "PokeAether Hotbar Test"
+        package = "com.pokeaether.hotbarqa"
+        report_name = "hotbar-qa-results.json"
     if coop_sprites:
         title = "Co-op Sprite QA"
         app_name = "PokeAether Co-op Sprite QA"
@@ -317,7 +323,7 @@ def main():
                                     "--script", script, "--check-only"],
                                    stdout=log, stderr=subprocess.STDOUT, check=True)
             command = ["godot", "--headless", "--log-file", str(output / "engine-export.log"), "--path", str(ROOT)]
-            android_file = "coop-sprite-qa.apk" if coop_sprites else ("mobile-collapse-qa.apk" if mobile_collapse else "battle-entry-qa.apk")
+            android_file = "hotbar-qa.apk" if mobile_hotbar else ("coop-sprite-qa.apk" if coop_sprites else ("mobile-collapse-qa.apk" if mobile_collapse else "battle-entry-qa.apk"))
             if android_3d:
                 android_file = "android-arena-pilot.apk" if (android_arenas or android_textures) else "android-3d-pilot.apk"
             if android_pairs:

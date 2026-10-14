@@ -25,6 +25,21 @@ func _run() -> void:
 	_check_page(overlay, [0, 1, 2], "1/3")
 	var phone_height: float = overlay.hotkey_sidebar_panel.size.y
 	_check(phone_height < 219.0 and phone_height >= overlay.hotkey_sidebar_panel.get_combined_minimum_size().y, "phone hotbar shrinks without clipping its contents")
+	var initial_right: float = overlay.hotkey_sidebar_panel.get_rect().end.x
+	for button: Control in [overlay.settings_button, overlay.mount_button, overlay.skills_button, overlay.donator_store_button, overlay.my_powers_button]:
+		button.show()
+	overlay.quest_journal_view.has_main_tracker = true
+	overlay.quest_journal_view._layout_trackers()
+	root.content_scale_factor = 1.875
+	await _settle()
+	for button: Control in [overlay.settings_button, overlay.mount_button, overlay.skills_button, overlay.donator_store_button, overlay.my_powers_button]:
+		_check(not overlay.hotkey_sidebar_panel.get_global_rect().intersects(button.get_global_rect()), "zoomed phone hotbar clears " + button.name)
+	_check(overlay.hotbar_layout_horizontal_shift > 0.0, "crowded hotbar moves beside the quick buttons")
+	for panel: Control in [overlay.personal_buffs_panel, overlay.player_status_panel]:
+		_check(not overlay.hotkey_sidebar_panel.get_global_rect().intersects(panel.get_global_rect()), "zoomed hotbar pager clears " + panel.name)
+	root.content_scale_factor = 1.25
+	await _settle()
+	_check(is_equal_approx(overlay.hotkey_sidebar_panel.get_rect().end.x, initial_right), "hotbar returns to its original column when room is available")
 	for button: Control in [overlay.settings_button, overlay.mount_button, overlay.skills_button, overlay.donator_store_button, overlay.my_powers_button]:
 		if button.visible:
 			_check(not overlay.hotkey_sidebar_panel.get_global_rect().intersects(button.get_global_rect()), "phone hotbar clears " + button.name)

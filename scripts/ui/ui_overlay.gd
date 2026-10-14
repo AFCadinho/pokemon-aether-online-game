@@ -801,6 +801,7 @@ var hotbar_quantity_labels: Array[Label] = []
 var hotbar_slots: Array = []
 var hotbar_current_page := 0
 var hotbar_page_size := HOTBAR_PAGE_SIZE
+var hotbar_layout_horizontal_shift := 0.0
 var hotbar_previous_page_button: Button
 var hotbar_next_page_button: Button
 var hotbar_page_label: Label
@@ -2294,7 +2295,32 @@ func _refresh_quest_tracker_layout() -> void:
 	var hotbar_height := maxf(_hotbar_grid_height(), hotkey_sidebar_panel.get_combined_minimum_size().y)
 	hotkey_sidebar_panel.offset_top = hotbar_top_offset
 	hotkey_sidebar_panel.offset_bottom = hotbar_top_offset + hotbar_height
+	_fit_compact_hotbar_beside_quick_buttons()
 	_position_collapsible_button("hotkey_sidebar")
+
+
+func _fit_compact_hotbar_beside_quick_buttons() -> void:
+	# Restore only our own adjustment, preserving the player's dragged position.
+	hotkey_sidebar_panel.position.x += hotbar_layout_horizontal_shift
+	hotbar_layout_horizontal_shift = 0.0
+	if not WindowFit.is_touch_ui() or WindowFit.is_mobile_browser_ui() or hotbar_page_size != HOTBAR_COMPACT_PAGE_SIZE:
+		return
+	var hotbar_rect := hotkey_sidebar_panel.get_rect()
+	var original_left := hotbar_rect.position.x
+	var obstacles: Array[Control] = [donator_store_button, settings_button, mount_button, skills_button, my_powers_button, personal_buffs_panel, player_status_panel]
+	# Moving beside the quick buttons can expose a second collision with the
+	# wider buff tray. Fit again until the whole hotbar, including its pager, fits.
+	for pass_index in obstacles.size():
+		var right_edge := hotbar_rect.end.x
+		for control: Control in obstacles:
+			if control != null and control.visible and hotbar_rect.intersects(control.get_rect()):
+				right_edge = minf(right_edge, control.position.x - ACTION_BAR_SLOT_GAP)
+		var fitted_left := maxf(0.0, right_edge - hotbar_rect.size.x)
+		if fitted_left >= hotbar_rect.position.x:
+			break
+		hotbar_rect.position.x = fitted_left
+	hotbar_layout_horizontal_shift = maxf(0.0, original_left - hotbar_rect.position.x)
+	hotkey_sidebar_panel.position.x -= hotbar_layout_horizontal_shift
 
 
 func _refresh_pc_localized_ui() -> void:
@@ -13768,6 +13794,7 @@ func _set_hotkey_sidebar_position(position: Vector2) -> void:
 		clampf(position.y, 8.0, maxf(8.0, root_size.y - panel_size.y - 8.0))
 	)
 	hotkey_sidebar_panel.position = clamped_position
+	hotbar_layout_horizontal_shift = 0.0
 	_update_hotkey_sidebar_collapse_side()
 	_position_collapsible_button("hotkey_sidebar")
 
@@ -35590,6 +35617,7 @@ func _set_hotbar_page(page_index: int) -> void:
 		)
 	hotkey_sidebar_panel.custom_minimum_size.y = _hotbar_grid_height()
 	hotkey_sidebar_panel.offset_bottom = hotkey_sidebar_panel.offset_top + _hotbar_grid_height()
+	_invalidate_collapsible_layout()
 	_refresh_hotbar_pager_ui()
 
 
