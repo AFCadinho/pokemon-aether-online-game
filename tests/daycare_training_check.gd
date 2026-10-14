@@ -138,12 +138,17 @@ func _run() -> void:
 			await RenderingServer.frame_post_draw
 			DirAccess.make_dir_recursive_absolute("res://.tmp/daycare")
 			root.get_texture().get_image().save_png("res://.tmp/daycare/initial.png")
-			_check(panel.size.y < 580 and panel.training_columns.columns == 2, "Initial desktop Daycare is compact and places training sections in columns")
+			var desktop_size: Vector2 = panel.size
+			var desktop_position: Vector2 = panel.position
+			_check(desktop_size == Vector2(840, 720) and panel.training_columns.columns == 2, "Initial desktop Daycare uses its fixed frame and responsive columns")
 			panel.level_input.value = 100
 			panel.ev_check.button_pressed = true
 			panel.ev_inputs["atk"].value = 252
 			panel.ev_inputs["spe"].value = 252
 			panel.ev_inputs["hp"].value = 6
+			panel.call("_fit_window")
+			await process_frame
+			_check(panel.size == desktop_size and panel.position == desktop_position, "Changing EXP and EV targets keeps the Daycare frame stationary")
 			panel.call("_show_quote", {"previewId": "quote", "price": 75950.0, "requiredExperience": 999000.0, "requiredEvs": 510.0, "durationSeconds": 6354, "expDurationSeconds": 6354, "evDurationSeconds": 983, "expSelected": true, "evSelected": true, "startLevel": 10, "targetLevel": 100, "targetEvs": {"atk": 252, "spe": 252, "hp": 6}, "priceBreakdown": {"start": 500, "experience": 49950, "evs": 25500}})
 			panel.call("_set_busy", false)
 			for frame in range(4):
@@ -152,18 +157,21 @@ func _run() -> void:
 			DirAccess.make_dir_recursive_absolute("res://.tmp/daycare")
 			print("DAYCARE DESKTOP size=", panel.size, " minimum=", panel.get_combined_minimum_size(), " viewport=", panel.get_viewport_rect().size, " position=", panel.position)
 			_check(panel.size.y <= 720, "Desktop Daycare summary does not create an oversized window")
+			_check(panel.size == desktop_size and panel.position == desktop_position, "Showing the training quote keeps the same Daycare size and position")
 			root.get_texture().get_image().save_png("res://.tmp/daycare/desktop.png")
 			panel.call("_apply_state", {"pokemon": [], "jobs": test_jobs, "money": 100000, "daycareLevelCap": 100})
 			panel.tabs.current_tab = 1
 			await process_frame
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png("res://.tmp/daycare/jobs.png")
+			_check(panel.size == desktop_size and panel.position == desktop_position, "Switching to the occupied places keeps the same frame")
 			panel.tabs.current_tab = 0
 			panel.state_loaded = false
 			panel.call("_show_load_error", "Something went wrong. Please try again.")
 			await process_frame
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png("res://.tmp/daycare/error.png")
+			_check(panel.size == desktop_size and panel.position == desktop_position, "A Daycare load error keeps the same frame")
 			panel.call("_apply_state", {"pokemon": [{"pokemon": {"ownedPokemonId": 12, "species": "Pikachu", "level": 10, "experience": 1000, "evs": {}, "storedEvs": {}}, "location": {"type": "party", "partySlot": 0}}], "jobs": [], "money": 100000, "daycareLevelCap": 100})
 			panel.call("_set_busy", false)
 			var window_fit := root.get_node("WindowFit")
@@ -195,5 +203,12 @@ func _run() -> void:
 			_check(panel.training_columns.columns == 1, "Narrow Daycare stacks its sections")
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png("res://.tmp/daycare/compact.png")
+			var compact_size: Vector2 = panel.size
+			var compact_position: Vector2 = panel.position
+			panel.call("_targets_changed", false)
+			panel.ev_check.button_pressed = false
+			panel.call("_fit_window")
+			await process_frame
+			_check(panel.size == compact_size and panel.position == compact_position, "Compact Daycare keeps its frame when the quote and EV fields close")
 		panel.free()
 	quit(1 if failures else 0)

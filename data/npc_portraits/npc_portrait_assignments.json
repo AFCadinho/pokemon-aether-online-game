@@ -37,6 +37,8 @@
     "kanto_cerulean_city_shiny_mount_collector": "showdown_collector_gen6"
   },
   "npc_definition_ids": {
+    "kanto_route_5_aethering_researcher": "showdown_hexmaniac_gen6",
+    "kanto_route_5_wing_merchant": "showdown_pokemonbreeder_gen4",
     "kanto_route_5_daycare_trainer": "showdown_pokemonbreeder_gen4",
     "aether_atelier_tailor": "showdown_beauty_gen6",
     "kanto_rivals_house_daisy": "showdown_daisy",
