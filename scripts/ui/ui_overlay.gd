@@ -1366,6 +1366,7 @@ var trainer_name_change_in_progress := false
 var aether_atelier_popup: AetherAtelierPopup
 var bank_popup: BankPopup
 var nature_specialist_popup
+var daycare_popup
 var move_mentor_popup
 var move_deleter_popup
 var aethering_popup
@@ -4007,6 +4008,7 @@ func _apply_ui_z_index_policy() -> void:
 		guild_popup,
 		bank_popup,
 		nature_specialist_popup,
+		daycare_popup,
 		move_mentor_popup,
 		move_deleter_popup,
 		aethering_popup,
@@ -4090,6 +4092,7 @@ func _priority_overlay_panels() -> Array[Control]:
 		guild_popup,
 		bank_popup,
 		nature_specialist_popup,
+		daycare_popup,
 		move_mentor_popup,
 		move_deleter_popup,
 		aethering_popup,
@@ -23712,6 +23715,23 @@ func _pokemon_nature_display(pokemon: Pokemon) -> String:
 	return LocalizationManager.text("ui.nature_specialist.details", {"original":natural, "effective":_localized_nature_name(pokemon.get_effective_nature())})
 
 
+func open_daycare() -> void:
+	if daycare_popup == null:
+		daycare_popup = preload("res://scenes/interface/daycare_popup.tscn").instantiate()
+		root_control.add_child(daycare_popup)
+		_set_ui_panel_base_z(daycare_popup)
+		daycare_popup.closed.connect(_hide_daycare)
+	daycare_popup.visible = true
+	_activate_ui_panel(daycare_popup)
+	daycare_popup.open_daycare()
+
+func _hide_daycare() -> void:
+	if daycare_popup == null or daycare_popup.busy:
+		return
+	daycare_popup.confirmation.hide_dialog()
+	daycare_popup.visible = false
+	_deactivate_ui_panel(daycare_popup)
+
 func open_nature_specialist() -> void:
 	if nature_specialist_popup == null:
 		nature_specialist_popup = preload("res://scenes/interface/nature_specialist_popup.tscn").instantiate()
@@ -32726,6 +32746,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": aether_atelier_popup, "close": Callable(self, "_hide_aether_atelier")},
 		{"panel": bank_popup, "close": Callable(self, "_hide_bank")},
 		{"panel": nature_specialist_popup, "close": Callable(self, "_hide_nature_specialist")},
+		{"panel": daycare_popup, "close": Callable(self, "_hide_daycare")},
 		{"panel": move_mentor_popup, "close": Callable(self, "_hide_move_mentor")},
 		{"panel": move_deleter_popup, "close": Callable(self, "_hide_move_deleter")},
 		{"panel": aethering_popup, "close": Callable(aethering_popup, "close_popup")},

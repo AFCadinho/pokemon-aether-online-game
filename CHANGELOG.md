@@ -5,6 +5,8 @@
 - Give Rock Slide five heavy, tumbling boulders, grounded debris and rolling dust, with a dedicated falling-rock camera shot, restrained earth-toned lighting and a brief hit recoil at the existing move speed.
   Keep cinematic stadium shots from incorrectly reverting to the overview because of empty gaps between batched scenery or roofs above the camera's sightline.
 
+- Add six parallel, offline Daycare training places on Route 5 with independent EXP/EV targets, story caps, server quotes, paid confirmation and individual pickup.
+
 - Start the Android 3D battle fade as soon as the arena is drawn, while battle data and Pokémon prepare. Keep one stable close-up overview as models appear, and retain touch zoom and move-camera shots. Speed up local preparation by reusing fresh verification and expanding only the required assets, with cold-load integrity checks preserved.
 
 - Keep Dark Pulse's charge, travelling pressure front and impact above the arena floor, adapting vertical growth to low emitters and targets while preserving its aim and width.
