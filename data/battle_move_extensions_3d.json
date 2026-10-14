@@ -26165,9 +26165,9 @@
       ],
       "presentation_review": "implemented-pending-player-review",
       "lighting": {
-        "energy": 0.0,
-        "mix": 0.0,
-        "brightness": 1.0
+        "energy": 0.25,
+        "mix": 0.18,
+        "brightness": 0.9
       },
       "source_reference": {
         "directory": "ew0157",
@@ -26178,7 +26178,9 @@
           "ew0157_hit_ground.ptcl"
         ],
         "usage": "shape-and-phase-reference; authored geometry, no SV timeline conversion"
-      }
+      },
+      "camera": "rockfall",
+      "cinematic_environment": true
     },
     "rocktomb": {
       "name": "Rock Tomb",
