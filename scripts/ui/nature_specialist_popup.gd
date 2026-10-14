@@ -39,6 +39,7 @@ var price_label: Label
 var wallet_label: Label
 var quote_hint: Label
 var cached_state: Dictionary = {}
+var party_hint: Label
 var content_scroll: ScrollContainer
 var stats_panel: PanelContainer
 
@@ -88,6 +89,8 @@ func _ready() -> void:
 	content.add_child(_section("pokemon_label"))
 	pokemon_select = _select(_selection_changed)
 	content.add_child(pokemon_select)
+	party_hint = _label("", MUTED, 12)
+	content.add_child(party_hint)
 	var card := PanelContainer.new()
 	card.add_theme_stylebox_override("panel", _box(Color("0c1e2d"), Color("26465b"), 10, 10))
 	content.add_child(card)
@@ -191,7 +194,7 @@ func _ready() -> void:
 
 func _fit() -> void:
 	var available := get_viewport_rect().size
-	var target := Vector2(minf(720, available.x-24), minf(820, available.y-24))
+	var target := Vector2(minf(720, available.x-24), minf(840, available.y-24))
 	custom_minimum_size = Vector2.ZERO
 	size = target
 	position = (available-target)/2.0
@@ -261,6 +264,7 @@ func _select(action: Callable) -> OptionButton:
 	select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	LanguageSelectorStyle.configure(select)
 	select.get_popup().borderless = true
+	select.get_popup().add_theme_color_override("font_disabled_color", MUTED)
 	select.get_popup().max_size = Vector2i(680,360)
 	select.item_selected.connect(action)
 	return select
@@ -317,11 +321,12 @@ func close_specialist() -> void:
 
 func _set_busy(value: bool) -> void:
 	busy = value
-	pokemon_select.disabled = value or not NatureSpecialistService.pending_request.is_empty()
-	nature_select.disabled = value or not NatureSpecialistService.pending_request.is_empty()
+	var eligible := pokemon_select.selected >= 0 and pokemon_select.selected < entries.size() and _entry_allowed(entries[pokemon_select.selected])
+	pokemon_select.disabled = value or entries.is_empty() or not NatureSpecialistService.pending_request.is_empty()
+	nature_select.disabled = value or not eligible or not NatureSpecialistService.pending_request.is_empty()
 	close_button.disabled = value
-	preview_button.disabled = value or cooldown or entries.is_empty() or not NatureSpecialistService.pending_request.is_empty()
-	confirm_button.disabled = value or (quote.is_empty() and NatureSpecialistService.pending_request.is_empty())
+	preview_button.disabled = value or cooldown or not eligible or not NatureSpecialistService.pending_request.is_empty()
+	confirm_button.disabled = value or ((quote.is_empty() or not eligible) and NatureSpecialistService.pending_request.is_empty())
 	confirm_button.text = _t("retry") if not NatureSpecialistService.pending_request.is_empty() else _t("confirm")
 
 func _load_state() -> void:
@@ -346,18 +351,37 @@ func _apply_state(data: Dictionary) -> void:
 		selected_id = int(NatureSpecialistService.pending_display.get("pokemonId",selected_id))
 		selected_nature = str(NatureSpecialistService.pending_display.get("newNature",selected_nature))
 	cached_state = data.duplicate(true)
-	entries = data.get("pokemon", [])
+	# Also defend against old/stale catalog responses containing box entries.
+	entries = data.get("pokemon", []).filter(func(entry: Dictionary): return entry.get("location",{}).get("type") == "party")
+	entries.sort_custom(func(a: Dictionary,b: Dictionary): return int(a["location"]["partySlot"]) < int(b["location"]["partySlot"]))
 	pokemon_select.clear()
+	var first_eligible := -1
+	var preferred := -1
+	var eligible_count := 0
 	for entry: Dictionary in entries:
 		var p: Dictionary = entry.get("pokemon", {})
-		var location: Dictionary = entry.get("location", {})
-		var position_text := "PC %s/%s" % [int(location.get("boxIndex",0))+1,int(location.get("slotIndex",0))+1] if str(location.get("type","")) == "box" else "Party %s" % (int(location.get("partySlot",0))+1)
+		var party_text := _t("party_slot",{"slot":int(entry["location"]["partySlot"])+1})
 		var display_name := str(p.get("nickname")) if p.get("nickname") is String and not str(p.get("nickname")).is_empty() else str(p.get("species","Pokemon"))
-		pokemon_select.add_item("%s #%s · Lv.%s%s · %s · %s ₽" % [display_name,int(p.get("ownedPokemonId",0)),int(p.get("level",1))," ★" if bool(p.get("shiny",false)) else "",position_text,_money(entry.get("price",0))])
-		if int(p.get("ownedPokemonId",0)) == selected_id:
-			pokemon_select.select(pokemon_select.item_count-1)
+		var allowed := _entry_allowed(entry)
+		var detail := _money(entry.get("price",0)) + " ₽" if allowed else _blocked_reason(entry)
+		var text := "%s · %s · Lv.%d%s · %s" % [party_text,display_name,int(p.get("level",1))," ★" if bool(p.get("shiny",false)) else "",detail]
+		pokemon_select.add_item(text)
+		var index := pokemon_select.item_count-1
+		pokemon_select.set_item_metadata(index,int(p.get("ownedPokemonId",0)))
+		pokemon_select.set_item_disabled(index,not allowed)
+		pokemon_select.set_item_tooltip(index,text + " · #%d" % int(p.get("ownedPokemonId",0)))
+		if allowed:
+			eligible_count += 1
+			if first_eligible < 0:
+				first_eligible = index
+			if int(p.get("ownedPokemonId",0)) == selected_id:
+				preferred = index
 	if entries.is_empty():
 		pokemon_select.add_item(_t("no_pokemon"))
+	else:
+		pokemon_select.select(preferred if preferred >= 0 else (first_eligible if first_eligible >= 0 else 0))
+	party_hint.text = _t("party_summary",{"eligible":eligible_count,"total":entries.size()})
+	party_hint.visible = not entries.is_empty()
 	nature_select.clear()
 	for nature: Dictionary in data.get("natures", []):
 		var name := str(nature.get("name", "Hardy"))
@@ -381,6 +405,13 @@ func _apply_state(data: Dictionary) -> void:
 	_set_busy(false)
 	_fit.call_deferred()
 
+func _entry_allowed(entry: Dictionary) -> bool:
+	return entry.get("location",{}).get("type") == "party" and bool(entry.get("eligible",true))
+
+func _blocked_reason(entry: Dictionary) -> String:
+	var key := "ui.nature_specialist.reason." + str(entry.get("blockedReason","nature_unavailable"))
+	return LocalizationManager.text(key) if LocalizationManager.has_key(key) else _t("reason.nature_unavailable")
+
 func _selection_changed(_index: int) -> void:
 	quote.clear()
 	quote_hint.text = _t("comparison_hint")
@@ -389,15 +420,19 @@ func _selection_changed(_index: int) -> void:
 		var p: Dictionary = entry.get("pokemon", {})
 		pokemon_name.text = str(p.get("nickname")) if p.get("nickname") is String and not str(p.get("nickname")).is_empty() else str(p.get("species", "Pokemon"))
 		pokemon_name.text += " ★" if bool(p.get("shiny",false)) else ""
-		pokemon_info.text = "Lv.%d · #%d" % [int(p.get("level",1)),int(p.get("ownedPokemonId",0))]
+		pokemon_info.text = _t("party_slot",{"slot":int(entry["location"]["partySlot"])+1}) + " · Lv.%d · #%d" % [int(p.get("level",1)),int(p.get("ownedPokemonId",0))]
 		pokemon_image.texture = PokemonAssets.load_home_sprite(str(p.get("speciesId",p.get("species",""))),bool(p.get("shiny",false)))
 		nature_info.text = _t("current", {"original":_nature(p.get("nature","Hardy")),"effective":_nature(p.get("effectiveNature",p.get("nature","Hardy")))})
-		price_label.text = _money(entry.get("price",0)) + " ₽"
+		price_label.text = _money(entry["price"]) + " ₽" if entry.get("price") != null else "—"
 		for stat: String in STATS:
 			var iv := int(p.get("ivs",{}).get(stat,0))
 			iv_values[stat].text = "%s  %d" % [stat.to_upper(),iv]
 			iv_values[stat].add_theme_color_override("font_color",ACCENT if iv == 31 else MUTED)
 		_render_stats(p.get("stats",{}),{})
+		if not _entry_allowed(entry):
+			quote_hint.text = _blocked_reason(entry)
+			if not cooldown:
+				status_label.text = _blocked_reason(entry)
 	else:
 		pokemon_name.text = _t("no_pokemon")
 		pokemon_info.text = ""
@@ -410,7 +445,7 @@ func _selection_changed(_index: int) -> void:
 	_set_busy(busy)
 
 func _preview() -> void:
-	if busy or entries.is_empty():
+	if busy or entries.is_empty() or not _entry_allowed(entries[pokemon_select.selected]):
 		return
 	_set_busy(true)
 	var p: Dictionary = entries[pokemon_select.selected].get("pokemon", {})
