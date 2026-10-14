@@ -74,6 +74,21 @@ func _run() -> void:
 	probe.stage = stage
 	add_child(probe)
 	probe.set_process(false)
+	probe.last_label = "active"
+	stage.user_camera_yaw = 0.33
+	stage.user_camera_pitch = -0.05
+	stage.user_camera_zoom = 0.81
+	stage._update_camera(0.0)
+	var chosen: Transform3D = stage.camera.transform
+	var measurement: Dictionary = probe._camera_record()
+	assert(measurement.idle and is_equal_approx(measurement.yaw_radians, 0.33) and is_equal_approx(measurement.pitch_radians, -0.05) and is_equal_approx(measurement.zoom, 0.81), "USB measurements retain the actual selected mobile orbit and zoom")
+	assert(stage.camera.transform == chosen, "Measuring does not change the view")
+	stage.current_actions[0] = "special_attack"
+	assert(not probe._camera_record().idle, "Move shots cannot be selected as an idle camera preference")
+	stage.current_actions[0] = "idle"
+	stage.preview_enabled = true
+	assert(not probe._camera_record().idle, "Team Preview cannot be selected as a battle camera preference")
+	stage.preview_enabled = false
 	probe.samples = {"engine_frame_ms": [16.0]}
 	probe._emit(Time.get_ticks_usec())
 	probe.queue_free()
@@ -83,5 +98,5 @@ func _run() -> void:
 	stage.queue_free()
 	view.queue_free()
 	await get_tree().process_frame
-	print("ANDROID_CAMERA_FRAMING_PASS samples=%d closer=true singles=true doubles=true large_models=true reset=true" % samples)
+	print("ANDROID_CAMERA_FRAMING_PASS samples=%d closer=true singles=true doubles=true large_models=true reset=true measurement=true" % samples)
 	get_tree().quit()

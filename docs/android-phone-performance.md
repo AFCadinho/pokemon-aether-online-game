@@ -1,5 +1,15 @@
 # Physical Android 3D performance measurements
 
+The explicit local USB performance probe's `ANDROID_3D_CAMERA` record now also
+includes the selected orbit yaw/pitch (radians and degrees), actual numeric
+camera pose and an `idle` flag. It emits alongside the existing five-second
+timing samples without changing camera input or defaults. Only records marked
+`idle: true` qualify as a chosen battle overview: preparation, Team Preview and
+attack shots are excluded. Set the desired view, release both fingers and leave
+the battle idle for at least five seconds before reading the newest sample.
+This aid stays restricted to opted-in Android test builds and contains no
+account, combatant, team or battle identities.
+
 ## Android touch camera and bounded move preparation
 
 The user confirmed that trial `0.3.109-3d-perf.8` clears foreground grass and
