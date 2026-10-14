@@ -16,6 +16,10 @@ func _run() -> void:
 	# The parent suite supplies a local stadium and offline Pokémon fixtures.
 	# Mark the environment available so the Android download service stays offline.
 	root.get_node("Android3DEnvironmentService").verified = true
-	root.get_node("SettingsManager").battle_ui_layout = "immersive"
+	var settings := root.get_node("SettingsManager")
+	settings.battle_ui_layout = "immersive"
+	# Compare entry framing with all optional motion disabled, like the desktop fixture.
+	settings.android_3d_idle_camera_motion = false
+	settings.android_3d_move_camera = false
 	await super._run()
 	print("ANDROID_3D_ENTRY_VISIBILITY_CHECK ", "FAIL" if failed else "PASS")
