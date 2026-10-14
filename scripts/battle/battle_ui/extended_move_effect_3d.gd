@@ -4,7 +4,9 @@ const Cinema = preload("res://scripts/battle/battle_ui/move_cinematic_forms_3d.g
 var forms: RefCounted
 const Forms = preload("res://scripts/battle/battle_ui/move_volume_forms_3d.gd")
 const FieryWrath = preload("res://scripts/battle/battle_ui/fiery_wrath_forms_3d.gd")
+const RockSlide = preload("res://scripts/battle/battle_ui/rock_slide_forms_3d.gd")
 var wrath: RefCounted
+var rock_slide: RefCounted
 var recipe: Dictionary
 var motif := ""
 var launched := false
@@ -64,6 +66,7 @@ func _prepare() -> void:
 	funnel = Forms.swept_mesh(true)
 	prepared = true
 	if key == "fierywrath": wrath = FieryWrath.new()
+	if key == "rockslide": rock_slide = RockSlide.new()
 
 func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) -> bool:
 	if not prepared: _prepare()
@@ -97,6 +100,9 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 	impact_drawn = hit and bool(recipe.damaging) and after>=0
 	if wrath != null:
 		wrath.draw(self)
+		return true
+	if rock_slide != null:
+		rock_slide.draw(self)
 		return true
 	if motif in ["ram","rush","punch","kick","slash","fang","pierce","lash","spin","hammer","grip","vanish"]: _contact()
 	else:
