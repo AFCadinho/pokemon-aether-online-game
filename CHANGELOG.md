@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Let desktop development builds record the chosen idle 3D battle camera with Ctrl+Shift+C for camera-framing feedback.
+
 - Widen the desktop 3D starting view slightly (5%) while retaining the close-up angle, stable fade and the approved Android camera.
 
 - Give desktop 3D battles the same close-up overview, zoom range and stable opening camera as Android. Fade the drawn battlefield in while battle data and Pokémon prepare, retaining grass/prop clearance during attack camera shots and mouse-wheel zoom.

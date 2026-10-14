@@ -1,5 +1,17 @@
 # Shared desktop and Android 3D overview
 
+In a desktop development run, adjust the idle battle camera with left-drag and
+the mouse wheel, release the mouse, then press **Ctrl+Shift+C**. This records the
+current zoom, yaw/pitch (both radians and degrees), actual camera pose, FOV,
+render/screen dimensions and the visible battle-log rectangle. The numeric JSON
+is written to `user://battle_camera_capture.json` and printed with the prefix
+`DESKTOP_BATTLE_CAMERA_CAPTURE`. Each explicit capture replaces the last one.
+It contains no account, team or battle identities. The shortcut is disabled in
+release, Android and web builds, during loading/preview/attack shots and while
+editing chat. Recording does not change the camera or the default settings.
+Restart the development client after integrating this measurement aid; it
+cannot read the camera of an already-running client from before the change.
+
 Desktop now uses the Android close-up policy with a slightly wider starting
 view: default zoom 0.63 (5% farther than 0.60); Android stays at 0.60. Both use limits
 0.30–1.60, the same three-quarter singles direction and wider resting-frame
