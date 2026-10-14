@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the fully zoomed-out 3D gym camera clear of ceiling beams.
+
 - Reduce the complete 3D model collection below 7 GB without changing decoded textures or animations; Android builds offer experimental 3D with a 2D option.
 
 - Prepare game and launcher model downloads for shared texture bundles, preserving each form’s appearance and repairing missing or damaged required downloads.

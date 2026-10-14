@@ -141,7 +141,8 @@ func _check_guards() -> void:
 
 func _check_real_maps() -> void:
 	# Route 2 has one crown duplicated in Objects; that ambiguous tree stays put.
-	for entry in [["viridian_city", 1316], ["kanto_route_2", 120], ["kanto_route_22", 540], ["route_1", 348], ["viridian_forest", 0], ["cerulean_city", 0]]:
+	# Refreshed Route 1 includes 23 eligible TreeTop trees and 87 StructureTop trees.
+	for entry in [["viridian_city", 1316], ["kanto_route_2", 120], ["kanto_route_22", 540], ["route_1", 440], ["viridian_forest", 0], ["cerulean_city", 0]]:
 		var name: String = entry[0]
 		var map: Node = load("res://generated/tiled_visuals/%s/%s.visual.tscn" % [name, name]).instantiate()
 		root.add_child(map)
