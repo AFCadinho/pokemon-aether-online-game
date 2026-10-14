@@ -7074,7 +7074,7 @@
   "ui.nature_specialist.current": "Oorspronkelijk: {original} · Effectief: {effective}",
   "ui.nature_specialist.proposed": "Nieuw effect: {nature} · Prijs: {price} ₽",
   "ui.nature_specialist.review": "Controleer de statwijzigingen vóór bevestiging.",
-  "ui.nature_specialist.confirmation": "{nature} toepassen voor {price} ₽? Je volgende behandeling is over zeven dagen beschikbaar. De oorspronkelijke nature en handelsbinding blijven behouden.",
+  "ui.nature_specialist.confirmation": "De effectieve nature van {old_nature} naar {nature} wijzigen voor {price} ₽? Je volgende behandeling is over zeven dagen beschikbaar. De oorspronkelijke nature en handelsbinding blijven behouden.",
   "ui.nature_specialist.success": "Behandeling voltooid.",
   "ui.nature_specialist.details": "{original} · Behandeld: {effective}",
   "ui.nature_specialist.neutral": "(Neutraal)",
