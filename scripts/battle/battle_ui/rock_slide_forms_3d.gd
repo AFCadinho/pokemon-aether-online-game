@@ -1,6 +1,8 @@
 extends RefCounted
 ## Five heavy falling rocks, sampled entirely from the native move clock.
 const OFFSETS := [Vector2.ZERO, Vector2(-.95,.4), Vector2(.9,-.45), Vector2(-.55,-.85), Vector2(.6,.85)]
+const FALL_SPREAD := 1.65
+const IMPACT_SPREAD := 1.35
 var boulder: ArrayMesh
 var stone: ShaderMaterial
 var dust: ShaderMaterial
@@ -66,7 +68,7 @@ func draw(effect: Node) -> void:
 		var landing: float = effect.impact+(effect.duration-effect.impact)*i*.045
 		var progress := clampf((effect.elapsed-effect.launch)/maxf(.01,landing-effect.launch),0,1)
 		if progress>=1 and not effect.hit: continue
-		var offset: Vector2 = OFFSETS[i]
+		var offset: Vector2 = OFFSETS[i]*FALL_SPREAD
 		var point: Vector3 = effect.ground+side*offset.x+forward*offset.y
 		point -= forward*(1.-progress)*.65
 		var size := 1.0 if i==0 else .7+(i%3)*.1
@@ -77,19 +79,19 @@ func draw(effect: Node) -> void:
 	var grow := smoothstep(0,.3,after)
 	# Connected low dust rolls leave the upper body and falling silhouettes readable.
 	for i in 3:
-		var offset := side*(i-1)*(.45+grow*.6)
+		var offset := side*(i-1)*(.45+grow*.6)*IMPACT_SPREAD
 		var height := (.16+grow*.28)*fade
-		effect._piece(effect.sphere,dust,effect.ground+offset+Vector3.UP*(height+.04),Vector3(.55+grow*.6,height,.55+grow*.7))
-	var radius := .65+grow*1.7
+		effect._piece(effect.sphere,dust,effect.ground+offset+Vector3.UP*(height+.04),Vector3((.55+grow*.6)*IMPACT_SPREAD,height,(.55+grow*.7)*IMPACT_SPREAD))
+	var radius := (.65+grow*1.7)*IMPACT_SPREAD
 	effect._piece(effect.ring,dust,effect.ground+Vector3.UP*.08,Vector3(radius,.18,radius))
 	for i in 6:
 		var angle := i*TAU/6.+.2
 		var radial := Vector3(cos(angle),0,sin(angle))
-		var point: Vector3 = effect.ground+radial*(.5+grow*1.55)
+		var point: Vector3 = effect.ground+radial*(.5+grow*1.55)*IMPACT_SPREAD
 		var bounce := sin(clampf(after/.65,0,1)*PI)*(.3+(i%2)*.25)
 		_rock(effect,point,Vector3(.15,.19,.12)*(1.-smoothstep(.55,.95,after)),Basis(radial.cross(Vector3.UP),after*5.+i),bounce)
-		var end: Vector3 = effect.ground+radial*(.6+grow*1.05)+Vector3.UP*.035
-		var bend: Vector3 = effect.ground+radial*.5+side*sin(i*2.4)*.13+Vector3.UP*.035
+		var end: Vector3 = effect.ground+radial*(.6+grow*1.05)*IMPACT_SPREAD+Vector3.UP*.035
+		var bend: Vector3 = effect.ground+(radial*.5+side*sin(i*2.4)*.13)*IMPACT_SPREAD+Vector3.UP*.035
 		effect._line(effect.ground+radial*.2+Vector3.UP*.035,bend,.018*fade,crack)
 		effect._line(bend,end,.024*fade,crack)
 
