@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Restyle the Nature Specialist with Pokémon and IV details, clear stat comparisons, custom dropdowns, readable prices and responsive controls; give the specialist a green gardener overworld and portrait.
+
+- Compact the Daycare window with responsive columns, content-based height and collapsible EV settings. Give its Trainer the matching Pokémon Breeder overworld sprite and dialogue portrait.
+
 - Enable gentle idle camera movement in Android 3D battles around the chosen viewing angle, with a separate Graphics switch and saved opt-out. Keep loading, Team Preview and attack framing steady.
 
 - Keep the Daycare frame at a fixed desktop size across training modes, quotes, tabs and loading states, while fitting smaller viewports.
