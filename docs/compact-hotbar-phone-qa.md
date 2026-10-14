@@ -70,6 +70,8 @@ The task `touch-hotbar-navigation` starts at local development
 page counter that cycles through the available pages. It is part of the
 hotbar's own frame and inherits its visibility and drawing order. The native
 footer is 16 dp high with 8 dp minimum text; the visible counter is `1/3›`.
+Its dark slot background, muted gold caption and thin blue separator match
+the existing HUD palette without increasing the visible footprint.
 The existing tiny desktop arrows are retained for desktop and browser layouts.
 
 The 48×48 dp minimum input rectangle extends to the left and below the visible
@@ -85,8 +87,11 @@ page wrapping, touch size, viewport bounds, world-movement blocking, separation
 from slots and other HUD controls, and containment of the visible page counter
 within its frame. The screenshots were inspected at all three scales. Device
 runtime logs contained no script errors. Evidence remains in
-`game/.worktrees/slot-b/.tmp/touch-hotbar-navigation-phone/verified-footer/`.
-APK SHA-256: `56dab91dbbf94ba7ac36557bc21f4584661977fa4c4000a1b5f60d5aa38ab944`.
+`game/.worktrees/slot-b/.tmp/touch-hotbar-navigation-phone/styled-footer/`.
+APK SHA-256: `b1a358c693e466bcbbbc90627dee40fc00d33b50f0b06fc0962117c73538c2af`.
+The player confirmed manual counter taps and left/right swipes work with the
+integrated footer. The final palette polish retained that geometry and passed
+the same 94 local assertions and 318 physical-device checks.
 
 A horizontal gesture starting on a slot changes one page after 24 dp. A back
 swipe uses the available travel near the right screen edge, with an 8 dp

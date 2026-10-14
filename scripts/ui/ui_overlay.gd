@@ -35555,11 +35555,19 @@ func _setup_player_hotbar() -> void:
 	navigation_overlay.add_child(hotbar_touch_page_button)
 	hotbar_touch_page_button.z_index = 1
 	_apply_button_style(hotbar_touch_page_button)
+	hotbar_touch_page_button.add_theme_color_override("font_color", UI_BORDER)
+	hotbar_touch_page_button.add_theme_color_override("font_pressed_color", UI_BORDER)
 	for state: String in ["normal", "hover", "pressed", "focus"]:
 		var style := hotbar_touch_page_button.get_theme_stylebox(state) as StyleBoxFlat
 		style.set_border_width_all(0)
+		style.border_width_top = 1
+		style.border_color = UI_BORDER_SUBTLE if state == "normal" else UI_BORDER_SOFT
+		style.corner_radius_top_left = 0
+		style.corner_radius_top_right = 0
+		style.corner_radius_bottom_left = 4
+		style.corner_radius_bottom_right = 4
 		if state == "normal":
-			style.bg_color = Color(0, 0, 0, 0)
+			style.bg_color = UI_SLOT_BG
 		style.content_margin_left = 2.0
 		style.content_margin_right = 2.0
 		style.content_margin_top = 2.0
