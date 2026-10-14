@@ -1,0 +1,50 @@
+[
+	{
+		"caption": "Illustrative training setup and calculated cost.",
+		"control": "DaycarePopup",
+		"exampleData": true,
+		"filename": "01-training.png",
+		"heading": "## Offline EXP and EV training",
+		"size": [
+			864,
+			744
+		],
+		"topic": 0
+	},
+	{
+		"caption": "Illustrative finished and active jobs; completed training can be collected.",
+		"control": "DaycarePopup",
+		"exampleData": true,
+		"filename": "02-training-places.png",
+		"heading": "### Up to six Pokémon, including while offline",
+		"size": [
+			864,
+			744
+		],
+		"topic": 0
+	},
+	{
+		"caption": "Illustrative IV comparison: keep ATK, copy DEF and reroll the unprotected differences.",
+		"control": "AetheringPopup",
+		"exampleData": true,
+		"filename": "03-aethering.png",
+		"heading": "## Aethering: change IVs",
+		"size": [
+			944,
+			714
+		],
+		"topic": 0
+	},
+	{
+		"caption": "Illustrative Nature-effect quote; original Hardy Nature remains recorded.",
+		"control": "NatureSpecialistPopup",
+		"exampleData": true,
+		"filename": "04-nature.png",
+		"heading": "## Nature Specialist: choose a stat effect",
+		"size": [
+			724,
+			664
+		],
+		"topic": 0
+	}
+]

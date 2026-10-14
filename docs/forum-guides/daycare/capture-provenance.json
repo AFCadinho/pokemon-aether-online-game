@@ -1,0 +1,86 @@
+{
+  "frontendBaseRevision": "5dd22acc8c2dc97e7c243796ab645d0242747a45",
+  "backendRevision": "83de0ae75e78801552f416d7e89fc20fd70b6468",
+  "exampleDataOnly": true,
+  "authenticatedPlayer": false,
+  "serviceTransactions": false,
+  "engine": "Godot 4.6.2, Compatibility",
+  "viewport": [
+    1280,
+    960
+  ],
+  "uiSourceSha256": {
+    "scripts/ui/daycare_popup.gd": "fca817d410e88b0d1329250007555a11f122d1589d5c16ea806f2019aa2eea34",
+    "scripts/ui/aethering_popup.gd": "4a83191079fdac4ad584bcb2d1c742592be845537574526d8bd8cb7c436ba275",
+    "scripts/ui/nature_specialist_popup.gd": "5afeea5358ed86f8ab81b8b8b139382efe231b58c21feeb350bf52a299ad4870",
+    "docs/forum-guides/daycare/capture.gd": "df4964e0e54870830bfc45fabdd364d19cd1a7eee395707e85302363297b922a"
+  },
+  "gameplaySourceSha256": {
+    "docs/daycare_training.md": "e1b8a4f8c44574392a719528f230baed2a8f375583f2d840bb8d3adc542ae5df",
+    "docs/aethering_backend.md": "fd1860012935da21b8af5379652b016875ca59fbeab605a49aa3123b45641b12",
+    "docs/nature_specialist.md": "a028cbf6c7281b63a1d64b3caf672a1ecec34529f7262775e705ace3aa2bc876",
+    "account-service/daycare_services.py": "af42a3ed50e900f2935b5e7993c0920838e0ea551c02aa7ed3f630f9f0a33e13",
+    "account-service/aethering_services.py": "326ce71ea5a04fb3b7280faf252cdbe0e05a98a7fb61a9ac96126d0ce59c774a",
+    "account-service/nature_specialist_services.py": "40a3297c91e970489d9d22157cea59aaa977e0225dadad5847461af07ea1ca8a",
+    "account-service/game_settings_services.py": "d86c7ee03f5138bd8a845c9a36be34f151094d3c608907b40bae09884c09e8dd",
+    "pokemon-data/data/shops/kanto/daycare_wing_merchant.json": "2854fc53308d2de9d341174eb3557ccc805021f926115ad1ef4cc1218ef4eda5"
+  },
+  "captures": [
+    {
+      "caption": "Illustrative training setup and calculated cost.",
+      "control": "DaycarePopup",
+      "exampleData": true,
+      "filename": "01-training.png",
+      "heading": "## Offline EXP and EV training",
+      "size": [
+        864,
+        744
+      ],
+      "topic": 0,
+      "sha256": "9507c2f9714c64c67458e850670c7af88e3b64ef49666e415737ad0997b11f89",
+      "visuallyReviewed": true
+    },
+    {
+      "caption": "Illustrative finished and active jobs; completed training can be collected.",
+      "control": "DaycarePopup",
+      "exampleData": true,
+      "filename": "02-training-places.png",
+      "heading": "### Up to six Pokémon, including while offline",
+      "size": [
+        864,
+        744
+      ],
+      "topic": 0,
+      "sha256": "89a8ca4a5d05dbeea224223afbed0a9e0e8797e4a8ea5a39b52c96afb3dd12d3",
+      "visuallyReviewed": true
+    },
+    {
+      "caption": "Illustrative IV comparison: keep ATK, copy DEF and reroll the unprotected differences.",
+      "control": "AetheringPopup",
+      "exampleData": true,
+      "filename": "03-aethering.png",
+      "heading": "## Aethering: change IVs",
+      "size": [
+        944,
+        714
+      ],
+      "topic": 0,
+      "sha256": "92f4ddb45290d00a528460992e9ecdaba58c175941ee7472486129ea54aab484",
+      "visuallyReviewed": true
+    },
+    {
+      "caption": "Illustrative Nature-effect quote; original Hardy Nature remains recorded.",
+      "control": "NatureSpecialistPopup",
+      "exampleData": true,
+      "filename": "04-nature.png",
+      "heading": "## Nature Specialist: choose a stat effect",
+      "size": [
+        724,
+        664
+      ],
+      "topic": 0,
+      "sha256": "6d42894b94499fe02e09c7b0f2d302a8ea94e2aeeec13ecdc64cb1dbc3d767d2",
+      "visuallyReviewed": true
+    }
+  ]
+}

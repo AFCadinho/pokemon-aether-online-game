@@ -2,10 +2,13 @@
 
 ## Unreleased
 
-- Correct the Nature Specialist's left, right and up sprite rows so the Daycare's configured left-facing direction displays correctly.
+- Add an Official Daycare forum guide covering training, Aethering, Wings and Nature treatments, with links from all three Daycare service windows.
 
 - Keep the compact Android hotbar and its page arrows clear of the bottom-right quick buttons, buffs and trainer card at larger UI scales.
+
 - Compact the Nature Specialist for desktop and mobile with a horizontal stat comparison, optional IV details and pinned payment actions. Explain unchanged nature selections before requesting a comparison.
+
+- Correct the Nature Specialist's left, right and up sprite rows so the Daycare's configured left-facing direction displays correctly.
 
 - Show each training Pokémon's icon beside its name and goals in the Daycare, including the matching shiny appearance.
 

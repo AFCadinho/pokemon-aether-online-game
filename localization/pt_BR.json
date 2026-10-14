@@ -7207,6 +7207,8 @@
   "ui.daycare.summary_no_evs": "Os EV permanecem iguais.",
   "ui.daycare.summary_costs": "Custos: Inicial {start} ₽ · EXP {exp} ₽ · EV {ev} ₽",
   "backend.error.daycare_party_only": "Transfira este Pokémon do PC para a equipa antes de iniciar o treino.",
+  "ui.daycare.forum_guide": "Guia do fórum",
+  "ui.daycare.forum_guide_hint": "Abrir o guia da Daycare no fórum (em inglês): treino, IVs e Natures.",
   "ui.daycare.title": "Creche Pokémon",
   "ui.daycare.explanation": "Escolha um Pokémon da equipa. Até seis podem treinar offline. EXP e EV são treinados ao mesmo tempo até às metas escolhidas.",
   "ui.daycare.new_training": "Novo treino",
