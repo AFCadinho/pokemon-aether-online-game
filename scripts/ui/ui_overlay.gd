@@ -38,7 +38,9 @@ const HOTBAR_GRID_BASE_TOP_OFFSET := -245.0
 const HOTBAR_GRID_HEIGHT := 219.0
 const HOTBAR_TRACKER_GAP := 16.0
 const HOTBAR_PAGE_SIZE := 4
-const HOTBAR_PAGE_COUNT := 2
+const HOTBAR_COMPACT_PAGE_SIZE := 3
+const HOTBAR_COMPACT_GRID_HEIGHT := 172.0
+const HOTBAR_COMPACT_SCREEN_SHORT_SIDE := 600.0
 const RANKED_QUEUE_AVAILABILITY_POLL_INTERVAL_SECONDS := 10.0
 const PVP_QUEUE_POLL_INTERVAL_SECONDS := 1.0
 const UI_BASE_Z_INDEX := 100
@@ -798,6 +800,7 @@ var hotbar_slot_panels: Array[PanelContainer] = []
 var hotbar_quantity_labels: Array[Label] = []
 var hotbar_slots: Array = []
 var hotbar_current_page := 0
+var hotbar_page_size := HOTBAR_PAGE_SIZE
 var hotbar_previous_page_button: Button
 var hotbar_next_page_button: Button
 var hotbar_page_label: Label
@@ -2252,6 +2255,7 @@ func _on_quest_journal_closed() -> void:
 
 
 func _refresh_quest_tracker_layout() -> void:
+	_refresh_hotbar_layout()
 	if quest_journal_view == null:
 		return
 	var right_action_bar_bottom := 0.0
@@ -2287,7 +2291,7 @@ func _refresh_quest_tracker_layout() -> void:
 		- viewport_height * 0.5
 	)
 	var hotbar_top_offset: float = maxf(HOTBAR_GRID_BASE_TOP_OFFSET, tracker_bottom_offset)
-	var hotbar_height := maxf(HOTBAR_GRID_HEIGHT, hotkey_sidebar_panel.get_combined_minimum_size().y)
+	var hotbar_height := maxf(_hotbar_grid_height(), hotkey_sidebar_panel.get_combined_minimum_size().y)
 	hotkey_sidebar_panel.offset_top = hotbar_top_offset
 	hotkey_sidebar_panel.offset_bottom = hotbar_top_offset + hotbar_height
 	_position_collapsible_button("hotkey_sidebar")
@@ -35544,27 +35548,54 @@ func _setup_player_hotbar() -> void:
 		slot.set_meta("hotbar_hovered", false)
 		slot.set_meta("hotbar_drop_highlighted", false)
 		_apply_hotbar_slot_style(slot_index)
+	_refresh_hotbar_layout()
 	_set_hotbar_page(0)
 
 
+func _refresh_hotbar_layout() -> void:
+	if not is_inside_tree() or hotbar_slot_panels.is_empty():
+		return
+	# Native Android uses a fixed design viewport, so measure the window in dp
+	# rather than UI units. This also keeps phone paging stable during UI zoom.
+	var screen_size := Vector2(get_window().size) / TouchTargetSize.pixel_density()
+	var compact := WindowFit.is_touch_ui() and minf(screen_size.x, screen_size.y) < HOTBAR_COMPACT_SCREEN_SHORT_SIDE
+	var page_size := HOTBAR_COMPACT_PAGE_SIZE if compact else HOTBAR_PAGE_SIZE
+	if page_size == hotbar_page_size:
+		return
+	var first_visible_slot := hotbar_current_page * hotbar_page_size
+	hotbar_page_size = page_size
+	_set_hotbar_page(first_visible_slot / hotbar_page_size)
+	_invalidate_collapsible_layout()
+
+
+func _hotbar_page_count() -> int:
+	return maxi(1, ceili(float(hotbar_slot_panels.size()) / hotbar_page_size))
+
+
+func _hotbar_grid_height() -> float:
+	return HOTBAR_COMPACT_GRID_HEIGHT if hotbar_page_size == HOTBAR_COMPACT_PAGE_SIZE else HOTBAR_GRID_HEIGHT
+
+
 func _change_hotbar_page(direction: int) -> void:
-	_set_hotbar_page(posmod(hotbar_current_page + direction, HOTBAR_PAGE_COUNT))
+	_set_hotbar_page(posmod(hotbar_current_page + direction, _hotbar_page_count()))
 
 
 func _set_hotbar_page(page_index: int) -> void:
-	hotbar_current_page = clampi(page_index, 0, HOTBAR_PAGE_COUNT - 1)
-	var first_visible_slot := hotbar_current_page * HOTBAR_PAGE_SIZE
-	var last_visible_slot := first_visible_slot + HOTBAR_PAGE_SIZE
+	hotbar_current_page = clampi(page_index, 0, _hotbar_page_count() - 1)
+	var first_visible_slot := hotbar_current_page * hotbar_page_size
+	var last_visible_slot := first_visible_slot + hotbar_page_size
 	for slot_index in range(hotbar_slot_panels.size()):
 		hotbar_slot_panels[slot_index].visible = (
 			slot_index >= first_visible_slot and slot_index < last_visible_slot
 		)
+	hotkey_sidebar_panel.custom_minimum_size.y = _hotbar_grid_height()
+	hotkey_sidebar_panel.offset_bottom = hotkey_sidebar_panel.offset_top + _hotbar_grid_height()
 	_refresh_hotbar_pager_ui()
 
 
 func _refresh_hotbar_pager_ui() -> void:
 	if hotbar_page_label != null:
-		hotbar_page_label.text = "%d/%d" % [hotbar_current_page + 1, HOTBAR_PAGE_COUNT]
+		hotbar_page_label.text = "%d/%d" % [hotbar_current_page + 1, _hotbar_page_count()]
 	if hotbar_previous_page_button != null:
 		hotbar_previous_page_button.tooltip_text = LocalizationManager.text("ui.hotbar.previous_page")
 	if hotbar_next_page_button != null:
@@ -35840,7 +35871,7 @@ func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void
 			"error": str(result.get("error", LocalizationManager.text("common.unknown_error"))),
 		}))
 		return
-	_set_hotbar_page(target_slot / HOTBAR_PAGE_SIZE)
+	_set_hotbar_page(target_slot / hotbar_page_size)
 	_add_chat_message(LocalizationManager.text("ui.hotbar.message.assigned", {
 		"item": str(item.get("name", _item_name_from_id(item_id))),
 		"slot": target_slot + 1,
