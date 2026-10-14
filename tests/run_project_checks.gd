@@ -489,6 +489,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/daycare_npc_access_check.gd",
 	"res://tests/aethering_party_picker_check.gd",
 	"res://tests/aethering_completion_feedback_check.gd",
+	"res://tests/daycare_party_picker_check.gd",
 	"res://tests/npc_metadata_role_boundary_check.gd",
 	"res://tests/map_metadata_request_timing_check.gd",
 	"res://tests/startup_preferences_check.gd",
