@@ -57,6 +57,21 @@ func _record(key: String, value: float) -> void:
 		samples[key] = []
 	samples[key].append(value)
 
+func _camera_record() -> Dictionary:
+	var camera: Camera3D = stage.camera
+	var focus: Vector3 = stage.ArenaCatalog.camera_target(stage.arena_id)
+	focus.y = stage._position(0).y + 1.2
+	var idle: bool = last_label == "active" and not stage.preview_enabled and not is_instance_valid(stage.move_camera.effect)
+	for index in stage._slot_count():
+		idle = idle and stage.current_actions[index] in ["idle", "sleep"] and stage.lifecycle[index] in ["idle", "hidden", "empty"]
+	return {"zoom": stage.user_camera_zoom, "yaw_radians": stage.user_camera_yaw,
+		"pitch_radians": stage.user_camera_pitch, "yaw_degrees": rad_to_deg(stage.user_camera_yaw),
+		"pitch_degrees": rad_to_deg(stage.user_camera_pitch), "idle": idle,
+		"distance": camera.position.distance_to(focus), "fov": camera.fov,
+		"camera_position": [camera.position.x, camera.position.y, camera.position.z],
+		"camera_rotation_degrees": [camera.rotation_degrees.x, camera.rotation_degrees.y, camera.rotation_degrees.z],
+		"slots": stage._slot_count()}
+
 func _emit(now: int) -> void:
 	if samples.is_empty():
 		return
@@ -86,11 +101,7 @@ func _emit(now: int) -> void:
 	# Godot's Android stdout truncates long lines. Keep each JSON record small.
 	print("ANDROID_3D_PERFORMANCE ", JSON.stringify(record))
 	if stage.active and is_instance_valid(stage.camera):
-		var focus: Vector3 = stage.ArenaCatalog.camera_target(stage.arena_id)
-		focus.y = stage._position(0).y + 1.2
-		print("ANDROID_3D_CAMERA ", JSON.stringify({"zoom": stage.user_camera_zoom,
-			"distance": stage.camera.position.distance_to(focus), "fov": stage.camera.fov,
-			"slots": stage._slot_count()}))
+		print("ANDROID_3D_CAMERA ", JSON.stringify(_camera_record()))
 	for key in timings:
 		var values: Dictionary = timings[key]
 		for field in ["p50", "p95", "max"]:
