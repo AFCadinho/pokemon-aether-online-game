@@ -45,3 +45,8 @@ The native fade pixel probe observed ten distinct intermediate blend levels
 after a simulated upload stall; the ready 3D early-entry check additionally
 asserts at least four intermediate steps. No live desktop battle or additional
 desktop GPU has been measured as part of this task.
+
+Integration retained the newer scenery-gap/overhead-roof clearance and Rock
+Slide framing from development. The native grass/prop check and eleven move
+profiles passed again with these updates; Rock Slide passed 1026 cases including
+raised floors, recoil, pause and recovery with the shared close-up default.
