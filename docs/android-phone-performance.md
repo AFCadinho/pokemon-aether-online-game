@@ -38,8 +38,11 @@ pin, local v14 models, disabled move warmup and numeric USB diagnostics.
 Focused checks passed for Android framing/reset (216 cases), desktop/Android
 framing parity and neutral Team Preview (108 cases), Android Draco Meteor
 charge/release/pause/recovery/cancellation, and held-response/model entry with
-the stable opening angle. These checks use local fixtures; physical appearance
-still requires player confirmation in the new build.
+the stable opening angle. The user confirmed that perf.14 starts at the preferred
+angle and that a move and camera reset work. Physical USB samples also recorded
+zoom 0.60, yaw -0.235828125 rad and pitch -0.12 rad at the measured default. Later
+manual orbit remained available. The Android idle arc remains disabled with its
+existing setting; move shots still use the separate Android camera preference.
 
 ## Android touch camera and bounded move preparation
 
