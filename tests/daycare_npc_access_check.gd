@@ -37,6 +37,10 @@ func _run() -> void:
 		npc.set_process(false)
 		_check(npc.nameplate.visible and not npc.nameplate_label.text.is_empty(), "Nameplate visible on spawn: " + str(npc.name))
 	_check(metadata.fetch_count == 0, "Names available before any network metadata request")
+	_check(researcher.portrait_id == "showdown_hexmaniac_gen6" and researcher.mugshot != null, "Aether Keeper has an assigned mystical portrait instead of Oak")
+	_check(researcher.mugshot.resource_path.ends_with("hexmaniac-gen6.png"), "Keeper dialogue uses the matching portrait texture")
+	_check(researcher.npc_sprite_frames.resource_path.ends_with("hex_maniac_frames.tres"), "Keeper uses mystical overworld frames")
+	_check(merchant.portrait_id == "showdown_pokemonbreeder_gen4" and merchant.mugshot != null, "Wing Merchant also has a matching portrait instead of Oak")
 	for locale in ["en", "nl", "pt_BR", "zh_CN"]:
 		localization.call("set_locale", locale)
 		for npc: Node in npcs:

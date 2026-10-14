@@ -19,8 +19,10 @@ models and disabled move warmup. Focused checks passed for preference migration,
 independent persistent switches, 216 Android framing cases plus idle/pause/reset
 behavior, 108 desktop/Android framing cases, held-model entry, Draco Meteor and
 eleven catalog camera profiles. All four camera-switch translations parse.
-These checks use local fixtures; physical motion and switch behavior still
-require confirmation in the installed build.
+The user confirmed physical idle motion, the Graphics switch and a move in the
+installed build. USB samples recorded changing camera positions at unchanged
+zoom 0.60, yaw -0.235828125 rad and pitch -0.12 rad; the chosen base orbit remains
+fixed while the automatic arc changes the presented pose.
 
 The explicit local USB performance probe's `ANDROID_3D_CAMERA` record now also
 includes the selected orbit yaw/pitch (radians and degrees), actual numeric

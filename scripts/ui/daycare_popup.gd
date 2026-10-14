@@ -42,6 +42,9 @@ var state_loaded := false
 var quote_price: Label
 var quote_duration: Label
 var quote_heading: Label
+var training_columns: GridContainer
+var training_content: VBoxContainer
+var ev_details: VBoxContainer
 
 func _t(key: String, values: Dictionary = {}) -> String:
 	return LocalizationManager.text("ui.daycare." + key, values)
@@ -179,6 +182,7 @@ func _ready() -> void:
 	tabs.add_child(training_scroll)
 	_style_scroll(training_scroll)
 	var training := VBoxContainer.new()
+	training_content = training
 	training.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	training.add_theme_constant_override("separation", 10)
 	training_scroll.add_child(training)
@@ -189,7 +193,17 @@ func _ready() -> void:
 	training_form.add_theme_constant_override("separation", 10)
 	training_form.hide()
 	training.add_child(training_form)
-	var selection_card := _card(training_form)
+	training_columns = GridContainer.new()
+	training_columns.columns = 2
+	training_columns.add_theme_constant_override("h_separation", 12)
+	training_columns.add_theme_constant_override("v_separation", 10)
+	training_form.add_child(training_columns)
+	var pokemon_column := VBoxContainer.new()
+	pokemon_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pokemon_column.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	pokemon_column.add_theme_constant_override("separation", 10)
+	training_columns.add_child(pokemon_column)
+	var selection_card := _card(pokemon_column)
 	var selection_title := _label(_t("choose_pokemon"), selection_card)
 	selection_title.add_theme_color_override("font_color", CYAN)
 	pokemon_select = OptionButton.new()
@@ -200,7 +214,7 @@ func _ready() -> void:
 	current_label = _label("", selection_card)
 	current_label.add_theme_color_override("font_color", MUTED)
 	current_label.add_theme_font_size_override("font_size", 12)
-	var exp_card := _card(training_form)
+	var exp_card := _card(pokemon_column)
 	var level_row := HBoxContainer.new()
 	level_row.add_theme_constant_override("separation", 10)
 	exp_card.add_child(level_row)
@@ -221,14 +235,18 @@ func _ready() -> void:
 	ev_check = CheckBox.new()
 	ev_check.text = _t("ev_training")
 	ev_check.toggled.connect(_targets_changed)
-	var ev_card := _card(training_form)
+	var ev_card := _card(training_columns)
+	(ev_card.get_parent() as Control).size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	ev_card.add_child(ev_check)
+	ev_details = VBoxContainer.new()
+	ev_details.add_theme_constant_override("separation", 8)
+	ev_card.add_child(ev_details)
 	var grid := GridContainer.new()
 	ev_grid = grid
 	grid.columns = 3
 	grid.add_theme_constant_override("h_separation", 8)
 	grid.add_theme_constant_override("v_separation", 8)
-	ev_card.add_child(grid)
+	ev_details.add_child(grid)
 	for stat: String in STATS:
 		var stat_column := VBoxContainer.new()
 		stat_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -246,7 +264,7 @@ func _ready() -> void:
 		input.value_changed.connect(_targets_changed)
 		stat_column.add_child(input)
 		ev_inputs[stat] = input
-	var hint := _label(_t("ev_hint"), ev_card)
+	var hint := _label(_t("ev_hint"), ev_details)
 	hint.add_theme_color_override("font_color", MUTED)
 	hint.add_theme_font_size_override("font_size", 12)
 	var quote_content := _card(layout, CYAN.darkened(0.4))
@@ -334,16 +352,23 @@ func _queue_fit() -> void:
 
 func _fit_window() -> void:
 	var screen := get_viewport_rect().size
-	var target_height := 360 if not state_loaded or (entries.is_empty() and jobs.is_empty()) else 940
-	size = Vector2(minf(760, screen.x - 32), minf(target_height, screen.y - 32))
-	position = (screen - size) * 0.5
+	var available_width := minf(840, screen.x - 32)
+	if training_columns != null:
+		training_columns.columns = 2 if available_width >= 820 else 1
 	if ev_grid != null:
-		ev_grid.columns = 2 if screen.x < 640 else 3
+		ev_grid.columns = 2 if available_width < 560 else 3
+	size.x = available_width
 	if help_label != null:
 		help_label.visible = screen.y >= 480
 	if quote_label != null:
 		quote_label.visible = screen.y >= 480
 		quote_heading.visible = screen.y >= 480
+	var content_height := 0.0
+	if training_content != null and job_container != null:
+		content_height = training_content.get_combined_minimum_size().y if tabs.current_tab == 0 else job_container.get_combined_minimum_size().y
+	var natural_height := get_combined_minimum_size().y + content_height
+	size.y = minf(minf(720, screen.y - 32), maxf(280, natural_height))
+	position = (screen - size) * 0.5
 
 func open_daycare() -> void:
 	visible = true
@@ -366,6 +391,7 @@ func _set_busy(value: bool) -> void:
 	var current_level := int(entries[pokemon_select.selected].get("pokemon", {}).get("level", 1)) if not entries.is_empty() else 100
 	exp_check.disabled = value or pending or entries.is_empty() or current_level >= daycare_cap
 	ev_check.disabled = value or pending or entries.is_empty()
+	ev_details.visible = ev_check.button_pressed
 	level_input.editable = not value and not pending and exp_check.button_pressed and not entries.is_empty()
 	for stat: String in STATS:
 		(ev_inputs[stat] as SpinBox).editable = not value and not pending and ev_check.button_pressed and not entries.is_empty()
