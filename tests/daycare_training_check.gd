@@ -81,8 +81,8 @@ func _run() -> void:
 		_check(panel.training_form.visible and not panel.training_notice.get_parent().visible, "Successful refresh restores the training form")
 		_check(not panel.ev_details.visible, "Disabled EV training collapses its fields")
 		_check(panel.confirm_button.has_theme_stylebox_override("disabled") and panel.tabs.get_tab_bar().has_theme_stylebox_override("tab_selected"), "Actions and tabs use Aether styles")
-		_check(panel.pokemon_select.item_count == 1 and "Pikachu" in panel.pokemon_select.get_item_text(0), "Pokemon selection shows the authoritative catalog")
-		_check("10.0" not in panel.pokemon_select.get_item_text(0) and "40.0" not in panel.current_label.text, "Party selection and stored EV values do not show JSON decimal suffixes")
+		_check(panel.entries.size() == 1 and "Pikachu" in panel.pokemon_select.text, "Pokemon selection shows the authoritative catalog")
+		_check("10.0" not in panel.pokemon_select.text and "40.0" not in panel.current_label.text, "Party selection and stored EV values do not show JSON decimal suffixes")
 		_check(panel.level_input.get_parent().get_combined_minimum_size().y < 64, "Target-level row does not wrap one character per line")
 		_check(panel.level_input.max_value == 25 and panel.level_input.min_value == 10, "EXP target respects the Daycare story cap")
 		panel.exp_check.button_pressed = false
