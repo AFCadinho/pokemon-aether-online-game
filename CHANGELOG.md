@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Automatically show server-checked Aethering IV outcomes, with question marks for random stats and clear missing-Wing requirements; style both IV-lock dropdowns.
+
 - Save the player's counter position before opening or refreshing Daycare, preventing proximity failures while the periodic autosave is still pending.
 
 - Show specific localized Daycare errors instead of a generic loading failure.
