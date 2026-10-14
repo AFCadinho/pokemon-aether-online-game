@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make completed Aethering immediately visible with before/after IVs, gains and losses, a short system message and one confirmation sound, including recovered confirmations.
+
 - Replace the tiny native Android hotbar arrows with one readable page button and a 48 dp touch target; swipe left or right across a slot to change pages without using its item.
 
 - Add an Official Daycare forum guide covering training, Aethering, Wings and Nature treatments, with links from all three Daycare service windows.

@@ -4,6 +4,18 @@ extends Node
 const PENDING_PATH := "user://aethering_pending_%d.json"
 const REQUEST_TIMEOUT_SECONDS := 12.0
 var pending: Dictionary = {}
+var completion_notices: Dictionary = {}
+
+func claim_completion_notice(result: Dictionary) -> bool:
+	var user_id := int(AuthService.current_user.get("id", 0))
+	var audit_id := str(result.get("auditId", "")).strip_edges()
+	if user_id <= 0 or audit_id.is_empty() or bool(result.get("refreshOnly", false)):
+		return false
+	var key := "%d:%s" % [user_id, audit_id]
+	if completion_notices.has(key):
+		return false
+	completion_notices[key] = true
+	return true
 
 func load_candidates() -> Dictionary:
 	return await _api("candidates", HTTPClient.METHOD_GET)
