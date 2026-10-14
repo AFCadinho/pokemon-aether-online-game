@@ -7245,5 +7245,17 @@
   "backend.error.daycare_preview_expired": "This quote expired. Calculate a new quote.",
   "backend.error.daycare_preview_stale": "Your Pokémon, storage or story cap changed. Calculate a new quote.",
   "backend.error.daycare_busy": "Another update is in progress. Retry safely.",
-  "backend.error.daycare_player_busy": "Finish your current activity before using the Daycare."
+  "backend.error.daycare_player_busy": "Finish your current activity before using the Daycare.",
+  "ui.nature_specialist.daycare": "ROUTE 5 DAYCARE · SPECIALIST CARE",
+  "ui.nature_specialist.pokemon_label": "YOUR POKÉMON",
+  "ui.nature_specialist.target_label": "CHOOSE THE NEW STAT EFFECT",
+  "ui.nature_specialist.stat_comparison": "STAT COMPARISON",
+  "ui.nature_specialist.stat": "Stat",
+  "ui.nature_specialist.before": "Current",
+  "ui.nature_specialist.after": "After treatment",
+  "ui.nature_specialist.difference": "Change",
+  "ui.nature_specialist.price_label": "TREATMENT FEE",
+  "ui.nature_specialist.wallet_label": "Wallet",
+  "ui.nature_specialist.ready": "Available · one treatment per seven days",
+  "ui.nature_specialist.comparison_hint": "Compare stats to review the chosen nature before paying."
 }

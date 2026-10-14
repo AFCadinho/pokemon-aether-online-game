@@ -7245,5 +7245,17 @@
   "backend.error.daycare_preview_expired": "Deze offerte is verlopen. Bereken een nieuwe offerte.",
   "backend.error.daycare_preview_stale": "Je Pokémon, opslag of storycap is gewijzigd. Bereken een nieuwe offerte.",
   "backend.error.daycare_busy": "Er loopt een andere wijziging. Probeer het veilig opnieuw.",
-  "backend.error.daycare_player_busy": "Rond je huidige activiteit af voordat je de Daycare gebruikt."
+  "backend.error.daycare_player_busy": "Rond je huidige activiteit af voordat je de Daycare gebruikt.",
+  "ui.nature_specialist.daycare": "ROUTE 5 DAYCARE · BIJZONDERE ZORG",
+  "ui.nature_specialist.pokemon_label": "JOUW POKÉMON",
+  "ui.nature_specialist.target_label": "KIES HET NIEUWE STAT-EFFECT",
+  "ui.nature_specialist.stat_comparison": "STATVERGELIJKING",
+  "ui.nature_specialist.stat": "Stat",
+  "ui.nature_specialist.before": "Huidig",
+  "ui.nature_specialist.after": "Na behandeling",
+  "ui.nature_specialist.difference": "Verschil",
+  "ui.nature_specialist.price_label": "BEHANDELPRIJS",
+  "ui.nature_specialist.wallet_label": "Portemonnee",
+  "ui.nature_specialist.ready": "Beschikbaar · één behandeling per zeven dagen",
+  "ui.nature_specialist.comparison_hint": "Vergelijk de stats om de gekozen nature te bekijken voordat je betaalt."
 }

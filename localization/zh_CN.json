@@ -7245,5 +7245,17 @@
   "backend.error.daycare_preview_expired": "报价已过期，请重新计算。",
   "backend.error.daycare_preview_stale": "宝可梦、存放位置或剧情上限已变化，请重新计算报价。",
   "backend.error.daycare_busy": "正在进行其他更新，请安全重试。",
-  "backend.error.daycare_player_busy": "请先结束当前活动，再使用培育屋。"
+  "backend.error.daycare_player_busy": "请先结束当前活动，再使用培育屋。",
+  "ui.nature_specialist.daycare": "5号道路培育屋 · 专属照护",
+  "ui.nature_specialist.pokemon_label": "你的宝可梦",
+  "ui.nature_specialist.target_label": "选择新的能力效果",
+  "ui.nature_specialist.stat_comparison": "能力比较",
+  "ui.nature_specialist.stat": "能力",
+  "ui.nature_specialist.before": "当前",
+  "ui.nature_specialist.after": "调整后",
+  "ui.nature_specialist.difference": "变化",
+  "ui.nature_specialist.price_label": "调整费用",
+  "ui.nature_specialist.wallet_label": "钱包",
+  "ui.nature_specialist.ready": "可用 · 每七天一次调整",
+  "ui.nature_specialist.comparison_hint": "付款前请比较能力，确认所选性格的效果。"
 }

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restyle the Nature Specialist with Pokémon and IV details, clear stat comparisons, custom dropdowns, readable prices and responsive controls; give the specialist a green gardener overworld and portrait.
+
 - Compact the Daycare window with responsive columns, content-based height and collapsible EV settings. Give its Trainer the matching Pokémon Breeder overworld sprite and dialogue portrait.
 
 - Give Rock Tomb, Stone Edge, Rock Blast, Ancient Power, Bulldoze and Precipice Blades distinct solid-rock choreography, wider impacts, cinematic cameras and earthy environment lighting while preserving native timing and audio.
