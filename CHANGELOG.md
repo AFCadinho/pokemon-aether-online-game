@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add six parallel, offline Daycare training places on Route 5 with independent EXP/EV targets, story caps, server quotes, paid confirmation and individual pickup.
+
 - Keep the overworld visible while Android 3D battles prepare, then fade directly into the ready battle with its final zoom. Lift cinematic move shots above foreground grass and arena props to keep their focus visible.
 
 - Enable move-specific 3D camera shots on Android, including Draco Meteor's charge and meteor rain. Add a separate Graphics toggle while keeping the idle camera steady and restoring the player's zoom after moves.

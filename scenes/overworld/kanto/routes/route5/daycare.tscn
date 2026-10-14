@@ -11,6 +11,8 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_visibility_mask"]
 [ext_resource type="PackedScene" uid="uid://cnektxhofuvol" path="res://scenes/npcs/market_attendant_npc.tscn" id="wings"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/daycare_trainer_npc.tscn" id="daycare_trainer"]
+
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
 
@@ -86,6 +88,11 @@ facing_direction = Vector2(0, 1)
 
 [node name="NatureSpecialist" parent="Entities/NPCs" instance=ExtResource("nature_specialist")]
 position = Vector2(272, 400)
+facing_direction = Vector2(0, 1)
+manual_interaction_reach_tiles = 2
+
+[node name="DaycareTrainer" parent="Entities/NPCs" instance=ExtResource("daycare_trainer")]
+position = Vector2(400, 496)
 facing_direction = Vector2(0, 1)
 manual_interaction_reach_tiles = 2
 
