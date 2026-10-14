@@ -7,7 +7,8 @@ func _run() -> void:
 	SettingsManager.battle_presentation_mode = "3d"
 	SettingsManager.battle_3d_camera_motion = false
 	assert(not stage.uses_android_camera())
-	assert(stage.user_camera_zoom == 0.63 and stage.camera_zoom_limits() == Vector2(0.30, 1.60))
+	assert(stage.user_camera_zoom == 0.70 and stage.camera_zoom_limits() == Vector2(0.30, 1.60))
+	assert(is_equal_approx(stage.user_camera_yaw, -0.164250014305115) and is_equal_approx(stage.user_camera_pitch, -0.0156436738967895), "Desktop starts at the user's measured orbit")
 	var view := SubViewport.new()
 	add_child(view)
 	stage.camera = Camera3D.new()
@@ -17,6 +18,7 @@ func _run() -> void:
 	add_child(android)
 	android.set_process(false)
 	assert(android.user_camera_zoom == 0.60, "Android retains the approved default")
+	assert(android.user_camera_yaw == 0.0 and android.user_camera_pitch == 0.0, "Android retains its approved angle")
 	android.camera = Camera3D.new()
 	view.add_child(android.camera)
 	android.camera.fov = 48.0
@@ -37,6 +39,8 @@ func _run() -> void:
 						android.user_camera_zoom = zoom
 						stage.user_camera_yaw = yaw
 						android.user_camera_yaw = yaw
+						stage.user_camera_pitch = 0.0
+						android.user_camera_pitch = 0.0
 						stage._update_camera(0.0)
 						android._update_camera(0.0)
 						assert(stage.camera.transform.is_equal_approx(android.camera.transform), "Desktop and Android use identical close-up framing at equal viewport sizes")
@@ -48,9 +52,9 @@ func _run() -> void:
 	var opening: Transform3D = stage.camera.transform
 	var focus: Vector3 = Stage.ArenaCatalog.camera_target(stage.arena_id)
 	focus.y = stage._position(0).y + 1.2
-	stage.user_camera_zoom = 0.60
+	stage.user_camera_zoom = 0.63
 	stage._update_camera(0.0)
-	assert(is_equal_approx(opening.origin.distance_to(focus) / stage.camera.position.distance_to(focus), 1.05), "Desktop starts only five percent farther away than the former close-up")
+	assert(is_equal_approx(opening.origin.distance_to(focus) / stage.camera.position.distance_to(focus), 0.70 / 0.63), "The measured zoom applies to the actual camera distance")
 	stage.reset_user_camera()
 	stage.visual_bounds.fixture.idle.size = [20, 30, 20]
 	stage.entry_arena_requested = false
@@ -65,6 +69,13 @@ func _run() -> void:
 	stage.preview_enabled = true
 	stage._update_camera(0.0)
 	assert(not stage.camera.transform.is_equal_approx(opening), "Team Preview retains its separate roster camera")
+	var roster: Transform3D = stage.camera.transform
+	android.double_mode = false
+	android.preview_enabled = true
+	android.reset_user_camera()
+	# Both default roster views retain the previous neutral framing.
+	android._update_camera(0.0)
+	assert(roster.is_equal_approx(android.camera.transform), "The chosen desktop battle orbit does not rotate or zoom Team Preview")
 	router.cancel_render()
 	router.release_threaded_resource_requests()
 	router = null

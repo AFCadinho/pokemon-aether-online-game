@@ -12,17 +12,22 @@ editing chat. Recording does not change the camera or the default settings.
 Restart the development client after integrating this measurement aid; it
 cannot read the camera of an already-running client from before the change.
 
-Desktop now uses the Android close-up policy with a slightly wider starting
-view: default zoom 0.63 (5% farther than 0.60); Android stays at 0.60. Both use limits
-0.30–1.60, the same three-quarter singles direction and wider resting-frame
+Desktop now uses the player's measured close-up: default zoom 0.70, orbit yaw
+-0.164250014305115 rad (-9.41°), and orbit pitch -0.0156436738967895 rad (-0.90°).
+These are user-orbit offsets from the base overview, not absolute world angles.
+Android retains zoom 0.60 and zero orbit offsets. Both use limits
+0.30–1.60, the same base three-quarter singles direction and wider resting-frame
 region. The logical HUD still reserves prompt/move-button space. The camera
 fits resting envelopes first, then applies zoom; wheel input can actually move
 closer without model-envelope fitting undoing it. Zooming out retains a complete
 overview. Camera reset restores the close-up default. Large limbs can crop at
 close zoom, as on Android; slot centres remain in front of the near plane.
-The desktop default was adjusted after the user's screenshot/reference feedback.
-The yaw, pitch and FOV are unchanged. Roster framing is normalized by the current
-platform's default, so the small battle-camera adjustment does not zoom the roster.
+The desktop default reproduces the numeric camera capture approved on 2026-10-14
+instead of estimating the view from a screenshot. FOV stays at 48°. The natural
+idle arc remains enabled when camera motion is enabled, so the absolute camera
+position varies slightly while the chosen orbit and zoom remain fixed. Roster
+zoom and orbit are normalized by the current platform's defaults, so the chosen
+battle-camera settings do not change the neutral Team Preview view.
 
 Pending fullscreen entries reserve one overview from the local lead's compiled
 resting profile, with the existing neutral envelope if no profile is available.
