@@ -39,6 +39,7 @@ var recipient_options: OptionButton
 var donor_options: OptionButton
 var grid: GridContainer
 var wing_stock: Label
+var no_wings_button: Button
 var status: Label
 var preview_button: Button
 var confirm_button: Button
@@ -135,8 +136,13 @@ func _build() -> void:
 	grid.add_theme_constant_override("h_separation", 14)
 	grid.add_theme_constant_override("v_separation", 7)
 	content.add_child(grid)
+	var wing_row := HBoxContainer.new()
+	content.add_child(wing_row)
 	wing_stock = _label("", CYAN)
-	content.add_child(wing_stock)
+	wing_row.add_child(wing_stock)
+	no_wings_button = _button("", _without_wings)
+	no_wings_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	wing_row.add_child(no_wings_button)
 	results = RichTextLabel.new()
 	results.bbcode_enabled = true
 	results.fit_content = true
@@ -233,6 +239,8 @@ func _localize() -> void:
 	help_label.text = _t("help")
 	refresh_button.text = _t("refresh")
 	preview_button.text = _t("preview")
+	no_wings_button.text = _t("without_wings")
+	no_wings_button.tooltip_text = _t("optional_wings")
 	confirm_button.text = _t("retry") if not AetheringService.pending.is_empty() else _t("confirm")
 	recipient_select.text = _t("choose_recipient")
 	donor_select.text = _t("choose_donor")
@@ -450,6 +458,17 @@ func _schedule_preview() -> void:
 	status.text = _t("checking")
 	preview_timer.start()
 
+func _without_wings() -> void:
+	if busy or confirmation_open or not AetheringService.pending.is_empty():
+		return
+	recipient_lock = null
+	donor_lock = null
+	plan.clear()
+	stat_preview.clear()
+	status.text = _t("optional_wings")
+	_render()
+	_schedule_preview()
+
 func _populate_locks(options: OptionButton, selected: Variant, other: Variant) -> void:
 	options.clear()
 	options.add_item(_t("no_lock"))
@@ -519,6 +538,8 @@ func _update_buttons() -> void:
 	donor_select.disabled = frozen or recipient.is_empty()
 	recipient_options.disabled = frozen or recipient.is_empty()
 	donor_options.disabled = frozen or donor.is_empty()
+	no_wings_button.disabled = frozen
+	no_wings_button.visible = recipient_lock != null or donor_lock != null
 	refresh_button.disabled = busy or confirmation_open
 	close_button.disabled = busy or confirmation_open
 	preview_button.disabled = frozen or not resources_ready or candidates.size() < 2 or recipient.is_empty() or donor.is_empty()

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Present Aethering through an Aether Keeper with matching mystical sprite, portrait and ritual dialogue; clarify that Wings are optional and add a button to remove both IV locks.
+
 - Compact the Daycare window with responsive columns, content-based height and collapsible EV settings. Give its Trainer the matching Pokémon Breeder overworld sprite and dialogue portrait.
 
 - Give Rock Tomb, Stone Edge, Rock Blast, Ancient Power, Bulldoze and Precipice Blades distinct solid-rock choreography, wider impacts, cinematic cameras and earthy environment lighting while preserving native timing and audio.

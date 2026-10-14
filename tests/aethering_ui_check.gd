@@ -97,6 +97,18 @@ func _run() -> void:
 	popup.wing_availability["clever-wing"] = 0
 	popup._render()
 	_check(popup.confirm_button.disabled and popup.confirm_button.tooltip_text.contains("Clever Wing"), "One of two required Wings missing blocks confirmation")
+	popup._without_wings()
+	_check(popup.recipient_lock == null and popup.donor_lock == null and popup.plan.is_empty(), "Without Wings clears both locks and invalidates the old preview")
+	popup.wing_availability.clear()
+	for wing in popup.WINGS:
+		popup.wing_availability[wing] = 0
+	popup.plan = {"previewId": "11111111-1111-4111-8111-111111111111", "requiredWings": [], "stats": {"hp": {"mode": "equal", "guaranteedIV": 31}, "atk": {"mode": "reroll", "guaranteedIV": null}}}
+	popup._render()
+	_check(not popup.confirm_button.disabled and not popup.no_wings_button.visible, "Zero Wings still permits confirmation when no locks are selected")
+	popup.recipient_lock = "atk"
+	popup.donor_lock = "spd"
+	popup.plan = {"previewId": "11111111-1111-4111-8111-111111111111", "shinyDonor": true, "requiredWings": [{"itemId": "muscle-wing", "quantity": 1}, {"itemId": "clever-wing", "quantity": 1}], "stats": {"atk": {"mode": "recipient_lock", "guaranteedIV": 31}, "spd": {"mode": "donor_lock", "guaranteedIV": 31}}}
+	popup.wing_availability["muscle-wing"] = 1
 	popup.wing_availability["clever-wing"] = 1
 	popup._render()
 	popup._ask_confirm()
