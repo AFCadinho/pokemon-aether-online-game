@@ -130,7 +130,7 @@ The **Nature Specialist** applies a chosen Nature's **stat effect**, similar to 
 3. Preview the **before and after stats** and the price.
 4. Confirm only when the effect and price are right for you.
 
-![Illustrative Nature treatment preview with stat differences and price](upload://85jKBqbggO8EDcaaptBEz4pgoae.png)
+![Illustrative Nature treatment preview with stat differences and price](upload://zs5HJnUNjAbrFpXsiPptBdQCy18.png)
 
 ### Which Pokémon can be treated?
 

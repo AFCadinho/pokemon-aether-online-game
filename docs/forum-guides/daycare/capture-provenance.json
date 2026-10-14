@@ -1,6 +1,6 @@
 {
-  "frontendBaseRevision": "1e610475367aff5dfc479d3c52e3af5440213713",
-  "backendRevision": "7fbc6dd545e6c677e1e9be1ff38e75fe325314e9",
+  "frontendBaseRevision": "5dd22acc8c2dc97e7c243796ab645d0242747a45",
+  "backendRevision": "83de0ae75e78801552f416d7e89fc20fd70b6468",
   "exampleDataOnly": true,
   "authenticatedPlayer": false,
   "serviceTransactions": false,
@@ -12,16 +12,16 @@
   "uiSourceSha256": {
     "scripts/ui/daycare_popup.gd": "fca817d410e88b0d1329250007555a11f122d1589d5c16ea806f2019aa2eea34",
     "scripts/ui/aethering_popup.gd": "4a83191079fdac4ad584bcb2d1c742592be845537574526d8bd8cb7c436ba275",
-    "scripts/ui/nature_specialist_popup.gd": "bfe2f5eb73897e6fc7a5e95ddbfd31fd2869e95d5e83ce0199922df0f4981b08",
+    "scripts/ui/nature_specialist_popup.gd": "5afeea5358ed86f8ab81b8b8b139382efe231b58c21feeb350bf52a299ad4870",
     "docs/forum-guides/daycare/capture.gd": "df4964e0e54870830bfc45fabdd364d19cd1a7eee395707e85302363297b922a"
   },
   "gameplaySourceSha256": {
     "docs/daycare_training.md": "e1b8a4f8c44574392a719528f230baed2a8f375583f2d840bb8d3adc542ae5df",
     "docs/aethering_backend.md": "fd1860012935da21b8af5379652b016875ca59fbeab605a49aa3123b45641b12",
-    "docs/nature_specialist.md": "159b71ce7ae224082b65b2c10dba244e7976982df670ad9f51f17b3bd46cbbb4",
+    "docs/nature_specialist.md": "a028cbf6c7281b63a1d64b3caf672a1ecec34529f7262775e705ace3aa2bc876",
     "account-service/daycare_services.py": "af42a3ed50e900f2935b5e7993c0920838e0ea551c02aa7ed3f630f9f0a33e13",
     "account-service/aethering_services.py": "326ce71ea5a04fb3b7280faf252cdbe0e05a98a7fb61a9ac96126d0ce59c774a",
-    "account-service/nature_specialist_services.py": "07a25d89176a5705c7bb9a8c93dbfabe6a54aad7832cc5a462b20bedd1dd8a23",
+    "account-service/nature_specialist_services.py": "40a3297c91e970489d9d22157cea59aaa977e0225dadad5847461af07ea1ca8a",
     "account-service/game_settings_services.py": "d86c7ee03f5138bd8a845c9a36be34f151094d3c608907b40bae09884c09e8dd",
     "pokemon-data/data/shops/kanto/daycare_wing_merchant.json": "2854fc53308d2de9d341174eb3557ccc805021f926115ad1ef4cc1218ef4eda5"
   },
@@ -75,11 +75,11 @@
       "filename": "04-nature.png",
       "heading": "## Nature Specialist: choose a stat effect",
       "size": [
-        744,
-        864
+        724,
+        664
       ],
       "topic": 0,
-      "sha256": "bb51a67fa9d7071235501bef2d8a0cbd66c56009682b9b64c7d7696f48a3f014",
+      "sha256": "6d42894b94499fe02e09c7b0f2d302a8ea94e2aeeec13ecdc64cb1dbc3d767d2",
       "visuallyReviewed": true
     }
   ]
