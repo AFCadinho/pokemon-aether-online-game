@@ -15,7 +15,8 @@ cannot read the camera of an already-running client from before the change.
 Desktop now uses the player's measured close-up: default zoom 0.70, orbit yaw
 -0.164250014305115 rad (-9.41°), and orbit pitch -0.0156436738967895 rad (-0.90°).
 These are user-orbit offsets from the base overview, not absolute world angles.
-Android retains zoom 0.60 and zero orbit offsets. Both use limits
+Android uses its separately measured zoom 0.60, yaw -0.235828125 rad (-13.51°)
+and pitch -0.12 rad (-6.88°). Both use limits
 0.30–1.60, the same base three-quarter singles direction and wider resting-frame
 region. The logical HUD still reserves prompt/move-button space. The camera
 fits resting envelopes first, then applies zoom; wheel input can actually move

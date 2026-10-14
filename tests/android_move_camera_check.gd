@@ -9,3 +9,6 @@ func _set_motion(enabled: bool) -> void:
 
 func _camera_zoom() -> float:
 	return 0.60
+
+func _camera_yaw() -> float:
+	return Stage.ANDROID_CAMERA_YAW_DEFAULT
