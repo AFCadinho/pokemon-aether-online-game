@@ -43,7 +43,6 @@ var quote_price: Label
 var quote_duration: Label
 var quote_heading: Label
 var training_columns: GridContainer
-var training_content: VBoxContainer
 var ev_details: VBoxContainer
 
 func _t(key: String, values: Dictionary = {}) -> String:
@@ -182,7 +181,6 @@ func _ready() -> void:
 	tabs.add_child(training_scroll)
 	_style_scroll(training_scroll)
 	var training := VBoxContainer.new()
-	training_content = training
 	training.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	training.add_theme_constant_override("separation", 10)
 	training_scroll.add_child(training)
@@ -363,11 +361,8 @@ func _fit_window() -> void:
 	if quote_label != null:
 		quote_label.visible = screen.y >= 480
 		quote_heading.visible = screen.y >= 480
-	var content_height := 0.0
-	if training_content != null and job_container != null:
-		content_height = training_content.get_combined_minimum_size().y if tabs.current_tab == 0 else job_container.get_combined_minimum_size().y
-	var natural_height := get_combined_minimum_size().y + content_height
-	size.y = minf(minf(720, screen.y - 32), maxf(280, natural_height))
+	# Keep the same frame across modes, quotes, tabs and loading states.
+	size.y = minf(720, screen.y - 32)
 	position = (screen - size) * 0.5
 
 func open_daycare() -> void:
