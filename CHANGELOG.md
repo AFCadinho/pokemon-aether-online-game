@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Keep the compact Android hotbar and its page arrows clear of the bottom-right quick buttons, buffs and trainer card at larger UI scales.
 - Compact the Nature Specialist for desktop and mobile with a horizontal stat comparison, optional IV details and pinned payment actions. Explain unchanged nature selections before requesting a comparison.
 
 - Show each training Pokémon's icon beside its name and goals in the Daycare, including the matching shiny appearance.
