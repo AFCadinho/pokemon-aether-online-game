@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Meet Dadinho outside the Route 5 Daycare after Misty for an introduction to IVs and natures before continuing to the S.S. Anne.
+
 - Show a compact Aethering history row beneath the six IV tiles in the Pokémon Summary, using its existing dark surfaces and cyan accents.
 
 ## 0.3.110
