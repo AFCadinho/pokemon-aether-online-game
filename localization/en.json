@@ -7171,6 +7171,7 @@
   "ui.aethering.reason.money_reserved_for_trade": "Money reserved for trade.",
   "ui.aethering.reason.aethering_session_changed": "Session changed. Reopen Aethering on the original account to retrieve its confirmation.",
   "ui.aethering.next_donor": "Next Donor",
+  "ui.aethering.researcher": "Aether Researcher",
   "ui.aethering.merchant": "Wing Merchant",
   "ui.aethering.reason.aethering_party_required": "Aethering requires two of your own Pokémon in your Party. Use the nearby PC to move Pokémon into your Party.",
   "ui.daycare.choose_pokemon": "Choose Pokémon",

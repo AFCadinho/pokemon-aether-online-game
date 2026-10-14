@@ -108,6 +108,8 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 ## Allows decorative actors on unreachable terrain to patrol across its blocking mask.
 ## Character occupancy checks still apply. Keep new inherited exports at the end of this list.
 @export var ambient_movement_ignores_map_collision := false
+## Immediate localized fallback while catalog metadata loads. Explicit scene names still win.
+@export var localized_display_name_key := ""
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
@@ -187,6 +189,7 @@ func _initialize_base_npc() -> void:
 	if Engine.is_editor_hint():
 		_refresh_npc_profile_preview()
 		return
+	_apply_localized_display_name()
 	_resolve_catalog_mugshot()
 
 	z_as_relative = false
@@ -1603,7 +1606,21 @@ func _apply_npc_metadata(metadata: Dictionary) -> void:
 	_refresh_quest_marker()
 
 
+func _apply_localized_display_name() -> void:
+	if localized_display_name_key.is_empty() or LocalizationManager == null:
+		return
+	if not display_name.strip_edges().is_empty() and display_name != metadata_display_name:
+		return
+	var localized_name := str(LocalizationManager.text(localized_display_name_key))
+	if localized_name.is_empty() or localized_name == localized_display_name_key:
+		return
+	display_name = localized_name
+	metadata_display_name = localized_name
+	_sync_nameplate()
+
+
 func _on_locale_changed(_locale: String) -> void:
+	_apply_localized_display_name()
 	npc_metadata_loaded = false
 	npc_metadata_load_failed = false
 	metadata_dialogue_id = ""
