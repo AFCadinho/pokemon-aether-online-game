@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show a compact Aethering history row beneath the six IV tiles in the Pokémon Summary, using its existing dark surfaces and cyan accents.
+
 ## 0.3.110
 
 ### Daycare training and guides

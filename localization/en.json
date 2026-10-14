@@ -1623,6 +1623,8 @@
   "ui.pokemon_summary.tab.stats": "Stats",
   "ui.pokemon_summary.tab.moves": "Moves",
   "ui.pokemon_summary.ivs.title": "Individual Values",
+  "ui.pokemon_summary.aethering.label": "Aethering",
+  "ui.pokemon_summary.aethering.tooltip": "Successful Aetherings received by this Pokémon, including unchanged IV outcomes. This history stays with the Pokémon when traded.",
   "ui.pokemon_summary.origin.gift": "Gift",
   "ui.pokemon_summary.origin.caught": "Caught",
   "ui.pokemon_summary.origin.generated": "Generated",

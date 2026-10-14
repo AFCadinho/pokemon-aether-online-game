@@ -450,6 +450,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pokemon_readonly_summary_check.gd",
 	"res://tests/pokemon_summary_escape_after_close_check.gd",
 	"res://tests/pokemon_summary_fixed_size_check.gd",
+	"res://tests/pokemon_summary_aethering_count_check.gd",
 	"res://tests/pokedex_sprite_scale_check.gd",
 	"res://tests/tmx_visual_importer_check.gd",
 	"res://tests/tmx_atlas_compactor_check.gd",

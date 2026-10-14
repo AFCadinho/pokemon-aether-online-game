@@ -29042,6 +29042,44 @@ func _render_pokemon_summary_ivs(pokemon: Pokemon) -> void:
 		var value: int = int(pokemon.ivs.get(stat_id, 0))
 		grid.add_child(_create_summary_value_orb(str(stat.get("label", stat_id)), value, 31, stat.get("color", UI_BORDER_FOCUS) as Color))
 
+	pokemon_summary_content_stack.add_child(_create_summary_aethering_count(pokemon))
+
+func _create_summary_aethering_count(pokemon: Pokemon) -> PanelContainer:
+	var panel := PanelContainer.new()
+	panel.name = "AetheringHistory"
+	panel.custom_minimum_size.y = 28
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _make_pokemon_summary_inner_style(Color("#08121cf2"), POKEMON_SUMMARY_ACCENT_SOFT))
+	panel.tooltip_text = LocalizationManager.text("ui.pokemon_summary.aethering.tooltip")
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_top", 4)
+	margin.add_theme_constant_override("margin_bottom", 4)
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(margin)
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_child(row)
+	var caption := Label.new()
+	caption.name = "Caption"
+	caption.text = LocalizationManager.text("ui.pokemon_summary.aethering.label")
+	caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caption.add_theme_font_size_override("font_size", 11)
+	caption.add_theme_color_override("font_color", Color("#91b2c6"))
+	row.add_child(caption)
+	var value := Label.new()
+	value.name = "Count"
+	value.text = "%d×" % maxi(0, pokemon.aethering_count)
+	value.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	value.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	value.add_theme_font_size_override("font_size", 14)
+	value.add_theme_color_override("font_color", Color("#62d7ff"))
+	row.add_child(value)
+	return panel
+
 func _render_pokemon_summary_evs(pokemon: Pokemon) -> void:
 	var allocated_total: int = _get_summary_ev_total(pokemon.evs)
 	_add_summary_section_title(LocalizationManager.text("ui.pokemon_summary.evs.allocated", {"total": allocated_total}), POKEMON_SUMMARY_ACCENT)

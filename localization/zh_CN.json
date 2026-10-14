@@ -1589,6 +1589,8 @@
   "ui.pokemon_summary.tab.stats": "能力",
   "ui.pokemon_summary.tab.moves": "招式",
   "ui.pokemon_summary.ivs.title": "个人价值观",
+  "ui.pokemon_summary.aethering.label": "以太融合",
+  "ui.pokemon_summary.aethering.tooltip": "这只宝可梦作为接收体完成的以太融合次数，包括IV未改变的结果。交换后该记录仍随宝可梦保留。",
   "ui.pokemon_summary.origin.gift": "礼物",
   "ui.pokemon_summary.origin.caught": "被发现",
   "ui.pokemon_summary.origin.generated": "已生成",

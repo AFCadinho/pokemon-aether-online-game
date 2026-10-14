@@ -128,6 +128,7 @@ func _run() -> void:
 	_check(popup._find(int(info["donorId"])).is_empty(), "Consumed Party Donor removed from picker")
 	_check(popup._wing_count("health-wing") == 2 and popup._wing_count("clever-wing") == 2, "Only selected Wings consumed and inventory refreshed")
 	_check(root.get_node("PlayerSave").get("money") == 30000, "Wallet refreshed after successful replay")
+	_check(popup.last_result.get("recipient", {}).get("aetheringCount") == 1 and root.get_node("PlayerSave").get("party")[0].aethering_count == 1, "Successful replay and Party refresh preserve exactly one Aethering in Summary metadata")
 	_check(popup.result_panel.visible and popup.results.visible and popup.result_grid.get_child_count() == 28, "Real IV result displayed")
 	_check(collector.messages.size() == 1 and collector.messages[0].contains("Aethering"), "Recovered commit announces success exactly once")
 	popup._publish_result_feedback()

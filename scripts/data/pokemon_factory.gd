@@ -56,6 +56,7 @@ static func create_pokemon_from_backend_payload(data: Dictionary) -> Pokemon:
 	pokemon.showdown_id = _get_string_option(data, ["showdownId", "showdown_id"])
 	pokemon.nickname = _get_string_option(data, ["nickname", "nickName", "displayName", "display_name", "name"])
 	pokemon.gender = _normalize_pokemon_gender(_get_string_option(data, ["gender", "sex"]))
+	pokemon.aethering_count = maxi(0, _get_int_option(data, ["aetheringCount"]))
 	pokemon.evolution_walk_steps = int(data.get("evolutionWalkSteps", 0))
 	pokemon.evolution_walk_ready_level = int(data.get("evolutionWalkReadyLevel", 0))
 	pokemon.evolution_walk_required_steps = int(data.get("evolutionWalkRequiredSteps", 0))
