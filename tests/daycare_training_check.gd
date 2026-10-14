@@ -18,6 +18,10 @@ func _run() -> void:
 		if npc:
 			var collision := interior.get_node("Tiles/Collision") as TileMapLayer
 			var cell := collision.local_to_map(npc.position)
+			var backend_root := OS.get_environment("DAYCARE_BACKEND_ROOT")
+			if not backend_root.is_empty():
+				var guard := FileAccess.get_file_as_string(backend_root.path_join("account-service/daycare_services.py"))
+				_check("NPC_POSITION = (%s, %s)" % [int(npc.position.x), int(npc.position.y)] in guard, "Daycare backend visit position matches the map NPC")
 			var reach := int(npc.manual_interaction_reach_tiles)
 			var approach_available := false
 			for distance in range(1, reach + 1):
@@ -75,6 +79,9 @@ func _run() -> void:
 		var locales := root.get_node("LocalizationManager")
 		for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 			locales.set_locale(locale)
+			var visit_message := BackendErrorLocalizationService.message({"status": 403, "body": {"detail": {"code": "daycare_visit_required", "message": "Stand beside the Daycare Trainer"}}})
+			_check(visit_message == locales.text("backend.error.daycare_visit_required"), "Daycare location errors resolve in " + locale)
+			_check(visit_message != locales.text("backend.error.generic"), "Daycare errors do not silently become generic in " + locale)
 			_check(locales.text("ui.daycare.title") != "ui.daycare.title" and "{price}" not in locales.text("ui.daycare.confirmation", {"price": 13100, "time": "00:08:06"}), "Daycare strings resolve in " + locale)
 		locales.set_locale("en")
 		if OS.get_environment("DAYCARE_CAPTURE") == "1":

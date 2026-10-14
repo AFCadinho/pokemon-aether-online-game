@@ -11,6 +11,19 @@ const CATALOG_PATHS: Dictionary = {
 }
 
 const CODE_TO_KEY: Dictionary = {
+	"daycare_visit_required": "backend.error.daycare_visit_required",
+	"daycare_party_required": "backend.error.daycare_party_required",
+	"daycare_level_cap": "backend.error.daycare_level_cap",
+	"daycare_full": "backend.error.daycare_full",
+	"daycare_not_ready": "backend.error.daycare_not_ready",
+	"daycare_insufficient_money": "backend.error.daycare_insufficient_money",
+	"daycare_unchanged": "backend.error.daycare_unchanged",
+	"daycare_ev_decrease": "backend.error.daycare_ev_decrease",
+	"daycare_level_decrease": "backend.error.daycare_level_decrease",
+	"daycare_preview_expired": "backend.error.daycare_preview_expired",
+	"daycare_preview_stale": "backend.error.daycare_preview_stale",
+	"daycare_busy": "backend.error.daycare_busy",
+	"daycare_player_busy": "backend.error.daycare_player_busy",
 	"guild_base_room_name_invalid": "ui.guild_base.visits.room_name_invalid",
 	"guild_design_wrong_room": "ui.guild_design.wrong_room",
 	"guild_design_already_owned": "ui.guild_design.already_owned",
