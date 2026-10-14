@@ -7063,7 +7063,7 @@
   "ui.guild_design.confirm_restore": "De vorige inrichting herstellen? De huidige inrichting wordt daarna de herstelkopie.",
   "ui.shiny_tracker.mounts.store_description_flying_nimbus": "Bevat een Flying Nimbus-mount. Shiny-basiskans: 50%.",
   "ui.nature_specialist.title": "Nature Specialist",
-  "ui.nature_specialist.explanation": "Verbeter een bijzondere eigen Pokémon uit je Party. Eén betaalde behandeling per zeven dagen; de oorspronkelijke nature blijft behouden.",
+  "ui.nature_specialist.explanation": "Verbeter een bijzondere Party-Pokémon; de oorspronkelijke nature blijft behouden.",
   "ui.nature_specialist.no_pokemon": "Je Party is leeg. Gebruik eerst de PC hiernaast.",
   "ui.nature_specialist.preview": "Stats vergelijken",
   "ui.nature_specialist.confirm": "Behandeling bevestigen",
@@ -7264,7 +7264,7 @@
   "ui.nature_specialist.stat_comparison": "STATVERGELIJKING",
   "ui.nature_specialist.stat": "Stat",
   "ui.nature_specialist.before": "Huidig",
-  "ui.nature_specialist.after": "Na behandeling",
+  "ui.nature_specialist.after": "Na",
   "ui.nature_specialist.difference": "Verschil",
   "ui.nature_specialist.price_label": "BEHANDELPRIJS",
   "ui.nature_specialist.wallet_label": "Portemonnee",
@@ -7288,5 +7288,8 @@
   "ui.nature_specialist.reason.rental_set_locked": "Deze huurset kan niet worden gewijzigd",
   "ui.nature_specialist.reason.pokemon_stored_in_guild_bank": "Opgeslagen in de Guild Bank",
   "ui.nature_specialist.reason.guild_bank_pokemon_borrowed": "Geleend uit de Guild Bank",
-  "ui.nature_specialist.reason.pokemon_holder_changed": "Momenteel in bezit van een andere speler"
+  "ui.nature_specialist.reason.pokemon_holder_changed": "Momenteel in bezit van een andere speler",
+  "ui.nature_specialist.choose_different": "Kies een andere nature om de stats te vergelijken.",
+  "ui.nature_specialist.iv_details": "IV-details tonen of verbergen",
+  "ui.nature_specialist.party_count": "Geschikt: {eligible}/{total}"
 }

@@ -27,7 +27,6 @@ const RED := Color("f18a97")
 const MINT := preload("res://assets/items/icons/ADAMANTMINT.png")
 
 var title_label: Label
-var explanation_label: Label
 var section_labels: Dictionary = {}
 var pokemon_image: TextureRect
 var pokemon_name: Label
@@ -42,11 +41,13 @@ var cached_state: Dictionary = {}
 var party_hint: Label
 var content_scroll: ScrollContainer
 var stats_panel: PanelContainer
+var iv_toggle: Button
+var action_buttons: BoxContainer
 
 func _ready() -> void:
-	add_theme_stylebox_override("panel", _box(Color("07121ffb"), Color("395b70"), 14, 20))
+	add_theme_stylebox_override("panel", _box(Color("07121ffb"), Color("395b70"), 14, 14))
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 10)
+	layout.add_theme_constant_override("separation", 8)
 	add_child(layout)
 	var header := HBoxContainer.new()
 	header.add_theme_constant_override("separation", 12)
@@ -56,7 +57,7 @@ func _ready() -> void:
 	header.add_child(badge)
 	var mint := TextureRect.new()
 	mint.texture = MINT
-	mint.custom_minimum_size = Vector2(36,36)
+	mint.custom_minimum_size = Vector2(24,24)
 	mint.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	mint.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	mint.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -64,15 +65,13 @@ func _ready() -> void:
 	var heading := VBoxContainer.new()
 	heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(heading)
-	title_label = _label("", TEXT, 23)
+	title_label = _label("", TEXT, 21)
 	heading.add_child(title_label)
 	var subtitle := _section("daycare", ACCENT)
 	heading.add_child(subtitle)
 	close_button = _button("×", close_specialist)
 	close_button.custom_minimum_size = Vector2(40,40)
 	header.add_child(close_button)
-	explanation_label = _label("", MUTED, 13)
-	layout.add_child(explanation_label)
 	var scroll := ScrollContainer.new()
 	content_scroll = scroll
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -86,11 +85,15 @@ func _ready() -> void:
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("separation", 6)
 	scroll.add_child(content)
-	content.add_child(_section("pokemon_label"))
+	var party_heading := HBoxContainer.new()
+	content.add_child(party_heading)
+	party_heading.add_child(_section("pokemon_label"))
+	party_hint = _label("", MUTED, 12)
+	party_hint.size_flags_horizontal = Control.SIZE_SHRINK_END
+	party_hint.autowrap_mode = TextServer.AUTOWRAP_OFF
+	party_heading.add_child(party_hint)
 	pokemon_select = _select(_selection_changed)
 	content.add_child(pokemon_select)
-	party_hint = _label("", MUTED, 12)
-	content.add_child(party_hint)
 	var card := PanelContainer.new()
 	card.add_theme_stylebox_override("panel", _box(Color("0c1e2d"), Color("26465b"), 10, 10))
 	content.add_child(card)
@@ -101,20 +104,30 @@ func _ready() -> void:
 	pokemon_row.add_theme_constant_override("separation", 12)
 	card_content.add_child(pokemon_row)
 	pokemon_image = TextureRect.new()
-	pokemon_image.custom_minimum_size = Vector2(64,64)
+	pokemon_image.custom_minimum_size = Vector2(48,48)
 	pokemon_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pokemon_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	pokemon_row.add_child(pokemon_image)
 	var identity := VBoxContainer.new()
 	identity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	pokemon_row.add_child(identity)
-	pokemon_name = _label("", TEXT, 19)
+	pokemon_name = _label("", TEXT, 17)
 	identity.add_child(pokemon_name)
+	iv_toggle = _button("IVs", Callable())
+	iv_toggle.toggle_mode = true
+	iv_toggle.custom_minimum_size.x = 44
+	iv_toggle.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	iv_toggle.add_theme_font_size_override("font_size", 12)
+	iv_toggle.add_theme_color_override("font_color", CYAN)
+	pokemon_row.add_child(iv_toggle)
 	pokemon_info = _label("", MUTED, 12)
+	pokemon_info.visible = false # Slot/level are already shown in the selector.
 	identity.add_child(pokemon_info)
 	nature_info = _label("", CYAN, 13)
 	identity.add_child(nature_info)
 	var iv_row := HBoxContainer.new()
+	iv_row.visible = false
+	iv_toggle.toggled.connect(func(expanded: bool): iv_row.visible = expanded)
 	iv_row.add_theme_constant_override("separation", 6)
 	card_content.add_child(iv_row)
 	var iv_caption := _label("IVs", MUTED, 12)
@@ -138,24 +151,26 @@ func _ready() -> void:
 	stats_stack.add_theme_constant_override("separation", 7)
 	stats_panel.add_child(stats_stack)
 	var grid := GridContainer.new()
-	grid.columns = 4
-	grid.add_theme_constant_override("h_separation", 16)
+	grid.columns = 7
+	grid.add_theme_constant_override("h_separation", 4)
 	grid.add_theme_constant_override("v_separation", 3)
 	stats_stack.add_child(grid)
-	for key: String in ["stat", "before", "after", "difference"]:
-		var label := _section(key, MUTED)
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if key == "stat" else HORIZONTAL_ALIGNMENT_RIGHT
-		grid.add_child(label)
+	grid.add_child(_section("stat", MUTED))
 	for stat: String in STATS:
-		var name_label := _label(stat.to_upper(), TEXT, 13)
+		var name_label := _label(stat.to_upper(), CYAN, 12)
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		name_label.custom_minimum_size.x = 24
 		grid.add_child(name_label)
-		var cells: Array[Label] = []
-		for _column in range(3):
-			var value := _label("—", MUTED, 14)
+		stat_values[stat] = []
+	for column in range(3):
+		var caption := _section(["before", "after", "difference"][column], MUTED)
+		caption.custom_minimum_size.x = 76
+		grid.add_child(caption)
+		for stat: String in STATS:
+			var value := _label("—", MUTED, 13)
 			value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			grid.add_child(value)
-			cells.append(value)
-		stat_values[stat] = cells
+			stat_values[stat].append(value)
 	quote_hint = _label("", MUTED, 12)
 	stats_stack.add_child(quote_hint)
 	var footer := HBoxContainer.new()
@@ -174,7 +189,8 @@ func _ready() -> void:
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	status_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	footer.add_child(status_label)
-	var buttons := HBoxContainer.new()
+	var buttons := BoxContainer.new()
+	action_buttons = buttons
 	buttons.add_theme_constant_override("separation", 10)
 	layout.add_child(buttons)
 	preview_button = _button("", _preview)
@@ -194,7 +210,8 @@ func _ready() -> void:
 
 func _fit() -> void:
 	var available := get_viewport_rect().size
-	var target := Vector2(minf(720, available.x-24), minf(840, available.y-24))
+	action_buttons.vertical = available.x < 480
+	var target := Vector2(minf(700, available.x-24), minf(640, available.y-24))
 	custom_minimum_size = Vector2.ZERO
 	size = target
 	position = (available-target)/2.0
@@ -254,7 +271,8 @@ func _button(text: String, action: Callable, primary := false) -> Button:
 			background = Color("101e29")
 			border = Color("203542")
 		button.add_theme_stylebox_override(state, _box(background,border,8,10))
-	button.pressed.connect(action)
+	if action.is_valid():
+		button.pressed.connect(action)
 	return button
 
 func _select(action: Callable) -> OptionButton:
@@ -285,10 +303,11 @@ func _nature(value: Variant) -> String:
 
 func _localize() -> void:
 	title_label.text = _t("title")
-	explanation_label.text = _t("explanation")
+	title_label.tooltip_text = _t("explanation")
 	for key: String in section_labels:
 		section_labels[key].text = _t(key)
 	close_button.tooltip_text = LocalizationManager.text("common.close")
+	iv_toggle.tooltip_text = _t("iv_details")
 	preview_button.text = _t("preview")
 	confirm_button.text = _t("confirm")
 	quote_hint.text = _t("comparison_hint")
@@ -326,6 +345,8 @@ func _set_busy(value: bool) -> void:
 	nature_select.disabled = value or not eligible or not NatureSpecialistService.pending_request.is_empty()
 	close_button.disabled = value
 	preview_button.disabled = value or cooldown or not eligible or not NatureSpecialistService.pending_request.is_empty()
+	if not _has_new_effect():
+		preview_button.disabled = true
 	confirm_button.disabled = value or ((quote.is_empty() or not eligible) and NatureSpecialistService.pending_request.is_empty())
 	confirm_button.text = _t("retry") if not NatureSpecialistService.pending_request.is_empty() else _t("confirm")
 
@@ -380,7 +401,8 @@ func _apply_state(data: Dictionary) -> void:
 		pokemon_select.add_item(_t("no_pokemon"))
 	else:
 		pokemon_select.select(preferred if preferred >= 0 else (first_eligible if first_eligible >= 0 else 0))
-	party_hint.text = _t("party_summary",{"eligible":eligible_count,"total":entries.size()})
+	party_hint.text = _t("party_count",{"eligible":eligible_count,"total":entries.size()})
+	party_hint.tooltip_text = _t("party_summary",{"eligible":eligible_count,"total":entries.size()})
 	party_hint.visible = not entries.is_empty()
 	nature_select.clear()
 	for nature: Dictionary in data.get("natures", []):
@@ -408,6 +430,13 @@ func _apply_state(data: Dictionary) -> void:
 func _entry_allowed(entry: Dictionary) -> bool:
 	return entry.get("location",{}).get("type") == "party" and bool(entry.get("eligible",true))
 
+func _has_new_effect() -> bool:
+	if pokemon_select.selected < 0 or pokemon_select.selected >= entries.size() or nature_select.selected < 0:
+		return false
+	var pokemon: Dictionary = entries[pokemon_select.selected].get("pokemon", {})
+	var current := str(pokemon.get("effectiveNature",pokemon.get("nature",""))).to_lower()
+	return str(nature_select.get_item_metadata(nature_select.selected)).to_lower() != current
+
 func _blocked_reason(entry: Dictionary) -> String:
 	var key := "ui.nature_specialist.reason." + str(entry.get("blockedReason","nature_unavailable"))
 	return LocalizationManager.text(key) if LocalizationManager.has_key(key) else _t("reason.nature_unavailable")
@@ -421,6 +450,7 @@ func _selection_changed(_index: int) -> void:
 		pokemon_name.text = str(p.get("nickname")) if p.get("nickname") is String and not str(p.get("nickname")).is_empty() else str(p.get("species", "Pokemon"))
 		pokemon_name.text += " ★" if bool(p.get("shiny",false)) else ""
 		pokemon_info.text = _t("party_slot",{"slot":int(entry["location"]["partySlot"])+1}) + " · Lv.%d · #%d" % [int(p.get("level",1)),int(p.get("ownedPokemonId",0))]
+		pokemon_name.tooltip_text = pokemon_info.text
 		pokemon_image.texture = PokemonAssets.load_home_sprite(str(p.get("speciesId",p.get("species",""))),bool(p.get("shiny",false)))
 		nature_info.text = _t("current", {"original":_nature(p.get("nature","Hardy")),"effective":_nature(p.get("effectiveNature",p.get("nature","Hardy")))})
 		price_label.text = _money(entry["price"]) + " ₽" if entry.get("price") != null else "—"
@@ -433,6 +463,11 @@ func _selection_changed(_index: int) -> void:
 			quote_hint.text = _blocked_reason(entry)
 			if not cooldown:
 				status_label.text = _blocked_reason(entry)
+		else:
+			if not _has_new_effect():
+				quote_hint.text = _t("choose_different")
+			if not cooldown:
+				status_label.text = _t("ready")
 	else:
 		pokemon_name.text = _t("no_pokemon")
 		pokemon_info.text = ""
@@ -445,7 +480,7 @@ func _selection_changed(_index: int) -> void:
 	_set_busy(busy)
 
 func _preview() -> void:
-	if busy or entries.is_empty() or not _entry_allowed(entries[pokemon_select.selected]):
+	if busy or not _has_new_effect() or not _entry_allowed(entries[pokemon_select.selected]):
 		return
 	_set_busy(true)
 	var p: Dictionary = entries[pokemon_select.selected].get("pokemon", {})
