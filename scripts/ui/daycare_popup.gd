@@ -39,10 +39,21 @@ var notice_label: Label
 var quote_card: PanelContainer
 var help_label: Label
 var state_loaded := false
-var quote_full_text := ""
+var quote_price: Label
+var quote_duration: Label
+var quote_heading: Label
 
 func _t(key: String, values: Dictionary = {}) -> String:
 	return LocalizationManager.text("ui.daycare." + key, values)
+
+func _number(value: Variant) -> String:
+	var digits := str(int(value))
+	var separator := "." if LocalizationManager.current_locale in ["nl", "pt_BR"] else ","
+	var result := ""
+	while digits.length() > 3:
+		result = separator + digits.right(3) + result
+		digits = digits.left(digits.length() - 3)
+	return digits + result
 
 func _label(text_value: String, parent: Node) -> Label:
 	var label := Label.new()
@@ -242,8 +253,27 @@ func _ready() -> void:
 	quote_card = quote_content.get_parent() as PanelContainer
 	quote_card.hide()
 	var quote_title := _label(_t("quote_title"), quote_content)
+	quote_heading = quote_title
 	quote_title.add_theme_color_override("font_color", CYAN)
+	var metrics := HBoxContainer.new()
+	metrics.add_theme_constant_override("separation", 16)
+	quote_content.add_child(metrics)
+	var metric_values: Array[Label] = []
+	for key: String in ["total_cost", "duration"]:
+		var column := VBoxContainer.new()
+		column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		metrics.add_child(column)
+		var caption := _label(_t(key), column)
+		caption.add_theme_color_override("font_color", MUTED)
+		caption.add_theme_font_size_override("font_size", 12)
+		var value := _label("", column)
+		value.add_theme_color_override("font_color", CYAN)
+		value.add_theme_font_size_override("font_size", 20)
+		metric_values.append(value)
+	quote_price = metric_values[0]
+	quote_duration = metric_values[1]
 	quote_label = _label("", quote_content)
+	quote_label.add_theme_font_size_override("font_size", 13)
 	var jobs_scroll := ScrollContainer.new()
 	jobs_scroll.name = _t("in_training")
 	jobs_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -304,15 +334,16 @@ func _queue_fit() -> void:
 
 func _fit_window() -> void:
 	var screen := get_viewport_rect().size
-	var target_height := 360 if not state_loaded or (entries.is_empty() and jobs.is_empty()) else 860
+	var target_height := 360 if not state_loaded or (entries.is_empty() and jobs.is_empty()) else 940
 	size = Vector2(minf(760, screen.x - 32), minf(target_height, screen.y - 32))
 	position = (screen - size) * 0.5
 	if ev_grid != null:
 		ev_grid.columns = 2 if screen.x < 640 else 3
 	if help_label != null:
 		help_label.visible = screen.y >= 480
-	if quote_label != null and not quote.is_empty():
-		quote_label.text = _t("quote_compact", {"price": quote.get("price", 0), "time": _duration(int(quote.get("durationSeconds", 0)))}) if screen.y < 480 else quote_full_text
+	if quote_label != null:
+		quote_label.visible = screen.y >= 480
+		quote_heading.visible = screen.y >= 480
 
 func open_daycare() -> void:
 	visible = true
@@ -364,7 +395,7 @@ func _load_state() -> void:
 
 func _apply_state(data: Dictionary) -> void:
 	state_loaded = true
-	entries = data.get("pokemon", [])
+	entries = data.get("pokemon", []).filter(func(entry: Dictionary) -> bool: return str(entry.get("location", {}).get("type", "")) == "party")
 	jobs = data.get("jobs", [])
 	training_form.visible = not entries.is_empty()
 	training_notice.get_parent().visible = entries.is_empty()
@@ -377,13 +408,13 @@ func _apply_state(data: Dictionary) -> void:
 		var p: Dictionary = entry.get("pokemon", {})
 		var location: Dictionary = entry.get("location", {})
 		var place := _t("party_slot", {"slot": int(location.get("partySlot", 0)) + 1}) if str(location.get("type", "")) == "party" else _t("box_slot", {"box": int(location.get("boxIndex", 0)) + 1, "slot": int(location.get("slotIndex", 0)) + 1})
-		pokemon_select.add_item("%s · Lv.%s · %s" % [_name(p), p.get("level", 1), place])
+		pokemon_select.add_item("%s · Lv.%s · %s" % [_name(p), _number(p.get("level", 1)), place])
 	if entries.is_empty():
 		pokemon_select.add_item(_t("no_pokemon"))
 	_clear_quote()
 	_pokemon_changed(0)
 	_build_jobs()
-	_status(_t("state", {"count": jobs.size(), "money": data.get("money", 0), "cap": daycare_cap}))
+	_status(_t("state", {"count": jobs.size(), "money": _number(data.get("money", 0)), "cap": daycare_cap}))
 	if not DaycareService.pending_request.is_empty():
 		_status(_t("pending"))
 
@@ -410,8 +441,8 @@ func _pokemon_changed(_index: int) -> void:
 		var input := ev_inputs[stat] as SpinBox
 		input.min_value = int(current_evs.get(stat, 0))
 		input.set_value_no_signal(input.min_value)
-		stored_text.append("%s %s" % [stat.to_upper(), stored_evs.get(stat, 0)])
-	current_label.text = _t("current", {"level": level, "experience": p.get("experience", 0), "stored": " · ".join(stored_text)})
+		stored_text.append("%s %s" % [stat.to_upper(), _number(stored_evs.get(stat, 0))])
+	current_label.text = _t("current", {"level": level, "experience": _number(p.get("experience", 0)), "stored": " · ".join(stored_text)})
 	_set_busy(busy)
 
 func _targets_changed(_value: Variant) -> void:
@@ -456,20 +487,42 @@ func _preview() -> void:
 func _show_quote(data: Dictionary) -> void:
 	quote = data
 	quote_card.show()
-	quote_label.text = _t("quote", {"experience": data.get("requiredExperience", 0), "evs": data.get("requiredEvs", 0), "price": data.get("price", 0), "time": _duration(int(data.get("durationSeconds", 0)))})
-	quote_label.text += "\n" + _t("service_times", {"exp": _duration(int(data.get("expDurationSeconds", 0))), "ev": _duration(int(data.get("evDurationSeconds", 0)))})
+	quote_price.text = _number(data.get("price", 0)) + " ₽"
+	quote_duration.text = _duration(int(data.get("durationSeconds", 0)))
+	var lines: Array[String] = []
+	var exp_selected := bool(data.get("expSelected", exp_check.button_pressed))
+	var ev_selected := bool(data.get("evSelected", ev_check.button_pressed))
+	if exp_selected:
+		var current_level := int(entries[pokemon_select.selected].get("pokemon", {}).get("level", 1)) if not entries.is_empty() else 1
+		lines.append(_t("summary_exp", {"start": _number(data.get("startLevel", current_level)), "level": _number(data.get("targetLevel", 1)), "experience": _number(data.get("requiredExperience", 0)), "time": _duration(int(data.get("expDurationSeconds", 0)))}))
+	else:
+		lines.append(_t("summary_no_exp", {"level": _number(data.get("targetLevel", 1))}))
 	var target_evs: Array[String] = []
+	var stored_used := 0
 	for stat: String in STATS:
-		target_evs.append("%s %s" % [stat.to_upper(), data.get("targetEvs", {}).get(stat, 0)])
-	quote_label.text += "\n" + _t("targets", {"level": data.get("targetLevel", 1), "evs": " · ".join(target_evs)})
-	quote_full_text = quote_label.text
+		var target := int(data.get("targetEvs", {}).get(stat, 0))
+		if target > 0:
+			target_evs.append("%s %s" % [stat.to_upper(), _number(target)])
+		stored_used += int(data.get("consumeStoredEvs", {}).get(stat, 0))
+	if ev_selected:
+		lines.append(_t("summary_evs", {"evs": " · ".join(target_evs) if not target_evs.is_empty() else "0"}))
+		if int(data.get("requiredEvs", 0)) == 0 and stored_used == 0:
+			lines.append(_t("summary_ev_reached"))
+		else:
+			lines.append(_t("summary_ev_work", {"new": _number(data.get("requiredEvs", 0)), "stored": _number(stored_used), "time": _duration(int(data.get("evDurationSeconds", 0)))}))
+	else:
+		lines.append(_t("summary_no_evs"))
+	var costs: Dictionary = data.get("priceBreakdown", {})
+	if not costs.is_empty():
+		lines.append(_t("summary_costs", {"start": _number(costs.get("start", 0)), "exp": _number(costs.get("experience", 0)), "ev": _number(costs.get("evs", 0))}))
+	quote_label.text = "\n".join(lines)
 	_fit_window()
 	_status(_t("review"))
 
 func _ask_confirm() -> void:
 	if busy or quote.is_empty():
 		return
-	confirmation.configure(_t("title"), _t("confirmation", {"price": quote.get("price", 0), "time": _duration(int(quote.get("durationSeconds", 0)))}), _t("deposit"), LocalizationManager.text("common.cancel"))
+	confirmation.configure(_t("title"), _t("confirmation", {"price": _number(quote.get("price", 0)), "time": _duration(int(quote.get("durationSeconds", 0)))}), _t("deposit"), LocalizationManager.text("common.cancel"))
 	confirmation.popup_centered()
 
 func _confirm() -> void:
@@ -524,15 +577,15 @@ func _build_jobs() -> void:
 		var card := _card(job_container)
 		var p: Dictionary = job.get("pokemon", {})
 		var plan: Dictionary = job.get("plan", {})
-		var title := _label(_t("job_title", {"place": int(job.get("bed", 0)) + 1, "pokemon": _name(p), "level": plan.get("targetLevel", 1)}), card)
+		var title := _label(_t("job_title", {"place": int(job.get("bed", 0)) + 1, "pokemon": _name(p), "level": _number(plan.get("targetLevel", 1))}), card)
 		title.add_theme_color_override("font_color", CYAN)
 		var goal: Array[String] = []
 		if bool(plan.get("expSelected", false)):
-			goal.append(_t("exp_goal", {"level": plan.get("targetLevel", 1)}))
+			goal.append(_t("exp_goal", {"level": _number(plan.get("targetLevel", 1))}))
 		if bool(plan.get("evSelected", false)):
 			var spread: Array[String] = []
 			for stat: String in STATS:
-				spread.append("%s %s" % [stat.to_upper(), plan.get("targetEvs", {}).get(stat, 0)])
+				spread.append("%s %s" % [stat.to_upper(), _number(plan.get("targetEvs", {}).get(stat, 0))])
 			goal.append("EV: " + " · ".join(spread))
 		var goal_label := _label("\n".join(goal), card)
 		goal_label.add_theme_color_override("font_color", MUTED)
