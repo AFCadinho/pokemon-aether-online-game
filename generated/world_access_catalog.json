@@ -3633,7 +3633,9 @@
 			"locationGroupId": "kanto_route_5",
 			"locationGroupLabel": "Route 5",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://0m06eo20syrv"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/route5/daycare.tscn",
 			"spawnPoints": {
 				"from_route_5": {
@@ -8497,7 +8499,9 @@
 		"kanto_route_5__to_daycare": {
 			"destination": {
 				"mapId": "kanto_route_5_daycare",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://0m06eo20syrv"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/route5/daycare.tscn",
 				"position": {
 					"x": 208.0,
