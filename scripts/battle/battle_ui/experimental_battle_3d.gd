@@ -115,6 +115,8 @@ func reset_user_camera() -> void:
 	user_camera_yaw = camera_yaw_default()
 	user_camera_pitch = camera_pitch_default()
 	user_camera_zoom = camera_zoom_default()
+	if uses_android_camera():
+		camera_phase = 0.0
 
 func _release_forest() -> void:
 	if forest_lease.is_empty():
@@ -2769,20 +2771,31 @@ func _update_camera(delta: float) -> void:
 		return
 	camera.projection = Camera3D.PROJECTION_PERSPECTIVE
 	var all_resting := true
+	var any_actor_shown := false
 	var focus_reframe_safe := true
 	for index in _slot_count():
+		any_actor_shown = any_actor_shown or actor_shown[index]
 		all_resting = all_resting and resting[index] and current_actions[index] in ["idle", "sleep"] and lifecycle[index] in ["idle", "empty", "hidden"]
 		focus_reframe_safe = focus_reframe_safe and (
 			lifecycle[index] in ["empty", "hidden", "fainted"]
 			or (resting[index] and current_actions[index] in ["idle", "sleep"])
 		)
-	if not settings.battle_3d_camera_motion:
+	var idle_motion: bool = settings.android_3d_idle_camera_motion if uses_android_camera() else settings.battle_3d_camera_motion
+	if not idle_motion:
 		camera_phase = 0.0
 		camera.position = _default_camera_home()
 	else:
 		# Small arc, never crosses the combat axis; both actors remain in frame.
 		# Hold framing during actions: existing 2D effects capture screen anchors.
-		if all_resting:
+		var ready_to_drift := all_resting
+		if uses_android_camera():
+			# Start from the chosen opening angle; roster/loading stay still.
+			ready_to_drift = (
+				ready_to_drift and active and any_actor_shown and not preview_enabled
+				and not entry_arena_requested and not arena_preparing and not warming_render
+				and not is_instance_valid(model_downloader) and not _models_pending()
+			)
+		if ready_to_drift:
 			camera_phase += delta * 0.22
 		var origin := ArenaCatalog.battle_origin(arena_id)
 		camera.position = origin + (_default_camera_home() - origin).rotated(Vector3.UP, sin(camera_phase) * 0.10)

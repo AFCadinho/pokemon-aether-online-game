@@ -90,6 +90,7 @@ func _run() -> void:
 	settings.battle_presentation_mode = "3d" # This test process only; never saved.
 	settings.battle_3d_arena = "stadium"
 	settings.battle_3d_camera_motion = false
+	settings.android_3d_idle_camera_motion = false
 	settings.battle_3d_catalog_path = ""
 	settings._manual_model_catalog_this_session = false
 	cache_only = FileAccess.file_exists(CACHE_ONLY_MARKER)

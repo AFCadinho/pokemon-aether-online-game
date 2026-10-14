@@ -1411,6 +1411,7 @@
   "ui.settings.terminology.localized": "Nomes traduzidos",
   "ui.settings.enable_move_animations": "Ativar animações de golpes",
   "ui.settings.android_move_camera": "Enquadramentos 3D durante os golpes",
+  "ui.settings.android_idle_camera": "Movimento suave da câmera 3D",
   "ui.settings.enable_weather_effects": "Ativar efeitos climáticos",
   "ui.settings.enable_terrain_effects": "Ativar efeitos de terreno",
   "ui.settings.display_own_name": "Exibir meu nome",

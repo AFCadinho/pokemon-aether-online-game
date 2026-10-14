@@ -1,5 +1,29 @@
 # Physical Android 3D performance measurements
 
+Android now enables the same gentle idle-camera arc as desktop around its
+approved manual orbit/zoom. Its own `android_3d_idle_camera_motion` preference
+defaults to true for new and existing profiles that lack the key. The localized
+Graphics switch **Gentle 3D camera movement** saves an explicit opt-out separately
+from Android move shots and the desktop motion preference. Disabling the arc
+restores the chosen static view; it does not disable move shots. Android advances
+the arc only while the battle is active with visible, resting actors, after
+entry/model/render preparation. Team Preview, preparation and any actor's action
+hold its phase. It reuses the existing camera update without extra rendering
+passes or scenery scans. Fixed-camera benchmark fixtures explicitly disable the
+new preference so their workload remains reproducible.
+
+USB trial `0.3.109-3d-perf.15` (code 45, source `f915190ab`) passed signed ARM64
+Mobile export and demand-asset checks and was installed over perf.14 on the
+SM-S938B without clearing data. It retains the published asset pin, local v14
+models and disabled move warmup. Focused checks passed for preference migration,
+independent persistent switches, 216 Android framing cases plus idle/pause/reset
+behavior, 108 desktop/Android framing cases, held-model entry, Draco Meteor and
+eleven catalog camera profiles. All four camera-switch translations parse.
+The user confirmed physical idle motion, the Graphics switch and a move in the
+installed build. USB samples recorded changing camera positions at unchanged
+zoom 0.60, yaw -0.235828125 rad and pitch -0.12 rad; the chosen base orbit remains
+fixed while the automatic arc changes the presented pose.
+
 The explicit local USB performance probe's `ANDROID_3D_CAMERA` record now also
 includes the selected orbit yaw/pitch (radians and degrees), actual numeric
 camera pose and an `idle` flag. It emits alongside the existing five-second
