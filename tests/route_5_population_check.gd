@@ -48,6 +48,38 @@ func _run() -> void:
 	_check(route.get_node_or_null("Entities/NPCs/CamperLena") != null, "Camper Lena is present")
 	_check(str(route.get_node("Entities/NPCs/HikerMilo").get("npc_id")) == "kanto_route_5_hiker_milo", "Hiker Milo has a dialogue metadata ID")
 	_check(str(route.get_node("Entities/NPCs/CamperLena").get("npc_id")) == "kanto_route_5_camper_lena", "Camper Lena has a dialogue metadata ID")
+	var dadinho := route.get_node_or_null("Entities/NPCs/Dadinho") as Node2D
+	_check(dadinho != null, "Dadinho waits outside the daycare")
+	if dadinho != null:
+		var cell := collision.local_to_map(dadinho.position)
+		_check(collision.get_cell_source_id(cell) < 0, "Dadinho stands on walkable ground")
+		_check(grass.get_cell_source_id(cell) < 0, "Dadinho stands outside encounter grass")
+		_check(collision.get_cell_source_id(cell + Vector2i.DOWN) < 0, "players can stand facing Dadinho")
+		_check(dadinho.position.distance_to(route.get_node("Spawns/FromDaycare").position) <= 96, "Dadinho is beside the daycare entrance")
+		_check(dadinho.get("mugshot") != null and dadinho.get("npc_sprite_frames") != null, "Dadinho has his portrait and overworld sprite")
+		var hook := dadinho.get_node("StoryHook")
+		_check(str(hook.get("interaction_id")) == "kanto_route_5_dadinho_potential", "Dadinho exposes his server-authorized lesson")
+		_check(str(hook.get("entity_id")) == str(dadinho.get("npc_id")), "the story hook and NPC use the same identity")
+		var story := root.get_node("StoryService")
+		story.call("reset_story")
+		_check(not dadinho.visible, "Dadinho is absent before Misty is defeated")
+		story.call("apply_story", {"revision": 1, "quests": [
+			{"questId": "challenge_cerulean_gym", "status": "completed"},
+			{"questId": "discover_pokemon_potential", "status": "active"},
+		]})
+		_check(dadinho.visible, "Dadinho appears after the Cascade Badge")
+		story.call("apply_story", {"revision": 2, "quests": [
+			{"questId": "challenge_cerulean_gym", "status": "completed"},
+			{"questId": "discover_pokemon_potential", "status": "completed"},
+			{"questId": "board_ss_anne", "status": "active"},
+		]})
+		_check(dadinho.visible, "Dadinho remains available to remind ship-bound players")
+		story.call("apply_story", {"revision": 3, "quests": [
+			{"questId": "challenge_cerulean_gym", "status": "completed"},
+			{"questId": "board_ss_anne", "status": "completed"},
+		]})
+		_check(not dadinho.visible, "Dadinho leaves after the player continues to the S.S. Anne")
+		story.call("reset_story")
 	route.queue_free()
 	await process_frame
 	quit(1 if failed else 0)

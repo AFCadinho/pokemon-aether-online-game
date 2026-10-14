@@ -14,6 +14,10 @@
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker_frames"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon_scene"]
 
+[ext_resource type="SpriteFrames" path="res://assets/npcs/custom/adinho_dad_frames.tres" id="dadinho_frames"]
+[ext_resource type="Texture2D" path="res://assets/sprites/mugshots/dadinho_mugshot.png" id="dadinho_mugshot"]
+[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="dadinho_story_hook"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(128, 16)
 
@@ -335,6 +339,21 @@ z_index = 5
 [node name="Players" type="Node2D" parent="Entities" unique_id=1792456903]
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=180381981]
+
+[node name="Dadinho" parent="Entities/NPCs" instance=ExtResource("dialogue_npc_scene")]
+position = Vector2(592, 1168)
+npc_id = "kanto_route_5_dadinho"
+display_name = "Dadinho"
+npc_sprite_frames = ExtResource("dadinho_frames")
+mugshot = ExtResource("dadinho_mugshot")
+facing_direction = Vector2(0, 1)
+visibility_required_quest_id = "challenge_cerulean_gym"
+visibility_hidden_quest_id = "board_ss_anne"
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/Dadinho"]
+script = ExtResource("dadinho_story_hook")
+interaction_id = "kanto_route_5_dadinho_potential"
+entity_id = "kanto_route_5_dadinho"
 
 [node name="HikerMilo" parent="Entities/NPCs" unique_id=726044363 instance=ExtResource("dialogue_npc_scene")]
 position = Vector2(1008, 720)
