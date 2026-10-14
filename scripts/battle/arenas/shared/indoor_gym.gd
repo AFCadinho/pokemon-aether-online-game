@@ -78,7 +78,8 @@ func hall(parent: Node3D, wall: Material, trim: Material, ceiling: Material) -> 
 		box(shell, trim, Vector3(0, y, -30.35), Vector3(51, 0.35, 0.35))
 		box(shell, trim, Vector3(0, y, 30.35), Vector3(51, 0.35, 0.35))
 	for z in [-24, -12, 0, 12, 24]:
-		box(shell, trim, Vector3(0, 19.3, z), Vector3(51, 0.8, 0.6))
+		# Keep trim attached to the ceiling, clear of the widened 1.60 camera zoom.
+		box(shell, trim, Vector3(0, 19.5, z), Vector3(51, 0.4, 0.6))
 
 func lamp(parent: Node3D, pos: Vector3, yaw: float, metal: Material, glow: Material) -> void:
 	var node := group(parent, "WallLantern", pos)
