@@ -7,7 +7,7 @@ func _run() -> void:
 	stage.camera = Camera3D.new()
 	stage.world.add_child(stage.camera)
 	stage.camera.fov = 48.0
-	stage.user_camera_yaw = 0.4
+	stage.user_camera_yaw = _camera_yaw()
 	stage.user_camera_zoom = _camera_zoom()
 	stage._update_camera(0.0)
 	var overview: Transform3D = stage.camera.transform
@@ -98,3 +98,6 @@ func _set_motion(enabled: bool) -> void:
 
 func _camera_zoom() -> float:
 	return Stage.USER_CAMERA_ZOOM_DEFAULT
+
+func _camera_yaw() -> float:
+	return 0.4

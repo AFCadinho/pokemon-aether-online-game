@@ -92,6 +92,8 @@ const USER_CAMERA_ZOOM_DEFAULT := 0.70
 const USER_CAMERA_YAW_DEFAULT := -0.164250014305115
 const USER_CAMERA_PITCH_DEFAULT := -0.0156436738967895
 const ANDROID_CAMERA_ZOOM_DEFAULT := 0.60
+const ANDROID_CAMERA_YAW_DEFAULT := -0.235828125
+const ANDROID_CAMERA_PITCH_DEFAULT := -0.12
 const ENTRY_OVERVIEW_DISTANCE_FACTOR := 4.0 / 3.0
 
 func uses_android_camera() -> bool:
@@ -104,10 +106,10 @@ func camera_zoom_default() -> float:
 	return ANDROID_CAMERA_ZOOM_DEFAULT if uses_android_camera() else USER_CAMERA_ZOOM_DEFAULT
 
 func camera_yaw_default() -> float:
-	return 0.0 if uses_android_camera() else USER_CAMERA_YAW_DEFAULT
+	return ANDROID_CAMERA_YAW_DEFAULT if uses_android_camera() else USER_CAMERA_YAW_DEFAULT
 
 func camera_pitch_default() -> float:
-	return 0.0 if uses_android_camera() else USER_CAMERA_PITCH_DEFAULT
+	return ANDROID_CAMERA_PITCH_DEFAULT if uses_android_camera() else USER_CAMERA_PITCH_DEFAULT
 
 func reset_user_camera() -> void:
 	user_camera_yaw = camera_yaw_default()
