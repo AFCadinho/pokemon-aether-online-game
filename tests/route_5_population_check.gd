@@ -81,13 +81,18 @@ func _run() -> void:
 			{"questId": "discover_pokemon_potential", "questType": "main", "status": "completed", "steps": [{"stepId": "meet_dadinho", "status": "completed"}]},
 			{"questId": "board_ss_anne", "status": "active"},
 		]})
-		_check(dadinho.visible, "Dadinho remains available to remind ship-bound players")
+		_check(dadinho.visible, "Dadinho remains until the current map visit ends after his lesson")
 		_check(marker != null and not marker.visible, "Dadinho hides the quest icon after completing his lesson")
-		story.call("apply_story", {"revision": 3, "quests": [
-			{"questId": "challenge_cerulean_gym", "status": "completed"},
-			{"questId": "board_ss_anne", "status": "completed"},
-		]})
-		_check(not dadinho.visible, "Dadinho leaves after the player continues to the S.S. Anne")
+		var refreshed_route := (load("res://scenes/overworld/kanto/routes/kanto_route_5.tscn") as PackedScene).instantiate()
+		root.add_child(refreshed_route)
+		await process_frame
+		var refreshed_dadinho := refreshed_route.get_node("Entities/NPCs/Dadinho") as Node2D
+		_check(not refreshed_dadinho.visible, "Dadinho is absent after reloading Route 5 with his lesson completed")
+		var refreshed_area := refreshed_dadinho.get_node("InteractionArea") as Area2D
+		_check(not refreshed_area.monitoring and not refreshed_area.monitorable, "departed Dadinho no longer accepts interactions")
+		_check(not bool(refreshed_dadinho.call("blocks_world_position", refreshed_dadinho.global_position)), "departed Dadinho no longer blocks his tile")
+		refreshed_route.queue_free()
+		await process_frame
 		story.call("reset_story")
 	route.queue_free()
 	await process_frame

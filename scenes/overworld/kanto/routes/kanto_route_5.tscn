@@ -349,7 +349,8 @@ npc_sprite_frames = ExtResource("dadinho_frames")
 mugshot = ExtResource("dadinho_mugshot")
 facing_direction = Vector2(0, 1)
 visibility_required_quest_id = "challenge_cerulean_gym"
-visibility_hidden_quest_id = "board_ss_anne"
+visibility_hidden_quest_id = "discover_pokemon_potential"
+defer_story_hide_until_reload = true
 
 [node name="StoryHook" type="Node" parent="Entities/NPCs/Dadinho"]
 script = ExtResource("dadinho_story_hook")
