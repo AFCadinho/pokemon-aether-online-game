@@ -13,6 +13,7 @@ var context_handler: Callable
 var tap_handler: Callable
 var horizontal_swipe_handler: Callable
 var horizontal_swipe_distance := 24.0
+var horizontal_swipe_edge_distance := 8.0
 var swipe_moved := false
 var pending := false
 var held := false
@@ -173,7 +174,11 @@ func _input(event: InputEvent) -> void:
 			var displacement: Vector2 = event.position - start_position
 			if absf(displacement.x) > MOVE_TOLERANCE and absf(displacement.x) > absf(displacement.y):
 				swipe_moved = true
-				if absf(displacement.x) >= horizontal_swipe_distance:
+				var required_distance := horizontal_swipe_distance
+				if displacement.x > 0.0:
+					# A hotbar at the right edge leaves less travel for a back swipe.
+					required_distance = minf(required_distance, maxf(horizontal_swipe_edge_distance, get_viewport().get_visible_rect().end.x - start_position.x - 1.0))
+				if absf(displacement.x) >= required_distance:
 					pending = false
 					cancelled = true
 					horizontal_swipe_handler.call(1 if displacement.x < 0.0 else -1)
