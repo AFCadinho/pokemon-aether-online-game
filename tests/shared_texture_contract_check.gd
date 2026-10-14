@@ -58,6 +58,7 @@ func _run() -> void:
 	assert(Pilot.asset_for("asset:"+pool.asset_id,pool.sha256).is_empty())
 	assert(not Release.descriptor_error(d).is_empty())
 	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST","1")
+	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION","v15")
 	assert(Index.validate(Pilot.catalog()).is_empty(), Index.validate(Pilot.catalog()))
 	assert(Pilot.production_revision()=="v15" and Pilot.release()==Pilot.PRODUCTION.data)
 	print("SHARED_TEXTURE_CONTRACT_OK tamper_cases=8 production_v15_unchanged=true")

@@ -18,7 +18,7 @@ func descriptor(pin: Dictionary) -> Dictionary:
 
 func _run() -> void:
 	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_TEST", "1")
-	OS.unset_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION")
+	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION", "v15")
 	assert(Pilot.release() == Current.data)
 	assert(Pilot.catalog().assets.size() == 1420)
 	assert(FileAccess.get_sha256(Pilot.PRODUCTION_PATH) == Current.data.index.sha256)
@@ -35,7 +35,7 @@ func _run() -> void:
 	# Exercise revision changes within one process: neither cache may mask a pin.
 	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION", "v14")
 	assert(Pilot.release() == Previous.data and Pilot.catalog() == previous)
-	OS.unset_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION")
+	OS.set_environment("POKEAETHER_SHARED_MODEL_PRODUCTION_REVISION", "v15")
 	assert(Pilot.release() == Current.data and Pilot.catalog().catalog_revision == Current.data.revision)
 	print("LAUNCHER_V15_BINDING_OK current=1420 previous=1420 legacy_pin=true tamper_rejected=true")
 	quit()

@@ -399,6 +399,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/shared_geometry_production_binding_check.gd",
 	"res://tests/approved_3d_release_v14_check.gd",
 	"res://tests/approved_3d_release_v15_check.gd",
+	"res://tests/approved_3d_release_v16_check.gd",
 	"res://tests/on_demand_3d_http_error_check.gd",
 	"res://tests/full_3d_catalog_size_check.gd",
 	"res://tests/trainer_entry_before_response_check.gd",

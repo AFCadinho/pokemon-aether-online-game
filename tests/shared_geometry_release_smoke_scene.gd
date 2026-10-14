@@ -1,19 +1,19 @@
 extends Node
 const Pilot = preload("res://scripts/services/model_pair_pilot.gd")
 const Service = preload("res://scripts/services/on_demand_3d_bundle_service.gd")
-const Pin = preload("res://data/approved_3d_release_v15.json")
+const Pin = preload("res://data/approved_3d_release_v16.json")
 
 func _ready() -> void:
 	if OS.is_debug_build() or not Pilot.production_enabled():
 		_fail("Expected a desktop release export")
 		return
-	if FileAccess.get_sha256(Pilot.PRODUCTION_PATH) != Pin.data.index.sha256:
+	if FileAccess.get_sha256(Pilot.NEW_PRODUCTION_PATH) != Pin.data.index.sha256:
 		_fail("Production index differs from its compiled pin")
 		return
 	var catalog := Pilot.catalog()
 	var service := Service.new()
 	var selected := service._selected_release()
-	if catalog.get("catalog_revision") != Pin.data.revision or catalog.assets.size() != 1420 or selected != Pin.data:
+	if catalog.get("catalog_revision") != Pin.data.revision or catalog.assets.size() != 1421 or selected != Pin.data:
 		_fail("Production geometry release binding is invalid")
 		return
 	var packs := 0
