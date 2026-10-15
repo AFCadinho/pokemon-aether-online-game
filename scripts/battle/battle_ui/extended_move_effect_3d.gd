@@ -59,6 +59,11 @@ func _prepare() -> void:
 	box.size = Vector3.ONE
 	rock.size = Vector3.ONE
 	tooth.radial_segments = 8
+	if key == "rockslide":
+		# Its dedicated renderer never uses the generic wave/funnel/materials.
+		rock_slide = RockSlide.new()
+		prepared = true
+		return
 	forms = Cinema.new(Color(str(recipe.color)),str(recipe.type))
 	solid = forms.skin
 	accent = _material(Color(str(recipe.color)).lerp(Color.WHITE,.65),.8)
@@ -68,7 +73,6 @@ func _prepare() -> void:
 	funnel = Forms.swept_mesh(true)
 	prepared = true
 	if key == "fierywrath": wrath = FieryWrath.new()
-	if key == "rockslide": rock_slide = RockSlide.new()
 	if key in RockGround.KEYS: rock_ground = RockGround.new()
 
 func _geometry_scale() -> float:
@@ -99,16 +103,16 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 	after = (elapsed-impact)/maxf(duration-impact,.01)
 	var t := elapsed/duration
 	envelope = smoothstep(0,.08,t)*(1.-smoothstep(.78,1.,t))
+	impact_drawn = hit and bool(recipe.damaging) and after>=0
+	if rock_slide != null:
+		rock_slide.draw(self)
+		return true
 	solid.set_shader_parameter("seconds",t*float(recipe.duration_seconds))
 	edge.albedo_color.a = envelope*.75
 	accent.albedo_color.a = envelope*.8
 	forms.sample(t*float(recipe.duration_seconds),envelope)
-	impact_drawn = hit and bool(recipe.damaging) and after>=0
 	if wrath != null:
 		wrath.draw(self)
-		return true
-	if rock_slide != null:
-		rock_slide.draw(self)
 		return true
 	if rock_ground != null:
 		rock_ground.draw(self)

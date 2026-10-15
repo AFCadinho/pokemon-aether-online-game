@@ -30,29 +30,7 @@ func _init() -> void:
 	# Arena camera updates at priority 10; billboards must sample its final pose.
 	process_priority = 11
 	quad.size = Vector2.ONE
-	sprite_shader = Shader.new()
-	sprite_shader.code = """
-shader_type spatial;
-render_mode unshaded, cull_disabled, blend_add, depth_draw_never;
-uniform sampler2D source_mask : filter_linear, repeat_disable;
-uniform vec3 tint = vec3(1.0);
-uniform float frames = 1.0;
-uniform float frame_index = 0.0;
-uniform float opacity = 1.0;
-uniform bool source_alpha = false;
-void fragment() {
-	// Blend adjacent source frames and keep filtering inside the atlas cell.
-	vec2 texel = 0.5 / vec2(textureSize(source_mask, 0));
-	vec2 local_uv = clamp(UV, texel * vec2(frames, 1.0), vec2(1.0) - texel * vec2(frames, 1.0));
-	float first = floor(frame_index);
-	float next = min(first + 1.0, frames - 1.0);
-	vec4 a = texture(source_mask, vec2((local_uv.x + first) / frames, local_uv.y));
-	vec4 b = texture(source_mask, vec2((local_uv.x + next) / frames, local_uv.y));
-	vec4 sample_color = mix(a, b, fract(frame_index));
-	ALBEDO = tint * (source_alpha ? sample_color.r : 1.0);
-	ALPHA = (source_alpha ? sample_color.a : sample_color.r) * opacity;
-}
-"""
+	sprite_shader = preload("res://scripts/battle/battle_ui/source_move_sprite.gdshader")
 
 func _sprite_values(id: String) -> Array:
 	return SPRITES[id]
@@ -146,19 +124,7 @@ func _water_stream(from: Vector3, to: Vector3, phase: float, opacity: float) -> 
 
 func _water_beam(from: Vector3, to: Vector3, opacity: float) -> void:
 	if beam_material == null:
-		var shader := Shader.new()
-		shader.code = """
-shader_type spatial;
-render_mode unshaded, cull_disabled, blend_mix, depth_draw_never;
-uniform sampler2D flow_mask : filter_linear, repeat_enable;
-uniform float seconds = 0.0;
-uniform float opacity = 1.0;
-void fragment() {
-	float noise = texture(flow_mask, vec2(UV.x * 1.5, UV.y * 3.0 + seconds * 3.5)).r;
-	ALBEDO = mix(vec3(0.06, 0.30, 0.85), vec3(0.70, 0.92, 1.0), smoothstep(0.3, 0.9, noise));
-	ALPHA = (0.65 + noise * 0.25) * opacity;
-}
-"""
+		var shader := preload("res://scripts/battle/battle_ui/source_water_beam.gdshader")
 		beam_material = ShaderMaterial.new()
 		beam_material.shader = shader
 		beam_material.set_shader_parameter("flow_mask", NOISE)

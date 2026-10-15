@@ -3,6 +3,7 @@ extends RefCounted
 const OFFSETS := [Vector2.ZERO, Vector2(-.95,.4), Vector2(.9,-.45), Vector2(-.55,-.85), Vector2(.6,.85)]
 const FALL_SPREAD := 1.65
 const IMPACT_SPREAD := 1.35
+static var shared_boulder: ArrayMesh
 var boulder: ArrayMesh
 var stone: ShaderMaterial
 var dust: ShaderMaterial
@@ -10,22 +11,10 @@ var crack: StandardMaterial3D
 var impact_start_index := 0
 
 func _init() -> void:
-	boulder = _boulder_mesh()
-	var shader := Shader.new()
-	shader.code = """
-shader_type spatial;
-render_mode cull_disabled, depth_prepass_alpha;
-uniform float opacity = 1.;
-varying vec3 local_point;
-void vertex() { local_point = VERTEX; }
-void fragment() {
- float layers = .5+.5*sin(local_point.y*19.+sin(local_point.x*8.+local_point.z*5.)*1.7);
- float grain = .5+.5*sin(dot(local_point,vec3(37.,53.,29.)));
- ALBEDO = mix(vec3(.19,.14,.095),vec3(.48,.38,.25),.3+layers*.45+grain*.12);
- ROUGHNESS = .96;
- ALPHA = opacity;
-}
-"""
+	# Only immutable geometry is retained; fades and clocks stay per cast.
+	if shared_boulder == null: shared_boulder = _boulder_mesh()
+	boulder = shared_boulder
+	var shader := preload("res://scripts/battle/battle_ui/rock_slide_stone.gdshader")
 	stone = ShaderMaterial.new()
 	stone.shader = shader
 	dust = preload("res://scripts/battle/battle_ui/move_cinematic_forms_3d.gd").material(Color("b39a78"),"rock",1)
