@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://bd42bc8qq21tc"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_1_0.texture.res" id="1_3xmwh"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_1025_0.texture.res" id="2_n18kf"]
