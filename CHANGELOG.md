@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Saffron City’s visual from its updated Tiled source.
+
 - Add a one-time TM Earthquake overworld pickup beside the Route 5 Daycare sign.
 
 - Add Celadon City with its Route 7 connection, eight overworld residents and ten ambient Pokémon with localized dialogue.
