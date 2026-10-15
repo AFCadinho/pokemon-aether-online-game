@@ -17,7 +17,6 @@ import subprocess
 import threading
 import time
 from urllib.parse import urlsplit
-from urllib.request import urlopen
 import uuid
 import zipfile
 
@@ -107,13 +106,12 @@ def prepare_assets(directory):
                 raise ValueError("Checked-in index does not match its compiled pin")
             partial = destination.with_suffix(destination.suffix + ".partial")
             print("Fetch pinned public fixture", Path(key).name, flush=True)
-            with urlopen("https://updates.pokeaether.com/" + key, timeout=90) as response, partial.open("wb") as output:
-                total = 0
-                while chunk := response.read(1024 * 1024):
-                    total += len(chunk)
-                    if total > size:
-                        raise ValueError("Fixture exceeds its compiled size")
-                    output.write(chunk)
+            # Use the same public endpoint through curl's standard TLS client;
+            # the CDN rejects Python-urllib's TLS/user-agent profile on some hosts.
+            subprocess.run(["curl", "--fail", "--location", "--silent", "--show-error",
+                            "--max-time", "180", "--max-filesize", str(size), "--output", str(partial),
+                            "https://updates.pokeaether.com/" + key], check=True)
+            total = partial.stat().st_size
             with partial.open("rb") as stream:
                 if total != size or hashlib.file_digest(stream, "sha256").hexdigest() != digest:
                     raise ValueError("Fixture failed exact size/hash verification")
