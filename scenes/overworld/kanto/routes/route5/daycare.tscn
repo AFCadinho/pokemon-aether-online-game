@@ -15,9 +15,6 @@
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
 
-[sub_resource type="RectangleShape2D" id="shape_wing_counter"]
-size = Vector2(96, 128)
-
 [sub_resource type="TileSetAtlasSource" id="collision_source"]
 texture = ExtResource("5_collision")
 texture_region_size = Vector2i(32, 32)
@@ -88,13 +85,6 @@ npc_definition_id = "kanto_route_5_wing_merchant"
 display_name = ""
 facing_direction = Vector2(0, 1)
 localized_display_name_key = "ui.aethering.merchant"
-manual_interaction_reach_tiles = 2
-
-[node name="InteractionArea" parent="Entities/NPCs/WingMerchant" index="1"]
-position = Vector2(0, 32)
-
-[node name="CollisionShape2D" parent="Entities/NPCs/WingMerchant/InteractionArea" index="0"]
-shape = SubResource("shape_wing_counter")
 
 [node name="NatureSpecialist" parent="Entities/NPCs" unique_id=435521811 instance=ExtResource("nature_specialist")]
 position = Vector2(528, 400)
