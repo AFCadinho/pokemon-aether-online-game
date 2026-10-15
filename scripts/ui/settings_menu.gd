@@ -34,6 +34,9 @@ const LOGOUT_CONFIRM_Z_INDEX := 2200
 @onready var battle_animations_check_box: CheckBox = $MarginContainer/VBoxContainer/BattleAnimationsCheckBox
 @onready var weather_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/WeatherEffectsCheckBox
 @onready var terrain_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/TerrainEffectsCheckBox
+var android_quality_options: OptionButton
+var android_fps_options: OptionButton
+var android_performance_toggle: CheckBox
 var performance_details_check_box: CheckBox
 var performance_check_box: CheckBox
 var display_own_name_check_box: CheckBox
@@ -147,6 +150,7 @@ var account_dialog_status_is_error := false
 
 
 func _ready() -> void:
+	add_to_group("performance_menu")
 	custom_minimum_size = MINIMUM_MENU_SIZE
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	_setup_tabs()
@@ -321,6 +325,11 @@ func _input(event: InputEvent) -> void:
 
 func _apply_settings_to_controls() -> void:
 	loading_controls = true
+	if android_quality_options != null:
+		android_quality_options.select(SettingsManager.AndroidQuality.PRESETS.find(SettingsManager.android_quality_preset))
+		android_fps_options.select(0 if SettingsManager.android_fps_limit == 30 else 1)
+	if android_performance_toggle != null:
+		android_performance_toggle.set_pressed_no_signal(SettingsManager.share_android_performance)
 	if battle_presentation_options != null:
 		for index in battle_presentation_options.item_count:
 			if battle_presentation_options.get_item_metadata(index) == SettingsManager.battle_presentation_mode:
@@ -447,6 +456,8 @@ func _setup_tabs() -> void:
 		settings_layout.add_child(compact_navigation)
 		settings_layout.move_child(compact_navigation, 1)
 		custom_minimum_size = Vector2(540, 500)
+	if OS.has_feature("android"):
+		_create_android_quality_controls(graphics_tab)
 	_create_world_pixel_scale_control()
 	_create_ui_scale_control()
 	_create_cursor_scale_control()
@@ -1328,6 +1339,8 @@ func _build_about_tab(about_tab: VBoxContainer) -> void:
 
 
 func _build_support_tab(support_tab: VBoxContainer) -> void:
+	if OS.has_feature("android"):
+		_create_android_performance_controls(support_tab)
 	var privacy_note := Label.new()
 	_set_localized_text(privacy_note, "ui.settings.support.privacy")
 	privacy_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1671,6 +1684,9 @@ func _refresh_tab_titles() -> void:
 
 
 func _refresh_localized_content() -> void:
+	if android_quality_options != null:
+		for index in android_quality_options.item_count:
+			android_quality_options.set_item_text(index, LocalizationManager.text("ui.settings.android.quality." + str(android_quality_options.get_item_metadata(index))))
 	LocalizationManager.localize_tree(self)
 	if battle_presentation_options != null and SettingsManager.is_android_3d_experimental():
 		for index in battle_presentation_options.item_count:
@@ -3138,3 +3154,48 @@ func _confirm_remove_models() -> void:
 	storage_confirm_dialog.confirmed.connect(_remove_downloaded_assets.bind(true), CONNECT_ONE_SHOT)
 	storage_confirm_dialog.popup_centered()
 	storage_confirm_dialog.cancel_button.grab_focus.call_deferred()
+
+
+func _create_android_quality_controls(graphics_tab: VBoxContainer) -> void:
+	var label := Label.new()
+	_set_localized_text(label, "ui.settings.android.quality")
+	android_quality_options = OptionButton.new()
+	android_quality_options.name = "AndroidQualityOptions"
+	android_quality_options.disabled = not SettingsManager.supports_3d_presentation()
+	for preset: String in SettingsManager.AndroidQuality.PRESETS:
+		android_quality_options.add_item(LocalizationManager.text("ui.settings.android.quality." + preset))
+		android_quality_options.set_item_metadata(android_quality_options.item_count - 1, preset)
+	android_quality_options.item_selected.connect(func(index):
+		if not loading_controls:
+			SettingsManager.set_android_quality_preset(str(android_quality_options.get_item_metadata(index))))
+	var hint := Label.new()
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_set_localized_text(hint, "ui.settings.android.quality_hint")
+	graphics_tab.add_child(_create_labeled_control_row(label, android_quality_options, hint))
+	var fps_label := Label.new()
+	_set_localized_text(fps_label, "ui.settings.android.fps")
+	android_fps_options = OptionButton.new()
+	android_fps_options.name = "AndroidFPSOptions"
+	for limit: int in SettingsManager.AndroidQuality.FPS_LIMITS:
+		android_fps_options.add_item("%d FPS" % limit, limit)
+	android_fps_options.item_selected.connect(func(index):
+		if not loading_controls:
+			SettingsManager.set_android_fps_limit(android_fps_options.get_item_id(index)))
+	graphics_tab.add_child(_create_labeled_control_row(fps_label, android_fps_options))
+	LanguageSelectorStyle.configure(android_quality_options)
+	LanguageSelectorStyle.configure(android_fps_options)
+
+
+func _create_android_performance_controls(support_tab: VBoxContainer) -> void:
+	android_performance_toggle = CheckBox.new()
+	android_performance_toggle.name = "ShareAndroidPerformance"
+	android_performance_toggle.toggled.connect(func(enabled):
+		if not loading_controls:
+			SettingsManager.set_share_android_performance(enabled))
+	support_tab.add_child(_create_toggle_setting(android_performance_toggle, "ui.settings.android.share_performance"))
+	var hint := Label.new()
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.add_theme_font_size_override("font_size", 12)
+	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	_set_localized_text(hint, "ui.settings.android.share_hint")
+	support_tab.add_child(hint)

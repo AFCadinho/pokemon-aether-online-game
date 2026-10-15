@@ -5,6 +5,8 @@ signal world_pixel_scale_changed(scale: float)
 signal mount_loadout_changed(movement_mode: String, mount_id: String)
 signal input_binding_changed(action: String, keycode: Key)
 
+const AndroidQuality := preload("res://scripts/services/android_quality_policy.gd")
+
 const PixelPerfectRendering := preload("res://scripts/services/pixel_perfect_rendering.gd")
 const MountServiceScript := preload("res://scripts/services/mount_service.gd")
 const ContentPacks := preload("res://scripts/services/content_pack_runtime.gd")
@@ -83,6 +85,9 @@ var weather_effects := true
 var terrain_effects := true
 var display_own_name := true
 var hide_other_players := false
+var android_quality_preset := AndroidQuality.DEFAULT_PRESET
+var android_fps_limit := 60
+var share_android_performance := false
 var performance_details := false
 var show_performance := false
 var fullscreen := false
@@ -196,6 +201,9 @@ func load_settings() -> void:
 	terrain_effects = bool(data.get("terrain_effects", terrain_effects))
 	display_own_name = bool(data.get("display_own_name", display_own_name))
 	hide_other_players = bool(data.get("hide_other_players", hide_other_players))
+	android_quality_preset = AndroidQuality.validate_preset(data.get("android_quality_preset", AndroidQuality.DEFAULT_PRESET))
+	android_fps_limit = AndroidQuality.validate_fps(data.get("android_fps_limit", 60))
+	share_android_performance = data.get("share_android_performance") is bool and data.get("share_android_performance") == true
 	performance_details = bool(data.get("performance_details", false))
 	show_performance = bool(data.get("show_performance", false))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
@@ -297,6 +305,9 @@ func save_settings() -> bool:
 		"terrain_effects": terrain_effects,
 		"display_own_name": display_own_name,
 		"hide_other_players": hide_other_players,
+		"android_quality_preset": android_quality_preset,
+		"android_fps_limit": android_fps_limit,
+		"share_android_performance": share_android_performance,
 		"performance_details": performance_details,
 		"show_performance": show_performance,
 		"fullscreen": fullscreen,
@@ -525,6 +536,38 @@ func get_active_sprite_style() -> String:
 	if OS.has_feature("mobile"):
 		return SPRITE_STYLE_ANIMATED
 	return SPRITE_STYLE_PIXEL if ContentPacks.has_sprite_collection_style("gen5") else SPRITE_STYLE_ANIMATED
+
+
+func set_android_quality_preset(value: String) -> void:
+	var preset := AndroidQuality.validate_preset(value)
+	if preset == android_quality_preset:
+		return
+	android_quality_preset = preset
+	# Keep a borrowed arena intact until its battle finishes.
+	if OS.has_feature("android"):
+		var pool := preload("res://scripts/battle/arenas/shared/environment_pool.gd").get_current()
+		if pool != null:
+			pool.discard_when_unused()
+	save_settings()
+	settings_changed.emit()
+
+
+func set_android_fps_limit(value: int) -> void:
+	android_fps_limit = AndroidQuality.validate_fps(value)
+	_apply_android_frame_limit()
+	save_settings()
+	settings_changed.emit()
+
+
+func set_share_android_performance(enabled: bool) -> void:
+	share_android_performance = enabled
+	save_settings()
+	settings_changed.emit()
+
+
+func _apply_android_frame_limit() -> void:
+	if OS.has_feature("android"):
+		Engine.max_fps = android_fps_limit
 
 
 func set_performance_details(enabled: bool) -> void:
@@ -926,6 +969,7 @@ func _ensure_audio_bus(bus_name: String) -> void:
 
 
 func _apply_runtime_settings() -> void:
+	_apply_android_frame_limit()
 	WindowFit.apply_ui_scale()
 	_apply_pixel_rendering_defaults()
 	_apply_input_bindings()

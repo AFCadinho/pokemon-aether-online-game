@@ -1,4 +1,13 @@
 {
+  "ui.settings.android.quality": "Qualidade 3D no Android",
+  "ui.settings.android.quality.low": "Baixa",
+  "ui.settings.android.quality.medium": "Média",
+  "ui.settings.android.quality.high": "Alta",
+  "ui.settings.android.quality.ultra": "Ultra",
+  "ui.settings.android.quality_hint": "Controla resolução 3D, suavização e sombras a partir da próxima batalha. Ultra usa resolução nativa. Os visuais 2D e a interface permanecem nítidos.",
+  "ui.settings.android.fps": "Limite de quadros",
+  "ui.settings.android.share_performance": "Compartilhar diagnóstico de desempenho do Android",
+  "ui.settings.android.share_hint": "Envia resumos técnicos de modelo do aparelho, versão do jogo, configurações, tempos de quadro, carregamento, memória e estado térmico. Desativado por padrão. Sem chat, equipe, ID da conta ou identificador do aparelho.",
   "ui.encounter_guard.renew_title": "Encounter Guard esgotado",
   "ui.encounter_guard.renew_message": "Seu Encounter Guard acabou. Ativar outro para até 3.000 encontros selvagens, até encontrar o primeiro Ultra Rare, Legendary ou Shiny?",
   "ui.encounter_guard.renew_confirm": "Ativar",

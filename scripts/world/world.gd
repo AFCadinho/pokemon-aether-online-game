@@ -3926,6 +3926,7 @@ func _mount_prepared_wild_battle_ui(started_at_msec: int) -> bool:
 		and is_instance_valid(prepared_wild_host)
 		and prepared_wild_host.get_meta("prewarm_layout", "") == SettingsManager.battle_ui_layout
 		and prepared_wild_host.get_meta("prewarm_mode", "") == SettingsManager.battle_presentation_mode
+		and prepared_wild_host.get_meta("prewarm_android_quality", "ultra") == SettingsManager.android_quality_preset
 		and _uses_fullscreen_battle()
 	):
 		battle_instance = prepared_wild_battle
@@ -3954,7 +3955,7 @@ func _prewarm_wild_battle_ui() -> void:
 	if is_in_battle or wild_battle_resume_pending:
 		return
 	if is_instance_valid(prepared_wild_battle) and is_instance_valid(prepared_wild_host):
-		if prepared_wild_host.get_meta("prewarm_layout", "") == SettingsManager.battle_ui_layout and prepared_wild_host.get_meta("prewarm_mode", "") == SettingsManager.battle_presentation_mode:
+		if prepared_wild_host.get_meta("prewarm_layout", "") == SettingsManager.battle_ui_layout and prepared_wild_host.get_meta("prewarm_mode", "") == SettingsManager.battle_presentation_mode and prepared_wild_host.get_meta("prewarm_android_quality", "ultra") == SettingsManager.android_quality_preset:
 			return
 		_discard_prepared_wild_battle_ui()
 	if not is_inside_tree() or battle_ui_host == null or BATTLE_SCENE == null:
@@ -3975,6 +3976,7 @@ func _prewarm_wild_battle_ui() -> void:
 	StartupTiming.record("battle_ui_prewarm", started_at_msec * 1000)
 	host.set_meta("prewarm_layout", SettingsManager.battle_ui_layout)
 	host.set_meta("prewarm_mode", SettingsManager.battle_presentation_mode)
+	host.set_meta("prewarm_android_quality", SettingsManager.android_quality_preset)
 	prepared_wild_battle = prepared
 	prepared_wild_host = host
 	if OS.is_debug_build():

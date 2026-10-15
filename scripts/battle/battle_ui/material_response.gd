@@ -167,6 +167,9 @@ func _build() -> void:
 				child.environment.ssr_enabled = false
 				child.environment.glow_enabled = false
 
+	if stage.get("quality_preset") == "low":
+		preload("res://scripts/services/android_quality_policy.gd").apply_lights(world, "low")
+
 func _process(_delta: float) -> void:
 	if not is_instance_valid(stage.world):
 		_drop()

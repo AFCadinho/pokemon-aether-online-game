@@ -1,4 +1,6 @@
 extends Control
+const AndroidQuality := preload("res://scripts/services/android_quality_policy.gd")
+var quality_preset := "ultra"
 const ModelPlatform = preload("res://scripts/battle/battle_ui/model_platform.gd")
 ## Desktop presentation: explicit combatants/actions/transitions from battle host.
 ## Missing reviewed models fall back as a whole battle; Substitute has a bundled 3D model.
@@ -167,6 +169,9 @@ var loaded_path := "!unloaded"
 var active := false
 
 func _ready() -> void:
+	add_to_group("performance_3d_stage")
+	if OS.has_feature("android"):
+		quality_preset = get_tree().root.get_node("SettingsManager").android_quality_preset
 	reset_user_camera()
 	if OS.has_feature("android") and OS.has_feature("android_3d_performance_probe"):
 		var probe := preload("res://scripts/battle/battle_ui/android_3d_performance_probe.gd").new()
@@ -2032,7 +2037,7 @@ func _build_world() -> void:
 	var screened_review := _screened_arena_review()
 	if ground_offsets.size() >= packed.size() or screened_review:
 		forest_pool = ForestPool.get_current()
-		if forest_pool != null and forest_pool.arena_id == _requested_arena():
+		if forest_pool != null and forest_pool.arena_id == _requested_arena() and forest_pool.quality_preset == quality_preset and not forest_pool.discard_requested:
 			forest_lease = forest_pool.acquire(self)
 		if not forest_lease.is_empty():
 			arena_id = _requested_arena()
@@ -2048,7 +2053,7 @@ func _build_world() -> void:
 	viewport = SubViewport.new()
 	viewport.own_world_3d = true
 	viewport.transparent_bg = get_tree().root.get_node("SettingsManager").battle_presentation_mode == "2.5d"
-	viewport.msaa_3d = Viewport.MSAA_4X
+	AndroidQuality.apply_viewport(viewport, quality_preset)
 	add_child(viewport)
 	_sync_render_size()
 	render_surface.texture = viewport.get_texture()
@@ -2084,6 +2089,7 @@ func _build_world() -> void:
 	elif not viewport.transparent_bg:
 		_build_classic_ground()
 	camera.position = _default_camera_home()
+	AndroidQuality.apply_lights(world, quality_preset)
 	camera.fov = ArenaCatalog.CAMERA_FOV
 	camera.look_at(ArenaCatalog.camera_target(arena_id))
 	camera.current = true
@@ -2631,7 +2637,7 @@ func _sync_render_size() -> void:
 	# rather than the 1080p UI design canvas (and HiDPI output stays sharp).
 	var screen := get_viewport().get_final_transform() * get_global_transform_with_canvas()
 	var target := Vector2i(maxi(2, ceili(size.x * screen.x.length())), maxi(2, ceili(size.y * screen.y.length())))
-	target = ModelPlatform.render_dimensions(target, get_tree().root.get_node("SettingsManager").is_android_3d_experimental())
+	target = ModelPlatform.render_dimensions(target, OS.has_feature("android"), quality_preset)
 	if viewport.size != target:
 		viewport.size = target
 		if OS.has_feature("android") and OS.is_debug_build():
