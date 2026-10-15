@@ -125,6 +125,10 @@ from those test setup failures.
 
 ## Remaining work
 
+A subsequent [20-minute automated Ultra soak](android-quality-soak.md) found
+a sustained FPS decline in the fixed forest scene. The short smoke above
+should not be treated as sustained-performance approval.
+
 Measure a weaker physical device with equivalent content, then real loading,
 busy overworld, menus and effects with a 20-minute gameplay session. Test 30 FPS,
 touch interaction, offline retries and authenticated staging ingestion before

@@ -60,4 +60,78 @@ owned ADB reverse after completion. It retains the separate app/cache.
 
 ## S25 Ultra result — 2026-10-15
 
-Result pending the complete physical run.
+The full run completed with forty valid windows, **1,200.38 measured seconds**
+and **1,204.43 seconds** from first sample start to final sample end. One stage
+instance (`467111253349`) and both pooled forest passes were retained throughout;
+no models/arena were re-prepared. The 4.05 seconds between measurement windows
+were instrumentation/upload/capture work while the renderer stayed active.
+
+Device: Samsung S25 Ultra / SM-S938B, Adreno 830, Android API 37, Mobile/Vulkan,
+ARM64 debug build `android-quality-d869ec4ab1e3`, game version 0.3.110. Ultra
+used **2340×1080 and 4× MSAA on both passes**, authored shadows and a 60 FPS cap.
+Power saving was off. USB remained connected; Android reported AC power with
+a **full 100% battery (status 5)** throughout, rather than active charging.
+Host battery sensor temperature went from 26.6 °C at startup to 38.3 °C at the
+last saved sample. This is battery sensor temperature, not GPU/CPU die temperature.
+
+| Measured minutes | Weighted FPS | Window frame p95 range, ms | Main GPU window p50 range, ms | PSS range, MiB | Peak native thermal |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 0–5 | 59.10 | 17.00–17.80 | 12.40–15.28 | 2208.10–2216.26 | 1 |
+| 5–10 | 51.24 | 17.23–33.47 | 15.27–20.00 | 2216.06–2216.14 | 2 |
+| 10–15 | 45.56 | 33.43–33.47 | 20.01–20.04 | 2207.94–2216.14 | 2 |
+| 15–20 | 45.17 | 33.43–33.48 | 20.03–20.04 | 2208.02–2208.35 | 2 |
+
+FPS is frame-count weighted over each five-minute block, using the actual
+production summaries’ frame counts and durations. The p95/p50 columns are
+ranges of individual 30-second window statistics, not pooled percentiles or
+averages of percentiles. These are engine-loop intervals and Godot GPU
+measurements, not display presentation timestamps.
+
+The first window averaged **60.05 FPS**, frame p95 **17.03 ms** and main GPU
+p50 **12.40 ms**. The last averaged **45.27 FPS**, frame p95 **33.47 ms** and
+main GPU p50 **20.03 ms**. The final five minutes averaged **45.17 FPS**.
+The entire observation averaged **50.27 FPS** over 60,339 intervals. Six intervals
+exceeded 50 ms, none exceeded 100 ms, and the maximum was 78.58 ms. There were
+11,797 intervals above the 25 ms budget tolerance.
+
+Android thermal status rose from 0 to 1 (light), then 2 (moderate); both native
+samples and 122 host health samples peaked at 2. Performance declined while
+the scene/profile remained fixed and reported thermal state rose. This is
+consistent with heat-related performance limiting, but no frequency trace or
+controlled cooling/power comparison establishes the exact cause. **Ultra did
+not sustain 60 FPS in this workload under these conditions.** This run does
+not establish that High or another preset would sustain it.
+
+Native PSS started at 2,208.10 MiB and ended at 2,208.35 MiB, with a peak of
+2,216.26 MiB. Engine render allocation stayed at 729.63 MiB. There is no
+progressive memory increase in this fixed retained scene. This does not rule
+out leaks in map changes, repeated battle creation/release or full gameplay.
+
+All forty actual USB-local telemetry reports uploaded, had unique report IDs,
+and satisfied the exact backend `PerformanceReport`/`PerformanceBatch` schema
+and count contracts in batches of eight in a network-disabled Python 3.13
+container. No backend, game session, database or production ingestion was used.
+The final real Android HOME/resume check succeeded (2 pause and 2 resume
+notifications), and opt-out cleared pending data and stopped processing.
+No engine/check errors were recorded. Start/end captures were visually inspected:
+both actors, the same forest, framing and authored shadows remained present.
+
+Eighteen focused Python quality/GPU harness tests passed, including rejection
+of short, re-created or re-prepared soak results. The actual updated GDScript
+parsed, exported with the real Java bridge and ran on the phone. No full paired
+certification, promotion, deployment or production collection was performed.
+The diagnostic process was stopped and its owned USB reverse removed afterwards.
+
+Artifacts remain in this slot’s ignored `.tmp/android-quality-phone/`:
+`soak-export-1/` holds the APK/build logs; `soak-run-1/` holds `report.json`,
+`details.json`, `telemetry.json`, a derived `summary.json`, two arena PNGs and
+two settings PNGs. The measured APK SHA-256 is
+`0ec54fe7485912a26bd8630000682372987a895a417b64fea939e1ffd43c13ab`.
+The host ran clean commit `448dc414b926a1a54f124191e71af917e5786363`;
+the APK source was `d869ec4ab1e3`. Existing verified art in this isolated
+app’s own cache was reused; there were no fixture GETs during this run.
+
+The next comparison is the same sustained workload on a lower preset under
+comparable starting conditions, then a weaker physical device and broader
+real/automated gameplay scenarios. A device-name tier alone does not establish
+sustained performance or justify an automatic preset recommendation.
