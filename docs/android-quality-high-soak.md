@@ -66,7 +66,9 @@ meaningful sustained-FPS improvement over Ultra in this comparison.** No
 hardware-default or automatic preset recommendation was changed. The next
 render-budget comparison would be Medium, which also lowers resolution, or
 focused GPU profiling to identify which work remains expensive. Those were
-not run as part of this High-only task.
+not run as part of this High-only task. A subsequent
+[warm High/Medium bracket](android-quality-warm-comparison.md) measured the
+resolution reduction directly and found Medium promising in a short comparison.
 
 ## Verification and artifacts
 
