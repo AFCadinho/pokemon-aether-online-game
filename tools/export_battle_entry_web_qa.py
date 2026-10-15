@@ -281,6 +281,14 @@ def main():
             # Only transport changes in this private APK. All pinned size/hash,
             # trusted-index and model/arena integrity checks remain production code.
             origin_helper = 'func _quality_usb_origin() -> String:\n\tvar fixture: Variant = JSON.parse_string(FileAccess.get_file_as_string("user://android-quality-fixture.json"))\n\tvar port := int(fixture.get("port", 0)) if fixture is Dictionary else 0\n\treturn "http://127.0.0.1:%d/" % port if port >= 1024 and port <= 65535 else "http://127.0.0.1:1/"\n'
+            wrapper = generated / "quality_usb_gateway.gd"
+            wrapper.write_text('extends "res://scripts/services/gateway_api_config.gd"\n' + origin_helper + 'func get_base_url() -> String:\n\treturn _quality_usb_origin().rstrip("/")\n')
+            config = config.replace('res://scripts/services/gateway_api_config.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
+            wrapper = generated / "quality_usb_battle_api.gd"
+            wrapper.write_text('extends "res://scripts/battle/battle_api/battle_api_config.gd"\n' + origin_helper + 'func get_base_url() -> String:\n\treturn _quality_usb_origin().rstrip("/")\n')
+            config = re.sub(r'^BattleApiConfig=.*$', 'BattleApiConfig="*res://scripts/battle_entry_qa_generated/' + wrapper.name + '"', config, flags=re.M)
+            source_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+            config = re.sub(r'^config/build_id=.*$', 'config/build_id="android-quality-' + source_commit[:12] + '"', config, flags=re.M)
             wrapper = generated / "quality_usb_models.gd"
             wrapper.write_text('extends "res://scripts/services/on_demand_3d_bundle_service.gd"\n' + origin_helper + 'func _start_download_request(url: String) -> Error:\n\tif not url.begins_with(BASE_URL):\n\t\treturn ERR_INVALID_PARAMETER\n\treturn active_request.request(_quality_usb_origin() + url.trim_prefix(BASE_URL))\n')
             config = config.replace('res://scripts/services/on_demand_3d_bundle_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
