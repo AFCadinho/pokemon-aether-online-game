@@ -165,8 +165,10 @@ func _observe(preset: String, index: int) -> void:
 		if now >= next_counters:
 			next_counters = now + 1000000
 			telemetry._sample_counters()
+	# End the measured interval before the synchronous native PSS query.
+	var sampled_seconds: float = telemetry.window.total_usec / 1000000.0
 	telemetry.native = telemetry._native_sample()
-	var row := {"preset": preset, "index": index, "seconds": (Time.get_ticks_usec() - started) / 1000000.0,
+	var row := {"preset": preset, "index": index, "seconds": sampled_seconds,
 		"preparation_ms": preparation_ms, "render_size": [stage.viewport.size.x, stage.viewport.size.y],
 		"response_size": [pool.passes[1].viewport.size.x, pool.passes[1].viewport.size.y],
 		"msaa": stage.viewport.msaa_3d, "timings": {}, "pipeline_start": pipeline_start,
