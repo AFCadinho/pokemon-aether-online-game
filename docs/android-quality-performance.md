@@ -125,5 +125,8 @@ References: [Godot Performance monitors](https://docs.godotengine.org/en/4.6/cla
   presenter reproduces that same failure; no acceptance threshold was relaxed.
   The standard headless check passes all three requested sizes.
 
-No release certification, deployment, production collection or phone test was
-performed. Physical visual/performance/thermal behavior remains to be measured.
+Those local checks did not include a phone test. The subsequent isolated
+[S25 Ultra smoke test](android-quality-phone-smoke.md) records physical preset,
+native telemetry and lifecycle results. Sustained gameplay and weaker-device
+behavior remain to be measured. No release certification, deployment or
+production collection was performed.

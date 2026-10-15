@@ -24,7 +24,7 @@ def rewrite_fixture_paths(source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     global CHECKS, FIXTURES
-    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "mobile-hotbar", "coop-sprites", "android-3d", "android-moves", "android-gpu", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark", "android-visual-choice"], default="battle-entry")
+    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "mobile-hotbar", "coop-sprites", "android-3d", "android-moves", "android-gpu", "android-quality", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark", "android-visual-choice"], default="battle-entry")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--platform", choices=["web", "android"], default="web")
     parser.add_argument("--sdk", type=Path)
@@ -47,7 +47,8 @@ def main():
     android_arenas = args.suite == "android-arenas"
     android_moves = args.suite == "android-moves"
     android_gpu = args.suite == "android-gpu"
-    if android_gpu and (args.platform != "android" or args.architecture != "arm64-v8a" or args.android_renderer != "mobile" or args.emulator_frame_pacing_off):
+    android_quality = args.suite == "android-quality"
+    if (android_gpu or android_quality) and (args.platform != "android" or args.architecture != "arm64-v8a" or args.android_renderer != "mobile" or args.emulator_frame_pacing_off):
         parser.error("GPU isolation requires physical ARM64 Android, Mobile and ordinary frame pacing")
     android_budget = args.suite == "android-battle-budget"
     android_textures = args.suite == "android-textures"
@@ -59,12 +60,12 @@ def main():
         parser.error("Android texture and model-pair diagnostics require --android-renderer mobile")
     if args.outdoor_colour_baseline and not (android_budget and args.android_renderer == "gl_compatibility"):
         parser.error("Outdoor colour baseline is limited to the separate GLES battle diagnostic")
-    renderer_diagnostic = android_arenas or android_budget or android_textures or android_pairs or android_moves or android_gpu
+    renderer_diagnostic = android_arenas or android_budget or android_textures or android_pairs or android_moves or android_gpu or android_quality
     if args.android_renderer != "gl_compatibility" and not renderer_diagnostic:
         parser.error("--android-renderer is limited to the separate Android arena/battle budget diagnostic")
     if args.emulator_frame_pacing_off and (not renderer_diagnostic or args.architecture != "x86_64"):
         parser.error("Frame-pacing workaround is limited to the x86_64 arena/battle emulator diagnostic")
-    android_3d = args.suite in {"android-3d", "android-moves", "android-gpu", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark"}
+    android_3d = args.suite in {"android-3d", "android-moves", "android-gpu", "android-quality", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark"}
     if android_3d:
         if args.platform != "android":
             parser.error("3D pilot requires the native Android debug runtime")
@@ -75,6 +76,8 @@ def main():
             CHECKS = ["android_move_shader_check"]
         if android_gpu:
             CHECKS = ["android_gpu_isolation_check"]
+        if android_quality:
+            CHECKS = ["android_quality_phone_check"]
         FIXTURES = []
         if android_arenas:
             FIXTURES = ["compatibility_outdoor_colour_probe"]
@@ -142,6 +145,11 @@ def main():
         from android_gpu_package import package_for_root
         package = package_for_root(ROOT)
         report_name = "android-gpu-results.json"
+    if android_quality:
+        title = "Android Quality Test"
+        app_name = "PokeAether Quality Test"
+        package = "com.pokeaether.androidquality." + ROOT.parent.name.replace("-", "_")
+        report_name = "android-quality-results.json"
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run slot exports through ops/worktrees/slot-env SLOT -- COMMAND")
     output = args.output.resolve()
@@ -163,6 +171,9 @@ def main():
     project = ROOT / "project.godot"
     presets = ROOT / "export_presets.cfg"
     originals = {project: project.read_bytes(), presets: presets.read_bytes()}
+    if android_quality:
+        audio = ROOT / "generated/browser_audio_catalog.json"
+        originals[audio] = audio.read_bytes() if audio.exists() else None
     if args.outdoor_colour_baseline:
         outdoor = ROOT / "scripts/battle/arenas/shared/outdoor_lighting.gd"
         originals[outdoor] = outdoor.read_bytes()
@@ -172,6 +183,10 @@ def main():
     editor_settings = None
     generated.mkdir()
     try:
+        if android_quality:
+            from prepare_android_assets import prepare as prepare_audio
+            prepare_audio(ROOT)
+            subprocess.run(["python3", str(ROOT / "android_updater/setup_build_template.py"), str(args.templates / "android_source.zip")], check=True)
         if args.outdoor_colour_baseline:
             source = originals[outdoor].decode()
             declaration = "var compatibility_colour_enabled := CompatibilityColour.supported()"
@@ -217,7 +232,7 @@ def main():
             (generated / f"{name}.gd").write_text(source)
         paths = [f"res://scripts/battle_entry_qa_generated/{name}.gd" for name in CHECKS]
         runner = "extends Node\nfunc _ready() -> void:\n\tvar origin := str(JavaScriptBridge.eval(\"window.location.origin\", true)) if OS.has_feature(\"web\") else \"http://127.0.0.1:8091\"\n\tWebPokemonSpriteService._release_config_cache = {\"spriteStyles\": {\"animated\": {\"front\": origin + \"/qa-sprites/front\", \"back\": origin + \"/qa-sprites/back\"}}}\n\tWebHomeIconService._catalog = {\"normal\": {}, \"shiny\": {}}\n\t_run.call_deferred()\nfunc _run() -> void:\n\tvar results := {}\n"
-        if android_pairs or android_choice or android_gpu:
+        if android_pairs or android_choice or android_gpu or android_quality:
             # The resource-only suite does not render/download sprites. Avoid
             # coupling its runner to unrelated presentation autoload globals.
             runner = "extends Node\nfunc _ready() -> void:\n\t_run.call_deferred()\nfunc _run() -> void:\n\tvar results := {}\n"
@@ -253,7 +268,7 @@ def main():
                 if service == 'client_crash_report_service':
                     wrapper.write_text(wrapper.read_text() + 'func _enter_tree() -> void:\n\tpass\n')
                 config = config.replace('res://scripts/services/' + service + '.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
-            if android_3d and not (android_arenas or android_textures or android_pairs or android_moves or android_gpu):
+            if android_3d and not (android_arenas or android_textures or android_pairs or android_moves or android_gpu or android_quality):
                 wrapper = generated / "pilot_model_service.gd"
                 wrapper.write_text('extends "res://scripts/services/on_demand_3d_bundle_service.gd"\nvar completed_downloads: Array[Dictionary] = []\nfunc _selected_release() -> Dictionary:\n\treturn RELEASE_V11.data\nfunc _publish_verified_download(absolute: String, expected: int, digest: String) -> String:\n\tvar error := super._publish_verified_download(absolute, expected, digest)\n\tif error.is_empty():\n\t\tcompleted_downloads.append({"file": absolute.get_file(), "bytes": expected, "sha256": digest})\n\treturn error\n')
                 config = config.replace('res://scripts/services/on_demand_3d_bundle_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
@@ -262,6 +277,29 @@ def main():
                 wrapper = generated / "mobile_asset_service_offline.gd"
                 wrapper.write_text('extends "res://scripts/services/mobile_asset_service.gd"\nfunc release_prefix() -> String:\n\treturn "http://127.0.0.1:8091/"\n')
                 config = config.replace('res://scripts/services/mobile_asset_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
+        if android_quality:
+            # Only transport changes in this private APK. All pinned size/hash,
+            # trusted-index and model/arena integrity checks remain production code.
+            origin_helper = 'func _quality_usb_origin() -> String:\n\tvar fixture: Variant = JSON.parse_string(FileAccess.get_file_as_string("user://android-quality-fixture.json"))\n\tvar port := int(fixture.get("port", 0)) if fixture is Dictionary else 0\n\treturn "http://127.0.0.1:%d/" % port if port >= 1024 and port <= 65535 else "http://127.0.0.1:1/"\n'
+            wrapper = generated / "quality_usb_gateway.gd"
+            wrapper.write_text('extends "res://scripts/services/gateway_api_config.gd"\n' + origin_helper + 'func get_base_url() -> String:\n\treturn _quality_usb_origin().rstrip("/")\n')
+            config = config.replace('res://scripts/services/gateway_api_config.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
+            wrapper = generated / "quality_usb_battle_api.gd"
+            wrapper.write_text('extends "res://scripts/battle/battle_api/battle_api_config.gd"\n' + origin_helper + 'func get_base_url() -> String:\n\treturn _quality_usb_origin().rstrip("/")\n')
+            config = re.sub(r'^BattleApiConfig=.*$', 'BattleApiConfig="*res://scripts/battle_entry_qa_generated/' + wrapper.name + '"', config, flags=re.M)
+            source_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+            config = re.sub(r'^config/build_id=.*$', 'config/build_id="android-quality-' + source_commit[:12] + '"', config, flags=re.M)
+            wrapper = generated / "quality_usb_models.gd"
+            wrapper.write_text('extends "res://scripts/services/on_demand_3d_bundle_service.gd"\n' + origin_helper + 'func _start_download_request(url: String) -> Error:\n\tif not url.begins_with(BASE_URL):\n\t\treturn ERR_INVALID_PARAMETER\n\treturn active_request.request(_quality_usb_origin() + url.trim_prefix(BASE_URL))\n')
+            config = config.replace('res://scripts/services/on_demand_3d_bundle_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
+            wrapper = generated / "quality_usb_environment.gd"
+            source = (ROOT / "scripts/services/android_3d_environment_service.gd").read_text()
+            source = source.replace('"https://updates.pokeaether.com/" + str(pin.object_key)', '_quality_usb_origin() + str(pin.object_key)')
+            wrapper.write_text(source + "\n" + origin_helper)
+            config = config.replace('res://scripts/services/android_3d_environment_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
+            wrapper = generated / "quality_usb_mobile_assets.gd"
+            wrapper.write_text('extends "res://scripts/services/mobile_asset_service.gd"\n' + origin_helper + 'func release_prefix() -> String:\n\treturn _quality_usb_origin()\n')
+            config = config.replace('res://scripts/services/mobile_asset_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
         if renderer_diagnostic:
             config = re.sub(r'^config/name=.*$', 'config/name="' + app_name + '"', config, flags=re.M)
             config = re.sub(r'^renderer/rendering_method.mobile=.*$', 'renderer/rendering_method.mobile="' + args.android_renderer + '"', config, flags=re.M)
@@ -290,7 +328,8 @@ def main():
             if args.sdk is None:
                 raise ValueError("Android diagnostic requires --sdk")
             selected = selected.replace(f'[preset.{next_index}.options]', f'[preset.{next_index}.options]\ncustom_template/debug="{args.templates / 'android_debug.apk'}"\ncustom_template/release="{args.templates / 'android_release.apk'}"')
-            selected = selected.replace('gradle_build/use_gradle_build=true', 'gradle_build/use_gradle_build=false')
+            if not android_quality:
+                selected = selected.replace('gradle_build/use_gradle_build=true', 'gradle_build/use_gradle_build=false')
             for architecture in ["armeabi-v7a", "arm64-v8a", "x86", "x86_64"]:
                 selected = re.sub(r'^architectures/' + re.escape(architecture) + r'=.*$',
                                   'architectures/' + architecture + '=' + ('true' if architecture == args.architecture else 'false'),
@@ -301,6 +340,8 @@ def main():
                 selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot' + (',android_arena_pilot' if android_arenas else '') + (',android_battle_budget' if android_budget else '') + (',android_battle_budget_gl' if android_budget and args.android_renderer == 'gl_compatibility' else '') + (',android_outdoor_colour_baseline' if args.outdoor_colour_baseline else '') + (',android_texture_residency' if android_textures else '') + (',android_model_pairs' if android_pairs else '') + (',android_tab_benchmark' if android_tab else '') + '"', selected, flags=re.M)
                 if android_gpu:
                     selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_experimental,android_gpu_isolation"', selected, flags=re.M)
+                if android_quality:
+                    selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_experimental,android_quality_benchmark"', selected, flags=re.M)
                 release_version = re.search(r'^config/version="([^"]+)"$', originals[project].decode(), re.M).group(1)
                 selected = re.sub(r'^version/name=.*$', 'version/name="' + release_version + '-3d-pilot.1"', selected, flags=re.M)
             if android_choice:
@@ -319,7 +360,7 @@ def main():
                 if android_pairs:
                     scripts.append("res://scripts/battle_entry_qa_generated/runner.gd")
                 for script in scripts:
-                    subprocess.run(["godot", "--headless", "--path", str(ROOT),
+                    subprocess.run(["godot", "--headless", "--log-file", str(output / (Path(script).stem + "-parse.log")), "--path", str(ROOT),
                                     "--script", script, "--check-only"],
                                    stdout=log, stderr=subprocess.STDOUT, check=True)
             command = ["godot", "--headless", "--log-file", str(output / "engine-export.log"), "--path", str(ROOT)]
@@ -336,12 +377,23 @@ def main():
                 android_file = "android-move-probe.apk"
             if android_gpu:
                 android_file = "android-gpu-benchmark.apk"
+            if android_quality:
+                android_file = "android-quality-benchmark.apk"
             command += ["--export-debug", title, str(output / ("index.html" if args.platform == "web" else android_file))]
-            subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
+            environment = os.environ.copy()
+            if android_quality:
+                environment["JAVA_HOME"] = str(args.java.resolve())
+                environment["ANDROID_HOME"] = str(args.sdk.resolve())
+                environment["GRADLE_USER_HOME"] = str(ROOT.parent / ".runtime/gradle")
+                environment["GRADLE_OPTS"] = "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=1 -Dorg.gradle.jvmargs=-Xmx1536m"
+            subprocess.run(command, env=environment, stdout=log, stderr=subprocess.STDOUT, check=True)
         print(f"{title} {args.platform} diagnostic exported:", output)
     finally:
         for file, content in originals.items():
-            file.write_bytes(content)
+            if content is None:
+                file.unlink(missing_ok=True)
+            else:
+                file.write_bytes(content)
         shutil.rmtree(generated)
         if editor_settings is not None:
             if original_editor is None:
