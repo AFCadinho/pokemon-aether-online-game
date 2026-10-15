@@ -160,18 +160,18 @@ func _gameplay_sequence(index: int) -> void:
 		var actor := "p1" if i % 2 == 0 else "p2"
 		var target := "p2" if actor == "p1" else "p1"
 		var started := Time.get_ticks_usec()
-		move_samples = {"frame_ms": [], "main_gpu_ms": [], "response_gpu_ms": [], "effect_frames": 0, "hit_seen": false}
+		move_samples = {"frame_ms": [], "main_gpu_ms": [], "response_gpu_ms": [], "effect_frames": 0, "visible_frames": 0, "hit_seen": false}
 		await router.play_move_animation(MOVES[i], actor, target, {"show_impact": true})
 		await router.finish_3d_impact_damage(target)
 		var until := Time.get_ticks_msec() + 3000
 		while not router.active_audio_nodes.is_empty() and Time.get_ticks_msec() < until:
 			await process_frame
 		var row := {"move": MOVES[i], "actor": actor, "seconds": (Time.get_ticks_usec() - started) / 1000000.0,
-			"effect_frames": move_samples.effect_frames, "hit_seen": move_samples.hit_seen, "timings": {},
+			"effect_frames": move_samples.effect_frames, "visible_frames": move_samples.visible_frames, "hit_seen": move_samples.hit_seen, "timings": {},
 			"cleaned": stage.common_effects.is_empty() and router.active_audio_nodes.is_empty() and not router.has_3d_impact_damage()}
 		for key in ["frame_ms", "main_gpu_ms", "response_gpu_ms"]:
 			row.timings[key] = Stats.stats(move_samples[key])
-		_check(row.effect_frames > 0 and row.hit_seen and row.cleaned, "Real move hit and effect/audio cleanup: " + MOVES[i])
+		_check(row.visible_frames > 0 and row.hit_seen and row.cleaned, "Real move reached visible impact and effect/audio cleanup: " + MOVES[i])
 		gameplay_row.moves.append(row)
 		move_samples = {}
 	var menu: Control = load("res://scenes/interface/settings/settings_menu.tscn").instantiate()
@@ -194,6 +194,7 @@ func _gameplay_sequence(index: int) -> void:
 
 # Separate evidence pass: PNG readback/encoding is excluded from measured casts.
 func _capture_moves() -> void:
+	report.move_captures = []
 	for i in MOVES.size():
 		var done := {"value": false}
 		_capture_cast(i, done)
@@ -216,12 +217,18 @@ func _capture_cast(index: int, done: Dictionary) -> void:
 		if captured:
 			continue
 		for effect in stage.common_effects:
-			if is_instance_valid(effect) and effect.hit:
+			if _visible_impact(effect):
+				var evidence := {"index": index, "elapsed": effect.elapsed, "impact": effect.impact, "visible_pieces": effect.cursor}
 				await RenderingServer.frame_post_draw
 				captured = stage.viewport.get_texture().get_image().save_png("user://android-quality-move-%d.png" % index) == OK
+				report.move_captures.append(evidence)
 				break
 	_check(captured, "Actual move impact captured: " + MOVES[index])
 	done.value = true
+
+func _visible_impact(effect: Node) -> bool:
+	# `hit` is an option set at creation, not an impact notification.
+	return is_instance_valid(effect) and effect.hit and effect.elapsed >= effect.impact + 0.025 and effect.cursor > 0
 
 func _capture_route(move: String, actor: String, target: String, done: Dictionary) -> void:
 	await router.play_move_animation(move, actor, target, {"show_impact": true})
@@ -315,7 +322,9 @@ func _observe(preset: String, index: int) -> void:
 			if not stage.common_effects.is_empty():
 				move_samples.effect_frames += 1
 			for effect in stage.common_effects:
-				if is_instance_valid(effect) and effect.hit:
+				if is_instance_valid(effect) and effect.cursor > 0:
+					move_samples.visible_frames += 1
+				if _visible_impact(effect):
 					move_samples.hit_seen = true
 		telemetry.window.record(now - last, 60)
 		telemetry.foreground_usec += now - last

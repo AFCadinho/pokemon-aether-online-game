@@ -128,9 +128,10 @@ class AndroidQualityResultTests(unittest.TestCase):
         details = copy.deepcopy(self.details)
         row = details["phases"][2]
         metric = copy.deepcopy(row["timings"])
+        details["move_captures"] = [{"index": i, "elapsed": 1.1, "impact": 1.0, "visible_pieces": 10} for i in range(4)]
         details["phases"] = [dict(copy.deepcopy(row), index=i, seconds=30.01,
             stage_instance=100 + i, gameplay={"complete": True, "cycle": i,
-                "moves": [{"move": move, "seconds": 3, "effect_frames": 120,
+                "moves": [{"move": move, "seconds": 3, "effect_frames": 120, "visible_frames": 100,
                            "hit_seen": True, "cleaned": True, "timings": copy.deepcopy(metric)}
                           for move in ("Flamethrower", "Thunderbolt", "Rock Slide", "Draco Meteor")],
                 "tabs": [{"tab": tab, "visible": True} for tab in range(8)]}) for i in range(3)]
@@ -142,11 +143,15 @@ class AndroidQualityResultTests(unittest.TestCase):
 
     def test_missing_animations_impacts_cleanup_tabs_or_reload_rejected(self):
         for change in (lambda d: d["phases"][1].update(stage_instance=100),
+                       lambda d: d["move_captures"].pop(),
+                       lambda d: d["move_captures"][0].update(elapsed=0),
+                       lambda d: d["move_captures"][0].update(visible_pieces=0),
                        lambda d: d["phases"][0]["gameplay"].update(complete=False),
                        lambda d: d["phases"][0]["gameplay"]["moves"].pop(),
                        lambda d: d["phases"][0]["gameplay"]["moves"][0].update(hit_seen=False),
                        lambda d: d["phases"][0]["gameplay"]["moves"][0].update(cleaned=False),
                        lambda d: d["phases"][0]["gameplay"]["moves"][0].update(effect_frames=0),
+                       lambda d: d["phases"][0]["gameplay"]["moves"][0].update(visible_frames=0),
                        lambda d: d["phases"][0]["gameplay"]["moves"][0]["timings"]["frame_ms"].update(p95=float("nan")),
                        lambda d: d["phases"][0]["gameplay"]["tabs"].pop()):
             fixture, details = self.gameplay_result()

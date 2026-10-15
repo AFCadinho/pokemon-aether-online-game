@@ -70,6 +70,10 @@ def validate(details, fixture):
     if [p.get("preset") for p in phases] != expected_presets(fixture):
         errors.append("Unexpected profile sequence")
     if fixture.get("mode") == "gameplay":
+        captures = details.get("move_captures", [])
+        if ([c.get("index") for c in captures] != list(range(4))
+                or any(not c.get("visible_pieces", 0) > 0 or not c.get("elapsed", 0) >= c.get("impact", 0) + .025 for c in captures)):
+            errors.append("Missing visible, post-impact evidence")
         ids = [p.get("stage_instance") for p in phases]
         if len(set(ids)) != 3 or not all(isinstance(v, int) and v > 0 for v in ids):
             errors.append("Gameplay must reconstruct three distinct arenas")
@@ -79,7 +83,7 @@ def validate(details, fixture):
             if not game.get("complete") or game.get("cycle") != index or [m.get("move") for m in moves] != MOVES:
                 errors.append("Incomplete real-time move sequence")
             for move in moves:
-                if (not move.get("hit_seen") or not move.get("cleaned") or move.get("effect_frames", 0) <= 0
+                if (not move.get("hit_seen") or not move.get("cleaned") or move.get("effect_frames", 0) <= 0 or move.get("visible_frames", 0) <= 0
                         or not 0 < move.get("seconds", 0) < 30):
                     errors.append("Move did not hit, finish or clean up")
                 for key in COUNTS:
