@@ -100,7 +100,17 @@ func _run() -> void:
 	report.complete = true
 	_finish()
 
+func _retire_entry() -> void:
+	if entry_trial == null: return
+	# release() cancels unused prepared effects with queue_free(). Let those
+	# children retire before close() immediately frees their host/world owner.
+	entry_trial.host.release()
+	entry_trial.host.hide()
+	for frame in 2: await process_frame
+	await RenderingServer.frame_post_draw
+
 func _prepare(preset: String) -> bool:
+	await _retire_entry()
 	_release_stage()
 	# Retire the previous world and its queued renderer resources before the
 	# next allocation. Errors remain logged throughout this untimed boundary.
@@ -190,7 +200,10 @@ func _desktop_observe(preset: String, index: int, reuse: bool) -> void:
 		_check(root.get_texture().get_image().save_png(output.path_join("battle-%d.png" % index)) == OK, "Battle image outside timed interval")
 
 func _finish() -> void:
+	await _retire_entry()
 	_release_stage()
+	for frame in 2: await process_frame
+	await RenderingServer.frame_post_draw
 	if is_instance_valid(original_models):
 		root.get_node("OnDemand3DBundleService").free()
 		root.add_child(original_models)
