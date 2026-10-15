@@ -1,5 +1,7 @@
 # Android first-attack preparation — 2026-10-15
 
+Follow-up: [ordinary battle host and authoritative move-request trial](android-battle-entry-preparation.md).
+
 The [resource reuse follow-up](android-effect-resource-reuse.md) reduced repeated
 setup but left a large first Rock Slide hitch. A new same-APK control shows that
 preparing and then **consuming the exact effect instance** can move much of that
