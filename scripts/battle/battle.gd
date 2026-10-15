@@ -7784,6 +7784,7 @@ func _refresh_wild_opponent_owned_icon(species: String, is_shiny: bool, request_
 		enemy_hud_panel.set_owned_icon_visible(PokedexService.is_species_owned(species, is_shiny))
 
 func play_wild_battle_intro(api_response: Dictionary) -> void:
+	if not await _prepare_initial_android_move_effects(): return
 	await _render_initial_battle_events(api_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
@@ -7956,6 +7957,7 @@ func setup_trainer_battle_from_response(
 	await _present_initial_summon_command("p2", _get_active_display_name("p2"))
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
 	_debug_battle_start("trainer.setup.after_lead_summons lastRenderedSeq=%d" % last_rendered_event_seq)
+	if not await _prepare_initial_android_move_effects(): return
 	await _render_initial_battle_events(lead_response)
 	_show_battle_controls_after_initial_events()
 	_set_battle_actions_ready(true)
@@ -8076,6 +8078,7 @@ func setup_pvp_battle_from_response(
 	await _play_lead_summon(_get_active_summon_ball_item_id("p1", player_ball_item_id), player_species, player_sprite_box, "back")
 	await _present_initial_summon_command("p2", _get_active_display_name("p2"))
 	await _play_lead_summon(_get_active_summon_ball_item_id("p2", "poke-ball"), opponent_species, enemy_sprite_box, "front")
+	if not await _prepare_initial_android_move_effects(): return
 	if not restored_history_log:
 		await _render_initial_battle_events(lead_response)
 		await _drain_pvp_team_preview_completion_updates()
@@ -8709,6 +8712,26 @@ func _show_default_trainer_leads_before_selection(player_pokemon: Pokemon, api_r
 			_get_switch_confirmation_pokemon_name(lead_data)
 		),
 	)
+
+func _prepare_initial_android_move_effects() -> bool:
+	# Team Preview may reveal before a request contains any usable moves.
+	# Recheck the authoritative local request after leads/summons, before input.
+	var presenter: Node = animation_router.model_presenter
+	if not is_instance_valid(presenter) or not presenter.has_method("android_move_preparation_enabled"):
+		return true
+	if not presenter.android_move_preparation_enabled(): return true
+	if presenter.preparation_cancelled or not is_inside_tree(): return false
+	if not presenter.active or battle_state == null: return true # Stable 2D fallback.
+	var prepared_battle_id: String = battle_state.battle_id
+	var was_locked := battle_input_locked
+	_set_battle_input_locked(true)
+	await presenter.prepare_android_move_effects(battle_state.get_available_moves(_get_local_state_player_id()))
+	if not is_inside_tree() or not is_instance_valid(presenter) or presenter.preparation_cancelled:
+		return false
+	if presenter != animation_router.model_presenter or battle_state.battle_id != prepared_battle_id: return false
+	_set_battle_input_locked(was_locked)
+	return true
+
 
 func _render_initial_battle_events(api_response: Dictionary) -> void:
 	_debug_battle_start_response("initial.render.enter", api_response)

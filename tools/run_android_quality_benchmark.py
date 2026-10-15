@@ -43,7 +43,7 @@ def interrupt_run(signum, _frame):
 
 
 def expected_presets(fixture):
-    if fixture.get("mode") == "gameplay":
+    if fixture.get("mode") in ("gameplay", "battle-entry"):
         return ["medium"] * (4 if fixture.get("hitch_visibility_control") else 3)
     if fixture.get("mode") == "warm-compare":
         return ["high", "medium", "medium", "high"]
@@ -135,7 +135,7 @@ def validate(details, fixture):
         errors.append("Unexpected profile sequence")
     if fixture.get("profile_hitches") and not details.get("profile_factory_match"):
         errors.append("Profiling wrappers do not match the production effect factory")
-    if fixture.get("mode") == "gameplay":
+    if fixture.get("mode") in ("gameplay", "battle-entry"):
         captures = details.get("move_captures", [])
         if ([c.get("index") for c in captures] != list(range(4))
                 or any(not c.get("visible_pieces", 0) > 0 or not c.get("elapsed", 0) >= c.get("impact", 0) + .025 for c in captures)):
@@ -172,6 +172,42 @@ def validate(details, fixture):
             tabs = game.get("tabs", [])
             if [tab.get("tab") for tab in tabs] != list(range(8)) or not all(tab.get("visible") for tab in tabs):
                 errors.append("Incomplete native menu navigation")
+    if fixture.get("mode") == "battle-entry":
+        cases = ["covered_wild", "early_wild", "preview_trainer"]
+        enabled = fixture.get("entry_warmup", False)
+        for kind, phase in zip(cases, phases):
+            entry = phase.get("entry", {})
+            if (entry.get("case") != kind or not entry.get("ready") or entry.get("warmup_enabled") is not enabled
+                    or not entry.get("input_held_during_preparation") or not entry.get("samples_hidden")
+                    or entry.get("available_keys") != ["flamethrower", "thunderbolt", "rockslide", "dracometeor"]
+                    or not isinstance(entry.get("elapsed_ms"), (int, float)) or not math.isfinite(entry["elapsed_ms"]) or entry["elapsed_ms"] <= 0):
+                errors.append("Invalid ordinary entry readiness, request or visibility")
+            if kind == "early_wild" and not entry.get("early_visible_before_response"):
+                errors.append("Early arena was not visible before its response")
+            if kind == "preview_trainer" and (entry.get("selected_slot") != 2 or not entry.get("previews_have_no_casts")
+                    or entry.get("actors", [None])[0] != "dragonite"):
+                errors.append("Team Preview did not prepare the actually selected lead")
+            rounds = entry.get("warmup", [])
+            evidence = {}
+            if enabled and not 1 <= len(rounds) <= 4:
+                errors.append("Missing or unbounded ordinary entry preparation evidence")
+            if not enabled and rounds:
+                errors.append("Disabled entry control performed preparation")
+            for round_ in rounds:
+                if (round_.get("mode") != "hidden" or not isinstance(round_.get("elapsed_ms"), (int, float))
+                        or not math.isfinite(round_["elapsed_ms"]) or round_["elapsed_ms"] < 0
+                        or round_.get("effects") != len(round_.get("samples", [])) or not 0 <= round_.get("effects", -1) <= 5):
+                    errors.append("Invalid ordinary entry preparation timings")
+                for sample in round_.get("samples", []):
+                    if (not sample.get("active_samples", 0) > 0 or sample.get("drawn_samples") != 0
+                            or not isinstance(sample.get("instance"), int) or sample["instance"] <= 0):
+                        errors.append("Invalid ordinary entry sample visibility or ownership")
+                    evidence[sample.get("key")] = sample.get("instance")
+            prepared = entry.get("prepared", {})
+            for move, key in zip(phase.get("gameplay", {}).get("moves", []), ["flamethrower", "thunderbolt", "rockslide", "dracometeor"]):
+                used = move.get("prepared_instance", 0)
+                if (enabled and (not isinstance(prepared.get(key), int) or prepared.get(key, 0) <= 0 or used != prepared.get(key) or prepared.get(key) != evidence.get(key))) or (not enabled and (prepared or used != 0)):
+                    errors.append("First action did not follow ordinary entry preparation ownership")
     if fixture.get("mode") == "warm-compare":
         heat = details.get("preheat", [])
         end = heat[-1] if heat else {}
@@ -211,8 +247,13 @@ def validate(details, fixture):
             errors.append("Invalid profile/artifact identity")
             continue
         edge = {"low": 540, "medium": 720, "high": 1080, "ultra": min(size)}[preset]
-        factor = min(1, edge / min(size))
-        expected = [math.floor(value * factor + .5) for value in size]
+        arena = row.get("entry", {}).get("arena_native_size") if fixture.get("mode") == "battle-entry" else size
+        if (not isinstance(arena, list) or len(arena) != 2 or not all(isinstance(v, int) and v > 0 for v in arena)
+                or any(v > limit + 2 for v, limit in zip(arena, size))):
+            errors.append("Invalid ordinary battlefield native size")
+            continue
+        factor = min(1, edge / min(arena))
+        expected = [math.floor(value * factor + .5) for value in arena]
         if row.get("render_size") != expected or row.get("response_size") != expected:
             errors.append("Both passes must use the selected aspect-preserving raster")
         if row.get("msaa") != {"low": 0, "medium": 1, "high": 1, "ultra": 2}[preset]:
@@ -283,6 +324,35 @@ def prepare_assets(directory):
     return files, records
 
 
+def prepare_entry_ui_assets(directory):
+    """Serve the two real party icons through the unchanged mobile hash catalog.
+
+    Ordinary battle UI loads HOME images on demand. Keep this fixture narrow;
+    unknown requests still fail instead of reaching a public asset server.
+    Images stay in their bootstrapped slot location, as with the pinned index.
+    """
+    directory.mkdir(parents=True, exist_ok=True)
+    files, home = {}, {"normal": {}, "shiny": {}}
+    for species in ("Charizard", "Dragonite"):
+        source = ROOT / "assets/sprites/pokemon/pokemon_home" / (species + ".png")
+        digest = hashlib.sha256(source.read_bytes()).hexdigest()
+        relative = "home-icons/" + digest + ".png"
+        home["normal"][species] = relative
+        files["/" + relative] = source
+    home_catalog = directory / "home-catalog.json"
+    home_catalog.write_text(json.dumps(home) + "\n")
+    files["/home-icons/catalog.json"] = home_catalog
+    catalog = {key.lstrip("/"): {"sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                                "size": path.stat().st_size} for key, path in files.items()}
+    mobile_catalog = directory / "mobile-catalog.json"
+    mobile_catalog.write_text(json.dumps(catalog) + "\n")
+    files["/mobile-assets/catalog.json"] = mobile_catalog
+    records = [{"key": key.lstrip("/"), "bytes": path.stat().st_size,
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(), "source": "slot_entry_ui_fixture"}
+               for key, path in sorted(files.items())]
+    return files, records
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--serial", required=True)
@@ -290,13 +360,16 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--phase-seconds", type=int, choices=[10, 15, 20], default=15)
     parser.add_argument("--order", choices=ORDERS, default="descending")
-    parser.add_argument("--mode", choices=["smoke", "soak", "warm-compare", "gameplay"], default="smoke")
+    parser.add_argument("--mode", choices=["smoke", "soak", "warm-compare", "gameplay", "battle-entry"], default="smoke")
+    parser.add_argument("--entry-warmup", action="store_true", help="Require the explicit move-warmup gate in the battle-entry APK")
     parser.add_argument("--profile-hitches", action="store_true", help="Private gameplay CPU spans, slow frames and retained-menu comparison")
     parser.add_argument("--first-cast-preparation", choices=["off", "hidden", "covered"], default="off",
                         help="Profile same-instance preparation separately, hidden or drawing behind an opaque cover")
     parser.add_argument("--hitch-visibility-control", action="store_true", help="Four profiled windows: draw effects, suppress, suppress, draw")
     parser.add_argument("--soak-preset", choices=["low", "medium", "high", "ultra"], default="ultra")
     args = parser.parse_args()
+    if args.entry_warmup and args.mode != "battle-entry":
+        parser.error("Entry warmup requires --mode battle-entry")
     if args.profile_hitches and args.mode != "gameplay":
         parser.error("Hitch profiling requires --mode gameplay")
     if args.hitch_visibility_control and not args.profile_hitches:
@@ -334,6 +407,10 @@ def main():
     if shell("getprop ro.kernel.qemu") == "1":
         raise ValueError("An emulator cannot be a physical result")
     files, pins = prepare_assets(output.parent / "fixtures")
+    if args.mode == "battle-entry":
+        ui_files, ui_pins = prepare_entry_ui_assets(output / "ui-fixtures")
+        files.update(ui_files)
+        pins.extend(ui_pins)
     uploads = []
     transport_errors = []
     requests = []
@@ -384,8 +461,9 @@ def main():
         fixture.update(mode="soak", preset=args.soak_preset, phase_seconds=30)
     elif args.mode == "warm-compare":
         fixture.update(mode="warm-compare", phase_seconds=30)
-    elif args.mode == "gameplay":
-        fixture.update(mode="gameplay", phase_seconds=30)
+    elif args.mode in ("gameplay", "battle-entry"):
+        fixture.update(mode=args.mode, phase_seconds=30)
+        if args.mode == "battle-entry": fixture["entry_warmup"] = args.entry_warmup
         if args.profile_hitches:
             fixture["profile_hitches"] = True
         if args.first_cast_preparation != "off":
@@ -414,7 +492,7 @@ def main():
         reverse_created = True
         shell("am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p " + PACKAGE)
         last_phase = ""
-        timeout_seconds = {"soak": 1800, "warm-compare": 1200, "smoke": 900, "gameplay": 600}[args.mode]
+        timeout_seconds = {"soak": 1800, "warm-compare": 1200, "smoke": 900, "gameplay": 600, "battle-entry": 600}[args.mode]
         while time.monotonic() - started < timeout_seconds:
             marker = owned_json("android-quality-phase.json") or {}
             phase = marker.get("phase", "startup") if marker.get("run_id") == fixture["run_id"] else "startup"
@@ -481,12 +559,18 @@ def main():
                 if not raw.startswith(b"\x89PNG\r\n\x1a\n"):
                     raise RuntimeError("Own arena image missing")
                 (output / name).write_bytes(raw)
+            if args.mode == "battle-entry":
+                for index in range(3):
+                    name = f"android-entry-ready-{index}.png"
+                    raw = device("exec-out", "run-as", PACKAGE, "cat", "files/" + name)
+                    if not raw.startswith(b"\x89PNG\r\n\x1a\n"): raise RuntimeError("Ordinary entry UI image missing")
+                    (output / name).write_bytes(raw)
             for name in ["android-quality-graphics.png", "android-quality-support.png"]:
                 raw = device("exec-out", "run-as", PACKAGE, "cat", "files/" + name)
                 if not raw.startswith(b"\x89PNG\r\n\x1a\n"):
                     raise RuntimeError("Native settings image missing")
                 (output / name).write_bytes(raw)
-            if args.mode == "gameplay":
+            if args.mode in ("gameplay", "battle-entry"):
                 for index in range(len(MOVES)):
                     name = f"android-quality-move-{index}.png"
                     raw = device("exec-out", "run-as", PACKAGE, "cat", "files/" + name)

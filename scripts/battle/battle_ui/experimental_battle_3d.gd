@@ -15,6 +15,9 @@ const SUPPORTED := ["dragonite", "roaring-moon"]
 const MegaEvolutionEffect = preload("res://scripts/battle/battle_ui/mega_evolution_effect_3d.gd")
 const MoveEffect = preload("res://scripts/battle/battle_ui/move_effect_3d.gd")
 var android_move_warmup := preload("res://scripts/battle/battle_ui/android_move_warmup.gd").new()
+var android_move_preparation_metrics := {"elapsed_ms": 0, "effects": 0, "rounds": []}
+var android_move_preparation_request: Array[String] = []
+var android_move_preparation_generation := -1
 const SourceMoveEffect = preload("res://scripts/battle/battle_ui/source_move_effect_3d.gd")
 const ContactMoveEffect = preload("res://scripts/battle/battle_ui/contact_move_effect_3d.gd")
 const ElectricMoveEffect = preload("res://scripts/battle/battle_ui/electric_move_effect_3d.gd")
@@ -750,17 +753,39 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 			return
 		await get_tree().process_frame
 
+func android_move_preparation_enabled() -> bool:
+	return android_move_warmup.allows(OS.has_feature("android"), OS.has_feature("android_3d_experimental"), RenderingServer.get_current_rendering_method() == "mobile", OS.has_feature("android_3d_move_warmup"))
+
 func prepare_android_move_effects(available: Array = []) -> void:
-	if not android_move_warmup.allows(OS.has_feature("android"), OS.has_feature("android_3d_experimental"), RenderingServer.get_current_rendering_method() == "mobile", OS.has_feature("android_3d_move_warmup")):
-		return
-	if _preview_wants_3d() or preparation_cancelled or preparation_failed: return
+	if not android_move_preparation_enabled(): return
+	if _preview_wants_3d() or preparation_cancelled or preparation_failed or not active: return
+	var request: Array[String] = android_move_warmup.selected_moves(available)
+	# A late intro check can overlap the screen host's preparation. Let the
+	# current owner finish; never release first-turn input over a busy sample.
+	var tree := get_tree()
+	var owned: int = android_move_warmup.generation
+	while android_move_warmup.busy:
+		await tree.process_frame
+		if not is_inside_tree() or preparation_cancelled or preparation_failed or owned != android_move_warmup.generation: return
+	if not active or _preview_wants_3d(): return
+	# Do not restart a bounded attempt (or refill a consumed node) for the
+	# same request. A cleared pool or newly available moves gets its own pass.
+	if request == android_move_preparation_request and owned == android_move_preparation_generation: return
 	# The S25 control found no extra benefit from drawing these samples.
-	# Keep covered drawing in the private fixture rather than extending entry.
 	var metrics: Dictionary = await android_move_warmup.prepare(self, available, "hidden")
-	if not is_instance_valid(self) or not is_inside_tree() or preparation_cancelled: return
-	preparation_metrics["move_warm_ms"] = metrics.elapsed_ms
-	preparation_metrics["move_warm_effects"] = metrics.effects
-	preparation_metrics["move_warmup"] = metrics
+	if not is_instance_valid(self) or not is_inside_tree() or preparation_cancelled or owned != android_move_warmup.generation: return
+	android_move_preparation_request = request
+	android_move_preparation_generation = owned
+	android_move_preparation_metrics.elapsed_ms += metrics.elapsed_ms
+	android_move_preparation_metrics.effects += metrics.effects
+	preparation_metrics["move_warm_ms"] = android_move_preparation_metrics.elapsed_ms
+	preparation_metrics["move_warm_effects"] = android_move_preparation_metrics.effects
+	var rounds: Array = android_move_preparation_metrics.rounds
+	if rounds.size() == 4: rounds.pop_front()
+	rounds.append(metrics)
+	preparation_metrics["move_warmup_rounds"] = rounds
+	if metrics.effects > 0 or not preparation_metrics.has("move_warmup"):
+		preparation_metrics["move_warmup"] = metrics
 	if OS.has_feature("android_3d_performance_probe"):
 		print("ANDROID_3D_MOVE_WARM ", JSON.stringify(metrics))
 
