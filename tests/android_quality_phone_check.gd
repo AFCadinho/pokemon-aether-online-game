@@ -114,6 +114,13 @@ func _prepare(preset: String) -> bool:
 	stage.set_combatant(0, "Charizard")
 	stage.set_combatant(1, "Dragonite")
 	await stage.await_prepared(true, 60000)
+	report.preparation = {"active": stage.active, "phase": stage.preparation_phase, "reason": stage.reason,
+		"arena": stage.arena_id, "arena_problem": stage.arena_problem, "pooled": not stage.forest_lease.is_empty(),
+		"catalog_problem": stage.catalog_problem, "packed_count": stage.packed.size(), "grounded_count": stage.ground_offsets.size(),
+		"pool_preset": pool.quality_preset, "stage_preset": stage.quality_preset, "pool_discarded": pool.discard_requested,
+		"requested_arena": stage._requested_arena(), "manual_catalog": settings.has_manual_battle_3d_catalog_selection(),
+		"catalog_path": settings.get_battle_3d_catalog_path(), "failed_models": stage.failed_models.duplicate(),
+		"model_revision": root.get_node("OnDemand3DBundleService")._selected_release().get("revision", "unknown")}
 	var expected := Quality.dimensions(dimensions, preset)
 	if not _check(stage.active and stage.handles("p1") and stage.handles("p2") and not stage.forest_lease.is_empty(), "Real actors use the arena pool"):
 		return false

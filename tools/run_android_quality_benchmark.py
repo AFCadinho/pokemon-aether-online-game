@@ -162,12 +162,14 @@ def main():
     files, pins = prepare_assets(output.parent / "fixtures")
     uploads = []
     transport_errors = []
+    requests = []
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *unused):
             pass
         def do_GET(self):
             path = urlsplit(self.path).path
             file = files.get(path)
+            requests.append({"method": "GET", "path": path, "allowed": file is not None})
             if file is None or urlsplit(self.path).query:
                 self.send_error(404)
                 return
@@ -241,6 +243,7 @@ def main():
             current_pid = shell("pidof " + PACKAGE)
             if pid is None and current_pid.isdigit():
                 pid = current_pid
+                report["pid"] = pid
             if pid and current_pid != pid:
                 raise RuntimeError("Diagnostic process exited or restarted")
             if phase == "lifecycle-ready" and not lifecycle_done:
@@ -272,6 +275,8 @@ def main():
         report["errors"] += validate(details, fixture) + transport_errors
         if len(uploads) != len(ORDERS[args.order]):
             report["errors"].append("Missing Android telemetry uploads")
+        if report["errors"] and pid:
+            (output / "diagnostic.log").write_bytes(device("logcat", "--pid", pid, "-d", "-v", "brief", check=False))
         if not report["errors"]:
             for index, preset in enumerate(ORDERS[args.order]):
                 name = f"android-quality-{index}-{preset}.png"
@@ -300,6 +305,7 @@ def main():
         server.shutdown()
         server.server_close()
         (output / "details.json").write_text(json.dumps(details, indent=2) + "\n")
+        report["fixture_requests"] = requests
         (output / "report.json").write_text(json.dumps(report, indent=2) + "\n")
         (output / "telemetry.json").write_text(json.dumps({"reports": uploads}, indent=2) + "\n")
     print(json.dumps({"usable": report["usable"], "errors": report["errors"], "output": str(output)}), flush=True)
