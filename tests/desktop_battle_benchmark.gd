@@ -86,14 +86,14 @@ func _run() -> void:
 		if not report.failures.is_empty() or not sink.errors.is_empty(): _finish(); return
 	await _capture_moves()
 	if fixture.mode != "soak":
-		var menu: Control = load("res://scenes/interface/settings/settings_menu.tscn").instantiate()
-		root.add_child(menu)
-		menu.open("game")
+		entry_trial.host._open_battle_settings()
+		var menu: Control = entry_trial.host.battle_settings_menu
 		menu.tab_container.current_tab = 2
 		for i in 5: await process_frame
 		await RenderingServer.frame_post_draw
+		_check(menu.is_visible_in_tree() and entry_trial.host.settings_overlay.visible, "Ordinary host settings visibly open")
 		_check(root.get_texture().get_image().save_png(output.path_join("graphics.png")) == OK, "Desktop settings captured")
-		menu.free()
+		menu.close()
 	report.complete = true
 	_finish()
 

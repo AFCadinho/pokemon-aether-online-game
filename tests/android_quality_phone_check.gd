@@ -355,21 +355,28 @@ func _gameplay_sequence(index: int) -> void:
 		_check(row.visible_frames > 0 and row.hit_seen and row.cleaned, "Real move reached visible impact and effect/audio cleanup: " + MOVES[i])
 		gameplay_row.moves.append(row)
 		move_samples = {}
-	profile_step = "menu_load"
+	var menu: Control
 	var menu_started := Time.get_ticks_usec()
-	var packed: PackedScene = load("res://scenes/interface/settings/settings_menu.tscn")
-	_profile_span(profile_step, menu_started)
-	profile_step = "menu_instantiate"
-	menu_started = Time.get_ticks_usec()
-	var menu: Control = packed.instantiate()
-	_profile_span(profile_step, menu_started)
-	profile_step = "menu_add_ready"
-	menu_started = Time.get_ticks_usec()
-	root.add_child(menu)
-	_profile_span(profile_step, menu_started)
+	if entry_trial != null:
+		# Ordinary battles retain their own menu above the fullscreen battlefield.
+		entry_trial.host._ensure_battle_settings_menu()
+		menu = entry_trial.host.battle_settings_menu
+		gameplay_row.menu_in_host = menu != null and menu.get_parent() == entry_trial.host.settings_center
+	else:
+		profile_step = "menu_load"
+		var packed: PackedScene = load("res://scenes/interface/settings/settings_menu.tscn")
+		_profile_span(profile_step, menu_started)
+		profile_step = "menu_instantiate"
+		menu_started = Time.get_ticks_usec()
+		menu = packed.instantiate()
+		_profile_span(profile_step, menu_started)
+		profile_step = "menu_add_ready"
+		menu_started = Time.get_ticks_usec()
+		root.add_child(menu)
+		_profile_span(profile_step, menu_started)
 	profile_step = "menu_open_new"
 	menu_started = Time.get_ticks_usec()
-	menu.open("game")
+	_open_gameplay_menu(menu)
 	_profile_span(profile_step, menu_started)
 	for tab in 8:
 		profile_step = "menu_tab:%d" % tab
@@ -378,7 +385,7 @@ func _gameplay_sequence(index: int) -> void:
 		_profile_span(profile_step, started)
 		for frame in 10:
 			await process_frame
-		gameplay_row.tabs.append({"tab": tab, "visible": menu.visible and menu.tab_container.current_tab == tab,
+		gameplay_row.tabs.append({"tab": tab, "visible": menu.is_visible_in_tree() and menu.tab_container.current_tab == tab and (entry_trial == null or entry_trial.host.settings_overlay.visible),
 			"ten_frame_ms": (Time.get_ticks_usec() - started) / 1000.0})
 	profile_step = "menu_close_new"
 	menu_started = Time.get_ticks_usec()
@@ -390,7 +397,7 @@ func _gameplay_sequence(index: int) -> void:
 		for frame in 10: await process_frame
 		profile_step = "menu_open_retained"
 		menu_started = Time.get_ticks_usec()
-		menu.open("game")
+		_open_gameplay_menu(menu)
 		_profile_span(profile_step, menu_started)
 		gameplay_row.reopened_menu_instance = menu.get_instance_id()
 		gameplay_row.reopen_tabs = await _profile_menu_tabs(menu)
@@ -400,12 +407,16 @@ func _gameplay_sequence(index: int) -> void:
 		_profile_span(profile_step, menu_started)
 		_check(not menu.visible, "Retained menu closes")
 	profile_step = "menu_queue_free"
-	menu.queue_free()
+	if entry_trial == null: menu.queue_free()
 	await process_frame
 	profile_step = "idle"
 	gameplay_row.complete = true
 	gameplay_row.cycle = index
 	gameplay_done = true
+
+func _open_gameplay_menu(menu: Control) -> void:
+	if entry_trial != null: entry_trial.host._open_battle_settings()
+	else: menu.open("game")
 
 # Separate evidence pass: PNG readback/encoding is excluded from measured casts.
 func _capture_moves() -> void:

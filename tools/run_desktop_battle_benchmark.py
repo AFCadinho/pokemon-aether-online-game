@@ -49,6 +49,8 @@ def validate(details, fixture):
             if stat.get("count", 0) < 10 or any(not isinstance(stat.get(k), (float, int)) or not math.isfinite(stat[k]) for k in ("p50", "p95", "p99", "max")):
                 errors.append("Missing finite frame/GPU timings")
         gameplay = row.get("gameplay", {})
+        if not gameplay.get("menu_in_host") or not all(tab.get("visible") for tab in gameplay.get("tabs", [])):
+            errors.append("Menu was not rendered in the ordinary host overlay")
         if not gameplay.get("complete") or [m.get("move") for m in gameplay.get("moves", [])] != MOVES or len(gameplay.get("tabs", [])) != 8:
             errors.append("Incomplete real move/menu workload")
         for move in gameplay.get("moves", []):

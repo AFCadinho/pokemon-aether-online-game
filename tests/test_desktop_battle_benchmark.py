@@ -13,6 +13,7 @@ class DesktopBenchmarkTests(unittest.TestCase):
         fixture.update(mode="entry", expected_adapter="NVIDIA GeForce RTX 3070 Laptop GPU", warmup=enabled, order=["medium"] * 3, seconds=30)
         details.update(renderer="forward_plus", adapter="NVIDIA GeForce RTX 3070 Laptop GPU")
         for row in details["phases"]:
+            row["gameplay"]["menu_in_host"] = True
             row.update(seconds=30.01, render_size=[1440,810], response_size=[1440,810])
             row["entry"]["arena_native_size"] = [1920,1080]
             for metric in row["timings"].values(): metric["p99"] = metric["p95"]
@@ -29,6 +30,7 @@ class DesktopBenchmarkTests(unittest.TestCase):
     def test_wrong_renderer_gpu_pass_request_or_prepared_identity_is_rejected(self):
         for change in (lambda d: d.update(renderer="gl_compatibility"),
                        lambda d: d.update(adapter="llvmpipe"),
+                       lambda d: d["phases"][0]["gameplay"].update(menu_in_host=False),
                        lambda d: d["phases"][0].update(response_size=[1280,720]),
                        lambda d: d["phases"][0]["entry"].update(selected_slot=1, case="preview_trainer"),
                        lambda d: d["phases"][0]["entry"].update(available_keys=[]),
