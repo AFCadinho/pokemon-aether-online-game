@@ -480,6 +480,39 @@
 			},
 			"weatherProfile": "disabled"
 		},
+		"kanto_celadon_city": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Celadon City",
+			"locationGroupId": "kanto_celadon_city",
+			"locationGroupLabel": "Celadon City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"spawnPoints": {
+				"city_center": {
+					"facingDirection": "down",
+					"label": "City Center",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "CityCenter",
+					"tile": {
+						"x": 38,
+						"y": 17
+					}
+				},
+				"from_route_7": {
+					"facingDirection": "down",
+					"label": "Route 7",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute7",
+					"tile": {
+						"x": 77,
+						"y": 17
+					}
+				}
+			},
+			"weatherProfile": "outdoor"
+		},
 		"kanto_cerulean_cave": {
 			"areaType": "wilderness",
 			"defaultMode": "open",
@@ -3772,6 +3805,16 @@
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_7.tscn",
 			"spawnPoints": {
+				"from_celadon_city": {
+					"facingDirection": "down",
+					"label": "Celadon City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromCeladonCity",
+					"tile": {
+						"x": 2,
+						"y": 24
+					}
+				},
 				"from_underground_path": {
 					"facingDirection": "down",
 					"label": "Underground Path",
@@ -5681,6 +5724,20 @@
 			},
 			"destinationAreaId": "guild_base_main_hall",
 			"sourceMapId": "guild_base_right_room"
+		},
+		"kanto_celadon_city__to_route7": {
+			"destination": {
+				"mapId": "kanto_route_7",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_7.tscn",
+				"position": {
+					"x": 80.0,
+					"y": 784.0
+				},
+				"spawnMarker": "FromCeladonCity"
+			},
+			"destinationAreaId": "kanto_route_7",
+			"sourceMapId": "kanto_celadon_city"
 		},
 		"kanto_cerulean_cave_2f__to_1f_a": {
 			"destination": {
@@ -8663,6 +8720,20 @@
 			},
 			"destinationAreaId": "kanto_saffron_city",
 			"sourceMapId": "kanto_route_6_saffron_gate"
+		},
+		"kanto_route_7__to_celadon_city": {
+			"destination": {
+				"mapId": "kanto_celadon_city",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+				"position": {
+					"x": 2480.0,
+					"y": 560.0
+				},
+				"spawnMarker": "FromRoute7"
+			},
+			"destinationAreaId": "kanto_celadon_city",
+			"sourceMapId": "kanto_route_7"
 		},
 		"kanto_route_7__to_underground_path": {
 			"destination": {
