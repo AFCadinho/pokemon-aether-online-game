@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Enable Android performance diagnostics sharing by default when no preference is saved, while retaining the option to turn it off and preserving saved opt-outs.
+
 - Add desktop Low, Medium, High and Ultra 3D battle quality, with a separate frame limit and an optional first-attack preparation trial.
 
 - Prepare the optional Android first-attack trial from the current move request after lead selection, while keeping first-turn input locked and avoiding repeated preparation.

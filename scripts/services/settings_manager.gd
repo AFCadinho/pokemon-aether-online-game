@@ -90,7 +90,7 @@ var android_quality_preset := AndroidQuality.DEFAULT_PRESET
 var android_fps_limit := 60
 var desktop_battle_quality_preset := BattleQuality.DEFAULT_PRESET
 var desktop_fps_limit := 0
-var share_android_performance := false
+var share_android_performance := true
 var performance_details := false
 var show_performance := false
 var fullscreen := false
@@ -208,7 +208,10 @@ func load_settings() -> void:
 	android_fps_limit = AndroidQuality.validate_fps(data.get("android_fps_limit", 60))
 	desktop_battle_quality_preset = BattleQuality.validate_preset(data.get("desktop_battle_quality_preset", BattleQuality.DEFAULT_PRESET))
 	desktop_fps_limit = BattleQuality.validate_fps(data.get("desktop_fps_limit", 0))
-	share_android_performance = data.get("share_android_performance") is bool and data.get("share_android_performance") == true
+	# Enable diagnostics by default, while preserving a saved opt-out. Invalid
+	# values remain disabled rather than being coerced into permission to share.
+	var saved_performance: Variant = data.get("share_android_performance", true)
+	share_android_performance = saved_performance is bool and saved_performance == true
 	performance_details = bool(data.get("performance_details", false))
 	show_performance = bool(data.get("show_performance", false))
 	fullscreen = bool(data.get("fullscreen", fullscreen))

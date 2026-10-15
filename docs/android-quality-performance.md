@@ -1,6 +1,6 @@
 # Android quality and performance diagnostics
 
-This first implementation provides explicit presets and opt-in measurements.
+This implementation provides explicit presets and optional performance sharing.
 It does not assign a hardware tier, run a startup benchmark, enable experimental
 3D on ordinary builds, or automatically change a player's quality/presentation.
 
@@ -29,10 +29,15 @@ quality discards idle/prewarmed worlds and marks a borrowed pool for release
 after its battle. Prewarmed UI metadata includes quality to prevent stale reuse.
 Desktop/browser rendering remains on its existing path.
 
-Android Support offers **Share Android performance diagnostics**, initially off.
-The client samples only while opted in, authenticated, foreground and outside
-impersonation. Opt-out cancels the request and clears all pending samples.
+Android Support offers **Share Android performance diagnostics**, enabled by
+default for new profiles and profiles without a saved preference. A saved false
+value remains disabled, including values saved by older clients; malformed
+preferences also remain disabled. Players can turn sharing off at any time.
+The client samples only while sharing is enabled, authenticated, foreground and
+outside impersonation. Opt-out cancels the request and clears all pending samples.
 An already accepted report remains subject to server retention.
+The server's independent `ANDROID_PERFORMANCE_ENABLED` switch still defaults to
+false. This client change does not activate or deploy production ingestion.
 
 ## Collection and transport
 

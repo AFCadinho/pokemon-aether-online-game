@@ -72,6 +72,23 @@ func _run() -> void:
 	var saved := FileAccess.get_file_as_string(settings.SETTINGS_PATH) if existed else ""
 	var old_max_fps := Engine.max_fps
 	var old_presentation: String = settings.battle_presentation_mode
+	var fresh_settings: Node = settings.get_script().new()
+	assert(fresh_settings.share_android_performance, "Fresh profiles must enable diagnostics")
+	fresh_settings.free()
+	# Profiles predating diagnostics receive the default; saved opt-outs survive
+	# subsequent loads, regardless of the current in-memory value.
+	var legacy_profile: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(settings.SETTINGS_PATH))
+	legacy_profile.erase("share_android_performance")
+	var legacy_file := FileAccess.open(settings.SETTINGS_PATH, FileAccess.WRITE)
+	legacy_file.store_string(JSON.stringify(legacy_profile))
+	legacy_file.close()
+	settings.share_android_performance = false
+	settings.load_settings()
+	assert(settings.share_android_performance, "An absent preference must enable diagnostics")
+	settings.set_share_android_performance(false)
+	settings.share_android_performance = true
+	settings.load_settings()
+	assert(not settings.share_android_performance, "A saved opt-out must survive loading")
 	var menu: Control = load("res://scenes/interface/settings/settings_menu.tscn").instantiate()
 	root.add_child(menu)
 	menu._create_android_quality_controls(menu.find_child("GraphicsContent", true, false))
