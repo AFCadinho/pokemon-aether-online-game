@@ -70,4 +70,91 @@ limits. This test does not require a weaker phone; it cannot certify one.
 
 ## Physical result — 2026-10-15
 
-Pending completion of the physical test.
+The physical run completed successfully. Preheat reached the required
+condition after **337.84 seconds (5 min 38 s)**: High's latest short observation
+was **50.79 FPS**, native thermal status **2 (moderate)**. There were 67 bounded
+five-second observations; no workload/background interruption was recorded.
+
+The measured bracket contained **120.03 seconds** over **133.10 seconds wall
+time**, with profile switches/settling and instrumentation excluded from frame
+statistics. Stage IDs confirmed that the initial High reused preheat, both
+Medium windows shared one prepared stage, and the final High used a newly
+prepared High stage. All real actor, pool, profile, both-pass raster and MSAA
+checks passed. High was 2340×1080 and Medium 1560×720; both had 2× MSAA.
+
+| Window | Profile | FPS | Frame p95 ms | Main GPU p50 / p95 ms | Render MiB | Thermal start → end |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| 0 | high | 51.64 | 33.38 | 17.22 / 17.30 | 632.02 | 2 → 2 |
+| 1 | medium | 60.05 | 16.97 | 11.86 / 13.21 | 533.84 | 2 → 2 |
+| 2 | medium | 59.83 | 16.99 | 11.86 / 13.19 | 533.84 | 2 → 2 |
+| 3 | high | 55.63 | 33.28 | 14.84 / 19.46 | 633.00 | 2 → 2 |
+
+Medium's actual frame-count-weighted average across its two windows was
+**59.94 FPS**. The two High references were **51.64 and 55.63 FPS**, weighted
+**53.63 FPS**. Medium had five intervals above the 25 ms tolerance and one above
+50 ms (maximum 65.41 ms); High had 391 above 25 ms and none above 50 ms.
+Neither had intervals above 100 ms. No blocking-pipeline counter increased
+within any measured window; preparation/compilation was outside those samples.
+
+Medium improved both observed frame pacing and main-pass GPU time in this
+warm bracket, while retaining the same MSAA and authored shadows. Render
+allocation was about 533.84 MiB instead of High's 632.02–633.00 MiB. Native
+PSS fluctuated around 2.14–2.17 GiB during profile handoffs and must not be
+added to render memory or interpreted as a leak from this short comparison.
+Arena captures were visually inspected: both actors, forest and shadows were
+present; Medium had the expected smaller render raster and coarser edges.
+
+**Medium is a promising candidate, not a certified sustained 60 FPS setting.**
+The final High GPU p50 (14.84 ms) was lower than initial High (17.22 ms), so
+device performance changed within the bracket even though every boundary
+reported thermal status 2. That coarse status does not establish identical
+frequencies or die temperatures. Different frozen actor poses and unmeasured
+background/system behavior also remain limitations. The improvement is an
+observed result of this bracket; one short run cannot assign an exact causal
+effect size or prove twenty-minute stability/full gameplay quality. No
+quality default, automatic recommendation or production behavior was changed.
+
+The next duration candidate is Medium under recorded comparable conditions;
+it was not automatically extended into another twenty-minute run. Wider
+physical-device coverage remains unavailable on the user's hardware.
+
+### Device and power conditions
+
+Samsung SM-S938B / S25 Ultra, Adreno 830, Android API 37, Mobile/Vulkan,
+ARM64 debug build `android-quality-636bed02fa28`, game version 0.3.110.
+Power saving was off. In contrast to the earlier full-battery AC-reported
+soaks, Android reported **USB power and active charging, battery 99%** at
+both saved endpoints. The host battery sensor went from 28.5 °C at startup to
+36.4 °C after the bracket; native and 48 host health samples peaked at thermal
+status 2. This trial is compared internally; its absolute values should not be
+pooled with the earlier twenty-minute runs as identical power conditions.
+
+### Verification and provenance
+
+All four actual USB-local uploads completed with unique report IDs and the
+exact High/Medium/Medium/High order. Actual Android HOME/resume afterwards
+succeeded (2 pause and 2 resume notifications), and opt-out cleared pending
+data and stopped processing. Engine/check errors were empty. The process was
+stopped, its owned ADB reverse removed and artifacts saved before the user
+was told they could disconnect.
+
+The four Android payloads passed the exact backend `PerformanceReport` and
+`PerformanceBatch` schema/count contracts in a network-disabled Python 3.13
+container. No account/session, backend runtime, database or authenticated
+server ingestion was used. Twenty-one focused Python harness/GPU checks
+passed, including cold/unbounded/wrong-order/recreated-stage rejection and
+retention of observed cooling. The updated GDScript parsed, built with the real
+Java performance bridge and completed on the phone. No full certification,
+release, deployment or production collection was performed.
+
+Local artifacts are retained under this slot's ignored
+`.tmp/android-quality-phone/`: `warm-export-1/` has the APK/build/parse logs;
+`warm-run-1/` has `report.json`, `details.json` (including preheat samples),
+`telemetry.json`, derived `summary.json`, four arena PNGs and two settings PNGs.
+The APK SHA-256 is
+`953b9614e5174a2f12b5eaae220a47506eed04d2bc8db4c8367e9b57d7b52b21`.
+APK source was `636bed02fa28`; the host ran clean commit
+`a41e20e027bf1f50bbfc44e7406877d5d4b5b3d0`. Since the earlier soak APK, the
+only other game-content change in this branch's ancestry was the Pewter Museum
+visual refresh, not the forest benchmark. Existing verified art in this
+isolated app's own cache was reused; there were no fixture GETs during this run.
