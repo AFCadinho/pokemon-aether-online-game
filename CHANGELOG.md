@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Route 7 and Route 11 visuals from their updated Tiled sources.
+
 - Refresh Route 5 and Route 6 visuals from their latest Tiled sources, including updated ground and object placement.
 
 - Refresh Saffron City’s visual from its updated Tiled source.
