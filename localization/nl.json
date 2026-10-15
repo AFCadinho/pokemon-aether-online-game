@@ -1,4 +1,13 @@
 {
+  "ui.settings.android.quality": "Android 3D-kwaliteit",
+  "ui.settings.android.quality.low": "Laag",
+  "ui.settings.android.quality.medium": "Gemiddeld",
+  "ui.settings.android.quality.high": "Hoog",
+  "ui.settings.android.quality.ultra": "Ultra",
+  "ui.settings.android.quality_hint": "Regelt 3D-resolutie, anti-aliasing en schaduwen vanaf het volgende gevecht. Ultra gebruikt native resolutie. 2D-beelden en de interface blijven scherp.",
+  "ui.settings.android.fps": "Framelimiet",
+  "ui.settings.android.share_performance": "Android-performancediagnostiek delen",
+  "ui.settings.android.share_hint": "Verstuur technische samenvattingen van toestelmodel, gameversie, instellingen, frametijden, laden, geheugen en warmtestatus. Standaard uit. Geen chat, team, account-ID of toestelidentificatie.",
   "ui.encounter_guard.renew_title": "Encounter Guard uitgewerkt",
   "ui.encounter_guard.renew_message": "Je Encounter Guard is uitgewerkt. Wil je een nieuwe activeren voor maximaal 3.000 wilde encounters, tot je eerste Ultra Rare, Legendary of Shiny?",
   "ui.encounter_guard.renew_confirm": "Activeren",

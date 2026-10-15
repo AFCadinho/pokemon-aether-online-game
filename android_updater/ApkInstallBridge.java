@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Debug;
+import android.os.PowerManager;
 import android.provider.Settings;
 import androidx.core.content.FileProvider;
 import java.io.File;
@@ -51,6 +53,32 @@ public final class ApkInstallBridge {
                 return value.toString();
             }
             return "{}";
+        }
+    }
+
+    /** Technical counters only, sampled at most once per five foreground seconds. */
+    public static String getPerformanceSnapshot(Activity activity) {
+        if (activity == null) return "{}";
+        JSONObject value = new JSONObject();
+        try {
+            value.put("androidApi", Build.VERSION.SDK_INT);
+            value.put("processPssBytes", Debug.getPss() * 1024L);
+            PowerManager power = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
+            if (power != null) {
+                value.put("powerSaveMode", power.isPowerSaveMode());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    value.put("thermalStatus", ThermalApi29.status(power));
+                }
+            }
+        } catch (Exception error) {
+            // Keep available fields; unavailable values must not look like zero.
+        }
+        return value.toString();
+    }
+
+    private static final class ThermalApi29 {
+        static int status(PowerManager power) {
+            return power.getCurrentThermalStatus();
         }
     }
 

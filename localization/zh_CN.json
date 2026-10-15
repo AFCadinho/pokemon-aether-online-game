@@ -1,4 +1,13 @@
 {
+  "ui.settings.android.quality": "Android 3D 画质",
+  "ui.settings.android.quality.low": "低",
+  "ui.settings.android.quality.medium": "中",
+  "ui.settings.android.quality.high": "高",
+  "ui.settings.android.quality.ultra": "极高",
+  "ui.settings.android.quality_hint": "从下一场对战起调整 3D 分辨率、抗锯齿和阴影。极高使用原生分辨率。2D 画面和界面保持清晰。",
+  "ui.settings.android.fps": "帧率上限",
+  "ui.settings.android.share_performance": "分享 Android 性能诊断",
+  "ui.settings.android.share_hint": "发送设备型号、游戏版本、设置、帧耗时、加载、内存和温度状态的技术摘要。默认关闭。不包含聊天、队伍、账号 ID 或设备标识。",
   "ui.encounter_guard.renew_title": "Encounter Guard 已用完",
   "ui.encounter_guard.renew_message": "你的 Encounter Guard 已用完。是否再激活一个？最多保护 3,000 次野外遭遇，直到遇到第一只 Ultra Rare、Legendary 或 Shiny。",
   "ui.encounter_guard.renew_confirm": "激活",

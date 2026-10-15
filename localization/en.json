@@ -1,4 +1,13 @@
 {
+  "ui.settings.android.quality": "Android 3D quality",
+  "ui.settings.android.quality.low": "Low",
+  "ui.settings.android.quality.medium": "Medium",
+  "ui.settings.android.quality.high": "High",
+  "ui.settings.android.quality.ultra": "Ultra",
+  "ui.settings.android.quality_hint": "Controls 3D resolution, anti-aliasing and shadows from the next battle. Ultra uses native resolution. 2D visuals and interface stay sharp.",
+  "ui.settings.android.fps": "Frame limit",
+  "ui.settings.android.share_performance": "Share Android performance diagnostics",
+  "ui.settings.android.share_hint": "Send technical summaries of device model, game version, settings, frame times, loading, memory and thermal state. Off by default. No chat, team, account ID or device identifier is included.",
   "ui.encounter_guard.renew_title": "Encounter Guard expired",
   "ui.encounter_guard.renew_message": "Your Encounter Guard has been used up. Activate another for up to 3,000 wild encounters, until your first Ultra Rare, Legendary or Shiny?",
   "ui.encounter_guard.renew_confirm": "Activate",

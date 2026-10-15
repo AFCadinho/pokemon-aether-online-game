@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Android Low, Medium, High and Ultra 3D quality presets, a separate 30/60 FPS limit, and optional performance diagnostics sharing.
+
 - Have Dadinho leave the Route 5 Daycare after completing his lesson when the map is next loaded, while keeping him present through the current conversation.
 
 - Refresh the Underground Path entrance visuals on Routes 5, 6, 7 and 8 from their updated Tiled sources.
