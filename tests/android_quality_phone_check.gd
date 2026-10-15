@@ -27,6 +27,9 @@ var move_samples := {}
 var profile_hitches := false
 var profile_step := "idle"
 var cast_preparation := {}
+var entry_trial: RefCounted
+var entry_observation := {}
+var entry_index := 0
 
 # Diagnostic subclasses preserve the production implementations. Timing data
 # stays in this private APK; none of these probes runs in the ordinary game.
@@ -138,8 +141,8 @@ static func valid_fixture(value: Variant) -> bool:
 		return false
 	var soak: bool = value.get("mode", "smoke") == "soak"
 	var paired: bool = value.get("mode", "smoke") == "warm-compare"
-	var gameplay: bool = value.get("mode") == "gameplay"
-	if value.get("mode", "smoke") not in ["smoke", "soak", "warm-compare", "gameplay"]:
+	var gameplay: bool = value.get("mode") in ["gameplay", "battle-entry"]
+	if value.get("mode", "smoke") not in ["smoke", "soak", "warm-compare", "gameplay", "battle-entry"]:
 		return false
 	if not value.get("profile_hitches", false) is bool or (value.get("profile_hitches", false) and not gameplay):
 		return false
@@ -147,6 +150,8 @@ static func valid_fixture(value: Variant) -> bool:
 		return false
 	if value.get("first_cast_preparation", "off") not in ["off", "hidden", "covered"]: return false
 	if value.get("first_cast_preparation", "off") != "off" and (not gameplay or not value.get("profile_hitches", false) or value.get("hitch_visibility_control", false)): return false
+	if value.get("mode") == "battle-entry" and (value.get("profile_hitches", false) or value.get("first_cast_preparation", "off") != "off"): return false
+	if not value.get("entry_warmup", false) is bool: return false
 	if soak and value.get("preset") not in ["low", "medium", "high", "ultra"]:
 		return false
 	var seconds: Variant = value.get("phase_seconds")
@@ -183,7 +188,10 @@ func _release_stage() -> void:
 		router.cancel_render()
 		router.release_threaded_resource_requests()
 		router = null
-	if is_instance_valid(stage):
+	if entry_trial != null:
+		entry_trial.close()
+		entry_trial = null
+	elif is_instance_valid(stage):
 		stage.free()
 	stage = null
 	if is_instance_valid(pool):
@@ -212,22 +220,37 @@ func _prepare(preset: String) -> bool:
 		var light: Node = data.arena.get_node("OutdoorLighting")
 		light.set_process(false)
 		light.apply_seconds(43200.0)
-	canvas = SubViewport.new()
-	canvas.size = dimensions
-	canvas.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	root.add_child(canvas)
-	surface = TextureRect.new()
-	surface.texture = canvas.get_texture()
-	surface.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	root.add_child(surface)
-	surface.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	stage = ProfiledStage.new() if profile_hitches else Stage.new()
-	canvas.add_child(stage)
-	stage.setup()
-	stage.set_battle_context(&"grass", "wild")
-	stage.set_combatant(0, "Charizard")
-	stage.set_combatant(1, "Dragonite")
-	await stage.await_prepared(true, 60000)
+	RenderingServer.global_shader_parameter_set("wind_speed", 0.0)
+	entry_observation = {}
+	if fixture.get("mode") == "battle-entry":
+		var entry_script: Script = load("res://tests/fixtures/android_battle_entry_trial.gd")
+		entry_trial = entry_script.new()
+		settings.battle_ui_layout = "immersive"
+		await entry_trial.mount(Engine.get_main_loop(), entry_script.CASES[entry_index])
+		stage = entry_trial.stage
+		_marker("intro:" + entry_script.CASES[entry_index])
+		entry_observation = await entry_trial.finish(Engine.get_main_loop(), 60000)
+		if not _check(entry_trial.errors.is_empty() and entry_observation.ready, "Actual host and intro reach first-turn readiness"): return false
+		if not _check(entry_observation.warmup_enabled == fixture.get("entry_warmup", false), "APK entry warmup matches requested control"): return false
+		await RenderingServer.frame_post_draw
+		_check(root.get_texture().get_image().save_png("user://android-entry-ready-%d.png" % entry_index) == OK, "Ordinary entry UI captured after intro")
+	else:
+		canvas = SubViewport.new()
+		canvas.size = dimensions
+		canvas.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+		root.add_child(canvas)
+		surface = TextureRect.new()
+		surface.texture = canvas.get_texture()
+		surface.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		root.add_child(surface)
+		surface.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		stage = ProfiledStage.new() if profile_hitches else Stage.new()
+		canvas.add_child(stage)
+		stage.setup()
+		stage.set_battle_context(&"grass", "wild")
+		stage.set_combatant(0, "Charizard")
+		stage.set_combatant(1, "Dragonite")
+		await stage.await_prepared(true, 60000)
 	cast_preparation = {"mode": "off", "elapsed_ms": 0, "effects": 0, "samples": []}
 	var mode := str(fixture.get("first_cast_preparation", "off"))
 	if mode != "off":
@@ -299,10 +322,11 @@ func _gameplay_sequence(index: int) -> void:
 	gameplay_row = {"moves": [], "tabs": [], "complete": false}
 	profile_step = "router_load_new"
 	var router_started := Time.get_ticks_usec()
-	router = load("res://scripts/battle/battle_animation_router.gd").new()
+	router = entry_trial.battle.animation_router if entry_trial != null else load("res://scripts/battle/battle_animation_router.gd").new()
 	_profile_span(profile_step, router_started)
-	router.model_presenter = stage
-	router.animation_parent = stage
+	if entry_trial == null:
+		router.model_presenter = stage
+		router.animation_parent = stage
 	for i in MOVES.size():
 		profile_step = "move:" + MOVES[i]
 		var actor := "p1" if i % 2 == 0 else "p2"
@@ -462,8 +486,9 @@ func _preheat() -> bool:
 func _observe(preset: String, index: int) -> void:
 	var soak: bool = fixture.get("mode", "smoke") == "soak"
 	var paired: bool = fixture.get("mode", "smoke") == "warm-compare"
-	var gameplay: bool = fixture.get("mode") == "gameplay"
+	var gameplay: bool = fixture.get("mode") in ["gameplay", "battle-entry"]
 	var reuse: bool = (soak and index > 0) or (paired and index in [0, 2])
+	entry_index = index
 	var prepared := Time.get_ticks_msec()
 	if not reuse and not await _prepare(preset):
 		return
@@ -565,6 +590,7 @@ func _observe(preset: String, index: int) -> void:
 		row.native_start = native_start
 	if gameplay:
 		row.gameplay = gameplay_row.duplicate(true)
+		if fixture.get("mode") == "battle-entry": row.entry = entry_observation.duplicate(true)
 	if profile_hitches:
 		row.cast_preparation = cast_preparation.duplicate(true)
 		row.hitch_profile = {"events": stage.hitch_events.duplicate(true), "dropped": stage.trace_cap.dropped,
@@ -664,7 +690,7 @@ func _run() -> void:
 		if not await _preheat():
 			_finish(); return
 		order = ["high", "medium", "medium", "high"]
-	elif fixture.get("mode") == "gameplay":
+	elif fixture.get("mode") in ["gameplay", "battle-entry"]:
 		order = ["medium", "medium", "medium"]
 		if fixture.get("hitch_visibility_control", false):
 			order.append("medium")
@@ -673,7 +699,7 @@ func _run() -> void:
 		await _observe(order[index], index)
 		if not report.failures.is_empty() or not sink.errors.is_empty():
 			_finish(); return
-	if fixture.get("mode") == "gameplay":
+	if fixture.get("mode") in ["gameplay", "battle-entry"]:
 		if profile_hitches:
 			_verify_profile_factories()
 		await _capture_moves()

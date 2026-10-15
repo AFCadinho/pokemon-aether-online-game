@@ -30,6 +30,7 @@ def main():
     parser.add_argument("--sdk", type=Path)
     parser.add_argument("--templates", type=Path, default=Path.home() / ".local/share/godot/export_templates/4.6.2.stable")
     parser.add_argument("--java", type=Path, default=Path("/usr/lib/jvm/java-26-openjdk"))
+    parser.add_argument("--entry-move-warmup", action="store_true", help="Enable the existing move-preparation gate only in a private Android quality APK")
     parser.add_argument("--emulator-frame-pacing-off", action="store_true", help="3D diagnostic-only x86_64 workaround for Godot emulator issue 121035")
     parser.add_argument("--android-renderer", choices=["gl_compatibility", "mobile"], default="gl_compatibility")
     parser.add_argument("--architecture", choices=["arm64-v8a", "x86_64"], default="arm64-v8a")
@@ -48,6 +49,8 @@ def main():
     android_moves = args.suite == "android-moves"
     android_gpu = args.suite == "android-gpu"
     android_quality = args.suite == "android-quality"
+    if args.entry_move_warmup and not android_quality:
+        parser.error("Entry move warmup is limited to the separate Android quality APK")
     if (android_gpu or android_quality) and (args.platform != "android" or args.architecture != "arm64-v8a" or args.android_renderer != "mobile" or args.emulator_frame_pacing_off):
         parser.error("GPU isolation requires physical ARM64 Android, Mobile and ordinary frame pacing")
     android_budget = args.suite == "android-battle-budget"
@@ -78,7 +81,7 @@ def main():
             CHECKS = ["android_gpu_isolation_check"]
         if android_quality:
             CHECKS = ["android_quality_phone_check"]
-        FIXTURES = []
+        FIXTURES = ["android_battle_entry_trial"] if android_quality else []
         if android_arenas:
             FIXTURES = ["compatibility_outdoor_colour_probe"]
     if mobile_collapse:
@@ -341,7 +344,7 @@ def main():
                 if android_gpu:
                     selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_experimental,android_gpu_isolation"', selected, flags=re.M)
                 if android_quality:
-                    selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_experimental,android_quality_benchmark"', selected, flags=re.M)
+                    selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_experimental,android_quality_benchmark' + (',android_3d_move_warmup' if args.entry_move_warmup else '') + '"', selected, flags=re.M)
                 release_version = re.search(r'^config/version="([^"]+)"$', originals[project].decode(), re.M).group(1)
                 selected = re.sub(r'^version/name=.*$', 'version/name="' + release_version + '-3d-pilot.1"', selected, flags=re.M)
             if android_choice:

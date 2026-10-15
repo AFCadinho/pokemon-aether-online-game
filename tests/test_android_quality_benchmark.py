@@ -189,6 +189,54 @@ class AndroidQualityResultTests(unittest.TestCase):
             change(details)
             self.assertTrue(validate(details, fixture))
 
+    def entry_result(self, enabled=True):
+        fixture, details = self.gameplay_result()
+        fixture.update(mode="battle-entry", entry_warmup=enabled)
+        keys = ["flamethrower", "thunderbolt", "rockslide", "dracometeor"]
+        for kind, phase in zip(["covered_wild", "early_wild", "preview_trainer"], details["phases"]):
+            phase["entry"] = {"case": kind, "ready": True, "warmup_enabled": enabled,
+                "input_held_during_preparation": True, "samples_hidden": True, "available_keys": keys,
+                "elapsed_ms": 6000, "early_visible_before_response": kind == "early_wild", "selected_slot": 2,
+                "previews_have_no_casts": True, "actors": ["dragonite", "charizard"],
+                "prepared": {key: 9000 + i for i, key in enumerate(keys)} if enabled else {},
+                "warmup": [{"mode": "hidden", "elapsed_ms": 900, "effects": 4,
+                    "samples": [{"key": key, "instance": 9000 + i, "active_samples": 5, "drawn_samples": 0}
+                                for i, key in enumerate(keys)]}] if enabled else []}
+            for i, move in enumerate(phase["gameplay"]["moves"]): move["prepared_instance"] = 9000 + i if enabled else 0
+        return fixture, details
+
+    def test_ordinary_entry_with_real_request_and_prepared_factory_handoff(self):
+        for enabled in (False, True):
+            fixture, details = self.entry_result(enabled)
+            self.assertEqual(validate(details, fixture), [])
+
+    def test_rejects_early_input_wrong_lead_missing_request_or_wrong_handoff(self):
+        for change in (lambda d: d["phases"][0]["entry"].update(ready=False),
+                       lambda d: d["phases"][0]["entry"].update(input_held_during_preparation=False),
+                       lambda d: d["phases"][0]["entry"].update(samples_hidden=False),
+                       lambda d: d["phases"][0]["entry"].update(available_keys=[]),
+                       lambda d: d["phases"][0]["entry"].update(warmup_enabled=False),
+                       lambda d: d["phases"][0]["entry"].update(warmup=[]),
+                       lambda d: d["phases"][0]["entry"]["warmup"][0].update(elapsed_ms=float("nan")),
+                       lambda d: d["phases"][0]["entry"]["warmup"][0]["samples"][0].update(drawn_samples=1),
+                       lambda d: d["phases"][1]["entry"].update(early_visible_before_response=False),
+                       lambda d: d["phases"][2]["entry"].update(selected_slot=1),
+                       lambda d: d["phases"][2]["entry"].update(actors=["charizard", "dragonite"]),
+                       lambda d: d["phases"][2]["entry"].update(previews_have_no_casts=False),
+                       lambda d: d["phases"][0]["gameplay"]["moves"][0].update(prepared_instance=123)):
+            fixture, details = self.entry_result()
+            change(details)
+            self.assertTrue(validate(details, fixture))
+
+    def test_entry_warmup_build_flag_is_restricted_to_private_quality_apk(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "forbidden"
+            run = subprocess.run([sys.executable, "tools/export_battle_entry_web_qa.py", "--suite", "battle-entry",
+                                  "--entry-move-warmup", "--output", str(output)], capture_output=True, text=True)
+            self.assertEqual(run.returncode, 2)
+            self.assertIn("limited to the separate Android quality APK", run.stderr)
+            self.assertFalse(output.exists())
+
     def prepared_result(self, mode="covered"):
         fixture, details = self.profile_result()
         fixture["first_cast_preparation"] = mode

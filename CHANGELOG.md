@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare the optional Android first-attack trial from the current move request after lead selection, while keeping first-turn input locked and avoiding repeated preparation.
+
 - Reuse prepared effects safely in the optional Android loading-time trial; keep automatic activation disabled.
 
 - Reduce repeated 3D attack setup by reusing fixed shaders and geometry, and skip unused generic preparation for Rock Slide.
