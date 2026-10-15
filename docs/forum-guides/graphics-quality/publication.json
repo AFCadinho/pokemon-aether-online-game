@@ -1,0 +1,30 @@
+{
+  "topic_id": 115,
+  "post_id": 122,
+  "title": "Graphics Settings: Low, Medium, High & Ultra",
+  "url": "https://forums.pokeaether.com/t/graphics-settings-low-medium-high-ultra/115",
+  "category_id": 13,
+  "author": "adinho",
+  "published_at": "2026-10-15T15:14:36Z",
+  "version": 1,
+  "raw_sha256": "d351fd5a718f836e280287501842520ed785533b3f34c78fbaa578c5ee5e0288",
+  "created": true,
+  "preview": {
+    "tables": 1,
+    "preset_rows": 4,
+    "headings": [
+      "Which setting should I use?"
+    ]
+  },
+  "verification": {
+    "checked_at": "2026-10-15T15:15:00.224326+00:00",
+    "anonymous_html_status": 200,
+    "anonymous_topic_json_status": 200,
+    "category_id": 13,
+    "author": "adinho",
+    "preset_rows": 4,
+    "upcoming_notice_present": true,
+    "stored_raw_matches_reviewed_sha256": true,
+    "anonymous_raw_matches_reviewed_sha256": true
+  }
+}
