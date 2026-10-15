@@ -1,20 +1,42 @@
-[gd_resource type="TileSet" format=3 uid="uid://dt8aa7a70r37t"]
+[gd_resource type="TileSet" format=3]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_1_0.texture.res" id="1_nfmef"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_2049_0.texture.res" id="2_v4wf8"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_3073_0.texture.res" id="3_uwqbq"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_4097_0.texture.res" id="4_ws5uj"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_5121_0.texture.res" id="5_0hrs0"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_1_0.texture.res" id="1_v4wf8"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_2049_0.texture.res" id="2_uwqbq"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_3073_0.texture.res" id="3_ws5uj"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_4097_0.texture.res" id="4_0hrs0"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_5865_0.texture.res" id="5_j2e4j"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_6377_0.texture.res" id="6_tl38w"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j2e4j"]
-texture = ExtResource("1_nfmef")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yl01a"]
+texture = ExtResource("1_v4wf8")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tl38w"]
-texture = ExtResource("2_v4wf8")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_se1xp"]
+texture = ExtResource("2_uwqbq")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jt0pb"]
+texture = ExtResource("3_ws5uj")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -39,34 +61,9 @@ texture_region_size = Vector2i(32, 32)
 4:2/0 = 0
 5:2/0 = 0
 6:2/0 = 0
-0:3/0 = 0
-1:3/0 = 0
-2:3/0 = 0
-3:3/0 = 0
-4:3/0 = 0
-5:3/0 = 0
-6:3/0 = 0
-0:4/0 = 0
-1:4/0 = 0
-2:4/0 = 0
-3:4/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yl01a"]
-texture = ExtResource("3_uwqbq")
-margins = Vector2i(2, 2)
-separation = Vector2i(4, 4)
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-0:1/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_se1xp"]
-texture = ExtResource("4_ws5uj")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ljl45"]
+texture = ExtResource("4_0hrs0")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -162,9 +159,10 @@ texture_region_size = Vector2i(32, 32)
 5:12/0 = 0
 6:12/0 = 0
 0:13/0 = 0
+1:13/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jt0pb"]
-texture = ExtResource("5_0hrs0")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p3a0k"]
+texture = ExtResource("5_j2e4j")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -180,13 +178,30 @@ texture_region_size = Vector2i(32, 32)
 2:1/0 = 0
 3:1/0 = 0
 4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gmfah"]
+texture = ExtResource("6_tl38w")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
 
 [resource]
 tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_j2e4j")
-sources/1 = SubResource("TileSetAtlasSource_tl38w")
-sources/2 = SubResource("TileSetAtlasSource_yl01a")
-sources/3 = SubResource("TileSetAtlasSource_se1xp")
-sources/4 = SubResource("TileSetAtlasSource_jt0pb")
+sources/0 = SubResource("TileSetAtlasSource_yl01a")
+sources/1 = SubResource("TileSetAtlasSource_se1xp")
+sources/2 = SubResource("TileSetAtlasSource_jt0pb")
+sources/3 = SubResource("TileSetAtlasSource_ljl45")
+sources/4 = SubResource("TileSetAtlasSource_p3a0k")
+sources/5 = SubResource("TileSetAtlasSource_gmfah")
 metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/pewter_city/Pewter Museum of Science.tmx"
 metadata/tiled_compact_atlas_version = 1

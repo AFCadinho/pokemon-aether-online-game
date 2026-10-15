@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh the Pewter Museum of Science visual from its updated Tiled source.
+
 - Add Android Low, Medium, High and Ultra 3D quality presets, a separate 30/60 FPS limit, and optional performance diagnostics sharing.
 
 - Have Dadinho leave the Route 5 Daycare after completing his lesson when the map is next loaded, while keeping him present through the current conversation.
