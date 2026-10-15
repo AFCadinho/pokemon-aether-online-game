@@ -145,8 +145,9 @@ def main():
         dex = [archive.read(name) for name in archive.namelist() if re.fullmatch(r"classes(?:\d+)?\.dex", name)]
         if arch != {"arm64-v8a"} or not any(b"getPerformanceSnapshot" in blob and b"Lcom/pokeaether/game/ApkInstallBridge;" in blob for blob in dex):
             raise ValueError("Require ARM64 with the real native performance bridge")
+    adb = str(Path.home() / "Android/Sdk/platform-tools/adb")
     def device(*command, data=None, check=True, timeout=30):
-        return subprocess.run(["adb", "-s", args.serial, *command], input=data, check=check,
+        return subprocess.run([adb, "-s", args.serial, *command], input=data, check=check,
                               capture_output=True, timeout=timeout).stdout
     def shell(command, check=True):
         return device("shell", command, check=check).decode().strip()
@@ -214,7 +215,7 @@ def main():
     started = time.monotonic()
     reverse_created = False
     try:
-        print(device("install", "--no-incremental", "-r", str(apk), timeout=120).decode(), flush=True)
+        print(device("install", "--no-incremental", "--user", "0", "-r", str(apk), timeout=120).decode(), flush=True)
         shell("am force-stop " + PACKAGE)
         shell("run-as " + PACKAGE + " mkdir -p files")
         shell("run-as " + PACKAGE + " rm -f files/android-quality-results.json files/android-quality-details.json files/android-quality-phase.json")
@@ -289,9 +290,13 @@ def main():
         if pid:
             (output / "diagnostic.log").write_bytes(device("logcat", "--pid", pid, "-d", "-v", "brief", check=False))
     finally:
-        shell("am force-stop " + PACKAGE, check=False)
-        if reverse_created:
-            device("reverse", "--remove", f"tcp:{port}", check=False)
+        try:
+            shell("am force-stop " + PACKAGE, check=False)
+            if reverse_created:
+                device("reverse", "--remove", f"tcp:{port}", check=False)
+        except (OSError, subprocess.SubprocessError) as error:
+            report["errors"].append("USB cleanup unavailable: " + type(error).__name__)
+            report["usable"] = False
         server.shutdown()
         server.server_close()
         (output / "details.json").write_text(json.dumps(details, indent=2) + "\n")
