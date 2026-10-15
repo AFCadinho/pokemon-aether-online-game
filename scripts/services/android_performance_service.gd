@@ -31,16 +31,31 @@ var foreground_usec := 0
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_process(false)
-	if not OS.has_feature("android"):
+	if not _supported_platform():
 		return
 	SettingsManager.settings_changed.connect(_settings_changed)
 	_settings_changed()
 
 func _settings_changed() -> void:
-	var enabled: bool = OS.has_feature("android") and SettingsManager.share_android_performance
+	var enabled := _supported_platform() and _sharing_enabled()
 	set_process(enabled)
 	if not enabled:
 		_clear()
+
+func _supported_platform() -> bool:
+	return OS.has_feature("android")
+
+func _sharing_enabled() -> bool:
+	return SettingsManager.share_android_performance
+
+func _quality_preset() -> String:
+	return SettingsManager.android_quality_preset
+
+func _target_fps() -> int:
+	return SettingsManager.android_fps_limit
+
+func _platform_metadata() -> Dictionary:
+	return {"platform": "android", "deviceModel": (OS.get_model_name().left(96) if not OS.get_model_name().is_empty() else "unknown")}
 
 func _notification(what: int) -> void:
 	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
@@ -108,7 +123,7 @@ func _process(_delta: float) -> void:
 	if now >= next_native:
 		next_native = now + 5000000
 		native = _native_sample()
-	if window.total_usec >= WINDOW_USEC:
+	if window.total_usec >= WINDOW_USEC or window.count >= 10000:
 		_finish_window(now)
 	if next_send == 0:
 		next_send = now + SEND_USEC
@@ -118,7 +133,7 @@ func _process(_delta: float) -> void:
 func _context() -> Dictionary:
 	var scene := "menu"
 	var presentation := "2d"
-	var preset: String = SettingsManager.android_quality_preset
+	var preset := _quality_preset()
 	var raster := Vector2i.ZERO
 	var world := GameState.get_world()
 	if world != null:
@@ -143,7 +158,7 @@ func _context() -> Dictionary:
 		if menu.is_visible_in_tree():
 			scene = "menu"
 	return {"scene": scene, "presentation": presentation, "preset": preset,
-		"presetVersion": Quality.SCHEMA_VERSION, "targetFps": SettingsManager.android_fps_limit,
+		"presetVersion": Quality.SCHEMA_VERSION, "targetFps": _target_fps(),
 		"renderWidth": raster.x, "renderHeight": raster.y,
 		"screenWidth": get_window().size.x, "screenHeight": get_window().size.y}
 
@@ -184,8 +199,9 @@ func _finish_window(now: int, load_ms := 0.0) -> void:
 		if load_ms > 0:
 			report.loadingDurationMs = load_ms
 		report.merge(native)
-		report.merge({"reportId": _report_id(), "schemaVersion": 1, "platform": "android",
-			"deviceModel": (OS.get_model_name().left(96) if not OS.get_model_name().is_empty() else "unknown"), "gameVersion": str(ProjectSettings.get_setting("application/config/version", "dev")).left(80),
+		report.merge(_platform_metadata())
+		report.merge({"reportId": _report_id(), "schemaVersion": 1,
+			"gameVersion": str(ProjectSettings.get_setting("application/config/version", "dev")).left(80),
 			"clientBuild": str(ProjectSettings.get_setting("application/config/build_id", "dev")).left(120),
 			"renderer": RenderingServer.get_current_rendering_method(), "gpu": (RenderingServer.get_video_adapter_name().left(120) if not RenderingServer.get_video_adapter_name().is_empty() else "unknown"), "debugBuild": OS.is_debug_build(),
 			"sessionAgeSeconds": int(foreground_usec / 1000000),
