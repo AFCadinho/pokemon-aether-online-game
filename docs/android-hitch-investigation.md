@@ -98,11 +98,16 @@ creation/compilation, allocations or driver scheduling.
 
 ## Next implementation work
 
-The next focused optimization should remove repeated immutable shader/mesh
+The [resource reuse follow-up](android-effect-resource-reuse.md) implements and
+measures the first optimization below. Repeated Rock Slide preparation drops
+to 0.10–0.16 ms in its new control; the first visible hitch remains substantial.
+
+The original next step was to remove repeated immutable shader/mesh
 construction from action-time effect setup, starting with Rock Slide and the
-other measured lazy effect paths. Keep per-cast materials/uniforms and actor
-clocks isolated. Measure preparation time and first/repeated casts again with
-the same scene and validate impact visuals, cancellation and memory ownership.
+other measured lazy effect paths, while keeping per-cast materials/uniforms
+and actor clocks isolated. The follow-up measures preparation time and
+first/repeated casts with the same scene and checks impact visuals,
+cancellation and memory ownership.
 A bounded preparation step behind the existing battle-loading cover is another
 candidate, but must be measured together with the extra loading time.
 

@@ -20,24 +20,7 @@ func _sprite_values(id: String) -> Array:
 
 func _fire_puff(point: Vector3, size: float, id: String, phase: float, alpha: float, facing: Basis, rotation_value := 0.0) -> void:
 	if fire_shader == null:
-		fire_shader = Shader.new()
-		fire_shader.code = """
-shader_type spatial;
-render_mode unshaded, cull_disabled, blend_add, depth_draw_never;
-uniform sampler2D source_mask : filter_linear, repeat_disable;
-uniform sampler2D flow_mask : filter_linear, repeat_enable;
-uniform float frames = 8.0;
-uniform float frame_index = 0.0;
-uniform float opacity = 1.0;
-uniform float seconds = 0.0;
-void fragment() {
-	vec2 uv = vec2((UV.x + floor(frame_index)) / frames, UV.y);
-	float mask = texture(source_mask, uv).r;
-	float flow = texture(flow_mask, UV * 1.7 + vec2(0.0, seconds * 2.0)).r;
-	ALBEDO = mix(vec3(1.0, 0.12, 0.015), vec3(1.0, 0.87, 0.32), smoothstep(0.2, 0.8, flow));
-	ALPHA = mask * smoothstep(0.1, 0.65, flow) * opacity;
-}
-"""
+		fire_shader = preload("res://scripts/battle/battle_ui/flamethrower_puff.gdshader")
 	if not sprite_templates.has(id):
 		var template := ShaderMaterial.new()
 		template.shader = fire_shader
@@ -85,19 +68,7 @@ func _fire_core(from: Vector3, to: Vector3, fade: float) -> void:
 		flame_cone.top_radius = 1.0
 		flame_cone.bottom_radius = 0.25
 		flame_cone.radial_segments = 12
-		var shader := Shader.new()
-		shader.code = """
-shader_type spatial;
-render_mode unshaded, cull_disabled, blend_add, depth_draw_never;
-uniform sampler2D flow_mask : filter_linear, repeat_enable;
-uniform float seconds = 0.0;
-uniform float opacity = 1.0;
-void fragment() {
-	float flow = texture(flow_mask, vec2(UV.x * 2.0 + seconds * 0.3, UV.y * 5.0 + seconds * 5.0)).r;
-	ALBEDO = mix(vec3(1.0, 0.13, 0.005), vec3(1.0, 0.75, 0.12), flow);
-	ALPHA = (0.25 + flow * 0.5) * opacity;
-}
-"""
+		var shader := preload("res://scripts/battle/battle_ui/flamethrower_core.gdshader")
 		stream_material = ShaderMaterial.new()
 		stream_material.shader = shader
 		stream_material.set_shader_parameter("flow_mask",preload("res://assets/battles/moves_3d/sv_flamethrower/cpt_3_flow0703s.png"))

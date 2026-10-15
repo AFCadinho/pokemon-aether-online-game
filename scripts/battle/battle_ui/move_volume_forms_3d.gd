@@ -1,45 +1,18 @@
 extends RefCounted
 ## Continuous silhouettes. Every animated surface uses the move clock, never TIME.
+## Two fixed read-only meshes, with no scene references or per-cast state.
+static var shared_funnel: ArrayMesh
+static var shared_tail: ArrayMesh
 
 static func energy_material(fire: bool) -> ShaderMaterial:
-	var shader := Shader.new()
-	shader.code = """
-shader_type spatial;
-render_mode unshaded, cull_back;
-uniform float seconds = 0.0;
-uniform bool fire = false;
-void fragment() {
-	float angle = UV.x * 6.283185;
-	float flow = sin(angle * 3.0 + UV.y * 12.0 - seconds * 7.0
-		+ sin(angle * 2.0 - UV.y * 9.0 + seconds * 3.0) * 1.4);
-	float face = abs(dot(normalize(NORMAL), normalize(VIEW)));
-	vec3 low = fire ? vec3(0.85, 0.055, 0.008) : vec3(1.0, 0.38, 0.045);
-	vec3 high = fire ? vec3(1.0, 0.84, 0.18) : vec3(1.0, 0.97, 0.77);
-	float streak = sin(angle * 7.0 + sin(UV.y * 11.0 - seconds * 16.0) * 0.7);
-	float heat = fire ? smoothstep(-0.7, 0.65, flow) : clamp(pow(face, 0.7) + streak * 0.14, 0.0, 1.0);
-	ALBEDO = mix(low, high, heat) * (0.65 + face * 0.35);
-	EMISSION = mix(low, high, heat) * (fire ? 0.35 : 1.2);
-}
-"""
+	var shader := preload("res://scripts/battle/battle_ui/move_energy_volume.gdshader")
 	var material := ShaderMaterial.new()
 	material.shader = shader
 	material.set_shader_parameter("fire", fire)
 	return material
 
 static func tail_material() -> ShaderMaterial:
-	var shader := Shader.new()
-	shader.code = """
-shader_type spatial;
-render_mode unshaded, cull_disabled, blend_add, depth_draw_never;
-uniform float seconds = 0.0;
-uniform float opacity = 1.0;
-void fragment() {
-	float flow = 0.5 + 0.5 * sin(UV.x * 18.84956 - UV.y * 13.0 + seconds * 12.0);
-	float edge = pow(abs(dot(normalize(NORMAL), normalize(VIEW))), 0.6);
-	ALBEDO = mix(vec3(1.0, 0.17, 0.012), vec3(1.0, 0.82, 0.23), (1.0 - UV.y) * 0.65 + flow * 0.25);
-	ALPHA = (1.0 - smoothstep(0.45, 1.0, UV.y)) * (0.45 + flow * 0.18) * edge * opacity;
-}
-"""
+	var shader := preload("res://scripts/battle/battle_ui/move_tail_volume.gdshader")
 	var material := ShaderMaterial.new()
 	material.shader = shader
 	return material
@@ -65,6 +38,8 @@ void fragment() {
 	return material
 
 static func swept_mesh(funnel: bool) -> ArrayMesh:
+	if funnel and shared_funnel != null: return shared_funnel
+	if not funnel and shared_tail != null: return shared_tail
 	var tool := SurfaceTool.new()
 	tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for row in 16:
@@ -77,7 +52,10 @@ static func swept_mesh(funnel: bool) -> ArrayMesh:
 				tool.set_uv(uv)
 				tool.add_vertex(Vector3(cos(angle) * radius, uv.y, sin(angle) * radius))
 	tool.generate_normals()
-	return tool.commit()
+	var mesh := tool.commit()
+	if funnel: shared_funnel = mesh
+	else: shared_tail = mesh
+	return mesh
 
 static func along(direction: Vector3) -> Basis:
 	var y := direction.normalized()

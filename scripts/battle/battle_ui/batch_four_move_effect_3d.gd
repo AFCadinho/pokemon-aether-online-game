@@ -78,8 +78,7 @@ func _sprite_values(id: String) -> Array:
 func _build_surface() -> void:
 	# The source moon mask includes a gray square border; crop it in the shader
 	# while retaining the original packaged pixels and source provenance.
-	sprite_shader.code = sprite_shader.code.replace("void fragment() {", "uniform bool moon_disc = false;\nvoid fragment() {")
-	sprite_shader.code = sprite_shader.code.replace("* opacity;", "* opacity;\n\tif (moon_disc) { ALPHA *= 1.0 - smoothstep(0.43, 0.46, length(UV - vec2(0.5))); }")
+	sprite_shader = preload("res://scripts/battle/battle_ui/source_move_moon_sprite.gdshader")
 	ring.inner_radius = 0.83
 	ring.outer_radius = 1.0
 	ring.rings = 24

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reduce repeated 3D attack setup by reusing fixed shaders and geometry, and skip unused generic preparation for Rock Slide.
+
 - Refresh the Pewter Museum of Science visual from its updated Tiled source.
 
 - Add Android Low, Medium, High and Ultra 3D quality presets, a separate 30/60 FPS limit, and optional performance diagnostics sharing.
