@@ -35,6 +35,8 @@ const LOGOUT_CONFIRM_Z_INDEX := 2200
 @onready var weather_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/WeatherEffectsCheckBox
 @onready var terrain_effects_check_box: CheckBox = $MarginContainer/VBoxContainer/TerrainEffectsCheckBox
 var android_quality_options: OptionButton
+var desktop_quality_options: OptionButton
+var desktop_fps_options: OptionButton
 var android_fps_options: OptionButton
 var android_performance_toggle: CheckBox
 var performance_details_check_box: CheckBox
@@ -325,6 +327,9 @@ func _input(event: InputEvent) -> void:
 
 func _apply_settings_to_controls() -> void:
 	loading_controls = true
+	if desktop_quality_options != null:
+		desktop_quality_options.select(SettingsManager.BattleQuality.PRESETS.find(SettingsManager.desktop_battle_quality_preset))
+		desktop_fps_options.select(SettingsManager.BattleQuality.FPS_LIMITS.find(SettingsManager.desktop_fps_limit))
 	if android_quality_options != null:
 		android_quality_options.select(SettingsManager.AndroidQuality.PRESETS.find(SettingsManager.android_quality_preset))
 		android_fps_options.select(0 if SettingsManager.android_fps_limit == 30 else 1)
@@ -458,6 +463,8 @@ func _setup_tabs() -> void:
 		custom_minimum_size = Vector2(540, 500)
 	if OS.has_feature("android"):
 		_create_android_quality_controls(graphics_tab)
+	elif OS.has_feature("pc"):
+		_create_desktop_quality_controls(graphics_tab)
 	_create_world_pixel_scale_control()
 	_create_ui_scale_control()
 	_create_cursor_scale_control()
@@ -1684,6 +1691,10 @@ func _refresh_tab_titles() -> void:
 
 
 func _refresh_localized_content() -> void:
+	if desktop_quality_options != null:
+		for index in desktop_quality_options.item_count:
+			desktop_quality_options.set_item_text(index, LocalizationManager.text("ui.settings.android.quality." + str(desktop_quality_options.get_item_metadata(index))))
+		desktop_fps_options.set_item_text(0, LocalizationManager.text("ui.settings.battle.fps_unlimited"))
 	if android_quality_options != null:
 		for index in android_quality_options.item_count:
 			android_quality_options.set_item_text(index, LocalizationManager.text("ui.settings.android.quality." + str(android_quality_options.get_item_metadata(index))))
@@ -3154,6 +3165,36 @@ func _confirm_remove_models() -> void:
 	storage_confirm_dialog.confirmed.connect(_remove_downloaded_assets.bind(true), CONNECT_ONE_SHOT)
 	storage_confirm_dialog.popup_centered()
 	storage_confirm_dialog.cancel_button.grab_focus.call_deferred()
+
+
+func _create_desktop_quality_controls(graphics_tab: VBoxContainer) -> void:
+	var label := Label.new()
+	_set_localized_text(label, "ui.settings.battle.quality")
+	desktop_quality_options = OptionButton.new()
+	desktop_quality_options.name = "DesktopBattleQualityOptions"
+	desktop_quality_options.disabled = not SettingsManager.supports_3d_presentation()
+	for preset: String in SettingsManager.BattleQuality.PRESETS:
+		desktop_quality_options.add_item(LocalizationManager.text("ui.settings.android.quality." + preset))
+		desktop_quality_options.set_item_metadata(desktop_quality_options.item_count - 1, preset)
+	desktop_quality_options.item_selected.connect(func(index):
+		if not loading_controls:
+			SettingsManager.set_desktop_battle_quality_preset(str(desktop_quality_options.get_item_metadata(index))))
+	var hint := Label.new()
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_set_localized_text(hint, "ui.settings.android.quality_hint")
+	graphics_tab.add_child(_create_labeled_control_row(label, desktop_quality_options, hint))
+	var fps_label := Label.new()
+	_set_localized_text(fps_label, "ui.settings.android.fps")
+	desktop_fps_options = OptionButton.new()
+	desktop_fps_options.name = "DesktopFPSOptions"
+	for limit: int in SettingsManager.BattleQuality.FPS_LIMITS:
+		desktop_fps_options.add_item(LocalizationManager.text("ui.settings.battle.fps_unlimited") if limit == 0 else "%d FPS" % limit, limit)
+	desktop_fps_options.item_selected.connect(func(index):
+		if not loading_controls:
+			SettingsManager.set_desktop_fps_limit(desktop_fps_options.get_item_id(index)))
+	graphics_tab.add_child(_create_labeled_control_row(fps_label, desktop_fps_options))
+	LanguageSelectorStyle.configure(desktop_quality_options)
+	LanguageSelectorStyle.configure(desktop_fps_options)
 
 
 func _create_android_quality_controls(graphics_tab: VBoxContainer) -> void:

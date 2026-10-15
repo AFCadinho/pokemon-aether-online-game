@@ -384,7 +384,7 @@ func _gameplay_sequence(index: int) -> void:
 	menu_started = Time.get_ticks_usec()
 	menu.close()
 	_profile_span(profile_step, menu_started)
-	_check(not menu.visible and settings.android_quality_preset == "medium", "Menu closes and retains Medium")
+	_check(not menu.visible and _gameplay_profile_valid(), "Menu closes and retains selected quality")
 	if profile_hitches:
 		gameplay_row.menu_instance = menu.get_instance_id()
 		for frame in 10: await process_frame
@@ -435,11 +435,14 @@ func _capture_cast(index: int, done: Dictionary) -> void:
 			if _visible_impact(effect):
 				var evidence := {"index": index, "elapsed": effect.elapsed, "impact": effect.impact, "visible_pieces": effect.cursor}
 				await RenderingServer.frame_post_draw
-				captured = stage.viewport.get_texture().get_image().save_png("user://android-quality-move-%d.png" % index) == OK
+				captured = stage.viewport.get_texture().get_image().save_png(_move_capture_path(index)) == OK
 				report.move_captures.append(evidence)
 				break
 	_check(captured, "Actual move impact captured: " + MOVES[index])
 	done.value = true
+
+func _move_capture_path(index: int) -> String:
+	return "user://android-quality-move-%d.png" % index
 
 func _visible_impact(effect: Node) -> bool:
 	# `hit` is an option set at creation, not an impact notification.
@@ -727,6 +730,9 @@ func _run() -> void:
 	lifecycle.queue_free()
 	report.complete = report.failures.is_empty()
 	_finish()
+
+func _gameplay_profile_valid() -> bool:
+	return settings.android_quality_preset == "medium"
 
 func _finish() -> void:
 	_release_stage()

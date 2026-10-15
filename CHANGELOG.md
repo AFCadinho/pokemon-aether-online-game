@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add desktop Low, Medium, High and Ultra 3D battle quality, with a separate frame limit and an optional first-attack preparation trial.
+
 - Prepare the optional Android first-attack trial from the current move request after lead selection, while keeping first-turn input locked and avoiding repeated preparation.
 
 - Refresh Route 5 and the north-south Underground Path tunnel visuals from their updated Tiled sources.

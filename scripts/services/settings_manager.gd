@@ -6,6 +6,7 @@ signal mount_loadout_changed(movement_mode: String, mount_id: String)
 signal input_binding_changed(action: String, keycode: Key)
 
 const AndroidQuality := preload("res://scripts/services/android_quality_policy.gd")
+const BattleQuality := preload("res://scripts/services/battle_quality_policy.gd")
 
 const PixelPerfectRendering := preload("res://scripts/services/pixel_perfect_rendering.gd")
 const MountServiceScript := preload("res://scripts/services/mount_service.gd")
@@ -87,6 +88,8 @@ var display_own_name := true
 var hide_other_players := false
 var android_quality_preset := AndroidQuality.DEFAULT_PRESET
 var android_fps_limit := 60
+var desktop_battle_quality_preset := BattleQuality.DEFAULT_PRESET
+var desktop_fps_limit := 0
 var share_android_performance := false
 var performance_details := false
 var show_performance := false
@@ -203,6 +206,8 @@ func load_settings() -> void:
 	hide_other_players = bool(data.get("hide_other_players", hide_other_players))
 	android_quality_preset = AndroidQuality.validate_preset(data.get("android_quality_preset", AndroidQuality.DEFAULT_PRESET))
 	android_fps_limit = AndroidQuality.validate_fps(data.get("android_fps_limit", 60))
+	desktop_battle_quality_preset = BattleQuality.validate_preset(data.get("desktop_battle_quality_preset", BattleQuality.DEFAULT_PRESET))
+	desktop_fps_limit = BattleQuality.validate_fps(data.get("desktop_fps_limit", 0))
 	share_android_performance = data.get("share_android_performance") is bool and data.get("share_android_performance") == true
 	performance_details = bool(data.get("performance_details", false))
 	show_performance = bool(data.get("show_performance", false))
@@ -307,6 +312,8 @@ func save_settings() -> bool:
 		"hide_other_players": hide_other_players,
 		"android_quality_preset": android_quality_preset,
 		"android_fps_limit": android_fps_limit,
+		"desktop_battle_quality_preset": desktop_battle_quality_preset,
+		"desktop_fps_limit": desktop_fps_limit,
 		"share_android_performance": share_android_performance,
 		"performance_details": performance_details,
 		"show_performance": show_performance,
@@ -538,6 +545,27 @@ func get_active_sprite_style() -> String:
 	return SPRITE_STYLE_PIXEL if ContentPacks.has_sprite_collection_style("gen5") else SPRITE_STYLE_ANIMATED
 
 
+func get_battle_quality_preset() -> String:
+	if OS.has_feature("android"): return android_quality_preset
+	return desktop_battle_quality_preset if OS.has_feature("pc") else BattleQuality.DEFAULT_PRESET
+
+
+func set_desktop_battle_quality_preset(value: String) -> void:
+	var preset := BattleQuality.validate_preset(value)
+	if preset == desktop_battle_quality_preset: return
+	desktop_battle_quality_preset = preset
+	if OS.has_feature("pc"):
+		var pool := preload("res://scripts/battle/arenas/shared/environment_pool.gd").get_current()
+		if pool != null: pool.discard_when_unused()
+	_save_and_emit()
+
+
+func set_desktop_fps_limit(value: int) -> void:
+	desktop_fps_limit = BattleQuality.validate_fps(value)
+	_apply_frame_limit()
+	_save_and_emit()
+
+
 func set_android_quality_preset(value: String) -> void:
 	var preset := AndroidQuality.validate_preset(value)
 	if preset == android_quality_preset:
@@ -554,7 +582,7 @@ func set_android_quality_preset(value: String) -> void:
 
 func set_android_fps_limit(value: int) -> void:
 	android_fps_limit = AndroidQuality.validate_fps(value)
-	_apply_android_frame_limit()
+	_apply_frame_limit()
 	save_settings()
 	settings_changed.emit()
 
@@ -565,9 +593,11 @@ func set_share_android_performance(enabled: bool) -> void:
 	settings_changed.emit()
 
 
-func _apply_android_frame_limit() -> void:
+func _apply_frame_limit() -> void:
 	if OS.has_feature("android"):
 		Engine.max_fps = android_fps_limit
+	elif OS.has_feature("pc"):
+		Engine.max_fps = desktop_fps_limit
 
 
 func set_performance_details(enabled: bool) -> void:
@@ -969,7 +999,7 @@ func _ensure_audio_bus(bus_name: String) -> void:
 
 
 func _apply_runtime_settings() -> void:
-	_apply_android_frame_limit()
+	_apply_frame_limit()
 	WindowFit.apply_ui_scale()
 	_apply_pixel_rendering_defaults()
 	_apply_input_bindings()
