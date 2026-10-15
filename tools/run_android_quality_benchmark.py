@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import re
 import shlex
+import signal
 import subprocess
 import threading
 import time
@@ -25,6 +26,19 @@ PACKAGE = "com.pokeaether.androidquality." + ROOT.parent.name.replace("-", "_")
 ORDERS = {"descending": ["ultra", "high", "medium", "low", "ultra"],
           "ascending": ["ultra", "low", "medium", "high", "ultra"]}
 COUNTS = ("frame_ms", "main_gpu_ms", "response_gpu_ms")
+
+
+def save_progress(output, report, details, uploads):
+    # Preserve bounded local evidence even if the terminal/host is interrupted.
+    for name, value in (("report.json", report), ("details.json", details),
+                        ("telemetry.json", {"reports": uploads})):
+        partial = output / (name + ".partial")
+        partial.write_text(json.dumps(value, indent=2) + "\n")
+        partial.replace(output / name)
+
+
+def interrupt_run(signum, _frame):
+    raise RuntimeError("Host runner interrupted by signal " + str(signum))
 
 
 def expected_presets(fixture):
@@ -255,7 +269,7 @@ def main():
     elif args.mode == "warm-compare":
         fixture.update(mode="warm-compare", phase_seconds=30)
     report = {"schema": 1, "package": PACKAGE, "fixture": fixture, "pins": pins, "health": [], "errors": [],
-              "usable": False, "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
+              "usable": False, "running": True, "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
               "source_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT)),
               "apk_sha256": hashlib.sha256(apk.read_bytes()).hexdigest(), "transport_only_no_account_authentication": True,
               "device": {key: shell("getprop " + key) for key in ["ro.product.model", "ro.build.version.sdk", "ro.board.platform"]}}
@@ -264,7 +278,9 @@ def main():
     pid, details, lifecycle_done = None, None, False
     started = time.monotonic()
     reverse_created = False
+    old_term = signal.signal(signal.SIGTERM, interrupt_run)
     try:
+        save_progress(output, report, details, uploads)
         print(device("install", "--no-incremental", "--user", "0", "-r", str(apk), timeout=120).decode(), flush=True)
         shell("am force-stop " + PACKAGE)
         shell("run-as " + PACKAGE + " mkdir -p files")
@@ -318,6 +334,8 @@ def main():
                       "thermal_status": number(thermal, r"Thermal Status:\s*(\d+)"),
                       "foreground": any(PACKAGE + "/" in line for line in activities.splitlines() if "mResumedActivity:" in line or "topResumedActivity=" in line)}
             report["health"].append(sample)
+            report["fixture_requests"] = list(requests)
+            save_progress(output, report, details, list(uploads))
             if not sample["foreground"] and time.monotonic() - started > 15:
                 raise RuntimeError("Keep the unlocked diagnostic in the foreground")
             if sample["thermal_status"] is not None and sample["thermal_status"] >= 4:
@@ -350,6 +368,8 @@ def main():
         if pid:
             (output / "diagnostic.log").write_bytes(device("logcat", "--pid", pid, "-d", "-v", "brief", check=False))
     finally:
+        signal.signal(signal.SIGTERM, old_term)
+        report["running"] = False
         try:
             shell("am force-stop " + PACKAGE, check=False)
             if reverse_created:
@@ -359,10 +379,8 @@ def main():
             report["usable"] = False
         server.shutdown()
         server.server_close()
-        (output / "details.json").write_text(json.dumps(details, indent=2) + "\n")
         report["fixture_requests"] = requests
-        (output / "report.json").write_text(json.dumps(report, indent=2) + "\n")
-        (output / "telemetry.json").write_text(json.dumps({"reports": uploads}, indent=2) + "\n")
+        save_progress(output, report, details, uploads)
     print(json.dumps({"usable": report["usable"], "errors": report["errors"], "output": str(output)}), flush=True)
     return 0 if report["usable"] else 1
 
