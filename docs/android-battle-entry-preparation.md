@@ -1,5 +1,7 @@
 # Android ordinary battle entry trial — 2026-10-15
 
+Desktop follow-up: [shared quality budgets and native desktop controls](desktop-battle-quality.md).
+
 This follows the [first-attack preparation control](android-first-attack-preparation.md)
 using the ordinary battle screen host, battle scene, request parser, intro and
 animation router. The integration had a gap: Team Preview intentionally skips
