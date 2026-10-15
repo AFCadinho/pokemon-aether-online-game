@@ -129,6 +129,8 @@ Those local checks did not include a phone test. The subsequent isolated
 [S25 Ultra smoke test](android-quality-phone-smoke.md) records physical preset,
 native telemetry and lifecycle results. A subsequent
 [20-minute Ultra soak](android-quality-soak.md) measured sustained behavior of
-the fixed forest renderer. Full gameplay and weaker-device behavior remain to
+the fixed forest renderer. A later [Medium duration test](android-quality-medium-soak.md)
+completed twenty minutes near 60 FPS on that S25 under recorded USB-power
+conditions. Full gameplay and weaker-device behavior remain to
 be measured. No release certification, deployment or
 production collection was performed.

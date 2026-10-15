@@ -1,7 +1,12 @@
 import copy
+import json
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
 import unittest
 
-from tools.run_android_quality_benchmark import ORDERS, PACKAGE, fixture_pins, require_debug_manifest, validate
+from tools.run_android_quality_benchmark import ORDERS, PACKAGE, fixture_pins, require_debug_manifest, save_progress, validate
 
 
 class AndroidQualityResultTests(unittest.TestCase):
@@ -117,6 +122,32 @@ class AndroidQualityResultTests(unittest.TestCase):
             row["native_start"]["thermalStatus"] = 1
             row["native"]["thermalStatus"] = 1
         self.assertEqual(validate(details, fixture), [])
+
+    def test_interrupted_host_preserves_partial_evidence_as_unusable(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)
+            code = '''
+import signal, sys
+from pathlib import Path
+from tools.run_android_quality_benchmark import interrupt_run, save_progress
+report = {"usable": False, "running": True, "errors": []}
+signal.signal(signal.SIGTERM, interrupt_run)
+try:
+    save_progress(Path(sys.argv[1]), report, {"complete": False}, [{"reportId": "partial"}])
+    signal.raise_signal(signal.SIGTERM)
+except RuntimeError as error:
+    report["errors"].append(str(error))
+finally:
+    report["running"] = False
+    save_progress(Path(sys.argv[1]), report, {"complete": False}, [{"reportId": "partial"}])
+'''
+            subprocess.run([sys.executable, "-c", code, directory], check=True)
+            report = json.loads((path / "report.json").read_text())
+            self.assertFalse(report["usable"] or report["running"])
+            self.assertIn("signal 15", report["errors"][0])
+            self.assertEqual(json.loads((path / "telemetry.json").read_text())["reports"], [{"reportId": "partial"}])
+            self.assertFalse(json.loads((path / "details.json").read_text())["complete"])
+            self.assertEqual(list(path.glob("*.partial")), [])
 
 
 if __name__ == "__main__":

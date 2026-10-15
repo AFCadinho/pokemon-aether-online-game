@@ -115,7 +115,9 @@ effect size or prove twenty-minute stability/full gameplay quality. No
 quality default, automatic recommendation or production behavior was changed.
 
 The next duration candidate is Medium under recorded comparable conditions;
-it was not automatically extended into another twenty-minute run. Wider
+it was not automatically extended into another twenty-minute run. A separately
+requested [Medium duration test](android-quality-medium-soak.md) subsequently
+completed a full twenty minutes near 60 FPS in the fixed forest workload. Wider
 physical-device coverage remains unavailable on the user's hardware.
 
 ### Device and power conditions
