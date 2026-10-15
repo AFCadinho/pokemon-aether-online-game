@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Route 5’s visual from its latest Tiled source.
+
 - Refresh Saffron City’s visual from its updated Tiled source.
 
 - Add a one-time TM Earthquake overworld pickup beside the Route 5 Daycare sign.
