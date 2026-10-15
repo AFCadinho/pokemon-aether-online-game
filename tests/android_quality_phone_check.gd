@@ -24,6 +24,77 @@ var router: RefCounted
 var gameplay_done := false
 var gameplay_row := {}
 var move_samples := {}
+var profile_hitches := false
+var profile_step := "idle"
+
+# Diagnostic subclasses preserve the production implementations. Timing data
+# stays in this private APK; none of these probes runs in the ordinary game.
+class EffectProbe extends RefCounted:
+	var events: Array = []
+	var cap := {"dropped": 0}
+	var move := ""
+	var cpu_ms: Array = []
+	func record(effect: Node, started: int) -> void:
+		var ended := Time.get_ticks_usec()
+		var ms := (ended - started) / 1000.0
+		cpu_ms.append(ms)
+		if ms < 2.0: return
+		if events.size() >= 1024:
+			cap.dropped += 1
+			return
+		events.append({"kind": "effect_process", "move": move, "from_usec": started, "to_usec": ended,
+			"ms": ms, "effect_seconds": effect.elapsed, "visible_pieces": effect.cursor})
+
+class ProfiledFire extends "res://scripts/battle/battle_ui/fire_stream_move_effect_3d.gd":
+	var probe := EffectProbe.new()
+	func _process(delta: float) -> void:
+		var started := Time.get_ticks_usec()
+		super._process(delta)
+		probe.record(self, started)
+
+class ProfiledThunder extends "res://scripts/battle/battle_ui/thunderbolt_move_effect_3d.gd":
+	var probe := EffectProbe.new()
+	func _process(delta: float) -> void:
+		var started := Time.get_ticks_usec()
+		super._process(delta)
+		probe.record(self, started)
+
+class ProfiledRock extends "res://scripts/battle/battle_ui/extended_move_effect_3d.gd":
+	var probe := EffectProbe.new()
+	func _process(delta: float) -> void:
+		var started := Time.get_ticks_usec()
+		super._process(delta)
+		probe.record(self, started)
+
+class ProfiledDraco extends "res://scripts/battle/battle_ui/draco_meteor_effect_3d.gd":
+	var probe := EffectProbe.new()
+	func _process(delta: float) -> void:
+		var started := Time.get_ticks_usec()
+		super._process(delta)
+		probe.record(self, started)
+
+class ProfiledStage extends Stage:
+	var hitch_events: Array = []
+	var probes: Array = []
+	var trace_cap := {"dropped": 0}
+	func new_move_effect(move: String) -> Node3D:
+		var effect: Node3D
+		match MoveEffect.move_key(move):
+			"flamethrower": effect = ProfiledFire.new()
+			"thunderbolt": effect = ProfiledThunder.new()
+			"rockslide": effect = ProfiledRock.new()
+			"dracometeor": effect = ProfiledDraco.new()
+			_: return super.new_move_effect(move)
+		effect.probe.events = hitch_events
+		effect.probe.cap = trace_cap
+		effect.probe.move = move
+		probes.append(effect.probe)
+		return effect
+	func _record_android_move_phase(phase: String) -> void:
+		if hitch_events.size() >= 1024:
+			trace_cap.dropped += 1
+			return
+		hitch_events.append({"kind": "router_phase", "phase": phase, "at_usec": Time.get_ticks_usec()})
 
 class ErrorSink extends Logger:
 	var errors: Array[String] = []
@@ -50,6 +121,8 @@ static func valid_fixture(value: Variant) -> bool:
 	var paired: bool = value.get("mode", "smoke") == "warm-compare"
 	var gameplay: bool = value.get("mode") == "gameplay"
 	if value.get("mode", "smoke") not in ["smoke", "soak", "warm-compare", "gameplay"]:
+		return false
+	if not value.get("profile_hitches", false) is bool or (value.get("profile_hitches", false) and not gameplay):
 		return false
 	if soak and value.get("preset") not in ["low", "medium", "high", "ultra"]:
 		return false
@@ -125,7 +198,7 @@ func _prepare(preset: String) -> bool:
 	surface.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	root.add_child(surface)
 	surface.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	stage = Stage.new()
+	stage = ProfiledStage.new() if profile_hitches else Stage.new()
 	canvas.add_child(stage)
 	stage.setup()
 	stage.set_battle_context(&"grass", "wild")
@@ -150,13 +223,50 @@ func _prepare(preset: String) -> bool:
 	RenderingServer.global_shader_parameter_set("wind_speed", 0.0)
 	return _check(stage.quality_preset == preset and pool.quality_preset == preset, "Presenter and pool retain the same profile")
 
+func _profile_span(label: String, started: int) -> void:
+	if not profile_hitches: return
+	if stage.hitch_events.size() >= 1024:
+		stage.trace_cap.dropped += 1
+		return
+	var ended := Time.get_ticks_usec()
+	stage.hitch_events.append({"kind": "span", "label": label, "from_usec": started, "to_usec": ended,
+		"ms": (ended - started) / 1000.0})
+
+func _verify_profile_factories() -> void:
+	# Run after measurement: constructing controls must not prewarm the trial.
+	var ordinary := Stage.new()
+	report.profile_factory_match = true
+	for move in MOVES:
+		var original: Node = ordinary.new_move_effect(move)
+		var wrapped: Node = stage.new_move_effect(move)
+		report.profile_factory_match = report.profile_factory_match and original.get_script() == wrapped.get_script().get_base_script()
+		original.free()
+		wrapped.free()
+	ordinary.free()
+	_check(report.profile_factory_match, "Profiling wrappers preserve the actual production effect classes")
+
+func _profile_menu_tabs(menu: Control) -> Array:
+	var rows := []
+	for tab in 8:
+		profile_step = "menu_reopen_tab:%d" % tab
+		var started := Time.get_ticks_usec()
+		menu.tab_container.current_tab = tab
+		_profile_span(profile_step, started)
+		for frame in 10: await process_frame
+		rows.append({"tab": tab, "visible": menu.visible and menu.tab_container.current_tab == tab})
+	return rows
+
 func _gameplay_sequence(index: int) -> void:
 	gameplay_done = false
 	gameplay_row = {"moves": [], "tabs": [], "complete": false}
+	profile_step = "router_load_new"
+	var router_started := Time.get_ticks_usec()
 	router = load("res://scripts/battle/battle_animation_router.gd").new()
+	_profile_span(profile_step, router_started)
 	router.model_presenter = stage
 	router.animation_parent = stage
 	for i in MOVES.size():
+		profile_step = "move:" + MOVES[i]
 		var actor := "p1" if i % 2 == 0 else "p2"
 		var target := "p2" if actor == "p1" else "p1"
 		var started := Time.get_ticks_usec()
@@ -174,20 +284,54 @@ func _gameplay_sequence(index: int) -> void:
 		_check(row.visible_frames > 0 and row.hit_seen and row.cleaned, "Real move reached visible impact and effect/audio cleanup: " + MOVES[i])
 		gameplay_row.moves.append(row)
 		move_samples = {}
-	var menu: Control = load("res://scenes/interface/settings/settings_menu.tscn").instantiate()
+	profile_step = "menu_load"
+	var menu_started := Time.get_ticks_usec()
+	var packed: PackedScene = load("res://scenes/interface/settings/settings_menu.tscn")
+	_profile_span(profile_step, menu_started)
+	profile_step = "menu_instantiate"
+	menu_started = Time.get_ticks_usec()
+	var menu: Control = packed.instantiate()
+	_profile_span(profile_step, menu_started)
+	profile_step = "menu_add_ready"
+	menu_started = Time.get_ticks_usec()
 	root.add_child(menu)
+	_profile_span(profile_step, menu_started)
+	profile_step = "menu_open_new"
+	menu_started = Time.get_ticks_usec()
 	menu.open("game")
+	_profile_span(profile_step, menu_started)
 	for tab in 8:
+		profile_step = "menu_tab:%d" % tab
 		var started := Time.get_ticks_usec()
 		menu.tab_container.current_tab = tab
+		_profile_span(profile_step, started)
 		for frame in 10:
 			await process_frame
 		gameplay_row.tabs.append({"tab": tab, "visible": menu.visible and menu.tab_container.current_tab == tab,
 			"ten_frame_ms": (Time.get_ticks_usec() - started) / 1000.0})
+	profile_step = "menu_close_new"
+	menu_started = Time.get_ticks_usec()
 	menu.close()
+	_profile_span(profile_step, menu_started)
 	_check(not menu.visible and settings.android_quality_preset == "medium", "Menu closes and retains Medium")
+	if profile_hitches:
+		gameplay_row.menu_instance = menu.get_instance_id()
+		for frame in 10: await process_frame
+		profile_step = "menu_open_retained"
+		menu_started = Time.get_ticks_usec()
+		menu.open("game")
+		_profile_span(profile_step, menu_started)
+		gameplay_row.reopened_menu_instance = menu.get_instance_id()
+		gameplay_row.reopen_tabs = await _profile_menu_tabs(menu)
+		profile_step = "menu_close_retained"
+		menu_started = Time.get_ticks_usec()
+		menu.close()
+		_profile_span(profile_step, menu_started)
+		_check(not menu.visible, "Retained menu closes")
+	profile_step = "menu_queue_free"
 	menu.queue_free()
 	await process_frame
+	profile_step = "idle"
 	gameplay_row.complete = true
 	gameplay_row.cycle = index
 	gameplay_done = true
@@ -306,6 +450,10 @@ func _observe(preset: String, index: int) -> void:
 	var samples := {"frame_ms": [], "main_gpu_ms": [], "response_gpu_ms": []}
 	var pipeline_start: Array = stage._blocking_pipelines()
 	var next_counters := started
+	var last_step := "start"
+	var previous_pipelines: Array = pipeline_start.duplicate()
+	if profile_hitches:
+		stage.hitch_events.clear()
 	if gameplay:
 		_gameplay_sequence(index)
 	while Time.get_ticks_usec() - started < int(fixture.phase_seconds) * 1000000 or (gameplay and not gameplay_done):
@@ -314,6 +462,18 @@ func _observe(preset: String, index: int) -> void:
 			_check(false, "Observation interrupted by Android background/resume")
 			return
 		var now := Time.get_ticks_usec()
+		if profile_hitches:
+			var pipelines: Array = stage._blocking_pipelines()
+			if now - last > 25000:
+				if stage.hitch_events.size() < 1024:
+					stage.hitch_events.append({"kind": "slow_frame", "from_usec": last, "to_usec": now,
+						"ms": (now-last)/1000.0, "from_step": last_step, "to_step": profile_step,
+						"pipeline_before": previous_pipelines.duplicate(), "pipeline_after": pipelines.duplicate(),
+						"process_ms": Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0,
+						"main_gpu_ms": RenderingServer.viewport_get_measured_render_time_gpu(stage.viewport.get_viewport_rid())})
+				else: stage.trace_cap.dropped += 1
+			previous_pipelines = pipelines
+			last_step = profile_step
 		if gameplay and not _check(now - started < 90000000, "Bounded gameplay cycle"):
 			return
 		samples.frame_ms.append((now - last) / 1000.0)
@@ -357,6 +517,10 @@ func _observe(preset: String, index: int) -> void:
 		row.native_start = native_start
 	if gameplay:
 		row.gameplay = gameplay_row.duplicate(true)
+	if profile_hitches:
+		row.hitch_profile = {"events": stage.hitch_events.duplicate(true), "dropped": stage.trace_cap.dropped, "effects": []}
+		for probe in stage.probes:
+			row.hitch_profile.effects.append({"move": probe.move, "process_cpu_ms": Stats.stats(probe.cpu_ms)})
 	for key in samples:
 		row.timings[key] = Stats.stats(samples[key])
 	row.fps = samples.frame_ms.size() / row.seconds
@@ -406,6 +570,7 @@ func _run() -> void:
 	if not _check(valid_fixture(parsed), "Bounded fixture supplied over USB"):
 		_finish(); return
 	fixture = parsed
+	profile_hitches = fixture.get("profile_hitches", false)
 	report.run_id = fixture.run_id
 	report.protocol = fixture.duplicate()
 	report.renderer = RenderingServer.get_current_rendering_method()
@@ -457,6 +622,8 @@ func _run() -> void:
 		if not report.failures.is_empty() or not sink.errors.is_empty():
 			_finish(); return
 	if fixture.get("mode") == "gameplay":
+		if profile_hitches:
+			_verify_profile_factories()
 		await _capture_moves()
 	if is_instance_valid(observation_lifecycle):
 		_check(observation_lifecycle.pauses == 0 and observation_lifecycle.resumes == 0, "Uninterrupted observation")

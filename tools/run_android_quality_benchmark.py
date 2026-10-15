@@ -60,6 +60,45 @@ def require_debug_manifest(raw):
         raise ValueError("Require this slot's exact separate debuggable quality package")
 
 
+def validate_hitch_profile(phase):
+    profile = phase.get("hitch_profile", {})
+    events = profile.get("events", [])
+    errors = []
+    if not 1 <= len(events) <= 1024 or profile.get("dropped") != 0:
+        errors.append("Missing or truncated hitch timeline")
+    for event in events:
+        kind = event.get("kind")
+        if kind not in ("span", "router_phase", "effect_process", "slow_frame"):
+            errors.append("Unknown hitch event")
+        elif kind == "router_phase":
+            if not isinstance(event.get("at_usec"), (int, float)) or not math.isfinite(event["at_usec"]) or event["at_usec"] <= 0:
+                errors.append("Invalid router timestamp")
+        else:
+            if (not all(isinstance(event.get(k), (int, float)) and math.isfinite(event[k]) for k in ("from_usec", "to_usec", "ms"))
+                    or not 0 < event["from_usec"] <= event["to_usec"]
+                    or abs((event["to_usec"] - event["from_usec"]) / 1000 - event["ms"]) > .001):
+                errors.append("Invalid hitch span duration")
+    labels = {event.get("label") for event in events if event.get("kind") == "span"}
+    required = {"router_load_new", "menu_load", "menu_instantiate", "menu_add_ready", "menu_open_new",
+                "menu_close_new", "menu_open_retained", "menu_close_retained"}
+    if not required <= labels:
+        errors.append("Missing setup/menu profiling spans")
+    effects = profile.get("effects", [])
+    if [row.get("move") for row in effects] != MOVES:
+        errors.append("Missing production-effect CPU probes")
+    for effect in effects:
+        stats = effect.get("process_cpu_ms", {})
+        if stats.get("count", 0) < 2 or not all(isinstance(stats.get(k), (int, float)) and math.isfinite(stats[k]) and stats[k] >= 0 for k in ("p50", "p95", "max")):
+            errors.append("Invalid effect CPU samples")
+    game = phase.get("gameplay", {})
+    menu = game.get("menu_instance")
+    tabs = game.get("reopen_tabs", [])
+    if (not isinstance(menu, int) or menu <= 0 or menu != game.get("reopened_menu_instance")
+            or [row.get("tab") for row in tabs] != list(range(8)) or not all(row.get("visible") for row in tabs)):
+        errors.append("Menu reopen did not retain the same instance and visit every tab")
+    return errors
+
+
 def validate(details, fixture):
     errors = []
     if not isinstance(details, dict) or details.get("run_id") != fixture["run_id"]:
@@ -69,6 +108,8 @@ def validate(details, fixture):
     phases = details.get("phases", [])
     if [p.get("preset") for p in phases] != expected_presets(fixture):
         errors.append("Unexpected profile sequence")
+    if fixture.get("profile_hitches") and not details.get("profile_factory_match"):
+        errors.append("Profiling wrappers do not match the production effect factory")
     if fixture.get("mode") == "gameplay":
         captures = details.get("move_captures", [])
         if ([c.get("index") for c in captures] != list(range(4))
@@ -78,6 +119,8 @@ def validate(details, fixture):
         if len(set(ids)) != 3 or not all(isinstance(v, int) and v > 0 for v in ids):
             errors.append("Gameplay must reconstruct three distinct arenas")
         for index, phase in enumerate(phases):
+            if fixture.get("profile_hitches"):
+                errors.extend(validate_hitch_profile(phase))
             game = phase.get("gameplay", {})
             moves = game.get("moves", [])
             if not game.get("complete") or game.get("cycle") != index or [m.get("move") for m in moves] != MOVES:
@@ -212,8 +255,11 @@ def main():
     parser.add_argument("--phase-seconds", type=int, choices=[10, 15, 20], default=15)
     parser.add_argument("--order", choices=ORDERS, default="descending")
     parser.add_argument("--mode", choices=["smoke", "soak", "warm-compare", "gameplay"], default="smoke")
+    parser.add_argument("--profile-hitches", action="store_true", help="Private gameplay CPU spans, slow frames and retained-menu comparison")
     parser.add_argument("--soak-preset", choices=["low", "medium", "high", "ultra"], default="ultra")
     args = parser.parse_args()
+    if args.profile_hitches and args.mode != "gameplay":
+        parser.error("Hitch profiling requires --mode gameplay")
     if ROOT.parent.name not in {"slot-a", "slot-b", "slot-c"} or os.getenv("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Use the assigned slot-env")
     if not re.fullmatch(r"[a-zA-Z0-9]+", args.serial) or args.serial.startswith("emulator-"):
@@ -297,6 +343,8 @@ def main():
         fixture.update(mode="warm-compare", phase_seconds=30)
     elif args.mode == "gameplay":
         fixture.update(mode="gameplay", phase_seconds=30)
+        if args.profile_hitches:
+            fixture["profile_hitches"] = True
     report = {"schema": 1, "package": PACKAGE, "fixture": fixture, "pins": pins, "health": [], "errors": [],
               "usable": False, "running": True, "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
               "source_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT)),

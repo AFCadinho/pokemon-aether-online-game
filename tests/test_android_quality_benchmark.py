@@ -141,6 +141,39 @@ class AndroidQualityResultTests(unittest.TestCase):
         fixture, details = self.gameplay_result()
         self.assertEqual(validate(details, fixture), [])
 
+    def profile_result(self):
+        fixture, details = self.gameplay_result()
+        fixture["profile_hitches"] = True
+        details["profile_factory_match"] = True
+        for phase in details["phases"]:
+            phase["hitch_profile"] = {"dropped": 0, "effects": [
+                {"move": move, "process_cpu_ms": {"count": 60, "p50": .1, "p95": 2, "max": 50}}
+                for move in ("Flamethrower", "Thunderbolt", "Rock Slide", "Draco Meteor")], "events": [
+                    {"kind": "span", "label": label, "from_usec": 100000, "to_usec": 250000, "ms": 150}
+                    for label in ("router_load_new", "menu_load", "menu_instantiate", "menu_add_ready", "menu_open_new",
+                                  "menu_close_new", "menu_open_retained", "menu_close_retained")]}
+            phase["gameplay"].update(menu_instance=100, reopened_menu_instance=100,
+                reopen_tabs=[{"tab": tab, "visible": True} for tab in range(8)])
+        return fixture, details
+
+    def test_complete_hitch_spans_effect_probes_and_menu_reuse(self):
+        fixture, details = self.profile_result()
+        self.assertEqual(validate(details, fixture), [])
+
+    def test_missing_truncated_invalid_profiles_or_new_instead_of_reused_menu_rejected(self):
+        for change in (lambda p: p["hitch_profile"].update(dropped=1),
+                       lambda p: p["hitch_profile"]["events"].clear(),
+                       lambda p: p["hitch_profile"]["events"].pop(),
+                       lambda p: p["hitch_profile"]["events"][0].update(ms=float("inf")),
+                       lambda p: p["hitch_profile"]["events"][0].update(to_usec=0),
+                       lambda p: p["hitch_profile"]["effects"][0]["process_cpu_ms"].update(max=float("nan")),
+                       lambda p: p["hitch_profile"]["effects"].pop(),
+                       lambda p: p["gameplay"].update(reopened_menu_instance=101),
+                       lambda p: p["gameplay"]["reopen_tabs"].pop()):
+            fixture, details = self.profile_result()
+            change(details["phases"][0])
+            self.assertTrue(validate(details, fixture))
+
     def test_missing_animations_impacts_cleanup_tabs_or_reload_rejected(self):
         for change in (lambda d: d["phases"][1].update(stage_instance=100),
                        lambda d: d["move_captures"].pop(),
