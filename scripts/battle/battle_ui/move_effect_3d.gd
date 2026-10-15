@@ -182,6 +182,21 @@ func seconds() -> float:
 func charge_progress() -> float:
 	return clampf((elapsed-effect_start)/maxf(launch-effect_start,.01),0,1)
 
+# Preparation is single-use and restricted by AndroidMoveWarmup.REUSABLE.
+# Release all fixture callables before storing or handing the node to a cast.
+func reset_prepared_cast() -> void:
+	elapsed = 0.0
+	cursor = 0
+	hit = false
+	miss = false
+	clock = Callable()
+	anchors = Callable()
+	valid = Callable()
+	emission_sources.clear()
+	visible = false
+	set_process(false)
+	for piece in pieces: piece.visible = false
+
 func cancel() -> void:
 	if done: return
 	cancelled = true

@@ -750,14 +750,15 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 			return
 		await get_tree().process_frame
 
-func prepare_android_move_effects(available: Array = []) -> void:
+func prepare_android_move_effects(available: Array = [], render_under_cover := false) -> void:
 	if not android_move_warmup.allows(OS.has_feature("android"), OS.has_feature("android_3d_experimental"), RenderingServer.get_current_rendering_method() == "mobile", OS.has_feature("android_3d_move_warmup")):
 		return
 	if _preview_wants_3d() or preparation_cancelled or preparation_failed: return
-	var metrics: Dictionary = await android_move_warmup.prepare(self, available)
+	var metrics: Dictionary = await android_move_warmup.prepare(self, available, "covered" if render_under_cover else "hidden")
 	if not is_instance_valid(self) or not is_inside_tree() or preparation_cancelled: return
 	preparation_metrics["move_warm_ms"] = metrics.elapsed_ms
 	preparation_metrics["move_warm_effects"] = metrics.effects
+	preparation_metrics["move_warmup"] = metrics
 	if OS.has_feature("android_3d_performance_probe"):
 		print("ANDROID_3D_MOVE_WARM ", JSON.stringify(metrics))
 
@@ -1618,8 +1619,13 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 	if source == null or destination == null: return null
 	var timing := move_timing(move, actor)
 	if timing.is_empty(): return null
-	var effect := new_move_effect(move)
-	world.add_child(effect)
+	var effect: Node3D = android_move_warmup.take(move)
+	if effect == null:
+		effect = new_move_effect(move)
+	else:
+		effect.visible = true
+		effect.set_process(true)
+	if effect.get_parent() == null: world.add_child(effect)
 	effect.view_camera = camera
 	common_effects.append(effect)
 	effect.tree_exiting.connect(func(): common_effects.erase(effect), CONNECT_ONE_SHOT)
@@ -2576,6 +2582,7 @@ func _set_active(value: bool) -> void:
 			last_fallback_reason = reason
 			print("BATTLE_3D_FALLBACK phase=", "team_preview" if preview_enabled else "battle", " reason=", reason)
 	if active and not value:
+		android_move_warmup.clear()
 		_clear_substitute_models()
 		_clear_status_effects()
 		_cancel_common_effects()

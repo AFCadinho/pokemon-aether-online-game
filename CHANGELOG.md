@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the optional Android attack-preparation trial covered during drawing and hand prepared effects safely to their first cast.
+
 - Reduce repeated 3D attack setup by reusing fixed shaders and geometry, and skip unused generic preparation for Rock Slide.
 
 - Refresh the Pewter Museum of Science visual from its updated Tiled source.

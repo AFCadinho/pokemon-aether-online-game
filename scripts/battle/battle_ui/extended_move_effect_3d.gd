@@ -43,8 +43,16 @@ var body := .7
 var center := Vector3.ZERO
 var prepared := false
 
+func reset_prepared_cast() -> void:
+	super.reset_prepared_cast()
+	captured = false
+	launched = false
+	impact_drawn = false
+
 func start(move: String, timing: Dictionary, options: Dictionary, native_clock: Callable, positions: Callable, guard: Callable) -> void:
 	emission_end = float(timing.get("emission_end_frame", -60.0)) / 60.0
+	if prepared and emission_end < 0:
+		emission_end = lerpf(float(timing.impact_frame) / 60.0, float(timing.frames) / 60.0, .55)
 	super.start(move, timing, options, native_clock, positions, guard)
 
 func _prepare() -> void:

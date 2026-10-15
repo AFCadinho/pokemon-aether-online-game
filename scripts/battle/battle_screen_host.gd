@@ -24,6 +24,7 @@ var outgoing_snapshot: TextureRect
 @onready var content: Control = $Content
 @onready var backdrop: ColorRect = $Content/Backdrop
 var preparation_ready := false
+var move_preparing_under_cover := false
 var early_arena_requested := false
 var entry_arena_ready := false
 var entry_arena_frames := 0
@@ -302,9 +303,12 @@ func _reveal_when_prepared(token: int) -> void:
 		var available: Array = []
 		if battle.battle_state != null:
 			available = battle.battle_state.get_available_moves(battle._get_local_state_player_id())
-		# Hidden samples may also prepare an early visible arena without showing
-		# an attack, moving its camera or revealing send-out actors.
-		await presenter.prepare_android_move_effects(available)
+		# Only a fully covered field can draw preparation samples. An early
+		# visible arena keeps the hidden control; neither drives actors/camera.
+		var under_cover := not early_arena_requested and reveal_tween == null and fade_progress == 0.0
+		move_preparing_under_cover = under_cover
+		await presenter.prepare_android_move_effects(available, under_cover)
+		move_preparing_under_cover = false
 	if released or token != generation or not is_inside_tree(): return
 	if presenter != null and (presenter.preparation_failed or not presenter.active) and settings.battle_presentation_mode in ["2.5d", "3d"]:
 		_prepare_2d_fallback()
@@ -364,7 +368,7 @@ func _apply_entry_fade() -> void:
 		outgoing_snapshot.modulate.a = 1.0
 
 func _reveal_cover() -> void:
-	if released or reveal_tween != null:
+	if released or reveal_tween != null or move_preparing_under_cover:
 		return
 	if waits_for_final_camera() and not preparation_ready:
 		return

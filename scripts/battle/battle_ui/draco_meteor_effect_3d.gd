@@ -29,6 +29,10 @@ var sky := Vector3.ZERO
 var forward := Vector3.FORWARD
 var sideways := Vector3.RIGHT
 
+func reset_prepared_cast() -> void:
+	super.reset_prepared_cast()
+	released = false
+
 func _init() -> void:
 	super._init()
 	sprite_shader = preload("res://scripts/battle/battle_ui/draco_meteor_sprite.gdshader")

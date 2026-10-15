@@ -26,6 +26,7 @@ var gameplay_row := {}
 var move_samples := {}
 var profile_hitches := false
 var profile_step := "idle"
+var cast_preparation := {}
 
 # Diagnostic subclasses preserve the production implementations. Timing data
 # stays in this private APK; none of these probes runs in the ordinary game.
@@ -104,7 +105,7 @@ class ProfiledStage extends Stage:
 			_: return super.new_move_effect(move)
 		effect.probe.events = hitch_events
 		effect.probe.cap = trace_cap
-		effect.probe.move = move
+		effect.probe.move = MOVES[["flamethrower", "thunderbolt", "rockslide", "dracometeor"].find(MoveEffect.move_key(move))]
 		effect.visible = draw_profile_effects
 		probes.append(effect.probe)
 		return effect
@@ -144,6 +145,8 @@ static func valid_fixture(value: Variant) -> bool:
 		return false
 	if not value.get("hitch_visibility_control", false) is bool or (value.get("hitch_visibility_control", false) and not value.get("profile_hitches", false)):
 		return false
+	if value.get("first_cast_preparation", "off") not in ["off", "hidden", "covered"]: return false
+	if value.get("first_cast_preparation", "off") != "off" and (not gameplay or not value.get("profile_hitches", false) or value.get("hitch_visibility_control", false)): return false
 	if soak and value.get("preset") not in ["low", "medium", "high", "ultra"]:
 		return false
 	var seconds: Variant = value.get("phase_seconds")
@@ -225,6 +228,21 @@ func _prepare(preset: String) -> bool:
 	stage.set_combatant(0, "Charizard")
 	stage.set_combatant(1, "Dragonite")
 	await stage.await_prepared(true, 60000)
+	cast_preparation = {"mode": "off", "elapsed_ms": 0, "effects": 0, "samples": []}
+	var mode := str(fixture.get("first_cast_preparation", "off"))
+	if mode != "off":
+		_marker("moves:" + mode)
+		# The opaque control covers the actual arena, while its same viewport draws.
+		var cover := ColorRect.new()
+		cover.color = Color("02050c")
+		cover.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		root.add_child(cover)
+		cover.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		await process_frame
+		cast_preparation = await stage.android_move_warmup.prepare(stage, MOVES, mode)
+		for probe in stage.probes: probe.cpu_ms.clear()
+		stage.trace_cap.dropped = 0
+		cover.queue_free()
 	report.preparation = {"active": stage.active, "phase": stage.preparation_phase, "reason": stage.reason,
 		"arena": stage.arena_id, "arena_problem": stage.arena_problem, "pooled": not stage.forest_lease.is_empty(),
 		"catalog_problem": stage.catalog_problem, "packed_count": stage.packed.size(), "grounded_count": stage.ground_offsets.size(),
@@ -301,6 +319,7 @@ func _gameplay_sequence(index: int) -> void:
 			"effect_frames": move_samples.effect_frames, "visible_frames": move_samples.visible_frames,
 			"render_visible_frames": move_samples.render_visible_frames, "suppressed_frames": move_samples.suppressed_frames,
 			"hit_seen": move_samples.hit_seen, "timings": {},
+			"prepared_instance": move_samples.get("prepared_instance", 0),
 			"cleaned": stage.common_effects.is_empty() and router.active_audio_nodes.is_empty() and not router.has_3d_impact_damage()}
 		for key in ["frame_ms", "main_gpu_ms", "response_gpu_ms"]:
 			row.timings[key] = Stats.stats(move_samples[key])
@@ -507,6 +526,8 @@ func _observe(preset: String, index: int) -> void:
 			if not stage.common_effects.is_empty():
 				move_samples.effect_frames += 1
 			for effect in stage.common_effects:
+				if is_instance_valid(effect) and effect.has_meta("android_prepared_cast"):
+					move_samples.prepared_instance = effect.get_instance_id()
 				if is_instance_valid(effect) and effect.cursor > 0:
 					move_samples.visible_frames += 1
 					if effect.is_visible_in_tree(): move_samples.render_visible_frames += 1
@@ -545,6 +566,7 @@ func _observe(preset: String, index: int) -> void:
 	if gameplay:
 		row.gameplay = gameplay_row.duplicate(true)
 	if profile_hitches:
+		row.cast_preparation = cast_preparation.duplicate(true)
 		row.hitch_profile = {"events": stage.hitch_events.duplicate(true), "dropped": stage.trace_cap.dropped,
 			"effects_visible": stage.draw_profile_effects, "effects": []}
 		for probe in stage.probes:
