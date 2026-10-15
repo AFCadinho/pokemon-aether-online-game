@@ -247,8 +247,13 @@ def validate(details, fixture):
             errors.append("Invalid profile/artifact identity")
             continue
         edge = {"low": 540, "medium": 720, "high": 1080, "ultra": min(size)}[preset]
-        factor = min(1, edge / min(size))
-        expected = [math.floor(value * factor + .5) for value in size]
+        arena = row.get("entry", {}).get("arena_native_size") if fixture.get("mode") == "battle-entry" else size
+        if (not isinstance(arena, list) or len(arena) != 2 or not all(isinstance(v, int) and v > 0 for v in arena)
+                or any(v > limit + 2 for v, limit in zip(arena, size))):
+            errors.append("Invalid ordinary battlefield native size")
+            continue
+        factor = min(1, edge / min(arena))
+        expected = [math.floor(value * factor + .5) for value in arena]
         if row.get("render_size") != expected or row.get("response_size") != expected:
             errors.append("Both passes must use the selected aspect-preserving raster")
         if row.get("msaa") != {"low": 0, "medium": 1, "high": 1, "ultra": 2}[preset]:

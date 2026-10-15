@@ -196,7 +196,7 @@ class AndroidQualityResultTests(unittest.TestCase):
         for kind, phase in zip(["covered_wild", "early_wild", "preview_trainer"], details["phases"]):
             phase["entry"] = {"case": kind, "ready": True, "warmup_enabled": enabled,
                 "input_held_during_preparation": True, "samples_hidden": True, "available_keys": keys,
-                "elapsed_ms": 6000, "early_visible_before_response": kind == "early_wild", "selected_slot": 2,
+                "elapsed_ms": 6000, "arena_native_size": [2400, 1080], "early_visible_before_response": kind == "early_wild", "selected_slot": 2,
                 "previews_have_no_casts": True, "actors": ["dragonite", "charizard"],
                 "prepared": {key: 9000 + i for i, key in enumerate(keys)} if enabled else {},
                 "warmup": [{"mode": "hidden", "elapsed_ms": 900, "effects": 4,
@@ -209,6 +209,15 @@ class AndroidQualityResultTests(unittest.TestCase):
         for enabled in (False, True):
             fixture, details = self.entry_result(enabled)
             self.assertEqual(validate(details, fixture), [])
+
+    def test_ordinary_battlefield_aspect_is_independent_of_the_full_screen(self):
+        fixture, details = self.entry_result()
+        for phase in details["phases"]:
+            phase["entry"]["arena_native_size"] = [2400, 800]
+            phase.update(render_size=[2160, 720], response_size=[2160, 720])
+        self.assertEqual(validate(details, fixture), [])
+        details["phases"][0]["entry"]["arena_native_size"] = [99999, 800]
+        self.assertTrue(validate(details, fixture))
 
     def test_rejects_early_input_wrong_lead_missing_request_or_wrong_handoff(self):
         for change in (lambda d: d["phases"][0]["entry"].update(ready=False),

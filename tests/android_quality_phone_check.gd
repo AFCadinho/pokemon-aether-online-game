@@ -232,7 +232,10 @@ func _prepare(preset: String) -> bool:
 		entry_observation = await entry_trial.finish(Engine.get_main_loop(), 60000)
 		if not _check(entry_trial.errors.is_empty() and entry_observation.ready, "Actual host and intro reach first-turn readiness"): return false
 		if not _check(entry_observation.warmup_enabled == fixture.get("entry_warmup", false), "APK entry warmup matches requested control"): return false
+		for frame in 2: await process_frame
 		await RenderingServer.frame_post_draw
+		var screen: Transform2D = stage.get_viewport().get_final_transform() * stage.get_global_transform_with_canvas()
+		entry_observation.arena_native_size = [maxi(2, ceili(stage.size.x * screen.x.length())), maxi(2, ceili(stage.size.y * screen.y.length()))]
 		_check(root.get_texture().get_image().save_png("user://android-entry-ready-%d.png" % entry_index) == OK, "Ordinary entry UI captured after intro")
 	else:
 		canvas = SubViewport.new()
@@ -273,7 +276,9 @@ func _prepare(preset: String) -> bool:
 		"requested_arena": stage._requested_arena(), "manual_catalog": settings.has_manual_battle_3d_catalog_selection(),
 		"catalog_path": settings.get_battle_3d_catalog_path(), "failed_models": stage.failed_models.duplicate(),
 		"model_revision": root.get_node("OnDemand3DBundleService")._selected_release().get("revision", "unknown")}
-	var expected := Quality.dimensions(dimensions, preset)
+	var native_arena := dimensions
+	if fixture.get("mode") == "battle-entry": native_arena = Vector2i(entry_observation.arena_native_size[0], entry_observation.arena_native_size[1])
+	var expected := Quality.dimensions(native_arena, preset)
 	if not _check(stage.active and stage.handles("p1") and stage.handles("p2") and not stage.forest_lease.is_empty(), "Real actors use the arena pool"):
 		return false
 	for data in pool.passes:
