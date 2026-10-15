@@ -102,6 +102,10 @@ func _run() -> void:
 
 func _prepare(preset: String) -> bool:
 	_release_stage()
+	# Retire the previous world and its queued renderer resources before the
+	# next allocation. Errors remain logged throughout this untimed boundary.
+	for frame in 2: await process_frame
+	await RenderingServer.frame_post_draw
 	settings.set_desktop_battle_quality_preset(preset)
 	_marker("prepare:" + preset)
 	pool = Pool.prepare(root, settings.get_battle_3d_forest_manifest(), dimensions, "forest")
