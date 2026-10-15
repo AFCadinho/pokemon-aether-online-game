@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Refresh Route 5’s visual from its latest Tiled source.
+- Refresh Route 5’s visual from its latest Tiled source, including the updated ground and object placement.
 
 - Refresh Saffron City’s visual from its updated Tiled source.
 
