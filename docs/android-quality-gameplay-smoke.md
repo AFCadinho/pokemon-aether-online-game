@@ -144,3 +144,15 @@ and menu/setup stalls, then repeat this same protocol before expanding to a
 long authenticated gameplay session. The earlier fixed-scene Medium soak remains
 valid for that narrower workload; this smoke adds evidence that steady rendering
 and smooth action/transition delivery need separate acceptance criteria.
+
+## Follow-up attribution
+
+A [native hitch investigation](android-hitch-investigation.md) measured the
+router load, menu construction/reopening and effect preparation separately.
+The large new-menu and initial dynamic-router costs in this smoke are scene
+setup costs that the fixture placed inside the action window. Production retains
+the menu and creates its router during scene setup. Reused-menu opening still
+had smaller above-budget intervals. Rock Slide preparation also remained costly
+with all effect drawing suppressed; lowering raster resolution alone does not
+remove that action-time work. See the follow-up for measured spans, the
+visible/hidden control and the remaining attribution limits.
