@@ -65,9 +65,10 @@ The earlier within-run warm bracket provides additional resolution evidence.
 
 **Medium is now supported as a sustained-performance candidate for this scene
 on this S25, not a final default for all Android devices or all gameplay.**
-Busy overworld, menu/loading transitions, repeated battles, animation/attack
-workloads, release-build behavior and user visual preference remain to be
-checked. No weaker physical device is available. Neither the game's default
+A subsequent [animated renderer/menu/reconstruction smoke](android-quality-gameplay-smoke.md)
+completed its functional checks but found short attack/setup hitches. Busy
+overworld, authenticated loading and battles, longer animated sessions,
+release-build behavior and user visual preference remain to be checked. No weaker physical device is available. Neither the game's default
 nor automatic quality assignment was changed.
 
 ## Interrupted first attempt and host improvement

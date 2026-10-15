@@ -26,6 +26,7 @@ PACKAGE = "com.pokeaether.androidquality." + ROOT.parent.name.replace("-", "_")
 ORDERS = {"descending": ["ultra", "high", "medium", "low", "ultra"],
           "ascending": ["ultra", "low", "medium", "high", "ultra"]}
 COUNTS = ("frame_ms", "main_gpu_ms", "response_gpu_ms")
+MOVES = ["Flamethrower", "Thunderbolt", "Rock Slide", "Draco Meteor"]
 
 
 def save_progress(output, report, details, uploads):
@@ -42,6 +43,8 @@ def interrupt_run(signum, _frame):
 
 
 def expected_presets(fixture):
+    if fixture.get("mode") == "gameplay":
+        return ["medium"] * 3
     if fixture.get("mode") == "warm-compare":
         return ["high", "medium", "medium", "high"]
     if fixture.get("mode", "smoke") == "soak":
@@ -66,6 +69,30 @@ def validate(details, fixture):
     phases = details.get("phases", [])
     if [p.get("preset") for p in phases] != expected_presets(fixture):
         errors.append("Unexpected profile sequence")
+    if fixture.get("mode") == "gameplay":
+        captures = details.get("move_captures", [])
+        if ([c.get("index") for c in captures] != list(range(4))
+                or any(not c.get("visible_pieces", 0) > 0 or not c.get("elapsed", 0) >= c.get("impact", 0) + .025 for c in captures)):
+            errors.append("Missing visible, post-impact evidence")
+        ids = [p.get("stage_instance") for p in phases]
+        if len(set(ids)) != 3 or not all(isinstance(v, int) and v > 0 for v in ids):
+            errors.append("Gameplay must reconstruct three distinct arenas")
+        for index, phase in enumerate(phases):
+            game = phase.get("gameplay", {})
+            moves = game.get("moves", [])
+            if not game.get("complete") or game.get("cycle") != index or [m.get("move") for m in moves] != MOVES:
+                errors.append("Incomplete real-time move sequence")
+            for move in moves:
+                if (not move.get("hit_seen") or not move.get("cleaned") or move.get("effect_frames", 0) <= 0 or move.get("visible_frames", 0) <= 0
+                        or not 0 < move.get("seconds", 0) < 30):
+                    errors.append("Move did not hit, finish or clean up")
+                for key in COUNTS:
+                    stats = move.get("timings", {}).get(key, {})
+                    if stats.get("count", 0) < 2 or not all(isinstance(stats.get(k), (int, float)) and math.isfinite(stats[k]) for k in ("p50", "p95", "max")):
+                        errors.append("Missing finite real-time move samples")
+            tabs = game.get("tabs", [])
+            if [tab.get("tab") for tab in tabs] != list(range(8)) or not all(tab.get("visible") for tab in tabs):
+                errors.append("Incomplete native menu navigation")
     if fixture.get("mode") == "warm-compare":
         heat = details.get("preheat", [])
         end = heat[-1] if heat else {}
@@ -184,7 +211,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--phase-seconds", type=int, choices=[10, 15, 20], default=15)
     parser.add_argument("--order", choices=ORDERS, default="descending")
-    parser.add_argument("--mode", choices=["smoke", "soak", "warm-compare"], default="smoke")
+    parser.add_argument("--mode", choices=["smoke", "soak", "warm-compare", "gameplay"], default="smoke")
     parser.add_argument("--soak-preset", choices=["low", "medium", "high", "ultra"], default="ultra")
     args = parser.parse_args()
     if ROOT.parent.name not in {"slot-a", "slot-b", "slot-c"} or os.getenv("POKEAETHER_SLOT") != ROOT.parent.name:
@@ -268,6 +295,8 @@ def main():
         fixture.update(mode="soak", preset=args.soak_preset, phase_seconds=30)
     elif args.mode == "warm-compare":
         fixture.update(mode="warm-compare", phase_seconds=30)
+    elif args.mode == "gameplay":
+        fixture.update(mode="gameplay", phase_seconds=30)
     report = {"schema": 1, "package": PACKAGE, "fixture": fixture, "pins": pins, "health": [], "errors": [],
               "usable": False, "running": True, "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
               "source_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT)),
@@ -290,7 +319,7 @@ def main():
         reverse_created = True
         shell("am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p " + PACKAGE)
         last_phase = ""
-        timeout_seconds = {"soak": 1800, "warm-compare": 1200, "smoke": 900}[args.mode]
+        timeout_seconds = {"soak": 1800, "warm-compare": 1200, "smoke": 900, "gameplay": 600}[args.mode]
         while time.monotonic() - started < timeout_seconds:
             marker = owned_json("android-quality-phase.json") or {}
             phase = marker.get("phase", "startup") if marker.get("run_id") == fixture["run_id"] else "startup"
@@ -362,6 +391,13 @@ def main():
                 if not raw.startswith(b"\x89PNG\r\n\x1a\n"):
                     raise RuntimeError("Native settings image missing")
                 (output / name).write_bytes(raw)
+            if args.mode == "gameplay":
+                for index in range(len(MOVES)):
+                    name = f"android-quality-move-{index}.png"
+                    raw = device("exec-out", "run-as", PACKAGE, "cat", "files/" + name)
+                    if not raw.startswith(b"\x89PNG\r\n\x1a\n"):
+                        raise RuntimeError("Move impact evidence missing")
+                    (output / name).write_bytes(raw)
             report["usable"] = True
     except Exception as error:
         report["errors"].append(str(error))
