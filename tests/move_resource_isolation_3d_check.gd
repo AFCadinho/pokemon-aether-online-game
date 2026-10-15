@@ -4,6 +4,7 @@ const Source = preload("res://scripts/battle/battle_ui/source_move_effect_3d.gd"
 const Fire = preload("res://scripts/battle/battle_ui/fire_stream_move_effect_3d.gd")
 const Draco = preload("res://scripts/battle/battle_ui/draco_meteor_effect_3d.gd")
 const Extended = preload("res://scripts/battle/battle_ui/extended_move_effect_3d.gd")
+const Batch = preload("res://scripts/battle/battle_ui/batch_four_move_effect_3d.gd")
 const Rocks = preload("res://scripts/battle/battle_ui/rock_slide_forms_3d.gd")
 const Ground = preload("res://scripts/battle/battle_ui/rock_ground_forms_3d.gd")
 const Volume = preload("res://scripts/battle/battle_ui/move_volume_forms_3d.gd")
@@ -50,7 +51,9 @@ func _run() -> void:
 	var ground := Ground.new()
 	assert(ground.rocks.stone.shader != original.stone.shader)
 	assert(original.stone.shader.code == stone_code and ground.rocks.stone.shader.code.contains("uniform vec3 tone"))
-	for pair in [[Source, "watergun"], [Fire, "flamethrower"], [Draco, "dracometeor"], [Extended, "rockslide"]]:
+	var source_program: Shader = preload("res://scripts/battle/battle_ui/source_move_sprite.gdshader")
+	var source_code := source_program.code
+	for pair in [[Source, "watergun"], [Fire, "flamethrower"], [Draco, "dracometeor"], [Extended, "rockslide"], [Batch, "moonblast"]]:
 		var clock_a := {"seconds": 0.0}
 		var clock_b := {"seconds": 0.0}
 		var a := _cast(pair[0], pair[1], clock_a)
@@ -73,11 +76,12 @@ func _run() -> void:
 		a = null
 		await get_tree().process_frame
 		assert(reference.get_ref() == null, "Shared resources retained a cancelled effect")
-		clock_b.seconds = 2.8
+		clock_b.seconds = 2.5
 		b._process(0.0)
-		assert(not b.done and b.cursor > 0, "Cancelling another cast invalidated this effect")
+		assert(not b.done and b.cursor > 0, str(pair[1]) + ": cancelling another cast invalidated this effect")
 		b.cancel()
 		await get_tree().process_frame
+	assert(source_program.code == source_code and not source_program.code.contains("moon_disc"), "Moon crop mutated the shared source shader")
 	assert(get_child_count() == 0, "Effect nodes survived teardown")
-	print("MOVE_RESOURCE_ISOLATION_OK concurrent=4 materials_independent=true bounded_shared_meshes=3 shader_edit_isolated=true cancellation=true")
+	print("MOVE_RESOURCE_ISOLATION_OK concurrent=5 materials_independent=true bounded_shared_meshes=3 shader_variants_isolated=true cancellation=true")
 	get_tree().quit()
