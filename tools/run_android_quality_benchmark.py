@@ -266,6 +266,10 @@ def main():
             sample = {"elapsed_seconds": time.monotonic() - started, "phase": phase,
                       "pss_kib": number(memory, r"TOTAL PSS:\s*(\d+)"),
                       "battery_c": number(battery, r"^\s*temperature:\s*(\d+)", 10),
+                      "battery_percent": number(battery, r"^\s*level:\s*(\d+)"),
+                      "charging_status": number(battery, r"^\s*status:\s*(\d+)"),
+                      "ac_powered": bool(re.search(r"^\s*AC powered: true$", battery, re.M)),
+                      "usb_powered": bool(re.search(r"^\s*USB powered: true$", battery, re.M)),
                       "thermal_status": number(thermal, r"Thermal Status:\s*(\d+)"),
                       "foreground": any(PACKAGE + "/" in line for line in activities.splitlines() if "mResumedActivity:" in line or "topResumedActivity=" in line)}
             report["health"].append(sample)
