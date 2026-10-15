@@ -18,6 +18,8 @@
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker_frames"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon_scene"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="earthquake_pickup"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(128, 16)
 
@@ -557,6 +559,14 @@ sign_type = "building"
 position = Vector2(1200, 1520)
 sign_id = "kanto_route_5_underground_path_sign"
 sign_type = "road"
+
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+
+[node name="TMEarthquake" parent="Entities/Interactables/Items" instance=ExtResource("earthquake_pickup")]
+position = Vector2(496, 1360)
+pickup_id = "kanto_route_5_tm_earthquake"
+item_id = "tm-earthquake"
+quantity = 1
 
 [node name="Tiles" type="Node2D" parent="." unique_id=318081660]
 
