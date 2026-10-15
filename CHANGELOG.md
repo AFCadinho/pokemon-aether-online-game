@@ -4,6 +4,8 @@
 
 - Publish a plain-English Official Guide explaining 3D battle quality presets and frame limits, marked for the upcoming update.
 
+- Refresh Route 5 and Route 6 visuals from their updated Tiled sources.
+
 - Add desktop performance diagnostics sharing, enabled by default with a Support setting to turn it off, using small authenticated summaries once per minute.
 
 - Enable Android performance diagnostics sharing by default when no preference is saved, while retaining the option to turn it off and preserving saved opt-outs.
