@@ -1,4 +1,6 @@
 {
+  "ui.settings.battle.quality": "Qualidade das batalhas 3D",
+  "ui.settings.battle.fps_unlimited": "Sem limite (VSync pode limitar FPS)",
   "ui.settings.android.quality": "Qualidade 3D no Android",
   "ui.settings.android.quality.low": "Baixa",
   "ui.settings.android.quality.medium": "Média",

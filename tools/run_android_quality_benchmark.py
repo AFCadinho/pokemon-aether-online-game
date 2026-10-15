@@ -99,6 +99,45 @@ def validate_hitch_profile(phase):
     return errors
 
 
+def validate_entry(phase, fixture, kind=None):
+    errors = []
+    kind = kind or ["covered_wild", "early_wild", "preview_trainer"][phase.get("index", 0) % 3]
+    enabled = fixture.get("entry_warmup", False)
+    entry = phase.get("entry", {})
+    if (entry.get("case") != kind or not entry.get("ready") or entry.get("warmup_enabled") is not enabled
+            or not entry.get("input_held_during_preparation") or not entry.get("samples_hidden")
+            or entry.get("available_keys") != ["flamethrower", "thunderbolt", "rockslide", "dracometeor"]
+            or not isinstance(entry.get("elapsed_ms"), (int, float)) or not math.isfinite(entry["elapsed_ms"]) or entry["elapsed_ms"] <= 0):
+        errors.append("Invalid ordinary entry readiness, request or visibility")
+    if kind == "early_wild" and not entry.get("early_visible_before_response"):
+        errors.append("Early arena was not visible before its response")
+    if kind == "preview_trainer" and (entry.get("selected_slot") != 2 or not entry.get("previews_have_no_casts")
+            or entry.get("actors", [None])[0] != "dragonite"):
+        errors.append("Team Preview did not prepare the actually selected lead")
+    rounds = entry.get("warmup", [])
+    evidence = {}
+    if enabled and not 1 <= len(rounds) <= 4:
+        errors.append("Missing or unbounded ordinary entry preparation evidence")
+    if not enabled and rounds:
+        errors.append("Disabled entry control performed preparation")
+    for round_ in rounds:
+        if (round_.get("mode") != "hidden" or not isinstance(round_.get("elapsed_ms"), (int, float))
+                or not math.isfinite(round_["elapsed_ms"]) or round_["elapsed_ms"] < 0
+                or round_.get("effects") != len(round_.get("samples", [])) or not 0 <= round_.get("effects", -1) <= 5):
+            errors.append("Invalid ordinary entry preparation timings")
+        for sample in round_.get("samples", []):
+            if (not sample.get("active_samples", 0) > 0 or sample.get("drawn_samples") != 0
+                    or not isinstance(sample.get("instance"), int) or sample["instance"] <= 0):
+                errors.append("Invalid ordinary entry sample visibility or ownership")
+            evidence[sample.get("key")] = sample.get("instance")
+    prepared = entry.get("prepared", {})
+    for move, key in zip(phase.get("gameplay", {}).get("moves", []), ["flamethrower", "thunderbolt", "rockslide", "dracometeor"]):
+        used = move.get("prepared_instance", 0)
+        if (enabled and (not isinstance(prepared.get(key), int) or prepared.get(key, 0) <= 0 or used != prepared.get(key) or prepared.get(key) != evidence.get(key))) or (not enabled and (prepared or used != 0)):
+            errors.append("First action did not follow ordinary entry preparation ownership")
+    return errors
+
+
 def validate(details, fixture):
     errors = []
     if not isinstance(details, dict) or details.get("run_id") != fixture["run_id"]:
@@ -174,40 +213,8 @@ def validate(details, fixture):
                 errors.append("Incomplete native menu navigation")
     if fixture.get("mode") == "battle-entry":
         cases = ["covered_wild", "early_wild", "preview_trainer"]
-        enabled = fixture.get("entry_warmup", False)
         for kind, phase in zip(cases, phases):
-            entry = phase.get("entry", {})
-            if (entry.get("case") != kind or not entry.get("ready") or entry.get("warmup_enabled") is not enabled
-                    or not entry.get("input_held_during_preparation") or not entry.get("samples_hidden")
-                    or entry.get("available_keys") != ["flamethrower", "thunderbolt", "rockslide", "dracometeor"]
-                    or not isinstance(entry.get("elapsed_ms"), (int, float)) or not math.isfinite(entry["elapsed_ms"]) or entry["elapsed_ms"] <= 0):
-                errors.append("Invalid ordinary entry readiness, request or visibility")
-            if kind == "early_wild" and not entry.get("early_visible_before_response"):
-                errors.append("Early arena was not visible before its response")
-            if kind == "preview_trainer" and (entry.get("selected_slot") != 2 or not entry.get("previews_have_no_casts")
-                    or entry.get("actors", [None])[0] != "dragonite"):
-                errors.append("Team Preview did not prepare the actually selected lead")
-            rounds = entry.get("warmup", [])
-            evidence = {}
-            if enabled and not 1 <= len(rounds) <= 4:
-                errors.append("Missing or unbounded ordinary entry preparation evidence")
-            if not enabled and rounds:
-                errors.append("Disabled entry control performed preparation")
-            for round_ in rounds:
-                if (round_.get("mode") != "hidden" or not isinstance(round_.get("elapsed_ms"), (int, float))
-                        or not math.isfinite(round_["elapsed_ms"]) or round_["elapsed_ms"] < 0
-                        or round_.get("effects") != len(round_.get("samples", [])) or not 0 <= round_.get("effects", -1) <= 5):
-                    errors.append("Invalid ordinary entry preparation timings")
-                for sample in round_.get("samples", []):
-                    if (not sample.get("active_samples", 0) > 0 or sample.get("drawn_samples") != 0
-                            or not isinstance(sample.get("instance"), int) or sample["instance"] <= 0):
-                        errors.append("Invalid ordinary entry sample visibility or ownership")
-                    evidence[sample.get("key")] = sample.get("instance")
-            prepared = entry.get("prepared", {})
-            for move, key in zip(phase.get("gameplay", {}).get("moves", []), ["flamethrower", "thunderbolt", "rockslide", "dracometeor"]):
-                used = move.get("prepared_instance", 0)
-                if (enabled and (not isinstance(prepared.get(key), int) or prepared.get(key, 0) <= 0 or used != prepared.get(key) or prepared.get(key) != evidence.get(key))) or (not enabled and (prepared or used != 0)):
-                    errors.append("First action did not follow ordinary entry preparation ownership")
+            errors.extend(validate_entry(phase, fixture, kind))
     if fixture.get("mode") == "warm-compare":
         heat = details.get("preheat", [])
         end = heat[-1] if heat else {}

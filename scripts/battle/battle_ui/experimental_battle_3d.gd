@@ -1,5 +1,5 @@
 extends Control
-const AndroidQuality := preload("res://scripts/services/android_quality_policy.gd")
+const BattleQuality := preload("res://scripts/services/battle_quality_policy.gd")
 var quality_preset := "ultra"
 const ModelPlatform = preload("res://scripts/battle/battle_ui/model_platform.gd")
 ## Desktop presentation: explicit combatants/actions/transitions from battle host.
@@ -173,8 +173,7 @@ var active := false
 
 func _ready() -> void:
 	add_to_group("performance_3d_stage")
-	if OS.has_feature("android"):
-		quality_preset = get_tree().root.get_node("SettingsManager").android_quality_preset
+	quality_preset = get_tree().root.get_node("SettingsManager").get_battle_quality_preset()
 	reset_user_camera()
 	if OS.has_feature("android") and OS.has_feature("android_3d_performance_probe"):
 		var probe := preload("res://scripts/battle/battle_ui/android_3d_performance_probe.gd").new()
@@ -753,11 +752,18 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 			return
 		await get_tree().process_frame
 
+func move_preparation_enabled() -> bool:
+	var renderer := RenderingServer.get_current_rendering_method()
+	return android_move_warmup.allows(OS.has_feature("android"), OS.has_feature("android_3d_experimental"), renderer == "mobile", OS.has_feature("android_3d_move_warmup")) or (OS.has_feature("pc") and not OS.has_feature("android") and OS.has_feature("desktop_3d_move_warmup") and renderer in ["forward_plus", "mobile"])
+
 func android_move_preparation_enabled() -> bool:
-	return android_move_warmup.allows(OS.has_feature("android"), OS.has_feature("android_3d_experimental"), RenderingServer.get_current_rendering_method() == "mobile", OS.has_feature("android_3d_move_warmup"))
+	return move_preparation_enabled() # Compatibility for the existing Android trial.
 
 func prepare_android_move_effects(available: Array = []) -> void:
-	if not android_move_preparation_enabled(): return
+	await prepare_move_effects(available)
+
+func prepare_move_effects(available: Array = []) -> void:
+	if not move_preparation_enabled(): return
 	if _preview_wants_3d() or preparation_cancelled or preparation_failed or not active: return
 	var request: Array[String] = android_move_warmup.selected_moves(available)
 	# A late intro check can overlap the screen host's preparation. Let the
@@ -2086,7 +2092,7 @@ func _build_world() -> void:
 	viewport = SubViewport.new()
 	viewport.own_world_3d = true
 	viewport.transparent_bg = get_tree().root.get_node("SettingsManager").battle_presentation_mode == "2.5d"
-	AndroidQuality.apply_viewport(viewport, quality_preset)
+	BattleQuality.apply_viewport(viewport, quality_preset)
 	add_child(viewport)
 	_sync_render_size()
 	render_surface.texture = viewport.get_texture()
@@ -2122,7 +2128,7 @@ func _build_world() -> void:
 	elif not viewport.transparent_bg:
 		_build_classic_ground()
 	camera.position = _default_camera_home()
-	AndroidQuality.apply_lights(world, quality_preset)
+	BattleQuality.apply_lights(world, quality_preset)
 	camera.fov = ArenaCatalog.CAMERA_FOV
 	camera.look_at(ArenaCatalog.camera_target(arena_id))
 	camera.current = true

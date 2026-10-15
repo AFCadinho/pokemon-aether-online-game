@@ -8,8 +8,11 @@ class LocalModels extends Node:
 	func battle_download_progress() -> Dictionary: return {}
 
 func _init() -> void:
-	ProjectSettings.set_setting("_custom_features", "mobile,android,android_3d_experimental,android_3d_move_warmup")
+	ProjectSettings.set_setting("_custom_features", _trial_features())
 	super._init()
+
+func _trial_features() -> String:
+	return "mobile,android,android_3d_experimental,android_3d_move_warmup"
 
 func _run() -> void:
 	Entry = load("res://tests/fixtures/android_battle_entry_trial.gd")

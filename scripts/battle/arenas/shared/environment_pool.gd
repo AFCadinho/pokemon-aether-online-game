@@ -1,5 +1,5 @@
 extends Node
-const AndroidQuality := preload("res://scripts/services/android_quality_policy.gd")
+const BattleQuality := preload("res://scripts/services/battle_quality_policy.gd")
 var quality_preset := "ultra"
 ## One world-session-owned pair of arena passes. Never stores battle state.
 const Catalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
@@ -64,7 +64,7 @@ static func get_current() -> Node:
 
 static func prepare(owner_node: Node, manifest: String, dimensions: Vector2i, requested_arena := "forest") -> Node:
 	var settings := owner_node.get_node_or_null("/root/SettingsManager")
-	var preset: String = settings.android_quality_preset if OS.has_feature("android") and settings != null else "ultra"
+	var preset: String = settings.get_battle_quality_preset() if settings != null else "ultra"
 	var existing := get_current()
 	if existing != null and existing.get_parent() == owner_node:
 		if existing.arena_id == requested_arena and existing.quality_preset == preset and not existing.discard_requested:
@@ -79,7 +79,7 @@ static func prepare(owner_node: Node, manifest: String, dimensions: Vector2i, re
 	pool.name = "ForestEnvironmentPool"
 	pool.arena_id = requested_arena
 	pool.quality_preset = preset
-	pool.render_size = AndroidQuality.dimensions(dimensions, preset)
+	pool.render_size = BattleQuality.dimensions(dimensions, preset, OS.has_feature("android"))
 	pool.started = Time.get_ticks_msec()
 	pool.memory_before = Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)
 	pool.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -118,7 +118,7 @@ func _process(_delta: float) -> void:
 func _build_pass(light_pass: bool) -> Dictionary:
 	var viewport := SubViewport.new()
 	viewport.own_world_3d = true
-	AndroidQuality.apply_viewport(viewport, quality_preset)
+	BattleQuality.apply_viewport(viewport, quality_preset)
 	viewport.use_hdr_2d = light_pass
 	viewport.transparent_bg = light_pass
 	viewport.size = render_size
@@ -151,7 +151,7 @@ func _build_pass(light_pass: bool) -> Dictionary:
 	world.add_child(arena)
 	if light_pass and OS.has_feature("android") and OS.has_feature("android_3d_experimental") and not OS.has_feature("android_3d_full_response_scene"):
 		_response_shadow_geometry(arena)
-	AndroidQuality.apply_lights(world, quality_preset)
+	BattleQuality.apply_lights(world, quality_preset)
 	return {"viewport":viewport,"world":world,"camera":camera,"arena":arena,"base":world.get_children()}
 
 static func _response_shadow_geometry(node: Node) -> void:

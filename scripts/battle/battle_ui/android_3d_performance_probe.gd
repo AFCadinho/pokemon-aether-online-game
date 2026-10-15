@@ -18,7 +18,8 @@ static func stats(values: Array) -> Dictionary:
 	var ordered := values.duplicate()
 	ordered.sort()
 	return {"count": ordered.size(), "p50": ordered[maxi(0, ceili(ordered.size() * .5) - 1)],
-		"p95": ordered[maxi(0, ceili(ordered.size() * .95) - 1)], "max": ordered.back()}
+		"p95": ordered[maxi(0, ceili(ordered.size() * .95) - 1)],
+		"p99": ordered[maxi(0, ceili(ordered.size() * .99) - 1)], "max": ordered.back()}
 
 func _process(_delta: float) -> void:
 	var now := Time.get_ticks_usec()
