@@ -7,6 +7,7 @@ const Stats := preload("res://scripts/battle/battle_ui/android_3d_performance_pr
 const REPORT := "user://android-quality-details.json"
 const FIXTURE := "user://android-quality-fixture.json"
 const ORDERS := [["ultra", "high", "medium", "low", "ultra"], ["ultra", "low", "medium", "high", "ultra"]]
+const MOVES := ["Flamethrower", "Thunderbolt", "Rock Slide", "Draco Meteor"]
 var fixture := {}
 var report := {"schema": 1, "phases": [], "failures": [], "complete": false}
 var stage: Control
@@ -19,6 +20,10 @@ var telemetry: Node
 var dimensions := Vector2i.ZERO
 var observation_lifecycle: Node
 var soak_started := 0
+var router: RefCounted
+var gameplay_done := false
+var gameplay_row := {}
+var move_samples := {}
 
 class ErrorSink extends Logger:
 	var errors: Array[String] = []
@@ -43,7 +48,8 @@ static func valid_fixture(value: Variant) -> bool:
 		return false
 	var soak: bool = value.get("mode", "smoke") == "soak"
 	var paired: bool = value.get("mode", "smoke") == "warm-compare"
-	if value.get("mode", "smoke") not in ["smoke", "soak", "warm-compare"]:
+	var gameplay: bool = value.get("mode") == "gameplay"
+	if value.get("mode", "smoke") not in ["smoke", "soak", "warm-compare", "gameplay"]:
 		return false
 	if soak and value.get("preset") not in ["low", "medium", "high", "ultra"]:
 		return false
@@ -51,7 +57,7 @@ static func valid_fixture(value: Variant) -> bool:
 	var port: Variant = value.get("port")
 	if not (seconds is float or seconds is int) or not (port is float or port is int):
 		return false
-	if float(seconds) not in ([30.0] if soak or paired else [10.0, 15.0, 20.0]) or float(port) != floorf(float(port)) or port < 1024 or port > 65535:
+	if float(seconds) not in ([30.0] if soak or paired or gameplay else [10.0, 15.0, 20.0]) or float(port) != floorf(float(port)) or port < 1024 or port > 65535:
 		return false
 	var run_id: Variant = value.get("run_id")
 	return run_id is String and RegEx.create_from_string("^[0-9a-f]{32}$").search(run_id) != null
@@ -77,6 +83,10 @@ func _marker(phase: String) -> void:
 	print("ANDROID_QUALITY_PHASE ", phase)
 
 func _release_stage() -> void:
+	if router != null:
+		router.cancel_render()
+		router.release_threaded_resource_requests()
+		router = null
 	if is_instance_valid(stage):
 		stage.free()
 	stage = null
@@ -136,9 +146,87 @@ func _prepare(preset: String) -> bool:
 		if not _check(data.viewport.size == expected and data.viewport.msaa_3d == Quality.msaa(preset), "Both passes apply the selected raster/MSAA"):
 			return false
 		RenderingServer.viewport_set_measure_render_time(data.viewport.get_viewport_rid(), true)
-	stage.playback_speed = 0.0
+	stage.playback_speed = 1.0 if fixture.get("mode") == "gameplay" else 0.0
 	RenderingServer.global_shader_parameter_set("wind_speed", 0.0)
 	return _check(stage.quality_preset == preset and pool.quality_preset == preset, "Presenter and pool retain the same profile")
+
+func _gameplay_sequence(index: int) -> void:
+	gameplay_done = false
+	gameplay_row = {"moves": [], "tabs": [], "complete": false}
+	router = load("res://scripts/battle/battle_animation_router.gd").new()
+	router.model_presenter = stage
+	router.animation_parent = stage
+	for i in MOVES.size():
+		var actor := "p1" if i % 2 == 0 else "p2"
+		var target := "p2" if actor == "p1" else "p1"
+		var started := Time.get_ticks_usec()
+		move_samples = {"frame_ms": [], "main_gpu_ms": [], "response_gpu_ms": [], "effect_frames": 0, "hit_seen": false}
+		await router.play_move_animation(MOVES[i], actor, target, {"show_impact": true})
+		await router.finish_3d_impact_damage(target)
+		var until := Time.get_ticks_msec() + 3000
+		while not router.active_audio_nodes.is_empty() and Time.get_ticks_msec() < until:
+			await process_frame
+		var row := {"move": MOVES[i], "actor": actor, "seconds": (Time.get_ticks_usec() - started) / 1000000.0,
+			"effect_frames": move_samples.effect_frames, "hit_seen": move_samples.hit_seen, "timings": {},
+			"cleaned": stage.common_effects.is_empty() and router.active_audio_nodes.is_empty() and not router.has_3d_impact_damage()}
+		for key in ["frame_ms", "main_gpu_ms", "response_gpu_ms"]:
+			row.timings[key] = Stats.stats(move_samples[key])
+		_check(row.effect_frames > 0 and row.hit_seen and row.cleaned, "Real move hit and effect/audio cleanup: " + MOVES[i])
+		gameplay_row.moves.append(row)
+		move_samples = {}
+	var menu: Control = load("res://scenes/interface/settings/settings_menu.tscn").instantiate()
+	root.add_child(menu)
+	menu.open("game")
+	for tab in 8:
+		var started := Time.get_ticks_usec()
+		menu.tab_container.current_tab = tab
+		for frame in 10:
+			await process_frame
+		gameplay_row.tabs.append({"tab": tab, "visible": menu.visible and menu.tab_container.current_tab == tab,
+			"ten_frame_ms": (Time.get_ticks_usec() - started) / 1000.0})
+	menu.close()
+	_check(not menu.visible and settings.android_quality_preset == "medium", "Menu closes and retains Medium")
+	menu.queue_free()
+	await process_frame
+	gameplay_row.complete = true
+	gameplay_row.cycle = index
+	gameplay_done = true
+
+# Separate evidence pass: PNG readback/encoding is excluded from measured casts.
+func _capture_moves() -> void:
+	for i in MOVES.size():
+		var done := {"value": false}
+		_capture_cast(i, done)
+		var until := Time.get_ticks_msec() + 20000
+		while not done.value and Time.get_ticks_msec() < until:
+			await process_frame
+		_check(done.value, "Bounded move capture")
+		if not done.value:
+			router.cancel_render()
+			return
+
+func _capture_cast(index: int, done: Dictionary) -> void:
+	var completed := {"value": false}
+	var actor := "p1" if index % 2 == 0 else "p2"
+	var target := "p2" if actor == "p1" else "p1"
+	_capture_route(MOVES[index], actor, target, completed)
+	var captured := false
+	while not completed.value:
+		await process_frame
+		if captured:
+			continue
+		for effect in stage.common_effects:
+			if is_instance_valid(effect) and effect.hit:
+				await RenderingServer.frame_post_draw
+				captured = stage.viewport.get_texture().get_image().save_png("user://android-quality-move-%d.png" % index) == OK
+				break
+	_check(captured, "Actual move impact captured: " + MOVES[index])
+	done.value = true
+
+func _capture_route(move: String, actor: String, target: String, done: Dictionary) -> void:
+	await router.play_move_animation(move, actor, target, {"show_impact": true})
+	await router.finish_3d_impact_damage(target)
+	done.value = true
 
 func _preheat() -> bool:
 	if not await _prepare("high"):
@@ -181,6 +269,7 @@ func _preheat() -> bool:
 func _observe(preset: String, index: int) -> void:
 	var soak: bool = fixture.get("mode", "smoke") == "soak"
 	var paired: bool = fixture.get("mode", "smoke") == "warm-compare"
+	var gameplay: bool = fixture.get("mode") == "gameplay"
 	var reuse: bool = (soak and index > 0) or (paired and index in [0, 2])
 	var prepared := Time.get_ticks_msec()
 	if not reuse and not await _prepare(preset):
@@ -191,7 +280,7 @@ func _observe(preset: String, index: int) -> void:
 		var warm_until := Time.get_ticks_msec() + (30000 if soak else 3000)
 		while Time.get_ticks_msec() < warm_until:
 			await process_frame
-	if soak and observation_lifecycle == null:
+	if (soak or gameplay) and observation_lifecycle == null:
 		observation_lifecycle = LifecycleProbe.new()
 		root.add_child(observation_lifecycle)
 	if not _check(stage.active and stage.handles("p1") and stage.handles("p2") and stage.quality_preset == preset and not stage.forest_lease.is_empty(), "Prepared workload remains active"):
@@ -210,19 +299,34 @@ func _observe(preset: String, index: int) -> void:
 	var samples := {"frame_ms": [], "main_gpu_ms": [], "response_gpu_ms": []}
 	var pipeline_start: Array = stage._blocking_pipelines()
 	var next_counters := started
-	while Time.get_ticks_usec() - started < int(fixture.phase_seconds) * 1000000:
+	if gameplay:
+		_gameplay_sequence(index)
+	while Time.get_ticks_usec() - started < int(fixture.phase_seconds) * 1000000 or (gameplay and not gameplay_done):
 		await process_frame
-		if (soak or paired) and (observation_lifecycle.pauses > 0 or observation_lifecycle.resumes > 0):
+		if (soak or paired or gameplay) and (observation_lifecycle.pauses > 0 or observation_lifecycle.resumes > 0):
 			_check(false, "Observation interrupted by Android background/resume")
 			return
 		var now := Time.get_ticks_usec()
+		if gameplay and not _check(now - started < 90000000, "Bounded gameplay cycle"):
+			return
 		samples.frame_ms.append((now - last) / 1000.0)
+		if not move_samples.is_empty():
+			move_samples.frame_ms.append((now - last) / 1000.0)
+			if not stage.common_effects.is_empty():
+				move_samples.effect_frames += 1
+			for effect in stage.common_effects:
+				if is_instance_valid(effect) and effect.hit:
+					move_samples.hit_seen = true
 		telemetry.window.record(now - last, 60)
 		telemetry.foreground_usec += now - last
 		last = now
 		for pass_index in 2:
 			var rid: RID = pool.passes[pass_index].viewport.get_viewport_rid()
-			samples["main_gpu_ms" if pass_index == 0 else "response_gpu_ms"].append(RenderingServer.viewport_get_measured_render_time_gpu(rid))
+			var key := "main_gpu_ms" if pass_index == 0 else "response_gpu_ms"
+			var gpu_ms := RenderingServer.viewport_get_measured_render_time_gpu(rid)
+			samples[key].append(gpu_ms)
+			if not move_samples.is_empty():
+				move_samples[key].append(gpu_ms)
 		if now >= next_counters:
 			next_counters = now + 1000000
 			telemetry._sample_counters()
@@ -236,12 +340,14 @@ func _observe(preset: String, index: int) -> void:
 		"msaa": stage.viewport.msaa_3d, "timings": {}, "pipeline_start": pipeline_start,
 		"pipeline_end": stage._blocking_pipelines(), "native": telemetry.native.duplicate(),
 		"render_bytes": Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)}
-	if soak or paired:
+	if soak or paired or gameplay:
 		row.stage_instance = stage.get_instance_id()
 		row.elapsed_seconds = (sample_ended - soak_started) / 1000000.0
 		_check(int(telemetry.native.get("thermalStatus", 0)) < 4, "Android thermal status below critical")
 	if paired:
 		row.native_start = native_start
+	if gameplay:
+		row.gameplay = gameplay_row.duplicate(true)
 	for key in samples:
 		row.timings[key] = Stats.stats(samples[key])
 	row.fps = samples.frame_ms.size() / row.seconds
@@ -310,6 +416,7 @@ func _run() -> void:
 	if not report.failures.is_empty():
 		_finish(); return
 	settings.set_android_fps_limit(60)
+	settings.battle_animations = true
 	settings.battle_presentation_mode = "3d"
 	settings.battle_3d_arena = "forest"
 	settings.battle_3d_camera_motion = false
@@ -333,10 +440,15 @@ func _run() -> void:
 		if not await _preheat():
 			_finish(); return
 		order = ["high", "medium", "medium", "high"]
+	elif fixture.get("mode") == "gameplay":
+		order = ["medium", "medium", "medium"]
+		report.note = "Offline animated renderer/router, real settings and three arena reconstructions; no authenticated world/network gameplay. Wind and camera fixed."
 	for index in order.size():
 		await _observe(order[index], index)
 		if not report.failures.is_empty() or not sink.errors.is_empty():
 			_finish(); return
+	if fixture.get("mode") == "gameplay":
+		await _capture_moves()
 	if is_instance_valid(observation_lifecycle):
 		_check(observation_lifecycle.pauses == 0 and observation_lifecycle.resumes == 0, "Uninterrupted observation")
 		observation_lifecycle.free()
