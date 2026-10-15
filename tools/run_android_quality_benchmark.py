@@ -27,6 +27,12 @@ ORDERS = {"descending": ["ultra", "high", "medium", "low", "ultra"],
 COUNTS = ("frame_ms", "main_gpu_ms", "response_gpu_ms")
 
 
+def expected_presets(fixture):
+    if fixture.get("mode", "smoke") == "soak":
+        return [fixture["preset"]] * 40
+    return ORDERS[fixture["order"]]
+
+
 def require_debug_manifest(raw):
     package = re.search(r'^    A: package="([^"]+)"', raw, re.M)
     application = re.search(r'^    E: application[^\n]*\n((?:      A:[^\n]*\n)+)', raw, re.M)
@@ -42,8 +48,17 @@ def validate(details, fixture):
     if not details.get("complete") or details.get("failures") or details.get("engine_errors"):
         errors.append("Incomplete workload or engine/check errors")
     phases = details.get("phases", [])
-    if [p.get("preset") for p in phases] != ORDERS[fixture["order"]]:
+    if [p.get("preset") for p in phases] != expected_presets(fixture):
         errors.append("Unexpected profile sequence")
+    if fixture.get("mode", "smoke") == "soak":
+        instances = {row.get("stage_instance") for row in phases}
+        elapsed = phases[-1].get("elapsed_seconds", 0) if phases else 0
+        if len(instances) != 1 or not all(isinstance(v, int) and v > 0 for v in instances):
+            errors.append("Soak must retain the same prepared stage throughout")
+        if not 1200 <= sum(row.get("seconds", 0) for row in phases) < 1240 or not 1200 <= elapsed < 1500:
+            errors.append("Incomplete twenty-minute soak")
+        if any(row.get("preparation_ms", 0) != 0 for row in phases[1:]):
+            errors.append("Soak unexpectedly re-prepared its workload")
     size = details.get("native_size", [])
     if len(size) != 2 or min(size, default=0) <= 0:
         return errors + ["Invalid native raster"]
@@ -132,6 +147,8 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--phase-seconds", type=int, choices=[10, 15, 20], default=15)
     parser.add_argument("--order", choices=ORDERS, default="descending")
+    parser.add_argument("--mode", choices=["smoke", "soak"], default="smoke")
+    parser.add_argument("--soak-preset", choices=["low", "medium", "high", "ultra"], default="ultra")
     args = parser.parse_args()
     if ROOT.parent.name not in {"slot-a", "slot-b", "slot-c"} or os.getenv("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Use the assigned slot-env")
@@ -210,6 +227,8 @@ def main():
         server.server_close()
         raise ValueError("Chosen USB reverse port is already owned")
     fixture = {"schema": 1, "run_id": uuid.uuid4().hex, "phase_seconds": args.phase_seconds, "order": args.order, "port": port}
+    if args.mode == "soak":
+        fixture.update(mode="soak", preset=args.soak_preset, phase_seconds=30)
     report = {"schema": 1, "package": PACKAGE, "fixture": fixture, "pins": pins, "health": [], "errors": [],
               "usable": False, "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
               "source_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT)),
@@ -230,7 +249,7 @@ def main():
         reverse_created = True
         shell("am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p " + PACKAGE)
         last_phase = ""
-        while time.monotonic() - started < 900:
+        while time.monotonic() - started < (1800 if args.mode == "soak" else 900):
             marker = owned_json("android-quality-phase.json") or {}
             phase = marker.get("phase", "startup") if marker.get("run_id") == fixture["run_id"] else "startup"
             if phase != last_phase:
@@ -277,16 +296,18 @@ def main():
                 raise RuntimeError("Keep the unlocked diagnostic in the foreground")
             if sample["thermal_status"] is not None and sample["thermal_status"] >= 4:
                 raise RuntimeError("Critical thermal status")
-            time.sleep(2)
+            time.sleep(10 if args.mode == "soak" else 2)
         else:
             raise RuntimeError("Bounded quality diagnostic timed out")
         report["errors"] += validate(details, fixture) + transport_errors
-        if len(uploads) != len(ORDERS[args.order]):
+        if len(uploads) != len(expected_presets(fixture)):
             report["errors"].append("Missing Android telemetry uploads")
         if report["errors"] and pid:
             (output / "diagnostic.log").write_bytes(device("logcat", "--pid", pid, "-d", "-v", "brief", check=False))
         if not report["errors"]:
-            for index, preset in enumerate(ORDERS[args.order]):
+            for index, preset in enumerate(expected_presets(fixture)):
+                if args.mode == "soak" and index not in (0, 39):
+                    continue
                 name = f"android-quality-{index}-{preset}.png"
                 raw = device("exec-out", "run-as", PACKAGE, "cat", "files/" + name)
                 if not raw.startswith(b"\x89PNG\r\n\x1a\n"):

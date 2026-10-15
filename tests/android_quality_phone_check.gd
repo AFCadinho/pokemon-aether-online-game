@@ -17,6 +17,8 @@ var status: Label
 var settings: Node
 var telemetry: Node
 var dimensions := Vector2i.ZERO
+var observation_lifecycle: Node
+var soak_started := 0
 
 class ErrorSink extends Logger:
 	var errors: Array[String] = []
@@ -39,11 +41,16 @@ static func valid_fixture(value: Variant) -> bool:
 		return false
 	if value.get("order") not in ["descending", "ascending"]:
 		return false
+	var soak: bool = value.get("mode", "smoke") == "soak"
+	if value.get("mode", "smoke") not in ["smoke", "soak"]:
+		return false
+	if soak and value.get("preset") not in ["low", "medium", "high", "ultra"]:
+		return false
 	var seconds: Variant = value.get("phase_seconds")
 	var port: Variant = value.get("port")
 	if not (seconds is float or seconds is int) or not (port is float or port is int):
 		return false
-	if float(seconds) not in [10.0, 15.0, 20.0] or float(port) != floorf(float(port)) or port < 1024 or port > 65535:
+	if float(seconds) not in ([30.0] if soak else [10.0, 15.0, 20.0]) or float(port) != floorf(float(port)) or port < 1024 or port > 65535:
 		return false
 	var run_id: Variant = value.get("run_id")
 	return run_id is String and RegEx.create_from_string("^[0-9a-f]{32}$").search(run_id) != null
@@ -133,14 +140,21 @@ func _prepare(preset: String) -> bool:
 	return _check(stage.quality_preset == preset and pool.quality_preset == preset, "Presenter and pool retain the same profile")
 
 func _observe(preset: String, index: int) -> void:
+	var soak: bool = fixture.get("mode", "smoke") == "soak"
 	var prepared := Time.get_ticks_msec()
-	if not await _prepare(preset):
+	if (not soak or index == 0) and not await _prepare(preset):
 		return
-	var preparation_ms := Time.get_ticks_msec() - prepared
-	_marker("warm:" + preset)
-	var warm_until := Time.get_ticks_msec() + 3000
-	while Time.get_ticks_msec() < warm_until:
-		await process_frame
+	var preparation_ms := Time.get_ticks_msec() - prepared if not soak or index == 0 else 0
+	if not soak or index == 0:
+		_marker("warm:" + preset)
+		var warm_until := Time.get_ticks_msec() + (30000 if soak else 3000)
+		while Time.get_ticks_msec() < warm_until:
+			await process_frame
+	if soak and observation_lifecycle == null:
+		observation_lifecycle = LifecycleProbe.new()
+		root.add_child(observation_lifecycle)
+	if not _check(stage.active and stage.handles("p1") and stage.handles("p2") and stage.quality_preset == preset and not stage.forest_lease.is_empty(), "Prepared workload remains active"):
+		return
 	telemetry._reset_window()
 	telemetry.context = {"scene": "battle", "presentation": "3d", "preset": preset, "presetVersion": 1,
 		"targetFps": 60, "renderWidth": stage.viewport.size.x, "renderHeight": stage.viewport.size.y,
@@ -148,12 +162,17 @@ func _observe(preset: String, index: int) -> void:
 	telemetry.native = telemetry._native_sample()
 	_marker("sample:%d:%s" % [index, preset])
 	var started := Time.get_ticks_usec()
+	if soak and soak_started == 0:
+		soak_started = started
 	var last := started
 	var samples := {"frame_ms": [], "main_gpu_ms": [], "response_gpu_ms": []}
 	var pipeline_start: Array = stage._blocking_pipelines()
 	var next_counters := started
 	while Time.get_ticks_usec() - started < int(fixture.phase_seconds) * 1000000:
 		await process_frame
+		if soak and (observation_lifecycle.pauses > 0 or observation_lifecycle.resumes > 0):
+			_check(false, "Continuous soak interrupted by Android background/resume")
+			return
 		var now := Time.get_ticks_usec()
 		samples.frame_ms.append((now - last) / 1000.0)
 		telemetry.window.record(now - last, 60)
@@ -167,6 +186,7 @@ func _observe(preset: String, index: int) -> void:
 			telemetry._sample_counters()
 	# End the measured interval before the synchronous native PSS query.
 	var sampled_seconds: float = telemetry.window.total_usec / 1000000.0
+	var sample_ended := Time.get_ticks_usec()
 	telemetry.native = telemetry._native_sample()
 	var row := {"preset": preset, "index": index, "seconds": sampled_seconds,
 		"preparation_ms": preparation_ms, "render_size": [stage.viewport.size.x, stage.viewport.size.y],
@@ -174,6 +194,10 @@ func _observe(preset: String, index: int) -> void:
 		"msaa": stage.viewport.msaa_3d, "timings": {}, "pipeline_start": pipeline_start,
 		"pipeline_end": stage._blocking_pipelines(), "native": telemetry.native.duplicate(),
 		"render_bytes": Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)}
+	if soak:
+		row.stage_instance = stage.get_instance_id()
+		row.elapsed_seconds = (sample_ended - soak_started) / 1000000.0
+		_check(int(telemetry.native.get("thermalStatus", 0)) < 4, "Android thermal status below critical")
 	for key in samples:
 		row.timings[key] = Stats.stats(samples[key])
 	row.fps = samples.frame_ms.size() / row.seconds
@@ -187,8 +211,9 @@ func _observe(preset: String, index: int) -> void:
 	while is_instance_valid(telemetry.request) and Time.get_ticks_msec() < upload_until:
 		await process_frame
 	_check(not is_instance_valid(telemetry.request) and telemetry.in_flight.is_empty(), "USB-local telemetry upload completed")
-	await RenderingServer.frame_post_draw
-	_check(stage.viewport.get_texture().get_image().save_png("user://android-quality-%d-%s.png" % [index, preset]) == OK, "Own arena capture saved")
+	if not soak or index in [0, 39]:
+		await RenderingServer.frame_post_draw
+		_check(stage.viewport.get_texture().get_image().save_png("user://android-quality-%d-%s.png" % [index, preset]) == OK, "Own arena capture saved")
 	_write(REPORT, report)
 	print("ANDROID_QUALITY_RESULT ", JSON.stringify(row))
 
@@ -256,10 +281,18 @@ func _run() -> void:
 	if not _check(report.native.has("androidApi") and report.native.has("processPssBytes"), "Real native bridge/counters available"):
 		_finish(); return
 	var order: Array = ORDERS[0 if fixture.order == "descending" else 1]
+	if fixture.get("mode", "smoke") == "soak":
+		order = []
+		order.resize(40)
+		order.fill(fixture.preset)
 	for index in order.size():
 		await _observe(order[index], index)
 		if not report.failures.is_empty() or not sink.errors.is_empty():
 			_finish(); return
+	if is_instance_valid(observation_lifecycle):
+		_check(observation_lifecycle.pauses == 0 and observation_lifecycle.resumes == 0, "Uninterrupted twenty-minute observation")
+		observation_lifecycle.free()
+		observation_lifecycle = null
 	_marker("lifecycle-ready")
 	var lifecycle := LifecycleProbe.new()
 	root.add_child(lifecycle)

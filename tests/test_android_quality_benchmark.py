@@ -57,6 +57,28 @@ class AndroidQualityResultTests(unittest.TestCase):
         detail["phases"][0]["timings"]["frame_ms"]["p95"] = float("nan")
         self.assertTrue(validate(detail, self.fixture))
 
+    def soak_result(self):
+        fixture = dict(self.fixture, mode="soak", preset="ultra", phase_seconds=30)
+        details = copy.deepcopy(self.details)
+        row = details["phases"][0]
+        details["phases"] = [dict(copy.deepcopy(row), index=i, seconds=30.01,
+            stage_instance=1234, preparation_ms=0, elapsed_seconds=(i + 1) * 30.01) for i in range(40)]
+        return fixture, details
+
+    def test_twenty_minute_single_stage_soak(self):
+        fixture, details = self.soak_result()
+        self.assertEqual(validate(details, fixture), [])
+
+    def test_shortened_recreated_or_reprepared_soak_is_rejected(self):
+        for change in (lambda d: d["phases"].pop(),
+                       lambda d: d["phases"][20].update(stage_instance=5678),
+                       lambda d: d["phases"][-1].update(elapsed_seconds=1199),
+                       lambda d: d["phases"][20].update(preparation_ms=3000),
+                       lambda d: d["phases"][20].update(seconds=0)):
+            fixture, details = self.soak_result()
+            change(details)
+            self.assertTrue(validate(details, fixture))
+
 
 if __name__ == "__main__":
     unittest.main()
