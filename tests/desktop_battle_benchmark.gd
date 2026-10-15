@@ -75,7 +75,10 @@ func _run() -> void:
 	local.catalog = catalog
 	root.add_child(local)
 	settings.battle_3d_catalog_path = catalog
-	settings._manual_model_catalog_this_session = true
+	# Match a launcher-managed installation. A manual catalog intentionally
+	# bypasses the host's pending-response gate and is a different entry flow.
+	OS.set_environment("POKEAETHER_MODEL_CATALOG", catalog)
+	settings._manual_model_catalog_this_session = false
 	entry_script = load("res://tests/fixtures/android_battle_entry_trial.gd")
 	for i in 3: await process_frame
 	dimensions = root.size
