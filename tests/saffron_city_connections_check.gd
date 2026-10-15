@@ -32,11 +32,12 @@ func _run() -> void:
 	_expect(city.get_node("Visual").scene_file_path == "res://generated/tiled_visuals/saffron_city/saffron_city.visual.tscn", "city instances the current generated visual")
 	var tree_bottom := city.get_node("Visual/TreeBottom") as TileMapLayer
 	var tree_top := city.get_node("Visual/TreeTop") as TileMapLayer
-	_expect(tree_bottom.get_used_cells().size() == 2248 and tree_top.get_used_cells().size() == 2248, "latest import contains all 562 complete tree sprites")
+	_expect(tree_bottom.get_used_cells().size() == 2828 and tree_top.get_used_cells().size() == 2648, "latest import preserves the authored tree bases and canopies")
 	var gate_border_complete := true
-	for cell in [Vector2i(0, 34), Vector2i(4, 34), Vector2i(6, 35), Vector2i(88, 35), Vector2i(90, 34), Vector2i(95, 34), Vector2i(6, 43), Vector2i(88, 43)]:
+	for cell in [Vector2i(0, 34), Vector2i(4, 34), Vector2i(90, 34), Vector2i(95, 34), Vector2i(6, 43), Vector2i(88, 43)]:
 		gate_border_complete = gate_border_complete and tree_bottom.get_cell_source_id(cell) != -1
 	_expect(gate_border_complete, "updated tree bases close both side-gate borders")
+	_expect(tree_bottom.get_cell_source_id(Vector2i(6, 35)) == -1 and tree_bottom.get_cell_source_id(Vector2i(88, 35)) == -1, "side-gate openings match the updated Tiled visual")
 	_expect(city.get_node("Visual/ObjectsTop") is TileMapLayer, "city includes upper building scenery")
 	_expect(city.get_node("Spawns/FromRoute5").position == Vector2(1520, 176), "north arrival matches Tiled connection")
 	_expect(city.get_node("Spawns/FromRoute6").position == Vector2(1584, 2672), "south arrival matches Tiled connection")
