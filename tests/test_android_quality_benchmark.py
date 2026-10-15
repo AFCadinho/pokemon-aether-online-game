@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -6,7 +7,7 @@ import sys
 import tempfile
 import unittest
 
-from tools.run_android_quality_benchmark import ORDERS, PACKAGE, fixture_pins, require_debug_manifest, save_progress, validate
+from tools.run_android_quality_benchmark import ORDERS, PACKAGE, fixture_pins, prepare_entry_ui_assets, require_debug_manifest, save_progress, validate
 
 
 class AndroidQualityResultTests(unittest.TestCase):
@@ -31,6 +32,23 @@ class AndroidQualityResultTests(unittest.TestCase):
         for actor, form in (("charizard", "base"), ("charizard", "mega-x"),
                             ("charizard", "mega-y"), ("dragonite", "base"), ("dragonite", "mega")):
             self.assertEqual(sum(key.startswith(f"optional-assets/pokemon_3d/{actor}/{form}/") for key in keys), 1)
+
+    def test_ordinary_ui_catalog_resolves_actual_party_icons_with_verified_bytes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            files, records = prepare_entry_ui_assets(Path(directory))
+            mobile = json.loads(files["/mobile-assets/catalog.json"].read_text())
+            home = json.loads(files["/home-icons/catalog.json"].read_text())
+            self.assertEqual(set(home["normal"]), {"Charizard", "Dragonite"})
+            self.assertEqual(home["shiny"], {})
+            self.assertEqual(set(mobile), {key.lstrip("/") for key in files if not key.startswith("/mobile-assets/")})
+            for species, relative in home["normal"].items():
+                payload = files["/" + relative].read_bytes()
+                self.assertTrue(payload.startswith(b"\x89PNG\r\n\x1a\n"), species)
+            for relative, pin in mobile.items():
+                payload = files["/" + relative].read_bytes()
+                self.assertEqual(pin, {"sha256": hashlib.sha256(payload).hexdigest(), "size": len(payload)})
+            self.assertEqual(len(records), 4)
+            self.assertNotIn("/home-icons/unknown.png", files)
 
     def test_only_the_separate_debug_identity_can_be_installed(self):
         manifest = ('    A: package="' + PACKAGE + '"\n'

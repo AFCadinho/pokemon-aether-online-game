@@ -324,6 +324,35 @@ def prepare_assets(directory):
     return files, records
 
 
+def prepare_entry_ui_assets(directory):
+    """Serve the two real party icons through the unchanged mobile hash catalog.
+
+    Ordinary battle UI loads HOME images on demand. Keep this fixture narrow;
+    unknown requests still fail instead of reaching a public asset server.
+    Images stay in their bootstrapped slot location, as with the pinned index.
+    """
+    directory.mkdir(parents=True, exist_ok=True)
+    files, home = {}, {"normal": {}, "shiny": {}}
+    for species in ("Charizard", "Dragonite"):
+        source = ROOT / "assets/sprites/pokemon/pokemon_home" / (species + ".png")
+        digest = hashlib.sha256(source.read_bytes()).hexdigest()
+        relative = "home-icons/" + digest + ".png"
+        home["normal"][species] = relative
+        files["/" + relative] = source
+    home_catalog = directory / "home-catalog.json"
+    home_catalog.write_text(json.dumps(home) + "\n")
+    files["/home-icons/catalog.json"] = home_catalog
+    catalog = {key.lstrip("/"): {"sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                                "size": path.stat().st_size} for key, path in files.items()}
+    mobile_catalog = directory / "mobile-catalog.json"
+    mobile_catalog.write_text(json.dumps(catalog) + "\n")
+    files["/mobile-assets/catalog.json"] = mobile_catalog
+    records = [{"key": key.lstrip("/"), "bytes": path.stat().st_size,
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(), "source": "slot_entry_ui_fixture"}
+               for key, path in sorted(files.items())]
+    return files, records
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--serial", required=True)
@@ -378,6 +407,10 @@ def main():
     if shell("getprop ro.kernel.qemu") == "1":
         raise ValueError("An emulator cannot be a physical result")
     files, pins = prepare_assets(output.parent / "fixtures")
+    if args.mode == "battle-entry":
+        ui_files, ui_pins = prepare_entry_ui_assets(output / "ui-fixtures")
+        files.update(ui_files)
+        pins.extend(ui_pins)
     uploads = []
     transport_errors = []
     requests = []
