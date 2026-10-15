@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reuse prepared effects safely in the optional Android loading-time trial; keep automatic activation disabled.
+
 - Reduce repeated 3D attack setup by reusing fixed shaders and geometry, and skip unused generic preparation for Rock Slide.
 
 - Refresh the Pewter Museum of Science visual from its updated Tiled source.

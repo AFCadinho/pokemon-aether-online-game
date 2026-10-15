@@ -189,6 +189,44 @@ class AndroidQualityResultTests(unittest.TestCase):
             change(details)
             self.assertTrue(validate(details, fixture))
 
+    def prepared_result(self, mode="covered"):
+        fixture, details = self.profile_result()
+        fixture["first_cast_preparation"] = mode
+        for row in details["phases"]:
+            row["cast_preparation"] = {"mode": mode, "elapsed_ms": 1200, "effects": 4,
+                "complete_keys": ["flamethrower", "thunderbolt", "rockslide", "dracometeor"],
+                "samples": [{"key": key, "instance": 1000 + i, "active_samples": 5,
+                    "drawn_samples": 5 if mode == "covered" else 0, "max_sample_ms": 80, "pieces": 40}
+                    for i, key in enumerate(["flamethrower", "thunderbolt", "rockslide", "dracometeor"])]}
+            for i, move in enumerate(row["gameplay"]["moves"]): move["prepared_instance"] = 1000 + i
+        return fixture, details
+
+    def test_hidden_and_covered_same_instance_preparation(self):
+        for mode in ("hidden", "covered"):
+            fixture, details = self.prepared_result(mode)
+            self.assertEqual(validate(details, fixture), [])
+
+    def test_slow_complete_preparation_is_kept_as_timing_evidence(self):
+        fixture, details = self.prepared_result()
+        details["phases"][0]["cast_preparation"]["elapsed_ms"] = 4000
+        self.assertEqual(validate(details, fixture), [])
+
+    def test_rejects_incomplete_preparation_wrong_instance_or_missing_draw_proof(self):
+        for change in (lambda p: p["cast_preparation"].update(mode="hidden"),
+                       lambda p: p["cast_preparation"].update(elapsed_ms=float("nan")),
+                       lambda p: p["cast_preparation"]["complete_keys"].pop(),
+                       lambda p: p["cast_preparation"]["samples"].pop(),
+                       lambda p: p["cast_preparation"]["samples"][0].update(drawn_samples=0),
+                       lambda p: p["cast_preparation"]["samples"][0].update(active_samples=0),
+                       lambda p: p["cast_preparation"]["samples"][0].update(max_sample_ms=float("inf")),
+                       lambda p: p["gameplay"]["moves"][0].update(prepared_instance=123)):
+            fixture, details = self.prepared_result()
+            change(details["phases"][0])
+            self.assertTrue(validate(details, fixture))
+        fixture, details = self.prepared_result("hidden")
+        details["phases"][0]["cast_preparation"]["samples"][0]["drawn_samples"] = 1
+        self.assertTrue(validate(details, fixture))
+
     def test_missing_truncated_invalid_profiles_or_new_instead_of_reused_menu_rejected(self):
         for change in (lambda p: p["hitch_profile"].update(dropped=1),
                        lambda p: p["hitch_profile"]["events"].clear(),

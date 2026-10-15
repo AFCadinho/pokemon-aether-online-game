@@ -105,6 +105,31 @@ def validate(details, fixture):
         return ["Missing, stale or foreign report"]
     if not details.get("complete") or details.get("failures") or details.get("engine_errors"):
         errors.append("Incomplete workload or engine/check errors")
+    mode = fixture.get("first_cast_preparation", "off")
+    if mode not in ("off", "hidden", "covered") or (mode != "off" and
+            (fixture.get("mode") != "gameplay" or not fixture.get("profile_hitches") or fixture.get("hitch_visibility_control"))):
+        errors.append("Invalid first-cast preparation protocol")
+    if mode != "off":
+        keys = ["flamethrower", "thunderbolt", "rockslide", "dracometeor"]
+        for phase in details.get("phases", []):
+            warm = phase.get("cast_preparation", {})
+            samples = warm.get("samples", [])
+            by_key = {sample.get("key"): sample for sample in samples}
+            if (warm.get("mode") != mode or not all(key in warm.get("complete_keys", []) for key in keys)
+                    or not isinstance(warm.get("elapsed_ms"), (int, float)) or not math.isfinite(warm["elapsed_ms"]) or warm["elapsed_ms"] <= 0
+                    or len(samples) != len(by_key) or not 4 <= len(samples) <= 8):
+                errors.append("Incomplete or unbounded first-cast preparation")
+            for key, move in zip(keys, phase.get("gameplay", {}).get("moves", [])):
+                sample = by_key.get(key, {})
+                if (not isinstance(sample.get("instance"), int) or sample.get("instance", 0) <= 0
+                        or move.get("prepared_instance") != sample.get("instance")
+                        or not sample.get("active_samples", 0) > 0 or not 0 < sample.get("pieces", 0) <= 128
+                        or not isinstance(sample.get("max_sample_ms"), (int, float))
+                        or not math.isfinite(sample["max_sample_ms"]) or sample["max_sample_ms"] < 0):
+                    errors.append("Actual cast did not consume a valid prepared effect")
+                if ((mode == "covered" and not sample.get("drawn_samples", 0) > 0)
+                        or (mode == "hidden" and sample.get("drawn_samples") != 0)):
+                    errors.append("Preparation draw control was not respected")
     phases = details.get("phases", [])
     if [p.get("preset") for p in phases] != expected_presets(fixture):
         errors.append("Unexpected profile sequence")
@@ -267,6 +292,8 @@ def main():
     parser.add_argument("--order", choices=ORDERS, default="descending")
     parser.add_argument("--mode", choices=["smoke", "soak", "warm-compare", "gameplay"], default="smoke")
     parser.add_argument("--profile-hitches", action="store_true", help="Private gameplay CPU spans, slow frames and retained-menu comparison")
+    parser.add_argument("--first-cast-preparation", choices=["off", "hidden", "covered"], default="off",
+                        help="Profile same-instance preparation separately, hidden or drawing behind an opaque cover")
     parser.add_argument("--hitch-visibility-control", action="store_true", help="Four profiled windows: draw effects, suppress, suppress, draw")
     parser.add_argument("--soak-preset", choices=["low", "medium", "high", "ultra"], default="ultra")
     args = parser.parse_args()
@@ -274,6 +301,8 @@ def main():
         parser.error("Hitch profiling requires --mode gameplay")
     if args.hitch_visibility_control and not args.profile_hitches:
         parser.error("Visibility control requires --profile-hitches")
+    if args.first_cast_preparation != "off" and (not args.profile_hitches or args.hitch_visibility_control):
+        parser.error("First-cast preparation requires hitch profiling without the visibility control")
     if ROOT.parent.name not in {"slot-a", "slot-b", "slot-c"} or os.getenv("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Use the assigned slot-env")
     if not re.fullmatch(r"[a-zA-Z0-9]+", args.serial) or args.serial.startswith("emulator-"):
@@ -359,6 +388,8 @@ def main():
         fixture.update(mode="gameplay", phase_seconds=30)
         if args.profile_hitches:
             fixture["profile_hitches"] = True
+        if args.first_cast_preparation != "off":
+            fixture["first_cast_preparation"] = args.first_cast_preparation
         if args.hitch_visibility_control:
             fixture["hitch_visibility_control"] = True
     report = {"schema": 1, "package": PACKAGE, "fixture": fixture, "pins": pins, "health": [], "errors": [],
