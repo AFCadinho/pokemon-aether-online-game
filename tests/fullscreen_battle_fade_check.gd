@@ -56,11 +56,6 @@ func _check_fullscreen_fade(settings: Node) -> void:
 		host.content.add_child(probe)
 		probe.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	host.fade_progress = 0.0
-	host.move_preparing_under_cover = true
-	host.request_reveal()
-	await process_frame
-	_check(host.reveal_tween == null and host.fade_progress == 0.0, "A late reveal request cannot expose preparation effects")
-	host.move_preparing_under_cover = false
 	host.request_reveal()
 	# Simulate a scene/texture upload stall at the first reveal frame.
 	OS.delay_msec(250)

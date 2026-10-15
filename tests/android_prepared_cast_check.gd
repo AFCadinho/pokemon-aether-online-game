@@ -33,6 +33,7 @@ func _run() -> void:
 	var comparisons := 0
 	for options in outcomes:
 		for player in stage.players: player.stop()
+		for action in ["physical_attack", "special_attack"]: stage.entries.fixture.action_timing[action].frames = 60.0
 		var original_camera: Transform3D = stage.camera.transform
 		var before_actions: Array = stage.current_actions.duplicate()
 		var before_positions: Array = stage.actors.map(func(actor): return actor.transform)
@@ -40,6 +41,8 @@ func _run() -> void:
 		assert(metrics.effects == 5 and metrics.complete_keys.size() == 5 and not metrics.bounded)
 		assert(stage.current_actions == before_actions and stage.actors.map(func(actor): return actor.transform) == before_positions)
 		assert(stage.camera.transform == original_camera and stage.common_effects.is_empty())
+		# New authoritative action timing after preparation must replace the old timing.
+		for action in ["physical_attack", "special_attack"]: stage.entries.fixture.action_timing[action].frames = 96.0
 		for move in MOVES:
 			var key := Effect.move_key(move)
 			var prepared: Node = stage.android_move_warmup.retained[key]
@@ -81,9 +84,18 @@ func _run() -> void:
 			await get_tree().process_frame
 			assert(held.get_ref() == null and stage.common_effects.is_empty())
 		assert(stage.android_move_warmup.retained.is_empty())
+	var subset: Dictionary = await stage.android_move_warmup.prepare(stage, ["Moonblast"], "hidden")
+	assert(subset.effects == 3 and not stage.android_move_warmup.retained.has("moonblast"))
+	assert(stage.android_move_warmup.take("Moonblast") == null, "Unreviewed renderer families stay on the ordinary factory")
+	stage.android_move_warmup.clear()
 	# Deactivation and cancellation during an await must release unused preparations.
 	await stage.android_move_warmup.prepare(stage, MOVES, "hidden")
-	var unused: WeakRef = weakref(stage.android_move_warmup.retained.flamethrower)
+	var rejected: WeakRef = weakref(stage.android_move_warmup.retained.flamethrower)
+	stage.android_move_warmup.retained.flamethrower.cancel()
+	assert(stage.android_move_warmup.take("Flamethrower") == null, "Queued effects cannot be handed out")
+	await get_tree().process_frame
+	assert(rejected.get_ref() == null)
+	var unused: WeakRef = weakref(stage.android_move_warmup.retained.thunderbolt)
 	stage._set_active(false)
 	await get_tree().process_frame
 	assert(stage.android_move_warmup.retained.is_empty() and unused.get_ref() == null)

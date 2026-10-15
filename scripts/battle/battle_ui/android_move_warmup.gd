@@ -1,6 +1,6 @@
 extends RefCounted
 ## Bounded VFX samples on the actual battle world. No actor clocks,
-## camera overrides, audio, battle commands or recorded move identities.
+## camera overrides, audio or battle commands. Metrics stay in the local trial.
 const Move = preload("res://scripts/battle/battle_ui/move_effect_3d.gd")
 const LIMIT := 8
 const BUDGET_MS := 1500
@@ -36,7 +36,7 @@ func take(move: String) -> Node3D:
 	var key := Move.move_key(move)
 	if busy or not retained.has(key): return null
 	var effect: Node3D = retained[key]
-	if not is_instance_valid(effect):
+	if not is_instance_valid(effect) or effect.is_queued_for_deletion() or effect.done:
 		retained.erase(key)
 		return null
 	if not effect.has_meta("android_prepared_cast"): return null

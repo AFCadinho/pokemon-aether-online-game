@@ -132,6 +132,12 @@ CPU execution time. Shader preloading also needs consideration during loading.
 
 ## Retained evidence and follow-up
 
+The [first-attack preparation follow-up](android-first-attack-preparation.md)
+now measures exact-instance handoff: first Rock Slide reaches 32.84 ms after
+about 0.9 seconds of hidden preparation, versus 242.25 ms without preparation
+in its new control. Covered drawing adds no demonstrated first-cast benefit.
+The entry trial remains gated and ordinary world battles remain unverified.
+
 In this slot's ignored `.tmp/android-quality-phone/`:
 
 - `resource-reuse-before-1/`: fresh baseline report/details/telemetry and ten

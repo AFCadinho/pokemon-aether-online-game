@@ -206,6 +206,11 @@ class AndroidQualityResultTests(unittest.TestCase):
             fixture, details = self.prepared_result(mode)
             self.assertEqual(validate(details, fixture), [])
 
+    def test_slow_complete_preparation_is_kept_as_timing_evidence(self):
+        fixture, details = self.prepared_result()
+        details["phases"][0]["cast_preparation"]["elapsed_ms"] = 4000
+        self.assertEqual(validate(details, fixture), [])
+
     def test_rejects_incomplete_preparation_wrong_instance_or_missing_draw_proof(self):
         for change in (lambda p: p["cast_preparation"].update(mode="hidden"),
                        lambda p: p["cast_preparation"].update(elapsed_ms=float("nan")),

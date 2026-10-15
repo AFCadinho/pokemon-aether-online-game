@@ -116,7 +116,7 @@ def validate(details, fixture):
             samples = warm.get("samples", [])
             by_key = {sample.get("key"): sample for sample in samples}
             if (warm.get("mode") != mode or not all(key in warm.get("complete_keys", []) for key in keys)
-                    or not isinstance(warm.get("elapsed_ms"), (int, float)) or not 0 < warm["elapsed_ms"] <= 3000
+                    or not isinstance(warm.get("elapsed_ms"), (int, float)) or not math.isfinite(warm["elapsed_ms"]) or warm["elapsed_ms"] <= 0
                     or len(samples) != len(by_key) or not 4 <= len(samples) <= 8):
                 errors.append("Incomplete or unbounded first-cast preparation")
             for key, move in zip(keys, phase.get("gameplay", {}).get("moves", [])):

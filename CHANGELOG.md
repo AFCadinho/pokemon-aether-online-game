@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Keep the optional Android attack-preparation trial covered during drawing and hand prepared effects safely to their first cast.
+- Reuse prepared effects safely in the optional Android loading-time trial; keep automatic activation disabled.
 
 - Reduce repeated 3D attack setup by reusing fixed shaders and geometry, and skip unused generic preparation for Rock Slide.
 

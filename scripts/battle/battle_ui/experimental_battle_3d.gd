@@ -750,11 +750,13 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 			return
 		await get_tree().process_frame
 
-func prepare_android_move_effects(available: Array = [], render_under_cover := false) -> void:
+func prepare_android_move_effects(available: Array = []) -> void:
 	if not android_move_warmup.allows(OS.has_feature("android"), OS.has_feature("android_3d_experimental"), RenderingServer.get_current_rendering_method() == "mobile", OS.has_feature("android_3d_move_warmup")):
 		return
 	if _preview_wants_3d() or preparation_cancelled or preparation_failed: return
-	var metrics: Dictionary = await android_move_warmup.prepare(self, available, "covered" if render_under_cover else "hidden")
+	# The S25 control found no extra benefit from drawing these samples.
+	# Keep covered drawing in the private fixture rather than extending entry.
+	var metrics: Dictionary = await android_move_warmup.prepare(self, available, "hidden")
 	if not is_instance_valid(self) or not is_inside_tree() or preparation_cancelled: return
 	preparation_metrics["move_warm_ms"] = metrics.elapsed_ms
 	preparation_metrics["move_warm_effects"] = metrics.effects
