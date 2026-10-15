@@ -117,6 +117,12 @@ func _prepare(preset: String) -> bool:
 	stage = entry_trial.stage
 	entry_observation = await entry_trial.finish(self, 60000)
 	if not _check(entry_trial.errors.is_empty() and entry_observation.ready and entry_observation.warmup_enabled == fixture.warmup and stage.active and stage.viewport != null, "Ordinary 3D intro/gate ready: " + stage.reason): return false
+	# First-turn readiness can resume within the frame that rebuilds the early
+	# arena's response pass. Match the phone fixture: observe after rendering,
+	# outside both the recorded intro duration and the timed action window.
+	for frame in 2: await process_frame
+	await RenderingServer.frame_post_draw
+	if not _check(stage.material_response.viewport != null, "Response pass exists after entry rendering"): return false
 	var screen: Transform2D = stage.get_viewport().get_final_transform() * stage.get_global_transform_with_canvas()
 	var arena := Vector2i(ceili(stage.size.x * screen.x.length()), ceili(stage.size.y * screen.y.length()))
 	entry_observation.arena_native_size = [arena.x, arena.y]
