@@ -1,5 +1,5 @@
 extends Node
-## Opt-in, bounded, in-memory telemetry. No disk queue or stable device identity.
+## Optional, bounded, in-memory telemetry. No disk queue or stable device identity.
 const FrameWindow := preload("res://scripts/services/android_performance_window.gd")
 const Quality := preload("res://scripts/services/android_quality_policy.gd")
 const WINDOW_USEC := 30000000
