@@ -79,6 +79,45 @@ class AndroidQualityResultTests(unittest.TestCase):
             change(details)
             self.assertTrue(validate(details, fixture))
 
+    def warm_result(self):
+        fixture = dict(self.fixture, mode="warm-compare", phase_seconds=30)
+        details = copy.deepcopy(self.details)
+        rows = [details["phases"][i] for i in (1, 2, 2, 1)]
+        details.update(preheat_ready=True, preheat_stage=101,
+            preheat=[{"elapsed_seconds": 360, "fps": 52, "native": {"thermalStatus": 2}}])
+        details["phases"] = [dict(copy.deepcopy(row), index=i, seconds=30.01,
+            preparation_ms=0 if i in (0, 2) else 3000,
+            stage_instance=(101, 202, 202, 303)[i], native_start={"thermalStatus": 2}) for i, row in enumerate(rows)]
+        for row in details["phases"]:
+            row["native"]["thermalStatus"] = 2
+        return fixture, details
+
+    def test_complete_bounded_warm_comparison(self):
+        fixture, details = self.warm_result()
+        self.assertEqual(validate(details, fixture), [])
+
+    def test_cold_unbounded_wrong_order_or_recreated_comparison_rejected(self):
+        for change in (lambda d: d.update(preheat_ready=False),
+                       lambda d: d["preheat"][-1].update(elapsed_seconds=700),
+                       lambda d: d["preheat"][-1]["native"].update(thermalStatus=1),
+                       lambda d: d["preheat"][-1].update(fps=60),
+                       lambda d: d["phases"][0].update(stage_instance=999),
+                       lambda d: d["phases"][2].update(stage_instance=404),
+                       lambda d: d["phases"][0]["native_start"].update(thermalStatus=0),
+                       lambda d: d["phases"][-1]["native"].update(thermalStatus=4),
+                       lambda d: d["phases"][1].update(preset="high"),
+                       lambda d: d["phases"][1].update(seconds=15)):
+            fixture, details = self.warm_result()
+            change(details)
+            self.assertTrue(validate(details, fixture))
+
+    def test_cooling_is_recorded_not_misreported_as_an_invalid_measurement(self):
+        fixture, details = self.warm_result()
+        for row in details["phases"][1:]:
+            row["native_start"]["thermalStatus"] = 1
+            row["native"]["thermalStatus"] = 1
+        self.assertEqual(validate(details, fixture), [])
+
 
 if __name__ == "__main__":
     unittest.main()

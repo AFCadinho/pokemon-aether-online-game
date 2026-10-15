@@ -28,6 +28,8 @@ COUNTS = ("frame_ms", "main_gpu_ms", "response_gpu_ms")
 
 
 def expected_presets(fixture):
+    if fixture.get("mode") == "warm-compare":
+        return ["high", "medium", "medium", "high"]
     if fixture.get("mode", "smoke") == "soak":
         return [fixture["preset"]] * 40
     return ORDERS[fixture["order"]]
@@ -50,6 +52,27 @@ def validate(details, fixture):
     phases = details.get("phases", [])
     if [p.get("preset") for p in phases] != expected_presets(fixture):
         errors.append("Unexpected profile sequence")
+    if fixture.get("mode") == "warm-compare":
+        heat = details.get("preheat", [])
+        end = heat[-1] if heat else {}
+        if (not details.get("preheat_ready") or not 30 <= end.get("elapsed_seconds", 0) < 606
+                or end.get("native", {}).get("thermalStatus") not in (2, 3)
+                or not 0 < end.get("fps", 0) <= 55):
+            errors.append("Missing bounded warm High precondition")
+        if len(phases) == 4:
+            ids = [row.get("stage_instance") for row in phases]
+            if (not all(isinstance(v, int) and v > 0 for v in ids)
+                    or ids[0] != details.get("preheat_stage")
+                    or ids[0] == ids[1] or ids[1] != ids[2] or ids[2] == ids[3]
+                    or phases[0].get("preparation_ms") != 0 or phases[2].get("preparation_ms") != 0):
+                errors.append("Warm comparison must reuse High preheat and the middle Medium stage")
+            if phases[0].get("native_start", {}).get("thermalStatus") not in (2, 3):
+                errors.append("First High observation did not start warm")
+            if any(row.get("native_start", {}).get("thermalStatus") not in (0, 1, 2, 3)
+                   or row.get("native", {}).get("thermalStatus") not in (0, 1, 2, 3) for row in phases):
+                errors.append("Missing or critical comparison thermal samples")
+            if not 120 <= sum(row.get("seconds", 0) for row in phases) < 124:
+                errors.append("Incomplete two-minute warm comparison")
     if fixture.get("mode", "smoke") == "soak":
         instances = {row.get("stage_instance") for row in phases}
         elapsed = phases[-1].get("elapsed_seconds", 0) if phases else 0
@@ -147,7 +170,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--phase-seconds", type=int, choices=[10, 15, 20], default=15)
     parser.add_argument("--order", choices=ORDERS, default="descending")
-    parser.add_argument("--mode", choices=["smoke", "soak"], default="smoke")
+    parser.add_argument("--mode", choices=["smoke", "soak", "warm-compare"], default="smoke")
     parser.add_argument("--soak-preset", choices=["low", "medium", "high", "ultra"], default="ultra")
     args = parser.parse_args()
     if ROOT.parent.name not in {"slot-a", "slot-b", "slot-c"} or os.getenv("POKEAETHER_SLOT") != ROOT.parent.name:
@@ -229,6 +252,8 @@ def main():
     fixture = {"schema": 1, "run_id": uuid.uuid4().hex, "phase_seconds": args.phase_seconds, "order": args.order, "port": port}
     if args.mode == "soak":
         fixture.update(mode="soak", preset=args.soak_preset, phase_seconds=30)
+    elif args.mode == "warm-compare":
+        fixture.update(mode="warm-compare", phase_seconds=30)
     report = {"schema": 1, "package": PACKAGE, "fixture": fixture, "pins": pins, "health": [], "errors": [],
               "usable": False, "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
               "source_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT)),
@@ -249,7 +274,8 @@ def main():
         reverse_created = True
         shell("am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p " + PACKAGE)
         last_phase = ""
-        while time.monotonic() - started < (1800 if args.mode == "soak" else 900):
+        timeout_seconds = {"soak": 1800, "warm-compare": 1200, "smoke": 900}[args.mode]
+        while time.monotonic() - started < timeout_seconds:
             marker = owned_json("android-quality-phase.json") or {}
             phase = marker.get("phase", "startup") if marker.get("run_id") == fixture["run_id"] else "startup"
             if phase != last_phase:
@@ -296,7 +322,7 @@ def main():
                 raise RuntimeError("Keep the unlocked diagnostic in the foreground")
             if sample["thermal_status"] is not None and sample["thermal_status"] >= 4:
                 raise RuntimeError("Critical thermal status")
-            time.sleep(10 if args.mode == "soak" else 2)
+            time.sleep(10 if args.mode in ("soak", "warm-compare") else 2)
         else:
             raise RuntimeError("Bounded quality diagnostic timed out")
         report["errors"] += validate(details, fixture) + transport_errors

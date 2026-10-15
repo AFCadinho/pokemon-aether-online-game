@@ -42,7 +42,8 @@ static func valid_fixture(value: Variant) -> bool:
 	if value.get("order") not in ["descending", "ascending"]:
 		return false
 	var soak: bool = value.get("mode", "smoke") == "soak"
-	if value.get("mode", "smoke") not in ["smoke", "soak"]:
+	var paired: bool = value.get("mode", "smoke") == "warm-compare"
+	if value.get("mode", "smoke") not in ["smoke", "soak", "warm-compare"]:
 		return false
 	if soak and value.get("preset") not in ["low", "medium", "high", "ultra"]:
 		return false
@@ -50,7 +51,7 @@ static func valid_fixture(value: Variant) -> bool:
 	var port: Variant = value.get("port")
 	if not (seconds is float or seconds is int) or not (port is float or port is int):
 		return false
-	if float(seconds) not in ([30.0] if soak else [10.0, 15.0, 20.0]) or float(port) != floorf(float(port)) or port < 1024 or port > 65535:
+	if float(seconds) not in ([30.0] if soak or paired else [10.0, 15.0, 20.0]) or float(port) != floorf(float(port)) or port < 1024 or port > 65535:
 		return false
 	var run_id: Variant = value.get("run_id")
 	return run_id is String and RegEx.create_from_string("^[0-9a-f]{32}$").search(run_id) != null
@@ -139,13 +140,53 @@ func _prepare(preset: String) -> bool:
 	RenderingServer.global_shader_parameter_set("wind_speed", 0.0)
 	return _check(stage.quality_preset == preset and pool.quality_preset == preset, "Presenter and pool retain the same profile")
 
+func _preheat() -> bool:
+	if not await _prepare("high"):
+		return false
+	if not _check(report.native.has("thermalStatus"), "Native thermal status required for warm comparison"):
+		return false
+	observation_lifecycle = LifecycleProbe.new()
+	root.add_child(observation_lifecycle)
+	_marker("preheat:high")
+	report.preheat = []
+	report.preheat_ready = false
+	report.preheat_stage = stage.get_instance_id()
+	var started := Time.get_ticks_usec()
+	var block_started := started
+	var frames := 0
+	while Time.get_ticks_usec() - started < 600000000:
+		await process_frame
+		if observation_lifecycle.pauses > 0 or observation_lifecycle.resumes > 0:
+			_check(false, "Warm comparison interrupted during preheat")
+			return false
+		frames += 1
+		var now := Time.get_ticks_usec()
+		if now - block_started < 5000000:
+			continue
+		var native: Dictionary = telemetry._native_sample()
+		var row := {"elapsed_seconds": (now - started) / 1000000.0,
+			"fps": frames * 1000000.0 / (now - block_started), "native": native}
+		report.preheat.append(row)
+		if not _check(int(native.get("thermalStatus", 0)) < 4, "Preheat thermal status below critical"):
+			return false
+		report.preheat_ready = row.elapsed_seconds >= 30.0 and int(native.get("thermalStatus", 0)) >= 2 and row.fps <= 55.0
+		_write(REPORT, report)
+		if report.preheat_ready:
+			return true
+		block_started = Time.get_ticks_usec()
+		frames = 0
+	_check(false, "Warm comparison did not reach moderate thermal status and reduced High FPS within ten minutes")
+	return false
+
 func _observe(preset: String, index: int) -> void:
 	var soak: bool = fixture.get("mode", "smoke") == "soak"
+	var paired: bool = fixture.get("mode", "smoke") == "warm-compare"
+	var reuse: bool = (soak and index > 0) or (paired and index in [0, 2])
 	var prepared := Time.get_ticks_msec()
-	if (not soak or index == 0) and not await _prepare(preset):
+	if not reuse and not await _prepare(preset):
 		return
-	var preparation_ms := Time.get_ticks_msec() - prepared if not soak or index == 0 else 0
-	if not soak or index == 0:
+	var preparation_ms := Time.get_ticks_msec() - prepared if not reuse else 0
+	if not reuse:
 		_marker("warm:" + preset)
 		var warm_until := Time.get_ticks_msec() + (30000 if soak else 3000)
 		while Time.get_ticks_msec() < warm_until:
@@ -160,9 +201,10 @@ func _observe(preset: String, index: int) -> void:
 		"targetFps": 60, "renderWidth": stage.viewport.size.x, "renderHeight": stage.viewport.size.y,
 		"screenWidth": dimensions.x, "screenHeight": dimensions.y}
 	telemetry.native = telemetry._native_sample()
+	var native_start: Dictionary = telemetry.native.duplicate()
 	_marker("sample:%d:%s" % [index, preset])
 	var started := Time.get_ticks_usec()
-	if soak and soak_started == 0:
+	if (soak or paired) and soak_started == 0:
 		soak_started = started
 	var last := started
 	var samples := {"frame_ms": [], "main_gpu_ms": [], "response_gpu_ms": []}
@@ -170,8 +212,8 @@ func _observe(preset: String, index: int) -> void:
 	var next_counters := started
 	while Time.get_ticks_usec() - started < int(fixture.phase_seconds) * 1000000:
 		await process_frame
-		if soak and (observation_lifecycle.pauses > 0 or observation_lifecycle.resumes > 0):
-			_check(false, "Continuous soak interrupted by Android background/resume")
+		if (soak or paired) and (observation_lifecycle.pauses > 0 or observation_lifecycle.resumes > 0):
+			_check(false, "Observation interrupted by Android background/resume")
 			return
 		var now := Time.get_ticks_usec()
 		samples.frame_ms.append((now - last) / 1000.0)
@@ -194,10 +236,12 @@ func _observe(preset: String, index: int) -> void:
 		"msaa": stage.viewport.msaa_3d, "timings": {}, "pipeline_start": pipeline_start,
 		"pipeline_end": stage._blocking_pipelines(), "native": telemetry.native.duplicate(),
 		"render_bytes": Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)}
-	if soak:
+	if soak or paired:
 		row.stage_instance = stage.get_instance_id()
 		row.elapsed_seconds = (sample_ended - soak_started) / 1000000.0
 		_check(int(telemetry.native.get("thermalStatus", 0)) < 4, "Android thermal status below critical")
+	if paired:
+		row.native_start = native_start
 	for key in samples:
 		row.timings[key] = Stats.stats(samples[key])
 	row.fps = samples.frame_ms.size() / row.seconds
@@ -285,12 +329,16 @@ func _run() -> void:
 		order = []
 		order.resize(40)
 		order.fill(fixture.preset)
+	elif fixture.get("mode", "smoke") == "warm-compare":
+		if not await _preheat():
+			_finish(); return
+		order = ["high", "medium", "medium", "high"]
 	for index in order.size():
 		await _observe(order[index], index)
 		if not report.failures.is_empty() or not sink.errors.is_empty():
 			_finish(); return
 	if is_instance_valid(observation_lifecycle):
-		_check(observation_lifecycle.pauses == 0 and observation_lifecycle.resumes == 0, "Uninterrupted twenty-minute observation")
+		_check(observation_lifecycle.pauses == 0 and observation_lifecycle.resumes == 0, "Uninterrupted observation")
 		observation_lifecycle.free()
 		observation_lifecycle = null
 	_marker("lifecycle-ready")
