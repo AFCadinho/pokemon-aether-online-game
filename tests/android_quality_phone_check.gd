@@ -34,6 +34,13 @@ class EffectProbe extends RefCounted:
 	var cap := {"dropped": 0}
 	var move := ""
 	var cpu_ms: Array = []
+	func span(label: String, started: int) -> void:
+		var ended := Time.get_ticks_usec()
+		if events.size() >= 1024:
+			cap.dropped += 1
+			return
+		events.append({"kind": "span", "label": label, "from_usec": started, "to_usec": ended,
+			"ms": (ended-started)/1000.0})
 	func record(effect: Node, started: int) -> void:
 		var ended := Time.get_ticks_usec()
 		var ms := (ended - started) / 1000.0
@@ -61,6 +68,15 @@ class ProfiledThunder extends "res://scripts/battle/battle_ui/thunderbolt_move_e
 
 class ProfiledRock extends "res://scripts/battle/battle_ui/extended_move_effect_3d.gd":
 	var probe := EffectProbe.new()
+	func _prepare() -> void:
+		var started := Time.get_ticks_usec()
+		super._prepare()
+		probe.span("rock_prepare", started)
+	func _wave_mesh() -> ArrayMesh:
+		var started := Time.get_ticks_usec()
+		var result := super._wave_mesh()
+		probe.span("rock_wave_mesh", started)
+		return result
 	func _process(delta: float) -> void:
 		var started := Time.get_ticks_usec()
 		super._process(delta)
@@ -77,6 +93,7 @@ class ProfiledStage extends Stage:
 	var hitch_events: Array = []
 	var probes: Array = []
 	var trace_cap := {"dropped": 0}
+	var draw_profile_effects := true
 	func new_move_effect(move: String) -> Node3D:
 		var effect: Node3D
 		match MoveEffect.move_key(move):
@@ -88,6 +105,7 @@ class ProfiledStage extends Stage:
 		effect.probe.events = hitch_events
 		effect.probe.cap = trace_cap
 		effect.probe.move = move
+		effect.visible = draw_profile_effects
 		probes.append(effect.probe)
 		return effect
 	func _record_android_move_phase(phase: String) -> void:
@@ -123,6 +141,8 @@ static func valid_fixture(value: Variant) -> bool:
 	if value.get("mode", "smoke") not in ["smoke", "soak", "warm-compare", "gameplay"]:
 		return false
 	if not value.get("profile_hitches", false) is bool or (value.get("profile_hitches", false) and not gameplay):
+		return false
+	if not value.get("hitch_visibility_control", false) is bool or (value.get("hitch_visibility_control", false) and not value.get("profile_hitches", false)):
 		return false
 	if soak and value.get("preset") not in ["low", "medium", "high", "ultra"]:
 		return false
@@ -270,14 +290,17 @@ func _gameplay_sequence(index: int) -> void:
 		var actor := "p1" if i % 2 == 0 else "p2"
 		var target := "p2" if actor == "p1" else "p1"
 		var started := Time.get_ticks_usec()
-		move_samples = {"frame_ms": [], "main_gpu_ms": [], "response_gpu_ms": [], "effect_frames": 0, "visible_frames": 0, "hit_seen": false}
+		move_samples = {"frame_ms": [], "main_gpu_ms": [], "response_gpu_ms": [], "effect_frames": 0,
+			"visible_frames": 0, "render_visible_frames": 0, "suppressed_frames": 0, "hit_seen": false}
 		await router.play_move_animation(MOVES[i], actor, target, {"show_impact": true})
 		await router.finish_3d_impact_damage(target)
 		var until := Time.get_ticks_msec() + 3000
 		while not router.active_audio_nodes.is_empty() and Time.get_ticks_msec() < until:
 			await process_frame
 		var row := {"move": MOVES[i], "actor": actor, "seconds": (Time.get_ticks_usec() - started) / 1000000.0,
-			"effect_frames": move_samples.effect_frames, "visible_frames": move_samples.visible_frames, "hit_seen": move_samples.hit_seen, "timings": {},
+			"effect_frames": move_samples.effect_frames, "visible_frames": move_samples.visible_frames,
+			"render_visible_frames": move_samples.render_visible_frames, "suppressed_frames": move_samples.suppressed_frames,
+			"hit_seen": move_samples.hit_seen, "timings": {},
 			"cleaned": stage.common_effects.is_empty() and router.active_audio_nodes.is_empty() and not router.has_3d_impact_damage()}
 		for key in ["frame_ms", "main_gpu_ms", "response_gpu_ms"]:
 			row.timings[key] = Stats.stats(move_samples[key])
@@ -425,6 +448,8 @@ func _observe(preset: String, index: int) -> void:
 	var prepared := Time.get_ticks_msec()
 	if not reuse and not await _prepare(preset):
 		return
+	if fixture.get("hitch_visibility_control", false):
+		stage.draw_profile_effects = index in [0, 3]
 	var preparation_ms := Time.get_ticks_msec() - prepared if not reuse else 0
 	if not reuse:
 		_marker("warm:" + preset)
@@ -484,6 +509,8 @@ func _observe(preset: String, index: int) -> void:
 			for effect in stage.common_effects:
 				if is_instance_valid(effect) and effect.cursor > 0:
 					move_samples.visible_frames += 1
+					if effect.is_visible_in_tree(): move_samples.render_visible_frames += 1
+					else: move_samples.suppressed_frames += 1
 				if _visible_impact(effect):
 					move_samples.hit_seen = true
 		telemetry.window.record(now - last, 60)
@@ -518,7 +545,8 @@ func _observe(preset: String, index: int) -> void:
 	if gameplay:
 		row.gameplay = gameplay_row.duplicate(true)
 	if profile_hitches:
-		row.hitch_profile = {"events": stage.hitch_events.duplicate(true), "dropped": stage.trace_cap.dropped, "effects": []}
+		row.hitch_profile = {"events": stage.hitch_events.duplicate(true), "dropped": stage.trace_cap.dropped,
+			"effects_visible": stage.draw_profile_effects, "effects": []}
 		for probe in stage.probes:
 			row.hitch_profile.effects.append({"move": probe.move, "process_cpu_ms": Stats.stats(probe.cpu_ms)})
 	for key in samples:
@@ -616,7 +644,9 @@ func _run() -> void:
 		order = ["high", "medium", "medium", "high"]
 	elif fixture.get("mode") == "gameplay":
 		order = ["medium", "medium", "medium"]
-		report.note = "Offline animated renderer/router, real settings and three arena reconstructions; no authenticated world/network gameplay. Wind and camera fixed."
+		if fixture.get("hitch_visibility_control", false):
+			order.append("medium")
+		report.note = "Offline animated renderer/router, real settings and repeated arena reconstructions; no authenticated world/network gameplay. Wind and camera fixed."
 	for index in order.size():
 		await _observe(order[index], index)
 		if not report.failures.is_empty() or not sink.errors.is_empty():

@@ -160,6 +160,35 @@ class AndroidQualityResultTests(unittest.TestCase):
         fixture, details = self.profile_result()
         self.assertEqual(validate(details, fixture), [])
 
+    def visibility_result(self):
+        fixture, details = self.profile_result()
+        fixture["hitch_visibility_control"] = True
+        phase = copy.deepcopy(details["phases"][0])
+        phase.update(index=3, stage_instance=103)
+        phase["gameplay"]["cycle"] = 3
+        details["phases"].append(phase)
+        for index, phase in enumerate(details["phases"]):
+            visible = index in (0, 3)
+            phase["hitch_profile"]["effects_visible"] = visible
+            for move in phase["gameplay"]["moves"]:
+                move.update(render_visible_frames=100 if visible else 0, suppressed_frames=0 if visible else 100)
+        return fixture, details
+
+    def test_visible_hidden_hidden_visible_with_live_geometry(self):
+        fixture, details = self.visibility_result()
+        self.assertEqual(validate(details, fixture), [])
+
+    def test_visibility_order_rendered_hidden_effects_or_inactive_controls_rejected(self):
+        for change in (lambda d: d["phases"][1]["hitch_profile"].update(effects_visible=True),
+                       lambda d: d["phases"][1]["gameplay"]["moves"][0].update(render_visible_frames=1),
+                       lambda d: d["phases"][1]["gameplay"]["moves"][0].update(suppressed_frames=0),
+                       lambda d: d["phases"][3]["gameplay"]["moves"][0].update(render_visible_frames=0),
+                       lambda d: d.update(profile_factory_match=False),
+                       lambda d: d["phases"].pop()):
+            fixture, details = self.visibility_result()
+            change(details)
+            self.assertTrue(validate(details, fixture))
+
     def test_missing_truncated_invalid_profiles_or_new_instead_of_reused_menu_rejected(self):
         for change in (lambda p: p["hitch_profile"].update(dropped=1),
                        lambda p: p["hitch_profile"]["events"].clear(),

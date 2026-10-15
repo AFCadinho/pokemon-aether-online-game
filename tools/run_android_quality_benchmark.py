@@ -44,7 +44,7 @@ def interrupt_run(signum, _frame):
 
 def expected_presets(fixture):
     if fixture.get("mode") == "gameplay":
-        return ["medium"] * 3
+        return ["medium"] * (4 if fixture.get("hitch_visibility_control") else 3)
     if fixture.get("mode") == "warm-compare":
         return ["high", "medium", "medium", "high"]
     if fixture.get("mode", "smoke") == "soak":
@@ -116,13 +116,24 @@ def validate(details, fixture):
                 or any(not c.get("visible_pieces", 0) > 0 or not c.get("elapsed", 0) >= c.get("impact", 0) + .025 for c in captures)):
             errors.append("Missing visible, post-impact evidence")
         ids = [p.get("stage_instance") for p in phases]
-        if len(set(ids)) != 3 or not all(isinstance(v, int) and v > 0 for v in ids):
-            errors.append("Gameplay must reconstruct three distinct arenas")
+        if len(set(ids)) != len(expected_presets(fixture)) or not all(isinstance(v, int) and v > 0 for v in ids):
+            errors.append("Gameplay must reconstruct each distinct arena")
         for index, phase in enumerate(phases):
             if fixture.get("profile_hitches"):
                 errors.extend(validate_hitch_profile(phase))
             game = phase.get("gameplay", {})
             moves = game.get("moves", [])
+            if fixture.get("hitch_visibility_control"):
+                visible = index in (0, 3)
+                if phase.get("hitch_profile", {}).get("effects_visible") is not visible:
+                    errors.append("Unexpected visible-hidden-hidden-visible condition")
+                for move in moves:
+                    if visible:
+                        ok = move.get("render_visible_frames", 0) > 0 and move.get("suppressed_frames") == 0
+                    else:
+                        ok = move.get("render_visible_frames") == 0 and move.get("suppressed_frames", 0) > 0
+                    if not ok:
+                        errors.append("Effect geometry did not follow the visibility control")
             if not game.get("complete") or game.get("cycle") != index or [m.get("move") for m in moves] != MOVES:
                 errors.append("Incomplete real-time move sequence")
             for move in moves:
@@ -256,10 +267,13 @@ def main():
     parser.add_argument("--order", choices=ORDERS, default="descending")
     parser.add_argument("--mode", choices=["smoke", "soak", "warm-compare", "gameplay"], default="smoke")
     parser.add_argument("--profile-hitches", action="store_true", help="Private gameplay CPU spans, slow frames and retained-menu comparison")
+    parser.add_argument("--hitch-visibility-control", action="store_true", help="Four profiled windows: draw effects, suppress, suppress, draw")
     parser.add_argument("--soak-preset", choices=["low", "medium", "high", "ultra"], default="ultra")
     args = parser.parse_args()
     if args.profile_hitches and args.mode != "gameplay":
         parser.error("Hitch profiling requires --mode gameplay")
+    if args.hitch_visibility_control and not args.profile_hitches:
+        parser.error("Visibility control requires --profile-hitches")
     if ROOT.parent.name not in {"slot-a", "slot-b", "slot-c"} or os.getenv("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Use the assigned slot-env")
     if not re.fullmatch(r"[a-zA-Z0-9]+", args.serial) or args.serial.startswith("emulator-"):
@@ -345,6 +359,8 @@ def main():
         fixture.update(mode="gameplay", phase_seconds=30)
         if args.profile_hitches:
             fixture["profile_hitches"] = True
+        if args.hitch_visibility_control:
+            fixture["hitch_visibility_control"] = True
     report = {"schema": 1, "package": PACKAGE, "fixture": fixture, "pins": pins, "health": [], "errors": [],
               "usable": False, "running": True, "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
               "source_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT)),
