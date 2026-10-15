@@ -39,6 +39,7 @@ var desktop_quality_options: OptionButton
 var desktop_fps_options: OptionButton
 var android_fps_options: OptionButton
 var android_performance_toggle: CheckBox
+var desktop_performance_toggle: CheckBox
 var performance_details_check_box: CheckBox
 var performance_check_box: CheckBox
 var display_own_name_check_box: CheckBox
@@ -335,6 +336,8 @@ func _apply_settings_to_controls() -> void:
 		android_fps_options.select(0 if SettingsManager.android_fps_limit == 30 else 1)
 	if android_performance_toggle != null:
 		android_performance_toggle.set_pressed_no_signal(SettingsManager.share_android_performance)
+	if desktop_performance_toggle != null:
+		desktop_performance_toggle.set_pressed_no_signal(SettingsManager.share_desktop_performance)
 	if battle_presentation_options != null:
 		for index in battle_presentation_options.item_count:
 			if battle_presentation_options.get_item_metadata(index) == SettingsManager.battle_presentation_mode:
@@ -1348,6 +1351,8 @@ func _build_about_tab(about_tab: VBoxContainer) -> void:
 func _build_support_tab(support_tab: VBoxContainer) -> void:
 	if OS.has_feature("android"):
 		_create_android_performance_controls(support_tab)
+	elif OS.has_feature("pc") and not OS.has_feature("web"):
+		_create_desktop_performance_controls(support_tab)
 	var privacy_note := Label.new()
 	_set_localized_text(privacy_note, "ui.settings.support.privacy")
 	privacy_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -3239,4 +3244,19 @@ func _create_android_performance_controls(support_tab: VBoxContainer) -> void:
 	hint.add_theme_font_size_override("font_size", 12)
 	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	_set_localized_text(hint, "ui.settings.android.share_hint")
+	support_tab.add_child(hint)
+
+
+func _create_desktop_performance_controls(support_tab: VBoxContainer) -> void:
+	desktop_performance_toggle = CheckBox.new()
+	desktop_performance_toggle.name = "ShareDesktopPerformance"
+	desktop_performance_toggle.toggled.connect(func(enabled):
+		if not loading_controls:
+			SettingsManager.set_share_desktop_performance(enabled))
+	support_tab.add_child(_create_toggle_setting(desktop_performance_toggle, "ui.settings.desktop.share_performance"))
+	var hint := Label.new()
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.add_theme_font_size_override("font_size", 12)
+	hint.add_theme_color_override("font_color", UI_MUTED_TEXT)
+	_set_localized_text(hint, "ui.settings.desktop.share_hint")
 	support_tab.add_child(hint)

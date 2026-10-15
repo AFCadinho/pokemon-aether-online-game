@@ -38,6 +38,8 @@ outside impersonation. Opt-out cancels the request and clears all pending sample
 An already accepted report remains subject to server retention.
 The server's independent `ANDROID_PERFORMANCE_ENABLED` switch still defaults to
 false. This client change does not activate or deploy production ingestion.
+Desktop uses the same bounded collector and transport with a separate preference
+and server switch; see [desktop diagnostics](desktop-performance-diagnostics.md).
 
 ## Collection and transport
 

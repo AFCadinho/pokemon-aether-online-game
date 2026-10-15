@@ -30,8 +30,9 @@ wrappers retain the existing Android diagnostic API. Desktop preparation needs
 the explicit desktop_3d_move_warmup feature and Forward+ or Mobile; it remains
 off in normal builds. The same five reviewed effects, single-use ownership,
 cooperative 1,500 ms deadline, hidden samples, request/generation idempotence and
-cancellation guards apply. No automatic quality assignment or telemetry upload
-for desktop was added.
+cancellation guards apply. No automatic quality assignment was added. Desktop
+telemetry was added afterward; see [desktop performance diagnostics](desktop-performance-diagnostics.md).
+The benchmark evidence below remains local and is not automatically uploaded.
 
 ## Matched native profile matrix
 

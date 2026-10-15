@@ -22,7 +22,9 @@ func record(usec: int, target_fps: int) -> void:
 	count += 1
 	total_usec += usec
 	maximum_usec = maxi(maximum_usec, usec)
-	over_budget += int(usec > 1500000.0 / target_fps)
+	# Zero means uncapped on desktop: there is no selected frame budget.
+	if target_fps > 0:
+		over_budget += int(usec > 1500000.0 / target_fps)
 	over_50 += int(usec > 50000)
 	over_100 += int(usec > 100000)
 	for index in BOUNDS_MS.size():

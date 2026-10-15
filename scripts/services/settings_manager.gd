@@ -91,6 +91,7 @@ var android_fps_limit := 60
 var desktop_battle_quality_preset := BattleQuality.DEFAULT_PRESET
 var desktop_fps_limit := 0
 var share_android_performance := true
+var share_desktop_performance := true
 var performance_details := false
 var show_performance := false
 var fullscreen := false
@@ -212,6 +213,8 @@ func load_settings() -> void:
 	# values remain disabled rather than being coerced into permission to share.
 	var saved_performance: Variant = data.get("share_android_performance", true)
 	share_android_performance = saved_performance is bool and saved_performance == true
+	var saved_desktop_performance: Variant = data.get("share_desktop_performance", true)
+	share_desktop_performance = saved_desktop_performance is bool and saved_desktop_performance == true
 	performance_details = bool(data.get("performance_details", false))
 	show_performance = bool(data.get("show_performance", false))
 	fullscreen = bool(data.get("fullscreen", fullscreen))
@@ -318,6 +321,7 @@ func save_settings() -> bool:
 		"desktop_battle_quality_preset": desktop_battle_quality_preset,
 		"desktop_fps_limit": desktop_fps_limit,
 		"share_android_performance": share_android_performance,
+		"share_desktop_performance": share_desktop_performance,
 		"performance_details": performance_details,
 		"show_performance": show_performance,
 		"fullscreen": fullscreen,
@@ -592,6 +596,12 @@ func set_android_fps_limit(value: int) -> void:
 
 func set_share_android_performance(enabled: bool) -> void:
 	share_android_performance = enabled
+	save_settings()
+	settings_changed.emit()
+
+
+func set_share_desktop_performance(enabled: bool) -> void:
+	share_desktop_performance = enabled
 	save_settings()
 	settings_changed.emit()
 
