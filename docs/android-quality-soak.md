@@ -100,7 +100,8 @@ the scene/profile remained fixed and reported thermal state rose. This is
 consistent with heat-related performance limiting, but no frequency trace or
 controlled cooling/power comparison establishes the exact cause. **Ultra did
 not sustain 60 FPS in this workload under these conditions.** This run does
-not establish that High or another preset would sustain it.
+not establish that High or another preset would sustain it. The subsequent
+[High comparison](android-quality-high-soak.md) measured that profile directly.
 
 Native PSS started at 2,208.10 MiB and ended at 2,208.35 MiB, with a peak of
 2,216.26 MiB. Engine render allocation stayed at 729.63 MiB. There is no
@@ -131,7 +132,9 @@ The host ran clean commit `448dc414b926a1a54f124191e71af917e5786363`;
 the APK source was `d869ec4ab1e3`. Existing verified art in this isolated
 app’s own cache was reused; there were no fixture GETs during this run.
 
-The next comparison is the same sustained workload on a lower preset under
-comparable starting conditions, then a weaker physical device and broader
-real/automated gameplay scenarios. A device-name tier alone does not establish
-sustained performance or justify an automatic preset recommendation.
+A subsequent [High comparison](android-quality-high-soak.md) reused the exact
+APK after cooldown and likewise did not sustain 60 FPS. Further work includes
+lower render budgets, profiling and broader real/automated gameplay scenarios.
+The user has no weaker phone; wider device validation needs other physical
+testers or later authorized opt-in measurements. A device-name tier alone does
+not establish sustained performance or justify an automatic preset recommendation.
