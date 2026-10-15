@@ -1,7 +1,7 @@
 import copy
 import unittest
 
-from tools.run_android_quality_benchmark import ORDERS, PACKAGE, require_debug_manifest, validate
+from tools.run_android_quality_benchmark import ORDERS, PACKAGE, fixture_pins, require_debug_manifest, validate
 
 
 class AndroidQualityResultTests(unittest.TestCase):
@@ -20,6 +20,12 @@ class AndroidQualityResultTests(unittest.TestCase):
 
     def test_complete_real_profiles_and_lifecycle(self):
         self.assertEqual(validate(self.details, self.fixture), [])
+
+    def test_fixture_includes_actual_actors_and_transformation_art(self):
+        keys = [row[0] for row in fixture_pins()]
+        for actor, form in (("charizard", "base"), ("charizard", "mega-x"),
+                            ("charizard", "mega-y"), ("dragonite", "base"), ("dragonite", "mega")):
+            self.assertEqual(sum(key.startswith(f"optional-assets/pokemon_3d/{actor}/{form}/") for key in keys), 1)
 
     def test_only_the_separate_debug_identity_can_be_installed(self):
         manifest = ('    A: package="' + PACKAGE + '"\n'

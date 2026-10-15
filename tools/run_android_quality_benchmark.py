@@ -80,9 +80,13 @@ def fixture_pins():
     index = release["index"]
     pins = [(index["object_key"], index["size_bytes"], index["sha256"], data / "approved_3d_bundles_v16_index.json")]
     catalog = json.loads((data / "model_pair_release_v16_catalog.json").read_text())
-    for actor in ("charizard", "dragonite"):
-        asset = next(row for row in catalog["assets"] if row["asset_id"] == f"pokemon_3d:{actor}:base")
-        if asset.get("dependencies"):
+    # The real presenter also prepares these actors' reviewed transformation art.
+    actor_ids = {"pokemon_3d:charizard:base", "pokemon_3d:charizard:mega-x",
+                 "pokemon_3d:charizard:mega-y", "pokemon_3d:dragonite:base",
+                 "pokemon_3d:dragonite:mega"}
+    for actor_id in sorted(actor_ids):
+        asset = next(row for row in catalog["assets"] if row["asset_id"] == actor_id)
+        if set(asset.get("dependencies", [])) - actor_ids:
             raise ValueError("Explicitly extend the fixture allowlist for newly required dependencies")
         pins.append((asset["object_key"], asset["size_bytes"], asset["sha256"], None))
     arena = json.loads((data / "android_3d_experiment.json").read_text())["arena"]
