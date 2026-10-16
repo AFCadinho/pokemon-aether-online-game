@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Route 6’s visual with the latest Tiled artwork edits.
+
 - Refresh Route 7 and Route 11 visuals from their updated Tiled sources.
 
 - Refresh Route 5 and Route 6 visuals from their latest Tiled sources, including updated ground and object placement.
