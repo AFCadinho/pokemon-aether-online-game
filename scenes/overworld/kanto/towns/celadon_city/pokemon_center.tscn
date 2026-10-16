@@ -1,0 +1,124 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="2_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="3_pokemon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/picnicker_frames.tres" id="frames_picnicker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="frames_worker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="frames_lass"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="frames_poke_fan_f"]
+
+[node name="PokemonCenter" instance=ExtResource("1_template")]
+map_id = "kanto_celadon_city_pokemon_center"
+map_display_name = "Celadon City Pokémon Center"
+world_access_group_id = "kanto_celadon_city"
+world_access_group_label = "Celadon City"
+world_access_area_type = "interior"
+location_id = "kanto.celadon_city.pokemon_center"
+location_name = "Celadon City Pokémon Center"
+
+[node name="NurseJoy" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="0"]
+respawn_point_id = "kanto_celadon_city_pokemon_center"
+respawn_marker_path = NodePath("../../../Spawns/HealNPC")
+
+[node name="GardenerFlora" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="8" instance=ExtResource("2_dialogue")]
+position = Vector2(336, 496)
+npc_id = "kanto_celadon_city_pokemon_center_gardener_flora"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Gardener Flora"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("frames_picnicker")
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_speed_pixels = 30.0
+movement_wait_seconds = 3.2
+movement_wait_jitter_seconds = 1.3
+
+[node name="CourierDaan" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="9" instance=ExtResource("2_dialogue")]
+position = Vector2(336, 816)
+npc_id = "kanto_celadon_city_pokemon_center_courier_daan"
+npc_definition_id = "trainer_class_worker"
+display_name = "Courier Daan"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("frames_worker")
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_speed_pixels = 42.0
+movement_wait_seconds = 2.1
+movement_wait_jitter_seconds = 0.9
+
+[node name="YoungTrainerMika" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="10" instance=ExtResource("2_dialogue")]
+position = Vector2(528, 816)
+npc_id = "kanto_celadon_city_pokemon_center_young_trainer_mika"
+npc_definition_id = "trainer_class_lass"
+display_name = "Young Trainer Mika"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("frames_lass")
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_speed_pixels = 36.0
+movement_wait_seconds = 2.7
+movement_wait_jitter_seconds = 1.1
+
+[node name="CaretakerRina" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="11" instance=ExtResource("2_dialogue")]
+position = Vector2(592, 496)
+npc_id = "kanto_celadon_city_pokemon_center_caretaker_rina"
+npc_definition_id = "trainer_class_poke_fan_f"
+display_name = "Caretaker Rina"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("frames_poke_fan_f")
+
+[node name="Pokemon" type="Node2D" parent="Entities" parent_id_path=PackedInt32Array(1761485951) index="3"]
+
+[node name="Bellossom" parent="Entities/Pokemon" index="0" instance=ExtResource("3_pokemon")]
+position = Vector2(368, 496)
+overworld_pokemon_id = "kanto_celadon_city_pokemon_center_bellossom_1"
+species_id = "bellossom"
+level = 24
+display_name = "Bellossom"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_speed_pixels = 28.0
+movement_wait_seconds = 3.8
+movement_wait_jitter_seconds = 1.4
+
+[node name="Skitty" parent="Entities/Pokemon" index="1" instance=ExtResource("3_pokemon")]
+position = Vector2(368, 816)
+overworld_pokemon_id = "kanto_celadon_city_pokemon_center_skitty_1"
+species_id = "skitty"
+level = 18
+display_name = "Skitty"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_speed_pixels = 50.0
+movement_wait_seconds = 1.4
+movement_wait_jitter_seconds = 0.7
+
+[node name="Budew" parent="Entities/Pokemon" index="2" instance=ExtResource("3_pokemon")]
+position = Vector2(560, 784)
+overworld_pokemon_id = "kanto_celadon_city_pokemon_center_budew_1"
+species_id = "budew"
+level = 16
+display_name = "Budew"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_speed_pixels = 24.0
+movement_wait_seconds = 4.1
+movement_wait_jitter_seconds = 1.6
+
+[node name="Chansey" parent="Entities/Pokemon" index="3" instance=ExtResource("3_pokemon")]
+position = Vector2(624, 496)
+overworld_pokemon_id = "kanto_celadon_city_pokemon_center_chansey_1"
+species_id = "chansey"
+level = 22
+display_name = "Chansey"
+facing_direction = Vector2(-1, 0)
+
+[node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0"]
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn"
+target_spawn_name = "FromPokecenter"
+transition_id = "kanto_celadon_city_pokemon_center__to_outside"
+transition_facing_direction = "down"

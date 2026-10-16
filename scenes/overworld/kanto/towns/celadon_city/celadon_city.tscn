@@ -16,6 +16,11 @@
 [ext_resource type="SpriteFrames" uid="uid://bmw8v3ctsygiq" path="res://assets/npcs/classes/socialite_frames.tres" id="frames_socialite"]
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="frames_worker"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="center_door_hint"]
+
+[sub_resource type="RectangleShape2D" id="shape_center_door"]
+size = Vector2(32, 32)
+
 [sub_resource type="RectangleShape2D" id="shape_route7"]
 size = Vector2(32, 128)
 
@@ -269,6 +274,9 @@ position = Vector2(2480, 560)
 [node name="CityCenter" type="Marker2D" parent="Spawns" unique_id=245493718]
 position = Vector2(1232, 560)
 
+[node name="FromPokecenter" type="Marker2D" parent="Spawns"]
+position = Vector2(1968, 496)
+
 [node name="Exits" type="Node2D" parent="." unique_id=730447284]
 
 [node name="ToRoute7" type="Area2D" parent="Exits" unique_id=485939152]
@@ -286,6 +294,20 @@ shape = SubResource("shape_route7")
 z_as_relative = false
 tile_footprint = Vector2i(1, 4)
 flow_direction = "right"
+
+[node name="ToPokecenter" type="Area2D" parent="Exits"]
+position = Vector2(1968, 464)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/pokemon_center.tscn"
+target_spawn_name = "FromOutside"
+transition_id = "kanto_celadon_city__to_pokemon_center"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter"]
+shape = SubResource("shape_center_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToPokecenter" instance=ExtResource("center_door_hint")]
+z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=1083392905]
 z_index = 5
@@ -501,3 +523,5 @@ tile_map_data = PackedByteArray("AAAaAAAAAAABAAQAAAAaAAEAAAABAAQAAAAaAAIAAAABAAQ
 tile_set = SubResource("TileSet_ed0sp")
 
 [connection signal="body_entered" from="Exits/ToRoute7" to="Exits/ToRoute7" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
