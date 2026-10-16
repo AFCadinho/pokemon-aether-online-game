@@ -587,7 +587,11 @@ npc_sprite_frames = ExtResource("life_lass")
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
-ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.8
+movement_speed_pixels = 40.0
+movement_wait_jitter_seconds = 1.3
 
 [node name="FanClubHugo" parent="Entities/NPCs" unique_id=999073519 instance=ExtResource("life_dialogue")]
 position = Vector2(848, 752)
@@ -599,7 +603,11 @@ npc_sprite_frames = ExtResource("life_poke_fan_m")
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
-ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 4.1
+movement_speed_pixels = 30.0
+movement_wait_jitter_seconds = 1.8
 
 [node name="ElderElsie" parent="Entities/NPCs" unique_id=1595034549 instance=ExtResource("life_dialogue")]
 position = Vector2(1072, 912)
@@ -611,7 +619,11 @@ npc_sprite_frames = ExtResource("life_elder_f")
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
-ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 5.2
+movement_speed_pixels = 24.0
+movement_wait_jitter_seconds = 2.1
 
 [node name="WorkerOwen" parent="Entities/NPCs" unique_id=1349633595 instance=ExtResource("life_dialogue")]
 position = Vector2(1840, 400)
@@ -623,7 +635,11 @@ npc_sprite_frames = ExtResource("life_worker")
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
-ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.7
+movement_speed_pixels = 48.0
+movement_wait_jitter_seconds = 0.8
 
 [node name="AceTrainerSienna" parent="Entities/NPCs" unique_id=1454817473 instance=ExtResource("life_dialogue")]
 position = Vector2(2032, 976)
@@ -634,7 +650,11 @@ npc_sprite_frames = ExtResource("life_ace_trainer_f")
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
-ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.1
+movement_speed_pixels = 54.0
+movement_wait_jitter_seconds = 0.6
 
 [node name="TrainerFelix" parent="Entities/NPCs" unique_id=942215298 instance=ExtResource("life_dialogue")]
 position = Vector2(720, 1232)
@@ -645,7 +665,11 @@ npc_sprite_frames = ExtResource("life_camper")
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
-ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.3
+movement_speed_pixels = 42.0
+movement_wait_jitter_seconds = 1.0
 
 [node name="ChildToby" parent="Entities/NPCs" unique_id=1993487757 instance=ExtResource("life_dialogue")]
 position = Vector2(528, 1360)
@@ -657,7 +681,11 @@ npc_sprite_frames = ExtResource("life_youngster")
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
-ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 0.9
+movement_speed_pixels = 58.0
+movement_wait_jitter_seconds = 0.5
 
 [node name="HarborWorkerBram" parent="Entities/NPCs" unique_id=1627561437 instance=ExtResource("life_dialogue")]
 position = Vector2(1616, 1648)
@@ -669,7 +697,11 @@ npc_sprite_frames = ExtResource("life_worker")
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
-ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 3.4
+movement_speed_pixels = 46.0
+movement_wait_jitter_seconds = 1.5
 
 [node name="RetiredSailorAbel" parent="Entities/NPCs" unique_id=896162058 instance=ExtResource("life_dialogue")]
 position = Vector2(1392, 1520)
@@ -681,7 +713,11 @@ npc_sprite_frames = ExtResource("life_elder")
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
-ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 4.7
+movement_speed_pixels = 26.0
+movement_wait_jitter_seconds = 2.0
 
 [node name="PicnickerJune" parent="Entities/NPCs" unique_id=2095030860 instance=ExtResource("life_dialogue")]
 position = Vector2(1232, 1648)
@@ -693,7 +729,11 @@ npc_sprite_frames = ExtResource("life_picnicker")
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
-ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 3.1
+movement_speed_pixels = 36.0
+movement_wait_jitter_seconds = 1.4
 
 [node name="TransitKeeperNPC" parent="Entities/NPCs" unique_id=1599793774 instance=ExtResource("16_by6y8")]
 position = Vector2(784, 144)
@@ -712,15 +752,15 @@ overworld_pokemon_id = "kanto_vermilion_city_pidgey_1"
 species_id = "pidgey"
 level = 12
 display_name = "Pidgey"
-movement_behavior = "pace_vertical"
-movement_tiles = 1
-movement_wait_seconds = 1.3
-movement_speed_pixels = 45.0
-movement_wait_jitter_seconds = 0.6
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
 ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.3
+movement_speed_pixels = 52.0
+movement_wait_jitter_seconds = 0.6
 
 [node name="Meowth" parent="Entities/Pokemon" unique_id=46466024 instance=ExtResource("life_pokemon")]
 position = Vector2(720, 912)
@@ -728,15 +768,15 @@ overworld_pokemon_id = "kanto_vermilion_city_meowth_1"
 species_id = "meowth"
 level = 14
 display_name = "Meowth"
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
-movement_wait_seconds = 2.1
-movement_speed_pixels = 45.0
-movement_wait_jitter_seconds = 0.8
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
 ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.1
+movement_speed_pixels = 38.0
+movement_wait_jitter_seconds = 0.8
 
 [node name="Pikachu" parent="Entities/Pokemon" unique_id=1719536144 instance=ExtResource("life_pokemon")]
 position = Vector2(592, 1360)
@@ -744,15 +784,15 @@ overworld_pokemon_id = "kanto_vermilion_city_pikachu_1"
 species_id = "pikachu"
 level = 16
 display_name = "Pikachu"
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
-movement_wait_seconds = 1.0
-movement_speed_pixels = 45.0
-movement_wait_jitter_seconds = 0.5
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
 ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.0
+movement_speed_pixels = 64.0
+movement_wait_jitter_seconds = 0.5
 
 [node name="Machop" parent="Entities/Pokemon" unique_id=1136073570 instance=ExtResource("life_pokemon")]
 position = Vector2(1520, 1648)
@@ -760,12 +800,15 @@ overworld_pokemon_id = "kanto_vermilion_city_machop_1"
 species_id = "machop"
 level = 18
 display_name = "Machop"
-movement_tiles = 1
-movement_speed_pixels = 45.0
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
 ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.9
+movement_speed_pixels = 42.0
+movement_wait_jitter_seconds = 0.9
 
 [node name="Krabby" parent="Entities/Pokemon" unique_id=450002034 instance=ExtResource("life_pokemon")]
 position = Vector2(1264, 1808)
@@ -773,15 +816,15 @@ overworld_pokemon_id = "kanto_vermilion_city_krabby_1"
 species_id = "krabby"
 level = 15
 display_name = "Krabby"
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
-movement_wait_seconds = 2.4
-movement_speed_pixels = 45.0
-movement_wait_jitter_seconds = 0.8
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
 ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.4
+movement_speed_pixels = 32.0
+movement_wait_jitter_seconds = 0.8
 
 [node name="Psyduck" parent="Entities/Pokemon" unique_id=921032284 instance=ExtResource("life_pokemon")]
 position = Vector2(1232, 1520)
@@ -789,15 +832,15 @@ overworld_pokemon_id = "kanto_vermilion_city_psyduck_1"
 species_id = "psyduck"
 level = 14
 display_name = "Psyduck"
-movement_behavior = "pace_vertical"
-movement_tiles = 1
-movement_wait_seconds = 1.6
-movement_speed_pixels = 45.0
-movement_wait_jitter_seconds = 0.6
 pickpocket_enabled = true
 pickpocket_required_level = 0
 minimum_sort_z = 1
 ambient_movement_ignores_map_collision = true
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 3.3
+movement_speed_pixels = 26.0
+movement_wait_jitter_seconds = 1.5
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=934936651]
 

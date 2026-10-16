@@ -32,7 +32,7 @@ func _run() -> void:
 		var wait_seconds := float(pokemon.get("movement_wait_seconds"))
 		var jitter_seconds := float(pokemon.get("movement_wait_jitter_seconds"))
 		var speed_pixels := float(pokemon.get("movement_speed_pixels"))
-		_check(jitter_seconds > 0.0, "%s has randomized pauses" % relative_path)
+		_check(jitter_seconds > 0.0 or bool(pokemon.get("natural_ambient_movement")), "%s has randomized pauses" % relative_path)
 		speeds[speed_pixels] = true
 		waits[wait_seconds] = true
 
@@ -43,6 +43,10 @@ func _run() -> void:
 			var delay_msec := int(pokemon.get("movement_next_step_at_msec")) - scheduled_at
 			var minimum_msec := int(maxf(wait_seconds - jitter_seconds, 0.0) * 1000.0) - 2
 			var maximum_msec := int((wait_seconds + jitter_seconds) * 1000.0) + 2
+			if jitter_seconds == 0.0:
+				# A placement without explicit jitter inherits the shared natural pacing.
+				minimum_msec = 0
+				maximum_msec = int(maxf(wait_seconds * 2.0, 4.0) * 1000.0)
 			_check(
 				delay_msec >= minimum_msec and delay_msec <= maximum_msec,
 				"%s pause stays inside its randomized range" % relative_path

@@ -166,7 +166,7 @@ func _apply_follower_sprite_frames() -> void:
 func _should_keep_walk_animation_after_step(direction: Vector2) -> bool:
 	if movement_behavior == "idle":
 		return false
-	if movement_wait_seconds > 0.0:
+	if movement_wait_seconds > 0.0 or _movement_pause_seconds > 0.0:
 		return false
 
 	var cardinal_direction := _get_cardinal_direction(direction)

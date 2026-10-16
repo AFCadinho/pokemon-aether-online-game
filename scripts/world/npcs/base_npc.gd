@@ -19,6 +19,7 @@ var ThievingService: Node
 
 func _init() -> void:
 	_bind_services()
+	_ambient_movement_rng.randomize()
 
 const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const NpcDefinitionResource := preload("res://scripts/world/npcs/npc_definition.gd")
@@ -110,6 +111,9 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export var ambient_movement_ignores_map_collision := false
 ## Immediate localized fallback while catalog metadata loads. Explicit scene names still win.
 @export var localized_display_name_key := ""
+## Independent ambient pacing. Disable to preserve the authored speed and pause settings.
+## Scripted story paths always use their authored speed.
+@export var natural_ambient_movement := true
 
 const TILE_SIZE := 32
 const MOVE_SPEED := 120.0
@@ -165,6 +169,10 @@ var _base_npc_process_active := false
 var _movement_collision_map: Node
 var _movement_collision_tilemap: TileMapLayer
 var _sorting_player: Node2D
+var _ambient_movement_rng := RandomNumberGenerator.new()
+var _ambient_movement_speed_scale := 1.0
+var _movement_pause_seconds := 0.0
+var _ambient_movement_was_paused := false
 
 
 func _ready_base_npc() -> void:
@@ -205,7 +213,10 @@ func _initialize_base_npc() -> void:
 		if not interaction_area.body_exited.is_connected(body_exited_callable):
 			interaction_area.body_exited.connect(body_exited_callable)
 	movement_origin_tile = _to_tile(get_feet_position())
-	_schedule_next_npc_movement_step()
+	if natural_ambient_movement and movement_behavior != "idle":
+		_ambient_movement_speed_scale = _ambient_movement_rng.randf_range(0.8, 1.2)
+		movement_direction_sign = -1 if _ambient_movement_rng.randf() < 0.5 else 1
+	_schedule_next_npc_movement_step(true)
 	_update_sort_z()
 	_setup_nameplate()
 	_setup_thieving_prompt()
@@ -1029,20 +1040,31 @@ func _process_npc_movement() -> void:
 	if movement_behavior == "idle":
 		return
 
-	if is_npc_moving or is_interacting:
+	if is_npc_moving:
 		return
 
-	if player_nearby:
+	if is_interacting or player_nearby:
+		_ambient_movement_was_paused = true
 		return
 
 	if GameState.is_overworld_input_locked():
+		_ambient_movement_was_paused = true
 		return
 
 	if _is_ui_typing():
+		_ambient_movement_was_paused = true
 		return
 
 	var dialogue_box := _get_dialogue_box()
 	if dialogue_box != null and dialogue_box.is_open:
+		_ambient_movement_was_paused = true
+		return
+
+	# Deadlines may expire together while dialogue/UI suspends the map.
+	# Give each actor a fresh independent delay instead of restarting the crowd at once.
+	if _ambient_movement_was_paused:
+		_ambient_movement_was_paused = false
+		_schedule_next_npc_movement_step(true)
 		return
 
 	if Time.get_ticks_msec() < movement_next_step_at_msec:
@@ -1082,7 +1104,7 @@ func _try_step_npc_movement() -> void:
 	_update_directional_sensors()
 
 	var target_global_position := global_position + (target_feet_position - get_feet_position())
-	var speed := maxf(movement_speed_pixels, 1.0)
+	var speed := _get_ambient_movement_speed()
 	var duration := global_position.distance_to(target_global_position) / speed
 	movement_reserved_tile = target_tile
 	var tween := create_tween()
@@ -1090,12 +1112,12 @@ func _try_step_npc_movement() -> void:
 	await tween.finished
 
 	movement_current_offset_tiles = target_offset
+	_schedule_next_npc_movement_step()
 	_set_idle_frame(direction)
 	_update_directional_sensors()
 	_update_sort_z()
 	movement_reserved_tile = Vector2i.ZERO
 	is_npc_moving = false
-	_schedule_next_npc_movement_step()
 
 
 func _get_movement_axis_direction() -> Vector2:
@@ -1106,11 +1128,23 @@ func _get_movement_axis_direction() -> Vector2:
 	return Vector2.ZERO
 
 
-func _schedule_next_npc_movement_step() -> void:
+func _get_ambient_movement_speed() -> float:
+	var scale_factor := _ambient_movement_speed_scale if natural_ambient_movement else 1.0
+	return maxf(movement_speed_pixels * scale_factor, 1.0)
+
+
+func _schedule_next_npc_movement_step(initial_delay := false) -> void:
 	var wait_seconds := maxf(movement_wait_seconds, 0.0)
 	var jitter_seconds := maxf(movement_wait_jitter_seconds, 0.0)
+	if natural_ambient_movement and jitter_seconds == 0.0:
+		# Existing placements without a pause profile also get breathing room.
+		wait_seconds = maxf(wait_seconds, 1.1)
+		jitter_seconds = maxf(0.7, wait_seconds * 0.5)
 	if jitter_seconds > 0.0:
-		wait_seconds = randf_range(maxf(wait_seconds - jitter_seconds, 0.0), wait_seconds + jitter_seconds)
+		wait_seconds = _ambient_movement_rng.randf_range(maxf(wait_seconds - jitter_seconds, 0.0), wait_seconds + jitter_seconds)
+	if initial_delay and natural_ambient_movement:
+		wait_seconds += _ambient_movement_rng.randf_range(0.2, 2.5)
+	_movement_pause_seconds = wait_seconds
 	var wait_msec := int(wait_seconds * 1000.0)
 	movement_next_step_at_msec = Time.get_ticks_msec() + wait_msec
 
