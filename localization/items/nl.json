@@ -1297,5 +1297,33 @@
     "name": "Swift Wing",
     "shortDesc": "Wordt verbruikt bij Aethering om de Speed-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken.",
     "flavorText": "Wordt verbruikt bij Aethering om de Speed-IV van de Recipient te behouden of die van de Donor over te nemen. Niet los te gebruiken."
+  },
+  "fishing-guru-outfit": {
+    "name": "Fishing Guru-outfitbox",
+    "shortDesc": "Open deze box voor mannelijke modellen om zes losse Fishing Guru-cosmetica te ontvangen."
+  },
+  "fishing-guru-shirt": {
+    "name": "Fishing Guru-visvest",
+    "shortDesc": "Activeer dit cosmeticum voor mannelijke modellen en draag het via Character Customization."
+  },
+  "fishing-guru-trousers": {
+    "name": "Fishing Guru-broek",
+    "shortDesc": "Activeer dit cosmeticum voor mannelijke modellen en draag het via Character Customization."
+  },
+  "fishing-guru-shoes": {
+    "name": "Fishing Guru-schoenen",
+    "shortDesc": "Activeer dit cosmeticum voor mannelijke modellen en draag het via Character Customization."
+  },
+  "fishing-guru-hair": {
+    "name": "Fishing Guru-haar",
+    "shortDesc": "Activeer dit cosmeticum voor mannelijke modellen en draag het via Character Customization."
+  },
+  "fishing-guru-hat": {
+    "name": "Fishing Guru-vissershoed",
+    "shortDesc": "Activeer dit cosmeticum voor mannelijke modellen en draag het via Character Customization."
+  },
+  "fishing-guru-rod": {
+    "name": "Fishing Guru-rughengel",
+    "shortDesc": "Een decoratieve hengel voor het rugslot; visgereedschap is apart."
   }
 }

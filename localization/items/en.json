@@ -1297,5 +1297,33 @@
     "name": "Swift Wing",
     "shortDesc": "Consumed during Aethering to protect the Recipient’s Speed IV or transfer the Donor’s Speed IV. Cannot be used directly.",
     "flavorText": "Consumed during Aethering to protect the Recipient’s Speed IV or transfer the Donor’s Speed IV. Cannot be used directly."
+  },
+  "fishing-guru-outfit": {
+    "name": "Fishing Guru Outfit Box",
+    "shortDesc": "Open this male-only box for six separate Fishing Guru cosmetics."
+  },
+  "fishing-guru-shirt": {
+    "name": "Fishing Guru Vest",
+    "shortDesc": "Activate this male-only cosmetic, then equip it in Character Customization."
+  },
+  "fishing-guru-trousers": {
+    "name": "Fishing Guru Trousers",
+    "shortDesc": "Activate this male-only cosmetic, then equip it in Character Customization."
+  },
+  "fishing-guru-shoes": {
+    "name": "Fishing Guru Shoes",
+    "shortDesc": "Activate this male-only cosmetic, then equip it in Character Customization."
+  },
+  "fishing-guru-hair": {
+    "name": "Fishing Guru Hair",
+    "shortDesc": "Activate this male-only cosmetic, then equip it in Character Customization."
+  },
+  "fishing-guru-hat": {
+    "name": "Fishing Guru Hat",
+    "shortDesc": "Activate this male-only cosmetic, then equip it in Character Customization."
+  },
+  "fishing-guru-rod": {
+    "name": "Fishing Guru Back Rod",
+    "shortDesc": "A decorative fishing rod for the Back slot; fishing tools are separate."
   }
 }

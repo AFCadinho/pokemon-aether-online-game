@@ -1,0 +1,234 @@
+{
+  "overworld_provenance": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/manifest.json",
+  "trainer_method": "Original vest, sleeves, hat and rod on approved trainer pose; starter trouser/shoe/hair template adaptations; free hand protected.",
+  "trainer_templates": [
+    {
+      "path": "assets/battles/trainers/player/male/base.png",
+      "sha256": "e20274331d852072e9b920ba3ead59fec9af4571db7c208ddd562e78a4499756"
+    },
+    {
+      "path": "assets/battles/trainers/player/male/starter_kit/trousers.png",
+      "sha256": "ece62e4c03c39911f545ab9e80102d064f563cda644ad3fae6a4048a26b0c0db"
+    },
+    {
+      "path": "assets/battles/trainers/player/male/starter_kit/shoes.png",
+      "sha256": "054bf506e75be85a86e6f9e132fc02fa86f473cf1222686bc072193c3598d41f"
+    },
+    {
+      "path": "assets/battles/trainers/player/male/starter_kit/hair.png",
+      "sha256": "a0d6c976a51e20f23e4fc13ed76feb1e696d78bd1c2fbfc4e955c7f3612dbc10"
+    }
+  ],
+  "assets": [
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/bottom/Fishing_Guru_Trousers.png",
+      "game_path": "assets/player/male/bottom/Fishing_Guru_Trousers.png",
+      "sha256": "7b7b6a52468c1d033d7fe354e66658a06fb9b448cbd91e2fe1bbc163cc339762"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/bottom/fish/Fishing_Guru_Trousers_fish.png",
+      "game_path": "assets/player/male/bottom/fish/Fishing_Guru_Trousers_fish.png",
+      "sha256": "a686a6db8720a8766ab9b8bdd719a0b0c588ce742bbd692fef78d6a0139ab68c"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/bottom/ride/Fishing_Guru_Trousers_ride.png",
+      "game_path": "assets/player/male/bottom/ride/Fishing_Guru_Trousers_ride.png",
+      "sha256": "501b94ac4973b17d0c00bc4e9b876bf0c4117abf3a599ea82de9addecc655a5a"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/bottom/run/Fishing_Guru_Trousers_run.png",
+      "game_path": "assets/player/male/bottom/run/Fishing_Guru_Trousers_run.png",
+      "sha256": "7b7b6a52468c1d033d7fe354e66658a06fb9b448cbd91e2fe1bbc163cc339762"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/cape/Fishing_Guru_Rod.png",
+      "game_path": "assets/player/male/cape/Fishing_Guru_Rod.png",
+      "sha256": "e9bd08c8436f086ed1951e1272912cee49cb7562344147efd9877e9c020ab5b1"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/cape/fish/Fishing_Guru_Rod_fish.png",
+      "game_path": "assets/player/male/cape/fish/Fishing_Guru_Rod_fish.png",
+      "sha256": "3c6c50f94ab35e9f96c772731fe6b7950048179bc81b8ab0396cc1edbde89163"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/cape/ride/Fishing_Guru_Rod_ride.png",
+      "game_path": "assets/player/male/cape/ride/Fishing_Guru_Rod_ride.png",
+      "sha256": "832a4d27386ad712a092a7107de5f1162473ff0f0d863f3ee6b224b6602afd85"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/cape/run/Fishing_Guru_Rod_run.png",
+      "game_path": "assets/player/male/cape/run/Fishing_Guru_Rod_run.png",
+      "sha256": "e9bd08c8436f086ed1951e1272912cee49cb7562344147efd9877e9c020ab5b1"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/cape_overlay/Fishing_Guru_Rod.png",
+      "game_path": "assets/player/male/cape_overlay/Fishing_Guru_Rod.png",
+      "sha256": "7f1bb95e33f3dc1c6dec784761b25f4fbbe68db7cc7c0b9a5e56a24626d31b96"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/cape_overlay/fish/Fishing_Guru_Rod_fish.png",
+      "game_path": "assets/player/male/cape_overlay/fish/Fishing_Guru_Rod_fish.png",
+      "sha256": "ce3bf85205543493dcb982f220c5bcfe4457c5705fdbb6cda8b2e6086e42f391"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/cape_overlay/ride/Fishing_Guru_Rod_ride.png",
+      "game_path": "assets/player/male/cape_overlay/ride/Fishing_Guru_Rod_ride.png",
+      "sha256": "d20a1a3d7fe8ce4248810dc203a22322fb5b1b2ac2c8587cb9ad760e8ee0f32c"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/cape_overlay/run/Fishing_Guru_Rod_run.png",
+      "game_path": "assets/player/male/cape_overlay/run/Fishing_Guru_Rod_run.png",
+      "sha256": "7f1bb95e33f3dc1c6dec784761b25f4fbbe68db7cc7c0b9a5e56a24626d31b96"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/hair/Fishing_Guru_Hair.png",
+      "game_path": "assets/player/male/hair/Fishing_Guru_Hair.png",
+      "sha256": "427e9b14c33c5feb392bf7068cbcff277a490c35abb8a85f1e9abdc73d04f8cf"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/hair/fish/Fishing_Guru_Hair_fish.png",
+      "game_path": "assets/player/male/hair/fish/Fishing_Guru_Hair_fish.png",
+      "sha256": "b8a0dcb70899b6434fb765a830bd702b406d4a94eaa1afda473769b38a44c334"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/hair/ride/Fishing_Guru_Hair_ride.png",
+      "game_path": "assets/player/male/hair/ride/Fishing_Guru_Hair_ride.png",
+      "sha256": "f61b4998af76e606d594fa8746971a5aa0a69745230b3a61a995cbba5f049827"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/hair/run/Fishing_Guru_Hair_run.png",
+      "game_path": "assets/player/male/hair/run/Fishing_Guru_Hair_run.png",
+      "sha256": "427e9b14c33c5feb392bf7068cbcff277a490c35abb8a85f1e9abdc73d04f8cf"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/headgear/Fishing_Guru_Hat.png",
+      "game_path": "assets/player/male/headgear/Fishing_Guru_Hat.png",
+      "sha256": "6fc0d7d2728b21f16982d2777f9fb31511af116f0715308b69ac45b173188917"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/headgear/fish/Fishing_Guru_Hat_fish.png",
+      "game_path": "assets/player/male/headgear/fish/Fishing_Guru_Hat_fish.png",
+      "sha256": "af2f1cf7b4757b8cb22bc0c1c562ff8e390cd549b0f7699b8196dae5f088b198"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/headgear/ride/Fishing_Guru_Hat_ride.png",
+      "game_path": "assets/player/male/headgear/ride/Fishing_Guru_Hat_ride.png",
+      "sha256": "c992311ffe73e589d0d2fe88ed31bfc4bd00f252e4adeacb1edcc907f058c2fb"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/headgear/run/Fishing_Guru_Hat_run.png",
+      "game_path": "assets/player/male/headgear/run/Fishing_Guru_Hat_run.png",
+      "sha256": "6fc0d7d2728b21f16982d2777f9fb31511af116f0715308b69ac45b173188917"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/shoes/Fishing_Guru_Shoes.png",
+      "game_path": "assets/player/male/shoes/Fishing_Guru_Shoes.png",
+      "sha256": "7fde026578e54b3d0aae1f2f8bdafdd9ccd928101d75e7135de6d5e92a5a0723"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/shoes/fish/Fishing_Guru_Shoes_fish.png",
+      "game_path": "assets/player/male/shoes/fish/Fishing_Guru_Shoes_fish.png",
+      "sha256": "fe827f434095714d9bbfb6ba1a8b2ff5b5b0030941d185d5f8271c724a7d1801"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/shoes/ride/Fishing_Guru_Shoes_ride.png",
+      "game_path": "assets/player/male/shoes/ride/Fishing_Guru_Shoes_ride.png",
+      "sha256": "c1cd3e7d63861f2da0c0b61b991739daf43e66ccbf7f8e9a6f23f9ccf061058e"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/shoes/run/Fishing_Guru_Shoes_run.png",
+      "game_path": "assets/player/male/shoes/run/Fishing_Guru_Shoes_run.png",
+      "sha256": "7fde026578e54b3d0aae1f2f8bdafdd9ccd928101d75e7135de6d5e92a5a0723"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/top/Fishing_Guru_Vest.png",
+      "game_path": "assets/player/male/top/Fishing_Guru_Vest.png",
+      "sha256": "b441382d6dde85fe332e14ff6b8c9aa75163846d1dc8b958cbfb901007654897"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/top/fish/Fishing_Guru_Vest_fish.png",
+      "game_path": "assets/player/male/top/fish/Fishing_Guru_Vest_fish.png",
+      "sha256": "debc5e97d9059d89bbadb7ef10f7c1bf891acf3ed149caa0e11e5c2821153a7f"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/top/ride/Fishing_Guru_Vest_ride.png",
+      "game_path": "assets/player/male/top/ride/Fishing_Guru_Vest_ride.png",
+      "sha256": "675ba495a5d6202917cee9ae1664395fb8934ca7523d7f407b6bb48c179a608d"
+    },
+    {
+      "kind": "overworld",
+      "source": "/home/adinho/Documents/pokeaether_assets/outfit/experiments/fishing-guru-20261016/accessories-02-rod/final/exports/male/top/run/Fishing_Guru_Vest_run.png",
+      "game_path": "assets/player/male/top/run/Fishing_Guru_Vest_run.png",
+      "sha256": "b441382d6dde85fe332e14ff6b8c9aa75163846d1dc8b958cbfb901007654897"
+    },
+    {
+      "kind": "trainer",
+      "source": "tools/build_fishing_guru_trainer.py",
+      "game_path": "assets/battles/trainers/player/male/fishing_guru/BackFront.png",
+      "sha256": "49ed728ff250c6cb198a911793f05c6d25da774f761d5d88ba86a1d3e8f8575b"
+    },
+    {
+      "kind": "trainer",
+      "source": "tools/build_fishing_guru_trainer.py",
+      "game_path": "assets/battles/trainers/player/male/fishing_guru/BackRear.png",
+      "sha256": "15a1ac998cca15a31da64096822d9a2f8c8ad7c75b69003ba422403c3600de03"
+    },
+    {
+      "kind": "trainer",
+      "source": "tools/build_fishing_guru_trainer.py",
+      "game_path": "assets/battles/trainers/player/male/fishing_guru/Hair.png",
+      "sha256": "93ceff226d3cbee2a623f5a1f6b49e604525e9b2be70e242876d0a7bfa435e7b"
+    },
+    {
+      "kind": "trainer",
+      "source": "tools/build_fishing_guru_trainer.py",
+      "game_path": "assets/battles/trainers/player/male/fishing_guru/Hat.png",
+      "sha256": "0c272297bfefae28eb9b2d2eaee145de07f5edf0b6977a7addd208e8bf762f49"
+    },
+    {
+      "kind": "trainer",
+      "source": "tools/build_fishing_guru_trainer.py",
+      "game_path": "assets/battles/trainers/player/male/fishing_guru/Shoes.png",
+      "sha256": "254dce45f29031dbb3482a8dfbaaeeabd9dc9e9338f4d34cabb0f01d7f2fc063"
+    },
+    {
+      "kind": "trainer",
+      "source": "tools/build_fishing_guru_trainer.py",
+      "game_path": "assets/battles/trainers/player/male/fishing_guru/Trousers.png",
+      "sha256": "b297c614fddb8ff420e9ac62578d34ca18e4a32cf8f470a4d8d5af1657b4444f"
+    },
+    {
+      "kind": "trainer",
+      "source": "tools/build_fishing_guru_trainer.py",
+      "game_path": "assets/battles/trainers/player/male/fishing_guru/Vest.png",
+      "sha256": "e3e597e2cd574a7ea3227908897ab3dcfefed24e4de04c3f0d48b0bb4b661d2b"
+    }
+  ]
+}

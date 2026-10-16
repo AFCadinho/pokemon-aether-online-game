@@ -104,6 +104,10 @@
             "Kakashi_Trousers": {
               "path": "res://assets/battles/trainers/player/male/kakashi/Trousers.png",
               "scale": 1.0
+            },
+            "Fishing_Guru_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/fishing_guru/Trousers.png",
+              "scale": 1.0
             }
           }
         },
@@ -193,6 +197,10 @@
             },
             "Kakashi_Shoes": {
               "path": "res://assets/battles/trainers/player/male/kakashi/Shoes.png",
+              "scale": 1.0
+            },
+            "Fishing_Guru_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/fishing_guru/Shoes.png",
               "scale": 1.0
             }
           }
@@ -285,6 +293,10 @@
             "Kakashi_Shirt": {
               "path": "res://assets/battles/trainers/player/male/kakashi/Shirt.png",
               "scale": 1.0
+            },
+            "Fishing_Guru_Vest": {
+              "path": "res://assets/battles/trainers/player/male/fishing_guru/Vest.png",
+              "scale": 1.0
             }
           }
         },
@@ -343,6 +355,10 @@
             "Kakashi_Hair": {
               "path": "res://assets/battles/trainers/player/male/kakashi/Hair.png",
               "scale": 1.0
+            },
+            "Fishing_Guru_Hair": {
+              "path": "res://assets/battles/trainers/player/male/fishing_guru/Hair.png",
+              "scale": 1.0
             }
           }
         },
@@ -381,6 +397,10 @@
               "path": "res://assets/battles/trainers/player/male/kakashi/Headgear.png",
               "scale": 1.0,
               "draw_after": "facegear"
+            },
+            "Fishing_Guru_Hat": {
+              "path": "res://assets/battles/trainers/player/male/fishing_guru/Hat.png",
+              "scale": 1.0
             }
           }
         },
@@ -438,6 +458,10 @@
             "Irelia_Blades": {
               "path": "res://assets/battles/trainers/player/male/irelia/BackRear.png",
               "scale": 1.0
+            },
+            "Fishing_Guru_Rod": {
+              "path": "res://assets/battles/trainers/player/male/fishing_guru/BackRear.png",
+              "scale": 1.0
             }
           }
         },
@@ -461,6 +485,10 @@
             },
             "Irelia_Blades": {
               "path": "res://assets/battles/trainers/player/male/irelia/BackFront.png",
+              "scale": 1.0
+            },
+            "Fishing_Guru_Rod": {
+              "path": "res://assets/battles/trainers/player/male/fishing_guru/BackFront.png",
               "scale": 1.0
             }
           }
