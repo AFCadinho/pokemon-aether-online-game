@@ -38,6 +38,7 @@ const EXTENDED_MAP_SCENES := {
 	"kanto_rocket_hideout_b2f": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b2f.tscn",
 	"kanto_rocket_hideout_b3f": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b3f.tscn",
 	"kanto_rocket_hideout_b4f": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn",
+	"kanto_celadon_gym": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
 	"kanto_celadon_game_corner": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
 	"kanto_celadon_city": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
 	"kanto_lavender_town_pokemon_tower": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
