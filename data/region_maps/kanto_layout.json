@@ -137,6 +137,9 @@
       "description": "A bustling city known for its department store, gardens, and department-sized ambitions.",
       "interiors": [
         {
+          "label": "Celadon Condominiums"
+        },
+        {
           "label": "Pokémon Center"
         },
         {

@@ -1,0 +1,131 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_condominiums_1f/assets/celadon_condominiums_1f.visual.tileset.compact_source_1_0.texture.res" id="1_6u7pq"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_condominiums_1f/assets/celadon_condominiums_1f.visual.tileset.compact_source_2049_0.texture.res" id="2_uegos"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_condominiums_1f/assets/celadon_condominiums_1f.visual.tileset.compact_source_3073_0.texture.res" id="3_lcao2"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_condominiums_1f/assets/celadon_condominiums_1f.visual.tileset.compact_source_4097_0.texture.res" id="4_0jxo3"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_condominiums_1f/assets/celadon_condominiums_1f.visual.tileset.compact_source_5865_0.texture.res" id="5_efmhf"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x4uwi"]
+texture = ExtResource("1_6u7pq")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aa6hs"]
+texture = ExtResource("2_uegos")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ikwnf"]
+texture = ExtResource("3_lcao2")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gyylh"]
+texture = ExtResource("4_0jxo3")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_si1id"]
+texture = ExtResource("5_efmhf")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_x4uwi")
+sources/1 = SubResource("TileSetAtlasSource_aa6hs")
+sources/2 = SubResource("TileSetAtlasSource_ikwnf")
+sources/3 = SubResource("TileSetAtlasSource_gyylh")
+sources/4 = SubResource("TileSetAtlasSource_si1id")
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/celadon_city/Celadon Condominiums 1F.tmx"
+metadata/tiled_compact_atlas_version = 1

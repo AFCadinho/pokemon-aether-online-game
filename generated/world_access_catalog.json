@@ -502,6 +502,26 @@
 						"y": 17
 					}
 				},
+				"from_condominiums_main": {
+					"facingDirection": "down",
+					"label": "Condominiums Main",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromCondominiumsMain",
+					"tile": {
+						"x": 40,
+						"y": 14
+					}
+				},
+				"from_condominiums_rear": {
+					"facingDirection": "down",
+					"label": "Condominiums Rear",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromCondominiumsRear",
+					"tile": {
+						"x": 36,
+						"y": 7
+					}
+				},
 				"from_pokecenter": {
 					"facingDirection": "down",
 					"label": "Pokémon Center",
@@ -553,6 +573,231 @@
 					"tile": {
 						"x": 14,
 						"y": 23
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"kanto_celadon_condominiums_1f": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Celadon Condominiums 1F",
+			"locationGroupId": "kanto_celadon_city",
+			"locationGroupLabel": "Celadon City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_1f.tscn",
+			"spawnPoints": {
+				"from_main_exit_to_celadon": {
+					"facingDirection": "down",
+					"label": "Main Exit To Celadon",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromMainExitToCeladon",
+					"tile": {
+						"x": 16,
+						"y": 25
+					}
+				},
+				"from_main_stairs_to_2f": {
+					"facingDirection": "down",
+					"label": "Main Stairs To 2f",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromMainStairsTo2F",
+					"tile": {
+						"x": 17,
+						"y": 5
+					}
+				},
+				"from_rear_exit_to_celadon": {
+					"facingDirection": "down",
+					"label": "Rear Exit To Celadon",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRearExitToCeladon",
+					"tile": {
+						"x": 4,
+						"y": 5
+					}
+				},
+				"from_rear_stairs_to_2f": {
+					"facingDirection": "down",
+					"label": "Rear Stairs To 2f",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRearStairsTo2F",
+					"tile": {
+						"x": 7,
+						"y": 5
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"kanto_celadon_condominiums_2f": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Celadon Condominiums 2F",
+			"locationGroupId": "kanto_celadon_city",
+			"locationGroupLabel": "Celadon City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_2f.tscn",
+			"spawnPoints": {
+				"from_main_stairs_down": {
+					"facingDirection": "down",
+					"label": "Main Stairs Down",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromMainStairsDown",
+					"tile": {
+						"x": 17,
+						"y": 4
+					}
+				},
+				"from_main_stairs_up": {
+					"facingDirection": "down",
+					"label": "Main Stairs Up",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromMainStairsUp",
+					"tile": {
+						"x": 15,
+						"y": 5
+					}
+				},
+				"from_rear_stairs_down": {
+					"facingDirection": "down",
+					"label": "Rear Stairs Down",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRearStairsDown",
+					"tile": {
+						"x": 7,
+						"y": 4
+					}
+				},
+				"from_rear_stairs_up": {
+					"facingDirection": "down",
+					"label": "Rear Stairs Up",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRearStairsUp",
+					"tile": {
+						"x": 5,
+						"y": 5
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"kanto_celadon_condominiums_3f": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Celadon Condominiums 3F",
+			"locationGroupId": "kanto_celadon_city",
+			"locationGroupLabel": "Celadon City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_3f.tscn",
+			"spawnPoints": {
+				"from_main_stairs_down": {
+					"facingDirection": "down",
+					"label": "Main Stairs Down",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromMainStairsDown",
+					"tile": {
+						"x": 14,
+						"y": 4
+					}
+				},
+				"from_main_stairs_up": {
+					"facingDirection": "down",
+					"label": "Main Stairs Up",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromMainStairsUp",
+					"tile": {
+						"x": 17,
+						"y": 5
+					}
+				},
+				"from_rear_stairs_down": {
+					"facingDirection": "down",
+					"label": "Rear Stairs Down",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRearStairsDown",
+					"tile": {
+						"x": 4,
+						"y": 4
+					}
+				},
+				"from_rear_stairs_up": {
+					"facingDirection": "down",
+					"label": "Rear Stairs Up",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRearStairsUp",
+					"tile": {
+						"x": 7,
+						"y": 5
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"kanto_celadon_condominiums_roof": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Celadon Condominiums Roof",
+			"locationGroupId": "kanto_celadon_city",
+			"locationGroupLabel": "Celadon City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_roof.tscn",
+			"spawnPoints": {
+				"from_main_stairs_down": {
+					"facingDirection": "down",
+					"label": "Main Stairs Down",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromMainStairsDown",
+					"tile": {
+						"x": 13,
+						"y": 4
+					}
+				},
+				"from_rear_stairs_down": {
+					"facingDirection": "down",
+					"label": "Rear Stairs Down",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRearStairsDown",
+					"tile": {
+						"x": 6,
+						"y": 4
+					}
+				},
+				"from_roof_room_entrance": {
+					"facingDirection": "down",
+					"label": "Roof Room Entrance",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoofRoomEntrance",
+					"tile": {
+						"x": 4,
+						"y": 16
+					}
+				}
+			},
+			"weatherProfile": "outdoor"
+		},
+		"kanto_celadon_condominiums_roof_room": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Celadon Condominiums Roof Room",
+			"locationGroupId": "kanto_celadon_city",
+			"locationGroupLabel": "Celadon City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_roof_room.tscn",
+			"spawnPoints": {
+				"from_roof_exit": {
+					"facingDirection": "down",
+					"label": "Roof Exit",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoofExit",
+					"tile": {
+						"x": 6,
+						"y": 9
 					}
 				}
 			},
@@ -5772,6 +6017,34 @@
 			"destinationAreaId": "guild_base_main_hall",
 			"sourceMapId": "guild_base_right_room"
 		},
+		"kanto_celadon_city__to_condominiums_main": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_1f.tscn",
+				"position": {
+					"x": 528.0,
+					"y": 816.0
+				},
+				"spawnMarker": "FromMainExitToCeladon"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_1f",
+			"sourceMapId": "kanto_celadon_city"
+		},
+		"kanto_celadon_city__to_condominiums_rear": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_1f.tscn",
+				"position": {
+					"x": 144.0,
+					"y": 176.0
+				},
+				"spawnMarker": "FromRearExitToCeladon"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_1f",
+			"sourceMapId": "kanto_celadon_city"
+		},
 		"kanto_celadon_city__to_pokemon_center": {
 			"destination": {
 				"mapId": "kanto_celadon_city_pokemon_center",
@@ -5817,6 +6090,234 @@
 			},
 			"destinationAreaId": "kanto_celadon_city",
 			"sourceMapId": "kanto_celadon_city_pokemon_center"
+		},
+		"kanto_celadon_condominiums_1f__main_exit_to_celadon": {
+			"destination": {
+				"mapId": "kanto_celadon_city",
+				"mapSceneAliases": [
+					"uid://c13m2ijv5ijuy"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+				"position": {
+					"x": 1296.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromCondominiumsMain"
+			},
+			"destinationAreaId": "kanto_celadon_city",
+			"sourceMapId": "kanto_celadon_condominiums_1f"
+		},
+		"kanto_celadon_condominiums_1f__main_stairs_to_2f": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_2f.tscn",
+				"position": {
+					"x": 560.0,
+					"y": 144.0
+				},
+				"spawnMarker": "FromMainStairsDown"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_2f",
+			"sourceMapId": "kanto_celadon_condominiums_1f"
+		},
+		"kanto_celadon_condominiums_1f__rear_exit_to_celadon": {
+			"destination": {
+				"mapId": "kanto_celadon_city",
+				"mapSceneAliases": [
+					"uid://c13m2ijv5ijuy"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+				"position": {
+					"x": 1168.0,
+					"y": 240.0
+				},
+				"spawnMarker": "FromCondominiumsRear"
+			},
+			"destinationAreaId": "kanto_celadon_city",
+			"sourceMapId": "kanto_celadon_condominiums_1f"
+		},
+		"kanto_celadon_condominiums_1f__rear_stairs_to_2f": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_2f.tscn",
+				"position": {
+					"x": 240.0,
+					"y": 144.0
+				},
+				"spawnMarker": "FromRearStairsDown"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_2f",
+			"sourceMapId": "kanto_celadon_condominiums_1f"
+		},
+		"kanto_celadon_condominiums_2f__main_stairs_down": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_1f.tscn",
+				"position": {
+					"x": 560.0,
+					"y": 176.0
+				},
+				"spawnMarker": "FromMainStairsTo2F"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_1f",
+			"sourceMapId": "kanto_celadon_condominiums_2f"
+		},
+		"kanto_celadon_condominiums_2f__main_stairs_up": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_3f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_3f.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 144.0
+				},
+				"spawnMarker": "FromMainStairsDown"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_3f",
+			"sourceMapId": "kanto_celadon_condominiums_2f"
+		},
+		"kanto_celadon_condominiums_2f__rear_stairs_down": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_1f.tscn",
+				"position": {
+					"x": 240.0,
+					"y": 176.0
+				},
+				"spawnMarker": "FromRearStairsTo2F"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_1f",
+			"sourceMapId": "kanto_celadon_condominiums_2f"
+		},
+		"kanto_celadon_condominiums_2f__rear_stairs_up": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_3f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_3f.tscn",
+				"position": {
+					"x": 144.0,
+					"y": 144.0
+				},
+				"spawnMarker": "FromRearStairsDown"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_3f",
+			"sourceMapId": "kanto_celadon_condominiums_2f"
+		},
+		"kanto_celadon_condominiums_3f__main_stairs_down": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_2f.tscn",
+				"position": {
+					"x": 496.0,
+					"y": 176.0
+				},
+				"spawnMarker": "FromMainStairsUp"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_2f",
+			"sourceMapId": "kanto_celadon_condominiums_3f"
+		},
+		"kanto_celadon_condominiums_3f__main_stairs_up": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_roof",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_roof.tscn",
+				"position": {
+					"x": 432.0,
+					"y": 144.0
+				},
+				"spawnMarker": "FromMainStairsDown"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_roof",
+			"sourceMapId": "kanto_celadon_condominiums_3f"
+		},
+		"kanto_celadon_condominiums_3f__rear_stairs_down": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_2f.tscn",
+				"position": {
+					"x": 176.0,
+					"y": 176.0
+				},
+				"spawnMarker": "FromRearStairsUp"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_2f",
+			"sourceMapId": "kanto_celadon_condominiums_3f"
+		},
+		"kanto_celadon_condominiums_3f__rear_stairs_up": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_roof",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_roof.tscn",
+				"position": {
+					"x": 208.0,
+					"y": 144.0
+				},
+				"spawnMarker": "FromRearStairsDown"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_roof",
+			"sourceMapId": "kanto_celadon_condominiums_3f"
+		},
+		"kanto_celadon_condominiums_roof__main_stairs_down": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_3f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_3f.tscn",
+				"position": {
+					"x": 560.0,
+					"y": 176.0
+				},
+				"spawnMarker": "FromMainStairsUp"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_3f",
+			"sourceMapId": "kanto_celadon_condominiums_roof"
+		},
+		"kanto_celadon_condominiums_roof__rear_stairs_down": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_3f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_3f.tscn",
+				"position": {
+					"x": 240.0,
+					"y": 176.0
+				},
+				"spawnMarker": "FromRearStairsUp"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_3f",
+			"sourceMapId": "kanto_celadon_condominiums_roof"
+		},
+		"kanto_celadon_condominiums_roof__roof_room_entrance": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_roof_room",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_roof_room.tscn",
+				"position": {
+					"x": 208.0,
+					"y": 304.0
+				},
+				"spawnMarker": "FromRoofExit"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_roof_room",
+			"sourceMapId": "kanto_celadon_condominiums_roof"
+		},
+		"kanto_celadon_condominiums_roof_room__roof_exit": {
+			"destination": {
+				"mapId": "kanto_celadon_condominiums_roof",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_roof.tscn",
+				"position": {
+					"x": 144.0,
+					"y": 528.0
+				},
+				"spawnMarker": "FromRoofRoomEntrance"
+			},
+			"destinationAreaId": "kanto_celadon_condominiums_roof",
+			"sourceMapId": "kanto_celadon_condominiums_roof_room"
 		},
 		"kanto_cerulean_cave_2f__to_1f_a": {
 			"destination": {

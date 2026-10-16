@@ -29,6 +29,11 @@ const MISTY_MAP_SCENES := {
 }
 const EXTENDED_MAP_SCENES := {
 	"kanto_celadon_city_pokemon_center": "res://scenes/overworld/kanto/towns/celadon_city/pokemon_center.tscn",
+	"kanto_celadon_condominiums_1f": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_1f.tscn",
+	"kanto_celadon_condominiums_2f": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_2f.tscn",
+	"kanto_celadon_condominiums_3f": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_3f.tscn",
+	"kanto_celadon_condominiums_roof": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_roof.tscn",
+	"kanto_celadon_condominiums_roof_room": "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_roof_room.tscn",
 	"kanto_celadon_city": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
 	"kanto_lavender_town_pokemon_tower": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
 	"kanto_lavender_town_house_1": "res://scenes/overworld/kanto/towns/lavender_town/house1.tscn",
