@@ -487,7 +487,9 @@
 			"locationGroupId": "kanto_celadon_city",
 			"locationGroupLabel": "Celadon City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://c13m2ijv5ijuy"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
 			"spawnPoints": {
 				"city_center": {
@@ -498,6 +500,16 @@
 					"tile": {
 						"x": 38,
 						"y": 17
+					}
+				},
+				"from_pokecenter": {
+					"facingDirection": "down",
+					"label": "Pokémon Center",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPokecenter",
+					"tile": {
+						"x": 61,
+						"y": 15
 					}
 				},
 				"from_route_7": {
@@ -512,6 +524,39 @@
 				}
 			},
 			"weatherProfile": "outdoor"
+		},
+		"kanto_celadon_city_pokemon_center": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Celadon City Pokémon Center",
+			"locationGroupId": "kanto_celadon_city",
+			"locationGroupLabel": "Celadon City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/pokemon_center.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "down",
+					"label": "Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 14,
+						"y": 31
+					}
+				},
+				"heal_npc": {
+					"facingDirection": "down",
+					"label": "Heal NPC",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "HealNPC",
+					"tile": {
+						"x": 14,
+						"y": 23
+					}
+				}
+			},
+			"weatherProfile": "disabled"
 		},
 		"kanto_cerulean_cave": {
 			"areaType": "wilderness",
@@ -2660,7 +2705,7 @@
 					"spawnMarker": "FromDiglettCave",
 					"tile": {
 						"x": 17,
-						"y": 13
+						"y": 11
 					}
 				},
 				"from_route_12_west": {
@@ -2669,7 +2714,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute12West",
 					"tile": {
-						"x": 74,
+						"x": 103,
 						"y": 20
 					}
 				},
@@ -3632,8 +3677,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromDaycare",
 					"tile": {
-						"x": 16,
-						"y": 36
+						"x": 32,
+						"y": 45
 					}
 				},
 				"from_saffron_north": {
@@ -3643,7 +3688,7 @@
 					"spawnMarker": "FromSaffronNorth",
 					"tile": {
 						"x": 21,
-						"y": 54
+						"y": 75
 					}
 				},
 				"from_underground_path": {
@@ -3652,8 +3697,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromUndergroundPath",
 					"tile": {
-						"x": 38,
-						"y": 40
+						"x": 50,
+						"y": 43
 					}
 				}
 			},
@@ -3736,7 +3781,7 @@
 					"spawnMarker": "FromSaffronSouth",
 					"tile": {
 						"x": 23,
-						"y": 5
+						"y": 4
 					}
 				},
 				"from_underground_path": {
@@ -3745,8 +3790,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromUndergroundPath",
 					"tile": {
-						"x": 36,
-						"y": 13
+						"x": 48,
+						"y": 17
 					}
 				},
 				"from_vermilion": {
@@ -3756,7 +3801,7 @@
 					"spawnMarker": "FromVermilion",
 					"tile": {
 						"x": 23,
-						"y": 52
+						"y": 78
 					}
 				}
 			},
@@ -3802,7 +3847,9 @@
 			"locationGroupId": "kanto_route_7",
 			"locationGroupLabel": "Route 7",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://d38tssqi4mi7g"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_7.tscn",
 			"spawnPoints": {
 				"from_celadon_city": {
@@ -3811,8 +3858,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCeladonCity",
 					"tile": {
-						"x": 2,
-						"y": 24
+						"x": 1,
+						"y": 25
 					}
 				},
 				"from_underground_path": {
@@ -3821,8 +3868,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromUndergroundPath",
 					"tile": {
-						"x": 12,
-						"y": 33
+						"x": 16,
+						"y": 39
 					}
 				}
 			},
@@ -3857,7 +3904,7 @@
 					"spawnMarker": "FromSaffronGate",
 					"tile": {
 						"x": 4,
-						"y": 17
+						"y": 16
 					}
 				},
 				"from_underground_path": {
@@ -3936,7 +3983,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute10",
 					"tile": {
-						"x": 94,
+						"x": 92,
 						"y": 20
 					}
 				},
@@ -3946,7 +3993,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute10River",
 					"tile": {
-						"x": 94,
+						"x": 92,
 						"y": 9
 					}
 				}
@@ -5725,19 +5772,51 @@
 			"destinationAreaId": "guild_base_main_hall",
 			"sourceMapId": "guild_base_right_room"
 		},
+		"kanto_celadon_city__to_pokemon_center": {
+			"destination": {
+				"mapId": "kanto_celadon_city_pokemon_center",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/pokemon_center.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_celadon_city_pokemon_center",
+			"sourceMapId": "kanto_celadon_city"
+		},
 		"kanto_celadon_city__to_route7": {
 			"destination": {
 				"mapId": "kanto_route_7",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://d38tssqi4mi7g"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_7.tscn",
 				"position": {
-					"x": 80.0,
-					"y": 784.0
+					"x": 48.0,
+					"y": 816.0
 				},
 				"spawnMarker": "FromCeladonCity"
 			},
 			"destinationAreaId": "kanto_route_7",
 			"sourceMapId": "kanto_celadon_city"
+		},
+		"kanto_celadon_city_pokemon_center__to_outside": {
+			"destination": {
+				"mapId": "kanto_celadon_city",
+				"mapSceneAliases": [
+					"uid://c13m2ijv5ijuy"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+				"position": {
+					"x": 1968.0,
+					"y": 496.0
+				},
+				"spawnMarker": "FromPokecenter"
+			},
+			"destinationAreaId": "kanto_celadon_city",
+			"sourceMapId": "kanto_celadon_city_pokemon_center"
 		},
 		"kanto_cerulean_cave_2f__to_1f_a": {
 			"destination": {
@@ -6364,7 +6443,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
 				"position": {
 					"x": 560.0,
-					"y": 432.0
+					"y": 368.0
 				},
 				"spawnMarker": "FromDiglettCave"
 			},
@@ -6581,8 +6660,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
 				"position": {
-					"x": 2496.0,
-					"y": 512.0
+					"x": 2512.0,
+					"y": 528.0
 				},
 				"spawnMarker": "FromLavenderTown"
 			},
@@ -7555,7 +7634,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
 				"position": {
-					"x": 3024.0,
+					"x": 2960.0,
 					"y": 656.0
 				},
 				"spawnMarker": "FromRoute10"
@@ -7571,7 +7650,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
 				"position": {
-					"x": 3024.0,
+					"x": 2960.0,
 					"y": 304.0
 				},
 				"spawnMarker": "FromRoute10River"
@@ -7759,7 +7838,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
 				"position": {
-					"x": 2384.0,
+					"x": 3312.0,
 					"y": 656.0
 				},
 				"spawnMarker": "FromRoute12West"
@@ -8607,8 +8686,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
-					"x": 528.0,
-					"y": 1168.0
+					"x": 1040.0,
+					"y": 1456.0
 				},
 				"spawnMarker": "FromDaycare"
 			},
@@ -8624,7 +8703,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
 					"x": 688.0,
-					"y": 1744.0
+					"y": 2416.0
 				},
 				"spawnMarker": "FromSaffronNorth"
 			},
@@ -8700,7 +8779,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
 				"position": {
 					"x": 752.0,
-					"y": 176.0
+					"y": 144.0
 				},
 				"spawnMarker": "FromSaffronSouth"
 			},
@@ -8724,7 +8803,9 @@
 		"kanto_route_7__to_celadon_city": {
 			"destination": {
 				"mapId": "kanto_celadon_city",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://c13m2ijv5ijuy"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
 				"position": {
 					"x": 2480.0,
@@ -8807,8 +8888,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
 				"position": {
-					"x": 128.0,
-					"y": 544.0
+					"x": 144.0,
+					"y": 528.0
 				},
 				"spawnMarker": "FromSaffronGate"
 			},
@@ -9773,8 +9854,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
 				"position": {
-					"x": 1232.0,
-					"y": 1296.0
+					"x": 1616.0,
+					"y": 1392.0
 				},
 				"spawnMarker": "FromUndergroundPath"
 			},
@@ -9805,8 +9886,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
 				"position": {
-					"x": 1168.0,
-					"y": 432.0
+					"x": 1552.0,
+					"y": 560.0
 				},
 				"spawnMarker": "FromUndergroundPath"
 			},
@@ -9848,11 +9929,13 @@
 		"kanto_underground_path_route_7_entrance__to_route7": {
 			"destination": {
 				"mapId": "kanto_route_7",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://d38tssqi4mi7g"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_7.tscn",
 				"position": {
-					"x": 400.0,
-					"y": 1072.0
+					"x": 528.0,
+					"y": 1264.0
 				},
 				"spawnMarker": "FromUndergroundPath"
 			},
@@ -10118,7 +10201,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
 				"position": {
 					"x": 752.0,
-					"y": 1680.0
+					"y": 2512.0
 				},
 				"spawnMarker": "FromVermilion"
 			},
