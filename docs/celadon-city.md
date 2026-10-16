@@ -7,8 +7,12 @@ Reimporting the artist visual must preserve the separate gameplay scene.
 
 The east opening connects to Route 7's west road. Both arrival markers sit two
 tiles beyond their return triggers. The world-access catalogs in both repositories
-and the extended web-map module include this connection. Building interiors and
-the western neighboring route are outside this exterior's scope.
+and the extended web-map module include this connection.
+
+The northeastern Pokémon Center uses the shared Center template, with its own
+healing/respawn identity, four visitors and four companion Pokémon. Nurse Joy’s
+respawn payload targets the canonical `Spawns/HealNPC` marker. Other building
+interiors and the western neighboring route are not connected yet.
 
 Eight dialogue NPCs and ten ambient Pokémon use the existing NPC and follower
 sprite systems. Their matching metadata and dialogues live in the backend's
