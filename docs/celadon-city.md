@@ -12,8 +12,8 @@ and the extended web-map module include this connection.
 The northeastern Pokémon Center uses the shared Center template, with its own
 healing/respawn identity, four visitors and four companion Pokémon. Nurse Joy’s
 respawn payload targets the canonical `Spawns/HealNPC` marker. Celadon Condominiums
-and Game Corner also connect to the city (see below). Other building interiors
-and the western neighboring route are not connected yet.
+and Game Corner also connect to the city (see below), along with Celadon Gym.
+Other building interiors and the western neighboring route are not connected yet.
 
 Eight dialogue NPCs and ten ambient Pokémon use the existing NPC and follower
 sprite systems. Their matching metadata and dialogues live in the backend's
@@ -80,3 +80,33 @@ catalogs. `tests/celadon_game_corner_check.gd` verifies the public routes, all
 forty standing spots, collision, safe doorway travel, atlas layout and registration.
 Account-service tests check the authoritative city/interior round trip. A live
 player walkthrough has not been performed.
+
+## Celadon Gym
+
+The active artist `Celadon Gym.tmx` is imported into
+`generated/tiled_visuals/celadon_gym/`; its gameplay scene is
+`scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn`. The city door at
+**(11,48)** enters the Gym at **(20,62)**, facing up. The full three-tile south
+threshold at **(19–21,64)** returns to the city forecourt at **(11,50)**, facing
+down. Both arrivals avoid immediate re-entry.
+
+The Gym shares Celadon City's access group, uses indoor lighting without weather,
+and selects the shared `gym.interior` music profile. The browser module and both
+world-access catalogs register its canonical scene and reciprocal doorway travel.
+The existing Celadon region-map entry already lists the Gym.
+
+Collision follows the current V4 garden layout. Hedges, flowers on every drawing
+layer, trees, benches and fountains block movement. All eleven pergolas retain
+two open middle columns; the three middle stair columns remain walkable. The
+stage and entrance gardens remain physically enclosed, including their isolated
+decorative floor cells. All 25 garden rooms, both fountain courts and the leader
+position at (20,10) are reachable from the entrance. The shortest route is 120
+tiles across 730 reachable public tiles. The flower clues retain their original
+pink → white → yellow artwork. Both fountains retain all 24 animation frames and
+100 ms timing on every part.
+
+`tests/celadon_gym_check.gd` covers those routes and collision, enclosed gardens,
+free circulation around the fountains, animation timing, safe arrivals, atlas
+layout and browser/server registration. Account-service tests cover the round
+trip and denied entry to a closed Gym. Canonical Godot resource compositions
+were visually reviewed; a live player walkthrough has not been performed.

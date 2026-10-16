@@ -18,6 +18,9 @@
 
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="center_door_hint"]
 
+[sub_resource type="RectangleShape2D" id="shape_gym_door"]
+size = Vector2(32, 32)
+
 [sub_resource type="RectangleShape2D" id="shape_game_corner_door"]
 size = Vector2(32, 32)
 
@@ -292,6 +295,9 @@ position = Vector2(1168, 240)
 [node name="FromGameCorner" type="Marker2D" parent="Spawns"]
 position = Vector2(1264, 944)
 
+[node name="FromGym" type="Marker2D" parent="Spawns"]
+position = Vector2(368, 1616)
+
 [node name="Exits" type="Node2D" parent="." unique_id=730447284]
 
 [node name="ToRoute7" type="Area2D" parent="Exits" unique_id=485939152]
@@ -367,6 +373,20 @@ transition_facing_direction = "up"
 shape = SubResource("shape_game_corner_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToGameCorner" instance=ExtResource("center_door_hint")]
+z_as_relative = false
+
+[node name="ToGym" type="Area2D" parent="Exits"]
+position = Vector2(368, 1552)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn"
+target_spawn_name = "FromOutside"
+transition_id = "kanto_celadon_city__to_gym"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGym"]
+shape = SubResource("shape_gym_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToGym" instance=ExtResource("center_door_hint")]
 z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=1083392905]
@@ -591,3 +611,5 @@ tile_set = SubResource("TileSet_ed0sp")
 [connection signal="body_entered" from="Exits/ToCondominiumsRear" to="Exits/ToCondominiumsRear" method="_on_body_entered"]
 
 [connection signal="body_entered" from="Exits/ToGameCorner" to="Exits/ToGameCorner" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToGym" to="Exits/ToGym" method="_on_body_entered"]

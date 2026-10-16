@@ -532,6 +532,16 @@
 						"y": 29
 					}
 				},
+				"from_gym": {
+					"facingDirection": "down",
+					"label": "Gym",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromGym",
+					"tile": {
+						"x": 11,
+						"y": 50
+					}
+				},
 				"from_pokecenter": {
 					"facingDirection": "down",
 					"label": "Pokémon Center",
@@ -841,6 +851,29 @@
 					"tile": {
 						"x": 23,
 						"y": 5
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"kanto_celadon_gym": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Celadon City Gym",
+			"locationGroupId": "kanto_celadon_city",
+			"locationGroupLabel": "Celadon City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "down",
+					"label": "Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 20,
+						"y": 62
 					}
 				}
 			},
@@ -6274,6 +6307,20 @@
 			"destinationAreaId": "kanto_celadon_game_corner",
 			"sourceMapId": "kanto_celadon_city"
 		},
+		"kanto_celadon_city__to_gym": {
+			"destination": {
+				"mapId": "kanto_celadon_gym",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+				"position": {
+					"x": 656.0,
+					"y": 2000.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_celadon_gym",
+			"sourceMapId": "kanto_celadon_city"
+		},
 		"kanto_celadon_city__to_pokemon_center": {
 			"destination": {
 				"mapId": "kanto_celadon_city_pokemon_center",
@@ -6577,6 +6624,22 @@
 			},
 			"destinationAreaId": "kanto_rocket_hideout_b1f",
 			"sourceMapId": "kanto_celadon_game_corner"
+		},
+		"kanto_celadon_gym__to_outside": {
+			"destination": {
+				"mapId": "kanto_celadon_city",
+				"mapSceneAliases": [
+					"uid://c13m2ijv5ijuy"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 1616.0
+				},
+				"spawnMarker": "FromGym"
+			},
+			"destinationAreaId": "kanto_celadon_city",
+			"sourceMapId": "kanto_celadon_gym"
 		},
 		"kanto_cerulean_cave_2f__to_1f_a": {
 			"destination": {
