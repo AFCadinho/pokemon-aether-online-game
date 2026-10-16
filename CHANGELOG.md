@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Refresh Celadon City’s visual from its updated Tiled source.
+- Refresh Celadon City’s visual with the latest Tiled artwork and tile placement edits.
 
 - Refresh Route 8’s visual from its updated Tiled source.
 
