@@ -30,6 +30,7 @@ const SIGN_PORTRAIT_PATHS: Dictionary = {
 	"kanto_route_8_underground_path_sign": "res://assets/sprites/sign_previews/route_5_underground_path.png",
 	"kanto_route_6_underground_path_sign": "res://assets/sprites/sign_previews/route_5_underground_path.png",
 	"kanto_route_9_route_sign": "res://assets/sprites/sign_previews/route_9.png",
+	"kanto_route_10_power_plant_sign": "res://assets/sprites/sign_previews/route_10_power_plant.png",
 	"kanto_route_10_rock_tunnel_sign": "res://assets/sprites/sign_previews/route_10_rock_tunnel.png",
 	"kanto_route_11_route_sign": "res://assets/sprites/sign_previews/route_11.png",
 	"kanto_route_11_digletts_cave_sign": "res://assets/sprites/sign_previews/route_11_digletts_cave.png",

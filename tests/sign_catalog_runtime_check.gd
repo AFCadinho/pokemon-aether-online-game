@@ -26,6 +26,7 @@ const EXPECTED_SIGN_MAPS: Dictionary = {
 	"kanto_route_6_underground_path_sign": "kanto_route_6",
 	"kanto_route_9_route_sign": "kanto_route_9",
 	"kanto_route_10_rock_tunnel_sign": "kanto_route_10",
+	"kanto_route_10_power_plant_sign": "kanto_route_10",
 	"kanto_route_11_route_sign": "kanto_route_11",
 	"kanto_route_11_digletts_cave_sign": "kanto_route_11",
 	"kanto_route_24_route_sign": "kanto_route_24",
