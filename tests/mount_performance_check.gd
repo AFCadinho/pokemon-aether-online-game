@@ -10,14 +10,19 @@ func _run() -> void:
 	var player = load("res://scenes/player.tscn").instantiate()
 	player.set_script(load("res://tests/fixtures/mount_movement_player.gd"))
 	root.add_child(player)
-	for duration in [0.065, 0.14, 0.22]:
+	for duration in [0.065, player.LAND_MOUNT_TILE_MOVE_DURATION, 0.14, 0.22]:
 		for fps in [30, 40, 50, 60, 120, 144]:
 			_reset(player, duration)
-			for frame in range(fps * 3):
+			# Sample beyond the exact three-second tile boundary to avoid
+			# floating-point ambiguity in the completed-step count.
+			var frame_count: int = fps * 3 + 1
+			var elapsed: float = float(frame_count) / fps
+			for frame in range(frame_count):
 				player._advance_tile_movement(1.0 / fps)
-			_check(absf(player.position.x - 3.0 / duration * 32.0) <= 1.0,
+			_check(absf(player.position.x - elapsed / duration * 32.0) <= 1.0,
 				"consistent distance at %d FPS, duration %s" % [fps, duration])
-			_check(player.completed == int(3.0 / duration), "each crossed tile emits a step")
+			_check(player.completed == int(elapsed / duration),
+				"each crossed tile emits a step at %d FPS, duration %s" % [fps, duration])
 	_reset(player, 0.065)
 	for frame in range(100):
 		player._advance_tile_movement(0.01)
