@@ -1297,5 +1297,33 @@
     "name": "Swift Wing",
     "shortDesc": "在 Aethering 中消耗，保留接收方的 Speed 个体值或转移供给方的该个体值。无法直接使用。",
     "flavorText": "在 Aethering 中消耗，保留接收方的 Speed 个体值或转移供给方的该个体值。无法直接使用。"
+  },
+  "fishing-guru-outfit": {
+    "name": "钓鱼大师服装箱",
+    "shortDesc": "打开此男性角色专用箱子，获得六件独立的钓鱼大师装饰。"
+  },
+  "fishing-guru-shirt": {
+    "name": "钓鱼大师马甲",
+    "shortDesc": "激活此男性角色专用装饰后，在角色自定义中装备。"
+  },
+  "fishing-guru-trousers": {
+    "name": "钓鱼大师长裤",
+    "shortDesc": "激活此男性角色专用装饰后，在角色自定义中装备。"
+  },
+  "fishing-guru-shoes": {
+    "name": "钓鱼大师鞋子",
+    "shortDesc": "激活此男性角色专用装饰后，在角色自定义中装备。"
+  },
+  "fishing-guru-hair": {
+    "name": "钓鱼大师发型",
+    "shortDesc": "激活此男性角色专用装饰后，在角色自定义中装备。"
+  },
+  "fishing-guru-hat": {
+    "name": "钓鱼大师渔帽",
+    "shortDesc": "激活此男性角色专用装饰后，在角色自定义中装备。"
+  },
+  "fishing-guru-rod": {
+    "name": "钓鱼大师背饰鱼竿",
+    "shortDesc": "装备在背部栏位的装饰鱼竿；钓鱼工具需另行获取。"
   }
 }

@@ -1297,5 +1297,33 @@
     "name": "Swift Wing",
     "shortDesc": "Consumida no Aethering para proteger o IV de Speed do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente.",
     "flavorText": "Consumida no Aethering para proteger o IV de Speed do Recipient ou transferir o IV do Donor. Não pode ser usada diretamente."
+  },
+  "fishing-guru-outfit": {
+    "name": "Caixa de Traje do Guru da Pesca",
+    "shortDesc": "Abra esta caixa para modelos masculinos e receba seis cosméticos separados do Guru da Pesca."
+  },
+  "fishing-guru-shirt": {
+    "name": "Colete do Guru da Pesca",
+    "shortDesc": "Ative este cosmético para modelos masculinos e equipe-o na Personalização de Personagem."
+  },
+  "fishing-guru-trousers": {
+    "name": "Calças do Guru da Pesca",
+    "shortDesc": "Ative este cosmético para modelos masculinos e equipe-o na Personalização de Personagem."
+  },
+  "fishing-guru-shoes": {
+    "name": "Sapatos do Guru da Pesca",
+    "shortDesc": "Ative este cosmético para modelos masculinos e equipe-o na Personalização de Personagem."
+  },
+  "fishing-guru-hair": {
+    "name": "Cabelo do Guru da Pesca",
+    "shortDesc": "Ative este cosmético para modelos masculinos e equipe-o na Personalização de Personagem."
+  },
+  "fishing-guru-hat": {
+    "name": "Chapéu do Guru da Pesca",
+    "shortDesc": "Ative este cosmético para modelos masculinos e equipe-o na Personalização de Personagem."
+  },
+  "fishing-guru-rod": {
+    "name": "Vara Decorativa do Guru da Pesca",
+    "shortDesc": "Uma vara decorativa para o espaço de Costas; as ferramentas de pesca são separadas."
   }
 }

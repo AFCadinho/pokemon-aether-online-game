@@ -49,6 +49,7 @@ const EYEBROWS_BY_HAIR_ID := {
 	"male:Hair": DEFAULT_MALE_EYEBROWS_ID,
 	"male:Irelia_Hair": DEFAULT_MALE_EYEBROWS_ID,
 	"male:Kakashi_Hair": DEFAULT_MALE_EYEBROWS_ID,
+	"male:Fishing_Guru_Hair": DEFAULT_MALE_EYEBROWS_ID,
 	"male:SS4_Hair": DEFAULT_MALE_EYEBROWS_ID,
 	"male:Adinho_Hair": "Adinho_Eyebrows",
 	"male:IronFanton_Hair": DEFAULT_MALE_EYEBROWS_ID,

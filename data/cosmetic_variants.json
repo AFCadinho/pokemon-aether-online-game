@@ -411,6 +411,146 @@
         }
       ]
     },
+    "fishing-guru-hair": {
+      "bundle": false,
+      "genders": [
+        "male"
+      ],
+      "layers": [
+        {
+          "category": "hair",
+          "genders": [
+            "male"
+          ],
+          "id": "Fishing_Guru_Hair"
+        }
+      ]
+    },
+    "fishing-guru-hat": {
+      "bundle": false,
+      "genders": [
+        "male"
+      ],
+      "layers": [
+        {
+          "category": "headgear",
+          "genders": [
+            "male"
+          ],
+          "id": "Fishing_Guru_Hat"
+        }
+      ]
+    },
+    "fishing-guru-outfit": {
+      "bundle": true,
+      "genders": [
+        "male"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male"
+          ],
+          "id": "Fishing_Guru_Vest"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male"
+          ],
+          "id": "Fishing_Guru_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male"
+          ],
+          "id": "Fishing_Guru_Shoes"
+        },
+        {
+          "category": "hair",
+          "genders": [
+            "male"
+          ],
+          "id": "Fishing_Guru_Hair"
+        },
+        {
+          "category": "headgear",
+          "genders": [
+            "male"
+          ],
+          "id": "Fishing_Guru_Hat"
+        },
+        {
+          "category": "cape",
+          "genders": [
+            "male"
+          ],
+          "id": "Fishing_Guru_Rod"
+        }
+      ]
+    },
+    "fishing-guru-rod": {
+      "bundle": false,
+      "genders": [
+        "male"
+      ],
+      "layers": [
+        {
+          "category": "cape",
+          "genders": [
+            "male"
+          ],
+          "id": "Fishing_Guru_Rod"
+        }
+      ]
+    },
+    "fishing-guru-shirt": {
+      "bundle": false,
+      "genders": [
+        "male"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male"
+          ],
+          "id": "Fishing_Guru_Vest"
+        }
+      ]
+    },
+    "fishing-guru-shoes": {
+      "bundle": false,
+      "genders": [
+        "male"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male"
+          ],
+          "id": "Fishing_Guru_Shoes"
+        }
+      ]
+    },
+    "fishing-guru-trousers": {
+      "bundle": false,
+      "genders": [
+        "male"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male"
+          ],
+          "id": "Fishing_Guru_Trousers"
+        }
+      ]
+    },
     "irelia-blades": {
       "bundle": false,
       "genders": [
@@ -1636,6 +1776,12 @@
           "male": "EmeraldLuchador_Trousers"
         }
       },
+      "Fishing_Guru_Trousers": {
+        "item_id": "fishing-guru-trousers",
+        "render_variants": {
+          "male": "Fishing_Guru_Trousers"
+        }
+      },
       "Irelia_Trousers": {
         "item_id": "irelia-trousers",
         "render_variants": {
@@ -1708,6 +1854,12 @@
           "male": "EmeraldLuchador_Wings"
         }
       },
+      "Fishing_Guru_Rod": {
+        "item_id": "fishing-guru-rod",
+        "render_variants": {
+          "male": "Fishing_Guru_Rod"
+        }
+      },
       "Irelia_Blades": {
         "item_id": "irelia-blades",
         "render_variants": {
@@ -1761,6 +1913,12 @@
       }
     },
     "hair": {
+      "Fishing_Guru_Hair": {
+        "item_id": "fishing-guru-hair",
+        "render_variants": {
+          "male": "Fishing_Guru_Hair"
+        }
+      },
       "Irelia_Hair": {
         "item_id": "irelia-hair",
         "render_variants": {
@@ -1789,6 +1947,12 @@
         "render_variants": {
           "female": "Akatsuki_Headband",
           "male": "Akatsuki_Headband"
+        }
+      },
+      "Fishing_Guru_Hat": {
+        "item_id": "fishing-guru-hat",
+        "render_variants": {
+          "male": "Fishing_Guru_Hat"
         }
       },
       "Irelia_Circlet": {
@@ -1840,6 +2004,12 @@
         "render_variants": {
           "female": "EmeraldLuchador_Shoes",
           "male": "EmeraldLuchador_Shoes"
+        }
+      },
+      "Fishing_Guru_Shoes": {
+        "item_id": "fishing-guru-shoes",
+        "render_variants": {
+          "male": "Fishing_Guru_Shoes"
         }
       },
       "Irelia_Shoes": {
@@ -1933,6 +2103,12 @@
         "render_variants": {
           "female": "EmeraldLuchador_Shirt",
           "male": "EmeraldLuchador_Shirt"
+        }
+      },
+      "Fishing_Guru_Vest": {
+        "item_id": "fishing-guru-shirt",
+        "render_variants": {
+          "male": "Fishing_Guru_Vest"
         }
       },
       "Irelia_Shirt": {
