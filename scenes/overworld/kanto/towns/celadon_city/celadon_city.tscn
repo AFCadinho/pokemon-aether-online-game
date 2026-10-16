@@ -18,6 +18,9 @@
 
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="center_door_hint"]
 
+[sub_resource type="RectangleShape2D" id="shape_game_corner_door"]
+size = Vector2(32, 32)
+
 [sub_resource type="RectangleShape2D" id="shape_condo_door"]
 size = Vector2(32, 32)
 
@@ -286,6 +289,9 @@ position = Vector2(1296, 464)
 [node name="FromCondominiumsRear" type="Marker2D" parent="Spawns"]
 position = Vector2(1168, 240)
 
+[node name="FromGameCorner" type="Marker2D" parent="Spawns"]
+position = Vector2(1264, 944)
+
 [node name="Exits" type="Node2D" parent="." unique_id=730447284]
 
 [node name="ToRoute7" type="Area2D" parent="Exits" unique_id=485939152]
@@ -348,6 +354,20 @@ shape = SubResource("shape_condo_door")
 z_as_relative = false
 position = Vector2(-32, 0)
 flow_direction = "right"
+
+[node name="ToGameCorner" type="Area2D" parent="Exits"]
+position = Vector2(1264, 880)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn"
+target_spawn_name = "FromOutside"
+transition_id = "kanto_celadon_city__to_game_corner"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGameCorner"]
+shape = SubResource("shape_game_corner_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToGameCorner" instance=ExtResource("center_door_hint")]
+z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=1083392905]
 z_index = 5
@@ -569,3 +589,5 @@ tile_set = SubResource("TileSet_ed0sp")
 [connection signal="body_entered" from="Exits/ToCondominiumsMain" to="Exits/ToCondominiumsMain" method="_on_body_entered"]
 
 [connection signal="body_entered" from="Exits/ToCondominiumsRear" to="Exits/ToCondominiumsRear" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToGameCorner" to="Exits/ToGameCorner" method="_on_body_entered"]

@@ -522,6 +522,16 @@
 						"y": 7
 					}
 				},
+				"from_game_corner": {
+					"facingDirection": "down",
+					"label": "Game Corner",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromGameCorner",
+					"tile": {
+						"x": 39,
+						"y": 29
+					}
+				},
 				"from_pokecenter": {
 					"facingDirection": "down",
 					"label": "Pokémon Center",
@@ -798,6 +808,29 @@
 					"tile": {
 						"x": 6,
 						"y": 9
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"kanto_celadon_game_corner": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Celadon Game Corner",
+			"locationGroupId": "kanto_celadon_city",
+			"locationGroupLabel": "Celadon City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "down",
+					"label": "Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 13,
+						"y": 16
 					}
 				}
 			},
@@ -6045,6 +6078,20 @@
 			"destinationAreaId": "kanto_celadon_condominiums_1f",
 			"sourceMapId": "kanto_celadon_city"
 		},
+		"kanto_celadon_city__to_game_corner": {
+			"destination": {
+				"mapId": "kanto_celadon_game_corner",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+				"position": {
+					"x": 432.0,
+					"y": 528.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_celadon_game_corner",
+			"sourceMapId": "kanto_celadon_city"
+		},
 		"kanto_celadon_city__to_pokemon_center": {
 			"destination": {
 				"mapId": "kanto_celadon_city_pokemon_center",
@@ -6318,6 +6365,22 @@
 			},
 			"destinationAreaId": "kanto_celadon_condominiums_roof",
 			"sourceMapId": "kanto_celadon_condominiums_roof_room"
+		},
+		"kanto_celadon_game_corner__to_outside": {
+			"destination": {
+				"mapId": "kanto_celadon_city",
+				"mapSceneAliases": [
+					"uid://c13m2ijv5ijuy"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+				"position": {
+					"x": 1264.0,
+					"y": 944.0
+				},
+				"spawnMarker": "FromGameCorner"
+			},
+			"destinationAreaId": "kanto_celadon_city",
+			"sourceMapId": "kanto_celadon_game_corner"
 		},
 		"kanto_cerulean_cave_2f__to_1f_a": {
 			"destination": {
