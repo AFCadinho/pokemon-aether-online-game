@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Route 11’s visual with the latest Tiled artwork edits.
+
 - Refresh Route 6’s visual with the latest Tiled artwork edits.
 
 - Refresh Route 7 and Route 11 visuals from their updated Tiled sources.
