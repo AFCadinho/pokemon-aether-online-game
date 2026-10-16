@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reduce land mount travel speed to 0.10 seconds per tile, keeping mounts 40% faster than running while giving players more time to navigate maps.
+
 - Give the Route 10 Power Plant sign localized text and a location preview.
 
 - Refresh Route 10’s visual from its updated Tiled source.

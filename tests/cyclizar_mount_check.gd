@@ -114,7 +114,7 @@ func _check_land_mount_runtime_contract() -> void:
 		and player_source.contains("func _get_current_mount_license_region_id()")
 		and player_source.contains('["mountLicenseRegionId", "regionId"]')
 		and player_source.contains('"ui.mounts.license_required"')
-		and player_source.contains("LAND_MOUNT_TILE_MOVE_DURATION := 0.065")
+		and player_source.contains("LAND_MOUNT_TILE_MOVE_DURATION := 0.10")
 		and player_source.contains("LAND_MOUNT_WALK_ANIMATION_SPEED := 18.0")
 		and player_source.contains("InventoryService"),
 		"the player can toggle an owned, faster land mount"
