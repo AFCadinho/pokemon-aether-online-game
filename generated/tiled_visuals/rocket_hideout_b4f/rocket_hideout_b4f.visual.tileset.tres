@@ -1,0 +1,195 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_b4f/assets/rocket_hideout_b4f.visual.tileset.compact_source_1_0.texture.res" id="1_tvpog"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_b4f/assets/rocket_hideout_b4f.visual.tileset.compact_source_2049_0.texture.res" id="2_kw32c"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_b4f/assets/rocket_hideout_b4f.visual.tileset.compact_source_3073_0.texture.res" id="3_j87yv"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_b4f/assets/rocket_hideout_b4f.visual.tileset.compact_source_4097_0.texture.res" id="4_m2ba0"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_b4f/assets/rocket_hideout_b4f.visual.tileset.compact_source_5865_0.texture.res" id="5_1l3rp"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_b4f/assets/rocket_hideout_b4f.visual.tileset.compact_source_5866_0.texture.res" id="6_l0hnv"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_b4f/assets/rocket_hideout_b4f.visual.tileset.compact_source_6378_0.texture.res" id="7_vslso"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2gh3r"]
+texture = ExtResource("1_tvpog")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yk45k"]
+texture = ExtResource("2_kw32c")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wjy7i"]
+texture = ExtResource("3_j87yv")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+6:6/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3f2bp"]
+texture = ExtResource("4_m2ba0")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0rmpm"]
+texture = ExtResource("5_1l3rp")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v43cj"]
+texture = ExtResource("6_l0hnv")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wfj0r"]
+texture = ExtResource("7_vslso")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_2gh3r")
+sources/1 = SubResource("TileSetAtlasSource_yk45k")
+sources/2 = SubResource("TileSetAtlasSource_wjy7i")
+sources/3 = SubResource("TileSetAtlasSource_3f2bp")
+sources/4 = SubResource("TileSetAtlasSource_0rmpm")
+sources/5 = SubResource("TileSetAtlasSource_v43cj")
+sources/6 = SubResource("TileSetAtlasSource_wfj0r")
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/celadon_city/Rocket Hideout B4F.tmx"
+metadata/tiled_compact_atlas_version = 1
