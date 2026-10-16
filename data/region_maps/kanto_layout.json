@@ -137,6 +137,9 @@
       "description": "A bustling city known for its department store, gardens, and department-sized ambitions.",
       "interiors": [
         {
+          "label": "Celadon Game Corner"
+        },
+        {
           "label": "Celadon Condominiums"
         },
         {

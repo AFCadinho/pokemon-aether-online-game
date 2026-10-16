@@ -12,8 +12,8 @@ and the extended web-map module include this connection.
 The northeastern Pokémon Center uses the shared Center template, with its own
 healing/respawn identity, four visitors and four companion Pokémon. Nurse Joy’s
 respawn payload targets the canonical `Spawns/HealNPC` marker. Celadon Condominiums
-also connects to the city (see below). Other building interiors and the western
-neighboring route are not connected yet.
+and Game Corner also connect to the city (see below). Other building interiors
+and the western neighboring route are not connected yet.
 
 Eight dialogue NPCs and ten ambient Pokémon use the existing NPC and follower
 sprite systems. Their matching metadata and dialogues live in the backend's
@@ -57,3 +57,25 @@ isolated access zones, furniture/wall collision, safe reciprocal arrivals,
 city access from Route 7, atlas layout and browser/server registration. Account
 service tests cover authoritative travel through both stairwells and the rooftop
 room. A live player walkthrough remains useful for visual movement review.
+
+## Celadon Game Corner
+
+`scenes/overworld/kanto/towns/celadon_city/game_corner.tscn` uses the active
+`Celadon Game Corner.tmx` (28 × 21 tiles), with the generated visual stored in
+`generated/tiled_visuals/celadon_game_corner/`. The city entrance covers the
+visible door at **(39,27)** and returns to **(39,29)**. Inside, the full south
+threshold **(12–14,18)** returns outside; arrival **(13,16)** faces north and
+avoids the exit trigger.
+
+Collision follows the current drawing layers. The forty low blue cushions stay
+walkable and render below players. Machine banks, sofas, plants, the counter,
+walls and the enclosed staff space stay solid. The Rocket Hideout staircase is
+blocked until that destination is connected; its approach at (23,5) stays open.
+The machines are scenery in this scene.
+
+The interior shares Celadon City access settings, uses indoor lighting without
+weather, and is included in the extended browser map module and both world-access
+catalogs. `tests/celadon_game_corner_check.gd` verifies the public routes, all
+forty standing spots, collision, safe doorway travel, atlas layout and registration.
+Account-service tests check the authoritative city/interior round trip. A live
+player walkthrough has not been performed.

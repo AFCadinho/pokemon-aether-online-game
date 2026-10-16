@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Connect Celadon Game Corner to the city, with indoor collision, safe doorway travel and forty walkable cushion spots.
+
 - Connect Celadon Condominiums: three floors, roof and rooftop room, with separate front and rear entrances and stairwells.
 
 - Add the male Fishing Guru Outfit Box with six independently wearable fixed-colour cosmetics, matching trainer art and complete overworld activity poses; available through item grants and Dev Tools.
