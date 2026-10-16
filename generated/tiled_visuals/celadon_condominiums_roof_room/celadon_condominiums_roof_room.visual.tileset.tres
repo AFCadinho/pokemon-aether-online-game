@@ -1,0 +1,101 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_condominiums_roof_room/assets/celadon_condominiums_roof_room.visual.tileset.compact_source_1_0.texture.res" id="1_5f4uh"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_condominiums_roof_room/assets/celadon_condominiums_roof_room.visual.tileset.compact_source_2049_0.texture.res" id="2_411ef"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_condominiums_roof_room/assets/celadon_condominiums_roof_room.visual.tileset.compact_source_3073_0.texture.res" id="3_06hqp"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_condominiums_roof_room/assets/celadon_condominiums_roof_room.visual.tileset.compact_source_4097_0.texture.res" id="4_p752c"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_condominiums_roof_room/assets/celadon_condominiums_roof_room.visual.tileset.compact_source_5865_0.texture.res" id="5_qklie"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2wk1w"]
+texture = ExtResource("1_5f4uh")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kxjs7"]
+texture = ExtResource("2_411ef")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dmcts"]
+texture = ExtResource("3_06hqp")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_51yla"]
+texture = ExtResource("4_p752c")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5cgvr"]
+texture = ExtResource("5_qklie")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_2wk1w")
+sources/1 = SubResource("TileSetAtlasSource_kxjs7")
+sources/2 = SubResource("TileSetAtlasSource_dmcts")
+sources/3 = SubResource("TileSetAtlasSource_51yla")
+sources/4 = SubResource("TileSetAtlasSource_5cgvr")
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/celadon_city/Celadon Condominiums Roof Room.tmx"
+metadata/tiled_compact_atlas_version = 1

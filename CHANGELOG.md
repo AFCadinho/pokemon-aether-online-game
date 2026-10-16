@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Connect Celadon Condominiums: three floors, roof and rooftop room, with separate front and rear entrances and stairwells.
+
 - Add the male Fishing Guru Outfit Box with six independently wearable fixed-colour cosmetics, matching trainer art and complete overworld activity poses; available through item grants and Dev Tools.
 
 - Connect Celadon City’s Pokémon Center with the usual services, four new visitors and Bellossom, Skitty, Budew and Chansey, with localized dialogue and varied ambient movement.

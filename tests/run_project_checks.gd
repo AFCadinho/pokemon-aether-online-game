@@ -424,6 +424,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/ambient_overworld_pokemon_check.gd",
 	"res://tests/celadon_city_check.gd",
 	"res://tests/celadon_pokemon_center_check.gd",
+	"res://tests/celadon_condominiums_check.gd",
 	"res://tests/wild_pokemon_map_popup_check.gd",
 	"res://tests/location_status_card_check.gd",
 	"res://tests/loading_screen_layout_check.gd",
