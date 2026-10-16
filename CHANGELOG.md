@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give roaming overworld NPCs and Pokémon independent start times, varied walking speeds and random pauses, with individual walking routines for Vermilion City residents and Pokémon.
+
 - Refresh Celadon City’s visual with the latest Tiled artwork and tile placement edits.
 
 - Refresh Route 8’s visual from its updated Tiled source.
