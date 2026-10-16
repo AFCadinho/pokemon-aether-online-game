@@ -19,6 +19,7 @@
     {"id": "kanto_route_11_route_sign", "type": "road", "mapId": "kanto_route_11", "title": "11号道路", "lines": ["11号道路", "枯叶市 ↔ 12号道路。地鼠洞穴通往2号道路。"]},
     {"id": "kanto_route_11_digletts_cave_sign", "type": "road", "mapId": "kanto_route_11", "title": "地鼠洞穴", "lines": ["地鼠洞穴", "连接11号道路与2号道路的地下通道。"]},
     {"id": "kanto_route_9_route_sign", "type": "road", "mapId": "kanto_route_9", "title": "9号道路", "lines": ["9号道路", "向西通往华蓝市，向东通往10号道路和岩山隧道。"]},
-    {"id": "kanto_route_10_rock_tunnel_sign", "type": "road", "mapId": "kanto_route_10", "title": "岩山隧道", "lines": ["岩山隧道","这条昏暗的隧道穿过群山。记得带上照明，并小心脚下。"]}
+    {"id": "kanto_route_10_rock_tunnel_sign", "type": "road", "mapId": "kanto_route_10", "title": "岩山隧道", "lines": ["岩山隧道","这条昏暗的隧道穿过群山。记得带上照明，并小心脚下。"]},
+    {"id": "kanto_route_10_power_plant_sign", "type": "building", "mapId": "kanto_route_10", "title": "发电厂", "lines": ["发电厂", "河边的一座废弃发电厂。野生电属性宝可梦在这里安了家。"]}
   ]
 }

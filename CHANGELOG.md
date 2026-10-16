@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give the Route 10 Power Plant sign localized text and a location preview.
+
 - Refresh Route 10’s visual from its updated Tiled source.
 
 - Refresh Route 5 and Route 9 visuals from their updated Tiled sources.

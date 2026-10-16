@@ -537,6 +537,8 @@ sign_type = "road"
 
 [node name="PowerPlantSign" parent="Entities/Interactables/Signs" unique_id=752840396 instance=ExtResource("10_h4b5l")]
 position = Vector2(1584, 2000)
+sign_id = "kanto_route_10_power_plant_sign"
+sign_type = "building"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=190000001]
 
