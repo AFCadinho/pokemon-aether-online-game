@@ -1,6 +1,6 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://dxoqibyhmj5sj"]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_1_0.texture.res" id="1_rx84r"]
+[ext_resource type="Texture2D" uid="uid://c2cotb1608trw" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_1_0.texture.res" id="1_rx84r"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_1025_0.texture.res" id="2_ik0ua"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_10241_0.texture.res" id="3_pu63f"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_12289_0.texture.res" id="4_n5r4q"]
@@ -11,36 +11,36 @@
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_16_0.texture.res" id="9_a8vwe"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_17_0.texture.res" id="10_kvlfj"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_18_0.texture.res" id="11_04ky5"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_19_0.texture.res" id="12_re7yc"]
+[ext_resource type="Texture2D" uid="uid://bugjmmbdceh6e" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_19_0.texture.res" id="12_re7yc"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_2049_0.texture.res" id="13_hy7rt"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_20_0.texture.res" id="14_6lmsq"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_21_0.texture.res" id="15_j3unh"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_22_0.texture.res" id="16_iefw3"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_23_0.texture.res" id="17_37ak4"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_24_0.texture.res" id="18_66kff"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_25_0.texture.res" id="19_sqb1j"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_26_0.texture.res" id="20_5tme8"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_27_0.texture.res" id="21_6nyxv"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_28_0.texture.res" id="22_31mpb"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_29_0.texture.res" id="23_m4085"]
+[ext_resource type="Texture2D" uid="uid://bwe4241rbanql" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_20_0.texture.res" id="14_6lmsq"]
+[ext_resource type="Texture2D" uid="uid://crywg171yxf8t" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_21_0.texture.res" id="15_j3unh"]
+[ext_resource type="Texture2D" uid="uid://rlpa5t4w1bey" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_22_0.texture.res" id="16_iefw3"]
+[ext_resource type="Texture2D" uid="uid://rxwegms62abs" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_23_0.texture.res" id="17_37ak4"]
+[ext_resource type="Texture2D" uid="uid://vk3du5fyj82w" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_24_0.texture.res" id="18_66kff"]
+[ext_resource type="Texture2D" uid="uid://0fl1dmvmywwv" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_25_0.texture.res" id="19_sqb1j"]
+[ext_resource type="Texture2D" uid="uid://ckscwodrh8qy7" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_26_0.texture.res" id="20_5tme8"]
+[ext_resource type="Texture2D" uid="uid://j50vn4s6id6r" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_27_0.texture.res" id="21_6nyxv"]
+[ext_resource type="Texture2D" uid="uid://g3lg75w4ycif" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_28_0.texture.res" id="22_31mpb"]
+[ext_resource type="Texture2D" uid="uid://c07mol6lqjgkn" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_29_0.texture.res" id="23_m4085"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_3073_0.texture.res" id="24_jk0f0"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_30_0.texture.res" id="25_q0l2d"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_31_0.texture.res" id="26_amh2l"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_32_0.texture.res" id="27_xyws7"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_33_0.texture.res" id="28_idfbs"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_34_0.texture.res" id="29_kcqu4"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_35_0.texture.res" id="30_pq7h7"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_36_0.texture.res" id="31_j78aa"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_37_0.texture.res" id="32_72nrs"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_38_0.texture.res" id="33_ocxrd"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_39_0.texture.res" id="34_kwupi"]
+[ext_resource type="Texture2D" uid="uid://dyw6nyt3gfrtp" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_30_0.texture.res" id="25_q0l2d"]
+[ext_resource type="Texture2D" uid="uid://nogukbsftf7s" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_31_0.texture.res" id="26_amh2l"]
+[ext_resource type="Texture2D" uid="uid://cydw1pmxo7wx1" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_32_0.texture.res" id="27_xyws7"]
+[ext_resource type="Texture2D" uid="uid://da7hv58j354f2" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_33_0.texture.res" id="28_idfbs"]
+[ext_resource type="Texture2D" uid="uid://bbmlg6hm0obhg" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_34_0.texture.res" id="29_kcqu4"]
+[ext_resource type="Texture2D" uid="uid://cb4ysefrwpif5" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_35_0.texture.res" id="30_pq7h7"]
+[ext_resource type="Texture2D" uid="uid://cbchb7356ak4m" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_36_0.texture.res" id="31_j78aa"]
+[ext_resource type="Texture2D" uid="uid://0oew021dob42" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_37_0.texture.res" id="32_72nrs"]
+[ext_resource type="Texture2D" uid="uid://chox3i8h3bmor" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_38_0.texture.res" id="33_ocxrd"]
+[ext_resource type="Texture2D" uid="uid://cxg6bst5hpvd6" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_39_0.texture.res" id="34_kwupi"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_4097_0.texture.res" id="35_i1bvk"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_40_0.texture.res" id="36_yqo61"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_41_0.texture.res" id="37_6vnpb"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_42_0.texture.res" id="38_miu3c"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_43_0.texture.res" id="39_mqvvv"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_44_0.texture.res" id="40_6xefs"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_45_0.texture.res" id="41_0vhel"]
+[ext_resource type="Texture2D" uid="uid://xbxoeeydgmwi" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_40_0.texture.res" id="36_yqo61"]
+[ext_resource type="Texture2D" uid="uid://de4ernh0tgi41" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_41_0.texture.res" id="37_6vnpb"]
+[ext_resource type="Texture2D" uid="uid://eklrfws1y1mw" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_42_0.texture.res" id="38_miu3c"]
+[ext_resource type="Texture2D" uid="uid://c5nl6px1cx4j5" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_43_0.texture.res" id="39_mqvvv"]
+[ext_resource type="Texture2D" uid="uid://dkdakt3dx6ef6" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_44_0.texture.res" id="40_6xefs"]
+[ext_resource type="Texture2D" uid="uid://3wvu18eg4m86" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_45_0.texture.res" id="41_0vhel"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_46_0.texture.res" id="42_0t8un"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_47_0.texture.res" id="43_utsqn"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_city/assets/celadon_city.visual.tileset.compact_source_48_0.texture.res" id="44_ryt4f"]
@@ -597,33 +597,6 @@ texture_region_size = Vector2i(32, 32)
 0:0/animation_frame_18/duration = 0.07
 0:0/animation_frame_19/duration = 0.07
 0:0/animation_frame_20/duration = 0.07
-0:0/animation_frame_21/duration = 0.07
-0:0/animation_frame_22/duration = 0.07
-0:0/animation_frame_23/duration = 0.07
-0:0/animation_frame_24/duration = 0.07
-0:0/animation_frame_25/duration = 0.07
-0:0/animation_frame_26/duration = 0.07
-0:0/animation_frame_27/duration = 0.07
-0:0/animation_frame_28/duration = 0.07
-0:0/animation_frame_29/duration = 0.07
-0:0/animation_frame_30/duration = 0.07
-0:0/animation_frame_31/duration = 0.07
-0:0/animation_frame_32/duration = 0.07
-0:0/animation_frame_33/duration = 0.07
-0:0/animation_frame_34/duration = 0.07
-0:0/animation_frame_35/duration = 0.07
-0:0/animation_frame_36/duration = 0.07
-0:0/animation_frame_37/duration = 0.07
-0:0/animation_frame_38/duration = 0.07
-0:0/animation_frame_39/duration = 0.07
-0:0/animation_frame_40/duration = 0.07
-0:0/animation_frame_41/duration = 0.07
-0:0/animation_frame_42/duration = 0.07
-0:0/animation_frame_43/duration = 0.07
-0:0/animation_frame_44/duration = 0.07
-0:0/animation_frame_45/duration = 0.07
-0:0/animation_frame_46/duration = 0.07
-0:0/animation_frame_47/duration = 0.07
 0:0/0 = 0
 metadata/tiled_animation_strip = true
 
@@ -668,33 +641,6 @@ texture_region_size = Vector2i(32, 32)
 0:0/animation_frame_18/duration = 0.07
 0:0/animation_frame_19/duration = 0.07
 0:0/animation_frame_20/duration = 0.07
-0:0/animation_frame_21/duration = 0.07
-0:0/animation_frame_22/duration = 0.07
-0:0/animation_frame_23/duration = 0.07
-0:0/animation_frame_24/duration = 0.07
-0:0/animation_frame_25/duration = 0.07
-0:0/animation_frame_26/duration = 0.07
-0:0/animation_frame_27/duration = 0.07
-0:0/animation_frame_28/duration = 0.07
-0:0/animation_frame_29/duration = 0.07
-0:0/animation_frame_30/duration = 0.07
-0:0/animation_frame_31/duration = 0.07
-0:0/animation_frame_32/duration = 0.07
-0:0/animation_frame_33/duration = 0.07
-0:0/animation_frame_34/duration = 0.07
-0:0/animation_frame_35/duration = 0.07
-0:0/animation_frame_36/duration = 0.07
-0:0/animation_frame_37/duration = 0.07
-0:0/animation_frame_38/duration = 0.07
-0:0/animation_frame_39/duration = 0.07
-0:0/animation_frame_40/duration = 0.07
-0:0/animation_frame_41/duration = 0.07
-0:0/animation_frame_42/duration = 0.07
-0:0/animation_frame_43/duration = 0.07
-0:0/animation_frame_44/duration = 0.07
-0:0/animation_frame_45/duration = 0.07
-0:0/animation_frame_46/duration = 0.07
-0:0/animation_frame_47/duration = 0.07
 0:0/0 = 0
 metadata/tiled_animation_strip = true
 
@@ -718,40 +664,6 @@ texture_region_size = Vector2i(32, 32)
 0:0/animation_frame_11/duration = 0.07
 0:0/animation_frame_12/duration = 0.07
 0:0/animation_frame_13/duration = 0.07
-0:0/animation_frame_14/duration = 0.07
-0:0/animation_frame_15/duration = 0.07
-0:0/animation_frame_16/duration = 0.07
-0:0/animation_frame_17/duration = 0.07
-0:0/animation_frame_18/duration = 0.07
-0:0/animation_frame_19/duration = 0.07
-0:0/animation_frame_20/duration = 0.07
-0:0/animation_frame_21/duration = 0.07
-0:0/animation_frame_22/duration = 0.07
-0:0/animation_frame_23/duration = 0.07
-0:0/animation_frame_24/duration = 0.07
-0:0/animation_frame_25/duration = 0.07
-0:0/animation_frame_26/duration = 0.07
-0:0/animation_frame_27/duration = 0.07
-0:0/animation_frame_28/duration = 0.07
-0:0/animation_frame_29/duration = 0.07
-0:0/animation_frame_30/duration = 0.07
-0:0/animation_frame_31/duration = 0.07
-0:0/animation_frame_32/duration = 0.07
-0:0/animation_frame_33/duration = 0.07
-0:0/animation_frame_34/duration = 0.07
-0:0/animation_frame_35/duration = 0.07
-0:0/animation_frame_36/duration = 0.07
-0:0/animation_frame_37/duration = 0.07
-0:0/animation_frame_38/duration = 0.07
-0:0/animation_frame_39/duration = 0.07
-0:0/animation_frame_40/duration = 0.07
-0:0/animation_frame_41/duration = 0.07
-0:0/animation_frame_42/duration = 0.07
-0:0/animation_frame_43/duration = 0.07
-0:0/animation_frame_44/duration = 0.07
-0:0/animation_frame_45/duration = 0.07
-0:0/animation_frame_46/duration = 0.07
-0:0/animation_frame_47/duration = 0.07
 0:0/0 = 0
 metadata/tiled_animation_strip = true
 
@@ -775,8 +687,6 @@ texture_region_size = Vector2i(32, 32)
 0:0/animation_frame_11/duration = 0.16
 0:0/animation_frame_12/duration = 0.16
 0:0/animation_frame_13/duration = 0.16
-0:0/animation_frame_14/duration = 0.16
-0:0/animation_frame_15/duration = 0.16
 0:0/0 = 0
 metadata/tiled_animation_strip = true
 
@@ -800,8 +710,6 @@ texture_region_size = Vector2i(32, 32)
 0:0/animation_frame_11/duration = 0.16
 0:0/animation_frame_12/duration = 0.16
 0:0/animation_frame_13/duration = 0.16
-0:0/animation_frame_14/duration = 0.16
-0:0/animation_frame_15/duration = 0.16
 0:0/0 = 0
 metadata/tiled_animation_strip = true
 
