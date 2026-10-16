@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Route 10’s visual from its updated Tiled source.
+
 - Refresh Route 5 and Route 9 visuals from their updated Tiled sources.
 
 - Refresh Route 11’s visual with the latest Tiled artwork edits, including adjusted tree placement.
