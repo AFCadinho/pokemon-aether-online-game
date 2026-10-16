@@ -36,8 +36,8 @@ func _run() -> void:
 				_check(collision.get_cell_source_id(Vector2i(bank.x, y)) != -1 and collision.get_cell_source_id(Vector2i(bank.x + 1, y)) != -1, "Machines remain solid beside each cushion")
 	_check(seat_count == 40, "All forty playing positions were checked")
 	_check(corner.get_node("Visual/Objects").z_index < corner.get_node("Entities").z_index, "Cushions draw below the player")
-	for tile: Vector2i in [Vector2i(13, 6), Vector2i(13, 7), Vector2i(13, 5), Vector2i(2, 8), Vector2i(22, 8), Vector2i(6, 6), Vector2i(20, 6), Vector2i(24, 5), Vector2i(25, 5), Vector2i(1, 17), Vector2i(26, 17)]:
-		_check(collision.get_cell_source_id(tile) != -1, "Solid counter, furniture, staff enclosure or unfinished stair: " + str(tile))
+	for tile: Vector2i in [Vector2i(13, 6), Vector2i(13, 7), Vector2i(13, 5), Vector2i(2, 8), Vector2i(22, 8), Vector2i(6, 6), Vector2i(20, 6), Vector2i(1, 17), Vector2i(26, 17)]:
+		_check(collision.get_cell_source_id(tile) != -1, "Solid counter, furniture or staff enclosure: " + str(tile))
 	var entrance := city.get_node("Exits/ToGameCorner")
 	var exit_node := corner.get_node("Exits/ToOutside")
 	var city_spawn := city.get_node("Spawns/FromGameCorner") as Marker2D
@@ -60,7 +60,8 @@ func _run() -> void:
 		var destination: Dictionary = catalog.transitions[transition.transition_id].destination
 		_check(destination.mapId == pair[1].map_id and destination.spawnMarker == str(pair[2].name), "Canonical server arrival marker")
 		_check(destination.position == {"x": pair[2].position.x, "y": pair[2].position.y}, "Server arrival matches scene coordinates")
-	_check(corner.get_node("Exits").get_child_count() == 1, "No dangling transition to an unconnected Rocket Hideout")
+	_check(corner.get_node("Exits").get_child_count() == 2, "City and Rocket Hideout are connected")
+	_check(reached.has(Vector2i(24, 5)) and reached.has(Vector2i(25, 5)), "Both Hideout stair cells are open")
 	_check(LOADER.module_for_scene(SCENE_PATH) == LOADER.EXTENDED_MODULE_NAME, "Browser can load Game Corner")
 	var errors: Array[String] = VALIDATOR.new().validate(corner.get_node("Visual"), "res://generated/tiled_visuals/celadon_game_corner/celadon_game_corner.visual.tileset.tres")
 	_check(errors.is_empty(), "Imported atlas layout: " + str(errors))

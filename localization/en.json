@@ -1,4 +1,6 @@
 {
+  "ui.rocket_hideout.lift.title": "Rocket Hideout lift",
+  "ui.rocket_hideout.lift.prompt": "Choose a floor.",
   "ui.settings.battle.quality": "3D battle quality",
   "ui.settings.battle.fps_unlimited": "Unlimited (VSync may limit FPS)",
   "ui.settings.android.quality": "Android 3D quality",

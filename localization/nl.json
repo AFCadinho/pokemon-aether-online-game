@@ -1,4 +1,6 @@
 {
+  "ui.rocket_hideout.lift.title": "Rocket Hideout-lift",
+  "ui.rocket_hideout.lift.prompt": "Kies een verdieping.",
   "ui.settings.battle.quality": "3D-gevechtskwaliteit",
   "ui.settings.battle.fps_unlimited": "Onbeperkt (VSync kan FPS begrenzen)",
   "ui.settings.android.quality": "Android 3D-kwaliteit",

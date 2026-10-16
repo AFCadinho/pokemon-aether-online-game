@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Connect Rocket Hideout B1F–B4F to Celadon Game Corner, with stairs, indoor collision and a lift with floor selection between B1F, B2F and B4F.
+
 - Connect Celadon Game Corner to the city, with indoor collision, safe doorway travel and forty walkable cushion spots.
 
 - Connect Celadon Condominiums: three floors, roof and rooftop room, with separate front and rear entrances and stairwells.

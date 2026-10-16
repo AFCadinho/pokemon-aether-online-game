@@ -69,9 +69,10 @@ avoids the exit trigger.
 
 Collision follows the current drawing layers. The forty low blue cushions stay
 walkable and render below players. Machine banks, sofas, plants, the counter,
-walls and the enclosed staff space stay solid. The Rocket Hideout staircase is
-blocked until that destination is connected; its approach at (23,5) stays open.
-The machines are scenery in this scene.
+walls and the enclosed staff space stay solid. The Rocket Hideout staircase
+at (24–25,5) now connects to B1F, returning to (23,5).
+The machines are scenery in this scene. See [rocket-hideout.md](rocket-hideout.md)
+for the four basement maps and lift.
 
 The interior shares Celadon City access settings, uses indoor lighting without
 weather, and is included in the extended browser map module and both world-access
