@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="6_pokemon"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="7_collision"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="15_5tkry"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="center_door_hint"]
 [ext_resource type="SpriteFrames" uid="uid://ctgjk0yaqmm8o" path="res://assets/npcs/classes/elder_frames.tres" id="frames_elder"]
 [ext_resource type="SpriteFrames" uid="uid://dew17ac2tan52" path="res://assets/npcs/classes/gentleman_frames.tres" id="frames_gentleman"]
 [ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="frames_lass"]
@@ -16,22 +17,20 @@
 [ext_resource type="SpriteFrames" uid="uid://bmw8v3ctsygiq" path="res://assets/npcs/classes/socialite_frames.tres" id="frames_socialite"]
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="frames_worker"]
 
-[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="center_door_hint"]
+[sub_resource type="RectangleShape2D" id="shape_route7"]
+size = Vector2(32, 128)
 
-[sub_resource type="RectangleShape2D" id="shape_gym_door"]
-size = Vector2(32, 32)
-
-[sub_resource type="RectangleShape2D" id="shape_game_corner_door"]
+[sub_resource type="RectangleShape2D" id="shape_center_door"]
 size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_condo_door"]
 size = Vector2(32, 32)
 
-[sub_resource type="RectangleShape2D" id="shape_center_door"]
+[sub_resource type="RectangleShape2D" id="shape_game_corner_door"]
 size = Vector2(32, 32)
 
-[sub_resource type="RectangleShape2D" id="shape_route7"]
-size = Vector2(32, 128)
+[sub_resource type="RectangleShape2D" id="shape_gym_door"]
+size = Vector2(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ge3ik"]
 texture = ExtResource("7_collision")
@@ -283,19 +282,19 @@ position = Vector2(2480, 560)
 [node name="CityCenter" type="Marker2D" parent="Spawns" unique_id=245493718]
 position = Vector2(1232, 560)
 
-[node name="FromPokecenter" type="Marker2D" parent="Spawns"]
+[node name="FromPokecenter" type="Marker2D" parent="Spawns" unique_id=371899888]
 position = Vector2(1968, 496)
 
-[node name="FromCondominiumsMain" type="Marker2D" parent="Spawns"]
+[node name="FromCondominiumsMain" type="Marker2D" parent="Spawns" unique_id=621557190]
 position = Vector2(1296, 464)
 
-[node name="FromCondominiumsRear" type="Marker2D" parent="Spawns"]
+[node name="FromCondominiumsRear" type="Marker2D" parent="Spawns" unique_id=1734768115]
 position = Vector2(1168, 240)
 
-[node name="FromGameCorner" type="Marker2D" parent="Spawns"]
+[node name="FromGameCorner" type="Marker2D" parent="Spawns" unique_id=1649116526]
 position = Vector2(1264, 944)
 
-[node name="FromGym" type="Marker2D" parent="Spawns"]
+[node name="FromGym" type="Marker2D" parent="Spawns" unique_id=1907604291]
 position = Vector2(368, 1616)
 
 [node name="Exits" type="Node2D" parent="." unique_id=730447284]
@@ -316,7 +315,7 @@ z_as_relative = false
 tile_footprint = Vector2i(1, 4)
 flow_direction = "right"
 
-[node name="ToPokecenter" type="Area2D" parent="Exits"]
+[node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=2125657287]
 position = Vector2(1968, 464)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/pokemon_center.tscn"
@@ -324,13 +323,13 @@ target_spawn_name = "FromOutside"
 transition_id = "kanto_celadon_city__to_pokemon_center"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=1836376724]
 shape = SubResource("shape_center_door")
 
-[node name="DoorTransitionHint" parent="Exits/ToPokecenter" instance=ExtResource("center_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=739461376 instance=ExtResource("center_door_hint")]
 z_as_relative = false
 
-[node name="ToCondominiumsMain" type="Area2D" parent="Exits"]
+[node name="ToCondominiumsMain" type="Area2D" parent="Exits" unique_id=1166089094]
 position = Vector2(1296, 400)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_1f.tscn"
@@ -338,14 +337,13 @@ target_spawn_name = "FromMainExitToCeladon"
 transition_id = "kanto_celadon_city__to_condominiums_main"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCondominiumsMain"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCondominiumsMain" unique_id=2018168812]
 shape = SubResource("shape_condo_door")
 
-[node name="DoorTransitionHint" parent="Exits/ToCondominiumsMain" instance=ExtResource("center_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToCondominiumsMain" unique_id=1208759473 instance=ExtResource("center_door_hint")]
 z_as_relative = false
-flow_direction = "up"
 
-[node name="ToCondominiumsRear" type="Area2D" parent="Exits"]
+[node name="ToCondominiumsRear" type="Area2D" parent="Exits" unique_id=540737758]
 position = Vector2(1200, 240)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_1f.tscn"
@@ -353,15 +351,15 @@ target_spawn_name = "FromRearExitToCeladon"
 transition_id = "kanto_celadon_city__to_condominiums_rear"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCondominiumsRear"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCondominiumsRear" unique_id=1524456391]
 shape = SubResource("shape_condo_door")
 
-[node name="DoorTransitionHint" parent="Exits/ToCondominiumsRear" instance=ExtResource("center_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToCondominiumsRear" unique_id=1178297515 instance=ExtResource("center_door_hint")]
 z_as_relative = false
 position = Vector2(-32, 0)
 flow_direction = "right"
 
-[node name="ToGameCorner" type="Area2D" parent="Exits"]
+[node name="ToGameCorner" type="Area2D" parent="Exits" unique_id=63311910]
 position = Vector2(1264, 880)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn"
@@ -369,13 +367,13 @@ target_spawn_name = "FromOutside"
 transition_id = "kanto_celadon_city__to_game_corner"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGameCorner"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGameCorner" unique_id=742971160]
 shape = SubResource("shape_game_corner_door")
 
-[node name="DoorTransitionHint" parent="Exits/ToGameCorner" instance=ExtResource("center_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToGameCorner" unique_id=1100006953 instance=ExtResource("center_door_hint")]
 z_as_relative = false
 
-[node name="ToGym" type="Area2D" parent="Exits"]
+[node name="ToGym" type="Area2D" parent="Exits" unique_id=573736978]
 position = Vector2(368, 1552)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn"
@@ -383,10 +381,10 @@ target_spawn_name = "FromOutside"
 transition_id = "kanto_celadon_city__to_gym"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGym"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGym" unique_id=869082017]
 shape = SubResource("shape_gym_door")
 
-[node name="DoorTransitionHint" parent="Exits/ToGym" instance=ExtResource("center_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToGym" unique_id=1579913885 instance=ExtResource("center_door_hint")]
 z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=1083392905]
@@ -603,13 +601,8 @@ tile_map_data = PackedByteArray("AAAaAAAAAAABAAQAAAAaAAEAAAABAAQAAAAaAAIAAAABAAQ
 tile_set = SubResource("TileSet_ed0sp")
 
 [connection signal="body_entered" from="Exits/ToRoute7" to="Exits/ToRoute7" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/ToCondominiumsMain" to="Exits/ToCondominiumsMain" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/ToCondominiumsRear" to="Exits/ToCondominiumsRear" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/ToGameCorner" to="Exits/ToGameCorner" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/ToGym" to="Exits/ToGym" method="_on_body_entered"]
