@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Enable Adventure Party encounters on all 19 playable maps with wild encounters in tall grass, including Cerulean City and Routes 3–5, 8–15, 24 and 25.
+
 - Enable Adventure Party grass encounters on Route 6.
 
 - Continue the Kanto story through a Jessie, James and Meowth sighting on Route 7, a Pokémon rescue battle in southeast Celadon, and Team Rocket’s escape; Adventure Parties face the same four Pokémon in doubles.
