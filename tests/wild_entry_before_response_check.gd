@@ -139,8 +139,11 @@ func _check_classic_entry(log_open: bool) -> void:
 	var transition := WildEncounterTransition.new()
 	root.add_child(transition)
 	world.wild_encounter_transition = transition
+	world._prewarm_wild_battle_ui(true)
+	var party_prepared: Control = world.prepared_wild_battle
 	world.run_entry()
 	var battle: Control = world.battle_instance
+	check(battle != party_prepared and not battle.has_meta("immersive_battle_ui"), "A classic single encounter never reuses the party's immersive screen")
 	battle._set_battle_log_open(log_open)
 	battle.update_entry_layout()
 	var entry_scales := _entry_scales(battle)

@@ -1212,13 +1212,7 @@ func _update_actions() -> void:
 		_set_native_mechanic_buttons(can_mega, can_z_move)
 		var display_moves: Array = []
 		for move: Dictionary in CoopService.view.get("moves", []):
-			var prepared := move.duplicate()
-			prepared["disabled"] = bool(move.get("disabled", false)) or _move_actions(int(move.get("slot", 0))).is_empty()
-			if _mega_evolution_selected:
-				prepared["name"] = "MEGA · " + str(prepared.get("name", ""))
-			elif _z_move_selected:
-				prepared["name"] = "Z · " + str(prepared.get("name", ""))
-			display_moves.append(prepared)
+			display_moves.append(_native_move_display_data(move))
 		_native_moves.set_moves(display_moves)
 		_native_moves.set_input_disabled(selected_move > 0)
 		_native_moves.visible = not display_moves.is_empty() and not CoopService.view.get("forceSwitch", false) and not _bag_open
@@ -1413,6 +1407,28 @@ func _final_event_playback_pending() -> bool:
 	if CoopService.activity.get("status") == "finished" and not bool(_latest.get("ended", false)):
 		return true
 	return displayed_cursor < int(_latest.get("eventCursor", 0))
+
+
+func _native_move_display_data(move: Dictionary) -> Dictionary:
+	var prepared := move.duplicate(true)
+	prepared["disabled"] = move.get("disabled", false) == true or _move_actions(int(move.get("slot", 0))).is_empty()
+	# The public protocol carries Z-Move metadata or null. MoveSlot uses boolean
+	# presentation flags; never pass that nullable object through as a UI flag.
+	prepared["zMove"] = false
+	prepared["zMoveUnavailable"] = false
+	if _mega_evolution_selected:
+		prepared["name"] = "MEGA · " + str(prepared.get("name", ""))
+	elif _z_move_selected:
+		var z_move: Variant = move.get("zMove")
+		if z_move is Dictionary and not str(z_move.get("name", "")).is_empty():
+			prepared["name"] = z_move["name"]
+			prepared["id"] = z_move["name"]
+			prepared["type"] = z_move.get("type", prepared.get("type", ""))
+			prepared["zMove"] = true
+		else:
+			prepared["disabled"] = true
+			prepared["zMoveUnavailable"] = true
+	return prepared
 
 
 func _move_actions(slot: int) -> Array:
