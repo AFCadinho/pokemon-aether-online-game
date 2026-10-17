@@ -1,0 +1,43 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_cinnabar_island",
+  "signs": [
+    {
+      "id": "kanto_cinnabar_island_town_sign",
+      "type": "town",
+      "title": "Cinnabar Island",
+      "lines": [
+        "Cinnabar Island — where the ocean meets the volcano.",
+        "Rest at the Pokémon Center, and stay on the marked paths around the volcano."
+      ]
+    },
+    {
+      "id": "kanto_cinnabar_island_pokemon_mansion",
+      "type": "notice",
+      "title": "Pokémon Mansion — Keep Out",
+      "lines": [
+        "Pokémon Mansion",
+        "ABANDONED — KEEP OUT!",
+        "Unsafe building. No entry."
+      ]
+    },
+    {
+      "id": "kanto_cinnabar_island_research_lab",
+      "type": "building",
+      "title": "Cinnabar Research Lab",
+      "lines": [
+        "Cinnabar Research Lab",
+        "Researchers study Pokémon fossils and the island’s volcanic environment."
+      ]
+    },
+    {
+      "id": "kanto_cinnabar_island_gym",
+      "type": "building",
+      "title": "Cinnabar Island Pokémon Gym",
+      "lines": [
+        "Cinnabar Island Pokémon Gym",
+        "Leader: Blaine. A Gym devoted to Fire-type Pokémon."
+      ]
+    }
+  ]
+}

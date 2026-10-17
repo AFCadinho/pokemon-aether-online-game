@@ -1,0 +1,43 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_cinnabar_island",
+  "signs": [
+    {
+      "id": "kanto_cinnabar_island_town_sign",
+      "type": "town",
+      "title": "红莲岛",
+      "lines": [
+        "红莲岛——海洋与火山交汇之地。",
+        "请到宝可梦中心休息，并沿着火山周围有标记的小路行走。"
+      ]
+    },
+    {
+      "id": "kanto_cinnabar_island_pokemon_mansion",
+      "type": "notice",
+      "title": "宝可梦屋——禁止入内",
+      "lines": [
+        "宝可梦屋",
+        "废弃建筑——禁止入内！",
+        "建筑存在安全隐患。请勿进入。"
+      ]
+    },
+    {
+      "id": "kanto_cinnabar_island_research_lab",
+      "type": "building",
+      "title": "红莲研究所",
+      "lines": [
+        "红莲研究所",
+        "研究人员在此研究宝可梦化石与岛上的火山环境。"
+      ]
+    },
+    {
+      "id": "kanto_cinnabar_island_gym",
+      "type": "building",
+      "title": "红莲岛宝可梦道馆",
+      "lines": [
+        "红莲岛宝可梦道馆",
+        "馆主：夏伯。专注于火属性宝可梦的道馆。"
+      ]
+    }
+  ]
+}

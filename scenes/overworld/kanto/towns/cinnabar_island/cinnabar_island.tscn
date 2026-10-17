@@ -187,12 +187,27 @@ z_index = 5
 
 [node name="CinnabarIslandSign" parent="Entities/Interactables" unique_id=2012447037 instance=ExtResource("4_ou6b4")]
 position = Vector2(848, 1776)
+sign_id = "kanto_cinnabar_island_town_sign"
+sign_type = "town"
+content_source = "local"
 
 [node name="PokemonMansionSign" parent="Entities/Interactables" unique_id=1449815395 instance=ExtResource("5_chlaa")]
 position = Vector2(672, 1424)
+sign_id = "kanto_cinnabar_island_pokemon_mansion"
+sign_type = "notice"
+content_source = "local"
 
 [node name="CinnabarResearchSign" parent="Entities/Interactables" unique_id=272681457 instance=ExtResource("5_chlaa")]
 position = Vector2(400, 1936)
+sign_id = "kanto_cinnabar_island_research_lab"
+sign_type = "building"
+content_source = "local"
+
+[node name="CinnabarGymSign" parent="Entities/Interactables" instance=ExtResource("5_chlaa")]
+position = Vector2(1552, 848)
+sign_id = "kanto_cinnabar_island_gym"
+sign_type = "building"
+content_source = "local"
 
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=1597394492 instance=ExtResource("6_xn4fb")]
 z_index = 1232

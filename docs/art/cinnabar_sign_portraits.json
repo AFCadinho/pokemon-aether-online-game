@@ -1,0 +1,22 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-10-17",
+  "assets": [
+    {
+      "path": "assets/sprites/sign_previews/cinnabar_pokemon_mansion.png",
+      "sha256": "87ace48c8cc25ed1ecb9b6f70296553fe7c265ecc58b5dccd7e9c3132d2f3f15",
+      "prompt": "Use case: stylized-concept. Asset type: square game dialogue sign portrait for PokeAether, readable as a small 256px illustration. Create one painterly anime environment illustration of Cinnabar Island's abandoned Pokémon Mansion. Three-storey old rectangular brick research mansion, dark teal flat parapet roof, rows of dark windows with several boarded up, overgrown weeds, cracked paving, visibly chained and boarded entrance with a weathered warning sign reading exactly 'KEEP OUT'. Warm volcanic island setting, rocky cliffs and hint of ocean, ominous quiet daylight. Building fills composition in front three-quarter view, clear silhouette and focal entrance. Rich detailed hand-painted anime background style, matching illustrated Pokémon town sign portraits, not pixel art, no people, no Pokemon, no UI or border, no watermark. Convey uninhabited and dangerous, not welcoming. Do not add any text except 'KEEP OUT'."
+    },
+    {
+      "path": "assets/sprites/sign_previews/cinnabar_research_lab.png",
+      "sha256": "8239018714235ef2e7f6170292239fd068ff7435c7d846c498ff8c871c6c096b",
+      "prompt": "Use case: stylized-concept. Asset type: square game dialogue sign portrait, legible at 256px. One richly hand-painted anime environment illustration of the Cinnabar Island Pokémon Research Laboratory. Compact cream-colored coastal scientific institute, two low stepped flat rooftop sections with pale green glass roof panels, broad windows, modest entrance; tidy garden, orange flowers, weathered volcanic stones, vivid blue sea and volcanic island landscape behind. Emphasize a working science facility through the architecture, a discreet atom/fossil emblem near the entry and equipment visible through a window, without readable text. Welcoming warm daylight, clear architectural silhouette and entrance, front three-quarter view, detailed polished Pokémon environment background painting consistent with town sign portrait illustrations. No people, no Pokemon, no UI, no border, no watermark, no readable lettering."
+    },
+    {
+      "path": "assets/sprites/sign_previews/cinnabar_gym.png",
+      "sha256": "b7005b7307498940be850217e57f4c2f9a815070fbab21453f306596d22df483",
+      "prompt": "Use case: stylized-concept. Asset type: square game dialogue sign portrait legible at 256px. Create one polished hand-painted anime environment illustration of Cinnabar Island's Pokémon Gym. Main subject a compact rounded modern gym building, broad warm bronze/gold curved roof with a subtle embossed Poké Ball circle emblem, blue glass facade and centered double entrance. An elevated grassy volcanic island terrace reached by a short broad stone stairway, discreet railings, dark volcanic rocks and blue sea behind. Fire-type character suggested by warm amber light within and warm palette around entrance, no active fire or lava. Clear front three-quarter architectural view, inviting challenge landmark in bright coastal daylight, richly colored detailed anime background painting consistent with illustrated Pokémon location sign portraits. No people, no Pokemon, no lettering, no UI, no border, no watermark."
+    }
+  ],
+  "reusedTownPortrait": "assets/sprites/sign_previews/cinnabar_island.png"
+}

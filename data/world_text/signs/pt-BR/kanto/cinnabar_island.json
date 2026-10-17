@@ -1,0 +1,43 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_cinnabar_island",
+  "signs": [
+    {
+      "id": "kanto_cinnabar_island_town_sign",
+      "type": "town",
+      "title": "Ilha de Cinnabar",
+      "lines": [
+        "Ilha de Cinnabar — onde o oceano encontra o vulcão.",
+        "Descanse no Centro Pokémon e siga pelas trilhas demarcadas ao redor do vulcão."
+      ]
+    },
+    {
+      "id": "kanto_cinnabar_island_pokemon_mansion",
+      "type": "notice",
+      "title": "Mansão Pokémon — Não entre",
+      "lines": [
+        "Mansão Pokémon",
+        "ABANDONADA — NÃO ENTRE!",
+        "Edifício inseguro. Entrada proibida."
+      ]
+    },
+    {
+      "id": "kanto_cinnabar_island_research_lab",
+      "type": "building",
+      "title": "Laboratório de Cinnabar",
+      "lines": [
+        "Laboratório de Cinnabar",
+        "Pesquisadores estudam fósseis de Pokémon e o ambiente vulcânico da ilha."
+      ]
+    },
+    {
+      "id": "kanto_cinnabar_island_gym",
+      "type": "building",
+      "title": "Ginásio Pokémon da Ilha de Cinnabar",
+      "lines": [
+        "Ginásio Pokémon da Ilha de Cinnabar",
+        "Líder: Blaine. Um Ginásio dedicado aos Pokémon do tipo Fogo."
+      ]
+    }
+  ]
+}
