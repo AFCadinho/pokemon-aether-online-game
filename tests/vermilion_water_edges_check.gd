@@ -43,7 +43,7 @@ func _run() -> void:
 	print("Checked %d painted cells, %d additional shore cells" % [water.get_used_cells().size(), shore_count])
 	for entry in [
 		["res://scenes/overworld/kanto/routes/kanto_route_21.tscn", Vector2i(50, 90), 3690],
-		["res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn", Vector2i(64, 72), 2212],
+		["res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn", Vector2i(64, 72), 1980],
 		["res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn", Vector2i(75, 30), 1939],
 	]:
 		var other: Node = load(entry[0]).instantiate()

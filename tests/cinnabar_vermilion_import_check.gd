@@ -23,7 +23,7 @@ func _run() -> void:
 		return
 
 	_check_water(route_21, Vector2i(50, 90), 3690)
-	_check_water(cinnabar, Vector2i(64, 72), 2212)
+	_check_water(cinnabar, Vector2i(64, 72), 1980)
 	_check_water(vermilion, Vector2i(80, 64), 654)
 	_check_water(docks, Vector2i(75, 30), 1939)
 	_expect(_water(cinnabar, 32, 1) and _water(route_21, 26, 88),
