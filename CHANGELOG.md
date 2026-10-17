@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Route 7 and Cinnabar Island visuals from the latest artist Tiled maps.
+
 - Connect Celadon City Gym with its indoor garden maze, walkable pergolas and stairs, animated fountains and safe doorway travel.
 
 - Connect Rocket Hideout B1F–B4F to Celadon Game Corner, with stairs, indoor collision and a lift with floor selection between B1F, B2F and B4F.
