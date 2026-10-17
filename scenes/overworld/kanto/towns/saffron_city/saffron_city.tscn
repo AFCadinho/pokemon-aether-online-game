@@ -5,11 +5,25 @@
 [ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
 
+[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="west_gate_collision_texture"]
+
 [sub_resource type="RectangleShape2D" id="shape_gate"]
 size = Vector2(96, 16)
 
 [sub_resource type="RectangleShape2D" id="shape_route8_gate"]
 size = Vector2(32, 192)
+
+[sub_resource type="RectangleShape2D" id="route7_gate_shape"]
+size = Vector2(32, 64)
+
+[sub_resource type="TileSetAtlasSource" id="west_gate_collision_atlas"]
+texture = ExtResource("west_gate_collision_texture")
+texture_region_size = Vector2i(32, 32)
+1:1/0 = 0
+
+[sub_resource type="TileSet" id="west_gate_collision_tiles"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("west_gate_collision_atlas")
 
 [node name="SaffronCity" type="Node2D"]
 script = ExtResource("2_metadata")
@@ -98,6 +112,33 @@ y_sort_enabled = true
 
 [node name="Interactables" type="Node2D" parent="Entities"]
 
+[node name="FromRoute7" type="Marker2D" parent="Spawns"]
+position = Vector2(176, 1296)
+
+[node name="ToRoute7Gate" type="Area2D" parent="Exits"]
+position = Vector2(144, 1280)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_7_saffron_gate.tscn"
+target_spawn_name = "FromEast"
+transition_id = "kanto_saffron_city__to_route7_gate"
+transition_facing_direction = "left"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute7Gate"]
+shape = SubResource("route7_gate_shape")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute7Gate" instance=ExtResource("4_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 2)
+flow_direction = "left"
+
+[node name="Tiles" type="Node2D" parent="."]
+
+[node name="Collision" type="TileMapLayer" parent="Tiles"]
+visible = false
+tile_map_data = PackedByteArray("AAAAACMAAAABAAEAAAAAACQAAAABAAEAAAAAACUAAAABAAEAAAAAACYAAAABAAEAAAAAACcAAAABAAEAAAAAACgAAAABAAEAAAAAACkAAAABAAEAAAAAACoAAAABAAEAAAAAACsAAAABAAEAAAABACMAAAABAAEAAAABACQAAAABAAEAAAABACUAAAABAAEAAAABACYAAAABAAEAAAABACcAAAABAAEAAAABACgAAAABAAEAAAABACkAAAABAAEAAAABACoAAAABAAEAAAABACsAAAABAAEAAAACACMAAAABAAEAAAACACQAAAABAAEAAAACACUAAAABAAEAAAACACYAAAABAAEAAAACACcAAAABAAEAAAACACgAAAABAAEAAAACACkAAAABAAEAAAACACoAAAABAAEAAAACACsAAAABAAEAAAADACMAAAABAAEAAAADACQAAAABAAEAAAADACUAAAABAAEAAAADACYAAAABAAEAAAADACcAAAABAAEAAAADACgAAAABAAEAAAADACkAAAABAAEAAAADACoAAAABAAEAAAADACsAAAABAAEAAAAEACMAAAABAAEAAAAEACQAAAABAAEAAAAEACUAAAABAAEAAAAEACYAAAABAAEAAAAEACkAAAABAAEAAAAEACoAAAABAAEAAAAEACsAAAABAAEAAAAFACMAAAABAAEAAAAFACQAAAABAAEAAAAFACkAAAABAAEAAAAFACoAAAABAAEAAAAGACsAAAABAAEAAAA=")
+tile_set = SubResource("west_gate_collision_tiles")
+
 [connection signal="body_entered" from="Exits/ToRoute5Gate" to="Exits/ToRoute5Gate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute6Gate" to="Exits/ToRoute6Gate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute8Gate" to="Exits/ToRoute8Gate" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute7Gate" to="Exits/ToRoute7Gate" method="_on_body_entered"]
