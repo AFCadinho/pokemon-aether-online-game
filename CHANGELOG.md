@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Populate Cinnabar Island with residents and Pokémon using varied natural pacing, and connect its Pokémon Center with healing, services and a local respawn point.
+
 - Refresh Route 7 and Cinnabar Island visuals from the latest artist Tiled maps.
 
 - Connect Celadon City Gym with its indoor garden maze, walkable pergolas and stairs, animated fountains and safe doorway travel.

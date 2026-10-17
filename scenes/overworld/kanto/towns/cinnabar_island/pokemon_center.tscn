@@ -1,0 +1,90 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="template"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="life_npc"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="life_pokemon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/hiker_frames.tres" id="life_hiker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="life_lass"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_f_frames.tres" id="life_scientist_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_m_frames.tres" id="life_scientist_m"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="life_ss_anne_sailor"]
+
+[node name="PokemonCenter" instance=ExtResource("template")]
+map_id = "kanto_cinnabar_island_pokemon_center"
+map_display_name = "Cinnabar Island Pokémon Center"
+world_access_group_id = "kanto_cinnabar_island"
+world_access_group_label = "Cinnabar Island"
+world_access_area_type = "interior"
+location_id = "kanto.cinnabar_island.pokemon_center"
+location_name = "Cinnabar Island Pokémon Center"
+
+[node name="NurseJoy" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="0"]
+respawn_point_id = "kanto_cinnabar_island_pokemon_center"
+
+[node name="ResearcherAda" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) instance=ExtResource("life_npc")]
+position = Vector2(336, 496)
+npc_id = "kanto_cinnabar_island_pokemon_center_researcher_ada"
+npc_definition_id = "trainer_class_scientist_f"
+npc_sprite_frames = ExtResource("life_scientist_f")
+display_name = "Researcher Ada"
+dialogue_id = "kanto_cinnabar_island_pokemon_center_researcher_ada_default"
+facing_direction = Vector2(0, 1)
+movement_behavior = "idle"
+movement_tiles = 1
+movement_speed_pixels = 36.0
+movement_wait_seconds = 3.0
+movement_wait_jitter_seconds = 1.0
+natural_ambient_movement = true
+
+[node name="SailorFinn" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) instance=ExtResource("life_npc")]
+position = Vector2(528, 816)
+npc_id = "kanto_cinnabar_island_pokemon_center_sailor_finn"
+npc_definition_id = ""
+npc_sprite_frames = ExtResource("life_ss_anne_sailor")
+display_name = "Sailor Finn"
+dialogue_id = "kanto_cinnabar_island_pokemon_center_sailor_finn_default"
+facing_direction = Vector2(0, 1)
+movement_behavior = "idle"
+movement_tiles = 1
+movement_speed_pixels = 40.0
+movement_wait_seconds = 2.0
+movement_wait_jitter_seconds = 1.0
+natural_ambient_movement = true
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Ponyta" parent="Entities/Pokemon" instance=ExtResource("life_pokemon")]
+position = Vector2(368, 496)
+overworld_pokemon_id = "kanto_cinnabar_island_pokemon_center_ponyta_1"
+species_id = "ponyta"
+level = 30
+display_name = "Ponyta"
+dialogue_id = "kanto_cinnabar_island_pokemon_center_ponyta_cry"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_speed_pixels = 34.0
+movement_wait_seconds = 2.9
+movement_wait_jitter_seconds = 1.1
+natural_ambient_movement = true
+
+[node name="Psyduck" parent="Entities/Pokemon" instance=ExtResource("life_pokemon")]
+position = Vector2(560, 816)
+overworld_pokemon_id = "kanto_cinnabar_island_pokemon_center_psyduck_1"
+species_id = "psyduck"
+level = 30
+display_name = "Psyduck"
+dialogue_id = "kanto_cinnabar_island_pokemon_center_psyduck_cry"
+facing_direction = Vector2(0, 1)
+movement_behavior = "idle"
+movement_tiles = 1
+movement_speed_pixels = 28.0
+movement_wait_seconds = 4.0
+movement_wait_jitter_seconds = 1.0
+natural_ambient_movement = true
+
+[node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0"]
+target_scene_path = "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn"
+target_spawn_name = "FromPokecenter"
+transition_id = "kanto_cinnabar_island_pokemon_center__to_outside"
+transition_facing_direction = "down"
