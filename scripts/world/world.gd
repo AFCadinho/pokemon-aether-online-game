@@ -5843,6 +5843,8 @@ func _on_coop_state_changed() -> void:
 	if CoopService.activity.is_empty():
 		if active_battle_kind == "coop":
 			finish_coop_activity.call_deferred()
+		else:
+			_queue_pending_coop_progression()
 		return
 	# A cancelled start has no battle view to dismiss. Leaving it mounted made
 	# both clients remain behind the synchronisation overlay indefinitely after
@@ -5990,10 +5992,19 @@ func _acquire_coop_trainer_outro_input() -> void:
 	GameState.acquire_overworld_input_lock(&"coop_trainer_outro")
 
 
+func _queue_pending_coop_progression() -> void:
+	if is_in_battle or coop_finishing or coop_world_reload_pending or coop_trainer_outro_input_owned:
+		return
+	if not GameState.pending_coop_battle_result.is_empty() or GameState.is_overworld_input_locked():
+		return
+	get_tree().call_group("ui_overlay", "queue_coop_progression_rewards", CoopService.pending_progression_rewards)
+
+
 func _release_coop_trainer_outro_input() -> void:
 	if coop_trainer_outro_input_owned:
 		GameState.release_overworld_input_lock(&"coop_trainer_outro")
 		coop_trainer_outro_input_owned = false
+	_queue_pending_coop_progression.call_deferred()
 
 
 func _coop_battle_result_message(activity: Dictionary) -> String:

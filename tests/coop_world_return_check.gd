@@ -5,6 +5,11 @@ class ReturnPlayer extends CharacterBody2D:
 	func reset_movement_state() -> void:
 		reset_count += 1
 
+class ReturnOverlay extends CanvasLayer:
+	var rewards: Array = []
+	func queue_coop_progression_rewards(value: Array) -> void:
+		rewards = value.duplicate(true)
+
 var failed := false
 var state: Node
 const GARY := "kanto_route_22_gary_bulbasaur"
@@ -25,7 +30,7 @@ func _world() -> Node2D:
 	world.get_node("Player").set_script(ReturnPlayer)
 	world.get_node("UIOverlay").free()
 	world.get_node("ContentCreatorPhotoMode").free()
-	var overlay := CanvasLayer.new()
+	var overlay := ReturnOverlay.new()
 	overlay.name = "UIOverlay"
 	overlay.add_to_group("ui_overlay")
 	world.add_child(overlay)
@@ -159,6 +164,30 @@ func _run() -> void:
 	world._complete_coop_world_return(ordinary, _saved())
 	_check(world.coop_world_reload_pending, "ordinary trainers retain their existing map refresh")
 	await process_frame
+	world.free()
+	current_scene = null
+	state.reset_gameplay_runtime_state()
+	# Durable prompts must wait until the battle, return and outro are finished.
+	world = _world()
+	var overlay: ReturnOverlay = world.get_node("UIOverlay")
+	var coop := root.get_node("CoopService")
+	coop.pending_progression_rewards = [{"battleId": "coop-fixture", "reward": {"moveLearnPrompts": [{"pokemonId": 7, "moveId": "gust"}]}}]
+	world._queue_pending_coop_progression()
+	_check(overlay.rewards.is_empty(), "learning waits while the shared battle is closing")
+	world.is_in_battle = false
+	world.coop_finishing = false
+	world.coop_trainer_outro_input_owned = true
+	world._queue_pending_coop_progression()
+	_check(overlay.rewards.is_empty(), "learning waits for the trainer outro")
+	world.coop_trainer_outro_input_owned = false
+	state.set_pending_coop_battle_result(_activity())
+	world._queue_pending_coop_progression()
+	_check(overlay.rewards.is_empty(), "learning waits across the pending world-result handoff")
+	state.take_pending_coop_battle_result()
+	state.unlock_input()
+	world._queue_pending_coop_progression()
+	_check(overlay.rewards == coop.pending_progression_rewards, "the restored world delivers choices to the existing UI queue")
+	coop.pending_progression_rewards = []
 	world.free()
 	current_scene = null
 	state.reset_gameplay_runtime_state()
