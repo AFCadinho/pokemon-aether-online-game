@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/story/rocket_trio_controller.gd" id="1_controller"]
+[ext_resource type="Script" path="res://scripts/world/story/rocket_trio_actor.gd" id="2_actor"]
+[ext_resource type="Texture2D" path="res://assets/npcs/story/jessie.png" id="3_jessie"]
+[ext_resource type="Texture2D" path="res://assets/npcs/story/james.png" id="4_james"]
+[ext_resource type="Texture2D" path="res://assets/followers/MEOWTH.png" id="5_meowth"]
+
+[node name="RocketTrio" type="Node2D"]
+script = ExtResource("1_controller")
+
+[node name="Jessie" type="AnimatedSprite2D" parent="."]
+position = Vector2(-32, 0)
+script = ExtResource("2_actor")
+sheet = ExtResource("3_jessie")
+initial_direction = "left"
+
+[node name="James" type="AnimatedSprite2D" parent="."]
+position = Vector2(32, 0)
+script = ExtResource("2_actor")
+sheet = ExtResource("4_james")
+initial_direction = "left"
+
+[node name="Meowth" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 32)
+script = ExtResource("2_actor")
+sheet = ExtResource("5_meowth")
+initial_direction = "left"

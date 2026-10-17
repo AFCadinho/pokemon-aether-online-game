@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Continue the Kanto story through a Jessie, James and Meowth sighting on Route 7, a Pokémon rescue battle in southeast Celadon, and Team Rocket’s escape; Adventure Parties face the same four Pokémon in doubles.
+
 - Refresh Cinnabar Island from the artist TMX, including its new animated lava pool.
 
 - Restore Adventure Party level-up move and evolution choices, retaining unfinished choices across reconnects.

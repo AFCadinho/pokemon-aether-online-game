@@ -23,6 +23,7 @@ const ORDINARY_TRAINERS := [
 
 
 func trainer_entity(trainer_id: String) -> String:
+	if trainer_id == "kanto_celadon_jessie_james": return trainer_id
 	if trainer_id in ORDINARY_TRAINERS or trainer_id == "kanto_alpha_gym_brock": return trainer_id
 	if trainer_id in ["kanto_route_22_gary_rival", "kanto_route_22_gary_bulbasaur", "kanto_route_22_gary_squirtle", "kanto_route_22_gary_charmander"]:
 		return "kanto_route_22_gary_oak"
