@@ -33,6 +33,7 @@ var party: Dictionary = {}
 var invitations: Array = []
 var activity: Dictionary = {}
 var view: Dictionary = {}
+var pending_progression_rewards: Array = []
 var pending_command: Dictionary = {}
 var pending_start: Dictionary = {}
 var command_in_flight := false
@@ -87,6 +88,7 @@ func reset() -> void:
 	invitations = []
 	activity = {}
 	view = {}
+	pending_progression_rewards = []
 	pending_command = {}
 	pending_start = {}
 	command_in_flight = false
@@ -139,6 +141,7 @@ func refresh() -> Dictionary:
 
 
 func apply_state(body: Dictionary) -> void:
+	pending_progression_rewards = body.get("pendingProgressionRewards", []) if body.get("pendingProgressionRewards") is Array else []
 	var previous_activity: Dictionary = activity.duplicate(true)
 	party = body.get("party", {}) if body.get("party") is Dictionary else {}
 	# Godot parses JSON numbers as floats (e.g. 7.0), but the server's public

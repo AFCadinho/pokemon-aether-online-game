@@ -865,6 +865,7 @@ var move_learn_skip_button: Button
 var move_learn_move_buttons: Array[Button] = []
 var move_learn_selected_replace_slot := -2
 var move_learn_hover_panel: PanelContainer
+var coop_progression_seen: Dictionary = {}
 var move_learn_queue: Array[Dictionary] = []
 var move_learn_active_prompt: Dictionary = {}
 var move_learn_pending_review_total := 0
@@ -5133,6 +5134,43 @@ func _hide_evolution_overlay() -> void:
 		evolution_overlay.visible = false
 	_reset_evolution_visuals()
 
+# Polling may repeat a receipt, including while its choice request is in flight.
+# A new overlay after reconnect reads the server's still-open choices again.
+
+func queue_coop_progression_rewards(rewards: Array) -> void:
+	for entry_value: Variant in rewards:
+		if not entry_value is Dictionary:
+			continue
+		var entry: Dictionary = entry_value
+		var battle_id := str(entry.get("battleId", ""))
+		if battle_id.is_empty() or not entry.get("reward") is Dictionary:
+			continue
+		var reward: Dictionary = entry["reward"]
+		var fresh := {"moveLearnPrompts": [], "evolutionPrompts": []}
+		for field: String in ["moveLearnPrompts", "evolutionPrompts"]:
+			var prompts: Variant = reward.get(field, [])
+			if not prompts is Array:
+				continue
+			for prompt_value: Variant in prompts:
+				if not prompt_value is Dictionary:
+					continue
+				var prompt: Dictionary = prompt_value
+				var pokemon_id := int(prompt.get("pokemonId", 0))
+				var pokemon := _find_party_pokemon_by_owned_id(pokemon_id)
+				if pokemon == null or pokemon.borrowed:
+					continue
+				var choice := _move_learn_prompt_move_id(prompt) if field == "moveLearnPrompts" else _evolution_prompt_target_species_id(prompt)
+				if field == "moveLearnPrompts" and _pokemon_knows_move_id(pokemon, choice):
+					continue
+				var key := "%s:%s:%s:%s" % [battle_id, field, pokemon_id, choice]
+				if coop_progression_seen.has(key):
+					continue
+				coop_progression_seen[key] = true
+				fresh[field].append(prompt.duplicate(true))
+		if not fresh["moveLearnPrompts"].is_empty() or not fresh["evolutionPrompts"].is_empty():
+			queue_reward_move_learn_candidates(fresh)
+
+
 func queue_reward_move_learn_candidates(reward_value: Variant) -> void:
 	if not (reward_value is Dictionary):
 		return
@@ -5655,6 +5693,16 @@ func _queue_move_learn_prompt(prompt_value: Dictionary) -> bool:
 	if int(prompt.get("pokemonId", 0)) <= 0:
 		return false
 
+	var pending: Array = move_learn_queue.duplicate()
+	if not move_learn_active_prompt.is_empty():
+		pending.append(move_learn_active_prompt)
+	for existing: Dictionary in pending:
+		if (
+			int(existing.get("pokemonId", 0)) == int(prompt["pokemonId"])
+			and _move_learn_prompt_move_id(existing) == move_id
+			and str(existing.get("sourceItemId", "")) == str(prompt.get("sourceItemId", ""))
+		):
+			return false
 	var species := str(prompt.get("species", "Pokemon")).strip_edges()
 	prompt["species"] = species if species != "" else "Pokemon"
 	move_learn_queue.append(prompt)
