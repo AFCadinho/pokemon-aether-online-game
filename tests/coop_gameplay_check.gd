@@ -81,7 +81,13 @@ func _run() -> void:
 	var host := Control.new()
 	host.visible = false
 	root.add_child(host)
-	var mounted_world = load("res://tests/fixtures/coop_world_fixture.gd").new()
+	var mounted_world: Variant = Node2D.new()
+	root.add_child(mounted_world)
+	mounted_world.set_script(load("res://tests/fixtures/coop_world_fixture.gd"))
+	mounted_world.set_process(false)
+	var transition := WildEncounterTransition.new()
+	root.add_child(transition)
+	mounted_world.wild_encounter_transition = transition
 	mounted_world.battle_ui_host = host
 	mounted_world.coop_world_ready = true
 	var coop_world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
@@ -755,8 +761,12 @@ func _run() -> void:
 		"generic double attack and hit animation restore only the affected sprite")
 	mounted_world._on_coop_state_changed()
 	_expect(host.get_child_count() == 1, "repeated snapshots do not mount duplicate battle scenes")
+	mounted_world._clear_battle_ui_instance()
 	mounted_world.free()
+	transition.queue_free()
 	host.queue_free()
+	await process_frame
+	await process_frame
 	var story := root.get_node("StoryService")
 	story.apply_story({"quests": [{"questId": "oaks_parcel", "status": "completed"}, {"questId": "reach_viridian_city", "status": "completed"}]})
 	var gary = load("res://scripts/world/npcs/base_npc.gd").new()

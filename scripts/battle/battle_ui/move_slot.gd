@@ -64,10 +64,12 @@ func set_move_data(move_data: Dictionary) -> void:
 	]
 	var move_type := _get_move_type(move_data)
 	_set_type_banner(move_type)
-	var is_z_move := bool(move_data.get("zMove", false))
+	var z_move_value: Variant = move_data.get("zMove", false)
+	var is_z_move: bool = z_move_value is bool and z_move_value
 	_apply_type_style(move_type, disabled, is_z_move)
 	
-	if bool(move_data.get("zMoveUnavailable", false)):
+	var unavailable_value: Variant = move_data.get("zMoveUnavailable", false)
+	if unavailable_value is bool and unavailable_value:
 		effectiveness_label.text = _t("battle.move.no_z_move")
 		effectiveness_label.add_theme_color_override("font_color", Color("#9ba5b8"))
 	elif is_z_move:

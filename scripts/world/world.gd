@@ -3920,21 +3920,22 @@ func _begin_pending_trainer_entry(trainer_data: Dictionary, started_at_msec: int
 	return true
 
 
-func _mount_prepared_wild_battle_ui(started_at_msec: int) -> bool:
+func _mount_prepared_wild_battle_ui(started_at_msec: int, force_immersive := false) -> bool:
 	if (
 		is_instance_valid(prepared_wild_battle)
 		and is_instance_valid(prepared_wild_host)
 		and prepared_wild_host.get_meta("prewarm_layout", "") == SettingsManager.battle_ui_layout
 		and prepared_wild_host.get_meta("prewarm_mode", "") == SettingsManager.battle_presentation_mode
 		and prepared_wild_host.get_meta("prewarm_android_quality", "ultra") == SettingsManager.android_quality_preset
-		and _uses_fullscreen_battle()
+		and (_uses_fullscreen_battle() or force_immersive)
+		and prepared_wild_battle.has_meta("immersive_battle_ui") == (force_immersive or SettingsManager.battle_ui_layout == "immersive")
 	):
 		battle_instance = prepared_wild_battle
 		battle_screen_host = prepared_wild_host
 		prepared_wild_battle = null
 		prepared_wild_host = null
 		var entry_style := wild_encounter_transition.transition_style if is_instance_valid(wild_encounter_transition) and wild_encounter_transition.visible else WildEncounterTransition.STYLE_WILD
-		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"), entry_style, false, wild_encounter_transition.overworld_snapshot)
+		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"), entry_style, force_immersive, wild_encounter_transition.overworld_snapshot)
 		battle_ui_host.visible = true
 		if battle_instance.has_signal("battle_ended"):
 			battle_instance.battle_ended.connect(_on_battle_ended)
@@ -3946,16 +3947,22 @@ func _mount_prepared_wild_battle_ui(started_at_msec: int) -> bool:
 	_trace_mobile_wild_transition("ui_instantiated", started_at_msec)
 	if not is_instance_valid(battle_instance) or not is_in_battle:
 		return false
-	return _attach_battle_ui()
+	return _attach_battle_ui(force_immersive)
 
 
-func _prewarm_wild_battle_ui() -> void:
-	if not _uses_fullscreen_battle():
+func _prewarm_wild_battle_ui(force_immersive := false) -> void:
+	if not _uses_fullscreen_battle() and not force_immersive:
 		return
 	if is_in_battle or wild_battle_resume_pending:
 		return
+	var immersive := force_immersive or SettingsManager.battle_ui_layout == "immersive"
 	if is_instance_valid(prepared_wild_battle) and is_instance_valid(prepared_wild_host):
-		if prepared_wild_host.get_meta("prewarm_layout", "") == SettingsManager.battle_ui_layout and prepared_wild_host.get_meta("prewarm_mode", "") == SettingsManager.battle_presentation_mode and prepared_wild_host.get_meta("prewarm_android_quality", "ultra") == SettingsManager.android_quality_preset:
+		if (
+			prepared_wild_host.get_meta("prewarm_layout", "") == SettingsManager.battle_ui_layout
+			and prepared_wild_host.get_meta("prewarm_mode", "") == SettingsManager.battle_presentation_mode
+			and prepared_wild_host.get_meta("prewarm_android_quality", "ultra") == SettingsManager.android_quality_preset
+			and prepared_wild_battle.has_meta("immersive_battle_ui") == immersive
+		):
 			return
 		_discard_prepared_wild_battle_ui()
 	if not is_inside_tree() or battle_ui_host == null or BATTLE_SCENE == null:
@@ -3972,7 +3979,7 @@ func _prewarm_wild_battle_ui() -> void:
 		return
 	host.visible = false
 	battle_ui_host.add_child(host)
-	host.prewarm_battle(prepared, SettingsManager.battle_ui_layout == "immersive")
+	host.prewarm_battle(prepared, immersive)
 	StartupTiming.record("battle_ui_prewarm", started_at_msec * 1000)
 	host.set_meta("prewarm_layout", SettingsManager.battle_ui_layout)
 	host.set_meta("prewarm_mode", SettingsManager.battle_presentation_mode)
@@ -5845,6 +5852,8 @@ func _on_coop_state_changed() -> void:
 			finish_coop_activity.call_deferred()
 		else:
 			_queue_pending_coop_progression()
+			if not CoopService.party.is_empty():
+				_prewarm_wild_battle_ui.call_deferred(true)
 		return
 	# A cancelled start has no battle view to dismiss. Leaving it mounted made
 	# both clients remain behind the synchronisation overlay indefinitely after
@@ -5864,20 +5873,30 @@ func _on_coop_state_changed() -> void:
 	if is_in_battle and active_battle_kind != "coop":
 		return
 	if active_battle_kind != "coop":
-		if not _mount_battle_ui(true):
+		# Use the same prepared screen and early arena fade as single battles.
+		# Rebuilding the full battle UI here froze the overworld before fading.
+		wild_encounter_transition.begin(WildEncounterTransition.STYLE_FULLSCREEN_FADE)
+		var started_at_msec := Time.get_ticks_msec()
+		is_in_battle = true
+		active_battle_kind = "coop"
+		_lock_overworld_for_battle()
+		if not _mount_prepared_wild_battle_ui(started_at_msec, true):
+			_abort_battle_start(true)
+			wild_encounter_transition.reveal()
 			CoopService.request_failed.emit("Could not open the shared battle. Retrying…")
 			return
 		if not battle_instance.setup_coop_battle():
-			_clear_battle_ui_instance()
+			_abort_battle_start(true)
+			wild_encounter_transition.reveal()
 			CoopService.request_failed.emit("Could not prepare the shared battle. Retrying…")
 			return
 		var model_stage: Node = battle_instance.animation_router.model_presenter
 		if is_instance_valid(model_stage):
 			var coop_kind := "wild" if str(CoopService.activity.get("activityId", "")).begins_with("wild_") else "trainer"
 			model_stage.set_battle_context(_resolve_battle_environment_id(coop_kind, CoopService.activity), coop_kind)
-		is_in_battle = true
-		active_battle_kind = "coop"
-		_lock_overworld_for_battle()
+		if is_instance_valid(battle_screen_host):
+			battle_screen_host.reveal_pending_entry()
+		wild_encounter_transition.reveal()
 	active_battle_id = str(CoopService.activity.get("battleId", ""))
 	if CoopService.activity.get("status") in ["starting", "active"]:
 		_play_coop_battle_music(str(CoopService.activity.get("activityId", "")))
