@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add localized text and illustrated portraits to all Cinnabar Island signs, including an abandoned-building KEEP OUT warning at Pokémon Mansion and readable Gym signage.
+
 - Populate Cinnabar Island with residents and Pokémon using varied natural pacing, and connect its Pokémon Center with healing, services and a local respawn point.
 
 - Refresh Route 7 and Cinnabar Island visuals from the latest artist Tiled maps.

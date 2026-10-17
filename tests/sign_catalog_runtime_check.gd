@@ -3,6 +3,10 @@ extends SceneTree
 const SIGN_TEXT_ROOT := "res://data/world_text/signs"
 const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt_BR", "zh_CN"]
 const EXPECTED_SIGN_MAPS: Dictionary = {
+	"kanto_cinnabar_island_town_sign": "kanto_cinnabar_island",
+	"kanto_cinnabar_island_pokemon_mansion": "kanto_cinnabar_island",
+	"kanto_cinnabar_island_research_lab": "kanto_cinnabar_island",
+	"kanto_cinnabar_island_gym": "kanto_cinnabar_island",
 	"kanto_cerulean_city_town_sign": "kanto_cerulean_city",
 	"kanto_cerulean_city_gym": "kanto_cerulean_city",
 	"kanto_cerulean_city_bike_shop": "kanto_cerulean_city",
