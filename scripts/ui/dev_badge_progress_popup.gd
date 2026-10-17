@@ -65,6 +65,9 @@ const STORY_CHECKPOINTS: Array[Dictionary] = [
 	{"id": "pokemon_tower_gary", "chapter_id": "pokemon_tower", "label_key": "ui.staff.story_checkpoint.pokemon_tower_gary"},
 	{"id": "find_saffron_route", "chapter_id": "after_tower", "label_key": "ui.staff.story_checkpoint.find_saffron_route"},
 	{"id": "find_secret_route", "chapter_id": "after_tower", "label_key": "ui.staff.story_checkpoint.find_secret_route"},
+	{"id": "rocket_route7", "chapter_id": "celadon", "label_key": "ui.staff.story_checkpoint.rocket_route7"},
+	{"id": "rocket_celadon_battle", "chapter_id": "celadon", "label_key": "ui.staff.story_checkpoint.rocket_celadon_battle"},
+	{"id": "rocket_celadon_escape", "chapter_id": "celadon", "label_key": "ui.staff.story_checkpoint.rocket_celadon_escape"},
 ]
 const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "pallet", "label_key": "ui.staff.story_chapter.pallet"},
@@ -77,6 +80,7 @@ const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "lavender", "label_key": "ui.staff.story_chapter.lavender"},
 	{"id": "pokemon_tower", "label_key": "ui.staff.story_chapter.pokemon_tower"},
 	{"id": "after_tower", "label_key": "ui.staff.story_chapter.after_tower"},
+	{"id": "celadon", "label_key": "ui.staff.story_chapter.celadon"},
 	{"id": "saffron", "label_key": "ui.staff.story_chapter.saffron"},
 ]
 const SIDE_QUESTS: Array[Dictionary] = [

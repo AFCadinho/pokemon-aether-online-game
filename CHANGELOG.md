@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Continue the Kanto story through a Jessie, James and Meowth sighting on Route 7, a Pokémon rescue battle in southeast Celadon, and Team Rocket’s escape; Adventure Parties face the same four Pokémon in doubles.
+
 - Connect Route 7 and Saffron City through a staffed horizontal gate, with safe return arrivals and the existing Saffron access rules.
 
 - Populate Route 7 with five residents and six ambient Pokémon, with localized dialogue and independent movement speeds and pauses.
