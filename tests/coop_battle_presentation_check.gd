@@ -308,6 +308,7 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_expect(effects_ref.get_ref() == null, "closing a battle releases its owned effect layer")
+	await _check_settled_escape_return()
 	pair = null
 	await create_timer(0.2).timeout
 	# SpriteBox deliberately shares render resources across battles. Explicitly
@@ -318,6 +319,53 @@ func _run() -> void:
 	service.reset()
 	print("PASS coop_battle_presentation_check" if not failed else "FAIL coop_battle_presentation_check")
 	quit(1 if failed else 0)
+
+
+func _check_settled_escape_return() -> void:
+	var service := root.get_node("CoopService")
+	for participant: String in ["p1", "p3"]:
+		service.reset()
+		var activity := {"reservationId": "escape", "battleId": "escape-fixture", "status": "active"}
+		var snapshot := {"battleId": "escape-fixture", "revision": 1, "decisionId": "coop-1",
+			"participant": participant, "locked": true, "ended": false, "eventCursor": 8, "events": [],
+			"exitRequest": {"type": "run", "requestedBy": "p1"}}
+		service.apply_state({"activity": activity, "view": snapshot})
+		var return_world := ReturnWorld.new()
+		root.add_child(return_world)
+		return_world.add_to_group("world")
+		var panel = load("res://scripts/battle/coop_battle_panel.gd").new()
+		root.add_child(panel)
+		await process_frame
+		await process_frame
+		_expect(return_world.finish_calls == 0, "A single Run request never returns either Trainer early")
+		panel._capture_animation_pending = true
+		activity.status = "finished"
+		activity.escaped = true
+		# Settlement is authoritative even if this client's last view is older.
+		service.apply_state({"activity": activity, "view": snapshot})
+		panel.displayed_cursor = 6
+		await process_frame
+		await process_frame
+		_expect(return_world.finish_calls == 0 and panel._final_event_playback_pending(),
+			"Settled escape still waits for a confirmed capture animation")
+		panel._capture_animation_pending = false
+		panel._playing = true
+		await process_frame
+		_expect(return_world.finish_calls == 0, "Settled escape still waits for active animation playback")
+		panel._playing = false
+		_expect(not panel._final_event_playback_pending(),
+			"Settled escape does not wait for an extra terminal projection or event cursor")
+		for frame in 3:
+			await process_frame
+		_expect(return_world.finish_calls == 1,
+			"Both Trainers return within frames after confirmed escape and animation completion")
+		service.state_changed.emit()
+		await process_frame
+		_expect(return_world.finish_calls == 1, "Repeated settled escape polls do not duplicate world return")
+		panel.queue_free()
+		return_world.queue_free()
+		await process_frame
+		await process_frame
 
 
 func _expect(condition: bool, message: String) -> void:

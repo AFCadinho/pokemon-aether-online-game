@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Return Adventure Parties sooner after both Trainers confirm Run, while preserving saved battle state.
+
 - Reuse the prepared battle screen for smooth doubles entry and fix move-button errors from nullable Z-Move metadata.
 
 - Keep doubles move and stat effects in 3D, with the correct attacker and target attachments for all four Pokémon.
