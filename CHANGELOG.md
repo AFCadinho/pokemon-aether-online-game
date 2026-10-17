@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Connect Route 7 and Saffron City through a staffed horizontal gate, with safe return arrivals and the existing Saffron access rules.
+
 - Populate Route 7 with five residents and six ambient Pokémon, with localized dialogue and independent movement speeds and pauses.
 
 - Add localized text and illustrated portraits to all Cinnabar Island signs, including an abandoned-building KEEP OUT warning at Pokémon Mansion and readable Gym signage.
