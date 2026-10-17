@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Populate Route 7 with five residents and six ambient Pokémon, with localized dialogue and independent movement speeds and pauses.
+
 - Add localized text and illustrated portraits to all Cinnabar Island signs, including an abandoned-building KEEP OUT warning at Pokémon Mansion and readable Gym signage.
 
 - Populate Cinnabar Island with residents and Pokémon using varied natural pacing, and connect its Pokémon Center with healing, services and a local respawn point.

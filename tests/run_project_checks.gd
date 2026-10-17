@@ -303,6 +303,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/vermilion_population_check.gd",
 	"res://tests/vermilion_city_pokemon_movement_check.gd",
 	"res://tests/route_6_pokemon_movement_check.gd",
+	"res://tests/route_7_population_check.gd",
 	"res://tests/vermilion_pokemon_center_check.gd",
 	"res://tests/cinnabar_pokemon_center_check.gd",
 	"res://tests/cinnabar_population_check.gd",
