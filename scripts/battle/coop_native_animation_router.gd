@@ -1,7 +1,7 @@
 extends "res://scripts/battle/coop_animation_router.gd"
 
-# A native double battle still uses the singles move catalog. Map its two
-# animation aliases to the actual pair of the four visible Pokémon sprites.
+# 3D keeps the four real controller IDs for model/bone attachments. The 2D
+# catalog uses a separate pair of presentation aliases for visible sprites.
 var _sprites_by_alias: Dictionary = {}
 var _boxes_by_alias: Dictionary = {}
 var _controllers_by_alias: Dictionary = {}
@@ -10,6 +10,10 @@ var _sprite_poses: Dictionary = {}
 
 
 func bind_native_pair(actor: String, target: String, sprites: Dictionary, boxes: Dictionary) -> Dictionary:
+	if uses_realtime_3d():
+		if not model_presenter.handles(actor) or not model_presenter.handles(target):
+			return {}
+		return {"actor": actor, "target": target}
 	var actor_sprite := sprites.get(actor) as AnimatedSprite2D
 	var target_sprite := sprites.get(target) as AnimatedSprite2D
 	var actor_box := boxes.get(actor) as Control
@@ -24,6 +28,18 @@ func bind_native_pair(actor: String, target: String, sprites: Dictionary, boxes:
 	_boxes_by_alias = {actor_alias: actor_box, target_alias: target_box}
 	_controllers_by_alias = {actor_alias: actor, target_alias: target}
 	return {"actor": actor_alias, "target": target_alias}
+
+
+func has_move_animation(move_name: String) -> bool:
+	# Unsupported native VFX still get model motion. Never consult sprite sheets
+	# or suppress a supported 3D move because its old 2D catalog entry is absent.
+	return true if uses_realtime_3d() else super.has_move_animation(move_name)
+
+
+func _start_3d_audio(kind: String, key: String, prepared_plan: Dictionary = {}, begin_immediately := true) -> Node:
+	if not audible:
+		return null
+	return await super._start_3d_audio(kind, key, prepared_plan, begin_immediately)
 
 
 func _get_effect_target_anchor_in_parent(player_id: String, parent_node: Node, anchor_point := "center") -> Vector2:
@@ -216,6 +232,8 @@ func _get_sprite_box_for_ident(_ident: String) -> Node:
 
 
 func play_stat_change_tween_for_target(target_ident: String, amount: int) -> void:
+	if uses_realtime_3d():
+		return
 	if amount == 0 or not SettingsManager.battle_animations:
 		return
 	var sprite := _get_sprite_for_ident(target_ident)

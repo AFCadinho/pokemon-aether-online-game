@@ -348,6 +348,7 @@ func _ready() -> void:
 	effect_layer.add_child(_effects)
 	if _native_mode:
 		_native_move_router = NATIVE_MOVE_ROUTER.new()
+		_native_move_router.set("model_presenter", _model_presenter())
 		_native_move_router.call("setup", embedded_hosts["player_sprite"], embedded_hosts["enemy_sprite"], effect_layer,
 			Callable(self, "_native_animation_allowed"))
 	if not _native_mode:
@@ -1732,9 +1733,10 @@ func _animate_event(event: Dictionary, batch: Array = []) -> void:
 				_capture_feedback_until_msec = Time.get_ticks_msec() + 4000
 			"move":
 				if SettingsManager.battle_animations:
-					if model != null and model.handles(controller):
-						await model.play_action(controller, model.attack_action_for(str(event.get("move", "")), controller))
-					else:
+					# The 3D router owns model motion, attachment clocks and VFX as
+					# one lifetime. Starting a separate action first repeats the move
+					# and leaves its particles bound to an already finished clock.
+					if _native_move_router == null or not _native_move_router.call("uses_realtime_3d"):
 						await _play_native_attack(controller)
 					await _play_native_catalog_move(event, batch)
 			"-damage", "-heal":
@@ -1955,7 +1957,7 @@ func _play_native_catalog_move(event: Dictionary, batch: Array) -> void:
 	if actor not in SLOTS:
 		return
 	# Move logs provide every affected slot for spread moves. Play each visual
-	# against its actual sprite in turn, while only the first target owns audio.
+	# against its actual model/sprite in turn; only the first target owns audio.
 	# Self and field moves fall back to the actor as their visual anchor.
 	if targets.is_empty():
 		targets.append(actor)

@@ -42,6 +42,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/coop_sprite_download_check.gd",
 	"res://tests/coop_3d_doubles_hud_check.gd",
 	"res://tests/coop_3d_faint_persistence_check.gd",
+	"res://tests/coop_3d_move_routing_check.gd",
 	"res://tests/mount_performance_check.gd",
 	"res://tests/player_map_layer_cache_check.gd",
 	"res://tests/battle_display_data_presenter_check.gd",
