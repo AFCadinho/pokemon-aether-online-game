@@ -1401,6 +1401,10 @@ func _auto_return_after_finish() -> void:
 func _final_event_playback_pending() -> bool:
 	if _capture_animation_pending or _playing:
 		return true
+	# The settled escape receipt already proves that both Trainers left safely.
+	# There is no finishing attack to wait for in a later terminal projection.
+	if CoopService.activity.get("status") == "finished" and CoopService.activity.get("escaped", false):
+		return false
 	# Settlement can reach this client before its poll receives the terminal
 	# projection.  Do not leave the scene with an older cursor: the other
 	# Trainer's finishing move must play on both clients.
