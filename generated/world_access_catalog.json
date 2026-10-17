@@ -1484,9 +1484,21 @@
 			"locationGroupId": "kanto_cinnabar_island",
 			"locationGroupLabel": "Cinnabar Island",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://dqi5pnfpbt4kq"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn",
 			"spawnPoints": {
+				"from_pokecenter": {
+					"facingDirection": "down",
+					"label": "Pokémon Center",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPokecenter",
+					"tile": {
+						"x": 33,
+						"y": 49
+					}
+				},
 				"from_route_20": {
 					"facingDirection": "down",
 					"label": "Route 20",
@@ -1519,6 +1531,39 @@
 				}
 			},
 			"weatherProfile": "outdoor"
+		},
+		"kanto_cinnabar_island_pokemon_center": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Cinnabar Island Pokémon Center",
+			"locationGroupId": "kanto_cinnabar_island",
+			"locationGroupLabel": "Cinnabar Island",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/pokemon_center.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "down",
+					"label": "Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 14,
+						"y": 31
+					}
+				},
+				"heal_npc": {
+					"facingDirection": "down",
+					"label": "Heal NPC",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "HealNPC",
+					"tile": {
+						"x": 14,
+						"y": 23
+					}
+				}
+			},
+			"weatherProfile": "disabled"
 		},
 		"kanto_diglett_cave_route_11_entrance": {
 			"areaType": "interior",
@@ -7241,6 +7286,20 @@
 			"destinationAreaId": "kanto_cerulean_city",
 			"sourceMapId": "kanto_cerulean_city_pokemon_center"
 		},
+		"kanto_cinnabar_island__to_pokemon_center": {
+			"destination": {
+				"mapId": "kanto_cinnabar_island_pokemon_center",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/pokemon_center.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_cinnabar_island_pokemon_center",
+			"sourceMapId": "kanto_cinnabar_island"
+		},
 		"kanto_cinnabar_island__to_route21": {
 			"destination": {
 				"mapId": "kanto_route_21",
@@ -7256,6 +7315,22 @@
 			},
 			"destinationAreaId": "kanto_route_21",
 			"sourceMapId": "kanto_cinnabar_island"
+		},
+		"kanto_cinnabar_island_pokemon_center__to_outside": {
+			"destination": {
+				"mapId": "kanto_cinnabar_island",
+				"mapSceneAliases": [
+					"uid://dqi5pnfpbt4kq"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn",
+				"position": {
+					"x": 1072.0,
+					"y": 1584.0
+				},
+				"spawnMarker": "FromPokecenter"
+			},
+			"destinationAreaId": "kanto_cinnabar_island",
+			"sourceMapId": "kanto_cinnabar_island_pokemon_center"
 		},
 		"kanto_diglett_cave_route_11_entrance__to_route11": {
 			"destination": {
@@ -9040,7 +9115,9 @@
 		"kanto_route_21__to_cinnabar_island": {
 			"destination": {
 				"mapId": "kanto_cinnabar_island",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dqi5pnfpbt4kq"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn",
 				"position": {
 					"x": 1040.0,
