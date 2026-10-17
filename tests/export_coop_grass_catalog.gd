@@ -3,6 +3,7 @@ extends SceneTree
 const MAPS := {
 	"kanto_route_1": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
 	"kanto_route_2": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
+	"kanto_route_6": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
 	"kanto_route_22": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
 	"kanto_viridian_forest": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
 }
@@ -29,7 +30,7 @@ func _run() -> void:
 			"tileSize": [grass.tile_set.tile_size.x, grass.tile_set.tile_size.y], "cells": cells}
 		map.free()
 	var args := OS.get_cmdline_user_args()
-	if args.size() < 1 or args.size() > 2 or result["maps"].size() != 4:
+	if args.size() < 1 or args.size() > 2 or result["maps"].size() != MAPS.size():
 		quit(1)
 		return
 	if args.size() == 2:
