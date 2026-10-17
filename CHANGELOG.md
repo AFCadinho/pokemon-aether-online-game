@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Cinnabar Island from the artist TMX, including its new animated lava pool.
+
 - Restore Adventure Party level-up move and evolution choices, retaining unfinished choices across reconnects.
 
 - Connect Route 7 and Saffron City through a staffed horizontal gate, with safe return arrivals and the existing Saffron access rules.
