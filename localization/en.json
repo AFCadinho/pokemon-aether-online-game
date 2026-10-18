@@ -7362,5 +7362,12 @@
   "ui.staff.story_checkpoint.rocket_route7": "Route 7: suspicious trio",
   "ui.staff.story_checkpoint.rocket_celadon_battle": "Celadon: rescue battle",
   "ui.staff.story_checkpoint.rocket_celadon_escape": "Celadon: Team Rocket flees",
+  "ui.staff.story_chapter.game_corner": "Game Corner & Rocket Hideout",
+  "ui.staff.story_checkpoint.celadon_mira_inquiry": "Celadon: ask Mira about Team Rocket",
+  "ui.staff.story_checkpoint.challenge_erika": "Celadon: challenge Erika",
+  "ui.staff.story_checkpoint.celadon_erika_inquiry": "Celadon: ask Erika about Team Rocket",
+  "ui.staff.story_checkpoint.game_corner_guard": "Game Corner: confront the attendant",
+  "ui.staff.story_checkpoint.game_corner_guard_escape": "Game Corner: guard flees",
+  "ui.staff.story_checkpoint.rocket_hideout_boss": "Rocket Hideout: confront the boss",
   "npc.celadon.mira": "Trainer Mira"
 }

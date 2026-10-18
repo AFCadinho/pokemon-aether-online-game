@@ -7360,5 +7360,12 @@
   "ui.staff.story_checkpoint.rocket_route7": "7号道路：可疑的三人组",
   "ui.staff.story_checkpoint.rocket_celadon_battle": "玉虹市：救援战斗",
   "ui.staff.story_checkpoint.rocket_celadon_escape": "玉虹市：火箭队逃走",
+  "ui.staff.story_chapter.game_corner": "游戏城与火箭队基地",
+  "ui.staff.story_checkpoint.celadon_mira_inquiry": "玉虹市：向米拉打听火箭队",
+  "ui.staff.story_checkpoint.challenge_erika": "玉虹市：挑战莉佳",
+  "ui.staff.story_checkpoint.celadon_erika_inquiry": "玉虹市：向莉佳打听火箭队",
+  "ui.staff.story_checkpoint.game_corner_guard": "游戏城：质问工作人员",
+  "ui.staff.story_checkpoint.game_corner_guard_escape": "游戏城：守卫逃跑",
+  "ui.staff.story_checkpoint.rocket_hideout_boss": "火箭队基地：与首领对峙",
   "npc.celadon.mira": "训练家米拉"
 }
