@@ -81,6 +81,16 @@ forty standing spots, collision, safe doorway travel, atlas layout and registrat
 Account-service tests check the authoritative city/interior round trip. A live
 player walkthrough has not been performed.
 
+The Game Corner has a black `FloorVisibilityMask` around its 896 × 672 canvas.
+Host Iris can be approached across the reception counter; Bram stands on a
+walkable cushion, and Ava, Niels and Faye patrol separate short lanes.
+Meowth and Pikachu wander independently while Porygon watches a screen.
+All eight added visitors have dialogue in English, Dutch, Brazilian Portuguese
+and Simplified Chinese. Their lanes avoid the entrance, guard and hideout
+approaches. `tests/game_corner_population_check.gd` verifies the mask polygons,
+reception interaction, artwork, access and actual patrol movement; game-content's
+`tests/test_game_corner_population.py` checks localized catalog resolution.
+
 ## Celadon Gym
 
 The active artist `Celadon Gym.tmx` is imported into
