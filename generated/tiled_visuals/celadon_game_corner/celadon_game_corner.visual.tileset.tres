@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3 uid="uid://bqcqhkewl86ju"]
+[gd_resource type="TileSet" format=3]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_1_0.texture.res" id="1_hgndo"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_1025_0.texture.res" id="2_ateof"]
@@ -59,12 +59,6 @@ texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bqqh4"]
 texture = ExtResource("4_6puek")

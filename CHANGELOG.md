@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh the Celadon Game Corner visual from the latest artist TMX.
+
 - Add five Celadon Department Store shoppers and four companion Pokémon, with localized dialogue and independently paced movement; align server shop checks with the repositioned Z-Crystal and Mega Stone vendors.
 
 - Refresh Celadon Department Store’s visual from the revised artist TMX, including its four-layer layout and updated furnishings.
