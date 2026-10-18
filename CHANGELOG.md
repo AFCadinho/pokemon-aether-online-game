@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Populate Celadon Gym with four Grass-type trainers and Gym Leader Erika, including her portrait and Rainbow Badge presentation.
+
 - Make Mira and her rescued Eevee ordinary Celadon overworld actors with blocking tiles, manual interaction and story-aware dialogue after Team Rocket escapes.
 
 - Let Jessie and James finish their full alternating motto during the Celadon confrontation, ending with Meowth's catchphrase before they notice the player.
