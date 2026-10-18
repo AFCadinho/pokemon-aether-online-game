@@ -133,3 +133,27 @@ place of unsupported TM Snatch. No further Tower rescue chapter is introduced.
 Run `tests/rocket_hideout_population_check.gd` for native actor, availability
 and spin-aware reachability checks; `-- --render` additionally saves complete
 Godot floor previews under `.tmp/` using the graphical rendering backend.
+
+
+## Soundtrack
+
+All four basement floors and the elevator cabin use music profile
+`kanto.rocket_hideout`, resolving to
+`overworld.kanto.interior.rocket_hideout_remastered_zame` in the music catalog.
+The shared path lets MusicManager continue the playing track across floor and
+cabin changes; its existing end-of-track handler repeats the soundtrack.
+
+Asset: `assets/music/overworld/kanto/interiors/rocket_hideout_remastered_zame.ogg`.
+User-supplied source: `Team Rocket Hideout Remastered ► Pokémon Fire Red & Leaf Green - Zame (128k).mp3`.
+Converted with FFmpeg/libvorbis, quality 5, 48 kHz stereo, preserving the full
+161.045354-second duration. Title and artist (Zame) are retained as OGG tags.
+
+- Source SHA-256: `4fa1de02d0a964b12f664e0ea41d35624ba39a52dc98105dad32a0f9008326bf`
+- OGG SHA-256: `1fa6cc4d539354059237ad1d85281776519953589c51db99dfbecf5d12656d70`
+
+The new OGG is tracked with this feature, like the existing Rival soundtrack,
+so local checkouts receive the asset alongside its catalog registration.
+Release exports use the separately managed music pack; include this track in
+the next music-pack build/publication. This task does not publish an asset pack.
+`tests/map_music_profile_check.gd` verifies decoding and runtime track selection
+on B1F–B4F and the cabin.
