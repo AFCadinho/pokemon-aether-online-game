@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="GymLeaderDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/world/npcs/gym_leader_definition.gd" id="1_definition"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/gym_leaders/erika_frames.tres" id="2_frames"]
+[ext_resource type="Texture2D" path="res://assets/gym_badges/kanto_badges/Rainbow_Badge.png" id="3_badge"]
+
+[resource]
+script = ExtResource("1_definition")
+npc_id = "kanto_celadon_gym_erika"
+trainer_id = "kanto_celadon_gym_erika"
+display_name = "Erika"
+sprite_frames = ExtResource("2_frames")
+portrait_id = "showdown_erika_lgpe"
+battle_environment_id = "grass"
+badge_id = "rainbow"
+badge_display_name = "Rainbow Badge"
+badge_icon_texture = ExtResource("3_badge")

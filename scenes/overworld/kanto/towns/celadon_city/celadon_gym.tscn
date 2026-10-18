@@ -6,6 +6,15 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
 [ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="collision"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/gym_leader_npc.tscn" id="leader"]
+[ext_resource type="Resource" path="res://resources/npcs/gym_leaders/erika.tres" id="erika_profile"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/gym_leaders/erika_frames.tres" id="erika_frames"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="lass"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="ace_trainer_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="poke_fan_f"]
+
 [sub_resource type="TileSetAtlasSource" id="collision_source"]
 texture = ExtResource("collision")
 texture_region_size = Vector2i(32, 32)
@@ -72,6 +81,60 @@ y_sort_enabled = true
 [node name="Players" type="Node2D" parent="Entities"]
 
 [node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="LassKay" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(400, 1680)
+trainer_id = "kanto_celadon_gym_lass_kay"
+npc_id = "kanto_celadon_gym_lass_kay"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lass Kay"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("lass")
+sight_range_tiles = 3
+battle_environment_id = "grass"
+
+[node name="PicnickerTina" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(784, 1456)
+trainer_id = "kanto_celadon_gym_picnicker_tina"
+npc_id = "kanto_celadon_gym_picnicker_tina"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Picnicker Tina"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("picnicker")
+sight_range_tiles = 3
+battle_environment_id = "grass"
+
+[node name="AceTrainerLori" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(528, 1136)
+trainer_id = "kanto_celadon_gym_ace_lori"
+npc_id = "kanto_celadon_gym_ace_lori"
+npc_definition_id = "trainer_class_ace_trainer_f"
+display_name = "Ace Trainer Lori"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("ace_trainer_f")
+sight_range_tiles = 3
+battle_environment_id = "grass"
+
+[node name="PokeFanMaren" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(816, 592)
+trainer_id = "kanto_celadon_gym_fan_maren"
+npc_id = "kanto_celadon_gym_fan_maren"
+npc_definition_id = "trainer_class_poke_fan_f"
+display_name = "Poké Fan Maren"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("poke_fan_f")
+sight_range_tiles = 3
+battle_environment_id = "grass"
+
+[node name="GymLeaderErika" parent="Entities/NPCs" instance=ExtResource("leader")]
+position = Vector2(656, 304)
+trainer_id = "kanto_celadon_gym_erika"
+npc_id = "kanto_celadon_gym_erika"
+display_name = "Erika"
+npc_profile = ExtResource("erika_profile")
+npc_sprite_frames = ExtResource("erika_frames")
+sight_range_tiles = 0
+battle_environment_id = "grass"
 
 [node name="Pokemon" type="Node2D" parent="Entities"]
 
