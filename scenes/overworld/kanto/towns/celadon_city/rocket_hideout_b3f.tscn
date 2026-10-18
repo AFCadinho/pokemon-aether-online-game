@@ -5,14 +5,13 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/rocket_hideout_b3f/rocket_hideout_b3f.visual.tscn" id="visual"]
-
-[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
-[ext_resource type="Script" path="res://scripts/world/npcs/rocket_hideout_trainer.gd" id="population_script"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="population_frames"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
+[ext_resource type="SpriteFrames" uid="uid://ndd4lyovddgq" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="population_frames"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="population_item"]
 [ext_resource type="Script" path="res://scripts/world/interactables/rocket_hideout_item.gd" id="population_item_script"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
+[ext_resource type="Script" path="res://scripts/world/npcs/rocket_hideout_trainer.gd" id="population_script"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/rocket_hideout_b3f/rocket_hideout_b3f.visual.tscn" id="visual"]
 
 [sub_resource type="RectangleShape2D" id="stairs_shape"]
 size = Vector2(32, 32)
@@ -81,7 +80,6 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_xfj3r"]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_agl1d")
-
 
 [node name="RocketHideoutB3F" type="Node2D" unique_id=1036129410]
 script = ExtResource("metadata")
@@ -166,9 +164,86 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=514625337]
 
+[node name="RocketGrunt1" parent="Entities/NPCs" unique_id=1233637155 instance=ExtResource("population_trainer")]
+position = Vector2(176, 784)
+script = ExtResource("population_script")
+trainer_id = "kanto_rocket_hideout_b3f_grunt_1"
+sight_range_tiles = 3
+npc_id = "kanto_rocket_hideout_b3f_grunt_1"
+display_name = "Team Rocket Grunt"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("population_frames")
+portrait_id = "showdown_rainbowrocketgrunt"
+battle_sprite_id = "showdown_rainbowrocketgrunt"
+localized_display_name_key = "npc.game_corner.rocket_guard"
+
+[node name="RocketGrunt2" parent="Entities/NPCs" unique_id=1057907727 instance=ExtResource("population_trainer")]
+position = Vector2(720, 272)
+script = ExtResource("population_script")
+trainer_id = "kanto_rocket_hideout_b3f_grunt_2"
+sight_range_tiles = 3
+npc_id = "kanto_rocket_hideout_b3f_grunt_2"
+display_name = "Team Rocket Grunt"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("population_frames")
+portrait_id = "showdown_rainbowrocketgrunt"
+battle_sprite_id = "showdown_rainbowrocketgrunt"
+localized_display_name_key = "npc.game_corner.rocket_guard"
+
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1036140764]
 
+[node name="Machop" parent="Entities/Pokemon" unique_id=893704444 instance=ExtResource("population_pokemon")]
+position = Vector2(208, 208)
+overworld_pokemon_id = "kanto_rocket_hideout_b3f_machop"
+species_id = "machop"
+level = 30
+display_name = "Machop"
+facing_direction = Vector2(1, 0)
+
+[node name="Rattata" parent="Entities/Pokemon" unique_id=1551496835 instance=ExtResource("population_pokemon")]
+position = Vector2(496, 848)
+overworld_pokemon_id = "kanto_rocket_hideout_b3f_rattata"
+species_id = "rattata"
+level = 30
+display_name = "Rattata"
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1909231289]
+
+[node name="RareCandy" parent="Entities/Interactables" unique_id=2096424494 instance=ExtResource("population_item")]
+position = Vector2(464, 528)
+script = ExtResource("population_item_script")
+required_trainer_id = ""
+required_quest_id = ""
+required_step_id = ""
+pickup_id = "kanto_rocket_hideout_b3f_rare_candy"
+item_id = "rare-candy"
+
+[node name="TmFrustration" parent="Entities/Interactables" unique_id=723253401 instance=ExtResource("population_item")]
+position = Vector2(688, 624)
+script = ExtResource("population_item_script")
+required_trainer_id = ""
+required_quest_id = ""
+required_step_id = ""
+pickup_id = "kanto_rocket_hideout_b3f_tm_frustration"
+item_id = "tm-frustration"
+
+[node name="BlackGlasses" parent="Entities/Interactables" unique_id=1379154092 instance=ExtResource("population_item")]
+position = Vector2(112, 1008)
+script = ExtResource("population_item_script")
+required_trainer_id = ""
+required_quest_id = ""
+required_step_id = ""
+pickup_id = "kanto_rocket_hideout_b3f_black_glasses"
+item_id = "black-glasses"
+
+[node name="Nugget" parent="Entities/Interactables" unique_id=1737052998 instance=ExtResource("population_item")]
+position = Vector2(112, 176)
+script = ExtResource("population_item_script")
+required_trainer_id = ""
+required_quest_id = ""
+required_step_id = ""
+pickup_id = "kanto_rocket_hideout_b3f_nugget"
+item_id = "nugget"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=222314760]
 visible = false
@@ -216,69 +291,3 @@ navigation_enabled = false
 
 [connection signal="body_entered" from="Exits/UpToB2F" to="Exits/UpToB2F" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/DownToB4F" to="Exits/DownToB4F" method="_on_body_entered"]
-
-[node name="RocketGrunt1" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
-position = Vector2(176, 816)
-script = ExtResource("population_script")
-npc_id = "kanto_rocket_hideout_b3f_grunt_1"
-trainer_id = "kanto_rocket_hideout_b3f_grunt_1"
-display_name = "Team Rocket Grunt"
-localized_display_name_key = "npc.game_corner.rocket_guard"
-npc_sprite_frames = ExtResource("population_frames")
-portrait_id = "showdown_rainbowrocketgrunt"
-battle_sprite_id = "showdown_rainbowrocketgrunt"
-facing_direction = Vector2(1, 0)
-sight_range_tiles = 3
-
-[node name="RocketGrunt2" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
-position = Vector2(592, 240)
-script = ExtResource("population_script")
-npc_id = "kanto_rocket_hideout_b3f_grunt_2"
-trainer_id = "kanto_rocket_hideout_b3f_grunt_2"
-display_name = "Team Rocket Grunt"
-localized_display_name_key = "npc.game_corner.rocket_guard"
-npc_sprite_frames = ExtResource("population_frames")
-portrait_id = "showdown_rainbowrocketgrunt"
-battle_sprite_id = "showdown_rainbowrocketgrunt"
-facing_direction = Vector2(-1, 0)
-sight_range_tiles = 3
-
-[node name="Machop" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
-position = Vector2(592, 624)
-overworld_pokemon_id = "kanto_rocket_hideout_b3f_machop"
-species_id = "machop"
-level = 30
-display_name = "Machop"
-movement_behavior = "idle"
-
-[node name="Rattata" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
-position = Vector2(144, 1008)
-overworld_pokemon_id = "kanto_rocket_hideout_b3f_rattata"
-species_id = "rattata"
-level = 30
-display_name = "Rattata"
-movement_behavior = "idle"
-
-[node name="RareCandy" parent="Entities/Interactables" instance=ExtResource("population_item")]
-position = Vector2(432, 368)
-script = ExtResource("population_item_script")
-pickup_id = "kanto_rocket_hideout_b3f_rare_candy"
-item_id = "rare-candy"
-
-[node name="TmFrustration" parent="Entities/Interactables" instance=ExtResource("population_item")]
-position = Vector2(720, 368)
-script = ExtResource("population_item_script")
-pickup_id = "kanto_rocket_hideout_b3f_tm_frustration"
-item_id = "tm-frustration"
-
-[node name="BlackGlasses" parent="Entities/Interactables" instance=ExtResource("population_item")]
-position = Vector2(112, 848)
-script = ExtResource("population_item_script")
-pickup_id = "kanto_rocket_hideout_b3f_black_glasses"
-item_id = "black-glasses"
-
-[node name="Nugget" parent="Entities/Interactables" instance=ExtResource("population_item")]
-position = Vector2(368, 208)
-script = ExtResource("population_item_script")
-pickup_id = "kanto_rocket_hideout_b3f_nugget"
-item_id = "nugget"
