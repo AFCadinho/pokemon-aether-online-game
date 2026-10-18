@@ -12,8 +12,12 @@ var CoopService: Node
 class DialogueProbe extends Node:
 	signal dialogue_finished
 	var speakers: Array[String] = []
-	func start_dialogue(_lines: Array[String], speaker: String, _portrait: Texture2D = null, _show_portrait := false) -> void:
+	var portraits: Array[Texture2D] = []
+	var portrait_visibility: Array[bool] = []
+	func start_dialogue(_lines: Array[String], speaker: String, portrait: Texture2D = null, show_portrait := false) -> void:
 		speakers.append(speaker)
+		portraits.append(portrait)
+		portrait_visibility.append(show_portrait)
 		_finish.call_deferred()
 	func _finish() -> void:
 		await get_tree().process_frame
@@ -114,6 +118,8 @@ func _check_presentation_recovery() -> void:
 	for speaker: String in ["Jessie", "James", "Meowth"]:
 		var lines: Array[String] = ["Fixture line"]
 		await trio.call("show_dialogue", lines, speaker)
+		_check(dialogue.speakers.back().is_empty(), "Route 7 does not reveal the trio's names")
+		_check(dialogue.portraits.back() != null and dialogue.portrait_visibility.back(), "Route 7 displays the Showdown trio portrait")
 	_check(not trio.get_node("Jessie").visible, "Trio walks towards Celadon before the quest acknowledgement")
 	_check(root.get_camera_2d() == camera, "Sighting restores the original camera")
 	trio.call("abort_story_sequence")
@@ -131,6 +137,11 @@ func _check_presentation_recovery() -> void:
 	for speaker: String in ["Trainer Mira", "Jessie", "James", "Meowth", "Jessie", "James"]:
 		var lines: Array[String] = ["Fixture line"]
 		await trio.call("show_dialogue", lines, speaker)
+		_check(dialogue.speakers.back() == speaker, "Celadon retains the named speaker")
+		var expected_path := "lass-gen6.png" if speaker == "Trainer Mira" else "teamrocket.png"
+		_check(dialogue.portraits.back() != null and dialogue.portrait_visibility.back(), "Rescue dialogue displays a portrait")
+		if dialogue.portraits.back() != null:
+			_check(dialogue.portraits.back().resource_path.ends_with(expected_path), "Victim and trio receive their own portraits")
 	_check(eevee.position == Vector2.ZERO, "Eevee lands after Meowth attempts the theft")
 	_check(root.get_camera_2d() == camera, "Confrontation restores the camera before battle")
 	var metadata: Dictionary = trio.call("build_battle_trainer_metadata", {"id": "kanto_celadon_jessie_james", "trainer_class": "team_rocket"})
@@ -142,6 +153,7 @@ func _check_presentation_recovery() -> void:
 	for speaker: String in ["Jessie", "James", "Jessie", "Meowth", "Team Rocket"]:
 		var lines: Array[String] = ["Fixture line"]
 		await trio.call("show_dialogue", lines, speaker)
+		_check(dialogue.portraits.back() != null and dialogue.portrait_visibility.back(), "Escape dialogue keeps the trio portrait")
 	_check(trio.get_node("James").scale.x < 0.1, "Trio blasts away at the final line")
 	_check(root.get_camera_2d() == camera, "Escape restores the original camera")
 	trio.call("abort_story_sequence")

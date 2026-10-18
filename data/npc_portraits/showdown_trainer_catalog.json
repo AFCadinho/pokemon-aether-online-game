@@ -6880,6 +6880,15 @@
       "sha256": "09d58f413ecbc0926a39240e268001b758ed0fe095fbbc4d7b6526f47b01fc6b"
     },
     {
+      "id": "showdown_teamrocket",
+      "filename": "teamrocket.png",
+      "texture": "res://assets/sprites/trainer_cards/showdown/teamrocket.png",
+      "artist": "Pokémon Showdown",
+      "source": "https://play.pokemonshowdown.com/sprites/trainers/teamrocket.png",
+      "catalog_source": "https://play.pokemonshowdown.com/sprites/trainers/?view=sprites",
+      "sha256": "78488c3e37f5c7421b18c4d4b1b0157b37580a35933fb1d006288a7ad6f91ae1"
+    },
+    {
       "id": "showdown_theroyal",
       "filename": "theroyal.png",
       "texture": "res://assets/sprites/trainer_cards/showdown/theroyal.png",

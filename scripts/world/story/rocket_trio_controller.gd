@@ -3,6 +3,7 @@ extends Node2D
 ## Presentation only. The catalog and durable battle settlement own progression.
 const QUEST_ID := "celadon_rocket_trio"
 const TRAINER_ID := "kanto_celadon_jessie_james"
+const ROCKET_PORTRAIT_ID := "showdown_teamrocket"
 const ActorScript := preload("res://scripts/world/story/rocket_trio_actor.gd")
 const MusicResolver := preload("res://scripts/world/npcs/trainer_battle_music_resolver.gd")
 
@@ -132,7 +133,13 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 			return false
 	if _sequence_step == "watch_trio_flee" and stage == 4:
 		_launch_blast_off()
-	dialogue.call("start_dialogue", lines, speaker_name, null, false)
+	var portrait_id := ROCKET_PORTRAIT_ID
+	if sequence_step == "defeat_trio" and stage == 0:
+		portrait_id = TrainerPortraitCatalog.resolve_portrait_id("", "kanto_celadon_city_mira", "")
+	var portrait := TrainerPortraitCatalog.get_texture(portrait_id)
+	# The player has not been introduced to the trio during the Route 7 cameo.
+	var displayed_name := "" if sequence_step == "spot_trio" else speaker_name
+	dialogue.call("start_dialogue", lines, displayed_name, portrait, portrait != null)
 	await dialogue.dialogue_finished
 	if not _running or _sequence_step != sequence_step:
 		return false
