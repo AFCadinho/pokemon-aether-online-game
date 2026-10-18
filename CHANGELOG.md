@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh the Pokémon Tower artist visual across all seven floors while preserving its gameplay, floor masks and stair connections.
+
 - Deepen Giovanni's confrontation about the Cubone skull trade and show him abandoning the dropped Silph Scope after his defeat.
 
 - Match Rocket Hideout Giovanni's dialogue portrait and battle sprite to his black overworld outfit using the existing Let's Go variant.
