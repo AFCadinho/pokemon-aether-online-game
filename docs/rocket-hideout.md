@@ -70,3 +70,18 @@ selection and input-lock cleanup. Account-service tests cover all sixteen
 transition directions and a denied lift journey to a closed destination.
 Canonical Godot resource compositions were visually reviewed; a live player
 walkthrough has not been performed.
+
+
+## Exterior masks
+
+B1F through B4F each use the shared black `FloorVisibilityMask`, drawn at
+absolute z-index 4096. Each mask surrounds the full imported visual canvas:
+B1F 1184 × 1408, B2F 1184 × 960, B3F 864 × 1120 and B4F 1056 × 1248 pixels.
+The fixed floor region does not follow the player or constrain the camera.
+Collision, room visibility within each canvas, stairs and lift behavior are
+independent of the exterior masks.
+
+All four scenes were rendered in Godot against a contrasting background and
+visually reviewed; every outer margin renders fully black. The existing
+`tests/floor_visibility_mask_camera_check.gd` passes. No live walkthrough was
+performed for this visual-only change.

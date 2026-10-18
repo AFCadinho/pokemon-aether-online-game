@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Mask the exterior of all four Rocket Hideout floors in black.
+
 - Add paintable SpinUp/Down/Left/Right/Stop map layers for Rocket Hideout slide puzzles, with automatic spinning, collision and control recovery.
 
 - Connect Celadon City’s Aether Beacon and Keeper to Aethernet Travel, with a safe arrival beside the beacon.
