@@ -7,9 +7,9 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
 [ext_resource type="SpriteFrames" uid="uid://ndd4lyovddgq" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="population_frames"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="population_item"]
-[ext_resource type="Script" path="res://scripts/world/interactables/rocket_hideout_item.gd" id="population_item_script"]
+[ext_resource type="Script" uid="uid://dcosxqbip5o03" path="res://scripts/world/interactables/rocket_hideout_item.gd" id="population_item_script"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
-[ext_resource type="Script" path="res://scripts/world/npcs/rocket_hideout_trainer.gd" id="population_script"]
+[ext_resource type="Script" uid="uid://cdxdum4jckooy" path="res://scripts/world/npcs/rocket_hideout_trainer.gd" id="population_script"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/rocket_hideout_b1f/rocket_hideout_b1f.visual.tscn" id="visual"]
 
@@ -17,7 +17,7 @@
 size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="elevator_door_shape"]
-size = Vector2(96, 32)
+size = Vector2(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3xlps"]
 texture = ExtResource("collision")
@@ -256,7 +256,11 @@ transition_id = "kanto_rocket_hideout_b1f__to_elevator"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToElevator" unique_id=1584949696]
+position = Vector2(0, -16)
 shape = SubResource("elevator_door_shape")
+
+[node name="DoorTransitionHint" parent="Exits/ToElevator" unique_id=72521409 instance=ExtResource("hint")]
+z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=1747314645]
 z_index = 5
@@ -269,6 +273,7 @@ y_sort_enabled = true
 [node name="RocketGrunt1" parent="Entities/NPCs" unique_id=829540794 instance=ExtResource("population_trainer")]
 position = Vector2(1008, 560)
 script = ExtResource("population_script")
+dropped_item_path = NodePath("")
 trainer_id = "kanto_rocket_hideout_b1f_grunt_1"
 sight_range_tiles = 4
 npc_id = "kanto_rocket_hideout_b1f_grunt_1"
@@ -282,6 +287,7 @@ localized_display_name_key = "npc.game_corner.rocket_guard"
 [node name="RocketGrunt2" parent="Entities/NPCs" unique_id=2132427925 instance=ExtResource("population_trainer")]
 position = Vector2(240, 368)
 script = ExtResource("population_script")
+dropped_item_path = NodePath("")
 trainer_id = "kanto_rocket_hideout_b1f_grunt_2"
 sight_range_tiles = 4
 npc_id = "kanto_rocket_hideout_b1f_grunt_2"
@@ -295,6 +301,7 @@ localized_display_name_key = "npc.game_corner.rocket_guard"
 [node name="RocketGrunt3" parent="Entities/NPCs" unique_id=1294620812 instance=ExtResource("population_trainer")]
 position = Vector2(880, 1168)
 script = ExtResource("population_script")
+dropped_item_path = NodePath("")
 trainer_id = "kanto_rocket_hideout_b1f_grunt_3"
 sight_range_tiles = 3
 npc_id = "kanto_rocket_hideout_b1f_grunt_3"
@@ -308,6 +315,7 @@ localized_display_name_key = "npc.game_corner.rocket_guard"
 [node name="RocketGrunt4" parent="Entities/NPCs" unique_id=190362100 instance=ExtResource("population_trainer")]
 position = Vector2(432, 1296)
 script = ExtResource("population_script")
+dropped_item_path = NodePath("")
 trainer_id = "kanto_rocket_hideout_b1f_grunt_4"
 sight_range_tiles = 3
 npc_id = "kanto_rocket_hideout_b1f_grunt_4"
@@ -321,6 +329,7 @@ localized_display_name_key = "npc.game_corner.rocket_guard"
 [node name="RocketGrunt5" parent="Entities/NPCs" unique_id=855296164 instance=ExtResource("population_trainer")]
 position = Vector2(464, 944)
 script = ExtResource("population_script")
+dropped_item_path = NodePath("")
 trainer_id = "kanto_rocket_hideout_b1f_grunt_5"
 sight_range_tiles = 2
 npc_id = "kanto_rocket_hideout_b1f_grunt_5"
@@ -354,6 +363,7 @@ script = ExtResource("population_item_script")
 required_trainer_id = ""
 required_quest_id = ""
 required_step_id = ""
+animate_trainer_drop = false
 pickup_id = "kanto_rocket_hideout_b1f_escape_rope"
 item_id = "escape-rope"
 
@@ -363,6 +373,7 @@ script = ExtResource("population_item_script")
 required_trainer_id = ""
 required_quest_id = ""
 required_step_id = ""
+animate_trainer_drop = false
 pickup_id = "kanto_rocket_hideout_b1f_hyper_potion"
 item_id = "hyper-potion"
 
@@ -372,6 +383,7 @@ script = ExtResource("population_item_script")
 required_trainer_id = ""
 required_quest_id = ""
 required_step_id = ""
+animate_trainer_drop = false
 pickup_id = "kanto_rocket_hideout_b1f_pp_up"
 item_id = "pp-up"
 

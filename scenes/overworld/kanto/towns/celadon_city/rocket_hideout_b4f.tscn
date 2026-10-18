@@ -21,7 +21,7 @@
 size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="elevator_door_shape"]
-size = Vector2(96, 32)
+size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="giovanni_conversation_shape"]
 size = Vector2(256, 224)
@@ -225,7 +225,11 @@ transition_id = "kanto_rocket_hideout_b4f__to_elevator"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToElevator" unique_id=185869691]
+position = Vector2(0, -16)
 shape = SubResource("elevator_door_shape")
+
+[node name="DoorTransitionHint" parent="Exits/ToElevator" unique_id=448586776 instance=ExtResource("hint")]
+z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=1233474862]
 z_index = 5
