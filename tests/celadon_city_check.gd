@@ -43,7 +43,7 @@ func _run() -> void:
 	var occupied := {}
 	var npcs := city.get_node("Entities/NPCs").get_children()
 	var pokemon := city.get_node("Entities/Pokemon").get_children()
-	_check(npcs.size() == 8 and pokemon.size() == 10, "City contains eight residents and ten Pokémon")
+	_check(npcs.size() == 9 and pokemon.size() == 11, "City contains nine residents and eleven Pokémon, including Mira and her Eevee")
 	for actor: Node2D in npcs + pokemon:
 		var is_pokemon: bool = actor.get_script().resource_path == PokemonScript
 		_check(is_pokemon or actor.get_script().resource_path == NpcScript, "Actor uses the established interaction script")

@@ -20,8 +20,6 @@
 [ext_resource type="PackedScene" path="res://scenes/world/story/rocket_trio.tscn" id="rocket_trio"]
 [ext_resource type="Script" path="res://scripts/world/story/story_trigger.gd" id="rocket_trigger"]
 [ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="rocket_hook"]
-[ext_resource type="Script" path="res://scripts/world/story/rocket_trio_actor.gd" id="rocket_actor"]
-[ext_resource type="Texture2D" path="res://assets/followers/EEVEE.png" id="rocket_eevee"]
 [ext_resource type="Texture2D" path="res://assets/ui/main_quest_marker.svg" id="rocket_marker"]
 
 [sub_resource type="RectangleShape2D" id="shape_route7"]
@@ -487,6 +485,16 @@ movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 2.5
 
+[node name="Mira" parent="Entities/NPCs" instance=ExtResource("5_npc")]
+position = Vector2(2352, 1616)
+npc_id = "kanto_celadon_city_mira"
+localized_display_name_key = "npc.celadon.mira"
+npc_sprite_frames = ExtResource("frames_lass")
+facing_direction = Vector2(-1, 0)
+visibility_required_quest_id = "celadon_rocket_trio"
+visibility_required_quest_step_id = "spot_trio"
+visibility_required_quest_status = "completed"
+
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=873866540]
 
 [node name="Eevee" parent="Entities/Pokemon" unique_id=1944541642 instance=ExtResource("6_pokemon")]
@@ -587,6 +595,17 @@ movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 2.5
 
+[node name="MirasEevee" parent="Entities/Pokemon" instance=ExtResource("6_pokemon")]
+position = Vector2(2320, 1648)
+overworld_pokemon_id = "kanto_celadon_city_mira_eevee"
+species_id = "eevee"
+level = 20
+display_name = "Eevee"
+facing_direction = Vector2(-1, 0)
+visibility_required_quest_id = "celadon_rocket_trio"
+visibility_required_quest_step_id = "spot_trio"
+visibility_required_quest_status = "completed"
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1285463609]
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1867462022]
@@ -629,8 +648,8 @@ tile_set = SubResource("TileSet_ed0sp")
 [node name="RocketTrio" parent="Story" instance=ExtResource("rocket_trio")]
 position = Vector2(2256, 1648)
 encounter = "celadon"
-victim_path = NodePath("Mira")
-victim_pokemon_path = NodePath("Eevee")
+victim_path = NodePath("../../Entities/NPCs/Mira")
+victim_pokemon_path = NodePath("../../Entities/Pokemon/MirasEevee")
 
 [node name="Jessie" parent="Story/RocketTrio" index="0"]
 position = Vector2(-32, 0)
@@ -643,23 +662,6 @@ initial_direction = "right"
 [node name="Meowth" parent="Story/RocketTrio" index="2"]
 position = Vector2(32, 0)
 initial_direction = "right"
-
-[node name="Mira" parent="Story/RocketTrio" instance=ExtResource("5_npc")]
-position = Vector2(96, 0)
-npc_id = "kanto_celadon_city_mira"
-localized_display_name_key = "npc.celadon.mira"
-npc_sprite_frames = ExtResource("frames_lass")
-facing_direction = Vector2(-1, 0)
-visibility_required_quest_id = "celadon_rocket_trio"
-visibility_required_quest_step_id = "spot_trio"
-visibility_required_quest_status = "completed"
-required_quest_id = "celadon_rocket_trio"
-
-[node name="Eevee" type="AnimatedSprite2D" parent="Story/RocketTrio"]
-position = Vector2(64, 0)
-script = ExtResource("rocket_actor")
-sheet = ExtResource("rocket_eevee")
-initial_direction = "left"
 
 [node name="QuestMarker" type="PanelContainer" parent="Story/RocketTrio"]
 z_as_relative = false
