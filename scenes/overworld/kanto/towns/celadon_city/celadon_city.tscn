@@ -1011,6 +1011,9 @@ position = Vector2(368, 1584)
 [node name="FromDepartmentStore" type="Marker2D" parent="Spawns" unique_id=279368465]
 position = Vector2(528, 464)
 
+[node name="TransitArrival" type="Marker2D" parent="Spawns"]
+position = Vector2(2288, 208)
+
 [node name="Exits" type="Node2D" parent="." unique_id=730447284]
 
 [node name="ToRoute7" type="Area2D" parent="Exits" unique_id=485939152]
@@ -1243,7 +1246,7 @@ entity_id = "kanto_celadon_city_mira"
 
 [node name="TransitKeeperNPC" parent="Entities/NPCs" unique_id=2063251970 instance=ExtResource("15_dnnov")]
 position = Vector2(2256, 176)
-local_destination_id = ""
+local_destination_id = "kanto_celadon_city"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=873866540]
 
@@ -1361,6 +1364,8 @@ facing_direction = Vector2(-1, 0)
 z_index = 208
 position = Vector2(2320, 208)
 display_name = "Aether Beacon"
+interactable_id = "kanto_celadon_city_aether_beacon"
+destination_id = "kanto_celadon_city"
 
 [node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=962911573]
 
