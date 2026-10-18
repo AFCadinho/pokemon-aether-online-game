@@ -33,6 +33,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/kanto_cities_arena_check.gd",
 	"res://tests/compatibility_outdoor_colour_check.gd",
 	"res://tests/gym_arenas_check.gd",
+	"res://tests/dungeon_arenas_check.gd",
 	"res://tests/routes_2_4_arena_check.gd",
 	"res://tests/cerulean_region_arena_check.gd",
 	"res://tests/coop_gameplay_check.gd",

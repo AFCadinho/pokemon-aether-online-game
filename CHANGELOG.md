@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add dedicated 3D battle interiors for Pokémon Tower and every Rocket Hideout floor, including wild encounters in the Tower.
+
 - Populate every Rocket Hideout floor with Rocket battles, companion Pokémon and one-time pickups; add Giovanni, the Lift Key route, Silph Scope and the return-to-Tower story with developer checkpoints.
 
 - Add black exterior masks to every Celadon Condominiums scene, including the roof and rooftop room.
