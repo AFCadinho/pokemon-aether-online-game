@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Move the Battle Point, evolution-item, Z-Crystal, Mega Stone and both rental vendors from Aether Clash Lobby to Celadon Department Store.
+
 - Keep dense city nightlights stable while the camera moves by rendering lit tilemaps in smaller batches, including runtime depth layers.
 
 - Add the artist Celadon Department Store interior, with collision, a visibility mask and both city entrances.

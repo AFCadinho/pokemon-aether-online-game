@@ -40,76 +40,8 @@ func _run() -> void:
 		and posmod(int(arrival.position.y), 32) == 16,
 		"Guild arrival marker is centered on a map tile"
 	)
-	var battle_point_vendor := lobby.get_node_or_null("Entities/NPCs/BattlePointVendor")
-	for rental: Array in [["TeamRentalNPC", "team", "Team Rental", Vector2(944, 176)], ["PokemonRentalNPC", "pokemon", "Pokémon Rental", Vector2(1008, 176)]]:
-		var vendor := lobby.get_node_or_null("Entities/NPCs/" + str(rental[0]))
-		_check(vendor != null and vendor.rental_kind == rental[1] and vendor.display_name == rental[2] and vendor.position == rental[3], "Rental vendor matches server location, short label and catalog: " + str(rental[0]))
-		var interaction_shape := vendor.get_node_or_null("InteractionArea/CollisionShape2D") as CollisionShape2D if vendor != null else null
-		_check(
-			vendor != null
-			and vendor.manual_interaction_reach_tiles == 3
-			and interaction_shape != null
-			and interaction_shape.position == Vector2.ZERO
-			and interaction_shape.shape is RectangleShape2D
-			and (interaction_shape.shape as RectangleShape2D).size == Vector2(96, 192)
-			and (vendor.get_node("InteractionArea") as Area2D).position == Vector2(0, 64),
-			"Rental vendor interaction reaches across the counter: " + str(rental[0])
-		)
-	_check(battle_point_vendor != null, "Lobby places the Battle Point vendor")
-	_check(
-		battle_point_vendor != null
-		and battle_point_vendor.position == Vector2(1584, 944),
-		"Battle Point vendor uses the updated lobby market location"
-	)
-	var z_crystal_vendor := lobby.get_node_or_null("Entities/NPCs/ZCrystalVendor")
-	_check(z_crystal_vendor != null, "Lobby places the Z-Crystal Seller")
-	_check(
-		z_crystal_vendor != null
-		and z_crystal_vendor.position == Vector2(1328, 944),
-		"Z-Crystal Seller uses the temporary lobby market location"
-	)
-	var mega_stone_vendor := lobby.get_node_or_null("Entities/NPCs/MegaStoneVendor")
-	_check(mega_stone_vendor != null, "Lobby places the Mega Stone Seller")
-	_check(
-		mega_stone_vendor != null
-		and mega_stone_vendor.position == Vector2(1456, 944),
-		"Mega Stone Seller uses the temporary lobby market location"
-	)
-	var evolution_vendor := lobby.get_node_or_null("Entities/NPCs/EvolutionItemVendor")
-	_check(
-		evolution_vendor != null
-		and evolution_vendor.position == Vector2(1200, 944)
-		and evolution_vendor.market_id == "evolution_item_shop"
-		and evolution_vendor.market_mode == "player_buys",
-		"Evolution Item Seller opens the existing buying shop at its server location"
-	)
-	_check(
-		evolution_vendor != null
-		and evolution_vendor.npc_definition_id == "evolution_item_vendor"
-		and evolution_vendor.call("_get_npc_metadata_id") == "evolution_item_vendor",
-		"Placed Evolution Item Seller resolves shared metadata and localized dialogue"
-	)
-	var lobby_scene_source := FileAccess.get_file_as_string(LOBBY_SCENE)
-	_check(
-		lobby_scene_source.contains("res://scenes/npcs/battle_point_vendor_npc.tscn")
-		and lobby_scene_source.contains('[node name="BattlePointVendor"'),
-		"Lobby placement instantiates the reusable Battle Point vendor scene"
-	)
-	_check(
-		lobby_scene_source.contains("res://scenes/npcs/z_crystal_vendor_npc.tscn")
-		and lobby_scene_source.contains('[node name="ZCrystalVendor"'),
-		"Lobby placement instantiates the reusable Z-Crystal Seller scene"
-	)
-	_check(
-		lobby_scene_source.contains("res://scenes/npcs/mega_stone_vendor_npc.tscn")
-		and lobby_scene_source.contains('[node name="MegaStoneVendor"'),
-		"Lobby placement instantiates the reusable Mega Stone Seller scene"
-	)
-	_check(
-		lobby_scene_source.contains("res://scenes/npcs/evolution_item_vendor_npc.tscn")
-		and lobby_scene_source.contains('[node name="EvolutionItemVendor"'),
-		"Lobby placement instantiates the reusable Evolution Item Seller scene"
-	)
+	for vendor_name: String in ["BattlePointVendor", "EvolutionItemVendor", "ZCrystalVendor", "MegaStoneVendor", "TeamRentalNPC", "PokemonRentalNPC"]:
+		_check(not lobby.has_node("Entities/NPCs/" + vendor_name), "Vendor moved to Celadon: " + vendor_name)
 	var night_lights := lobby.get_node_or_null("NightLights")
 	_check(night_lights != null, "Lobby owns a hand-maintained night-light layer")
 	_check(night_lights != null and night_lights.get_child_count() == 22, "Lobby lanterns and portals have night lights")
@@ -146,7 +78,7 @@ func _run() -> void:
 	var collision := lobby.get_node_or_null("Tiles/Collision") as TileMapLayer
 	_check(collision != null and not collision.get_used_cells().is_empty(), "Lobby includes gameplay collision")
 	for tile: Vector2i in [Vector2i(29, 5), Vector2i(31, 5), Vector2i(29, 7), Vector2i(31, 7), Vector2i(29, 8), Vector2i(31, 8)]:
-		_check(collision.get_cell_source_id(tile) == -1, "Rental vendor or counter approach tile is walkable: " + str(tile))
+		_check(collision.get_cell_source_id(tile) == -1, "Former rental counter approach remains walkable: " + str(tile))
 	_check(
 		collision != null and collision.get_cell_source_id(Vector2i(29, 50)) == -1,
 		"Guild arrival tile is walkable"
