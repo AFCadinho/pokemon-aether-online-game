@@ -1,17 +1,82 @@
-[gd_scene format=4]
+[gd_scene format=4 uid="uid://oc7eqhsgahk3"]
 
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="7_ma1ct"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
 [ext_resource type="Script" path="res://scripts/world/rocket_hideout_elevator.gd" id="map"]
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/rocket_hideout_elevator/rocket_hideout_elevator.visual.tscn" id="visual"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="mask"]
+[ext_resource type="Script" uid="uid://5un458vcvarg" path="res://scripts/world/interactables/rocket_hideout_lift.gd" id="panel"]
 [ext_resource type="Script" path="res://scripts/world/rocket_elevator_ride_exit.gd" id="ride"]
-[ext_resource type="Script" path="res://scripts/world/interactables/rocket_hideout_lift.gd" id="panel"]
-[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="collision"]
-[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="mask"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/rocket_hideout_elevator/rocket_hideout_elevator.visual.tscn" id="visual"]
 
 [sub_resource type="RectangleShape2D" id="door_shape"]
 size = Vector2(32, 32)
 
-[node name="RocketHideoutElevator" type="Node2D"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6ovs4"]
+texture = ExtResource("7_ma1ct")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_qkxbq"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_6ovs4")
+
+[node name="RocketHideoutElevator" type="Node2D" unique_id=703021254]
 script = ExtResource("map")
 map_id = "kanto_rocket_hideout_elevator"
 map_region_name = "Kanto"
@@ -25,19 +90,19 @@ lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.rocket_hideout"
 
-[node name="Visual" parent="." instance=ExtResource("visual")]
+[node name="Visual" parent="." unique_id=1512125409 instance=ExtResource("visual")]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=2140093172]
 
-[node name="FromFloor" type="Marker2D" parent="Spawns"]
-position = Vector2(176, 208)
+[node name="FromFloor" type="Marker2D" parent="Spawns" unique_id=959638399]
+position = Vector2(176, 240)
 
-[node name="FromPanel" type="Marker2D" parent="Spawns"]
+[node name="FromPanel" type="Marker2D" parent="Spawns" unique_id=198066603]
 position = Vector2(112, 176)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=691395905]
 
-[node name="ToB1F" type="Area2D" parent="Exits"]
+[node name="ToB1F" type="Area2D" parent="Exits" unique_id=499633713]
 position = Vector2(176, 272)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn"
@@ -45,11 +110,12 @@ target_spawn_name = "FromLift"
 transition_id = "kanto_rocket_hideout_elevator__to_b1f"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F" unique_id=1135052349]
+position = Vector2(0, 16)
 shape = SubResource("door_shape")
 disabled = true
 
-[node name="RideToB1F" type="Area2D" parent="Exits"]
+[node name="RideToB1F" type="Area2D" parent="Exits" unique_id=642997693]
 collision_layer = 0
 collision_mask = 0
 monitoring = false
@@ -59,7 +125,7 @@ target_spawn_name = "FromPanel"
 transition_id = "kanto_rocket_hideout_elevator__ride_to_b1f"
 transition_facing_direction = "up"
 
-[node name="ToB2F" type="Area2D" parent="Exits"]
+[node name="ToB2F" type="Area2D" parent="Exits" unique_id=298156824]
 position = Vector2(176, 272)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b2f.tscn"
@@ -67,11 +133,12 @@ target_spawn_name = "FromLift"
 transition_id = "kanto_rocket_hideout_elevator__to_b2f"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB2F"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB2F" unique_id=516138260]
+position = Vector2(0, 16)
 shape = SubResource("door_shape")
 disabled = true
 
-[node name="RideToB2F" type="Area2D" parent="Exits"]
+[node name="RideToB2F" type="Area2D" parent="Exits" unique_id=962977522]
 collision_layer = 0
 collision_mask = 0
 monitoring = false
@@ -81,7 +148,7 @@ target_spawn_name = "FromPanel"
 transition_id = "kanto_rocket_hideout_elevator__ride_to_b2f"
 transition_facing_direction = "up"
 
-[node name="ToB4F" type="Area2D" parent="Exits"]
+[node name="ToB4F" type="Area2D" parent="Exits" unique_id=800674789]
 position = Vector2(176, 272)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn"
@@ -89,11 +156,12 @@ target_spawn_name = "FromLift"
 transition_id = "kanto_rocket_hideout_elevator__to_b4f"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB4F"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB4F" unique_id=361342800]
+position = Vector2(0, 16)
 shape = SubResource("door_shape")
 disabled = true
 
-[node name="RideToB4F" type="Area2D" parent="Exits"]
+[node name="RideToB4F" type="Area2D" parent="Exits" unique_id=1707898794]
 collision_layer = 0
 collision_mask = 0
 monitoring = false
@@ -103,59 +171,62 @@ target_spawn_name = "FromPanel"
 transition_id = "kanto_rocket_hideout_elevator__ride_to_b4f"
 transition_facing_direction = "up"
 
-[node name="Doors" type="Node2D" parent="."]
+[node name="Doors" type="Node2D" parent="." unique_id=23106610]
 visible = false
-position = Vector2(160, 256)
 z_index = 2052
+position = Vector2(160, 256)
 
-[node name="Left" type="Polygon2D" parent="Doors"]
+[node name="Left" type="Polygon2D" parent="Doors" unique_id=640839473]
 position = Vector2(-16, 0)
 color = Color(0.22, 0.24, 0.25, 1)
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 32, 0, 32)
 
-[node name="Right" type="Polygon2D" parent="Doors"]
+[node name="Right" type="Polygon2D" parent="Doors" unique_id=1413947807]
 position = Vector2(16, 0)
 color = Color(0.31, 0.33, 0.34, 1)
 polygon = PackedVector2Array(16, 0, 32, 0, 32, 32, 16, 32)
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=2071544003]
 y_sort_enabled = true
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=1966342425]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=1076350688]
 
-[node name="Panel" type="Node2D" parent="Entities/Interactables"]
+[node name="Panel" type="Node2D" parent="Entities/Interactables" unique_id=43040632]
 position = Vector2(112, 144)
 script = ExtResource("panel")
+destination_exits = Array[NodePath]([NodePath("../../../Exits/RideToB1F"), NodePath("../../../Exits/RideToB2F"), NodePath("../../../Exits/RideToB4F")])
 interactable_id = "kanto_rocket_hideout_elevator_panel"
 interactable_kind = "lift"
-interaction_shape_size = Vector2(96, 96)
-destination_floors = PackedStringArray("B1F", "B2F", "B4F")
-destination_exits = Array[NodePath]([NodePath("../../../Exits/RideToB1F"), NodePath("../../../Exits/RideToB2F"), NodePath("../../../Exits/RideToB4F")])
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=159259628]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("mask")
-floor_regions = {&"cabin": Rect2(0, 0, 352, 352)}
+floor_regions = {
+&"cabin": Rect2(0, 0, 352, 352)
+}
 active_floor = &"cabin"
 follow_player_floor = false
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=457640343]
 
-[node name="Tiles" type="Node2D" parent="."]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=512802043]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1320318217]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1522067739]
+
+[node name="Tiles" type="Node2D" parent="." unique_id=1090409909]
 visible = false
 
-[node name="Collision" type="TileMapLayer" parent="Tiles"]
-tile_map_data = PackedByteArray("AAD/////AAAAAAAAAAAAAP//AAAAAAAAAAABAP//AAAAAAAAAAACAP//AAAAAAAAAAADAP//AAAAAAAAAAAEAP//AAAAAAAAAAAFAP//AAAAAAAAAAAGAP//AAAAAAAAAAAHAP//AAAAAAAAAAAIAP//AAAAAAAAAAAJAP//AAAAAAAAAAAKAP//AAAAAAAAAAALAP//AAAAAAAAAAD//wAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAALAAAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAAEAAEAAAAAAAAAAAAFAAEAAAAAAAAAAAAGAAEAAAAAAAAAAAAHAAEAAAAAAAAAAAAIAAEAAAAAAAAAAAAJAAEAAAAAAAAAAAAKAAEAAAAAAAAAAAALAAEAAAAAAAAAAAD//wIAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAAEAAIAAAAAAAAAAAAFAAIAAAAAAAAAAAAGAAIAAAAAAAAAAAAHAAIAAAAAAAAAAAAIAAIAAAAAAAAAAAAJAAIAAAAAAAAAAAAKAAIAAAAAAAAAAAALAAIAAAAAAAAAAAD//wMAAAAAAAAAAAAAAAMAAAAAAAAAAAABAAMAAAAAAAAAAAACAAMAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAMAAAAAAAAAAAAGAAMAAAAAAAAAAAAHAAMAAAAAAAAAAAAIAAMAAAAAAAAAAAAJAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAALAAMAAAAAAAAAAAD//wQAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAQAAAAAAAAAAAAHAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAJAAQAAAAAAAAAAAAKAAQAAAAAAAAAAAALAAQAAAAAAAAAAAD//wUAAAAAAAAAAAAAAAUAAAAAAAAAAAABAAUAAAAAAAAAAAACAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAKAAUAAAAAAAAAAAALAAUAAAAAAAAAAAD//wYAAAAAAAAAAAAAAAYAAAAAAAAAAAABAAYAAAAAAAAAAAACAAYAAAAAAAAAAAAIAAYAAAAAAAAAAAAJAAYAAAAAAAAAAAAKAAYAAAAAAAAAAAALAAYAAAAAAAAAAAD//wcAAAAAAAAAAAAAAAcAAAAAAAAAAAABAAcAAAAAAAAAAAACAAcAAAAAAAAAAAAIAAcAAAAAAAAAAAAJAAcAAAAAAAAAAAAKAAcAAAAAAAAAAAALAAcAAAAAAAAAAAD//wgAAAAAAAAAAAAAAAgAAAAAAAAAAAABAAgAAAAAAAAAAAACAAgAAAAAAAAAAAADAAgAAAAAAAAAAAAEAAgAAAAAAAAAAAAGAAgAAAAAAAAAAAAHAAgAAAAAAAAAAAAIAAgAAAAAAAAAAAAJAAgAAAAAAAAAAAAKAAgAAAAAAAAAAAALAAgAAAAAAAAAAAD//wkAAAAAAAAAAAAAAAkAAAAAAAAAAAABAAkAAAAAAAAAAAACAAkAAAAAAAAAAAADAAkAAAAAAAAAAAAEAAkAAAAAAAAAAAAFAAkAAAAAAAAAAAAGAAkAAAAAAAAAAAAHAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAJAAkAAAAAAAAAAAAKAAkAAAAAAAAAAAALAAkAAAAAAAAAAAD//woAAAAAAAAAAAAAAAoAAAAAAAAAAAABAAoAAAAAAAAAAAACAAoAAAAAAAAAAAADAAoAAAAAAAAAAAAEAAoAAAAAAAAAAAAFAAoAAAAAAAAAAAAGAAoAAAAAAAAAAAAHAAoAAAAAAAAAAAAIAAoAAAAAAAAAAAAJAAoAAAAAAAAAAAAKAAoAAAAAAAAAAAALAAoAAAAAAAAAAAD//wsAAAAAAAAAAAAAAAsAAAAAAAAAAAABAAsAAAAAAAAAAAACAAsAAAAAAAAAAAADAAsAAAAAAAAAAAAEAAsAAAAAAAAAAAAFAAsAAAAAAAAAAAAGAAsAAAAAAAAAAAAHAAsAAAAAAAAAAAAIAAsAAAAAAAAAAAAJAAsAAAAAAAAAAAAKAAsAAAAAAAAAAAALAAsAAAAAAAAAAAA=")
-tile_set = ExtResource("collision")
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=1260229127]
+visible = false
+z_index = 4096
+tile_map_data = PackedByteArray("AAACAAIAAAABAAEAAAACAAMAAAABAAEAAAACAAQAAAABAAEAAAACAAUAAAABAAEAAAACAAYAAAABAAEAAAACAAcAAAABAAEAAAACAAgAAAABAAEAAAADAAgAAAABAAEAAAAEAAgAAAABAAEAAAAEAAkAAAABAAEAAAAFAAkAAAABAAEAAAAGAAkAAAABAAEAAAAHAAkAAAABAAEAAAAGAAgAAAABAAEAAAAHAAgAAAABAAEAAAAIAAgAAAABAAEAAAAIAAcAAAABAAEAAAAIAAYAAAABAAEAAAAIAAUAAAABAAEAAAAIAAQAAAABAAEAAAAIAAMAAAABAAEAAAAIAAIAAAABAAEAAAAHAAQAAAABAAEAAAAHAAMAAAABAAEAAAAGAAMAAAABAAEAAAAFAAMAAAABAAEAAAAEAAMAAAABAAEAAAAEAAIAAAABAAEAAAADAAIAAAABAAEAAAAHAAIAAAABAAEAAAAGAAIAAAABAAEAAAAFAAIAAAABAAEAAAAGAAQAAAABAAEAAAAFAAQAAAABAAEAAAADAAMAAAABAAEAAAAEAAQAAAABAAEAAAADAAQAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_qkxbq")
 
 [connection signal="body_entered" from="Exits/ToB1F" to="Exits/ToB1F" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/ToB2F" to="Exits/ToB2F" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/ToB4F" to="Exits/ToB4F" method="_on_body_entered"]
