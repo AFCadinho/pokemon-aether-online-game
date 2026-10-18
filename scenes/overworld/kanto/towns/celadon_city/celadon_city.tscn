@@ -271,6 +271,20 @@ sources/0 = SubResource("TileSetAtlasSource_j7wvr")
 [sub_resource type="RectangleShape2D" id="rocket_celadon_shape"]
 size = Vector2(128, 96)
 
+[sub_resource type="StyleBoxFlat" id="rocket_main_quest_marker_style"]
+bg_color = Color(0.03137255, 0.08235294, 0.12941177, 0.92941177)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6039216, 0.4117647, 0.12156863, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 3
+
 [node name="CeladonCity" type="Node2D" unique_id=495230876]
 script = ExtResource("2_metadata")
 map_id = "kanto_celadon_city"
@@ -647,13 +661,25 @@ script = ExtResource("rocket_actor")
 sheet = ExtResource("rocket_eevee")
 initial_direction = "left"
 
-[node name="QuestMarker" type="Sprite2D" parent="Story/RocketTrio"]
+[node name="QuestMarker" type="PanelContainer" parent="Story/RocketTrio"]
 z_as_relative = false
 z_index = 4094
-position = Vector2(0, -80)
-scale = Vector2(1, 1)
-modulate = Color(1, 0.84, 0.3, 1)
+custom_minimum_size = Vector2(30, 30)
+offset_left = -47.0
+offset_top = -116.0
+offset_right = -17.0
+offset_bottom = -86.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("rocket_main_quest_marker_style")
+
+[node name="Icon" type="TextureRect" parent="Story/RocketTrio/QuestMarker"]
+modulate = Color(1, 0.84313726, 0.3529412, 1)
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("rocket_marker")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Confrontation" type="Area2D" parent="Story/RocketTrio"]
 position = Vector2(0, -48)
