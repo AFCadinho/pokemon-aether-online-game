@@ -71,7 +71,7 @@ func _check_placement() -> void:
 		_check(trigger.get_node("StoryHook").get("entity_id") == "kanto_celadon_rocket_trio", "Rescue uses the catalog entity")
 	_check(encounter.get_node("Confrontation").get("required_step_id") == "defeat_trio", "Battle trigger requires the battle objective")
 	_check(encounter.get_node("Escape").get("required_step_id") == "watch_trio_flee", "Flight requires the committed victory step")
-	_check(CoopService.trainer_entity("kanto_celadon_jessie_james") == "kanto_celadon_jessie_james", "Adventure Party routes the exact duo to doubles")
+	_check(CoopService.trainer_entity("kanto_celadon_jessie_james") == "kanto_celadon_rocket_trio", "Adventure Party routes the exact duo to doubles")
 	route.free()
 	city.free()
 

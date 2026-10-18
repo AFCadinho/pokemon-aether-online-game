@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Support Adventure Party challenges across all existing story and ordinary trainers, with matching trainer names, portraits and post-battle story conversations.
+
 - Mask the exterior of all four Rocket Hideout floors in black.
 
 - Add paintable SpinUp/Down/Left/Right/Stop map layers for Rocket Hideout slide puzzles, with automatic spinning, collision and control recovery.
