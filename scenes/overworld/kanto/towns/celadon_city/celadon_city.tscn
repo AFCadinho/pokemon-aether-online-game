@@ -491,12 +491,18 @@ movement_wait_seconds = 2.5
 [node name="Mira" parent="Entities/NPCs" unique_id=681646349 instance=ExtResource("5_npc")]
 position = Vector2(2352, 1616)
 npc_id = "kanto_celadon_city_mira"
+preload_quest_markers = true
 localized_display_name_key = "npc.celadon.mira"
 npc_sprite_frames = ExtResource("frames_lass")
 facing_direction = Vector2(-1, 0)
 visibility_required_quest_id = "celadon_rocket_trio"
 visibility_required_quest_step_id = "spot_trio"
 visibility_required_quest_status = "completed"
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/Mira"]
+script = ExtResource("rocket_hook")
+interaction_id = "kanto_celadon_mira_rocket_inquiry"
+entity_id = "kanto_celadon_city_mira"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=873866540]
 

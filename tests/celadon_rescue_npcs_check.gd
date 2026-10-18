@@ -2,11 +2,30 @@ extends SceneTree
 
 const CITY := "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn"
 const QUEST := "celadon_rocket_trio"
+const INQUIRY := "celadon_rocket_inquiry"
 const MIRA := "kanto_celadon_city_mira"
 const EEVEE := "kanto_celadon_city_mira_eevee"
 var failures := 0
 var story: Node
 var game_state: Node
+
+
+class StoryApiProbe extends Node:
+	var resolutions: Array[Dictionary] = []
+	var completions: Array[Dictionary] = []
+	var completed_story: Dictionary
+	func resolve_story_interaction(interaction_id: String, map_id: String, entity_id: String, trigger: String) -> Dictionary:
+		resolutions.append({"interactionId": interaction_id, "mapId": map_id, "entityId": entity_id, "trigger": trigger})
+		var active: bool = get_node("/root/StoryService").is_requirement_met("celadon_rocket_inquiry", "ask_mira", "active")
+		return {"success": true, "interactionId": interaction_id, "handled": active, "revision": 21,
+			"completionRequired": active, "actions": [
+				{"type": "dialogue", "dialogueId": "kanto_celadon_mira_after_rescue"},
+				{"type": "dialogue", "dialogueId": "kanto_rocket_player_ask_mira"},
+				{"type": "dialogue", "dialogueId": "kanto_celadon_mira_rocket_lead"}] if active else []}
+	func complete_story_interaction(interaction_id: String, request_id: String, expected_revision: int, map_id: String, entity_id: String, trigger: String) -> Dictionary:
+		completions.append({"interactionId": interaction_id, "requestId": request_id, "expectedRevision": expected_revision,
+			"mapId": map_id, "entityId": entity_id, "trigger": trigger})
+		return {"success": true, "story": completed_story, "effects": []}
 
 
 class PlayerProbe extends CharacterBody2D:
@@ -43,6 +62,10 @@ func _run() -> void:
 	await process_frame
 	story = root.get_node("StoryService")
 	game_state = root.get_node("GameState")
+	var api := root.get_node("PlayerGameStateService")
+	var api_script: Script = api.get_script()
+	api.set_script(StoryApiProbe)
+	api.set("completed_story", _inquiry_story(true))
 	_prime_metadata()
 	story.apply_story(_story("spot_trio"))
 	var map := (load(CITY) as PackedScene).instantiate()
@@ -67,6 +90,7 @@ func _run() -> void:
 	dialogue.name = "Box"
 	layer.add_child(dialogue)
 	var mira := map.get_node("Entities/NPCs/Mira") as Node2D
+	_check(mira.get_node("StoryHook").get("interaction_id") == "kanto_celadon_mira_rocket_inquiry", "Mira's manual interaction binds the authoritative inquiry")
 	var eevee := map.get_node("Entities/Pokemon/MirasEevee") as Node2D
 	await process_frame
 	_check(not mira.visible and not eevee.visible, "Rescue actors stay hidden before the Route 7 sighting")
@@ -103,16 +127,32 @@ func _run() -> void:
 	_check(map.is_position_blocked_by_character(eevee.global_position), "Eevee remains solid after the escape")
 	await _press_interact()
 	_check(dialogue.lines.size() == 2 and dialogue.lines.back() == ["Thank you for saving Eevee."], "Manual interaction selects Mira's thank-you after the escape")
+	story.apply_story(_inquiry_story())
+	await process_frame
+	var marker := mira.get_node("QuestMarker") as Control
+	_check(marker.visible, "Mira shows the main-quest marker while the inquiry is active")
+	_check(api.get("completions").is_empty(), "Seeing Mira and the marker does not complete the inquiry")
+	await _press_interact()
+	_check(dialogue.lines.size() == 5 and dialogue.lines.back() == ["Ask Erika at Celadon Gym."], "Manual quest conversation thanks the player, asks about Rocket and gives the Gym lead")
+	_check(dialogue.lines[3] == ["What do you know about Team Rocket?"], "The player's question runs through the shared player dialogue flow")
+	_check(api.get("completions").size() == 1, "The inquiry is acknowledged after all dialogue finishes")
+	var context: Dictionary = api.get("resolutions").back()
+	_check(context.get("mapId") == "kanto_celadon_city" and context.get("entityId") == MIRA and context.get("trigger") == "interact", "Manual inquiry sends the real map, Mira identity and trigger")
+	_check(story.is_requirement_met(INQUIRY, "ask_mira", "completed") and not marker.visible, "The acknowledged inquiry completes and clears Mira's marker")
+	await _press_interact()
+	_check(dialogue.lines.size() == 6 and dialogue.lines.back() == ["Ask Erika at Celadon Gym."], "Mira repeats the Gym hint after the quest without replaying it")
+	_check(api.get("completions").size() == 1, "Repeating Mira's hint does not send another completion")
 	player.global_position = eevee.global_position + Vector2(0, 32)
 	player.last_direction = Vector2.UP
 	await _press_interact()
-	_check(dialogue.lines.size() == 3 and dialogue.lines.back() == ["Vee!"], "Manual interaction opens Eevee's normal Pokémon cry dialogue")
+	_check(dialogue.lines.size() == 7 and dialogue.lines.back() == ["Vee!"], "Manual interaction opens Eevee's normal Pokémon cry dialogue")
 	_check(not game_state.is_overworld_input_locked(), "Manual interactions release the overworld input lock")
 	game_state.current_map = null
 	current_scene = null
 	map.queue_free()
 	await process_frame
 	story.reset_story()
+	api.set_script(api_script)
 	print("celadon_rescue_npcs_check: %s" % ("PASS" if failures == 0 else "FAIL"))
 	quit(1 if failures else 0)
 
@@ -125,7 +165,7 @@ func _press_interact() -> void:
 	for _frame in range(3):
 		await process_frame
 	Input.action_release("interact")
-	for _frame in range(8):
+	for _frame in range(30):
 		await process_frame
 
 
@@ -134,7 +174,9 @@ func _prime_metadata() -> void:
 	var key: String = npc.call("_get_cache_key", npc.call("_get_http_locale"), MIRA)
 	npc.npc_metadata_cache[key] = {"success": true, "metadata": {
 		"id": MIRA, "name": "Trainer Mira", "dialogueId": "kanto_celadon_mira_needs_help",
-		"dialogueVariants": [{"requiredQuestId": QUEST, "requiredQuestStatus": "completed",
+		"questMarkers": [{"questId": INQUIRY, "stepId": "ask_mira", "statuses": ["active"]}],
+		"dialogueVariants": [{"requiredQuestId": INQUIRY, "requiredQuestStatus": "completed",
+			"dialogueId": "kanto_celadon_mira_rocket_lead"}, {"requiredQuestId": QUEST, "requiredQuestStatus": "completed",
 			"dialogueId": "kanto_celadon_mira_after_rescue"}]}}
 	var pokemon := root.get_node("OverworldPokemonMetadataService")
 	pokemon.overworld_pokemon_metadata_cache[EEVEE] = {"success": true, "metadata": {
@@ -146,6 +188,21 @@ func _prime_metadata() -> void:
 		key = dialogue.call("_get_cache_key", dialogue.call("_get_http_locale"), id)
 		dialogue.dialogue_metadata_cache[key] = {"success": true, "metadata": {
 			"id": id, "dialogueId": id, "speakerName": "Eevee" if id.ends_with("cry") else "Trainer Mira", "lines": [line]}}
+	for id: String in ["kanto_rocket_player_ask_mira", "kanto_celadon_mira_rocket_lead"]:
+		var is_player := id == "kanto_rocket_player_ask_mira"
+		key = dialogue.call("_get_cache_key", dialogue.call("_get_http_locale"), id)
+		dialogue.dialogue_metadata_cache[key] = {"success": true, "metadata": {
+			"id": id, "dialogueId": id, "speakerName": "Player" if is_player else "Trainer Mira",
+			"speakerRole": "player" if is_player else "npc",
+			"lines": ["What do you know about Team Rocket?" if is_player else "Ask Erika at Celadon Gym."]}}
+
+
+func _inquiry_story(completed := false) -> Dictionary:
+	var snapshot := _story("watch_trio_flee", true)
+	snapshot["revision"] = 22 if completed else 21
+	snapshot["quests"].append({"questId": INQUIRY, "storylineId": "kanto_main", "questType": "main", "definitionVersion": 1,
+		"status": "completed" if completed else "active", "steps": [{"stepId": "ask_mira", "status": "completed" if completed else "active"}]})
+	return snapshot
 
 
 func _story(active_step: String, completed := false) -> Dictionary:
