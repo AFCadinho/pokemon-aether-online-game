@@ -1647,7 +1647,7 @@
         "kanto_rocket_hideout_giovanni": {
           "gymBadge": null,
           "name": "Giovanni",
-          "teamSize": 3,
+          "teamSize": 5,
           "trainerClass": "team_rocket"
         }
       }
