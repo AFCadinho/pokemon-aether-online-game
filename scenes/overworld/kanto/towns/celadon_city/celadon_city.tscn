@@ -26,7 +26,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/story/rocket_trio.tscn" id="rocket_trio"]
 
 [sub_resource type="RectangleShape2D" id="shape_route7"]
-size = Vector2(32, 128)
+size = Vector2(32, 160)
 
 [sub_resource type="RectangleShape2D" id="shape_center_door"]
 size = Vector2(32, 32)
@@ -851,7 +851,7 @@ region_id = "kanto"
 [node name="Spawns" type="Node2D" parent="." unique_id=985955561]
 
 [node name="FromRoute7" type="Marker2D" parent="Spawns" unique_id=42219324]
-position = Vector2(2480, 560)
+position = Vector2(2512, 560)
 
 [node name="CityCenter" type="Marker2D" parent="Spawns" unique_id=245493718]
 position = Vector2(1232, 560)
@@ -882,6 +882,7 @@ transition_id = "kanto_celadon_city__to_route7"
 transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute7" unique_id=1070071306]
+position = Vector2(16, -16)
 shape = SubResource("shape_route7")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute7" unique_id=535624866 instance=ExtResource("4_hint")]
@@ -1217,7 +1218,7 @@ z_as_relative = false
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_6ka4n")
 animation = &"idle_right"
-frame_progress = 0.934425
+frame_progress = 0.6655872
 offset = Vector2(0, -16)
 initial_direction = "right"
 
@@ -1228,7 +1229,7 @@ texture_filter = 1
 position = Vector2(0, 32)
 sprite_frames = SubResource("SpriteFrames_guoqy")
 animation = &"idle_right"
-frame_progress = 0.934425
+frame_progress = 0.6655872
 offset = Vector2(0, -16)
 initial_direction = "right"
 
@@ -1239,7 +1240,7 @@ texture_filter = 1
 position = Vector2(32, 0)
 sprite_frames = SubResource("SpriteFrames_c6v4y")
 animation = &"idle_right"
-frame_progress = 0.934425
+frame_progress = 0.6655872
 offset = Vector2(0, -16)
 initial_direction = "right"
 
