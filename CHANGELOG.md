@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give all four Celadon City signs localized text and location illustrations.
+
 - Expose the Mira follow-up, Erika battle and hint, Game Corner guard and escape, and Rocket boss objective in Story Trainer Progress.
 
 - Refresh Celadon Game Corner’s artist visual with the revised object layering and tileset references.

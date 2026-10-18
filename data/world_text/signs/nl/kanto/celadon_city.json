@@ -1,0 +1,43 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_celadon_city",
+  "signs": [
+    {
+      "id": "kanto_celadon_city_town_sign",
+      "type": "town",
+      "title": "Celadon City",
+      "lines": [
+        "Celadon City — een stad vol bloemen en groen.",
+        "Bezoek de Department Store, ontdek de Game Corner of daag de Gym uit."
+      ]
+    },
+    {
+      "id": "kanto_celadon_city_department_store",
+      "type": "building",
+      "title": "Celadon Department Store",
+      "lines": [
+        "Celadon Department Store",
+        "Bij de balies vind je gevechtsitems, evolutie-items, Z-Crystals en Mega Stones."
+      ]
+    },
+    {
+      "id": "kanto_celadon_city_game_corner",
+      "type": "building",
+      "title": "Celadon Game Corner",
+      "lines": [
+        "Celadon Game Corner",
+        "Koop Casino Tokens bij Iris aan de balie.",
+        "Tokens horen bij je account en kunnen niet worden teruggewisseld voor geld."
+      ]
+    },
+    {
+      "id": "kanto_celadon_city_gym",
+      "type": "building",
+      "title": "Celadon City Pokémon Gym",
+      "lines": [
+        "Celadon City Pokémon Gym",
+        "Leider: Erika. Deze Gym staat in het teken van Grass-type Pokémon."
+      ]
+    }
+  ]
+}

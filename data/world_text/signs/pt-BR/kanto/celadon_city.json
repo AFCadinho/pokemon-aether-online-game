@@ -1,0 +1,43 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_celadon_city",
+  "signs": [
+    {
+      "id": "kanto_celadon_city_town_sign",
+      "type": "town",
+      "title": "Celadon City",
+      "lines": [
+        "Celadon City — uma cidade de flores e muito verde.",
+        "Visite a Department Store, explore o Game Corner ou desafie o Ginásio."
+      ]
+    },
+    {
+      "id": "kanto_celadon_city_department_store",
+      "type": "building",
+      "title": "Celadon Department Store",
+      "lines": [
+        "Celadon Department Store",
+        "Encontre itens de batalha, itens de evolução, Z-Crystals e Mega Stones nos balcões."
+      ]
+    },
+    {
+      "id": "kanto_celadon_city_game_corner",
+      "type": "building",
+      "title": "Celadon Game Corner",
+      "lines": [
+        "Celadon Game Corner",
+        "Fale com Iris no balcão para comprar Casino Tokens.",
+        "As fichas pertencem à sua conta e não podem ser trocadas de volta por dinheiro."
+      ]
+    },
+    {
+      "id": "kanto_celadon_city_gym",
+      "type": "building",
+      "title": "Ginásio Pokémon de Celadon City",
+      "lines": [
+        "Ginásio Pokémon de Celadon City",
+        "Líder: Erika. Um Ginásio dedicado aos Pokémon do tipo Grama."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-10-18",
+  "assets": [
+    {
+      "path": "assets/sprites/sign_previews/celadon_department_store.png",
+      "prompt": "Use case: stylized-concept. Asset type: square game dialogue sign portrait, readable at 256px. Create one polished hand-painted anime environment illustration of Celadon City's Department Store in Pokémon Kanto. A tall broad multi-storey department store, cream facade, green rooftop, long horizontal blue glass shop windows and welcoming central double entrance. Garden city setting with neat flowering shrubs and paved pedestrian approach. Clear front three-quarter architectural view, building fills composition, bright sunny daylight, rich colors and painterly anime background detail matching illustrated Pokémon location sign portraits. No people, no Pokémon, no readable letters, no UI, no border, no watermark.",
+      "sha256": "1a5d97ec2b72d1ba53d19ca9c64c86e5c06a0d0ceb7670d0917d762514f5ec69"
+    },
+    {
+      "path": "assets/sprites/sign_previews/celadon_game_corner.png",
+      "prompt": "Use case: stylized-concept. Asset type: square game dialogue sign portrait, readable at 256px. Create one polished hand-painted anime environment illustration of Celadon City's Game Corner in Pokémon Kanto. Broad low arcade building with purple roof, cream facade, colorful glowing geometric light decorations, bright glazed entrance, warmly lit arcade cabinets glimpsed inside. Neat garden city street with flowering shrubs. Clear front three-quarter architectural view, building fills composition, sunny afternoon, rich colors, detailed painterly anime background style matching illustrated Pokémon location sign portraits. No people, no Pokémon, no readable letters, no UI, no border, no watermark.",
+      "sha256": "37c26d24574908a4d592fc7ec14ea3a24d5380a8df2c52b69cdbdcf66866384d"
+    },
+    {
+      "path": "assets/sprites/sign_previews/celadon_gym.png",
+      "prompt": "Use case: stylized-concept. Asset type: square game dialogue sign portrait, readable at 256px. Create one polished hand-painted anime environment illustration of Celadon City's Pokémon Gym, Erika's Grass-type Gym. Low elegant Japanese-inspired greenhouse gym, green curved roof with subtle circular Poké Ball emblem, pale cream walls, broad blue glass frontage and central doorway. Lush carefully tended garden with pink flowers, vines and ornamental trees framing the gym. Clear front three-quarter architectural view, building fills composition, bright soft daylight, rich colors, detailed painterly anime background style matching illustrated Pokémon location sign portraits. No people, no Pokémon, no readable letters, no UI, no border, no watermark.",
+      "sha256": "b967535c8030910983e4f88c10a264acc8fc72d3019d4449918ff32d8b788d83"
+    }
+  ],
+  "reusedTownPortrait": "assets/sprites/sign_previews/celadon_city.png"
+}

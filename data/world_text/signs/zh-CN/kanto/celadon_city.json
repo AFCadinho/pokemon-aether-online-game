@@ -1,0 +1,43 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_celadon_city",
+  "signs": [
+    {
+      "id": "kanto_celadon_city_town_sign",
+      "type": "town",
+      "title": "玉虹市",
+      "lines": [
+        "玉虹市——鲜花与绿意环绕的城市。",
+        "欢迎光临玉虹百货公司、探索游戏城，或挑战道馆。"
+      ]
+    },
+    {
+      "id": "kanto_celadon_city_department_store",
+      "type": "building",
+      "title": "玉虹百货公司",
+      "lines": [
+        "玉虹百货公司",
+        "各柜台出售对战道具、进化道具、Z纯晶和超级石。"
+      ]
+    },
+    {
+      "id": "kanto_celadon_city_game_corner",
+      "type": "building",
+      "title": "玉虹游戏城",
+      "lines": [
+        "玉虹游戏城",
+        "请到柜台找 Iris 购买游戏代币。",
+        "代币绑定你的账号，不能兑换回金钱。"
+      ]
+    },
+    {
+      "id": "kanto_celadon_city_gym",
+      "type": "building",
+      "title": "玉虹市宝可梦道馆",
+      "lines": [
+        "玉虹市宝可梦道馆",
+        "馆主：莉佳。专精草属性宝可梦的道馆。"
+      ]
+    }
+  ]
+}

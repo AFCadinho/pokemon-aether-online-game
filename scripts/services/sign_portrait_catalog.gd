@@ -3,6 +3,10 @@ extends RefCounted
 class_name SignPortraitCatalog
 
 const SIGN_PORTRAIT_PATHS: Dictionary = {
+	"kanto_celadon_city_town_sign": "res://assets/sprites/sign_previews/celadon_city.png",
+	"kanto_celadon_city_department_store": "res://assets/sprites/sign_previews/celadon_department_store.png",
+	"kanto_celadon_city_game_corner": "res://assets/sprites/sign_previews/celadon_game_corner.png",
+	"kanto_celadon_city_gym": "res://assets/sprites/sign_previews/celadon_gym.png",
 	"kanto_cinnabar_island_town_sign": "res://assets/sprites/sign_previews/cinnabar_island.png",
 	"kanto_cinnabar_island_pokemon_mansion": "res://assets/sprites/sign_previews/cinnabar_pokemon_mansion.png",
 	"kanto_cinnabar_island_research_lab": "res://assets/sprites/sign_previews/cinnabar_research_lab.png",
