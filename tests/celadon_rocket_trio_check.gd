@@ -116,11 +116,12 @@ func _check_presentation_recovery() -> void:
 			_check(actor.sprite_frames.get_frame_count("walk_" + direction) == 4, "Actor has four walking frames: %s %s" % [actor_name, direction])
 	var prepared: Dictionary = await trio.call("prepare_story_sequence")
 	_check(prepared.get("success", false), "Sighting preflight succeeds")
-	for speaker: String in ["Jessie", "James", "Meowth"]:
+	# Localized labels must still select the right portrait before names are hidden.
+	for speaker: String in ["武藏", "小次郎", "喵喵"]:
 		var lines: Array[String] = ["Fixture line"]
 		await trio.call("show_dialogue", lines, speaker)
 		_check(dialogue.speakers.back().is_empty(), "Route 7 does not reveal the trio's names")
-		_check(dialogue.portraits.back() != null and dialogue.portrait_visibility.back(), "Route 7 displays the Showdown trio portrait")
+		_check_portrait(dialogue, speaker)
 	_check(not trio.get_node("Jessie").visible, "Trio walks towards Celadon before the quest acknowledgement")
 	_check(root.get_camera_2d() == camera, "Sighting restores the original camera")
 	trio.call("abort_story_sequence")
@@ -144,10 +145,7 @@ func _check_presentation_recovery() -> void:
 		var lines: Array[String] = ["Fixture line"]
 		await trio.call("show_dialogue", lines, speaker)
 		_check(dialogue.speakers.back() == speaker, "Celadon retains the named speaker")
-		var expected_path := "lass-gen6.png" if speaker == "Trainer Mira" else "teamrocket.png"
-		_check(dialogue.portraits.back() != null and dialogue.portrait_visibility.back(), "Rescue dialogue displays a portrait")
-		if dialogue.portraits.back() != null:
-			_check(dialogue.portraits.back().resource_path.ends_with(expected_path), "Victim and trio receive their own portraits")
+		_check_portrait(dialogue, speaker)
 		if index < confrontation_speakers.size() - 1:
 			_check(root.get_camera_2d() != camera, "Camera stays on the full motto and confrontation until the challenge")
 		_check(trio.get_node("James").animation == ("idle_left" if index >= 12 else "idle_right"), "Trio notices the player only after Meowth ends the motto")
@@ -162,7 +160,7 @@ func _check_presentation_recovery() -> void:
 	for speaker: String in ["Jessie", "James", "Jessie", "Meowth", "Team Rocket"]:
 		var lines: Array[String] = ["Fixture line"]
 		await trio.call("show_dialogue", lines, speaker)
-		_check(dialogue.portraits.back() != null and dialogue.portrait_visibility.back(), "Escape dialogue keeps the trio portrait")
+		_check_portrait(dialogue, speaker)
 	_check(trio.get_node("James").scale.x < 0.1, "Trio blasts away at the final line")
 	_check(root.get_camera_2d() == camera, "Escape restores the original camera")
 	trio.call("abort_story_sequence")
@@ -175,6 +173,21 @@ func _check_presentation_recovery() -> void:
 	current_scene = null
 	await process_frame
 	StoryService.reset_story()
+
+
+func _check_portrait(dialogue: DialogueProbe, speaker: String) -> void:
+	var expected_path := "showdown/teamrocket.png"
+	match speaker:
+		"Jessie", "武藏":
+			expected_path = "pixelheim/jessie.png"
+		"James", "小次郎":
+			expected_path = "pixelheim/james.png"
+		"Trainer Mira":
+			expected_path = "showdown/lass-gen6.png"
+	var portrait: Texture2D = dialogue.portraits.back()
+	_check(portrait != null and dialogue.portrait_visibility.back(), "Dialogue displays a portrait for %s" % speaker)
+	if portrait != null:
+		_check(portrait.resource_path.ends_with(expected_path), "Correct individual or group portrait for %s" % speaker)
 
 
 func _check(condition: bool, message: String) -> void:

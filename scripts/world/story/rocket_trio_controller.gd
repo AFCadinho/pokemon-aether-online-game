@@ -4,6 +4,19 @@ extends Node2D
 const QUEST_ID := "celadon_rocket_trio"
 const TRAINER_ID := "kanto_celadon_jessie_james"
 const ROCKET_PORTRAIT_ID := "showdown_teamrocket"
+const JESSIE_PORTRAIT := preload("res://assets/sprites/trainer_cards/pixelheim/jessie.png")
+const JAMES_PORTRAIT := preload("res://assets/sprites/trainer_cards/pixelheim/james.png")
+# NPC dialogue stages, independent of the localized or hidden speaker label.
+const JESSIE_PORTRAIT_STAGES := {
+	"spot_trio": [0],
+	"defeat_trio": [1, 3, 5, 7, 9, 12],
+	"watch_trio_flee": [0, 2],
+}
+const JAMES_PORTRAIT_STAGES := {
+	"spot_trio": [1],
+	"defeat_trio": [2, 4, 6, 8, 10, 13],
+	"watch_trio_flee": [1],
+}
 const CONFRONTATION_MEOWTH_STAGE := 11
 const CONFRONTATION_NOTICE_STAGE := 12
 const CONFRONTATION_CHALLENGE_STAGE := 13
@@ -137,6 +150,10 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 	if sequence_step == "defeat_trio" and stage == 0:
 		portrait_id = TrainerPortraitCatalog.resolve_portrait_id("", "kanto_celadon_city_mira", "")
 	var portrait := TrainerPortraitCatalog.get_texture(portrait_id)
+	if (JESSIE_PORTRAIT_STAGES.get(sequence_step, []) as Array).has(stage):
+		portrait = JESSIE_PORTRAIT
+	elif (JAMES_PORTRAIT_STAGES.get(sequence_step, []) as Array).has(stage):
+		portrait = JAMES_PORTRAIT
 	# The player has not been introduced to the trio during the Route 7 cameo.
 	var displayed_name := "" if sequence_step == "spot_trio" else speaker_name
 	dialogue.call("start_dialogue", lines, displayed_name, portrait, portrait != null)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show separate transparent Jessie and James dialogue portraits cut from the supplied Pixelheim sprites, including during their anonymous Route 7 cameo.
+
 - Populate Celadon Gym with four Grass-type trainers and Gym Leader Erika, including her portrait and Rainbow Badge presentation.
 
 - Make Mira and her rescued Eevee ordinary Celadon overworld actors with blocking tiles, manual interaction and story-aware dialogue after Team Rocket escapes.
