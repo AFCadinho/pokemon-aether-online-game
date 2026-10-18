@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Let Jessie and James finish their full alternating motto during the Celadon confrontation, ending with Meowth's catchphrase before they notice the player.
+
 - Give the southeast Celadon Rocket encounter the standard framed main-quest marker above Jessie, so it stays recognizable against the scenery and at night.
 
 - Hide the suspicious trio's names during the Route 7 cameo and show their original Showdown trainer portrait throughout their dialogue, with a matching portrait for Mira.
