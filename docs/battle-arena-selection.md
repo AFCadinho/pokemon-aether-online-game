@@ -7,6 +7,7 @@ The 3D arena also uses the battle kind:
 | --- | --- |
 | Wild land encounter | Generic grassfield, or cave when the environment is a cave |
 | Wild surf, fishing or water-tile encounter | Generic sea arena |
+| Wild or trainer encounter in Pokémon Tower / Rocket Hideout | That dungeon's indoor arena |
 | NPC trainer or rival on a map with an authored arena | That map's arena |
 | Gym trainer or leader | That gym's indoor arena |
 | Trainer on a map without an authored arena | The environment's generic arena |

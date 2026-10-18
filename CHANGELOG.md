@@ -3,6 +3,8 @@
 ## Unreleased
 
 - Show the Rocket Hideout grunt dropping the Lift Key after his defeat dialogue, let Giovanni disappear before leaving the Silph Scope, and block his office with a gate until both guards are defeated.
+- Add dedicated 3D battle interiors for Pokémon Tower and every Rocket Hideout floor, including wild encounters in the Tower.
+- Play Zame’s remastered Team Rocket Hideout soundtrack throughout B1F–B4F and the elevator cabin.
 
 - Populate every Rocket Hideout floor with Rocket battles, companion Pokémon and one-time pickups; add Giovanni, the Lift Key route, Silph Scope and the return-to-Tower story with developer checkpoints.
 

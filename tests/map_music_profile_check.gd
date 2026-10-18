@@ -163,6 +163,16 @@ func _run() -> void:
 			map.free()
 		var stream := load(expected_track) as AudioStream
 		_check(stream != null and stream.get_length() > 0, "%s theme decodes successfully" % cave_name)
+	var hideout_track := "res://assets/music/overworld/kanto/interiors/rocket_hideout_remastered_zame.ogg"
+	var hideout_stream := load(hideout_track) as AudioStreamOggVorbis
+	_check(hideout_stream != null and absf(hideout_stream.get_length() - 161.0) < 1.0,
+		"Rocket Hideout OGG decodes with the complete source duration")
+	for floor_id: String in ["b1f", "b2f", "b3f", "b4f", "elevator"]:
+		var scene_path := "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_%s.tscn" % floor_id
+		var map := (load(scene_path) as PackedScene).instantiate()
+		_check_equal(music_manager.call("get_map_music_path", map), hideout_track,
+			"%s selects the shared Rocket Hideout soundtrack at runtime" % floor_id)
+		map.free()
 	music_manager.free()
 	inherited_interior.free()
 	print("map_music_profile_check: %s" % ("FAIL" if failed else "PASS"))

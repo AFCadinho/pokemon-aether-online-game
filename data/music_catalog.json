@@ -88,6 +88,10 @@
     "overworld.kanto.interior.pokemon_tower_remastered_zame": {
       "label": "Pokémon Tower Remastered (FireRed & LeafGreen) - Zame",
       "path": "res://assets/music/overworld/kanto/interiors/pokemon_tower_remastered_zame.ogg"
+    },
+    "overworld.kanto.interior.rocket_hideout_remastered_zame": {
+      "label": "Team Rocket Hideout Remastered (FireRed & LeafGreen) - Zame",
+      "path": "res://assets/music/overworld/kanto/interiors/rocket_hideout_remastered_zame.ogg"
     }
   },
   "map_profiles": {
@@ -100,6 +104,7 @@
     "kanto.pewter_city": "overworld.kanto.viridian_city",
     "kanto.routes_11_15": "overworld.kanto.routes_11_15_zame",
     "kanto.routes_3_10_16_22": "overworld.kanto.routes_3_10_16_22",
-    "aether_clash.duel": "overworld.aether_clash.duel"
+    "aether_clash.duel": "overworld.aether_clash.duel",
+    "kanto.rocket_hideout": "overworld.kanto.interior.rocket_hideout_remastered_zame"
   }
 }
