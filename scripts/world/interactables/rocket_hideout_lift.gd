@@ -6,6 +6,9 @@ const CONFIRMATION := preload("res://scenes/interface/aether_confirmation_dialog
 
 @export var destination_floors: PackedStringArray = []
 @export var destination_exits: Array[NodePath] = []
+var current_floor := ""
+var _menu_layer: CanvasLayer
+var _input_owner := StringName("rocket_elevator_panel_%s" % get_instance_id())
 
 
 func _ready() -> void:
@@ -14,7 +17,7 @@ func _ready() -> void:
 
 
 func interact_with_player(player: Node2D) -> void:
-	if destination_floors.is_empty() or destination_floors.size() != destination_exits.size():
+	if current_floor not in destination_floors or destination_floors.size() != destination_exits.size():
 		push_error("Rocket Hideout lift has incomplete destinations.")
 		return
 	var selected := await _show_floor_selection()
@@ -33,6 +36,7 @@ func _show_floor_selection() -> int:
 	var layer := CanvasLayer.new()
 	layer.name = "RocketHideoutLiftMenu"
 	layer.layer = 120
+	_menu_layer = layer
 	get_tree().current_scene.add_child(layer)
 	var dialog := CONFIRMATION.instantiate() as AetherConfirmationDialog
 	layer.add_child(dialog)
@@ -40,12 +44,20 @@ func _show_floor_selection() -> int:
 	choice.name = "Floors"
 	for floor_name: String in destination_floors:
 		choice.add_item(floor_name)
+		var index := choice.item_count - 1
+		if floor_name == current_floor:
+			choice.set_item_text(index, LocalizationManager.text("ui.rocket_hideout.lift.current_floor", {"floor": floor_name}))
+			choice.set_item_disabled(index, true)
+	for index in choice.item_count:
+		if not choice.is_item_disabled(index):
+			choice.select(index)
+			break
 	choice.custom_minimum_size = Vector2(0, 42)
 	dialog.add_custom_control(choice)
 	dialog.style_option_button(choice)
 	dialog.configure(
 		LocalizationManager.text("ui.rocket_hideout.lift.title"),
-		LocalizationManager.text("ui.rocket_hideout.lift.prompt"),
+		LocalizationManager.text("ui.rocket_hideout.lift.prompt") + "\n" + LocalizationManager.text("ui.rocket_hideout.lift.current_floor", {"floor": current_floor}),
 		LocalizationManager.text("common.continue"),
 		LocalizationManager.text("common.cancel")
 	)
@@ -54,4 +66,21 @@ func _show_floor_selection() -> int:
 	dialog.popup_centered(Vector2i(500, 290))
 	var selected: int = await floor_selected
 	layer.queue_free()
+	_menu_layer = null
 	return selected
+
+
+func _lock_overworld_input() -> void:
+	GameState.acquire_overworld_input_lock(_input_owner)
+
+
+func _unlock_overworld_input() -> void:
+	GameState.release_overworld_input_lock(_input_owner)
+
+
+func _exit_tree() -> void:
+	if is_instance_valid(_menu_layer):
+		floor_selected.emit(-1)
+	_unlock_overworld_input()
+	if is_instance_valid(_menu_layer):
+		_menu_layer.queue_free()

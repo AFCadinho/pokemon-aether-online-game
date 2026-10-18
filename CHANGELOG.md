@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Add black exterior masks to every Celadon Condominiums scene, including the roof and rooftop room.
+- Add the shared Rocket Hideout elevator cabin with the artist visual, physical floor entrances, current-floor selection and a short ride animation.
 
 - Refresh Celadon Prize Corner’s artist visual with the revised foreground layering.
 

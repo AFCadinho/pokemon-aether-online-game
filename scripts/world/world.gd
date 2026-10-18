@@ -1109,6 +1109,8 @@ func _configure_authorized_map_instance(map: Node, state: Dictionary) -> void:
 		map.call("configure_guild_base_instance", str(state.get("mapId", "")))
 	elif map.has_method("configure_aether_clash_instance"):
 		map.call("configure_aether_clash_instance", str(state.get("mapId", "")))
+	elif map.has_method("configure_rocket_elevator_instance"):
+		map.call("configure_rocket_elevator_instance", str(state.get("mapId", "")))
 
 
 func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
