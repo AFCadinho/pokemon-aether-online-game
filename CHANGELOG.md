@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a dedicated transparent pixel-art Lift Key icon to the bag and other item displays.
+
 - Add dedicated 3D battle arenas for Celadon Game Corner and Celadon Gym, including Erika and all four Gym trainers.
 
 - Darken the Pokémon Tower and Rocket Hideout 3D arena materials and soften their decorative lights while preserving Pokémon lighting.
