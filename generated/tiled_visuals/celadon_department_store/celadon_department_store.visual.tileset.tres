@@ -1,0 +1,734 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_1_0.texture.res" id="1_pstfn"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_2049_0.texture.res" id="2_qwrw1"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_10_0.texture.res" id="3_410tb"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_11_0.texture.res" id="4_ym426"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_12_0.texture.res" id="5_j6j3x"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_13_0.texture.res" id="6_nbi5u"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_14_0.texture.res" id="7_5nux6"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_15_0.texture.res" id="8_4rogg"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_16_0.texture.res" id="9_psdmf"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_17_0.texture.res" id="10_ytlfw"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_18_0.texture.res" id="11_78kpg"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_19_0.texture.res" id="12_wr73u"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_3073_0.texture.res" id="13_wauod"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_20_0.texture.res" id="14_tgs8w"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_21_0.texture.res" id="15_jgdns"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_22_0.texture.res" id="16_wcivg"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_4097_0.texture.res" id="17_nvl0d"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_5121_0.texture.res" id="18_kd7i4"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_10000_0.texture.res" id="19_wns1q"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_18192_0.texture.res" id="20_tykad"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_7_0.texture.res" id="21_nsg7v"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_8_0.texture.res" id="22_3srhg"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_department_store/assets/celadon_department_store.visual.tileset.compact_source_9_0.texture.res" id="23_kcncv"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fc0au"]
+texture = ExtResource("1_pstfn")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g7uh5"]
+texture = ExtResource("2_qwrw1")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o2efo"]
+texture = ExtResource("3_410tb")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uq573"]
+texture = ExtResource("4_ym426")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h37el"]
+texture = ExtResource("5_j6j3x")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_781q0"]
+texture = ExtResource("6_nbi5u")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dl8w0"]
+texture = ExtResource("7_5nux6")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hwpm3"]
+texture = ExtResource("8_4rogg")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v23xa"]
+texture = ExtResource("9_psdmf")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_18ljd"]
+texture = ExtResource("10_ytlfw")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hahi4"]
+texture = ExtResource("11_78kpg")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5nyvs"]
+texture = ExtResource("12_wr73u")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gf4o2"]
+texture = ExtResource("13_wauod")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tpxp0"]
+texture = ExtResource("14_tgs8w")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q3e7j"]
+texture = ExtResource("15_jgdns")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i4xa7"]
+texture = ExtResource("16_wcivg")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1jigk"]
+texture = ExtResource("17_nvl0d")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_17bkc"]
+texture = ExtResource("18_kd7i4")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eauvi"]
+texture = ExtResource("19_wns1q")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1bk6j"]
+texture = ExtResource("20_tykad")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0m8sl"]
+texture = ExtResource("21_nsg7v")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pwhpf"]
+texture = ExtResource("22_3srhg")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tfsi5"]
+texture = ExtResource("23_kcncv")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/animation_columns = 7
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_8/duration = 0.1
+0:0/animation_frame_9/duration = 0.1
+0:0/animation_frame_10/duration = 0.1
+0:0/animation_frame_11/duration = 0.1
+0:0/animation_frame_12/duration = 0.1
+0:0/animation_frame_13/duration = 0.1
+0:0/animation_frame_14/duration = 0.1
+0:0/animation_frame_15/duration = 0.1
+0:0/animation_frame_16/duration = 0.1
+0:0/animation_frame_17/duration = 0.1
+0:0/animation_frame_18/duration = 0.1
+0:0/animation_frame_19/duration = 0.1
+0:0/animation_frame_20/duration = 0.1
+0:0/animation_frame_21/duration = 0.1
+0:0/animation_frame_22/duration = 0.1
+0:0/animation_frame_23/duration = 0.1
+0:0/0 = 0
+metadata/tiled_animation_strip = true
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_fc0au")
+sources/1 = SubResource("TileSetAtlasSource_g7uh5")
+sources/2 = SubResource("TileSetAtlasSource_gf4o2")
+sources/3 = SubResource("TileSetAtlasSource_1jigk")
+sources/4 = SubResource("TileSetAtlasSource_17bkc")
+sources/5 = SubResource("TileSetAtlasSource_eauvi")
+sources/6 = SubResource("TileSetAtlasSource_1bk6j")
+sources/7 = SubResource("TileSetAtlasSource_0m8sl")
+sources/8 = SubResource("TileSetAtlasSource_pwhpf")
+sources/9 = SubResource("TileSetAtlasSource_tfsi5")
+sources/10 = SubResource("TileSetAtlasSource_o2efo")
+sources/11 = SubResource("TileSetAtlasSource_uq573")
+sources/12 = SubResource("TileSetAtlasSource_h37el")
+sources/13 = SubResource("TileSetAtlasSource_781q0")
+sources/14 = SubResource("TileSetAtlasSource_dl8w0")
+sources/15 = SubResource("TileSetAtlasSource_hwpm3")
+sources/16 = SubResource("TileSetAtlasSource_v23xa")
+sources/17 = SubResource("TileSetAtlasSource_18ljd")
+sources/18 = SubResource("TileSetAtlasSource_hahi4")
+sources/19 = SubResource("TileSetAtlasSource_5nyvs")
+sources/20 = SubResource("TileSetAtlasSource_tpxp0")
+sources/21 = SubResource("TileSetAtlasSource_q3e7j")
+sources/22 = SubResource("TileSetAtlasSource_i4xa7")
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/celadon_city/Celadon Department Store.tmx"
+metadata/tiled_compact_atlas_version = 1

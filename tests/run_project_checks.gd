@@ -439,6 +439,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/celadon_condominiums_check.gd",
 	"res://tests/celadon_game_corner_check.gd",
 	"res://tests/celadon_gym_check.gd",
+	"res://tests/celadon_department_store_check.gd",
 	"res://tests/celadon_gym_trainers_check.gd",
 	"res://tests/rocket_hideout_check.gd",
 	"res://tests/rocket_hideout_lift_check.gd",
