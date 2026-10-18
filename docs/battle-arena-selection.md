@@ -10,6 +10,7 @@ The 3D arena also uses the battle kind:
 | Wild or trainer encounter in Pokémon Tower / Rocket Hideout | That dungeon's indoor arena |
 | NPC trainer or rival on a map with an authored arena | That map's arena |
 | Gym trainer or leader | That gym's indoor arena |
+| Game Corner Rocket guard | Celadon Game Corner's casino interior |
 | Trainer on a map without an authored arena | The environment's generic arena |
 | PvP and training arena | The existing stadium environment |
 

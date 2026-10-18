@@ -21,7 +21,7 @@ func _init() -> void:
 	for id in Arenas.IDS:
 		assert(Arenas.validate(id)==id)
 		var entry := Arenas.definition(id)
-		assert(entry.scope == ("map" if (id in ["pokemon_tower", "rocket_hideout", "ss_anne", "pallet_town", "pallet_town_water", "viridian_city", "viridian_city_water", "pewter_city"] or id.ends_with("_gym") or id.begins_with("route_") or id.begins_with("cerulean_city")) else "generic"))
+		assert(entry.scope == ("map" if (id in ["celadon_game_corner", "pokemon_tower", "rocket_hideout", "ss_anne", "pallet_town", "pallet_town_water", "viridian_city", "viridian_city_water", "pewter_city"] or id.ends_with("_gym") or id.begins_with("route_") or id.begins_with("cerulean_city")) else "generic"))
 		if id != "classic":
 			assert(ResourceLoader.exists("res://scripts/battle/arenas/" + entry.builder))
 		if entry.scope == "map":

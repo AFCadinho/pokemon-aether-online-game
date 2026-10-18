@@ -163,7 +163,7 @@ npc_definition_id = "trainer_class_lass"
 display_name = "Lass Kay"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("lass")
-battle_environment_id = "grass"
+battle_environment_id = "celadon_gym"
 
 [node name="PicnickerTina" parent="Entities/NPCs" unique_id=2039711744 instance=ExtResource("trainer")]
 position = Vector2(848, 1104)
@@ -173,7 +173,7 @@ npc_id = "kanto_celadon_gym_picnicker_tina"
 npc_definition_id = "trainer_class_picnicker"
 display_name = "Picnicker Tina"
 npc_sprite_frames = ExtResource("picnicker")
-battle_environment_id = "grass"
+battle_environment_id = "celadon_gym"
 
 [node name="AceTrainerLori" parent="Entities/NPCs" unique_id=67697487 instance=ExtResource("trainer")]
 position = Vector2(496, 912)
@@ -184,7 +184,7 @@ npc_definition_id = "trainer_class_ace_trainer_f"
 display_name = "Ace Trainer Lori"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("ace_trainer_f")
-battle_environment_id = "grass"
+battle_environment_id = "celadon_gym"
 
 [node name="PokeFanMaren" parent="Entities/NPCs" unique_id=2105658983 instance=ExtResource("trainer")]
 position = Vector2(880, 656)
@@ -195,7 +195,7 @@ npc_definition_id = "trainer_class_poke_fan_f"
 display_name = "Poké Fan Maren"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("poke_fan_f")
-battle_environment_id = "grass"
+battle_environment_id = "celadon_gym"
 
 [node name="GymLeaderErika" parent="Entities/NPCs" unique_id=951821764 instance=ExtResource("leader")]
 position = Vector2(656, 304)
@@ -206,7 +206,7 @@ preload_quest_markers = true
 display_name = "Erika"
 npc_sprite_frames = ExtResource("erika_frames")
 portrait_id = "showdown_erika_lgpe"
-battle_environment_id = "grass"
+battle_environment_id = "celadon_gym"
 
 [node name="StoryHook" type="Node" parent="Entities/NPCs/GymLeaderErika"]
 script = ExtResource("story_hook")

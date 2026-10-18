@@ -34,6 +34,8 @@ static func resolve(context: Dictionary) -> StringName:
 	# Authored interiors retain their environment on every floor. Explicit/PvP wins.
 	if battle_kind in ["wild", "trainer"]:
 		match str(context.get("map_id", "")).strip_edges():
+			"kanto_celadon_game_corner": return &"celadon_game_corner"
+			"kanto_celadon_gym": return &"celadon_gym"
 			"kanto_lavender_town_pokemon_tower": return &"pokemon_tower"
 			"kanto_rocket_hideout_b1f", "kanto_rocket_hideout_b2f", "kanto_rocket_hideout_b3f", "kanto_rocket_hideout_b4f", "kanto_rocket_hideout_elevator": return &"rocket_hideout"
 			"kanto_pewter_city_gym": return &"pewter_city_gym"

@@ -25,7 +25,7 @@ func _run() -> void:
 		_check(collision.get_cell_source_id(tile) == -1, "Trainer stands on open floor")
 		_check(actor.trainer_id == actor.npc_id and not ids.has(actor.trainer_id), "Stable unique trainer identity")
 		ids[actor.trainer_id] = true
-		_check(actor.battle_environment_id == "grass", "Garden battle environment")
+		_check(actor.battle_environment_id == "celadon_gym", "Dedicated garden battle environment")
 		_check(actor.npc_sprite_frames != null and (actor.npc_sprite_frames.has_animation("default") or actor.npc_sprite_frames.has_animation("idle_down")), "Overworld sprite is available")
 		var profile: Resource = actor.npc_profile
 		var portrait := catalog.resolve_portrait_id(profile.portrait_id if profile != null else "", actor.npc_id, actor.npc_definition_id)

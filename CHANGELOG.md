@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add dedicated 3D battle arenas for Celadon Game Corner and Celadon Gym, including Erika and all four Gym trainers.
+
 - Darken the Pokémon Tower and Rocket Hideout 3D arena materials and soften their decorative lights while preserving Pokémon lighting.
 
 - Show the Rocket Hideout grunt dropping the Lift Key after his defeat dialogue, let Giovanni disappear before leaving the Silph Scope, and block his office with a gate until both guards are defeated.

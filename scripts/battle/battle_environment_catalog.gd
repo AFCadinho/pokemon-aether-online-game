@@ -8,6 +8,8 @@ const CAVE_ENVIRONMENT_ID := &"cave"
 const PVP_STADIUM_ENVIRONMENT_ID := &"pvp_stadium"
 
 const PROFILES: Dictionary = {
+	&"celadon_game_corner": preload("res://resources/battle/environments/celadon_game_corner.tres"),
+	&"celadon_gym": preload("res://resources/battle/environments/celadon_gym.tres"),
 	&"pokemon_tower": preload("res://resources/battle/environments/pokemon_tower.tres"),
 	&"rocket_hideout": preload("res://resources/battle/environments/rocket_hideout.tres"),
 	&"ss_anne": preload("res://resources/battle/environments/ss_anne.tres"),
