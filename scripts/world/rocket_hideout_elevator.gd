@@ -17,11 +17,18 @@ func configure_rocket_elevator_instance(instance_map_id: String) -> void:
 	for floor: String in FLOORS:
 		var shape := get_node("Exits/To" + floor.to_upper() + "/CollisionShape2D") as CollisionShape2D
 		shape.set_deferred("disabled", floor != current_floor)
+	_refresh_exit_hints()
+
+
+func _refresh_exit_hints() -> void:
+	for floor: String in FLOORS:
+		get_node("Exits/To" + floor.to_upper() + "/DoorTransitionHint").visible = floor == current_floor and not $Doors.visible
 
 
 func play_departure() -> void:
 	GameState.acquire_overworld_input_lock(_ride_owner)
 	$Doors.show()
+	_refresh_exit_hints()
 	_ride = create_tween()
 	_ride.tween_property($Doors/Left, "position:x", 0.0, 0.18)
 	_ride.parallel().tween_property($Doors/Right, "position:x", 0.0, 0.18)
@@ -37,6 +44,7 @@ func finish_ride() -> void:
 	$Doors/Left.position.x = -16.0
 	$Doors/Right.position.x = 16.0
 	$Doors.hide()
+	_refresh_exit_hints()
 	GameState.release_overworld_input_lock(_ride_owner)
 
 

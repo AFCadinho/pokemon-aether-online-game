@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore the Rocket Hideout lift's floor choices and show door arrows on the approach floor, including the cabin's active exit.
+
 - Block the B1F Rocket Hideout lift shortcut until its lift-side grunt is defeated, preserving the first route through the B2F spinner maze.
 - Refresh Celadon Game Corner’s artist visual with the Hideout stair tiles drawn below characters.
 

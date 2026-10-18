@@ -194,6 +194,29 @@ reachable. `-- --render` captures the actual closed/open B1F scene and B2F.
 The B4F drop/gate test covers the shared-script regression. These use trusted API
 probes; a live two-client multiplayer walkthrough is not part of these checks.
 
+## Lift hint and panel follow-up
+
+The floor door hints sit one tile south of the lift entry, on the free approach
+floor. `transition_hint.gd` intentionally sets its absolute drawing layer to 7 at
+runtime; a scene-only `z_index = 4096` override did not survive `_ready`, so the
+old hints were covered by the lift artwork on `ObjectsTop` (2051). The shared
+hint drawing policy remains unchanged. Cabin exits now have matching downward
+hints; only the server-selected floor's hint is visible, and departure hides it
+until doors reopen, including rejected rides.
+
+The cabin's missing `destination_floors` property is restored to B1F/B2F/B4F.
+The panel script uses the same defaults, so an editor property reset no longer
+leaves an empty floor list beside three correctly configured destination exits.
+The trusted current floor and authorized ride/exit paths remain mandatory.
+
+All user-authored collision layers, collision-shape offsets, trigger positions
+and door-entry timing are preserved. The focused lift check verifies native panel
+input, all floor choices, authorization success/failure, hint state and movement
+through the authored cabin. Its footprint assertions cover playable floor and
+the immediate wall perimeter, rather than unreachable empty cells outside it.
+Graphical Godot captures also compare shown/hidden hints on B1F/B2F/B4F and in
+the cabin: all four visibly affect the rendered image on clear approach floor.
+
 ## Soundtrack
 
 All four basement floors and the elevator cabin use music profile
