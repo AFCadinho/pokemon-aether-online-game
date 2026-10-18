@@ -1,0 +1,78 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_elevator/assets/rocket_hideout_elevator.visual.tileset.compact_source_1_0.texture.res" id="1_1pvmb"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_elevator/assets/rocket_hideout_elevator.visual.tileset.compact_source_1025_0.texture.res" id="2_gyglu"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_elevator/assets/rocket_hideout_elevator.visual.tileset.compact_source_2049_0.texture.res" id="3_vrexw"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_elevator/assets/rocket_hideout_elevator.visual.tileset.compact_source_3073_0.texture.res" id="4_vyf6w"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_elevator/assets/rocket_hideout_elevator.visual.tileset.compact_source_5865_0.texture.res" id="5_pmwgm"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_elevator/assets/rocket_hideout_elevator.visual.tileset.compact_source_5866_0.texture.res" id="6_1mya5"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3mc6t"]
+texture = ExtResource("1_1pvmb")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_27m3s"]
+texture = ExtResource("2_gyglu")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o6g3x"]
+texture = ExtResource("3_vrexw")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tvu0y"]
+texture = ExtResource("4_vyf6w")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tqwgc"]
+texture = ExtResource("5_pmwgm")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4niyg"]
+texture = ExtResource("6_1mya5")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_3mc6t")
+sources/1 = SubResource("TileSetAtlasSource_27m3s")
+sources/2 = SubResource("TileSetAtlasSource_o6g3x")
+sources/3 = SubResource("TileSetAtlasSource_tvu0y")
+sources/4 = SubResource("TileSetAtlasSource_tqwgc")
+sources/5 = SubResource("TileSetAtlasSource_4niyg")
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/celadon_city/Rocket Hideout Elevator.tmx"
+metadata/tiled_compact_atlas_version = 1

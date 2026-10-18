@@ -23,6 +23,8 @@ func _run() -> void:
 	for key: String in SPECS:
 		var path := DIRECTORY + "rocket_hideout_" + key + ".tscn"
 		maps[path] = (load(path) as PackedScene).instantiate()
+	var cabin_path := DIRECTORY + "rocket_hideout_elevator.tscn"
+	maps[cabin_path] = (load(cabin_path) as PackedScene).instantiate()
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	var transition_count := 1 # Game Corner entry.
 	for key: String in SPECS:
@@ -47,11 +49,11 @@ func _run() -> void:
 		for exit_node: Area2D in map.get_node("Exits").get_children():
 			transition_count += 1
 			_check(catalog.transitions.has(exit_node.transition_id), "Server knows " + exit_node.transition_id)
-			var manual := str(exit_node.name).begins_with("LiftTo")
+			var manual := str(exit_node.name).begins_with("RideTo")
 			if manual:
 				_check(not exit_node.monitoring and exit_node.get_child_count() == 0, "Lift travel needs manual floor selection")
 			else:
-				var zone: Dictionary = second if key == "b1f" and str(exit_node.name) == "DownToB2F" else first
+				var zone: Dictionary = second if (key == "b1f" and str(exit_node.name) == "DownToB2F") or (key == "b4f" and str(exit_node.name) == "ToElevator") else first
 				_check(zone.has(Vector2i(exit_node.position / 32.0)), key + " reaches the correct staircase wing")
 				_check(exit_node.is_connected("body_entered", Callable(exit_node, "_on_body_entered")), "Stair entry signal")
 			var target: Node2D = maps[exit_node.target_scene_path]
@@ -62,24 +64,20 @@ func _run() -> void:
 			_check(destination.mapId == target.map_id and destination.spawnMarker == str(target_spawn.name), "Canonical destination marker")
 			_check(destination.position == {"x": target_spawn.position.x, "y": target_spawn.position.y}, "Server arrival matches the scene")
 		if key != "b3f":
-			var lift := map.get_node("Entities/Interactables/Lift")
-			_check(lift.destination_floors.size() == 2 and lift.destination_exits.size() == 2, "Lift offers the other two served floors")
-			var approach := Vector2i(lift.position / 32.0) + Vector2i.DOWN
-			var zone: Dictionary = second if key == "b4f" else first
-			_check(zone.has(approach), key + " lift control can be approached")
-			for path: NodePath in lift.destination_exits:
-				var exit_node := lift.get_node(path)
-				_check(exit_node.target_spawn_name == "FromLift" and exit_node.transition_facing_direction == "down", "Lift has a safe outward arrival")
+			var entrance := map.get_node("Exits/ToElevator")
+			_check(entrance.target_scene_path == cabin_path and entrance.target_spawn_name == "FromFloor", "Lift door enters the shared cabin")
+			_check(map.get_node_or_null("Entities/Interactables/Lift") == null, "Floor has no obsolete lift menu")
 		_check(LOADER.module_for_scene(map.scene_file_path) == LOADER.EXTENDED_MODULE_NAME, key + " browser module")
 		_check(catalog.areas[map.map_id].locationGroupId == "kanto_rocket_hideout", key + " server registration")
 		var errors: Array[String] = VALIDATOR.new().validate(map.get_node("Visual"), "res://generated/tiled_visuals/rocket_hideout_%s/rocket_hideout_%s.visual.tileset.tres" % [key, key])
 		_check(errors.is_empty(), key + " atlas layout: " + str(errors))
-	_check(transition_count == 16, "All ten stair directions and six lift journeys are configured")
+	transition_count += maps[cabin_path].get_node("Exits").get_child_count()
+	_check(transition_count == 19, "Ten stair directions, three cabin entries, three rides and three cabin exits are configured")
 	var corner_reached := _reachable(corner.get_node("Tiles/Collision"), Vector2i(28, 21), Vector2i(13, 16))
 	var entrance := corner.get_node("Exits/ToRocketHideout")
 	_check(corner_reached.has(Vector2i(24, 5)) and corner_reached.has(Vector2i(25, 5)), "Casino entrance reaches both stair tiles")
 	_check(entrance.target_scene_path == DIRECTORY + "rocket_hideout_b1f.tscn" and entrance.transition_facing_direction == "right", "Casino enters the B1F vestibule")
-	# Puzzle arrows and stop pads remain ordinary floor in this map-connection task.
+	# Spin logic uses separate markers and keeps the visual puzzle tiles walkable.
 	for point: Array in [["b2f", Vector2i(4, 8)], ["b2f", Vector2i(6, 8)], ["b3f", Vector2i(4, 13)], ["b3f", Vector2i(6, 13)], ["b4f", Vector2i(24, 14)], ["b4f", Vector2i(25, 14)]]:
 		_check(maps[DIRECTORY + "rocket_hideout_" + point[0] + ".tscn"].get_node("Tiles/Collision").get_cell_source_id(point[1]) == -1, "Walkable puzzle floor or overhead statue " + str(point))
 	for point: Array in [["b2f", Vector2i(4, 7)], ["b3f", Vector2i(5, 14)], ["b4f", Vector2i(23, 16)], ["b4f", Vector2i(26, 16)]]:
