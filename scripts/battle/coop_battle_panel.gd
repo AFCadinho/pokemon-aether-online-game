@@ -2088,11 +2088,7 @@ func _opponent_title() -> String:
 	var activity_id := str(CoopService.activity.get("activityId", ""))
 	if activity_id.begins_with("wild_"):
 		return "Wild Pokémon"
-	if activity_id.contains("gary"):
-		return "Gary"
-	if activity_id.contains("brock"):
-		return "Brock"
-	return "Trainer"
+	return CoopService.trainer_name_for_activity(activity_id)
 
 
 func _sync_native_trainers() -> void:
@@ -2226,11 +2222,8 @@ func _opponent_trainer_npc() -> BaseNPC:
 	var current_map := GameState.current_map
 	if current_map == null or not is_instance_valid(current_map):
 		return null
-	var npc_id := str(CoopService.activity.get("activityId", ""))
-	if npc_id == "brock":
-		npc_id = "kanto_alpha_gym_brock"
-	elif npc_id.contains("gary"):
-		npc_id = "kanto_route_22_gary_oak"
+	var trainer_id := CoopService.trainer_for_activity(str(CoopService.activity.get("activityId", "")))
+	var npc_id := CoopService.trainer_entity(trainer_id)
 	var npc_root := current_map.get_node_or_null("Entities/NPCs")
 	if npc_root == null:
 		npc_root = current_map
@@ -2242,7 +2235,8 @@ func _opponent_trainer_npc() -> BaseNPC:
 
 func _opponent_trainer_sprite_id(opponent_npc: BaseNPC = null) -> String:
 	var activity_id := str(CoopService.activity.get("activityId", ""))
-	var npc_id := "kanto_alpha_gym_brock" if activity_id == "brock" else activity_id
+	var trainer_id := CoopService.trainer_for_activity(activity_id)
+	var npc_id := CoopService.trainer_entity(trainer_id)
 	var catalog := get_node_or_null("/root/TrainerPortraitCatalog")
 	if catalog == null or not catalog.has_method("resolve_battle_sprite_id"):
 		return ""

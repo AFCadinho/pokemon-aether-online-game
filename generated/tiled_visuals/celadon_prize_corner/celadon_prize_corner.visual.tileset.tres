@@ -1,15 +1,14 @@
-[gd_resource type="TileSet" format=3 uid="uid://06s144k2rfaj"]
+[gd_resource type="TileSet" format=3]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_1_0.texture.res" id="1_ovfa5"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_1025_0.texture.res" id="2_87byh"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_2049_0.texture.res" id="3_y1jfd"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_3073_0.texture.res" id="4_g1t3h"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_5121_0.texture.res" id="5_pbibk"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_5865_0.texture.res" id="6_f1gvk"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_6785_0.texture.res" id="7_vxcp1"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_1_0.texture.res" id="1_qlo5o"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_1025_0.texture.res" id="2_ovfa5"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_2049_0.texture.res" id="3_87byh"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_3073_0.texture.res" id="4_y1jfd"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_5865_0.texture.res" id="5_g1t3h"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_6785_0.texture.res" id="6_pbibk"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4gjsv"]
-texture = ExtResource("1_ovfa5")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_f1gvk"]
+texture = ExtResource("1_qlo5o")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -21,14 +20,9 @@ texture_region_size = Vector2i(32, 32)
 5:0/0 = 0
 6:0/0 = 0
 0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-3:1/0 = 0
-4:1/0 = 0
-5:1/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yngup"]
-texture = ExtResource("2_87byh")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vxcp1"]
+texture = ExtResource("2_ovfa5")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -50,16 +44,23 @@ texture_region_size = Vector2i(32, 32)
 1:2/0 = 0
 2:2/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qai1m"]
-texture = ExtResource("3_y1jfd")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4gjsv"]
+texture = ExtResource("3_87byh")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_simyd"]
-texture = ExtResource("4_g1t3h")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yngup"]
+texture = ExtResource("4_y1jfd")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -81,21 +82,11 @@ texture_region_size = Vector2i(32, 32)
 1:2/0 = 0
 2:2/0 = 0
 3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2n17p"]
-texture = ExtResource("5_pbibk")
-margins = Vector2i(2, 2)
-separation = Vector2i(4, 4)
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tl7y1"]
-texture = ExtResource("6_f1gvk")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qai1m"]
+texture = ExtResource("5_g1t3h")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -108,9 +99,15 @@ texture_region_size = Vector2i(32, 32)
 6:0/0 = 0
 0:1/0 = 0
 1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r188a"]
-texture = ExtResource("7_vxcp1")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_simyd"]
+texture = ExtResource("6_pbibk")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -120,15 +117,18 @@ texture_region_size = Vector2i(32, 32)
 3:0/0 = 0
 4:0/0 = 0
 5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
 
 [resource]
 tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_4gjsv")
-sources/1 = SubResource("TileSetAtlasSource_yngup")
-sources/2 = SubResource("TileSetAtlasSource_qai1m")
-sources/3 = SubResource("TileSetAtlasSource_simyd")
-sources/4 = SubResource("TileSetAtlasSource_2n17p")
-sources/5 = SubResource("TileSetAtlasSource_tl7y1")
-sources/6 = SubResource("TileSetAtlasSource_r188a")
+sources/0 = SubResource("TileSetAtlasSource_f1gvk")
+sources/1 = SubResource("TileSetAtlasSource_vxcp1")
+sources/2 = SubResource("TileSetAtlasSource_4gjsv")
+sources/3 = SubResource("TileSetAtlasSource_yngup")
+sources/4 = SubResource("TileSetAtlasSource_qai1m")
+sources/5 = SubResource("TileSetAtlasSource_simyd")
 metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/celadon_city/Celadon Prize Corner.tmx"
 metadata/tiled_compact_atlas_version = 1

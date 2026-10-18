@@ -1,0 +1,4305 @@
+{
+	"entries": {
+		"aether_clash_lobby_clash_coordinator": {
+			"mapId": "aether_clash_lobby",
+			"position": {
+				"x": 784.0,
+				"y": 1360.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_lobby.tscn",
+			"trainerId": ""
+		},
+		"aether_clash_lobby_training_captain": {
+			"mapId": "aether_clash_lobby",
+			"position": {
+				"x": 528.0,
+				"y": 816.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_lobby.tscn",
+			"trainerId": ""
+		},
+		"aether_clash_lobby_transit_keeper": {
+			"mapId": "aether_clash_lobby",
+			"position": {
+				"x": 1040.0,
+				"y": 1424.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/aether_clash/aether_clash_lobby.tscn",
+			"trainerId": ""
+		},
+		"guild_base_directory_attendant": {
+			"mapId": "guild_base_elevator",
+			"position": {
+				"x": 336.0,
+				"y": 592.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/guild_base/elevator.tscn",
+			"trainerId": ""
+		},
+		"guild_base_lift_attendant": {
+			"mapId": "guild_base_elevator_cabin",
+			"position": {
+				"x": 176.0,
+				"y": 208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/guild_base/elevator_cabin.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_bills_house_activate_cell_separator": {
+			"mapId": "kanto_route_25_bills_house",
+			"position": {
+				"x": 272.0,
+				"y": 288.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/bills_house.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_bills_house_meet_bill": {
+			"mapId": "kanto_route_25_bills_house",
+			"position": {
+				"x": 464.0,
+				"y": 272.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/bills_house.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_celadon_erika_rocket_inquiry": {
+			"mapId": "kanto_celadon_gym",
+			"position": {
+				"x": 656.0,
+				"y": 336.0
+			},
+			"radius": 151.764495849609,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_celadon_erika_rocket_inquiry_manual": {
+			"mapId": "kanto_celadon_gym",
+			"position": {
+				"x": 656.0,
+				"y": 304.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_celadon_mira_rocket_inquiry": {
+			"mapId": "kanto_celadon_city",
+			"position": {
+				"x": 2352.0,
+				"y": 1616.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_celadon_rocket_confrontation": {
+			"mapId": "kanto_celadon_city",
+			"position": {
+				"x": 2256.0,
+				"y": 1600.0
+			},
+			"radius": 96.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_celadon_rocket_escape": {
+			"mapId": "kanto_celadon_city",
+			"position": {
+				"x": 2256.0,
+				"y": 1600.0
+			},
+			"radius": 96.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_cerulean_gym_closed": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 1584.0,
+				"y": 1360.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_game_corner_guard_confrontation": {
+			"mapId": "kanto_celadon_game_corner",
+			"position": {
+				"x": 752.0,
+				"y": 176.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_game_corner_guard_escape": {
+			"mapId": "kanto_celadon_game_corner",
+			"position": {
+				"x": 752.0,
+				"y": 176.0
+			},
+			"radius": 129.137084960938,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_game_corner_guard_escape_manual": {
+			"mapId": "kanto_celadon_game_corner",
+			"position": {
+				"x": 752.0,
+				"y": 176.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_lavender_fuji_helper_request": {
+			"mapId": "kanto_lavender_town_mr_fuji_house",
+			"position": {
+				"x": 432.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/mr_fuji_house.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_lavender_town_resident_warning": {
+			"mapId": "kanto_lavender_town",
+			"position": {
+				"x": 720.0,
+				"y": 80.0
+			},
+			"radius": 124.811767578125,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_mt_moon_ambush_rescue": {
+			"mapId": "kanto_mt_moon_b2f",
+			"position": {
+				"x": 768.0,
+				"y": 624.0
+			},
+			"radius": 118.449989318848,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_mt_moon_entrance_warning": {
+			"mapId": "kanto_mt_moon_1f",
+			"position": {
+				"x": 944.0,
+				"y": 2416.0
+			},
+			"radius": 144.996124267578,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_oaks_lab_oak_rock_tunnel_advice": {
+			"mapId": "kanto_oaks_lab",
+			"position": {
+				"x": 400.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_pokemon_tower_gary_auto_challenge": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 1296.0,
+				"y": 400.0
+			},
+			"radius": 224.614471435547,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_pokemon_tower_gary_challenge": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 1328.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_route_25_misty_found": {
+			"mapId": "kanto_route_25",
+			"position": {
+				"x": 1840.0,
+				"y": 1040.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_route_5_dadinho_potential": {
+			"mapId": "kanto_route_5",
+			"position": {
+				"x": 1104.0,
+				"y": 1488.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_route_6_saffron_gate_closed": {
+			"mapId": "kanto_route_6_saffron_gate",
+			"position": {
+				"x": 464.0,
+				"y": 528.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_route_7_rocket_sighting": {
+			"mapId": "kanto_route_7",
+			"position": {
+				"x": 528.0,
+				"y": 1216.0
+			},
+			"radius": 153.63720703125,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_7.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_route_8_saffron_gate_closed": {
+			"mapId": "kanto_route_8_saffron_gate",
+			"position": {
+				"x": 496.0,
+				"y": 208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_8_saffron_gate.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_ss_anne_collect_tea": {
+			"mapId": "kanto_ss_anne_1f",
+			"position": {
+				"x": 2160.0,
+				"y": 2032.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_ss_anne_deliver_report": {
+			"mapId": "kanto_ss_anne_3f",
+			"position": {
+				"x": 496.0,
+				"y": 208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_ss_anne_meet_captain": {
+			"mapId": "kanto_ss_anne_2f",
+			"position": {
+				"x": 2352.0,
+				"y": 1136.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_ss_anne_return_report": {
+			"mapId": "kanto_ss_anne_b1f",
+			"position": {
+				"x": 784.0,
+				"y": 1040.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_ss_anne_return_tea": {
+			"mapId": "kanto_ss_anne_2f",
+			"position": {
+				"x": 2352.0,
+				"y": 1136.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_ss_anne_rival_challenge": {
+			"mapId": "kanto_ss_anne_2f",
+			"position": {
+				"x": 1680.0,
+				"y": 1008.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_ss_anne_show_ticket": {
+			"mapId": "kanto_vermilion_docks",
+			"position": {
+				"x": 1392.0,
+				"y": 624.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_ss_anne_titanic_pose": {
+			"mapId": "kanto_ss_anne_3f",
+			"position": {
+				"x": 208.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn",
+			"trainerId": ""
+		},
+		"interaction:oaks_lab_oak_parcel_request": {
+			"mapId": "kanto_oaks_lab",
+			"position": {
+				"x": 400.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn",
+			"trainerId": ""
+		},
+		"interaction:players_house_father_intro": {
+			"mapId": "kanto_players_house",
+			"position": {
+				"x": 448.0,
+				"y": 848.0
+			},
+			"radius": 97.5843124389648,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn",
+			"trainerId": ""
+		},
+		"interaction:players_house_mom_before_journey": {
+			"mapId": "kanto_players_house",
+			"position": {
+				"x": 336.0,
+				"y": 880.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn",
+			"trainerId": ""
+		},
+		"interaction:route_22_meet_gary": {
+			"mapId": "kanto_route_22",
+			"position": {
+				"x": 1488.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
+			"trainerId": ""
+		},
+		"interaction:trainer_school_meet_dadinho": {
+			"mapId": "kanto_viridian_city_trainer_school",
+			"position": {
+				"x": 400.0,
+				"y": 401.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn",
+			"trainerId": ""
+		},
+		"kanto_alpha_gym_brock": {
+			"mapId": "kanto_pewter_city_gym",
+			"position": {
+				"x": 528.0,
+				"y": 272.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn",
+			"trainerId": "kanto_alpha_gym_brock"
+		},
+		"kanto_alpha_gym_lt_surge": {
+			"mapId": "kanto_vermilion_city_gym",
+			"position": {
+				"x": 368.0,
+				"y": 304.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_gym.tscn",
+			"trainerId": "kanto_alpha_gym_lt_surge"
+		},
+		"kanto_alpha_gym_misty": {
+			"mapId": "kanto_cerulean_city_gym",
+			"position": {
+				"x": 496.0,
+				"y": 240.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn",
+			"trainerId": "kanto_alpha_gym_misty"
+		},
+		"kanto_celadon_city_bridge_worker": {
+			"mapId": "kanto_celadon_city",
+			"position": {
+				"x": 1232.0,
+				"y": 976.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_city_canal_stroller": {
+			"mapId": "kanto_celadon_city",
+			"position": {
+				"x": 2000.0,
+				"y": 1392.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_city_city_guide": {
+			"mapId": "kanto_celadon_city",
+			"position": {
+				"x": 2320.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_city_fountain_resident": {
+			"mapId": "kanto_celadon_city",
+			"position": {
+				"x": 656.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_city_garden_keeper": {
+			"mapId": "kanto_celadon_city",
+			"position": {
+				"x": 1776.0,
+				"y": 1744.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_city_gym_admirer": {
+			"mapId": "kanto_celadon_city",
+			"position": {
+				"x": 464.0,
+				"y": 1616.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_city_mira": {
+			"mapId": "kanto_celadon_city",
+			"position": {
+				"x": 2352.0,
+				"y": 1616.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_city_pokemon_center_caretaker_rina": {
+			"mapId": "kanto_celadon_city_pokemon_center",
+			"position": {
+				"x": 592.0,
+				"y": 496.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_city_pokemon_center_courier_daan": {
+			"mapId": "kanto_celadon_city_pokemon_center",
+			"position": {
+				"x": 336.0,
+				"y": 816.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_city_pokemon_center_gardener_flora": {
+			"mapId": "kanto_celadon_city_pokemon_center",
+			"position": {
+				"x": 336.0,
+				"y": 496.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_city_pokemon_center_young_trainer_mika": {
+			"mapId": "kanto_celadon_city_pokemon_center",
+			"position": {
+				"x": 528.0,
+				"y": 816.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_city_pokemon_walker": {
+			"mapId": "kanto_celadon_city",
+			"position": {
+				"x": 1904.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_city_window_shopper": {
+			"mapId": "kanto_celadon_city",
+			"position": {
+				"x": 560.0,
+				"y": 528.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_department_store_assistant_noor": {
+			"mapId": "kanto_celadon_department_store",
+			"position": {
+				"x": 240.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_department_store_collector_daan": {
+			"mapId": "kanto_celadon_department_store",
+			"position": {
+				"x": 976.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_department_store_gentleman_hugo": {
+			"mapId": "kanto_celadon_department_store",
+			"position": {
+				"x": 1104.0,
+				"y": 816.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_department_store_school_kid_lina": {
+			"mapId": "kanto_celadon_department_store",
+			"position": {
+				"x": 272.0,
+				"y": 848.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_department_store_shopper_mila": {
+			"mapId": "kanto_celadon_department_store",
+			"position": {
+				"x": 400.0,
+				"y": 368.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_game_corner_gentleman_bram": {
+			"mapId": "kanto_celadon_game_corner",
+			"position": {
+				"x": 272.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_game_corner_host_iris": {
+			"mapId": "kanto_celadon_game_corner",
+			"position": {
+				"x": 432.0,
+				"y": 176.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_game_corner_lass_faye": {
+			"mapId": "kanto_celadon_game_corner",
+			"position": {
+				"x": 752.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_game_corner_socialite_ava": {
+			"mapId": "kanto_celadon_game_corner",
+			"position": {
+				"x": 752.0,
+				"y": 368.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_game_corner_youngster_niels": {
+			"mapId": "kanto_celadon_game_corner",
+			"position": {
+				"x": 368.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+			"trainerId": ""
+		},
+		"kanto_celadon_gym_ace_lori": {
+			"mapId": "kanto_celadon_gym",
+			"position": {
+				"x": 496.0,
+				"y": 912.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+			"trainerId": "kanto_celadon_gym_ace_lori"
+		},
+		"kanto_celadon_gym_erika": {
+			"mapId": "kanto_celadon_gym",
+			"position": {
+				"x": 656.0,
+				"y": 304.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+			"trainerId": "kanto_celadon_gym_erika"
+		},
+		"kanto_celadon_gym_fan_maren": {
+			"mapId": "kanto_celadon_gym",
+			"position": {
+				"x": 880.0,
+				"y": 656.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+			"trainerId": "kanto_celadon_gym_fan_maren"
+		},
+		"kanto_celadon_gym_lass_kay": {
+			"mapId": "kanto_celadon_gym",
+			"position": {
+				"x": 496.0,
+				"y": 1456.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+			"trainerId": "kanto_celadon_gym_lass_kay"
+		},
+		"kanto_celadon_gym_picnicker_tina": {
+			"mapId": "kanto_celadon_gym",
+			"position": {
+				"x": 848.0,
+				"y": 1104.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+			"trainerId": "kanto_celadon_gym_picnicker_tina"
+		},
+		"kanto_cerulean_city_ace_trainer_bram": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 752.0,
+				"y": 1200.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_ace_trainer_lila": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 624.0,
+				"y": 1200.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_bike_enthusiast_theo": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 752.0,
+				"y": 1680.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_bike_store_owner": {
+			"mapId": "kanto_cerulean_city_bike_store",
+			"position": {
+				"x": 592.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/bike_store.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_bridge_worker_milo": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 1872.0,
+				"y": 656.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_canal_picnicker_nia": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 1168.0,
+				"y": 880.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_canal_researcher_cora": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 400.0,
+				"y": 752.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_cave_agent": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 528.0,
+				"y": 208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_gym_attendant": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 1584.0,
+				"y": 1360.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_gym_guide": {
+			"mapId": "kanto_cerulean_city_gym",
+			"position": {
+				"x": 560.0,
+				"y": 1136.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_gym_picnicker_diana": {
+			"mapId": "kanto_cerulean_city_gym",
+			"position": {
+				"x": 560.0,
+				"y": 656.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn",
+			"trainerId": "kanto_cerulean_city_gym_picnicker_diana"
+		},
+		"kanto_cerulean_city_gym_swimmer_briana": {
+			"mapId": "kanto_cerulean_city_gym",
+			"position": {
+				"x": 432.0,
+				"y": 880.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn",
+			"trainerId": "kanto_cerulean_city_gym_swimmer_briana"
+		},
+		"kanto_cerulean_city_gym_swimmer_luis": {
+			"mapId": "kanto_cerulean_city_gym",
+			"position": {
+				"x": 624.0,
+				"y": 496.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn",
+			"trainerId": "kanto_cerulean_city_gym_swimmer_luis"
+		},
+		"kanto_cerulean_city_house_1_onix_trainer": {
+			"mapId": "kanto_cerulean_city_house_1",
+			"position": {
+				"x": 272.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/house1.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_house_2_resident": {
+			"mapId": "kanto_cerulean_city_house_2",
+			"position": {
+				"x": 272.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/house2.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_house_3_resident_elise": {
+			"mapId": "kanto_cerulean_city_house_3",
+			"position": {
+				"x": 272.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/house3.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_mountain_guide": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 1712.0,
+				"y": 1904.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_patrol_officer": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 1040.0,
+				"y": 1008.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_pokemon_center_camper_finn": {
+			"mapId": "kanto_cerulean_city_pokemon_center",
+			"position": {
+				"x": 560.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_pokemon_center_trainer_marina": {
+			"mapId": "kanto_cerulean_city_pokemon_center",
+			"position": {
+				"x": 336.0,
+				"y": 816.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_shiny_mount_collector": {
+			"mapId": "kanto_cerulean_city_bike_store",
+			"position": {
+				"x": 368.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/bike_store.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_veteran_garrick": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 1648.0,
+				"y": 1680.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_cerulean_city_waterway_visitor_maya": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 1424.0,
+				"y": 720.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_cinnabar_island_beachgoer_lina": {
+			"mapId": "kanto_cinnabar_island",
+			"position": {
+				"x": 1808.0,
+				"y": 976.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn",
+			"trainerId": ""
+		},
+		"kanto_cinnabar_island_hiker_roan": {
+			"mapId": "kanto_cinnabar_island",
+			"position": {
+				"x": 1136.0,
+				"y": 752.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn",
+			"trainerId": ""
+		},
+		"kanto_cinnabar_island_pokemon_center_researcher_ada": {
+			"mapId": "kanto_cinnabar_island_pokemon_center",
+			"position": {
+				"x": 336.0,
+				"y": 496.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_cinnabar_island_pokemon_center_sailor_finn": {
+			"mapId": "kanto_cinnabar_island_pokemon_center",
+			"position": {
+				"x": 528.0,
+				"y": 816.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_cinnabar_island_researcher_ivo": {
+			"mapId": "kanto_cinnabar_island",
+			"position": {
+				"x": 752.0,
+				"y": 1392.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn",
+			"trainerId": ""
+		},
+		"kanto_cinnabar_island_researcher_mira": {
+			"mapId": "kanto_cinnabar_island",
+			"position": {
+				"x": 720.0,
+				"y": 1968.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn",
+			"trainerId": ""
+		},
+		"kanto_cinnabar_island_sailor_bram": {
+			"mapId": "kanto_cinnabar_island",
+			"position": {
+				"x": 1168.0,
+				"y": 2064.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn",
+			"trainerId": ""
+		},
+		"kanto_cinnabar_island_traveler_esme": {
+			"mapId": "kanto_cinnabar_island",
+			"position": {
+				"x": 976.0,
+				"y": 1104.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn",
+			"trainerId": ""
+		},
+		"kanto_game_corner_attendant": {
+			"mapId": "kanto_celadon_game_corner",
+			"position": {
+				"x": 752.0,
+				"y": 176.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+			"trainerId": "kanto_celadon_game_corner_rocket_guard"
+		},
+		"kanto_lavender_fuji_helper": {
+			"mapId": "kanto_lavender_town_mr_fuji_house",
+			"position": {
+				"x": 432.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/mr_fuji_house.tscn",
+			"trainerId": ""
+		},
+		"kanto_lavender_house_1_name_rater": {
+			"mapId": "kanto_lavender_town_house_1",
+			"position": {
+				"x": 400.0,
+				"y": 400.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/house1.tscn",
+			"trainerId": ""
+		},
+		"kanto_lavender_house_2_caretaker": {
+			"mapId": "kanto_lavender_town_house_2",
+			"position": {
+				"x": 304.0,
+				"y": 272.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/house2.tscn",
+			"trainerId": ""
+		},
+		"kanto_lavender_house_3_young_trainer": {
+			"mapId": "kanto_lavender_town_house_3",
+			"position": {
+				"x": 304.0,
+				"y": 352.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/house3.tscn",
+			"trainerId": ""
+		},
+		"kanto_lavender_town_pokecenter_visitor": {
+			"mapId": "kanto_lavender_town",
+			"position": {
+				"x": 368.0,
+				"y": 752.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
+			"trainerId": ""
+		},
+		"kanto_lavender_town_pokemon_center_tourist": {
+			"mapId": "kanto_lavender_town_pokemon_center",
+			"position": {
+				"x": 320.0,
+				"y": 816.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_lavender_town_resident": {
+			"mapId": "kanto_lavender_town",
+			"position": {
+				"x": 656.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
+			"trainerId": ""
+		},
+		"kanto_lavender_town_tower_watcher": {
+			"mapId": "kanto_lavender_town",
+			"position": {
+				"x": 1008.0,
+				"y": 720.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
+			"trainerId": ""
+		},
+		"kanto_mt_moon_1f_bug_catcher_kent": {
+			"mapId": "kanto_mt_moon_1f",
+			"position": {
+				"x": 272.0,
+				"y": 1904.0
+			},
+			"radius": 144.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+			"trainerId": "kanto_mt_moon_1f_bug_catcher_kent"
+		},
+		"kanto_mt_moon_1f_bug_catcher_robby": {
+			"mapId": "kanto_mt_moon_1f",
+			"position": {
+				"x": 2512.0,
+				"y": 1872.0
+			},
+			"radius": 144.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+			"trainerId": "kanto_mt_moon_1f_bug_catcher_robby"
+		},
+		"kanto_mt_moon_1f_hiker_marcos": {
+			"mapId": "kanto_mt_moon_1f",
+			"position": {
+				"x": 336.0,
+				"y": 496.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+			"trainerId": "kanto_mt_moon_1f_hiker_marcos"
+		},
+		"kanto_mt_moon_1f_lass_iris": {
+			"mapId": "kanto_mt_moon_1f",
+			"position": {
+				"x": 976.0,
+				"y": 1712.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+			"trainerId": "kanto_mt_moon_1f_lass_iris"
+		},
+		"kanto_mt_moon_1f_lass_miriam": {
+			"mapId": "kanto_mt_moon_1f",
+			"position": {
+				"x": 2256.0,
+				"y": 240.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+			"trainerId": "kanto_mt_moon_1f_lass_miriam"
+		},
+		"kanto_mt_moon_1f_super_nerd_jovan": {
+			"mapId": "kanto_mt_moon_1f",
+			"position": {
+				"x": 1712.0,
+				"y": 2320.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+			"trainerId": "kanto_mt_moon_1f_super_nerd_jovan"
+		},
+		"kanto_mt_moon_1f_youngster_josh": {
+			"mapId": "kanto_mt_moon_1f",
+			"position": {
+				"x": 752.0,
+				"y": 1104.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+			"trainerId": "kanto_mt_moon_1f_youngster_josh"
+		},
+		"kanto_mt_moon_b2f_rocket_grunt_1": {
+			"mapId": "kanto_mt_moon_b2f",
+			"position": {
+				"x": 816.0,
+				"y": 1136.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+			"trainerId": "kanto_mt_moon_b2f_rocket_grunt_1"
+		},
+		"kanto_mt_moon_b2f_rocket_grunt_2": {
+			"mapId": "kanto_mt_moon_b2f",
+			"position": {
+				"x": 1136.0,
+				"y": 1840.0
+			},
+			"radius": 144.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+			"trainerId": "kanto_mt_moon_b2f_rocket_grunt_2"
+		},
+		"kanto_mt_moon_b2f_rocket_grunt_3": {
+			"mapId": "kanto_mt_moon_b2f",
+			"position": {
+				"x": 1872.0,
+				"y": 592.0
+			},
+			"radius": 144.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+			"trainerId": "kanto_mt_moon_b2f_rocket_grunt_3"
+		},
+		"kanto_mt_moon_b2f_rocket_grunt_4": {
+			"mapId": "kanto_mt_moon_b2f",
+			"position": {
+				"x": 1840.0,
+				"y": 1328.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+			"trainerId": "kanto_mt_moon_b2f_rocket_grunt_4"
+		},
+		"kanto_mt_moon_b2f_super_nerd_miguel": {
+			"mapId": "kanto_mt_moon_b2f",
+			"position": {
+				"x": 720.0,
+				"y": 656.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+			"trainerId": "kanto_mt_moon_b2f_super_nerd_miguel"
+		},
+		"kanto_oaklab_oak_1": {
+			"mapId": "kanto_oaks_lab",
+			"position": {
+				"x": 400.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn",
+			"trainerId": ""
+		},
+		"kanto_oaks_lab_aide_emma": {
+			"mapId": "kanto_oaks_lab",
+			"position": {
+				"x": 496.0,
+				"y": 528.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn",
+			"trainerId": ""
+		},
+		"kanto_oaks_lab_aide_noah": {
+			"mapId": "kanto_oaks_lab",
+			"position": {
+				"x": 240.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn",
+			"trainerId": ""
+		},
+		"kanto_oaks_lab_gary": {
+			"mapId": "kanto_oaks_lab",
+			"position": {
+				"x": 432.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn",
+			"trainerId": ""
+		},
+		"kanto_pallet_town_fishing_guru": {
+			"mapId": "kanto_vermilion_city_house_1",
+			"position": {
+				"x": 304.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/house1.tscn",
+			"trainerId": ""
+		},
+		"kanto_pallet_town_north_guard": {
+			"mapId": "kanto_pallet_town",
+			"position": {
+				"x": 1040.0,
+				"y": 208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+			"trainerId": ""
+		},
+		"kanto_pallet_town_play_family_child": {
+			"mapId": "kanto_pallet_town",
+			"position": {
+				"x": 240.0,
+				"y": 400.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+			"trainerId": ""
+		},
+		"kanto_pallet_town_play_family_father": {
+			"mapId": "kanto_pallet_town",
+			"position": {
+				"x": 272.0,
+				"y": 240.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+			"trainerId": ""
+		},
+		"kanto_pallet_town_play_family_mother": {
+			"mapId": "kanto_pallet_town",
+			"position": {
+				"x": 368.0,
+				"y": 240.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+			"trainerId": ""
+		},
+		"kanto_pallet_town_resident_mara": {
+			"mapId": "kanto_pallet_town",
+			"position": {
+				"x": 784.0,
+				"y": 1008.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+			"trainerId": ""
+		},
+		"kanto_pallet_town_transit_keeper": {
+			"mapId": "kanto_pallet_town",
+			"position": {
+				"x": 720.0,
+				"y": 240.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_gym_fan_max": {
+			"mapId": "kanto_pewter_city",
+			"position": {
+				"x": 496.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_gym_guide_rocky": {
+			"mapId": "kanto_pewter_city_gym",
+			"position": {
+				"x": 592.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_gym_hiker_flint": {
+			"mapId": "kanto_pewter_city_gym",
+			"position": {
+				"x": 304.0,
+				"y": 624.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn",
+			"trainerId": "kanto_pewter_city_gym_hiker_flint"
+		},
+		"kanto_pewter_city_gym_youngster_stone": {
+			"mapId": "kanto_pewter_city_gym",
+			"position": {
+				"x": 752.0,
+				"y": 464.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn",
+			"trainerId": "kanto_pewter_city_gym_youngster_stone"
+		},
+		"kanto_pewter_city_hiker_bruno": {
+			"mapId": "kanto_pewter_city",
+			"position": {
+				"x": 240.0,
+				"y": 208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_house_1_fossil_fan_petra": {
+			"mapId": "kanto_pewter_city_house_1",
+			"position": {
+				"x": 272.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/house1.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_house_1_school_kid_tessa": {
+			"mapId": "kanto_pewter_city_house_1",
+			"position": {
+				"x": 400.0,
+				"y": 368.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/house1.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_house_2_hiker_amos": {
+			"mapId": "kanto_pewter_city_house_2",
+			"position": {
+				"x": 272.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/house2.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_house_2_poke_fan_mira": {
+			"mapId": "kanto_pewter_city_house_2",
+			"position": {
+				"x": 400.0,
+				"y": 368.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/house2.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_karate_master_kenji": {
+			"mapId": "kanto_pewter_city",
+			"position": {
+				"x": 592.0,
+				"y": 176.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_museum_guide_theo": {
+			"mapId": "kanto_pewter_city",
+			"position": {
+				"x": 1456.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_pokemon_center_hiker_flint": {
+			"mapId": "kanto_pewter_city_pokemon_center",
+			"position": {
+				"x": 272.0,
+				"y": 496.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_pokemon_center_lass_celeste": {
+			"mapId": "kanto_pewter_city_pokemon_center",
+			"position": {
+				"x": 528.0,
+				"y": 816.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_resident_nora": {
+			"mapId": "kanto_pewter_city",
+			"position": {
+				"x": 1360.0,
+				"y": 912.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_route_3_guard": {
+			"mapId": "kanto_pewter_city",
+			"position": {
+				"x": 1872.0,
+				"y": 1008.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_transit_keeper": {
+			"mapId": "kanto_pewter_city",
+			"position": {
+				"x": 1488.0,
+				"y": 976.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_city_worker_cole": {
+			"mapId": "kanto_pewter_city",
+			"position": {
+				"x": 400.0,
+				"y": 976.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_museum_attendant_iris": {
+			"mapId": "kanto_pewter_city_museum",
+			"position": {
+				"x": 400.0,
+				"y": 528.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_museum_collector_hugo": {
+			"mapId": "kanto_pewter_city_museum",
+			"position": {
+				"x": 464.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_museum_curator_elara": {
+			"mapId": "kanto_pewter_city_museum",
+			"position": {
+				"x": 752.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_museum_researcher_owen": {
+			"mapId": "kanto_pewter_city_museum",
+			"position": {
+				"x": 272.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn",
+			"trainerId": ""
+		},
+		"kanto_pewter_museum_visitor_finn": {
+			"mapId": "kanto_pewter_city_museum",
+			"position": {
+				"x": 528.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn",
+			"trainerId": ""
+		},
+		"kanto_players_house_father": {
+			"mapId": "kanto_players_house",
+			"position": {
+				"x": 448.0,
+				"y": 896.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn",
+			"trainerId": ""
+		},
+		"kanto_players_house_mom": {
+			"mapId": "kanto_players_house",
+			"position": {
+				"x": 336.0,
+				"y": 880.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_fan_club_chairman": {
+			"mapId": "kanto_vermilion_city_pokemon_fan_club",
+			"position": {
+				"x": 560.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_fan_club.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_caretaker_elias": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 144.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_drifloon_1": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 592.0,
+				"y": 1072.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_gary": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 1328.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_gastly_1": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 1008.0,
+				"y": 496.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_healer_selene": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 1296.0,
+				"y": 1168.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_hex_maniac_aster": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 2160.0,
+				"y": 240.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": "kanto_pokemon_tower_hex_maniac_aster"
+		},
+		"kanto_pokemon_tower_hex_maniac_iris": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 2192.0,
+				"y": 1168.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": "kanto_pokemon_tower_hex_maniac_iris"
+		},
+		"kanto_pokemon_tower_hex_maniac_liora": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 368.0,
+				"y": 1168.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": "kanto_pokemon_tower_hex_maniac_liora"
+		},
+		"kanto_pokemon_tower_hex_maniac_mira": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 1488.0,
+				"y": 1072.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": "kanto_pokemon_tower_hex_maniac_mira"
+		},
+		"kanto_pokemon_tower_hex_maniac_nora": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 2192.0,
+				"y": 496.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": "kanto_pokemon_tower_hex_maniac_nora"
+		},
+		"kanto_pokemon_tower_hex_maniac_nyx": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 1936.0,
+				"y": 1328.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": "kanto_pokemon_tower_hex_maniac_nyx"
+		},
+		"kanto_pokemon_tower_hex_maniac_rhea": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 592.0,
+				"y": 2032.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": "kanto_pokemon_tower_hex_maniac_rhea"
+		},
+		"kanto_pokemon_tower_hex_maniac_vera": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 592.0,
+				"y": 1296.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": "kanto_pokemon_tower_hex_maniac_vera"
+		},
+		"kanto_pokemon_tower_litwick_1": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 1040.0,
+				"y": 1328.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_mimikyu_1": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 144.0,
+				"y": 2128.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_misdreavus_1": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 1936.0,
+				"y": 240.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_mourner_mara": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 432.0,
+				"y": 496.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_phantump_1": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 2384.0,
+				"y": 1296.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_pilgrim_ren": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 400.0,
+				"y": 2000.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_researcher_noor": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 1296.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_pokemon_tower_shuppet_1": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 144.0,
+				"y": 1296.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"kanto_rivals_house_daisy": {
+			"mapId": "kanto_rivals_house",
+			"position": {
+				"x": 336.0,
+				"y": 816.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/rivals_house.tscn",
+			"trainerId": ""
+		},
+		"kanto_rock_tunnel_1f_hiker_lenny": {
+			"mapId": "kanto_rock_tunnel_1f",
+			"position": {
+				"x": 240.0,
+				"y": 656.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+			"trainerId": "kanto_rock_tunnel_1f_hiker_lenny"
+		},
+		"kanto_rock_tunnel_1f_hiker_lucas": {
+			"mapId": "kanto_rock_tunnel_1f",
+			"position": {
+				"x": 1680.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+			"trainerId": "kanto_rock_tunnel_1f_hiker_lucas"
+		},
+		"kanto_rock_tunnel_1f_hiker_oliver": {
+			"mapId": "kanto_rock_tunnel_1f",
+			"position": {
+				"x": 560.0,
+				"y": 944.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+			"trainerId": "kanto_rock_tunnel_1f_hiker_oliver"
+		},
+		"kanto_rock_tunnel_1f_picnicker_ariana": {
+			"mapId": "kanto_rock_tunnel_1f",
+			"position": {
+				"x": 2512.0,
+				"y": 1744.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+			"trainerId": "kanto_rock_tunnel_1f_picnicker_ariana"
+		},
+		"kanto_rock_tunnel_1f_picnicker_dana": {
+			"mapId": "kanto_rock_tunnel_1f",
+			"position": {
+				"x": 1040.0,
+				"y": 1968.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+			"trainerId": "kanto_rock_tunnel_1f_picnicker_dana"
+		},
+		"kanto_rock_tunnel_1f_picnicker_leah": {
+			"mapId": "kanto_rock_tunnel_1f",
+			"position": {
+				"x": 1936.0,
+				"y": 2128.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+			"trainerId": "kanto_rock_tunnel_1f_picnicker_leah"
+		},
+		"kanto_rock_tunnel_1f_pokemaniac_ashton": {
+			"mapId": "kanto_rock_tunnel_1f",
+			"position": {
+				"x": 2128.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+			"trainerId": "kanto_rock_tunnel_1f_pokemaniac_ashton"
+		},
+		"kanto_rock_tunnel_b1f_hiker_allen": {
+			"mapId": "kanto_rock_tunnel_b1f",
+			"position": {
+				"x": 1904.0,
+				"y": 2032.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+			"trainerId": "kanto_rock_tunnel_b1f_hiker_allen"
+		},
+		"kanto_rock_tunnel_b1f_hiker_dudley": {
+			"mapId": "kanto_rock_tunnel_b1f",
+			"position": {
+				"x": 1104.0,
+				"y": 1648.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+			"trainerId": "kanto_rock_tunnel_b1f_hiker_dudley"
+		},
+		"kanto_rock_tunnel_b1f_hiker_eric": {
+			"mapId": "kanto_rock_tunnel_b1f",
+			"position": {
+				"x": 2352.0,
+				"y": 1872.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+			"trainerId": "kanto_rock_tunnel_b1f_hiker_eric"
+		},
+		"kanto_rock_tunnel_b1f_picnicker_martha": {
+			"mapId": "kanto_rock_tunnel_b1f",
+			"position": {
+				"x": 528.0,
+				"y": 1392.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+			"trainerId": "kanto_rock_tunnel_b1f_picnicker_martha"
+		},
+		"kanto_rock_tunnel_b1f_picnicker_sofia": {
+			"mapId": "kanto_rock_tunnel_b1f",
+			"position": {
+				"x": 688.0,
+				"y": 1520.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+			"trainerId": "kanto_rock_tunnel_b1f_picnicker_sofia"
+		},
+		"kanto_rock_tunnel_b1f_pokemaniac_cooper": {
+			"mapId": "kanto_rock_tunnel_b1f",
+			"position": {
+				"x": 1616.0,
+				"y": 1648.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+			"trainerId": "kanto_rock_tunnel_b1f_pokemaniac_cooper"
+		},
+		"kanto_rock_tunnel_b1f_pokemaniac_steve": {
+			"mapId": "kanto_rock_tunnel_b1f",
+			"position": {
+				"x": 880.0,
+				"y": 304.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+			"trainerId": "kanto_rock_tunnel_b1f_pokemaniac_steve"
+		},
+		"kanto_rock_tunnel_b1f_pokemaniac_winston": {
+			"mapId": "kanto_rock_tunnel_b1f",
+			"position": {
+				"x": 2352.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+			"trainerId": "kanto_rock_tunnel_b1f_pokemaniac_winston"
+		},
+		"kanto_rock_tunnel_future_self": {
+			"mapId": "kanto_rock_tunnel_1f",
+			"position": {
+				"x": 992.0,
+				"y": 976.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+			"trainerId": "kanto_rock_tunnel_future_self"
+		},
+		"kanto_route_10_hiker_clark": {
+			"mapId": "kanto_route_10",
+			"position": {
+				"x": 848.0,
+				"y": 2864.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+			"trainerId": "kanto_route_10_hiker_clark"
+		},
+		"kanto_route_10_hiker_trent": {
+			"mapId": "kanto_route_10",
+			"position": {
+				"x": 816.0,
+				"y": 2608.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+			"trainerId": "kanto_route_10_hiker_trent"
+		},
+		"kanto_route_10_picnicker_carol": {
+			"mapId": "kanto_route_10",
+			"position": {
+				"x": 1488.0,
+				"y": 1072.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+			"trainerId": "kanto_route_10_picnicker_carol"
+		},
+		"kanto_route_10_picnicker_heidi": {
+			"mapId": "kanto_route_10",
+			"position": {
+				"x": 816.0,
+				"y": 624.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+			"trainerId": "kanto_route_10_picnicker_heidi"
+		},
+		"kanto_route_10_pokemaniac_herman": {
+			"mapId": "kanto_route_10",
+			"position": {
+				"x": 1328.0,
+				"y": 3152.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+			"trainerId": "kanto_route_10_pokemaniac_herman"
+		},
+		"kanto_route_10_pokemaniac_mark": {
+			"mapId": "kanto_route_10",
+			"position": {
+				"x": 1648.0,
+				"y": 944.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+			"trainerId": "kanto_route_10_pokemaniac_mark"
+		},
+		"kanto_route_10_pokemon_center_bird_keeper_kian": {
+			"mapId": "kanto_route_10_pokemon_center",
+			"position": {
+				"x": 656.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route_10_pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_10_pokemon_center_worker_finn": {
+			"mapId": "kanto_route_10_pokemon_center",
+			"position": {
+				"x": 368.0,
+				"y": 848.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route_10_pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_10_rock_tunnel_north_guard": {
+			"mapId": "kanto_route_10",
+			"position": {
+				"x": 1072.0,
+				"y": 1040.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_10_rock_tunnel_south_guard": {
+			"mapId": "kanto_route_10",
+			"position": {
+				"x": 624.0,
+				"y": 2480.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_11_engineer_bernie": {
+			"mapId": "kanto_route_11",
+			"position": {
+				"x": 3184.0,
+				"y": 624.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+			"trainerId": "kanto_route_11_engineer_bernie"
+		},
+		"kanto_route_11_engineer_braxton": {
+			"mapId": "kanto_route_11",
+			"position": {
+				"x": 3120.0,
+				"y": 1552.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+			"trainerId": "kanto_route_11_engineer_braxton"
+		},
+		"kanto_route_11_gamer_darian": {
+			"mapId": "kanto_route_11",
+			"position": {
+				"x": 2672.0,
+				"y": 1424.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+			"trainerId": "kanto_route_11_gamer_darian"
+		},
+		"kanto_route_11_gamer_dirk": {
+			"mapId": "kanto_route_11",
+			"position": {
+				"x": 3088.0,
+				"y": 816.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+			"trainerId": "kanto_route_11_gamer_dirk"
+		},
+		"kanto_route_11_gamer_hugo": {
+			"mapId": "kanto_route_11",
+			"position": {
+				"x": 1968.0,
+				"y": 1072.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+			"trainerId": "kanto_route_11_gamer_hugo"
+		},
+		"kanto_route_11_gamer_jasper": {
+			"mapId": "kanto_route_11",
+			"position": {
+				"x": 2320.0,
+				"y": 1456.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+			"trainerId": "kanto_route_11_gamer_jasper"
+		},
+		"kanto_route_11_youngster_dave": {
+			"mapId": "kanto_route_11",
+			"position": {
+				"x": 2096.0,
+				"y": 848.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+			"trainerId": "kanto_route_11_youngster_dave"
+		},
+		"kanto_route_11_youngster_dillon": {
+			"mapId": "kanto_route_11",
+			"position": {
+				"x": 1264.0,
+				"y": 400.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+			"trainerId": "kanto_route_11_youngster_dillon"
+		},
+		"kanto_route_11_youngster_eddie": {
+			"mapId": "kanto_route_11",
+			"position": {
+				"x": 720.0,
+				"y": 688.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+			"trainerId": "kanto_route_11_youngster_eddie"
+		},
+		"kanto_route_11_youngster_yasu": {
+			"mapId": "kanto_route_11",
+			"position": {
+				"x": 912.0,
+				"y": 976.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+			"trainerId": "kanto_route_11_youngster_yasu"
+		},
+		"kanto_route_12_bird_keeper_gail": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 592.0,
+				"y": 3120.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_bird_keeper_gail"
+		},
+		"kanto_route_12_bird_keeper_justin": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 656.0,
+				"y": 2512.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_bird_keeper_justin"
+		},
+		"kanto_route_12_camper_justin": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 1008.0,
+				"y": 2064.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_camper_justin"
+		},
+		"kanto_route_12_fisherman_andrew": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 1296.0,
+				"y": 1840.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_fisherman_andrew"
+		},
+		"kanto_route_12_fisherman_barney": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 944.0,
+				"y": 3472.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_fisherman_barney"
+		},
+		"kanto_route_12_fisherman_chip": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 688.0,
+				"y": 976.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_fisherman_chip"
+		},
+		"kanto_route_12_fisherman_elliot": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 592.0,
+				"y": 1232.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_fisherman_elliot"
+		},
+		"kanto_route_12_fisherman_hank": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 1104.0,
+				"y": 752.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_fisherman_hank"
+		},
+		"kanto_route_12_fisherman_kyle": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 1200.0,
+				"y": 2416.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_fisherman_kyle"
+		},
+		"kanto_route_12_fisherman_kyler": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 1296.0,
+				"y": 3728.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_fisherman_kyler"
+		},
+		"kanto_route_12_fisherman_martin": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 1072.0,
+				"y": 2640.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_fisherman_martin"
+		},
+		"kanto_route_12_fisherman_ned": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 592.0,
+				"y": 656.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_fisherman_ned"
+		},
+		"kanto_route_12_fisherman_stephen": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 1040.0,
+				"y": 2928.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_fisherman_stephen"
+		},
+		"kanto_route_12_fishing_guru": {
+			"mapId": "kanto_route_12_fishing_brother_house",
+			"position": {
+				"x": 304.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route_12_fishing_brother_house.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_12_rocker_luca": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 976.0,
+				"y": 1552.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_rocker_luca"
+		},
+		"kanto_route_12_young_couple_gia_jes": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 976.0,
+				"y": 1168.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_young_couple_gia_jes"
+		},
+		"kanto_route_12_young_couple_vic_tara": {
+			"mapId": "kanto_route_12",
+			"position": {
+				"x": 560.0,
+				"y": 2928.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+			"trainerId": "kanto_route_12_young_couple_vic_tara"
+		},
+		"kanto_route_13_beauty_lola": {
+			"mapId": "kanto_route_13",
+			"position": {
+				"x": 592.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+			"trainerId": "kanto_route_13_beauty_lola"
+		},
+		"kanto_route_13_beauty_sheila": {
+			"mapId": "kanto_route_13",
+			"position": {
+				"x": 1296.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+			"trainerId": "kanto_route_13_beauty_sheila"
+		},
+		"kanto_route_13_biker_jared": {
+			"mapId": "kanto_route_13",
+			"position": {
+				"x": 400.0,
+				"y": 848.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+			"trainerId": "kanto_route_13_biker_jared"
+		},
+		"kanto_route_13_bird_keeper_perry": {
+			"mapId": "kanto_route_13",
+			"position": {
+				"x": 208.0,
+				"y": 656.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+			"trainerId": "kanto_route_13_bird_keeper_perry"
+		},
+		"kanto_route_13_bird_keeper_robert": {
+			"mapId": "kanto_route_13",
+			"position": {
+				"x": 176.0,
+				"y": 400.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+			"trainerId": "kanto_route_13_bird_keeper_robert"
+		},
+		"kanto_route_13_bird_keeper_sebastian": {
+			"mapId": "kanto_route_13",
+			"position": {
+				"x": 2320.0,
+				"y": 272.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+			"trainerId": "kanto_route_13_bird_keeper_sebastian"
+		},
+		"kanto_route_13_picnicker_alma": {
+			"mapId": "kanto_route_13",
+			"position": {
+				"x": 2128.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+			"trainerId": "kanto_route_13_picnicker_alma"
+		},
+		"kanto_route_13_picnicker_gwen": {
+			"mapId": "kanto_route_13",
+			"position": {
+				"x": 1296.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+			"trainerId": "kanto_route_13_picnicker_gwen"
+		},
+		"kanto_route_13_picnicker_susie": {
+			"mapId": "kanto_route_13",
+			"position": {
+				"x": 1840.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+			"trainerId": "kanto_route_13_picnicker_susie"
+		},
+		"kanto_route_13_picnicker_valerie": {
+			"mapId": "kanto_route_13",
+			"position": {
+				"x": 560.0,
+				"y": 656.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+			"trainerId": "kanto_route_13_picnicker_valerie"
+		},
+		"kanto_route_14_biker_gerald": {
+			"mapId": "kanto_route_14",
+			"position": {
+				"x": 880.0,
+				"y": 1872.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+			"trainerId": "kanto_route_14_biker_gerald"
+		},
+		"kanto_route_14_biker_isaac": {
+			"mapId": "kanto_route_14",
+			"position": {
+				"x": 464.0,
+				"y": 2096.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+			"trainerId": "kanto_route_14_biker_isaac"
+		},
+		"kanto_route_14_biker_lukas": {
+			"mapId": "kanto_route_14",
+			"position": {
+				"x": 464.0,
+				"y": 1296.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+			"trainerId": "kanto_route_14_biker_lukas"
+		},
+		"kanto_route_14_biker_malik": {
+			"mapId": "kanto_route_14",
+			"position": {
+				"x": 784.0,
+				"y": 1072.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+			"trainerId": "kanto_route_14_biker_malik"
+		},
+		"kanto_route_14_bird_keeper_beck": {
+			"mapId": "kanto_route_14",
+			"position": {
+				"x": 880.0,
+				"y": 1232.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+			"trainerId": "kanto_route_14_bird_keeper_beck"
+		},
+		"kanto_route_14_bird_keeper_carter": {
+			"mapId": "kanto_route_14",
+			"position": {
+				"x": 464.0,
+				"y": 1616.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+			"trainerId": "kanto_route_14_bird_keeper_carter"
+		},
+		"kanto_route_14_bird_keeper_marlon": {
+			"mapId": "kanto_route_14",
+			"position": {
+				"x": 880.0,
+				"y": 848.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+			"trainerId": "kanto_route_14_bird_keeper_marlon"
+		},
+		"kanto_route_14_bird_keeper_mitch": {
+			"mapId": "kanto_route_14",
+			"position": {
+				"x": 464.0,
+				"y": 848.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+			"trainerId": "kanto_route_14_bird_keeper_mitch"
+		},
+		"kanto_route_15_beauty_grace": {
+			"mapId": "kanto_route_15",
+			"position": {
+				"x": 2992.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+			"trainerId": "kanto_route_15_beauty_grace"
+		},
+		"kanto_route_15_beauty_olivia": {
+			"mapId": "kanto_route_15",
+			"position": {
+				"x": 2128.0,
+				"y": 880.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+			"trainerId": "kanto_route_15_beauty_olivia"
+		},
+		"kanto_route_15_biker_alex": {
+			"mapId": "kanto_route_15",
+			"position": {
+				"x": 2416.0,
+				"y": 880.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+			"trainerId": "kanto_route_15_biker_alex"
+		},
+		"kanto_route_15_biker_ernest": {
+			"mapId": "kanto_route_15",
+			"position": {
+				"x": 2768.0,
+				"y": 880.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+			"trainerId": "kanto_route_15_biker_ernest"
+		},
+		"kanto_route_15_bird_keeper_chester": {
+			"mapId": "kanto_route_15",
+			"position": {
+				"x": 1136.0,
+				"y": 880.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+			"trainerId": "kanto_route_15_bird_keeper_chester"
+		},
+		"kanto_route_15_bird_keeper_edwin": {
+			"mapId": "kanto_route_15",
+			"position": {
+				"x": 816.0,
+				"y": 880.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+			"trainerId": "kanto_route_15_bird_keeper_edwin"
+		},
+		"kanto_route_15_crush_kin_mya": {
+			"mapId": "kanto_route_15",
+			"position": {
+				"x": 1808.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+			"trainerId": "kanto_route_15_crush_kin_mya"
+		},
+		"kanto_route_15_crush_kin_ron": {
+			"mapId": "kanto_route_15",
+			"position": {
+				"x": 1840.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+			"trainerId": "kanto_route_15_crush_kin_ron"
+		},
+		"kanto_route_15_picnicker_becky": {
+			"mapId": "kanto_route_15",
+			"position": {
+				"x": 2576.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+			"trainerId": "kanto_route_15_picnicker_becky"
+		},
+		"kanto_route_15_picnicker_celia": {
+			"mapId": "kanto_route_15",
+			"position": {
+				"x": 976.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+			"trainerId": "kanto_route_15_picnicker_celia"
+		},
+		"kanto_route_15_picnicker_kindra": {
+			"mapId": "kanto_route_15",
+			"position": {
+				"x": 1456.0,
+				"y": 880.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+			"trainerId": "kanto_route_15_picnicker_kindra"
+		},
+		"kanto_route_15_picnicker_yazmin": {
+			"mapId": "kanto_route_15",
+			"position": {
+				"x": 528.0,
+				"y": 752.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+			"trainerId": "kanto_route_15_picnicker_yazmin"
+		},
+		"kanto_route_1_camper_quinn": {
+			"mapId": "kanto_route_1",
+			"position": {
+				"x": 416.0,
+				"y": 2080.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_1_dadinho": {
+			"mapId": "kanto_route_1",
+			"position": {
+				"x": 896.0,
+				"y": 2208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_1_lass_zoe": {
+			"mapId": "kanto_route_1",
+			"position": {
+				"x": 832.0,
+				"y": 1120.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
+			"trainerId": "kanto_route_1_lass_zoe"
+		},
+		"kanto_route_1_mart_employee_eli": {
+			"mapId": "kanto_route_1",
+			"position": {
+				"x": 960.0,
+				"y": 576.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_1_north_guard": {
+			"mapId": "kanto_route_1",
+			"position": {
+				"x": 1088.0,
+				"y": 288.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_1_youngster_liam": {
+			"mapId": "kanto_route_1",
+			"position": {
+				"x": 1536.0,
+				"y": 1664.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
+			"trainerId": "kanto_route_1_youngster_liam"
+		},
+		"kanto_route_22_gary_oak": {
+			"mapId": "kanto_route_22",
+			"position": {
+				"x": 1488.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_22_lass_paige": {
+			"mapId": "kanto_route_22",
+			"position": {
+				"x": 1456.0,
+				"y": 1104.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
+			"trainerId": "kanto_route_22_lass_paige"
+		},
+		"kanto_route_22_league_hiker_grant": {
+			"mapId": "kanto_route_22",
+			"position": {
+				"x": 656.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_22_youngster_caleb": {
+			"mapId": "kanto_route_22",
+			"position": {
+				"x": 2160.0,
+				"y": 752.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
+			"trainerId": "kanto_route_22_youngster_caleb"
+		},
+		"kanto_route_24_gary_oak": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 1808.0,
+				"y": 720.0
+			},
+			"radius": 151.764495849609,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": "kanto_route_24_gary_bulbasaur"
+		},
+		"kanto_route_24_nugget_bridge_01_cale": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 1872.0,
+				"y": 464.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": "kanto_route_24_nugget_bridge_01_cale"
+		},
+		"kanto_route_24_nugget_bridge_02_ali": {
+			"mapId": "kanto_cerulean_city",
+			"position": {
+				"x": 1872.0,
+				"y": 176.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+			"trainerId": "kanto_route_24_nugget_bridge_02_ali"
+		},
+		"kanto_route_24_nugget_bridge_03_timmy": {
+			"mapId": "kanto_route_24",
+			"position": {
+				"x": 1072.0,
+				"y": 1808.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+			"trainerId": "kanto_route_24_nugget_bridge_03_timmy"
+		},
+		"kanto_route_24_nugget_bridge_04_reli": {
+			"mapId": "kanto_route_24",
+			"position": {
+				"x": 1072.0,
+				"y": 1424.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+			"trainerId": "kanto_route_24_nugget_bridge_04_reli"
+		},
+		"kanto_route_24_nugget_bridge_05_ethan": {
+			"mapId": "kanto_route_24",
+			"position": {
+				"x": 1072.0,
+				"y": 1040.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+			"trainerId": "kanto_route_24_nugget_bridge_05_ethan"
+		},
+		"kanto_route_24_rocket_recruiter": {
+			"mapId": "kanto_route_24",
+			"position": {
+				"x": 1072.0,
+				"y": 752.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+			"trainerId": "kanto_route_24_rocket_recruiter"
+		},
+		"kanto_route_25_camper_flint": {
+			"mapId": "kanto_route_25",
+			"position": {
+				"x": 1136.0,
+				"y": 464.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+			"trainerId": "kanto_route_25_camper_flint"
+		},
+		"kanto_route_25_dadinho_date": {
+			"mapId": "kanto_route_25",
+			"position": {
+				"x": 1840.0,
+				"y": 1040.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_25_hiker_franklin": {
+			"mapId": "kanto_route_25",
+			"position": {
+				"x": 272.0,
+				"y": 464.0
+			},
+			"radius": 144.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+			"trainerId": "kanto_route_25_hiker_franklin"
+		},
+		"kanto_route_25_hiker_nob": {
+			"mapId": "kanto_route_25",
+			"position": {
+				"x": 1104.0,
+				"y": 720.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+			"trainerId": "kanto_route_25_hiker_nob"
+		},
+		"kanto_route_25_hiker_wayne": {
+			"mapId": "kanto_route_25",
+			"position": {
+				"x": 528.0,
+				"y": 656.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+			"trainerId": "kanto_route_25_hiker_wayne"
+		},
+		"kanto_route_25_lass_haley": {
+			"mapId": "kanto_route_25",
+			"position": {
+				"x": 1776.0,
+				"y": 528.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+			"trainerId": "kanto_route_25_lass_haley"
+		},
+		"kanto_route_25_picnicker_kelsey": {
+			"mapId": "kanto_route_25",
+			"position": {
+				"x": 976.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+			"trainerId": "kanto_route_25_picnicker_kelsey"
+		},
+		"kanto_route_25_youngster_chad": {
+			"mapId": "kanto_route_25",
+			"position": {
+				"x": 1584.0,
+				"y": 944.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+			"trainerId": "kanto_route_25_youngster_chad"
+		},
+		"kanto_route_25_youngster_dan": {
+			"mapId": "kanto_route_25",
+			"position": {
+				"x": 880.0,
+				"y": 656.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+			"trainerId": "kanto_route_25_youngster_dan"
+		},
+		"kanto_route_25_youngster_joey": {
+			"mapId": "kanto_route_25",
+			"position": {
+				"x": 560.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+			"trainerId": "kanto_route_25_youngster_joey"
+		},
+		"kanto_route_2_bug_catcher_cale": {
+			"mapId": "kanto_route_2",
+			"position": {
+				"x": 1456.0,
+				"y": 1264.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
+			"trainerId": "kanto_route_2_bug_catcher_cale"
+		},
+		"kanto_route_2_cave_researcher_owen": {
+			"mapId": "kanto_route_2",
+			"position": {
+				"x": 912.0,
+				"y": 592.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_2_forest_watcher_ivy": {
+			"mapId": "kanto_route_2",
+			"position": {
+				"x": 912.0,
+				"y": 1264.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_2_gate_attendant": {
+			"mapId": "kanto_route_2_gate",
+			"position": {
+				"x": 464.0,
+				"y": 528.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_gate.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_2_house_oak_assistant": {
+			"mapId": "kanto_route_2_house",
+			"position": {
+				"x": 336.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route2/route_2_house.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_2_youngster_mason": {
+			"mapId": "kanto_route_2",
+			"position": {
+				"x": 976.0,
+				"y": 1968.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
+			"trainerId": "kanto_route_2_youngster_mason"
+		},
+		"kanto_route_3_firebreather_otis": {
+			"mapId": "kanto_route_3",
+			"position": {
+				"x": 2704.0,
+				"y": 912.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+			"trainerId": "kanto_route_3_firebreather_otis"
+		},
+		"kanto_route_3_hiker_bruce": {
+			"mapId": "kanto_route_3",
+			"position": {
+				"x": 1552.0,
+				"y": 624.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+			"trainerId": "kanto_route_3_hiker_bruce"
+		},
+		"kanto_route_3_pokemon_center_camper_iris": {
+			"mapId": "kanto_route_3_pokemon_center",
+			"position": {
+				"x": 368.0,
+				"y": 848.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_3_pokemon_center_clerk": {
+			"mapId": "kanto_route_3_pokemon_center",
+			"position": {
+				"x": 592.0,
+				"y": 912.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_3_pokemon_center_hiker_dax": {
+			"mapId": "kanto_route_3_pokemon_center",
+			"position": {
+				"x": 656.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_3_pokemon_center_magikarp_salesman": {
+			"mapId": "kanto_route_3_pokemon_center",
+			"position": {
+				"x": 272.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route_3_pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_3_youngster_warren": {
+			"mapId": "kanto_route_3",
+			"position": {
+				"x": 848.0,
+				"y": 688.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+			"trainerId": "kanto_route_3_youngster_warren"
+		},
+		"kanto_route_4_bird_keeper_hank": {
+			"mapId": "kanto_route_4",
+			"position": {
+				"x": 1968.0,
+				"y": 1200.0
+			},
+			"radius": 144.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+			"trainerId": "kanto_route_4_bird_keeper_hank"
+		},
+		"kanto_route_4_picnicker_hope": {
+			"mapId": "kanto_route_4",
+			"position": {
+				"x": 784.0,
+				"y": 1040.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+			"trainerId": "kanto_route_4_picnicker_hope"
+		},
+		"kanto_route_4_picnicker_sharon": {
+			"mapId": "kanto_route_4",
+			"position": {
+				"x": 2480.0,
+				"y": 912.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+			"trainerId": "kanto_route_4_picnicker_sharon"
+		},
+		"kanto_route_5_camper_lena": {
+			"mapId": "kanto_route_5",
+			"position": {
+				"x": 368.0,
+				"y": 1712.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_5_dadinho": {
+			"mapId": "kanto_route_5",
+			"position": {
+				"x": 1104.0,
+				"y": 1488.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_5_hiker_milo": {
+			"mapId": "kanto_route_5",
+			"position": {
+				"x": 1264.0,
+				"y": 944.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_5_saffron_gate_attendant": {
+			"mapId": "kanto_route_5_saffron_gate",
+			"position": {
+				"x": 464.0,
+				"y": 528.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_5_saffron_gate.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_6_bug_catcher_elijah": {
+			"mapId": "kanto_route_6",
+			"position": {
+				"x": 656.0,
+				"y": 1616.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+			"trainerId": "kanto_route_6_bug_catcher_elijah"
+		},
+		"kanto_route_6_bug_catcher_keigo": {
+			"mapId": "kanto_route_6",
+			"position": {
+				"x": 1520.0,
+				"y": 752.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+			"trainerId": "kanto_route_6_bug_catcher_keigo"
+		},
+		"kanto_route_6_camper_jeff": {
+			"mapId": "kanto_route_6",
+			"position": {
+				"x": 1104.0,
+				"y": 2128.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+			"trainerId": "kanto_route_6_camper_jeff"
+		},
+		"kanto_route_6_camper_ricky": {
+			"mapId": "kanto_route_6",
+			"position": {
+				"x": 624.0,
+				"y": 848.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+			"trainerId": "kanto_route_6_camper_ricky"
+		},
+		"kanto_route_6_picnicker_isabelle": {
+			"mapId": "kanto_route_6",
+			"position": {
+				"x": 1328.0,
+				"y": 1744.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+			"trainerId": "kanto_route_6_picnicker_isabelle"
+		},
+		"kanto_route_6_picnicker_nancy": {
+			"mapId": "kanto_route_6",
+			"position": {
+				"x": 368.0,
+				"y": 1328.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+			"trainerId": "kanto_route_6_picnicker_nancy"
+		},
+		"kanto_route_6_saffron_gate_attendant": {
+			"mapId": "kanto_route_6_saffron_gate",
+			"position": {
+				"x": 464.0,
+				"y": 528.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_7_bird_keeper_elian": {
+			"mapId": "kanto_route_7",
+			"position": {
+				"x": 1744.0,
+				"y": 592.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_7.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_7_camper_niek": {
+			"mapId": "kanto_route_7",
+			"position": {
+				"x": 2096.0,
+				"y": 720.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_7.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_7_gentleman_otis": {
+			"mapId": "kanto_route_7",
+			"position": {
+				"x": 1616.0,
+				"y": 848.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_7.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_7_picnicker_rina": {
+			"mapId": "kanto_route_7",
+			"position": {
+				"x": 1008.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_7.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_7_saffron_gate_attendant": {
+			"mapId": "kanto_route_7_saffron_gate",
+			"position": {
+				"x": 496.0,
+				"y": 208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_7_saffron_gate.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_7_traveler_lotte": {
+			"mapId": "kanto_route_7",
+			"position": {
+				"x": 720.0,
+				"y": 880.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_7.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_8_biker_jaren": {
+			"mapId": "kanto_route_8",
+			"position": {
+				"x": 848.0,
+				"y": 880.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"trainerId": "kanto_route_8_biker_jaren"
+		},
+		"kanto_route_8_biker_ricardo": {
+			"mapId": "kanto_route_8",
+			"position": {
+				"x": 560.0,
+				"y": 944.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"trainerId": "kanto_route_8_biker_ricardo"
+		},
+		"kanto_route_8_gamer_rich": {
+			"mapId": "kanto_route_8",
+			"position": {
+				"x": 1776.0,
+				"y": 880.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"trainerId": "kanto_route_8_gamer_rich"
+		},
+		"kanto_route_8_gamer_stan": {
+			"mapId": "kanto_route_8",
+			"position": {
+				"x": 496.0,
+				"y": 496.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"trainerId": "kanto_route_8_gamer_stan"
+		},
+		"kanto_route_8_lass_andrea": {
+			"mapId": "kanto_route_8",
+			"position": {
+				"x": 912.0,
+				"y": 624.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"trainerId": "kanto_route_8_lass_andrea"
+		},
+		"kanto_route_8_lass_julia": {
+			"mapId": "kanto_route_8",
+			"position": {
+				"x": 2032.0,
+				"y": 848.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"trainerId": "kanto_route_8_lass_julia"
+		},
+		"kanto_route_8_lass_megan": {
+			"mapId": "kanto_route_8",
+			"position": {
+				"x": 944.0,
+				"y": 912.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"trainerId": "kanto_route_8_lass_megan"
+		},
+		"kanto_route_8_lass_paige": {
+			"mapId": "kanto_route_8",
+			"position": {
+				"x": 1328.0,
+				"y": 656.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"trainerId": "kanto_route_8_lass_paige"
+		},
+		"kanto_route_8_saffron_gate_attendant": {
+			"mapId": "kanto_route_8_saffron_gate",
+			"position": {
+				"x": 496.0,
+				"y": 208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_8_saffron_gate.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_8_super_nerd_aidan": {
+			"mapId": "kanto_route_8",
+			"position": {
+				"x": 720.0,
+				"y": 432.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"trainerId": "kanto_route_8_super_nerd_aidan"
+		},
+		"kanto_route_8_super_nerd_glenn": {
+			"mapId": "kanto_route_8",
+			"position": {
+				"x": 1584.0,
+				"y": 592.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"trainerId": "kanto_route_8_super_nerd_glenn"
+		},
+		"kanto_route_8_super_nerd_leslie": {
+			"mapId": "kanto_route_8",
+			"position": {
+				"x": 1232.0,
+				"y": 592.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"trainerId": "kanto_route_8_super_nerd_leslie"
+		},
+		"kanto_route_8_twins_eli_anne": {
+			"mapId": "kanto_route_8",
+			"position": {
+				"x": 1456.0,
+				"y": 592.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"trainerId": "kanto_route_8_twins_eli_anne"
+		},
+		"kanto_route_9_bug_catcher_brent": {
+			"mapId": "kanto_route_9",
+			"position": {
+				"x": 2128.0,
+				"y": 880.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+			"trainerId": "kanto_route_9_bug_catcher_brent"
+		},
+		"kanto_route_9_bug_catcher_conner": {
+			"mapId": "kanto_route_9",
+			"position": {
+				"x": 2384.0,
+				"y": 1072.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+			"trainerId": "kanto_route_9_bug_catcher_conner"
+		},
+		"kanto_route_9_camper_chris": {
+			"mapId": "kanto_route_9",
+			"position": {
+				"x": 1776.0,
+				"y": 880.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+			"trainerId": "kanto_route_9_camper_chris"
+		},
+		"kanto_route_9_camper_drew": {
+			"mapId": "kanto_route_9",
+			"position": {
+				"x": 2448.0,
+				"y": 880.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+			"trainerId": "kanto_route_9_camper_drew"
+		},
+		"kanto_route_9_hiker_alan": {
+			"mapId": "kanto_route_9",
+			"position": {
+				"x": 880.0,
+				"y": 1072.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+			"trainerId": "kanto_route_9_hiker_alan"
+		},
+		"kanto_route_9_hiker_brice": {
+			"mapId": "kanto_route_9",
+			"position": {
+				"x": 2928.0,
+				"y": 752.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+			"trainerId": "kanto_route_9_hiker_brice"
+		},
+		"kanto_route_9_hiker_jeremy": {
+			"mapId": "kanto_route_9",
+			"position": {
+				"x": 976.0,
+				"y": 752.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+			"trainerId": "kanto_route_9_hiker_jeremy"
+		},
+		"kanto_route_9_picnicker_alicia": {
+			"mapId": "kanto_route_9",
+			"position": {
+				"x": 496.0,
+				"y": 624.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+			"trainerId": "kanto_route_9_picnicker_alicia"
+		},
+		"kanto_route_9_picnicker_caitlin": {
+			"mapId": "kanto_route_9",
+			"position": {
+				"x": 2704.0,
+				"y": 624.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+			"trainerId": "kanto_route_9_picnicker_caitlin"
+		},
+		"kanto_ss_anne_captain": {
+			"mapId": "kanto_ss_anne_2f",
+			"position": {
+				"x": 2352.0,
+				"y": 1136.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_chef": {
+			"mapId": "kanto_ss_anne_1f",
+			"position": {
+				"x": 2160.0,
+				"y": 2032.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_collector_noor": {
+			"mapId": "kanto_ss_anne_2f",
+			"position": {
+				"x": 1040.0,
+				"y": 400.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_crew_robin": {
+			"mapId": "kanto_ss_anne_b1f",
+			"position": {
+				"x": 560.0,
+				"y": 1744.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_crew_worker": {
+			"mapId": "kanto_ss_anne_b1f",
+			"position": {
+				"x": 784.0,
+				"y": 1040.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_deck_officer": {
+			"mapId": "kanto_ss_anne_3f",
+			"position": {
+				"x": 496.0,
+				"y": 208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_gentleman_arthur": {
+			"mapId": "kanto_ss_anne_2f",
+			"position": {
+				"x": 272.0,
+				"y": 400.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+			"trainerId": "kanto_ss_anne_gentleman_arthur"
+		},
+		"kanto_ss_anne_gentleman_thomas": {
+			"mapId": "kanto_ss_anne_1f",
+			"position": {
+				"x": 944.0,
+				"y": 432.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+			"trainerId": "kanto_ss_anne_gentleman_thomas"
+		},
+		"kanto_ss_anne_kitchen_milo": {
+			"mapId": "kanto_ss_anne_1f",
+			"position": {
+				"x": 2704.0,
+				"y": 1872.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_lass_ann": {
+			"mapId": "kanto_ss_anne_1f",
+			"position": {
+				"x": 2256.0,
+				"y": 432.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+			"trainerId": "kanto_ss_anne_lass_ann"
+		},
+		"kanto_ss_anne_mechanic_inez": {
+			"mapId": "kanto_ss_anne_b1f",
+			"position": {
+				"x": 1456.0,
+				"y": 400.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_passenger": {
+			"mapId": "kanto_ss_anne_1f",
+			"position": {
+				"x": 400.0,
+				"y": 432.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+			"trainerId": "kanto_ss_anne_passenger"
+		},
+		"kanto_ss_anne_reader_iris": {
+			"mapId": "kanto_ss_anne_1f",
+			"position": {
+				"x": 368.0,
+				"y": 1968.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_rest_attendant": {
+			"mapId": "kanto_ss_anne_1f",
+			"position": {
+				"x": 976.0,
+				"y": 1776.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_rival": {
+			"mapId": "kanto_ss_anne_2f",
+			"position": {
+				"x": 1680.0,
+				"y": 1008.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_sailor": {
+			"mapId": "kanto_ss_anne_b1f",
+			"position": {
+				"x": 464.0,
+				"y": 400.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+			"trainerId": "kanto_ss_anne_sailor"
+		},
+		"kanto_ss_anne_sailor_duncan": {
+			"mapId": "kanto_ss_anne_b1f",
+			"position": {
+				"x": 944.0,
+				"y": 400.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+			"trainerId": "kanto_ss_anne_sailor_duncan"
+		},
+		"kanto_ss_anne_sailor_trevor": {
+			"mapId": "kanto_ss_anne_3f",
+			"position": {
+				"x": 816.0,
+				"y": 496.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn",
+			"trainerId": "kanto_ss_anne_sailor_trevor"
+		},
+		"kanto_ss_anne_steward_oscar": {
+			"mapId": "kanto_ss_anne_2f",
+			"position": {
+				"x": 1168.0,
+				"y": 1232.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_tourist_sana": {
+			"mapId": "kanto_ss_anne_3f",
+			"position": {
+				"x": 208.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_traveler_lena": {
+			"mapId": "kanto_ss_anne_1f",
+			"position": {
+				"x": 1040.0,
+				"y": 2000.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+			"trainerId": ""
+		},
+		"kanto_ss_anne_youngster_tyler": {
+			"mapId": "kanto_ss_anne_1f",
+			"position": {
+				"x": 1520.0,
+				"y": 496.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+			"trainerId": "kanto_ss_anne_youngster_tyler"
+		},
+		"kanto_vermilion_city_ace_trainer_sienna": {
+			"mapId": "kanto_vermilion_city",
+			"position": {
+				"x": 2032.0,
+				"y": 976.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_child_toby": {
+			"mapId": "kanto_vermilion_city",
+			"position": {
+				"x": 528.0,
+				"y": 1360.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_elder_elsie": {
+			"mapId": "kanto_vermilion_city",
+			"position": {
+				"x": 1072.0,
+				"y": 912.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_fan_club_bram": {
+			"mapId": "kanto_vermilion_city_pokemon_fan_club",
+			"position": {
+				"x": 144.0,
+				"y": 528.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_fan_club.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_fan_club_hugo": {
+			"mapId": "kanto_vermilion_city",
+			"position": {
+				"x": 848.0,
+				"y": 752.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_fan_club_lola": {
+			"mapId": "kanto_vermilion_city_pokemon_fan_club",
+			"position": {
+				"x": 272.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_fan_club.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_fan_club_noor": {
+			"mapId": "kanto_vermilion_city_pokemon_fan_club",
+			"position": {
+				"x": 464.0,
+				"y": 624.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_fan_club.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_guild_registrar": {
+			"mapId": "kanto_vermilion_city",
+			"position": {
+				"x": 1136.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_gym_gentleman_edwin": {
+			"mapId": "kanto_vermilion_city_gym",
+			"position": {
+				"x": 272.0,
+				"y": 560.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_gym.tscn",
+			"trainerId": "kanto_vermilion_city_gym_gentleman_edwin"
+		},
+		"kanto_vermilion_city_gym_guide": {
+			"mapId": "kanto_vermilion_city_gym",
+			"position": {
+				"x": 400.0,
+				"y": 944.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_gym.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_gym_scientist_mira": {
+			"mapId": "kanto_vermilion_city_gym",
+			"position": {
+				"x": 592.0,
+				"y": 720.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_gym.tscn",
+			"trainerId": "kanto_vermilion_city_gym_scientist_mira"
+		},
+		"kanto_vermilion_city_gym_worker_dax": {
+			"mapId": "kanto_vermilion_city_gym",
+			"position": {
+				"x": 144.0,
+				"y": 784.0
+			},
+			"radius": 176.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_gym.tscn",
+			"trainerId": "kanto_vermilion_city_gym_worker_dax"
+		},
+		"kanto_vermilion_city_harbor_worker_bram": {
+			"mapId": "kanto_vermilion_city",
+			"position": {
+				"x": 1616.0,
+				"y": 1648.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_house_2_resident_ada": {
+			"mapId": "kanto_vermilion_city_house_2",
+			"position": {
+				"x": 432.0,
+				"y": 400.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/house2.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_house_2_worker_niels": {
+			"mapId": "kanto_vermilion_city_house_2",
+			"position": {
+				"x": 304.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/house2.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_house_3_grandmother_tessa": {
+			"mapId": "kanto_vermilion_city_house_3",
+			"position": {
+				"x": 304.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/house3.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_house_3_school_kid_milo": {
+			"mapId": "kanto_vermilion_city_house_3",
+			"position": {
+				"x": 176.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/house3.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_picnicker_june": {
+			"mapId": "kanto_vermilion_city",
+			"position": {
+				"x": 1232.0,
+				"y": 1648.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_pokemon_center_bird_keeper_elias": {
+			"mapId": "kanto_vermilion_city_pokemon_center",
+			"position": {
+				"x": 368.0,
+				"y": 848.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_pokemon_center_traveler_nori": {
+			"mapId": "kanto_vermilion_city_pokemon_center",
+			"position": {
+				"x": 528.0,
+				"y": 816.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_pokemon_center_worker_petra": {
+			"mapId": "kanto_vermilion_city_pokemon_center",
+			"position": {
+				"x": 336.0,
+				"y": 496.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_retired_sailor_abel": {
+			"mapId": "kanto_vermilion_city",
+			"position": {
+				"x": 1392.0,
+				"y": 1520.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_trainer_felix": {
+			"mapId": "kanto_vermilion_city",
+			"position": {
+				"x": 720.0,
+				"y": 1232.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_transit_keeper": {
+			"mapId": "kanto_vermilion_city",
+			"position": {
+				"x": 784.0,
+				"y": 144.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_visitor_iris": {
+			"mapId": "kanto_vermilion_city",
+			"position": {
+				"x": 528.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_city_worker_owen": {
+			"mapId": "kanto_vermilion_city",
+			"position": {
+				"x": 1840.0,
+				"y": 400.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_vermilion_port_ss_anne_skipper": {
+			"mapId": "kanto_vermilion_docks",
+			"position": {
+				"x": 1392.0,
+				"y": 624.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_ace_trainer_victor": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 1648.0,
+				"y": 688.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_catching_mentor_gideon": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 656.0,
+				"y": 1456.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_ev_assistant_eli": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 432.0,
+				"y": 1136.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_ev_assistant_rina": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 432.0,
+				"y": 400.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_ev_expert_mateo": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 528.0,
+				"y": 1168.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_forest_scout_nico": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 752.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_gardener_mabel": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 1616.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_house_1_poke_fan_rowan": {
+			"mapId": "kanto_viridian_city_house_1",
+			"position": {
+				"x": 272.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/house1.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_house_1_school_kid_sam": {
+			"mapId": "kanto_viridian_city_house_1",
+			"position": {
+				"x": 400.0,
+				"y": 368.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/house1.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_jail_manager": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 1488.0,
+				"y": 1456.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_league_fan_dorian": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 1392.0,
+				"y": 944.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_north_route_guard": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 880.0,
+				"y": 144.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_pokemon_center_clerk": {
+			"mapId": "kanto_viridian_city_pokemon_center",
+			"position": {
+				"x": 592.0,
+				"y": 912.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_pokemon_center_lass_holly": {
+			"mapId": "kanto_viridian_city_pokemon_center",
+			"position": {
+				"x": 560.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_pokemon_center_youngster_benji": {
+			"mapId": "kanto_viridian_city_pokemon_center",
+			"position": {
+				"x": 336.0,
+				"y": 816.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/pokemon_center.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_rocket_grunt_rook": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 1072.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_school_kid_june": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 1968.0,
+				"y": 912.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_south_route_guard": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 1360.0,
+				"y": 1904.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_trainer_school_dadinho": {
+			"mapId": "kanto_viridian_city_trainer_school",
+			"position": {
+				"x": 400.0,
+				"y": 401.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_trainer_school_instructor_celia": {
+			"mapId": "kanto_viridian_city_trainer_school",
+			"position": {
+				"x": 624.0,
+				"y": 368.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_trainer_school_kid_milo": {
+			"mapId": "kanto_viridian_city_trainer_school",
+			"position": {
+				"x": 176.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_trainer_school_kid_rina": {
+			"mapId": "kanto_viridian_city_trainer_school",
+			"position": {
+				"x": 368.0,
+				"y": 496.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_trainer_school_youngster_finn": {
+			"mapId": "kanto_viridian_city_trainer_school",
+			"position": {
+				"x": 528.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/trainer_school.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_transit_keeper": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 1008.0,
+				"y": 1136.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_city_west_route_guard": {
+			"mapId": "kanto_viridian_city",
+			"position": {
+				"x": 208.0,
+				"y": 1232.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_forest_bug_catcher_anthony": {
+			"mapId": "kanto_viridian_forest",
+			"position": {
+				"x": 1104.0,
+				"y": 976.0
+			},
+			"radius": 144.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+			"trainerId": "kanto_viridian_forest_bug_catcher_anthony"
+		},
+		"kanto_viridian_forest_bug_catcher_doug": {
+			"mapId": "kanto_viridian_forest",
+			"position": {
+				"x": 1968.0,
+				"y": 1136.0
+			},
+			"radius": 144.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+			"trainerId": "kanto_viridian_forest_bug_catcher_doug"
+		},
+		"kanto_viridian_forest_bug_catcher_rick": {
+			"mapId": "kanto_viridian_forest",
+			"position": {
+				"x": 1840.0,
+				"y": 1968.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+			"trainerId": "kanto_viridian_forest_bug_catcher_rick"
+		},
+		"kanto_viridian_forest_bug_catcher_sammy": {
+			"mapId": "kanto_viridian_forest",
+			"position": {
+				"x": 1616.0,
+				"y": 176.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+			"trainerId": "kanto_viridian_forest_bug_catcher_sammy"
+		},
+		"kanto_viridian_forest_lost_camper_dana": {
+			"mapId": "kanto_viridian_forest",
+			"position": {
+				"x": 432.0,
+				"y": 1456.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_forest_north_gate_attendant": {
+			"mapId": "kanto_route_2_viridian_forest_north_gate",
+			"position": {
+				"x": 464.0,
+				"y": 528.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_north_gate.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_forest_researcher_leah": {
+			"mapId": "kanto_viridian_forest",
+			"position": {
+				"x": 880.0,
+				"y": 176.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+			"trainerId": ""
+		},
+		"kanto_viridian_forest_south_gate_attendant": {
+			"mapId": "kanto_route_2_viridian_forest_south_gate",
+			"position": {
+				"x": 464.0,
+				"y": 528.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_2_viridian_forest_south_gate.tscn",
+			"trainerId": ""
+		},
+		"mt_moon_warning_hiker": {
+			"mapId": "kanto_mt_moon_1f",
+			"position": {
+				"x": 848.0,
+				"y": 2416.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+			"trainerId": ""
+		}
+	},
+	"schemaVersion": 1
+}

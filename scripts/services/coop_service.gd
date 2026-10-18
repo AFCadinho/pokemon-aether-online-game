@@ -8,26 +8,47 @@ signal invitation_sent(username: String)
 signal invitation_failed(message: String)
 signal party_profile_missing(source: String)
 
-const ORDINARY_TRAINERS := [
-	"kanto_route_1_youngster_liam",
-	"kanto_viridian_forest_bug_catcher_sammy",
-	"kanto_route_1_lass_zoe",
-	"kanto_route_2_youngster_mason",
-	"kanto_route_2_bug_catcher_cale",
-	"kanto_viridian_forest_bug_catcher_rick",
-	"kanto_viridian_forest_bug_catcher_doug",
-	"kanto_viridian_forest_bug_catcher_anthony",
-	"kanto_pewter_city_gym_hiker_flint",
-	"kanto_pewter_city_gym_youngster_stone",
-]
+const TRAINER_CATALOG: Dictionary = preload("res://generated/coop_trainer_catalog.json").data
+# Retained for callers that enumerate encounters; admission belongs to the server.
+var ORDINARY_TRAINERS: Array = _ordinary_trainers()
+
+
+func _ordinary_trainers() -> Array:
+	var trainers: Array = []
+	for activity_id: String in TRAINER_CATALOG.activities:
+		var entry: Dictionary = TRAINER_CATALOG.activities[activity_id]
+		if entry.story == null and str(entry.rivalPrefix).is_empty():
+			trainers.append_array(entry.trainerIds)
+	return trainers
 
 
 func trainer_entity(trainer_id: String) -> String:
-	if trainer_id == "kanto_celadon_jessie_james": return trainer_id
-	if trainer_id in ORDINARY_TRAINERS or trainer_id == "kanto_alpha_gym_brock": return trainer_id
-	if trainer_id in ["kanto_route_22_gary_rival", "kanto_route_22_gary_bulbasaur", "kanto_route_22_gary_squirtle", "kanto_route_22_gary_charmander"]:
-		return "kanto_route_22_gary_oak"
-	return ""
+	var activity_id := str(TRAINER_CATALOG.identities.get(trainer_id, ""))
+	if activity_id.is_empty():
+		return ""
+	return str(TRAINER_CATALOG.activities[activity_id].entityId)
+
+
+func supports_trainer(trainer_id: String) -> bool:
+	return not trainer_entity(trainer_id).is_empty()
+
+
+func is_story_trainer(trainer_id: String) -> bool:
+	var activity_id := str(TRAINER_CATALOG.identities.get(trainer_id, ""))
+	return not activity_id.is_empty() and TRAINER_CATALOG.activities[activity_id].story != null
+
+
+func trainer_for_activity(activity_id: String) -> String:
+	var entry: Dictionary = TRAINER_CATALOG.activities.get(activity_id, {})
+	var trainers: Array = entry.get("trainerIds", [])
+	return str(trainers[0]) if not trainers.is_empty() else ""
+
+
+func trainer_name_for_activity(activity_id: String) -> String:
+	var trainer_id := trainer_for_activity(activity_id)
+	if trainer_id.is_empty():
+		return "Trainer"
+	return str(TRAINER_CATALOG.activities[activity_id].trainers[trainer_id].name)
 
 var available := false
 var party: Dictionary = {}

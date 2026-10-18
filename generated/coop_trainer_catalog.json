@@ -1,0 +1,4685 @@
+{
+  "activities": {
+    "brock": {
+      "entityId": "kanto_alpha_gym_brock",
+      "mapId": "kanto_pewter_city_gym",
+      "position": {
+        "x": 528.0,
+        "y": 272.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn",
+      "story": {
+        "eventId": "kanto_alpha_gym_brock_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "challenge_pewter_gym",
+        "stepId": "challenge_brock"
+      },
+      "trainerIds": [
+        "kanto_alpha_gym_brock"
+      ],
+      "trainers": {
+        "kanto_alpha_gym_brock": {
+          "gymBadge": {
+            "badgeId": "boulder",
+            "region": "kanto"
+          },
+          "name": "Gym Leader Brock",
+          "teamSize": 3,
+          "trainerClass": "gym_leader"
+        }
+      }
+    },
+    "celadon_rocket_trio": {
+      "entityId": "kanto_celadon_rocket_trio",
+      "mapId": "kanto_celadon_city",
+      "position": {
+        "x": 2256.0,
+        "y": 1600.0
+      },
+      "radius": 96.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+      "story": {
+        "eventId": "kanto_celadon_jessie_james_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "celadon_rocket_trio",
+        "stepId": "defeat_trio"
+      },
+      "trainerIds": [
+        "kanto_celadon_jessie_james"
+      ],
+      "trainers": {
+        "kanto_celadon_jessie_james": {
+          "gymBadge": null,
+          "name": "Jessie & James",
+          "teamSize": 4,
+          "trainerClass": "team_rocket"
+        }
+      }
+    },
+    "gary_route22": {
+      "entityId": "kanto_route_22_gary_oak",
+      "mapId": "kanto_route_22",
+      "position": {
+        "x": 1488.0,
+        "y": 464.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "kanto_route_22_gary",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
+      "story": {
+        "eventId": "kanto_route_22_gary_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "reach_viridian_city",
+        "stepId": "travel_to_viridian_city"
+      },
+      "trainerIds": [
+        "kanto_route_22_gary_bulbasaur",
+        "kanto_route_22_gary_squirtle",
+        "kanto_route_22_gary_charmander"
+      ],
+      "trainers": {
+        "kanto_route_22_gary_bulbasaur": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 2,
+          "trainerClass": "rival"
+        },
+        "kanto_route_22_gary_charmander": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 2,
+          "trainerClass": "rival"
+        },
+        "kanto_route_22_gary_squirtle": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 2,
+          "trainerClass": "rival"
+        }
+      }
+    },
+    "kanto_alpha_gym_lt_surge": {
+      "entityId": "kanto_alpha_gym_lt_surge",
+      "mapId": "kanto_vermilion_city_gym",
+      "position": {
+        "x": 368.0,
+        "y": 304.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_gym.tscn",
+      "story": {
+        "eventId": "kanto_alpha_gym_lt_surge_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "challenge_vermilion_gym",
+        "stepId": "vermilion_defeat_surge"
+      },
+      "trainerIds": [
+        "kanto_alpha_gym_lt_surge"
+      ],
+      "trainers": {
+        "kanto_alpha_gym_lt_surge": {
+          "gymBadge": {
+            "badgeId": "thunder",
+            "region": "kanto"
+          },
+          "name": "Gym Leader Lt. Surge",
+          "teamSize": 4,
+          "trainerClass": "gym_leader"
+        }
+      }
+    },
+    "kanto_alpha_gym_misty": {
+      "entityId": "kanto_alpha_gym_misty",
+      "mapId": "kanto_cerulean_city_gym",
+      "position": {
+        "x": 496.0,
+        "y": 240.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn",
+      "story": {
+        "eventId": "kanto_alpha_gym_misty_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "challenge_cerulean_gym",
+        "stepId": "challenge_misty"
+      },
+      "trainerIds": [
+        "kanto_alpha_gym_misty"
+      ],
+      "trainers": {
+        "kanto_alpha_gym_misty": {
+          "gymBadge": {
+            "badgeId": "cascade",
+            "region": "kanto"
+          },
+          "name": "Gym Leader Misty",
+          "teamSize": 4,
+          "trainerClass": "gym_leader"
+        }
+      }
+    },
+    "kanto_celadon_game_corner_rocket_guard": {
+      "entityId": "kanto_game_corner_attendant",
+      "mapId": "kanto_celadon_game_corner",
+      "position": {
+        "x": 752.0,
+        "y": 176.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+      "story": {
+        "eventId": "kanto_celadon_game_corner_rocket_guard_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "investigate_celadon_game_corner",
+        "stepId": "investigate_game_corner"
+      },
+      "trainerIds": [
+        "kanto_celadon_game_corner_rocket_guard"
+      ],
+      "trainers": {
+        "kanto_celadon_game_corner_rocket_guard": {
+          "gymBadge": null,
+          "name": "Team Rocket Grunt",
+          "teamSize": 2,
+          "trainerClass": "team_rocket"
+        }
+      }
+    },
+    "kanto_celadon_gym_ace_lori": {
+      "entityId": "kanto_celadon_gym_ace_lori",
+      "mapId": "kanto_celadon_gym",
+      "position": {
+        "x": 496.0,
+        "y": 912.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_celadon_gym_ace_lori"
+      ],
+      "trainers": {
+        "kanto_celadon_gym_ace_lori": {
+          "gymBadge": null,
+          "name": "Ace Trainer Lori",
+          "teamSize": 2,
+          "trainerClass": "Ace Trainer"
+        }
+      }
+    },
+    "kanto_celadon_gym_erika": {
+      "entityId": "kanto_celadon_gym_erika",
+      "mapId": "kanto_celadon_gym",
+      "position": {
+        "x": 656.0,
+        "y": 304.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+      "story": {
+        "eventId": "kanto_celadon_gym_erika_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "challenge_celadon_gym",
+        "stepId": "challenge_erika"
+      },
+      "trainerIds": [
+        "kanto_celadon_gym_erika"
+      ],
+      "trainers": {
+        "kanto_celadon_gym_erika": {
+          "gymBadge": {
+            "badgeId": "rainbow",
+            "region": "kanto"
+          },
+          "name": "Erika",
+          "teamSize": 5,
+          "trainerClass": "gym_leader"
+        }
+      }
+    },
+    "kanto_celadon_gym_fan_maren": {
+      "entityId": "kanto_celadon_gym_fan_maren",
+      "mapId": "kanto_celadon_gym",
+      "position": {
+        "x": 880.0,
+        "y": 656.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_celadon_gym_fan_maren"
+      ],
+      "trainers": {
+        "kanto_celadon_gym_fan_maren": {
+          "gymBadge": null,
+          "name": "Poké Fan Maren",
+          "teamSize": 1,
+          "trainerClass": "Poké Fan"
+        }
+      }
+    },
+    "kanto_celadon_gym_lass_kay": {
+      "entityId": "kanto_celadon_gym_lass_kay",
+      "mapId": "kanto_celadon_gym",
+      "position": {
+        "x": 496.0,
+        "y": 1456.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_celadon_gym_lass_kay"
+      ],
+      "trainers": {
+        "kanto_celadon_gym_lass_kay": {
+          "gymBadge": null,
+          "name": "Lass Kay",
+          "teamSize": 2,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_celadon_gym_picnicker_tina": {
+      "entityId": "kanto_celadon_gym_picnicker_tina",
+      "mapId": "kanto_celadon_gym",
+      "position": {
+        "x": 848.0,
+        "y": 1104.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_celadon_gym_picnicker_tina"
+      ],
+      "trainers": {
+        "kanto_celadon_gym_picnicker_tina": {
+          "gymBadge": null,
+          "name": "Picnicker Tina",
+          "teamSize": 2,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_cerulean_city_gym_picnicker_diana": {
+      "entityId": "kanto_cerulean_city_gym_picnicker_diana",
+      "mapId": "kanto_cerulean_city_gym",
+      "position": {
+        "x": 560.0,
+        "y": 656.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_cerulean_city_gym_picnicker_diana"
+      ],
+      "trainers": {
+        "kanto_cerulean_city_gym_picnicker_diana": {
+          "gymBadge": null,
+          "name": "Picnicker Diana",
+          "teamSize": 1,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_cerulean_city_gym_swimmer_briana": {
+      "entityId": "kanto_cerulean_city_gym_swimmer_briana",
+      "mapId": "kanto_cerulean_city_gym",
+      "position": {
+        "x": 432.0,
+        "y": 880.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_cerulean_city_gym_swimmer_briana"
+      ],
+      "trainers": {
+        "kanto_cerulean_city_gym_swimmer_briana": {
+          "gymBadge": null,
+          "name": "Swimmer Briana",
+          "teamSize": 2,
+          "trainerClass": "Swimmer"
+        }
+      }
+    },
+    "kanto_cerulean_city_gym_swimmer_luis": {
+      "entityId": "kanto_cerulean_city_gym_swimmer_luis",
+      "mapId": "kanto_cerulean_city_gym",
+      "position": {
+        "x": 624.0,
+        "y": 496.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_cerulean_city_gym_swimmer_luis"
+      ],
+      "trainers": {
+        "kanto_cerulean_city_gym_swimmer_luis": {
+          "gymBadge": null,
+          "name": "Swimmer Luis",
+          "teamSize": 2,
+          "trainerClass": "Swimmer"
+        }
+      }
+    },
+    "kanto_mt_moon_1f_bug_catcher_kent": {
+      "entityId": "kanto_mt_moon_1f_bug_catcher_kent",
+      "mapId": "kanto_mt_moon_1f",
+      "position": {
+        "x": 272.0,
+        "y": 1904.0
+      },
+      "radius": 144.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_mt_moon_1f_bug_catcher_kent"
+      ],
+      "trainers": {
+        "kanto_mt_moon_1f_bug_catcher_kent": {
+          "gymBadge": null,
+          "name": "Bug Catcher Kent",
+          "teamSize": 2,
+          "trainerClass": "Bug Catcher"
+        }
+      }
+    },
+    "kanto_mt_moon_1f_bug_catcher_robby": {
+      "entityId": "kanto_mt_moon_1f_bug_catcher_robby",
+      "mapId": "kanto_mt_moon_1f",
+      "position": {
+        "x": 2512.0,
+        "y": 1872.0
+      },
+      "radius": 144.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_mt_moon_1f_bug_catcher_robby"
+      ],
+      "trainers": {
+        "kanto_mt_moon_1f_bug_catcher_robby": {
+          "gymBadge": null,
+          "name": "Bug Catcher Robby",
+          "teamSize": 3,
+          "trainerClass": "Bug Catcher"
+        }
+      }
+    },
+    "kanto_mt_moon_1f_hiker_marcos": {
+      "entityId": "kanto_mt_moon_1f_hiker_marcos",
+      "mapId": "kanto_mt_moon_1f",
+      "position": {
+        "x": 336.0,
+        "y": 496.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_mt_moon_1f_hiker_marcos"
+      ],
+      "trainers": {
+        "kanto_mt_moon_1f_hiker_marcos": {
+          "gymBadge": null,
+          "name": "Hiker Marcos",
+          "teamSize": 3,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_mt_moon_1f_lass_iris": {
+      "entityId": "kanto_mt_moon_1f_lass_iris",
+      "mapId": "kanto_mt_moon_1f",
+      "position": {
+        "x": 976.0,
+        "y": 1712.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_mt_moon_1f_lass_iris"
+      ],
+      "trainers": {
+        "kanto_mt_moon_1f_lass_iris": {
+          "gymBadge": null,
+          "name": "Lass Iris",
+          "teamSize": 1,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_mt_moon_1f_lass_miriam": {
+      "entityId": "kanto_mt_moon_1f_lass_miriam",
+      "mapId": "kanto_mt_moon_1f",
+      "position": {
+        "x": 2256.0,
+        "y": 240.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_mt_moon_1f_lass_miriam"
+      ],
+      "trainers": {
+        "kanto_mt_moon_1f_lass_miriam": {
+          "gymBadge": null,
+          "name": "Lass Miriam",
+          "teamSize": 2,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_mt_moon_1f_super_nerd_jovan": {
+      "entityId": "kanto_mt_moon_1f_super_nerd_jovan",
+      "mapId": "kanto_mt_moon_1f",
+      "position": {
+        "x": 1712.0,
+        "y": 2320.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_mt_moon_1f_super_nerd_jovan"
+      ],
+      "trainers": {
+        "kanto_mt_moon_1f_super_nerd_jovan": {
+          "gymBadge": null,
+          "name": "Super Nerd Jovan",
+          "teamSize": 2,
+          "trainerClass": "Super Nerd"
+        }
+      }
+    },
+    "kanto_mt_moon_1f_youngster_josh": {
+      "entityId": "kanto_mt_moon_1f_youngster_josh",
+      "mapId": "kanto_mt_moon_1f",
+      "position": {
+        "x": 752.0,
+        "y": 1104.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/mt_moon/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_mt_moon_1f_youngster_josh"
+      ],
+      "trainers": {
+        "kanto_mt_moon_1f_youngster_josh": {
+          "gymBadge": null,
+          "name": "Youngster Josh",
+          "teamSize": 3,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_mt_moon_b2f_rocket_grunt_1": {
+      "entityId": "kanto_mt_moon_b2f_rocket_grunt_1",
+      "mapId": "kanto_mt_moon_b2f",
+      "position": {
+        "x": 816.0,
+        "y": 1136.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+      "story": {
+        "eventId": "kanto_mt_moon_b2f_rocket_grunt_1_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "travel_through_mt_moon",
+        "stepId": "stop_rocket_scouts"
+      },
+      "trainerIds": [
+        "kanto_mt_moon_b2f_rocket_grunt_1"
+      ],
+      "trainers": {
+        "kanto_mt_moon_b2f_rocket_grunt_1": {
+          "gymBadge": null,
+          "name": "Team Rocket Grunt",
+          "teamSize": 2,
+          "trainerClass": "Team Rocket"
+        }
+      }
+    },
+    "kanto_mt_moon_b2f_rocket_grunt_2": {
+      "entityId": "kanto_mt_moon_b2f_rocket_grunt_2",
+      "mapId": "kanto_mt_moon_b2f",
+      "position": {
+        "x": 1136.0,
+        "y": 1840.0
+      },
+      "radius": 144.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+      "story": {
+        "eventId": "kanto_mt_moon_b2f_rocket_grunt_2_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "travel_through_mt_moon",
+        "stepId": "stop_rocket_scouts"
+      },
+      "trainerIds": [
+        "kanto_mt_moon_b2f_rocket_grunt_2"
+      ],
+      "trainers": {
+        "kanto_mt_moon_b2f_rocket_grunt_2": {
+          "gymBadge": null,
+          "name": "Team Rocket Grunt",
+          "teamSize": 3,
+          "trainerClass": "Team Rocket"
+        }
+      }
+    },
+    "kanto_mt_moon_b2f_rocket_grunt_3": {
+      "entityId": "kanto_mt_moon_b2f_rocket_grunt_3",
+      "mapId": "kanto_mt_moon_b2f",
+      "position": {
+        "x": 1872.0,
+        "y": 592.0
+      },
+      "radius": 144.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+      "story": {
+        "eventId": "kanto_mt_moon_b2f_rocket_grunt_3_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "travel_through_mt_moon",
+        "stepId": "stop_rocket_scouts"
+      },
+      "trainerIds": [
+        "kanto_mt_moon_b2f_rocket_grunt_3"
+      ],
+      "trainers": {
+        "kanto_mt_moon_b2f_rocket_grunt_3": {
+          "gymBadge": null,
+          "name": "Team Rocket Grunt",
+          "teamSize": 2,
+          "trainerClass": "Team Rocket"
+        }
+      }
+    },
+    "kanto_mt_moon_b2f_rocket_grunt_4": {
+      "entityId": "kanto_mt_moon_b2f_rocket_grunt_4",
+      "mapId": "kanto_mt_moon_b2f",
+      "position": {
+        "x": 1840.0,
+        "y": 1328.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+      "story": {
+        "eventId": "kanto_mt_moon_b2f_rocket_grunt_4_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "travel_through_mt_moon",
+        "stepId": "stop_rocket_scouts"
+      },
+      "trainerIds": [
+        "kanto_mt_moon_b2f_rocket_grunt_4"
+      ],
+      "trainers": {
+        "kanto_mt_moon_b2f_rocket_grunt_4": {
+          "gymBadge": null,
+          "name": "Team Rocket Grunt",
+          "teamSize": 2,
+          "trainerClass": "Team Rocket"
+        }
+      }
+    },
+    "kanto_mt_moon_b2f_super_nerd_miguel": {
+      "entityId": "kanto_mt_moon_b2f_super_nerd_miguel",
+      "mapId": "kanto_mt_moon_b2f",
+      "position": {
+        "x": 720.0,
+        "y": 656.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn",
+      "story": {
+        "eventId": "kanto_mt_moon_b2f_super_nerd_miguel_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "travel_through_mt_moon",
+        "stepId": "defeat_miguel"
+      },
+      "trainerIds": [
+        "kanto_mt_moon_b2f_super_nerd_miguel"
+      ],
+      "trainers": {
+        "kanto_mt_moon_b2f_super_nerd_miguel": {
+          "gymBadge": null,
+          "name": "Super Nerd Miguel",
+          "teamSize": 3,
+          "trainerClass": "Super Nerd"
+        }
+      }
+    },
+    "kanto_oaks_lab_gary": {
+      "entityId": "kanto_oaks_lab_gary",
+      "mapId": "kanto_oaks_lab",
+      "position": {
+        "x": 432.0,
+        "y": 784.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "kanto_oaks_lab_gary",
+      "scenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn",
+      "story": {
+        "eventId": "kanto_oaks_lab_gary_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "gary_starter_battle",
+        "stepId": "battle_gary"
+      },
+      "trainerIds": [
+        "kanto_oaks_lab_gary_bulbasaur",
+        "kanto_oaks_lab_gary_squirtle",
+        "kanto_oaks_lab_gary_charmander"
+      ],
+      "trainers": {
+        "kanto_oaks_lab_gary_bulbasaur": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 1,
+          "trainerClass": "rival"
+        },
+        "kanto_oaks_lab_gary_charmander": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 1,
+          "trainerClass": "rival"
+        },
+        "kanto_oaks_lab_gary_squirtle": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 1,
+          "trainerClass": "rival"
+        }
+      }
+    },
+    "kanto_pewter_city_gym_hiker_flint": {
+      "entityId": "kanto_pewter_city_gym_hiker_flint",
+      "mapId": "kanto_pewter_city_gym",
+      "position": {
+        "x": 304.0,
+        "y": 624.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_pewter_city_gym_hiker_flint"
+      ],
+      "trainers": {
+        "kanto_pewter_city_gym_hiker_flint": {
+          "gymBadge": null,
+          "name": "Hiker Flint",
+          "teamSize": 2,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_pewter_city_gym_youngster_stone": {
+      "entityId": "kanto_pewter_city_gym_youngster_stone",
+      "mapId": "kanto_pewter_city_gym",
+      "position": {
+        "x": 752.0,
+        "y": 464.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_pewter_city_gym_youngster_stone"
+      ],
+      "trainers": {
+        "kanto_pewter_city_gym_youngster_stone": {
+          "gymBadge": null,
+          "name": "Youngster Stone",
+          "teamSize": 2,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_pokemon_tower_gary": {
+      "entityId": "kanto_pokemon_tower_gary",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 1328.0,
+        "y": 432.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "kanto_pokemon_tower_gary",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": {
+        "eventId": "kanto_pokemon_tower_gary_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "investigate_pokemon_tower",
+        "stepId": "battle_gary"
+      },
+      "trainerIds": [
+        "kanto_pokemon_tower_gary_bulbasaur",
+        "kanto_pokemon_tower_gary_squirtle",
+        "kanto_pokemon_tower_gary_charmander"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_gary_bulbasaur": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 4,
+          "trainerClass": "rival"
+        },
+        "kanto_pokemon_tower_gary_charmander": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 4,
+          "trainerClass": "rival"
+        },
+        "kanto_pokemon_tower_gary_squirtle": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 4,
+          "trainerClass": "rival"
+        }
+      }
+    },
+    "kanto_pokemon_tower_hex_maniac_aster": {
+      "entityId": "kanto_pokemon_tower_hex_maniac_aster",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 2160.0,
+        "y": 240.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_pokemon_tower_hex_maniac_aster"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_hex_maniac_aster": {
+          "gymBadge": null,
+          "name": "Hex Maniac Aster",
+          "teamSize": 2,
+          "trainerClass": "Hex Maniac"
+        }
+      }
+    },
+    "kanto_pokemon_tower_hex_maniac_iris": {
+      "entityId": "kanto_pokemon_tower_hex_maniac_iris",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 2192.0,
+        "y": 1168.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_pokemon_tower_hex_maniac_iris"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_hex_maniac_iris": {
+          "gymBadge": null,
+          "name": "Hex Maniac Iris",
+          "teamSize": 2,
+          "trainerClass": "Hex Maniac"
+        }
+      }
+    },
+    "kanto_pokemon_tower_hex_maniac_liora": {
+      "entityId": "kanto_pokemon_tower_hex_maniac_liora",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 368.0,
+        "y": 1168.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_pokemon_tower_hex_maniac_liora"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_hex_maniac_liora": {
+          "gymBadge": null,
+          "name": "Hex Maniac Liora",
+          "teamSize": 2,
+          "trainerClass": "Hex Maniac"
+        }
+      }
+    },
+    "kanto_pokemon_tower_hex_maniac_mira": {
+      "entityId": "kanto_pokemon_tower_hex_maniac_mira",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 1488.0,
+        "y": 1072.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_pokemon_tower_hex_maniac_mira"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_hex_maniac_mira": {
+          "gymBadge": null,
+          "name": "Hex Maniac Mira",
+          "teamSize": 2,
+          "trainerClass": "Hex Maniac"
+        }
+      }
+    },
+    "kanto_pokemon_tower_hex_maniac_nora": {
+      "entityId": "kanto_pokemon_tower_hex_maniac_nora",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 2192.0,
+        "y": 496.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_pokemon_tower_hex_maniac_nora"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_hex_maniac_nora": {
+          "gymBadge": null,
+          "name": "Hex Maniac Nora",
+          "teamSize": 2,
+          "trainerClass": "Hex Maniac"
+        }
+      }
+    },
+    "kanto_pokemon_tower_hex_maniac_nyx": {
+      "entityId": "kanto_pokemon_tower_hex_maniac_nyx",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 1936.0,
+        "y": 1328.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_pokemon_tower_hex_maniac_nyx"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_hex_maniac_nyx": {
+          "gymBadge": null,
+          "name": "Hex Maniac Nyx",
+          "teamSize": 2,
+          "trainerClass": "Hex Maniac"
+        }
+      }
+    },
+    "kanto_pokemon_tower_hex_maniac_rhea": {
+      "entityId": "kanto_pokemon_tower_hex_maniac_rhea",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 592.0,
+        "y": 2032.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_pokemon_tower_hex_maniac_rhea"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_hex_maniac_rhea": {
+          "gymBadge": null,
+          "name": "Hex Maniac Rhea",
+          "teamSize": 3,
+          "trainerClass": "Hex Maniac"
+        }
+      }
+    },
+    "kanto_pokemon_tower_hex_maniac_vera": {
+      "entityId": "kanto_pokemon_tower_hex_maniac_vera",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 592.0,
+        "y": 1296.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_pokemon_tower_hex_maniac_vera"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_hex_maniac_vera": {
+          "gymBadge": null,
+          "name": "Hex Maniac Vera",
+          "teamSize": 2,
+          "trainerClass": "Hex Maniac"
+        }
+      }
+    },
+    "kanto_rock_tunnel_1f_hiker_lenny": {
+      "entityId": "kanto_rock_tunnel_1f_hiker_lenny",
+      "mapId": "kanto_rock_tunnel_1f",
+      "position": {
+        "x": 240.0,
+        "y": 656.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_1f_hiker_lenny"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_1f_hiker_lenny": {
+          "gymBadge": null,
+          "name": "Hiker Lenny",
+          "teamSize": 4,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_rock_tunnel_1f_hiker_lucas": {
+      "entityId": "kanto_rock_tunnel_1f_hiker_lucas",
+      "mapId": "kanto_rock_tunnel_1f",
+      "position": {
+        "x": 1680.0,
+        "y": 784.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_1f_hiker_lucas"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_1f_hiker_lucas": {
+          "gymBadge": null,
+          "name": "Hiker Lucas",
+          "teamSize": 2,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_rock_tunnel_1f_hiker_oliver": {
+      "entityId": "kanto_rock_tunnel_1f_hiker_oliver",
+      "mapId": "kanto_rock_tunnel_1f",
+      "position": {
+        "x": 560.0,
+        "y": 944.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_1f_hiker_oliver"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_1f_hiker_oliver": {
+          "gymBadge": null,
+          "name": "Hiker Oliver",
+          "teamSize": 3,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_rock_tunnel_1f_picnicker_ariana": {
+      "entityId": "kanto_rock_tunnel_1f_picnicker_ariana",
+      "mapId": "kanto_rock_tunnel_1f",
+      "position": {
+        "x": 2512.0,
+        "y": 1744.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_1f_picnicker_ariana"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_1f_picnicker_ariana": {
+          "gymBadge": null,
+          "name": "Picnicker Ariana",
+          "teamSize": 4,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_rock_tunnel_1f_picnicker_dana": {
+      "entityId": "kanto_rock_tunnel_1f_picnicker_dana",
+      "mapId": "kanto_rock_tunnel_1f",
+      "position": {
+        "x": 1040.0,
+        "y": 1968.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_1f_picnicker_dana"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_1f_picnicker_dana": {
+          "gymBadge": null,
+          "name": "Picnicker Dana",
+          "teamSize": 3,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_rock_tunnel_1f_picnicker_leah": {
+      "entityId": "kanto_rock_tunnel_1f_picnicker_leah",
+      "mapId": "kanto_rock_tunnel_1f",
+      "position": {
+        "x": 1936.0,
+        "y": 2128.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_1f_picnicker_leah"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_1f_picnicker_leah": {
+          "gymBadge": null,
+          "name": "Picnicker Leah",
+          "teamSize": 2,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_rock_tunnel_1f_pokemaniac_ashton": {
+      "entityId": "kanto_rock_tunnel_1f_pokemaniac_ashton",
+      "mapId": "kanto_rock_tunnel_1f",
+      "position": {
+        "x": 2128.0,
+        "y": 464.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_1f_pokemaniac_ashton"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_1f_pokemaniac_ashton": {
+          "gymBadge": null,
+          "name": "Poké Maniac Ashton",
+          "teamSize": 2,
+          "trainerClass": "Poké Maniac"
+        }
+      }
+    },
+    "kanto_rock_tunnel_b1f_hiker_allen": {
+      "entityId": "kanto_rock_tunnel_b1f_hiker_allen",
+      "mapId": "kanto_rock_tunnel_b1f",
+      "position": {
+        "x": 1904.0,
+        "y": 2032.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_b1f_hiker_allen"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_b1f_hiker_allen": {
+          "gymBadge": null,
+          "name": "Hiker Allen",
+          "teamSize": 1,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_rock_tunnel_b1f_hiker_dudley": {
+      "entityId": "kanto_rock_tunnel_b1f_hiker_dudley",
+      "mapId": "kanto_rock_tunnel_b1f",
+      "position": {
+        "x": 1104.0,
+        "y": 1648.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_b1f_hiker_dudley"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_b1f_hiker_dudley": {
+          "gymBadge": null,
+          "name": "Hiker Dudley",
+          "teamSize": 3,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_rock_tunnel_b1f_hiker_eric": {
+      "entityId": "kanto_rock_tunnel_b1f_hiker_eric",
+      "mapId": "kanto_rock_tunnel_b1f",
+      "position": {
+        "x": 2352.0,
+        "y": 1872.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_b1f_hiker_eric"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_b1f_hiker_eric": {
+          "gymBadge": null,
+          "name": "Hiker Eric",
+          "teamSize": 2,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_rock_tunnel_b1f_picnicker_martha": {
+      "entityId": "kanto_rock_tunnel_b1f_picnicker_martha",
+      "mapId": "kanto_rock_tunnel_b1f",
+      "position": {
+        "x": 528.0,
+        "y": 1392.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_b1f_picnicker_martha"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_b1f_picnicker_martha": {
+          "gymBadge": null,
+          "name": "Picnicker Martha",
+          "teamSize": 2,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_rock_tunnel_b1f_picnicker_sofia": {
+      "entityId": "kanto_rock_tunnel_b1f_picnicker_sofia",
+      "mapId": "kanto_rock_tunnel_b1f",
+      "position": {
+        "x": 688.0,
+        "y": 1520.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_b1f_picnicker_sofia"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_b1f_picnicker_sofia": {
+          "gymBadge": null,
+          "name": "Picnicker Sofia",
+          "teamSize": 3,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_rock_tunnel_b1f_pokemaniac_cooper": {
+      "entityId": "kanto_rock_tunnel_b1f_pokemaniac_cooper",
+      "mapId": "kanto_rock_tunnel_b1f",
+      "position": {
+        "x": 1616.0,
+        "y": 1648.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_b1f_pokemaniac_cooper"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_b1f_pokemaniac_cooper": {
+          "gymBadge": null,
+          "name": "Poké Maniac Cooper",
+          "teamSize": 3,
+          "trainerClass": "Poké Maniac"
+        }
+      }
+    },
+    "kanto_rock_tunnel_b1f_pokemaniac_steve": {
+      "entityId": "kanto_rock_tunnel_b1f_pokemaniac_steve",
+      "mapId": "kanto_rock_tunnel_b1f",
+      "position": {
+        "x": 880.0,
+        "y": 304.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_b1f_pokemaniac_steve"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_b1f_pokemaniac_steve": {
+          "gymBadge": null,
+          "name": "Poké Maniac Steve",
+          "teamSize": 2,
+          "trainerClass": "Poké Maniac"
+        }
+      }
+    },
+    "kanto_rock_tunnel_b1f_pokemaniac_winston": {
+      "entityId": "kanto_rock_tunnel_b1f_pokemaniac_winston",
+      "mapId": "kanto_rock_tunnel_b1f",
+      "position": {
+        "x": 2352.0,
+        "y": 560.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_rock_tunnel_b1f_pokemaniac_winston"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_b1f_pokemaniac_winston": {
+          "gymBadge": null,
+          "name": "Poké Maniac Winston",
+          "teamSize": 1,
+          "trainerClass": "Poké Maniac"
+        }
+      }
+    },
+    "kanto_rock_tunnel_future_self": {
+      "entityId": "kanto_rock_tunnel_future_self",
+      "mapId": "kanto_rock_tunnel_1f",
+      "position": {
+        "x": 992.0,
+        "y": 976.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
+      "story": {
+        "eventId": "kanto_rock_tunnel_future_self_battle",
+        "eventType": "trainer_battle_resolved",
+        "questId": "travel_to_lavender_town",
+        "stepId": "cross_rock_tunnel"
+      },
+      "trainerIds": [
+        "kanto_rock_tunnel_future_self"
+      ],
+      "trainers": {
+        "kanto_rock_tunnel_future_self": {
+          "gymBadge": null,
+          "name": "Mysterious Trainer",
+          "teamSize": 1,
+          "trainerClass": "story_battle"
+        }
+      }
+    },
+    "kanto_route_10_hiker_clark": {
+      "entityId": "kanto_route_10_hiker_clark",
+      "mapId": "kanto_route_10",
+      "position": {
+        "x": 848.0,
+        "y": 2864.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_10_hiker_clark"
+      ],
+      "trainers": {
+        "kanto_route_10_hiker_clark": {
+          "gymBadge": null,
+          "name": "Hiker Clark",
+          "teamSize": 2,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_route_10_hiker_trent": {
+      "entityId": "kanto_route_10_hiker_trent",
+      "mapId": "kanto_route_10",
+      "position": {
+        "x": 816.0,
+        "y": 2608.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_10_hiker_trent"
+      ],
+      "trainers": {
+        "kanto_route_10_hiker_trent": {
+          "gymBadge": null,
+          "name": "Hiker Trent",
+          "teamSize": 2,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_route_10_picnicker_carol": {
+      "entityId": "kanto_route_10_picnicker_carol",
+      "mapId": "kanto_route_10",
+      "position": {
+        "x": 1488.0,
+        "y": 1072.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_10_picnicker_carol"
+      ],
+      "trainers": {
+        "kanto_route_10_picnicker_carol": {
+          "gymBadge": null,
+          "name": "Picnicker Carol",
+          "teamSize": 2,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_10_picnicker_heidi": {
+      "entityId": "kanto_route_10_picnicker_heidi",
+      "mapId": "kanto_route_10",
+      "position": {
+        "x": 816.0,
+        "y": 624.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_10_picnicker_heidi"
+      ],
+      "trainers": {
+        "kanto_route_10_picnicker_heidi": {
+          "gymBadge": null,
+          "name": "Picnicker Heidi",
+          "teamSize": 2,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_10_pokemaniac_herman": {
+      "entityId": "kanto_route_10_pokemaniac_herman",
+      "mapId": "kanto_route_10",
+      "position": {
+        "x": 1328.0,
+        "y": 3152.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_10_pokemaniac_herman"
+      ],
+      "trainers": {
+        "kanto_route_10_pokemaniac_herman": {
+          "gymBadge": null,
+          "name": "Poké Maniac Herman",
+          "teamSize": 2,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_route_10_pokemaniac_mark": {
+      "entityId": "kanto_route_10_pokemaniac_mark",
+      "mapId": "kanto_route_10",
+      "position": {
+        "x": 1648.0,
+        "y": 944.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_10_pokemaniac_mark"
+      ],
+      "trainers": {
+        "kanto_route_10_pokemaniac_mark": {
+          "gymBadge": null,
+          "name": "Poké Maniac Mark",
+          "teamSize": 2,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_route_11_engineer_bernie": {
+      "entityId": "kanto_route_11_engineer_bernie",
+      "mapId": "kanto_route_11",
+      "position": {
+        "x": 3184.0,
+        "y": 624.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_11_engineer_bernie"
+      ],
+      "trainers": {
+        "kanto_route_11_engineer_bernie": {
+          "gymBadge": null,
+          "name": "Engineer Bernie",
+          "teamSize": 3,
+          "trainerClass": "Engineer"
+        }
+      }
+    },
+    "kanto_route_11_engineer_braxton": {
+      "entityId": "kanto_route_11_engineer_braxton",
+      "mapId": "kanto_route_11",
+      "position": {
+        "x": 3120.0,
+        "y": 1552.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_11_engineer_braxton"
+      ],
+      "trainers": {
+        "kanto_route_11_engineer_braxton": {
+          "gymBadge": null,
+          "name": "Engineer Braxton",
+          "teamSize": 1,
+          "trainerClass": "Engineer"
+        }
+      }
+    },
+    "kanto_route_11_gamer_darian": {
+      "entityId": "kanto_route_11_gamer_darian",
+      "mapId": "kanto_route_11",
+      "position": {
+        "x": 2672.0,
+        "y": 1424.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_11_gamer_darian"
+      ],
+      "trainers": {
+        "kanto_route_11_gamer_darian": {
+          "gymBadge": null,
+          "name": "Gamer Darian",
+          "teamSize": 2,
+          "trainerClass": "Gamer"
+        }
+      }
+    },
+    "kanto_route_11_gamer_dirk": {
+      "entityId": "kanto_route_11_gamer_dirk",
+      "mapId": "kanto_route_11",
+      "position": {
+        "x": 3088.0,
+        "y": 816.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_11_gamer_dirk"
+      ],
+      "trainers": {
+        "kanto_route_11_gamer_dirk": {
+          "gymBadge": null,
+          "name": "Gamer Dirk",
+          "teamSize": 2,
+          "trainerClass": "Gamer"
+        }
+      }
+    },
+    "kanto_route_11_gamer_hugo": {
+      "entityId": "kanto_route_11_gamer_hugo",
+      "mapId": "kanto_route_11",
+      "position": {
+        "x": 1968.0,
+        "y": 1072.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_11_gamer_hugo"
+      ],
+      "trainers": {
+        "kanto_route_11_gamer_hugo": {
+          "gymBadge": null,
+          "name": "Gamer Hugo",
+          "teamSize": 2,
+          "trainerClass": "Gamer"
+        }
+      }
+    },
+    "kanto_route_11_gamer_jasper": {
+      "entityId": "kanto_route_11_gamer_jasper",
+      "mapId": "kanto_route_11",
+      "position": {
+        "x": 2320.0,
+        "y": 1456.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_11_gamer_jasper"
+      ],
+      "trainers": {
+        "kanto_route_11_gamer_jasper": {
+          "gymBadge": null,
+          "name": "Gamer Jasper",
+          "teamSize": 2,
+          "trainerClass": "Gamer"
+        }
+      }
+    },
+    "kanto_route_11_youngster_dave": {
+      "entityId": "kanto_route_11_youngster_dave",
+      "mapId": "kanto_route_11",
+      "position": {
+        "x": 2096.0,
+        "y": 848.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_11_youngster_dave"
+      ],
+      "trainers": {
+        "kanto_route_11_youngster_dave": {
+          "gymBadge": null,
+          "name": "Youngster Dave",
+          "teamSize": 2,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_route_11_youngster_dillon": {
+      "entityId": "kanto_route_11_youngster_dillon",
+      "mapId": "kanto_route_11",
+      "position": {
+        "x": 1264.0,
+        "y": 400.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_11_youngster_dillon"
+      ],
+      "trainers": {
+        "kanto_route_11_youngster_dillon": {
+          "gymBadge": null,
+          "name": "Youngster Dillon",
+          "teamSize": 2,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_route_11_youngster_eddie": {
+      "entityId": "kanto_route_11_youngster_eddie",
+      "mapId": "kanto_route_11",
+      "position": {
+        "x": 720.0,
+        "y": 688.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_11_youngster_eddie"
+      ],
+      "trainers": {
+        "kanto_route_11_youngster_eddie": {
+          "gymBadge": null,
+          "name": "Youngster Eddie",
+          "teamSize": 1,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_route_11_youngster_yasu": {
+      "entityId": "kanto_route_11_youngster_yasu",
+      "mapId": "kanto_route_11",
+      "position": {
+        "x": 912.0,
+        "y": 976.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_11_youngster_yasu"
+      ],
+      "trainers": {
+        "kanto_route_11_youngster_yasu": {
+          "gymBadge": null,
+          "name": "Youngster Yasu",
+          "teamSize": 3,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_route_12_bird_keeper_gail": {
+      "entityId": "kanto_route_12_bird_keeper_gail",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 592.0,
+        "y": 3120.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_bird_keeper_gail"
+      ],
+      "trainers": {
+        "kanto_route_12_bird_keeper_gail": {
+          "gymBadge": null,
+          "name": "Bird Keeper Gail",
+          "teamSize": 2,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_12_bird_keeper_justin": {
+      "entityId": "kanto_route_12_bird_keeper_justin",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 656.0,
+        "y": 2512.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_bird_keeper_justin"
+      ],
+      "trainers": {
+        "kanto_route_12_bird_keeper_justin": {
+          "gymBadge": null,
+          "name": "Bird Keeper Justin",
+          "teamSize": 2,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_12_camper_justin": {
+      "entityId": "kanto_route_12_camper_justin",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 1008.0,
+        "y": 2064.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_camper_justin"
+      ],
+      "trainers": {
+        "kanto_route_12_camper_justin": {
+          "gymBadge": null,
+          "name": "Camper Justin",
+          "teamSize": 2,
+          "trainerClass": "Camper"
+        }
+      }
+    },
+    "kanto_route_12_fisherman_andrew": {
+      "entityId": "kanto_route_12_fisherman_andrew",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 1296.0,
+        "y": 1840.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_fisherman_andrew"
+      ],
+      "trainers": {
+        "kanto_route_12_fisherman_andrew": {
+          "gymBadge": null,
+          "name": "Fisherman Andrew",
+          "teamSize": 2,
+          "trainerClass": "Fisherman"
+        }
+      }
+    },
+    "kanto_route_12_fisherman_barney": {
+      "entityId": "kanto_route_12_fisherman_barney",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 944.0,
+        "y": 3472.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_fisherman_barney"
+      ],
+      "trainers": {
+        "kanto_route_12_fisherman_barney": {
+          "gymBadge": null,
+          "name": "Fisherman Barney",
+          "teamSize": 3,
+          "trainerClass": "Fisherman"
+        }
+      }
+    },
+    "kanto_route_12_fisherman_chip": {
+      "entityId": "kanto_route_12_fisherman_chip",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 688.0,
+        "y": 976.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_fisherman_chip"
+      ],
+      "trainers": {
+        "kanto_route_12_fisherman_chip": {
+          "gymBadge": null,
+          "name": "Fisherman Chip",
+          "teamSize": 2,
+          "trainerClass": "Fisherman"
+        }
+      }
+    },
+    "kanto_route_12_fisherman_elliot": {
+      "entityId": "kanto_route_12_fisherman_elliot",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 592.0,
+        "y": 1232.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_fisherman_elliot"
+      ],
+      "trainers": {
+        "kanto_route_12_fisherman_elliot": {
+          "gymBadge": null,
+          "name": "Fisherman Elliot",
+          "teamSize": 4,
+          "trainerClass": "Fisherman"
+        }
+      }
+    },
+    "kanto_route_12_fisherman_hank": {
+      "entityId": "kanto_route_12_fisherman_hank",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 1104.0,
+        "y": 752.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_fisherman_hank"
+      ],
+      "trainers": {
+        "kanto_route_12_fisherman_hank": {
+          "gymBadge": null,
+          "name": "Fisherman Hank",
+          "teamSize": 1,
+          "trainerClass": "Fisherman"
+        }
+      }
+    },
+    "kanto_route_12_fisherman_kyle": {
+      "entityId": "kanto_route_12_fisherman_kyle",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 1200.0,
+        "y": 2416.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_fisherman_kyle"
+      ],
+      "trainers": {
+        "kanto_route_12_fisherman_kyle": {
+          "gymBadge": null,
+          "name": "Fisherman Kyle",
+          "teamSize": 3,
+          "trainerClass": "Fisherman"
+        }
+      }
+    },
+    "kanto_route_12_fisherman_kyler": {
+      "entityId": "kanto_route_12_fisherman_kyler",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 1296.0,
+        "y": 3728.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_fisherman_kyler"
+      ],
+      "trainers": {
+        "kanto_route_12_fisherman_kyler": {
+          "gymBadge": null,
+          "name": "Fisherman Kyler",
+          "teamSize": 3,
+          "trainerClass": "Fisherman"
+        }
+      }
+    },
+    "kanto_route_12_fisherman_martin": {
+      "entityId": "kanto_route_12_fisherman_martin",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 1072.0,
+        "y": 2640.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_fisherman_martin"
+      ],
+      "trainers": {
+        "kanto_route_12_fisherman_martin": {
+          "gymBadge": null,
+          "name": "Fisherman Martin",
+          "teamSize": 2,
+          "trainerClass": "Fisherman"
+        }
+      }
+    },
+    "kanto_route_12_fisherman_ned": {
+      "entityId": "kanto_route_12_fisherman_ned",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 592.0,
+        "y": 656.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_fisherman_ned"
+      ],
+      "trainers": {
+        "kanto_route_12_fisherman_ned": {
+          "gymBadge": null,
+          "name": "Fisherman Ned",
+          "teamSize": 3,
+          "trainerClass": "Fisherman"
+        }
+      }
+    },
+    "kanto_route_12_fisherman_stephen": {
+      "entityId": "kanto_route_12_fisherman_stephen",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 1040.0,
+        "y": 2928.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_fisherman_stephen"
+      ],
+      "trainers": {
+        "kanto_route_12_fisherman_stephen": {
+          "gymBadge": null,
+          "name": "Fisherman Stephen",
+          "teamSize": 3,
+          "trainerClass": "Fisherman"
+        }
+      }
+    },
+    "kanto_route_12_rocker_luca": {
+      "entityId": "kanto_route_12_rocker_luca",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 976.0,
+        "y": 1552.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_rocker_luca"
+      ],
+      "trainers": {
+        "kanto_route_12_rocker_luca": {
+          "gymBadge": null,
+          "name": "Rocker Luca",
+          "teamSize": 2,
+          "trainerClass": "Rocker"
+        }
+      }
+    },
+    "kanto_route_12_young_couple_gia_jes": {
+      "entityId": "kanto_route_12_young_couple_gia_jes",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 976.0,
+        "y": 1168.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_young_couple_gia_jes"
+      ],
+      "trainers": {
+        "kanto_route_12_young_couple_gia_jes": {
+          "gymBadge": null,
+          "name": "Young Couple Gia & Jes",
+          "teamSize": 2,
+          "trainerClass": "Young Couple"
+        }
+      }
+    },
+    "kanto_route_12_young_couple_vic_tara": {
+      "entityId": "kanto_route_12_young_couple_vic_tara",
+      "mapId": "kanto_route_12",
+      "position": {
+        "x": 560.0,
+        "y": 2928.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_12_young_couple_vic_tara"
+      ],
+      "trainers": {
+        "kanto_route_12_young_couple_vic_tara": {
+          "gymBadge": null,
+          "name": "Young Couple Vic & Tara",
+          "teamSize": 2,
+          "trainerClass": "Young Couple"
+        }
+      }
+    },
+    "kanto_route_13_beauty_lola": {
+      "entityId": "kanto_route_13_beauty_lola",
+      "mapId": "kanto_route_13",
+      "position": {
+        "x": 592.0,
+        "y": 464.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_13_beauty_lola"
+      ],
+      "trainers": {
+        "kanto_route_13_beauty_lola": {
+          "gymBadge": null,
+          "name": "Beauty Lola",
+          "teamSize": 3,
+          "trainerClass": "Beauty"
+        }
+      }
+    },
+    "kanto_route_13_beauty_sheila": {
+      "entityId": "kanto_route_13_beauty_sheila",
+      "mapId": "kanto_route_13",
+      "position": {
+        "x": 1296.0,
+        "y": 560.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_13_beauty_sheila"
+      ],
+      "trainers": {
+        "kanto_route_13_beauty_sheila": {
+          "gymBadge": null,
+          "name": "Beauty Sheila",
+          "teamSize": 2,
+          "trainerClass": "Beauty"
+        }
+      }
+    },
+    "kanto_route_13_biker_jared": {
+      "entityId": "kanto_route_13_biker_jared",
+      "mapId": "kanto_route_13",
+      "position": {
+        "x": 400.0,
+        "y": 848.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_13_biker_jared"
+      ],
+      "trainers": {
+        "kanto_route_13_biker_jared": {
+          "gymBadge": null,
+          "name": "Biker Jared",
+          "teamSize": 3,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_13_bird_keeper_perry": {
+      "entityId": "kanto_route_13_bird_keeper_perry",
+      "mapId": "kanto_route_13",
+      "position": {
+        "x": 208.0,
+        "y": 656.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_13_bird_keeper_perry"
+      ],
+      "trainers": {
+        "kanto_route_13_bird_keeper_perry": {
+          "gymBadge": null,
+          "name": "Bird Keeper Perry",
+          "teamSize": 5,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_13_bird_keeper_robert": {
+      "entityId": "kanto_route_13_bird_keeper_robert",
+      "mapId": "kanto_route_13",
+      "position": {
+        "x": 176.0,
+        "y": 400.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_13_bird_keeper_robert"
+      ],
+      "trainers": {
+        "kanto_route_13_bird_keeper_robert": {
+          "gymBadge": null,
+          "name": "Bird Keeper Robert",
+          "teamSize": 4,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_13_bird_keeper_sebastian": {
+      "entityId": "kanto_route_13_bird_keeper_sebastian",
+      "mapId": "kanto_route_13",
+      "position": {
+        "x": 2320.0,
+        "y": 272.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_13_bird_keeper_sebastian"
+      ],
+      "trainers": {
+        "kanto_route_13_bird_keeper_sebastian": {
+          "gymBadge": null,
+          "name": "Bird Keeper Sebastian",
+          "teamSize": 2,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_13_picnicker_alma": {
+      "entityId": "kanto_route_13_picnicker_alma",
+      "mapId": "kanto_route_13",
+      "position": {
+        "x": 2128.0,
+        "y": 560.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_13_picnicker_alma"
+      ],
+      "trainers": {
+        "kanto_route_13_picnicker_alma": {
+          "gymBadge": null,
+          "name": "Picnicker Alma",
+          "teamSize": 3,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_13_picnicker_gwen": {
+      "entityId": "kanto_route_13_picnicker_gwen",
+      "mapId": "kanto_route_13",
+      "position": {
+        "x": 1296.0,
+        "y": 784.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_13_picnicker_gwen"
+      ],
+      "trainers": {
+        "kanto_route_13_picnicker_gwen": {
+          "gymBadge": null,
+          "name": "Picnicker Gwen",
+          "teamSize": 4,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_13_picnicker_susie": {
+      "entityId": "kanto_route_13_picnicker_susie",
+      "mapId": "kanto_route_13",
+      "position": {
+        "x": 1840.0,
+        "y": 464.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_13_picnicker_susie"
+      ],
+      "trainers": {
+        "kanto_route_13_picnicker_susie": {
+          "gymBadge": null,
+          "name": "Picnicker Susie",
+          "teamSize": 5,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_13_picnicker_valerie": {
+      "entityId": "kanto_route_13_picnicker_valerie",
+      "mapId": "kanto_route_13",
+      "position": {
+        "x": 560.0,
+        "y": 656.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_13_picnicker_valerie"
+      ],
+      "trainers": {
+        "kanto_route_13_picnicker_valerie": {
+          "gymBadge": null,
+          "name": "Picnicker Valerie",
+          "teamSize": 2,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_14_biker_gerald": {
+      "entityId": "kanto_route_14_biker_gerald",
+      "mapId": "kanto_route_14",
+      "position": {
+        "x": 880.0,
+        "y": 1872.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_14_biker_gerald"
+      ],
+      "trainers": {
+        "kanto_route_14_biker_gerald": {
+          "gymBadge": null,
+          "name": "Biker Gerald",
+          "teamSize": 2,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_14_biker_isaac": {
+      "entityId": "kanto_route_14_biker_isaac",
+      "mapId": "kanto_route_14",
+      "position": {
+        "x": 464.0,
+        "y": 2096.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_14_biker_isaac"
+      ],
+      "trainers": {
+        "kanto_route_14_biker_isaac": {
+          "gymBadge": null,
+          "name": "Biker Isaac",
+          "teamSize": 3,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_14_biker_lukas": {
+      "entityId": "kanto_route_14_biker_lukas",
+      "mapId": "kanto_route_14",
+      "position": {
+        "x": 464.0,
+        "y": 1296.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_14_biker_lukas"
+      ],
+      "trainers": {
+        "kanto_route_14_biker_lukas": {
+          "gymBadge": null,
+          "name": "Biker Lukas",
+          "teamSize": 3,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_14_biker_malik": {
+      "entityId": "kanto_route_14_biker_malik",
+      "mapId": "kanto_route_14",
+      "position": {
+        "x": 784.0,
+        "y": 1072.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_14_biker_malik"
+      ],
+      "trainers": {
+        "kanto_route_14_biker_malik": {
+          "gymBadge": null,
+          "name": "Biker Malik",
+          "teamSize": 2,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_14_bird_keeper_beck": {
+      "entityId": "kanto_route_14_bird_keeper_beck",
+      "mapId": "kanto_route_14",
+      "position": {
+        "x": 880.0,
+        "y": 1232.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_14_bird_keeper_beck"
+      ],
+      "trainers": {
+        "kanto_route_14_bird_keeper_beck": {
+          "gymBadge": null,
+          "name": "Bird Keeper Beck",
+          "teamSize": 2,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_14_bird_keeper_carter": {
+      "entityId": "kanto_route_14_bird_keeper_carter",
+      "mapId": "kanto_route_14",
+      "position": {
+        "x": 464.0,
+        "y": 1616.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_14_bird_keeper_carter"
+      ],
+      "trainers": {
+        "kanto_route_14_bird_keeper_carter": {
+          "gymBadge": null,
+          "name": "Bird Keeper Carter",
+          "teamSize": 3,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_14_bird_keeper_marlon": {
+      "entityId": "kanto_route_14_bird_keeper_marlon",
+      "mapId": "kanto_route_14",
+      "position": {
+        "x": 880.0,
+        "y": 848.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_14_bird_keeper_marlon"
+      ],
+      "trainers": {
+        "kanto_route_14_bird_keeper_marlon": {
+          "gymBadge": null,
+          "name": "Bird Keeper Marlon",
+          "teamSize": 3,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_14_bird_keeper_mitch": {
+      "entityId": "kanto_route_14_bird_keeper_mitch",
+      "mapId": "kanto_route_14",
+      "position": {
+        "x": 464.0,
+        "y": 848.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_14.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_14_bird_keeper_mitch"
+      ],
+      "trainers": {
+        "kanto_route_14_bird_keeper_mitch": {
+          "gymBadge": null,
+          "name": "Bird Keeper Mitch",
+          "teamSize": 4,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_15_beauty_grace": {
+      "entityId": "kanto_route_15_beauty_grace",
+      "mapId": "kanto_route_15",
+      "position": {
+        "x": 2992.0,
+        "y": 784.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_15_beauty_grace"
+      ],
+      "trainers": {
+        "kanto_route_15_beauty_grace": {
+          "gymBadge": null,
+          "name": "Beauty Grace",
+          "teamSize": 2,
+          "trainerClass": "Beauty"
+        }
+      }
+    },
+    "kanto_route_15_beauty_olivia": {
+      "entityId": "kanto_route_15_beauty_olivia",
+      "mapId": "kanto_route_15",
+      "position": {
+        "x": 2128.0,
+        "y": 880.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_15_beauty_olivia"
+      ],
+      "trainers": {
+        "kanto_route_15_beauty_olivia": {
+          "gymBadge": null,
+          "name": "Beauty Olivia",
+          "teamSize": 2,
+          "trainerClass": "Beauty"
+        }
+      }
+    },
+    "kanto_route_15_biker_alex": {
+      "entityId": "kanto_route_15_biker_alex",
+      "mapId": "kanto_route_15",
+      "position": {
+        "x": 2416.0,
+        "y": 880.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_15_biker_alex"
+      ],
+      "trainers": {
+        "kanto_route_15_biker_alex": {
+          "gymBadge": null,
+          "name": "Biker Alex",
+          "teamSize": 3,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_15_biker_ernest": {
+      "entityId": "kanto_route_15_biker_ernest",
+      "mapId": "kanto_route_15",
+      "position": {
+        "x": 2768.0,
+        "y": 880.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_15_biker_ernest"
+      ],
+      "trainers": {
+        "kanto_route_15_biker_ernest": {
+          "gymBadge": null,
+          "name": "Biker Ernest",
+          "teamSize": 5,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_15_bird_keeper_chester": {
+      "entityId": "kanto_route_15_bird_keeper_chester",
+      "mapId": "kanto_route_15",
+      "position": {
+        "x": 1136.0,
+        "y": 880.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_15_bird_keeper_chester"
+      ],
+      "trainers": {
+        "kanto_route_15_bird_keeper_chester": {
+          "gymBadge": null,
+          "name": "Bird Keeper Chester",
+          "teamSize": 3,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_15_bird_keeper_edwin": {
+      "entityId": "kanto_route_15_bird_keeper_edwin",
+      "mapId": "kanto_route_15",
+      "position": {
+        "x": 816.0,
+        "y": 880.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_15_bird_keeper_edwin"
+      ],
+      "trainers": {
+        "kanto_route_15_bird_keeper_edwin": {
+          "gymBadge": null,
+          "name": "Bird Keeper Edwin",
+          "teamSize": 4,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_15_crush_kin_mya": {
+      "entityId": "kanto_route_15_crush_kin_mya",
+      "mapId": "kanto_route_15",
+      "position": {
+        "x": 1808.0,
+        "y": 432.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_15_crush_kin_mya"
+      ],
+      "trainers": {
+        "kanto_route_15_crush_kin_mya": {
+          "gymBadge": null,
+          "name": "Crush Kin Mya",
+          "teamSize": 1,
+          "trainerClass": "Crush Kin"
+        }
+      }
+    },
+    "kanto_route_15_crush_kin_ron": {
+      "entityId": "kanto_route_15_crush_kin_ron",
+      "mapId": "kanto_route_15",
+      "position": {
+        "x": 1840.0,
+        "y": 464.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_15_crush_kin_ron"
+      ],
+      "trainers": {
+        "kanto_route_15_crush_kin_ron": {
+          "gymBadge": null,
+          "name": "Crush Kin Ron",
+          "teamSize": 1,
+          "trainerClass": "Crush Kin"
+        }
+      }
+    },
+    "kanto_route_15_picnicker_becky": {
+      "entityId": "kanto_route_15_picnicker_becky",
+      "mapId": "kanto_route_15",
+      "position": {
+        "x": 2576.0,
+        "y": 464.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_15_picnicker_becky"
+      ],
+      "trainers": {
+        "kanto_route_15_picnicker_becky": {
+          "gymBadge": null,
+          "name": "Picnicker Becky",
+          "teamSize": 2,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_15_picnicker_celia": {
+      "entityId": "kanto_route_15_picnicker_celia",
+      "mapId": "kanto_route_15",
+      "position": {
+        "x": 976.0,
+        "y": 464.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_15_picnicker_celia"
+      ],
+      "trainers": {
+        "kanto_route_15_picnicker_celia": {
+          "gymBadge": null,
+          "name": "Picnicker Celia",
+          "teamSize": 1,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_15_picnicker_kindra": {
+      "entityId": "kanto_route_15_picnicker_kindra",
+      "mapId": "kanto_route_15",
+      "position": {
+        "x": 1456.0,
+        "y": 880.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_15_picnicker_kindra"
+      ],
+      "trainers": {
+        "kanto_route_15_picnicker_kindra": {
+          "gymBadge": null,
+          "name": "Picnicker Kindra",
+          "teamSize": 3,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_15_picnicker_yazmin": {
+      "entityId": "kanto_route_15_picnicker_yazmin",
+      "mapId": "kanto_route_15",
+      "position": {
+        "x": 528.0,
+        "y": 752.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_15_picnicker_yazmin"
+      ],
+      "trainers": {
+        "kanto_route_15_picnicker_yazmin": {
+          "gymBadge": null,
+          "name": "Picnicker Yazmin",
+          "teamSize": 3,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_1_lass_zoe": {
+      "entityId": "kanto_route_1_lass_zoe",
+      "mapId": "kanto_route_1",
+      "position": {
+        "x": 832.0,
+        "y": 1120.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_1_lass_zoe"
+      ],
+      "trainers": {
+        "kanto_route_1_lass_zoe": {
+          "gymBadge": null,
+          "name": "Lass Zoe",
+          "teamSize": 2,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_route_1_youngster_liam": {
+      "entityId": "kanto_route_1_youngster_liam",
+      "mapId": "kanto_route_1",
+      "position": {
+        "x": 1536.0,
+        "y": 1664.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_1.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_1_youngster_liam"
+      ],
+      "trainers": {
+        "kanto_route_1_youngster_liam": {
+          "gymBadge": null,
+          "name": "Youngster Liam",
+          "teamSize": 1,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_route_22_lass_paige": {
+      "entityId": "kanto_route_22_lass_paige",
+      "mapId": "kanto_route_22",
+      "position": {
+        "x": 1456.0,
+        "y": 1104.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_22_lass_paige"
+      ],
+      "trainers": {
+        "kanto_route_22_lass_paige": {
+          "gymBadge": null,
+          "name": "Lass Paige",
+          "teamSize": 1,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_route_22_youngster_caleb": {
+      "entityId": "kanto_route_22_youngster_caleb",
+      "mapId": "kanto_route_22",
+      "position": {
+        "x": 2160.0,
+        "y": 752.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_22.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_22_youngster_caleb"
+      ],
+      "trainers": {
+        "kanto_route_22_youngster_caleb": {
+          "gymBadge": null,
+          "name": "Youngster Caleb",
+          "teamSize": 2,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_route_24_gary": {
+      "entityId": "kanto_route_24_gary_oak",
+      "mapId": "kanto_cerulean_city",
+      "position": {
+        "x": 1808.0,
+        "y": 720.0
+      },
+      "radius": 151.764495849609,
+      "rivalPrefix": "kanto_route_24_gary",
+      "scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_24_gary_bulbasaur",
+        "kanto_route_24_gary_squirtle",
+        "kanto_route_24_gary_charmander"
+      ],
+      "trainers": {
+        "kanto_route_24_gary_bulbasaur": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 4,
+          "trainerClass": "rival"
+        },
+        "kanto_route_24_gary_charmander": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 4,
+          "trainerClass": "rival"
+        },
+        "kanto_route_24_gary_squirtle": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 4,
+          "trainerClass": "rival"
+        }
+      }
+    },
+    "kanto_route_24_nugget_bridge_01_cale": {
+      "entityId": "kanto_route_24_nugget_bridge_01_cale",
+      "mapId": "kanto_cerulean_city",
+      "position": {
+        "x": 1872.0,
+        "y": 464.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_24_nugget_bridge_01_cale"
+      ],
+      "trainers": {
+        "kanto_route_24_nugget_bridge_01_cale": {
+          "gymBadge": null,
+          "name": "Bug Catcher Cale",
+          "teamSize": 2,
+          "trainerClass": "Bug Catcher"
+        }
+      }
+    },
+    "kanto_route_24_nugget_bridge_02_ali": {
+      "entityId": "kanto_route_24_nugget_bridge_02_ali",
+      "mapId": "kanto_cerulean_city",
+      "position": {
+        "x": 1872.0,
+        "y": 176.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_24_nugget_bridge_02_ali"
+      ],
+      "trainers": {
+        "kanto_route_24_nugget_bridge_02_ali": {
+          "gymBadge": null,
+          "name": "Lass Ali",
+          "teamSize": 3,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_route_24_nugget_bridge_03_timmy": {
+      "entityId": "kanto_route_24_nugget_bridge_03_timmy",
+      "mapId": "kanto_route_24",
+      "position": {
+        "x": 1072.0,
+        "y": 1808.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_24_nugget_bridge_03_timmy"
+      ],
+      "trainers": {
+        "kanto_route_24_nugget_bridge_03_timmy": {
+          "gymBadge": null,
+          "name": "Youngster Timmy",
+          "teamSize": 2,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_route_24_nugget_bridge_04_reli": {
+      "entityId": "kanto_route_24_nugget_bridge_04_reli",
+      "mapId": "kanto_route_24",
+      "position": {
+        "x": 1072.0,
+        "y": 1424.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_24_nugget_bridge_04_reli"
+      ],
+      "trainers": {
+        "kanto_route_24_nugget_bridge_04_reli": {
+          "gymBadge": null,
+          "name": "Lass Reli",
+          "teamSize": 2,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_route_24_nugget_bridge_05_ethan": {
+      "entityId": "kanto_route_24_nugget_bridge_05_ethan",
+      "mapId": "kanto_route_24",
+      "position": {
+        "x": 1072.0,
+        "y": 1040.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_24_nugget_bridge_05_ethan"
+      ],
+      "trainers": {
+        "kanto_route_24_nugget_bridge_05_ethan": {
+          "gymBadge": null,
+          "name": "Camper Ethan",
+          "teamSize": 1,
+          "trainerClass": "Camper"
+        }
+      }
+    },
+    "kanto_route_24_rocket_recruiter": {
+      "entityId": "kanto_route_24_rocket_recruiter",
+      "mapId": "kanto_route_24",
+      "position": {
+        "x": 1072.0,
+        "y": 752.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_24.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_24_rocket_recruiter"
+      ],
+      "trainers": {
+        "kanto_route_24_rocket_recruiter": {
+          "gymBadge": null,
+          "name": "Team Rocket Recruiter",
+          "teamSize": 2,
+          "trainerClass": "Team Rocket"
+        }
+      }
+    },
+    "kanto_route_25_camper_flint": {
+      "entityId": "kanto_route_25_camper_flint",
+      "mapId": "kanto_route_25",
+      "position": {
+        "x": 1136.0,
+        "y": 464.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_25_camper_flint"
+      ],
+      "trainers": {
+        "kanto_route_25_camper_flint": {
+          "gymBadge": null,
+          "name": "Camper Flint",
+          "teamSize": 2,
+          "trainerClass": "Camper"
+        }
+      }
+    },
+    "kanto_route_25_hiker_franklin": {
+      "entityId": "kanto_route_25_hiker_franklin",
+      "mapId": "kanto_route_25",
+      "position": {
+        "x": 272.0,
+        "y": 464.0
+      },
+      "radius": 144.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_25_hiker_franklin"
+      ],
+      "trainers": {
+        "kanto_route_25_hiker_franklin": {
+          "gymBadge": null,
+          "name": "Hiker Franklin",
+          "teamSize": 2,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_route_25_hiker_nob": {
+      "entityId": "kanto_route_25_hiker_nob",
+      "mapId": "kanto_route_25",
+      "position": {
+        "x": 1104.0,
+        "y": 720.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_25_hiker_nob"
+      ],
+      "trainers": {
+        "kanto_route_25_hiker_nob": {
+          "gymBadge": null,
+          "name": "Hiker Nob",
+          "teamSize": 4,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_route_25_hiker_wayne": {
+      "entityId": "kanto_route_25_hiker_wayne",
+      "mapId": "kanto_route_25",
+      "position": {
+        "x": 528.0,
+        "y": 656.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_25_hiker_wayne"
+      ],
+      "trainers": {
+        "kanto_route_25_hiker_wayne": {
+          "gymBadge": null,
+          "name": "Hiker Wayne",
+          "teamSize": 1,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_route_25_lass_haley": {
+      "entityId": "kanto_route_25_lass_haley",
+      "mapId": "kanto_route_25",
+      "position": {
+        "x": 1776.0,
+        "y": 528.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_25_lass_haley"
+      ],
+      "trainers": {
+        "kanto_route_25_lass_haley": {
+          "gymBadge": null,
+          "name": "Lass Haley",
+          "teamSize": 3,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_route_25_picnicker_kelsey": {
+      "entityId": "kanto_route_25_picnicker_kelsey",
+      "mapId": "kanto_route_25",
+      "position": {
+        "x": 976.0,
+        "y": 560.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_25_picnicker_kelsey"
+      ],
+      "trainers": {
+        "kanto_route_25_picnicker_kelsey": {
+          "gymBadge": null,
+          "name": "Picnicker Kelsey",
+          "teamSize": 2,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_25_youngster_chad": {
+      "entityId": "kanto_route_25_youngster_chad",
+      "mapId": "kanto_route_25",
+      "position": {
+        "x": 1584.0,
+        "y": 944.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_25_youngster_chad"
+      ],
+      "trainers": {
+        "kanto_route_25_youngster_chad": {
+          "gymBadge": null,
+          "name": "Youngster Chad",
+          "teamSize": 2,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_route_25_youngster_dan": {
+      "entityId": "kanto_route_25_youngster_dan",
+      "mapId": "kanto_route_25",
+      "position": {
+        "x": 880.0,
+        "y": 656.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_25_youngster_dan"
+      ],
+      "trainers": {
+        "kanto_route_25_youngster_dan": {
+          "gymBadge": null,
+          "name": "Youngster Dan",
+          "teamSize": 1,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_route_25_youngster_joey": {
+      "entityId": "kanto_route_25_youngster_joey",
+      "mapId": "kanto_route_25",
+      "position": {
+        "x": 560.0,
+        "y": 336.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_25_youngster_joey"
+      ],
+      "trainers": {
+        "kanto_route_25_youngster_joey": {
+          "gymBadge": null,
+          "name": "Youngster Joey",
+          "teamSize": 2,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_route_2_bug_catcher_cale": {
+      "entityId": "kanto_route_2_bug_catcher_cale",
+      "mapId": "kanto_route_2",
+      "position": {
+        "x": 1456.0,
+        "y": 1264.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_2_bug_catcher_cale"
+      ],
+      "trainers": {
+        "kanto_route_2_bug_catcher_cale": {
+          "gymBadge": null,
+          "name": "Bug Catcher Cale",
+          "teamSize": 2,
+          "trainerClass": "Bug Catcher"
+        }
+      }
+    },
+    "kanto_route_2_youngster_mason": {
+      "entityId": "kanto_route_2_youngster_mason",
+      "mapId": "kanto_route_2",
+      "position": {
+        "x": 976.0,
+        "y": 1968.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_2_youngster_mason"
+      ],
+      "trainers": {
+        "kanto_route_2_youngster_mason": {
+          "gymBadge": null,
+          "name": "Youngster Mason",
+          "teamSize": 2,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_route_3_firebreather_otis": {
+      "entityId": "kanto_route_3_firebreather_otis",
+      "mapId": "kanto_route_3",
+      "position": {
+        "x": 2704.0,
+        "y": 912.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_3_firebreather_otis"
+      ],
+      "trainers": {
+        "kanto_route_3_firebreather_otis": {
+          "gymBadge": null,
+          "name": "Firebreather Otis",
+          "teamSize": 2,
+          "trainerClass": "Firebreather"
+        }
+      }
+    },
+    "kanto_route_3_hiker_bruce": {
+      "entityId": "kanto_route_3_hiker_bruce",
+      "mapId": "kanto_route_3",
+      "position": {
+        "x": 1552.0,
+        "y": 624.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_3_hiker_bruce"
+      ],
+      "trainers": {
+        "kanto_route_3_hiker_bruce": {
+          "gymBadge": null,
+          "name": "Hiker Bruce",
+          "teamSize": 2,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_route_3_youngster_warren": {
+      "entityId": "kanto_route_3_youngster_warren",
+      "mapId": "kanto_route_3",
+      "position": {
+        "x": 848.0,
+        "y": 688.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_3.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_3_youngster_warren"
+      ],
+      "trainers": {
+        "kanto_route_3_youngster_warren": {
+          "gymBadge": null,
+          "name": "Youngster Warren",
+          "teamSize": 2,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_route_4_bird_keeper_hank": {
+      "entityId": "kanto_route_4_bird_keeper_hank",
+      "mapId": "kanto_route_4",
+      "position": {
+        "x": 1968.0,
+        "y": 1200.0
+      },
+      "radius": 144.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_4_bird_keeper_hank"
+      ],
+      "trainers": {
+        "kanto_route_4_bird_keeper_hank": {
+          "gymBadge": null,
+          "name": "Bird Keeper Hank",
+          "teamSize": 2,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_4_picnicker_hope": {
+      "entityId": "kanto_route_4_picnicker_hope",
+      "mapId": "kanto_route_4",
+      "position": {
+        "x": 784.0,
+        "y": 1040.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_4_picnicker_hope"
+      ],
+      "trainers": {
+        "kanto_route_4_picnicker_hope": {
+          "gymBadge": null,
+          "name": "Picnicker Hope",
+          "teamSize": 1,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_4_picnicker_sharon": {
+      "entityId": "kanto_route_4_picnicker_sharon",
+      "mapId": "kanto_route_4",
+      "position": {
+        "x": 2480.0,
+        "y": 912.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_4.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_4_picnicker_sharon"
+      ],
+      "trainers": {
+        "kanto_route_4_picnicker_sharon": {
+          "gymBadge": null,
+          "name": "Picnicker Sharon",
+          "teamSize": 2,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_6_bug_catcher_elijah": {
+      "entityId": "kanto_route_6_bug_catcher_elijah",
+      "mapId": "kanto_route_6",
+      "position": {
+        "x": 656.0,
+        "y": 1616.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_6_bug_catcher_elijah"
+      ],
+      "trainers": {
+        "kanto_route_6_bug_catcher_elijah": {
+          "gymBadge": null,
+          "name": "Bug Catcher Elijah",
+          "teamSize": 1,
+          "trainerClass": "Bug Catcher"
+        }
+      }
+    },
+    "kanto_route_6_bug_catcher_keigo": {
+      "entityId": "kanto_route_6_bug_catcher_keigo",
+      "mapId": "kanto_route_6",
+      "position": {
+        "x": 1520.0,
+        "y": 752.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_6_bug_catcher_keigo"
+      ],
+      "trainers": {
+        "kanto_route_6_bug_catcher_keigo": {
+          "gymBadge": null,
+          "name": "Bug Catcher Keigo",
+          "teamSize": 3,
+          "trainerClass": "Bug Catcher"
+        }
+      }
+    },
+    "kanto_route_6_camper_jeff": {
+      "entityId": "kanto_route_6_camper_jeff",
+      "mapId": "kanto_route_6",
+      "position": {
+        "x": 1104.0,
+        "y": 2128.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_6_camper_jeff"
+      ],
+      "trainers": {
+        "kanto_route_6_camper_jeff": {
+          "gymBadge": null,
+          "name": "Camper Jeff",
+          "teamSize": 2,
+          "trainerClass": "Camper"
+        }
+      }
+    },
+    "kanto_route_6_camper_ricky": {
+      "entityId": "kanto_route_6_camper_ricky",
+      "mapId": "kanto_route_6",
+      "position": {
+        "x": 624.0,
+        "y": 848.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_6_camper_ricky"
+      ],
+      "trainers": {
+        "kanto_route_6_camper_ricky": {
+          "gymBadge": null,
+          "name": "Camper Ricky",
+          "teamSize": 1,
+          "trainerClass": "Camper"
+        }
+      }
+    },
+    "kanto_route_6_picnicker_isabelle": {
+      "entityId": "kanto_route_6_picnicker_isabelle",
+      "mapId": "kanto_route_6",
+      "position": {
+        "x": 1328.0,
+        "y": 1744.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_6_picnicker_isabelle"
+      ],
+      "trainers": {
+        "kanto_route_6_picnicker_isabelle": {
+          "gymBadge": null,
+          "name": "Picnicker Isabelle",
+          "teamSize": 3,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_6_picnicker_nancy": {
+      "entityId": "kanto_route_6_picnicker_nancy",
+      "mapId": "kanto_route_6",
+      "position": {
+        "x": 368.0,
+        "y": 1328.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_6.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_6_picnicker_nancy"
+      ],
+      "trainers": {
+        "kanto_route_6_picnicker_nancy": {
+          "gymBadge": null,
+          "name": "Picnicker Nancy",
+          "teamSize": 2,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_8_biker_jaren": {
+      "entityId": "kanto_route_8_biker_jaren",
+      "mapId": "kanto_route_8",
+      "position": {
+        "x": 848.0,
+        "y": 880.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_8_biker_jaren"
+      ],
+      "trainers": {
+        "kanto_route_8_biker_jaren": {
+          "gymBadge": null,
+          "name": "Biker Jaren",
+          "teamSize": 2,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_8_biker_ricardo": {
+      "entityId": "kanto_route_8_biker_ricardo",
+      "mapId": "kanto_route_8",
+      "position": {
+        "x": 560.0,
+        "y": 944.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_8_biker_ricardo"
+      ],
+      "trainers": {
+        "kanto_route_8_biker_ricardo": {
+          "gymBadge": null,
+          "name": "Biker Ricardo",
+          "teamSize": 3,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_8_gamer_rich": {
+      "entityId": "kanto_route_8_gamer_rich",
+      "mapId": "kanto_route_8",
+      "position": {
+        "x": 1776.0,
+        "y": 880.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_8_gamer_rich"
+      ],
+      "trainers": {
+        "kanto_route_8_gamer_rich": {
+          "gymBadge": null,
+          "name": "Gamer Rich",
+          "teamSize": 2,
+          "trainerClass": "Gamer"
+        }
+      }
+    },
+    "kanto_route_8_gamer_stan": {
+      "entityId": "kanto_route_8_gamer_stan",
+      "mapId": "kanto_route_8",
+      "position": {
+        "x": 496.0,
+        "y": 496.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_8_gamer_stan"
+      ],
+      "trainers": {
+        "kanto_route_8_gamer_stan": {
+          "gymBadge": null,
+          "name": "Gamer Stan",
+          "teamSize": 3,
+          "trainerClass": "Gamer"
+        }
+      }
+    },
+    "kanto_route_8_lass_andrea": {
+      "entityId": "kanto_route_8_lass_andrea",
+      "mapId": "kanto_route_8",
+      "position": {
+        "x": 912.0,
+        "y": 624.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_8_lass_andrea"
+      ],
+      "trainers": {
+        "kanto_route_8_lass_andrea": {
+          "gymBadge": null,
+          "name": "Lass Andrea",
+          "teamSize": 3,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_route_8_lass_julia": {
+      "entityId": "kanto_route_8_lass_julia",
+      "mapId": "kanto_route_8",
+      "position": {
+        "x": 2032.0,
+        "y": 848.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_8_lass_julia"
+      ],
+      "trainers": {
+        "kanto_route_8_lass_julia": {
+          "gymBadge": null,
+          "name": "Lass Julia",
+          "teamSize": 2,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_route_8_lass_megan": {
+      "entityId": "kanto_route_8_lass_megan",
+      "mapId": "kanto_route_8",
+      "position": {
+        "x": 944.0,
+        "y": 912.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_8_lass_megan"
+      ],
+      "trainers": {
+        "kanto_route_8_lass_megan": {
+          "gymBadge": null,
+          "name": "Lass Megan",
+          "teamSize": 5,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_route_8_lass_paige": {
+      "entityId": "kanto_route_8_lass_paige",
+      "mapId": "kanto_route_8",
+      "position": {
+        "x": 1328.0,
+        "y": 656.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_8_lass_paige"
+      ],
+      "trainers": {
+        "kanto_route_8_lass_paige": {
+          "gymBadge": null,
+          "name": "Lass Paige",
+          "teamSize": 2,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_route_8_super_nerd_aidan": {
+      "entityId": "kanto_route_8_super_nerd_aidan",
+      "mapId": "kanto_route_8",
+      "position": {
+        "x": 720.0,
+        "y": 432.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_8_super_nerd_aidan"
+      ],
+      "trainers": {
+        "kanto_route_8_super_nerd_aidan": {
+          "gymBadge": null,
+          "name": "Super Nerd Aidan",
+          "teamSize": 4,
+          "trainerClass": "Super Nerd"
+        }
+      }
+    },
+    "kanto_route_8_super_nerd_glenn": {
+      "entityId": "kanto_route_8_super_nerd_glenn",
+      "mapId": "kanto_route_8",
+      "position": {
+        "x": 1584.0,
+        "y": 592.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_8_super_nerd_glenn"
+      ],
+      "trainers": {
+        "kanto_route_8_super_nerd_glenn": {
+          "gymBadge": null,
+          "name": "Super Nerd Glenn",
+          "teamSize": 3,
+          "trainerClass": "Super Nerd"
+        }
+      }
+    },
+    "kanto_route_8_super_nerd_leslie": {
+      "entityId": "kanto_route_8_super_nerd_leslie",
+      "mapId": "kanto_route_8",
+      "position": {
+        "x": 1232.0,
+        "y": 592.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_8_super_nerd_leslie"
+      ],
+      "trainers": {
+        "kanto_route_8_super_nerd_leslie": {
+          "gymBadge": null,
+          "name": "Super Nerd Leslie",
+          "teamSize": 1,
+          "trainerClass": "Super Nerd"
+        }
+      }
+    },
+    "kanto_route_8_twins_eli_anne": {
+      "entityId": "kanto_route_8_twins_eli_anne",
+      "mapId": "kanto_route_8",
+      "position": {
+        "x": 1456.0,
+        "y": 592.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_8_twins_eli_anne"
+      ],
+      "trainers": {
+        "kanto_route_8_twins_eli_anne": {
+          "gymBadge": null,
+          "name": "Twins Eli & Anne",
+          "teamSize": 2,
+          "trainerClass": "Twins"
+        }
+      }
+    },
+    "kanto_route_9_bug_catcher_brent": {
+      "entityId": "kanto_route_9_bug_catcher_brent",
+      "mapId": "kanto_route_9",
+      "position": {
+        "x": 2128.0,
+        "y": 880.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_9_bug_catcher_brent"
+      ],
+      "trainers": {
+        "kanto_route_9_bug_catcher_brent": {
+          "gymBadge": null,
+          "name": "Bug Catcher Brent",
+          "teamSize": 2,
+          "trainerClass": "Bug Catcher"
+        }
+      }
+    },
+    "kanto_route_9_bug_catcher_conner": {
+      "entityId": "kanto_route_9_bug_catcher_conner",
+      "mapId": "kanto_route_9",
+      "position": {
+        "x": 2384.0,
+        "y": 1072.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_9_bug_catcher_conner"
+      ],
+      "trainers": {
+        "kanto_route_9_bug_catcher_conner": {
+          "gymBadge": null,
+          "name": "Bug Catcher Conner",
+          "teamSize": 3,
+          "trainerClass": "Bug Catcher"
+        }
+      }
+    },
+    "kanto_route_9_camper_chris": {
+      "entityId": "kanto_route_9_camper_chris",
+      "mapId": "kanto_route_9",
+      "position": {
+        "x": 1776.0,
+        "y": 880.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_9_camper_chris"
+      ],
+      "trainers": {
+        "kanto_route_9_camper_chris": {
+          "gymBadge": null,
+          "name": "Camper Chris",
+          "teamSize": 2,
+          "trainerClass": "Camper"
+        }
+      }
+    },
+    "kanto_route_9_camper_drew": {
+      "entityId": "kanto_route_9_camper_drew",
+      "mapId": "kanto_route_9",
+      "position": {
+        "x": 2448.0,
+        "y": 880.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_9_camper_drew"
+      ],
+      "trainers": {
+        "kanto_route_9_camper_drew": {
+          "gymBadge": null,
+          "name": "Camper Drew",
+          "teamSize": 4,
+          "trainerClass": "Camper"
+        }
+      }
+    },
+    "kanto_route_9_hiker_alan": {
+      "entityId": "kanto_route_9_hiker_alan",
+      "mapId": "kanto_route_9",
+      "position": {
+        "x": 880.0,
+        "y": 1072.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_9_hiker_alan"
+      ],
+      "trainers": {
+        "kanto_route_9_hiker_alan": {
+          "gymBadge": null,
+          "name": "Hiker Alan",
+          "teamSize": 2,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_route_9_hiker_brice": {
+      "entityId": "kanto_route_9_hiker_brice",
+      "mapId": "kanto_route_9",
+      "position": {
+        "x": 2928.0,
+        "y": 752.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_9_hiker_brice"
+      ],
+      "trainers": {
+        "kanto_route_9_hiker_brice": {
+          "gymBadge": null,
+          "name": "Hiker Brice",
+          "teamSize": 3,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_route_9_hiker_jeremy": {
+      "entityId": "kanto_route_9_hiker_jeremy",
+      "mapId": "kanto_route_9",
+      "position": {
+        "x": 976.0,
+        "y": 752.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_9_hiker_jeremy"
+      ],
+      "trainers": {
+        "kanto_route_9_hiker_jeremy": {
+          "gymBadge": null,
+          "name": "Hiker Jeremy",
+          "teamSize": 2,
+          "trainerClass": "Hiker"
+        }
+      }
+    },
+    "kanto_route_9_picnicker_alicia": {
+      "entityId": "kanto_route_9_picnicker_alicia",
+      "mapId": "kanto_route_9",
+      "position": {
+        "x": 496.0,
+        "y": 624.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_9_picnicker_alicia"
+      ],
+      "trainers": {
+        "kanto_route_9_picnicker_alicia": {
+          "gymBadge": null,
+          "name": "Picnicker Alicia",
+          "teamSize": 4,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_route_9_picnicker_caitlin": {
+      "entityId": "kanto_route_9_picnicker_caitlin",
+      "mapId": "kanto_route_9",
+      "position": {
+        "x": 2704.0,
+        "y": 624.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_9.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_9_picnicker_caitlin"
+      ],
+      "trainers": {
+        "kanto_route_9_picnicker_caitlin": {
+          "gymBadge": null,
+          "name": "Picnicker Caitlin",
+          "teamSize": 1,
+          "trainerClass": "Picnicker"
+        }
+      }
+    },
+    "kanto_ss_anne_gary": {
+      "entityId": "kanto_ss_anne_rival",
+      "mapId": "kanto_ss_anne_2f",
+      "position": {
+        "x": 1680.0,
+        "y": 1008.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "kanto_ss_anne_gary",
+      "scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+      "story": {
+        "eventId": "kanto_ss_anne_gary_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "ss_anne_rival",
+        "stepId": "ss_anne_defeat_rival"
+      },
+      "trainerIds": [
+        "kanto_ss_anne_gary_bulbasaur",
+        "kanto_ss_anne_gary_squirtle",
+        "kanto_ss_anne_gary_charmander"
+      ],
+      "trainers": {
+        "kanto_ss_anne_gary_bulbasaur": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 4,
+          "trainerClass": "rival"
+        },
+        "kanto_ss_anne_gary_charmander": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 4,
+          "trainerClass": "rival"
+        },
+        "kanto_ss_anne_gary_squirtle": {
+          "gymBadge": null,
+          "name": "Gary Oak",
+          "teamSize": 4,
+          "trainerClass": "rival"
+        }
+      }
+    },
+    "kanto_ss_anne_gentleman_arthur": {
+      "entityId": "kanto_ss_anne_gentleman_arthur",
+      "mapId": "kanto_ss_anne_2f",
+      "position": {
+        "x": 272.0,
+        "y": 400.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_ss_anne_gentleman_arthur"
+      ],
+      "trainers": {
+        "kanto_ss_anne_gentleman_arthur": {
+          "gymBadge": null,
+          "name": "Gentleman Arthur",
+          "teamSize": 2,
+          "trainerClass": "Gentleman"
+        }
+      }
+    },
+    "kanto_ss_anne_gentleman_thomas": {
+      "entityId": "kanto_ss_anne_gentleman_thomas",
+      "mapId": "kanto_ss_anne_1f",
+      "position": {
+        "x": 944.0,
+        "y": 432.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_ss_anne_gentleman_thomas"
+      ],
+      "trainers": {
+        "kanto_ss_anne_gentleman_thomas": {
+          "gymBadge": null,
+          "name": "Gentleman Thomas",
+          "teamSize": 2,
+          "trainerClass": "Gentleman"
+        }
+      }
+    },
+    "kanto_ss_anne_lass_ann": {
+      "entityId": "kanto_ss_anne_lass_ann",
+      "mapId": "kanto_ss_anne_1f",
+      "position": {
+        "x": 2256.0,
+        "y": 432.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_ss_anne_lass_ann"
+      ],
+      "trainers": {
+        "kanto_ss_anne_lass_ann": {
+          "gymBadge": null,
+          "name": "Lass Ann",
+          "teamSize": 2,
+          "trainerClass": "Lass"
+        }
+      }
+    },
+    "kanto_ss_anne_passenger": {
+      "entityId": "kanto_ss_anne_passenger",
+      "mapId": "kanto_ss_anne_1f",
+      "position": {
+        "x": 400.0,
+        "y": 432.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_ss_anne_passenger"
+      ],
+      "trainers": {
+        "kanto_ss_anne_passenger": {
+          "gymBadge": null,
+          "name": "Gentleman Edwin",
+          "teamSize": 1,
+          "trainerClass": "Gentleman"
+        }
+      }
+    },
+    "kanto_ss_anne_sailor": {
+      "entityId": "kanto_ss_anne_sailor",
+      "mapId": "kanto_ss_anne_b1f",
+      "position": {
+        "x": 464.0,
+        "y": 400.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_ss_anne_sailor"
+      ],
+      "trainers": {
+        "kanto_ss_anne_sailor": {
+          "gymBadge": null,
+          "name": "Sailor Kai",
+          "teamSize": 2,
+          "trainerClass": "Sailor"
+        }
+      }
+    },
+    "kanto_ss_anne_sailor_duncan": {
+      "entityId": "kanto_ss_anne_sailor_duncan",
+      "mapId": "kanto_ss_anne_b1f",
+      "position": {
+        "x": 944.0,
+        "y": 400.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_ss_anne_sailor_duncan"
+      ],
+      "trainers": {
+        "kanto_ss_anne_sailor_duncan": {
+          "gymBadge": null,
+          "name": "Sailor Duncan",
+          "teamSize": 3,
+          "trainerClass": "Sailor"
+        }
+      }
+    },
+    "kanto_ss_anne_sailor_trevor": {
+      "entityId": "kanto_ss_anne_sailor_trevor",
+      "mapId": "kanto_ss_anne_3f",
+      "position": {
+        "x": 816.0,
+        "y": 496.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_ss_anne_sailor_trevor"
+      ],
+      "trainers": {
+        "kanto_ss_anne_sailor_trevor": {
+          "gymBadge": null,
+          "name": "Sailor Trevor",
+          "teamSize": 2,
+          "trainerClass": "Sailor"
+        }
+      }
+    },
+    "kanto_ss_anne_youngster_tyler": {
+      "entityId": "kanto_ss_anne_youngster_tyler",
+      "mapId": "kanto_ss_anne_1f",
+      "position": {
+        "x": 1520.0,
+        "y": 496.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_ss_anne_youngster_tyler"
+      ],
+      "trainers": {
+        "kanto_ss_anne_youngster_tyler": {
+          "gymBadge": null,
+          "name": "Youngster Tyler",
+          "teamSize": 1,
+          "trainerClass": "Youngster"
+        }
+      }
+    },
+    "kanto_vermilion_city_gym_gentleman_edwin": {
+      "entityId": "kanto_vermilion_city_gym_gentleman_edwin",
+      "mapId": "kanto_vermilion_city_gym",
+      "position": {
+        "x": 272.0,
+        "y": 560.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_vermilion_city_gym_gentleman_edwin"
+      ],
+      "trainers": {
+        "kanto_vermilion_city_gym_gentleman_edwin": {
+          "gymBadge": null,
+          "name": "Gentleman Edwin",
+          "teamSize": 1,
+          "trainerClass": "Gentleman"
+        }
+      }
+    },
+    "kanto_vermilion_city_gym_scientist_mira": {
+      "entityId": "kanto_vermilion_city_gym_scientist_mira",
+      "mapId": "kanto_vermilion_city_gym",
+      "position": {
+        "x": 592.0,
+        "y": 720.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_vermilion_city_gym_scientist_mira"
+      ],
+      "trainers": {
+        "kanto_vermilion_city_gym_scientist_mira": {
+          "gymBadge": null,
+          "name": "Scientist Mira",
+          "teamSize": 2,
+          "trainerClass": "Scientist"
+        }
+      }
+    },
+    "kanto_vermilion_city_gym_worker_dax": {
+      "entityId": "kanto_vermilion_city_gym_worker_dax",
+      "mapId": "kanto_vermilion_city_gym",
+      "position": {
+        "x": 144.0,
+        "y": 784.0
+      },
+      "radius": 176.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_vermilion_city_gym_worker_dax"
+      ],
+      "trainers": {
+        "kanto_vermilion_city_gym_worker_dax": {
+          "gymBadge": null,
+          "name": "Worker Dax",
+          "teamSize": 2,
+          "trainerClass": "Worker"
+        }
+      }
+    },
+    "kanto_viridian_forest_bug_catcher_anthony": {
+      "entityId": "kanto_viridian_forest_bug_catcher_anthony",
+      "mapId": "kanto_viridian_forest",
+      "position": {
+        "x": 1104.0,
+        "y": 976.0
+      },
+      "radius": 144.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_viridian_forest_bug_catcher_anthony"
+      ],
+      "trainers": {
+        "kanto_viridian_forest_bug_catcher_anthony": {
+          "gymBadge": null,
+          "name": "Bug Catcher Anthony",
+          "teamSize": 2,
+          "trainerClass": "Bug Catcher"
+        }
+      }
+    },
+    "kanto_viridian_forest_bug_catcher_doug": {
+      "entityId": "kanto_viridian_forest_bug_catcher_doug",
+      "mapId": "kanto_viridian_forest",
+      "position": {
+        "x": 1968.0,
+        "y": 1136.0
+      },
+      "radius": 144.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_viridian_forest_bug_catcher_doug"
+      ],
+      "trainers": {
+        "kanto_viridian_forest_bug_catcher_doug": {
+          "gymBadge": null,
+          "name": "Bug Catcher Doug",
+          "teamSize": 2,
+          "trainerClass": "Bug Catcher"
+        }
+      }
+    },
+    "kanto_viridian_forest_bug_catcher_rick": {
+      "entityId": "kanto_viridian_forest_bug_catcher_rick",
+      "mapId": "kanto_viridian_forest",
+      "position": {
+        "x": 1840.0,
+        "y": 1968.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_viridian_forest_bug_catcher_rick"
+      ],
+      "trainers": {
+        "kanto_viridian_forest_bug_catcher_rick": {
+          "gymBadge": null,
+          "name": "Bug Catcher Rick",
+          "teamSize": 2,
+          "trainerClass": "Bug Catcher"
+        }
+      }
+    },
+    "kanto_viridian_forest_bug_catcher_sammy": {
+      "entityId": "kanto_viridian_forest_bug_catcher_sammy",
+      "mapId": "kanto_viridian_forest",
+      "position": {
+        "x": 1616.0,
+        "y": 176.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/viridian_forest.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_viridian_forest_bug_catcher_sammy"
+      ],
+      "trainers": {
+        "kanto_viridian_forest_bug_catcher_sammy": {
+          "gymBadge": null,
+          "name": "Bug Catcher Sammy",
+          "teamSize": 1,
+          "trainerClass": "Bug Catcher"
+        }
+      }
+    }
+  },
+  "identities": {
+    "kanto_alpha_gym_brock": "brock",
+    "kanto_alpha_gym_lt_surge": "kanto_alpha_gym_lt_surge",
+    "kanto_alpha_gym_misty": "kanto_alpha_gym_misty",
+    "kanto_celadon_game_corner_rocket_guard": "kanto_celadon_game_corner_rocket_guard",
+    "kanto_celadon_gym_ace_lori": "kanto_celadon_gym_ace_lori",
+    "kanto_celadon_gym_erika": "kanto_celadon_gym_erika",
+    "kanto_celadon_gym_fan_maren": "kanto_celadon_gym_fan_maren",
+    "kanto_celadon_gym_lass_kay": "kanto_celadon_gym_lass_kay",
+    "kanto_celadon_gym_picnicker_tina": "kanto_celadon_gym_picnicker_tina",
+    "kanto_celadon_jessie_james": "celadon_rocket_trio",
+    "kanto_celadon_rocket_trio": "celadon_rocket_trio",
+    "kanto_cerulean_city_gym_picnicker_diana": "kanto_cerulean_city_gym_picnicker_diana",
+    "kanto_cerulean_city_gym_swimmer_briana": "kanto_cerulean_city_gym_swimmer_briana",
+    "kanto_cerulean_city_gym_swimmer_luis": "kanto_cerulean_city_gym_swimmer_luis",
+    "kanto_game_corner_attendant": "kanto_celadon_game_corner_rocket_guard",
+    "kanto_mt_moon_1f_bug_catcher_kent": "kanto_mt_moon_1f_bug_catcher_kent",
+    "kanto_mt_moon_1f_bug_catcher_robby": "kanto_mt_moon_1f_bug_catcher_robby",
+    "kanto_mt_moon_1f_hiker_marcos": "kanto_mt_moon_1f_hiker_marcos",
+    "kanto_mt_moon_1f_lass_iris": "kanto_mt_moon_1f_lass_iris",
+    "kanto_mt_moon_1f_lass_miriam": "kanto_mt_moon_1f_lass_miriam",
+    "kanto_mt_moon_1f_super_nerd_jovan": "kanto_mt_moon_1f_super_nerd_jovan",
+    "kanto_mt_moon_1f_youngster_josh": "kanto_mt_moon_1f_youngster_josh",
+    "kanto_mt_moon_b2f_rocket_grunt_1": "kanto_mt_moon_b2f_rocket_grunt_1",
+    "kanto_mt_moon_b2f_rocket_grunt_2": "kanto_mt_moon_b2f_rocket_grunt_2",
+    "kanto_mt_moon_b2f_rocket_grunt_3": "kanto_mt_moon_b2f_rocket_grunt_3",
+    "kanto_mt_moon_b2f_rocket_grunt_4": "kanto_mt_moon_b2f_rocket_grunt_4",
+    "kanto_mt_moon_b2f_super_nerd_miguel": "kanto_mt_moon_b2f_super_nerd_miguel",
+    "kanto_oaks_lab_gary": "kanto_oaks_lab_gary",
+    "kanto_oaks_lab_gary_bulbasaur": "kanto_oaks_lab_gary",
+    "kanto_oaks_lab_gary_charmander": "kanto_oaks_lab_gary",
+    "kanto_oaks_lab_gary_oak": "kanto_oaks_lab_gary",
+    "kanto_oaks_lab_gary_rival": "kanto_oaks_lab_gary",
+    "kanto_oaks_lab_gary_squirtle": "kanto_oaks_lab_gary",
+    "kanto_pewter_city_gym_hiker_flint": "kanto_pewter_city_gym_hiker_flint",
+    "kanto_pewter_city_gym_youngster_stone": "kanto_pewter_city_gym_youngster_stone",
+    "kanto_pokemon_tower_gary": "kanto_pokemon_tower_gary",
+    "kanto_pokemon_tower_gary_bulbasaur": "kanto_pokemon_tower_gary",
+    "kanto_pokemon_tower_gary_charmander": "kanto_pokemon_tower_gary",
+    "kanto_pokemon_tower_gary_oak": "kanto_pokemon_tower_gary",
+    "kanto_pokemon_tower_gary_rival": "kanto_pokemon_tower_gary",
+    "kanto_pokemon_tower_gary_squirtle": "kanto_pokemon_tower_gary",
+    "kanto_pokemon_tower_hex_maniac_aster": "kanto_pokemon_tower_hex_maniac_aster",
+    "kanto_pokemon_tower_hex_maniac_iris": "kanto_pokemon_tower_hex_maniac_iris",
+    "kanto_pokemon_tower_hex_maniac_liora": "kanto_pokemon_tower_hex_maniac_liora",
+    "kanto_pokemon_tower_hex_maniac_mira": "kanto_pokemon_tower_hex_maniac_mira",
+    "kanto_pokemon_tower_hex_maniac_nora": "kanto_pokemon_tower_hex_maniac_nora",
+    "kanto_pokemon_tower_hex_maniac_nyx": "kanto_pokemon_tower_hex_maniac_nyx",
+    "kanto_pokemon_tower_hex_maniac_rhea": "kanto_pokemon_tower_hex_maniac_rhea",
+    "kanto_pokemon_tower_hex_maniac_vera": "kanto_pokemon_tower_hex_maniac_vera",
+    "kanto_rock_tunnel_1f_hiker_lenny": "kanto_rock_tunnel_1f_hiker_lenny",
+    "kanto_rock_tunnel_1f_hiker_lucas": "kanto_rock_tunnel_1f_hiker_lucas",
+    "kanto_rock_tunnel_1f_hiker_oliver": "kanto_rock_tunnel_1f_hiker_oliver",
+    "kanto_rock_tunnel_1f_picnicker_ariana": "kanto_rock_tunnel_1f_picnicker_ariana",
+    "kanto_rock_tunnel_1f_picnicker_dana": "kanto_rock_tunnel_1f_picnicker_dana",
+    "kanto_rock_tunnel_1f_picnicker_leah": "kanto_rock_tunnel_1f_picnicker_leah",
+    "kanto_rock_tunnel_1f_pokemaniac_ashton": "kanto_rock_tunnel_1f_pokemaniac_ashton",
+    "kanto_rock_tunnel_b1f_hiker_allen": "kanto_rock_tunnel_b1f_hiker_allen",
+    "kanto_rock_tunnel_b1f_hiker_dudley": "kanto_rock_tunnel_b1f_hiker_dudley",
+    "kanto_rock_tunnel_b1f_hiker_eric": "kanto_rock_tunnel_b1f_hiker_eric",
+    "kanto_rock_tunnel_b1f_picnicker_martha": "kanto_rock_tunnel_b1f_picnicker_martha",
+    "kanto_rock_tunnel_b1f_picnicker_sofia": "kanto_rock_tunnel_b1f_picnicker_sofia",
+    "kanto_rock_tunnel_b1f_pokemaniac_cooper": "kanto_rock_tunnel_b1f_pokemaniac_cooper",
+    "kanto_rock_tunnel_b1f_pokemaniac_steve": "kanto_rock_tunnel_b1f_pokemaniac_steve",
+    "kanto_rock_tunnel_b1f_pokemaniac_winston": "kanto_rock_tunnel_b1f_pokemaniac_winston",
+    "kanto_rock_tunnel_future_self": "kanto_rock_tunnel_future_self",
+    "kanto_route_10_hiker_clark": "kanto_route_10_hiker_clark",
+    "kanto_route_10_hiker_trent": "kanto_route_10_hiker_trent",
+    "kanto_route_10_picnicker_carol": "kanto_route_10_picnicker_carol",
+    "kanto_route_10_picnicker_heidi": "kanto_route_10_picnicker_heidi",
+    "kanto_route_10_pokemaniac_herman": "kanto_route_10_pokemaniac_herman",
+    "kanto_route_10_pokemaniac_mark": "kanto_route_10_pokemaniac_mark",
+    "kanto_route_11_engineer_bernie": "kanto_route_11_engineer_bernie",
+    "kanto_route_11_engineer_braxton": "kanto_route_11_engineer_braxton",
+    "kanto_route_11_gamer_darian": "kanto_route_11_gamer_darian",
+    "kanto_route_11_gamer_dirk": "kanto_route_11_gamer_dirk",
+    "kanto_route_11_gamer_hugo": "kanto_route_11_gamer_hugo",
+    "kanto_route_11_gamer_jasper": "kanto_route_11_gamer_jasper",
+    "kanto_route_11_youngster_dave": "kanto_route_11_youngster_dave",
+    "kanto_route_11_youngster_dillon": "kanto_route_11_youngster_dillon",
+    "kanto_route_11_youngster_eddie": "kanto_route_11_youngster_eddie",
+    "kanto_route_11_youngster_yasu": "kanto_route_11_youngster_yasu",
+    "kanto_route_12_bird_keeper_gail": "kanto_route_12_bird_keeper_gail",
+    "kanto_route_12_bird_keeper_justin": "kanto_route_12_bird_keeper_justin",
+    "kanto_route_12_camper_justin": "kanto_route_12_camper_justin",
+    "kanto_route_12_fisherman_andrew": "kanto_route_12_fisherman_andrew",
+    "kanto_route_12_fisherman_barney": "kanto_route_12_fisherman_barney",
+    "kanto_route_12_fisherman_chip": "kanto_route_12_fisherman_chip",
+    "kanto_route_12_fisherman_elliot": "kanto_route_12_fisherman_elliot",
+    "kanto_route_12_fisherman_hank": "kanto_route_12_fisherman_hank",
+    "kanto_route_12_fisherman_kyle": "kanto_route_12_fisherman_kyle",
+    "kanto_route_12_fisherman_kyler": "kanto_route_12_fisherman_kyler",
+    "kanto_route_12_fisherman_martin": "kanto_route_12_fisherman_martin",
+    "kanto_route_12_fisherman_ned": "kanto_route_12_fisherman_ned",
+    "kanto_route_12_fisherman_stephen": "kanto_route_12_fisherman_stephen",
+    "kanto_route_12_rocker_luca": "kanto_route_12_rocker_luca",
+    "kanto_route_12_young_couple_gia_jes": "kanto_route_12_young_couple_gia_jes",
+    "kanto_route_12_young_couple_vic_tara": "kanto_route_12_young_couple_vic_tara",
+    "kanto_route_13_beauty_lola": "kanto_route_13_beauty_lola",
+    "kanto_route_13_beauty_sheila": "kanto_route_13_beauty_sheila",
+    "kanto_route_13_biker_jared": "kanto_route_13_biker_jared",
+    "kanto_route_13_bird_keeper_perry": "kanto_route_13_bird_keeper_perry",
+    "kanto_route_13_bird_keeper_robert": "kanto_route_13_bird_keeper_robert",
+    "kanto_route_13_bird_keeper_sebastian": "kanto_route_13_bird_keeper_sebastian",
+    "kanto_route_13_picnicker_alma": "kanto_route_13_picnicker_alma",
+    "kanto_route_13_picnicker_gwen": "kanto_route_13_picnicker_gwen",
+    "kanto_route_13_picnicker_susie": "kanto_route_13_picnicker_susie",
+    "kanto_route_13_picnicker_valerie": "kanto_route_13_picnicker_valerie",
+    "kanto_route_14_biker_gerald": "kanto_route_14_biker_gerald",
+    "kanto_route_14_biker_isaac": "kanto_route_14_biker_isaac",
+    "kanto_route_14_biker_lukas": "kanto_route_14_biker_lukas",
+    "kanto_route_14_biker_malik": "kanto_route_14_biker_malik",
+    "kanto_route_14_bird_keeper_beck": "kanto_route_14_bird_keeper_beck",
+    "kanto_route_14_bird_keeper_carter": "kanto_route_14_bird_keeper_carter",
+    "kanto_route_14_bird_keeper_marlon": "kanto_route_14_bird_keeper_marlon",
+    "kanto_route_14_bird_keeper_mitch": "kanto_route_14_bird_keeper_mitch",
+    "kanto_route_15_beauty_grace": "kanto_route_15_beauty_grace",
+    "kanto_route_15_beauty_olivia": "kanto_route_15_beauty_olivia",
+    "kanto_route_15_biker_alex": "kanto_route_15_biker_alex",
+    "kanto_route_15_biker_ernest": "kanto_route_15_biker_ernest",
+    "kanto_route_15_bird_keeper_chester": "kanto_route_15_bird_keeper_chester",
+    "kanto_route_15_bird_keeper_edwin": "kanto_route_15_bird_keeper_edwin",
+    "kanto_route_15_crush_kin_mya": "kanto_route_15_crush_kin_mya",
+    "kanto_route_15_crush_kin_ron": "kanto_route_15_crush_kin_ron",
+    "kanto_route_15_picnicker_becky": "kanto_route_15_picnicker_becky",
+    "kanto_route_15_picnicker_celia": "kanto_route_15_picnicker_celia",
+    "kanto_route_15_picnicker_kindra": "kanto_route_15_picnicker_kindra",
+    "kanto_route_15_picnicker_yazmin": "kanto_route_15_picnicker_yazmin",
+    "kanto_route_1_lass_zoe": "kanto_route_1_lass_zoe",
+    "kanto_route_1_youngster_liam": "kanto_route_1_youngster_liam",
+    "kanto_route_22_gary": "gary_route22",
+    "kanto_route_22_gary_bulbasaur": "gary_route22",
+    "kanto_route_22_gary_charmander": "gary_route22",
+    "kanto_route_22_gary_oak": "gary_route22",
+    "kanto_route_22_gary_rival": "gary_route22",
+    "kanto_route_22_gary_squirtle": "gary_route22",
+    "kanto_route_22_lass_paige": "kanto_route_22_lass_paige",
+    "kanto_route_22_youngster_caleb": "kanto_route_22_youngster_caleb",
+    "kanto_route_24_gary": "kanto_route_24_gary",
+    "kanto_route_24_gary_bulbasaur": "kanto_route_24_gary",
+    "kanto_route_24_gary_charmander": "kanto_route_24_gary",
+    "kanto_route_24_gary_oak": "kanto_route_24_gary",
+    "kanto_route_24_gary_rival": "kanto_route_24_gary",
+    "kanto_route_24_gary_squirtle": "kanto_route_24_gary",
+    "kanto_route_24_nugget_bridge_01_cale": "kanto_route_24_nugget_bridge_01_cale",
+    "kanto_route_24_nugget_bridge_02_ali": "kanto_route_24_nugget_bridge_02_ali",
+    "kanto_route_24_nugget_bridge_03_timmy": "kanto_route_24_nugget_bridge_03_timmy",
+    "kanto_route_24_nugget_bridge_04_reli": "kanto_route_24_nugget_bridge_04_reli",
+    "kanto_route_24_nugget_bridge_05_ethan": "kanto_route_24_nugget_bridge_05_ethan",
+    "kanto_route_24_rocket_recruiter": "kanto_route_24_rocket_recruiter",
+    "kanto_route_25_camper_flint": "kanto_route_25_camper_flint",
+    "kanto_route_25_hiker_franklin": "kanto_route_25_hiker_franklin",
+    "kanto_route_25_hiker_nob": "kanto_route_25_hiker_nob",
+    "kanto_route_25_hiker_wayne": "kanto_route_25_hiker_wayne",
+    "kanto_route_25_lass_haley": "kanto_route_25_lass_haley",
+    "kanto_route_25_picnicker_kelsey": "kanto_route_25_picnicker_kelsey",
+    "kanto_route_25_youngster_chad": "kanto_route_25_youngster_chad",
+    "kanto_route_25_youngster_dan": "kanto_route_25_youngster_dan",
+    "kanto_route_25_youngster_joey": "kanto_route_25_youngster_joey",
+    "kanto_route_2_bug_catcher_cale": "kanto_route_2_bug_catcher_cale",
+    "kanto_route_2_youngster_mason": "kanto_route_2_youngster_mason",
+    "kanto_route_3_firebreather_otis": "kanto_route_3_firebreather_otis",
+    "kanto_route_3_hiker_bruce": "kanto_route_3_hiker_bruce",
+    "kanto_route_3_youngster_warren": "kanto_route_3_youngster_warren",
+    "kanto_route_4_bird_keeper_hank": "kanto_route_4_bird_keeper_hank",
+    "kanto_route_4_picnicker_hope": "kanto_route_4_picnicker_hope",
+    "kanto_route_4_picnicker_sharon": "kanto_route_4_picnicker_sharon",
+    "kanto_route_6_bug_catcher_elijah": "kanto_route_6_bug_catcher_elijah",
+    "kanto_route_6_bug_catcher_keigo": "kanto_route_6_bug_catcher_keigo",
+    "kanto_route_6_camper_jeff": "kanto_route_6_camper_jeff",
+    "kanto_route_6_camper_ricky": "kanto_route_6_camper_ricky",
+    "kanto_route_6_picnicker_isabelle": "kanto_route_6_picnicker_isabelle",
+    "kanto_route_6_picnicker_nancy": "kanto_route_6_picnicker_nancy",
+    "kanto_route_8_biker_jaren": "kanto_route_8_biker_jaren",
+    "kanto_route_8_biker_ricardo": "kanto_route_8_biker_ricardo",
+    "kanto_route_8_gamer_rich": "kanto_route_8_gamer_rich",
+    "kanto_route_8_gamer_stan": "kanto_route_8_gamer_stan",
+    "kanto_route_8_lass_andrea": "kanto_route_8_lass_andrea",
+    "kanto_route_8_lass_julia": "kanto_route_8_lass_julia",
+    "kanto_route_8_lass_megan": "kanto_route_8_lass_megan",
+    "kanto_route_8_lass_paige": "kanto_route_8_lass_paige",
+    "kanto_route_8_super_nerd_aidan": "kanto_route_8_super_nerd_aidan",
+    "kanto_route_8_super_nerd_glenn": "kanto_route_8_super_nerd_glenn",
+    "kanto_route_8_super_nerd_leslie": "kanto_route_8_super_nerd_leslie",
+    "kanto_route_8_twins_eli_anne": "kanto_route_8_twins_eli_anne",
+    "kanto_route_9_bug_catcher_brent": "kanto_route_9_bug_catcher_brent",
+    "kanto_route_9_bug_catcher_conner": "kanto_route_9_bug_catcher_conner",
+    "kanto_route_9_camper_chris": "kanto_route_9_camper_chris",
+    "kanto_route_9_camper_drew": "kanto_route_9_camper_drew",
+    "kanto_route_9_hiker_alan": "kanto_route_9_hiker_alan",
+    "kanto_route_9_hiker_brice": "kanto_route_9_hiker_brice",
+    "kanto_route_9_hiker_jeremy": "kanto_route_9_hiker_jeremy",
+    "kanto_route_9_picnicker_alicia": "kanto_route_9_picnicker_alicia",
+    "kanto_route_9_picnicker_caitlin": "kanto_route_9_picnicker_caitlin",
+    "kanto_ss_anne_gary": "kanto_ss_anne_gary",
+    "kanto_ss_anne_gary_bulbasaur": "kanto_ss_anne_gary",
+    "kanto_ss_anne_gary_charmander": "kanto_ss_anne_gary",
+    "kanto_ss_anne_gary_oak": "kanto_ss_anne_gary",
+    "kanto_ss_anne_gary_rival": "kanto_ss_anne_gary",
+    "kanto_ss_anne_gary_squirtle": "kanto_ss_anne_gary",
+    "kanto_ss_anne_gentleman_arthur": "kanto_ss_anne_gentleman_arthur",
+    "kanto_ss_anne_gentleman_thomas": "kanto_ss_anne_gentleman_thomas",
+    "kanto_ss_anne_lass_ann": "kanto_ss_anne_lass_ann",
+    "kanto_ss_anne_passenger": "kanto_ss_anne_passenger",
+    "kanto_ss_anne_rival": "kanto_ss_anne_gary",
+    "kanto_ss_anne_sailor": "kanto_ss_anne_sailor",
+    "kanto_ss_anne_sailor_duncan": "kanto_ss_anne_sailor_duncan",
+    "kanto_ss_anne_sailor_trevor": "kanto_ss_anne_sailor_trevor",
+    "kanto_ss_anne_youngster_tyler": "kanto_ss_anne_youngster_tyler",
+    "kanto_vermilion_city_gym_gentleman_edwin": "kanto_vermilion_city_gym_gentleman_edwin",
+    "kanto_vermilion_city_gym_scientist_mira": "kanto_vermilion_city_gym_scientist_mira",
+    "kanto_vermilion_city_gym_worker_dax": "kanto_vermilion_city_gym_worker_dax",
+    "kanto_viridian_forest_bug_catcher_anthony": "kanto_viridian_forest_bug_catcher_anthony",
+    "kanto_viridian_forest_bug_catcher_doug": "kanto_viridian_forest_bug_catcher_doug",
+    "kanto_viridian_forest_bug_catcher_rick": "kanto_viridian_forest_bug_catcher_rick",
+    "kanto_viridian_forest_bug_catcher_sammy": "kanto_viridian_forest_bug_catcher_sammy"
+  },
+  "schemaVersion": 1
+}
