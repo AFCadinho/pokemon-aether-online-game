@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://ddt1xlsauv1w1"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/cinnabar_island/assets/cinnabar_island.visual.tileset.compact_source_1_0.texture.res" id="1_fad2g"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/cinnabar_island/assets/cinnabar_island.visual.tileset.compact_source_1025_0.texture.res" id="2_4prc6"]
