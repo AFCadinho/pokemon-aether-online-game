@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/celadon_department_store/celadon_department_store.visual.tscn" id="visual"]
 
 [sub_resource type="RectangleShape2D" id="counter_interaction"]
-size = Vector2(96, 192)
+size = Vector2(160, 192)
 
 [sub_resource type="RectangleShape2D" id="exit_shape"]
 size = Vector2(96, 32)
@@ -150,6 +150,7 @@ y_sort_enabled = true
 position = Vector2(272, 240)
 facing_direction = Vector2(0, 1)
 manual_interaction_reach_tiles = 3
+counter_interaction_width_tiles = 2
 
 [node name="InteractionArea" parent="Entities/NPCs/BattlePointVendor" index="1"]
 position = Vector2(0, 64)
@@ -161,6 +162,7 @@ shape = SubResource("counter_interaction")
 position = Vector2(560, 240)
 facing_direction = Vector2(0, 1)
 manual_interaction_reach_tiles = 3
+counter_interaction_width_tiles = 2
 
 [node name="InteractionArea" parent="Entities/NPCs/EvolutionItemVendor" index="1"]
 position = Vector2(0, 64)
@@ -172,6 +174,7 @@ shape = SubResource("counter_interaction")
 position = Vector2(880, 240)
 facing_direction = Vector2(0, 1)
 manual_interaction_reach_tiles = 3
+counter_interaction_width_tiles = 2
 
 [node name="InteractionArea" parent="Entities/NPCs/ZCrystalVendor" index="1"]
 position = Vector2(0, 64)
@@ -183,6 +186,7 @@ shape = SubResource("counter_interaction")
 position = Vector2(1168, 240)
 facing_direction = Vector2(0, 1)
 manual_interaction_reach_tiles = 3
+counter_interaction_width_tiles = 2
 
 
 
