@@ -175,3 +175,18 @@ has the same geometry; alpha blending differs by at most one RGB level on
 4,778 of 278,528 pixels. Prize Corner's browser selection/exclusion is checked.
 The general browser partition check still reports the same 15 pre-existing
 unlisted maps as the task base; a full web export was not run.
+
+
+## Celadon Aethernet station
+
+The existing Aether Beacon at (2320,208) and Keeper at (2256,176) share
+`kanto_celadon_city` as their destination ID. The beacon's interaction identity
+is `kanto_celadon_city_aether_beacon`. The server-owned `TransitArrival` is
+(2288,208), tile (71,6), one tile west of the beacon on reachable dry ground.
+The station uses the standard attunement, fare, membership and Anchor rules.
+`tests/celadon_aethernet_check.gd` verifies the scene wiring, Keeper discovery,
+arrival occupancy and access from Route 7. Account-service transit tests cover
+attunement, paid arrivals, replay safety, Anchor returns and departures.
+
+The paired access catalogs were regenerated from the saved scenes, also
+synchronizing the existing Rocket Hideout B2F–B4F arrival-marker edits.
