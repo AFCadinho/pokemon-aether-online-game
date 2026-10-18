@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make Mira and her rescued Eevee ordinary Celadon overworld actors with blocking tiles, manual interaction and story-aware dialogue after Team Rocket escapes.
+
 - Let Jessie and James finish their full alternating motto during the Celadon confrontation, ending with Meowth's catchphrase before they notice the player.
 
 - Give the southeast Celadon Rocket encounter the standard framed main-quest marker above Jessie, so it stays recognizable against the scenery and at night.
