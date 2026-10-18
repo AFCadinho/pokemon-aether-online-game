@@ -33,87 +33,87 @@ size = Vector2(160, 160)
 atlas = ExtResource("13_17fqp")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hauda"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_17fqp"]
 atlas = ExtResource("13_17fqp")
 region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hauda"]
+atlas = ExtResource("13_17fqp")
+region = Rect2(0, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jdcu5"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(0, 64, 64, 64)
+region = Rect2(0, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8kcv7"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(0, 128, 64, 64)
+region = Rect2(0, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v630c"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(0, 192, 64, 64)
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yj4be"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(0, 0, 64, 64)
+region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_clvy1"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(64, 0, 64, 64)
+region = Rect2(128, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4iu0o"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(128, 0, 64, 64)
+region = Rect2(192, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_emon5"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(192, 0, 64, 64)
+region = Rect2(0, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_21hst"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(0, 64, 64, 64)
+region = Rect2(64, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yq3ew"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(64, 64, 64, 64)
+region = Rect2(128, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vt7jc"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(128, 64, 64, 64)
+region = Rect2(192, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qw5mq"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(192, 64, 64, 64)
+region = Rect2(0, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_40gug"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(0, 128, 64, 64)
+region = Rect2(64, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6dimq"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(64, 128, 64, 64)
+region = Rect2(128, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xdlj1"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(128, 128, 64, 64)
+region = Rect2(192, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_64r7w"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(192, 128, 64, 64)
+region = Rect2(0, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k7yd5"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(0, 192, 64, 64)
+region = Rect2(64, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4l75b"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(64, 192, 64, 64)
+region = Rect2(128, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_p7qce"]
 atlas = ExtResource("13_17fqp")
-region = Rect2(128, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_n28du"]
-atlas = ExtResource("13_17fqp")
 region = Rect2(192, 192, 64, 64)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_tgas0"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_n28du"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -125,7 +125,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_hauda")
+"texture": SubResource("AtlasTexture_17fqp")
 }],
 "loop": true,
 "name": &"idle_down",
@@ -133,7 +133,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_jdcu5")
+"texture": SubResource("AtlasTexture_hauda")
 }],
 "loop": true,
 "name": &"idle_left",
@@ -141,7 +141,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8kcv7")
+"texture": SubResource("AtlasTexture_jdcu5")
 }],
 "loop": true,
 "name": &"idle_right",
@@ -149,13 +149,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_v630c")
+"texture": SubResource("AtlasTexture_8kcv7")
 }],
 "loop": true,
 "name": &"idle_up",
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v630c")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_yj4be")
 }, {
@@ -164,15 +167,15 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_4iu0o")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_emon5")
 }],
 "loop": true,
 "name": &"walk_down",
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_emon5")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_21hst")
 }, {
@@ -181,15 +184,15 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vt7jc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qw5mq")
 }],
 "loop": true,
 "name": &"walk_left",
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qw5mq")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_40gug")
 }, {
@@ -198,15 +201,15 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xdlj1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_64r7w")
 }],
 "loop": true,
 "name": &"walk_right",
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_64r7w")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_k7yd5")
 }, {
@@ -215,9 +218,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_p7qce")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_n28du")
 }],
 "loop": true,
 "name": &"walk_up",
@@ -425,7 +425,7 @@ movement_wait_jitter_seconds = 0.8
 manual_interaction_reach_tiles = 3
 
 [node name="AnimatedSprite2D" parent="Entities/NPCs/HostIris/Look" parent_id_path=PackedInt32Array(2087610299, 1214042111) index="0" unique_id=1079755674]
-sprite_frames = SubResource("SpriteFrames_tgas0")
+sprite_frames = SubResource("SpriteFrames_n28du")
 
 [node name="InteractionArea" parent="Entities/NPCs/HostIris" index="1" unique_id=1449738252]
 position = Vector2(0, 64)
@@ -439,6 +439,7 @@ npc_id = "kanto_celadon_game_corner_gentleman_bram"
 npc_definition_id = "trainer_class_gentleman"
 dialogue_id = "kanto_celadon_game_corner_gentleman_bram_default"
 display_name = "Gentleman Bram"
+facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("population_gentleman")
 movement_tiles = 1
 movement_wait_seconds = 3.5
