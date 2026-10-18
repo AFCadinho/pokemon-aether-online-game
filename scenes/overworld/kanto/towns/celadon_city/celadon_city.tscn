@@ -16,8 +16,6 @@
 [ext_resource type="SpriteFrames" uid="uid://yluab5wp1usc" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="frames_poke_fan_m"]
 [ext_resource type="SpriteFrames" uid="uid://bmw8v3ctsygiq" path="res://assets/npcs/classes/socialite_frames.tres" id="frames_socialite"]
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="frames_worker"]
-[ext_resource type="Script" path="res://scripts/world/story/rocket_trio_actor.gd" id="rocket_actor"]
-[ext_resource type="Texture2D" uid="uid://bai6r5w0xkk23" path="res://assets/followers/EEVEE.png" id="rocket_eevee"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="rocket_hook"]
 [ext_resource type="Texture2D" uid="uid://sm0gidg521r8" path="res://assets/ui/main_quest_marker.svg" id="rocket_marker"]
 [ext_resource type="Script" uid="uid://c0rvsvb5ckinb" path="res://scripts/world/story/story_trigger.gd" id="rocket_trigger"]
@@ -267,189 +265,6 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_j7wvr")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_lvl5s"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jw82p"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(0, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ga50g"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(0, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_npyfy"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(0, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_dnnov"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_87ibu"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ysnv7"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(128, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_br38p"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(192, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_v2t2g"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(0, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qtueq"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(64, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bcvsc"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(128, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gwi34"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(192, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0q2yt"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(0, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hlcop"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(64, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rtirh"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(128, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_p6sue"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(192, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5ook6"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(0, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mejs6"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(64, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xjwnx"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(128, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4w6dm"]
-atlas = ExtResource("rocket_eevee")
-region = Rect2(192, 192, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_cv1bu"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_lvl5s")
-}],
-"loop": true,
-"name": &"idle_down",
-"speed": 7.5
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jw82p")
-}],
-"loop": true,
-"name": &"idle_left",
-"speed": 7.5
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ga50g")
-}],
-"loop": true,
-"name": &"idle_right",
-"speed": 7.5
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_npyfy")
-}],
-"loop": true,
-"name": &"idle_up",
-"speed": 7.5
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dnnov")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_87ibu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ysnv7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_br38p")
-}],
-"loop": true,
-"name": &"walk_down",
-"speed": 7.5
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_v2t2g")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qtueq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bcvsc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gwi34")
-}],
-"loop": true,
-"name": &"walk_left",
-"speed": 7.5
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0q2yt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hlcop")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rtirh")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_p6sue")
-}],
-"loop": true,
-"name": &"walk_right",
-"speed": 7.5
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5ook6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mejs6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xjwnx")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4w6dm")
-}],
-"loop": true,
-"name": &"walk_up",
-"speed": 7.5
-}]
-
 [sub_resource type="StyleBoxFlat" id="rocket_main_quest_marker_style"]
 bg_color = Color(0.03137255, 0.08235294, 0.12941177, 0.92941177)
 border_width_left = 2
@@ -673,6 +488,16 @@ movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 2.5
 
+[node name="Mira" parent="Entities/NPCs" unique_id=681646349 instance=ExtResource("5_npc")]
+position = Vector2(2352, 1616)
+npc_id = "kanto_celadon_city_mira"
+localized_display_name_key = "npc.celadon.mira"
+npc_sprite_frames = ExtResource("frames_lass")
+facing_direction = Vector2(-1, 0)
+visibility_required_quest_id = "celadon_rocket_trio"
+visibility_required_quest_step_id = "spot_trio"
+visibility_required_quest_status = "completed"
+
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=873866540]
 
 [node name="Eevee" parent="Entities/Pokemon" unique_id=1944541642 instance=ExtResource("6_pokemon")]
@@ -773,6 +598,17 @@ movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 2.5
 
+[node name="MirasEevee" parent="Entities/Pokemon" unique_id=1876824208 instance=ExtResource("6_pokemon")]
+position = Vector2(2320, 1648)
+overworld_pokemon_id = "kanto_celadon_city_mira_eevee"
+species_id = "eevee"
+level = 20
+display_name = "Eevee"
+facing_direction = Vector2(-1, 0)
+visibility_required_quest_id = "celadon_rocket_trio"
+visibility_required_quest_step_id = "spot_trio"
+visibility_required_quest_status = "completed"
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1285463609]
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1867462022]
@@ -816,33 +652,23 @@ tile_set = SubResource("TileSet_ed0sp")
 [node name="RocketTrio" parent="Story" unique_id=1081685245 instance=ExtResource("rocket_trio")]
 position = Vector2(2256, 1648)
 encounter = "celadon"
-victim_path = NodePath("Mira")
-victim_pokemon_path = NodePath("Eevee")
+victim_path = NodePath("../../Entities/NPCs/Mira")
+victim_pokemon_path = NodePath("../../Entities/Pokemon/MirasEevee")
 
-[node name="Mira" parent="Story/RocketTrio" unique_id=681646349 instance=ExtResource("5_npc")]
-position = Vector2(96, 0)
-npc_id = "kanto_celadon_city_mira"
-required_quest_id = "celadon_rocket_trio"
-visibility_required_quest_id = "celadon_rocket_trio"
-visibility_required_quest_step_id = "spot_trio"
-facing_direction = Vector2(-1, 0)
-npc_sprite_frames = ExtResource("frames_lass")
-localized_display_name_key = "npc.celadon.mira"
+[node name="Jessie" parent="Story/RocketTrio" index="0"]
+position = Vector2(-32, 0)
+initial_direction = "right"
 
-[node name="Eevee" type="AnimatedSprite2D" parent="Story/RocketTrio" unique_id=1876824208]
-z_index = 1648
-z_as_relative = false
-texture_filter = 1
-position = Vector2(64, 0)
-sprite_frames = SubResource("SpriteFrames_cv1bu")
-animation = &"idle_left"
-frame_progress = 0.030165
-offset = Vector2(0, -16)
-script = ExtResource("rocket_actor")
-sheet = ExtResource("rocket_eevee")
-initial_direction = "left"
+[node name="James" parent="Story/RocketTrio" index="1"]
+position = Vector2(0, 32)
+initial_direction = "right"
+
+[node name="Meowth" parent="Story/RocketTrio" index="2"]
+position = Vector2(32, 0)
+initial_direction = "right"
 
 [node name="QuestMarker" type="PanelContainer" parent="Story/RocketTrio" unique_id=1471907567]
+z_as_relative = false
 z_index = 4094
 z_as_relative = false
 custom_minimum_size = Vector2(30, 30)
@@ -900,3 +726,5 @@ entity_id = "kanto_celadon_rocket_trio"
 [connection signal="body_entered" from="Exits/ToCondominiumsRear" to="Exits/ToCondominiumsRear" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToGameCorner" to="Exits/ToGameCorner" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToGym" to="Exits/ToGym" method="_on_body_entered"]
+
+[editable path="Story/RocketTrio"]

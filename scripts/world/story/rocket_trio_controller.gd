@@ -55,6 +55,13 @@ func prepare_story_sequence() -> Dictionary:
 		return {"success": false}
 	_running = true
 	_reset_actors()
+	if encounter == "celadon":
+		for path: NodePath in [victim_path, victim_pokemon_path]:
+			if path.is_empty():
+				continue
+			var victim := get_node_or_null(path)
+			if victim != null and victim.has_method("face_world_position"):
+				victim.call("face_world_position", actors[2].global_position)
 	if _story_player != null and _story_player.has_method("face_world_position"):
 		_story_player.call("face_world_position", global_position)
 	await _focus_camera()
@@ -112,12 +119,6 @@ func _on_story_changed(_revision: int) -> void:
 	var marker := get_node_or_null("QuestMarker") as CanvasItem
 	if marker != null:
 		marker.visible = show_trio
-	if encounter == "celadon":
-		var started := StoryService.is_requirement_met(QUEST_ID, "spot_trio", "completed")
-		for path: NodePath in [victim_path, victim_pokemon_path]:
-			var node := get_node_or_null(path) as CanvasItem
-			if node != null:
-				node.visible = started
 
 
 func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
