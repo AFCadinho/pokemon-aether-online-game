@@ -143,38 +143,35 @@ were visually reviewed; a live player walkthrough has not been performed.
 
 ## Celadon Prize Corner
 
-`celadon_prize_corner.tscn` imports the artist `Celadon Prize Corner.tmx`
-(16 × 17 tiles, 32 px) into `generated/tiled_visuals/celadon_prize_corner/`.
-The supplied preview is the matching visual reference; no source art is changed.
-The small city door immediately east of Game Corner is at **(44,27)**,
-returning to **(44,29)**. Inside, **(7–8,14)** is the complete two-tile
-exit and **(7,12)** is the arrival, facing north, clear of the return trigger.
+`celadon_prize_corner.tscn` imports the current artist `Celadon Prize Corner.tmx`
+(15 × 17 tiles, 32 px) into `generated/tiled_visuals/celadon_prize_corner/`.
+Its casino counter, display panels, statues, rug and blue trim remain separate
+from Godot collision and exits. No artist source art is changed.
 
-Hand-authored collision follows the artist footprint handoff: 66 connected
-public tiles and 10 isolated staff tiles. The counter, sofas, plants and
-cutaway perimeter stay solid. A black FloorVisibilityMask covers the exterior
-of the 512 × 544 canvas. Indoor lighting, disabled weather, Celadon access
-grouping and the extended browser module match the other city interiors.
-The three service counters remain scenery pending a separate prize-service task.
+The small city door immediately east of Game Corner is at **(44,27)**.
+The hand-edited city return marker remains at **(44,28)**; the authoritative
+server return remains **(44,29)**. Inside, **(7,14)** is the single-tile exit.
+The saved room arrival remains **(7,13)**, while the server arrival stays at
+**(7,12)**. These paired landings are checked for clear floor and separation
+from their return triggers; this visual refresh preserves their existing values.
 
-`tests/celadon_prize_corner_check.gd` checks actual player movement predicates,
-public circulation, boundary collision, the full exit aperture, safe reciprocal
-arrivals, runtime mask initialization, imported layer counts and atlas layout.
-Account-service tests check canonical travel and denied-entry preservation.
-Native Tiled and Godot renders were inspected; no live server walkthrough was
-performed.
+Hand-authored collision follows the matching artist footprint handoff: 63
+connected public tiles and 14 isolated staff tiles. The counter, statue
+footprints, plants and cutaway perimeter stay solid. The layer is named
+`Tiles/Collision`, as required by player movement. The exit and its hint cover
+one tile and the black exterior mask fits the 480 × 544 canvas.
 
-Regenerating the paired access catalogs also synchronizes the already saved
-Celadon arrival-marker edits (city, Department Store, Game Corner and Hideout
-B1F). The second Department Store exit now has its own
-`kanto_celadon_department_store__to_outside_east` transition ID, resolving the
-previous duplicate without moving either exit.
+Indoor lighting, disabled weather, Celadon access grouping and extended browser
+registration remain in place. Prize services are separate gameplay work.
+`tests/celadon_prize_corner_check.gd` checks player movement, public circulation,
+boundary collision, exit coverage, both local and server arrivals, runtime mask
+initialization, imported layer counts and atlas layout. Native Tiled and Godot
+renders were reviewed after import: geometry matches and alpha blending differs
+by at most one RGB level. The exterior mask renders fully black. No live server
+walkthrough was performed.
 
-The native Tiled render exactly matches the supplied preview. The Godot render
-has the same geometry; alpha blending differs by at most one RGB level on
-4,778 of 278,528 pixels. Prize Corner's browser selection/exclusion is checked.
-The general browser partition check still reports the same 15 pre-existing
-unlisted maps as the task base; a full web export was not run.
+The general browser partition check has 15 previously documented unlisted maps;
+a full web export is outside this visual refresh.
 
 
 ## Celadon Aethernet station
