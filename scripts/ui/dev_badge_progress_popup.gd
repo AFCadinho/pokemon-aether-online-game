@@ -74,6 +74,9 @@ const STORY_CHECKPOINTS: Array[Dictionary] = [
 	{"id": "game_corner_guard", "chapter_id": "game_corner", "label_key": "ui.staff.story_checkpoint.game_corner_guard"},
 	{"id": "game_corner_guard_escape", "chapter_id": "game_corner", "label_key": "ui.staff.story_checkpoint.game_corner_guard_escape"},
 	{"id": "rocket_hideout_boss", "chapter_id": "game_corner", "label_key": "ui.staff.story_checkpoint.rocket_hideout_boss"},
+	{"id": "rocket_hideout_plan", "chapter_id": "game_corner", "label_key": "ui.staff.story_checkpoint.rocket_hideout_plan"},
+	{"id": "rocket_hideout_scope", "chapter_id": "game_corner", "label_key": "ui.staff.story_checkpoint.rocket_hideout_scope"},
+	{"id": "rocket_hideout_return", "chapter_id": "game_corner", "label_key": "ui.staff.story_checkpoint.rocket_hideout_return"},
 ]
 const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "pallet", "label_key": "ui.staff.story_chapter.pallet"},

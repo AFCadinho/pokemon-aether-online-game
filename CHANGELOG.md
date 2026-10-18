@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Populate every Rocket Hideout floor with Rocket battles, companion Pokémon and one-time pickups; add Giovanni, the Lift Key route, Silph Scope and the return-to-Tower story with developer checkpoints.
+
 - Add black exterior masks to every Celadon Condominiums scene, including the roof and rooftop room.
 - Add the shared Rocket Hideout elevator cabin with the artist visual, physical floor entrances, current-floor selection and a short ride animation.
 
