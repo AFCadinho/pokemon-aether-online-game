@@ -7375,5 +7375,12 @@
   "ui.casino.purchased": "已花费 ₽{money} 购买 {tokens} 枚代币。",
   "ui.casino.purchase_failed": "无法购买代币。",
   "ui.casino.visit": "请前往游戏城柜台找艾莉丝购买代币。",
-  "ui.casino.invalid_bundle": "请选择 10、50、100 或 500 枚代币。"
+  "ui.casino.invalid_bundle": "请选择 10、50、100 或 500 枚代币。",
+  "ui.staff.story_chapter.game_corner": "游戏城与火箭队基地",
+  "ui.staff.story_checkpoint.celadon_mira_inquiry": "玉虹市：向米拉打听火箭队",
+  "ui.staff.story_checkpoint.challenge_erika": "玉虹市：挑战莉佳",
+  "ui.staff.story_checkpoint.celadon_erika_inquiry": "玉虹市：向莉佳打听火箭队",
+  "ui.staff.story_checkpoint.game_corner_guard": "游戏城：质问工作人员",
+  "ui.staff.story_checkpoint.game_corner_guard_escape": "游戏城：守卫逃跑",
+  "ui.staff.story_checkpoint.rocket_hideout_boss": "火箭队基地：与首领对峙"
 }

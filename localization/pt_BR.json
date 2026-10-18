@@ -7375,5 +7375,12 @@
   "ui.casino.purchased": "Você comprou {tokens} tokens por ₽{money}.",
   "ui.casino.purchase_failed": "Não foi possível comprar tokens.",
   "ui.casino.visit": "Visite Iris no balcão do Game Corner para comprar tokens.",
-  "ui.casino.invalid_bundle": "Escolha um pacote de 10, 50, 100 ou 500 tokens."
+  "ui.casino.invalid_bundle": "Escolha um pacote de 10, 50, 100 ou 500 tokens.",
+  "ui.staff.story_chapter.game_corner": "Game Corner e esconderijo Rocket",
+  "ui.staff.story_checkpoint.celadon_mira_inquiry": "Celadon: pergunte a Mira sobre a Equipe Rocket",
+  "ui.staff.story_checkpoint.challenge_erika": "Celadon: desafie Erika",
+  "ui.staff.story_checkpoint.celadon_erika_inquiry": "Celadon: pergunte a Erika sobre a Equipe Rocket",
+  "ui.staff.story_checkpoint.game_corner_guard": "Game Corner: confronte o funcionário",
+  "ui.staff.story_checkpoint.game_corner_guard_escape": "Game Corner: o guarda foge",
+  "ui.staff.story_checkpoint.rocket_hideout_boss": "Esconderijo Rocket: confronte o chefe"
 }

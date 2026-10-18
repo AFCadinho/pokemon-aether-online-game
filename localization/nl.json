@@ -7377,5 +7377,12 @@
   "ui.casino.purchased": "{tokens} tokens gekocht voor ₽{money}.",
   "ui.casino.purchase_failed": "Tokens kopen is niet gelukt.",
   "ui.casino.visit": "Ga naar Iris achter de balie in de Game Corner om tokens te kopen.",
-  "ui.casino.invalid_bundle": "Kies een bundel van 10, 50, 100 of 500 tokens."
+  "ui.casino.invalid_bundle": "Kies een bundel van 10, 50, 100 of 500 tokens.",
+  "ui.staff.story_chapter.game_corner": "Game Corner en Rocket Hideout",
+  "ui.staff.story_checkpoint.celadon_mira_inquiry": "Celadon: vraag Mira naar Team Rocket",
+  "ui.staff.story_checkpoint.challenge_erika": "Celadon: daag Erika uit",
+  "ui.staff.story_checkpoint.celadon_erika_inquiry": "Celadon: vraag Erika naar Team Rocket",
+  "ui.staff.story_checkpoint.game_corner_guard": "Game Corner: confronteer de medewerker",
+  "ui.staff.story_checkpoint.game_corner_guard_escape": "Game Corner: bewaker vlucht",
+  "ui.staff.story_checkpoint.rocket_hideout_boss": "Rocket Hideout: confronteer de baas"
 }
