@@ -1,6 +1,6 @@
 extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
-const IDS := ["ss_anne", "pallet_town", "pallet_town_water", "viridian_city", "viridian_city_water", "pewter_city", "pewter_city_gym", "cerulean_city_gym", "classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
+const IDS := ["pokemon_tower", "rocket_hideout", "ss_anne", "pallet_town", "pallet_town_water", "viridian_city", "viridian_city_water", "pewter_city", "pewter_city_gym", "cerulean_city_gym", "classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
 const Framing = preload("res://scripts/battle/arenas/shared/framing.gd")
 const OutdoorLighting = preload("res://scripts/battle/arenas/shared/outdoor_lighting.gd")
 const CAMERA_FOV := Framing.CAMERA_FOV
@@ -15,8 +15,9 @@ static func resolve(selection: String, environment_id: StringName, battle_kind: 
 	var local_arena := validate(preload("res://scripts/battle/battle_environment_catalog.gd").get_profile(environment_id).arena_3d_id)
 	# Wild encounters keep the map's terrain (including surf/fishing and caves)
 	# while using its quieter generic arena. Trainer and gym battles keep the
-	# location-specific scene. An explicit review selection wins above.
-	if battle_kind == "wild" and definition(local_arena).scope == "map":
+	# location-specific scene. Dungeon interiors opt in to retaining their scene
+	# for wild encounters too. An explicit review selection wins above.
+	if battle_kind == "wild" and definition(local_arena).scope == "map" and not definition(local_arena).get("retain_for_wild", false):
 		match str(definition(local_arena).terrain):
 			"water", "pool": return "sea"
 			"cave", "stone": return "cave"
@@ -44,6 +45,8 @@ static func prepare_forest(manifest_path: String) -> String:
 
 # Stable IDs preserve saved selections. Scope/type make the authoring structure explicit.
 const DEFINITIONS := {
+	"pokemon_tower": {"scope": "map", "map_id": "kanto_lavender_town_pokemon_tower", "terrain": "stone", "lighting": "enclosed", "retain_for_wild": true, "builder": "maps/pokemon_tower/arena.gd"},
+	"rocket_hideout": {"scope": "map", "map_id": "kanto_rocket_hideout_b1f", "terrain": "metal", "lighting": "enclosed", "retain_for_wild": true, "builder": "maps/rocket_hideout/arena.gd"},
 	"ss_anne": {"scope": "map", "map_id": "kanto_ss_anne_3f", "terrain": "deck", "lighting": "outdoor", "builder": "maps/ss_anne/arena.gd"},
 	"pallet_town": {"scope": "map", "map_id": "kanto_pallet_town", "terrain": "grass", "lighting": "outdoor", "builder": "maps/pallet_town/arena.gd"},
 	"pallet_town_water": {"scope": "map", "map_id": "kanto_pallet_town", "terrain": "water", "lighting": "outdoor", "builder": "maps/pallet_town/arena.gd"},
@@ -79,6 +82,8 @@ static func definition(id: String) -> Dictionary:
 	return DEFINITIONS.get(validate(id), DEFINITIONS.classic).duplicate(true)
 
 const BUILDERS := {
+	"pokemon_tower": preload("res://scripts/battle/arenas/maps/pokemon_tower/arena.gd"),
+	"rocket_hideout": preload("res://scripts/battle/arenas/maps/rocket_hideout/arena.gd"),
 	"ss_anne": preload("res://scripts/battle/arenas/maps/ss_anne/arena.gd"),
 	"pewter_city_gym": preload("res://scripts/battle/arenas/maps/pewter_city_gym/arena.gd"),
 	"cerulean_city_gym": preload("res://scripts/battle/arenas/maps/cerulean_city_gym/arena.gd"),
