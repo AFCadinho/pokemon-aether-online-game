@@ -4,6 +4,8 @@
 
 - Add paintable SpinUp/Down/Left/Right/Stop map layers for Rocket Hideout slide puzzles, with automatic spinning, collision and control recovery.
 
+- Connect Celadon City’s Aether Beacon and Keeper to Aethernet Travel, with a safe arrival beside the beacon.
+
 - Add the Celadon Prize Corner interior with the artist visual, collision, exterior mask and reciprocal city doorway; give the second Department Store exit a unique transition ID.
 
 - Give all four Celadon City signs localized text and location illustrations.
