@@ -59,7 +59,7 @@ func _run() -> void:
 		var return_exit: Area2D = exit_node if pair[1] == room else entrance
 		_check(not return_exit.contains_world_position(server_position), "Server arrival avoids the return trigger")
 	_check(LOADER.module_for_scene(SCENE) == LOADER.EXTENDED_MODULE_NAME, "Browser module includes Prize Corner")
-	for pair: Array in [["Ground", 255], ["GroundDetail", 115], ["Objects", 37], ["ObjectsTop", 16]]:
+	for pair: Array in [["Ground", 255], ["GroundDetail", 115], ["Objects", 27], ["ObjectsTop", 26]]:
 		_check(room.get_node("Visual/" + pair[0]).get_used_cells().size() == pair[1], "Imported artist layer: " + pair[0])
 	var errors: Array[String] = VALIDATOR.new().validate(room.get_node("Visual"), "res://generated/tiled_visuals/celadon_prize_corner/celadon_prize_corner.visual.tileset.tres")
 	_check(errors.is_empty(), "Imported atlas layout: " + str(errors))

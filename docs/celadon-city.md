@@ -170,6 +170,13 @@ renders were reviewed after import: geometry matches and alpha blending differs
 by at most one RGB level. The exterior mask renders fully black. No live server
 walkthrough was performed.
 
+The latest artist revision moves ten existing tiles from `Objects` to
+`ObjectsTop` (27 and 26 cells respectively). Their art and positions, both
+ground layers and the gameplay scene are unchanged. Native Tiled/Godot renders
+match within one RGB level. The broader scene check still reports 44 existing
+collision/containment expectations from before this reimport; imported layer
+counts and atlas validation pass.
+
 The general browser partition check has 15 previously documented unlisted maps;
 a full web export is outside this visual refresh.
 

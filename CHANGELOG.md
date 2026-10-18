@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Celadon Prize Corner’s artist visual with the revised foreground layering.
+
 - Support Adventure Party challenges across all existing story and ordinary trainers, with matching trainer names, portraits and post-battle story conversations.
 
 - Refresh Celadon Prize Corner’s artist visual and align collision, mask and the one-tile exit with its narrower casino layout.

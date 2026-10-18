@@ -1,11 +1,11 @@
-[gd_resource type="TileSet" format=3 uid="uid://06s144k2rfaj"]
+[gd_resource type="TileSet" format=3]
 
-[ext_resource type="Texture2D" uid="uid://cmjhe74x7w2cp" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_1_0.texture.res" id="1_qlo5o"]
-[ext_resource type="Texture2D" uid="uid://b4kfysu08nfg4" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_1025_0.texture.res" id="2_ovfa5"]
-[ext_resource type="Texture2D" uid="uid://b72vo1740nq66" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_2049_0.texture.res" id="3_87byh"]
-[ext_resource type="Texture2D" uid="uid://dckme02ep2cp3" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_3073_0.texture.res" id="4_y1jfd"]
-[ext_resource type="Texture2D" uid="uid://bu3uxn85f5co4" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_5865_0.texture.res" id="5_g1t3h"]
-[ext_resource type="Texture2D" uid="uid://bio8aqpt1we5b" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_6785_0.texture.res" id="6_pbibk"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_1_0.texture.res" id="1_qlo5o"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_1025_0.texture.res" id="2_ovfa5"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_2049_0.texture.res" id="3_87byh"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_3073_0.texture.res" id="4_y1jfd"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_5865_0.texture.res" id="5_g1t3h"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_prize_corner/assets/celadon_prize_corner.visual.tileset.compact_source_6785_0.texture.res" id="6_pbibk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_f1gvk"]
 texture = ExtResource("1_qlo5o")
