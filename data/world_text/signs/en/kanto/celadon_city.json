@@ -1,0 +1,43 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_celadon_city",
+  "signs": [
+    {
+      "id": "kanto_celadon_city_town_sign",
+      "type": "town",
+      "title": "Celadon City",
+      "lines": [
+        "Celadon City — a city of flowers and greenery.",
+        "Visit the Department Store, explore the Game Corner, or challenge the Gym."
+      ]
+    },
+    {
+      "id": "kanto_celadon_city_department_store",
+      "type": "building",
+      "title": "Celadon Department Store",
+      "lines": [
+        "Celadon Department Store",
+        "Browse the counters for battle items, evolution items, Z-Crystals and Mega Stones."
+      ]
+    },
+    {
+      "id": "kanto_celadon_city_game_corner",
+      "type": "building",
+      "title": "Celadon Game Corner",
+      "lines": [
+        "Celadon Game Corner",
+        "Visit Iris at the counter to buy Casino Tokens.",
+        "Tokens belong to your account and cannot be exchanged back for money."
+      ]
+    },
+    {
+      "id": "kanto_celadon_city_gym",
+      "type": "building",
+      "title": "Celadon City Pokémon Gym",
+      "lines": [
+        "Celadon City Pokémon Gym",
+        "Leader: Erika. A Gym devoted to Grass-type Pokémon."
+      ]
+    }
+  ]
+}

@@ -1349,15 +1349,23 @@ display_name = "Aether Beacon"
 
 [node name="DeparmentStoreSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("18_87ibu")]
 position = Vector2(592, 496)
+sign_id = "kanto_celadon_city_department_store"
+sign_type = "building"
 
 [node name="GameCornerSign" parent="Entities/Interactables/Signs" unique_id=1838620784 instance=ExtResource("18_87ibu")]
 position = Vector2(1328, 944)
+sign_id = "kanto_celadon_city_game_corner"
+sign_type = "building"
 
 [node name="GymSign" parent="Entities/Interactables/Signs" unique_id=1309159241 instance=ExtResource("18_87ibu")]
 position = Vector2(432, 1584)
+sign_id = "kanto_celadon_city_gym"
+sign_type = "building"
 
 [node name="CeladonCitySign" parent="Entities/Interactables/Signs" unique_id=289545458 instance=ExtResource("19_ysnv7")]
 position = Vector2(464, 592)
+sign_id = "kanto_celadon_city_town_sign"
+sign_type = "town"
 required_facing_direction = "down"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1867462022]
