@@ -5,6 +5,12 @@ arches, candles and a remembrance altar. `rocket_hideout` is an underground
 operations room with server racks, cargo crates, consoles, ventilation, a lift
 door and a mesh-built Rocket insignia.
 
+The Tower uses deep purple-grey stone; the Hideout uses dark blue-grey concrete
+and steel. Floor, wall and trim albedos are deliberately subdued under the
+shared neutral battle lights. Candle, screen and insignia emission is softened
+so it remains an accent. This palette is checked in Forward+ and Compatibility;
+Pokémon lighting and scene-wide exposure are unchanged.
+
 The resolver selects these interiors for trainer and wild encounters on the
 Tower map and Rocket Hideout B1F–B4F / elevator. All Tower floors share one map
 and therefore the same arena. These dungeon definitions retain their authored
