@@ -120,7 +120,7 @@ func _geometry(map: Node2D, floor: int) -> void:
 	var actors: Array[Node] = []
 	for category: String in ["NPCs", "Pokemon", "Interactables"]:
 		for actor: Node2D in map.get_node("Entities/" + category).get_children():
-			if actor.name == "GiovanniGate":
+			if actor.name in ["GiovanniGate", "LiftShortcutGate"]:
 				continue # The dedicated gate test checks its closed and open route.
 			var tile := Vector2i(actor.position / 32.0)
 			_check(not blockers.has(tile), "Actors do not overlap: " + str(actor.name))

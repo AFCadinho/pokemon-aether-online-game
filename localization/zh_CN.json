@@ -7394,6 +7394,7 @@
   "ui.staff.story_checkpoint.rocket_hideout_return": "返回宝可梦塔",
   "backend.error.rocket_hideout_guards_required": "挑战坂木之前，先击败他的两名守卫。",
   "backend.error.world_pickup_trainer_required": "先击败看守这个道具的训练家。",
+  "world.rocket_hideout.shortcut_gate.closed": "安全门锁着，似乎要从另一侧才能打开。",
   "world.rocket_hideout.gate.name": "安全门",
   "world.rocket_hideout.gate.closed": "安全门锁住了。击败两名火箭队守卫后才能打开。"
 }

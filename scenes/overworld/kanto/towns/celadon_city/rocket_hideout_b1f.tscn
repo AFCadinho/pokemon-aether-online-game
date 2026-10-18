@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://cdxdum4jckooy" path="res://scripts/world/npcs/rocket_hideout_trainer.gd" id="population_script"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/rocket_hideout_b1f/rocket_hideout_b1f.visual.tscn" id="visual"]
+[ext_resource type="Script" path="res://scripts/world/interactables/rocket_hideout_boss_gate.gd" id="shortcut_gate"]
 
 [sub_resource type="RectangleShape2D" id="stairs_shape"]
 size = Vector2(32, 32)
@@ -356,6 +357,16 @@ level = 30
 display_name = "Koffing"
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=512761871]
+
+[node name="LiftShortcutGate" type="Node2D" parent="Entities/Interactables"]
+position = Vector2(864, 784)
+script = ExtResource("shortcut_gate")
+interactable_id = "rocket_hideout_b1f_lift_shortcut_gate"
+required_trainer_ids = Array[String](["kanto_rocket_hideout_b1f_grunt_3"])
+completed_quest_id = ""
+closed_message_key = "world.rocket_hideout.shortcut_gate.closed"
+blocked_tile_offset = Vector2i(-1, 0)
+blocked_tile_footprint = Vector2i(2, 1)
 
 [node name="EscapeRope" parent="Entities/Interactables" unique_id=1078203888 instance=ExtResource("population_item")]
 position = Vector2(208, 688)

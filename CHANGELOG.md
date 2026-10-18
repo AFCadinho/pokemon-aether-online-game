@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Block the B1F Rocket Hideout lift shortcut until its lift-side grunt is defeated, preserving the first route through the B2F spinner maze.
 - Refresh Celadon Game Corner’s artist visual with the Hideout stair tiles drawn below characters.
 
 - Restore Rocket Hideout B1F’s shared soundtrack selection.
