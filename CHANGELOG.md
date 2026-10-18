@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- Move the Battle Point, evolution-item, Z-Crystal, Mega Stone and both rental vendors from Aether Clash Lobby to Celadon Department Store.
+- Keep Team Rental and Pokémon Rental at their original Aether Clash Lobby counters.
+
+- Move the Battle Point, evolution-item, Z-Crystal and Mega Stone vendors from Aether Clash Lobby to Celadon Department Store.
 
 - Keep dense city nightlights stable while the camera moves by rendering lit tilemaps in smaller batches, including runtime depth layers.
 

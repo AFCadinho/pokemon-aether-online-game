@@ -7,8 +7,6 @@ const VENDORS := {
 	"EvolutionItemVendor": [Vector2(560, 240), "evolution_item_shop", "evolution_item_vendor"],
 	"ZCrystalVendor": [Vector2(880, 240), "z_crystal_shop", "z_crystal_vendor"],
 	"MegaStoneVendor": [Vector2(1168, 240), "mega_stone_shop", "mega_stone_vendor"],
-	"TeamRentalNPC": [Vector2(272, 688), "team", "Team Rental"],
-	"PokemonRentalNPC": [Vector2(1104, 688), "pokemon", "Pokémon Rental"],
 }
 var failed := false
 
@@ -26,7 +24,7 @@ func _run() -> void:
 	var collision: TileMapLayer = store.get_node("Tiles/Collision")
 	var reached: Dictionary = _reachable(collision, Vector2i(42, 36), Vector2i(store.get_node("Spawns/FromOutside").position / 32))
 	var customer := Customer.new()
-	_check(store.get_node("Entities/NPCs").get_child_count() == 6, "All six lobby vendors have a department")
+	_check(store.get_node("Entities/NPCs").get_child_count() == 4, "Four item vendors have a department")
 	for vendor_name: String in VENDORS:
 		var vendor: Node2D = store.get_node("Entities/NPCs/" + vendor_name)
 		var expected: Array = VENDORS[vendor_name]
@@ -44,10 +42,9 @@ func _run() -> void:
 		var shape: CollisionShape2D = area.get_node("CollisionShape2D")
 		var local_customer := customer.position - vendor.position - area.position - shape.position
 		_check(shape.shape is RectangleShape2D and Rect2(-shape.shape.size / 2, shape.shape.size).has_point(local_customer), "Interaction sensor includes customer side: " + vendor_name)
-		if vendor_name.contains("Rental"):
-			_check(vendor.rental_kind == expected[1] and vendor.display_name == expected[2], "Rental type and name preserved: " + vendor_name)
-		else:
-			_check(vendor.market_id == expected[1] and vendor.market_mode == "player_buys" and vendor.npc_definition_id == expected[2], "Existing shop and dialogue identity preserved: " + vendor_name)
+		_check(vendor.market_id == expected[1] and vendor.market_mode == "player_buys" and vendor.npc_definition_id == expected[2], "Existing shop and dialogue identity preserved: " + vendor_name)
+	for rental_name: String in ["TeamRentalNPC", "PokemonRentalNPC"]:
+		_check(not store.has_node("Entities/NPCs/" + rental_name), "Rentals remain exclusive to Clash Lobby: " + rental_name)
 	for npc_name: String in ["TransitKeeper", "ClashCoordinator", "ClashTrainingCaptain", "HealNPC", "HealNPC2"]:
 		_check(lobby.has_node("Entities/NPCs/" + npc_name), "Lobby service remains available: " + npc_name)
 	customer.free()

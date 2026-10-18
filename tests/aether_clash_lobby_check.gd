@@ -40,8 +40,16 @@ func _run() -> void:
 		and posmod(int(arrival.position.y), 32) == 16,
 		"Guild arrival marker is centered on a map tile"
 	)
-	for vendor_name: String in ["BattlePointVendor", "EvolutionItemVendor", "ZCrystalVendor", "MegaStoneVendor", "TeamRentalNPC", "PokemonRentalNPC"]:
+	for vendor_name: String in ["BattlePointVendor", "EvolutionItemVendor", "ZCrystalVendor", "MegaStoneVendor"]:
 		_check(not lobby.has_node("Entities/NPCs/" + vendor_name), "Vendor moved to Celadon: " + vendor_name)
+	for rental: Array in [["TeamRentalNPC", "team", "Team Rental", Vector2(944, 176)], ["PokemonRentalNPC", "pokemon", "Pokémon Rental", Vector2(1008, 176)]]:
+		var vendor := lobby.get_node_or_null("Entities/NPCs/" + str(rental[0]))
+		_check(vendor != null, "Rental vendor remains in lobby: " + str(rental[0]))
+		if vendor == null:
+			continue
+		_check(vendor.rental_kind == rental[1] and vendor.display_name == rental[2] and vendor.position == rental[3], "Rental type, name and server position: " + str(rental[0]))
+		var shape := vendor.get_node("InteractionArea/CollisionShape2D") as CollisionShape2D
+		_check(vendor.facing_direction == Vector2.DOWN and vendor.manual_interaction_reach_tiles == 3 and shape.position == Vector2.ZERO and shape.shape is RectangleShape2D and shape.shape.size == Vector2(96, 192) and vendor.get_node("InteractionArea").position == Vector2(0, 64), "Rental interaction reaches across the lobby counter: " + str(rental[0]))
 	var night_lights := lobby.get_node_or_null("NightLights")
 	_check(night_lights != null, "Lobby owns a hand-maintained night-light layer")
 	_check(night_lights != null and night_lights.get_child_count() == 22, "Lobby lanterns and portals have night lights")
@@ -78,7 +86,7 @@ func _run() -> void:
 	var collision := lobby.get_node_or_null("Tiles/Collision") as TileMapLayer
 	_check(collision != null and not collision.get_used_cells().is_empty(), "Lobby includes gameplay collision")
 	for tile: Vector2i in [Vector2i(29, 5), Vector2i(31, 5), Vector2i(29, 7), Vector2i(31, 7), Vector2i(29, 8), Vector2i(31, 8)]:
-		_check(collision.get_cell_source_id(tile) == -1, "Former rental counter approach remains walkable: " + str(tile))
+		_check(collision.get_cell_source_id(tile) == -1, "Rental counter approach remains walkable: " + str(tile))
 	_check(
 		collision != null and collision.get_cell_source_id(Vector2i(29, 50)) == -1,
 		"Guild arrival tile is walkable"

@@ -9,9 +9,10 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
-[ext_resource type="SpriteFrames" uid="uid://bmw8v3ctsygiq" path="res://assets/npcs/classes/socialite_frames.tres" id="rental_socialite_frames"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/rental_npc.tscn" id="rental_vendor"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/celadon_department_store/celadon_department_store.visual.tscn" id="visual"]
+
+[sub_resource type="RectangleShape2D" id="counter_interaction"]
+size = Vector2(96, 192)
 
 [sub_resource type="RectangleShape2D" id="exit_shape"]
 size = Vector2(96, 32)
@@ -150,31 +151,46 @@ position = Vector2(272, 240)
 facing_direction = Vector2(0, 1)
 manual_interaction_reach_tiles = 3
 
+[node name="InteractionArea" parent="Entities/NPCs/BattlePointVendor" index="1"]
+position = Vector2(0, 64)
+
+[node name="CollisionShape2D" parent="Entities/NPCs/BattlePointVendor/InteractionArea" index="0"]
+shape = SubResource("counter_interaction")
+
 [node name="EvolutionItemVendor" parent="Entities/NPCs" unique_id=944995123 instance=ExtResource("evolution_item_vendor")]
 position = Vector2(560, 240)
 facing_direction = Vector2(0, 1)
 manual_interaction_reach_tiles = 3
+
+[node name="InteractionArea" parent="Entities/NPCs/EvolutionItemVendor" index="1"]
+position = Vector2(0, 64)
+
+[node name="CollisionShape2D" parent="Entities/NPCs/EvolutionItemVendor/InteractionArea" index="0"]
+shape = SubResource("counter_interaction")
 
 [node name="ZCrystalVendor" parent="Entities/NPCs" unique_id=630248255 instance=ExtResource("9_z_crystal_vendor")]
 position = Vector2(880, 240)
 facing_direction = Vector2(0, 1)
 manual_interaction_reach_tiles = 3
 
+[node name="InteractionArea" parent="Entities/NPCs/ZCrystalVendor" index="1"]
+position = Vector2(0, 64)
+
+[node name="CollisionShape2D" parent="Entities/NPCs/ZCrystalVendor/InteractionArea" index="0"]
+shape = SubResource("counter_interaction")
+
 [node name="MegaStoneVendor" parent="Entities/NPCs" unique_id=1459876499 instance=ExtResource("10_mega_stone_vendor")]
 position = Vector2(1168, 240)
 facing_direction = Vector2(0, 1)
 manual_interaction_reach_tiles = 3
 
-[node name="TeamRentalNPC" parent="Entities/NPCs" unique_id=220831213 instance=ExtResource("rental_vendor")]
-position = Vector2(272, 688)
-rental_kind = "team"
 
-[node name="PokemonRentalNPC" parent="Entities/NPCs" unique_id=4411246 instance=ExtResource("rental_vendor")]
-position = Vector2(1104, 688)
-rental_kind = "pokemon"
-display_name = "Pokémon Rental"
-npc_sprite_frames = ExtResource("rental_socialite_frames")
-portrait_id = "showdown_lady_gen6"
+
+[node name="InteractionArea" parent="Entities/NPCs/MegaStoneVendor" index="1"]
+position = Vector2(0, 64)
+
+[node name="CollisionShape2D" parent="Entities/NPCs/MegaStoneVendor/InteractionArea" index="0"]
+shape = SubResource("counter_interaction")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1895810101]
 
@@ -190,3 +206,11 @@ tile_map_data = PackedByteArray("AAABAAIAAAABAAEAAAABAAMAAAABAAEAAAABAAQAAAABAAE
 tile_set = SubResource("TileSet_okqq7")
 
 [connection signal="body_entered" from="Exits/ToOutside" to="Exits/ToOutside" method="_on_body_entered"]
+
+[editable path="Entities/NPCs/BattlePointVendor"]
+
+[editable path="Entities/NPCs/EvolutionItemVendor"]
+
+[editable path="Entities/NPCs/ZCrystalVendor"]
+
+[editable path="Entities/NPCs/MegaStoneVendor"]
