@@ -290,8 +290,8 @@ visibility_hidden_quest_id = "confront_team_rocket_boss"
 visibility_hidden_quest_step_id = "learn_plan"
 display_name = "Giovanni"
 npc_sprite_frames = ExtResource("giovanni_frames")
-portrait_id = "showdown_giovanni_masters"
-battle_sprite_id = "showdown_giovanni_masters"
+portrait_id = "showdown_giovanni_lgpe"
+battle_sprite_id = "showdown_giovanni_lgpe"
 preload_quest_markers = true
 
 [node name="StoryHook" type="Node" parent="Entities/NPCs/Giovanni" unique_id=1498084525]
