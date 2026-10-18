@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Hide the suspicious trio's names during the Route 7 cameo and show their original Showdown trainer portrait throughout their dialogue, with a matching portrait for Mira.
+
 - Return Adventure Parties sooner after both Trainers confirm Run, while preserving saved battle state.
 
 - Reuse the prepared battle screen for smooth doubles entry and fix move-button errors from nullable Z-Move metadata.

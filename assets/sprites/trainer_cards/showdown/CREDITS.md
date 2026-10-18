@@ -835,6 +835,7 @@ Source index: https://play.pokemonshowdown.com/sprites/trainers/?view=sprites&fi
 - `alder.png` — [source](https://play.pokemonshowdown.com/sprites/trainers/alder.png)
 - `ltsurge.png` — [source](https://play.pokemonshowdown.com/sprites/trainers/ltsurge.png)
 - `pokemonbreeder-gen4.png` — [source](https://play.pokemonshowdown.com/sprites/trainers/pokemonbreeder-gen4.png)
+- `teamrocket.png` — [source](https://play.pokemonshowdown.com/sprites/trainers/teamrocket.png)
 
 ## RADU
 
