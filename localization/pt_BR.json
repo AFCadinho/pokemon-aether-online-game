@@ -1,4 +1,7 @@
 {
+  "ui.rocket_hideout.lift.current_floor": "{floor} (andar atual)",
+  "ui.rocket_hideout.lift.title": "Elevador da Equipe Rocket",
+  "ui.rocket_hideout.lift.prompt": "Para qual andar você quer ir?",
   "ui.settings.battle.quality": "Qualidade das batalhas 3D",
   "ui.settings.battle.fps_unlimited": "Sem limite (VSync pode limitar FPS)",
   "ui.settings.android.quality": "Qualidade 3D no Android",

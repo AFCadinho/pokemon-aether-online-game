@@ -3161,6 +3161,39 @@
 			},
 			"weatherProfile": "disabled"
 		},
+		"kanto_rocket_hideout_elevator": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Rocket Hideout — Elevator",
+			"locationGroupId": "kanto_rocket_hideout",
+			"locationGroupLabel": "Rocket Hideout",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_elevator.tscn",
+			"spawnPoints": {
+				"from_floor": {
+					"facingDirection": "down",
+					"label": "Floor",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromFloor",
+					"tile": {
+						"x": 5,
+						"y": 6
+					}
+				},
+				"from_panel": {
+					"facingDirection": "down",
+					"label": "Panel",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPanel",
+					"tile": {
+						"x": 3,
+						"y": 5
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
 		"kanto_route_1": {
 			"areaType": "route",
 			"defaultMode": "open",
@@ -6096,9 +6129,7 @@
 			"regionName": "Kanto",
 			"sceneAliases": [],
 			"scenePath": "",
-			"spawnPoints": {
-
-			}
+			"spawnPoints": {}
 		},
 		"kanto_viridian_city_house_1": {
 			"areaType": "interior",
@@ -8705,38 +8736,6 @@
 			"destinationAreaId": "kanto_rocket_hideout_b2f",
 			"sourceMapId": "kanto_rocket_hideout_b1f"
 		},
-		"kanto_rocket_hideout_b1f__lift_to_b2f": {
-			"destination": {
-				"mapId": "kanto_rocket_hideout_b2f",
-				"mapSceneAliases": [
-					"uid://cf55klvusdq22"
-				],
-				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b2f.tscn",
-				"position": {
-					"x": 1008.0,
-					"y": 752.0
-				},
-				"spawnMarker": "FromLift"
-			},
-			"destinationAreaId": "kanto_rocket_hideout_b2f",
-			"sourceMapId": "kanto_rocket_hideout_b1f"
-		},
-		"kanto_rocket_hideout_b1f__lift_to_b4f": {
-			"destination": {
-				"mapId": "kanto_rocket_hideout_b4f",
-				"mapSceneAliases": [
-					"uid://bifqyrgvwan61"
-				],
-				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn",
-				"position": {
-					"x": 880.0,
-					"y": 1104.0
-				},
-				"spawnMarker": "FromLift"
-			},
-			"destinationAreaId": "kanto_rocket_hideout_b4f",
-			"sourceMapId": "kanto_rocket_hideout_b1f"
-		},
 		"kanto_rocket_hideout_b1f__north_down_to_b2f": {
 			"destination": {
 				"mapId": "kanto_rocket_hideout_b2f",
@@ -8751,6 +8750,20 @@
 				"spawnMarker": "FromNorthUpToB1F"
 			},
 			"destinationAreaId": "kanto_rocket_hideout_b2f",
+			"sourceMapId": "kanto_rocket_hideout_b1f"
+		},
+		"kanto_rocket_hideout_b1f__to_elevator": {
+			"destination": {
+				"mapId": "kanto_rocket_hideout_elevator",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_elevator.tscn",
+				"position": {
+					"x": 176.0,
+					"y": 208.0
+				},
+				"spawnMarker": "FromFloor"
+			},
+			"destinationAreaId": "kanto_rocket_hideout_elevator",
 			"sourceMapId": "kanto_rocket_hideout_b1f"
 		},
 		"kanto_rocket_hideout_b1f__up_to_game_corner": {
@@ -8785,38 +8798,6 @@
 			"destinationAreaId": "kanto_rocket_hideout_b3f",
 			"sourceMapId": "kanto_rocket_hideout_b2f"
 		},
-		"kanto_rocket_hideout_b2f__lift_to_b1f": {
-			"destination": {
-				"mapId": "kanto_rocket_hideout_b1f",
-				"mapSceneAliases": [
-					"uid://bejxs47b6stxx"
-				],
-				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
-				"position": {
-					"x": 976.0,
-					"y": 1104.0
-				},
-				"spawnMarker": "FromLift"
-			},
-			"destinationAreaId": "kanto_rocket_hideout_b1f",
-			"sourceMapId": "kanto_rocket_hideout_b2f"
-		},
-		"kanto_rocket_hideout_b2f__lift_to_b4f": {
-			"destination": {
-				"mapId": "kanto_rocket_hideout_b4f",
-				"mapSceneAliases": [
-					"uid://bifqyrgvwan61"
-				],
-				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn",
-				"position": {
-					"x": 880.0,
-					"y": 1104.0
-				},
-				"spawnMarker": "FromLift"
-			},
-			"destinationAreaId": "kanto_rocket_hideout_b4f",
-			"sourceMapId": "kanto_rocket_hideout_b2f"
-		},
 		"kanto_rocket_hideout_b2f__north_up_to_b1f": {
 			"destination": {
 				"mapId": "kanto_rocket_hideout_b1f",
@@ -8847,6 +8828,20 @@
 				"spawnMarker": "FromDownToB2F"
 			},
 			"destinationAreaId": "kanto_rocket_hideout_b1f",
+			"sourceMapId": "kanto_rocket_hideout_b2f"
+		},
+		"kanto_rocket_hideout_b2f__to_elevator": {
+			"destination": {
+				"mapId": "kanto_rocket_hideout_elevator",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_elevator.tscn",
+				"position": {
+					"x": 176.0,
+					"y": 208.0
+				},
+				"spawnMarker": "FromFloor"
+			},
+			"destinationAreaId": "kanto_rocket_hideout_elevator",
 			"sourceMapId": "kanto_rocket_hideout_b2f"
 		},
 		"kanto_rocket_hideout_b3f__down_to_b4f": {
@@ -8881,36 +8876,18 @@
 			"destinationAreaId": "kanto_rocket_hideout_b2f",
 			"sourceMapId": "kanto_rocket_hideout_b3f"
 		},
-		"kanto_rocket_hideout_b4f__lift_to_b1f": {
+		"kanto_rocket_hideout_b4f__to_elevator": {
 			"destination": {
-				"mapId": "kanto_rocket_hideout_b1f",
-				"mapSceneAliases": [
-					"uid://bejxs47b6stxx"
-				],
-				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
+				"mapId": "kanto_rocket_hideout_elevator",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_elevator.tscn",
 				"position": {
-					"x": 976.0,
-					"y": 1104.0
+					"x": 176.0,
+					"y": 208.0
 				},
-				"spawnMarker": "FromLift"
+				"spawnMarker": "FromFloor"
 			},
-			"destinationAreaId": "kanto_rocket_hideout_b1f",
-			"sourceMapId": "kanto_rocket_hideout_b4f"
-		},
-		"kanto_rocket_hideout_b4f__lift_to_b2f": {
-			"destination": {
-				"mapId": "kanto_rocket_hideout_b2f",
-				"mapSceneAliases": [
-					"uid://cf55klvusdq22"
-				],
-				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b2f.tscn",
-				"position": {
-					"x": 1008.0,
-					"y": 752.0
-				},
-				"spawnMarker": "FromLift"
-			},
-			"destinationAreaId": "kanto_rocket_hideout_b2f",
+			"destinationAreaId": "kanto_rocket_hideout_elevator",
 			"sourceMapId": "kanto_rocket_hideout_b4f"
 		},
 		"kanto_rocket_hideout_b4f__up_to_b3f": {
@@ -8928,6 +8905,96 @@
 			},
 			"destinationAreaId": "kanto_rocket_hideout_b3f",
 			"sourceMapId": "kanto_rocket_hideout_b4f"
+		},
+		"kanto_rocket_hideout_elevator__ride_to_b1f": {
+			"destination": {
+				"mapId": "kanto_rocket_hideout_elevator",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_elevator.tscn",
+				"position": {
+					"x": 112.0,
+					"y": 176.0
+				},
+				"spawnMarker": "FromPanel"
+			},
+			"destinationAreaId": "kanto_rocket_hideout_elevator",
+			"sourceMapId": "kanto_rocket_hideout_elevator"
+		},
+		"kanto_rocket_hideout_elevator__ride_to_b2f": {
+			"destination": {
+				"mapId": "kanto_rocket_hideout_elevator",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_elevator.tscn",
+				"position": {
+					"x": 112.0,
+					"y": 176.0
+				},
+				"spawnMarker": "FromPanel"
+			},
+			"destinationAreaId": "kanto_rocket_hideout_elevator",
+			"sourceMapId": "kanto_rocket_hideout_elevator"
+		},
+		"kanto_rocket_hideout_elevator__ride_to_b4f": {
+			"destination": {
+				"mapId": "kanto_rocket_hideout_elevator",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_elevator.tscn",
+				"position": {
+					"x": 112.0,
+					"y": 176.0
+				},
+				"spawnMarker": "FromPanel"
+			},
+			"destinationAreaId": "kanto_rocket_hideout_elevator",
+			"sourceMapId": "kanto_rocket_hideout_elevator"
+		},
+		"kanto_rocket_hideout_elevator__to_b1f": {
+			"destination": {
+				"mapId": "kanto_rocket_hideout_b1f",
+				"mapSceneAliases": [
+					"uid://bejxs47b6stxx"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
+				"position": {
+					"x": 976.0,
+					"y": 1104.0
+				},
+				"spawnMarker": "FromLift"
+			},
+			"destinationAreaId": "kanto_rocket_hideout_b1f",
+			"sourceMapId": "kanto_rocket_hideout_elevator"
+		},
+		"kanto_rocket_hideout_elevator__to_b2f": {
+			"destination": {
+				"mapId": "kanto_rocket_hideout_b2f",
+				"mapSceneAliases": [
+					"uid://cf55klvusdq22"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b2f.tscn",
+				"position": {
+					"x": 1008.0,
+					"y": 752.0
+				},
+				"spawnMarker": "FromLift"
+			},
+			"destinationAreaId": "kanto_rocket_hideout_b2f",
+			"sourceMapId": "kanto_rocket_hideout_elevator"
+		},
+		"kanto_rocket_hideout_elevator__to_b4f": {
+			"destination": {
+				"mapId": "kanto_rocket_hideout_b4f",
+				"mapSceneAliases": [
+					"uid://bifqyrgvwan61"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn",
+				"position": {
+					"x": 880.0,
+					"y": 1104.0
+				},
+				"spawnMarker": "FromLift"
+			},
+			"destinationAreaId": "kanto_rocket_hideout_b4f",
+			"sourceMapId": "kanto_rocket_hideout_elevator"
 		},
 		"kanto_route_10__to_lavender_town": {
 			"destination": {

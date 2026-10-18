@@ -36,24 +36,40 @@ both separations intact. Furniture, low maze partitions and statue bases are
 solid. The overhead wings of the gold statues on B4F remain passable underneath,
 preserving the corridor to the executive room.
 
-## Lift
+## Shared elevator cabin
 
-Face the existing metal doors and interact to choose between the other served
-floors: **B1F, B2F and B4F**. The English/Dutch menu supports confirmation and
-cancellation and releases its interaction lock before travel. It invokes regular
-server-authorized `MapExit` transitions, including destination access checks.
-Lift exits have no automatic collision trigger, so arriving never reopens the
-menu or starts another journey.
+`rocket_hideout_elevator.tscn` imports the user-supplied **Rocket Hideout
+Elevator.tmx** once. B1F, B2F and B4F use physical `ToElevator` doors rather than
+separate floor menus. The cabin has 16 walkable tiles, a control panel at (3,4),
+a `FromFloor` arrival at (5,6), a `FromPanel` ride arrival at (3,5), and a south
+exit at (5,8). Collision and the exterior mask remain editable Godot nodes.
 
-| Map | Door interaction tile | Arrival, facing down |
+| Floor | Three-wide entrance centre | `FromLift` return, facing down |
 | --- | --- | --- |
-| B1F | (30,33), three tiles wide | (30,35) |
-| B2F | (31,22), three tiles wide | (31,24) |
-| B4F | (27,33), three tiles wide | (27,34) |
+| B1F | (30,33) | (30,34) |
+| B2F | (31,22) | (31,23) |
+| B4F | (27,33) | (27,34) |
 
-The B2F/B3F arrows and stop pads are walkable visuals for this scene-connection
-pass. Automatic sliding, story progression, trainers and item rewards are
-separate gameplay work.
+The panel offers B1F/B2F/B4F in all four locales and marks the current floor.
+Canceling keeps the current context, so walking straight out returns to the
+entry floor. Selecting another floor closes the doors, plays a short ride,
+executes the normal authorized MapExit flow and updates the same cabin instance.
+The current floor's door is the only enabled exit. Destinations are checked by
+the server before accepting travel. All arrivals avoid automatic reentry.
+
+The server persists `kanto_rocket_hideout_elevator:<user-id>:<floor>` as the
+player's map ID, using the one shared scene for every floor. World applies this
+context on both live travel and login. Normal teleport acknowledgement recovers
+a disconnect during a ride. Position autosave cannot create a cabin, change its
+floor, leave it, or enter another user's instance. Private presence authorization
+isolates users and checks context changes. Staff teleport templates exclude the
+cabin; staff following a player into a private cabin is rejected.
+
+Floor entrance edits open only the two formerly blocked side cells in each
+existing three-wide doorway; all other authored collision and spin markers stay
+unchanged. The generated catalogs replace six direct floor-to-floor warps with
+three entries, three cabin rides and three exits. For server details see the
+backend `docs/rocket_hideout_elevator.md`.
 
 ## Visuals and verification
 
@@ -62,15 +78,21 @@ scenes explicitly preserve Ground `#d1edc0` and GroundDetail `#daeaff` through
 child-property overrides; preserve those overrides when reimporting the visuals.
 Objects retain their original colours.
 
-`tests/rocket_hideout_check.gd` checks all public floor components, separate
-wings, reachable stairs/lift controls, safe reciprocal arrivals, floor/wall tints,
-statue collision, atlas layout and browser/server registration.
-`tests/rocket_hideout_lift_check.gd` exercises the real floor menu, cancellation,
-selection and input-lock cleanup. Account-service tests cover all sixteen
-transition directions and a denied lift journey to a closed destination.
-Canonical Godot resource compositions were visually reviewed; a live player
-walkthrough has not been performed.
+The elevator follow-up passes **103 account tests**, **58 Gateway presence tests**
+and the focused Godot `rocket_hideout_lift_check.gd`. It exercises the actual
+Player collision/appearance, cabin geometry, panel menu, current-floor exits,
+real MapExit handoff, World instance configuration, success/failure/cancel paths,
+input ownership, cleanup, all four locales and browser-module registration.
+Godot-rendered cabin and menu previews were inspected against the source TMX.
 
+The general `rocket_hideout_check.gd` still reports **1,419 identical static map
+findings** with both the updated and unchanged original floor collision data.
+These cover prior tint, geometry and arrival assumptions; the focused cabin
+checks pass. The broader moderator/Guild teleport run has the same two failures
+and ten errors on unchanged source/catalogs as on this branch. Catalog generation
+also sees prior Celadon City/Prize Corner drift (two areas and two transitions);
+those unrelated baseline entries were preserved. Full certification and a live
+networked walkthrough were not performed.
 
 ## Exterior masks
 

@@ -1,4 +1,7 @@
 {
+  "ui.rocket_hideout.lift.current_floor": "{floor}（当前楼层）",
+  "ui.rocket_hideout.lift.title": "火箭队电梯",
+  "ui.rocket_hideout.lift.prompt": "你想前往哪一层？",
   "ui.settings.battle.quality": "3D 对战画质",
   "ui.settings.battle.fps_unlimited": "不限制（垂直同步可能限制帧率）",
   "ui.settings.android.quality": "Android 3D 画质",

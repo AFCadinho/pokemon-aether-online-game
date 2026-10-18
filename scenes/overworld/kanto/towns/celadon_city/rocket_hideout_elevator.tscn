@@ -1,0 +1,160 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/rocket_hideout_elevator.gd" id="map"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/rocket_hideout_elevator/rocket_hideout_elevator.visual.tscn" id="visual"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" path="res://scripts/world/rocket_elevator_ride_exit.gd" id="ride"]
+[ext_resource type="Script" path="res://scripts/world/interactables/rocket_hideout_lift.gd" id="panel"]
+[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="collision"]
+[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="mask"]
+
+[sub_resource type="RectangleShape2D" id="door_shape"]
+size = Vector2(32, 32)
+
+[node name="RocketHideoutElevator" type="Node2D"]
+script = ExtResource("map")
+map_id = "kanto_rocket_hideout_elevator"
+map_region_name = "Kanto"
+map_display_name = "Rocket Hideout — Elevator"
+world_access_group_id = "kanto_rocket_hideout"
+world_access_group_label = "Rocket Hideout"
+world_access_area_type = "interior"
+location_id = "kanto.rocket_hideout.elevator"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+
+[node name="Visual" parent="." instance=ExtResource("visual")]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromFloor" type="Marker2D" parent="Spawns"]
+position = Vector2(176, 208)
+
+[node name="FromPanel" type="Marker2D" parent="Spawns"]
+position = Vector2(112, 176)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToB1F" type="Area2D" parent="Exits"]
+position = Vector2(176, 272)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn"
+target_spawn_name = "FromLift"
+transition_id = "kanto_rocket_hideout_elevator__to_b1f"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1F"]
+shape = SubResource("door_shape")
+disabled = true
+
+[node name="RideToB1F" type="Area2D" parent="Exits"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+script = ExtResource("ride")
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_elevator.tscn"
+target_spawn_name = "FromPanel"
+transition_id = "kanto_rocket_hideout_elevator__ride_to_b1f"
+transition_facing_direction = "up"
+
+[node name="ToB2F" type="Area2D" parent="Exits"]
+position = Vector2(176, 272)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b2f.tscn"
+target_spawn_name = "FromLift"
+transition_id = "kanto_rocket_hideout_elevator__to_b2f"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB2F"]
+shape = SubResource("door_shape")
+disabled = true
+
+[node name="RideToB2F" type="Area2D" parent="Exits"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+script = ExtResource("ride")
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_elevator.tscn"
+target_spawn_name = "FromPanel"
+transition_id = "kanto_rocket_hideout_elevator__ride_to_b2f"
+transition_facing_direction = "up"
+
+[node name="ToB4F" type="Area2D" parent="Exits"]
+position = Vector2(176, 272)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn"
+target_spawn_name = "FromLift"
+transition_id = "kanto_rocket_hideout_elevator__to_b4f"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB4F"]
+shape = SubResource("door_shape")
+disabled = true
+
+[node name="RideToB4F" type="Area2D" parent="Exits"]
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+script = ExtResource("ride")
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_elevator.tscn"
+target_spawn_name = "FromPanel"
+transition_id = "kanto_rocket_hideout_elevator__ride_to_b4f"
+transition_facing_direction = "up"
+
+[node name="Doors" type="Node2D" parent="."]
+visible = false
+position = Vector2(160, 256)
+z_index = 2052
+
+[node name="Left" type="Polygon2D" parent="Doors"]
+position = Vector2(-16, 0)
+color = Color(0.22, 0.24, 0.25, 1)
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 32, 0, 32)
+
+[node name="Right" type="Polygon2D" parent="Doors"]
+position = Vector2(16, 0)
+color = Color(0.31, 0.33, 0.34, 1)
+polygon = PackedVector2Array(16, 0, 32, 0, 32, 32, 16, 32)
+
+[node name="Entities" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Panel" type="Node2D" parent="Entities/Interactables"]
+position = Vector2(112, 144)
+script = ExtResource("panel")
+interactable_id = "kanto_rocket_hideout_elevator_panel"
+interactable_kind = "lift"
+interaction_shape_size = Vector2(96, 96)
+destination_floors = PackedStringArray("B1F", "B2F", "B4F")
+destination_exits = Array[NodePath]([NodePath("../../../Exits/RideToB1F"), NodePath("../../../Exits/RideToB2F"), NodePath("../../../Exits/RideToB4F")])
+
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("mask")
+floor_regions = {&"cabin": Rect2(0, 0, 352, 352)}
+active_floor = &"cabin"
+follow_player_floor = false
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Tiles" type="Node2D" parent="."]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles"]
+tile_map_data = PackedByteArray("AAD/////AAAAAAAAAAAAAP//AAAAAAAAAAABAP//AAAAAAAAAAACAP//AAAAAAAAAAADAP//AAAAAAAAAAAEAP//AAAAAAAAAAAFAP//AAAAAAAAAAAGAP//AAAAAAAAAAAHAP//AAAAAAAAAAAIAP//AAAAAAAAAAAJAP//AAAAAAAAAAAKAP//AAAAAAAAAAALAP//AAAAAAAAAAD//wAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAALAAAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAAEAAEAAAAAAAAAAAAFAAEAAAAAAAAAAAAGAAEAAAAAAAAAAAAHAAEAAAAAAAAAAAAIAAEAAAAAAAAAAAAJAAEAAAAAAAAAAAAKAAEAAAAAAAAAAAALAAEAAAAAAAAAAAD//wIAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAAEAAIAAAAAAAAAAAAFAAIAAAAAAAAAAAAGAAIAAAAAAAAAAAAHAAIAAAAAAAAAAAAIAAIAAAAAAAAAAAAJAAIAAAAAAAAAAAAKAAIAAAAAAAAAAAALAAIAAAAAAAAAAAD//wMAAAAAAAAAAAAAAAMAAAAAAAAAAAABAAMAAAAAAAAAAAACAAMAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAMAAAAAAAAAAAAGAAMAAAAAAAAAAAAHAAMAAAAAAAAAAAAIAAMAAAAAAAAAAAAJAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAALAAMAAAAAAAAAAAD//wQAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAQAAAAAAAAAAAAHAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAJAAQAAAAAAAAAAAAKAAQAAAAAAAAAAAALAAQAAAAAAAAAAAD//wUAAAAAAAAAAAAAAAUAAAAAAAAAAAABAAUAAAAAAAAAAAACAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAKAAUAAAAAAAAAAAALAAUAAAAAAAAAAAD//wYAAAAAAAAAAAAAAAYAAAAAAAAAAAABAAYAAAAAAAAAAAACAAYAAAAAAAAAAAAIAAYAAAAAAAAAAAAJAAYAAAAAAAAAAAAKAAYAAAAAAAAAAAALAAYAAAAAAAAAAAD//wcAAAAAAAAAAAAAAAcAAAAAAAAAAAABAAcAAAAAAAAAAAACAAcAAAAAAAAAAAAIAAcAAAAAAAAAAAAJAAcAAAAAAAAAAAAKAAcAAAAAAAAAAAALAAcAAAAAAAAAAAD//wgAAAAAAAAAAAAAAAgAAAAAAAAAAAABAAgAAAAAAAAAAAACAAgAAAAAAAAAAAADAAgAAAAAAAAAAAAEAAgAAAAAAAAAAAAGAAgAAAAAAAAAAAAHAAgAAAAAAAAAAAAIAAgAAAAAAAAAAAAJAAgAAAAAAAAAAAAKAAgAAAAAAAAAAAALAAgAAAAAAAAAAAD//wkAAAAAAAAAAAAAAAkAAAAAAAAAAAABAAkAAAAAAAAAAAACAAkAAAAAAAAAAAADAAkAAAAAAAAAAAAEAAkAAAAAAAAAAAAFAAkAAAAAAAAAAAAGAAkAAAAAAAAAAAAHAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAJAAkAAAAAAAAAAAAKAAkAAAAAAAAAAAALAAkAAAAAAAAAAAD//woAAAAAAAAAAAAAAAoAAAAAAAAAAAABAAoAAAAAAAAAAAACAAoAAAAAAAAAAAADAAoAAAAAAAAAAAAEAAoAAAAAAAAAAAAFAAoAAAAAAAAAAAAGAAoAAAAAAAAAAAAHAAoAAAAAAAAAAAAIAAoAAAAAAAAAAAAJAAoAAAAAAAAAAAAKAAoAAAAAAAAAAAALAAoAAAAAAAAAAAD//wsAAAAAAAAAAAAAAAsAAAAAAAAAAAABAAsAAAAAAAAAAAACAAsAAAAAAAAAAAADAAsAAAAAAAAAAAAEAAsAAAAAAAAAAAAFAAsAAAAAAAAAAAAGAAsAAAAAAAAAAAAHAAsAAAAAAAAAAAAIAAsAAAAAAAAAAAAJAAsAAAAAAAAAAAAKAAsAAAAAAAAAAAALAAsAAAAAAAAAAAA=")
+tile_set = ExtResource("collision")
+
+[connection signal="body_entered" from="Exits/ToB1F" to="Exits/ToB1F" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToB2F" to="Exits/ToB2F" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToB4F" to="Exits/ToB4F" method="_on_body_entered"]

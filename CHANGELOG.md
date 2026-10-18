@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the shared Rocket Hideout elevator cabin with the artist visual, physical floor entrances, current-floor selection and a short ride animation.
+
 - Mask the exterior of all four Rocket Hideout floors in black.
 
 - Add paintable SpinUp/Down/Left/Right/Stop map layers for Rocket Hideout slide puzzles, with automatic spinning, collision and control recovery.
