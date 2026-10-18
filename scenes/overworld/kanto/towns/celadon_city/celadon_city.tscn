@@ -10,7 +10,9 @@
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="15_5tkry"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="15_dnnov"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="17_87ibu"]
+[ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="18_87ibu"]
 [ext_resource type="Texture2D" uid="uid://bc3msqb7fyvft" path="res://assets/npcs/story/jessie.png" id="19_ga50g"]
+[ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="19_ysnv7"]
 [ext_resource type="Texture2D" uid="uid://b36b2on04mb7x" path="res://assets/npcs/story/james.png" id="20_npyfy"]
 [ext_resource type="Texture2D" uid="uid://dfkx8sc5qujyb" path="res://assets/followers/MEOWTH.png" id="21_dnnov"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="center_door_hint"]
@@ -1343,6 +1345,21 @@ z_index = 208
 position = Vector2(2320, 208)
 display_name = "Aether Beacon"
 
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=962911573]
+
+[node name="DeparmentStoreSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("18_87ibu")]
+position = Vector2(592, 496)
+
+[node name="GameCornerSign" parent="Entities/Interactables/Signs" unique_id=1838620784 instance=ExtResource("18_87ibu")]
+position = Vector2(1328, 944)
+
+[node name="GymSign" parent="Entities/Interactables/Signs" unique_id=1309159241 instance=ExtResource("18_87ibu")]
+position = Vector2(432, 1584)
+
+[node name="CeladonCitySign" parent="Entities/Interactables/Signs" unique_id=289545458 instance=ExtResource("19_ysnv7")]
+position = Vector2(464, 592)
+required_facing_direction = "down"
+
 [node name="Tiles" type="Node2D" parent="." unique_id=1867462022]
 visible = false
 
@@ -1406,7 +1423,7 @@ z_as_relative = false
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_pt6d7")
 animation = &"idle_right"
-frame_progress = 0.3335699
+frame_progress = 0.193219
 offset = Vector2(0, -16)
 initial_direction = "right"
 
@@ -1417,7 +1434,7 @@ texture_filter = 1
 position = Vector2(0, 32)
 sprite_frames = SubResource("SpriteFrames_xsogm")
 animation = &"idle_right"
-frame_progress = 0.3335699
+frame_progress = 0.193219
 offset = Vector2(0, -16)
 initial_direction = "right"
 
@@ -1428,7 +1445,7 @@ texture_filter = 1
 position = Vector2(32, 0)
 sprite_frames = SubResource("SpriteFrames_x4hwo")
 animation = &"idle_right"
-frame_progress = 0.3335699
+frame_progress = 0.193219
 offset = Vector2(0, -16)
 initial_direction = "right"
 
