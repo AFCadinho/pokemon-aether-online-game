@@ -1,6 +1,6 @@
 extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
-const IDS := ["pokemon_tower", "rocket_hideout", "ss_anne", "pallet_town", "pallet_town_water", "viridian_city", "viridian_city_water", "pewter_city", "pewter_city_gym", "cerulean_city_gym", "classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
+const IDS := ["celadon_game_corner", "celadon_gym", "pokemon_tower", "rocket_hideout", "ss_anne", "pallet_town", "pallet_town_water", "viridian_city", "viridian_city_water", "pewter_city", "pewter_city_gym", "cerulean_city_gym", "classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
 const Framing = preload("res://scripts/battle/arenas/shared/framing.gd")
 const OutdoorLighting = preload("res://scripts/battle/arenas/shared/outdoor_lighting.gd")
 const CAMERA_FOV := Framing.CAMERA_FOV
@@ -45,6 +45,8 @@ static func prepare_forest(manifest_path: String) -> String:
 
 # Stable IDs preserve saved selections. Scope/type make the authoring structure explicit.
 const DEFINITIONS := {
+	"celadon_game_corner": {"scope": "map", "map_id": "kanto_celadon_game_corner", "terrain": "carpet", "lighting": "enclosed", "retain_for_wild": true, "builder": "maps/celadon_game_corner/arena.gd"},
+	"celadon_gym": {"scope": "map", "map_id": "kanto_celadon_gym", "terrain": "grass", "lighting": "enclosed", "retain_for_wild": true, "builder": "maps/celadon_gym/arena.gd"},
 	"pokemon_tower": {"scope": "map", "map_id": "kanto_lavender_town_pokemon_tower", "terrain": "stone", "lighting": "enclosed", "retain_for_wild": true, "builder": "maps/pokemon_tower/arena.gd"},
 	"rocket_hideout": {"scope": "map", "map_id": "kanto_rocket_hideout_b1f", "terrain": "metal", "lighting": "enclosed", "retain_for_wild": true, "builder": "maps/rocket_hideout/arena.gd"},
 	"ss_anne": {"scope": "map", "map_id": "kanto_ss_anne_3f", "terrain": "deck", "lighting": "outdoor", "builder": "maps/ss_anne/arena.gd"},
@@ -82,6 +84,8 @@ static func definition(id: String) -> Dictionary:
 	return DEFINITIONS.get(validate(id), DEFINITIONS.classic).duplicate(true)
 
 const BUILDERS := {
+	"celadon_game_corner": preload("res://scripts/battle/arenas/maps/celadon_game_corner/arena.gd"),
+	"celadon_gym": preload("res://scripts/battle/arenas/maps/celadon_gym/arena.gd"),
 	"pokemon_tower": preload("res://scripts/battle/arenas/maps/pokemon_tower/arena.gd"),
 	"rocket_hideout": preload("res://scripts/battle/arenas/maps/rocket_hideout/arena.gd"),
 	"ss_anne": preload("res://scripts/battle/arenas/maps/ss_anne/arena.gd"),

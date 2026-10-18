@@ -20,6 +20,10 @@ func _run() -> void:
 	var player := Pokemon.new("Dragonite", 100)
 	var enemy := Pokemon.new("Roaring Moon", 100)
 	for example in [
+		[battle.BattleType.TRAINER, &"celadon_game_corner", "trainer", "celadon_game_corner"],
+		[battle.BattleType.TRAINER, &"celadon_gym", "trainer", "celadon_gym"],
+		[battle.BattleType.WILD, &"celadon_game_corner", "wild", "celadon_game_corner"],
+		[battle.BattleType.WILD, &"celadon_gym", "wild", "celadon_gym"],
 		[battle.BattleType.WILD, &"pokemon_tower", "wild", "pokemon_tower"],
 		[battle.BattleType.TRAINER, &"pokemon_tower", "trainer", "pokemon_tower"],
 		[battle.BattleType.WILD, &"rocket_hideout", "wild", "rocket_hideout"],

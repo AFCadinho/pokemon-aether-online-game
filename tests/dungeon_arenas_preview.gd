@@ -11,10 +11,14 @@ func _run() -> void:
 	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 	assert(not output.is_empty())
 	DirAccess.make_dir_recursive_absolute(output)
-	root.title = "PokeAether — Tower / Rocket arena review"
+	root.title = "PokeAether — interior arena review"
 	root.size = Vector2i(1440, 900)
 	root.msaa_3d = Viewport.MSAA_4X
-	for id in ["pokemon_tower", "rocket_hideout"]:
+	var ids := OS.get_environment("POKEAETHER_TEST_ARENAS")
+	if ids.is_empty():
+		ids = "pokemon_tower,rocket_hideout"
+	for id in ids.split(","):
+		assert(id in ["pokemon_tower", "rocket_hideout", "celadon_game_corner", "celadon_gym"])
 		var world := Node3D.new()
 		root.add_child(world)
 		var environment := WorldEnvironment.new()
