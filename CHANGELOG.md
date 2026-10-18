@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Update Celadon Gym’s imported garden layers from the revised artist TMX.
+
 - Add warm, time-controlled night lighting to Celadon City’s street lamps, windows and entrances using the same lights as Cerulean and Vermilion.
 
 - Refresh the Celadon Gym visual from the latest artist TMX.
