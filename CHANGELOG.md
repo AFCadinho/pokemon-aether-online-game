@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Block the B1F Rocket Hideout lift shortcut until its lift-side grunt is defeated, preserving the first route through the B2F spinner maze.
+
 - Add a dedicated transparent pixel-art Lift Key icon to the bag and other item displays.
 
 - Add dedicated 3D battle arenas for Celadon Game Corner and Celadon Gym, including Erika and all four Gym trainers.

@@ -164,6 +164,36 @@ The general population check still reports the same five placement findings as
 an unchanged HEAD-scene geometry run (Escape Rope, Taunt, Super Potion, Max Ether,
 Calcium). These predate this follow-up and were not changed with the user's maps.
 
+## B1F lift shortcut gate
+
+`Entities/Interactables/LiftShortcutGate` spans tiles (26–27,24), closing the
+two-tile corridor between the eastern office and the lift. The entrance and the
+southern workroom cannot bypass it. The first elevator approach therefore goes
+through B2F's spinner maze after obtaining the Lift Key.
+
+The shared security-gate script now accepts required trainer IDs, an optional
+completed-story fallback, and a closed-dialogue localization key. B1F requires
+only `kanto_rocket_hideout_b1f_grunt_3`, the grunt already placed beside the lift;
+no NPCs, pickups, static collision, artist maps or generated trainer anchors were
+moved. B4F retains both guards and its existing compatibility fallback. The Lift
+Key and Giovanni's story progress cannot unlock B1F. Trusted first victory opens
+the shortcut permanently, after the defeat dialogue; Adventure Party map reloads
+wait for their pending battle outro too.
+
+This follows the barrier behavior in the reconstructed FireRed/LeafGreen
+[B1F scripts](https://github.com/pret/pokefirered/blob/master/data/maps/RocketHideout_B1F/scripts.inc).
+The source calls its lift-side guard Grunt5; our current authored placement puts
+Grunt3 in that role, so the gate uses that actor's existing ID and position.
+
+`tests/rocket_hideout_b1f_gate_check.gd` checks native Player movement across both
+gate cells, routes from all B1F arrivals, the guard's accessible side, unrelated
+victories/story completion, unavailable progress, dialogue ordering, reconnect
+and Adventure Party reload. It also checks the B2F route using production spin
+logic, removing a ground pickup only after its adjacent collection position is
+reachable. `-- --render` captures the actual closed/open B1F scene and B2F.
+The B4F drop/gate test covers the shared-script regression. These use trusted API
+probes; a live two-client multiplayer walkthrough is not part of these checks.
+
 ## Soundtrack
 
 All four basement floors and the elevator cabin use music profile

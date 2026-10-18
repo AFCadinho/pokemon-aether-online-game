@@ -3,6 +3,10 @@ extends WorldInteractable
 
 const QUEST := "confront_team_rocket_boss"
 const GUARDS: Array[String] = ["kanto_rocket_hideout_b4f_grunt_2", "kanto_rocket_hideout_b4f_grunt_3"]
+@export var required_trainer_ids: Array[String] = GUARDS.duplicate()
+@export var completed_quest_id := QUEST
+@export var completed_step_id := "confront_boss"
+@export var closed_message_key := "world.rocket_hideout.gate.closed"
 var _generation := 0
 var _progress_loaded := false
 var _opening := false
@@ -12,11 +16,14 @@ var _openness := 0.0:
 	set(value):
 		_openness = value
 		queue_redraw()
+var _pending_coop_open := false
 
 func _ready() -> void:
 	super._ready()
 	if Engine.is_editor_hint():
 		return
+	var result: Dictionary = GameState.pending_coop_battle_result
+	_pending_coop_open = result.get("outcome") == "win" and str(result.get("activityId", "")) in required_trainer_ids
 	display_name = LocalizationManager.text("world.rocket_hideout.gate.name")
 	StoryService.story_changed.connect(_on_story_changed)
 	TrainerProgressService.progress_invalidated.connect(refresh_guard_progress)
@@ -37,15 +44,17 @@ func refresh_guard_progress() -> void:
 		_motion.kill()
 	_motion = null
 	_opening = false
-	var both_defeated := true
+	var both_defeated := not required_trainer_ids.is_empty()
 	# An earned boss victory also preserves passage for pre-gate saves.
-	if not StoryService.is_requirement_met(QUEST, "confront_boss", "completed"):
-		for guard: String in GUARDS:
+	if not completed_quest_id.is_empty() and StoryService.is_requirement_met(completed_quest_id, completed_step_id, "completed"):
+		both_defeated = true
+	else:
+		for guard: String in required_trainer_ids:
 			var result: Dictionary = await TrainerProgressService.get_progress(guard)
 			if not is_inside_tree() or generation != _generation:
 				return
 			both_defeated = both_defeated and bool(result.get("success", false)) and bool(result.get("progress", {}).get("firstDefeated", false))
-	var animate := _progress_loaded and not _open
+	var animate := (_progress_loaded or _pending_coop_open) and not _open
 	_progress_loaded = true
 	if not both_defeated:
 		if _motion != null and _motion.is_valid():
@@ -74,6 +83,7 @@ func refresh_guard_progress() -> void:
 	_motion = null
 	_opening = false
 	_open = true
+	_pending_coop_open = false
 	_openness = 1.0
 	blocks_movement = false
 
@@ -89,7 +99,7 @@ func _can_start_manual_interaction() -> bool:
 
 func interact_with_player(_player: Node2D) -> void:
 	if not _open:
-		var lines: Array[String] = [LocalizationManager.text("world.rocket_hideout.gate.closed")]
+		var lines: Array[String] = [LocalizationManager.text(closed_message_key)]
 		await show_dialogue(lines)
 
 func _draw() -> void:
