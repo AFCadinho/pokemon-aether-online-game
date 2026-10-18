@@ -509,7 +509,7 @@
 					"spawnMarker": "FromCondominiumsMain",
 					"tile": {
 						"x": 40,
-						"y": 14
+						"y": 13
 					}
 				},
 				"from_condominiums_rear": {
@@ -518,8 +518,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromCondominiumsRear",
 					"tile": {
-						"x": 36,
-						"y": 7
+						"x": 38,
+						"y": 9
 					}
 				},
 				"from_department_store": {
@@ -528,8 +528,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromDepartmentStore",
 					"tile": {
-						"x": 12,
-						"y": 15
+						"x": 16,
+						"y": 14
 					}
 				},
 				"from_game_corner": {
@@ -539,7 +539,7 @@
 					"spawnMarker": "FromGameCorner",
 					"tile": {
 						"x": 39,
-						"y": 29
+						"y": 28
 					}
 				},
 				"from_gym": {
@@ -549,7 +549,7 @@
 					"spawnMarker": "FromGym",
 					"tile": {
 						"x": 11,
-						"y": 50
+						"y": 49
 					}
 				},
 				"from_pokecenter": {
@@ -562,13 +562,23 @@
 						"y": 15
 					}
 				},
+				"from_prize_corner": {
+					"facingDirection": "down",
+					"label": "Prize Corner",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPrizeCorner",
+					"tile": {
+						"x": 44,
+						"y": 29
+					}
+				},
 				"from_route_7": {
 					"facingDirection": "down",
 					"label": "Route 7",
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute7",
 					"tile": {
-						"x": 77,
+						"x": 78,
 						"y": 17
 					}
 				}
@@ -840,7 +850,9 @@
 			"locationGroupId": "kanto_celadon_city",
 			"locationGroupLabel": "Celadon City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://dw7c36a54vxot"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn",
 			"spawnPoints": {
 				"from_outside": {
@@ -849,7 +861,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromOutside",
 					"tile": {
-						"x": 20,
+						"x": 23,
 						"y": 32
 					}
 				}
@@ -863,7 +875,9 @@
 			"locationGroupId": "kanto_celadon_city",
 			"locationGroupLabel": "Celadon City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://tsg33essa75u"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
 			"spawnPoints": {
 				"from_outside": {
@@ -873,7 +887,7 @@
 					"spawnMarker": "FromOutside",
 					"tile": {
 						"x": 13,
-						"y": 16
+						"y": 17
 					}
 				},
 				"from_rocket_hideout": {
@@ -896,7 +910,9 @@
 			"locationGroupId": "kanto_celadon_city",
 			"locationGroupLabel": "Celadon City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://daguq8ayuqqj1"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
 			"spawnPoints": {
 				"from_outside": {
@@ -907,6 +923,29 @@
 					"tile": {
 						"x": 20,
 						"y": 62
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"kanto_celadon_prize_corner": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Celadon Prize Corner",
+			"locationGroupId": "kanto_celadon_city",
+			"locationGroupLabel": "Celadon City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_prize_corner.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "up",
+					"label": "Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 7,
+						"y": 12
 					}
 				}
 			},
@@ -2939,7 +2978,9 @@
 			"locationGroupId": "kanto_rocket_hideout",
 			"locationGroupLabel": "Rocket Hideout",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://bejxs47b6stxx"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
 			"spawnPoints": {
 				"from_down_to_b_2f": {
@@ -2959,7 +3000,7 @@
 					"spawnMarker": "FromLift",
 					"tile": {
 						"x": 30,
-						"y": 35
+						"y": 34
 					}
 				},
 				"from_north_down_to_b_2f": {
@@ -2978,8 +3019,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromUpToGameCorner",
 					"tile": {
-						"x": 16,
-						"y": 6
+						"x": 15,
+						"y": 5
 					}
 				}
 			},
@@ -6427,10 +6468,12 @@
 		"kanto_celadon_city__to_department_store": {
 			"destination": {
 				"mapId": "kanto_celadon_department_store",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dw7c36a54vxot"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn",
 				"position": {
-					"x": 656.0,
+					"x": 752.0,
 					"y": 1040.0
 				},
 				"spawnMarker": "FromOutside"
@@ -6441,10 +6484,12 @@
 		"kanto_celadon_city__to_department_store_east": {
 			"destination": {
 				"mapId": "kanto_celadon_department_store",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dw7c36a54vxot"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn",
 				"position": {
-					"x": 656.0,
+					"x": 752.0,
 					"y": 1040.0
 				},
 				"spawnMarker": "FromOutside"
@@ -6455,11 +6500,13 @@
 		"kanto_celadon_city__to_game_corner": {
 			"destination": {
 				"mapId": "kanto_celadon_game_corner",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://tsg33essa75u"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
 				"position": {
 					"x": 432.0,
-					"y": 528.0
+					"y": 560.0
 				},
 				"spawnMarker": "FromOutside"
 			},
@@ -6469,7 +6516,9 @@
 		"kanto_celadon_city__to_gym": {
 			"destination": {
 				"mapId": "kanto_celadon_gym",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://daguq8ayuqqj1"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
 				"position": {
 					"x": 656.0,
@@ -6492,6 +6541,20 @@
 				"spawnMarker": "FromOutside"
 			},
 			"destinationAreaId": "kanto_celadon_city_pokemon_center",
+			"sourceMapId": "kanto_celadon_city"
+		},
+		"kanto_celadon_city__to_prize_corner": {
+			"destination": {
+				"mapId": "kanto_celadon_prize_corner",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_prize_corner.tscn",
+				"position": {
+					"x": 240.0,
+					"y": 400.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_celadon_prize_corner",
 			"sourceMapId": "kanto_celadon_city"
 		},
 		"kanto_celadon_city__to_route7": {
@@ -6535,7 +6598,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
 				"position": {
 					"x": 1296.0,
-					"y": 464.0
+					"y": 432.0
 				},
 				"spawnMarker": "FromCondominiumsMain"
 			},
@@ -6564,8 +6627,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
 				"position": {
-					"x": 1168.0,
-					"y": 240.0
+					"x": 1232.0,
+					"y": 304.0
 				},
 				"spawnMarker": "FromCondominiumsRear"
 			},
@@ -6762,8 +6825,24 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
 				"position": {
-					"x": 400.0,
-					"y": 496.0
+					"x": 528.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromDepartmentStore"
+			},
+			"destinationAreaId": "kanto_celadon_city",
+			"sourceMapId": "kanto_celadon_department_store"
+		},
+		"kanto_celadon_department_store__to_outside_east": {
+			"destination": {
+				"mapId": "kanto_celadon_city",
+				"mapSceneAliases": [
+					"uid://c13m2ijv5ijuy"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+				"position": {
+					"x": 528.0,
+					"y": 464.0
 				},
 				"spawnMarker": "FromDepartmentStore"
 			},
@@ -6779,7 +6858,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
 				"position": {
 					"x": 1264.0,
-					"y": 944.0
+					"y": 912.0
 				},
 				"spawnMarker": "FromGameCorner"
 			},
@@ -6789,11 +6868,13 @@
 		"kanto_celadon_game_corner__to_rocket_hideout": {
 			"destination": {
 				"mapId": "kanto_rocket_hideout_b1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://bejxs47b6stxx"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
 				"position": {
-					"x": 528.0,
-					"y": 208.0
+					"x": 496.0,
+					"y": 176.0
 				},
 				"spawnMarker": "FromUpToGameCorner"
 			},
@@ -6809,12 +6890,28 @@
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
 				"position": {
 					"x": 368.0,
-					"y": 1616.0
+					"y": 1584.0
 				},
 				"spawnMarker": "FromGym"
 			},
 			"destinationAreaId": "kanto_celadon_city",
 			"sourceMapId": "kanto_celadon_gym"
+		},
+		"kanto_celadon_prize_corner__to_outside": {
+			"destination": {
+				"mapId": "kanto_celadon_city",
+				"mapSceneAliases": [
+					"uid://c13m2ijv5ijuy"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+				"position": {
+					"x": 1424.0,
+					"y": 944.0
+				},
+				"spawnMarker": "FromPrizeCorner"
+			},
+			"destinationAreaId": "kanto_celadon_city",
+			"sourceMapId": "kanto_celadon_prize_corner"
 		},
 		"kanto_cerulean_cave_2f__to_1f_a": {
 			"destination": {
@@ -8635,7 +8732,9 @@
 		"kanto_rocket_hideout_b1f__up_to_game_corner": {
 			"destination": {
 				"mapId": "kanto_celadon_game_corner",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://tsg33essa75u"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
 				"position": {
 					"x": 752.0,
@@ -8663,11 +8762,13 @@
 		"kanto_rocket_hideout_b2f__lift_to_b1f": {
 			"destination": {
 				"mapId": "kanto_rocket_hideout_b1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://bejxs47b6stxx"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
 				"position": {
 					"x": 976.0,
-					"y": 1136.0
+					"y": 1104.0
 				},
 				"spawnMarker": "FromLift"
 			},
@@ -8691,7 +8792,9 @@
 		"kanto_rocket_hideout_b2f__north_up_to_b1f": {
 			"destination": {
 				"mapId": "kanto_rocket_hideout_b1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://bejxs47b6stxx"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
 				"position": {
 					"x": 720.0,
@@ -8705,7 +8808,9 @@
 		"kanto_rocket_hideout_b2f__south_up_to_b1f": {
 			"destination": {
 				"mapId": "kanto_rocket_hideout_b1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://bejxs47b6stxx"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
 				"position": {
 					"x": 624.0,
@@ -8747,11 +8852,13 @@
 		"kanto_rocket_hideout_b4f__lift_to_b1f": {
 			"destination": {
 				"mapId": "kanto_rocket_hideout_b1f",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://bejxs47b6stxx"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
 				"position": {
 					"x": 976.0,
-					"y": 1136.0
+					"y": 1104.0
 				},
 				"spawnMarker": "FromLift"
 			},
@@ -10048,7 +10155,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
 				"position": {
-					"x": 2480.0,
+					"x": 2512.0,
 					"y": 560.0
 				},
 				"spawnMarker": "FromRoute7"

@@ -1002,6 +1002,9 @@ position = Vector2(1232, 304)
 [node name="FromGameCorner" type="Marker2D" parent="Spawns" unique_id=1649116526]
 position = Vector2(1264, 912)
 
+[node name="FromPrizeCorner" type="Marker2D" parent="Spawns"]
+position = Vector2(1424, 944)
+
 [node name="FromGym" type="Marker2D" parent="Spawns" unique_id=1907604291]
 position = Vector2(368, 1584)
 
@@ -1086,6 +1089,20 @@ position = Vector2(0, -16)
 shape = SubResource("shape_game_corner_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToGameCorner" unique_id=1100006953 instance=ExtResource("center_door_hint")]
+z_as_relative = false
+
+[node name="ToPrizeCorner" type="Area2D" parent="Exits"]
+position = Vector2(1424, 880)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/celadon_prize_corner.tscn"
+target_spawn_name = "FromOutside"
+transition_id = "kanto_celadon_city__to_prize_corner"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPrizeCorner"]
+shape = SubResource("shape_game_corner_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToPrizeCorner" instance=ExtResource("center_door_hint")]
 z_as_relative = false
 
 [node name="ToGym" type="Area2D" parent="Exits" unique_id=573736978]
@@ -1904,5 +1921,7 @@ position = Vector2(1424, 880)
 [connection signal="body_entered" from="Exits/ToGym" to="Exits/ToGym" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToDepartmentStore" to="Exits/ToDepartmentStore" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToDepartmentStoreEast" to="Exits/ToDepartmentStoreEast" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToPrizeCorner" to="Exits/ToPrizeCorner" method="_on_body_entered"]
 
 [editable path="Story/RocketTrio"]

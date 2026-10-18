@@ -139,3 +139,39 @@ free circulation around the fountains, animation timing, safe arrivals, atlas
 layout and browser/server registration. Account-service tests cover the round
 trip and denied entry to a closed Gym. Canonical Godot resource compositions
 were visually reviewed; a live player walkthrough has not been performed.
+
+
+## Celadon Prize Corner
+
+`celadon_prize_corner.tscn` imports the artist `Celadon Prize Corner.tmx`
+(16 × 17 tiles, 32 px) into `generated/tiled_visuals/celadon_prize_corner/`.
+The supplied preview is the matching visual reference; no source art is changed.
+The small city door immediately east of Game Corner is at **(44,27)**,
+returning to **(44,29)**. Inside, **(7–8,14)** is the complete two-tile
+exit and **(7,12)** is the arrival, facing north, clear of the return trigger.
+
+Hand-authored collision follows the artist footprint handoff: 66 connected
+public tiles and 10 isolated staff tiles. The counter, sofas, plants and
+cutaway perimeter stay solid. A black FloorVisibilityMask covers the exterior
+of the 512 × 544 canvas. Indoor lighting, disabled weather, Celadon access
+grouping and the extended browser module match the other city interiors.
+The three service counters remain scenery pending a separate prize-service task.
+
+`tests/celadon_prize_corner_check.gd` checks actual player movement predicates,
+public circulation, boundary collision, the full exit aperture, safe reciprocal
+arrivals, runtime mask initialization, imported layer counts and atlas layout.
+Account-service tests check canonical travel and denied-entry preservation.
+Native Tiled and Godot renders were inspected; no live server walkthrough was
+performed.
+
+Regenerating the paired access catalogs also synchronizes the already saved
+Celadon arrival-marker edits (city, Department Store, Game Corner and Hideout
+B1F). The second Department Store exit now has its own
+`kanto_celadon_department_store__to_outside_east` transition ID, resolving the
+previous duplicate without moving either exit.
+
+The native Tiled render exactly matches the supplied preview. The Godot render
+has the same geometry; alpha blending differs by at most one RGB level on
+4,778 of 278,528 pixels. Prize Corner's browser selection/exclusion is checked.
+The general browser partition check still reports the same 15 pre-existing
+unlisted maps as the task base; a full web export was not run.

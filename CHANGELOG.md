@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Celadon Prize Corner interior with the artist visual, collision, exterior mask and reciprocal city doorway; give the second Department Store exit a unique transition ID.
+
 - Give all four Celadon City signs localized text and location illustrations.
 
 - Let Iris sell account-bound Casino Tokens at Celadon Game Corner for ₽100 each in 10/50/100/500-token bundles, with atomic wallet updates and safe purchase retries.
