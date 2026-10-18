@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://biflcoxcmiwxt"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_b1f/assets/rocket_hideout_b1f.visual.tileset.compact_source_1_0.texture.res" id="1_u171o"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/rocket_hideout_b1f/assets/rocket_hideout_b1f.visual.tileset.compact_source_2049_0.texture.res" id="2_e2232"]
