@@ -874,7 +874,7 @@ position = Vector2(1264, 912)
 position = Vector2(368, 1584)
 
 [node name="FromDepartmentStore" type="Marker2D" parent="Spawns" unique_id=279368465]
-position = Vector2(400, 496)
+position = Vector2(528, 464)
 
 [node name="Exits" type="Node2D" parent="." unique_id=730447284]
 
@@ -972,7 +972,7 @@ shape = SubResource("shape_gym_door")
 z_as_relative = false
 
 [node name="ToDepartmentStore" type="Area2D" parent="Exits" unique_id=913399840]
-position = Vector2(400, 464)
+position = Vector2(400, 432)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn"
 target_spawn_name = "FromOutside"
@@ -985,10 +985,9 @@ shape = SubResource("shape_center_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToDepartmentStore" unique_id=2111763686 instance=ExtResource("center_door_hint")]
 z_as_relative = false
-position = Vector2(0, -16)
 
 [node name="ToDepartmentStoreEast" type="Area2D" parent="Exits" unique_id=384217010]
-position = Vector2(528, 464)
+position = Vector2(528, 432)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn"
 target_spawn_name = "FromOutside"
@@ -1001,7 +1000,6 @@ shape = SubResource("shape_center_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToDepartmentStoreEast" unique_id=1453658886 instance=ExtResource("center_door_hint")]
 z_as_relative = false
-position = Vector2(0, -16)
 
 [node name="Entities" type="Node2D" parent="." unique_id=1083392905]
 z_index = 5
@@ -1265,7 +1263,7 @@ z_as_relative = false
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_pt6d7")
 animation = &"idle_right"
-frame_progress = 0.626475
+frame_progress = 0.7088048
 offset = Vector2(0, -16)
 initial_direction = "right"
 
@@ -1276,7 +1274,7 @@ texture_filter = 1
 position = Vector2(0, 32)
 sprite_frames = SubResource("SpriteFrames_xsogm")
 animation = &"idle_right"
-frame_progress = 0.626475
+frame_progress = 0.7088048
 offset = Vector2(0, -16)
 initial_direction = "right"
 
@@ -1287,7 +1285,7 @@ texture_filter = 1
 position = Vector2(32, 0)
 sprite_frames = SubResource("SpriteFrames_x4hwo")
 animation = &"idle_right"
-frame_progress = 0.626475
+frame_progress = 0.7088048
 offset = Vector2(0, -16)
 initial_direction = "right"
 
