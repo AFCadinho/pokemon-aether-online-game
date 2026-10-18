@@ -7360,5 +7360,12 @@
   "ui.staff.story_checkpoint.rocket_route7": "Route 7: trio suspeito",
   "ui.staff.story_checkpoint.rocket_celadon_battle": "Celadon: batalha de resgate",
   "ui.staff.story_checkpoint.rocket_celadon_escape": "Celadon: fuga da Equipe Rocket",
+  "ui.staff.story_chapter.game_corner": "Game Corner e esconderijo Rocket",
+  "ui.staff.story_checkpoint.celadon_mira_inquiry": "Celadon: pergunte a Mira sobre a Equipe Rocket",
+  "ui.staff.story_checkpoint.challenge_erika": "Celadon: desafie Erika",
+  "ui.staff.story_checkpoint.celadon_erika_inquiry": "Celadon: pergunte a Erika sobre a Equipe Rocket",
+  "ui.staff.story_checkpoint.game_corner_guard": "Game Corner: confronte o funcionário",
+  "ui.staff.story_checkpoint.game_corner_guard_escape": "Game Corner: o guarda foge",
+  "ui.staff.story_checkpoint.rocket_hideout_boss": "Esconderijo Rocket: confronte o chefe",
   "npc.celadon.mira": "Treinadora Mira"
 }

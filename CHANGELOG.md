@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Expose the Mira follow-up, Erika battle and hint, Game Corner guard and escape, and Rocket boss objective in Story Trainer Progress.
+
 - Refresh Celadon Game Corner’s artist visual with the revised object layering and tileset references.
 
 - Add a black exterior mask, five Game Corner visitors and three companion Pokémon, with localized dialogue and independently paced movement.

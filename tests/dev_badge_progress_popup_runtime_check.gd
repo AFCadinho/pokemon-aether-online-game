@@ -109,13 +109,29 @@ func _run() -> void:
 		"resetting Rock Smash refreshes removed training-rock nodes in the open map"
 	)
 	if story_chapter_select != null and story_checkpoint_select != null:
-		_check(story_chapter_select.item_count == 11, "story checkpoints use bounded chapters through the Saffron quest")
+		_check(story_chapter_select.item_count == 13, "story checkpoints use bounded chapters through the Rocket Hideout objective")
 		var largest_chapter_size := 0
 		for chapter_index in story_chapter_select.item_count:
 			story_chapter_select.select(chapter_index)
 			popup.call("_on_story_chapter_selected", chapter_index)
 			largest_chapter_size = maxi(largest_chapter_size, story_checkpoint_select.item_count)
 		_check(largest_chapter_size <= 6, "no story chapter opens an unbounded checkpoint list")
+		for chapter_id in ["celadon", "game_corner"]:
+			for chapter_index in story_chapter_select.item_count:
+				if str(story_chapter_select.get_item_metadata(chapter_index)) != chapter_id:
+					continue
+				story_chapter_select.select(chapter_index)
+				popup.call("_on_story_chapter_selected", chapter_index)
+				var actual: Array[String] = []
+				for checkpoint_index in story_checkpoint_select.item_count:
+					actual.append(str(story_checkpoint_select.get_item_metadata(checkpoint_index)))
+				var expected: Array = ["rocket_route7", "rocket_celadon_battle", "rocket_celadon_escape", "celadon_mira_inquiry", "challenge_erika", "celadon_erika_inquiry"] if chapter_id == "celadon" else ["game_corner_guard", "game_corner_guard_escape", "rocket_hideout_boss"]
+				_check(actual == expected, "%s exposes every story phase in order" % chapter_id)
+				for locale in ["en", "nl", "pt_BR", "zh_CN"]:
+					var translations: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))
+					_check(not str(translations.get("ui.staff.story_chapter." + chapter_id, "")).is_empty(), "%s has a %s chapter label" % [locale, chapter_id])
+					for checkpoint_id in expected:
+						_check(not str(translations.get("ui.staff.story_checkpoint." + str(checkpoint_id), "")).is_empty(), "%s labels %s" % [locale, checkpoint_id])
 		var mt_moon_index := -1
 		for chapter_index in story_chapter_select.item_count:
 			if str(story_chapter_select.get_item_metadata(chapter_index)) == "mt_moon":

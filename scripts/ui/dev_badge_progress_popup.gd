@@ -68,6 +68,12 @@ const STORY_CHECKPOINTS: Array[Dictionary] = [
 	{"id": "rocket_route7", "chapter_id": "celadon", "label_key": "ui.staff.story_checkpoint.rocket_route7"},
 	{"id": "rocket_celadon_battle", "chapter_id": "celadon", "label_key": "ui.staff.story_checkpoint.rocket_celadon_battle"},
 	{"id": "rocket_celadon_escape", "chapter_id": "celadon", "label_key": "ui.staff.story_checkpoint.rocket_celadon_escape"},
+	{"id": "celadon_mira_inquiry", "chapter_id": "celadon", "label_key": "ui.staff.story_checkpoint.celadon_mira_inquiry"},
+	{"id": "challenge_erika", "chapter_id": "celadon", "label_key": "ui.staff.story_checkpoint.challenge_erika"},
+	{"id": "celadon_erika_inquiry", "chapter_id": "celadon", "label_key": "ui.staff.story_checkpoint.celadon_erika_inquiry"},
+	{"id": "game_corner_guard", "chapter_id": "game_corner", "label_key": "ui.staff.story_checkpoint.game_corner_guard"},
+	{"id": "game_corner_guard_escape", "chapter_id": "game_corner", "label_key": "ui.staff.story_checkpoint.game_corner_guard_escape"},
+	{"id": "rocket_hideout_boss", "chapter_id": "game_corner", "label_key": "ui.staff.story_checkpoint.rocket_hideout_boss"},
 ]
 const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "pallet", "label_key": "ui.staff.story_chapter.pallet"},
@@ -81,6 +87,7 @@ const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "pokemon_tower", "label_key": "ui.staff.story_chapter.pokemon_tower"},
 	{"id": "after_tower", "label_key": "ui.staff.story_chapter.after_tower"},
 	{"id": "celadon", "label_key": "ui.staff.story_chapter.celadon"},
+	{"id": "game_corner", "label_key": "ui.staff.story_chapter.game_corner"},
 	{"id": "saffron", "label_key": "ui.staff.story_chapter.saffron"},
 ]
 const SIDE_QUESTS: Array[Dictionary] = [
