@@ -66,19 +66,26 @@ func _run() -> void:
 	world.cabin.get_node("Entities/Players").add_child(world.player)
 	world.player.teleport_within_current_map(Vector2(112,176), Vector2.UP)
 	var panel := world.cabin.get_node("Entities/Interactables/Panel")
+	_check(panel.destination_floors == PackedStringArray(["B1F", "B2F", "B4F"]), "The saved cabin retains all three floor labels")
+	var default_panel: Node = load("res://scripts/world/interactables/rocket_hideout_lift.gd").new()
+	_check(default_panel.destination_floors == panel.destination_floors, "The panel defaults retain the floor labels after an editor property reset")
+	default_panel.free()
 	var collision := world.cabin.get_node("Tiles/Collision") as TileMapLayer
 	var atlas_errors: Array[String] = load("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd").new().validate(world.cabin.get_node("Visual"), "res://generated/tiled_visuals/rocket_hideout_elevator/rocket_hideout_elevator.visual.tileset.tres")
 	_check(atlas_errors.is_empty(), "The supplied cabin visual has a valid imported atlas")
 	var loader := load("res://scripts/services/web_asset_module_service.gd")
 	_check(loader.module_for_scene(CABIN) == loader.EXTENDED_MODULE_NAME, "The shared cabin belongs to the browser's extended map pack")
 	var walkable := 0
-	for y in range(-1,12):
-		for x in range(-1,12):
+	# Check the playable cabin and its immediate perimeter. Unreachable cells
+	# outside the authored walls need not be painted as collision markers.
+	for y in range(4,9):
+		for x in range(2,9):
 			var expected := (x >= 3 and x <= 7 and y >= 5 and y <= 7) or Vector2i(x,y) == Vector2i(5,8)
 			_check((collision.get_cell_source_id(Vector2i(x,y)) == -1) == expected, "Cabin footprint at %s" % Vector2i(x,y))
 			if expected:
 				walkable += 1
 	_check(walkable == 16 and world.player.can_move_to(Vector2(144,176)), "Real Player can approach the panel over the cabin floor")
+	_check(collision.get_cell_source_id(Vector2i(5,9)) >= 0, "The doorway has a blocked back edge")
 	_check(not world.player.can_move_to(Vector2(112,144)), "The panel wall blocks the real Player")
 	_check(panel._is_player_facing_interactable(world.player), "The panel can be used facing its supplied control artwork")
 	for floor: String in ["b1f", "b2f", "b4f"]:
@@ -87,6 +94,9 @@ func _run() -> void:
 		for candidate: String in ["b1f", "b2f", "b4f"]:
 			var exit := world.cabin.get_node("Exits/To" + candidate.to_upper())
 			_check(exit.get_node("CollisionShape2D").disabled == (candidate != floor), "Only the current floor's physical exit is enabled")
+			var hint := exit.get_node("DoorTransitionHint") as Node2D
+			_check(hint.visible == (candidate == floor), "Only the current floor's exit hint is shown")
+			_check(hint.global_position == Vector2(176,240) and hint.get_flow_vector() == Vector2.DOWN, "The cabin hint points out from clear interior floor")
 		if floor == "b1f":
 			await physics_frame
 			await physics_frame
@@ -121,11 +131,13 @@ func _run() -> void:
 	_check(world.cabin.current_floor == "b4f" and world.cabin.map_id == PREFIX + ":7:b4f", "The normal World configuration hook applies the server-selected instance")
 	_check(world.player.global_position == Vector2(112,176), "Arrival stays safely at the panel")
 	_check(not game.is_overworld_input_locked() and not world.cabin.get_node("Doors").visible, "Ride success opens the doors and restores control")
+	_check(world.cabin.get_node("Exits/ToB4F/DoorTransitionHint").visible, "A successful ride restores the selected exit hint")
 
 	service.response = {"success": false, "error": "Fixture destination closed"}
 	await _select(world, panel, 0)
 	_check(world.cancelled == 1 and errors.shown == 1, "Rejected travel uses normal World cancellation and error feedback")
 	_check(world.cabin.current_floor == "b4f" and not game.is_overworld_input_locked(), "Rejected travel preserves the floor and releases all owned locks")
+	_check(world.cabin.get_node("Exits/ToB4F/DoorTransitionHint").visible, "Rejected travel restores the existing floor's hint")
 
 	panel._start_manual_interaction(world.player)
 	await process_frame
@@ -139,6 +151,9 @@ func _run() -> void:
 		var map: Node2D = load(CABIN.get_base_dir() + "/rocket_hideout_" + floor + ".tscn").instantiate()
 		var exit := map.get_node("Exits/ToElevator")
 		var grid := map.get_node("Tiles/Collision") as TileMapLayer
+		var hint := exit.get_node("DoorTransitionHint") as Node2D
+		_check(hint.position == Vector2(0,32) and hint.global_position == map.get_node("Spawns/FromLift").global_position, "%s lift hint sits on the clear approach floor instead of underneath the door artwork" % floor)
+		_check(grid.get_cell_source_id(Vector2i(hint.global_position / 32.0)) < 0 and hint.get_flow_vector() == Vector2.UP, "%s lift hint points into the door from walkable floor" % floor)
 		for offset in [-1,0,1]:
 			_check(grid.get_cell_source_id(Vector2i(exit.position / 32.0) + Vector2i(offset,0)) == -1, "The full %s lift doorway is walkable" % floor)
 		_check(not exit.contains_world_position(map.get_node("Spawns/FromLift").position), "%s arrival avoids immediate cabin reentry" % floor)
@@ -183,6 +198,9 @@ func _select(world: Node, panel: Node, index: int) -> void:
 	dialog.confirmed.emit()
 	for frame in range(240):
 		await process_frame
+		if world.cabin.get_node("Doors").visible:
+			for floor: String in ["B1F", "B2F", "B4F"]:
+				_check(not world.cabin.get_node("Exits/To" + floor + "/DoorTransitionHint").visible, "A departing lift hides its exit hints")
 		if not panel.is_interacting and not world.cabin.get_node("Doors").visible and not world.cabin.get_node("Exits/RideTo" + ["B1F","B2F","B4F"][index]).is_transitioning:
 			return
 	_check(false, "The lift ride finishes within the bounded runtime check")

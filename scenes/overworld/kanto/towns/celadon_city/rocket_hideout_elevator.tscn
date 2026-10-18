@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://scripts/world/rocket_elevator_ride_exit.gd" id="ride"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/rocket_hideout_elevator/rocket_hideout_elevator.visual.tscn" id="visual"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
+
 [sub_resource type="RectangleShape2D" id="door_shape"]
 size = Vector2(32, 32)
 
@@ -115,6 +117,11 @@ position = Vector2(0, 16)
 shape = SubResource("door_shape")
 disabled = true
 
+[node name="DoorTransitionHint" parent="Exits/ToB1F" instance=ExtResource("hint")]
+visible = false
+position = Vector2(0, -32)
+flow_direction = "down"
+
 [node name="RideToB1F" type="Area2D" parent="Exits" unique_id=642997693]
 collision_layer = 0
 collision_mask = 0
@@ -124,6 +131,8 @@ target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/rocket_hide
 target_spawn_name = "FromPanel"
 transition_id = "kanto_rocket_hideout_elevator__ride_to_b1f"
 transition_facing_direction = "up"
+
+metadata/pao_transition_hint_hidden = true
 
 [node name="ToB2F" type="Area2D" parent="Exits" unique_id=298156824]
 position = Vector2(176, 272)
@@ -138,6 +147,11 @@ position = Vector2(0, 16)
 shape = SubResource("door_shape")
 disabled = true
 
+[node name="DoorTransitionHint" parent="Exits/ToB2F" instance=ExtResource("hint")]
+visible = false
+position = Vector2(0, -32)
+flow_direction = "down"
+
 [node name="RideToB2F" type="Area2D" parent="Exits" unique_id=962977522]
 collision_layer = 0
 collision_mask = 0
@@ -147,6 +161,8 @@ target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/rocket_hide
 target_spawn_name = "FromPanel"
 transition_id = "kanto_rocket_hideout_elevator__ride_to_b2f"
 transition_facing_direction = "up"
+
+metadata/pao_transition_hint_hidden = true
 
 [node name="ToB4F" type="Area2D" parent="Exits" unique_id=800674789]
 position = Vector2(176, 272)
@@ -161,6 +177,11 @@ position = Vector2(0, 16)
 shape = SubResource("door_shape")
 disabled = true
 
+[node name="DoorTransitionHint" parent="Exits/ToB4F" instance=ExtResource("hint")]
+visible = false
+position = Vector2(0, -32)
+flow_direction = "down"
+
 [node name="RideToB4F" type="Area2D" parent="Exits" unique_id=1707898794]
 collision_layer = 0
 collision_mask = 0
@@ -170,6 +191,8 @@ target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/rocket_hide
 target_spawn_name = "FromPanel"
 transition_id = "kanto_rocket_hideout_elevator__ride_to_b4f"
 transition_facing_direction = "up"
+
+metadata/pao_transition_hint_hidden = true
 
 [node name="Doors" type="Node2D" parent="." unique_id=23106610]
 visible = false
@@ -196,6 +219,7 @@ y_sort_enabled = true
 [node name="Panel" type="Node2D" parent="Entities/Interactables" unique_id=43040632]
 position = Vector2(112, 144)
 script = ExtResource("panel")
+destination_floors = PackedStringArray("B1F", "B2F", "B4F")
 destination_exits = Array[NodePath]([NodePath("../../../Exits/RideToB1F"), NodePath("../../../Exits/RideToB2F"), NodePath("../../../Exits/RideToB4F")])
 interactable_id = "kanto_rocket_hideout_elevator_panel"
 interactable_kind = "lift"

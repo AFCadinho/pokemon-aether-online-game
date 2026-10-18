@@ -4,7 +4,7 @@ signal floor_selected(index: int)
 
 const CONFIRMATION := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 
-@export var destination_floors: PackedStringArray = []
+@export var destination_floors := PackedStringArray(["B1F", "B2F", "B4F"])
 @export var destination_exits: Array[NodePath] = []
 var current_floor := ""
 var _menu_layer: CanvasLayer
