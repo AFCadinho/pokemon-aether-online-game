@@ -4,6 +4,13 @@ Artist source: `/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/ce
 The 42 × 36 visual imports as `celadon_department_store`. Gameplay lives in
 `scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn`.
 
+The revised visual uses `Ground`, `GroundDetail`, `Objects` and `ObjectsTop`.
+The fountain animation spans the latter two layers. Its furniture and two
+southern doorway openings differ from the original gameplay layout described
+below: visual reimport preserves the existing collision, central exit and
+arrivals. Those gameplay footprints need a separate update to match the revised
+scenery; the four upper-gallery vendor interactions remain checked.
+
 This is a single interior with eight departments. The broad central staircase
 connects the lower shopping floor to the raised northern gallery within the same
 map. Tread columns 19–22 and landings at rows 11 and 17 stay open; rail columns

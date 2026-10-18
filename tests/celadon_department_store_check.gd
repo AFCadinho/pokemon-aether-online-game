@@ -76,7 +76,7 @@ func _run() -> void:
 	var visual: Node = store.get_node("Visual")
 	var errors: Array[String] = VALIDATOR.new().validate(visual, "res://generated/tiled_visuals/celadon_department_store/celadon_department_store.visual.tileset.tres")
 	_check(errors.is_empty(), "Imported atlas layout: " + str(errors))
-	var fountain: TileMapLayer = visual.get_node("Fountain")
+	var fountain: TileMapLayer = visual.get_node("Objects")
 	var coords := fountain.get_cell_atlas_coords(Vector2i(20, 24))
 	var source := fountain.tile_set.get_source(fountain.get_cell_source_id(Vector2i(20, 24))) as TileSetAtlasSource
 	_check(source.get_tile_animation_frames_count(coords) > 1, "Fountain retains native tile animation")
