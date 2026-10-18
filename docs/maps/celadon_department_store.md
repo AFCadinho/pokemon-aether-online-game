@@ -38,3 +38,17 @@ circulation, the stair and balcony, furniture bases, all three exit columns,
 both exterior doors, arrival safety, server destinations, the mask, atlas
 packing and fountain animation. Backend coverage lives in
 `account-service/tests/test_celadon_department_store.py`.
+
+## Visitors
+
+Five shoppers and four non-battle companion Pokémon (Meowth, Eevee, Pikachu and
+Clefairy) occupy separate, short patrol lanes on clear floor. Seven actors walk
+with independently randomized start delays, speeds and pauses; Lina and
+Clefairy remain stationary. The stair landings, entrance and vendor approaches
+stay clear even if every patrol lane is occupied. Content IDs use
+`kanto_celadon_department_store_` and have English, Dutch, Brazilian Portuguese
+and Simplified Chinese dialogue. Rental vendors remain in Aether Clash Lobby.
+
+Focused coverage: `tests/celadon_store_population_check.gd` checks revised visual
+furniture, collision, access and actual movement; game-content's
+`tests/test_celadon_store_population.py` verifies catalog and locale resolution.

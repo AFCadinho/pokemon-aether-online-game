@@ -12,6 +12,14 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/celadon_department_store/celadon_department_store.visual.tscn" id="visual"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="store_npc"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="store_pokemon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="store_lass"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/collector_frames.tres" id="store_collector"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/mart_m_frames.tres" id="store_mart_m"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="store_gentleman"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/school_kid_f_frames.tres" id="store_school_kid_f"]
+
 [sub_resource type="RectangleShape2D" id="exit_shape"]
 size = Vector2(96, 32)
 
@@ -280,7 +288,126 @@ position = Vector2(0, 64)
 [node name="CollisionShape2D" parent="Entities/NPCs/MegaStoneVendor/InteractionArea" index="0" unique_id=787493254]
 shape = SubResource("counter_interaction")
 
+
+[node name="ShopperMila" parent="Entities/NPCs" instance=ExtResource("store_npc")]
+position = Vector2(400, 368)
+npc_id = "kanto_celadon_department_store_shopper_mila"
+npc_definition_id = "trainer_class_lass"
+dialogue_id = "kanto_celadon_department_store_shopper_mila_default"
+display_name = "Shopper Mila"
+npc_sprite_frames = ExtResource("store_lass")
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.1
+movement_speed_pixels = 42.0
+movement_wait_jitter_seconds = 0.8
+
+[node name="CollectorDaan" parent="Entities/NPCs" instance=ExtResource("store_npc")]
+position = Vector2(976, 336)
+npc_id = "kanto_celadon_department_store_collector_daan"
+npc_definition_id = "trainer_class_collector"
+dialogue_id = "kanto_celadon_department_store_collector_daan_default"
+display_name = "Collector Daan"
+npc_sprite_frames = ExtResource("store_collector")
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 3.4
+movement_speed_pixels = 34.0
+movement_wait_jitter_seconds = 1.2
+
+[node name="AssistantNoor" parent="Entities/NPCs" instance=ExtResource("store_npc")]
+position = Vector2(240, 560)
+npc_id = "kanto_celadon_department_store_assistant_noor"
+npc_definition_id = "trainer_class_mart_m"
+dialogue_id = "kanto_celadon_department_store_assistant_noor_default"
+display_name = "Store Assistant Noor"
+npc_sprite_frames = ExtResource("store_mart_m")
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.8
+movement_speed_pixels = 38.0
+movement_wait_jitter_seconds = 0.9
+
+[node name="GentlemanHugo" parent="Entities/NPCs" instance=ExtResource("store_npc")]
+position = Vector2(1104, 816)
+npc_id = "kanto_celadon_department_store_gentleman_hugo"
+npc_definition_id = "trainer_class_gentleman"
+dialogue_id = "kanto_celadon_department_store_gentleman_hugo_default"
+display_name = "Gentleman Hugo"
+npc_sprite_frames = ExtResource("store_gentleman")
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 4.2
+movement_speed_pixels = 30.0
+movement_wait_jitter_seconds = 1.4
+
+[node name="SchoolKidLina" parent="Entities/NPCs" instance=ExtResource("store_npc")]
+position = Vector2(272, 848)
+npc_id = "kanto_celadon_department_store_school_kid_lina"
+npc_definition_id = "trainer_class_school_kid_f"
+dialogue_id = "kanto_celadon_department_store_school_kid_lina_default"
+display_name = "School Kid Lina"
+npc_sprite_frames = ExtResource("store_school_kid_f")
+movement_behavior = "idle"
+movement_tiles = 1
+movement_wait_seconds = 3.0
+movement_speed_pixels = 32.0
+movement_wait_jitter_seconds = 0.8
+
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1895810101]
+
+
+[node name="Meowth" parent="Entities/Pokemon" instance=ExtResource("store_pokemon")]
+position = Vector2(144, 816)
+overworld_pokemon_id = "kanto_celadon_department_store_meowth"
+species_id = "meowth"
+level = 18
+dialogue_id = "kanto_celadon_department_store_meowth_cry"
+display_name = "Meowth"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 45.0
+movement_wait_jitter_seconds = 0.7
+
+[node name="Eevee" parent="Entities/Pokemon" instance=ExtResource("store_pokemon")]
+position = Vector2(304, 912)
+overworld_pokemon_id = "kanto_celadon_department_store_eevee"
+species_id = "eevee"
+level = 16
+dialogue_id = "kanto_celadon_department_store_eevee_cry"
+display_name = "Eevee"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.6
+movement_speed_pixels = 36.0
+movement_wait_jitter_seconds = 1.1
+
+[node name="Pikachu" parent="Entities/Pokemon" instance=ExtResource("store_pokemon")]
+position = Vector2(1040, 688)
+overworld_pokemon_id = "kanto_celadon_department_store_pikachu"
+species_id = "pikachu"
+level = 17
+dialogue_id = "kanto_celadon_department_store_pikachu_cry"
+display_name = "Pikachu"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.3
+movement_speed_pixels = 40.0
+movement_wait_jitter_seconds = 0.9
+
+[node name="Clefairy" parent="Entities/Pokemon" instance=ExtResource("store_pokemon")]
+position = Vector2(784, 880)
+overworld_pokemon_id = "kanto_celadon_department_store_clefairy"
+species_id = "clefairy"
+level = 19
+dialogue_id = "kanto_celadon_department_store_clefairy_cry"
+display_name = "Clefairy"
+movement_behavior = "idle"
+movement_tiles = 1
+movement_wait_seconds = 3.5
+movement_speed_pixels = 25.0
+movement_wait_jitter_seconds = 1.2
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=950732527]
 
