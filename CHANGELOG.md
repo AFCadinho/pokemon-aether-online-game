@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Deepen Giovanni's confrontation about the Cubone skull trade and show him abandoning the dropped Silph Scope after his defeat.
+
 - Match Rocket Hideout Giovanni's dialogue portrait and battle sprite to his black overworld outfit using the existing Let's Go variant.
 
 - Restore the Rocket Hideout lift's floor choices and show door arrows on the approach floor, including the cabin's active exit.
