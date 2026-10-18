@@ -94,6 +94,7 @@ location_name = "Rocket Hideout B3F"
 region_id = "kanto"
 lighting_profile = "indoor"
 weather_profile = "disabled"
+music_profile_id = "kanto.rocket_hideout"
 
 [node name="Visual" parent="." unique_id=1523597983 instance=ExtResource("visual")]
 
