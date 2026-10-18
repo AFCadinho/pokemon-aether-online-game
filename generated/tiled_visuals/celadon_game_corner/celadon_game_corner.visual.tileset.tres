@@ -1,13 +1,13 @@
-[gd_resource type="TileSet" format=3 uid="uid://5swl8k3allum"]
+[gd_resource type="TileSet" format=3]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_1_0.texture.res" id="1_hgndo"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_1025_0.texture.res" id="2_ateof"]
-[ext_resource type="Texture2D" uid="uid://bc8lk3e6jkjpq" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_2049_0.texture.res" id="3_irm8e"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_2049_0.texture.res" id="3_irm8e"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_3073_0.texture.res" id="4_6puek"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_4097_0.texture.res" id="5_g7bhc"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_11000_0.texture.res" id="6_ahkf0"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_12000_0.texture.res" id="7_xlvug"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_12001_0.texture.res" id="8_s5jof"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_5865_0.texture.res" id="6_ahkf0"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_6785_0.texture.res" id="7_xlvug"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/celadon_game_corner/assets/celadon_game_corner.visual.tileset.compact_source_6786_0.texture.res" id="8_s5jof"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_s80sg"]
 texture = ExtResource("1_hgndo")

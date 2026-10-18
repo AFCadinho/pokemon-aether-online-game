@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Celadon Game Corner’s artist visual with the revised object layering and tileset references.
+
 - Add a black exterior mask, five Game Corner visitors and three companion Pokémon, with localized dialogue and independently paced movement.
 
 - Refresh the Celadon Game Corner visual from the latest artist TMX.
