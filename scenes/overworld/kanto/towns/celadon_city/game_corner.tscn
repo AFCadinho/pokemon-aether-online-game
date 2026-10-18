@@ -5,6 +5,14 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/celadon_game_corner/celadon_game_corner.visual.tscn" id="visual"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="guard_npc"]
+[ext_resource type="Script" path="res://scripts/world/npcs/game_corner_rocket_guard.gd" id="guard_script"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="guard_frames"]
+[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
+[ext_resource type="Script" path="res://scripts/world/story/story_trigger.gd" id="story_trigger"]
+
+[sub_resource type="RectangleShape2D" id="shape_guard_escape"]
+size = Vector2(160, 160)
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
@@ -143,6 +151,42 @@ y_sort_enabled = true
 [node name="Players" type="Node2D" parent="Entities" unique_id=874545283]
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1619878575]
+
+[node name="StairAttendant" parent="Entities/NPCs" instance=ExtResource("guard_npc")]
+position = Vector2(752, 176)
+script = ExtResource("guard_script")
+npc_id = "kanto_game_corner_attendant"
+trainer_id = "kanto_celadon_game_corner_rocket_guard"
+sight_range_tiles = 0
+display_name = "Game Corner Attendant"
+npc_sprite_frames = ExtResource("guard_frames")
+portrait_id = "showdown_worker_gen6"
+preload_quest_markers = true
+facing_direction = Vector2(0, 1)
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/StairAttendant"]
+script = ExtResource("story_hook")
+interaction_id = "kanto_game_corner_guard_confrontation"
+entity_id = "kanto_game_corner_attendant"
+
+[node name="EscapeHook" type="Node" parent="Entities/NPCs/StairAttendant"]
+script = ExtResource("story_hook")
+interaction_id = "kanto_game_corner_guard_escape_manual"
+entity_id = "kanto_game_corner_attendant"
+
+[node name="Escape" type="Area2D" parent="Entities/NPCs/StairAttendant"]
+script = ExtResource("story_trigger")
+story_host_path = NodePath("..")
+required_quest_id = "investigate_celadon_game_corner"
+required_step_id = "watch_guard_flee"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/NPCs/StairAttendant/Escape"]
+shape = SubResource("shape_guard_escape")
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/StairAttendant/Escape"]
+script = ExtResource("story_hook")
+interaction_id = "kanto_game_corner_guard_escape"
+entity_id = "kanto_game_corner_attendant"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=279567358]
 

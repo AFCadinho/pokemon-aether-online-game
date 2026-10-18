@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reveal the Game Corner stair attendant as a Rocket Grunt after Erika’s hint; defeat him to open the stairs and follow his escape toward Team Rocket’s boss.
+
 - Let Celadon Department Store customers speak to vendors from across the width of their counters, within the existing shop interaction radius.
 
 - Keep Team Rental and Pokémon Rental at their original Aether Clash Lobby counters.

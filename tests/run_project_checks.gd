@@ -29,6 +29,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/celadon_rocket_trio_check.gd",
 	"res://tests/celadon_rescue_npcs_check.gd",
 	"res://tests/celadon_gym_story_check.gd",
+	"res://tests/game_corner_rocket_guard_check.gd",
 	"res://tests/kanto_cities_arena_check.gd",
 	"res://tests/compatibility_outdoor_colour_check.gd",
 	"res://tests/gym_arenas_check.gd",
