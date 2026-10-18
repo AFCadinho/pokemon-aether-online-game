@@ -34,6 +34,14 @@ visuals remain separate from editable gameplay collision and transitions. All
 five maps belong to the Celadon City world-access group and extended browser map
 module; server catalogs register each floor and every transition in both directions.
 
+All five Condominiums scenes use the shared black `FloorVisibilityMask` at
+absolute z-index 4096. Each fixed mask surrounds the full visual canvas:
+1F 704 × 928, 2F/3F 704 × 896, roof 576 × 896 and rooftop room 448 × 416 px.
+The regions do not follow the player or constrain the camera.
+All five scenes were rendered and visually reviewed with black outer margins;
+`tests/floor_visibility_mask_camera_check.gd` passes. No live walkthrough was
+performed for this visual change.
+
 The front entrance uses the visible city door at **(40,12)**, returning to
 **(40,14)**. The hidden rear entrance is on the upper western side at **(37,7)**,
 returning west to **(36,7)**. Transition hints mark both entries. The narrow
