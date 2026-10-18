@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore Rocket Hideout B1F’s shared soundtrack selection.
+
 - Add a dedicated transparent pixel-art Lift Key icon to the bag and other item displays.
 
 - Add dedicated 3D battle arenas for Celadon Game Corner and Celadon Gym, including Erika and all four Gym trainers.
