@@ -195,6 +195,7 @@ position = Vector2(0, -16)
 shape = SubResource("elevator_door_shape")
 
 [node name="DoorTransitionHint" parent="Exits/ToElevator" unique_id=888177928 instance=ExtResource("hint")]
+z_index = 4096
 z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=1912511600]

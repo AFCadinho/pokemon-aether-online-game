@@ -229,6 +229,7 @@ position = Vector2(0, -16)
 shape = SubResource("elevator_door_shape")
 
 [node name="DoorTransitionHint" parent="Exits/ToElevator" unique_id=448586776 instance=ExtResource("hint")]
+z_index = 4096
 z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=1233474862]
@@ -410,6 +411,9 @@ item_id = "net-ball"
 [node name="GiovanniGate" type="Node2D" parent="Entities/Interactables" unique_id=1404317687]
 position = Vector2(800, 592)
 script = ExtResource("boss_gate_script")
+completed_quest_id = null
+completed_step_id = null
+closed_message_key = null
 interactable_id = "kanto_rocket_hideout_b4f_giovanni_gate"
 display_name = "Security Gate"
 blocked_tile_offset = Vector2i(-1, 0)
