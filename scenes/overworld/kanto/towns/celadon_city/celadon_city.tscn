@@ -1423,7 +1423,7 @@ z_as_relative = false
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_pt6d7")
 animation = &"idle_right"
-frame_progress = 0.33636403
+frame_progress = 0.49983406
 offset = Vector2(0, -16)
 initial_direction = "right"
 
@@ -1434,7 +1434,7 @@ texture_filter = 1
 position = Vector2(0, 32)
 sprite_frames = SubResource("SpriteFrames_xsogm")
 animation = &"idle_right"
-frame_progress = 0.33636403
+frame_progress = 0.49983406
 offset = Vector2(0, -16)
 initial_direction = "right"
 
@@ -1445,7 +1445,7 @@ texture_filter = 1
 position = Vector2(32, 0)
 sprite_frames = SubResource("SpriteFrames_x4hwo")
 animation = &"idle_right"
-frame_progress = 0.33636403
+frame_progress = 0.49983406
 offset = Vector2(0, -16)
 initial_direction = "right"
 
