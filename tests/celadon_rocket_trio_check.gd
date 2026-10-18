@@ -84,7 +84,7 @@ func _story(active_step: String, completed := false) -> Dictionary:
 			status = "active"
 			passed = false
 		steps.append({"stepId": id, "status": "completed" if completed else status})
-	return {"revision": 20, "quests": [{"questId": QUEST, "storylineId": "kanto_main", "definitionVersion": 1,
+	return {"revision": 20, "quests": [{"questId": QUEST, "storylineId": "kanto_main", "definitionVersion": 2,
 		"status": "completed" if completed else "active", "steps": steps}]}
 
 
@@ -134,7 +134,12 @@ func _check_presentation_recovery() -> void:
 	trio.set("victim_pokemon_path", NodePath("Eevee"))
 	prepared = await trio.call("prepare_story_sequence")
 	_check(prepared.get("success", false), "Rescue preflight succeeds")
-	for speaker: String in ["Trainer Mira", "Jessie", "James", "Meowth", "Jessie", "James"]:
+	var confrontation_speakers: Array[String] = [
+		"Trainer Mira", "Jessie", "James", "Jessie", "James", "Jessie", "James",
+		"Jessie", "James", "Jessie", "James", "Meowth", "Jessie", "James",
+	]
+	for index: int in range(confrontation_speakers.size()):
+		var speaker := confrontation_speakers[index]
 		var lines: Array[String] = ["Fixture line"]
 		await trio.call("show_dialogue", lines, speaker)
 		_check(dialogue.speakers.back() == speaker, "Celadon retains the named speaker")
@@ -142,6 +147,9 @@ func _check_presentation_recovery() -> void:
 		_check(dialogue.portraits.back() != null and dialogue.portrait_visibility.back(), "Rescue dialogue displays a portrait")
 		if dialogue.portraits.back() != null:
 			_check(dialogue.portraits.back().resource_path.ends_with(expected_path), "Victim and trio receive their own portraits")
+		if index < confrontation_speakers.size() - 1:
+			_check(root.get_camera_2d() != camera, "Camera stays on the full motto and confrontation until the challenge")
+		_check(trio.get_node("James").animation == ("idle_left" if index >= 12 else "idle_right"), "Trio notices the player only after Meowth ends the motto")
 	_check(eevee.position == Vector2.ZERO, "Eevee lands after Meowth attempts the theft")
 	_check(root.get_camera_2d() == camera, "Confrontation restores the camera before battle")
 	var metadata: Dictionary = trio.call("build_battle_trainer_metadata", {"id": "kanto_celadon_jessie_james", "trainer_class": "team_rocket"})

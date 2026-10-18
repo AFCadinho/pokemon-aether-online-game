@@ -4,6 +4,9 @@ extends Node2D
 const QUEST_ID := "celadon_rocket_trio"
 const TRAINER_ID := "kanto_celadon_jessie_james"
 const ROCKET_PORTRAIT_ID := "showdown_teamrocket"
+const CONFRONTATION_MEOWTH_STAGE := 11
+const CONFRONTATION_NOTICE_STAGE := 12
+const CONFRONTATION_CHALLENGE_STAGE := 13
 const ActorScript := preload("res://scripts/world/story/rocket_trio_actor.gd")
 const MusicResolver := preload("res://scripts/world/npcs/trainer_battle_music_resolver.gd")
 
@@ -125,12 +128,8 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 	var stage := _stage
 	var sequence_step := _sequence_step
 	_stage += 1
-	if _sequence_step == "defeat_trio" and stage == 4:
+	if _sequence_step == "defeat_trio" and stage == CONFRONTATION_NOTICE_STAGE:
 		_face_player()
-	if _sequence_step == "defeat_trio" and stage == 3:
-		await _attempt_theft()
-		if not _running:
-			return false
 	if _sequence_step == "watch_trio_flee" and stage == 4:
 		_launch_blast_off()
 	var portrait_id := ROCKET_PORTRAIT_ID
@@ -148,7 +147,11 @@ func show_dialogue(lines: Array[String], speaker_name := "") -> bool:
 		await _return_camera()
 		for actor: AnimatedSprite2D in actors:
 			actor.visible = false
-	elif _sequence_step == "defeat_trio" and stage == 5:
+	elif _sequence_step == "defeat_trio" and stage == CONFRONTATION_MEOWTH_STAGE:
+		await _attempt_theft()
+		if not _running:
+			return false
+	elif _sequence_step == "defeat_trio" and stage == CONFRONTATION_CHALLENGE_STAGE:
 		# The player's catalog dialogue is presented by the shared runner, so
 		# this is the final NPC line immediately before starting the battle.
 		await _return_camera()
