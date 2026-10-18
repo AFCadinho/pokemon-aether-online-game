@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add warm, time-controlled night lighting to Celadon City’s street lamps, windows and entrances using the same lights as Cerulean and Vermilion.
+
 - Refresh the Celadon Gym visual from the latest artist TMX.
 
 - Mask the area outside Celadon Gym with the shared black interior visibility mask.
