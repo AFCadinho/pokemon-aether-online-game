@@ -11,8 +11,6 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/z_crystal_vendor_npc.tscn" id="9_z_crystal_vendor"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/mega_stone_vendor_npc.tscn" id="10_mega_stone_vendor"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/evolution_item_vendor_npc.tscn" id="evolution_item_vendor"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/rental_npc.tscn" id="rental_vendor"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/socialite_frames.tres" id="rental_socialite_frames"]
 
 [sub_resource type="RectangleShape2D" id="counter_interaction"]
 size = Vector2(96, 192)
@@ -193,17 +191,6 @@ position = Vector2(0, 64)
 
 [node name="CollisionShape2D" parent="Entities/NPCs/MegaStoneVendor/InteractionArea" index="0"]
 shape = SubResource("counter_interaction")
-
-[node name="TeamRentalNPC" parent="Entities/NPCs" unique_id=220831213 instance=ExtResource("rental_vendor")]
-position = Vector2(272, 688)
-rental_kind = "team"
-
-[node name="PokemonRentalNPC" parent="Entities/NPCs" unique_id=4411246 instance=ExtResource("rental_vendor")]
-position = Vector2(1104, 688)
-rental_kind = "pokemon"
-display_name = "Pokémon Rental"
-npc_sprite_frames = ExtResource("rental_socialite_frames")
-portrait_id = "showdown_lady_gen6"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1895810101]
 
