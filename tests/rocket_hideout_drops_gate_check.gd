@@ -120,17 +120,29 @@ func _run() -> void:
 	_check(player.can_move_to(Vector2(784,592)) and player.can_move_to(Vector2(816,592)), "Native Player movement can cross both open panels")
 	await _capture("open")
 
-	# Giovanni stays throughout his dialogue, leaves, then drops the Scope.
+	# The Scope slips out before Giovanni reacts. An interruption during its
+	# fall must not leave a ghost conversation running or an input lock behind.
 	story.apply_story(_story("learn_plan"))
 	await _frames(2)
 	giovanni.prepare_story_sequence()
 	_present_giovanni.call_deferred()
-	await _until(func(): return box.is_open)
-	_check(giovanni.visible and not scope.visible, "Giovanni speaks before disappearing; Scope stays hidden")
-	box.finish()
 	await _until(func(): return scope.visible)
-	_check(not giovanni.visible and not scope.blocks_movement, "Giovanni disappears before the Scope falls")
+	_check(giovanni.visible and scope.get("_drop_presenting") and not box.is_open, "Scope falls before Giovanni notices it in dialogue")
+	giovanni.abort_story_sequence()
 	await _until(func(): return _dialogue_done)
+	_check(not _dialogue_ok and not scope.visible and giovanni.visible and not box.is_open, "Aborting the fall restores Giovanni without starting stale dialogue")
+	_check(not state.is_overworld_input_locked(), "Aborting the Scope fall releases its input owner")
+	_dialogue_done = false
+	_dialogue_ok = false
+	giovanni.prepare_story_sequence()
+	_present_giovanni.call_deferred()
+	await _until(func(): return box.is_open)
+	_check(giovanni.visible and scope.visible and not scope.get("_drop_presenting"), "Giovanni reacts while the dropped Scope is visibly on the ground")
+	_check(not scope.blocks_movement, "The visible Scope still requires story acknowledgement before collection")
+	await _capture("giovanni_scope_reaction")
+	box.finish()
+	await _until(func(): return _dialogue_done)
+	_check(not giovanni.visible and scope.visible, "Giovanni leaves after his reaction and abandons the Scope")
 	_check(_dialogue_ok and not scope.blocks_movement, "Presented Scope cannot be claimed before story acknowledgement")
 	await _capture("scope_left_behind")
 	_check(not inventory.is_world_pickup_collected(scope.pickup_id), "Scope is left on the floor, not granted to inventory")
@@ -188,7 +200,7 @@ func _run() -> void:
 	quit(1 if failed else 0)
 
 func _present_giovanni() -> void:
-	var lines: Array[String] = ["Our men are holding Mr. Fuji in Pokémon Tower."]
+	var lines: Array[String] = ["Tch. The Silph Scope. Keep it. I can replace a machine."]
 	_dialogue_ok = await giovanni.show_dialogue(lines, "Giovanni")
 	_dialogue_done = true
 
@@ -233,8 +245,10 @@ func _capture(label: String) -> void:
 		return
 	var player_was_visible := player.visible
 	player.visible = false
+	viewport.canvas_transform = Transform2D.IDENTITY
 	await process_frame
 	await process_frame
+	await RenderingServer.frame_post_draw
 	viewport.get_texture().get_image().save_png("res://.tmp/rocket_gate_" + label + ".png")
 	player.visible = player_was_visible
 

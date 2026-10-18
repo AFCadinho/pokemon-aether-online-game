@@ -143,11 +143,20 @@ Solo and Adventure Party outro locks both delay this animation. The item remains
 a normal one-time pickup: the animation never grants inventory. A reconnect
 restores an earned, uncollected ground item without repeating the fall.
 
-Giovanni's revelation host waits for his dialogue to finish, fades him away,
-then leaves the Scope before the player's response. Until the story acknowledges
-the revelation the Scope is only a visual preview. A failed acknowledgement or
+Giovanni's post-battle host drops the Scope before he notices it in dialogue.
+He dismisses the lost machine as replaceable, then fades away and leaves it for
+the player. Until the story acknowledges the conversation the Scope is only a
+visual preview. A failed acknowledgement or
 interrupted sequence restores Giovanni and hides that preview for retry. Scene
 unload cancels tweens and releases only the drop's named input lock.
+
+The pre-battle exchange alternates Giovanni's business rationale and the player's
+objections. Giovanni boasts about selling valuable Cubone skulls and the Cubone
+on Pokémon Tower's upper floors before issuing his challenge. After defeat he
+confirms Mr. Fuji's captivity and the Scope's ability to identify ghosts. All
+four locales share the same sequence. Existing quest step IDs and pickup
+authorization are retained; the post-battle objective now asks the player to
+speak to the defeated Giovanni instead of discovering an already revealed plan.
 
 `GiovanniGate` spans tiles (24–25,18), across the entire corridor behind the two
 guards. It checks both guards' trusted progress and opens after the second
