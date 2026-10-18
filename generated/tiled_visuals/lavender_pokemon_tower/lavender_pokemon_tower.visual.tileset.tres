@@ -1,21 +1,22 @@
-[gd_resource type="TileSet" format=3 uid="uid://dbv5g6olbmdv5"]
+[gd_resource type="TileSet" format=3]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_1_0.texture.res" id="1_pw7hd"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_1025_0.texture.res" id="2_w8img"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_3073_0.texture.res" id="3_8pvt8"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_5817_0.texture.res" id="4_x8io7"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_5833_0.texture.res" id="5_r1jna"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_5863_0.texture.res" id="6_16wub"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_1_0.texture.res" id="1_w8img"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_1025_0.texture.res" id="2_8pvt8"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_3073_0.texture.res" id="3_x8io7"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_5865_0.texture.res" id="4_r1jna"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_5881_0.texture.res" id="5_16wub"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_5911_0.texture.res" id="6_m882p"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_pokemon_tower/assets/lavender_pokemon_tower.visual.tileset.compact_source_7024_0.texture.res" id="7_weoyl"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m882p"]
-texture = ExtResource("1_pw7hd")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o1giy"]
+texture = ExtResource("1_w8img")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_weoyl"]
-texture = ExtResource("2_w8img")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mjd58"]
+texture = ExtResource("2_8pvt8")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -31,8 +32,8 @@ texture_region_size = Vector2i(32, 32)
 2:1/0 = 0
 3:1/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o1giy"]
-texture = ExtResource("3_8pvt8")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a5g88"]
+texture = ExtResource("3_x8io7")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -81,51 +82,8 @@ texture_region_size = Vector2i(32, 32)
 0:6/0 = 0
 1:6/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mjd58"]
-texture = ExtResource("4_x8io7")
-margins = Vector2i(2, 2)
-separation = Vector2i(4, 4)
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-3:1/0 = 0
-4:1/0 = 0
-5:1/0 = 0
-6:1/0 = 0
-0:2/0 = 0
-1:2/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a5g88"]
-texture = ExtResource("5_r1jna")
-margins = Vector2i(2, 2)
-separation = Vector2i(4, 4)
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-3:1/0 = 0
-4:1/0 = 0
-5:1/0 = 0
-6:1/0 = 0
-0:2/0 = 0
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1rvsa"]
-texture = ExtResource("6_16wub")
+texture = ExtResource("4_r1jna")
 margins = Vector2i(2, 2)
 separation = Vector2i(4, 4)
 texture_region_size = Vector2i(32, 32)
@@ -145,14 +103,76 @@ texture_region_size = Vector2i(32, 32)
 6:1/0 = 0
 0:2/0 = 0
 1:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bw30k"]
+texture = ExtResource("5_16wub")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c8cop"]
+texture = ExtResource("6_m882p")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sner5"]
+texture = ExtResource("7_weoyl")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
 
 [resource]
 tile_size = Vector2i(32, 32)
-sources/1 = SubResource("TileSetAtlasSource_m882p")
-sources/1025 = SubResource("TileSetAtlasSource_weoyl")
-sources/3073 = SubResource("TileSetAtlasSource_o1giy")
-sources/5817 = SubResource("TileSetAtlasSource_mjd58")
-sources/5833 = SubResource("TileSetAtlasSource_a5g88")
-sources/5863 = SubResource("TileSetAtlasSource_1rvsa")
+sources/0 = SubResource("TileSetAtlasSource_o1giy")
+sources/1 = SubResource("TileSetAtlasSource_mjd58")
+sources/2 = SubResource("TileSetAtlasSource_a5g88")
+sources/3 = SubResource("TileSetAtlasSource_1rvsa")
+sources/4 = SubResource("TileSetAtlasSource_bw30k")
+sources/5 = SubResource("TileSetAtlasSource_c8cop")
+sources/6 = SubResource("TileSetAtlasSource_sner5")
 metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/lavender_town/pokemon_tower/Pokemon Tower.tmx"
 metadata/tiled_compact_atlas_version = 1
