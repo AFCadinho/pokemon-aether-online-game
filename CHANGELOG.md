@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Let Celadon Department Store customers speak to vendors from across the width of their counters, within the existing shop interaction radius.
+
 - Keep Team Rental and Pokémon Rental at their original Aether Clash Lobby counters.
 
 - Move the Battle Point, evolution-item, Z-Crystal and Mega Stone vendors from Aether Clash Lobby to Celadon Department Store.
