@@ -204,7 +204,7 @@ position = Vector2(752, 1072)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn"
 target_spawn_name = "FromDepartmentStore"
-transition_id = "kanto_celadon_department_store__to_outside"
+transition_id = "kanto_celadon_department_store__to_outside_east"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOutside2" unique_id=2023714533]

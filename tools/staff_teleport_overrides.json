@@ -413,6 +413,13 @@
           "safe": false
         }
       }
+    },
+    "kanto_celadon_prize_corner": {
+      "points": {
+        "from_outside": {
+          "facingDirection": "up"
+        }
+      }
     }
   }
 }
