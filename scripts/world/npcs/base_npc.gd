@@ -1453,9 +1453,9 @@ func _start_manual_interaction(body: Node2D) -> void:
 
 
 func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
-	if (npc_id in ["kanto_route_22_gary_oak", "kanto_alpha_gym_brock"] or npc_id in CoopService.ORDINARY_TRAINERS) and not CoopService.party.is_empty():
+	if CoopService.supports_trainer(npc_id) and not CoopService.is_story_trainer(npc_id) and not CoopService.party.is_empty():
 		# Completed helpers bypass solo rematch dialogue/fees, not server admission.
-		var trainer := "kanto_route_22_gary_rival" if npc_id == "kanto_route_22_gary_oak" else npc_id
+		var trainer := npc_id
 		var coop_result: Dictionary = await CoopService.try_start(trainer)
 		if coop_result.get("handled", false):
 			if coop_result.get("success", false):

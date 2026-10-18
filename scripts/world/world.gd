@@ -6077,23 +6077,17 @@ func _show_pending_coop_battle_result() -> void:
 
 
 func _coop_trainer_outro_id(activity: Dictionary) -> String:
-	if activity.get("outcome") != "win":
+	if activity.get("outcome") != "win" and not bool(activity.get("storyResolved", false)):
 		return ""
-	var trainer_id := str(activity.get("activityId", ""))
-	if trainer_id == "brock":
-		return "kanto_alpha_gym_brock"
-	if trainer_id == "gary_route22":
-		return "kanto_route_22_gary_bulbasaur"
-	return trainer_id if trainer_id in CoopService.ORDINARY_TRAINERS else ""
+	return CoopService.trainer_for_activity(str(activity.get("activityId", "")))
 
 
 func _coop_trainer_outro_mugshot(trainer_id: String, metadata: Dictionary) -> Texture2D:
 	# The placed NPC already resolves explicit and class-assigned portraits for
 	# single battles. Use that same mugshot for both co-op players after reload.
-	var placed_npc_id := (
-		"kanto_route_22_gary_oak"
-		if trainer_id.begins_with("kanto_route_22_gary_") else trainer_id
-	)
+	var placed_npc_id := CoopService.trainer_entity(trainer_id)
+	if placed_npc_id.is_empty():
+		placed_npc_id = trainer_id
 	var map_node := GameState.current_map as Node
 	if map_node != null:
 		for node: Node in map_node.find_children("*", "", true, false):

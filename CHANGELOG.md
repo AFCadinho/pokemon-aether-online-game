@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Support Adventure Party challenges across all existing story and ordinary trainers, with matching trainer names, portraits and post-battle story conversations.
+
 - Refresh Celadon Prize Corner’s artist visual and align collision, mask and the one-tile exit with its narrower casino layout.
 
 - Mask the exterior of all four Rocket Hideout floors in black.

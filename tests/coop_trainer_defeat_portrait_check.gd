@@ -18,7 +18,10 @@ func _run() -> void:
 	var scenes: Array[String] = []
 	for path: String in SCENE_PATHS:
 		scenes.append(FileAccess.get_file_as_string(path))
-	var trainer_ids: Array = root.get_node("CoopService").ORDINARY_TRAINERS.duplicate()
+	var trainer_ids: Array = []
+	for entry: Dictionary in root.get_node("CoopService").TRAINER_CATALOG.activities.values():
+		if entry.scenePath in SCENE_PATHS and entry.story == null and str(entry.rivalPrefix).is_empty():
+			trainer_ids.append_array(entry.trainerIds)
 	trainer_ids.append_array(["kanto_alpha_gym_brock", "kanto_route_22_gary_oak"])
 	for trainer_id: String in trainer_ids:
 		var portrait_id := ""
@@ -58,6 +61,12 @@ func _run() -> void:
 	map_node.add_child(gary)
 	assert(world.call("_coop_trainer_outro_mugshot", "kanto_route_22_gary_bulbasaur", {}) == gary.mugshot,
 		"the Route 22 team ID resolves the placed Gary NPC's mugshot")
+	var anne_gary := BaseNPC.new()
+	anne_gary.npc_id = "kanto_ss_anne_rival"
+	anne_gary.mugshot = gary.mugshot
+	map_node.add_child(anne_gary)
+	assert(world.call("_coop_trainer_outro_mugshot", "kanto_ss_anne_gary_charmander", {}) == anne_gary.mugshot,
+		"later rival team IDs resolve their actual placed NPC portrait")
 	game_state.current_map = null
 	assert(world.call("_coop_trainer_outro_mugshot", lass.npc_id, {"trainer_class": "Lass"}) == lass.mugshot,
 		"trainer class resolves the correct mugshot if the placed NPC is unavailable")

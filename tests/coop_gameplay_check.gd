@@ -29,7 +29,7 @@ func _run() -> void:
 	_expect(typeof(service.party["memberIds"][0]) == TYPE_INT and service.party["memberIds"] == [2, 7], "JSON float member IDs normalize to integer IDs")
 	_expect(missing_profile_sources.size() == 1, "canonical member keys find both names and portraits after JSON parsing")
 	gateway_config.set("cached_url", previous_gateway_url)
-	_expect(service.ORDINARY_TRAINERS.size() == 10, "ordinary trainer slice is explicitly bounded")
+	_expect(service.TRAINER_CATALOG.activities.size() >= 187, "all placed trainer encounters use the content-derived co-op catalog")
 	var coop_service_source := FileAccess.get_file_as_string("res://scripts/services/coop_service.gd")
 	_expect(not coop_service_source.contains("COOP_DIAG") and coop_service_source.contains("func _partner_is_ready_for_coop()"),
 		"party grass encounters fall back to solo when the partner is unavailable without console diagnostics")
@@ -37,8 +37,14 @@ func _run() -> void:
 		and not coop_service_source.contains('party["memberIds"].size()'),
 		"co-op polling handles the empty party response immediately after leaving a party")
 	for trainer: String in service.ORDINARY_TRAINERS:
-		_expect(service.trainer_entity(trainer) == trainer, "ordinary trainer uses its own canonical entity")
-	_expect(service.trainer_entity("kanto_route_3_youngster").is_empty(), "later trainers remain unsupported")
+		_expect(not service.trainer_entity(trainer).is_empty(), "trainer variants resolve to their placed world entity")
+	_expect(service.trainer_entity("kanto_route_3_youngster").is_empty(), "unknown trainer identities remain unsupported")
+	_expect(service.trainer_entity("kanto_celadon_gym_erika") == "kanto_celadon_gym_erika", "Erika supports Adventure Party battles")
+	_expect(service.trainer_entity("kanto_ss_anne_gary_charmander") == "kanto_ss_anne_rival", "later rival teams resolve to their story NPC")
+	_expect(service.is_story_trainer("kanto_celadon_gym_erika"), "Erika's story conversations retain their normal quest hooks")
+	_expect(service.is_story_trainer("kanto_mt_moon_b2f_rocket_grunt_1"), "event-set trainers retain their story admission")
+	_expect(not service.is_story_trainer("kanto_route_3_youngster_warren"), "ordinary trainers use their trainer completion")
+	_expect(service.trainer_name_for_activity("kanto_celadon_gym_erika") == "Erika", "co-op HUD uses the trainer's content name")
 	var activity := {"reservationId": "fixture", "battleId": "coop-fixture", "status": "active"}
 	service.apply_state({"party": {"leaderId": 1}, "invitations": [], "activity": activity,
 		"view": {"battleId": "coop-fixture", "revision": 2, "decisionId": "coop-1", "locked": false,
