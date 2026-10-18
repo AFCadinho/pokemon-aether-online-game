@@ -7393,5 +7393,7 @@
   "ui.staff.story_checkpoint.rocket_hideout_scope": "Schuilplaats — pak de Silph Scope",
   "ui.staff.story_checkpoint.rocket_hideout_return": "Terug naar Pokémon Tower",
   "backend.error.rocket_hideout_guards_required": "Versla eerst beide bewakers van Giovanni voordat je hem uitdaagt.",
-  "backend.error.world_pickup_trainer_required": "Versla eerst de trainer die dit item bewaakt."
+  "backend.error.world_pickup_trainer_required": "Versla eerst de trainer die dit item bewaakt.",
+  "world.rocket_hideout.gate.name": "Beveiligingspoort",
+  "world.rocket_hideout.gate.closed": "De beveiligingspoort is gesloten. Versla beide Rocket-bewakers om hem te openen."
 }

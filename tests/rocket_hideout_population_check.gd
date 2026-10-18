@@ -37,6 +37,7 @@ func _initialize() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	Engine.max_fps = 120
 	var state := root.get_node("GameState")
 	state.reset_gameplay_runtime_state()
 	root.get_node("CoopService").set_process(false)
@@ -95,8 +96,8 @@ func _run() -> void:
 			_check(not key.visible and not key.blocks_movement, "Lift Key waits for trusted guard victory")
 			progress.defeated = true
 			story.apply_story(_story("confront_boss"))
-			await process_frame
-			_check(key.visible and key.blocks_movement, "Defeated grunt reveals the key on this visit")
+			await create_timer(0.6).timeout
+			_check(key.visible and key.blocks_movement, "Defeated grunt drops the key on this visit")
 			_check(not scope.visible, "Scope is hidden before the revelation")
 			story.apply_story(_story("collect_scope"))
 			await process_frame
@@ -119,6 +120,8 @@ func _geometry(map: Node2D, floor: int) -> void:
 	var actors: Array[Node] = []
 	for category: String in ["NPCs", "Pokemon", "Interactables"]:
 		for actor: Node2D in map.get_node("Entities/" + category).get_children():
+			if actor.name == "GiovanniGate":
+				continue # The dedicated gate test checks its closed and open route.
 			var tile := Vector2i(actor.position / 32.0)
 			_check(not blockers.has(tile), "Actors do not overlap: " + str(actor.name))
 			_check(map.get_node("Tiles/Collision").get_cell_source_id(tile) < 0, "Actor is on walkable floor: " + str(actor.name))

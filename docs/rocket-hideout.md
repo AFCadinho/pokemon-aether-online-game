@@ -133,3 +133,33 @@ place of unsupported TM Snatch. No further Tower rescue chapter is introduced.
 Run `tests/rocket_hideout_population_check.gd` for native actor, availability
 and spin-aware reachability checks; `-- --render` additionally saves complete
 Godot floor previews under `.tmp/` using the graphical rendering backend.
+
+## Dropped keys and Giovanni's gate
+
+The Lift Key and Silph Scope nodes start hidden in the B4F scene, including in
+the editor. A live victory over the northwest grunt queues a visible drop from
+his feet to the authored item position, after his accidental-drop reaction.
+Solo and Adventure Party outro locks both delay this animation. The item remains
+a normal one-time pickup: the animation never grants inventory. A reconnect
+restores an earned, uncollected ground item without repeating the fall.
+
+Giovanni's revelation host waits for his dialogue to finish, fades him away,
+then leaves the Scope before the player's response. Until the story acknowledges
+the revelation the Scope is only a visual preview. A failed acknowledgement or
+interrupted sequence restores Giovanni and hides that preview for retry. Scene
+unload cancels tweens and releases only the drop's named input lock.
+
+`GiovanniGate` spans tiles (24–25,18), across the entire corridor behind the two
+guards. It checks both guards' trusted progress and opens after the second
+victory/outro; one guard in either order cannot open it. Unknown progress keeps
+it closed. Earned boss completion preserves access for older saves. No artist
+visual, static collision, spin layer or NPC/item position was changed. Generated
+Adventure Party anchors/catalogs now reflect the user's latest trainer placement.
+
+`tests/rocket_hideout_drops_gate_check.gd` exercises the native Player's movement
+through both portal cells, reachability to the boss, guard order, missing progress,
+dialogue/drop/departure ordering, retry, reconnect, co-op reload and input cleanup.
+Its optional `-- --render` previews cover the closed/open gate and dropped items.
+The general population check still reports the same five placement findings as
+an unchanged HEAD-scene geometry run (Escape Rope, Taunt, Super Potion, Max Ether,
+Calcium). These predate this follow-up and were not changed with the user's maps.

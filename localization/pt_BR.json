@@ -7393,5 +7393,7 @@
   "ui.staff.story_checkpoint.rocket_hideout_scope": "Esconderijo — pegue o Silph Scope",
   "ui.staff.story_checkpoint.rocket_hideout_return": "Volte à Pokémon Tower",
   "backend.error.rocket_hideout_guards_required": "Derrote os dois guardas de Giovanni antes de desafiá-lo.",
-  "backend.error.world_pickup_trainer_required": "Derrote primeiro o treinador que guarda este item."
+  "backend.error.world_pickup_trainer_required": "Derrote primeiro o treinador que guarda este item.",
+  "world.rocket_hideout.gate.name": "Portão de segurança",
+  "world.rocket_hideout.gate.closed": "O portão de segurança está trancado. Derrote os dois guardas Rocket para abri-lo."
 }
