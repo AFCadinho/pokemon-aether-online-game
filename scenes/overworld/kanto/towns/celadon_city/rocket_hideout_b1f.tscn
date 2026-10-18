@@ -279,6 +279,31 @@ z_index = 100
 tile_map_data = PackedByteArray("AAAUACUAAAAEAAAAAAA=")
 tile_set = SubResource("TileSet_b80k1")
 
+[node name="SpinUp" type="TileMapLayer" parent="Tiles"]
+tile_set = SubResource("TileSet_re0qe")
+collision_enabled = false
+navigation_enabled = false
+
+[node name="SpinDown" type="TileMapLayer" parent="Tiles"]
+tile_set = SubResource("TileSet_re0qe")
+collision_enabled = false
+navigation_enabled = false
+
+[node name="SpinLeft" type="TileMapLayer" parent="Tiles"]
+tile_set = SubResource("TileSet_re0qe")
+collision_enabled = false
+navigation_enabled = false
+
+[node name="SpinRight" type="TileMapLayer" parent="Tiles"]
+tile_set = SubResource("TileSet_re0qe")
+collision_enabled = false
+navigation_enabled = false
+
+[node name="SpinStop" type="TileMapLayer" parent="Tiles"]
+tile_set = SubResource("TileSet_re0qe")
+collision_enabled = false
+navigation_enabled = false
+
 [connection signal="body_entered" from="Exits/UpToGameCorner" to="Exits/UpToGameCorner" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/DownToB2F" to="Exits/DownToB2F" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/NorthDownToB2F" to="Exits/NorthDownToB2F" method="_on_body_entered"]
