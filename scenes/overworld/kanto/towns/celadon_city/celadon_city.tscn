@@ -320,6 +320,9 @@ position = Vector2(1264, 912)
 [node name="FromGym" type="Marker2D" parent="Spawns" unique_id=1907604291]
 position = Vector2(368, 1584)
 
+[node name="FromDepartmentStore" type="Marker2D" parent="Spawns"]
+position = Vector2(400, 496)
+
 [node name="Exits" type="Node2D" parent="." unique_id=730447284]
 
 [node name="ToRoute7" type="Area2D" parent="Exits" unique_id=485939152]
@@ -413,6 +416,38 @@ shape = SubResource("shape_gym_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToGym" unique_id=1579913885 instance=ExtResource("center_door_hint")]
 z_as_relative = false
+
+[node name="ToDepartmentStore" type="Area2D" parent="Exits"]
+position = Vector2(400, 464)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn"
+target_spawn_name = "FromOutside"
+transition_id = "kanto_celadon_city__to_department_store"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDepartmentStore"]
+position = Vector2(0, -16)
+shape = SubResource("shape_center_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToDepartmentStore" instance=ExtResource("center_door_hint")]
+z_as_relative = false
+position = Vector2(0, -16)
+
+[node name="ToDepartmentStoreEast" type="Area2D" parent="Exits"]
+position = Vector2(528, 464)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn"
+target_spawn_name = "FromOutside"
+transition_id = "kanto_celadon_city__to_department_store_east"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDepartmentStoreEast"]
+position = Vector2(0, -16)
+shape = SubResource("shape_center_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToDepartmentStoreEast" instance=ExtResource("center_door_hint")]
+z_as_relative = false
+position = Vector2(0, -16)
 
 [node name="Entities" type="Node2D" parent="." unique_id=1083392905]
 z_index = 5
@@ -1121,5 +1156,10 @@ position = Vector2(1424, 880)
 [connection signal="body_entered" from="Exits/ToCondominiumsRear" to="Exits/ToCondominiumsRear" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToGameCorner" to="Exits/ToGameCorner" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToGym" to="Exits/ToGym" method="_on_body_entered"]
+
+
+[connection signal="body_entered" from="Exits/ToDepartmentStore" to="Exits/ToDepartmentStore" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToDepartmentStoreEast" to="Exits/ToDepartmentStoreEast" method="_on_body_entered"]
 
 [editable path="Story/RocketTrio"]

@@ -28,6 +28,7 @@ const MISTY_MAP_SCENES := {
 	"kanto_route_25_bills_house": "res://scenes/overworld/kanto/routes/route25/bills_house.tscn",
 }
 const EXTENDED_MAP_SCENES := {
+	"kanto_celadon_department_store": "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn",
 	"kanto_route_7_saffron_gate": "res://scenes/overworld/kanto/transition_buildings/route_7_saffron_gate.tscn",
 	"kanto_cinnabar_island_pokemon_center": "res://scenes/overworld/kanto/towns/cinnabar_island/pokemon_center.tscn",
 	"kanto_celadon_city_pokemon_center": "res://scenes/overworld/kanto/towns/celadon_city/pokemon_center.tscn",

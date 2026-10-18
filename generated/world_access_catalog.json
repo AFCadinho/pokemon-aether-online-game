@@ -522,6 +522,16 @@
 						"y": 7
 					}
 				},
+				"from_department_store": {
+					"facingDirection": "down",
+					"label": "Department Store",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromDepartmentStore",
+					"tile": {
+						"x": 12,
+						"y": 15
+					}
+				},
 				"from_game_corner": {
 					"facingDirection": "down",
 					"label": "Game Corner",
@@ -818,6 +828,29 @@
 					"tile": {
 						"x": 6,
 						"y": 9
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"kanto_celadon_department_store": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Celadon Department Store",
+			"locationGroupId": "kanto_celadon_city",
+			"locationGroupLabel": "Celadon City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "down",
+					"label": "Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 20,
+						"y": 32
 					}
 				}
 			},
@@ -6391,6 +6424,34 @@
 			"destinationAreaId": "kanto_celadon_condominiums_1f",
 			"sourceMapId": "kanto_celadon_city"
 		},
+		"kanto_celadon_city__to_department_store": {
+			"destination": {
+				"mapId": "kanto_celadon_department_store",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn",
+				"position": {
+					"x": 656.0,
+					"y": 1040.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_celadon_department_store",
+			"sourceMapId": "kanto_celadon_city"
+		},
+		"kanto_celadon_city__to_department_store_east": {
+			"destination": {
+				"mapId": "kanto_celadon_department_store",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_department_store.tscn",
+				"position": {
+					"x": 656.0,
+					"y": 1040.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_celadon_department_store",
+			"sourceMapId": "kanto_celadon_city"
+		},
 		"kanto_celadon_city__to_game_corner": {
 			"destination": {
 				"mapId": "kanto_celadon_game_corner",
@@ -6692,6 +6753,22 @@
 			},
 			"destinationAreaId": "kanto_celadon_condominiums_roof",
 			"sourceMapId": "kanto_celadon_condominiums_roof_room"
+		},
+		"kanto_celadon_department_store__to_outside": {
+			"destination": {
+				"mapId": "kanto_celadon_city",
+				"mapSceneAliases": [
+					"uid://c13m2ijv5ijuy"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 496.0
+				},
+				"spawnMarker": "FromDepartmentStore"
+			},
+			"destinationAreaId": "kanto_celadon_city",
+			"sourceMapId": "kanto_celadon_department_store"
 		},
 		"kanto_celadon_game_corner__to_outside": {
 			"destination": {

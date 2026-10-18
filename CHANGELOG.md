@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the artist Celadon Department Store interior, with collision, a visibility mask and both city entrances.
+
 - Update Celadon Gym’s imported garden layers from the revised artist TMX.
 
 - Add warm, time-controlled night lighting to Celadon City’s street lamps, windows and entrances using the same lights as Cerulean and Vermilion.
