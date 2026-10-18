@@ -91,6 +91,25 @@ approaches. `tests/game_corner_population_check.gd` verifies the mask polygons,
 reception interaction, artwork, access and actual patrol movement; game-content's
 `tests/test_game_corner_population.py` checks localized catalog resolution.
 
+Iris also operates the Casino Token counter. The existing `casino_tokens`
+wallet balance is credited at a fixed rate of ₽100 per token, with 10/50/100/500
+bundles and no membership or volume discount. This phase only sells tokens;
+games, prize redemption and a reverse exchange are not provided. Tokens stay
+in the account wallet rather than inventory or trade slots.
+
+`PlayerWalletService` calls `/game/casino/tokens` and its `/purchase` endpoint,
+updates the authoritative wallet and retains uncertain purchase request IDs for
+safe retry. The NPC saves the player's position before opening its themed
+counter. Account-service checks Iris's map/position, current activity, reserved
+trade money and the token balance cap. Purchases use the existing
+`NpcMarketPurchase` receipt table and a user/wallet lock; money, tokens, receipt
+and activity history commit together. No schema migration is needed.
+
+Focused checks: `tests/casino_token_vendor_check.gd` and account-service's
+`tests/test_casino_tokens.py`, alongside the existing Game Corner population and
+guard checks. PostgreSQL concurrent execution has not been exercised by the
+SQLite service tests; they cover receipt replay and the post-lock replay branch.
+
 ## Celadon Gym
 
 The active artist `Celadon Gym.tmx` is imported into

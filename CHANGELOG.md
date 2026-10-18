@@ -4,6 +4,7 @@
 
 - Give all four Celadon City signs localized text and location illustrations.
 
+- Let Iris sell account-bound Casino Tokens at Celadon Game Corner for ₽100 each in 10/50/100/500-token bundles, with atomic wallet updates and safe purchase retries.
 - Expose the Mira follow-up, Erika battle and hint, Game Corner guard and escape, and Rocket boss objective in Story Trainer Progress.
 
 - Refresh Celadon Game Corner’s artist visual with the revised object layering and tileset references.
