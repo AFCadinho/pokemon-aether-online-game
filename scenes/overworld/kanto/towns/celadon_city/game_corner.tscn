@@ -11,6 +11,18 @@
 [ext_resource type="Script" uid="uid://c0rvsvb5ckinb" path="res://scripts/world/story/story_trigger.gd" id="story_trigger"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/celadon_game_corner/celadon_game_corner.visual.tscn" id="visual"]
 
+[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="population_npc"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/mart_m_frames.tres" id="population_mart_m"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="population_gentleman"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/socialite_frames.tres" id="population_socialite"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="population_youngster"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="population_lass"]
+
+[sub_resource type="RectangleShape2D" id="host_interaction"]
+size = Vector2(96, 192)
+
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
 
@@ -101,6 +113,23 @@ weather_profile = "disabled"
 
 [node name="Visual" parent="." unique_id=123032442 instance=ExtResource("visual")]
 
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("floor_mask")
+floor_regions = {
+&"ground_floor": Rect2(0, 0, 896, 672)
+}
+follow_player_floor = false
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+
 [node name="Spawns" type="Node2D" parent="." unique_id=1400707400]
 
 [node name="FromOutside" type="Marker2D" parent="Spawns" unique_id=464606162]
@@ -187,7 +216,120 @@ script = ExtResource("story_hook")
 interaction_id = "kanto_game_corner_guard_escape"
 entity_id = "kanto_game_corner_attendant"
 
+
+[node name="HostIris" parent="Entities/NPCs" instance=ExtResource("population_npc")]
+position = Vector2(432, 176)
+npc_id = "kanto_celadon_game_corner_host_iris"
+npc_definition_id = "trainer_class_mart_m"
+dialogue_id = "kanto_celadon_game_corner_host_iris_default"
+display_name = "Host Iris"
+npc_sprite_frames = ExtResource("population_mart_m")
+movement_behavior = "idle"
+movement_tiles = 1
+movement_speed_pixels = 32.0
+movement_wait_seconds = 3.0
+movement_wait_jitter_seconds = 0.8
+manual_interaction_reach_tiles = 3
+
+[node name="InteractionArea" parent="Entities/NPCs/HostIris" index="1"]
+position = Vector2(0, 64)
+
+[node name="CollisionShape2D" parent="Entities/NPCs/HostIris/InteractionArea" index="0"]
+shape = SubResource("host_interaction")
+
+[node name="GentlemanBram" parent="Entities/NPCs" instance=ExtResource("population_npc")]
+position = Vector2(272, 336)
+npc_id = "kanto_celadon_game_corner_gentleman_bram"
+npc_definition_id = "trainer_class_gentleman"
+dialogue_id = "kanto_celadon_game_corner_gentleman_bram_default"
+display_name = "Gentleman Bram"
+npc_sprite_frames = ExtResource("population_gentleman")
+movement_behavior = "idle"
+movement_tiles = 1
+movement_speed_pixels = 30.0
+movement_wait_seconds = 3.5
+movement_wait_jitter_seconds = 1.2
+
+[node name="SocialiteAva" parent="Entities/NPCs" instance=ExtResource("population_npc")]
+position = Vector2(752, 368)
+npc_id = "kanto_celadon_game_corner_socialite_ava"
+npc_definition_id = "trainer_class_socialite"
+dialogue_id = "kanto_celadon_game_corner_socialite_ava_default"
+display_name = "Socialite Ava"
+npc_sprite_frames = ExtResource("population_socialite")
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 32.0
+movement_wait_seconds = 3.2
+movement_wait_jitter_seconds = 1.3
+
+[node name="YoungsterNiels" parent="Entities/NPCs" instance=ExtResource("population_npc")]
+position = Vector2(368, 464)
+npc_id = "kanto_celadon_game_corner_youngster_niels"
+npc_definition_id = "trainer_class_youngster"
+dialogue_id = "kanto_celadon_game_corner_youngster_niels_default"
+display_name = "Youngster Niels"
+npc_sprite_frames = ExtResource("population_youngster")
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_speed_pixels = 44.0
+movement_wait_seconds = 1.6
+movement_wait_jitter_seconds = 0.7
+
+[node name="LassFaye" parent="Entities/NPCs" instance=ExtResource("population_npc")]
+position = Vector2(752, 560)
+npc_id = "kanto_celadon_game_corner_lass_faye"
+npc_definition_id = "trainer_class_lass"
+dialogue_id = "kanto_celadon_game_corner_lass_faye_default"
+display_name = "Lass Faye"
+npc_sprite_frames = ExtResource("population_lass")
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 37.0
+movement_wait_seconds = 2.4
+movement_wait_jitter_seconds = 0.9
+
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=279567358]
+
+
+[node name="Meowth" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(208, 368)
+overworld_pokemon_id = "kanto_celadon_game_corner_meowth"
+species_id = "meowth"
+level = 18
+dialogue_id = "kanto_celadon_game_corner_meowth_cry"
+display_name = "Meowth"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 41.0
+movement_wait_seconds = 2.0
+movement_wait_jitter_seconds = 0.8
+
+[node name="Porygon" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(656, 272)
+overworld_pokemon_id = "kanto_celadon_game_corner_porygon"
+species_id = "porygon"
+level = 20
+dialogue_id = "kanto_celadon_game_corner_porygon_cry"
+display_name = "Porygon"
+movement_behavior = "idle"
+movement_tiles = 1
+movement_speed_pixels = 28.0
+movement_wait_seconds = 3.6
+movement_wait_jitter_seconds = 1.1
+
+[node name="Pikachu" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(112, 560)
+overworld_pokemon_id = "kanto_celadon_game_corner_pikachu"
+species_id = "pikachu"
+level = 17
+dialogue_id = "kanto_celadon_game_corner_pikachu_cry"
+display_name = "Pikachu"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 46.0
+movement_wait_seconds = 1.9
+movement_wait_jitter_seconds = 1.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=294245030]
 
@@ -202,3 +344,5 @@ tile_set = SubResource("TileSet_o1wif")
 
 [connection signal="body_entered" from="Exits/ToOutside" to="Exits/ToOutside" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRocketHideout" to="Exits/ToRocketHideout" method="_on_body_entered"]
+
+[editable path="Entities/NPCs/HostIris"]

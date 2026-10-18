@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a black exterior mask, five Game Corner visitors and three companion Pokémon, with localized dialogue and independently paced movement.
+
 - Refresh the Celadon Game Corner visual from the latest artist TMX.
 
 - Add five Celadon Department Store shoppers and four companion Pokémon, with localized dialogue and independently paced movement; align server shop checks with the repositioned Z-Crystal and Mega Stone vendors.
