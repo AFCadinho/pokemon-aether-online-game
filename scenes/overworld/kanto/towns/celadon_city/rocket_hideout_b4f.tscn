@@ -240,4 +240,29 @@ z_index = 100
 tile_map_data = PackedByteArray("AAARABUAAAAEAAAAAAA=")
 tile_set = SubResource("TileSet_7vm3t")
 
+[node name="SpinUp" type="TileMapLayer" parent="Tiles"]
+tile_set = SubResource("TileSet_ia3ar")
+collision_enabled = false
+navigation_enabled = false
+
+[node name="SpinDown" type="TileMapLayer" parent="Tiles"]
+tile_set = SubResource("TileSet_ia3ar")
+collision_enabled = false
+navigation_enabled = false
+
+[node name="SpinLeft" type="TileMapLayer" parent="Tiles"]
+tile_set = SubResource("TileSet_ia3ar")
+collision_enabled = false
+navigation_enabled = false
+
+[node name="SpinRight" type="TileMapLayer" parent="Tiles"]
+tile_set = SubResource("TileSet_ia3ar")
+collision_enabled = false
+navigation_enabled = false
+
+[node name="SpinStop" type="TileMapLayer" parent="Tiles"]
+tile_set = SubResource("TileSet_ia3ar")
+collision_enabled = false
+navigation_enabled = false
+
 [connection signal="body_entered" from="Exits/UpToB3F" to="Exits/UpToB3F" method="_on_body_entered"]

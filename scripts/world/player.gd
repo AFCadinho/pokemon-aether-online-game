@@ -54,6 +54,7 @@ const WildEncounterProvider := preload("res://scripts/world/map_encounter_provid
 const MapChatBubbleScript := preload("res://scripts/world/map_chat_bubble.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 const LedgeDirectionResolverScript := preload("res://scripts/world/ledge_direction_resolver.gd")
+const SpinTileMovement := preload("res://scripts/world/spin_tile_movement.gd")
 const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_stair_elevation.gd")
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
@@ -276,6 +277,8 @@ var map_layer_cache_generation := 0
 # de volgende tile aan het lopen is.
 var is_moving := false
 var story_path_movement_active := false
+var spin_tiles := SpinTileMovement.new()
+var spin_tile_input_owner := StringName("spin_tiles_%s" % get_instance_id())
 var next_sand_footprint_is_left := true
 
 # target_position is een wereldpositie in pixels.
@@ -896,6 +899,7 @@ func get_persistent_world_position() -> Vector2:
 
 func reset_movement_state() -> void:
 	var persistent_position := get_persistent_world_position()
+	_reset_spin_tiles()
 	_finish_fishing_activity()
 	_finish_surf_activity()
 	_finish_land_mount_activity()
@@ -915,6 +919,7 @@ func reset_movement_state() -> void:
 
 
 func teleport_within_current_map(world_position: Vector2, facing_direction := Vector2.ZERO) -> void:
+	_reset_spin_tiles()
 	_finish_fishing_activity()
 	_finish_surf_activity()
 	_finish_land_mount_activity()
@@ -955,6 +960,7 @@ func can_story_move_path(path: Array[String]) -> bool:
 		or fishing_activity_active
 		or surf_activity_active
 		or story_path_movement_active
+		or spin_tiles.active
 	):
 		return false
 	for direction_name: String in path:
@@ -1208,6 +1214,7 @@ func _get_current_map_world_access_area_type() -> String:
 	return ""
 
 func _exit_tree() -> void:
+	_reset_spin_tiles()
 	var had_activity := fishing_activity_active or surf_activity_active or land_mount_activity_active
 	var should_unlock_overworld := fishing_activity_active
 
@@ -1779,6 +1786,9 @@ func _process(delta: float) -> void:
 	_sync_surf_prompt_visibility()
 	_sync_fishing_bite_prompt_visibility()
 
+	if _process_spin_tiles(delta):
+		return
+
 	if _try_start_fishing_skill_input():
 		_sync_fishing_prompt_visibility()
 		_sync_surf_prompt_visibility()
@@ -1844,6 +1854,7 @@ func _advance_tile_movement(delta: float) -> void:
 				if not surf_activity_active and not land_mount_activity_active:
 					WalkingEvolutionService.record_steps(completed_tiles)
 				if check_for_map_exit():
+					_stop_spin_tiles()
 					return
 
 				_sync_surf_state_after_move()
@@ -1863,6 +1874,14 @@ func _advance_tile_movement(delta: float) -> void:
 					var map_step_encounter_type := _get_map_step_encounter_type()
 					if not map_step_encounter_type.is_empty():
 						check_for_wild_encounter(map_step_encounter_type)
+
+			if not story_path_movement_active and (spin_tiles.active or _try_begin_spin_tiles()):
+				if _can_continue_spin_tiles() and _try_start_spin_step():
+					if remaining_delta > 0.0:
+						continue
+				elif not spin_tiles.active:
+					set_idle_frame()
+				return
 
 			if _can_accept_movement_input():
 				var next_direction := _get_next_movement_direction()
@@ -1944,8 +1963,67 @@ func _get_pokemon_follower_parent() -> Node:
 
 func _can_accept_movement_input() -> bool:
 	return not fishing_activity_active \
+		and not spin_tiles.active \
 		and not GameState.is_overworld_input_locked() \
 		and not _is_ui_typing()
+
+
+func _process_spin_tiles(delta: float) -> bool:
+	_ensure_map_layers()
+	if not spin_tiles.active:
+		if is_moving or story_path_movement_active or not _try_begin_spin_tiles():
+			return false
+	_clear_input_buffer()
+	_clear_held_direction()
+	if is_moving:
+		_advance_tile_movement(delta)
+	elif _can_continue_spin_tiles():
+		_try_start_spin_step()
+	if spin_tiles.active and _can_continue_spin_tiles():
+		spin_tiles.elapsed += maxf(delta, 0.0)
+		_apply_static_activity_idle_pose(spin_tiles.visual_direction())
+	elif not spin_tiles.active:
+		set_idle_frame()
+	return true
+
+
+func _try_begin_spin_tiles() -> bool:
+	if not _can_accept_movement_input() or not spin_tiles.try_begin(global_position):
+		return false
+	GameState.acquire_overworld_input_lock(spin_tile_input_owner)
+	_clear_input_buffer()
+	_clear_held_direction()
+	return true
+
+
+func _can_continue_spin_tiles() -> bool:
+	if GameState.input_locked or GameState.overworld_input_legacy_locked or _is_ui_typing():
+		return false
+	for owner: Variant in GameState.overworld_input_lock_owners:
+		if owner != spin_tile_input_owner:
+			return false
+	return true
+
+
+func _try_start_spin_step() -> bool:
+	var direction := spin_tiles.next_direction(global_position)
+	if direction != Vector2.ZERO and _try_start_move(direction):
+		return true
+	_stop_spin_tiles()
+	return false
+
+
+func _stop_spin_tiles() -> void:
+	if spin_tiles.active:
+		spin_tiles.stop(global_position)
+	GameState.release_overworld_input_lock(spin_tile_input_owner)
+	_clear_input_buffer()
+	_clear_held_direction()
+
+
+func _reset_spin_tiles() -> void:
+	_stop_spin_tiles()
+	spin_tiles.reset()
 
 func _try_handle_fishing_input_event(event: InputEvent) -> bool:
 	if event == null or not event.is_action_pressed("fish", false):
@@ -2430,6 +2508,8 @@ func _has_reached_target() -> bool:
 	return move_elapsed >= move_duration
 
 func _get_current_tile_move_duration() -> float:
+	if spin_tiles.active:
+		return SpinTileMovement.TILE_DURATION
 	if land_mount_activity_active:
 		return LAND_MOUNT_TILE_MOVE_DURATION
 	if surf_activity_active:
@@ -2502,12 +2582,14 @@ func _try_start_move(direction: Vector2) -> bool:
 	var new_target_position := _snap_world_position(global_position) + (direction * TILE_SIZE)
 	var movement_target_position := new_target_position
 
-	if _try_trigger_route_gate(new_target_position):
+	if not spin_tiles.active and _try_trigger_route_gate(new_target_position):
 		set_idle_frame()
 		return false
 
 	var ledge_directions := _get_ledge_directions_for_tile(new_target_position)
 	if not ledge_directions.is_empty():
+		if spin_tiles.active:
+			return false
 		if not ledge_directions.has(direction):
 			return false
 
@@ -2538,6 +2620,9 @@ func _try_start_move(direction: Vector2) -> bool:
 	return true
 
 func play_walk_animation(direction: Vector2) -> void:
+	if spin_tiles.active:
+		_apply_static_activity_idle_pose(spin_tiles.visual_direction())
+		return
 	if _uses_static_activity_movement_pose():
 		_apply_static_activity_idle_pose(direction)
 		_sync_mount_animation(true, direction)
@@ -2721,6 +2806,9 @@ func refresh_map_layers() -> void:
 		return
 
 	GameState.current_map = current_map
+	if spin_tiles.map_owner != current_map:
+		_reset_spin_tiles()
+	spin_tiles.refresh_layers(current_map)
 	map_layers_owner = current_map
 	map_layers_initialized = true
 	map_layer_cache_generation += 1
@@ -2751,6 +2839,9 @@ func _ensure_map_layers() -> void:
 
 
 func _clear_map_layer_cache() -> void:
+	_reset_spin_tiles()
+	spin_tiles.map_owner = null
+	spin_tiles.layers.clear()
 	map_layers_owner = null
 	map_layers_initialized = false
 	collision_tilemap = null
