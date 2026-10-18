@@ -4,7 +4,11 @@
 
 - Reveal the Game Corner stair attendant as a Rocket Grunt after Erika’s hint; defeat him to open the stairs and follow his escape toward Team Rocket’s boss.
 
-- Move the Battle Point, evolution-item, Z-Crystal, Mega Stone and both rental vendors from Aether Clash Lobby to Celadon Department Store.
+- Let Celadon Department Store customers speak to vendors from across the width of their counters, within the existing shop interaction radius.
+
+- Keep Team Rental and Pokémon Rental at their original Aether Clash Lobby counters.
+
+- Move the Battle Point, evolution-item, Z-Crystal and Mega Stone vendors from Aether Clash Lobby to Celadon Department Store.
 
 - Keep dense city nightlights stable while the camera moves by rendering lit tilemaps in smaller batches, including runtime depth layers.
 

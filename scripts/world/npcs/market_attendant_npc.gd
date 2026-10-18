@@ -19,10 +19,39 @@ const MARKET_MODE_PLAYER_SELLS := "player_sells"
 @export var opening_dialogue_id := ""
 @export var failure_dialogue_id := ""
 
+## Extra counter width in tiles; ordinary attendants retain straight-line interaction.
+@export_range(0, 3, 1) var counter_interaction_width_tiles := 0
+
 var quest_reward_id := ""
 var quest_reward_quest_id := ""
 var quest_reward_step_id := ""
 var quest_reward_received_dialogue_id := ""
+
+
+func _is_player_facing_npc(body: Node2D) -> bool:
+	if super._is_player_facing_npc(body):
+		return true
+	if body == null or counter_interaction_width_tiles <= 0:
+		return false
+	var direction_value: Variant = body.get("last_direction")
+	if not direction_value is Vector2:
+		return false
+	var direction := Vector2i((direction_value as Vector2).round())
+	if absi(direction.x) + absi(direction.y) != 1:
+		return false
+	var origins: Array[Vector2] = [_get_body_interaction_position(body)]
+	if body.has_method("get_interaction_positions"):
+		origins = body.call("get_interaction_positions")
+	for origin: Vector2 in origins:
+		var offset := _to_tile(get_feet_position()) - _to_tile(origin)
+		var forward := offset.x * direction.x + offset.y * direction.y
+		var lateral := absi(offset.x * direction.y - offset.y * direction.x)
+		# Keep diagonal customer positions inside the existing server shop radius.
+		if forward > 0 and forward <= manual_interaction_reach_tiles \
+				and lateral <= counter_interaction_width_tiles \
+				and get_feet_position().distance_squared_to(origin) <= pow(manual_interaction_reach_tiles * TILE_SIZE, 2):
+			return true
+	return false
 
 
 func interact_with_player(_player: Node2D) -> void:
