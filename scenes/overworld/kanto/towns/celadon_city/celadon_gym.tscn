@@ -15,6 +15,11 @@
 [ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="poke_fan_f"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/celadon_gym/celadon_gym.visual.tscn" id="visual"]
+[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
+[ext_resource type="Script" path="res://scripts/world/story/story_trigger.gd" id="story_trigger"]
+
+[sub_resource type="RectangleShape2D" id="shape_erika_conversation"]
+size = Vector2(192, 192)
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
@@ -197,10 +202,31 @@ position = Vector2(656, 304)
 trainer_id = "kanto_celadon_gym_erika"
 npc_profile = ExtResource("erika_profile")
 npc_id = "kanto_celadon_gym_erika"
+preload_quest_markers = true
 display_name = "Erika"
 npc_sprite_frames = ExtResource("erika_frames")
 portrait_id = "showdown_erika_lgpe"
 battle_environment_id = "grass"
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/GymLeaderErika"]
+script = ExtResource("story_hook")
+interaction_id = "kanto_celadon_erika_rocket_inquiry_manual"
+entity_id = "kanto_celadon_gym_erika"
+
+[node name="RocketInquiry" type="Area2D" parent="Entities/NPCs/GymLeaderErika"]
+position = Vector2(0, 32)
+script = ExtResource("story_trigger")
+story_host_path = NodePath("..")
+required_quest_id = "challenge_celadon_gym"
+required_step_id = "ask_erika"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/NPCs/GymLeaderErika/RocketInquiry"]
+shape = SubResource("shape_erika_conversation")
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/GymLeaderErika/RocketInquiry"]
+script = ExtResource("story_hook")
+interaction_id = "kanto_celadon_erika_rocket_inquiry"
+entity_id = "kanto_celadon_gym_erika"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1952400408]
 
