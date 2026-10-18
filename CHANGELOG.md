@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh the Celadon Gym visual from the latest artist TMX.
+
 - Mask the area outside Celadon Gym with the shared black interior visibility mask.
 
 - Continue the main story after Team Rocket escapes with a manual conversation and quest marker for Mira, who points the player toward Erika in Celadon Gym.
