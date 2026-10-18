@@ -4,6 +4,8 @@
 
 - Add the artist Celadon Department Store interior, with collision, a visibility mask and both city entrances.
 
+- Continue Mira’s lead through Erika’s Gym battle and automatic Team Rocket conversation to the Game Corner investigation; clarify the Pokémon Tower motive for following the trio on Route 7.
+
 - Update Celadon Gym’s imported garden layers from the revised artist TMX.
 
 - Add warm, time-controlled night lighting to Celadon City’s street lamps, windows and entrances using the same lights as Cerulean and Vermilion.
