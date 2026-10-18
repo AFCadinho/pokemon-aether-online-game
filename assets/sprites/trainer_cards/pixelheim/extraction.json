@@ -1,0 +1,51 @@
+{
+  "source": "User-provided @Pixelheim sheet, 2026-10-18",
+  "source_sha256": "b2cb3ba79ba196705356aa2219285b8ad0d87e1f71a1281abbeab8137737b97c",
+  "canvas": [
+    128,
+    128
+  ],
+  "background_mask": "g > r + 12 and g > b + 12 and g > 65",
+  "sprites": {
+    "jessie": {
+      "crop": [
+        0,
+        75,
+        104,
+        205
+      ],
+      "visible_source_bounds": [
+        5,
+        82,
+        101,
+        204
+      ],
+      "canvas_offset": [
+        16,
+        3
+      ],
+      "opaque_pixels": 5030,
+      "sha256": "6224ac96414a8bd0e8b4e56d9fe64200ec19c5c84c764dd9a8c5e7d8350009f4"
+    },
+    "james": {
+      "crop": [
+        105,
+        75,
+        219,
+        205
+      ],
+      "visible_source_bounds": [
+        111,
+        82,
+        213,
+        200
+      ],
+      "canvas_offset": [
+        13,
+        7
+      ],
+      "opaque_pixels": 4385,
+      "sha256": "8fbca3acd67b0afeb91e76fad1488c13660a9419352ff57b9e367b9378c8ddce"
+    }
+  }
+}
