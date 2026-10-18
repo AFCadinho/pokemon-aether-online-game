@@ -33,6 +33,11 @@ const REQUEST_TIMEOUT_SECONDS := 8.0
 var _gem_notification_poll_in_flight := false
 var _delivered_gem_notifications: Dictionary = {}
 
+# Keep an uncertain request across closing/reopening the counter; never retry with a new id.
+var casino_pending_purchase: Dictionary = {}
+var _casino_pending_owner := ""
+var _casino_purchase_in_flight := false
+
 
 func _ready() -> void:
 	var timer := Timer.new()
@@ -470,6 +475,78 @@ func award_trainer_battle_rewards(battle_id: String) -> Dictionary:
 		})
 	)
 	return _reward_claim_result_from_response(response)
+
+
+func _sync_casino_owner() -> void:
+	var account_key := str(AuthService.current_user.get("id", AuthService.current_user.get("username", "")))
+	if account_key != _casino_pending_owner:
+		casino_pending_purchase.clear()
+		_casino_pending_owner = account_key
+
+func load_casino_tokens() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	_sync_casino_owner()
+	var account_key := _casino_pending_owner
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response := await _request_json(base_url + "/game/casino/tokens", HTTPClient.METHOD_GET, GatewayApiConfig.get_accept_headers(), "")
+	_sync_casino_owner()
+	if account_key != _casino_pending_owner:
+		return {"success": false, "error": "Account changed."}
+	if not bool(response.get("success", false)):
+		return response
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	if not body.get("offers") is Array or not body.get("wallet") is Dictionary or int(body.get("unitPrice", 0)) <= 0:
+		return {"success": false, "error": "Invalid token counter response."}
+	var result := {"success": true, "wallet": body.wallet, "offers": body.offers, "unitPrice": body.unitPrice}
+	apply_wallet_result(result)
+	return result
+
+func purchase_casino_tokens(amount: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	_sync_casino_owner()
+	if _casino_purchase_in_flight:
+		return {"success": false, "error": "A token purchase is already in progress."}
+	if not amount in [10, 50, 100, 500]:
+		return {"success": false, "error": "Invalid token bundle."}
+	if not casino_pending_purchase.is_empty() and int(casino_pending_purchase.tokenAmount) != amount:
+		return {"success": false, "retryRequired": true}
+	if casino_pending_purchase.is_empty():
+		var hex := Crypto.new().generate_random_bytes(16).hex_encode()
+		var request_id := "%s-%s-%s-%s-%s" % [hex.substr(0, 8), hex.substr(8, 4), hex.substr(12, 4), hex.substr(16, 4), hex.substr(20, 12)]
+		casino_pending_purchase = {"tokenAmount": amount, "requestId": request_id}
+	_casino_purchase_in_flight = true
+	var account_key := _casino_pending_owner
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response := await _request_json(base_url + "/game/casino/tokens/purchase", HTTPClient.METHOD_POST, GatewayApiConfig.get_json_headers(), JSON.stringify(casino_pending_purchase))
+	_casino_purchase_in_flight = false
+	_sync_casino_owner()
+	if account_key != _casino_pending_owner:
+		return {"success": false, "error": "Account changed."}
+	return _finish_casino_purchase(response)
+
+func _finish_casino_purchase(response: Dictionary) -> Dictionary:
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var receipt: Dictionary = _dictionary_from_value(body.get("purchase", {}))
+	var wallet: Dictionary = _dictionary_from_value(body.get("wallet", {}))
+	if bool(response.get("success", false)) and not casino_pending_purchase.is_empty() \
+			and str(receipt.get("requestId", "")) == str(casino_pending_purchase.requestId) \
+			and int(receipt.get("tokenAmount", 0)) == int(casino_pending_purchase.tokenAmount) \
+			and wallet.has("money") and wallet.has("casino_tokens"):
+		casino_pending_purchase.clear()
+		var result := {"success": true, "wallet": wallet, "purchase": receipt}
+		apply_wallet_result(result)
+		return result
+	var detail: Dictionary = _dictionary_from_value(body.get("detail", {}))
+	var definitive_codes := ["casino_invalid_bundle", "casino_invalid_request", "casino_activity_blocked",
+		"casino_vendor_required", "not_enough_money", "casino_tokens_balance_overflow",
+		"casino_request_conflict", "money_reserved_for_trade", "thieving_most_wanted_arrested"]
+	if not bool(response.get("success", false)) and str(detail.get("code", "")) in definitive_codes:
+		casino_pending_purchase.clear()
+		return response
+	# Transport errors, 5xx and malformed successful replies may have committed.
+	return {"success": false, "retryRequired": true, "error": response.get("error", "")}
 
 
 func apply_wallet_result(result: Dictionary) -> void:

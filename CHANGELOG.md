@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Let Iris sell account-bound Casino Tokens at Celadon Game Corner for ₽100 each in 10/50/100/500-token bundles, with atomic wallet updates and safe purchase retries.
+
 - Refresh Celadon Game Corner’s artist visual with the revised object layering and tileset references.
 
 - Add a black exterior mask, five Game Corner visitors and three companion Pokémon, with localized dialogue and independently paced movement.
