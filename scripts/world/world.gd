@@ -18,6 +18,7 @@ const AetherClashJailDepthScript := preload("res://scripts/world/aether_clash_ja
 const MapDepthSortingScript := preload("res://scripts/world/map_depth_sorting.gd")
 const TreeLowerDepthSortingScript := preload("res://scripts/world/tree_lower_depth_sorting.gd")
 const ObjectLowerDepthSortingScript := preload("res://scripts/world/object_lower_depth_sorting.gd")
+const NightLightRenderingScript := preload("res://scripts/world/night_light_rendering.gd")
 const SavedMapScenePathResolver := preload("res://scripts/world/saved_map_scene_path_resolver.gd")
 const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
@@ -2586,6 +2587,9 @@ func _normalize_map_depth_layer_z_indices(map: Node) -> void:
 	_build_tall_grass_visual_depth_rows(map)
 	_build_decorative_visual_depth_rows(map)
 	_build_structure_top_visual_depth_groups(map)
+	# Include the row/crown layers created above in the lighting batches.
+	NightLightRenderingScript.configure_map(map)
+
 
 func _normalize_tree_layer_z_indices_recursive(node: Node) -> void:
 	if node is TileMapLayer:

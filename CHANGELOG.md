@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep dense city nightlights stable while the camera moves by rendering lit tilemaps in smaller batches, including runtime depth layers.
+
 - Add the artist Celadon Department Store interior, with collision, a visibility mask and both city entrances.
 
 - Continue Mira’s lead through Erika’s Gym battle and automatic Team Rocket conversation to the Game Corner investigation; clarify the Pokémon Tower motive for following the trio on Route 7.
