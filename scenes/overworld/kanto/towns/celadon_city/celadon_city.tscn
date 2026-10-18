@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="6_pokemon"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="7_collision"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="15_5tkry"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="15_dnnov"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="17_87ibu"]
 [ext_resource type="Texture2D" uid="uid://bc3msqb7fyvft" path="res://assets/npcs/story/jessie.png" id="19_ga50g"]
 [ext_resource type="Texture2D" uid="uid://b36b2on04mb7x" path="res://assets/npcs/story/james.png" id="20_npyfy"]
 [ext_resource type="Texture2D" uid="uid://dfkx8sc5qujyb" path="res://assets/followers/MEOWTH.png" id="21_dnnov"]
@@ -1057,6 +1059,10 @@ script = ExtResource("rocket_hook")
 interaction_id = "kanto_celadon_mira_rocket_inquiry"
 entity_id = "kanto_celadon_city_mira"
 
+[node name="TransitKeeperNPC" parent="Entities/NPCs" unique_id=2063251970 instance=ExtResource("15_dnnov")]
+position = Vector2(2256, 176)
+local_destination_id = ""
+
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=873866540]
 
 [node name="Eevee" parent="Entities/Pokemon" unique_id=1944541642 instance=ExtResource("6_pokemon")]
@@ -1169,6 +1175,10 @@ facing_direction = Vector2(-1, 0)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1285463609]
 
+[node name="AetherBeacon" parent="Entities/Interactables" unique_id=23565231 instance=ExtResource("17_87ibu")]
+position = Vector2(2320, 208)
+display_name = "Aether Beacon"
+
 [node name="Tiles" type="Node2D" parent="." unique_id=1867462022]
 
 [node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=1782502594]
@@ -1218,7 +1228,7 @@ z_as_relative = false
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_6ka4n")
 animation = &"idle_right"
-frame_progress = 0.6655872
+frame_progress = 0.056585073
 offset = Vector2(0, -16)
 initial_direction = "right"
 
@@ -1229,7 +1239,7 @@ texture_filter = 1
 position = Vector2(0, 32)
 sprite_frames = SubResource("SpriteFrames_guoqy")
 animation = &"idle_right"
-frame_progress = 0.6655872
+frame_progress = 0.056585073
 offset = Vector2(0, -16)
 initial_direction = "right"
 
@@ -1240,7 +1250,7 @@ texture_filter = 1
 position = Vector2(32, 0)
 sprite_frames = SubResource("SpriteFrames_c6v4y")
 animation = &"idle_right"
-frame_progress = 0.6655872
+frame_progress = 0.056585073
 offset = Vector2(0, -16)
 initial_direction = "right"
 
