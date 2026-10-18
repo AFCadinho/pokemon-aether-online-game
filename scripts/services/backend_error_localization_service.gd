@@ -11,6 +11,11 @@ const CATALOG_PATHS: Dictionary = {
 }
 
 const CODE_TO_KEY: Dictionary = {
+	"casino_activity_blocked": "backend.error.action_blocked",
+	"casino_vendor_required": "ui.casino.visit",
+	"casino_request_conflict": "backend.error.request_conflict",
+	"casino_invalid_bundle": "ui.casino.invalid_bundle",
+	"casino_invalid_request": "ui.casino.purchase_failed",
 	"nature_unchanged": "ui.nature_specialist.choose_different",
 	"daycare_party_only": "backend.error.daycare_party_only",
 	"daycare_visit_required": "backend.error.daycare_visit_required",
