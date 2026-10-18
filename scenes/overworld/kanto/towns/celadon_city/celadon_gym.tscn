@@ -1,10 +1,12 @@
 [gd_scene format=4 uid="uid://daguq8ayuqqj1"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="14_rabkt"]
 [ext_resource type="SpriteFrames" uid="uid://cg046cju3kis8" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="ace_trainer_f"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="collision"]
 [ext_resource type="SpriteFrames" uid="uid://c88p17fu83ihp" path="res://assets/npcs/gym_leaders/erika_frames.tres" id="erika_frames"]
 [ext_resource type="Resource" path="res://resources/npcs/gym_leaders/erika.tres" id="erika_profile"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
 [ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="lass"]
 [ext_resource type="PackedScene" uid="uid://ds0lg7oj5khbm" path="res://scenes/npcs/gym_leader_npc.tscn" id="leader"]
@@ -13,8 +15,6 @@
 [ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="poke_fan_f"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/celadon_gym/celadon_gym.visual.tscn" id="visual"]
-
-[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
@@ -101,7 +101,7 @@ music_profile_id = "gym.interior"
 
 [node name="Visual" parent="." unique_id=2136097716 instance=ExtResource("visual")]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1580045409]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("floor_mask")
@@ -110,13 +110,13 @@ floor_regions = {
 }
 follow_player_floor = false
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1281932369]
 
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1801347383]
 
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=645791744]
 
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1801666221]
 
 [node name="Spawns" type="Node2D" parent="." unique_id=133101069]
 
@@ -205,6 +205,82 @@ battle_environment_id = "grass"
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1952400408]
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1019667145]
+
+[node name="CutTrees" type="Node2D" parent="Entities/Interactables" unique_id=1368650931]
+
+[node name="CuttableTree" parent="Entities/Interactables/CutTrees" unique_id=296532205 instance=ExtResource("14_rabkt")]
+
+[node name="Row" type="Node2D" parent="Entities/Interactables/CutTrees/CuttableTree" unique_id=1736632621]
+position = Vector2(400, 1616)
+
+[node name="CuttableTree" parent="Entities/Interactables/CutTrees/CuttableTree/Row" unique_id=776422137 instance=ExtResource("14_rabkt")]
+
+[node name="CuttableTree2" parent="Entities/Interactables/CutTrees/CuttableTree/Row" unique_id=601552890 instance=ExtResource("14_rabkt")]
+position = Vector2(32, 0)
+
+[node name="Row2" type="Node2D" parent="Entities/Interactables/CutTrees/CuttableTree" unique_id=1919594525]
+position = Vector2(208, 1616)
+
+[node name="CuttableTree" parent="Entities/Interactables/CutTrees/CuttableTree/Row2" unique_id=898424274 instance=ExtResource("14_rabkt")]
+
+[node name="CuttableTree2" parent="Entities/Interactables/CutTrees/CuttableTree/Row2" unique_id=761225533 instance=ExtResource("14_rabkt")]
+position = Vector2(32, 0)
+
+[node name="Row3" type="Node2D" parent="Entities/Interactables/CutTrees/CuttableTree" unique_id=161595980]
+position = Vector2(1104, 1616)
+
+[node name="CuttableTree" parent="Entities/Interactables/CutTrees/CuttableTree/Row3" unique_id=777104491 instance=ExtResource("14_rabkt")]
+
+[node name="CuttableTree2" parent="Entities/Interactables/CutTrees/CuttableTree/Row3" unique_id=1641363682 instance=ExtResource("14_rabkt")]
+position = Vector2(32, 0)
+
+[node name="Row4" type="Node2D" parent="Entities/Interactables/CutTrees/CuttableTree" unique_id=765539276]
+position = Vector2(912, 1232)
+
+[node name="CuttableTree" parent="Entities/Interactables/CutTrees/CuttableTree/Row4" unique_id=588710256 instance=ExtResource("14_rabkt")]
+
+[node name="CuttableTree2" parent="Entities/Interactables/CutTrees/CuttableTree/Row4" unique_id=1547362052 instance=ExtResource("14_rabkt")]
+position = Vector2(32, 0)
+
+[node name="Row5" type="Node2D" parent="Entities/Interactables/CutTrees/CuttableTree" unique_id=2138751272]
+position = Vector2(400, 1072)
+
+[node name="CuttableTree" parent="Entities/Interactables/CutTrees/CuttableTree/Row5" unique_id=505496608 instance=ExtResource("14_rabkt")]
+
+[node name="CuttableTree2" parent="Entities/Interactables/CutTrees/CuttableTree/Row5" unique_id=1740924896 instance=ExtResource("14_rabkt")]
+position = Vector2(32, 0)
+
+[node name="Row6" type="Node2D" parent="Entities/Interactables/CutTrees/CuttableTree" unique_id=1822101234]
+position = Vector2(208, 1072)
+
+[node name="CuttableTree" parent="Entities/Interactables/CutTrees/CuttableTree/Row6" unique_id=666033929 instance=ExtResource("14_rabkt")]
+
+[node name="CuttableTree2" parent="Entities/Interactables/CutTrees/CuttableTree/Row6" unique_id=241869032 instance=ExtResource("14_rabkt")]
+position = Vector2(32, 0)
+
+[node name="Row7" type="Node2D" parent="Entities/Interactables/CutTrees/CuttableTree" unique_id=64756904]
+position = Vector2(208, 688)
+
+[node name="CuttableTree" parent="Entities/Interactables/CutTrees/CuttableTree/Row7" unique_id=1172987649 instance=ExtResource("14_rabkt")]
+
+[node name="CuttableTree2" parent="Entities/Interactables/CutTrees/CuttableTree/Row7" unique_id=62304412 instance=ExtResource("14_rabkt")]
+position = Vector2(32, 0)
+
+[node name="Row8" type="Node2D" parent="Entities/Interactables/CutTrees/CuttableTree" unique_id=1556442865]
+position = Vector2(912, 688)
+
+[node name="CuttableTree" parent="Entities/Interactables/CutTrees/CuttableTree/Row8" unique_id=1355577576 instance=ExtResource("14_rabkt")]
+
+[node name="CuttableTree2" parent="Entities/Interactables/CutTrees/CuttableTree/Row8" unique_id=1144347296 instance=ExtResource("14_rabkt")]
+position = Vector2(32, 0)
+
+[node name="Row9" type="Node2D" parent="Entities/Interactables/CutTrees/CuttableTree" unique_id=1124010208]
+position = Vector2(1104, 688)
+
+[node name="CuttableTree" parent="Entities/Interactables/CutTrees/CuttableTree/Row9" unique_id=255274648 instance=ExtResource("14_rabkt")]
+
+[node name="CuttableTree2" parent="Entities/Interactables/CutTrees/CuttableTree/Row9" unique_id=1616043961 instance=ExtResource("14_rabkt")]
+position = Vector2(32, 0)
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1599975804]
 visible = false
