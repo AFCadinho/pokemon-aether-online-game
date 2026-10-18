@@ -7393,5 +7393,7 @@
   "ui.staff.story_checkpoint.rocket_hideout_scope": "Hideout — collect the Silph Scope",
   "ui.staff.story_checkpoint.rocket_hideout_return": "Return to Pokémon Tower",
   "backend.error.rocket_hideout_guards_required": "Defeat both of Giovanni’s guards before challenging him.",
-  "backend.error.world_pickup_trainer_required": "Defeat the trainer guarding this item first."
+  "backend.error.world_pickup_trainer_required": "Defeat the trainer guarding this item first.",
+  "world.rocket_hideout.gate.name": "Security Gate",
+  "world.rocket_hideout.gate.closed": "The security gate is locked. Defeat both Rocket guards to open it."
 }
