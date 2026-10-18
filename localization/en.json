@@ -7385,5 +7385,13 @@
   "ui.staff.story_checkpoint.celadon_erika_inquiry": "Celadon: ask Erika about Team Rocket",
   "ui.staff.story_checkpoint.game_corner_guard": "Game Corner: confront the attendant",
   "ui.staff.story_checkpoint.game_corner_guard_escape": "Game Corner: guard flees",
-  "ui.staff.story_checkpoint.rocket_hideout_boss": "Rocket Hideout: confront the boss"
+  "ui.staff.story_checkpoint.rocket_hideout_boss": "Rocket Hideout: confront the boss",
+  "story.kanto.confront_team_rocket_boss.learn_plan": "Listen to Giovanni and learn what Team Rocket is doing in Pokémon Tower.",
+  "story.kanto.confront_team_rocket_boss.collect_scope": "Pick up the Silph Scope beside Giovanni’s desk on B4F.",
+  "story.kanto.confront_team_rocket_boss.return_to_tower": "Return to Pokémon Tower in Lavender Town with the Silph Scope.",
+  "ui.staff.story_checkpoint.rocket_hideout_plan": "Giovanni — hear his plan",
+  "ui.staff.story_checkpoint.rocket_hideout_scope": "Hideout — collect the Silph Scope",
+  "ui.staff.story_checkpoint.rocket_hideout_return": "Return to Pokémon Tower",
+  "backend.error.rocket_hideout_guards_required": "Defeat both of Giovanni’s guards before challenging him.",
+  "backend.error.world_pickup_trainer_required": "Defeat the trainer guarding this item first."
 }

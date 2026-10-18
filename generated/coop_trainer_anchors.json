@@ -230,6 +230,36 @@
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
 			"trainerId": ""
 		},
+		"interaction:kanto_rocket_hideout_giovanni_challenge": {
+			"mapId": "kanto_rocket_hideout_b4f",
+			"position": {
+				"x": 848.0,
+				"y": 304.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_rocket_hideout_giovanni_plan": {
+			"mapId": "kanto_rocket_hideout_b4f",
+			"position": {
+				"x": 848.0,
+				"y": 304.0
+			},
+			"radius": 186.082336425781,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_rocket_hideout_giovanni_plan_manual": {
+			"mapId": "kanto_rocket_hideout_b4f",
+			"position": {
+				"x": 848.0,
+				"y": 304.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn",
+			"trainerId": ""
+		},
 		"interaction:kanto_route_25_misty_found": {
 			"mapId": "kanto_route_25",
 			"position": {
@@ -1979,6 +2009,126 @@
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
 			"trainerId": "kanto_rock_tunnel_future_self"
+		},
+		"kanto_rocket_hideout_b1f_grunt_1": {
+			"mapId": "kanto_rocket_hideout_b1f",
+			"position": {
+				"x": 944.0,
+				"y": 400.0
+			},
+			"radius": 144.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
+			"trainerId": "kanto_rocket_hideout_b1f_grunt_1"
+		},
+		"kanto_rocket_hideout_b1f_grunt_2": {
+			"mapId": "kanto_rocket_hideout_b1f",
+			"position": {
+				"x": 176.0,
+				"y": 368.0
+			},
+			"radius": 144.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
+			"trainerId": "kanto_rocket_hideout_b1f_grunt_2"
+		},
+		"kanto_rocket_hideout_b1f_grunt_3": {
+			"mapId": "kanto_rocket_hideout_b1f",
+			"position": {
+				"x": 208.0,
+				"y": 720.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
+			"trainerId": "kanto_rocket_hideout_b1f_grunt_3"
+		},
+		"kanto_rocket_hideout_b1f_grunt_4": {
+			"mapId": "kanto_rocket_hideout_b1f",
+			"position": {
+				"x": 208.0,
+				"y": 1136.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
+			"trainerId": "kanto_rocket_hideout_b1f_grunt_4"
+		},
+		"kanto_rocket_hideout_b1f_grunt_5": {
+			"mapId": "kanto_rocket_hideout_b1f",
+			"position": {
+				"x": 592.0,
+				"y": 1040.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b1f.tscn",
+			"trainerId": "kanto_rocket_hideout_b1f_grunt_5"
+		},
+		"kanto_rocket_hideout_b2f_grunt_1": {
+			"mapId": "kanto_rocket_hideout_b2f",
+			"position": {
+				"x": 848.0,
+				"y": 336.0
+			},
+			"radius": 144.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b2f.tscn",
+			"trainerId": "kanto_rocket_hideout_b2f_grunt_1"
+		},
+		"kanto_rocket_hideout_b3f_grunt_1": {
+			"mapId": "kanto_rocket_hideout_b3f",
+			"position": {
+				"x": 176.0,
+				"y": 816.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b3f.tscn",
+			"trainerId": "kanto_rocket_hideout_b3f_grunt_1"
+		},
+		"kanto_rocket_hideout_b3f_grunt_2": {
+			"mapId": "kanto_rocket_hideout_b3f",
+			"position": {
+				"x": 592.0,
+				"y": 240.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b3f.tscn",
+			"trainerId": "kanto_rocket_hideout_b3f_grunt_2"
+		},
+		"kanto_rocket_hideout_b4f_grunt_1": {
+			"mapId": "kanto_rocket_hideout_b4f",
+			"position": {
+				"x": 272.0,
+				"y": 208.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn",
+			"trainerId": "kanto_rocket_hideout_b4f_grunt_1"
+		},
+		"kanto_rocket_hideout_b4f_grunt_2": {
+			"mapId": "kanto_rocket_hideout_b4f",
+			"position": {
+				"x": 752.0,
+				"y": 720.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn",
+			"trainerId": "kanto_rocket_hideout_b4f_grunt_2"
+		},
+		"kanto_rocket_hideout_b4f_grunt_3": {
+			"mapId": "kanto_rocket_hideout_b4f",
+			"position": {
+				"x": 912.0,
+				"y": 720.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn",
+			"trainerId": "kanto_rocket_hideout_b4f_grunt_3"
+		},
+		"kanto_rocket_hideout_giovanni": {
+			"mapId": "kanto_rocket_hideout_b4f",
+			"position": {
+				"x": 848.0,
+				"y": 304.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b4f.tscn",
+			"trainerId": "kanto_rocket_hideout_giovanni"
 		},
 		"kanto_route_10_hiker_clark": {
 			"mapId": "kanto_route_10",

@@ -8,6 +8,13 @@
 
 [ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
+[ext_resource type="Script" path="res://scripts/world/npcs/rocket_hideout_trainer.gd" id="population_script"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="population_frames"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="population_item"]
+[ext_resource type="Script" path="res://scripts/world/interactables/rocket_hideout_item.gd" id="population_item_script"]
+
 [sub_resource type="RectangleShape2D" id="stairs_shape"]
 size = Vector2(32, 32)
 
@@ -78,6 +85,7 @@ sources/0 = SubResource("TileSetAtlasSource_bc5x4")
 
 [sub_resource type="RectangleShape2D" id="elevator_door_shape"]
 size = Vector2(96, 32)
+
 
 [node name="RocketHideoutB2F" type="Node2D" unique_id=409934564]
 script = ExtResource("metadata")
@@ -251,3 +259,56 @@ navigation_enabled = false
 [connection signal="body_entered" from="Exits/DownToB3F" to="Exits/DownToB3F" method="_on_body_entered"]
 
 [connection signal="body_entered" from="Exits/ToElevator" to="Exits/ToElevator" method="_on_body_entered"]
+
+[node name="RocketGrunt1" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+position = Vector2(848, 336)
+script = ExtResource("population_script")
+npc_id = "kanto_rocket_hideout_b2f_grunt_1"
+trainer_id = "kanto_rocket_hideout_b2f_grunt_1"
+display_name = "Team Rocket Grunt"
+localized_display_name_key = "npc.game_corner.rocket_guard"
+npc_sprite_frames = ExtResource("population_frames")
+portrait_id = "showdown_rainbowrocketgrunt"
+battle_sprite_id = "showdown_rainbowrocketgrunt"
+facing_direction = Vector2(1, 0)
+sight_range_tiles = 4
+
+[node name="Zubat" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(880, 400)
+overworld_pokemon_id = "kanto_rocket_hideout_b2f_zubat"
+species_id = "zubat"
+level = 30
+display_name = "Zubat"
+movement_behavior = "idle"
+
+[node name="Grimer" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(848, 784)
+overworld_pokemon_id = "kanto_rocket_hideout_b2f_grimer"
+species_id = "grimer"
+level = 30
+display_name = "Grimer"
+movement_behavior = "idle"
+
+[node name="XSpeed" parent="Entities/Interactables" instance=ExtResource("population_item")]
+position = Vector2(592, 208)
+script = ExtResource("population_item_script")
+pickup_id = "kanto_rocket_hideout_b2f_x_speed"
+item_id = "x-speed"
+
+[node name="MoonStone" parent="Entities/Interactables" instance=ExtResource("population_item")]
+position = Vector2(112, 208)
+script = ExtResource("population_item_script")
+pickup_id = "kanto_rocket_hideout_b2f_moon_stone"
+item_id = "moon-stone"
+
+[node name="TmTaunt" parent="Entities/Interactables" instance=ExtResource("population_item")]
+position = Vector2(176, 368)
+script = ExtResource("population_item_script")
+pickup_id = "kanto_rocket_hideout_b2f_tm_taunt"
+item_id = "tm-taunt"
+
+[node name="SuperPotion" parent="Entities/Interactables" instance=ExtResource("population_item")]
+position = Vector2(112, 784)
+script = ExtResource("population_item_script")
+pickup_id = "kanto_rocket_hideout_b2f_super_potion"
+item_id = "super-potion"

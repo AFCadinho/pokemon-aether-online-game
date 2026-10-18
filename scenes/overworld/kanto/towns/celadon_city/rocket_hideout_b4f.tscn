@@ -8,6 +8,16 @@
 
 [ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
+[ext_resource type="Script" path="res://scripts/world/npcs/rocket_hideout_trainer.gd" id="population_script"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="population_frames"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="population_item"]
+[ext_resource type="Script" path="res://scripts/world/interactables/rocket_hideout_item.gd" id="population_item_script"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/giovanni_frames.tres" id="giovanni_frames"]
+[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="giovanni_hook"]
+[ext_resource type="Script" path="res://scripts/world/story/story_trigger.gd" id="giovanni_trigger"]
+
 [sub_resource type="RectangleShape2D" id="stairs_shape"]
 size = Vector2(32, 32)
 
@@ -144,6 +154,9 @@ sources/0 = SubResource("TileSetAtlasSource_75oes")
 [sub_resource type="RectangleShape2D" id="elevator_door_shape"]
 size = Vector2(96, 32)
 
+[sub_resource type="RectangleShape2D" id="giovanni_conversation_shape"]
+size = Vector2(256, 224)
+
 [node name="RocketHideoutB4F" type="Node2D" unique_id=2042396397]
 script = ExtResource("metadata")
 map_id = "kanto_rocket_hideout_b4f"
@@ -273,3 +286,141 @@ navigation_enabled = false
 [connection signal="body_entered" from="Exits/UpToB3F" to="Exits/UpToB3F" method="_on_body_entered"]
 
 [connection signal="body_entered" from="Exits/ToElevator" to="Exits/ToElevator" method="_on_body_entered"]
+
+[node name="RocketGrunt1" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+position = Vector2(272, 208)
+script = ExtResource("population_script")
+npc_id = "kanto_rocket_hideout_b4f_grunt_1"
+trainer_id = "kanto_rocket_hideout_b4f_grunt_1"
+display_name = "Team Rocket Grunt"
+localized_display_name_key = "npc.game_corner.rocket_guard"
+npc_sprite_frames = ExtResource("population_frames")
+portrait_id = "showdown_rainbowrocketgrunt"
+battle_sprite_id = "showdown_rainbowrocketgrunt"
+facing_direction = Vector2(0, 1)
+sight_range_tiles = 3
+
+[node name="RocketGrunt2" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+position = Vector2(752, 720)
+script = ExtResource("population_script")
+npc_id = "kanto_rocket_hideout_b4f_grunt_2"
+trainer_id = "kanto_rocket_hideout_b4f_grunt_2"
+display_name = "Team Rocket Grunt"
+localized_display_name_key = "npc.game_corner.rocket_guard"
+npc_sprite_frames = ExtResource("population_frames")
+portrait_id = "showdown_rainbowrocketgrunt"
+battle_sprite_id = "showdown_rainbowrocketgrunt"
+facing_direction = Vector2(0, 1)
+sight_range_tiles = 2
+
+[node name="RocketGrunt3" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+position = Vector2(912, 720)
+script = ExtResource("population_script")
+npc_id = "kanto_rocket_hideout_b4f_grunt_3"
+trainer_id = "kanto_rocket_hideout_b4f_grunt_3"
+display_name = "Team Rocket Grunt"
+localized_display_name_key = "npc.game_corner.rocket_guard"
+npc_sprite_frames = ExtResource("population_frames")
+portrait_id = "showdown_rainbowrocketgrunt"
+battle_sprite_id = "showdown_rainbowrocketgrunt"
+facing_direction = Vector2(0, 1)
+sight_range_tiles = 2
+
+[node name="Meowth" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(496, 592)
+overworld_pokemon_id = "kanto_rocket_hideout_b4f_meowth"
+species_id = "meowth"
+level = 30
+display_name = "Meowth"
+movement_behavior = "idle"
+
+[node name="Persian" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(944, 304)
+overworld_pokemon_id = "kanto_rocket_hideout_b4f_persian"
+species_id = "persian"
+level = 30
+display_name = "Persian"
+movement_behavior = "idle"
+
+[node name="TmThief" parent="Entities/Interactables" instance=ExtResource("population_item")]
+position = Vector2(112, 400)
+script = ExtResource("population_item_script")
+pickup_id = "kanto_rocket_hideout_b4f_tm_thief"
+item_id = "tm-thief"
+
+[node name="MaxEther" parent="Entities/Interactables" instance=ExtResource("population_item")]
+position = Vector2(112, 592)
+script = ExtResource("population_item_script")
+pickup_id = "kanto_rocket_hideout_b4f_max_ether"
+item_id = "max-ether"
+
+[node name="Calcium" parent="Entities/Interactables" instance=ExtResource("population_item")]
+position = Vector2(688, 1008)
+script = ExtResource("population_item_script")
+pickup_id = "kanto_rocket_hideout_b4f_calcium"
+item_id = "calcium"
+
+[node name="LiftKey" parent="Entities/Interactables" instance=ExtResource("population_item")]
+position = Vector2(272, 240)
+script = ExtResource("population_item_script")
+pickup_id = "kanto_rocket_hideout_b4f_lift_key"
+item_id = "lift-key"
+required_trainer_id = "kanto_rocket_hideout_b4f_grunt_1"
+
+[node name="SilphScope" parent="Entities/Interactables" instance=ExtResource("population_item")]
+position = Vector2(880, 304)
+script = ExtResource("population_item_script")
+pickup_id = "kanto_rocket_hideout_b4f_silph_scope"
+item_id = "silph-scope"
+required_quest_id = "confront_team_rocket_boss"
+required_step_id = "collect_scope"
+
+[node name="Giovanni" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+position = Vector2(848, 304)
+script = ExtResource("population_script")
+npc_id = "kanto_rocket_hideout_giovanni"
+trainer_id = "kanto_rocket_hideout_giovanni"
+display_name = "Giovanni"
+npc_sprite_frames = ExtResource("giovanni_frames")
+portrait_id = "showdown_giovanni_masters"
+battle_sprite_id = "showdown_giovanni_masters"
+sight_range_tiles = 0
+preload_quest_markers = true
+visibility_hidden_quest_id = "confront_team_rocket_boss"
+visibility_hidden_quest_step_id = "learn_plan"
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/Giovanni"]
+script = ExtResource("giovanni_hook")
+interaction_id = "kanto_rocket_hideout_giovanni_challenge"
+entity_id = "kanto_rocket_hideout_giovanni"
+
+[node name="AfterBattleHook" type="Node" parent="Entities/NPCs/Giovanni"]
+script = ExtResource("giovanni_hook")
+interaction_id = "kanto_rocket_hideout_giovanni_plan_manual"
+entity_id = "kanto_rocket_hideout_giovanni"
+
+[node name="Conversation" type="Area2D" parent="Entities/NPCs/Giovanni"]
+script = ExtResource("giovanni_trigger")
+story_host_path = NodePath("..")
+required_quest_id = "confront_team_rocket_boss"
+required_step_id = "learn_plan"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/NPCs/Giovanni/Conversation"]
+shape = SubResource("giovanni_conversation_shape")
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/Giovanni/Conversation"]
+script = ExtResource("giovanni_hook")
+interaction_id = "kanto_rocket_hideout_giovanni_plan"
+entity_id = "kanto_rocket_hideout_giovanni"
+
+[node name="NestBall" parent="Entities/Interactables" instance=ExtResource("population_item")]
+position = Vector2(912, 240)
+script = ExtResource("population_item_script")
+pickup_id = "kanto_rocket_hideout_b4f_nest_ball"
+item_id = "nest-ball"
+
+[node name="NetBall" parent="Entities/Interactables" instance=ExtResource("population_item")]
+position = Vector2(752, 240)
+script = ExtResource("population_item_script")
+pickup_id = "kanto_rocket_hideout_b4f_net_ball"
+item_id = "net-ball"

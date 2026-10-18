@@ -107,3 +107,29 @@ All four scenes were rendered in Godot against a contrasting background and
 visually reviewed; every outer margin renders fully black. The existing
 `tests/floor_visibility_mask_camera_check.gd` passes. No live walkthrough was
 performed for this visual-only change.
+
+## Trainers, Pokémon and pickups
+
+The four floors now contain 11 Rocket grunts (5/1/2/3), Giovanni on B4F,
+eight talkable companion Pokémon and 18 one-time pickup balls. Placement uses
+native TrainerNPC/OverworldPokemon/OverworldItem scenes, with collision and
+Showdown portraits. The current artist geometry and painted spin layers are
+unchanged. The extra Pokémon are stationary so they cannot wander onto the
+conveyors or reserve a puzzle destination.
+
+The western B4F grunt reveals the Lift Key after defeat. The server requires
+this key for rides; exiting the current floor remains possible without it.
+Old unkeyed B2F/B4F saves can also evacuate to B1F.
+Both eastern guards must be beaten before Giovanni. His quest marker takes
+precedence over the ordinary battle icon. The trusted boss victory leads to
+an automatic/resumable conversation, a Silph Scope pickup and the objective to
+return to Pokémon Tower. Story Trainer Progress includes each new stage.
+
+The official reference and explicit adaptations are documented in the paired
+backend's `docs/rocket_hideout_population.md`: current Aether levels/moves,
+eight extra companions, original hidden items shown as balls, and TM Thief in
+place of unsupported TM Snatch. No further Tower rescue chapter is introduced.
+
+Run `tests/rocket_hideout_population_check.gd` for native actor, availability
+and spin-aware reachability checks; `-- --render` additionally saves complete
+Godot floor previews under `.tmp/` using the graphical rendering backend.
