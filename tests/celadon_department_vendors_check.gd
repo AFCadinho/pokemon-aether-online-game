@@ -5,8 +5,8 @@ const LOBBY := "res://scenes/overworld/aether_clash/aether_clash_lobby.tscn"
 const VENDORS := {
 	"BattlePointVendor": [Vector2(272, 240), "battle_point_exchange", "battle_point_vendor"],
 	"EvolutionItemVendor": [Vector2(560, 240), "evolution_item_shop", "evolution_item_vendor"],
-	"ZCrystalVendor": [Vector2(880, 240), "z_crystal_shop", "z_crystal_vendor"],
-	"MegaStoneVendor": [Vector2(1168, 240), "mega_stone_shop", "mega_stone_vendor"],
+	"ZCrystalVendor": [Vector2(784, 240), "z_crystal_shop", "z_crystal_vendor"],
+	"MegaStoneVendor": [Vector2(1072, 240), "mega_stone_shop", "mega_stone_vendor"],
 }
 var failed := false
 
@@ -23,6 +23,7 @@ func _run() -> void:
 	var lobby: Node2D = load(LOBBY).instantiate()
 	var collision: TileMapLayer = store.get_node("Tiles/Collision")
 	var reached: Dictionary = _reachable(collision, Vector2i(42, 36), Vector2i(store.get_node("Spawns/FromOutside").position / 32))
+	_cache_actor_metadata(store)
 	root.add_child(store)
 	for vendor: Node in store.get_node("Entities/NPCs").get_children():
 		vendor.set_process(false)
@@ -34,7 +35,7 @@ func _run() -> void:
 	body_shape.position = Vector2(0, -0.75)
 	customer.add_child(body_shape)
 	store.add_child(customer)
-	_check(store.get_node("Entities/NPCs").get_child_count() == 4, "Four item vendors have a department")
+	_check(store.get_node("Entities/NPCs").get_children().filter(func(actor): return actor.get("market_id") != null).size() == 4, "Four item vendors have a department")
 	for vendor_name: String in VENDORS:
 		var vendor: Node2D = store.get_node("Entities/NPCs/" + vendor_name)
 		var expected: Array = VENDORS[vendor_name]
@@ -105,4 +106,17 @@ func _reachable(collision: TileMapLayer, size: Vector2i, start: Vector2i) -> Dic
 			queue.append(next)
 	return seen
 
+
+
+func _cache_actor_metadata(map: Node) -> void:
+	# Exercise local physics and movement without contacting a running backend.
+	var npc_service := root.get_node("NpcMetadataService")
+	for actor: Node in map.get_node("Entities/NPCs").get_children():
+		var id: String = actor._get_npc_metadata_id()
+		if not id.is_empty():
+			var key: String = npc_service._get_cache_key(npc_service._get_http_locale(), id)
+			npc_service.npc_metadata_cache[key] = {"success": true, "metadata": {"id": id, "name": actor.display_name, "dialogueId": actor.dialogue_id}}
+	var pokemon_service := root.get_node("OverworldPokemonMetadataService")
+	for actor: Node in map.get_node("Entities/Pokemon").get_children():
+		pokemon_service.overworld_pokemon_metadata_cache[actor.overworld_pokemon_id] = {"success": true, "metadata": {"id": actor.overworld_pokemon_id, "name": actor.display_name, "speciesId": actor.species_id, "level": actor.level, "dialogueId": actor.dialogue_id, "interactionType": "cry"}}
 
