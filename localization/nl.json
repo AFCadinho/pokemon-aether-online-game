@@ -7403,11 +7403,17 @@
   "story.kanto.calm_pokemon_tower_spirit.battle_marowak": "Onthul en bevecht de rusteloze geest op Pokémon Tower 6F.",
   "story.kanto.calm_pokemon_tower_spirit.farewell_marowak": "Help Marowaks geest rust te vinden.",
   "story.kanto.rescue_mr_fuji.title": "Red Mr. Fuji",
-  "story.kanto.rescue_mr_fuji.summary": "Red Mr. Fuji boven in Pokémon Tower.",
-  "story.kanto.rescue_mr_fuji.rescue_fuji": "Red Mr. Fuji boven in Pokémon Tower.",
+  "story.kanto.rescue_mr_fuji.summary": "Verdrijf Team Rocket van de bovenste verdieping van Pokémon Tower en red Mr. Fuji.",
+  "story.kanto.rescue_mr_fuji.rescue_fuji": "Versla de drie Team Rocket-leden op Pokémon Tower 7F.",
   "ui.pokemon_tower.scope.title": "Silph Scope",
   "ui.pokemon_tower.scope.prompt": "Wil je de Silph Scope gebruiken?",
   "ui.staff.story_checkpoint.tower_marowak": "Marowak: onthulling en gevecht",
   "ui.staff.story_checkpoint.tower_marowak_farewell": "Marowak: afscheid",
-  "ui.staff.story_checkpoint.tower_rescue_fuji": "Red Mr. Fuji"
+  "ui.staff.story_checkpoint.tower_rescue_fuji": "Red Mr. Fuji",
+  "story.kanto.rescue_mr_fuji.speak_to_fuji": "Praat met Mr. Fuji boven in Pokémon Tower.",
+  "story.kanto.visit_mr_fuji.title": "Bezoek Mr. Fuji",
+  "story.kanto.visit_mr_fuji.summary": "Bezoek Mr. Fuji bij zijn huis in Lavender Town.",
+  "story.kanto.visit_mr_fuji.receive_flute": "Bezoek Mr. Fuji thuis en ontvang zijn bedankje.",
+  "ui.staff.story_checkpoint.tower_fuji_thanks": "Mr. Fuji: bedankje in de toren",
+  "ui.staff.story_checkpoint.fuji_house_reward": "Mr. Fuji: Poké Flute thuis"
 }

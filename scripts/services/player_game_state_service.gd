@@ -354,6 +354,7 @@ func resolve_story_interaction(
 		"revision": int(body.get("revision", 0)),
 		"actions": _array_from_value(body.get("actions", [])).duplicate(true),
 		"completionRequired": bool(body.get("completionRequired", false)),
+		"dialogueParameters": _dictionary_from_value(body.get("dialogueParameters", {})).duplicate(true),
 	}
 
 
@@ -581,6 +582,12 @@ func _is_valid_story_resolve_body(body: Dictionary) -> bool:
 		return false
 	if not body.has("completionRequired") or typeof(body.get("completionRequired")) != TYPE_BOOL:
 		return false
+	var parameters: Variant = body.get("dialogueParameters", {})
+	if not parameters is Dictionary:
+		return false
+	for key: Variant in parameters:
+		if key != "starterSpeciesName" or not (parameters[key] is String) or str(parameters[key]).is_empty() or str(parameters[key]).length() > 128:
+			return false
 	if not bool(body.get("handled", false)):
 		return _array_from_value(body.get("actions", [])).is_empty() and not bool(
 			body.get("completionRequired", false)

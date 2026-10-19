@@ -7403,11 +7403,17 @@
   "story.kanto.calm_pokemon_tower_spirit.battle_marowak": "Revele e enfrente o espírito inquieto no 6º andar da Pokémon Tower.",
   "story.kanto.calm_pokemon_tower_spirit.farewell_marowak": "Ajude o espírito de Marowak a encontrar paz.",
   "story.kanto.rescue_mr_fuji.title": "Resgate o Sr. Fuji",
-  "story.kanto.rescue_mr_fuji.summary": "Resgate o Sr. Fuji no topo da Pokémon Tower.",
-  "story.kanto.rescue_mr_fuji.rescue_fuji": "Resgate o Sr. Fuji no topo da Pokémon Tower.",
+  "story.kanto.rescue_mr_fuji.summary": "Expulse a Equipe Rocket do topo da Pokémon Tower e resgate o Sr. Fuji.",
+  "story.kanto.rescue_mr_fuji.rescue_fuji": "Derrote os três membros da Equipe Rocket no 7º andar da Pokémon Tower.",
   "ui.pokemon_tower.scope.title": "Silph Scope",
   "ui.pokemon_tower.scope.prompt": "Quer usar o Silph Scope?",
   "ui.staff.story_checkpoint.tower_marowak": "Marowak: revelação e batalha",
   "ui.staff.story_checkpoint.tower_marowak_farewell": "Marowak: despedida",
-  "ui.staff.story_checkpoint.tower_rescue_fuji": "Resgate o Sr. Fuji"
+  "ui.staff.story_checkpoint.tower_rescue_fuji": "Resgate o Sr. Fuji",
+  "story.kanto.rescue_mr_fuji.speak_to_fuji": "Fale com o Sr. Fuji no topo da Pokémon Tower.",
+  "story.kanto.visit_mr_fuji.title": "Visite o Sr. Fuji",
+  "story.kanto.visit_mr_fuji.summary": "Visite o Sr. Fuji na casa dele em Lavender Town.",
+  "story.kanto.visit_mr_fuji.receive_flute": "Visite o Sr. Fuji em casa para receber seu agradecimento.",
+  "ui.staff.story_checkpoint.tower_fuji_thanks": "Sr. Fuji: agradecimento na torre",
+  "ui.staff.story_checkpoint.fuji_house_reward": "Sr. Fuji: Poké Flute em casa"
 }

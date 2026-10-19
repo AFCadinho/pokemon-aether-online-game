@@ -12,6 +12,14 @@
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="helper_frames"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="cubone"]
 
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/mr_fuji_frames.tres" id="fuji_frames"]
+[ext_resource type="Script" path="res://scripts/world/npcs/mr_fuji.gd" id="fuji_script"]
+[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/Zaffre's Overworlds/NPC_Z13_Mr_Fuji.png" id="fuji_portrait_sheet"]
+
+[sub_resource type="AtlasTexture" id="fuji_portrait"]
+atlas = ExtResource("fuji_portrait_sheet")
+region = Rect2(0, 0, 64, 64)
+
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
 
@@ -134,6 +142,20 @@ preload_quest_markers = true
 [node name="StoryHook" type="Node" parent="Entities/NPCs/FujiHelper"]
 script = ExtResource("story_hook")
 interaction_id = "kanto_lavender_fuji_helper_request"
+
+[node name="MrFuji" parent="Entities/NPCs" instance=ExtResource("story_npc")]
+script = ExtResource("fuji_script")
+position = Vector2(368, 432)
+npc_id = "kanto_lavender_mr_fuji"
+display_name = "Mr. Fuji"
+npc_sprite_frames = ExtResource("fuji_frames")
+mugshot = SubResource("fuji_portrait")
+visibility_required_quest_id = "rescue_mr_fuji"
+preload_quest_markers = true
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/MrFuji"]
+script = ExtResource("story_hook")
+interaction_id = "kanto_lavender_fuji_flute_gift"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=266126023]
 

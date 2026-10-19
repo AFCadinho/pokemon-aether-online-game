@@ -80,6 +80,8 @@ const STORY_CHECKPOINTS: Array[Dictionary] = [
 	{"id": "tower_marowak", "chapter_id": "pokemon_tower", "label_key": "ui.staff.story_checkpoint.tower_marowak"},
 	{"id": "tower_marowak_farewell", "chapter_id": "pokemon_tower", "label_key": "ui.staff.story_checkpoint.tower_marowak_farewell"},
 	{"id": "tower_rescue_fuji", "chapter_id": "pokemon_tower", "label_key": "ui.staff.story_checkpoint.tower_rescue_fuji"},
+	{"id": "tower_fuji_thanks", "chapter_id": "pokemon_tower", "label_key": "ui.staff.story_checkpoint.tower_fuji_thanks"},
+	{"id": "fuji_house_reward", "chapter_id": "pokemon_tower", "label_key": "ui.staff.story_checkpoint.fuji_house_reward"},
 ]
 const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "pallet", "label_key": "ui.staff.story_chapter.pallet"},

@@ -1026,6 +1026,90 @@
         }
       }
     },
+    "kanto_pokemon_tower_rocket_grunt_1": {
+      "entityId": "kanto_pokemon_tower_rocket_grunt_1",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 432.0,
+        "y": 2192.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": {
+        "eventId": "kanto_pokemon_tower_rocket_grunt_1_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "rescue_mr_fuji",
+        "stepId": "rescue_fuji"
+      },
+      "trainerIds": [
+        "kanto_pokemon_tower_rocket_grunt_1"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_rocket_grunt_1": {
+          "gymBadge": null,
+          "name": "Team Rocket Grunt",
+          "teamSize": 2,
+          "trainerClass": "team_rocket"
+        }
+      }
+    },
+    "kanto_pokemon_tower_rocket_grunt_2": {
+      "entityId": "kanto_pokemon_tower_rocket_grunt_2",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 336.0,
+        "y": 2128.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": {
+        "eventId": "kanto_pokemon_tower_rocket_grunt_2_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "rescue_mr_fuji",
+        "stepId": "rescue_fuji"
+      },
+      "trainerIds": [
+        "kanto_pokemon_tower_rocket_grunt_2"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_rocket_grunt_2": {
+          "gymBadge": null,
+          "name": "Team Rocket Grunt",
+          "teamSize": 2,
+          "trainerClass": "team_rocket"
+        }
+      }
+    },
+    "kanto_pokemon_tower_rocket_grunt_3": {
+      "entityId": "kanto_pokemon_tower_rocket_grunt_3",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 432.0,
+        "y": 2064.0
+      },
+      "radius": 112.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": {
+        "eventId": "kanto_pokemon_tower_rocket_grunt_3_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "rescue_mr_fuji",
+        "stepId": "rescue_fuji"
+      },
+      "trainerIds": [
+        "kanto_pokemon_tower_rocket_grunt_3"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_rocket_grunt_3": {
+          "gymBadge": null,
+          "name": "Team Rocket Grunt",
+          "teamSize": 3,
+          "trainerClass": "team_rocket"
+        }
+      }
+    },
     "kanto_rock_tunnel_1f_hiker_lenny": {
       "entityId": "kanto_rock_tunnel_1f_hiker_lenny",
       "mapId": "kanto_rock_tunnel_1f",
@@ -4825,6 +4909,9 @@
     "kanto_pokemon_tower_hex_maniac_vera": "kanto_pokemon_tower_hex_maniac_vera",
     "kanto_pokemon_tower_marowak": "kanto_pokemon_tower_marowak",
     "kanto_pokemon_tower_restless_spirit": "kanto_pokemon_tower_marowak",
+    "kanto_pokemon_tower_rocket_grunt_1": "kanto_pokemon_tower_rocket_grunt_1",
+    "kanto_pokemon_tower_rocket_grunt_2": "kanto_pokemon_tower_rocket_grunt_2",
+    "kanto_pokemon_tower_rocket_grunt_3": "kanto_pokemon_tower_rocket_grunt_3",
     "kanto_rock_tunnel_1f_hiker_lenny": "kanto_rock_tunnel_1f_hiker_lenny",
     "kanto_rock_tunnel_1f_hiker_lucas": "kanto_rock_tunnel_1f_hiker_lucas",
     "kanto_rock_tunnel_1f_hiker_oliver": "kanto_rock_tunnel_1f_hiker_oliver",
