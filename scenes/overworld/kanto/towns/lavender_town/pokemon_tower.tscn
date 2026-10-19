@@ -5,6 +5,11 @@
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
 [ext_resource type="Script" uid="uid://dcir531aqivcy" path="res://scripts/world/internal_floor_transition.gd" id="floor_transition"]
+[ext_resource type="SpriteFrames" uid="uid://cikktetf5osid" path="res://assets/npcs/classes/mr_fuji_frames.tres" id="fuji_frames"]
+[ext_resource type="Texture2D" uid="uid://b4rxwte0ki14y" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/Zaffre's Overworlds/NPC_Z13_Mr_Fuji.png" id="fuji_portrait_sheet"]
+[ext_resource type="SpriteFrames" uid="uid://ndd4lyovddgq" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="fuji_rocket_frames"]
+[ext_resource type="Script" path="res://scripts/world/npcs/pokemon_tower_rocket.gd" id="fuji_rocket_script"]
+[ext_resource type="Script" path="res://scripts/world/npcs/mr_fuji.gd" id="fuji_script"]
 [ext_resource type="SpriteFrames" uid="uid://bwxa4fpyvnrfx" path="res://assets/npcs/classes/blue_frames.tres" id="gary_frames"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="gary_story_hook"]
 [ext_resource type="Script" uid="uid://c0rvsvb5ckinb" path="res://scripts/world/story/story_trigger.gd" id="gary_story_trigger"]
@@ -19,14 +24,8 @@
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_overworld_pokemon"]
 [ext_resource type="SpriteFrames" uid="uid://ckxh3g37blbkj" path="res://assets/npcs/classes/scientist_f_frames.tres" id="population_scientist_f_frames"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
-[ext_resource type="Script" path="res://scripts/world/interactables/pokemon_tower_spirit_gate.gd" id="spirit_gate"]
+[ext_resource type="Script" uid="uid://cc0k72cd82sb0" path="res://scripts/world/interactables/pokemon_tower_spirit_gate.gd" id="spirit_gate"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/lavender_pokemon_tower/lavender_pokemon_tower.visual.tscn" id="visual"]
-
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/mr_fuji_frames.tres" id="fuji_frames"]
-[ext_resource type="Script" path="res://scripts/world/npcs/mr_fuji.gd" id="fuji_script"]
-[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/Zaffre's Overworlds/NPC_Z13_Mr_Fuji.png" id="fuji_portrait_sheet"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/rocket_grunt_m_frames.tres" id="fuji_rocket_frames"]
-[ext_resource type="Script" path="res://scripts/world/npcs/pokemon_tower_rocket.gd" id="fuji_rocket_script"]
 
 [sub_resource type="AtlasTexture" id="fuji_portrait"]
 atlas = ExtResource("fuji_portrait_sheet")
@@ -414,78 +413,77 @@ portrait_id = "showdown_scientistf_gen6"
 [node name="PilgrimRen" parent="Entities/NPCs" unique_id=1254552624 instance=ExtResource("population_dialogue")]
 position = Vector2(400, 2000)
 npc_id = "kanto_pokemon_tower_pilgrim_ren"
-visibility_required_quest_id = "rescue_mr_fuji"
-visibility_required_quest_status = "completed"
 npc_definition_id = "trainer_class_elder_f"
+visibility_required_quest_id = "rescue_mr_fuji"
 display_name = "Pilgrim Ren"
 npc_sprite_frames = ExtResource("population_elder_f_frames")
 portrait_id = "showdown_madame_gen6"
 
-[node name="MrFuji" parent="Entities/NPCs" instance=ExtResource("population_dialogue")]
-script = ExtResource("fuji_script")
+[node name="MrFuji" parent="Entities/NPCs" unique_id=1706365670 instance=ExtResource("population_dialogue")]
 position = Vector2(400, 2000)
+script = ExtResource("fuji_script")
 npc_id = "kanto_pokemon_tower_mr_fuji"
+visibility_hidden_quest_id = "rescue_mr_fuji"
 display_name = "Mr. Fuji"
 npc_sprite_frames = ExtResource("fuji_frames")
 mugshot = SubResource("fuji_portrait")
-visibility_hidden_quest_id = "rescue_mr_fuji"
 preload_quest_markers = true
 
-[node name="StoryHook" type="Node" parent="Entities/NPCs/MrFuji"]
+[node name="StoryHook" type="Node" parent="Entities/NPCs/MrFuji" unique_id=43500084]
 script = ExtResource("gary_story_hook")
 interaction_id = "kanto_pokemon_tower_fuji_rescued"
 
-[node name="RocketGrunt1" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="RocketGrunt1" parent="Entities/NPCs" unique_id=1293527909 instance=ExtResource("population_trainer")]
+position = Vector2(432, 2128)
 script = ExtResource("fuji_rocket_script")
-position = Vector2(432, 2192)
-npc_id = "kanto_pokemon_tower_rocket_grunt_1"
 trainer_id = "kanto_pokemon_tower_rocket_grunt_1"
+sight_range_tiles = 3
+npc_id = "kanto_pokemon_tower_rocket_grunt_1"
+npc_definition_id = "trainer_class_rocket_grunt_m"
+visibility_hidden_quest_id = "rescue_mr_fuji"
+display_name = "Team Rocket Grunt"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("fuji_rocket_frames")
 portrait_id = "showdown_rainbowrocketgrunt"
 battle_sprite_id = "showdown_rainbowrocketgrunt"
-npc_definition_id = "trainer_class_rocket_grunt_m"
-display_name = "Team Rocket Grunt"
-npc_sprite_frames = ExtResource("fuji_rocket_frames")
-facing_direction = Vector2(-1, 0)
-sight_range_tiles = 3
-visibility_hidden_quest_id = "rescue_mr_fuji"
 
-[node name="StoryHook" type="Node" parent="Entities/NPCs/RocketGrunt1"]
+[node name="StoryHook" type="Node" parent="Entities/NPCs/RocketGrunt1" unique_id=269119368]
 script = ExtResource("gary_story_hook")
 interaction_id = "kanto_pokemon_tower_rocket_grunt_1_challenge"
 
-[node name="RocketGrunt2" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="RocketGrunt2" parent="Entities/NPCs" unique_id=557020855 instance=ExtResource("population_trainer")]
+position = Vector2(336, 2096)
 script = ExtResource("fuji_rocket_script")
-position = Vector2(336, 2128)
-npc_id = "kanto_pokemon_tower_rocket_grunt_2"
 trainer_id = "kanto_pokemon_tower_rocket_grunt_2"
+sight_range_tiles = 3
+npc_id = "kanto_pokemon_tower_rocket_grunt_2"
+npc_definition_id = "trainer_class_rocket_grunt_m"
+visibility_hidden_quest_id = "rescue_mr_fuji"
+display_name = "Team Rocket Grunt"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("fuji_rocket_frames")
 portrait_id = "showdown_rainbowrocketgrunt"
 battle_sprite_id = "showdown_rainbowrocketgrunt"
-npc_definition_id = "trainer_class_rocket_grunt_m"
-display_name = "Team Rocket Grunt"
-npc_sprite_frames = ExtResource("fuji_rocket_frames")
-facing_direction = Vector2(1, 0)
-sight_range_tiles = 3
-visibility_hidden_quest_id = "rescue_mr_fuji"
 
-[node name="StoryHook" type="Node" parent="Entities/NPCs/RocketGrunt2"]
+[node name="StoryHook" type="Node" parent="Entities/NPCs/RocketGrunt2" unique_id=1692993218]
 script = ExtResource("gary_story_hook")
 interaction_id = "kanto_pokemon_tower_rocket_grunt_2_challenge"
 
-[node name="RocketGrunt3" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
-script = ExtResource("fuji_rocket_script")
+[node name="RocketGrunt3" parent="Entities/NPCs" unique_id=1789539632 instance=ExtResource("population_trainer")]
 position = Vector2(432, 2064)
-npc_id = "kanto_pokemon_tower_rocket_grunt_3"
+script = ExtResource("fuji_rocket_script")
 trainer_id = "kanto_pokemon_tower_rocket_grunt_3"
+sight_range_tiles = 3
+npc_id = "kanto_pokemon_tower_rocket_grunt_3"
+npc_definition_id = "trainer_class_rocket_grunt_m"
+visibility_hidden_quest_id = "rescue_mr_fuji"
+display_name = "Team Rocket Grunt"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("fuji_rocket_frames")
 portrait_id = "showdown_rainbowrocketgrunt"
 battle_sprite_id = "showdown_rainbowrocketgrunt"
-npc_definition_id = "trainer_class_rocket_grunt_m"
-display_name = "Team Rocket Grunt"
-npc_sprite_frames = ExtResource("fuji_rocket_frames")
-facing_direction = Vector2(-1, 0)
-sight_range_tiles = 3
-visibility_hidden_quest_id = "rescue_mr_fuji"
 
-[node name="StoryHook" type="Node" parent="Entities/NPCs/RocketGrunt3"]
+[node name="StoryHook" type="Node" parent="Entities/NPCs/RocketGrunt3" unique_id=952998195]
 script = ExtResource("gary_story_hook")
 interaction_id = "kanto_pokemon_tower_rocket_grunt_3_challenge"
 
@@ -567,12 +565,12 @@ interactable_id = "kanto_pokemon_tower_restless_spirit"
 interactable_kind = "restless_spirit"
 display_name = "???"
 
-[node name="MarowakChallenge" type="Node" parent="Entities/Interactables/RestlessSpirit"]
+[node name="MarowakChallenge" type="Node" parent="Entities/Interactables/RestlessSpirit" unique_id=1963971262]
 script = ExtResource("gary_story_hook")
 interaction_id = "kanto_pokemon_tower_marowak_challenge"
 entity_id = "kanto_pokemon_tower_restless_spirit"
 
-[node name="MarowakFarewell" type="Node" parent="Entities/Interactables/RestlessSpirit"]
+[node name="MarowakFarewell" type="Node" parent="Entities/Interactables/RestlessSpirit" unique_id=1815240634]
 script = ExtResource("gary_story_hook")
 interaction_id = "kanto_pokemon_tower_marowak_farewell"
 entity_id = "kanto_pokemon_tower_restless_spirit"
