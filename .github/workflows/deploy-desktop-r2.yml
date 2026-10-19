@@ -7,7 +7,7 @@ on:
         description: Game and launcher display version for this build.
         required: false
         type: string
-        default: "0.3.112"
+        default: "0.3.113"
       build_launcher:
         description: Rebuild and publish the launcher only when the launcher itself changed.
         required: false
@@ -501,14 +501,11 @@ jobs:
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: python3 tools/publish_approved_3d_index_v15.py --apply
 
-      - name: Verify v16 model payloads and publish production index
+      - name: Verify already published v16 model collection
         if: inputs.approved_3d_release == 'v16'
-        env:
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: python3 tools/publish_approved_3d_index_v16.py --apply
+        run: |
+          python3 tools/test_verify_published_3d_v16.py
+          python3 tools/verify_published_3d_v16.py --remote
 
       - name: Register approved 3D Pokemon bundle index
         env:
