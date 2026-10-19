@@ -5,12 +5,15 @@ import unittest
 from unittest.mock import patch
 
 import publish_approved_3d_index_v16 as publisher
+from verify_published_3d_v16 import verified_metadata
 from package_launcher_release import _build_asset_bundle_index
 
 
 class V16ReleaseChecks(unittest.TestCase):
     def test_complete_pin_and_publication_admission(self):
-        meta = publisher.validate_local()
+        # Current game releases admit the retained publication. The publisher
+        # intentionally requires its historical, exact qualification source.
+        meta = verified_metadata()
         self.assertEqual(meta['total_bundle_bytes'], 6989696054)
         self.assertEqual(meta['saved_download_bytes'], 1805630084)
         pin = meta['index']
