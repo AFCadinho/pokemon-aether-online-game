@@ -1743,8 +1743,8 @@
 		"kanto_pokemon_tower_gastly_1": {
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
-				"x": 1008.0,
-				"y": 496.0
+				"x": 1072.0,
+				"y": 432.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
