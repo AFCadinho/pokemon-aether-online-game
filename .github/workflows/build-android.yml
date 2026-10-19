@@ -5,12 +5,12 @@ on:
     inputs:
       version_name:
         description: Android release version
-        default: "0.3.111"
+        default: "0.3.112"
         required: true
         type: string
       version_code:
-        description: New integer Android version code (next release uses 31)
-        default: 31
+        description: New integer Android version code (next release uses 32)
+        default: 32
         required: true
         type: number
       experimental_3d:

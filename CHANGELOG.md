@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.3.112
+
+- Prepare browser and Android release candidates for the deployment CI follow-up; Android keeps experimental 3D enabled with version code 32.
+
 ## 0.3.111
 
 - Move the Tower’s Gastly off a tomb platform and close a decorative plant pocket in Rocket Hideout B4F.

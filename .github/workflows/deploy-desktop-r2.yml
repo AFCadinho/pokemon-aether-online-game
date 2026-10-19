@@ -7,7 +7,7 @@ on:
         description: Game and launcher display version for this build.
         required: false
         type: string
-        default: "0.3.111"
+        default: "0.3.112"
       build_launcher:
         description: Rebuild and publish the launcher only when the launcher itself changed.
         required: false
