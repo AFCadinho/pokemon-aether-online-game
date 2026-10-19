@@ -4,6 +4,8 @@
 
 ## 0.3.111
 
+- Include the new Celadon, Rocket Hideout, Route 7 gate and Cinnabar Pokémon Center maps in the browser’s downloadable Kanto map pack.
+
 - Prepare matching browser and Android release candidates; Android retains its opt-in experimental 3D mode with release version code 31.
 
 - Refresh Silph Scope and story status when speaking to the Pokémon Tower spirit, recovering a missed return objective and avoiding incorrect missing-device dialogue.
