@@ -635,9 +635,13 @@ func _location_name(location_id: String) -> String:
 
 
 func _resolve_location_group(map_id: String) -> String:
+	var areas := world_access.get("areas", {}) as Dictionary
+	# Private cabins and other instances share their canonical area's map point.
+	var base_map_id := map_id.get_slice(":", 0)
+	if areas.has(base_map_id):
+		map_id = base_map_id
 	if map_location_points.has(map_id):
 		return str(map_location_points[map_id])
-	var areas := world_access.get("areas", {}) as Dictionary
 	var area := areas.get(map_id, {}) as Dictionary
 	var group_id := str(area.get("locationGroupId", map_id)).strip_edges()
 	return str(location_group_points.get(group_id, group_id))

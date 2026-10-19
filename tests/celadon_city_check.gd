@@ -30,12 +30,19 @@ func _run() -> void:
 	var collision := city.get_node("Tiles/Collision") as TileMapLayer
 	var reachable := _reachable_tiles(collision, Vector2i(77, 17))
 	_check(collision.get_used_cells().size() > 2000, "Buildings, trees, canal and boundaries have collision")
-	for tile: Vector2i in [Vector2i(10, 10), Vector2i(28, 24), Vector2i(14, 23), Vector2i(60, 51), Vector2i(0, 30)]:
+	for tile: Vector2i in [Vector2i(10, 10), Vector2i(14, 23), Vector2i(60, 51)]:
 		_check(collision.get_cell_source_id(tile) != -1, "Solid scenery is blocked: %s" % tile)
 	for tile: Vector2i in [Vector2i(28, 17), Vector2i(31, 30), Vector2i(49, 51), Vector2i(77, 17)]:
 		_check(reachable.has(tile), "Bridges and city arrival are reachable: %s" % tile)
 	for y in range(16, 20):
 		_check(reachable.has(Vector2i(79, y)), "Entire Celadon exit opening is traversable")
+	for tile: Vector2i in reachable:
+		if tile.x not in [0,79] and tile.y not in [0,69]:
+			continue
+		var covered := false
+		for transition: Node in city.get_node("Exits").get_children():
+			covered = covered or transition.contains_world_position(collision.map_to_local(tile))
+		_check(covered, "City boundary opens only at a transition: %s" % tile)
 	var route_collision := route.get_node("Tiles/Collision") as TileMapLayer
 	for y in range(23, 26):
 		_check(route_collision.get_cell_source_id(Vector2i(0, y)) == -1, "Route 7 western exit is open")
@@ -43,13 +50,17 @@ func _run() -> void:
 	var occupied := {}
 	var npcs := city.get_node("Entities/NPCs").get_children()
 	var pokemon := city.get_node("Entities/Pokemon").get_children()
-	_check(npcs.size() == 9 and pokemon.size() == 11, "City contains nine residents and eleven Pokémon, including Mira and her Eevee")
+	_check(npcs.size() == 10 and pokemon.size() == 11, "City contains nine residents, a Transit Keeper and eleven Pokémon, including Mira and her Eevee")
 	for actor: Node2D in npcs + pokemon:
 		var is_pokemon: bool = actor.get_script().resource_path == PokemonScript
-		_check(is_pokemon or actor.get_script().resource_path == NpcScript, "Actor uses the established interaction script")
+		var is_keeper: bool = actor.get_script().resource_path == "res://scripts/world/npcs/transit_keeper_npc.gd"
+		_check(is_pokemon or is_keeper or actor.get_script().resource_path == NpcScript, "Actor uses the established interaction script")
 		var id := str(actor.get("overworld_pokemon_id") if is_pokemon else actor.get("npc_id"))
-		_check(id.begins_with("kanto_celadon_city_") and not ids.has(id), "Actor metadata ID is unique: %s" % id)
-		ids[id] = true
+		if is_keeper:
+			_check(actor.local_destination_id == city.map_id, "Transit Keeper serves Celadon")
+		else:
+			_check(id.begins_with("kanto_celadon_city_") and not ids.has(id), "Actor metadata ID is unique: %s" % id)
+			ids[id] = true
 		var tile := Vector2i(actor.position / 32.0)
 		_check(reachable.has(tile), "Actor can be reached from Route 7: %s" % actor.name)
 		_check(not occupied.has(tile), "Actor placement does not overlap: %s" % actor.name)

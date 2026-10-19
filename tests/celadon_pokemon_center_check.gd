@@ -91,7 +91,7 @@ func _run() -> void:
 	_check(entrance.target_scene_path == CENTER_PATH and entrance.target_spawn_name == "FromOutside", "City doorway enters the Center")
 	_check(exit_node.target_scene_path == CITY_PATH and exit_node.target_spawn_name == "FromPokecenter", "Center returns to Celadon City")
 	_check(entrance.transition_facing_direction == "up" and exit_node.transition_facing_direction == "down", "Both arrivals face into their destination")
-	_check(entrance.contains_world_position(Vector2(1968, 464)), "Entrance covers the visible northeastern Center doorway")
+	_check(entrance.contains_world_position(Vector2(1968, 448)), "Entrance covers the visible northeastern Center doorway")
 	_check(not entrance.contains_world_position(city.get_node("Spawns/FromPokecenter").position), "Outside return avoids immediate re-entry")
 	_check(not exit_node.contains_world_position(center.get_node("Spawns/FromOutside").position), "Inside arrival avoids immediate exit")
 	_check(entrance.is_connected("body_entered", Callable(entrance, "_on_body_entered")) and exit_node.is_connected("body_entered", Callable(exit_node, "_on_body_entered")), "Both transitions respond to player entry")

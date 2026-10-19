@@ -44,6 +44,7 @@ func _run() -> void:
 	inventory.set_script(InventoryProbe)
 	_load_map()
 	await _frames(5)
+	_check(gate.required_trainer_ids == [GUARD] and gate.completed_quest_id.is_empty(), "B1F shortcut requires its own lift-side guard")
 	_check(not gate.is_gate_open(), "B1F shortcut starts closed")
 	var reachable := _reachable(map, map.get_node("Spawns/FromUpToGameCorner").position)
 	_check(not reachable.has(Vector2i(30,34)), "Entrance cannot reach the B1F lift before the guard victory")

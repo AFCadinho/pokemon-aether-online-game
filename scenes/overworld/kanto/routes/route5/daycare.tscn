@@ -12,6 +12,9 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/nature_specialist_npc.tscn" id="nature_specialist"]
 [ext_resource type="PackedScene" uid="uid://cnektxhofuvol" path="res://scenes/npcs/market_attendant_npc.tscn" id="wings"]
 
+[sub_resource type="RectangleShape2D" id="shape_wing_counter_interaction"]
+size = Vector2(96, 96)
+
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
 
@@ -86,6 +89,12 @@ display_name = ""
 facing_direction = Vector2(0, 1)
 localized_display_name_key = "ui.aethering.merchant"
 
+[node name="InteractionArea" parent="Entities/NPCs/WingMerchant" index="1"]
+position = Vector2(0, 32)
+
+[node name="CollisionShape2D" parent="Entities/NPCs/WingMerchant/InteractionArea" index="0"]
+shape = SubResource("shape_wing_counter_interaction")
+
 [node name="NatureSpecialist" parent="Entities/NPCs" unique_id=435521811 instance=ExtResource("nature_specialist")]
 position = Vector2(528, 400)
 facing_direction = Vector2(-1, 0)
@@ -126,3 +135,5 @@ constrain_camera_to_active_floor = true
 [node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1123533806]
 
 [connection signal="body_entered" from="Exits/ToRoute5" to="Exits/ToRoute5" method="_on_body_entered"]
+
+[editable path="Entities/NPCs/WingMerchant"]

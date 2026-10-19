@@ -183,6 +183,7 @@ func _run() -> void:
 			if str((planned_location_value as Dictionary).get("description", "")).strip_edges() == "":
 				planned_without_description += 1
 	_check(planned_without_description == 0, "Every planned Town Map location has a description")
+	_check(popup._resolve_location_group("kanto_rocket_hideout_elevator:7:b4f") == "kanto_map_point_06", "A private Rocket elevator resolves to Celadon on the Town Map")
 	popup.open_for_map("kanto_oaks_lab")
 	await process_frame
 	_check(popup.visible, "Town Map opens as a modal")

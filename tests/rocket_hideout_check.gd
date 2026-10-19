@@ -39,10 +39,22 @@ func _run() -> void:
 		_check(map.get_node("Visual/GroundDetail").modulate.is_equal_approx(Color("daeaff")), key + " source wall tint")
 		for tile: Vector2i in first:
 			_check(not second.has(tile), key + " preserves separate access wings")
+		var ground := map.get_node("Visual/Ground") as TileMapLayer
+		var void_source_id := ground.get_cell_source_id(Vector2i.ZERO)
+		var void_coords := ground.get_cell_atlas_coords(Vector2i.ZERO)
+		var atlas := ground.tile_set.get_source(void_source_id) as TileSetAtlasSource
+		var void_image := atlas.texture.get_image().get_region(atlas.get_tile_texture_region(void_coords))
+		var black_padding := true
+		for py in void_image.get_height():
+			for px in void_image.get_width():
+				var pixel := void_image.get_pixel(px, py)
+				black_padding = black_padding and (pixel.a == 0.0 or (pixel.r == 0.0 and pixel.g == 0.0 and pixel.b == 0.0))
+		_check(black_padding, key + " padding reference is visually empty")
 		for y in spec[0].y:
 			for x in spec[0].x:
 				var tile := Vector2i(x, y)
-				if collision.get_cell_source_id(tile) == -1:
+				var is_void := ground.get_cell_source_id(tile) == void_source_id and ground.get_cell_atlas_coords(tile) == void_coords
+				if collision.get_cell_source_id(tile) == -1 and not is_void:
 					_check(first.has(tile) or second.has(tile), "%s has no stranded floor at %s" % [key, tile])
 		for spawn: Marker2D in map.get_node("Spawns").get_children():
 			_check(collision.get_cell_source_id(Vector2i(spawn.position / 32.0)) == -1, key + " safe spawn " + str(spawn.name))

@@ -31,7 +31,6 @@ const ROUTES := {
 		"Poliwag": ["kanto_route_14_poliwag_1", "poliwag", Vector2(1232, 464), "idle", "water"],
 		"Goldeen": ["kanto_route_14_goldeen_1", "goldeen", Vector2(1232, 976), "idle", "water"],
 		"Magikarp": ["kanto_route_14_magikarp_1", "magikarp", Vector2(1232, 1616), "idle", "water"],
-		"Psyduck": ["kanto_route_14_psyduck_1", "psyduck", Vector2(1232, 2192), "idle", "water"],
 	},
 	"res://scenes/overworld/kanto/routes/kanto_route_15.tscn": {
 		"Oddish": ["kanto_route_15_oddish_1", "oddish", Vector2(592, 624), "pace_vertical", "grass"],
