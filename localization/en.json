@@ -7396,5 +7396,17 @@
   "backend.error.world_pickup_trainer_required": "Defeat the trainer guarding this item first.",
   "world.rocket_hideout.shortcut_gate.closed": "The security gate is locked. It appears to be controlled from the other side.",
   "world.rocket_hideout.gate.name": "Security Gate",
-  "world.rocket_hideout.gate.closed": "The security gate is locked. Defeat both Rocket guards to open it."
+  "world.rocket_hideout.gate.closed": "The security gate is locked. Defeat both Rocket guards to open it.",
+  "story.kanto.calm_pokemon_tower_spirit.title": "Calm the Restless Spirit",
+  "story.kanto.calm_pokemon_tower_spirit.summary": "Use the Silph Scope to reveal the spirit guarding the final stairs.",
+  "story.kanto.calm_pokemon_tower_spirit.battle_marowak": "Reveal and battle the restless spirit on Pokémon Tower 6F.",
+  "story.kanto.calm_pokemon_tower_spirit.farewell_marowak": "Help Marowak’s spirit find peace.",
+  "story.kanto.rescue_mr_fuji.title": "Rescue Mr. Fuji",
+  "story.kanto.rescue_mr_fuji.summary": "Rescue Mr. Fuji at the top of Pokémon Tower.",
+  "story.kanto.rescue_mr_fuji.rescue_fuji": "Rescue Mr. Fuji at the top of Pokémon Tower.",
+  "ui.pokemon_tower.scope.title": "Silph Scope",
+  "ui.pokemon_tower.scope.prompt": "Would you like to use the Silph Scope?",
+  "ui.staff.story_checkpoint.tower_marowak": "Marowak: reveal and battle",
+  "ui.staff.story_checkpoint.tower_marowak_farewell": "Marowak: farewell",
+  "ui.staff.story_checkpoint.tower_rescue_fuji": "Rescue Mr. Fuji"
 }

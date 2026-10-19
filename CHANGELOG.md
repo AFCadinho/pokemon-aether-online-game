@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reveal and battle Marowak’s spirit with the Silph Scope on Pokémon Tower 6F, reunite it with Cubone, and open the way to rescue Mr. Fuji.
+
 - Refresh the Pokémon Tower artist visual across all seven floors while preserving its gameplay, floor masks and stair connections.
 
 - Deepen Giovanni's confrontation about the Cubone skull trade and show him abandoning the dropped Silph Scope after his defeat.

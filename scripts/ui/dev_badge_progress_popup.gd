@@ -77,6 +77,9 @@ const STORY_CHECKPOINTS: Array[Dictionary] = [
 	{"id": "rocket_hideout_plan", "chapter_id": "game_corner", "label_key": "ui.staff.story_checkpoint.rocket_hideout_plan"},
 	{"id": "rocket_hideout_scope", "chapter_id": "game_corner", "label_key": "ui.staff.story_checkpoint.rocket_hideout_scope"},
 	{"id": "rocket_hideout_return", "chapter_id": "game_corner", "label_key": "ui.staff.story_checkpoint.rocket_hideout_return"},
+	{"id": "tower_marowak", "chapter_id": "pokemon_tower", "label_key": "ui.staff.story_checkpoint.tower_marowak"},
+	{"id": "tower_marowak_farewell", "chapter_id": "pokemon_tower", "label_key": "ui.staff.story_checkpoint.tower_marowak_farewell"},
+	{"id": "tower_rescue_fuji", "chapter_id": "pokemon_tower", "label_key": "ui.staff.story_checkpoint.tower_rescue_fuji"},
 ]
 const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "pallet", "label_key": "ui.staff.story_chapter.pallet"},

@@ -7396,5 +7396,17 @@
   "backend.error.world_pickup_trainer_required": "Versla eerst de trainer die dit item bewaakt.",
   "world.rocket_hideout.shortcut_gate.closed": "De beveiligingspoort zit op slot. Hij lijkt vanaf de andere kant te worden bediend.",
   "world.rocket_hideout.gate.name": "Beveiligingspoort",
-  "world.rocket_hideout.gate.closed": "De beveiligingspoort is gesloten. Versla beide Rocket-bewakers om hem te openen."
+  "world.rocket_hideout.gate.closed": "De beveiligingspoort is gesloten. Versla beide Rocket-bewakers om hem te openen.",
+  "story.kanto.calm_pokemon_tower_spirit.title": "Kalmeer de rusteloze geest",
+  "story.kanto.calm_pokemon_tower_spirit.summary": "Gebruik de Silph Scope om de geest bij de laatste trap te onthullen.",
+  "story.kanto.calm_pokemon_tower_spirit.battle_marowak": "Onthul en bevecht de rusteloze geest op Pokémon Tower 6F.",
+  "story.kanto.calm_pokemon_tower_spirit.farewell_marowak": "Help Marowaks geest rust te vinden.",
+  "story.kanto.rescue_mr_fuji.title": "Red Mr. Fuji",
+  "story.kanto.rescue_mr_fuji.summary": "Red Mr. Fuji boven in Pokémon Tower.",
+  "story.kanto.rescue_mr_fuji.rescue_fuji": "Red Mr. Fuji boven in Pokémon Tower.",
+  "ui.pokemon_tower.scope.title": "Silph Scope",
+  "ui.pokemon_tower.scope.prompt": "Wil je de Silph Scope gebruiken?",
+  "ui.staff.story_checkpoint.tower_marowak": "Marowak: onthulling en gevecht",
+  "ui.staff.story_checkpoint.tower_marowak_farewell": "Marowak: afscheid",
+  "ui.staff.story_checkpoint.tower_rescue_fuji": "Red Mr. Fuji"
 }

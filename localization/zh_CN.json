@@ -7396,5 +7396,17 @@
   "backend.error.world_pickup_trainer_required": "先击败看守这个道具的训练家。",
   "world.rocket_hideout.shortcut_gate.closed": "安全门锁着，似乎要从另一侧才能打开。",
   "world.rocket_hideout.gate.name": "安全门",
-  "world.rocket_hideout.gate.closed": "安全门锁住了。击败两名火箭队守卫后才能打开。"
+  "world.rocket_hideout.gate.closed": "安全门锁住了。击败两名火箭队守卫后才能打开。",
+  "story.kanto.calm_pokemon_tower_spirit.title": "安抚不安的幽灵",
+  "story.kanto.calm_pokemon_tower_spirit.summary": "使用西尔佛检视镜揭示守在最后一段楼梯前的幽灵。",
+  "story.kanto.calm_pokemon_tower_spirit.battle_marowak": "在宝可梦塔6楼揭示幽灵并与其对战。",
+  "story.kanto.calm_pokemon_tower_spirit.farewell_marowak": "帮助嘎啦嘎啦的灵魂获得安宁。",
+  "story.kanto.rescue_mr_fuji.title": "营救富士老人",
+  "story.kanto.rescue_mr_fuji.summary": "营救宝可梦塔顶层的富士老人。",
+  "story.kanto.rescue_mr_fuji.rescue_fuji": "营救宝可梦塔顶层的富士老人。",
+  "ui.pokemon_tower.scope.title": "西尔佛检视镜",
+  "ui.pokemon_tower.scope.prompt": "要使用西尔佛检视镜吗？",
+  "ui.staff.story_checkpoint.tower_marowak": "嘎啦嘎啦：揭示与对战",
+  "ui.staff.story_checkpoint.tower_marowak_farewell": "嘎啦嘎啦：告别",
+  "ui.staff.story_checkpoint.tower_rescue_fuji": "营救富士老人"
 }

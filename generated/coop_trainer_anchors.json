@@ -230,6 +230,26 @@
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
 			"trainerId": ""
 		},
+		"interaction:kanto_pokemon_tower_marowak_challenge": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 2224.0,
+				"y": 1360.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_pokemon_tower_marowak_farewell": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 2224.0,
+				"y": 1360.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
 		"interaction:kanto_rocket_hideout_giovanni_challenge": {
 			"mapId": "kanto_rocket_hideout_b4f",
 			"position": {
@@ -1683,8 +1703,8 @@
 		"kanto_pokemon_tower_hex_maniac_aster": {
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
-				"x": 2160.0,
-				"y": 240.0
+				"x": 1968.0,
+				"y": 496.0
 			},
 			"radius": 112.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
@@ -1693,8 +1713,8 @@
 		"kanto_pokemon_tower_hex_maniac_iris": {
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
-				"x": 2192.0,
-				"y": 1168.0
+				"x": 2384.0,
+				"y": 1104.0
 			},
 			"radius": 112.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
@@ -1703,8 +1723,8 @@
 		"kanto_pokemon_tower_hex_maniac_liora": {
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
-				"x": 368.0,
-				"y": 1168.0
+				"x": 432.0,
+				"y": 1136.0
 			},
 			"radius": 112.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
@@ -1713,8 +1733,8 @@
 		"kanto_pokemon_tower_hex_maniac_mira": {
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
-				"x": 1488.0,
-				"y": 1072.0
+				"x": 1328.0,
+				"y": 1296.0
 			},
 			"radius": 112.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
@@ -1723,8 +1743,8 @@
 		"kanto_pokemon_tower_hex_maniac_nora": {
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
-				"x": 2192.0,
-				"y": 496.0
+				"x": 2224.0,
+				"y": 464.0
 			},
 			"radius": 112.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
@@ -1733,8 +1753,8 @@
 		"kanto_pokemon_tower_hex_maniac_nyx": {
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
-				"x": 1936.0,
-				"y": 1328.0
+				"x": 1968.0,
+				"y": 1424.0
 			},
 			"radius": 112.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
@@ -1743,8 +1763,8 @@
 		"kanto_pokemon_tower_hex_maniac_rhea": {
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
-				"x": 592.0,
-				"y": 2032.0
+				"x": 688.0,
+				"y": 2224.0
 			},
 			"radius": 112.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
@@ -1753,7 +1773,7 @@
 		"kanto_pokemon_tower_hex_maniac_vera": {
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
-				"x": 592.0,
+				"x": 272.0,
 				"y": 1296.0
 			},
 			"radius": 112.0,
@@ -1823,8 +1843,8 @@
 		"kanto_pokemon_tower_researcher_noor": {
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
-				"x": 1296.0,
-				"y": 336.0
+				"x": 1168.0,
+				"y": 368.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
@@ -2073,7 +2093,7 @@
 		"kanto_rocket_hideout_b3f_grunt_1": {
 			"mapId": "kanto_rocket_hideout_b3f",
 			"position": {
-				"x": 176.0,
+				"x": 144.0,
 				"y": 784.0
 			},
 			"radius": 112.0,

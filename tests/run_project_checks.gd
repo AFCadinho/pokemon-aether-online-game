@@ -25,6 +25,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/tree_lower_depth_check.gd",
 	"res://tests/battle_api_json_response_check.gd",
 	"res://tests/pokemon_tower_spirit_gate_check.gd",
+	"res://tests/tower_marowak_story_check.gd",
 	"res://tests/lavender_fuji_story_check.gd",
 	"res://tests/celadon_rocket_trio_check.gd",
 	"res://tests/celadon_rescue_npcs_check.gd",
