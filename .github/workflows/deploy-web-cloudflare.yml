@@ -5,6 +5,7 @@ on:
     inputs:
       release_version:
         description: Browser release version, for example 0.4.0-beta.1
+        default: "0.3.111"
         required: true
         type: string
       pages_project:
