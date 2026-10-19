@@ -6695,6 +6695,7 @@
   "ui.town_map.location.route_15.name": "Rota 15",
   "ui.town_map.location.route_15.description": "Uma longa rota costeira que segue para oeste da Rota 14 em direção à Cidade de Fuchsia.",
   "static_encounter.snorlax_sleeping": "Snorlax está dormindo profundamente. Uma Poké Flauta pode acordá-lo.",
+  "static_encounter.use_flute_prompt": "Snorlax está dormindo profundamente. Quer tocar a Poké Flauta para acordá-lo?",
   "static_encounter.played_flute": "Você tocou a Poké Flauta!",
   "static_encounter.snorlax_awoke": "Snorlax acordou e atacou!",
   "ui.store.guilds.subcategory.emblems": "Emblemas",
