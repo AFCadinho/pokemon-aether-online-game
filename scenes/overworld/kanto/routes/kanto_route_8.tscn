@@ -367,7 +367,6 @@ sight_range_tiles = 3
 npc_id = "kanto_route_8_twins_eli_anne"
 npc_definition_id = "trainer_class_school_kid_f"
 display_name = "Twins Eli & Anne"
-facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("13_twins")
 
 [node name="LassPaige" parent="Entities/NPCs" unique_id=1054603451 instance=ExtResource("7_trainer")]
