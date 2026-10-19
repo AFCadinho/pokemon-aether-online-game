@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://dqlgit23de6ty"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_15/assets/route_15.visual.tileset.compact_source_0_0.texture.res" id="1_qfpgd"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_15/assets/route_15.visual.tileset.compact_source_1_0.texture.res" id="1_su42c"]
