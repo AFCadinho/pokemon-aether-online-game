@@ -501,7 +501,7 @@ portrait_id = "showdown_hexmaniac_gen6"
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=224325708]
 
 [node name="Gastly" parent="Entities/Pokemon" unique_id=120911884 instance=ExtResource("population_overworld_pokemon")]
-position = Vector2(1008, 496)
+position = Vector2(1072, 432)
 overworld_pokemon_id = "kanto_pokemon_tower_gastly_1"
 species_id = "gastly"
 level = 22

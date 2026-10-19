@@ -19,7 +19,10 @@ func _run() -> void:
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(POPULATION))
 	var npcs := map.get_node("Entities/NPCs").get_children()
 	var pokemon := map.get_node("Entities/Pokemon").get_children()
-	var entities: Array = npcs + pokemon
+	# Fuji, Ren and the Rockets have mutually exclusive story placements.
+	# Their visibility, collision and portraits are checked by fuji_rescue_story_check.
+	var entities: Array = npcs.filter(func(npc: Node):
+		return npc.visibility_required_quest_id != "rescue_mr_fuji" and npc.visibility_hidden_quest_id != "rescue_mr_fuji") + pokemon
 	var npc_service := UnexpectedNpcMetadataService.new()
 	root.add_child(npc_service)
 	var pokemon_service := root.get_node("OverworldPokemonMetadataService")
@@ -57,9 +60,10 @@ func _run() -> void:
 	var story_rival_count := 0
 	var healer_count := 0
 	var catalog := root.get_node("TrainerPortraitCatalog")
-	for entity in entities:
+	for entity in npcs + pokemon:
 		_check(not by_id.has(entity.npc_id), "Unique NPC/Pokémon ID: " + entity.npc_id)
 		by_id[entity.npc_id] = entity
+	for entity in entities:
 		var cell := Vector2i(entity.position / 32)
 		_check(entity.position == Vector2(cell * 32) + Vector2(16, 16), "Tile-center placement: " + entity.name)
 		_check(_walkable(map, cell), "Clear mapped floor: " + entity.name)
@@ -177,21 +181,18 @@ func _run() -> void:
 		state.current_map = previous
 		_check(payload.get("mapId") == "kanto_lavender_town_pokemon_tower" and payload.get("mapScenePath") == TOWER, "Healing respawn targets Tower")
 		_check(payload.get("spawnMarker") == "FromHealingSeal" and payload.get("position") == {"x": spawn.position.x, "y": spawn.position.y}, "Healing respawn payload is correct")
-	_check(trainer_count == 8 and dialogue_count == 4 and story_rival_count == 1 and healer_count == 1 and pokemon.size() == 7, "Population counts match requested design")
+	_check(trainer_count == 8 and dialogue_count == 3 and story_rival_count == 1 and healer_count == 1 and pokemon.size() == 7, "Population counts match requested design")
 	_check(generations.size() == 7, "Ghost Pokémon span seven generations")
 	map.free()
 	if failures == 0:
-		print("POKEMON_TOWER_POPULATION PASS: 8 Hex Maniacs, 4 visitors, 2F Gary, 5F healer, 7 Ghost Pokémon; clear placement, artwork and respawn")
+		print("POKEMON_TOWER_POPULATION PASS: 8 Hex Maniacs, 3 regular visitors, phased Ren/Fuji, 2F Gary, 5F healer, 7 Ghost Pokémon; clear placement, artwork and respawn")
 	quit(1 if failures else 0)
 
 func _walkable(map: Node, cell: Vector2i) -> bool:
-	if map.get_node("Visual/Ground").get_cell_source_id(cell) == -1:
-		return false
-	for path in ["Visual/Walls", "Visual/Objects", "Visual/ObjectsTop", "Tiles/Collision", "Tiles/BlockDirection/BlockDown"]:
-		var layer := map.get_node_or_null(path) as TileMapLayer
-		if layer != null and layer.get_cell_source_id(cell) != -1:
-			return false
-	return true
+	# Visual canopies/decorations are not colliders, and BlockDown only
+	# constrains leaving a tile in one direction.
+	return _route_cell_clear(map, cell)
+
 
 func _route_cell_clear(map: Node, cell: Vector2i) -> bool:
 	# Stairs have visual object tiles. Player movement uses the authored collision,

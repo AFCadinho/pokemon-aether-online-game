@@ -4,7 +4,7 @@ const Catalog := preload("res://scripts/battle/battle_environment_catalog.gd")
 const Resolver := preload("res://scripts/battle/battle_environment_resolver.gd")
 const DayNight := preload("res://scripts/world/day_night_controller.gd")
 const VIDEO := "res://assets/video/battle/grass_meadow.ogv"
-const GRASS_IDS := ["grass", "pallet_town", "viridian_city", "pewter_city", "cerulean_city", "route_1", "route_2", "route_3", "route_4", "route_22", "route_24", "route_25"]
+const GRASS_IDS := ["grass", "pallet_town", "viridian_city", "pewter_city", "cerulean_city", "route_1", "route_2", "route_3", "route_4", "route_22", "route_24", "route_25", "rocket_hideout", "celadon_gym", "celadon_game_corner"]
 
 
 func _init() -> void:

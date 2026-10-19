@@ -168,7 +168,7 @@ func _run() -> void:
 		var scene: Node = load("res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_b%sf.tscn" % floor).instantiate()
 		for name: String in LAYER_NAMES:
 			var layer := scene.get_node_or_null("Tiles/" + name) as TileMapLayer
-			_check(layer != null and layer.tile_set != null and layer.get_used_cells().is_empty(), "B%sF has a paint-ready %s layer" % [floor, name])
+			_check(layer != null and layer.tile_set != null, "B%sF has an authored %s marker layer" % [floor, name])
 		scene.free()
 	print("spin_tile_movement_check: %s" % ("FAIL" if failed else "PASS"))
 	quit(1 if failed else 0)

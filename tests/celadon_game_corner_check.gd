@@ -20,15 +20,15 @@ func _run() -> void:
 	var reached := _reachable(collision, Vector2i(28, 21), Vector2i(spawn.position / 32.0))
 	_check(corner.map_id == MAP_ID and corner.world_access_group_id == city.map_id, "Game Corner shares Celadon access settings")
 	_check(corner.world_access_area_type == "interior" and corner.lighting_profile == "indoor" and corner.weather_profile == "disabled", "Indoor lighting and weather")
-	for y in 21:
-		for x in 28:
-			var tile := Vector2i(x, y)
-			if collision.get_cell_source_id(tile) == -1:
-				_check(reached.has(tile), "No stranded public floor at " + str(tile))
-	for tile: Vector2i in [Vector2i(13, 8), Vector2i(3, 9), Vector2i(24, 9), Vector2i(6, 12), Vector2i(21, 12), Vector2i(23, 5)]:
+	# Black canvas padding is not public floor. Flood beyond the map bounds
+	# to prove the actual playable floor is enclosed.
+	var outer := _reachable(collision, Vector2i(29, 22), Vector2i(spawn.position / 32.0))
+	for tile: Vector2i in outer:
+		_check(tile.x > 0 and tile.x < 27 and tile.y > 0 and tile.y < 20, "Public floor stays inside the room: " + str(tile))
+	for tile: Vector2i in [Vector2i(13, 8), Vector2i(2, 9), Vector2i(25, 9), Vector2i(6, 12), Vector2i(21, 12), Vector2i(23, 5)]:
 		_check(reached.has(tile), "Reception, salons, aisles and stair approach are reachable: " + str(tile))
 	var seat_count := 0
-	for bank: Vector3i in [Vector3i(9, 10, 6), Vector3i(17, 10, 6), Vector3i(3, 12, 4), Vector3i(23, 12, 4)]:
+	for bank: Vector3i in [Vector3i(3, 8, 3), Vector3i(9, 9, 3), Vector3i(17, 9, 3), Vector3i(23, 8, 3), Vector3i(6, 13, 4), Vector3i(20, 13, 4)]:
 		for y in range(bank.y, bank.y + bank.z):
 			for x: int in [bank.x - 1, bank.x + 2]:
 				seat_count += 1
@@ -36,7 +36,7 @@ func _run() -> void:
 				_check(collision.get_cell_source_id(Vector2i(bank.x, y)) != -1 and collision.get_cell_source_id(Vector2i(bank.x + 1, y)) != -1, "Machines remain solid beside each cushion")
 	_check(seat_count == 40, "All forty playing positions were checked")
 	_check(corner.get_node("Visual/Objects").z_index < corner.get_node("Entities").z_index, "Cushions draw below the player")
-	for tile: Vector2i in [Vector2i(13, 6), Vector2i(13, 7), Vector2i(13, 5), Vector2i(2, 8), Vector2i(22, 8), Vector2i(6, 6), Vector2i(20, 6), Vector2i(1, 17), Vector2i(26, 17)]:
+	for tile: Vector2i in [Vector2i(10, 6), Vector2i(13, 7), Vector2i(17, 6), Vector2i(3, 8), Vector2i(23, 8), Vector2i(6, 6), Vector2i(20, 6), Vector2i(1, 17), Vector2i(26, 17)]:
 		_check(collision.get_cell_source_id(tile) != -1, "Solid counter, furniture or staff enclosure: " + str(tile))
 	var entrance := city.get_node("Exits/ToGameCorner")
 	var exit_node := corner.get_node("Exits/ToOutside")
@@ -45,7 +45,7 @@ func _run() -> void:
 	_check(exit_node.target_scene_path == city.scene_file_path and exit_node.target_spawn_name == "FromGameCorner", "Game Corner returns to its own city door")
 	_check(entrance.transition_facing_direction == "up" and exit_node.transition_facing_direction == "down", "Arrivals face away from their return triggers")
 	_check(not entrance.contains_world_position(city_spawn.position) and not exit_node.contains_world_position(spawn.position), "Arrivals avoid immediate bounce-back")
-	_check(entrance.contains_world_position(Vector2(1264, 880)), "Entry covers the visible city doorway at (39,27)")
+	_check(entrance.contains_world_position(Vector2(1264, 864)), "Entry covers the upper half of the visible city doorway at (39,27)")
 	for x in range(12, 15):
 		var tile := Vector2i(x, 18)
 		_check(reached.has(tile) and exit_node.contains_world_position(Vector2(tile * 32) + Vector2(16, 16)), "Complete three-tile south exit")

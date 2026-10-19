@@ -17,7 +17,7 @@ func _run() -> void:
 	var actors: Array[Node] = []
 	actors.append_array(island.get_node('Entities/NPCs').get_children())
 	actors.append_array(island.get_node('Entities/Pokemon').get_children())
-	_check(actors.size() == 12, 'six residents and six Pokemon')
+	_check(actors.size() == 13, 'six residents, the Transit Keeper and six Pokemon')
 	var doorway := island.get_node('Exits/ToPokecenter')
 	for actor in actors:
 		var cell := collision.local_to_map(actor.position)

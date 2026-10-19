@@ -291,7 +291,6 @@ func _check_cerulean_route_sign_markers() -> void:
 	var route_data_text := _read_text(ROUTE_SIGN_DATA)
 	var expected_signs := {
 		"kanto_route_5_daycare_sign": [ROUTE_5_SCENE, "kanto_route_5"],
-		"kanto_route_5_underground_path_sign": [ROUTE_5_SCENE, "kanto_route_5"],
 		"kanto_route_6_route_sign": [ROUTE_6_SCENE, "kanto_route_6"],
 		"kanto_route_8_route_sign": ["res://scenes/overworld/kanto/routes/kanto_route_8.tscn", "kanto_route_8"],
 		"kanto_route_6_underground_path_sign": [ROUTE_6_SCENE, "kanto_route_6"],

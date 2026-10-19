@@ -6,6 +6,9 @@ class FakeWorld extends Node:
 	var is_in_battle := true
 	var is_loading_map := false
 
+class PartialWorld extends Node:
+	var is_in_battle := true
+
 class FakeStage extends Control:
 	var active := true
 	var warming_render := false
@@ -175,6 +178,18 @@ func _run() -> void:
 	settings.android_quality_preset = previous_quality
 	fake_world.free()
 	stage.free()
+	# Transitional/test worlds may expose only part of the normal world API.
+	# Missing flags are false; diagnostics must never interrupt gameplay.
+	var partial_world := PartialWorld.new()
+	root.add_child(partial_world)
+	partial_world.add_to_group("world")
+	assert(service._context().scene == "battle")
+	partial_world.free()
+	var minimal_world := Node.new()
+	root.add_child(minimal_world)
+	minimal_world.add_to_group("world")
+	assert(service._context().scene == "overworld")
+	minimal_world.free()
 	service.in_flight.assign([report])
 	for attempt in 3:
 		service._completed(HTTPRequest.RESULT_CANT_CONNECT, 0, PackedStringArray(), PackedByteArray())

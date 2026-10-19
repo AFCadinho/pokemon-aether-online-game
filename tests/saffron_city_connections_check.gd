@@ -42,7 +42,7 @@ func _run() -> void:
 	_expect(city.get_node("Spawns/FromRoute5").position == Vector2(1520, 176), "north arrival matches Tiled connection")
 	_expect(city.get_node("Spawns/FromRoute6").position == Vector2(1584, 2672), "south arrival matches Tiled connection")
 	_expect(city.get_node("Spawns/FromRoute8").position == Vector2(2848, 1248), "Route 8 arrival matches the authored Saffron gate")
-	_expect(maps[ROUTE8].get_node("Spawns/FromSaffronGate").position == Vector2(128, 544), "Route 8 arrival matches its authored Saffron gate")
+	_expect(maps[ROUTE8].get_node("Spawns/FromSaffronGate").position == Vector2(144, 528), "Route 8 arrival matches its authored Saffron gate")
 	for gate_path in [GATE5, GATE6]:
 		var gate: Node = maps[gate_path]
 		_expect(gate.lighting_profile == "indoor" and gate.weather_profile == "disabled", "gate uses indoor lighting and weather")

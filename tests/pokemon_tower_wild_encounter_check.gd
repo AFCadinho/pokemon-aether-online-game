@@ -64,17 +64,17 @@ func _run() -> void:
 	var seal: Rect2 = map.get_node("EncounterRegions/HealingSeal").get_meta("pao_region_rect")
 	var details := map.get_node("Visual/GroundDetail") as TileMapLayer
 	var checked_seal_tiles := 0
-	for cell in details.get_used_cells():
-		var local_feet := Vector2(cell * 32) + Vector2(16, 16)
-		if not mask.floor_regions[&"floor_5"].has_point(local_feet):
-			continue
-		checked_seal_tiles += 1
-		_check(seal.has_point(local_feet), "Safe zone covers every cyan tile")
-		player.position = local_feet - player.feet_offset
-		var encounter := Provider.resolve_wild_encounter(map, player.get_feet_position(), "cave")
-		_check(encounter.region_id == "pokemon_tower_healing_seal", "Seal takes priority over the 5F region")
-		_check(encounter.use_map_trigger and not map.should_trigger_wild_encounter("cave"), "Seal cannot start a wild battle")
-		_check(map.get_wild_encounter_area_id() == "kanto_pokemon_tower_5f", "Safe zone keeps 5F encounter information accessible")
+	for y in range(floori(seal.position.y / 32.0), ceili(seal.end.y / 32.0)):
+		for x in range(floori(seal.position.x / 32.0), ceili(seal.end.x / 32.0)):
+			var cell := Vector2i(x, y)
+			var local_feet := Vector2(cell * 32) + Vector2(16, 16)
+			checked_seal_tiles += 1
+			_check(details.get_cell_source_id(cell) != -1, "Safe seal tile has authored artwork")
+			player.position = local_feet - player.feet_offset
+			var encounter := Provider.resolve_wild_encounter(map, player.get_feet_position(), "cave")
+			_check(encounter.region_id == "pokemon_tower_healing_seal", "Seal takes priority over the 5F region")
+			_check(encounter.use_map_trigger and not map.should_trigger_wild_encounter("cave"), "Seal cannot start a wild battle")
+			_check(map.get_wild_encounter_area_id() == "kanto_pokemon_tower_5f", "Safe zone keeps 5F encounter information accessible")
 	_check(checked_seal_tiles == 16, "All sixteen cyan seal tiles checked")
 	player.position = Vector2(1488, 1360) - player.feet_offset
 	_check(map.should_trigger_wild_encounter("cave"), "Walking away from the seal enables 5F encounters")

@@ -2,6 +2,30 @@
 
 ## Unreleased
 
+## 0.3.111
+
+- Move the Tower’s Gastly off a tomb platform and close a decorative plant pocket in Rocket Hideout B4F.
+
+- Keep Celadon’s unfinished western and southern roads inside the playable map boundary.
+
+- Restore interaction with the Day Care Wing Merchant across the counter.
+
+- Preserve the Rocket Hideout floor and wall tints from the artist’s Tiled maps.
+
+- Restore the B1F Rocket Hideout shortcut gate’s own guard requirement after saving the scene.
+
+- Keep Route 7 and Cinnabar residents on clear patrol paths and move the southern Bellsprout into its grass habitat.
+
+- Keep the encounter-marker layers on Routes 6, 8 and 11 hidden when loading a map.
+
+- Show Celadon as the current Town Map location while inside the Rocket Hideout.
+
+- Keep Android performance diagnostics safe while a world is loading or exposes only part of its state.
+
+- Include the new Celadon, Rocket Hideout, Route 7 gate and Cinnabar Pokémon Center maps in the browser’s downloadable Kanto map pack.
+
+- Prepare matching browser and Android release candidates; Android retains its opt-in experimental 3D mode with release version code 31.
+
 - Refresh Silph Scope and story status when speaking to the Pokémon Tower spirit, recovering a missed return objective and avoiding incorrect missing-device dialogue.
 
 - Rescue Mr. Fuji from three Rockets on Pokémon Tower 7F, clear the tower, and visit him at home for the Poké Flute and a promise recognizing your starter’s current evolution.

@@ -115,8 +115,8 @@ func _run() -> void:
 			story_chapter_select.select(chapter_index)
 			popup.call("_on_story_chapter_selected", chapter_index)
 			largest_chapter_size = maxi(largest_chapter_size, story_checkpoint_select.item_count)
-		_check(largest_chapter_size <= 6, "no story chapter opens an unbounded checkpoint list")
-		for chapter_id in ["celadon", "game_corner"]:
+		_check(largest_chapter_size <= 8, "no story chapter opens an unbounded checkpoint list")
+		for chapter_id in ["celadon", "game_corner", "pokemon_tower"]:
 			for chapter_index in story_chapter_select.item_count:
 				if str(story_chapter_select.get_item_metadata(chapter_index)) != chapter_id:
 					continue
@@ -125,7 +125,12 @@ func _run() -> void:
 				var actual: Array[String] = []
 				for checkpoint_index in story_checkpoint_select.item_count:
 					actual.append(str(story_checkpoint_select.get_item_metadata(checkpoint_index)))
-				var expected: Array = ["rocket_route7", "rocket_celadon_battle", "rocket_celadon_escape", "celadon_mira_inquiry", "challenge_erika", "celadon_erika_inquiry"] if chapter_id == "celadon" else ["game_corner_guard", "game_corner_guard_escape", "rocket_hideout_boss"]
+				var expected_by_chapter := {
+					"celadon": ["rocket_route7", "rocket_celadon_battle", "rocket_celadon_escape", "celadon_mira_inquiry", "challenge_erika", "celadon_erika_inquiry"],
+					"game_corner": ["game_corner_guard", "game_corner_guard_escape", "rocket_hideout_boss", "rocket_hideout_plan", "rocket_hideout_scope", "rocket_hideout_return"],
+					"pokemon_tower": ["fuji_helper", "pokemon_tower_entry", "pokemon_tower_gary", "tower_marowak", "tower_marowak_farewell", "tower_rescue_fuji", "tower_fuji_thanks", "fuji_house_reward"],
+				}
+				var expected: Array = expected_by_chapter[chapter_id]
 				_check(actual == expected, "%s exposes every story phase in order" % chapter_id)
 				for locale in ["en", "nl", "pt_BR", "zh_CN"]:
 					var translations: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://localization/%s.json" % locale))

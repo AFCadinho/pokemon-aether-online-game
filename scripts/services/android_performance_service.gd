@@ -138,9 +138,9 @@ func _context() -> Dictionary:
 	var world := GameState.get_world()
 	if world != null:
 		scene = "overworld"
-		if bool(world.get("is_loading_map")):
+		if world.get("is_loading_map") == true:
 			scene = "loading"
-		elif bool(world.get("is_in_battle")):
+		elif world.get("is_in_battle") == true:
 			scene = "battle"
 			for stage: Node in get_tree().get_nodes_in_group("performance_3d_stage"):
 				if not stage.is_visible_in_tree():

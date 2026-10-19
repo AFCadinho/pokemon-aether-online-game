@@ -159,7 +159,8 @@
       "needsReview": false,
       "hitSize": 60,
       "locationGroupIds": [
-        "kanto_celadon_city"
+        "kanto_celadon_city",
+        "kanto_rocket_hideout"
       ]
     },
     "kanto_map_point_07": {

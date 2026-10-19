@@ -6354,9 +6354,33 @@
 				"layers": 8,
 				"usedTiles": 307
 			},
+			"current_animation_fingerprint": "7bc36efa550b55e11cacd09dae8b604816b13b0fa5ab41763dc3dab38ccf53e8",
+			"current_flower_cells": {
+				"1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee": 5,
+				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 7,
+				"8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4": 6,
+				"c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a": 5,
+				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 7
+			},
+			"current_reference_provenance": "Pixel/layout/TileData fingerprint and all animation timelines compared with a fresh import of the current shared-library TMX source.",
+			"current_source_sha256": "562411dd10298fcf35da79ecbece094686f8ef710cb41249200184ee4b518f9d",
+			"current_static_reference": {
+				"baseRGBABytes": 9142272,
+				"cells": 14582,
+				"fingerprint": "186d87c9eef601e67eaa1738c632fb912a48ae9645a16cfbce4182a0c0b7bfa6",
+				"layers": 8,
+				"usedTiles": 331
+			},
 			"flower_cells": {
 				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 4,
 				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 4
+			},
+			"native_flower_types": {
+				"16(0, 0)": "8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4#48",
+				"17(0, 0)": "c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e#48",
+				"18(0, 0)": "1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee#48",
+				"19(0, 0)": "5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e#48",
+				"20(0, 0)": "c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a#48"
 			},
 			"preserved_animations": {
 				"32004a5fbf26b33eeb35e3c385590f35395216ae63661f0d51165191e8979a48": [
@@ -7703,9 +7727,33 @@
 				"layers": 8,
 				"usedTiles": 163
 			},
+			"current_animation_fingerprint": "aec6f58575943243b6a331444a5cb801b0b804be3b693299d1f6e54f7741be60",
+			"current_flower_cells": {
+				"1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee": 4,
+				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 6,
+				"8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4": 5,
+				"c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a": 4,
+				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 6
+			},
+			"current_reference_provenance": "Pixel/layout/TileData fingerprint and all animation timelines compared with a fresh import of the current shared-library TMX source.",
+			"current_source_sha256": "b794ed858661004578106b855b3f04d29b4fe556e2809e7dd496d1d456121d2a",
+			"current_static_reference": {
+				"baseRGBABytes": 8275968,
+				"cells": 12863,
+				"fingerprint": "146334921a21252b05bbba599883adbe89f2a75364749b569a5f19e5e84ce706",
+				"layers": 8,
+				"usedTiles": 234
+			},
 			"flower_cells": {
 				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 5,
 				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 5
+			},
+			"native_flower_types": {
+				"15(0, 0)": "8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4#48",
+				"16(0, 0)": "c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e#48",
+				"17(0, 0)": "1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee#48",
+				"18(0, 0)": "5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e#48",
+				"19(0, 0)": "c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a#48"
 			},
 			"preserved_animations": {
 				"51da45d3409e3df7cebf73c9532d68feff02438ac2a9eab5f04fa36532ab23d4": [
@@ -22097,9 +22145,35 @@
 				"layers": 8,
 				"usedTiles": 201
 			},
+			"current_animation_fingerprint": "6cd07ccd5e5fe461a809840e4f34cb1d1d5e67bacc91e9771a4aa51b4bfebfb6",
+			"current_flower_cells": {
+				"1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee": 10,
+				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 15,
+				"8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4": 12,
+				"c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a": 10,
+				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 13
+			},
+			"current_reference_provenance": "Pixel/layout/TileData fingerprint and all animation timelines compared with a fresh import of the current shared-library TMX source.",
+			"current_source_sha256": "cf035d2ebce959e66d56fdba025144c1231993fa94d3f82bfb5a9138d066aecd",
+			"current_static_reference": {
+				"baseRGBABytes": 9179136,
+				"cells": 9127,
+				"fingerprint": "dd669bfde3f26ecdcf2cf50d44b9eafc314cb2cba880fabbe0e71c0201dc80eb",
+				"layers": 8,
+				"usedTiles": 243
+			},
 			"flower_cells": {
 				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 13,
 				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 11
+			},
+			"native_flower_types": {
+				"17(0, 0)": "8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4#48",
+				"18(0, 0)": "c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e#48",
+				"19(0, 0)": "1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee#48",
+				"20(0, 0)": "5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e#48",
+				"21(0, 0)": "c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a#48",
+				"26(0, 0)": "c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e#48",
+				"27(0, 0)": "5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e#48"
 			},
 			"preserved_animations": {
 				"08b923787bd75fa45694a08e208f4988a7b93cc02f37879592977a2286986844": [
@@ -24570,9 +24644,33 @@
 				"layers": 8,
 				"usedTiles": 129
 			},
+			"current_animation_fingerprint": "7bc36efa550b55e11cacd09dae8b604816b13b0fa5ab41763dc3dab38ccf53e8",
+			"current_flower_cells": {
+				"1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee": 8,
+				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 7,
+				"8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4": 8,
+				"c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a": 8,
+				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 7
+			},
+			"current_reference_provenance": "Pixel/layout/TileData fingerprint and all animation timelines compared with a fresh import of the current shared-library TMX source.",
+			"current_source_sha256": "2a4ca82ea07c00e09f311ea336e33bc3b6302a3b5b1bd1232902353b37668fd7",
+			"current_static_reference": {
+				"baseRGBABytes": 8294400,
+				"cells": 9128,
+				"fingerprint": "0889d99d7f208be4aa0631bb4f5bf4f5d058441874e27c76175b30c7f6267aae",
+				"layers": 8,
+				"usedTiles": 165
+			},
 			"flower_cells": {
 				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 6,
 				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 6
+			},
+			"native_flower_types": {
+				"16(0, 0)": "8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4#48",
+				"17(0, 0)": "c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e#48",
+				"18(0, 0)": "1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee#48",
+				"19(0, 0)": "5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e#48",
+				"20(0, 0)": "c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a#48"
 			},
 			"preserved_animations": {
 				"48f89fb7f3ea2f4620aea576a811f2296db485c36823743164a87de8dd26c822": [
@@ -25591,12 +25689,37 @@
 				"layers": 9,
 				"usedTiles": 131
 			},
+			"current_animation_fingerprint": "7aedfc0dae338a4426740e3c0ce20029a1fc4445f419822cb28db949af8d54ae",
+			"current_flower_cells": {
+				"1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee": 5,
+				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 7,
+				"8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4": 8,
+				"c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a": 5,
+				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 7
+			},
+			"current_reference_provenance": "Pixel/layout/TileData fingerprint and all animation timelines compared with a fresh import of the current shared-library TMX source.",
+			"current_source_sha256": "3e6b084ab64730cecd9725f156ca809b50d9830c47ba9c0c7c6fa548193cb9de",
+			"current_static_reference": {
+				"baseRGBABytes": 8331264,
+				"cells": 9800,
+				"fingerprint": "ea5f5fd629826258207132b4d1c0930cb55841de8beca0c8746eb76ffc85aa23",
+				"layers": 9,
+				"usedTiles": 203
+			},
 			"flower_cells": {
 				"1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee": 3,
 				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 2,
 				"8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4": 8,
 				"c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a": 3,
 				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 2
+			},
+			"native_flower_types": {
+				"0(0, 0)": "8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4#1",
+				"16(0, 0)": "8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4#48",
+				"17(0, 0)": "c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e#48",
+				"18(0, 0)": "1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee#48",
+				"19(0, 0)": "5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e#48",
+				"20(0, 0)": "c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a#48"
 			},
 			"preserved_animations": {
 				"51da45d3409e3df7cebf73c9532d68feff02438ac2a9eab5f04fa36532ab23d4": [
@@ -25877,10 +26000,34 @@
 				"layers": 8,
 				"usedTiles": 205
 			},
+			"current_animation_fingerprint": "aec6f58575943243b6a331444a5cb801b0b804be3b693299d1f6e54f7741be60",
+			"current_flower_cells": {
+				"1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee": 6,
+				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 6,
+				"8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4": 5,
+				"c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a": 6,
+				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 6
+			},
+			"current_reference_provenance": "Pixel/layout/TileData fingerprint and all animation timelines compared with a fresh import of the current shared-library TMX source.",
+			"current_source_sha256": "7d42f0bb5bc6de62ab27905d874ea62f2e558bc8844e31bed72c697753d385a6",
+			"current_static_reference": {
+				"baseRGBABytes": 8146944,
+				"cells": 5805,
+				"fingerprint": "9594e7607abf5c9c5240debad6bef6e21dde6a84040cb63c9f30de3630a59543",
+				"layers": 8,
+				"usedTiles": 212
+			},
 			"flower_cells": {
 				"1f03fe3cffdb0be1ab49c5a5cf1c9998f5f8d8dcd041cd9d4839c266e05d1d93": 30,
 				"1fa6eaff954f4fb102b6e8cae47b8d21784f3364175af66bdcef6163a4e29258": 30,
 				"8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4": 21
+			},
+			"native_flower_types": {
+				"16(0, 0)": "8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4#48",
+				"17(0, 0)": "c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e#48",
+				"18(0, 0)": "1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee#48",
+				"19(0, 0)": "5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e#48",
+				"20(0, 0)": "c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a#48"
 			},
 			"preserved_animations": {
 				"51da45d3409e3df7cebf73c9532d68feff02438ac2a9eab5f04fa36532ab23d4": [
@@ -26161,9 +26308,33 @@
 				"layers": 8,
 				"usedTiles": 99
 			},
+			"current_animation_fingerprint": "691dc82b5133410915fb5437edbf2906faaecd7e8df5c1598420ad1054cfde1f",
+			"current_flower_cells": {
+				"1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee": 4,
+				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 4,
+				"8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4": 10,
+				"c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a": 4,
+				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 4
+			},
+			"current_reference_provenance": "Pixel/layout/TileData fingerprint and all animation timelines compared with a fresh import of the current shared-library TMX source. Source comparison retains the accepted empty Doors layer and its one-step render-order offset.",
+			"current_source_sha256": "fe41207c481a548b4d35a3e1e787f96e5a6cbae0461756a2da5b5ee87fb0847b",
+			"current_static_reference": {
+				"baseRGBABytes": 7262208,
+				"cells": 9056,
+				"fingerprint": "858f10c19bc0b8a775fb78f6e6f28b6931ea634643401661844b22dc14e9ed7c",
+				"layers": 8,
+				"usedTiles": 125
+			},
 			"flower_cells": {
 				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 7,
 				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 7
+			},
+			"native_flower_types": {
+				"10(0, 0)": "8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4#48",
+				"11(0, 0)": "c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e#48",
+				"12(0, 0)": "1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee#48",
+				"13(0, 0)": "5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e#48",
+				"14(0, 0)": "c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a#48"
 			},
 			"preserved_animations": {
 				"08b923787bd75fa45694a08e208f4988a7b93cc02f37879592977a2286986844": [
