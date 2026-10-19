@@ -11,6 +11,7 @@ var failures: Array[String] = []
 func _init() -> void:
 	var report: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(REPORT))
 	var total_cells := 0
+	var expected_cells := 0
 	var total_frames := 0
 	var flower_maps := 0
 	_check(report.maps.size() == 22, "Expected 20 active route/forest sources and two Saffron connections")
@@ -19,13 +20,21 @@ func _init() -> void:
 		var visual := (ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene).instantiate()
 		var record: Dictionary = report.maps[id]
 		var actual := Fingerprint.new().capture(visual)
+		var reference: Dictionary = record.get("current_static_reference", record.before)
+		var expected_flowers: Dictionary = record.get("current_flower_cells", record.flower_cells)
+		for count: int in expected_flowers.values():
+			expected_cells += count
 		for key in ["fingerprint", "cells", "layers", "usedTiles"]:
-			_check(actual[key] == record.before[key], id + " original artwork/layout/TileData changed: " + key)
-		_check(actual.baseRGBABytes == record.after.baseRGBABytes, id + " measured atlas memory budget changed")
+			_check(actual[key] == reference[key], id + " original artwork/layout/TileData changed: " + key)
+		_check(actual.baseRGBABytes == record.get("current_static_reference", record.after).baseRGBABytes, id + " measured atlas memory budget changed")
 		failures.append_array(Validator.new().validate(visual, path.trim_suffix(".tscn") + ".tileset.tres"))
 		var signatures := Recovery._animation_signatures(visual)
-		for hash: String in record.preserved_animations:
-			_check(_same_timeline(signatures.get(hash, []), record.preserved_animations[hash]), id + " existing non-flower animation changed")
+		if record.has("current_animation_fingerprint"):
+			_check(Fingerprint.new()._hash(JSON.stringify(signatures, "", true).to_utf8_buffer()) == record.current_animation_fingerprint,
+				id + " current native animation pixels/timing changed")
+		else:
+			for hash: String in record.preserved_animations:
+				_check(_same_timeline(signatures.get(hash, []), record.preserved_animations[hash]), id + " existing non-flower animation changed")
 		var layers: Array[TileMapLayer] = []
 		Compactor.new()._collect(visual, layers)
 		var tiles := layers[0].tile_set
@@ -44,6 +53,16 @@ func _init() -> void:
 				hashes[str(source_id) + str(coords)] = hash
 				var expected: Dictionary = report.catalog[hash]
 				var frames := source.get_tile_animation_frames_count(coords)
+				if record.has("native_flower_types"):
+					var type_key := str(source_id) + str(coords)
+					var timeline_key := hash + "#" + str(frames)
+					_check(record.native_flower_types.get(type_key, "") == timeline_key, id + " authored flower frame count changed")
+					# The current authored Route 7 also contains a static flower.
+					# Its exact atlas identity/frame count is pinned above.
+					if frames == 1:
+						_check(is_equal_approx(source.get_tile_animation_speed(coords), 1.0), id + " static flower speed changed")
+						total_frames += 1
+						continue
 				_check(frames == 48 and expected.frame_hashes.size() == 48, id + " flower frame count differs from Lavender")
 				_check(is_equal_approx(source.get_tile_animation_speed(coords), 1.0), id + " native flower speed changed")
 				for frame in mini(frames, 48):
@@ -57,14 +76,14 @@ func _init() -> void:
 				if hashes.has(key):
 					var hash: String = hashes[key]
 					counts[hash] = int(counts.get(hash, 0)) + 1
-		_check(counts.size() == record.flower_cells.size(), id + " flower variants changed")
-		for hash: String in record.flower_cells:
-			_check(int(counts.get(hash, -1)) == int(record.flower_cells[hash]), id + " original flower placement changed")
+		_check(counts.size() == expected_flowers.size(), id + " flower variants changed")
+		for hash: String in expected_flowers:
+			_check(int(counts.get(hash, -1)) == int(expected_flowers[hash]), id + " original flower placement changed")
 			total_cells += int(counts.get(hash, 0))
 		if not counts.is_empty():
 			flower_maps += 1
 		visual.free()
-	_check(total_cells == 828 and flower_maps == 20, "Expected all 828 flowers in 20 active route/forest visuals")
+	_check(total_cells == expected_cells and flower_maps == 20, "Expected every audited flower in 20 active route/forest visuals")
 	for failure in failures:
 		push_error(failure)
 	print("ROUTE_FLOWER_CHECK ", JSON.stringify({"reviewed": report.maps.size(), "flower_maps": flower_maps,

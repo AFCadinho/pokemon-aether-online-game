@@ -1,6 +1,6 @@
 # Active route flower animation audit
 
-The registered Godot world scenes use Routes 1–15, 21, 22, 24 and 25, plus Viridian Forest. They contain 828 flower tiles. Route 8 already had the correct Lavender frames; the other 19 flower visuals were updated.
+The registered Godot world scenes use Routes 1–15, 21, 22, 24 and 25, plus Viridian Forest. The original rollout contained 828 flower tiles; the reference-refresh section below records later authored changes. Route 8 already had the correct Lavender frames; the other 19 flower visuals were updated.
 
 Both Saffron connection sources are active and contain no flowers. `Route 15 copy.tmx` is unused. The authoring Lavender north stub and Route 12 west exterior are not referenced by active generated visuals; Godot uses its existing transitions and gate template.
 
@@ -44,3 +44,18 @@ ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend 
 An unchanged rerun preserves the existing report and generated resources.
 
 Validation: eight focused Godot checks passed, including all 2,976 authored frame samples, original fingerprints and non-flower timelines. Tiled renders passed for all 20 flower maps at 0, 840 and 2,520 ms; frame zero is identical and changed pixels are confined to flower tiles. An unchanged rerun preserved every generated resource and the existing report. The aggregate decoded atlas allowance increases by 7.98 MiB across the reviewed maps.
+
+## v0.3.111 reference refresh
+
+Seven subsequently reimported route visuals (5–11) use the current shared
+artist tilesets. Their complete static fingerprints, TileData, flower placement
+and native animation timelines were compared with isolated fresh imports of the
+current TMX sources. Route 9 retains its accepted empty Doors layer; only that
+empty layer and the resulting render-order offset were normalized for comparison.
+No map, source art or generated visual was changed for this reference refresh.
+
+The report preserves the historical rollout records and adds explicit
+`current_*` references and per-atlas flower timeline pins for these seven maps.
+The current total is 901 flowers. Tests retain the original 48-frame
+contract for untouched maps and verify each current native flower's exact frame
+count, pixels, speed and timing on the refreshed maps.
