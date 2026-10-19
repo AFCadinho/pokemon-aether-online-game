@@ -80,3 +80,14 @@ remained unchanged. A separate real HTTP check loaded eight appearances for
 Hydreigon, Tyranitar and two pooled Minior forms, and verified cached reuse.
 Two missing historical Garchomp fixtures in the owned QA cache triggered
 conservative history-retention warnings; all requested new models verified.
+
+## Reusing an existing model publication
+
+Subsequent game releases do not republish the immutable model collection. The
+desktop workflow runs `verify_published_3d_v16.py --remote`, which checks the
+retained publication receipt, historical qualification binding and proofs,
+client catalogs and exact public index bytes. The existing registration step
+then HEAD-checks all 1,422 immutable objects before creating the game manifest.
+Current game consumers remain covered by paired game-release certification.
+The original publisher and its exact source bindings remain unchanged for
+actual model publication; game version changes do not alter historical proofs.

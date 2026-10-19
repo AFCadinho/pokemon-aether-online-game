@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed desktop release publication reusing the verified v16 model collection after game updates.
+
 ## 0.3.112
 
 - Prepare browser and Android release candidates for the deployment CI follow-up; Android keeps experimental 3D enabled with version code 32.
