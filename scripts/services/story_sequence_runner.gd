@@ -60,7 +60,10 @@ func validate_actions(actions_value: Variant) -> Dictionary:
 	return {"success": true}
 
 
-func run_sequence(actions: Variant, host: Node, player: Node2D = null) -> Dictionary:
+func run_sequence(actions: Variant, host: Node, player: Node2D = null, dialogue_parameters: Dictionary = {}) -> Dictionary:
+	for key: Variant in dialogue_parameters:
+		if key != "starterSpeciesName" or not (dialogue_parameters[key] is String) or str(dialogue_parameters[key]).is_empty() or str(dialogue_parameters[key]).length() > 128:
+			return {"success": false, "status": "invalid_dialogue_parameters"}
 	var validation := validate_actions(actions)
 	if not bool(validation.get("success", false)):
 		return validation
@@ -88,7 +91,7 @@ func run_sequence(actions: Variant, host: Node, player: Node2D = null) -> Dictio
 			return {"success": false, "status": "host_preflight_failed", "actionIndex": -1}
 	for index: int in range(action_list.size()):
 		var action: Dictionary = action_list[index] as Dictionary
-		var action_result: Dictionary = await _run_action(action, host, resolved_player)
+		var action_result: Dictionary = await _run_action(action, host, resolved_player, dialogue_parameters)
 		if str(action_result.get("status", "")) == "pending_battle":
 			_is_running = false
 			_restore_input_state(previous_input_state, true)
@@ -258,10 +261,10 @@ func _is_valid_reference(value: String) -> bool:
 	return true
 
 
-func _run_action(action: Dictionary, host: Node, player: Node2D) -> Dictionary:
+func _run_action(action: Dictionary, host: Node, player: Node2D, dialogue_parameters: Dictionary = {}) -> Dictionary:
 	match str(action.get("type", "")):
 		"dialogue":
-			return await _run_dialogue(action, host)
+			return await _run_dialogue(action, host, dialogue_parameters)
 		"wait":
 			return await _run_wait(action)
 		"player_pose":
@@ -275,7 +278,7 @@ func _run_action(action: Dictionary, host: Node, player: Node2D) -> Dictionary:
 	return {"success": false, "status": "unsupported_action"}
 
 
-func _run_dialogue(action: Dictionary, host: Node) -> Dictionary:
+func _run_dialogue(action: Dictionary, host: Node, dialogue_parameters: Dictionary = {}) -> Dictionary:
 	if not host.has_method("show_dialogue"):
 		return {"success": false, "status": "dialogue_host_unavailable"}
 	if get_tree().current_scene == null or get_tree().current_scene.get_node_or_null("DialogueBox/Box") == null:
@@ -293,6 +296,13 @@ func _run_dialogue(action: Dictionary, host: Node) -> Dictionary:
 	):
 		return {"success": false, "status": "dialogue_identity_mismatch"}
 	var lines := _string_array(metadata.get("lines", []))
+	# Never mutate the cached metadata: another interaction/account may use it.
+	for index: int in range(lines.size()):
+		for key: String in dialogue_parameters:
+			lines[index] = lines[index].replace("{" + key + "}", str(dialogue_parameters[key]))
+	for line: String in lines:
+		if line.contains("{starterSpeciesName}"):
+			return {"success": false, "status": "dialogue_parameters_missing"}
 	if lines.is_empty():
 		return {"success": false, "status": "dialogue_empty"}
 	if str(metadata.get("speakerRole", "npc")) == "player":

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rescue Mr. Fuji from three Rockets on Pokémon Tower 7F, clear the tower, and visit him at home for the Poké Flute and a promise recognizing your starter’s current evolution.
+
 - Reveal and battle Marowak’s spirit with the Silph Scope on Pokémon Tower 6F, reunite it with Cubone, and open the way to rescue Mr. Fuji.
 
 - Ask before playing the Poké Flute to awaken Route 12 Snorlax and start its catchable wild battle, with localized confirmation and safe cancellation.

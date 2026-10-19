@@ -160,6 +160,16 @@
 			"scenePath": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
 			"trainerId": ""
 		},
+		"interaction:kanto_lavender_fuji_flute_gift": {
+			"mapId": "kanto_lavender_town_mr_fuji_house",
+			"position": {
+				"x": 368.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/mr_fuji_house.tscn",
+			"trainerId": ""
+		},
 		"interaction:kanto_lavender_fuji_helper_request": {
 			"mapId": "kanto_lavender_town_mr_fuji_house",
 			"position": {
@@ -210,6 +220,16 @@
 			"scenePath": "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn",
 			"trainerId": ""
 		},
+		"interaction:kanto_pokemon_tower_fuji_rescued": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 400.0,
+				"y": 2000.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
 		"interaction:kanto_pokemon_tower_gary_auto_challenge": {
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
@@ -245,6 +265,36 @@
 			"position": {
 				"x": 2224.0,
 				"y": 1360.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_pokemon_tower_rocket_grunt_1_challenge": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 432.0,
+				"y": 2192.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_pokemon_tower_rocket_grunt_2_challenge": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 336.0,
+				"y": 2128.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
+		"interaction:kanto_pokemon_tower_rocket_grunt_3_challenge": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 432.0,
+				"y": 2064.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
@@ -1130,6 +1180,16 @@
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/house3.tscn",
 			"trainerId": ""
 		},
+		"kanto_lavender_mr_fuji": {
+			"mapId": "kanto_lavender_town_mr_fuji_house",
+			"position": {
+				"x": 368.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/mr_fuji_house.tscn",
+			"trainerId": ""
+		},
 		"kanto_lavender_town_pokecenter_visitor": {
 			"mapId": "kanto_lavender_town",
 			"position": {
@@ -1820,6 +1880,16 @@
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
 			"trainerId": ""
 		},
+		"kanto_pokemon_tower_mr_fuji": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 400.0,
+				"y": 2000.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": ""
+		},
 		"kanto_pokemon_tower_phantump_1": {
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
@@ -1849,6 +1919,36 @@
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
 			"trainerId": ""
+		},
+		"kanto_pokemon_tower_rocket_grunt_1": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 432.0,
+				"y": 2192.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": "kanto_pokemon_tower_rocket_grunt_1"
+		},
+		"kanto_pokemon_tower_rocket_grunt_2": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 336.0,
+				"y": 2128.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": "kanto_pokemon_tower_rocket_grunt_2"
+		},
+		"kanto_pokemon_tower_rocket_grunt_3": {
+			"mapId": "kanto_lavender_town_pokemon_tower",
+			"position": {
+				"x": 432.0,
+				"y": 2064.0
+			},
+			"radius": 112.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"trainerId": "kanto_pokemon_tower_rocket_grunt_3"
 		},
 		"kanto_pokemon_tower_shuppet_1": {
 			"mapId": "kanto_lavender_town_pokemon_tower",

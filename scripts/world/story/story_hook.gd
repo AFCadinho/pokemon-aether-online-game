@@ -70,7 +70,8 @@ func try_handle_interaction(host: Node, player: Node2D, trigger: String) -> Dict
 	var sequence_result: Dictionary = await StorySequenceRunner.run_sequence(
 		resolve_result.get("actions", []),
 		host,
-		player
+		player,
+		resolve_result.get("dialogueParameters", {}) as Dictionary
 	)
 	if str(sequence_result.get("status", "")) == "pending_battle":
 		return _finish({
