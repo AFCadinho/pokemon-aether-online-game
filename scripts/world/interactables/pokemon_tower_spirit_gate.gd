@@ -17,6 +17,7 @@ signal scope_selected(accepted: bool)
 var GameState: Node
 var StoryService: Node
 var InventoryService: Node
+var PlayerGameStateService: Node
 var StorySequenceRunner: Node
 var GameErrorDialogService: Node
 var LocalizationManager: Node
@@ -36,6 +37,7 @@ func _ready() -> void:
 	GameState = get_node("/root/GameState")
 	StoryService = get_node("/root/StoryService")
 	InventoryService = get_node("/root/InventoryService")
+	PlayerGameStateService = get_node("/root/PlayerGameStateService")
 	StorySequenceRunner = get_node("/root/StorySequenceRunner")
 	GameErrorDialogService = get_node("/root/GameErrorDialogService")
 	LocalizationManager = get_node("/root/LocalizationManager")
@@ -93,13 +95,24 @@ func interact_with_player(player: Node2D) -> void:
 func _run_story_or_legacy_interaction(player: Node2D, _trigger: String) -> Dictionary:
 	if is_passage_open():
 		return {"success": true}
+	# The player can already be inside the tower after a teleport/reconnect.
+	# Reconcile that arrival on the server before reading the local gate state.
+	var refreshed: Dictionary = await _refresh_spirit_state()
+	if not bool(refreshed.get("success", false)):
+		await GameErrorDialogService.show_response(refreshed)
+		return {"success": false, "handled": true, "status": "spirit_refresh_failed"}
+	if is_passage_open():
+		return {"success": true}
 	_story_player = player
 	_phase = ""
 	if _is_farewell_active():
 		return await _run_spirit_hook("farewell", "MarowakFarewell", player)
 	var actions: Array = [{"type": "dialogue", "dialogueId": "kanto_pokemon_tower_spirit_warning"}]
 	if not can_reveal_spirit():
-		actions.append({"type": "dialogue", "dialogueId": "kanto_pokemon_tower_player_scope_needed"})
+		var dialogue_id := "kanto_pokemon_tower_player_scope_needed"
+		if InventoryService.has_item(SCOPE_ITEM_ID):
+			dialogue_id = "kanto_pokemon_tower_player_scope_not_ready"
+		actions.append({"type": "dialogue", "dialogueId": dialogue_id})
 	var result: Dictionary = await StorySequenceRunner.run_sequence(actions, self, player)
 	if not bool(result.get("success", false)):
 		await GameErrorDialogService.show_report_to_staff_message()
@@ -107,6 +120,19 @@ func _run_story_or_legacy_interaction(player: Node2D, _trigger: String) -> Dicti
 	if can_reveal_spirit() and await _ask_use_scope():
 		return await _run_spirit_hook("battle", "MarowakChallenge", player)
 	return {"success": true, "status": "declined"}
+
+
+func _refresh_spirit_state() -> Dictionary:
+	var world: Node = GameState.get_world()
+	if world == null or not world.has_method("sync_player_position_for_world_action"):
+		return {"success": false, "status": "world_unavailable"}
+	var result: Dictionary = await world.call("sync_player_position_for_world_action")
+	if not bool(result.get("success", false)):
+		return result
+	result = await InventoryService.load_inventory()
+	if not bool(result.get("success", false)):
+		return result
+	return await PlayerGameStateService.bootstrap_story()
 
 
 func _run_spirit_hook(phase: String, hook_name: String, player: Node2D) -> Dictionary:
