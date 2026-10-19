@@ -7397,5 +7397,17 @@
   "backend.error.world_pickup_trainer_required": "Derrote primeiro o treinador que guarda este item.",
   "world.rocket_hideout.shortcut_gate.closed": "O portão de segurança está trancado. Parece ser controlado pelo outro lado.",
   "world.rocket_hideout.gate.name": "Portão de segurança",
-  "world.rocket_hideout.gate.closed": "O portão de segurança está trancado. Derrote os dois guardas Rocket para abri-lo."
+  "world.rocket_hideout.gate.closed": "O portão de segurança está trancado. Derrote os dois guardas Rocket para abri-lo.",
+  "story.kanto.calm_pokemon_tower_spirit.title": "Acalme o espírito inquieto",
+  "story.kanto.calm_pokemon_tower_spirit.summary": "Use o Silph Scope para revelar o espírito que guarda a última escada.",
+  "story.kanto.calm_pokemon_tower_spirit.battle_marowak": "Revele e enfrente o espírito inquieto no 6º andar da Pokémon Tower.",
+  "story.kanto.calm_pokemon_tower_spirit.farewell_marowak": "Ajude o espírito de Marowak a encontrar paz.",
+  "story.kanto.rescue_mr_fuji.title": "Resgate o Sr. Fuji",
+  "story.kanto.rescue_mr_fuji.summary": "Resgate o Sr. Fuji no topo da Pokémon Tower.",
+  "story.kanto.rescue_mr_fuji.rescue_fuji": "Resgate o Sr. Fuji no topo da Pokémon Tower.",
+  "ui.pokemon_tower.scope.title": "Silph Scope",
+  "ui.pokemon_tower.scope.prompt": "Quer usar o Silph Scope?",
+  "ui.staff.story_checkpoint.tower_marowak": "Marowak: revelação e batalha",
+  "ui.staff.story_checkpoint.tower_marowak_farewell": "Marowak: despedida",
+  "ui.staff.story_checkpoint.tower_rescue_fuji": "Resgate o Sr. Fuji"
 }

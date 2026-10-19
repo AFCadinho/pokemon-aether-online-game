@@ -487,6 +487,16 @@ interactable_id = "kanto_pokemon_tower_restless_spirit"
 interactable_kind = "restless_spirit"
 display_name = "???"
 
+[node name="MarowakChallenge" type="Node" parent="Entities/Interactables/RestlessSpirit"]
+script = ExtResource("gary_story_hook")
+interaction_id = "kanto_pokemon_tower_marowak_challenge"
+entity_id = "kanto_pokemon_tower_restless_spirit"
+
+[node name="MarowakFarewell" type="Node" parent="Entities/Interactables/RestlessSpirit"]
+script = ExtResource("gary_story_hook")
+interaction_id = "kanto_pokemon_tower_marowak_farewell"
+entity_id = "kanto_pokemon_tower_restless_spirit"
+
 [node name="StoryTriggers" type="Node2D" parent="." unique_id=22834120]
 
 [node name="GaryChallenge" type="Area2D" parent="StoryTriggers" unique_id=728835768]

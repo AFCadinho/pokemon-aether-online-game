@@ -9,7 +9,10 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
-	# Geometry checks exercise every stair with the required key item owned.
+	# Geometry checks exercise every stair after the spirit farewell.
+	var story := root.get_node("StoryService")
+	var old_story: Dictionary = story.get_story()
+	story.apply_story({"revision": 1, "quests": [{"questId": "calm_pokemon_tower_spirit", "status": "completed", "steps": [{"stepId": "farewell_marowak", "status": "completed"}]}]})
 	var auth := root.get_node("AuthService")
 	var inventory := root.get_node("InventoryService")
 	var old_user: Dictionary = auth.current_user.duplicate(true)
@@ -112,6 +115,7 @@ func _run() -> void:
 	town.free()
 	tower.queue_free()
 	await process_frame
+	story.apply_story(old_story)
 	auth.current_user = old_user
 	inventory.cached_inventory_items = old_items
 	inventory.cached_inventory_user_id = old_owner

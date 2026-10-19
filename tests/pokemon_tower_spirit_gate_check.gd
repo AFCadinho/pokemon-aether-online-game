@@ -23,6 +23,9 @@ func _run() -> void:
 	var inventory := root.get_node("InventoryService")
 	var save := root.get_node("PlayerSave")
 	var state := root.get_node("GameState")
+	var story := root.get_node("StoryService")
+	var old_story: Dictionary = story.get_story()
+	story.reset_story()
 	var old_user: Dictionary = auth.current_user.duplicate(true)
 	var old_items: Array = inventory.cached_inventory_items.duplicate(true)
 	var old_owner: int = inventory.cached_inventory_user_id
@@ -117,11 +120,16 @@ func _run() -> void:
 		_check(box.turns[1].speaker == "Spirit Tester" and box.turns[1].portrait != null, "The player's response uses their own name and portrait")
 	_check(state.input_locked == old_input, "The dialogue restores input")
 	inventory.cached_inventory_items = [{"itemId": "silph-scope", "quantity": 1}]
-	_check(gate.is_passage_open() and not gate.blocks_world_position(gate.global_position), "Owning the Scope unlocks both the tile and stair")
+	_check(not gate.is_passage_open(), "Owning the Scope alone never unlocks the stair")
+	story.apply_story({"revision": 1, "quests": [{"questId": "calm_pokemon_tower_spirit", "status": "active", "steps": [{"stepId": "battle_marowak", "status": "completed"}, {"stepId": "farewell_marowak", "status": "active"}]}]})
+	_check(not gate.is_passage_open(), "Victory alone keeps the stair closed during the farewell")
+	story.apply_story({"revision": 2, "quests": [{"questId": "calm_pokemon_tower_spirit", "status": "completed", "steps": [{"stepId": "farewell_marowak", "status": "completed"}]}]})
+	_check(gate.is_passage_open() and not gate.blocks_world_position(gate.global_position), "The acknowledged farewell unlocks the tile and stair")
 	await stair._on_body_entered(player)
 	_check(player.position == destination and mask.active_floor == &"floor_7", "The unlocked stair moves the player to 7F")
 	inventory.cached_inventory_items = []
-	_check(not gate.is_passage_open(), "Removing the Scope closes the gate immediately")
+	_check(gate.is_passage_open(), "Marowak stays at peace after the Scope is removed")
+	story.apply_story(old_story)
 	for key in cached_keys:
 		dialogue_service.dialogue_metadata_cache.erase(key)
 	auth.current_user = old_user

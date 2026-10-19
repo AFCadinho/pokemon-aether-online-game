@@ -818,8 +818,8 @@
       "entityId": "kanto_pokemon_tower_hex_maniac_aster",
       "mapId": "kanto_lavender_town_pokemon_tower",
       "position": {
-        "x": 2160.0,
-        "y": 240.0
+        "x": 1968.0,
+        "y": 496.0
       },
       "radius": 112.0,
       "rivalPrefix": "",
@@ -841,8 +841,8 @@
       "entityId": "kanto_pokemon_tower_hex_maniac_iris",
       "mapId": "kanto_lavender_town_pokemon_tower",
       "position": {
-        "x": 2192.0,
-        "y": 1168.0
+        "x": 2384.0,
+        "y": 1104.0
       },
       "radius": 112.0,
       "rivalPrefix": "",
@@ -864,8 +864,8 @@
       "entityId": "kanto_pokemon_tower_hex_maniac_liora",
       "mapId": "kanto_lavender_town_pokemon_tower",
       "position": {
-        "x": 368.0,
-        "y": 1168.0
+        "x": 432.0,
+        "y": 1136.0
       },
       "radius": 112.0,
       "rivalPrefix": "",
@@ -887,8 +887,8 @@
       "entityId": "kanto_pokemon_tower_hex_maniac_mira",
       "mapId": "kanto_lavender_town_pokemon_tower",
       "position": {
-        "x": 1488.0,
-        "y": 1072.0
+        "x": 1328.0,
+        "y": 1296.0
       },
       "radius": 112.0,
       "rivalPrefix": "",
@@ -910,8 +910,8 @@
       "entityId": "kanto_pokemon_tower_hex_maniac_nora",
       "mapId": "kanto_lavender_town_pokemon_tower",
       "position": {
-        "x": 2192.0,
-        "y": 496.0
+        "x": 2224.0,
+        "y": 464.0
       },
       "radius": 112.0,
       "rivalPrefix": "",
@@ -933,8 +933,8 @@
       "entityId": "kanto_pokemon_tower_hex_maniac_nyx",
       "mapId": "kanto_lavender_town_pokemon_tower",
       "position": {
-        "x": 1936.0,
-        "y": 1328.0
+        "x": 1968.0,
+        "y": 1424.0
       },
       "radius": 112.0,
       "rivalPrefix": "",
@@ -956,8 +956,8 @@
       "entityId": "kanto_pokemon_tower_hex_maniac_rhea",
       "mapId": "kanto_lavender_town_pokemon_tower",
       "position": {
-        "x": 592.0,
-        "y": 2032.0
+        "x": 688.0,
+        "y": 2224.0
       },
       "radius": 112.0,
       "rivalPrefix": "",
@@ -979,7 +979,7 @@
       "entityId": "kanto_pokemon_tower_hex_maniac_vera",
       "mapId": "kanto_lavender_town_pokemon_tower",
       "position": {
-        "x": 592.0,
+        "x": 272.0,
         "y": 1296.0
       },
       "radius": 112.0,
@@ -995,6 +995,34 @@
           "name": "Hex Maniac Vera",
           "teamSize": 2,
           "trainerClass": "Hex Maniac"
+        }
+      }
+    },
+    "kanto_pokemon_tower_marowak": {
+      "entityId": "kanto_pokemon_tower_restless_spirit",
+      "mapId": "kanto_lavender_town_pokemon_tower",
+      "position": {
+        "x": 2224.0,
+        "y": 1360.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+      "story": {
+        "eventId": "kanto_pokemon_tower_marowak_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "calm_pokemon_tower_spirit",
+        "stepId": "battle_marowak"
+      },
+      "trainerIds": [
+        "kanto_pokemon_tower_marowak"
+      ],
+      "trainers": {
+        "kanto_pokemon_tower_marowak": {
+          "gymBadge": null,
+          "name": "Marowak",
+          "teamSize": 1,
+          "trainerClass": "spirit"
         }
       }
     },
@@ -1513,7 +1541,7 @@
       "entityId": "kanto_rocket_hideout_b3f_grunt_1",
       "mapId": "kanto_rocket_hideout_b3f",
       "position": {
-        "x": 176.0,
+        "x": 144.0,
         "y": 784.0
       },
       "radius": 112.0,
@@ -4795,6 +4823,8 @@
     "kanto_pokemon_tower_hex_maniac_nyx": "kanto_pokemon_tower_hex_maniac_nyx",
     "kanto_pokemon_tower_hex_maniac_rhea": "kanto_pokemon_tower_hex_maniac_rhea",
     "kanto_pokemon_tower_hex_maniac_vera": "kanto_pokemon_tower_hex_maniac_vera",
+    "kanto_pokemon_tower_marowak": "kanto_pokemon_tower_marowak",
+    "kanto_pokemon_tower_restless_spirit": "kanto_pokemon_tower_marowak",
     "kanto_rock_tunnel_1f_hiker_lenny": "kanto_rock_tunnel_1f_hiker_lenny",
     "kanto_rock_tunnel_1f_hiker_lucas": "kanto_rock_tunnel_1f_hiker_lucas",
     "kanto_rock_tunnel_1f_hiker_oliver": "kanto_rock_tunnel_1f_hiker_oliver",
