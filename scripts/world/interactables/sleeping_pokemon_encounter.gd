@@ -1,10 +1,17 @@
 @tool
 extends "res://scripts/world/interactables/world_interactable.gd"
 
+signal flute_choice_resolved(accepted: bool)
+
+const CONFIRMATION := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+
 ## A permanent, player-specific encounter; each map actor needs its own server ID.
 @export var encounter_id := ""
 @export var encounter_area_id := ""
 @export var flute_sound: AudioStream
+
+var _menu_layer: CanvasLayer
+var _input_owner := StringName("sleeping_encounter_%s" % get_instance_id())
 
 var completed := false
 var status_loading := false
@@ -66,6 +73,8 @@ func refresh_status() -> Dictionary:
 
 
 func _start_manual_interaction(_body: Node2D) -> void:
+	if is_interacting or completed:
+		return
 	is_interacting = true
 	_lock_overworld_input()
 	var response := await refresh_status()
@@ -75,18 +84,58 @@ func _start_manual_interaction(_body: Node2D) -> void:
 	elif not completed:
 		if not bool(status.get("canAwaken", false)):
 			await show_dialogue([LocalizationManager.text("static_encounter.snorlax_sleeping")])
-		else:
+		elif await _confirm_awaken():
 			if flute_sound != null:
 				SfxManager.play("poke_flute_awaken")
 				await get_tree().create_timer(flute_sound.get_length()).timeout
-			await show_dialogue([
+			awaken = await show_dialogue([
 				LocalizationManager.text("static_encounter.played_flute"),
 				LocalizationManager.text("static_encounter.snorlax_awoke"),
 			])
-			awaken = true
 	_unlock_overworld_input()
 	if awaken:
 		var world := get_tree().get_first_node_in_group("world")
 		if world != null:
 			await world.start_triggered_wild_battle_for_area(encounter_area_id, "static", "", true, encounter_id)
 	is_interacting = false
+
+
+func _confirm_awaken() -> bool:
+	var layer := CanvasLayer.new()
+	layer.name = "SnorlaxFluteConfirmation"
+	layer.layer = 120
+	_menu_layer = layer
+	get_tree().current_scene.add_child(layer)
+	var dialog := CONFIRMATION.instantiate() as AetherConfirmationDialog
+	layer.add_child(dialog)
+	dialog.configure(
+		display_name,
+		LocalizationManager.text("static_encounter.use_flute_prompt"),
+		LocalizationManager.text("common.yes"),
+		LocalizationManager.text("common.no")
+	)
+	dialog.confirmed.connect(func(): flute_choice_resolved.emit(true), CONNECT_ONE_SHOT)
+	dialog.canceled.connect(func(): flute_choice_resolved.emit(false), CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(540, 260))
+	var accepted: bool = await flute_choice_resolved
+	layer.queue_free()
+	_menu_layer = null
+	return accepted
+
+
+func _lock_overworld_input() -> void:
+	GameState.acquire_overworld_input_lock(_input_owner)
+
+
+func _unlock_overworld_input() -> void:
+	GameState.release_overworld_input_lock(_input_owner)
+
+
+func _exit_tree() -> void:
+	if Engine.is_editor_hint():
+		return
+	if is_instance_valid(_menu_layer):
+		flute_choice_resolved.emit(false)
+	_unlock_overworld_input()
+	if is_instance_valid(_menu_layer):
+		_menu_layer.queue_free()

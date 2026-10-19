@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Ask before playing the Poké Flute to awaken Route 12 Snorlax and start its catchable wild battle, with localized confirmation and safe cancellation.
+
 - Refresh the Pokémon Tower artist visual across all seven floors while preserving its gameplay, floor masks and stair connections.
 
 - Deepen Giovanni's confrontation about the Cubone skull trade and show him abandoning the dropped Silph Scope after his defeat.
