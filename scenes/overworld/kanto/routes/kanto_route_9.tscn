@@ -339,7 +339,6 @@ sight_range_tiles = 3
 npc_id = "kanto_route_9_camper_chris"
 npc_definition_id = "trainer_class_camper"
 display_name = "Camper Chris"
-facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("camper")
 
 [node name="BugCatcherBrent" parent="Entities/NPCs" unique_id=1379502940 instance=ExtResource("trainer")]
