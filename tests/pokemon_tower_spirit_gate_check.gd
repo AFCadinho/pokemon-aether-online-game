@@ -3,6 +3,12 @@ extends SceneTree
 const TOWER := "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn"
 const Blockers := preload("res://scripts/world/map_character_blocking.gd")
 
+const Gate := preload("res://scripts/world/interactables/pokemon_tower_spirit_gate.gd")
+
+class OfflineGate extends Gate:
+	func _refresh_spirit_state() -> Dictionary:
+		return {"success": true}
+
 class FakeFloorMask extends Node2D:
 	var active_floor: StringName = &"floor_6"
 	func show_floor(value: StringName) -> void:
@@ -65,7 +71,7 @@ func _run() -> void:
 	var interactables := Node2D.new()
 	interactables.name = "Interactables"
 	actors.add_child(interactables)
-	var gate := load("res://scripts/world/interactables/pokemon_tower_spirit_gate.gd").new() as Node2D
+	var gate := OfflineGate.new()
 	gate.name = "RestlessSpirit"
 	gate.position = source_position
 	interactables.add_child(gate)
@@ -107,6 +113,7 @@ func _run() -> void:
 	for entry: Dictionary in [
 		{"id": "kanto_pokemon_tower_spirit_warning", "speakerName": "???", "lines": ["Go away…"]},
 		{"id": "kanto_pokemon_tower_player_scope_needed", "speakerRole": "player", "lines": ["I need a device that can reveal this spirit."]},
+		{"id": "kanto_pokemon_tower_player_scope_not_ready", "speakerRole": "player", "lines": ["I have the Silph Scope, but I should finish investigating Team Rocket before I use it here."]},
 	]:
 		entry["dialogueId"] = entry.id
 		var key: String = dialogue_service.call("_get_cache_key", locale, entry.id)
@@ -120,6 +127,8 @@ func _run() -> void:
 		_check(box.turns[1].speaker == "Spirit Tester" and box.turns[1].portrait != null, "The player's response uses their own name and portrait")
 	_check(state.input_locked == old_input, "The dialogue restores input")
 	inventory.cached_inventory_items = [{"itemId": "silph-scope", "quantity": 1}]
+	await gate.interact_with_player(player)
+	_check(box.turns.size() == 4 and "I have the Silph Scope" in str(box.turns[-1].lines), "An unfinished story with an owned Scope never claims the device is missing")
 	_check(not gate.is_passage_open(), "Owning the Scope alone never unlocks the stair")
 	story.apply_story({"revision": 1, "quests": [{"questId": "calm_pokemon_tower_spirit", "status": "active", "steps": [{"stepId": "battle_marowak", "status": "completed"}, {"stepId": "farewell_marowak", "status": "active"}]}]})
 	_check(not gate.is_passage_open(), "Victory alone keeps the stair closed during the farewell")

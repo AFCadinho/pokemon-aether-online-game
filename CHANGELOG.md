@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Silph Scope and story status when speaking to the Pokémon Tower spirit, recovering a missed return objective and avoiding incorrect missing-device dialogue.
+
 - Rescue Mr. Fuji from three Rockets on Pokémon Tower 7F, clear the tower, and visit him at home for the Poké Flute and a promise recognizing your starter’s current evolution.
 
 - Reveal and battle Marowak’s spirit with the Silph Scope on Pokémon Tower 6F, reunite it with Cubone, and open the way to rescue Mr. Fuji.

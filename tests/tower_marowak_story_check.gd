@@ -8,6 +8,13 @@ class TestGate extends Gate:
 	var prompts := 0
 	var challenges := 0
 	var farewells := 0
+	var refreshed_story: Dictionary = {}
+	var refreshes := 0
+	func _refresh_spirit_state() -> Dictionary:
+		refreshes += 1
+		if not refreshed_story.is_empty():
+			StoryService.apply_story(refreshed_story)
+		return {"success": true}
 	func _ask_use_scope() -> bool:
 		prompts += 1
 		return accept
@@ -61,7 +68,19 @@ func _run() -> void:
 	var locale: String = dialogue.call("_get_http_locale")
 	var key: String = dialogue.call("_get_cache_key", locale, "kanto_pokemon_tower_spirit_warning")
 	dialogue.dialogue_metadata_cache[key] = {"success": true, "metadata": {"id": "kanto_pokemon_tower_spirit_warning", "dialogueId": "kanto_pokemon_tower_spirit_warning", "speakerName": "???", "lines": ["Go away…"]}}
-	story.apply_story(_battle_story())
+	story.apply_story({"revision": 0, "quests": [
+		{"questId": "confront_team_rocket_boss", "status": "active", "steps": [
+			{"stepId": "confront_boss", "status": "completed"}, {"stepId": "return_to_tower", "status": "active"}]},
+		{"questId": "calm_pokemon_tower_spirit", "status": "available", "steps": [{"stepId": "battle_marowak", "status": "inactive"}]},
+	]})
+	_check(not gate.can_reveal_spirit(), "A stale return objective initially blocks the reveal despite the owned Scope")
+	gate.refreshed_story = _battle_story()
+	await gate._start_manual_interaction(player)
+	_check(gate.refreshes == 1 and gate.prompts == 1 and box.lines_seen == 1, "Interaction refreshes stale progress before dialogue and offers the owned Scope immediately")
+	gate.refreshed_story = {}
+	gate.prompts = 0
+	box.lines_seen = 0
+	box.portraits.clear()
 	_check(gate.can_reveal_spirit() and not gate.is_passage_open(), "Scope plus Giovanni and the active Tower objective allow revealing, never bypassing")
 	await gate._start_manual_interaction(player)
 	_check(gate.prompts == 1 and gate.challenges == 0 and not gate.is_passage_open(), "No leaves the stair blocked and starts no battle")
