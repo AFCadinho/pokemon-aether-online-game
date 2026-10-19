@@ -274,7 +274,7 @@
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
 				"x": 432.0,
-				"y": 2192.0
+				"y": 2128.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
@@ -284,7 +284,7 @@
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
 				"x": 336.0,
-				"y": 2128.0
+				"y": 2096.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
@@ -1924,7 +1924,7 @@
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
 				"x": 432.0,
-				"y": 2192.0
+				"y": 2128.0
 			},
 			"radius": 112.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
@@ -1934,7 +1934,7 @@
 			"mapId": "kanto_lavender_town_pokemon_tower",
 			"position": {
 				"x": 336.0,
-				"y": 2128.0
+				"y": 2096.0
 			},
 			"radius": 112.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
