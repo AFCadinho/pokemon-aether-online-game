@@ -3,6 +3,7 @@ extends SceneTree
 const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/route_18_mine_check.gd",
 	"res://tests/route_18_mine_population_check.gd",
+	"res://tests/route_18_mine_gate_check.gd",
 	"res://tests/route_18_map_check.gd",
 	"res://tests/route_17_map_check.gd",
 	"res://tests/route_16_gate_check.gd",

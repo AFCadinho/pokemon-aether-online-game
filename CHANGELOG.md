@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a mine foreman beside Route 18’s underground entrance; entry requires Rock Smash level 20, while returning to Route 18 stays unrestricted.
+
 - Cover the space outside Routes 16 and 17 with black masks instead of showing the gray background.
 
 - Add Ground-type wild encounters, including Sandile and rare Gible, seven ambient Pokémon and two talkable explorers to Route 18 Underground Mine.

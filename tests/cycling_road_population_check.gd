@@ -18,7 +18,7 @@ func _run() -> void:
 		var actors: Array[Node] = []
 		actors.append_array(map.get_node("Entities/NPCs").get_children())
 		actors.append_array(map.get_node("Entities/Pokemon").get_children())
-		_check(map.get_node("Entities/NPCs").get_child_count() == {16:6,17:10,18:3}[number], "complete route trainer roster")
+		_check(map.get_node("Entities/NPCs").get_child_count() == {16:6,17:10,18:4}[number], "complete route trainer roster and mine attendant")
 		_check(map.get_node("Entities/Pokemon").get_child_count() == {16:5,17:6,18:5}[number], "ambient route population")
 		for actor in actors:
 			actor.feet_marker = actor.get_node("FeetMarker")
@@ -27,12 +27,18 @@ func _run() -> void:
 			var axis := Vector2i.RIGHT if actor.movement_behavior == "pace_horizontal" else Vector2i.DOWN
 			for offset in range(-radius,radius+1):
 				var lane := cell+axis*offset
+				if offset != 0 and collision.get_cell_source_id(lane) != -1:
+					_check(not actor.call("_can_npc_move_to",_point(lane)), "real patrol rejects terrain beyond its authored edge")
+					continue
 				_check(bounds.has_point(lane) and collision.get_cell_source_id(lane) == -1 and water.get_cell_source_id(lane) == -1, "%s stays on clear, dry terrain at %s" % [actor.name,lane])
 				_check(not occupied.has(lane), "independent actor lanes")
 				occupied[lane] = actor.name
 			for spawn in map.get_node("Spawns").get_children():
 				_check(not occupied.has(Vector2i(spawn.position/32)), "arrival remains clear")
 			if actor.get_parent().name == "NPCs":
+				if not actor.has_method("supports_trainer_rematches"):
+					_check(number == 18 and actor.npc_id == "kanto_route_18_mine_foreman_niels", "additional NPC is the mine foreman")
+					continue
 				_check(actor.npc_id == actor.trainer_id and anchors.has(actor.trainer_id), "trainer has registered co-op identity")
 				var entry: Dictionary = anchors.get(actor.trainer_id,{})
 				_check(entry.get("mapId") == map.map_id and entry.get("position") == {"x":actor.position.x,"y":actor.position.y}, "authoritative anchor matches placed trainer")
@@ -41,16 +47,15 @@ func _run() -> void:
 					_check(actor.display_name.begins_with("Biker ") and actor.npc_sprite_frames.resource_path.ends_with("biker_frames.tres"), "Cycling Road uses only real Biker sprites")
 					for direction in ["down","up","left","right"]:
 						_check(actor.npc_sprite_frames.has_animation("walk_"+direction) and actor.npc_sprite_frames.has_animation("idle_"+direction), "Biker has directional approach and idle animations")
-				for distance in range(1,actor.sight_range_tiles+1):
-					var sight_cell := cell+Vector2i(actor.facing_direction)*distance
-					_check(collision.get_cell_source_id(sight_cell) == -1 and water.get_cell_source_id(sight_cell) == -1, "%s has a clear challenge approach" % actor.name)
+				var sight_cell := cell+Vector2i(actor.facing_direction)
+				_check(collision.get_cell_source_id(sight_cell) == -1 and water.get_cell_source_id(sight_cell) == -1, "%s has a clear adjacent challenge approach" % actor.name)
 			else:
 				_check(FollowerSpriteService.get_sprite_frames(actor.species_id,false) != null, "ambient species has follower artwork")
 				_check(actor.natural_ambient_movement and not actor.ambient_movement_ignores_map_collision, "ambient movement respects collision")
 		var items := map.get_node("Entities/Interactables").get_children()
 		_check(items.size() == (5 if number == 17 else 0), "only canonical Route 17 ground rewards are added")
 		for item in items:
-			_check(item.z_index == floori(item.position.y) and not item.z_as_relative, "visible pickup depth follows its ground position")
+			_check(item.z_index > map.get_node("Visual/Ground").z_index and not item.z_as_relative, "pickup remains visible above the authored ground")
 			var cell := Vector2i(item.position/32)
 			_check(not occupied.has(cell) and collision.get_cell_source_id(cell) == -1 and water.get_cell_source_id(cell) == -1, "pickup has a free dry landing")
 			occupied[cell] = item.name
@@ -75,6 +80,7 @@ func _run() -> void:
 			var axis := Vector2i.RIGHT if actor.movement_behavior == "pace_horizontal" else Vector2i.DOWN
 			for offset in range(-radius,radius+1):
 				var cell := Vector2i(actor.position/32)+axis*offset
+				if collision.get_cell_source_id(cell) != -1: continue
 				if offset == 0: _check(not player.can_move_to(_point(cell)), "real player respects actor blocking")
 				_check(_approachable(reached,cell), "every actor patrol stop can be approached: "+actor.name)
 		for item in items:

@@ -3003,8 +3003,8 @@
 		"kanto_route_16_biker_camron": {
 			"mapId": "kanto_route_16",
 			"position": {
-				"x": 400.0,
-				"y": 560.0
+				"x": 688.0,
+				"y": 944.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
@@ -3013,8 +3013,8 @@
 		"kanto_route_16_biker_hideo": {
 			"mapId": "kanto_route_16",
 			"position": {
-				"x": 1072.0,
-				"y": 464.0
+				"x": 560.0,
+				"y": 1104.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
@@ -3023,8 +3023,8 @@
 		"kanto_route_16_biker_koji": {
 			"mapId": "kanto_route_16",
 			"position": {
-				"x": 688.0,
-				"y": 496.0
+				"x": 720.0,
+				"y": 528.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
@@ -3033,8 +3033,8 @@
 		"kanto_route_16_biker_lao": {
 			"mapId": "kanto_route_16",
 			"position": {
-				"x": 528.0,
-				"y": 432.0
+				"x": 656.0,
+				"y": 400.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
@@ -3233,8 +3233,8 @@
 		"kanto_route_18_bird_keeper_jacob": {
 			"mapId": "kanto_route_18",
 			"position": {
-				"x": 592.0,
-				"y": 848.0
+				"x": 816.0,
+				"y": 1040.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
@@ -3243,7 +3243,7 @@
 		"kanto_route_18_bird_keeper_ramiro": {
 			"mapId": "kanto_route_18",
 			"position": {
-				"x": 1424.0,
+				"x": 1264.0,
 				"y": 1264.0
 			},
 			"radius": 80.0,
@@ -3259,6 +3259,16 @@
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
 			"trainerId": "kanto_route_18_bird_keeper_wilton"
+		},
+		"kanto_route_18_mine_foreman_niels": {
+			"mapId": "kanto_route_18",
+			"position": {
+				"x": 304.0,
+				"y": 1200.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
+			"trainerId": ""
 		},
 		"kanto_route_18_mine_hiker_daan": {
 			"mapId": "kanto_route_18_mine",

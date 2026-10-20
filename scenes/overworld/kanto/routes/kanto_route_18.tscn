@@ -12,6 +12,10 @@
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_18/route_18.visual.tscn" id="visual"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/gate_npc.tscn" id="mine_guard"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="mine_guard_frames"]
+[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/worker-gen6.png" id="mine_guard_portrait"]
+
 [sub_resource type="RectangleShape2D" id="gate_shape"]
 size = Vector2(32, 128)
 
@@ -263,6 +267,19 @@ y_sort_enabled = true
 [node name="Players" type="Node2D" parent="Entities" unique_id=1736782990]
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1549005885]
+
+[node name="MineForeman" parent="Entities/NPCs" instance=ExtResource("mine_guard")]
+position = Vector2(304, 1200)
+gate_id = "route_18_mine"
+guarded_transition_id = "kanto_route_18__to_underground_mine"
+requires_party_pokemon = false
+requires_staff_role = false
+blocked_dialogue_id = "kanto_route_18_mine_guard_blocked"
+allowed_dialogue_id = "kanto_route_18_mine_guard_allowed"
+npc_id = "kanto_route_18_mine_foreman_niels"
+display_name = "Mine Foreman Niels"
+npc_sprite_frames = ExtResource("mine_guard_frames")
+mugshot = ExtResource("mine_guard_portrait")
 
 [node name="bird_keeper_jacob" parent="Entities/NPCs" unique_id=512772016 instance=ExtResource("population_trainer")]
 position = Vector2(816, 1040)

@@ -4135,7 +4135,9 @@
 			"locationGroupId": "kanto_route_18",
 			"locationGroupLabel": "Route 18",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://bghbwnbiqv4ym"
+			],
 			"scenePath": "res://scenes/overworld/kanto/caves/route_18_mine/route_18_mine.tscn",
 			"spawnPoints": {
 				"from_route_18": {
@@ -10254,7 +10256,9 @@
 		"kanto_route_18__to_underground_mine": {
 			"destination": {
 				"mapId": "kanto_route_18_mine",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://bghbwnbiqv4ym"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/route_18_mine/route_18_mine.tscn",
 				"position": {
 					"x": 176.0,
