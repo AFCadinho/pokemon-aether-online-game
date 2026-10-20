@@ -296,6 +296,7 @@ sources/0 = SubResource("TileSetAtlasSource_q7va0")
 [node name="CeladonGameCorner" type="Node2D" unique_id=528190411]
 script = ExtResource("metadata")
 map_id = "kanto_celadon_game_corner"
+music_track_id = "overworld.kanto.interior.celadon_game_corner_remastered_zame"
 map_region_name = "Kanto"
 map_display_name = "Celadon Game Corner"
 world_access_group_id = "kanto_celadon_city"

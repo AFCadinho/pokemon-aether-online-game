@@ -34,6 +34,8 @@ const KANTO_ROUTE_GROUP_PROFILE_ID := "kanto.routes_3_10_16_22"
 const KANTO_ROUTE_GROUP_TRACK_ID := "overworld.kanto.routes_3_10_16_22"
 const MT_MOON_TRACK_ID := "overworld.kanto.cave.mt_moon"
 const CERULEAN_CITY_TRACK_ID := "overworld.kanto.cerulean_city"
+const CELADON_CITY_TRACK_ID := "overworld.kanto.celadon_city_remastered_zame"
+const CELADON_GAME_CORNER_TRACK_ID := "overworld.kanto.interior.celadon_game_corner_remastered_zame"
 const GYM_PROFILE_ID := "gym.interior"
 const GYM_TRACK_ID := "overworld.gym.black_white_remastered_zame"
 const PALLET_TOWN_TRACK := "res://assets/music/overworld/kanto/towns/pallet_town.ogg"
@@ -51,6 +53,8 @@ const SS_ANNE_TRACK_ID := "overworld.kanto.ss_anne_zame"
 const SS_ANNE_TRACK := "res://assets/music/overworld/kanto/towns/ss_anne.ogg"
 const MT_MOON_TRACK := "res://assets/music/overworld/kanto/caves/mt_moon.ogg"
 const CERULEAN_CITY_TRACK := "res://assets/music/overworld/kanto/towns/cerulean_city.ogg"
+const CELADON_CITY_TRACK := "res://assets/music/overworld/kanto/towns/celadon_city_remastered_zame.ogg"
+const CELADON_GAME_CORNER_TRACK := "res://assets/music/overworld/kanto/interiors/celadon_game_corner_remastered_zame.ogg"
 const GYM_TRACK := "res://assets/music/overworld/gyms/black_white_gym_theme_remastered_zame.ogg"
 const AETHER_CLASH_DUEL_TRACK_ID := "overworld.aether_clash.duel"
 const AETHER_CLASH_DUEL_TRACK := "res://assets/music/overworld/aether_clash/aether_clash_duel.ogg"
@@ -99,6 +103,10 @@ func _run() -> void:
 		_check_scene_track(scene_path, 'music_track_id = "%s"' % MT_MOON_TRACK_ID, "%s uses the dedicated Mt. Moon track" % scene_path)
 	_check_equal(str((tracks.get(CERULEAN_CITY_TRACK_ID, {}) as Dictionary).get("path", "")), CERULEAN_CITY_TRACK, "Cerulean City catalog track has the expected path")
 	_check_scene_track(CERULEAN_CITY_SCENE_PATH, 'music_track_id = "%s"' % CERULEAN_CITY_TRACK_ID, "Cerulean City uses its dedicated catalog track")
+	_check_equal(str((tracks.get(CELADON_CITY_TRACK_ID, {}) as Dictionary).get("path", "")), CELADON_CITY_TRACK, "Celadon City catalog track has the expected path")
+	_check_scene_track("res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn", 'music_track_id = "%s"' % CELADON_CITY_TRACK_ID, "Celadon City uses its dedicated catalog track")
+	_check_equal(str((tracks.get(CELADON_GAME_CORNER_TRACK_ID, {}) as Dictionary).get("path", "")), CELADON_GAME_CORNER_TRACK, "Celadon Game Corner catalog track has the expected path")
+	_check_scene_track("res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn", 'music_track_id = "%s"' % CELADON_GAME_CORNER_TRACK_ID, "Celadon Game Corner uses its dedicated catalog track")
 	_check_equal(str(profiles.get(GYM_PROFILE_ID, "")), GYM_TRACK_ID, "Gym interior profile resolves to its catalog track")
 	_check_equal(str((tracks.get(GYM_TRACK_ID, {}) as Dictionary).get("path", "")), GYM_TRACK, "Gym catalog track has the expected path")
 	_check_equal(str(profiles.get("aether_clash.duel", "")), AETHER_CLASH_DUEL_TRACK_ID, "Aether Clash Duel profile resolves to its dedicated track")
@@ -109,6 +117,8 @@ func _run() -> void:
 	_check(FileAccess.file_exists(POKEMON_CENTER_TRACK), "Pokémon Center OGG is included in the project")
 	_check(FileAccess.file_exists(MT_MOON_TRACK), "Mt. Moon OGG is included in the project")
 	_check(FileAccess.file_exists(CERULEAN_CITY_TRACK), "Cerulean City OGG is included in the project")
+	_check(FileAccess.file_exists(CELADON_CITY_TRACK), "Celadon City OGG is included in the project")
+	_check(FileAccess.file_exists(CELADON_GAME_CORNER_TRACK), "Celadon Game Corner OGG is included in the project")
 	_check(FileAccess.file_exists(KANTO_ROUTES_11_15_TRACK), "Routes 11–15 OGG is included in the project")
 	_check(FileAccess.file_exists(VERMILION_CITY_TRACK), "Vermilion City OGG is included in the project")
 	_check(FileAccess.file_exists(SS_ANNE_TRACK), "S.S. Anne OGG is included in the project")
@@ -130,6 +140,18 @@ func _run() -> void:
 	_check(lavender_stream != null and absf(lavender_stream.get_length() - 160.04) < 1.0,
 		"Lavender Town OGG decodes with the complete source duration")
 	var music_manager := load("res://scripts/services/music_manager.gd").new() as Node
+	for scene_path: String in [
+		"res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+		"res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
+	]:
+		var celadon_map := (load(scene_path) as PackedScene).instantiate()
+		var expected_track := CELADON_CITY_TRACK if scene_path.ends_with("/celadon_city.tscn") else CELADON_GAME_CORNER_TRACK
+		_check_equal(music_manager.call("get_map_music_path", celadon_map), expected_track,
+			"%s resolves its Celadon soundtrack through the runtime manager" % scene_path)
+		celadon_map.free()
+		var celadon_stream := load(expected_track) as AudioStreamOggVorbis
+		_check(celadon_stream != null and celadon_stream.get_length() > 0,
+			"%s decodes as a complete music stream" % expected_track)
 	for scene_path: String in [
 		"res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
 	]:
