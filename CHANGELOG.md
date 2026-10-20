@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Route 18’s artist visual with the updated quarry fence layering.
+
 - Preserve the moved Route 18 gate and city landings, synchronize server arrivals, and keep the Route 17 side-platform escape.
 
 - Add Route 18 Underground Mine with its artist visual and two-way quarry stairs; contain Route 18’s outer map edges.
