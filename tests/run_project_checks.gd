@@ -223,6 +223,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/route5_saffron_gate_transition_check.gd",
 	"res://tests/saffron_city_connections_check.gd",
 	"res://tests/fuchsia_city_connections_check.gd",
+	"res://tests/fuchsia_pokemon_center_check.gd",
 	"res://tests/route7_saffron_gate_check.gd",
 	"res://tests/aether_clash_staff_preview_check.gd",
 	"res://tests/aether_clash_bot_anchors_check.gd",

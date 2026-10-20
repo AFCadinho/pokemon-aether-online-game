@@ -1774,6 +1774,16 @@
 						"y": 22
 					}
 				},
+				"from_pokecenter": {
+					"facingDirection": "down",
+					"label": "Pokémon Center",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPokecenter",
+					"tile": {
+						"x": 7,
+						"y": 11
+					}
+				},
 				"from_route_15_gate": {
 					"facingDirection": "down",
 					"label": "Route 15 Gate",
@@ -1786,6 +1796,39 @@
 				}
 			},
 			"weatherProfile": "outdoor"
+		},
+		"kanto_fuchsia_city_pokemon_center": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Fuchsia City Pokémon Center",
+			"locationGroupId": "kanto_fuchsia_city",
+			"locationGroupLabel": "Fuchsia City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/pokemon_center.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "down",
+					"label": "Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 14,
+						"y": 31
+					}
+				},
+				"heal_npc": {
+					"facingDirection": "down",
+					"label": "Heal NPC",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "HealNPC",
+					"tile": {
+						"x": 14,
+						"y": 23
+					}
+				}
+			},
+			"weatherProfile": "disabled"
 		},
 		"kanto_lavender_town": {
 			"areaType": "exterior",
@@ -7743,6 +7786,20 @@
 			"destinationAreaId": "kanto_diglett_cave_route_2_entrance",
 			"sourceMapId": "kanto_diglett_cave_tunnel"
 		},
+		"kanto_fuchsia_city__to_pokemon_center": {
+			"destination": {
+				"mapId": "kanto_fuchsia_city_pokemon_center",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/pokemon_center.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_fuchsia_city_pokemon_center",
+			"sourceMapId": "kanto_fuchsia_city"
+		},
 		"kanto_fuchsia_city__to_route15_gate": {
 			"destination": {
 				"mapId": "kanto_route_15_fuchsia_gate",
@@ -7756,6 +7813,20 @@
 			},
 			"destinationAreaId": "kanto_route_15_fuchsia_gate",
 			"sourceMapId": "kanto_fuchsia_city"
+		},
+		"kanto_fuchsia_city_pokemon_center__to_outside": {
+			"destination": {
+				"mapId": "kanto_fuchsia_city",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+				"position": {
+					"x": 240.0,
+					"y": 368.0
+				},
+				"spawnMarker": "FromPokecenter"
+			},
+			"destinationAreaId": "kanto_fuchsia_city",
+			"sourceMapId": "kanto_fuchsia_city_pokemon_center"
 		},
 		"kanto_lavender_town__to_house_1": {
 			"destination": {
