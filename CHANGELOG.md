@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Route 16 East’s artist visual, including its updated water and flowers.
+
 - Add Magikarp, Goldeen and Poliwag swimming in Route 16 East’s southern pond.
 - Add gently floating pixel Zs above sleeping Snorlax on Routes 12 and 16 East.
 
