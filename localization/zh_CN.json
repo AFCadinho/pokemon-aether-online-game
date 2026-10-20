@@ -7415,5 +7415,8 @@
   "story.kanto.visit_mr_fuji.summary": "前往紫苑镇的富士老人家中拜访他。",
   "story.kanto.visit_mr_fuji.receive_flute": "拜访富士老人并接受他的谢礼。",
   "ui.staff.story_checkpoint.tower_fuji_thanks": "富士老人：塔顶的感谢",
-  "ui.staff.story_checkpoint.fuji_house_reward": "富士老人：家中的宝可梦之笛"
+  "ui.staff.story_checkpoint.fuji_house_reward": "富士老人：家中的宝可梦之笛",
+  "ui.cycling_road.mount_required": "必须骑乘坐骑才能进入自行车道。",
+  "ui.cycling_road.dismount_blocked": "在自行车道上无法下坐骑。",
+  "ui.cycling_road.north_blocked": "这座桥禁止向北行进。"
 }

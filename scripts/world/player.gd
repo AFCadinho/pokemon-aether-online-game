@@ -643,7 +643,7 @@ func can_fish_here() -> bool:
 		return false
 	if int(GameState.fishing_tier) <= 0:
 		return false
-	if fishing_activity_active or is_moving:
+	if fishing_activity_active or is_moving or (land_mount_activity_active and not _current_map_allows_land_mount_dismount()):
 		return false
 	if GameState.is_overworld_input_locked() or _is_ui_typing():
 		return false
@@ -662,6 +662,8 @@ func start_fishing(fishing_tier: int = -1) -> bool:
 
 func toggle_land_mount() -> bool:
 	if land_mount_activity_active:
+		if not _current_map_allows_land_mount_dismount():
+			return false
 		_finish_land_mount_activity()
 		land_mount_toggled.emit()
 		return true
@@ -712,6 +714,8 @@ func start_surf() -> bool:
 	return true
 
 func get_surf_check_result() -> Dictionary:
+	if land_mount_activity_active and not _current_map_allows_land_mount_dismount():
+		return {"allowed":false,"reason":"dismount_blocked","error":LocalizationManager.text("ui.cycling_road.dismount_blocked")}
 	var target_position_value := _get_facing_tile_position()
 	var result := {
 		"allowed": false,
@@ -1136,10 +1140,11 @@ func _on_world_pixel_scale_changed(_scale: float) -> void:
 
 func _on_mount_loadout_changed(movement_mode: String, mount_id: String) -> void:
 	if movement_mode == SettingsManager.MOUNT_MODE_LAND and land_mount_activity_active:
-		active_mount_id = MountService.resolve_mount_id_for_mode(
-			mount_id,
-			SettingsManager.MOUNT_MODE_LAND
-		)
+		var candidate_mount := MountService.resolve_mount_id_for_mode(mount_id, SettingsManager.MOUNT_MODE_LAND)
+		if (candidate_mount.is_empty() or not _is_mount_owned(candidate_mount)) and not _current_map_allows_land_mount_dismount() and _is_mount_owned(active_mount_id):
+			SettingsManager.set_selected_mount_id(SettingsManager.MOUNT_MODE_LAND, active_mount_id)
+			return
+		active_mount_id = candidate_mount
 		if active_mount_id.is_empty() or not _is_mount_owned(active_mount_id):
 			_finish_land_mount_activity()
 			return
@@ -1193,6 +1198,11 @@ func _apply_world_pixel_scale() -> void:
 		world_camera,
 		effective_scale
 	)
+
+
+func _current_map_allows_land_mount_dismount() -> bool:
+	var current_map := _resolve_current_map()
+	return current_map == null or not current_map.has_method("allows_land_mount_dismount") or bool(current_map.call("allows_land_mount_dismount"))
 
 
 func _current_map_allows_land_mounts() -> bool:
@@ -2090,7 +2100,9 @@ func request_land_mount_toggle() -> bool:
 		return false
 	if toggle_land_mount():
 		return true
-	var message_key := "ui.mounts.interior_blocked" \
+	var message_key := "ui.cycling_road.dismount_blocked" \
+		if land_mount_activity_active and not _current_map_allows_land_mount_dismount() \
+		else "ui.mounts.interior_blocked" \
 		if not _current_map_allows_land_mounts() \
 		else "ui.mounts.license_required" \
 		if not _has_mount_license_for_current_region() \

@@ -123,6 +123,10 @@ func build(
 				"destination": destination,
 			}
 
+			for flag in ["requiresLandMount", "movementBlocked"]:
+				if bool(exit_record.get(flag, false)):
+					transitions[transition_id][flag] = true
+
 	if not errors.is_empty():
 		return {
 			"success": false,
@@ -285,6 +289,8 @@ func _load_scene_record(scene_path: String, staff_teleport_overrides: Dictionary
 				"targetScenePath": target_scene_path,
 				"targetSpawnName": target_spawn_name,
 				"transitionId": str(_property_value(child, "transition_id", "")),
+				"requiresLandMount": bool(_property_value(child, "requires_land_mount", false)),
+				"movementBlocked": bool(_property_value(child, "movement_blocked", false)),
 			})
 
 	var weather_profile := "outdoor"
@@ -302,6 +308,10 @@ func _load_scene_record(scene_path: String, staff_teleport_overrides: Dictionary
 		"defaultMode": "open",
 		"spawnPoints": _sorted_dictionary(spawn_points),
 	}
+	if root.has_method("get_world_travel_rules"):
+		var rules: Dictionary = root.call("get_world_travel_rules")
+		if not rules.is_empty():
+			area["travelRules"] = rules
 	var result := {
 		"success": true,
 		"mapId": map_id,

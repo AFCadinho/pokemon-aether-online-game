@@ -22,6 +22,8 @@ sources/0 = SubResource("marker_source")
 [node name="Route17" type="Node2D"]
 script = ExtResource("metadata")
 map_id = "kanto_route_17"
+land_mount_dismount_blocked = true
+northbound_blocked_regions = Array[Rect2i]([Rect2i(15, 0, 9, 57), Rect2i(8, 24, 7, 10)])
 map_region_name = "Kanto"
 map_display_name = "Route 17"
 individual_tree_depth_sorting = true
@@ -45,6 +47,8 @@ position = Vector2(560, 80)
 [node name="ToRoute16" type="Area2D" parent="Exits"]
 position = Vector2(624, 16)
 script = ExtResource("exit")
+requires_land_mount = true
+movement_blocked = true
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_16.tscn"
 target_spawn_name = "FromRoute17"
 transition_id = "kanto_route_17__to_route16"
@@ -54,6 +58,7 @@ transition_facing_direction = "up"
 shape = SubResource("bridge_shape")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute16" instance=ExtResource("hint")]
+visible = false
 z_as_relative = false
 tile_footprint = Vector2i(9, 1)
 flow_direction = "up"

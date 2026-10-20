@@ -1826,6 +1826,7 @@ func _position_player_at_authorized_teleport_state(map: Node, state: Dictionary)
 		_refresh_map_visual_depth_for_player(map)
 		player.refresh_map_layers()
 		_sync_player_activity_state_for_current_tile()
+		_restore_land_mount_from_state(state)
 		if player.has_method("reset_pokemon_follower_position"):
 			player.call("reset_pokemon_follower_position")
 		GameState.player_position = spawn_position
@@ -1855,18 +1856,21 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 	_refresh_map_visual_depth_for_player(map)
 	player.refresh_map_layers()
 	_sync_player_activity_state_for_current_tile()
-	var saved_mount_id := str(state.get("mountId", "")).strip_edges().to_lower()
-	if (
-		not saved_mount_id.is_empty()
-		and not bool(state.get("teleportAcknowledgementRequired", false))
-		and player.has_method("restore_land_mount")
-	):
-		player.call("restore_land_mount", saved_mount_id)
+	_restore_land_mount_from_state(state)
 	if player.has_method("reset_pokemon_follower_position"):
 		player.call("reset_pokemon_follower_position")
 	GameState.player_position = saved_position
 	GameState.player_direction = player.last_direction
 	GameState.has_player_position = true
+
+
+func _restore_land_mount_from_state(state: Dictionary) -> void:
+	var saved_mount_id := _optional_string(state.get("mountId", "")).to_lower()
+	if (
+		not saved_mount_id.is_empty()
+		and player.has_method("restore_land_mount")
+	):
+		player.call("restore_land_mount", saved_mount_id)
 
 
 func _sync_player_activity_state_for_current_tile() -> void:

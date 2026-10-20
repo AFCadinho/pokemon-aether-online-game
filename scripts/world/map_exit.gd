@@ -8,6 +8,8 @@ extends Area2D
 @export var required_trainer_id := ""
 @export_enum("up", "down", "left", "right") var transition_facing_direction := ""
 @export var player_node_name := "Player"
+@export var requires_land_mount := false
+@export var movement_blocked := false
 
 const FACING_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 const DOOR_POSITION_INPUT_LOCK := &"guild_base_door_position"
@@ -43,6 +45,10 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.name != player_node_name:
 		return
 	if _is_route_gate_interaction_active(body):
+		return
+	var travel_reason := get_travel_block_reason(body)
+	if not travel_reason.is_empty():
+		get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text(travel_reason))
 		return
 	if await _handle_required_trainer(body):
 		return
@@ -138,9 +144,9 @@ func _enter_authorized_transition(
 		push_error("MapExit failed: World does not support authorized transitions.")
 		return
 
-	# Guild Base doors validate the last saved position on the server. Flush it
+	# Riding gates and Guild Base doors validate saved player state. Flush it
 	# before beginning the teleport, which deliberately blocks position autosave.
-	if normalized_transition_id.begins_with("guild_base_") or target_scene_path.contains("/guild_base/"):
+	if requires_land_mount or normalized_transition_id.begins_with("guild_base_") or target_scene_path.contains("/guild_base/"):
 		var game_state := get_node("/root/GameState")
 		game_state.call("acquire_overworld_input_lock", DOOR_POSITION_INPUT_LOCK)
 		var position_result: Dictionary = await world.call("sync_player_position_for_world_action")
@@ -154,6 +160,11 @@ func _enter_authorized_transition(
 			await _show_transition_error(position_result)
 			return
 
+	var travel_reason := get_travel_block_reason(player)
+	if not travel_reason.is_empty():
+		is_transitioning = false
+		get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text(travel_reason))
+		return
 	var begin_result: Dictionary = await world.call("begin_authorized_teleport", true)
 	if not bool(begin_result.get("success", false)):
 		is_transitioning = false
@@ -303,3 +314,11 @@ func _shape_contains_local_position(shape: Shape2D, local_position: Vector2) -> 
 		var radius := (shape as CircleShape2D).radius
 		return local_position.length_squared() <= radius * radius
 	return false
+
+
+func get_travel_block_reason(player: Node) -> String:
+	if movement_blocked:
+		return "ui.cycling_road.north_blocked"
+	if requires_land_mount and (not player.has_method("is_land_mount_activity_active") or not bool(player.call("is_land_mount_activity_active"))):
+		return "ui.cycling_road.mount_required"
+	return ""
