@@ -5,13 +5,12 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="hint"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="marker"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_17/route_17.visual.tscn" id="visual"]
-
-[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
+[ext_resource type="SpriteFrames" uid="uid://bj8kbqnqou7cg" path="res://assets/npcs/classes/biker_frames.tres" id="population_frames"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="population_item"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/biker_frames.tres" id="population_frames"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/triathletebiker-gen6.png" id="population_portrait"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
+[ext_resource type="Texture2D" uid="uid://bijf5maooquds" path="res://assets/sprites/trainer_cards/showdown/triathletebiker-gen6.png" id="population_portrait"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_17/route_17.visual.tscn" id="visual"]
 
 [sub_resource type="RectangleShape2D" id="bridge_shape"]
 size = Vector2(288, 32)
@@ -189,230 +188,229 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=2007357177]
 
-[node name="biker_virgil" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="biker_virgil" parent="Entities/NPCs" unique_id=1039777324 instance=ExtResource("population_trainer")]
 position = Vector2(528, 304)
 trainer_id = "kanto_route_17_biker_virgil"
+sight_range_tiles = 2
 npc_id = "kanto_route_17_biker_virgil"
 dialogue_id = "kanto_route_17_biker_virgil_intro"
 display_name = "Biker Virgil"
 facing_direction = Vector2(1, 0)
-sight_range_tiles = 2
 npc_sprite_frames = ExtResource("population_frames")
 mugshot = ExtResource("population_portrait")
 
-[node name="biker_isaiah" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="biker_isaiah" parent="Entities/NPCs" unique_id=461830361 instance=ExtResource("population_trainer")]
 position = Vector2(720, 432)
 trainer_id = "kanto_route_17_biker_isaiah"
+sight_range_tiles = 2
 npc_id = "kanto_route_17_biker_isaiah"
 dialogue_id = "kanto_route_17_biker_isaiah_intro"
 display_name = "Biker Isaiah"
 facing_direction = Vector2(-1, 0)
-sight_range_tiles = 2
 npc_sprite_frames = ExtResource("population_frames")
 mugshot = ExtResource("population_portrait")
 
-[node name="biker_raul" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="biker_raul" parent="Entities/NPCs" unique_id=532224767 instance=ExtResource("population_trainer")]
 position = Vector2(528, 656)
 trainer_id = "kanto_route_17_biker_raul"
+sight_range_tiles = 2
 npc_id = "kanto_route_17_biker_raul"
 dialogue_id = "kanto_route_17_biker_raul_intro"
 display_name = "Biker Raul"
 facing_direction = Vector2(1, 0)
-sight_range_tiles = 2
 npc_sprite_frames = ExtResource("population_frames")
 mugshot = ExtResource("population_portrait")
 
-[node name="biker_nikolas" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="biker_nikolas" parent="Entities/NPCs" unique_id=907149987 instance=ExtResource("population_trainer")]
 position = Vector2(720, 752)
 trainer_id = "kanto_route_17_biker_nikolas"
+sight_range_tiles = 2
 npc_id = "kanto_route_17_biker_nikolas"
 dialogue_id = "kanto_route_17_biker_nikolas_intro"
 display_name = "Biker Nikolas"
 facing_direction = Vector2(-1, 0)
-sight_range_tiles = 2
 npc_sprite_frames = ExtResource("population_frames")
 mugshot = ExtResource("population_portrait")
 
-[node name="biker_billy" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="biker_billy" parent="Entities/NPCs" unique_id=294942220 instance=ExtResource("population_trainer")]
 position = Vector2(528, 1168)
 trainer_id = "kanto_route_17_biker_billy"
+sight_range_tiles = 2
 npc_id = "kanto_route_17_biker_billy"
 dialogue_id = "kanto_route_17_biker_billy_intro"
 display_name = "Biker Billy"
 facing_direction = Vector2(1, 0)
-sight_range_tiles = 2
 npc_sprite_frames = ExtResource("population_frames")
 mugshot = ExtResource("population_portrait")
 
-[node name="biker_jamal" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="biker_jamal" parent="Entities/NPCs" unique_id=1185077169 instance=ExtResource("population_trainer")]
 position = Vector2(720, 1296)
 trainer_id = "kanto_route_17_biker_jamal"
+sight_range_tiles = 2
 npc_id = "kanto_route_17_biker_jamal"
 dialogue_id = "kanto_route_17_biker_jamal_intro"
 display_name = "Biker Jamal"
 facing_direction = Vector2(-1, 0)
-sight_range_tiles = 2
 npc_sprite_frames = ExtResource("population_frames")
 mugshot = ExtResource("population_portrait")
 
-[node name="biker_zeek" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="biker_zeek" parent="Entities/NPCs" unique_id=1863885252 instance=ExtResource("population_trainer")]
 position = Vector2(528, 1552)
 trainer_id = "kanto_route_17_biker_zeek"
+sight_range_tiles = 2
 npc_id = "kanto_route_17_biker_zeek"
 dialogue_id = "kanto_route_17_biker_zeek_intro"
 display_name = "Biker Zeek"
 facing_direction = Vector2(1, 0)
-sight_range_tiles = 2
 npc_sprite_frames = ExtResource("population_frames")
 mugshot = ExtResource("population_portrait")
 
-[node name="biker_corey" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="biker_corey" parent="Entities/NPCs" unique_id=2061851612 instance=ExtResource("population_trainer")]
 position = Vector2(720, 1648)
 trainer_id = "kanto_route_17_biker_corey"
+sight_range_tiles = 2
 npc_id = "kanto_route_17_biker_corey"
 dialogue_id = "kanto_route_17_biker_corey_intro"
 display_name = "Biker Corey"
 facing_direction = Vector2(-1, 0)
-sight_range_tiles = 2
 npc_sprite_frames = ExtResource("population_frames")
 mugshot = ExtResource("population_portrait")
 
-[node name="biker_william" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="biker_william" parent="Entities/NPCs" unique_id=1514876898 instance=ExtResource("population_trainer")]
 position = Vector2(624, 1968)
 trainer_id = "kanto_route_17_biker_william"
+sight_range_tiles = 2
 npc_id = "kanto_route_17_biker_william"
 dialogue_id = "kanto_route_17_biker_william_intro"
 display_name = "Biker William"
-facing_direction = Vector2(0, 1)
-sight_range_tiles = 2
+facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("population_frames")
 mugshot = ExtResource("population_portrait")
 
-[node name="biker_jaxon" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="biker_jaxon" parent="Entities/NPCs" unique_id=1162563754 instance=ExtResource("population_trainer")]
 position = Vector2(976, 1968)
 trainer_id = "kanto_route_17_biker_jaxon"
+sight_range_tiles = 2
 npc_id = "kanto_route_17_biker_jaxon"
 dialogue_id = "kanto_route_17_biker_jaxon_intro"
 display_name = "Biker Jaxon"
 facing_direction = Vector2(0, -1)
-sight_range_tiles = 2
 npc_sprite_frames = ExtResource("population_frames")
 mugshot = ExtResource("population_portrait")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=794926139]
 
-[node name="Rattata1" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+[node name="Rattata1" parent="Entities/Pokemon" unique_id=1019608162 instance=ExtResource("population_pokemon")]
 position = Vector2(304, 912)
 overworld_pokemon_id = "kanto_route_17_rattata_1"
 species_id = "rattata"
 level = 22
-display_name = "Rattata"
 dialogue_id = "kanto_route_17_rattata_1_cry"
+display_name = "Rattata"
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
+movement_wait_seconds = 1.4
 movement_speed_pixels = 30.0
-movement_wait_seconds = 1.40
 movement_wait_jitter_seconds = 0.5
 
-[node name="Spearow1" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+[node name="Spearow1" parent="Entities/Pokemon" unique_id=2035801704 instance=ExtResource("population_pokemon")]
 position = Vector2(336, 848)
 overworld_pokemon_id = "kanto_route_17_spearow_1"
 species_id = "spearow"
 level = 22
-display_name = "Spearow"
 dialogue_id = "kanto_route_17_spearow_1_cry"
-movement_behavior = "idle"
+display_name = "Spearow"
 movement_tiles = 1
-movement_speed_pixels = 33.0
 movement_wait_seconds = 1.65
+movement_speed_pixels = 33.0
 movement_wait_jitter_seconds = 0.5
 
-[node name="Doduo1" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+[node name="Doduo1" parent="Entities/Pokemon" unique_id=1832360794 instance=ExtResource("population_pokemon")]
 position = Vector2(400, 1040)
 overworld_pokemon_id = "kanto_route_17_doduo_1"
 species_id = "doduo"
 level = 26
-display_name = "Doduo"
 dialogue_id = "kanto_route_17_doduo_1_cry"
+display_name = "Doduo"
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
+movement_wait_seconds = 1.9
 movement_speed_pixels = 36.0
-movement_wait_seconds = 1.90
 movement_wait_jitter_seconds = 0.5
 
-[node name="Fearow1" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+[node name="Fearow1" parent="Entities/Pokemon" unique_id=1059464815 instance=ExtResource("population_pokemon")]
 position = Vector2(592, 1840)
 overworld_pokemon_id = "kanto_route_17_fearow_1"
 species_id = "fearow"
 level = 25
-display_name = "Fearow"
 dialogue_id = "kanto_route_17_fearow_1_cry"
+display_name = "Fearow"
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
-movement_speed_pixels = 39.0
 movement_wait_seconds = 2.15
+movement_speed_pixels = 39.0
 movement_wait_jitter_seconds = 0.5
 
-[node name="Raticate1" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+[node name="Raticate1" parent="Entities/Pokemon" unique_id=604705235 instance=ExtResource("population_pokemon")]
 position = Vector2(848, 1904)
 overworld_pokemon_id = "kanto_route_17_raticate_1"
 species_id = "raticate"
 level = 27
-display_name = "Raticate"
 dialogue_id = "kanto_route_17_raticate_1_cry"
+display_name = "Raticate"
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
+movement_wait_seconds = 2.4
 movement_speed_pixels = 42.0
-movement_wait_seconds = 2.40
 movement_wait_jitter_seconds = 0.5
 
-[node name="Doduo2" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+[node name="Doduo2" parent="Entities/Pokemon" unique_id=1169372017 instance=ExtResource("population_pokemon")]
 position = Vector2(1040, 2000)
 overworld_pokemon_id = "kanto_route_17_doduo_2"
 species_id = "doduo"
 level = 28
-display_name = "Doduo"
 dialogue_id = "kanto_route_17_doduo_2_cry"
+display_name = "Doduo"
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
-movement_speed_pixels = 45.0
 movement_wait_seconds = 2.65
+movement_speed_pixels = 45.0
 movement_wait_jitter_seconds = 0.5
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=730497027]
 
-[node name="full_restore" parent="Entities/Interactables" instance=ExtResource("population_item")]
-position = Vector2(592, 592)
+[node name="full_restore" parent="Entities/Interactables" unique_id=2019501486 instance=ExtResource("population_item")]
 z_index = 592
 z_as_relative = false
+position = Vector2(624, 592)
 pickup_id = "kanto_route_17_full_restore"
 item_id = "full-restore"
 
-[node name="pp_up" parent="Entities/Interactables" instance=ExtResource("population_item")]
-position = Vector2(368, 976)
+[node name="pp_up" parent="Entities/Interactables" unique_id=212036528 instance=ExtResource("population_item")]
 z_index = 976
 z_as_relative = false
+position = Vector2(304, 1040)
 pickup_id = "kanto_route_17_pp_up"
 item_id = "pp-up"
 
-[node name="rare_candy" parent="Entities/Interactables" instance=ExtResource("population_item")]
-position = Vector2(688, 1104)
+[node name="rare_candy" parent="Entities/Interactables" unique_id=452558877 instance=ExtResource("population_item")]
 z_index = 1104
 z_as_relative = false
+position = Vector2(752, 1104)
 pickup_id = "kanto_route_17_rare_candy"
 item_id = "rare-candy"
 
-[node name="max_revive" parent="Entities/Interactables" instance=ExtResource("population_item")]
-position = Vector2(592, 1712)
+[node name="max_revive" parent="Entities/Interactables" unique_id=483005866 instance=ExtResource("population_item")]
 z_index = 1712
 z_as_relative = false
+position = Vector2(816, 1840)
 pickup_id = "kanto_route_17_max_revive"
 item_id = "max-revive"
 
-[node name="max_elixir" parent="Entities/Interactables" instance=ExtResource("population_item")]
-position = Vector2(944, 2000)
+[node name="max_elixir" parent="Entities/Interactables" unique_id=216036181 instance=ExtResource("population_item")]
 z_index = 2000
 z_as_relative = false
+position = Vector2(1104, 1808)
 pickup_id = "kanto_route_17_max_elixir"
 item_id = "max-elixir"
 
