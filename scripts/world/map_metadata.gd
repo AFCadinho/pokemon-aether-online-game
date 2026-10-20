@@ -5,6 +5,8 @@ const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.
 @export var map_id := ""
 @export var map_region_name := ""
 @export var map_display_name := ""
+# Opt-in: keep complete trees independent of adjacent forest crowns.
+@export var individual_tree_depth_sorting := false
 @export var world_access_group_id := ""
 @export var world_access_group_label := ""
 @export_enum("exterior", "interior", "route", "wilderness", "transition") var world_access_area_type := "exterior"

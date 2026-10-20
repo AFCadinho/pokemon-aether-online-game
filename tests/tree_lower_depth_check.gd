@@ -73,6 +73,7 @@ func _check_complete_tree() -> void:
 	var group: TileMapLayer = fixture.group
 	var before := _cells(bottom)
 	var top_before := _cells(fixture.top)
+	_check(Lower.find_complete_tree_crowns(fixture.top).size() == 1, "one complete tree is eligible for individual grouping")
 	_check(Lower.build_depth_layers(fixture.top, fixture.groups) == 4, "a complete tree moves its four lower cells")
 	var replacement := _replacement(fixture.map)
 	_check(replacement != null, "lower depth layer exists")
@@ -134,6 +135,8 @@ func _check_guards() -> void:
 			"hidden":
 				bottom.visible = false
 		var before := _cells(bottom)
+		if scenario != "split_groups":
+			_check(Lower.find_complete_tree_crowns(fixture.top).is_empty(), scenario + " is not eligible for individual grouping")
 		_check(Lower.build_depth_layers(fixture.top, fixture.groups) == 0, scenario + " tree is left alone")
 		_check(_cells(bottom) == before and _replacement(fixture.map) == null, scenario + " cannot move unrelated cells")
 		fixture.map.free()

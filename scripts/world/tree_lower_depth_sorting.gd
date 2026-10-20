@@ -22,3 +22,7 @@ const FAMILY := {"name": "Tree", "size": Vector2i(2, 4), "upper_rows": 2, "parts
 
 static func build_depth_layers(top: TileMapLayer, group_root: Node2D) -> int:
 	return LowerVisualDepth.build_depth_layers(top, group_root, FAMILY, BOTTOM_LAYER_NAMES, DEPTH_LAYER_META)
+
+
+static func find_complete_tree_crowns(top: TileMapLayer) -> Array[Array]:
+	return LowerVisualDepth.find_complete_family_crowns(top,FAMILY,BOTTOM_LAYER_NAMES)

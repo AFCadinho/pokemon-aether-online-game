@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix Route 16 East trees covering the cottage roof and players on mounts by sorting complete trees individually.
+
 - Refresh Route 16 East’s scenery from the updated artist map.
 
 - Add Route 16 East using its artist visual, with a two-way connection to Celadon City.

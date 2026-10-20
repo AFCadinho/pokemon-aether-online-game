@@ -102,6 +102,55 @@ static func build_depth_layers(
 	return moved
 
 
+# Only complete, unambiguous assemblies may opt out of connected-group sorting.
+# Share the same pixel signatures and safety guards as lower-part migration.
+static func find_complete_family_crowns(
+	top: TileMapLayer, family: Dictionary, bottom_layer_names: Array
+) -> Array[Array]:
+	var crowns: Array[Array] = []
+	if top == null or top.get_parent() == null or top.top_level or top.tile_set == null:
+		return crowns
+	if top.tile_set.tile_size != Vector2i(32,32) or top.get_script() != null or top.get_child_count() != 0:
+		return crowns
+	var bottoms: Array[TileMapLayer] = []
+	var other_tops: Array[TileMapLayer] = []
+	for sibling in top.get_parent().get_children():
+		var layer := sibling as TileMapLayer
+		if layer == null or layer == top or _is_depth_layer(layer) or layer.get_meta(STRUCTURE_GROUP_META,false):
+			continue
+		if layer.top_level or layer.transform != top.transform or layer.tile_set == null or layer.tile_set.tile_size != Vector2i(32,32):
+			continue
+		if bottom_layer_names.has(str(layer.get_meta("tiled_name",layer.name))):
+			bottoms.append(layer)
+		else:
+			other_tops.append(layer)
+	var signatures := {}
+	var images := {}
+	for cell in top.get_used_cells():
+		if _get_signature(top,cell,signatures,images) != family.parts[Vector2i.ZERO]:
+			continue
+		if not _matches(top,cell,0,family.upper_rows,family,signatures,images):
+			continue
+		var ambiguous := false
+		for other in other_tops:
+			if _matches(other,cell,0,family.upper_rows,family,signatures,images):
+				ambiguous = true
+		var matches := 0
+		var eligible := false
+		for bottom in bottoms:
+			if _matches(bottom,cell,family.upper_rows,family.size.y,family,signatures,images):
+				matches += 1
+				eligible = bottom.visible and bottom.get_script() == null and bottom.get_child_count() == 0
+		if ambiguous or matches != 1 or not eligible:
+			continue
+		var crown: Array[Vector2i] = []
+		for row in range(family.upper_rows):
+			for column in range(family.size.x):
+				crown.append(cell+Vector2i(column,row))
+		crowns.append(crown)
+	return crowns
+
+
 static func _is_depth_layer(layer: TileMapLayer) -> bool:
 	return bool(layer.get_meta(DEPTH_LAYER_META, false)) \
 		or bool(layer.get_meta(&"pao_tree_lower_depth_layer", false)) \
