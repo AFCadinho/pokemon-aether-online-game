@@ -17,6 +17,10 @@ const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.
 @export var preserve_land_mount_on_transition := false
 # Grid regions where leaving a tile to the north is forbidden.
 @export var northbound_blocked_regions: Array[Rect2i] = []
+# One connected side path and its bridge landings. The server may accept a
+# batched northward save between these tiles via that detour; individual
+# movement steps still use northbound_blocked_regions.
+@export var northbound_detour_regions: Array[Rect2i] = []
 @export var location_id := ""
 @export var location_name := ""
 @export var region_id := ""
@@ -202,6 +206,11 @@ func get_world_travel_rules() -> Dictionary:
 		for region in northbound_blocked_regions:
 			regions.append({"x":region.position.x,"y":region.position.y,"width":region.size.x,"height":region.size.y})
 		rules["northBlockedRegions"] = regions
+	if not northbound_detour_regions.is_empty():
+		var regions: Array[Dictionary] = []
+		for region in northbound_detour_regions:
+			regions.append({"x":region.position.x,"y":region.position.y,"width":region.size.x,"height":region.size.y})
+		rules["northDetourRegions"] = regions
 	return rules
 
 

@@ -46,8 +46,10 @@ func run() -> void:
 		check(player.call("_try_start_move",Vector2.UP), "north movement still works off bridge")
 		player.is_moving = false
 		if number == 17:
-			player.position = point(Vector2i(11,28))
-			check(not player.call("_try_start_move",Vector2.UP), "viewing platform follows bridge direction rule")
+			_check_platform_escape(player)
+			player.is_moving = false
+			player.position = point(Vector2i(15,31))
+			check(not player.call("_try_start_move",Vector2.UP), "north movement stays blocked on the bridge beside the platform")
 			check(map.get_node("Exits/ToRoute16").get_travel_block_reason(player) == "ui.cycling_road.north_blocked", "northward route transfer cannot bypass bridge rule")
 		player._finish_land_mount_activity() # System resets/battle teardown remain possible.
 		check(not player.is_land_mount_activity_active(), "system reset can clear transient riding")
@@ -118,3 +120,48 @@ func check(ok: bool,message: String) -> void:
 	if not ok:
 		failed = true
 		push_error(message)
+
+
+func _check_platform_escape(player: Node) -> void:
+	# Build directed edges through the actual mounted player's movement rules,
+	# then prove every walkable platform tile can reach a bridge landing.
+	var cells := {}
+	for y in range(24,34):
+		for x in range(8,19):
+			if x >= 15 and (y < 26 or y > 31): continue
+			var cell := Vector2i(x,y)
+			if player.can_move_to(point(cell)):
+				cells[cell] = true
+	var incoming := {}
+	for cell: Vector2i in cells:
+		incoming[cell] = []
+	for cell: Vector2i in cells:
+		for direction in [Vector2i.UP,Vector2i.DOWN,Vector2i.LEFT,Vector2i.RIGHT]:
+			var next: Vector2i = cell+direction
+			if not cells.has(next): continue
+			player.is_moving = false
+			player.position = point(cell)
+			if player.call("_try_start_move",Vector2(direction)):
+				incoming[next].append(cell)
+	var queue: Array[Vector2i] = []
+	var reached := {}
+	for cell: Vector2i in cells:
+		if cell.x >= 15:
+			queue.append(cell)
+			reached[cell] = true
+	var index := 0
+	while index < queue.size():
+		var cell := queue[index]
+		index += 1
+		for previous: Vector2i in incoming[cell]:
+			if not reached.has(previous):
+				reached[previous] = true
+				queue.append(previous)
+	for cell: Vector2i in cells:
+		check(reached.has(cell), "mounted rider can leave platform tile %s" % cell)
+	for corner in [Vector2i(8,33),Vector2i(13,33)]:
+		check(cells.has(corner) and reached.has(corner), "both lower platform corners have an escape")
+	player.is_moving = false
+	player.position = point(Vector2i(13,33))
+	check(player.call("_try_start_move",Vector2.UP), "rider can climb out of reported lower-right corner")
+	player.is_moving = false

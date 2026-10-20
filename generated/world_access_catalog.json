@@ -4027,12 +4027,20 @@
 						"width": 9,
 						"x": 15,
 						"y": 0
-					},
+					}
+				],
+				"northDetourRegions": [
 					{
 						"height": 10,
 						"width": 7,
 						"x": 8,
 						"y": 24
+					},
+					{
+						"height": 6,
+						"width": 4,
+						"x": 15,
+						"y": 26
 					}
 				],
 				"preserveLandMount": true
