@@ -6,6 +6,13 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="hint"]
 [ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="marker"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="population_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="population_worker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/hiker_frames.tres" id="population_hiker"]
+[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/worker-gen6.png" id="portrait_worker"]
+[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/hiker-gen6.png" id="portrait_hiker"]
+
 [sub_resource type="RectangleShape2D" id="mine_stair_shape"]
 size = Vector2(24, 24)
 
@@ -31,6 +38,9 @@ preserve_land_mount_on_transition = true
 location_id = "kanto.route18.mine"
 location_name = "Route 18 Underground Mine"
 region_id = "kanto"
+encounter_area_id = "kanto_route_18_mine"
+step_encounter_type = "cave"
+cave_encounter_chance = 0.07
 battle_environment_id = "cave"
 lighting_profile = "indoor"
 weather_profile = "disabled"
@@ -68,7 +78,114 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities"]
 
+[node name="miner_bram" parent="Entities/NPCs" instance=ExtResource("population_dialogue")]
+position = Vector2(272, 336)
+npc_id = "kanto_route_18_mine_miner_bram"
+display_name = "Miner Bram"
+dialogue_id = "kanto_route_18_mine_miner_bram_dialogue"
+npc_sprite_frames = ExtResource("population_worker")
+mugshot = ExtResource("portrait_worker")
+
+[node name="hiker_daan" parent="Entities/NPCs" instance=ExtResource("population_dialogue")]
+position = Vector2(1072, 752)
+npc_id = "kanto_route_18_mine_hiker_daan"
+display_name = "Hiker Daan"
+dialogue_id = "kanto_route_18_mine_hiker_daan_dialogue"
+npc_sprite_frames = ExtResource("population_hiker")
+mugshot = ExtResource("portrait_hiker")
+
 [node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Sandshrew" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(368, 272)
+overworld_pokemon_id = "kanto_route_18_mine_sandshrew_1"
+species_id = "sandshrew"
+level = 26
+display_name = "Sandshrew"
+dialogue_id = "kanto_route_18_mine_sandshrew_1_cry"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 28.0
+movement_wait_seconds = 1.60
+movement_wait_jitter_seconds = 0.5
+
+[node name="Geodude" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(816, 208)
+overworld_pokemon_id = "kanto_route_18_mine_geodude_1"
+species_id = "geodude"
+level = 25
+display_name = "Geodude"
+dialogue_id = "kanto_route_18_mine_geodude_1_cry"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 31.0
+movement_wait_seconds = 1.85
+movement_wait_jitter_seconds = 0.5
+
+[node name="Diglett" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(336, 464)
+overworld_pokemon_id = "kanto_route_18_mine_diglett_1"
+species_id = "diglett"
+level = 24
+display_name = "Diglett"
+dialogue_id = "kanto_route_18_mine_diglett_1_cry"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 34.0
+movement_wait_seconds = 2.10
+movement_wait_jitter_seconds = 0.5
+
+[node name="Cubone" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(336, 720)
+overworld_pokemon_id = "kanto_route_18_mine_cubone_1"
+species_id = "cubone"
+level = 27
+display_name = "Cubone"
+dialogue_id = "kanto_route_18_mine_cubone_1_cry"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 37.0
+movement_wait_seconds = 2.35
+movement_wait_jitter_seconds = 0.5
+
+[node name="Onix" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(1040, 528)
+overworld_pokemon_id = "kanto_route_18_mine_onix_1"
+species_id = "onix"
+level = 28
+display_name = "Onix"
+dialogue_id = "kanto_route_18_mine_onix_1_cry"
+movement_behavior = "idle"
+movement_tiles = 1
+movement_speed_pixels = 40.0
+movement_wait_seconds = 2.60
+movement_wait_jitter_seconds = 0.5
+
+[node name="Sandile" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(944, 816)
+overworld_pokemon_id = "kanto_route_18_mine_sandile_1"
+species_id = "sandile"
+level = 26
+display_name = "Sandile"
+dialogue_id = "kanto_route_18_mine_sandile_1_cry"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 43.0
+movement_wait_seconds = 2.85
+movement_wait_jitter_seconds = 0.5
+
+[node name="Gible" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(1136, 336)
+overworld_pokemon_id = "kanto_route_18_mine_gible_1"
+species_id = "gible"
+level = 29
+display_name = "Gible"
+dialogue_id = "kanto_route_18_mine_gible_1_cry"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 46.0
+movement_wait_seconds = 3.10
+movement_wait_jitter_seconds = 0.5
 
 [node name="Interactables" type="Node2D" parent="Entities"]
 
