@@ -3858,6 +3858,29 @@
 			},
 			"weatherProfile": "disabled"
 		},
+		"kanto_route_16": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 16",
+			"locationGroupId": "kanto_route_16",
+			"locationGroupLabel": "Route 16",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+			"spawnPoints": {
+				"from_route_16_gate": {
+					"facingDirection": "down",
+					"label": "Route 16 Gate",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute16Gate",
+					"tile": {
+						"x": 32,
+						"y": 14
+					}
+				}
+			},
+			"weatherProfile": "outdoor"
+		},
 		"kanto_route_16_east": {
 			"areaType": "route",
 			"defaultMode": "open",
@@ -3886,8 +3909,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute16Gate",
 					"tile": {
-						"x": 8,
-						"y": 30
+						"x": 4,
+						"y": 29
 					}
 				}
 			},
@@ -3919,7 +3942,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromWest",
 					"tile": {
-						"x": 6,
+						"x": 3,
 						"y": 10
 					}
 				}
@@ -9818,6 +9841,20 @@
 			"destinationAreaId": "kanto_route_15",
 			"sourceMapId": "kanto_route_15_fuchsia_gate"
 		},
+		"kanto_route_16__to_route16_gate": {
+			"destination": {
+				"mapId": "kanto_route_16_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_16_gate.tscn",
+				"position": {
+					"x": 112.0,
+					"y": 336.0
+				},
+				"spawnMarker": "FromWest"
+			},
+			"destinationAreaId": "kanto_route_16_gate",
+			"sourceMapId": "kanto_route_16"
+		},
 		"kanto_route_16_east__to_celadon_city": {
 			"destination": {
 				"mapId": "kanto_celadon_city",
@@ -9848,6 +9885,20 @@
 			"destinationAreaId": "kanto_route_16_gate",
 			"sourceMapId": "kanto_route_16_east"
 		},
+		"kanto_route_16_gate__to_route16": {
+			"destination": {
+				"mapId": "kanto_route_16",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+				"position": {
+					"x": 1040.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromRoute16Gate"
+			},
+			"destinationAreaId": "kanto_route_16",
+			"sourceMapId": "kanto_route_16_gate"
+		},
 		"kanto_route_16_gate__to_route16_east": {
 			"destination": {
 				"mapId": "kanto_route_16_east",
@@ -9856,8 +9907,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
 				"position": {
-					"x": 272.0,
-					"y": 976.0
+					"x": 144.0,
+					"y": 944.0
 				},
 				"spawnMarker": "FromRoute16Gate"
 			},
