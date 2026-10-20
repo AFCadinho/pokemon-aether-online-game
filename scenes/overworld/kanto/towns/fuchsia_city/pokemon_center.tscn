@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
+
+[node name="PokemonCenter" instance=ExtResource("1_template")]
+map_id = "kanto_fuchsia_city_pokemon_center"
+map_display_name = "Fuchsia City Pokémon Center"
+world_access_group_id = "kanto_fuchsia_city"
+world_access_group_label = "Fuchsia City"
+world_access_area_type = "interior"
+location_id = "kanto.fuchsia_city.pokemon_center"
+location_name = "Fuchsia City Pokémon Center"
+
+[node name="NurseJoy" parent="Entities/NPCs" index="0"]
+respawn_point_id = "kanto_fuchsia_city_pokemon_center"
+respawn_marker_path = NodePath("../../../Spawns/HealNPC")
+
+[node name="ToOutside" parent="Exits" index="0"]
+target_scene_path = "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn"
+target_spawn_name = "FromPokecenter"
+transition_id = "kanto_fuchsia_city_pokemon_center__to_outside"
+transition_facing_direction = "down"

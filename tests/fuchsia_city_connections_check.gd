@@ -65,7 +65,7 @@ func _run() -> void:
 			if player.can_move_to(Vector2(next)*32+Vector2(16,16)):
 				visited[next] = true
 				pending.append(next)
-	for cell in [Vector2i(37,22),Vector2i(7,11),Vector2i(22,11),Vector2i(31,36),Vector2i(54,27),Vector2i(54,37),Vector2i(54,12),Vector2i(21,45),Vector2i(17,33)]:
+	for cell in [Vector2i(7,9),Vector2i(37,22),Vector2i(7,11),Vector2i(22,11),Vector2i(31,36),Vector2i(54,27),Vector2i(54,37),Vector2i(54,12),Vector2i(21,45),Vector2i(17,33)]:
 		_check(visited.has(cell), "city streets, stairs and bridge are reachable: " + str(cell))
 	for y in range(21,24):
 		var point := Vector2(67,y)*32+Vector2(16,16)
