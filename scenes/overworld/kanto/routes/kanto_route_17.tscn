@@ -32,7 +32,6 @@ world_access_group_label = "Route 17"
 world_access_area_type = "route"
 land_mount_dismount_blocked = true
 northbound_blocked_regions = Array[Rect2i]([Rect2i(15, 0, 9, 57)])
-northbound_detour_regions = Array[Rect2i]([Rect2i(8, 24, 7, 10), Rect2i(15, 26, 4, 6)])
 location_id = "kanto.route17"
 location_name = "Route 17"
 region_id = "kanto"
