@@ -13,14 +13,20 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	for entry in [["snorlax_route_12","kanto_route_12"],["snorlax_route_16","kanto_route_16_east"]]:
+		await _check_encounter(entry[0],entry[1])
+	print("SNORLAX_FLUTE_CONFIRMATION: %d failures" % failures)
+	quit(1 if failures else 0)
+
+func _check_encounter(id: String,area: String) -> void:
 	var world := WorldProbe.new()
 	root.add_child(world)
 	current_scene = world
 	world.add_to_group("world")
 	var encounter: Node2D = load("res://tests/fixtures/snorlax_encounter_probe.gd").new()
 	encounter.display_name = "Snorlax"
-	encounter.encounter_id = "snorlax_route_12"
-	encounter.encounter_area_id = "kanto_route_12"
+	encounter.encounter_id = id
+	encounter.encounter_area_id = area
 	world.add_child(encounter)
 	var game := root.get_node("GameState")
 	await encounter._start_manual_interaction(null)
@@ -44,7 +50,7 @@ func _run() -> void:
 	dialog = world.get_node("SnorlaxFluteConfirmation").get_child(0) as AetherConfirmationDialog
 	dialog.confirm_button.pressed.emit()
 	await process_frame
-	_check(world.calls == [["kanto_route_12", "static", "", true, "snorlax_route_12"]], "Yes starts the trusted static wild battle for Route 12 Snorlax")
+	_check(world.calls == [[area, "static", "", true, id]], "Yes starts the trusted static wild battle for this Snorlax")
 	_check(encounter.spoken.size() == 1 and encounter.spoken[0].size() == 2, "Yes presents played-flute and awakening dialogue")
 	_check(not world.battle_started_locked and not game.is_overworld_input_locked(), "Interaction releases input before the battle handoff")
 	_check(not encounter.completed, "Starting a battle does not prematurely remove Snorlax")
@@ -62,8 +68,6 @@ func _run() -> void:
 	_check(world.get_node_or_null("SnorlaxFluteConfirmation") == null and not game.is_overworld_input_locked(), "Removing the actor closes its prompt and releases input")
 	world.queue_free()
 	await process_frame
-	print("SNORLAX_FLUTE_CONFIRMATION: %d failures" % failures)
-	quit(1 if failures else 0)
 
 func _check(ok: bool, label: String) -> void:
 	if not ok:
