@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Route 18 with its artist visual, a gate to Route 17, and two-way travel to Fuchsia City. Both Cycling Road gate lobbies allow walkers; their guards require riding a mount before entering Route 16 or 17.
+
 - Require mounts at the Cycling Road gate, keep riders mounted on Routes 16 and 17, and block northward movement on their bridge sections.
 
 - Add Route 17 with its artist visual and a two-way bridge connection to Route 16; keep the unfinished Route 18 passage closed.

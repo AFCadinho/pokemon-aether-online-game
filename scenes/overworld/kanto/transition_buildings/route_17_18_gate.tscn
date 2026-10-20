@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/horizontal_transition_building_template.tscn" id="template"]
+
+[node name="Route1718Gate" instance=ExtResource("template")]
+map_id = "kanto_route_17_18_gate"
+preserve_land_mount_on_transition = true
+map_display_name = "Route 17–18 Gate"
+world_access_group_id = "kanto_route_18"
+world_access_group_label = "Route 18"
+world_access_area_type = "transition"
+location_id = "kanto.route17_18.gate"
+location_name = "Route 17–18 Gate"
+music_profile_id = "kanto.routes_3_10_16_22"
+
+[node name="GateNPC" parent="Entities/NPCs" index="0"]
+npc_id = "kanto_route_17_18_gate_attendant"
+npc_definition_id = "kanto_route_17_18_gate_attendant"
+display_name = "Route 17–18 Gate Attendant"
+requires_party_pokemon = false
+guarded_transition_id = "kanto_route_17_18_gate__to_route17"
+blocked_dialogue_id = "cycling_road_mount_required"
+allowed_dialogue_id = "cycling_road_south_gate"
+
+[node name="ToWest" parent="Exits" index="0"]
+requires_land_mount = true
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_17.tscn"
+target_spawn_name = "FromRoute18Gate"
+transition_id = "kanto_route_17_18_gate__to_route17"
+transition_facing_direction = "left"
+
+[node name="ToEast" parent="Exits" index="1"]
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_18.tscn"
+target_spawn_name = "FromRoute17Gate"
+transition_id = "kanto_route_17_18_gate__to_route18"
+transition_facing_direction = "right"

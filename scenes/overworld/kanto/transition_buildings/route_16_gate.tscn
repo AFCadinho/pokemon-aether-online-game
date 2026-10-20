@@ -5,7 +5,6 @@
 [node name="Route16Gate" instance=ExtResource("template")]
 map_id = "kanto_route_16_gate"
 preserve_land_mount_on_transition = true
-land_mount_required_entry = true
 map_display_name = "Route 16 Gate"
 world_access_group_id = "kanto_route_16_east"
 world_access_group_label = "Route 16 East"
@@ -19,7 +18,9 @@ npc_id = "kanto_route_16_gate_attendant"
 npc_definition_id = "kanto_route_16_gate_attendant"
 display_name = "Route 16 Gate Attendant"
 requires_party_pokemon = false
-allowed_dialogue_id = "horizontal_gate_attendant_default"
+guarded_transition_id = "kanto_route_16_gate__to_route16"
+blocked_dialogue_id = "cycling_road_mount_required"
+allowed_dialogue_id = "cycling_road_north_gate"
 
 [node name="ToWest" parent="Exits" index="0"]
 requires_land_mount = true

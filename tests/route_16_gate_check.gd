@@ -39,7 +39,7 @@ func _run() -> void:
 	_check(collision.get_used_cells().size() == template.get_node("Tiles/Collision").get_used_cells().size(), "temporary west cap removed")
 	var guard: Node = gate.get_node("Entities/NPCs/GateNPC")
 	guard.feet_marker = guard.get_node("FeetMarker")
-	_check(guard.is_gate_open() and guard.guard_role == "attendant", "attendant opens passage and returns to desk")
+	_check(guard.guard_role == "attendant" and guard.guarded_transition_id == "kanto_route_16_gate__to_route16", "desk attendant checks the Cycling Road exit")
 	gate.add_child(player)
 	player.map_layers_initialized = true
 	player.map_layers_owner = gate
