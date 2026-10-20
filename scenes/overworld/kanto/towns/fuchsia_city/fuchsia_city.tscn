@@ -19,9 +19,6 @@
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="population_worker"]
 
-[sub_resource type="RectangleShape2D" id="route18_road_shape"]
-size = Vector2(32, 160)
-
 [sub_resource type="RectangleShape2D" id="gate_shape"]
 size = Vector2(32, 96)
 
@@ -33,6 +30,9 @@ size = Vector2(128, 32)
 
 [sub_resource type="RectangleShape2D" id="route19_gate_shape"]
 size = Vector2(128, 32)
+
+[sub_resource type="RectangleShape2D" id="route18_road_shape"]
+size = Vector2(32, 160)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jyhq6"]
 texture = ExtResource("5_markers")
@@ -293,8 +293,8 @@ position = Vector2(1200, 208)
 [node name="FromRoute19Gate" type="Marker2D" parent="Spawns" unique_id=831460340]
 position = Vector2(656, 1520)
 
-[node name="FromRoute18" type="Marker2D" parent="Spawns"]
-position = Vector2(112, 720)
+[node name="FromRoute18" type="Marker2D" parent="Spawns" unique_id=1981173712]
+position = Vector2(48, 720)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1471260928]
 
@@ -366,7 +366,7 @@ position = Vector2(16, -16)
 tile_footprint = Vector2i(4, 1)
 flow_direction = "down"
 
-[node name="ToRoute18" type="Area2D" parent="Exits"]
+[node name="ToRoute18" type="Area2D" parent="Exits" unique_id=2128462973]
 position = Vector2(16, 720)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_18.tscn"
@@ -374,10 +374,11 @@ target_spawn_name = "FromFuchsiaCity"
 transition_id = "kanto_fuchsia_city__to_route18"
 transition_facing_direction = "left"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute18"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute18" unique_id=368430027]
+position = Vector2(-16, 0)
 shape = SubResource("route18_road_shape")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute18" instance=ExtResource("4_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute18" unique_id=1791273587 instance=ExtResource("4_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(1, 5)
 flow_direction = "left"
@@ -627,5 +628,4 @@ tile_set = SubResource("TileSet_xabhn")
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToSafariZoneGate" to="Exits/ToSafariZoneGate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute19Gate" to="Exits/ToRoute19Gate" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/ToRoute18" to="Exits/ToRoute18" method="_on_body_entered"]
