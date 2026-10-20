@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Respawn Route 12 and Route 16 Snorlax every Wednesday at 00:00 Europe/Amsterdam after capture or defeat, without stacking encounters.
+- Respawn Route 12 and Route 16 Snorlax every Wednesday at 00:00 in-game time (UTC) after capture or defeat, without stacking encounters.
 
 - Enable wild grass encounters on Route 16 East using the existing Route 16 species and level ranges.
 
