@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Route 16 with its artist visual and two-way gate connection to Route 16 East; keep the unfinished Route 17 passage closed.
+
 - Refresh Route 16 East’s artist visual, including its updated water and flowers.
 
 - Add Magikarp, Goldeen and Poliwag swimming in Route 16 East’s southern pond.
