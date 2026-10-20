@@ -8,6 +8,10 @@
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="7_bwab0"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="7_door_hint"]
 
+[sub_resource type="RectangleShape2D" id="safari_gate_shape"]
+size = Vector2(96, 32)
+
+
 [sub_resource type="RectangleShape2D" id="gate_shape"]
 size = Vector2(32, 96)
 
@@ -267,6 +271,10 @@ position = Vector2(1200, 720)
 [node name="FromPokecenter" type="Marker2D" parent="Spawns" unique_id=990266968]
 position = Vector2(240, 368)
 
+[node name="FromSafariZoneGate" type="Marker2D" parent="Spawns"]
+position = Vector2(1200, 272)
+
+
 [node name="Exits" type="Node2D" parent="." unique_id=1471260928]
 
 [node name="ToRoute15Gate" type="Area2D" parent="Exits" unique_id=707877330]
@@ -298,6 +306,21 @@ shape = SubResource("center_door_shape")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=2116646579 instance=ExtResource("7_door_hint")]
 z_as_relative = false
+
+[node name="ToSafariZoneGate" type="Area2D" parent="Exits"]
+position = Vector2(1200, 208)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/safari_zone_gate.tscn"
+target_spawn_name = "FromSouth"
+transition_id = "kanto_fuchsia_city__to_safari_zone_gate"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToSafariZoneGate"]
+shape = SubResource("safari_gate_shape")
+
+[node name="RouteTransitionHint" parent="Exits/ToSafariZoneGate" instance=ExtResource("4_hint")]
+tile_footprint = Vector2i(3, 1)
+flow_direction = "up"
 
 [node name="Entities" type="Node2D" parent="." unique_id=1849289808]
 z_index = 5
@@ -339,3 +362,5 @@ tile_set = SubResource("TileSet_xabhn")
 
 [connection signal="body_entered" from="Exits/ToRoute15Gate" to="Exits/ToRoute15Gate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToSafariZoneGate" to="Exits/ToSafariZoneGate" method="_on_body_entered"]

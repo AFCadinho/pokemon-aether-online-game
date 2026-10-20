@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the vertical Safari Zone gate connected to Fuchsia City; its unfinished northern passage remains closed.
+
 - Connect Fuchsia City’s Pokémon Center with healing, storage and a dedicated respawn point.
 
 - Add Fuchsia City with its artist visual, authored collision and a two-way connection through the Route 15 gate.
