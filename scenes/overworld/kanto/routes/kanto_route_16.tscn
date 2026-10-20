@@ -12,6 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_16/route_16.visual.tscn" id="visual"]
 
+[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="outside_mask"]
+
 [sub_resource type="RectangleShape2D" id="gate_shape"]
 size = Vector2(32, 128)
 
@@ -191,6 +193,23 @@ grass_encounter_chance = 0.21
 music_profile_id = "kanto.routes_3_10_16_22"
 
 [node name="Visual" parent="." unique_id=2132464414 instance=ExtResource("visual")]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("outside_mask")
+floor_regions = {
+&"ground_floor": Rect2(0, 0, 1280, 1536)
+}
+follow_player_floor = false
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
 
 [node name="Spawns" type="Node2D" parent="." unique_id=11711247]
 
