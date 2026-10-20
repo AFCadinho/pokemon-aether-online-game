@@ -5,11 +5,12 @@ signal flute_choice_resolved(accepted: bool)
 
 const CONFIRMATION := preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 
-## A permanent, player-specific encounter; each map actor needs its own server ID.
+## A recurring, player-specific encounter; each map actor needs its own server ID.
 @export var encounter_id := ""
 @export var encounter_area_id := ""
 @export var flute_sound: AudioStream
 
+var _respawn_timer: Timer
 var _menu_layer: CanvasLayer
 var _input_owner := StringName("sleeping_encounter_%s" % get_instance_id())
 
@@ -23,6 +24,10 @@ func _ready() -> void:
 		return
 	super._ready()
 	add_to_group("static_encounters")
+	_respawn_timer = Timer.new()
+	_respawn_timer.one_shot = true
+	_respawn_timer.timeout.connect(refresh_status)
+	add_child(_respawn_timer)
 	refresh_status.call_deferred()
 
 
@@ -48,6 +53,10 @@ func apply_status(next_status: Dictionary) -> bool:
 	status = next_status.duplicate(true)
 	completed = bool(status.get("completed", false))
 	visible = not completed
+	if is_instance_valid(_respawn_timer):
+		_respawn_timer.stop()
+		if completed and status.get("respawnAt") != null:
+			_respawn_timer.start(maxf(1.0, float(status["respawnAt"]) - Time.get_unix_time_from_system()))
 	return true
 
 
@@ -63,6 +72,8 @@ func refresh_status() -> Dictionary:
 	)
 	request.queue_free()
 	status_loading = false
+	if completed and not bool(response.get("success", false)) and is_instance_valid(_respawn_timer):
+		_respawn_timer.start(60.0)
 	if bool(response.get("success", false)):
 		var value: Variant = response.get("encounter", {})
 		if value is Dictionary and apply_status(value as Dictionary):

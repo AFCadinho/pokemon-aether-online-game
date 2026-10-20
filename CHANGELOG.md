@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Respawn Route 12 and Route 16 Snorlax every Wednesday at 00:00 Europe/Amsterdam after capture or defeat, without stacking encounters.
+
 - Add Route 16 East travelers and ambient Pokémon, plus an independent sleeping Snorlax awakened with the Poké Flute.
 
 - Fix Route 16 East trees covering the cottage roof and players on mounts by sorting complete trees individually.
