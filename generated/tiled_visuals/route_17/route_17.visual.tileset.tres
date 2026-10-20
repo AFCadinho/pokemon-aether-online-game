@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://bjdsh152djxw8"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_17/assets/route_17.visual.tileset.compact_source_1_0.texture.res" id="1_w041k"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_17/assets/route_17.visual.tileset.compact_source_1025_0.texture.res" id="2_ium88"]
@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_17/assets/route_17.visual.tileset.compact_source_2049_0.texture.res" id="6_300id"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_17/assets/route_17.visual.tileset.compact_source_3073_0.texture.res" id="7_vc8g5"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_17/assets/route_17.visual.tileset.compact_source_4097_0.texture.res" id="8_60l2y"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_17/assets/route_17.visual.tileset.compact_source_8193_0.texture.res" id="9_r2f3e"]
+[ext_resource type="Texture2D" uid="uid://qjmnfecb0q0u" path="res://generated/tiled_visuals/route_17/assets/route_17.visual.tileset.compact_source_8193_0.texture.res" id="9_r2f3e"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_17/assets/route_17.visual.tileset.compact_source_9217_0.texture.res" id="10_g0iov"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_17/assets/route_17.visual.tileset.compact_source_7_0.texture.res" id="11_1sgpw"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_17/assets/route_17.visual.tileset.compact_source_8_0.texture.res" id="12_ehd3y"]
