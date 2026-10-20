@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add the Route 16 gate connected to Route 16 East, with a closed western passage until Route 16 is available.
 - Respawn Route 12 and Route 16 Snorlax every Wednesday at 00:00 in-game time (UTC) after capture or defeat, without stacking encounters.
 
 - Enable wild grass encounters on Route 16 East using the existing Route 16 species and level ranges.

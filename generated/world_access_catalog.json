@@ -3865,7 +3865,9 @@
 			"locationGroupId": "kanto_route_16_east",
 			"locationGroupLabel": "Route 16 East",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://br47spdmma7dp"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
 			"spawnPoints": {
 				"from_celadon_city": {
@@ -3877,9 +3879,52 @@
 						"x": 50,
 						"y": 21
 					}
+				},
+				"from_route_16_gate": {
+					"facingDirection": "down",
+					"label": "Route 16 Gate",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute16Gate",
+					"tile": {
+						"x": 8,
+						"y": 30
+					}
 				}
 			},
 			"weatherProfile": "outdoor"
+		},
+		"kanto_route_16_gate": {
+			"areaType": "transition",
+			"defaultMode": "open",
+			"label": "Route 16 Gate",
+			"locationGroupId": "kanto_route_16_east",
+			"locationGroupLabel": "Route 16 East",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_16_gate.tscn",
+			"spawnPoints": {
+				"from_east": {
+					"facingDirection": "down",
+					"label": "East",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromEast",
+					"tile": {
+						"x": 16,
+						"y": 10
+					}
+				},
+				"from_west": {
+					"facingDirection": "down",
+					"label": "West",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromWest",
+					"tile": {
+						"x": 6,
+						"y": 10
+					}
+				}
+			},
+			"weatherProfile": "disabled"
 		},
 		"kanto_route_19_fuchsia_gate": {
 			"areaType": "transition",
@@ -6812,7 +6857,9 @@
 		"kanto_celadon_city__to_route16_east": {
 			"destination": {
 				"mapId": "kanto_route_16_east",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://br47spdmma7dp"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
 				"position": {
 					"x": 1616.0,
@@ -9786,6 +9833,36 @@
 			},
 			"destinationAreaId": "kanto_celadon_city",
 			"sourceMapId": "kanto_route_16_east"
+		},
+		"kanto_route_16_east__to_route16_gate": {
+			"destination": {
+				"mapId": "kanto_route_16_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_16_gate.tscn",
+				"position": {
+					"x": 528.0,
+					"y": 336.0
+				},
+				"spawnMarker": "FromEast"
+			},
+			"destinationAreaId": "kanto_route_16_gate",
+			"sourceMapId": "kanto_route_16_east"
+		},
+		"kanto_route_16_gate__to_route16_east": {
+			"destination": {
+				"mapId": "kanto_route_16_east",
+				"mapSceneAliases": [
+					"uid://br47spdmma7dp"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
+				"position": {
+					"x": 272.0,
+					"y": 976.0
+				},
+				"spawnMarker": "FromRoute16Gate"
+			},
+			"destinationAreaId": "kanto_route_16_east",
+			"sourceMapId": "kanto_route_16_gate"
 		},
 		"kanto_route_19_fuchsia_gate__to_fuchsia_city": {
 			"destination": {

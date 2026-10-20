@@ -61,10 +61,12 @@ func _run() -> void:
 			_check(not lanes.has(tile), "ambient patrols stay outside Snorlax")
 			reserved[tile] = "Snorlax"
 	var reached := _reachable(collision,water,reserved,start)
+	# The western gate becomes connected after the independent Snorlax encounter.
+	var reached_open := _reachable(collision,water,lanes,start)
 	var player := (load("res://scenes/player.tscn") as PackedScene).instantiate()
 	player.set_script(load("res://tests/support/fuchsia_movement_probe.gd"))
 	for spawn in city.get_node("Spawns").get_children():
-		_check(reached.has(Vector2i(spawn.position/32.0)), "arrival remains connected with every complete patrol lane reserved: " + spawn.name)
+		_check(reached_open.has(Vector2i(spawn.position/32.0)), "arrival connects after Snorlax with every complete patrol lane reserved: " + spawn.name)
 	for lane: Vector2i in lanes:
 		var approachable := false
 		for direction in [Vector2i.UP,Vector2i.DOWN,Vector2i.LEFT,Vector2i.RIGHT]:
@@ -74,7 +76,7 @@ func _run() -> void:
 	# the entering grid center, while the player's upper body enters it.
 	for exit_node in city.get_node("Exits").get_children():
 		var accessible := false
-		for cell: Vector2i in reached:
+		for cell: Vector2i in reached_open:
 			accessible = accessible or player.overlaps_exit_at(exit_node,Vector2(cell)*32+Vector2(16,16))
 		_check(accessible, "every exit remains reachable with complete patrol lanes reserved: " + exit_node.name)
 	player.free()
@@ -84,6 +86,7 @@ func _run() -> void:
 	var previous: Node = state.get("current_map")
 	state.set("current_map",city)
 	snorlax.set_script(load("res://tests/fixtures/snorlax_encounter_probe.gd"))
+	city.encounter_area_id = "" # Keep the offline movement check free of metadata HTTP.
 	root.add_child(city)
 	for actor in actors:
 		actor.set_process(false)
