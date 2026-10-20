@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bring Fuchsia City to life with seven residents and seven ambient Pokémon, with varied pacing around the gardens, plaza and pond.
+
 - Update Fuchsia City’s bridge layering from the latest artist map.
 
 - Add the southern Route 19–Fuchsia transition building, with a safe return to Fuchsia and a closed Route 19 passage.

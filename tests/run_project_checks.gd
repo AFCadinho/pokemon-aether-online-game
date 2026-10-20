@@ -224,6 +224,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/saffron_city_connections_check.gd",
 	"res://tests/fuchsia_city_connections_check.gd",
 	"res://tests/fuchsia_pokemon_center_check.gd",
+	"res://tests/fuchsia_population_check.gd",
 	"res://tests/safari_zone_gate_check.gd",
 	"res://tests/route_19_fuchsia_gate_check.gd",
 	"res://tests/route7_saffron_gate_check.gd",
