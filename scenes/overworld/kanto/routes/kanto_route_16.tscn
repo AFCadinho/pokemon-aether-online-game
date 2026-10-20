@@ -205,7 +205,6 @@ target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_16_
 target_spawn_name = "FromWest"
 transition_id = "kanto_route_16__to_route16_gate"
 transition_facing_direction = "right"
-requires_land_mount = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute16Gate" unique_id=1132689558]
 shape = SubResource("gate_shape")
