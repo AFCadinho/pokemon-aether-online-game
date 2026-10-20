@@ -24,6 +24,8 @@ size = Vector2(288, 32)
 [node name="Route16" type="Node2D"]
 script = ExtResource("metadata")
 map_id = "kanto_route_16"
+land_mount_dismount_blocked = true
+northbound_blocked_regions = Array[Rect2i]([Rect2i(15, 18, 9, 30)])
 map_region_name = "Kanto"
 map_display_name = "Route 16"
 individual_tree_depth_sorting = true
@@ -52,6 +54,7 @@ position = Vector2(560, 1456)
 [node name="ToRoute16Gate" type="Area2D" parent="Exits"]
 position = Vector2(1104, 448)
 script = ExtResource("exit")
+requires_land_mount = true
 target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_16_gate.tscn"
 target_spawn_name = "FromWest"
 transition_id = "kanto_route_16__to_route16_gate"
@@ -68,6 +71,7 @@ flow_direction = "right"
 [node name="ToRoute17" type="Area2D" parent="Exits"]
 position = Vector2(624, 1520)
 script = ExtResource("exit")
+requires_land_mount = true
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_17.tscn"
 target_spawn_name = "FromRoute16"
 transition_id = "kanto_route_16__to_route17"

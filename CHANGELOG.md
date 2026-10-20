@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Require mounts at the Cycling Road gate, keep riders mounted on Routes 16 and 17, and block northward movement on their bridge sections.
+
 - Add Route 17 with its artist visual and a two-way bridge connection to Route 16; keep the unfinished Route 18 passage closed.
 
 - Regenerate Route 16 East’s visuals from the artist source while preserving its gameplay layout.

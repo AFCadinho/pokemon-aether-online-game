@@ -3889,6 +3889,18 @@
 					}
 				}
 			},
+			"travelRules": {
+				"dismountBlocked": true,
+				"northBlockedRegions": [
+					{
+						"height": 30,
+						"width": 9,
+						"x": 15,
+						"y": 18
+					}
+				],
+				"preserveLandMount": true
+			},
 			"weatherProfile": "outdoor"
 		},
 		"kanto_route_16_east": {
@@ -3957,6 +3969,10 @@
 					}
 				}
 			},
+			"travelRules": {
+				"mountRequiredEntry": true,
+				"preserveLandMount": true
+			},
 			"weatherProfile": "disabled"
 		},
 		"kanto_route_17": {
@@ -3979,6 +3995,24 @@
 						"y": 2
 					}
 				}
+			},
+			"travelRules": {
+				"dismountBlocked": true,
+				"northBlockedRegions": [
+					{
+						"height": 57,
+						"width": 9,
+						"x": 15,
+						"y": 0
+					},
+					{
+						"height": 10,
+						"width": 7,
+						"x": 8,
+						"y": 24
+					}
+				],
+				"preserveLandMount": true
 			},
 			"weatherProfile": "outdoor"
 		},
@@ -9886,6 +9920,7 @@
 				"spawnMarker": "FromWest"
 			},
 			"destinationAreaId": "kanto_route_16_gate",
+			"requiresLandMount": true,
 			"sourceMapId": "kanto_route_16"
 		},
 		"kanto_route_16__to_route17": {
@@ -9900,6 +9935,7 @@
 				"spawnMarker": "FromRoute16"
 			},
 			"destinationAreaId": "kanto_route_17",
+			"requiresLandMount": true,
 			"sourceMapId": "kanto_route_16"
 		},
 		"kanto_route_16_east__to_celadon_city": {
@@ -9930,6 +9966,7 @@
 				"spawnMarker": "FromEast"
 			},
 			"destinationAreaId": "kanto_route_16_gate",
+			"requiresLandMount": true,
 			"sourceMapId": "kanto_route_16_east"
 		},
 		"kanto_route_16_gate__to_route16": {
@@ -9944,6 +9981,7 @@
 				"spawnMarker": "FromRoute16Gate"
 			},
 			"destinationAreaId": "kanto_route_16",
+			"requiresLandMount": true,
 			"sourceMapId": "kanto_route_16_gate"
 		},
 		"kanto_route_16_gate__to_route16_east": {
@@ -9974,6 +10012,8 @@
 				"spawnMarker": "FromRoute17"
 			},
 			"destinationAreaId": "kanto_route_16",
+			"movementBlocked": true,
+			"requiresLandMount": true,
 			"sourceMapId": "kanto_route_17"
 		},
 		"kanto_route_19_fuchsia_gate__to_fuchsia_city": {

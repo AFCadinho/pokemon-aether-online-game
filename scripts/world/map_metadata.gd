@@ -12,6 +12,11 @@ const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.
 @export_enum("exterior", "interior", "route", "wilderness", "transition") var world_access_area_type := "exterior"
 # Allow cave interiors to support riding without changing world-access grouping.
 @export var land_mounts_allowed_interior := false
+@export var land_mount_dismount_blocked := false
+@export var land_mount_required_entry := false
+@export var preserve_land_mount_on_transition := false
+# Grid regions where leaving a tile to the north is forbidden.
+@export var northbound_blocked_regions: Array[Rect2i] = []
 @export var location_id := ""
 @export var location_name := ""
 @export var region_id := ""
@@ -178,3 +183,33 @@ func is_position_blocked_by_character(world_position: Vector2) -> bool:
 
 func get_closed_route_gate_npc(world_position: Vector2) -> Node:
 	return MapCharacterBlocking.get_closed_route_gate_npc(self, world_position)
+
+
+func allows_land_mount_dismount() -> bool:
+	return not land_mount_dismount_blocked
+
+
+func get_world_travel_rules() -> Dictionary:
+	var rules := {}
+	if land_mount_required_entry:
+		rules["mountRequiredEntry"] = true
+	if land_mount_dismount_blocked:
+		rules["dismountBlocked"] = true
+	if preserve_land_mount_on_transition or land_mount_dismount_blocked:
+		rules["preserveLandMount"] = true
+	if not northbound_blocked_regions.is_empty():
+		var regions: Array[Dictionary] = []
+		for region in northbound_blocked_regions:
+			regions.append({"x":region.position.x,"y":region.position.y,"width":region.size.x,"height":region.size.y})
+		rules["northBlockedRegions"] = regions
+	return rules
+
+
+func is_world_barrier_step_blocked(from_position: Vector2, to_position: Vector2) -> bool:
+	if to_position.y >= from_position.y:
+		return false
+	var cell := Vector2i((from_position - global_position) / 32.0)
+	for region in northbound_blocked_regions:
+		if region.has_point(cell):
+			return true
+	return false

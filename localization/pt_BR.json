@@ -7415,5 +7415,8 @@
   "story.kanto.visit_mr_fuji.summary": "Visite o Sr. Fuji na casa dele em Lavender Town.",
   "story.kanto.visit_mr_fuji.receive_flute": "Visite o Sr. Fuji em casa para receber seu agradecimento.",
   "ui.staff.story_checkpoint.tower_fuji_thanks": "Sr. Fuji: agradecimento na torre",
-  "ui.staff.story_checkpoint.fuji_house_reward": "Sr. Fuji: Poké Flute em casa"
+  "ui.staff.story_checkpoint.fuji_house_reward": "Sr. Fuji: Poké Flute em casa",
+  "ui.cycling_road.mount_required": "Você precisa estar em uma montaria para entrar na Cycling Road.",
+  "ui.cycling_road.dismount_blocked": "Você não pode desmontar na Cycling Road.",
+  "ui.cycling_road.north_blocked": "Você não pode seguir para o norte nesta ponte."
 }
