@@ -189,15 +189,15 @@ music_profile_id = "kanto.routes_3_10_16_22"
 [node name="Spawns" type="Node2D" parent="." unique_id=630567069]
 
 [node name="FromRoute17Gate" type="Marker2D" parent="Spawns" unique_id=893205626]
-position = Vector2(272, 752)
+position = Vector2(144, 752)
 
 [node name="FromFuchsiaCity" type="Marker2D" parent="Spawns" unique_id=1685764193]
-position = Vector2(1936, 752)
+position = Vector2(2000, 752)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1187326632]
 
 [node name="ToRoute17Gate" type="Area2D" parent="Exits" unique_id=2039216844]
-position = Vector2(208, 768)
+position = Vector2(112, 752)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_17_18_gate.tscn"
 target_spawn_name = "FromEast"
@@ -205,6 +205,7 @@ transition_id = "kanto_route_18__to_route17_gate"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute17Gate" unique_id=919273939]
+position = Vector2(-16, 0)
 shape = SubResource("gate_shape")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute17Gate" unique_id=49645383 instance=ExtResource("hint")]
@@ -221,6 +222,7 @@ transition_id = "kanto_route_18__to_fuchsia_city"
 transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToFuchsiaCity" unique_id=1582170441]
+position = Vector2(16, 0)
 shape = SubResource("road_shape")
 
 [node name="RouteTransitionHint" parent="Exits/ToFuchsiaCity" unique_id=569866248 instance=ExtResource("hint")]
