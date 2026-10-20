@@ -134,7 +134,7 @@ func clear() -> void:
 	energy = 0.0
 	visible = false
 	set_process(false)
-	if jet != null:
+	if is_instance_valid(jet):
 		jet.visible = false
 		sparks.emitting = false
 		sparks.restart(true)
@@ -185,6 +185,13 @@ func _draw() -> void:
 
 
 func _exit_tree() -> void:
-	# Jet is a sibling layer, not owned by this foreground node.
-	if is_instance_valid(jet) and not jet.is_queued_for_deletion():
-		jet.queue_free()
+	# Map transfers temporarily detach the player. Keep the turbine alive with
+	# its rig, but stop emission so the next map cannot inherit an old exhaust.
+	clear()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE and is_instance_valid(jet):
+		# The jet lives under the mount or foreground sprite, outside our own
+		# subtree. Release it only when this effect is actually destroyed.
+		jet.free()

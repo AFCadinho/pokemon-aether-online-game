@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve Zekrom’s turbo effect across teleports and map transfers, reset its exhaust on departure, and clean up its nodes when the effect is destroyed.
+
 - Use Zame’s Celadon City remaster in Celadon City and the Johto Game Corner remaster inside Celadon’s Game Corner.
 
 - Refresh Routes 16 and 17 with wider artist visuals and matching black outside masks, preserving existing gameplay alignment.
