@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_17/route_17.visual.tscn" id="visual"]
 
 [ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="outside_mask"]
+[ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="night_light"]
 
 [sub_resource type="RectangleShape2D" id="bridge_shape"]
 size = Vector2(288, 32)
@@ -450,3 +451,33 @@ tile_set = SubResource("TileSet_75ifx")
 
 [connection signal="body_entered" from="Exits/ToRoute16" to="Exits/ToRoute16" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute18Gate" to="Exits/ToRoute18Gate" method="_on_body_entered"]
+
+[node name="NightLights" type="Node2D" parent="."]
+
+[node name="NorthWest" parent="NightLights" instance=ExtResource("night_light")]
+position = Vector2(492, 410)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="NorthEast" parent="NightLights" instance=ExtResource("night_light")]
+position = Vector2(748, 410)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="PlatformWest" parent="NightLights" instance=ExtResource("night_light")]
+position = Vector2(268, 922)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="PlatformEast" parent="NightLights" instance=ExtResource("night_light")]
+position = Vector2(748, 922)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="SouthWest" parent="NightLights" instance=ExtResource("night_light")]
+position = Vector2(492, 1434)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="SouthEast" parent="NightLights" instance=ExtResource("night_light")]
+position = Vector2(748, 1434)
+light_color = Color(1, 0.72, 0.38, 1)
+
+[node name="SouthApproach" parent="NightLights" instance=ExtResource("night_light")]
+position = Vector2(784, 1772)
+light_color = Color(1, 0.72, 0.38, 1)
