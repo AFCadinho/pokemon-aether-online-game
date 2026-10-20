@@ -19,12 +19,11 @@ position = Vector2(528, 336)
 position = Vector2(112, 336)
 
 [node name="ToWest" parent="Exits" index="0"]
-visible = false
-monitoring = false
-monitorable = false
+target_scene_path = "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn"
+target_spawn_name = "FromRoute15Gate"
+transition_id = "kanto_route_15_fuchsia_gate__to_fuchsia_city"
+transition_facing_direction = "left"
 
-[node name="CollisionShape2D" parent="Exits/ToWest" index="0"]
-disabled = true
 
 [node name="ToEast" parent="Exits" index="1"]
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_15.tscn"
