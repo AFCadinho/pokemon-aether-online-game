@@ -46,6 +46,7 @@ const EXTENDED_MAP_SCENES := {
 	"kanto_celadon_gym": "res://scenes/overworld/kanto/towns/celadon_city/celadon_gym.tscn",
 	"kanto_celadon_game_corner": "res://scenes/overworld/kanto/towns/celadon_city/game_corner.tscn",
 	"kanto_celadon_city": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+	"kanto_fuchsia_safari_zone_gate": "res://scenes/overworld/kanto/transition_buildings/safari_zone_gate.tscn",
 	"kanto_fuchsia_city": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 	"kanto_fuchsia_city_pokemon_center": "res://scenes/overworld/kanto/towns/fuchsia_city/pokemon_center.tscn",
 	"kanto_lavender_town_pokemon_tower": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",

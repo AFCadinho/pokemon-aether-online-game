@@ -1793,6 +1793,16 @@
 						"x": 65,
 						"y": 22
 					}
+				},
+				"from_safari_zone_gate": {
+					"facingDirection": "down",
+					"label": "Safari Zone Gate",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromSafariZoneGate",
+					"tile": {
+						"x": 37,
+						"y": 8
+					}
 				}
 			},
 			"weatherProfile": "outdoor"
@@ -1825,6 +1835,39 @@
 					"tile": {
 						"x": 14,
 						"y": 23
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"kanto_fuchsia_safari_zone_gate": {
+			"areaType": "transition",
+			"defaultMode": "open",
+			"label": "Safari Zone Gate",
+			"locationGroupId": "kanto_fuchsia_city",
+			"locationGroupLabel": "Fuchsia City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/safari_zone_gate.tscn",
+			"spawnPoints": {
+				"from_north": {
+					"facingDirection": "down",
+					"label": "North",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromNorth",
+					"tile": {
+						"x": 10,
+						"y": 8
+					}
+				},
+				"from_south": {
+					"facingDirection": "down",
+					"label": "South",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromSouth",
+					"tile": {
+						"x": 10,
+						"y": 18
 					}
 				}
 			},
@@ -7814,6 +7857,20 @@
 			"destinationAreaId": "kanto_route_15_fuchsia_gate",
 			"sourceMapId": "kanto_fuchsia_city"
 		},
+		"kanto_fuchsia_city__to_safari_zone_gate": {
+			"destination": {
+				"mapId": "kanto_fuchsia_safari_zone_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/safari_zone_gate.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 592.0
+				},
+				"spawnMarker": "FromSouth"
+			},
+			"destinationAreaId": "kanto_fuchsia_safari_zone_gate",
+			"sourceMapId": "kanto_fuchsia_city"
+		},
 		"kanto_fuchsia_city_pokemon_center__to_outside": {
 			"destination": {
 				"mapId": "kanto_fuchsia_city",
@@ -7827,6 +7884,20 @@
 			},
 			"destinationAreaId": "kanto_fuchsia_city",
 			"sourceMapId": "kanto_fuchsia_city_pokemon_center"
+		},
+		"kanto_fuchsia_safari_zone_gate__to_fuchsia_city": {
+			"destination": {
+				"mapId": "kanto_fuchsia_city",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+				"position": {
+					"x": 1200.0,
+					"y": 272.0
+				},
+				"spawnMarker": "FromSafariZoneGate"
+			},
+			"destinationAreaId": "kanto_fuchsia_city",
+			"sourceMapId": "kanto_fuchsia_safari_zone_gate"
 		},
 		"kanto_lavender_town__to_house_1": {
 			"destination": {
