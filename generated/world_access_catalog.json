@@ -1754,6 +1754,39 @@
 			},
 			"weatherProfile": "disabled"
 		},
+		"kanto_fuchsia_city": {
+			"areaType": "exterior",
+			"defaultMode": "open",
+			"label": "Fuchsia City",
+			"locationGroupId": "kanto_fuchsia_city",
+			"locationGroupLabel": "Fuchsia City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+			"spawnPoints": {
+				"city_center": {
+					"facingDirection": "down",
+					"label": "City Center",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "CityCenter",
+					"tile": {
+						"x": 37,
+						"y": 22
+					}
+				},
+				"from_route_15_gate": {
+					"facingDirection": "down",
+					"label": "Route 15 Gate",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute15Gate",
+					"tile": {
+						"x": 65,
+						"y": 22
+					}
+				}
+			},
+			"weatherProfile": "outdoor"
+		},
 		"kanto_lavender_town": {
 			"areaType": "exterior",
 			"defaultMode": "open",
@@ -7710,6 +7743,20 @@
 			"destinationAreaId": "kanto_diglett_cave_route_2_entrance",
 			"sourceMapId": "kanto_diglett_cave_tunnel"
 		},
+		"kanto_fuchsia_city__to_route15_gate": {
+			"destination": {
+				"mapId": "kanto_route_15_fuchsia_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_15_fuchsia_gate.tscn",
+				"position": {
+					"x": 112.0,
+					"y": 336.0
+				},
+				"spawnMarker": "FromFuchsiaCity"
+			},
+			"destinationAreaId": "kanto_route_15_fuchsia_gate",
+			"sourceMapId": "kanto_fuchsia_city"
+		},
 		"kanto_lavender_town__to_house_1": {
 			"destination": {
 				"mapId": "kanto_lavender_town_house_1",
@@ -9439,6 +9486,20 @@
 			},
 			"destinationAreaId": "kanto_route_14",
 			"sourceMapId": "kanto_route_15"
+		},
+		"kanto_route_15_fuchsia_gate__to_fuchsia_city": {
+			"destination": {
+				"mapId": "kanto_fuchsia_city",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+				"position": {
+					"x": 2096.0,
+					"y": 720.0
+				},
+				"spawnMarker": "FromRoute15Gate"
+			},
+			"destinationAreaId": "kanto_fuchsia_city",
+			"sourceMapId": "kanto_route_15_fuchsia_gate"
 		},
 		"kanto_route_15_fuchsia_gate__to_route15": {
 			"destination": {

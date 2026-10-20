@@ -180,7 +180,7 @@
           "label": "Safari Zone Entrance"
         }
       ],
-      "planned": true,
+      "planned": false,
       "needsReview": false,
       "hitSize": 60,
       "locationGroupIds": [
