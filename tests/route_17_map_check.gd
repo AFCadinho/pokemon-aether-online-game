@@ -61,7 +61,7 @@ func _run() -> void:
 		if x < 15 or x > 23: _check(not player.can_move_to(_point(Vector2i(x,0))), "northern water edges contained")
 	for y in range(0,56):
 		for x in [15,16,17,18,20,21,22,23]:
-			_check(player.can_move_to(_point(Vector2i(x,y))) and water.get_cell_source_id(Vector2i(x,y)) == -1, "both full bridge lanes stay dry and clear")
+			_check(collision.get_cell_source_id(Vector2i(x,y)) == -1 and water.get_cell_source_id(Vector2i(x,y)) == -1, "both full bridge lanes have clear dry terrain beneath the population")
 		_check(not player.can_move_to(_point(Vector2i(24,y))), "east bridge rail blocks water access")
 		if y < 26 or y > 31: _check(not player.can_move_to(_point(Vector2i(14,y))), "west rail outside platform opening blocks movement")
 	for span in [[5,16],[21,32],[37,46]]:

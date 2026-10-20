@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Populate Routes 16–18 with FRLG-based battle trainers and ambient Pokémon; add Cycling Road pickups while preserving authored exits and riding rules.
+
 - Refresh Route 18’s artist visual with the updated quarry fence layering.
 
 - Preserve the moved Route 18 gate and city landings, synchronize server arrivals, and keep the Route 17 side-platform escape.

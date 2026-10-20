@@ -21,9 +21,12 @@ func run() -> void:
 	var previous: Node = state.current_map
 	for number in [16,17]:
 		var map := (load("res://scenes/overworld/kanto/routes/kanto_route_%s.tscn" % number) as PackedScene).instantiate()
-		for actor in map.get_node("Entities/NPCs").get_children(): actor.feet_marker = actor.get_node("FeetMarker")
+		for container in ["Entities/NPCs","Entities/Pokemon"]:
+			for actor in map.get_node(container).get_children(): actor.feet_marker = actor.get_node("FeetMarker")
 		player.test_map = map
 		state.current_map = map
+		map.encounter_area_id = ""
+		root.add_child(map)
 		player.map_layers_initialized = true
 		player.map_layers_owner = map
 		player.collision_tilemap = map.get_node("Tiles/Collision")

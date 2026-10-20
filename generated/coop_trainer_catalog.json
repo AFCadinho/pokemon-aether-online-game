@@ -3190,6 +3190,443 @@
         }
       }
     },
+    "kanto_route_16_biker_camron": {
+      "entityId": "kanto_route_16_biker_camron",
+      "mapId": "kanto_route_16",
+      "position": {
+        "x": 400.0,
+        "y": 560.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_16_biker_camron"
+      ],
+      "trainers": {
+        "kanto_route_16_biker_camron": {
+          "gymBadge": null,
+          "name": "Biker Camron",
+          "teamSize": 2,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_16_biker_hideo": {
+      "entityId": "kanto_route_16_biker_hideo",
+      "mapId": "kanto_route_16",
+      "position": {
+        "x": 1072.0,
+        "y": 464.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_16_biker_hideo"
+      ],
+      "trainers": {
+        "kanto_route_16_biker_hideo": {
+          "gymBadge": null,
+          "name": "Biker Hideo",
+          "teamSize": 1,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_16_biker_koji": {
+      "entityId": "kanto_route_16_biker_koji",
+      "mapId": "kanto_route_16",
+      "position": {
+        "x": 688.0,
+        "y": 496.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_16_biker_koji"
+      ],
+      "trainers": {
+        "kanto_route_16_biker_koji": {
+          "gymBadge": null,
+          "name": "Biker Koji",
+          "teamSize": 3,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_16_biker_lao": {
+      "entityId": "kanto_route_16_biker_lao",
+      "mapId": "kanto_route_16",
+      "position": {
+        "x": 528.0,
+        "y": 432.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_16_biker_lao"
+      ],
+      "trainers": {
+        "kanto_route_16_biker_lao": {
+          "gymBadge": null,
+          "name": "Biker Lao",
+          "teamSize": 2,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_16_biker_luke": {
+      "entityId": "kanto_route_16_biker_luke",
+      "mapId": "kanto_route_16",
+      "position": {
+        "x": 848.0,
+        "y": 464.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_16_biker_luke"
+      ],
+      "trainers": {
+        "kanto_route_16_biker_luke": {
+          "gymBadge": null,
+          "name": "Biker Luke",
+          "teamSize": 2,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_16_biker_ruben": {
+      "entityId": "kanto_route_16_biker_ruben",
+      "mapId": "kanto_route_16",
+      "position": {
+        "x": 976.0,
+        "y": 400.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_16_biker_ruben"
+      ],
+      "trainers": {
+        "kanto_route_16_biker_ruben": {
+          "gymBadge": null,
+          "name": "Biker Ruben",
+          "teamSize": 3,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_17_biker_billy": {
+      "entityId": "kanto_route_17_biker_billy",
+      "mapId": "kanto_route_17",
+      "position": {
+        "x": 528.0,
+        "y": 1168.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_17_biker_billy"
+      ],
+      "trainers": {
+        "kanto_route_17_biker_billy": {
+          "gymBadge": null,
+          "name": "Biker Billy",
+          "teamSize": 1,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_17_biker_corey": {
+      "entityId": "kanto_route_17_biker_corey",
+      "mapId": "kanto_route_17",
+      "position": {
+        "x": 720.0,
+        "y": 1648.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_17_biker_corey"
+      ],
+      "trainers": {
+        "kanto_route_17_biker_corey": {
+          "gymBadge": null,
+          "name": "Biker Corey",
+          "teamSize": 2,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_17_biker_isaiah": {
+      "entityId": "kanto_route_17_biker_isaiah",
+      "mapId": "kanto_route_17",
+      "position": {
+        "x": 720.0,
+        "y": 432.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_17_biker_isaiah"
+      ],
+      "trainers": {
+        "kanto_route_17_biker_isaiah": {
+          "gymBadge": null,
+          "name": "Biker Isaiah",
+          "teamSize": 2,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_17_biker_jamal": {
+      "entityId": "kanto_route_17_biker_jamal",
+      "mapId": "kanto_route_17",
+      "position": {
+        "x": 720.0,
+        "y": 1296.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_17_biker_jamal"
+      ],
+      "trainers": {
+        "kanto_route_17_biker_jamal": {
+          "gymBadge": null,
+          "name": "Biker Jamal",
+          "teamSize": 4,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_17_biker_jaxon": {
+      "entityId": "kanto_route_17_biker_jaxon",
+      "mapId": "kanto_route_17",
+      "position": {
+        "x": 976.0,
+        "y": 1968.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_17_biker_jaxon"
+      ],
+      "trainers": {
+        "kanto_route_17_biker_jaxon": {
+          "gymBadge": null,
+          "name": "Biker Jaxon",
+          "teamSize": 2,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_17_biker_nikolas": {
+      "entityId": "kanto_route_17_biker_nikolas",
+      "mapId": "kanto_route_17",
+      "position": {
+        "x": 720.0,
+        "y": 752.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_17_biker_nikolas"
+      ],
+      "trainers": {
+        "kanto_route_17_biker_nikolas": {
+          "gymBadge": null,
+          "name": "Biker Nikolas",
+          "teamSize": 2,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_17_biker_raul": {
+      "entityId": "kanto_route_17_biker_raul",
+      "mapId": "kanto_route_17",
+      "position": {
+        "x": 528.0,
+        "y": 656.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_17_biker_raul"
+      ],
+      "trainers": {
+        "kanto_route_17_biker_raul": {
+          "gymBadge": null,
+          "name": "Biker Raul",
+          "teamSize": 2,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_17_biker_virgil": {
+      "entityId": "kanto_route_17_biker_virgil",
+      "mapId": "kanto_route_17",
+      "position": {
+        "x": 528.0,
+        "y": 304.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_17_biker_virgil"
+      ],
+      "trainers": {
+        "kanto_route_17_biker_virgil": {
+          "gymBadge": null,
+          "name": "Biker Virgil",
+          "teamSize": 3,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_17_biker_william": {
+      "entityId": "kanto_route_17_biker_william",
+      "mapId": "kanto_route_17",
+      "position": {
+        "x": 624.0,
+        "y": 1968.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_17_biker_william"
+      ],
+      "trainers": {
+        "kanto_route_17_biker_william": {
+          "gymBadge": null,
+          "name": "Biker William",
+          "teamSize": 5,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_17_biker_zeek": {
+      "entityId": "kanto_route_17_biker_zeek",
+      "mapId": "kanto_route_17",
+      "position": {
+        "x": 528.0,
+        "y": 1552.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_17_biker_zeek"
+      ],
+      "trainers": {
+        "kanto_route_17_biker_zeek": {
+          "gymBadge": null,
+          "name": "Biker Zeek",
+          "teamSize": 1,
+          "trainerClass": "Biker"
+        }
+      }
+    },
+    "kanto_route_18_bird_keeper_jacob": {
+      "entityId": "kanto_route_18_bird_keeper_jacob",
+      "mapId": "kanto_route_18",
+      "position": {
+        "x": 592.0,
+        "y": 848.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_18_bird_keeper_jacob"
+      ],
+      "trainers": {
+        "kanto_route_18_bird_keeper_jacob": {
+          "gymBadge": null,
+          "name": "Bird Keeper Jacob",
+          "teamSize": 4,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_18_bird_keeper_ramiro": {
+      "entityId": "kanto_route_18_bird_keeper_ramiro",
+      "mapId": "kanto_route_18",
+      "position": {
+        "x": 1424.0,
+        "y": 1264.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_18_bird_keeper_ramiro"
+      ],
+      "trainers": {
+        "kanto_route_18_bird_keeper_ramiro": {
+          "gymBadge": null,
+          "name": "Bird Keeper Ramiro",
+          "teamSize": 1,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
+    "kanto_route_18_bird_keeper_wilton": {
+      "entityId": "kanto_route_18_bird_keeper_wilton",
+      "mapId": "kanto_route_18",
+      "position": {
+        "x": 944.0,
+        "y": 1200.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_18_bird_keeper_wilton"
+      ],
+      "trainers": {
+        "kanto_route_18_bird_keeper_wilton": {
+          "gymBadge": null,
+          "name": "Bird Keeper Wilton",
+          "teamSize": 2,
+          "trainerClass": "Bird Keeper"
+        }
+      }
+    },
     "kanto_route_1_lass_zoe": {
       "entityId": "kanto_route_1_lass_zoe",
       "mapId": "kanto_route_1",
@@ -5002,6 +5439,25 @@
     "kanto_route_15_picnicker_celia": "kanto_route_15_picnicker_celia",
     "kanto_route_15_picnicker_kindra": "kanto_route_15_picnicker_kindra",
     "kanto_route_15_picnicker_yazmin": "kanto_route_15_picnicker_yazmin",
+    "kanto_route_16_biker_camron": "kanto_route_16_biker_camron",
+    "kanto_route_16_biker_hideo": "kanto_route_16_biker_hideo",
+    "kanto_route_16_biker_koji": "kanto_route_16_biker_koji",
+    "kanto_route_16_biker_lao": "kanto_route_16_biker_lao",
+    "kanto_route_16_biker_luke": "kanto_route_16_biker_luke",
+    "kanto_route_16_biker_ruben": "kanto_route_16_biker_ruben",
+    "kanto_route_17_biker_billy": "kanto_route_17_biker_billy",
+    "kanto_route_17_biker_corey": "kanto_route_17_biker_corey",
+    "kanto_route_17_biker_isaiah": "kanto_route_17_biker_isaiah",
+    "kanto_route_17_biker_jamal": "kanto_route_17_biker_jamal",
+    "kanto_route_17_biker_jaxon": "kanto_route_17_biker_jaxon",
+    "kanto_route_17_biker_nikolas": "kanto_route_17_biker_nikolas",
+    "kanto_route_17_biker_raul": "kanto_route_17_biker_raul",
+    "kanto_route_17_biker_virgil": "kanto_route_17_biker_virgil",
+    "kanto_route_17_biker_william": "kanto_route_17_biker_william",
+    "kanto_route_17_biker_zeek": "kanto_route_17_biker_zeek",
+    "kanto_route_18_bird_keeper_jacob": "kanto_route_18_bird_keeper_jacob",
+    "kanto_route_18_bird_keeper_ramiro": "kanto_route_18_bird_keeper_ramiro",
+    "kanto_route_18_bird_keeper_wilton": "kanto_route_18_bird_keeper_wilton",
     "kanto_route_1_lass_zoe": "kanto_route_1_lass_zoe",
     "kanto_route_1_youngster_liam": "kanto_route_1_youngster_liam",
     "kanto_route_22_gary": "gary_route22",
