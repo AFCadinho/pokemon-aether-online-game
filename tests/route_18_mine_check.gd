@@ -60,7 +60,7 @@ func _run() -> void:
 	mine.remove_child(player)
 	surface.add_child(player)
 	_configure_player(player,surface)
-	var surface_reached := _reachable(player,Rect2i(0,0,64,52),Vector2i(60,23))
+	var surface_reached := _reachable(player,Rect2i(0,0,64,52),Vector2i(surface.get_node("Spawns/FromFuchsiaCity").position/32))
 	for cell in [Vector2i(9,38),Vector2i(10,38)]:
 		_check(surface_reached.has(cell), "surface shaft and return landing reachable from Route 18 road")
 	# Route 18's lake edge must also contain a surfing player after a failed save/transfer.

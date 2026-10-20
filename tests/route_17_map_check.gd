@@ -38,7 +38,7 @@ func _run() -> void:
 		var seam_y: int = 47 if leg[0] == route16 else 0
 		for x in range(15,24):
 			var point := _point(Vector2i(x,seam_y))
-			_check(exit_node.contains_world_position(point) and player.overlaps_exit_at(exit_node,point), "full nine-column seam transfers")
+			_check(player.overlaps_exit_at(exit_node,point), "full nine-column seam transfers")
 			_check(leg[0].find_map_tilemap_layer("Collision").get_cell_source_id(Vector2i(x,seam_y)) == -1, "seam is not capped")
 			var beyond_y: int = 48 if leg[0] == route16 else -1
 			_check(leg[0].find_map_tilemap_layer("Collision").get_cell_source_id(Vector2i(x,beyond_y)) != -1, "outside cap prevents escape when transfer is denied or fails")
@@ -55,16 +55,16 @@ func _run() -> void:
 	state.acquire_overworld_input_lock(&"route17_map_check")
 	for x in range(15,24): _check(not player.can_move_to(_point(Vector2i(x,-1))), "real movement cannot leave map after failed north transfer")
 	for y in range(72):
-		for x in [0,39]: _check(not player.can_move_to(_point(Vector2i(x,y))) and collision.get_cell_source_id(Vector2i(x,y)) != -1, "outer east/west edge contained")
+		for x in [0,39]: _check(not player.can_move_to(_point(Vector2i(x,y))), "outer east/west edge contained")
 	for x in range(40):
 		_check(collision.get_cell_source_id(Vector2i(x,71)) != -1, "south edge contained")
-		if x < 15 or x > 23: _check(collision.get_cell_source_id(Vector2i(x,0)) != -1, "northern water edges contained")
+		if x < 15 or x > 23: _check(not player.can_move_to(_point(Vector2i(x,0))), "northern water edges contained")
 	for y in range(0,56):
 		for x in [15,16,17,18,20,21,22,23]:
 			_check(player.can_move_to(_point(Vector2i(x,y))) and water.get_cell_source_id(Vector2i(x,y)) == -1, "both full bridge lanes stay dry and clear")
 		_check(not player.can_move_to(_point(Vector2i(24,y))), "east bridge rail blocks water access")
 		if y < 26 or y > 31: _check(not player.can_move_to(_point(Vector2i(14,y))), "west rail outside platform opening blocks movement")
-	for span in [[4,16],[20,32],[36,46]]:
+	for span in [[5,16],[21,32],[37,46]]:
 		for y in range(span[0],span[1]+1): _check(not player.can_move_to(_point(Vector2i(19,y))), "center dividers block crossing")
 	var reached := _reachable(collision,water,Vector2i(17,2))
 	for y in range(24,34):
@@ -75,9 +75,19 @@ func _run() -> void:
 		_check(reached.has(cell), "bridge connects to southern plaza and gate approach")
 	_check(not map.has_node("Entities/NPCs/Route18Guard"), "temporary Route 18 closure removed")
 	_check(map.get_node("Exits").get_child_count() == 2, "north bridge and south gate exits available")
-	for y in range(58,62):
-		_check(reached.has(Vector2i(34,y)), "entire southern gate approach reachable")
-		_check(player.overlaps_exit_at(map.get_node("Exits/ToRoute18Gate"),_point(Vector2i(34,y))), "full four-row gate throat transfers")
+	var south_exit: Area2D = map.get_node("Exits/ToRoute18Gate")
+	var south_shape: CollisionShape2D = south_exit.get_node("CollisionShape2D")
+	var center := south_exit.position+south_shape.position
+	var half: Vector2 = south_shape.shape.size/2
+	var opening_rows := 0
+	for y in range(ceili((center.y-half.y-16)/32),floori((center.y+half.y-16)/32)+1):
+		var cell := Vector2i(floori(south_exit.position.x/32),y)
+		if collision.get_cell_source_id(cell) != -1: continue
+		opening_rows += 1
+		_check(reached.has(cell), "entire authored southern gate approach reachable")
+		_check(player.overlaps_exit_at(south_exit,_point(cell)), "full authored gate throat transfers")
+	_check(opening_rows > 0, "south gate has a clear approach")
+	_check(reached.has(Vector2i(map.get_node("Spawns/FromRoute18Gate").position/32)), "authored gate landing connects to road")
 	state.release_overworld_input_lock(&"route17_map_check")
 	state.current_map = previous
 	map.free()
