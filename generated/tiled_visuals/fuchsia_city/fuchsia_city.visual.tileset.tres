@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://c1jhe8kug8jpy"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_1_0.texture.res" id="1_5j2aq"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_1025_0.texture.res" id="2_xv010"]
