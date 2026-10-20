@@ -79,10 +79,17 @@ func _run() -> void:
 			if player.can_move_to(Vector2(next)*32+Vector2(16,16)):
 				reached[next] = true
 				pending.append(next)
-	for cell in [Vector2i(20,47),Vector2i(21,47),Vector2i(21,45)]:
+	for cell in [Vector2i(20,48),Vector2i(21,48),Vector2i(20,47)]:
 		_check(reached.has(cell), "south gate and return are reachable from Route 15")
+	var city_exit: Area2D = city.get_node("Exits/ToRoute19Gate")
+	_check(city_exit.position == Vector2(656,1552), "south exit keeps its authored position")
+	_check(city_exit.get_node("CollisionShape2D").position == Vector2(16,16), "south trigger keeps its authored offset")
+	_check(city_exit.get_node("CollisionShape2D").shape.size == Vector2(128,32), "south trigger keeps its four-tile width")
+	_check(city.get_node("Spawns/FromRoute19Gate").position == Vector2(656,1520), "south return keeps its authored position")
 	for x in [20,21]:
-		_check(city.get_node("Exits/ToRoute19Gate").contains_world_position(Vector2(x,47)*32+Vector2(16,16)), "full two-tile city opening is covered")
+		_check(city_exit.contains_world_position(Vector2(x,48)*32+Vector2(16,16)), "both walkable southern doorway tiles are covered")
+	for x in [19,22]:
+		_check(not player.can_move_to(Vector2(x,48)*32+Vector2(16,16)), "walls beside the southern doorway remain blocked")
 	var loader = load("res://scripts/services/web_asset_module_service.gd")
 	_check(loader.module_for_scene(GATE) == loader.EXTENDED_MODULE_NAME and loader.scene_for_map(gate.map_id) == GATE, "browser resolves the southern gate")
 	state.call("release_overworld_input_lock", &"route19_gate_test")

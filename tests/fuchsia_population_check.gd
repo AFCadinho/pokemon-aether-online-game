@@ -54,7 +54,8 @@ func _run() -> void:
 	_check(speeds.size() >= 6 and waits.size() >= 6, "residents and Pokemon have varied rhythms")
 	var start := Vector2i(city.get_node("Spawns/FromRoute15Gate").position / 32.0)
 	var reached := _reachable(collision,water,lanes,start)
-	var original_reached := _reachable(collision,water,{},start)
+	var player := (load("res://scenes/player.tscn") as PackedScene).instantiate()
+	player.set_script(load("res://tests/support/fuchsia_movement_probe.gd"))
 	for spawn in city.get_node("Spawns").get_children():
 		_check(reached.has(Vector2i(spawn.position/32.0)), "arrival remains connected with every complete patrol lane reserved: " + spawn.name)
 	for lane: Vector2i in lanes:
@@ -62,11 +63,14 @@ func _run() -> void:
 		for direction in [Vector2i.UP,Vector2i.DOWN,Vector2i.LEFT,Vector2i.RIGHT]:
 			approachable = approachable or reached.has(lane + direction)
 		_check(approachable, "actor can be approached at every patrol stop: " + str(lanes[lane]))
-	# Population must preserve every trigger cell reachable in the empty city.
+	# Check actual player-shape overlap: the Center trigger ends exactly at
+	# the entering grid center, while the player's upper body enters it.
 	for exit_node in city.get_node("Exits").get_children():
-		for cell: Vector2i in original_reached:
-			if exit_node.contains_world_position(Vector2(cell)*32+Vector2(16,16)):
-				_check(reached.has(cell), "population preserves reachable exit cell: " + exit_node.name)
+		var accessible := false
+		for cell: Vector2i in reached:
+			accessible = accessible or player.overlaps_exit_at(exit_node,Vector2(cell)*32+Vector2(16,16))
+		_check(accessible, "every exit remains reachable with complete patrol lanes reserved: " + exit_node.name)
+	player.free()
 	# Exercise the real NPC movement gate on every authored step, after ready
 	# initializes its feet marker and collision cache.
 	var state: Node = root.get_node("GameState")
