@@ -382,6 +382,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/gyarados_surf_check.gd",
 	"res://tests/mount_idle_pilot_check.gd",
 	"res://tests/zekrom_turbo_check.gd",
+	"res://tests/mount_turbo_lifecycle_check.gd",
 	"res://tests/flying_nimbus_check.gd",
 	"res://tests/meme_mounts_check.gd",
 	"res://tests/mount_management_ui_check.gd",
