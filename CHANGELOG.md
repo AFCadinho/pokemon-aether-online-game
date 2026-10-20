@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Route 18 Underground Mine with its artist visual and two-way quarry stairs; contain Route 18’s outer map edges.
+
 - Refresh Route 17’s artist visual, preserve its side-platform escape rules, and synchronize manually edited travel arrivals.
 
 - Let riders move freely on Route 17’s side platform so every corner has a way back to the bridge; preserve downhill-only travel on the main bridge.

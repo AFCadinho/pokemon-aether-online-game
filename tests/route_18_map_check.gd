@@ -17,7 +17,11 @@ func _run() -> void:
 	var errors := preload("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd").new().validate(visual,"res://generated/tiled_visuals/route_18/route_18.visual.tileset.tres")
 	_check(errors.is_empty(), "Route 18 imported atlas validates: "+str(errors))
 	_check(visual.get_meta("tiled_visual_map").width == 64 and visual.get_meta("tiled_visual_map").height == 52, "artist dimensions preserved")
-	_check(route.encounter_area_id == "kanto_route_18" and route.get_node("Tiles/Grass").get_used_cells().size() == 60, "native grass uses existing Route 18 encounter pool")
+	var grass: TileMapLayer
+	for marker_name in ["TallGrass","Tallgrass","Grass"]:
+		grass = route.get_node_or_null("Tiles/"+marker_name) as TileMapLayer
+		if grass != null: break
+	_check(route.encounter_area_id == "kanto_route_18" and grass != null and grass.get_used_cells().size() == 60, "authored grass markers and Route 18 encounter identity retained")
 	_check(route.allows_land_mount_dismount() and route.northbound_blocked_regions.is_empty(), "Route 18 keeps normal movement and dismount rules")
 	_check(not gate.land_mount_required_entry and gate.preserve_land_mount_on_transition, "south gate allows walking entry and preserves riding")
 	var attendant: Node = gate.get_node("Entities/NPCs/GateNPC")
@@ -61,15 +65,16 @@ func _run() -> void:
 	for x in range(64):
 		for y in [0,51]: _check(not player.can_move_to(_point(Vector2i(x,y))), "north/south edges contained")
 	for y in range(21,26): _check(not player.can_move_to(_point(Vector2i(64,y))), "failed transfer cannot escape east")
-	for cell in [Vector2i(10,38),Vector2i(11,38),Vector2i(12,38),Vector2i(20,34),Vector2i(17,41),Vector2i(24,42)]:
+	for cell in [Vector2i(12,38),Vector2i(20,34),Vector2i(17,41),Vector2i(24,42)]:
 		_check(not player.can_move_to(_point(cell)), "shaft and worksite props are solid")
 	for cell in [Vector2i(10,4),Vector2i(30,6)]:
 		_check(player.water_tilemap.get_cell_source_id(cell) != -1 and not player.can_move_to(_point(cell)), "lake requires Surf")
 	var reached := _reachable(player.collision_tilemap,player.water_tilemap)
 	for cell in [Vector2i(6,23),Vector2i(63,23),Vector2i(27,30),Vector2i(27,32),Vector2i(35,35),Vector2i(37,40),Vector2i(37,42),Vector2i(30,44)]:
 		_check(reached.has(cell) and player.can_move_to(_point(cell)), "road, grass, stairs and quarry landings reachable")
-	for cell in route.get_node("Tiles/Grass").get_used_cells():
-		if player.collision_tilemap.get_cell_source_id(cell) == -1: _check(reached.has(cell), "all unobstructed tall grass accessible")
+	if grass != null:
+		for cell in grass.get_used_cells():
+			if player.collision_tilemap.get_cell_source_id(cell) == -1: _check(reached.has(cell), "all unobstructed tall grass accessible")
 	# Real mount eligibility checks apply only to the Cycling Road side.
 	player.land_mount_activity_active = false
 	for exit_node in [gate.get_node("Exits/ToWest")]:

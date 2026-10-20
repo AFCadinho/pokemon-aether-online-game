@@ -4114,9 +4114,45 @@
 						"x": 8,
 						"y": 23
 					}
+				},
+				"from_underground_mine": {
+					"facingDirection": "down",
+					"label": "Underground Mine",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromUndergroundMine",
+					"tile": {
+						"x": 9,
+						"y": 38
+					}
 				}
 			},
 			"weatherProfile": "outdoor"
+		},
+		"kanto_route_18_mine": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Route 18 Underground Mine",
+			"locationGroupId": "kanto_route_18",
+			"locationGroupLabel": "Route 18",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/caves/route_18_mine/route_18_mine.tscn",
+			"spawnPoints": {
+				"from_route_18": {
+					"facingDirection": "down",
+					"label": "Route 18",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute18",
+					"tile": {
+						"x": 5,
+						"y": 9
+					}
+				}
+			},
+			"travelRules": {
+				"preserveLandMount": true
+			},
+			"weatherProfile": "disabled"
 		},
 		"kanto_route_19_fuchsia_gate": {
 			"areaType": "transition",
@@ -10214,6 +10250,36 @@
 			},
 			"destinationAreaId": "kanto_route_17_18_gate",
 			"sourceMapId": "kanto_route_18"
+		},
+		"kanto_route_18__to_underground_mine": {
+			"destination": {
+				"mapId": "kanto_route_18_mine",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/caves/route_18_mine/route_18_mine.tscn",
+				"position": {
+					"x": 176.0,
+					"y": 304.0
+				},
+				"spawnMarker": "FromRoute18"
+			},
+			"destinationAreaId": "kanto_route_18_mine",
+			"sourceMapId": "kanto_route_18"
+		},
+		"kanto_route_18_mine__to_route18": {
+			"destination": {
+				"mapId": "kanto_route_18",
+				"mapSceneAliases": [
+					"uid://dn6xpcew6f7wm"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 1232.0
+				},
+				"spawnMarker": "FromUndergroundMine"
+			},
+			"destinationAreaId": "kanto_route_18",
+			"sourceMapId": "kanto_route_18_mine"
 		},
 		"kanto_route_19_fuchsia_gate__to_fuchsia_city": {
 			"destination": {
