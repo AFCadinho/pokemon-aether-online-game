@@ -23,7 +23,7 @@
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_27_0.texture.res" id="21_rji1g"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_28_0.texture.res" id="22_6fw1y"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_29_0.texture.res" id="23_wvgm1"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_4097_0.texture.res" id="24_uvx0o"]
+[ext_resource type="Texture2D" uid="uid://bxkqsvempxy81" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_4097_0.texture.res" id="24_uvx0o"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_8193_0.texture.res" id="25_5ttqd"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_5_0.texture.res" id="26_2tri7"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_6_0.texture.res" id="27_1l4ac"]
