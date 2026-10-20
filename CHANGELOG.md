@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add Magikarp, Goldeen and Poliwag swimming in Route 16 East’s southern pond.
 - Add gently floating pixel Zs above sleeping Snorlax on Routes 12 and 16 East.
 
 - Add the Route 16 gate connected to Route 16 East, with a closed western passage until Route 16 is available.

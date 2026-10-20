@@ -1,7 +1,8 @@
 extends SceneTree
 
 const CITY := "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn"
-const SPECIES := ["vulpix","spearow","rattata","ponyta","raticate","doduo"]
+const WATER_SPECIES := ["magikarp","goldeen","poliwag"]
+const SPECIES := ["vulpix","spearow","rattata","ponyta","raticate","doduo","magikarp","goldeen","poliwag"]
 var failed := false
 
 func _init() -> void:
@@ -13,16 +14,18 @@ func _run() -> void:
 	var water: TileMapLayer = city.get_node("Tiles/Water")
 	var npcs: Node = city.get_node("Entities/NPCs")
 	var pokemon: Node = city.get_node("Entities/Pokemon")
-	_check(npcs.get_child_count() == 5 and pokemon.get_child_count() == 6, "five travelers and six ambient Pokemon")
+	_check(npcs.get_child_count() == 5 and pokemon.get_child_count() == 9, "five travelers and nine ambient Pokemon")
 	var actors: Array[Node] = []
 	actors.append_array(npcs.get_children())
 	actors.append_array(pokemon.get_children())
+	var water_lanes := {}
 	var lanes := {}
 	var identities := {}
 	var seen_species := {}
 	var speeds := {}
 	var waits := {}
 	for actor in actors:
+		var water_actor: bool = actor.get_parent() == pokemon and WATER_SPECIES.has(actor.species_id)
 		var cell := Vector2i(actor.position / 32.0)
 		var axis := Vector2i.RIGHT if actor.movement_behavior == "pace_horizontal" else Vector2i.DOWN
 		var radius: int = 0 if actor.movement_behavior == "idle" else actor.movement_tiles
@@ -44,7 +47,9 @@ func _run() -> void:
 		for offset in range(-radius,radius+1):
 			var lane: Vector2i = cell + axis*offset
 			_check(Rect2i(0,0,52,57).has_point(lane), "lane stays inside the map")
-			_check(collision.get_cell_source_id(lane) == -1 and water.get_cell_source_id(lane) == -1, "%s has dry, clear ground at %s" % [actor.name,lane])
+			_check(collision.get_cell_source_id(lane) == -1, "%s stays clear of obstacles at %s" % [actor.name,lane])
+			_check((water.get_cell_source_id(lane) != -1) == water_actor, "%s stays in its land or water habitat at %s" % [actor.name,lane])
+			if water_actor: water_lanes[lane] = true
 			_check(not lanes.has(lane), "%s has a separate lane at %s" % [actor.name,lane])
 			lanes[lane] = actor.name
 			for exit_node in city.get_node("Exits").get_children():
@@ -68,6 +73,7 @@ func _run() -> void:
 	for spawn in city.get_node("Spawns").get_children():
 		_check(reached_open.has(Vector2i(spawn.position/32.0)), "arrival connects after Snorlax with every complete patrol lane reserved: " + spawn.name)
 	for lane: Vector2i in lanes:
+		if water_lanes.has(lane): continue # Decorative swimmers are visible from shore.
 		var approachable := false
 		for direction in [Vector2i.UP,Vector2i.DOWN,Vector2i.LEFT,Vector2i.RIGHT]:
 			approachable = approachable or reached.has(lane + direction)
@@ -92,8 +98,9 @@ func _run() -> void:
 		actor.set_process(false)
 		if actor.movement_behavior == "idle": continue
 		var axis := Vector2.RIGHT if actor.movement_behavior == "pace_horizontal" else Vector2.DOWN
-		for sign_value in [-1,1]:
-			_check(actor.call("_can_npc_move_to",actor.global_position+axis*32*sign_value), "runtime actor can take its authored step: " + actor.name)
+		for offset in range(-actor.movement_tiles,actor.movement_tiles+1):
+			if offset == 0: continue
+			_check(actor.call("_can_npc_move_to",actor.global_position+axis*32*offset), "runtime actor can take its authored step: " + actor.name)
 	state.set("current_map",previous)
 	city.free()
 	print("ROUTE16_POPULATION ", "FAIL" if failed else "PASS")
