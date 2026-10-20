@@ -2,9 +2,11 @@
 
 ## Unreleased
 
+- Add Route 17 with its artist visual and a two-way bridge connection to Route 16; keep the unfinished Route 18 passage closed.
+
 - Regenerate Route 16 East’s visuals from the artist source while preserving its gameplay layout.
 
-- Add Route 16 with its artist visual and two-way gate connection to Route 16 East; keep the unfinished Route 17 passage closed.
+- Add Route 16 with its artist visual and two-way gate connection to Route 16 East.
 
 - Refresh Route 16 East’s artist visual, including its updated water and flowers.
 

@@ -3877,6 +3877,16 @@
 						"x": 32,
 						"y": 14
 					}
+				},
+				"from_route_17": {
+					"facingDirection": "down",
+					"label": "Route 17",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute17",
+					"tile": {
+						"x": 17,
+						"y": 45
+					}
 				}
 			},
 			"weatherProfile": "outdoor"
@@ -3948,6 +3958,29 @@
 				}
 			},
 			"weatherProfile": "disabled"
+		},
+		"kanto_route_17": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 17",
+			"locationGroupId": "kanto_route_17",
+			"locationGroupLabel": "Route 17",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+			"spawnPoints": {
+				"from_route_16": {
+					"facingDirection": "down",
+					"label": "Route 16",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute16",
+					"tile": {
+						"x": 17,
+						"y": 2
+					}
+				}
+			},
+			"weatherProfile": "outdoor"
 		},
 		"kanto_route_19_fuchsia_gate": {
 			"areaType": "transition",
@@ -9855,6 +9888,20 @@
 			"destinationAreaId": "kanto_route_16_gate",
 			"sourceMapId": "kanto_route_16"
 		},
+		"kanto_route_16__to_route17": {
+			"destination": {
+				"mapId": "kanto_route_17",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+				"position": {
+					"x": 560.0,
+					"y": 80.0
+				},
+				"spawnMarker": "FromRoute16"
+			},
+			"destinationAreaId": "kanto_route_17",
+			"sourceMapId": "kanto_route_16"
+		},
 		"kanto_route_16_east__to_celadon_city": {
 			"destination": {
 				"mapId": "kanto_celadon_city",
@@ -9914,6 +9961,20 @@
 			},
 			"destinationAreaId": "kanto_route_16_east",
 			"sourceMapId": "kanto_route_16_gate"
+		},
+		"kanto_route_17__to_route16": {
+			"destination": {
+				"mapId": "kanto_route_16",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+				"position": {
+					"x": 560.0,
+					"y": 1456.0
+				},
+				"spawnMarker": "FromRoute17"
+			},
+			"destinationAreaId": "kanto_route_16",
+			"sourceMapId": "kanto_route_17"
 		},
 		"kanto_route_19_fuchsia_gate__to_fuchsia_city": {
 			"destination": {
