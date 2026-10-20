@@ -1796,6 +1796,16 @@
 						"y": 22
 					}
 				},
+				"from_route_19_gate": {
+					"facingDirection": "down",
+					"label": "Route 19 Gate",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute19Gate",
+					"tile": {
+						"x": 21,
+						"y": 45
+					}
+				},
 				"from_safari_zone_gate": {
 					"facingDirection": "down",
 					"label": "Safari Zone Gate",
@@ -3833,6 +3843,39 @@
 					"tile": {
 						"x": 3,
 						"y": 10
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"kanto_route_19_fuchsia_gate": {
+			"areaType": "transition",
+			"defaultMode": "open",
+			"label": "Route 19–Fuchsia Gate",
+			"locationGroupId": "kanto_fuchsia_city",
+			"locationGroupLabel": "Fuchsia City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_19_fuchsia_gate.tscn",
+			"spawnPoints": {
+				"from_north": {
+					"facingDirection": "down",
+					"label": "North",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromNorth",
+					"tile": {
+						"x": 10,
+						"y": 8
+					}
+				},
+				"from_south": {
+					"facingDirection": "down",
+					"label": "South",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromSouth",
+					"tile": {
+						"x": 10,
+						"y": 17
 					}
 				}
 			},
@@ -7859,6 +7902,20 @@
 			"destinationAreaId": "kanto_route_15_fuchsia_gate",
 			"sourceMapId": "kanto_fuchsia_city"
 		},
+		"kanto_fuchsia_city__to_route19_gate": {
+			"destination": {
+				"mapId": "kanto_route_19_fuchsia_gate",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/transition_buildings/route_19_fuchsia_gate.tscn",
+				"position": {
+					"x": 336.0,
+					"y": 272.0
+				},
+				"spawnMarker": "FromNorth"
+			},
+			"destinationAreaId": "kanto_route_19_fuchsia_gate",
+			"sourceMapId": "kanto_fuchsia_city"
+		},
 		"kanto_fuchsia_city__to_safari_zone_gate": {
 			"destination": {
 				"mapId": "kanto_fuchsia_safari_zone_gate",
@@ -9666,6 +9723,22 @@
 			},
 			"destinationAreaId": "kanto_route_15",
 			"sourceMapId": "kanto_route_15_fuchsia_gate"
+		},
+		"kanto_route_19_fuchsia_gate__to_fuchsia_city": {
+			"destination": {
+				"mapId": "kanto_fuchsia_city",
+				"mapSceneAliases": [
+					"uid://d4gk1ehf0pv8e"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+				"position": {
+					"x": 688.0,
+					"y": 1456.0
+				},
+				"spawnMarker": "FromRoute19Gate"
+			},
+			"destinationAreaId": "kanto_fuchsia_city",
+			"sourceMapId": "kanto_route_19_fuchsia_gate"
 		},
 		"kanto_route_1__to_pallet_town": {
 			"destination": {

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the southern Route 19–Fuchsia transition building, with a safe return to Fuchsia and a closed Route 19 passage.
+
 - Add the vertical Safari Zone gate connected to Fuchsia City; its unfinished northern passage remains closed.
 
 - Connect Fuchsia City’s Pokémon Center with healing, storage and a dedicated respawn point.

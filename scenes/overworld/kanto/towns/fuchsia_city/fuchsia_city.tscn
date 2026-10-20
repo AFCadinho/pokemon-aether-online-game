@@ -12,6 +12,9 @@
 size = Vector2(96, 32)
 
 
+[sub_resource type="RectangleShape2D" id="route19_gate_shape"]
+size = Vector2(64, 32)
+
 [sub_resource type="RectangleShape2D" id="gate_shape"]
 size = Vector2(32, 96)
 
@@ -275,6 +278,9 @@ position = Vector2(240, 368)
 position = Vector2(1200, 272)
 
 
+[node name="FromRoute19Gate" type="Marker2D" parent="Spawns"]
+position = Vector2(688, 1456)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1471260928]
 
 [node name="ToRoute15Gate" type="Area2D" parent="Exits" unique_id=707877330]
@@ -322,6 +328,23 @@ shape = SubResource("safari_gate_shape")
 tile_footprint = Vector2i(3, 1)
 flow_direction = "up"
 
+[node name="ToRoute19Gate" type="Area2D" parent="Exits"]
+position = Vector2(672, 1520)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_19_fuchsia_gate.tscn"
+target_spawn_name = "FromNorth"
+transition_id = "kanto_fuchsia_city__to_route19_gate"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute19Gate"]
+shape = SubResource("route19_gate_shape")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute19Gate" instance=ExtResource("4_hint")]
+z_as_relative = false
+position = Vector2(0, -32)
+tile_footprint = Vector2i(2, 1)
+flow_direction = "down"
+
 [node name="Entities" type="Node2D" parent="." unique_id=1849289808]
 z_index = 5
 y_sort_enabled = true
@@ -364,3 +387,5 @@ tile_set = SubResource("TileSet_xabhn")
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
 
 [connection signal="body_entered" from="Exits/ToSafariZoneGate" to="Exits/ToSafariZoneGate" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToRoute19Gate" to="Exits/ToRoute19Gate" method="_on_body_entered"]
