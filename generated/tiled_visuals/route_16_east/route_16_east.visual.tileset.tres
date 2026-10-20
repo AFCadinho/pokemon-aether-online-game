@@ -1,11 +1,11 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://dqmw1x7p77dxt"]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_1_0.texture.res" id="1_0y851"]
+[ext_resource type="Texture2D" uid="uid://dqsw6a20jfnfx" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_1_0.texture.res" id="1_0y851"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_1025_0.texture.res" id="2_e8jca"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_10_0.texture.res" id="3_nmewm"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_11_0.texture.res" id="4_ninc2"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_12_0.texture.res" id="5_kymqe"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_13_0.texture.res" id="6_tyx3y"]
+[ext_resource type="Texture2D" uid="uid://du7g7e4ilp13b" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_10_0.texture.res" id="3_nmewm"]
+[ext_resource type="Texture2D" uid="uid://co8rye3b7vws8" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_11_0.texture.res" id="4_ninc2"]
+[ext_resource type="Texture2D" uid="uid://d25rlwcikyuek" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_12_0.texture.res" id="5_kymqe"]
+[ext_resource type="Texture2D" uid="uid://dyk6sck8e5j6m" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_13_0.texture.res" id="6_tyx3y"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_14_0.texture.res" id="7_r0c3u"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_15_0.texture.res" id="8_qj1ay"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_16_0.texture.res" id="9_bfkrt"]
@@ -22,13 +22,13 @@
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_26_0.texture.res" id="20_ylrqy"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_27_0.texture.res" id="21_0xcvi"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_28_0.texture.res" id="22_rji1g"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_4097_0.texture.res" id="23_6fw1y"]
+[ext_resource type="Texture2D" uid="uid://nrvg3yef7t8l" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_4097_0.texture.res" id="23_6fw1y"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_8193_0.texture.res" id="24_wvgm1"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_5_0.texture.res" id="25_uvx0o"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_6_0.texture.res" id="26_5ttqd"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_7_0.texture.res" id="27_2tri7"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_8_0.texture.res" id="28_1l4ac"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_9_0.texture.res" id="29_ojvwe"]
+[ext_resource type="Texture2D" uid="uid://difxmobctobak" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_5_0.texture.res" id="25_uvx0o"]
+[ext_resource type="Texture2D" uid="uid://dsef6j810sfyh" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_6_0.texture.res" id="26_5ttqd"]
+[ext_resource type="Texture2D" uid="uid://crkeqlx11h4nj" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_7_0.texture.res" id="27_2tri7"]
+[ext_resource type="Texture2D" uid="uid://ieqbh5cw03pk" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_8_0.texture.res" id="28_1l4ac"]
+[ext_resource type="Texture2D" uid="uid://pm7i0bfkckl2" path="res://generated/tiled_visuals/route_16_east/assets/route_16_east.visual.tileset.compact_source_9_0.texture.res" id="29_ojvwe"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5dexi"]
 texture = ExtResource("1_0y851")
@@ -235,7 +235,6 @@ texture_region_size = Vector2i(32, 32)
 0:0/animation_frame_46/duration = 0.07
 0:0/animation_frame_47/duration = 0.07
 0:0/animation_frame_48/duration = 0.07
-0:0/animation_frame_49/duration = 2.8
 0:0/0 = 0
 metadata/tiled_animation_strip = true
 metadata/pao_tall_grass_family = "51da45d3409e3df7cebf73c9532d68feff02438ac2a9eab5f04fa36532ab23d4"
@@ -1283,33 +1282,6 @@ texture_region_size = Vector2i(32, 32)
 0:0/animation_frame_18/duration = 0.07
 0:0/animation_frame_19/duration = 0.07
 0:0/animation_frame_20/duration = 0.07
-0:0/animation_frame_21/duration = 0.07
-0:0/animation_frame_22/duration = 0.07
-0:0/animation_frame_23/duration = 0.07
-0:0/animation_frame_24/duration = 0.07
-0:0/animation_frame_25/duration = 0.07
-0:0/animation_frame_26/duration = 0.07
-0:0/animation_frame_27/duration = 0.07
-0:0/animation_frame_28/duration = 0.07
-0:0/animation_frame_29/duration = 0.07
-0:0/animation_frame_30/duration = 0.07
-0:0/animation_frame_31/duration = 0.07
-0:0/animation_frame_32/duration = 0.07
-0:0/animation_frame_33/duration = 0.07
-0:0/animation_frame_34/duration = 0.07
-0:0/animation_frame_35/duration = 0.07
-0:0/animation_frame_36/duration = 0.07
-0:0/animation_frame_37/duration = 0.07
-0:0/animation_frame_38/duration = 0.07
-0:0/animation_frame_39/duration = 0.07
-0:0/animation_frame_40/duration = 0.07
-0:0/animation_frame_41/duration = 0.07
-0:0/animation_frame_42/duration = 0.07
-0:0/animation_frame_43/duration = 0.07
-0:0/animation_frame_44/duration = 0.07
-0:0/animation_frame_45/duration = 0.07
-0:0/animation_frame_46/duration = 0.07
-0:0/animation_frame_47/duration = 0.07
 0:0/0 = 0
 metadata/tiled_animation_strip = true
 
@@ -1340,33 +1312,6 @@ texture_region_size = Vector2i(32, 32)
 0:0/animation_frame_18/duration = 0.07
 0:0/animation_frame_19/duration = 0.07
 0:0/animation_frame_20/duration = 0.07
-0:0/animation_frame_21/duration = 0.07
-0:0/animation_frame_22/duration = 0.07
-0:0/animation_frame_23/duration = 0.07
-0:0/animation_frame_24/duration = 0.07
-0:0/animation_frame_25/duration = 0.07
-0:0/animation_frame_26/duration = 0.07
-0:0/animation_frame_27/duration = 0.07
-0:0/animation_frame_28/duration = 0.07
-0:0/animation_frame_29/duration = 0.07
-0:0/animation_frame_30/duration = 0.07
-0:0/animation_frame_31/duration = 0.07
-0:0/animation_frame_32/duration = 0.07
-0:0/animation_frame_33/duration = 0.07
-0:0/animation_frame_34/duration = 0.07
-0:0/animation_frame_35/duration = 0.07
-0:0/animation_frame_36/duration = 0.07
-0:0/animation_frame_37/duration = 0.07
-0:0/animation_frame_38/duration = 0.07
-0:0/animation_frame_39/duration = 0.07
-0:0/animation_frame_40/duration = 0.07
-0:0/animation_frame_41/duration = 0.07
-0:0/animation_frame_42/duration = 0.07
-0:0/animation_frame_43/duration = 0.07
-0:0/animation_frame_44/duration = 0.07
-0:0/animation_frame_45/duration = 0.07
-0:0/animation_frame_46/duration = 0.07
-0:0/animation_frame_47/duration = 0.07
 0:0/0 = 0
 metadata/tiled_animation_strip = true
 
@@ -1397,33 +1342,6 @@ texture_region_size = Vector2i(32, 32)
 0:0/animation_frame_18/duration = 0.07
 0:0/animation_frame_19/duration = 0.07
 0:0/animation_frame_20/duration = 0.07
-0:0/animation_frame_21/duration = 0.07
-0:0/animation_frame_22/duration = 0.07
-0:0/animation_frame_23/duration = 0.07
-0:0/animation_frame_24/duration = 0.07
-0:0/animation_frame_25/duration = 0.07
-0:0/animation_frame_26/duration = 0.07
-0:0/animation_frame_27/duration = 0.07
-0:0/animation_frame_28/duration = 0.07
-0:0/animation_frame_29/duration = 0.07
-0:0/animation_frame_30/duration = 0.07
-0:0/animation_frame_31/duration = 0.07
-0:0/animation_frame_32/duration = 0.07
-0:0/animation_frame_33/duration = 0.07
-0:0/animation_frame_34/duration = 0.07
-0:0/animation_frame_35/duration = 0.07
-0:0/animation_frame_36/duration = 0.07
-0:0/animation_frame_37/duration = 0.07
-0:0/animation_frame_38/duration = 0.07
-0:0/animation_frame_39/duration = 0.07
-0:0/animation_frame_40/duration = 0.07
-0:0/animation_frame_41/duration = 0.07
-0:0/animation_frame_42/duration = 0.07
-0:0/animation_frame_43/duration = 0.07
-0:0/animation_frame_44/duration = 0.07
-0:0/animation_frame_45/duration = 0.07
-0:0/animation_frame_46/duration = 0.07
-0:0/animation_frame_47/duration = 0.07
 0:0/0 = 0
 metadata/tiled_animation_strip = true
 
@@ -1454,33 +1372,6 @@ texture_region_size = Vector2i(32, 32)
 0:0/animation_frame_18/duration = 0.07
 0:0/animation_frame_19/duration = 0.07
 0:0/animation_frame_20/duration = 0.07
-0:0/animation_frame_21/duration = 0.07
-0:0/animation_frame_22/duration = 0.07
-0:0/animation_frame_23/duration = 0.07
-0:0/animation_frame_24/duration = 0.07
-0:0/animation_frame_25/duration = 0.07
-0:0/animation_frame_26/duration = 0.07
-0:0/animation_frame_27/duration = 0.07
-0:0/animation_frame_28/duration = 0.07
-0:0/animation_frame_29/duration = 0.07
-0:0/animation_frame_30/duration = 0.07
-0:0/animation_frame_31/duration = 0.07
-0:0/animation_frame_32/duration = 0.07
-0:0/animation_frame_33/duration = 0.07
-0:0/animation_frame_34/duration = 0.07
-0:0/animation_frame_35/duration = 0.07
-0:0/animation_frame_36/duration = 0.07
-0:0/animation_frame_37/duration = 0.07
-0:0/animation_frame_38/duration = 0.07
-0:0/animation_frame_39/duration = 0.07
-0:0/animation_frame_40/duration = 0.07
-0:0/animation_frame_41/duration = 0.07
-0:0/animation_frame_42/duration = 0.07
-0:0/animation_frame_43/duration = 0.07
-0:0/animation_frame_44/duration = 0.07
-0:0/animation_frame_45/duration = 0.07
-0:0/animation_frame_46/duration = 0.07
-0:0/animation_frame_47/duration = 0.07
 0:0/0 = 0
 metadata/tiled_animation_strip = true
 
