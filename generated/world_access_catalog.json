@@ -4004,8 +4004,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute16",
 					"tile": {
-						"x": 17,
-						"y": 2
+						"x": 19,
+						"y": 1
 					}
 				},
 				"from_route_18_gate": {
@@ -4014,7 +4014,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute18Gate",
 					"tile": {
-						"x": 32,
+						"x": 35,
 						"y": 59
 					}
 				}
@@ -4101,7 +4101,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromFuchsiaCity",
 					"tile": {
-						"x": 60,
+						"x": 62,
 						"y": 23
 					}
 				},
@@ -4111,7 +4111,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute17Gate",
 					"tile": {
-						"x": 8,
+						"x": 4,
 						"y": 23
 					}
 				},
@@ -8232,7 +8232,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
 				"position": {
-					"x": 1936.0,
+					"x": 2000.0,
 					"y": 752.0
 				},
 				"spawnMarker": "FromFuchsiaCity"
@@ -10084,8 +10084,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
 				"position": {
-					"x": 560.0,
-					"y": 80.0
+					"x": 624.0,
+					"y": 48.0
 				},
 				"spawnMarker": "FromRoute16"
 			},
@@ -10164,7 +10164,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
 				"position": {
-					"x": 1040.0,
+					"x": 1136.0,
 					"y": 1904.0
 				},
 				"spawnMarker": "FromRoute18Gate"
@@ -10181,7 +10181,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
 				"position": {
-					"x": 272.0,
+					"x": 144.0,
 					"y": 752.0
 				},
 				"spawnMarker": "FromRoute17Gate"

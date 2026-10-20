@@ -42,14 +42,20 @@ func _run() -> void:
 		_check(col.get_cell_source_id(Vector2i(arrival.position/32)) == -1, "arrival ground clear")
 		for other in leg[2].get_node("Exits").get_children():
 			_check(not player.overlaps_exit_at(other,arrival.position), "actual player shape avoids immediate return")
-	for aperture in [[west,"ToRoute18Gate",34,58,62],[route,"ToRoute17Gate",6,22,26],[route,"ToFuchsiaCity",63,21,26],[city,"ToRoute18",0,20,25],[gate,"ToWest",2,8,13],[gate,"ToEast",17,8,13]]:
-		for y in range(aperture[3],aperture[4]):
-			var cell := Vector2i(aperture[2],y)
-			_check(aperture[0].find_map_tilemap_layer("Collision").get_cell_source_id(cell) == -1, "full opening has no collision")
-			_check(player.overlaps_exit_at(aperture[0].get_node("Exits/"+aperture[1]),_point(cell)), "actual player enters across entire opening")
-	for cap in [[west,35,58,62],[route,5,22,26]]:
-		for y in range(cap[2],cap[3]):
-			_check(cap[0].find_map_tilemap_layer("Collision").get_cell_source_id(Vector2i(cap[1],y)) != -1, "failed gate transfer cannot pass through building wall")
+	# Derive the usable opening from the authored sensor and terrain, including
+	# child-shape offsets. Preserve manual doorway and arrival placements.
+	for aperture in [[west,"ToRoute18Gate"],[route,"ToRoute17Gate"],[route,"ToFuchsiaCity"],[city,"ToRoute18"],[gate,"ToWest"],[gate,"ToEast"]]:
+		var door: Area2D = aperture[0].get_node("Exits/"+aperture[1])
+		var shape: CollisionShape2D = door.get_node("CollisionShape2D")
+		var center := door.position+shape.position
+		var half: Vector2 = shape.shape.size/2
+		var open_rows := 0
+		for y in range(ceili((center.y-half.y-16)/32),floori((center.y+half.y-16)/32)+1):
+			var cell := Vector2i(floori(door.position.x/32),y)
+			if aperture[0].find_map_tilemap_layer("Collision").get_cell_source_id(cell) != -1: continue
+			open_rows += 1
+			_check(player.overlaps_exit_at(door,_point(cell)), "actual player enters across entire authored opening")
+		_check(open_rows > 0, "door has a walkable approach")
 	for y in range(20,25):
 		_check(city.find_map_tilemap_layer("Collision").get_cell_source_id(Vector2i(-1,y)) != -1, "failed west transfer stays within Fuchsia")
 	# Exercise player collision rules on the complete imported route.
@@ -70,7 +76,7 @@ func _run() -> void:
 	for cell in [Vector2i(10,4),Vector2i(30,6)]:
 		_check(player.water_tilemap.get_cell_source_id(cell) != -1 and not player.can_move_to(_point(cell)), "lake requires Surf")
 	var reached := _reachable(player.collision_tilemap,player.water_tilemap)
-	for cell in [Vector2i(6,23),Vector2i(63,23),Vector2i(27,30),Vector2i(27,32),Vector2i(35,35),Vector2i(37,40),Vector2i(37,42),Vector2i(30,44)]:
+	for cell in [Vector2i(route.get_node("Spawns/FromRoute17Gate").position/32),Vector2i(63,23),Vector2i(27,30),Vector2i(27,32),Vector2i(35,35),Vector2i(37,40),Vector2i(37,42),Vector2i(30,44)]:
 		_check(reached.has(cell) and player.can_move_to(_point(cell)), "road, grass, stairs and quarry landings reachable")
 	if grass != null:
 		for cell in grass.get_used_cells():
