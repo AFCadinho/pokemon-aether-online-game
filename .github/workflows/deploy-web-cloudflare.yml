@@ -5,7 +5,7 @@ on:
     inputs:
       release_version:
         description: Browser release version, for example 0.4.0-beta.1
-        default: "0.3.113"
+        default: "0.3.115"
         required: true
         type: string
       pages_project:
@@ -49,7 +49,7 @@ env:
   GODOT_RELEASE: stable
   POKEMON_HOME_ASSET_VERSION: pokemon-home-a74442caa16b
   POKEMON_HOME_SHINY_ASSET_VERSION: pokemon-home-shiny-b7565d0885ae
-  MUSIC_ASSET_VERSION: music-3f2a6df18793
+  MUSIC_ASSET_VERSION: music-a785da6cc5cf
   POKEMON_FRONT_ASSET_VERSION: pokemon-front-scale1-128-402b7a6cee88
   POKEMON_BACK_ASSET_VERSION: pokemon-back-scale1-128-6b78c3968c2f
   POKEMON_SHINY_FRONT_ASSET_VERSION: pokemon-shiny-front-scale1-128-066cf83cdfc7
