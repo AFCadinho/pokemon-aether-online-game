@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Refresh Route 17’s artist visual while preserving its gameplay layout and side-platform movement rules.
+- Refresh Route 17’s artist visual, preserve its side-platform escape rules, and synchronize manually edited travel arrivals.
 
 - Let riders move freely on Route 17’s side platform so every corner has a way back to the bridge; preserve downhill-only travel on the main bridge.
 
