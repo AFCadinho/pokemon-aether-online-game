@@ -28,6 +28,7 @@ const MISTY_MAP_SCENES := {
 	"kanto_route_25_bills_house": "res://scenes/overworld/kanto/routes/route25/bills_house.tscn",
 }
 const EXTENDED_MAP_SCENES := {
+	"kanto_route_18_mine": "res://scenes/overworld/kanto/caves/route_18_mine/route_18_mine.tscn",
 	"kanto_route_18": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
 	"kanto_route_17_18_gate": "res://scenes/overworld/kanto/transition_buildings/route_17_18_gate.tscn",
 	"kanto_route_17": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
