@@ -5,7 +5,7 @@ on:
     inputs:
       version_name:
         description: Android release version
-        default: "0.3.113"
+        default: "0.3.115"
         required: true
         type: string
       version_code:
@@ -37,9 +37,9 @@ env:
   POKEMON_HOME_SHINY_ASSET_VERSION: pokemon-home-shiny-b7565d0885ae
   POKEMON_HOME_SHINY_ASSET_SIZE: 33195703
   POKEMON_HOME_SHINY_ASSET_SHA256: 45dafaee8c4a1ce72e5efaea93d716d17b2ab334824a95c60a78b28c62736293
-  MUSIC_ASSET_VERSION: music-3f2a6df18793
-  MUSIC_ASSET_SIZE: 49402952
-  MUSIC_ASSET_SHA256: 0b1a376bd7d93e31a72b8b6a49116415f8ec0c6316bf5e1a71f766857119e31a
+  MUSIC_ASSET_VERSION: music-a785da6cc5cf
+  MUSIC_ASSET_SIZE: 78994986
+  MUSIC_ASSET_SHA256: bf066af3af794d562f8441b81cc0ff25c10fa9ddc2a91e990d2f78f170437bfb
 
 jobs:
   build:
