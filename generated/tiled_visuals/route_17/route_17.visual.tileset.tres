@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3 uid="uid://bwqffahxg7bae"]
+[gd_resource type="TileSet" format=3]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_17/assets/route_17.visual.tileset.compact_source_1_0.texture.res" id="1_w041k"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_17/assets/route_17.visual.tileset.compact_source_1025_0.texture.res" id="2_ium88"]
@@ -295,6 +295,8 @@ texture_region_size = Vector2i(32, 32)
 1:6/0 = 0
 2:6/0 = 0
 3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6tvla"]
 texture = ExtResource("10_g0iov")
