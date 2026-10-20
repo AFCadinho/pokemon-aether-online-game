@@ -293,7 +293,7 @@ sight_range_tiles = 2
 npc_id = "kanto_route_16_biker_hideo"
 dialogue_id = "kanto_route_16_biker_hideo_intro"
 display_name = "Biker Hideo"
-facing_direction = Vector2(-1, 0)
+facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("population_frames")
 mugshot = ExtResource("population_portrait")
 
@@ -304,7 +304,7 @@ sight_range_tiles = 2
 npc_id = "kanto_route_16_biker_camron"
 dialogue_id = "kanto_route_16_biker_camron_intro"
 display_name = "Biker Camron"
-facing_direction = Vector2(1, 0)
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("population_frames")
 mugshot = ExtResource("population_portrait")
 
