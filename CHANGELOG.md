@@ -4,6 +4,8 @@
 
 - Add Route 16 East using its artist visual, with a two-way connection to Celadon City.
 
+- Restore Fuchsia’s residents and Pokémon while preserving the adjusted doors and arrival points.
+
 - Bring Fuchsia City to life with seven residents and seven ambient Pokémon, with varied pacing around the gardens, plaza and pond.
 
 - Update Fuchsia City’s bridge layering from the latest artist map.

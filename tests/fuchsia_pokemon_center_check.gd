@@ -48,7 +48,16 @@ func _run() -> void:
 				_check(not target_exit.contains_world_position(arrival.position+offset), "arrival avoids immediate return")
 		var entry: Dictionary = catalog.transitions[exit_node.transition_id]
 		_check(entry.sourceMapId == leg[0].map_id and entry.destinationAreaId == leg[2].map_id, "server catalog matches scene endpoints")
-	_check(city.get_node("Exits/ToPokecenter").contains_world_position(Vector2(240,304)), "door covers the lower painted door tile")
+	var door: Area2D = city.get_node("Exits/ToPokecenter")
+	_check(door.position == Vector2(240,304), "authored Center exit position is preserved")
+	_check(door.get_node("CollisionShape2D").position == Vector2(0,-16), "Center trigger keeps its authored half-tile offset")
+	_check(door.contains_world_position(Vector2(240,288)), "trigger covers the shifted doorway")
+	_check(city.get_node("Spawns/FromPokecenter").position == Vector2(240,336), "Center return keeps its authored front step")
+	var player := (load("res://scenes/player.tscn") as PackedScene).instantiate()
+	player.set_script(load("res://tests/support/fuchsia_movement_probe.gd"))
+	_check(player.overlaps_exit_at(door,Vector2(240,304)), "player entering the doorway overlaps the shifted trigger")
+	_check(not player.overlaps_exit_at(door,Vector2(240,336)), "returning player does not overlap the trigger")
+	player.free()
 	var city_collision: TileMapLayer = city.get_node("Tiles/Collision")
 	for cell in [Vector2i(7,9),Vector2i(7,10),Vector2i(7,11)]:
 		_check(city_collision.get_cell_source_id(cell) == -1, "doorway and front step are open")

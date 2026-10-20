@@ -65,9 +65,14 @@ func _run() -> void:
 	for x in range(9,12):
 		var point := Vector2(x,19)*32+Vector2(16,16)
 		_check(player.can_move_to(point) and gate.get_node("Exits/ToSouth").contains_world_position(point), "full southern exit width is usable")
-	for x in range(36,39):
-		var point := Vector2(x,6)*32+Vector2(16,16)
-		_check(city.get_node("Tiles/Collision").get_cell_source_id(Vector2i(x,6)) == -1 and city.get_node("Exits/ToSafariZoneGate").contains_world_position(point), "full city gate opening aligns with the art")
+	var city_exit: Area2D = city.get_node("Exits/ToSafariZoneGate")
+	_check(city_exit.position == Vector2(1200,176), "Safari exit keeps its authored position")
+	_check(city_exit.get_node("CollisionShape2D").position == Vector2(-16,-16), "Safari trigger keeps its authored offset")
+	_check(city_exit.get_node("CollisionShape2D").shape.size == Vector2(128,32), "Safari trigger spans four tiles")
+	_check(city.get_node("Spawns/FromSafariZoneGate").position == Vector2(1200,208), "Safari return keeps its authored position")
+	for x in range(35,39):
+		var point := Vector2(x,4)*32+Vector2(16,16)
+		_check(city.get_node("Tiles/Collision").get_cell_source_id(Vector2i(x,4)) == -1 and city_exit.contains_world_position(point), "full shifted four-tile Safari opening is usable")
 	# The city's hand-authored cleanup collision is retained. Check access to
 	# this gate independently of unrelated perimeter assertions.
 	player.reparent(city.get_node("Entities/Players"))
@@ -85,7 +90,7 @@ func _run() -> void:
 			if player.can_move_to(Vector2(next)*32+Vector2(16,16)):
 				reached[next] = true
 				pending.append(next)
-	for cell in [Vector2i(36,6),Vector2i(37,6),Vector2i(38,6),Vector2i(37,8)]:
+	for cell in [Vector2i(35,4),Vector2i(36,4),Vector2i(37,4),Vector2i(38,4),Vector2i(37,6)]:
 		_check(reached.has(cell), "Safari entrance and return are reachable from Route 15")
 	var loader = load("res://scripts/services/web_asset_module_service.gd")
 	_check(loader.module_for_scene(GATE) == loader.EXTENDED_MODULE_NAME and loader.scene_for_map(gate.map_id) == GATE, "browser resolves the gate scene")
