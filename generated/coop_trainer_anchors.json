@@ -3260,6 +3260,26 @@
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
 			"trainerId": "kanto_route_18_bird_keeper_wilton"
 		},
+		"kanto_route_18_mine_hiker_daan": {
+			"mapId": "kanto_route_18_mine",
+			"position": {
+				"x": 1072.0,
+				"y": 752.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/route_18_mine/route_18_mine.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_18_mine_miner_bram": {
+			"mapId": "kanto_route_18_mine",
+			"position": {
+				"x": 272.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/caves/route_18_mine/route_18_mine.tscn",
+			"trainerId": ""
+		},
 		"kanto_route_19_fuchsia_gate_attendant": {
 			"mapId": "kanto_route_19_fuchsia_gate",
 			"position": {
