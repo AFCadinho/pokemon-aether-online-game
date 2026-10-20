@@ -178,6 +178,8 @@ sources/0 = SubResource("TileSetAtlasSource_s2jot")
 [node name="Route16East" type="Node2D" unique_id=2058030044]
 script = ExtResource("metadata")
 map_id = "kanto_route_16_east"
+encounter_area_id = "kanto_route_16_east"
+grass_encounter_chance = 0.21
 map_region_name = "Kanto"
 map_display_name = "Route 16 East"
 individual_tree_depth_sorting = true
