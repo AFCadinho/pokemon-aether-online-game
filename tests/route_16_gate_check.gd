@@ -15,6 +15,10 @@ func _run() -> void:
 	var template := (load("res://scenes/overworld/kanto/reusable_interiors/horizontal_transition_building_template.tscn") as PackedScene).instantiate()
 	_check(gate.get_node("Visuals").scene_file_path == template.get_node("Visuals").scene_file_path, "approved horizontal interior preserved")
 	_check(gate.lighting_profile == "indoor" and gate.weather_profile == "disabled", "indoor lighting without weather")
+	_check(not gate.land_mount_required_entry, "gate lobby accepts walkers")
+	for outside in [east,route]:
+		_check(not outside.get_node("Exits/ToRoute16Gate").requires_land_mount, "gate can be entered on foot from either side")
+	_check(gate.get_node("Exits/ToWest").requires_land_mount, "only the Route 16 exit requires riding")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	var player := (load("res://scenes/player.tscn") as PackedScene).instantiate()
 	player.set_script(load("res://tests/support/fuchsia_movement_probe.gd"))

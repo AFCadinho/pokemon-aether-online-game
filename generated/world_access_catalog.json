@@ -3875,7 +3875,9 @@
 			"locationGroupId": "kanto_route_16",
 			"locationGroupLabel": "Route 16",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://dm8hsoxg1ivu2"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
 			"spawnPoints": {
 				"from_route_16_gate": {
@@ -3991,7 +3993,9 @@
 			"locationGroupId": "kanto_route_17",
 			"locationGroupLabel": "Route 17",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://dyohnrbgexi62"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
 			"spawnPoints": {
 				"from_route_16": {
@@ -10027,7 +10031,9 @@
 		"kanto_route_16__to_route17": {
 			"destination": {
 				"mapId": "kanto_route_17",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dyohnrbgexi62"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
 				"position": {
 					"x": 560.0,
@@ -10072,7 +10078,9 @@
 		"kanto_route_16_gate__to_route16": {
 			"destination": {
 				"mapId": "kanto_route_16",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dm8hsoxg1ivu2"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
 				"position": {
 					"x": 1040.0,
@@ -10103,7 +10111,9 @@
 		"kanto_route_17_18_gate__to_route17": {
 			"destination": {
 				"mapId": "kanto_route_17",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dyohnrbgexi62"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
 				"position": {
 					"x": 1040.0,
@@ -10132,7 +10142,9 @@
 		"kanto_route_17__to_route16": {
 			"destination": {
 				"mapId": "kanto_route_16",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dm8hsoxg1ivu2"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
 				"position": {
 					"x": 560.0,
