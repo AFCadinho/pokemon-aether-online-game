@@ -80,6 +80,8 @@ func _run() -> void:
 	quit(1 if failed else 0)
 
 func _configure_player(player: Node,map: Node) -> void:
+	for container in ["Entities/NPCs","Entities/Pokemon"]:
+		for actor in map.get_node(container).get_children(): actor.feet_marker = actor.get_node("FeetMarker")
 	player.map_layers_initialized = true
 	player.map_layers_owner = map
 	player.resolved_map_cache = map

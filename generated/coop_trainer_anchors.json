@@ -1130,6 +1130,86 @@
 			"scenePath": "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn",
 			"trainerId": ""
 		},
+		"kanto_fuchsia_city_center_visitor_noor": {
+			"mapId": "kanto_fuchsia_city",
+			"position": {
+				"x": 304.0,
+				"y": 400.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_fuchsia_city_garden_keeper_mila": {
+			"mapId": "kanto_fuchsia_city",
+			"position": {
+				"x": 496.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_fuchsia_city_gym_visitor_nina": {
+			"mapId": "kanto_fuchsia_city",
+			"position": {
+				"x": 1104.0,
+				"y": 1264.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_fuchsia_city_pond_watcher_hidde": {
+			"mapId": "kanto_fuchsia_city",
+			"position": {
+				"x": 1456.0,
+				"y": 1264.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_fuchsia_city_resident_haru": {
+			"mapId": "kanto_fuchsia_city",
+			"position": {
+				"x": 1776.0,
+				"y": 368.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_fuchsia_city_safari_guide_sera": {
+			"mapId": "kanto_fuchsia_city",
+			"position": {
+				"x": 1232.0,
+				"y": 368.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_fuchsia_city_traveler_timo": {
+			"mapId": "kanto_fuchsia_city",
+			"position": {
+				"x": 720.0,
+				"y": 1392.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+			"trainerId": ""
+		},
+		"kanto_fuchsia_safari_zone_gate_attendant": {
+			"mapId": "kanto_fuchsia_safari_zone_gate",
+			"position": {
+				"x": 336.0,
+				"y": 240.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/safari_zone_gate.tscn",
+			"trainerId": ""
+		},
 		"kanto_game_corner_attendant": {
 			"mapId": "kanto_celadon_game_corner",
 			"position": {
@@ -2919,6 +2999,276 @@
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
 			"trainerId": "kanto_route_15_picnicker_yazmin"
+		},
+		"kanto_route_16_biker_camron": {
+			"mapId": "kanto_route_16",
+			"position": {
+				"x": 400.0,
+				"y": 560.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+			"trainerId": "kanto_route_16_biker_camron"
+		},
+		"kanto_route_16_biker_hideo": {
+			"mapId": "kanto_route_16",
+			"position": {
+				"x": 1072.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+			"trainerId": "kanto_route_16_biker_hideo"
+		},
+		"kanto_route_16_biker_koji": {
+			"mapId": "kanto_route_16",
+			"position": {
+				"x": 688.0,
+				"y": 496.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+			"trainerId": "kanto_route_16_biker_koji"
+		},
+		"kanto_route_16_biker_lao": {
+			"mapId": "kanto_route_16",
+			"position": {
+				"x": 528.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+			"trainerId": "kanto_route_16_biker_lao"
+		},
+		"kanto_route_16_biker_luke": {
+			"mapId": "kanto_route_16",
+			"position": {
+				"x": 848.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+			"trainerId": "kanto_route_16_biker_luke"
+		},
+		"kanto_route_16_biker_ruben": {
+			"mapId": "kanto_route_16",
+			"position": {
+				"x": 976.0,
+				"y": 400.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
+			"trainerId": "kanto_route_16_biker_ruben"
+		},
+		"kanto_route_16_east_bird_watcher_fenna": {
+			"mapId": "kanto_route_16_east",
+			"position": {
+				"x": 880.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_16_east_hiker_elias": {
+			"mapId": "kanto_route_16_east",
+			"position": {
+				"x": 1200.0,
+				"y": 1392.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_16_east_resident_aya": {
+			"mapId": "kanto_route_16_east",
+			"position": {
+				"x": 464.0,
+				"y": 464.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_16_east_trail_runner_ravi": {
+			"mapId": "kanto_route_16_east",
+			"position": {
+				"x": 816.0,
+				"y": 944.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_16_east_walker_bram": {
+			"mapId": "kanto_route_16_east",
+			"position": {
+				"x": 1456.0,
+				"y": 624.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_16_gate_attendant": {
+			"mapId": "kanto_route_16_gate",
+			"position": {
+				"x": 496.0,
+				"y": 208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_16_gate.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_17_18_gate_attendant": {
+			"mapId": "kanto_route_17_18_gate",
+			"position": {
+				"x": 496.0,
+				"y": 208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_17_18_gate.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_17_biker_billy": {
+			"mapId": "kanto_route_17",
+			"position": {
+				"x": 528.0,
+				"y": 1168.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+			"trainerId": "kanto_route_17_biker_billy"
+		},
+		"kanto_route_17_biker_corey": {
+			"mapId": "kanto_route_17",
+			"position": {
+				"x": 720.0,
+				"y": 1648.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+			"trainerId": "kanto_route_17_biker_corey"
+		},
+		"kanto_route_17_biker_isaiah": {
+			"mapId": "kanto_route_17",
+			"position": {
+				"x": 720.0,
+				"y": 432.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+			"trainerId": "kanto_route_17_biker_isaiah"
+		},
+		"kanto_route_17_biker_jamal": {
+			"mapId": "kanto_route_17",
+			"position": {
+				"x": 720.0,
+				"y": 1296.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+			"trainerId": "kanto_route_17_biker_jamal"
+		},
+		"kanto_route_17_biker_jaxon": {
+			"mapId": "kanto_route_17",
+			"position": {
+				"x": 976.0,
+				"y": 1968.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+			"trainerId": "kanto_route_17_biker_jaxon"
+		},
+		"kanto_route_17_biker_nikolas": {
+			"mapId": "kanto_route_17",
+			"position": {
+				"x": 720.0,
+				"y": 752.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+			"trainerId": "kanto_route_17_biker_nikolas"
+		},
+		"kanto_route_17_biker_raul": {
+			"mapId": "kanto_route_17",
+			"position": {
+				"x": 528.0,
+				"y": 656.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+			"trainerId": "kanto_route_17_biker_raul"
+		},
+		"kanto_route_17_biker_virgil": {
+			"mapId": "kanto_route_17",
+			"position": {
+				"x": 528.0,
+				"y": 304.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+			"trainerId": "kanto_route_17_biker_virgil"
+		},
+		"kanto_route_17_biker_william": {
+			"mapId": "kanto_route_17",
+			"position": {
+				"x": 624.0,
+				"y": 1968.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+			"trainerId": "kanto_route_17_biker_william"
+		},
+		"kanto_route_17_biker_zeek": {
+			"mapId": "kanto_route_17",
+			"position": {
+				"x": 528.0,
+				"y": 1552.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
+			"trainerId": "kanto_route_17_biker_zeek"
+		},
+		"kanto_route_18_bird_keeper_jacob": {
+			"mapId": "kanto_route_18",
+			"position": {
+				"x": 592.0,
+				"y": 848.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
+			"trainerId": "kanto_route_18_bird_keeper_jacob"
+		},
+		"kanto_route_18_bird_keeper_ramiro": {
+			"mapId": "kanto_route_18",
+			"position": {
+				"x": 1424.0,
+				"y": 1264.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
+			"trainerId": "kanto_route_18_bird_keeper_ramiro"
+		},
+		"kanto_route_18_bird_keeper_wilton": {
+			"mapId": "kanto_route_18",
+			"position": {
+				"x": 944.0,
+				"y": 1200.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
+			"trainerId": "kanto_route_18_bird_keeper_wilton"
+		},
+		"kanto_route_19_fuchsia_gate_attendant": {
+			"mapId": "kanto_route_19_fuchsia_gate",
+			"position": {
+				"x": 336.0,
+				"y": 592.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_19_fuchsia_gate.tscn",
+			"trainerId": ""
 		},
 		"kanto_route_1_camper_quinn": {
 			"mapId": "kanto_route_1",

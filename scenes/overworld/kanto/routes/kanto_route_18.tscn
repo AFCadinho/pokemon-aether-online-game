@@ -8,6 +8,11 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_18/route_18.visual.tscn" id="visual"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/bird_keeper_directional_frames.tres" id="population_frames"]
+[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/birdkeeper-gen6.png" id="population_portrait"]
+
 [sub_resource type="RectangleShape2D" id="mine_stair_shape"]
 size = Vector2(24, 24)
 
@@ -259,9 +264,108 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1549005885]
 
+[node name="bird_keeper_jacob" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+position = Vector2(592, 848)
+trainer_id = "kanto_route_18_bird_keeper_jacob"
+npc_id = "kanto_route_18_bird_keeper_jacob"
+dialogue_id = "kanto_route_18_bird_keeper_jacob_intro"
+display_name = "Bird Keeper Jacob"
+facing_direction = Vector2(0, -1)
+sight_range_tiles = 2
+npc_sprite_frames = ExtResource("population_frames")
+mugshot = ExtResource("population_portrait")
+
+[node name="bird_keeper_ramiro" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+position = Vector2(1424, 1264)
+trainer_id = "kanto_route_18_bird_keeper_ramiro"
+npc_id = "kanto_route_18_bird_keeper_ramiro"
+dialogue_id = "kanto_route_18_bird_keeper_ramiro_intro"
+display_name = "Bird Keeper Ramiro"
+facing_direction = Vector2(-1, 0)
+sight_range_tiles = 2
+npc_sprite_frames = ExtResource("population_frames")
+mugshot = ExtResource("population_portrait")
+
+[node name="bird_keeper_wilton" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+position = Vector2(944, 1200)
+trainer_id = "kanto_route_18_bird_keeper_wilton"
+npc_id = "kanto_route_18_bird_keeper_wilton"
+dialogue_id = "kanto_route_18_bird_keeper_wilton_intro"
+display_name = "Bird Keeper Wilton"
+facing_direction = Vector2(-1, 0)
+sight_range_tiles = 2
+npc_sprite_frames = ExtResource("population_frames")
+mugshot = ExtResource("population_portrait")
+
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=985037644]
 
+[node name="Spearow1" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(1136, 1008)
+overworld_pokemon_id = "kanto_route_18_spearow_1"
+species_id = "spearow"
+level = 22
+display_name = "Spearow"
+dialogue_id = "kanto_route_18_spearow_1_cry"
+movement_behavior = "idle"
+movement_tiles = 1
+movement_speed_pixels = 30.0
+movement_wait_seconds = 1.40
+movement_wait_jitter_seconds = 0.5
+
+[node name="Doduo1" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(1392, 1232)
+overworld_pokemon_id = "kanto_route_18_doduo_1"
+species_id = "doduo"
+level = 26
+display_name = "Doduo"
+dialogue_id = "kanto_route_18_doduo_1_cry"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 33.0
+movement_wait_seconds = 1.65
+movement_wait_jitter_seconds = 0.5
+
+[node name="Fearow1" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(1296, 976)
+overworld_pokemon_id = "kanto_route_18_fearow_1"
+species_id = "fearow"
+level = 27
+display_name = "Fearow"
+dialogue_id = "kanto_route_18_fearow_1_cry"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 36.0
+movement_wait_seconds = 1.90
+movement_wait_jitter_seconds = 0.5
+
+[node name="Raticate1" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(1168, 1232)
+overworld_pokemon_id = "kanto_route_18_raticate_1"
+species_id = "raticate"
+level = 27
+display_name = "Raticate"
+dialogue_id = "kanto_route_18_raticate_1_cry"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 39.0
+movement_wait_seconds = 2.15
+movement_wait_jitter_seconds = 0.5
+
+[node name="Doduo2" parent="Entities/Pokemon" instance=ExtResource("population_pokemon")]
+position = Vector2(1008, 1424)
+overworld_pokemon_id = "kanto_route_18_doduo_2"
+species_id = "doduo"
+level = 28
+display_name = "Doduo"
+dialogue_id = "kanto_route_18_doduo_2_cry"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_speed_pixels = 42.0
+movement_wait_seconds = 2.40
+movement_wait_jitter_seconds = 0.5
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1408519220]
+
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1810960647]
 visible = false

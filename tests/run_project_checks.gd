@@ -6,6 +6,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/route_17_map_check.gd",
 	"res://tests/route_16_gate_check.gd",
 	"res://tests/cycling_road_rules_check.gd",
+	"res://tests/cycling_road_population_check.gd",
 	"res://tests/route_16_population_check.gd",
 	"res://tests/route_16_snorlax_check.gd",
 	"res://tests/route_16_tree_depth_check.gd",

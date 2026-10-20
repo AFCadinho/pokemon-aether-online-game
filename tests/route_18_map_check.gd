@@ -24,6 +24,9 @@ func _run() -> void:
 	_check(route.encounter_area_id == "kanto_route_18" and grass != null and grass.get_used_cells().size() == 60, "authored grass markers and Route 18 encounter identity retained")
 	_check(route.allows_land_mount_dismount() and route.northbound_blocked_regions.is_empty(), "Route 18 keeps normal movement and dismount rules")
 	_check(not gate.land_mount_required_entry and gate.preserve_land_mount_on_transition, "south gate allows walking entry and preserves riding")
+	for area in [route,west]:
+		for container in ["Entities/NPCs","Entities/Pokemon"]:
+			for actor in area.get_node(container).get_children(): actor.feet_marker = actor.get_node("FeetMarker")
 	var attendant: Node = gate.get_node("Entities/NPCs/GateNPC")
 	_check(attendant.guarded_transition_id == "kanto_route_17_18_gate__to_route17", "attendant checks Route 17 entry")
 	_check(attendant.allowed_dialogue_id == "cycling_road_south_gate", "attendant explains mount and direction rules")
