@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Cover the space outside Routes 16 and 17 with black masks instead of showing the gray background.
+
 - Add Ground-type wild encounters, including Sandile and rare Gible, seven ambient Pokémon and two talkable explorers to Route 18 Underground Mine.
 
 - Populate Routes 16–18 with FRLG-based battle trainers and ambient Pokémon; add Cycling Road pickups while preserving authored exits and riding rules.
