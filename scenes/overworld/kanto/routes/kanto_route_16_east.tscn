@@ -112,6 +112,7 @@ sources/0 = SubResource("TileSetAtlasSource_fhx26")
 [node name="Route16East" type="Node2D" unique_id=2058030044]
 script = ExtResource("metadata")
 map_id = "kanto_route_16_east"
+individual_tree_depth_sorting = true
 map_region_name = "Kanto"
 map_display_name = "Route 16 East"
 world_access_group_id = "kanto_route_16_east"

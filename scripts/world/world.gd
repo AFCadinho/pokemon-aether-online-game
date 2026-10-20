@@ -2746,22 +2746,17 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 		if parent == null:
 			continue
 
-		var groups := _build_connected_tile_groups(used_cells)
+		var groups := _build_structure_depth_groups(map, structure_layer, used_cells)
 		var group_root := Node2D.new()
 		group_root.name = "%sDepthGroups" % structure_layer.name
 		group_root.set_meta(STRUCTURE_TOP_DEPTH_GROUP_META, true)
 		parent.add_child(group_root)
 
 		var group_z_offset := _get_structure_top_group_z_offset(structure_layer)
+		var layers_by_depth := {}
+		var batch_equal_depths: bool = map.get("individual_tree_depth_sorting") == true
 		for group_index in range(groups.size()):
 			var group: Array[Vector2i] = groups[group_index]
-			var group_layer := TileMapLayer.new()
-			group_layer.name = "%sGroup%d" % [structure_layer.name, group_index]
-			group_layer.tile_set = structure_layer.tile_set
-			group_layer.visible = structure_layer.visible
-			group_layer.modulate = structure_layer.modulate
-			group_layer.position = structure_layer.position
-			group_layer.z_as_relative = false
 			var group_z_index := _get_tile_group_bottom_z_index(
 				structure_layer,
 				group,
@@ -2794,9 +2789,22 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 					TREE_LAYER_Z_MAX
 				)
 			)
-			group_layer.z_index = group_z_index
-			group_layer.set_meta(STRUCTURE_TOP_DEPTH_GROUP_META, true)
-			group_root.add_child(group_layer)
+			# Compute depth per tree first, then share native layers at equal depth.
+			# Dense forests do not need a separate draw layer for every tree.
+			var group_layer: TileMapLayer = layers_by_depth.get(group_z_index) if batch_equal_depths else null
+			if group_layer == null:
+				group_layer = TileMapLayer.new()
+				group_layer.name = "%sGroup%d" % [structure_layer.name, group_index]
+				group_layer.tile_set = structure_layer.tile_set
+				group_layer.visible = structure_layer.visible
+				group_layer.modulate = structure_layer.modulate
+				group_layer.position = structure_layer.position
+				group_layer.z_as_relative = false
+				group_layer.z_index = group_z_index
+				group_layer.set_meta(STRUCTURE_TOP_DEPTH_GROUP_META, true)
+				group_root.add_child(group_layer)
+				if batch_equal_depths:
+					layers_by_depth[group_z_index] = group_layer
 
 			for cell: Vector2i in group:
 				var source_id := structure_layer.get_cell_source_id(cell)
@@ -2833,6 +2841,24 @@ func _get_structure_top_group_z_offset(layer: TileMapLayer) -> int:
 	# Viridian Forest's TreeTop and StructureTop layers sit above its grass layer
 	# in Tiled. Preserve that priority when their depth boundary is shared.
 	return FOREST_TOP_LAYER_Z_OFFSET if tiled_name in ["StructureTop", "TreeTop"] else 0
+
+func _build_structure_depth_groups(map: Node, layer: TileMapLayer, cells: Array[Vector2i]) -> Array[Array]:
+	if map.get("individual_tree_depth_sorting") != true:
+		return _build_connected_tile_groups(cells)
+	var groups := TreeLowerDepthSortingScript.find_complete_tree_crowns(layer)
+	var claimed := {}
+	for group in groups:
+		for cell in group:
+			claimed[cell] = true
+	var remainder: Array[Vector2i] = []
+	for cell in cells:
+		if not claimed.has(cell):
+			remainder.append(cell)
+	# Clipped trees, unknown art and every non-tree structure keep the existing
+	# connected-group behavior, including roof and grass-overlap rules.
+	groups.append_array(_build_connected_tile_groups(remainder))
+	return groups
+
 
 func _build_connected_tile_groups(cells: Array[Vector2i]) -> Array[Array]:
 	var remaining := {}
