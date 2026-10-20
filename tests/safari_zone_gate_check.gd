@@ -68,6 +68,25 @@ func _run() -> void:
 	for x in range(36,39):
 		var point := Vector2(x,6)*32+Vector2(16,16)
 		_check(city.get_node("Tiles/Collision").get_cell_source_id(Vector2i(x,6)) == -1 and city.get_node("Exits/ToSafariZoneGate").contains_world_position(point), "full city gate opening aligns with the art")
+	# The city's hand-authored cleanup collision is retained. Check access to
+	# this gate independently of unrelated perimeter assertions.
+	player.reparent(city.get_node("Entities/Players"))
+	player.refresh_map_layers()
+	var start := Vector2i(city.get_node("Spawns/FromRoute15Gate").position / 32.0)
+	var pending: Array[Vector2i] = [start]
+	var reached := {start:true}
+	var cursor := 0
+	while cursor < pending.size():
+		var cell := pending[cursor]
+		cursor += 1
+		for direction in [Vector2i.UP,Vector2i.DOWN,Vector2i.LEFT,Vector2i.RIGHT]:
+			var next: Vector2i = cell + direction
+			if not Rect2i(0,0,72,50).has_point(next) or reached.has(next): continue
+			if player.can_move_to(Vector2(next)*32+Vector2(16,16)):
+				reached[next] = true
+				pending.append(next)
+	for cell in [Vector2i(36,6),Vector2i(37,6),Vector2i(38,6),Vector2i(37,8)]:
+		_check(reached.has(cell), "Safari entrance and return are reachable from Route 15")
 	var loader = load("res://scripts/services/web_asset_module_service.gd")
 	_check(loader.module_for_scene(GATE) == loader.EXTENDED_MODULE_NAME and loader.scene_for_map(gate.map_id) == GATE, "browser resolves the gate scene")
 	game_state.call("release_overworld_input_lock", &"safari_gate_test")

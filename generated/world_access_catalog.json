@@ -1761,7 +1761,9 @@
 			"locationGroupId": "kanto_fuchsia_city",
 			"locationGroupLabel": "Fuchsia City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://d4gk1ehf0pv8e"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 			"spawnPoints": {
 				"city_center": {
@@ -7874,7 +7876,9 @@
 		"kanto_fuchsia_city_pokemon_center__to_outside": {
 			"destination": {
 				"mapId": "kanto_fuchsia_city",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://d4gk1ehf0pv8e"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 				"position": {
 					"x": 240.0,
@@ -7888,7 +7892,9 @@
 		"kanto_fuchsia_safari_zone_gate__to_fuchsia_city": {
 			"destination": {
 				"mapId": "kanto_fuchsia_city",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://d4gk1ehf0pv8e"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 				"position": {
 					"x": 1200.0,
@@ -9632,7 +9638,9 @@
 		"kanto_route_15_fuchsia_gate__to_fuchsia_city": {
 			"destination": {
 				"mapId": "kanto_fuchsia_city",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://d4gk1ehf0pv8e"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 				"position": {
 					"x": 2096.0,
