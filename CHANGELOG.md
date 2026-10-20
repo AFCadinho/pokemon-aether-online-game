@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Enable wild grass encounters on Route 16 East using the existing Route 16 species and level ranges.
+
 - Add Route 16 East travelers and ambient Pokémon, plus an independent sleeping Snorlax awakened with the Poké Flute.
 
 - Fix Route 16 East trees covering the cottage roof and players on mounts by sorting complete trees individually.
