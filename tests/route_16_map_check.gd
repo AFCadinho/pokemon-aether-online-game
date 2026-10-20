@@ -19,9 +19,6 @@ func _run() -> void:
 	var water: TileMapLayer = map.get_node("Tiles/Water")
 	for cell in grass.get_used_cells():
 		_check(visual.get_node("Grass").get_cell_source_id(cell) != -1 and collision.get_cell_source_id(cell) == -1, "grass has art and clear ground")
-	var guard: Node = map.get_node("Entities/NPCs/Route17Guard")
-	guard.feet_marker = guard.get_node("FeetMarker")
-	_check(guard.passage_closed and guard.blocked_dialogue_id == "area_closed_blocked", "visible guard closes pending Route 17")
 	var player := (load("res://scenes/player.tscn") as PackedScene).instantiate()
 	player.set_script(load("res://tests/support/fuchsia_movement_probe.gd"))
 	map.add_child(player)
@@ -36,14 +33,18 @@ func _run() -> void:
 	map.encounter_area_id = "" # Offline movement check: no encounter metadata HTTP.
 	root.add_child(map)
 	state.acquire_overworld_input_lock(&"route16_boundary_check")
+	for x in range(15,24): _check(not player.can_move_to(_point(Vector2i(x,48))), "real movement cannot leave map after failed south transfer")
 	for y in range(48):
 		for x in [0,39]: _check(not player.can_move_to(_point(Vector2i(x,y))), "west/east edges contained")
 	for x in range(40):
 		for y in [0,47]:
-			_check(collision.get_cell_source_id(Vector2i(x,y)) != -1 and not player.can_move_to(_point(Vector2i(x,y))), "north/south edges contained even while Surfing")
+			if y == 47 and x >= 15 and x <= 23:
+				_check(player.can_move_to(_point(Vector2i(x,y))) and map.get_node("Exits/ToRoute17").contains_world_position(_point(Vector2i(x,y))), "full southern seam transfers to Route 17")
+			else:
+				_check(collision.get_cell_source_id(Vector2i(x,y)) != -1 and not player.can_move_to(_point(Vector2i(x,y))), "non-transition edges contained even while Surfing")
 	for x in range(15,24):
 		_check(not player.call("_is_story_grid_step_blocked",_point(Vector2i(x,17)),_point(Vector2i(x,18)),Vector2.DOWN), "bridge approach unguarded")
-		_check(player.call("_is_story_grid_step_blocked",_point(Vector2i(x,45)),_point(Vector2i(x,46)),Vector2.DOWN), "guard covers all nine bridge columns")
+		_check(not player.call("_is_story_grid_step_blocked",_point(Vector2i(x,45)),_point(Vector2i(x,46)),Vector2.DOWN), "former Route 17 guard no longer blocks bridge")
 	for y in range(18,47):
 		for x in [14,24]: _check(not player.can_move_to(_point(Vector2i(x,y))), "outer bridge rails block sideways movement")
 	for y in range(33,45): _check(not player.can_move_to(_point(Vector2i(19,y))), "center divider blocks movement")
@@ -52,11 +53,11 @@ func _run() -> void:
 	var reached := _reachable(collision,water,Vector2i(32,14))
 	for cell in grass.get_used_cells(): _check(reached.has(cell), "all tall grass accessible from gate")
 	for cell in [Vector2i(9,18),Vector2i(15,45),Vector2i(23,45),Vector2i(34,13),Vector2i(34,14)]: _check(reached.has(cell), "patio, both bridge lanes and gate connected: " + str(cell))
-	_check(map.get_node("Exits").get_child_count() == 1, "no runtime Route 17 transfer")
+	_check(map.get_node("Exits").get_child_count() == 2 and not map.has_node("Entities/NPCs/Route17Guard"), "Route 17 is connected and its temporary guard is removed")
 	state.release_overworld_input_lock(&"route16_boundary_check")
 	state.current_map = previous
 	map.free()
-	if not failed: print("PASS Route 16: visual atlas, grass, boundaries, bridge rails and pending Route 17")
+	if not failed: print("PASS Route 16: visual atlas, grass, boundaries, bridge rails and open Route 17 seam")
 	quit(1 if failed else 0)
 
 func _reachable(collision: TileMapLayer,water: TileMapLayer,start: Vector2i) -> Dictionary:
