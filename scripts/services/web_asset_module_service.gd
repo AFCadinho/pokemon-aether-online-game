@@ -28,6 +28,7 @@ const MISTY_MAP_SCENES := {
 	"kanto_route_25_bills_house": "res://scenes/overworld/kanto/routes/route25/bills_house.tscn",
 }
 const EXTENDED_MAP_SCENES := {
+	"kanto_route_16_gate": "res://scenes/overworld/kanto/transition_buildings/route_16_gate.tscn",
 	"kanto_route_16_east": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
 	"kanto_rocket_hideout_elevator": "res://scenes/overworld/kanto/towns/celadon_city/rocket_hideout_elevator.tscn",
 	"kanto_celadon_prize_corner": "res://scenes/overworld/kanto/towns/celadon_city/celadon_prize_corner.tscn",

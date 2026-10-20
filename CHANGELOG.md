@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Route 16 gate connected to Route 16 East, with a closed western passage until Route 16 is available.
+
 - Enable wild grass encounters on Route 16 East using the existing Route 16 species and level ranges.
 
 - Add Route 16 East travelers and ambient Pokémon, plus an independent sleeping Snorlax awakened with the Poké Flute.

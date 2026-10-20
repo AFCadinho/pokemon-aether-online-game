@@ -175,6 +175,9 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_s2jot")
 
+[sub_resource type="RectangleShape2D" id="route16_gate_shape"]
+size = Vector2(32, 64)
+
 [node name="Route16East" type="Node2D" unique_id=2058030044]
 script = ExtResource("metadata")
 map_id = "kanto_route_16_east"
@@ -198,6 +201,9 @@ music_profile_id = "kanto.routes_3_10_16_22"
 [node name="FromCeladonCity" type="Marker2D" parent="Spawns" unique_id=1994916424]
 position = Vector2(1616, 688)
 
+[node name="FromRoute16Gate" type="Marker2D" parent="Spawns"]
+position = Vector2(272, 976)
+
 [node name="Exits" type="Node2D" parent="." unique_id=826128744]
 
 [node name="ToCeladonCity" type="Area2D" parent="Exits" unique_id=1454808080]
@@ -216,6 +222,22 @@ shape = SubResource("celadon_shape")
 z_as_relative = false
 tile_footprint = Vector2i(1, 5)
 flow_direction = "right"
+
+[node name="ToRoute16Gate" type="Area2D" parent="Exits"]
+position = Vector2(208, 960)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_16_gate.tscn"
+target_spawn_name = "FromEast"
+transition_id = "kanto_route_16_east__to_route16_gate"
+transition_facing_direction = "left"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute16Gate"]
+shape = SubResource("route16_gate_shape")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute16Gate" instance=ExtResource("hint")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 2)
+flow_direction = "left"
 
 [node name="Entities" type="Node2D" parent="." unique_id=1954935388]
 y_sort_enabled = true
@@ -432,3 +454,5 @@ tile_map_data = PackedByteArray("AAAnABkAAAAIAAEAAAAnABoAAAAIAAEAAAAnABsAAAAIAAE
 tile_set = SubResource("TileSet_fhx26")
 
 [connection signal="body_entered" from="Exits/ToCeladonCity" to="Exits/ToCeladonCity" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToRoute16Gate" to="Exits/ToRoute16Gate" method="_on_body_entered"]
