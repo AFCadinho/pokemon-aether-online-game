@@ -572,6 +572,16 @@
 						"y": 28
 					}
 				},
+				"from_route_16_east": {
+					"facingDirection": "down",
+					"label": "Route 16 East",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute16East",
+					"tile": {
+						"x": 1,
+						"y": 31
+					}
+				},
 				"from_route_7": {
 					"facingDirection": "down",
 					"label": "Route 7",
@@ -1783,7 +1793,7 @@
 					"spawnMarker": "FromPokecenter",
 					"tile": {
 						"x": 7,
-						"y": 11
+						"y": 10
 					}
 				},
 				"from_route_15_gate": {
@@ -1792,7 +1802,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute15Gate",
 					"tile": {
-						"x": 65,
+						"x": 68,
 						"y": 22
 					}
 				},
@@ -1802,8 +1812,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute19Gate",
 					"tile": {
-						"x": 21,
-						"y": 45
+						"x": 20,
+						"y": 47
 					}
 				},
 				"from_safari_zone_gate": {
@@ -1813,7 +1823,7 @@
 					"spawnMarker": "FromSafariZoneGate",
 					"tile": {
 						"x": 37,
-						"y": 8
+						"y": 6
 					}
 				}
 			},
@@ -3847,6 +3857,29 @@
 				}
 			},
 			"weatherProfile": "disabled"
+		},
+		"kanto_route_16_east": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 16 East",
+			"locationGroupId": "kanto_route_16_east",
+			"locationGroupLabel": "Route 16 East",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
+			"spawnPoints": {
+				"from_celadon_city": {
+					"facingDirection": "down",
+					"label": "Celadon City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromCeladonCity",
+					"tile": {
+						"x": 50,
+						"y": 21
+					}
+				}
+			},
+			"weatherProfile": "outdoor"
 		},
 		"kanto_route_19_fuchsia_gate": {
 			"areaType": "transition",
@@ -6776,6 +6809,20 @@
 			"destinationAreaId": "kanto_celadon_prize_corner",
 			"sourceMapId": "kanto_celadon_city"
 		},
+		"kanto_celadon_city__to_route16_east": {
+			"destination": {
+				"mapId": "kanto_route_16_east",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
+				"position": {
+					"x": 1616.0,
+					"y": 688.0
+				},
+				"spawnMarker": "FromCeladonCity"
+			},
+			"destinationAreaId": "kanto_route_16_east",
+			"sourceMapId": "kanto_celadon_city"
+		},
 		"kanto_celadon_city__to_route7": {
 			"destination": {
 				"mapId": "kanto_route_7",
@@ -7939,7 +7986,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 				"position": {
 					"x": 240.0,
-					"y": 368.0
+					"y": 336.0
 				},
 				"spawnMarker": "FromPokecenter"
 			},
@@ -7955,7 +8002,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 				"position": {
 					"x": 1200.0,
-					"y": 272.0
+					"y": 208.0
 				},
 				"spawnMarker": "FromSafariZoneGate"
 			},
@@ -9700,7 +9747,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 				"position": {
-					"x": 2096.0,
+					"x": 2192.0,
 					"y": 720.0
 				},
 				"spawnMarker": "FromRoute15Gate"
@@ -9724,6 +9771,22 @@
 			"destinationAreaId": "kanto_route_15",
 			"sourceMapId": "kanto_route_15_fuchsia_gate"
 		},
+		"kanto_route_16_east__to_celadon_city": {
+			"destination": {
+				"mapId": "kanto_celadon_city",
+				"mapSceneAliases": [
+					"uid://c13m2ijv5ijuy"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn",
+				"position": {
+					"x": 48.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromRoute16East"
+			},
+			"destinationAreaId": "kanto_celadon_city",
+			"sourceMapId": "kanto_route_16_east"
+		},
 		"kanto_route_19_fuchsia_gate__to_fuchsia_city": {
 			"destination": {
 				"mapId": "kanto_fuchsia_city",
@@ -9732,8 +9795,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 				"position": {
-					"x": 688.0,
-					"y": 1456.0
+					"x": 656.0,
+					"y": 1520.0
 				},
 				"spawnMarker": "FromRoute19Gate"
 			},
