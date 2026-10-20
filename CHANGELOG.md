@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Routes 16 and 17 with wider artist visuals and matching black outside masks, preserving existing gameplay alignment.
+
 - Add a mine foreman beside Route 18’s underground entrance; entry requires Rock Smash level 20, while returning to Route 18 stays unrestricted.
 
 - Cover the space outside Routes 16 and 17 with black masks instead of showing the gray background.
