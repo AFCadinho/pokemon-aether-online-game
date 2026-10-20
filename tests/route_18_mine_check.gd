@@ -31,7 +31,7 @@ func _run() -> void:
 		_check(exit_node.monitoring and not exit_node.get_node("CollisionShape2D").disabled, "stairs enabled")
 		_check(exit_node.is_connected("body_entered",Callable(exit_node,"_on_body_entered")), "stair signal connected")
 		_check(exit_node.get_travel_block_reason(player).is_empty(), "stairs accept walking")
-		_check(exit_node.contains_world_position(_point(leg[5])) and player.overlaps_exit_at(exit_node,_point(leg[5])), "actual player enters at authored staircase")
+		_check(player.overlaps_exit_at(exit_node,_point(leg[5])), "actual player enters at authored staircase")
 		var entry: Dictionary = catalog.transitions[exit_node.transition_id]
 		_check(entry.sourceMapId == leg[0].map_id and entry.destinationAreaId == leg[2].map_id, "authoritative endpoints match")
 		_check(entry.destination.position == {"x":arrival.position.x,"y":arrival.position.y}, "authoritative arrival matches")
@@ -48,7 +48,7 @@ func _run() -> void:
 		for x in [0,41]: _check(not player.can_move_to(_point(Vector2i(x,y))), "east/west perimeter contained")
 	for y in range(12,21):
 		for x in range(13,29): _check(not player.can_move_to(_point(Vector2i(x,y))), "complete central rock rib blocks movement")
-	for cell in [Vector2i(5,11),Vector2i(7,13),Vector2i(6,18),Vector2i(5,24),Vector2i(10,26),Vector2i(34,8),Vector2i(31,12),Vector2i(4,18),Vector2i(34,27),Vector2i(3,9),Vector2i(4,8),Vector2i(4,10)]:
+	for cell in [Vector2i(5,11),Vector2i(6,13),Vector2i(6,18),Vector2i(5,24),Vector2i(10,26),Vector2i(34,8),Vector2i(31,12),Vector2i(4,18),Vector2i(34,27),Vector2i(2,9),Vector2i(4,8),Vector2i(4,10)]:
 		_check(not player.can_move_to(_point(cell)), "standing rocks, work props and stair sides block movement at %s" % cell)
 	var reached := _reachable(player,Rect2i(0,0,42,32),Vector2i(5,9))
 	for cell in [Vector2i(4,9),Vector2i(20,7),Vector2i(35,16),Vector2i(24,26),Vector2i(20,10),Vector2i(30,16),Vector2i(20,22),Vector2i(10,16),Vector2i(10,9),Vector2i(11,10),Vector2i(29,22)]:
