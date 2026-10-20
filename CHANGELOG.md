@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Route 17’s artist visual, preserve its side-platform escape rules, and synchronize manually edited travel arrivals.
+
 - Let riders move freely on Route 17’s side platform so every corner has a way back to the bridge; preserve downhill-only travel on the main bridge.
 
 - Add Route 18 with its artist visual, a gate to Route 17, and two-way travel to Fuchsia City. Both Cycling Road gate lobbies allow walkers; their guards require riding a mount before entering Route 16 or 17.

@@ -1812,7 +1812,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute18",
 					"tile": {
-						"x": 3,
+						"x": 1,
 						"y": 22
 					}
 				},
@@ -3886,8 +3886,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute16Gate",
 					"tile": {
-						"x": 32,
-						"y": 14
+						"x": 35,
+						"y": 13
 					}
 				},
 				"from_route_17": {
@@ -3896,8 +3896,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute17",
 					"tile": {
-						"x": 17,
-						"y": 45
+						"x": 19,
+						"y": 46
 					}
 				}
 			},
@@ -4090,7 +4090,9 @@
 			"locationGroupId": "kanto_route_18",
 			"locationGroupLabel": "Route 18",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://dn6xpcew6f7wm"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
 			"spawnPoints": {
 				"from_fuchsia_city": {
@@ -8189,7 +8191,9 @@
 		"kanto_fuchsia_city__to_route18": {
 			"destination": {
 				"mapId": "kanto_route_18",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dn6xpcew6f7wm"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
 				"position": {
 					"x": 1936.0,
@@ -10091,8 +10095,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
 				"position": {
-					"x": 1040.0,
-					"y": 464.0
+					"x": 1136.0,
+					"y": 432.0
 				},
 				"spawnMarker": "FromRoute16Gate"
 			},
@@ -10136,7 +10140,9 @@
 		"kanto_route_17_18_gate__to_route18": {
 			"destination": {
 				"mapId": "kanto_route_18",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dn6xpcew6f7wm"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_18.tscn",
 				"position": {
 					"x": 272.0,
@@ -10155,8 +10161,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_16.tscn",
 				"position": {
-					"x": 560.0,
-					"y": 1456.0
+					"x": 624.0,
+					"y": 1488.0
 				},
 				"spawnMarker": "FromRoute17"
 			},
@@ -10187,7 +10193,7 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 				"position": {
-					"x": 112.0,
+					"x": 48.0,
 					"y": 720.0
 				},
 				"spawnMarker": "FromRoute18"

@@ -36,9 +36,14 @@ func _run() -> void:
 		var entry: Dictionary = catalog.transitions[exit_node.transition_id]
 		_check(entry.sourceMapId == leg[0].map_id and entry.destinationAreaId == leg[2].map_id, "catalog endpoint matches")
 		_check(entry.destination.position == {"x":arrival.position.x,"y":arrival.position.y}, "server arrival position matches")
-	for y in range(13,15):
-		_check(route.get_node("Tiles/Collision").get_cell_source_id(Vector2i(34,y)) == -1, "new external door stays walkable")
-		_check(player.overlaps_exit_at(route.get_node("Exits/ToRoute16Gate"),Vector2(1104,y*32+16)), "full new exterior door aperture transfers")
+	var exterior: Area2D = route.get_node("Exits/ToRoute16Gate")
+	var door_shape: CollisionShape2D = exterior.get_node("CollisionShape2D")
+	var door_size: Vector2 = (door_shape.shape as RectangleShape2D).size
+	var door_center := exterior.position + door_shape.position
+	for y in range(floori((door_center.y-door_size.y/2)/32),ceili((door_center.y+door_size.y/2)/32)):
+		var approach := Vector2(exterior.position.x,y*32+16)
+		_check(route.get_node("Tiles/Collision").get_cell_source_id(Vector2i(approach/32)) == -1, "saved external doorway stays walkable")
+		_check(player.overlaps_exit_at(exterior,approach), "entire saved exterior door aperture transfers")
 	var collision: TileMapLayer = gate.get_node("Tiles/Collision")
 	_check(collision.get_used_cells().size() == template.get_node("Tiles/Collision").get_used_cells().size(), "temporary west cap removed")
 	var guard: Node = gate.get_node("Entities/NPCs/GateNPC")
