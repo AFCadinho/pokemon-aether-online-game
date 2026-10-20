@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Route 16 East’s scenery from the updated artist map.
+
 - Add Route 16 East using its artist visual, with a two-way connection to Celadon City.
 
 - Restore Fuchsia’s residents and Pokémon while preserving the adjusted doors and arrival points.
