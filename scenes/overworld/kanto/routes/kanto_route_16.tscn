@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_16/route_16.visual.tscn" id="visual"]
 
 [sub_resource type="RectangleShape2D" id="gate_shape"]
-size = Vector2(32, 64)
+size = Vector2(32, 128)
 
 [sub_resource type="RectangleShape2D" id="route17_bridge_shape"]
 size = Vector2(288, 32)
@@ -191,27 +191,29 @@ music_profile_id = "kanto.routes_3_10_16_22"
 [node name="Spawns" type="Node2D" parent="." unique_id=11711247]
 
 [node name="FromRoute16Gate" type="Marker2D" parent="Spawns" unique_id=1013031316]
-position = Vector2(1040, 464)
+position = Vector2(1136, 432)
 
 [node name="FromRoute17" type="Marker2D" parent="Spawns" unique_id=299728835]
-position = Vector2(560, 1456)
+position = Vector2(624, 1488)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1449372593]
 
 [node name="ToRoute16Gate" type="Area2D" parent="Exits" unique_id=202950945]
-position = Vector2(1104, 448)
+position = Vector2(1168, 432)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_16_gate.tscn"
 target_spawn_name = "FromWest"
 transition_id = "kanto_route_16__to_route16_gate"
 transition_facing_direction = "right"
+requires_land_mount = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute16Gate" unique_id=1132689558]
+position = Vector2(16, -16)
 shape = SubResource("gate_shape")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute16Gate" unique_id=1988817797 instance=ExtResource("hint")]
 z_as_relative = false
-tile_footprint = Vector2i(1, 2)
+tile_footprint = Vector2i(1, 3)
 flow_direction = "right"
 
 [node name="ToRoute17" type="Area2D" parent="Exits" unique_id=2102715805]
@@ -224,6 +226,7 @@ transition_facing_direction = "down"
 requires_land_mount = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute17" unique_id=555263130]
+position = Vector2(0, 16)
 shape = SubResource("route17_bridge_shape")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute17" unique_id=475185513 instance=ExtResource("hint")]
