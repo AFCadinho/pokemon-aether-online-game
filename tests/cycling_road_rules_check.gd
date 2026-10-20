@@ -1,4 +1,12 @@
 extends SceneTree
+class DenialPresenter extends Node:
+	var checked_transition := ""
+	var received: Dictionary = {}
+	func handles_world_transition(candidate: String) -> bool:
+		return candidate == checked_transition
+	func present_world_transition_denied(access: Dictionary, _player: Node2D) -> void:
+		received = access
+
 var failed := false
 func _init() -> void:
 	run.call_deferred()
@@ -48,7 +56,9 @@ func run() -> void:
 	var gate := (load("res://scenes/overworld/kanto/transition_buildings/route_16_gate.tscn") as PackedScene).instantiate()
 	player.test_map = east
 	check(player.restore_land_mount("cyclizar") and player.toggle_land_mount(), "Route 16 East retains normal mounting and dismounting")
-	for exit_node in [east.get_node("Exits/ToRoute16Gate"),gate.get_node("Exits/ToWest")]:
+	check(east.get_node("Exits/ToRoute16Gate").get_travel_block_reason(player).is_empty(), "gate can be entered on foot")
+	check(not gate.land_mount_required_entry, "interior does not require riding")
+	for exit_node in [gate.get_node("Exits/ToWest")]:
 		check(exit_node.get_travel_block_reason(player) == "ui.cycling_road.mount_required", "gate/road entry rejects rider on foot")
 		player.land_mount_activity_active = true
 		player.active_mount_id = "cyclizar"
@@ -57,6 +67,24 @@ func run() -> void:
 		player.active_mount_id = ""
 	check(gate.get_node("Exits/ToEast").get_travel_block_reason(player).is_empty(), "unmounted visitor can return to Route 16 East")
 	check(east.allows_land_mount_dismount() and east.northbound_blocked_regions.is_empty(), "East map has no road restrictions")
+	# An unmounted approach invokes the bound guard instead of starting travel.
+	player.land_mount_activity_active = false
+	var presenter := DenialPresenter.new()
+	root.add_child(presenter)
+	presenter.add_to_group("world_transition_denial_presenters")
+	var exit_node: Area2D = load("res://scripts/world/map_exit.gd").new()
+	exit_node.requires_land_mount = true
+	root.add_child(exit_node)
+	for transition in ["kanto_route_16_gate__to_route16","kanto_route_17_18_gate__to_route17"]:
+		presenter.checked_transition = transition
+		exit_node.transition_id = transition
+		await exit_node.call("_on_body_entered",player)
+		check(presenter.received.get("reasonCode") == "LAND_MOUNT_REQUIRED", "road guard blocks unmounted approach")
+		check(presenter.received.get("dialogueId") == "cycling_road_mount_required", "road guard explains riding requirement")
+		check(not exit_node.is_transitioning, "guard dialogue leaves gate usable")
+		presenter.received.clear()
+	exit_node.free()
+	presenter.free()
 	var resumed := (load("res://scenes/overworld/kanto/routes/kanto_route_16.tscn") as PackedScene).instantiate()
 	player.test_map = resumed
 	state.current_map = resumed

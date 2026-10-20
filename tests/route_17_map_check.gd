@@ -17,8 +17,6 @@ func _run() -> void:
 	_check(map.map_id == "kanto_route_17" and map.world_access_area_type == "route", "map identity")
 	var collision: TileMapLayer = map.get_node("Tiles/Collision")
 	var water: TileMapLayer = map.get_node("Tiles/Water")
-	var guard: Node = map.get_node("Entities/NPCs/Route18Guard")
-	guard.feet_marker = guard.get_node("FeetMarker")
 	var player := (load("res://scenes/player.tscn") as PackedScene).instantiate()
 	player.set_script(load("res://tests/support/fuchsia_movement_probe.gd"))
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
@@ -75,15 +73,16 @@ func _run() -> void:
 				_check(water.get_cell_source_id(Vector2i(x,y)) == -1 and reached.has(Vector2i(x,y)), "all unobstructed platform floor accessible and dry")
 	for cell in [Vector2i(15,55),Vector2i(23,55),Vector2i(17,60),Vector2i(32,59)]:
 		_check(reached.has(cell), "bridge connects to southern plaza and gate approach")
-	_check(guard.passage_closed and guard.blocked_dialogue_id == "area_closed_blocked", "visible guard closes unfinished Route 18 passage")
+	_check(not map.has_node("Entities/NPCs/Route18Guard"), "temporary Route 18 closure removed")
+	_check(map.get_node("Exits").get_child_count() == 2, "north bridge and south gate exits available")
 	for y in range(58,62):
-		_check(player.call("_is_story_grid_step_blocked",_point(Vector2i(32,y)),_point(Vector2i(33,y)),Vector2.RIGHT), "real movement respects guard across southern gate approach")
-	_check(map.get_node("Exits").get_child_count() == 1, "no pending Route 18 runtime exit")
+		_check(reached.has(Vector2i(34,y)), "entire southern gate approach reachable")
+		_check(player.overlaps_exit_at(map.get_node("Exits/ToRoute18Gate"),_point(Vector2i(34,y))), "full four-row gate throat transfers")
 	state.release_overworld_input_lock(&"route17_map_check")
 	state.current_map = previous
 	map.free()
 	route16.free()
-	if not failed: print("PASS Route 17: atlas, round trip, complete seam, bridge lanes, side platform and closed Route 18")
+	if not failed: print("PASS Route 17: atlas, round trip, complete seam, bridge lanes, side platform and open Route 18 gate")
 	quit(1 if failed else 0)
 
 func _reachable(collision: TileMapLayer,water: TileMapLayer,start: Vector2i) -> Dictionary:

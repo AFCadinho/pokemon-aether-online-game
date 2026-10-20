@@ -48,7 +48,7 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	var travel_reason := get_travel_block_reason(body)
 	if not travel_reason.is_empty():
-		get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text(travel_reason))
+		await _present_travel_block(body, travel_reason)
 		return
 	if await _handle_required_trainer(body):
 		return
@@ -163,7 +163,7 @@ func _enter_authorized_transition(
 	var travel_reason := get_travel_block_reason(player)
 	if not travel_reason.is_empty():
 		is_transitioning = false
-		get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text(travel_reason))
+		await _present_travel_block(player, travel_reason)
 		return
 	var begin_result: Dictionary = await world.call("begin_authorized_teleport", true)
 	if not bool(begin_result.get("success", false)):
@@ -322,3 +322,21 @@ func get_travel_block_reason(player: Node) -> String:
 	if requires_land_mount and (not player.has_method("is_land_mount_activity_active") or not bool(player.call("is_land_mount_activity_active"))):
 		return "ui.cycling_road.mount_required"
 	return ""
+
+
+func _present_travel_block(player: Node2D, reason: String) -> void:
+	# A bound gate attendant explains the local riding requirement. Other
+	# exits retain their existing system-message feedback.
+	if reason == "ui.cycling_road.mount_required":
+		var normalized_id := _resolve_transition_id_for_player(player)
+		for candidate: Node in get_tree().get_nodes_in_group("world_transition_denial_presenters"):
+			if candidate.has_method("handles_world_transition") and bool(candidate.call("handles_world_transition", normalized_id)):
+				is_transitioning = true
+				await _present_denied_transition(normalized_id, {
+					"allowed": false,
+					"reasonCode": "LAND_MOUNT_REQUIRED",
+					"dialogueId": "cycling_road_mount_required",
+				}, player)
+				is_transitioning = false
+				return
+	get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text(reason))

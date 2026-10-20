@@ -54,7 +54,6 @@ position = Vector2(560, 1456)
 [node name="ToRoute16Gate" type="Area2D" parent="Exits"]
 position = Vector2(1104, 448)
 script = ExtResource("exit")
-requires_land_mount = true
 target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_16_gate.tscn"
 target_spawn_name = "FromWest"
 transition_id = "kanto_route_16__to_route16_gate"
