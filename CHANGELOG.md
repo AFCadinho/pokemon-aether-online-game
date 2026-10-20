@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve Zekrom’s turbo effect across teleports and map transfers, reset its exhaust on departure, and clean up its nodes when the effect is destroyed.
+
 - Refresh Routes 16 and 17 with wider artist visuals and matching black outside masks, preserving existing gameplay alignment.
 
 - Light all seven Route 17 street lamps at night using the shared day/night lighting system.
