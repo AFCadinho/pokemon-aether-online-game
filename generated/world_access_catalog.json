@@ -3993,7 +3993,9 @@
 			"locationGroupId": "kanto_route_17",
 			"locationGroupLabel": "Route 17",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://dyohnrbgexi62"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
 			"spawnPoints": {
 				"from_route_16": {
@@ -10029,7 +10031,9 @@
 		"kanto_route_16__to_route17": {
 			"destination": {
 				"mapId": "kanto_route_17",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dyohnrbgexi62"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
 				"position": {
 					"x": 560.0,
@@ -10107,7 +10111,9 @@
 		"kanto_route_17_18_gate__to_route17": {
 			"destination": {
 				"mapId": "kanto_route_17",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dyohnrbgexi62"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_17.tscn",
 				"position": {
 					"x": 1040.0,
