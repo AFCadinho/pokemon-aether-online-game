@@ -92,6 +92,14 @@
     "overworld.kanto.interior.rocket_hideout_remastered_zame": {
       "label": "Team Rocket Hideout Remastered (FireRed & LeafGreen) - Zame",
       "path": "res://assets/music/overworld/kanto/interiors/rocket_hideout_remastered_zame.ogg"
+    },
+    "overworld.kanto.celadon_city_remastered_zame": {
+      "label": "Celadon City Remastered (HeartGold & SoulSilver) - Zame",
+      "path": "res://assets/music/overworld/kanto/towns/celadon_city_remastered_zame.ogg"
+    },
+    "overworld.kanto.interior.celadon_game_corner_remastered_zame": {
+      "label": "Game Corner (Johto) Remastered (HeartGold & SoulSilver) - Zame",
+      "path": "res://assets/music/overworld/kanto/interiors/celadon_game_corner_remastered_zame.ogg"
     }
   },
   "map_profiles": {

@@ -975,6 +975,7 @@ size = Vector2(128, 96)
 [node name="CeladonCity" type="Node2D" unique_id=495230876]
 script = ExtResource("2_metadata")
 map_id = "kanto_celadon_city"
+music_track_id = "overworld.kanto.celadon_city_remastered_zame"
 map_region_name = "Kanto"
 map_display_name = "Celadon City"
 world_access_group_id = "kanto_celadon_city"
