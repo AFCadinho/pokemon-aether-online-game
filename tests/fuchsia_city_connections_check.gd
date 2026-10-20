@@ -47,14 +47,17 @@ func _run() -> void:
 		for x in range(72):
 			for y in [0,49]: _check(not player.can_move_to(Vector2(x,y)*32+Vector2(16,16)), "north/south perimeter is contained")
 		for y in range(50):
-			for x in [0,71]: _check(not player.can_move_to(Vector2(x,y)*32+Vector2(16,16)), "west/east perimeter is contained")
+			_check(not player.can_move_to(Vector2(71,y)*32+Vector2(16,16)), "east perimeter is contained")
+			var west_opening := y >= 20 and y <= 24
+			_check(player.can_move_to(Vector2(0,y)*32+Vector2(16,16)) == west_opening, "authored western opening and remaining perimeter are preserved")
 	player.surf_activity_active = false
 	_check(not player.can_move_to(Vector2(44,30)*32+Vector2(16,16)), "pond requires Surf")
 	player.surf_activity_active = true
 	_check(player.can_move_to(Vector2(44,30)*32+Vector2(16,16)), "pond allows Surf")
 	player.surf_activity_active = false
-	var visited := {Vector2i(65,22): true}
-	var pending: Array[Vector2i] = [Vector2i(65,22)]
+	var start := Vector2i(city.get_node("Spawns/FromRoute15Gate").position/32.0)
+	var visited := {start: true}
+	var pending: Array[Vector2i] = [start]
 	var cursor := 0
 	while cursor < pending.size():
 		var cell := pending[cursor]
@@ -67,10 +70,15 @@ func _run() -> void:
 				pending.append(next)
 	for cell in [Vector2i(36,6),Vector2i(37,6),Vector2i(38,6),Vector2i(7,9),Vector2i(37,22),Vector2i(7,11),Vector2i(22,11),Vector2i(31,36),Vector2i(54,27),Vector2i(54,37),Vector2i(54,12),Vector2i(21,45),Vector2i(17,33)]:
 		_check(visited.has(cell), "city streets, stairs and bridge are reachable: " + str(cell))
+	var city_exit: Area2D = city.get_node("Exits/ToRoute15Gate")
+	_check(city_exit.position == Vector2(2224,720), "Route 15 exit keeps its authored position")
+	_check(city_exit.get_node("CollisionShape2D").position == Vector2(16,0), "Route 15 trigger keeps its authored half-tile offset")
+	_check(city.get_node("Spawns/FromRoute15Gate").position == Vector2(2192,720), "Route 15 arrival keeps its authored position")
 	for y in range(21,24):
-		var point := Vector2(67,y)*32+Vector2(16,16)
+		var point := Vector2(69,y)*32+Vector2(16,16)
+		_check(visited.has(Vector2i(69,y)), "shifted Route 15 opening is reachable")
 		_check(player.can_move_to(point) and city.get_node("Exits/ToRoute15Gate").contains_world_position(point), "full three-tile gate aperture is usable")
-		_check(not player.can_move_to(Vector2(68,y)*32+Vector2(16,16)), "failed transfer cannot walk through gate facade")
+		_check(not player.can_move_to(Vector2(71,y)*32+Vector2(16,16)), "failed transfer cannot walk through gate facade")
 	city.free()
 	gate.free()
 	print("FUCHSIA_CITY_CONNECTIONS ", "FAIL" if failed else "PASS")
