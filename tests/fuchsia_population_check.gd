@@ -11,9 +11,12 @@ func _run() -> void:
 	var city := (load(CITY) as PackedScene).instantiate()
 	var npcs: Node = city.get_node("Entities/NPCs")
 	var pokemon: Node = city.get_node("Entities/Pokemon")
-	_check(npcs.get_child_count() == 7 and pokemon.get_child_count() == 7, "seven residents and seven ambient Pokemon")
+	var keeper: Node = npcs.get_node("TransitKeeperNPC")
+	_check(npcs.get_child_count() == 8 and pokemon.get_child_count() == 7, "seven residents, the Aethernet Keeper and seven ambient Pokemon")
 	var actors: Array[Node] = []
-	actors.append_array(npcs.get_children())
+	for npc in npcs.get_children():
+		if npc != keeper:
+			actors.append(npc)
 	actors.append_array(pokemon.get_children())
 	var lanes := {}
 	var identities := {}

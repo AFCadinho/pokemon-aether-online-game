@@ -64,7 +64,7 @@ func _run() -> void:
 		and route8_guard.guarded_transition_id == "kanto_route_8_saffron_gate__to_saffron_city",
 		"Route 8 guard holds the player at the Saffron entrance"
 	)
-	_expect(route8_guard.blocked_dialogue_id == "kanto_route_6_saffron_gate_unsafe", "Route 8 guard uses the Saffron lockdown dialogue")
+	_expect(route8_guard.blocked_dialogue_id == "kanto_route_8_saffron_gate_unsafe" and route8_guard.story_blocked_dialogue_id == "kanto_route_8_saffron_gate_unsafe", "Route 8 guard uses its local Saffron lockdown dialogue")
 	var route8_gate_collision := route8_gate.get_node("Tiles/Collision") as TileMapLayer
 	var horizontal_corridor_clear := true
 	for x in range(3, 17):
