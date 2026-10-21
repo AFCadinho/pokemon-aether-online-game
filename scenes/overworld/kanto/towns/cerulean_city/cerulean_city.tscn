@@ -40,9 +40,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="34_i2u7v"]
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="35_bug_catcher"]
 [ext_resource type="Script" uid="uid://bokcw1q7hoc1w" path="res://scripts/world/kanto/routes/nugget_bridge_trainer.gd" id="36_bridge_trainer"]
+[ext_resource type="Script" uid="uid://cisf4rdrl8y3y" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="overworld_pickup_extra"]
-
-[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -76,6 +75,9 @@ size = Vector2(112, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_5_exit"]
 size = Vector2(32, 192)
+
+[sub_resource type="RectangleShape2D" id="shape_standard_door"]
+size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door_exit"]
 size = Vector2(32, 32)
@@ -367,9 +369,6 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_ash1f"]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_nf6b6")
-
-[sub_resource type="RectangleShape2D" id="shape_standard_door"]
-size = Vector2(32, 32)
 
 [node name="CeruleanCity" type="Node2D" unique_id=1286302656]
 script = ExtResource("2_city")
@@ -685,8 +684,8 @@ transition_facing_direction = "up"
 shape = SubResource("RectangleShape2D_door_exit")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokemonCenter" unique_id=1671865357 instance=ExtResource("8_door_hint")]
-position = Vector2(0, 16)
 z_as_relative = false
+position = Vector2(0, 16)
 
 [node name="ToGym" type="Area2D" parent="Exits" unique_id=791741072]
 position = Vector2(1584, 1312)
@@ -1414,6 +1413,9 @@ position = Vector2(1712, 1296)
 [node name="NightLight6" parent="NightLights/Buildings/Gym" unique_id=659755095 instance=ExtResource("8_ex4qq")]
 position = Vector2(1456, 1296)
 
+[node name="MapDoors" type="Node" parent="." unique_id=595387118]
+script = ExtResource("90_map_doors")
+
 [connection signal="body_entered" from="Exits/ToRoute4" to="Exits/ToRoute4" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute4Water" to="Exits/ToRoute4Water" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToCeruleanCave" to="Exits/ToCeruleanCave" method="_on_body_entered"]
@@ -1431,6 +1433,3 @@ position = Vector2(1456, 1296)
 [connection signal="body_entered" from="Exits/ToBikeStore" to="Exits/ToBikeStore" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse2" to="Exits/ToHouse2" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse3" to="Exits/ToHouse3" method="_on_body_entered"]
-
-[node name="MapDoors" type="Node" parent="."]
-script = ExtResource("90_map_doors")
