@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add localized text and illustrated portraits to all three Fuchsia City signs.
+
 - Restore Fuchsia City’s Aethernet Beacon, Keeper connection and arrival point.
 
 - Place every transition-building guard behind the counter facing the player aisle, while preserving the closed Safari passage.

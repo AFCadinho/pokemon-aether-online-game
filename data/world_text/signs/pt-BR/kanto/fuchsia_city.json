@@ -1,0 +1,36 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_fuchsia_city",
+  "signs": [
+    {
+      "id": "kanto_fuchsia_city_town_sign",
+      "type": "town",
+      "title": "Fuchsia City",
+      "lines": [
+        "Fuchsia City — jardins, brisa do mar e amor pelos Pokémon.",
+        "Leste: Rota 15. Oeste: Rota 18. Sul: Rota 19.",
+        "A entrada da Safari Zone fica ao norte da cidade."
+      ]
+    },
+    {
+      "id": "kanto_fuchsia_city_gym",
+      "type": "building",
+      "title": "Ginásio Pokémon de Fuchsia City",
+      "lines": [
+        "Ginásio Pokémon de Fuchsia City",
+        "Líder: Koga — especialista em Pokémon do tipo Veneno.",
+        "Uma mente calma e uma boa preparação são a melhor defesa de um Treinador."
+      ]
+    },
+    {
+      "id": "kanto_fuchsia_city_safari_zone",
+      "type": "notice",
+      "title": "Safari Zone",
+      "lines": [
+        "Safari Zone — reserva natural de Pokémon",
+        "A Safari Zone está fechada no momento.",
+        "Fale com o funcionário na portaria para mais informações."
+      ]
+    }
+  ]
+}

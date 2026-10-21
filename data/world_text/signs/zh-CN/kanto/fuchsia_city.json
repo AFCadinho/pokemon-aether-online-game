@@ -1,0 +1,36 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_fuchsia_city",
+  "signs": [
+    {
+      "id": "kanto_fuchsia_city_town_sign",
+      "type": "town",
+      "title": "浅红市",
+      "lines": [
+        "浅红市——花园、海风与对宝可梦的热爱。",
+        "东边：１５号道路。西边：１８号道路。南边：１９号道路。",
+        "野生原野区的入口位于城市北部。"
+      ]
+    },
+    {
+      "id": "kanto_fuchsia_city_gym",
+      "type": "building",
+      "title": "浅红市宝可梦道馆",
+      "lines": [
+        "浅红市宝可梦道馆",
+        "馆主：阿桔——擅长使用毒属性宝可梦。",
+        "冷静的头脑与充分的准备，是训练家最好的防御。"
+      ]
+    },
+    {
+      "id": "kanto_fuchsia_city_safari_zone",
+      "type": "notice",
+      "title": "野生原野区",
+      "lines": [
+        "野生原野区——宝可梦自然保护区",
+        "野生原野区目前暂停开放。",
+        "如需了解详情，请咨询入口建筑内的工作人员。"
+      ]
+    }
+  ]
+}

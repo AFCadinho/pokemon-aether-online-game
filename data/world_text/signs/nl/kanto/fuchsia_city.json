@@ -1,0 +1,36 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_fuchsia_city",
+  "signs": [
+    {
+      "id": "kanto_fuchsia_city_town_sign",
+      "type": "town",
+      "title": "Fuchsia City",
+      "lines": [
+        "Fuchsia City — tuinen, zeelucht en liefde voor Pokémon.",
+        "Oost: Route 15. West: Route 18. Zuid: Route 19.",
+        "De ingang van de Safari Zone ligt in het noorden van de stad."
+      ]
+    },
+    {
+      "id": "kanto_fuchsia_city_gym",
+      "type": "building",
+      "title": "Pokémon Gym van Fuchsia City",
+      "lines": [
+        "Pokémon Gym van Fuchsia City",
+        "Leider: Koga — specialist in Pokémon van het type Poison.",
+        "Een kalme geest en een goede voorbereiding zijn de beste verdediging van een trainer."
+      ]
+    },
+    {
+      "id": "kanto_fuchsia_city_safari_zone",
+      "type": "notice",
+      "title": "Safari Zone",
+      "lines": [
+        "Safari Zone — natuurreservaat voor Pokémon",
+        "De Safari Zone is momenteel gesloten.",
+        "Spreek de medewerker in het poortgebouw aan voor informatie."
+      ]
+    }
+  ]
+}

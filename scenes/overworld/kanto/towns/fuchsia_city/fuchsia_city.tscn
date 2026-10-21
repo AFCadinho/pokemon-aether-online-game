@@ -502,12 +502,24 @@ npc_id = "kanto_fuchsia_city_transit_keeper"
 
 [node name="SafariZoneSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("6_uspme")]
 position = Vector2(1136, 272)
+sign_id = "kanto_fuchsia_city_safari_zone"
+sign_type = "notice"
+content_source = "local"
+fallback_lines = Array[String](["Safari Zone — Pokémon nature reserve", "The Safari Zone is currently closed.", "Please speak to the attendant in the gatehouse for information."])
 
 [node name="GymSign" parent="Entities/Interactables/Signs" unique_id=462982740 instance=ExtResource("6_uspme")]
 position = Vector2(1072, 1136)
+sign_id = "kanto_fuchsia_city_gym"
+sign_type = "building"
+content_source = "local"
+fallback_lines = Array[String](["Fuchsia City Pokémon Gym", "Leader: Koga — a specialist in Poison-type Pokémon.", "A calm mind and careful preparation are a trainer’s best defense."])
 
 [node name="FuchsiaCitySign" parent="Entities/Interactables/Signs" unique_id=138014515 instance=ExtResource("7_4tpbt")]
 position = Vector2(880, 656)
+sign_id = "kanto_fuchsia_city_town_sign"
+sign_type = "town"
+content_source = "local"
+fallback_lines = Array[String](["Fuchsia City — gardens, sea breezes and a love of Pokémon.", "East: Route 15. West: Route 18. South: Route 19.", "The Safari Zone entrance is in the north of the city."])
 
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=1079872017 instance=ExtResource("17_p35n4")]
 z_index = 1008
