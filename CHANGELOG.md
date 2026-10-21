@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Let the Fuchsia Warden use his waiting and thank-you dialogue as the Gold Teeth quest progresses.
+
 - Show the Fuchsia Warden’s quest marker as soon as the house loads, without needing to approach him.
 
 - Add a transparent pixel-art Gold Teeth icon to the Bag and item rewards.
