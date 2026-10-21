@@ -18,6 +18,8 @@
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="life_scientist_m"]
 [ext_resource type="SpriteFrames" uid="uid://bext5y1mblgc5" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="life_ss_anne_sailor"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="shape_route21"]
 size = Vector2(384, 32)
 
@@ -386,3 +388,6 @@ tile_set = SubResource("TileSet_5c663")
 
 [connection signal="body_entered" from="Exits/ToRoute21" to="Exits/ToRoute21" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

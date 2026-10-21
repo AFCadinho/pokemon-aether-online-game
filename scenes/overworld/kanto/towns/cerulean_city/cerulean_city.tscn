@@ -42,6 +42,8 @@
 [ext_resource type="Script" uid="uid://bokcw1q7hoc1w" path="res://scripts/world/kanto/routes/nugget_bridge_trainer.gd" id="36_bridge_trainer"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="overworld_pickup_extra"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
 
@@ -1424,3 +1426,6 @@ position = Vector2(1456, 1296)
 [connection signal="body_entered" from="Exits/ToBikeStore" to="Exits/ToBikeStore" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse2" to="Exits/ToHouse2" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse3" to="Exits/ToHouse3" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

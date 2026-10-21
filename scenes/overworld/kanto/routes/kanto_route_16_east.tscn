@@ -17,6 +17,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/sleeping_snorlax.tscn" id="r16_snorlax"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_16_east/route_16_east.visual.tscn" id="visual"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="celadon_shape"]
 size = Vector2(32, 160)
 
@@ -498,3 +500,6 @@ tile_set = SubResource("TileSet_fhx26")
 [connection signal="body_entered" from="Exits/ToCeladonCity" to="Exits/ToCeladonCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute16Gate" to="Exits/ToRoute16Gate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse" to="Exits/ToHouse" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

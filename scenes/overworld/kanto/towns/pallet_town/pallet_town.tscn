@@ -11,7 +11,6 @@
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="14_voysl"]
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="19_3oirl"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pallet_town/pallet_town.visual.tscn" id="21_visual"]
-[ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="22_door_animator"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="24_door_hint"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="25_sign"]
@@ -26,6 +25,8 @@
 [ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="35_locked_door"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="36_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="37_aether_beacon"]
+
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2p5pd"]
 atlas = ExtResource("13_j8pek")
@@ -2104,16 +2105,6 @@ script = ExtResource("1_f4ndu")
 
 [node name="Visuals" parent="." unique_id=1489195967 instance=ExtResource("21_visual")]
 
-[node name="DoorAnimator" type="Node" parent="." unique_id=1334535847]
-script = ExtResource("22_door_animator")
-visual_root_path = NodePath("../Visuals")
-door_layer_name = "Door Layer"
-cell_opening_regions = {
-Vector2i(20, 16): Rect2(0, 0, 32, 24),
-Vector2i(35, 12): Rect2(0, 0, 32, 24),
-Vector2i(40, 25): Rect2(0, 0, 32, 24)
-}
-animate_all_door_groups = true
 
 [node name="Entities" type="Node2D" parent="." unique_id=1216669791]
 z_index = 5
@@ -2401,3 +2392,6 @@ tile_set = SubResource("TileSet_bkfw7")
 [connection signal="body_entered" from="Exits/ToPlayersHouse" to="Exits/ToPlayersHouse" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRivalsHouse" to="Exits/ToRivalsHouse" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute21" to="Exits/ToRoute21" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

@@ -1,0 +1,1699 @@
+{
+  "res://scenes/overworld/kanto/routes/kanto_route_10.tscn": [
+    {
+      "activation": [
+        4.0,
+        -4.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromPokemonCenter"
+      ],
+      "bounds": [
+        1340.0,
+        648.0,
+        40.0,
+        44.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPokemonCenter",
+      "id": "Door2",
+      "kind": "slide",
+      "label": "ToPokemonCenter",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -4.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromPowerPlant"
+      ],
+      "bounds": [
+        1184.0,
+        1714.0,
+        32.0,
+        44.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPowerPlant",
+      "id": "Door3",
+      "kind": "hinge",
+      "label": "ToPowerPlant",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/routes/kanto_route_12.tscn": [
+    {
+      "activation": [
+        0.0,
+        -10.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromFishingBrotherHouse"
+      ],
+      "bounds": [
+        896.0,
+        2448.0,
+        32.0,
+        38.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToFishingBrotherHouse",
+      "id": "Door8",
+      "kind": "hinge",
+      "label": "ToFishingBrotherHouse",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn": [
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromHouse"
+      ],
+      "bounds": [
+        448.0,
+        378.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse",
+      "id": "Door11",
+      "kind": "hinge",
+      "label": "ToHouse",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/routes/kanto_route_3.tscn": [
+    {
+      "activation": [
+        4.0,
+        -4.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromPokecenter"
+      ],
+      "bounds": [
+        2844.0,
+        1032.0,
+        40.0,
+        44.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPokecenter",
+      "id": "Door20",
+      "kind": "slide",
+      "label": "ToPokecenter",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Route3"
+    }
+  ],
+  "res://scenes/overworld/kanto/routes/kanto_route_5.tscn": [
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromDaycare"
+      ],
+      "bounds": [
+        1024.0,
+        1402.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToDaycare",
+      "id": "Door28",
+      "kind": "hinge",
+      "label": "ToDaycare",
+      "layers": [
+        "Objects",
+        "Doors",
+        "ObjectsTop"
+      ],
+      "lock": "",
+      "visual": "Visual",
+      "depth_y": 1441
+    },
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromUndergroundPath"
+      ],
+      "bounds": [
+        1600.0,
+        1338.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToUndergroundPath",
+      "id": "Door29",
+      "kind": "hinge",
+      "label": "tile_[50, 42]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/routes/kanto_route_6.tscn": [
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromUndergroundPath"
+      ],
+      "bounds": [
+        1536.0,
+        506.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToUndergroundPath",
+      "id": "Door32",
+      "kind": "hinge",
+      "label": "tile_[48, 16]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/routes/kanto_route_7.tscn": [
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromUndergroundPath"
+      ],
+      "bounds": [
+        512.0,
+        1210.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToUndergroundPath",
+      "id": "Doorextra4",
+      "kind": "hinge",
+      "label": "ToUndergroundPath",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/routes/kanto_route_8.tscn": [
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromUndergroundPath"
+      ],
+      "bounds": [
+        768.0,
+        378.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToUndergroundPath",
+      "id": "Doorextra5",
+      "kind": "hinge",
+      "label": "ToUndergroundPath",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn": [
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromHouse"
+      ],
+      "bounds": [
+        1408.0,
+        506.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse",
+      "id": "Door100",
+      "kind": "hinge",
+      "label": "ToHouse",
+      "layers": [
+        "StructureBottom",
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Route2"
+    }
+  ],
+  "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn": [
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromBillsHouse"
+      ],
+      "bounds": [
+        1600.0,
+        408.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToBillsHouse",
+      "id": "Door101",
+      "kind": "hinge",
+      "label": "ToBillsHouse",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Route25Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn": [
+    {
+      "activation": [
+        4.0,
+        -4.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromPokecenter"
+      ],
+      "bounds": [
+        1948.0,
+        424.0,
+        40.0,
+        44.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPokecenter",
+      "id": "Door58",
+      "kind": "slide",
+      "label": "ToPokecenter",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -14.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromCondominiumsMain"
+      ],
+      "bounds": [
+        1280.0,
+        380.0,
+        32.0,
+        34.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToCondominiumsMain",
+      "id": "Door59",
+      "kind": "hinge",
+      "label": "ToCondominiumsMain",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -20.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromGameCorner"
+      ],
+      "bounds": [
+        1248.0,
+        864.0,
+        32.0,
+        28.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToGameCorner",
+      "id": "Door61",
+      "kind": "slide",
+      "label": "ToGameCorner",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -24.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromPrizeCorner"
+      ],
+      "bounds": [
+        1402.0,
+        870.0,
+        32.0,
+        24.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPrizeCorner",
+      "id": "Door62",
+      "kind": "hinge",
+      "label": "ToPrizeCorner",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        8.0,
+        -10.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromGym"
+      ],
+      "bounds": [
+        344.0,
+        1520.0,
+        48.0,
+        38.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToGym",
+      "id": "Door63",
+      "kind": "gym",
+      "label": "ToGym",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        4.0,
+        -16.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        380.0,
+        412.0,
+        40.0,
+        32.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToDepartmentStore",
+      "id": "Door64",
+      "kind": "slide",
+      "label": "ToDepartmentStore",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        4.0,
+        -16.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromDepartmentStore"
+      ],
+      "bounds": [
+        508.0,
+        412.0,
+        40.0,
+        32.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToDepartmentStoreEast",
+      "id": "Door65",
+      "kind": "slide",
+      "label": "ToDepartmentStoreEast",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -10.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        1056.0,
+        1496.0,
+        32.0,
+        38.0
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door66",
+      "kind": "hinge",
+      "label": "tile_[33, 47]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn": [
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromHouse1"
+      ],
+      "bounds": [
+        768.0,
+        890.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse1",
+      "id": "Door38",
+      "kind": "hinge",
+      "label": "ToHouse1",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "CeruleanCityVisual"
+    },
+    {
+      "activation": [
+        4.0,
+        -20.0,
+        32.0,
+        108.0
+      ],
+      "arrivals": [
+        "FromPokemonCenter"
+      ],
+      "bounds": [
+        1052.0,
+        1288.0,
+        40.0,
+        44.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPokemonCenter",
+      "id": "Door39",
+      "kind": "slide",
+      "label": "ToPokemonCenter",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "CeruleanCityVisual"
+    },
+    {
+      "activation": [
+        8.0,
+        -26.0,
+        32.0,
+        106.0
+      ],
+      "arrivals": [
+        "FromGym"
+      ],
+      "bounds": [
+        1560.0,
+        1296.0,
+        48.0,
+        38.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToGym",
+      "id": "Door40",
+      "kind": "gym",
+      "label": "ToGym",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "CeruleanCityVisual"
+    },
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromBikeStore"
+      ],
+      "bounds": [
+        608.0,
+        1626.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToBikeStore",
+      "id": "Door41",
+      "kind": "hinge",
+      "label": "ToBikeStore",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "CeruleanCityVisual"
+    },
+    {
+      "activation": [
+        0.0,
+        -28.0,
+        32.0,
+        98.0
+      ],
+      "arrivals": [
+        "FromHouse2"
+      ],
+      "bounds": [
+        1152.0,
+        1626.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse2",
+      "id": "Door42",
+      "kind": "hinge",
+      "label": "ToHouse2",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "CeruleanCityVisual"
+    },
+    {
+      "activation": [
+        0.0,
+        -28.0,
+        32.0,
+        98.0
+      ],
+      "arrivals": [
+        "FromHouse3"
+      ],
+      "bounds": [
+        832.0,
+        1306.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse3",
+      "id": "Door43",
+      "kind": "hinge",
+      "label": "ToHouse3",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "CeruleanCityVisual"
+    }
+  ],
+  "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn": [
+    {
+      "activation": [
+        4.0,
+        -4.0,
+        32.0,
+        124.0
+      ],
+      "arrivals": [
+        "FromPokecenter"
+      ],
+      "bounds": [
+        1052.0,
+        1480.0,
+        40.0,
+        44.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPokecenter",
+      "id": "Door67",
+      "kind": "slide",
+      "label": "ToPokecenter",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        8.0,
+        -10.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        1464.0,
+        784.0,
+        48.0,
+        38.0
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door68",
+      "kind": "gym",
+      "label": "tile_[46, 24]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        320.0,
+        1402.0,
+        32.0,
+        36.0
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door69",
+      "kind": "hinge",
+      "label": "tile_[10, 43]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        1504.0,
+        1370.0,
+        32.0,
+        36.0
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door70",
+      "kind": "hinge",
+      "label": "tile_[47, 43]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0,
+        -16,
+        32,
+        96
+      ],
+      "arrivals": [],
+      "bounds": [
+        448,
+        1848,
+        32,
+        36
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door71",
+      "kind": "hinge",
+      "label": "UnlinkedLab",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn": [
+    {
+      "activation": [
+        4.0,
+        -4.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromPokecenter"
+      ],
+      "bounds": [
+        220.0,
+        264.0,
+        40.0,
+        44.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPokecenter",
+      "id": "Door72",
+      "kind": "slide",
+      "label": "ToPokecenter",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -14.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        704.0,
+        284.0,
+        32.0,
+        34.0
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door74",
+      "kind": "hinge",
+      "label": "tile_[22, 9]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        10.0,
+        -8.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        358.0,
+        944.0,
+        52.0,
+        40.0
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door75",
+      "kind": "double",
+      "label": "tile_[11, 29]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        8.0,
+        -10.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        984.0,
+        1072.0,
+        48.0,
+        38.0
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door76",
+      "kind": "gym",
+      "label": "tile_[31, 33]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn": [
+    {
+      "activation": [
+        4.0,
+        -4.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromPokecenter"
+      ],
+      "bounds": [
+        252.0,
+        360.0,
+        40.0,
+        44.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPokecenter",
+      "id": "Door77",
+      "kind": "slide",
+      "label": "ToPokecenter",
+      "layers": [
+        "Objects",
+        "Door"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromPokemonTower"
+      ],
+      "bounds": [
+        1056.0,
+        476.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPokemonTower",
+      "id": "Door78",
+      "kind": "slide",
+      "label": "ToPokemonTower",
+      "layers": [
+        "Objects",
+        "Door"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        4.0,
+        -14.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromHouse1"
+      ],
+      "bounds": [
+        1276.0,
+        828.0,
+        40.0,
+        34.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse1",
+      "id": "Door79",
+      "kind": "hinge",
+      "label": "ToHouse1",
+      "layers": [
+        "Objects",
+        "Door"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromHouse2"
+      ],
+      "bounds": [
+        416.0,
+        986.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse2",
+      "id": "Door80",
+      "kind": "hinge",
+      "label": "ToHouse2",
+      "layers": [
+        "Objects",
+        "Door"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromHouse3"
+      ],
+      "bounds": [
+        1312.0,
+        1146.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse3",
+      "id": "Door81",
+      "kind": "hinge",
+      "label": "ToHouse3",
+      "layers": [
+        "Objects",
+        "Door"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        4.0,
+        -14.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromMrFujiHouse"
+      ],
+      "bounds": [
+        252.0,
+        988.0,
+        40.0,
+        34.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToMrFujiHouse",
+      "id": "Door82",
+      "kind": "hinge",
+      "label": "ToMrFujiHouse",
+      "layers": [
+        "Objects",
+        "Door"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn": [
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromPlayersHouse"
+      ],
+      "bounds": [
+        640.0,
+        504.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPlayersHouse",
+      "id": "Door45",
+      "kind": "hinge",
+      "label": "ToPlayersHouse",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "Entities/Interactables/PlayersHouseDoorLock",
+      "visual": "Visuals"
+    },
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromRivalsHouse"
+      ],
+      "bounds": [
+        1120.0,
+        376.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToRivalsHouse",
+      "id": "Door46",
+      "kind": "hinge",
+      "label": "ToRivalsHouse",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "Entities/Interactables/RivalsHouseDoorLock",
+      "visual": "Visuals"
+    },
+    {
+      "activation": [
+        0.0,
+        -18.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromOaksLab"
+      ],
+      "bounds": [
+        1280.0,
+        800.0,
+        32.0,
+        30.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToOaksLab",
+      "id": "Door47",
+      "kind": "hinge",
+      "label": "OaksLabDoorLock",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "Entities/Interactables/OaksLabDoorLock",
+      "visual": "Visuals"
+    }
+  ],
+  "res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": [
+    {
+      "activation": [
+        4.0,
+        -4.0,
+        32.0,
+        124.0
+      ],
+      "arrivals": [
+        "FromPokecenter"
+      ],
+      "bounds": [
+        1404.0,
+        1480.0,
+        40.0,
+        44.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPokecenter",
+      "id": "Door48",
+      "kind": "slide",
+      "label": "ToPokecenter",
+      "layers": [
+        "StructuresBottom",
+        "Doors",
+        "Objects"
+      ],
+      "lock": "Entities/Interactables/PokemonCenterDoorLock",
+      "visual": "PewterCity"
+    },
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        114.0
+      ],
+      "arrivals": [
+        "FromHouse2"
+      ],
+      "bounds": [
+        448.0,
+        1498.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse2",
+      "id": "Door52",
+      "kind": "hinge",
+      "label": "ToHouse2",
+      "layers": [
+        "StructuresBottom",
+        "Doors",
+        "Objects"
+      ],
+      "lock": "Entities/Interactables/House2DoorLock",
+      "visual": "PewterCity"
+    },
+    {
+      "activation": [
+        0.0,
+        -12.0,
+        32.0,
+        114.0
+      ],
+      "arrivals": [
+        "FromHouse1"
+      ],
+      "bounds": [
+        1088.0,
+        922.0,
+        32.0,
+        36.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse1",
+      "id": "Door53",
+      "kind": "hinge",
+      "label": "House1DoorLock",
+      "layers": [
+        "StructuresBottom",
+        "Doors",
+        "Objects"
+      ],
+      "lock": "Entities/Interactables/House1DoorLock",
+      "visual": "PewterCity"
+    }
+  ],
+  "res://scenes/overworld/kanto/towns/saffron_city/saffron_city.tscn": [
+    {
+      "activation": [
+        0.0,
+        -14.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        864.0,
+        892.0,
+        32.0,
+        34.0
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door83",
+      "kind": "hinge",
+      "label": "tile_[27, 28]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        8.0,
+        -10.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        2456.0,
+        912.0,
+        48.0,
+        38.0
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door84",
+      "kind": "gym",
+      "label": "tile_[77, 28]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -14.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        512.0,
+        1692.0,
+        32.0,
+        34.0
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door85",
+      "kind": "hinge",
+      "label": "tile_[16, 53]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -14.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        2176.0,
+        1692.0,
+        32.0,
+        34.0
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door86",
+      "kind": "hinge",
+      "label": "tile_[68, 53]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        4.0,
+        -4.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [],
+      "bounds": [
+        572.0,
+        2216.0,
+        40.0,
+        44.0
+      ],
+      "enabled": false,
+      "exit": "",
+      "id": "Door87",
+      "kind": "slide",
+      "label": "tile_[18, 69]",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn": [
+    {
+      "activation": [
+        4.0,
+        -4.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromPokecenter"
+      ],
+      "bounds": [
+        380.0,
+        424.0,
+        40.0,
+        44.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToPokecenter",
+      "id": "Door91",
+      "kind": "slide",
+      "label": "ToPokecenter",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -10.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromFanClub"
+      ],
+      "bounds": [
+        352.0,
+        848.0,
+        32.0,
+        38.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToFanClub",
+      "id": "Door93",
+      "kind": "hinge",
+      "label": "ToFanClub",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -10.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromHouse1"
+      ],
+      "bounds": [
+        608.0,
+        400.0,
+        32.0,
+        38.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse1",
+      "id": "Door94",
+      "kind": "hinge",
+      "label": "ToHouse1",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -10.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromHouse2"
+      ],
+      "bounds": [
+        640.0,
+        848.0,
+        32.0,
+        38.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse2",
+      "id": "Door95",
+      "kind": "hinge",
+      "label": "ToHouse2",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        0.0,
+        -10.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromHouse3"
+      ],
+      "bounds": [
+        1152.0,
+        1136.0,
+        32.0,
+        38.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToHouse3",
+      "id": "Door96",
+      "kind": "hinge",
+      "label": "ToHouse3",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        -3.0,
+        -14.0,
+        32.0,
+        96.0
+      ],
+      "arrivals": [
+        "FromGuildBase"
+      ],
+      "bounds": [
+        1662.0,
+        316.0,
+        26.0,
+        34.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToGuildBase",
+      "id": "Door97",
+      "kind": "hinge",
+      "label": "ToGuildBase",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    },
+    {
+      "activation": [
+        8.0,
+        -10.0,
+        32.0,
+        106.0
+      ],
+      "arrivals": [
+        "FromGym"
+      ],
+      "bounds": [
+        440.0,
+        1232.0,
+        48.0,
+        38.0
+      ],
+      "enabled": true,
+      "exit": "Exits/ToGym",
+      "id": "Door92",
+      "kind": "gym",
+      "label": "ToGym",
+      "layers": [
+        "Objects",
+        "Doors"
+      ],
+      "lock": "",
+      "visual": "Visual"
+    }
+  ],
+  "res://scenes/overworld/kanto/towns/celadon_city/celadon_condominiums_roof.tscn": [
+    {
+      "id": "RoofRoomDoor",
+      "label": "RoofRoomEntrance",
+      "kind": "hinge",
+      "visual": "Visual",
+      "bounds": [
+        128,
+        444,
+        32,
+        32
+      ],
+      "layers": [
+        "Objects"
+      ],
+      "lock": "",
+      "exit": "Exits/RoofRoomEntrance",
+      "arrivals": [
+        "FromRoofRoomEntrance"
+      ],
+      "enabled": true,
+      "activation": [
+        0,
+        -16,
+        32,
+        116
+      ]
+    }
+  ]
+}

@@ -18,6 +18,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="17_route_rock"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="18_overworld_pokemon"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jt1dn"]
 texture = ExtResource("3_3df0w")
 texture_region_size = Vector2i(32, 32)
@@ -630,3 +632,6 @@ tile_set = SubResource("TileSet_qfrt0")
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToMtMoon" to="Exits/ToMtMoon" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

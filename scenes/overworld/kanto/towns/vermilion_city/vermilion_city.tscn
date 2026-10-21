@@ -26,6 +26,8 @@
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="life_youngster"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="ss_anne_gym_tree"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 16)
 
@@ -1086,3 +1088,6 @@ shape = SubResource("shape_center_door")
 z_as_relative = false
 
 [connection signal="body_entered" from="Exits/ToGuildBase" to="Exits/ToGuildBase" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

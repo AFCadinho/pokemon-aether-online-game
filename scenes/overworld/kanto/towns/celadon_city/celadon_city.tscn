@@ -29,6 +29,8 @@
 [ext_resource type="Script" uid="uid://c0rvsvb5ckinb" path="res://scripts/world/story/story_trigger.gd" id="rocket_trigger"]
 [ext_resource type="PackedScene" path="res://scenes/world/story/rocket_trio.tscn" id="rocket_trio"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="route16_east_shape"]
 size = Vector2(32, 160)
 
@@ -1955,3 +1957,6 @@ position = Vector2(1424, 880)
 [connection signal="body_entered" from="Exits/ToDepartmentStoreEast" to="Exits/ToDepartmentStoreEast" method="_on_body_entered"]
 
 [editable path="Story/RocketTrio"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

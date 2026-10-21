@@ -2,6 +2,7 @@ extends Node2D
 ## Opt-in visual door. Uses existing map pixels and never changes collision,
 ## access checks, network state, or the server-authorized MapExit.
 
+@export var access_enabled := true
 @export var source_layers: Array[NodePath] = []
 @export var players_path: NodePath
 @export var access_lock_path: NodePath
@@ -78,6 +79,8 @@ func _play_movement_sound(direction: int) -> void:
 
 
 func _access_allows_opening() -> bool:
+	if not access_enabled:
+		return false
 	if access_lock_path.is_empty():
 		return true
 	var access_lock := get_node_or_null(access_lock_path)
