@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore the enabled Pokémon follower when entering an indoor map from a mount.
+
 - Reimport Route 15 scenery from the latest artist TMX.
 
 - Add nighttime lighting to Fuchsia City’s street lamps and building windows, following the shared day/night cycle.

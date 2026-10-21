@@ -35,6 +35,7 @@ func _init() -> void:
 
 
 func _run() -> void:
+	_check_follower_after_mounted_map_exit()
 	_check_surf_hides_local_follower()
 	_check_pokemon_assignment_before_ready()
 	_check_remote_player_accepts_follower_before_ready()
@@ -44,6 +45,49 @@ func _run() -> void:
 	_check_trail_keeps_one_open_tile()
 	_check_remote_player_exposes_active_step_target()
 	quit(1 if failed else 0)
+
+
+func _check_follower_after_mounted_map_exit() -> void:
+	var player_save: Node = get_root().get_node("PlayerSave")
+	var game_state: Node = get_root().get_node("GameState")
+	var previous_party: Array[Pokemon] = player_save.party.duplicate()
+	var previous_show_follower: bool = game_state.show_follower
+	var previous_map: Node = game_state.current_map
+	var test_party: Array[Pokemon] = [Pokemon.new("Pikachu", 5)]
+	player_save.party = test_party
+	var interior := Node2D.new()
+	var collision := TileMapLayer.new()
+	collision.name = "Collision"
+	interior.add_child(collision)
+	game_state.current_map = interior
+	var player: Variant = load("res://scripts/world/player.gd").new()
+	interior.add_child(player)
+	var feet_marker := Marker2D.new()
+	player.add_child(feet_marker)
+	player.feet_marker = feet_marker
+	player._setup_pokemon_follower()
+	var follower: Variant = player.pokemon_follower
+	for enabled: bool in [true, false]:
+		game_state.show_follower = enabled
+		player.land_mount_activity_active = true
+		player.active_mount_id = "cyclizar"
+		player.refresh_pokemon_follower()
+		player.sync_activity_state_for_current_tile()
+		_check(not follower.visible, "riding hides the follower before a map change")
+		# World.load_map removes the player, triggering this cleanup. The
+		# follower survives separately under World and retains its hidden state.
+		player._exit_tree()
+		_check(not player.land_mount_activity_active, "map exit clears the land mount")
+		_check(not follower.visible, "the existing follower stays hidden until arrival sync")
+		player.sync_activity_state_for_current_tile()
+		player.reset_pokemon_follower_position()
+		_check(player.pokemon_follower == follower, "arrival reuses the existing follower")
+		_check(follower.visible == enabled, "indoor arrival respects follower preference %s" % enabled)
+		_check(game_state.show_follower == enabled, "map arrival preserves the follower preference")
+	interior.free()
+	player_save.party = previous_party
+	game_state.show_follower = previous_show_follower
+	game_state.current_map = previous_map
 
 
 func _check_surf_hides_local_follower() -> void:
