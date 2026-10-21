@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep regular Android 3D builds working when Godot omits its default Mobile renderer setting.
+
 - Keep co-op trainer admission positions aligned with the latest authored Route 15 layout.
 
 - Keep 3D Mega Evolution effects loadable when battle scenes are preloaded, preserving separate battle sound controls.

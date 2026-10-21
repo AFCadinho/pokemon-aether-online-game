@@ -120,6 +120,22 @@ class AndroidReleaseTests(unittest.TestCase):
             self.assertEqual(json.loads(setting(presets, "preset.7", "custom_features")), "keep_this_feature,android_3d_experimental")
             self.assertEqual(setting(project, "rendering", "renderer/rendering_method.mobile"), '"mobile"')
 
+    def test_prepare_handles_godot_omitting_the_default_mobile_renderer(self) -> None:
+        repository = Path(__file__).resolve().parents[1]
+        with TemporaryDirectory() as directory:
+            project = Path(directory) / "project.godot"
+            presets = Path(directory) / "export_presets.cfg"
+            source = (repository / "project.godot").read_text()
+            source = "\n".join(line for line in source.splitlines()
+                               if not line.startswith("renderer/rendering_method.mobile=")) + "\n"
+            project.write_text(source)
+            presets.write_text((repository / "export_presets.cfg").read_text())
+            code = int(setting(presets, "preset.7.options", "version/code")) + 1
+            prepare(project, presets, "0.3.118", code, "regression-build")
+            self.assertEqual(setting(project, "rendering", "renderer/rendering_method.mobile"), '"mobile"')
+            self.assertIn("android_3d_experimental", json.loads(setting(presets, "preset.7", "custom_features")))
+            self.assertEqual(setting(project, "application", "config/build_id"), '"regression-build"')
+
     def test_manifest_requires_matching_package_version_and_certificate(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)

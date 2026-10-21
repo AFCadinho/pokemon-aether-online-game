@@ -28,16 +28,23 @@ def setting(path: Path, section: str, key: str) -> str:
     raise ValueError(f"Missing [{section}] {key} in {path}")
 
 
-def replace_setting(path: Path, section: str, key: str, value: str) -> None:
+def replace_setting(path: Path, section: str, key: str, value: str, *, allow_missing: bool = False) -> None:
     lines = path.read_text(encoding="utf-8").splitlines()
     current = ""
+    section_start = None
     for index, line in enumerate(lines):
         if line.startswith("[") and line.endswith("]"):
             current = line[1:-1]
+            if current == section:
+                section_start = index
         elif current == section and line.startswith(key + "="):
             lines[index] = f"{key}={value}"
             path.write_text("\n".join(lines) + "\n", encoding="utf-8")
             return
+    if allow_missing and section_start is not None:
+        lines.insert(section_start + 1, f"{key}={value}")
+        path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        return
     raise ValueError(f"Missing [{section}] {key} in {path}")
 
 
@@ -59,7 +66,8 @@ def prepare(project: Path, presets: Path, version: str, code: int, build_id: str
     replace_setting(presets, "preset.7", "custom_features", json.dumps(",".join(features)))
     # Preserve the shipping 3D renderer: Adreno's Compatibility shader linker
     # can crash natively during moves. 2D remains a player preference.
-    replace_setting(project, "rendering", "renderer/rendering_method.mobile", json.dumps("mobile"))
+    replace_setting(project, "rendering", "renderer/rendering_method.mobile",
+                    json.dumps("mobile"), allow_missing=True)
     replace_setting(project, "application", "config/version", json.dumps(version))
     replace_setting(project, "application", "config/build_id", json.dumps(build_id))
     replace_setting(project, "application", "config/android_version_code", str(code))
