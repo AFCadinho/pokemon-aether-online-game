@@ -25,8 +25,7 @@
 [ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="35_locked_door"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="36_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="37_aether_beacon"]
-
-[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+[ext_resource type="Script" uid="uid://cisf4rdrl8y3y" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2p5pd"]
 atlas = ExtResource("13_j8pek")
@@ -2105,7 +2104,6 @@ script = ExtResource("1_f4ndu")
 
 [node name="Visuals" parent="." unique_id=1489195967 instance=ExtResource("21_visual")]
 
-
 [node name="Entities" type="Node2D" parent="." unique_id=1216669791]
 z_index = 5
 
@@ -2286,7 +2284,7 @@ target_scene_path = "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tsc
 target_spawn_name = "FromPalletTown"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOaksLab" unique_id=550005627]
-position = Vector2(800, 672)
+position = Vector2(800, 656)
 shape = SubResource("RectangleShape2D_3e7rq")
 
 [node name="DoorTransitionHint" parent="Exits/ToOaksLab" unique_id=1983010285 instance=ExtResource("24_door_hint")]
@@ -2313,6 +2311,7 @@ target_scene_path = "res://scenes/overworld/kanto/towns/pallet_town/rivals_house
 target_spawn_name = "FromPalletTown"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRivalsHouse" unique_id=1938726291]
+position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_3e7rq")
 
 [node name="DoorTransitionHint" parent="Exits/ToRivalsHouse" unique_id=1928985348 instance=ExtResource("24_door_hint")]
@@ -2387,11 +2386,11 @@ z_index = 100
 tile_map_data = PackedByteArray("AAAfAB0AAAABAAEAAAAfAB4AAAABAAEAAAAfAB8AAAABAAEAAAA=")
 tile_set = SubResource("TileSet_bkfw7")
 
+[node name="MapDoors" type="Node" parent="." unique_id=1123899778]
+script = ExtResource("90_map_doors")
+
 [connection signal="body_entered" from="Exits/ToRoute1" to="Exits/ToRoute1" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToOaksLab" to="Exits/ToOaksLab" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPlayersHouse" to="Exits/ToPlayersHouse" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRivalsHouse" to="Exits/ToRivalsHouse" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute21" to="Exits/ToRoute21" method="_on_body_entered"]
-
-[node name="MapDoors" type="Node" parent="."]
-script = ExtResource("90_map_doors")

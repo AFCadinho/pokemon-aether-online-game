@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="7_door_hint"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="14_nycgr"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="17_p35n4"]
+[ext_resource type="Script" uid="uid://cisf4rdrl8y3y" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
 [ext_resource type="SpriteFrames" uid="uid://cg046cju3kis8" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="population_ace_trainer_f"]
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="population_camper"]
 [ext_resource type="SpriteFrames" uid="uid://ctgjk0yaqmm8o" path="res://assets/npcs/classes/elder_frames.tres" id="population_elder"]
@@ -20,8 +21,6 @@
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="population_picnicker"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="population_worker"]
-
-[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
 
 [sub_resource type="RectangleShape2D" id="gate_shape"]
 size = Vector2(32, 96)
@@ -508,6 +507,7 @@ position = Vector2(1072, 1136)
 position = Vector2(880, 656)
 
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=1079872017 instance=ExtResource("17_p35n4")]
+z_index = 1008
 position = Vector2(144, 1008)
 display_name = "Aether Beacon"
 
@@ -636,11 +636,11 @@ z_index = 4096
 tile_map_data = PackedByteArray("AAArAAkAAAAEAAAAAAArAAoAAAAEAAAAAAArAAsAAAAEAAAAAAA=")
 tile_set = SubResource("TileSet_xabhn")
 
+[node name="MapDoors" type="Node" parent="." unique_id=2076605001]
+script = ExtResource("90_map_doors")
+
 [connection signal="body_entered" from="Exits/ToRoute15Gate" to="Exits/ToRoute15Gate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToSafariZoneGate" to="Exits/ToSafariZoneGate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute19Gate" to="Exits/ToRoute19Gate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute18" to="Exits/ToRoute18" method="_on_body_entered"]
-
-[node name="MapDoors" type="Node" parent="."]
-script = ExtResource("90_map_doors")
