@@ -321,6 +321,9 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_m5ude")
 
+[sub_resource type="RectangleShape2D" id="shape_standard_door"]
+size = Vector2(32, 32)
+
 [node name="KantoRoute3" type="Node2D" unique_id=685382640]
 script = ExtResource("5_metadata")
 map_id = "kanto_route_3"
@@ -580,12 +583,12 @@ target_spawn_name = "FromOutside"
 transition_id = "kanto_route_3__to_pokecenter"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=120000009]
-position = Vector2(0, -20)
-shape = SubResource("RectangleShape2D_route3_pokecenter")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=856094939 instance=ExtResource("12_pokecenter_hint")]
+position = Vector2(0, 0)
 z_as_relative = false
-position = Vector2(0, -16)
 tile_footprint = Vector2i(1, 2)
 
 [node name="ToMtMoon" type="Area2D" parent="Exits" unique_id=1945368174]

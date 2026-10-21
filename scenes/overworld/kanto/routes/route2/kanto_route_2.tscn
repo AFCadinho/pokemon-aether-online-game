@@ -327,6 +327,9 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_ohdj5")
 
+[sub_resource type="RectangleShape2D" id="shape_standard_door"]
+size = Vector2(32, 32)
+
 [node name="KantoRoute2" type="Node2D" unique_id=1334981567]
 script = ExtResource("8_metadata")
 map_id = "kanto_route_2"
@@ -489,8 +492,8 @@ target_spawn_name = "FromRoute2"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse" unique_id=986702895]
-position = Vector2(8, -8)
-shape = SubResource("RectangleShape2D_house_door")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse" unique_id=27466854 instance=ExtResource("20_door_hint")]
 z_as_relative = false

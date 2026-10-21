@@ -209,6 +209,9 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_3ghgs")
 
+[sub_resource type="RectangleShape2D" id="shape_standard_door"]
+size = Vector2(32, 32)
+
 [node name="PewterCity2" type="Node2D" unique_id=2051045385]
 script = ExtResource("4_metadata")
 map_id = "kanto_pewter_city"
@@ -291,12 +294,12 @@ target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/pokemon_cent
 target_spawn_name = "FromOutside"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=170342928]
-position = Vector2(0, -18)
-shape = SubResource("RectangleShape2D_2mtwu")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=43017231 instance=ExtResource("6_frcun")]
+position = Vector2(0, 0)
 z_as_relative = false
-position = Vector2(0, -16)
 
 [node name="ToGym" type="Area2D" parent="Exits" unique_id=1528691859]
 position = Vector2(592, 528)
@@ -306,7 +309,7 @@ target_spawn_name = "FromPewterCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGym" unique_id=1730913991]
 position = Vector2(0, -16)
-shape = SubResource("RectangleShape2D_2mtwu")
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToGym" unique_id=1666455636 instance=ExtResource("6_frcun")]
 z_as_relative = false
@@ -334,8 +337,8 @@ target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/house1.tscn"
 target_spawn_name = "FromPewterCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1" unique_id=1866582334]
-position = Vector2(-96, -104)
-shape = SubResource("RectangleShape2D_2mtwu")
+position = Vector2(-96, -112)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse1" unique_id=100386195 instance=ExtResource("6_frcun")]
 z_as_relative = false
@@ -348,8 +351,8 @@ target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/house2.tscn"
 target_spawn_name = "FromPewterCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse2" unique_id=1165082321]
-position = Vector2(0, -8)
-shape = SubResource("RectangleShape2D_2mtwu")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse2" unique_id=1293932138 instance=ExtResource("6_frcun")]
 z_as_relative = false

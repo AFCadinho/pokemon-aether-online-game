@@ -41,6 +41,7 @@ func _init() -> void:
 func _run() -> void:
 	for entrance: Array in ENTRANCES:
 		await _check_entrance(entrance[0], entrance[1], entrance[2], entrance[3])
+	await _check_world_doors()
 	quit(1 if failed else 0)
 
 
@@ -53,10 +54,7 @@ func _check_entrance(scene_path: String, exit_name: String, spawn_name: String, 
 	var arrival := town.get_node("Spawns/" + spawn_name) as Marker2D
 	_check(collision.get_cell_source_id(collision.local_to_map(collision.to_local(door_tile))) == -1,
 		"the door tile is walkable")
-	if scene_path == PALLET_SCENE:
-		_check(not door.call("contains_world_position", door_tile), "adjusted Pallet trigger uses body overlap at the threshold")
-	else:
-		_check(door.call("contains_world_position", door_tile), "the transition contains the reachable door tile")
+	_check(not door.call("contains_world_position", door_tile), "door trigger uses body overlap at the threshold")
 	_check(hint.global_position == door_tile, "the hint marks the same door tile")
 	_check(not door.call("contains_world_position", arrival.global_position),
 		"returning from the house does not immediately re-enter")
@@ -65,7 +63,7 @@ func _check_entrance(scene_path: String, exit_name: String, spawn_name: String, 
 		_check_pallet_geometry(town, door, exit_name, door_tile, arrival)
 		await _check_physics_entry(door, door_tile, arrival.global_position)
 	else:
-		_check_player_detection(town, door, door_tile, arrival.global_position)
+		await _check_physics_entry(door, door_tile, arrival.global_position)
 
 	town.free()
 
@@ -168,3 +166,59 @@ func _check(condition: bool, message: String) -> void:
 	else:
 		failed = true
 		push_error("FAIL %s" % message)
+
+
+func _check_world_doors() -> void:
+	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://resources/world/map_doors.json"))
+	catalog["res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"] = [
+		{"exit": "Exits/ToPokecenter", "enabled": true, "threshold": Vector2(1136, 1456), "arrivals": ["FromPokecenter"]},
+		{"exit": "Exits/ToHouse1", "enabled": true, "threshold": Vector2(1552, 880), "arrivals": ["FromHouse1"]},
+		{"exit": "Exits/ToTrainerSchool", "enabled": true, "threshold": Vector2(1904, 880), "arrivals": ["FromTrainerSchool"]},
+	]
+	catalog["res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn"].append(
+		{"exit": "Exits/ToGym", "enabled": true, "threshold": Vector2(592, 528), "arrivals": ["FromGym"]})
+	var count := 0
+	for path: String in catalog:
+		var map := (load(path) as PackedScene).instantiate()
+		if path.ends_with("/viridian_city/viridian_city.tscn"):
+			var locked := map.get_node("Exits/ToGym") as Area2D
+			var locked_shape := locked.get_node("CollisionShape2D") as CollisionShape2D
+			_check(locked.get_script() == null, "Viridian gym remains unavailable")
+			_check(locked_shape.global_position == Vector2(1328, 384) and locked_shape.shape.size == Vector2(32, 32), "locked gym also follows the trigger standard")
+		for entry: Dictionary in catalog[path]:
+			if not entry.enabled:
+				continue
+			count += 1
+			print("Checking standard ", path, " ", entry.exit)
+			var threshold: Vector2
+			if entry.has("threshold"):
+				threshold = entry.threshold
+			else:
+				# Last art row identifies the walkable doorway tile independently
+				# of the exit/hint position being tested (32px movement grid).
+				var bounds: Array = entry.bounds
+				threshold = Vector2(floor((bounds[0] + bounds[2] / 2.0) / 32.0) * 32 + 16,
+					floor((bounds[1] + bounds[3] - 1) / 32.0) * 32 + 16)
+			if path.ends_with("/celadon_condominiums_roof.tscn"):
+				# The raised facade has collision on the art's last row.
+				# Its reachable entrance is the next tile down.
+				threshold = Vector2(144, 496)
+			var door := map.get_node(entry.exit) as Area2D
+			var shape := door.get_node("CollisionShape2D") as CollisionShape2D
+			_check(shape.shape is RectangleShape2D and shape.shape.size == Vector2(32, 32), "standard one-tile trigger")
+			_check(shape.global_position == threshold - Vector2(0, 16), "trigger bottom aligns with visible threshold")
+			var hint := door.get_node_or_null("DoorTransitionHint") as Node2D
+			if hint == null:
+				hint = door.get_node("TransitionHint") as Node2D
+			_check(hint.global_position == threshold, "hint identifies the actual doorway tile")
+			var collision := map.find_child("Collision", true, false) as TileMapLayer
+			_check(collision != null and collision.get_cell_source_id(collision.local_to_map(collision.to_local(threshold))) == -1, "threshold is walkable")
+			_check(door.is_connected("body_entered", Callable(door, "_on_body_entered")), "physics signal remains connected")
+			# Some entrances share a return door (department store); still test
+			# their approach and use every configured return marker where present.
+			await _check_physics_entry(door, threshold, threshold + Vector2(0, 32))
+			for spawn: String in entry.arrivals:
+				var arrival := map.get_node("Spawns/" + spawn) as Node2D
+				await _check_physics_entry(door, threshold, arrival.global_position)
+		map.free()
+	_check(count == 51, "all 51 configured building door entrances covered")
