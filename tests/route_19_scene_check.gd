@@ -27,8 +27,8 @@ func _run() -> void:
 	for y in range(8,40):
 		_check(player.can_move_to(Vector2(560,y*32+16)), "gate stair avenue reaches the beach")
 	for x in range(16,19):
-		_check(player.can_move_to(Vector2(x*32+16,240)), "full gate opening is walkable")
-		_check(route.get_node("Exits/ToFuchsiaGate").contains_world_position(Vector2(x*32+16,240)), "full gate opening detects exits")
+		_check(player.can_move_to(Vector2(x*32+16,144)), "current gate opening is walkable")
+		_check(route.get_node("Exits/ToFuchsiaGate").contains_world_position(Vector2(x*32+16,144)), "full gate opening detects exits")
 	_check(route.is_water_tile_for_actor(Vector2(25*32+16,60*32+16),player), "sea is water")
 	_check(not player.can_move_to(Vector2(25*32+16,60*32+16)), "sea blocks walking")
 	var collision: TileMapLayer = route.find_map_tilemap_layer("Collision")
