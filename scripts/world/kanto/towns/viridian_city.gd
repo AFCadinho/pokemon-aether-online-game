@@ -275,6 +275,7 @@ func prepare_player_arrival(spawn_name: String) -> void:
 	var doors := {
 		"FromPokecenter": "ViridianCity/PokemonCenterSlidingDoor",
 		"FromHouse1": "ViridianCity/House1HingedDoor",
+		"FromGym": "ViridianCity/GymDoubleSlidingDoor",
 	}
 	if not doors.has(spawn_name):
 		return

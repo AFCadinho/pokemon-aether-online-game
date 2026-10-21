@@ -75,3 +75,22 @@ with a shaded face and visible edge. Its swing lasts 0.24 seconds.
 The complete leaf includes six shaded rows below the lintel. At full opening
 the leaf edge disappears behind the jamb; the render check verifies every pixel
 of the opening, not only its center.
+
+
+## Gym double sliding door
+
+Viridian Gym uses `double_sliding_map_door.gd`: both leaves translate away
+from the center into their respective jambs. The original 48×38 panel starts
+at (1304, 368). Its curved lintel/sill are preserved with stepped column bounds;
+the silver center seam moves with the leaves. This profile is specific to this
+48-pixel gym artwork; inspect other gym artwork before reusing it.
+
+The shared controller retains access checks, Overworld SFX, nearby-player
+holding and silent `FromGym` arrival preparation. The existing `ToGym` node
+has no MapExit script or interior destination: this visual does not enable
+that unavailable entrance. Tests simulate unlocked access, not a live gym visit.
+
+Run `viridian_gym_door_check.gd` and the native
+`viridian_gym_door_render_check.gd` through slot-env. The latter checks both
+translation directions, the opening center, every fully-open aperture pixel,
+and unchanged surrounding artwork. Live gym entry awaits an interior hookup.
