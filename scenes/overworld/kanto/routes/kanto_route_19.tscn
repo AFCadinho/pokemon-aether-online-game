@@ -7,16 +7,15 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_pnatt"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="6_xdia5"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_1wlhw"]
-
-[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="r19_trainer"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="r19_dialogue"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="r19_pokemon"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/swimmer_m_frames.tres" id="r19_m"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/swimmer_f_frames.tres" id="r19_f"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="r19_worker"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/collector_frames.tres" id="r19_collector"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/swimmer-gen6.png" id="r19_m_portrait"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/swimmerf2-gen6.png" id="r19_f_portrait"]
+[ext_resource type="SpriteFrames" uid="uid://dyj1g8gbbb10q" path="res://assets/npcs/classes/collector_frames.tres" id="r19_collector"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="r19_dialogue"]
+[ext_resource type="SpriteFrames" uid="uid://brop6u80ud8n0" path="res://assets/npcs/classes/swimmer_f_frames.tres" id="r19_f"]
+[ext_resource type="Texture2D" uid="uid://n6sb5cu70xtd" path="res://assets/sprites/trainer_cards/showdown/swimmerf2-gen6.png" id="r19_f_portrait"]
+[ext_resource type="SpriteFrames" uid="uid://dta57j6dhidtv" path="res://assets/npcs/classes/swimmer_m_frames.tres" id="r19_m"]
+[ext_resource type="Texture2D" uid="uid://dniqsjmrs8pln" path="res://assets/sprites/trainer_cards/showdown/swimmer-gen6.png" id="r19_m_portrait"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="r19_pokemon"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r19_trainer"]
+[ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="r19_worker"]
 
 [sub_resource type="RectangleShape2D" id="GateShape"]
 size = Vector2(96, 32)
@@ -178,8 +177,6 @@ sources/0 = SubResource("TileSetAtlasSource_lqpig")
 [node name="Route19" type="Node2D" unique_id=1197152435]
 script = ExtResource("2_metadata")
 water_reference_tile = Vector2i(25, 60)
-encounter_area_id = "kanto_route_19"
-surf_encounter_chance = 0.02
 map_id = "kanto_route_19"
 map_region_name = "Kanto"
 map_display_name = "Route 19"
@@ -189,7 +186,9 @@ world_access_area_type = "route"
 location_id = "kanto.route.19"
 location_name = "Route 19"
 region_id = "kanto"
+encounter_area_id = "kanto_route_19"
 battle_environment_id = "water"
+surf_encounter_chance = 0.02
 music_profile_id = "kanto.routes_3_10_16_22"
 
 [node name="Visual" parent="." unique_id=899745830 instance=ExtResource("1_visual")]
@@ -202,7 +201,270 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1666816289]
 
+[node name="swimmer_richard" parent="Entities/NPCs" unique_id=1479376926 instance=ExtResource("r19_trainer")]
+position = Vector2(720, 1232)
+trainer_id = "kanto_route_19_swimmer_richard"
+sight_range_tiles = 2
+npc_id = "kanto_route_19_swimmer_richard"
+dialogue_id = "kanto_route_19_swimmer_richard_intro"
+display_name = "Swimmer Richard"
+npc_sprite_frames = ExtResource("r19_m")
+mugshot = ExtResource("r19_m_portrait")
+battle_environment_id = "water"
+
+[node name="swimmer_reece" parent="Entities/NPCs" unique_id=1994331855 instance=ExtResource("r19_trainer")]
+position = Vector2(1008, 1360)
+trainer_id = "kanto_route_19_swimmer_reece"
+sight_range_tiles = 2
+npc_id = "kanto_route_19_swimmer_reece"
+dialogue_id = "kanto_route_19_swimmer_reece_intro"
+display_name = "Swimmer Reece"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("r19_m")
+mugshot = ExtResource("r19_m_portrait")
+battle_environment_id = "water"
+
+[node name="swimmer_tony" parent="Entities/NPCs" unique_id=771585275 instance=ExtResource("r19_trainer")]
+position = Vector2(1040, 1840)
+trainer_id = "kanto_route_19_swimmer_tony"
+sight_range_tiles = 2
+npc_id = "kanto_route_19_swimmer_tony"
+dialogue_id = "kanto_route_19_swimmer_tony_intro"
+display_name = "Swimmer Tony"
+npc_sprite_frames = ExtResource("r19_m")
+mugshot = ExtResource("r19_m_portrait")
+battle_environment_id = "water"
+
+[node name="swimmer_david" parent="Entities/NPCs" unique_id=157239684 instance=ExtResource("r19_trainer")]
+position = Vector2(1264, 1712)
+trainer_id = "kanto_route_19_swimmer_david"
+sight_range_tiles = 2
+npc_id = "kanto_route_19_swimmer_david"
+dialogue_id = "kanto_route_19_swimmer_david_intro"
+display_name = "Swimmer David"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("r19_m")
+mugshot = ExtResource("r19_m_portrait")
+battle_environment_id = "water"
+
+[node name="swimmer_douglas" parent="Entities/NPCs" unique_id=913126306 instance=ExtResource("r19_trainer")]
+position = Vector2(816, 1904)
+trainer_id = "kanto_route_19_swimmer_douglas"
+sight_range_tiles = 2
+npc_id = "kanto_route_19_swimmer_douglas"
+dialogue_id = "kanto_route_19_swimmer_douglas_intro"
+display_name = "Swimmer Douglas"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("r19_m")
+mugshot = ExtResource("r19_m_portrait")
+battle_environment_id = "water"
+
+[node name="swimmer_matthew" parent="Entities/NPCs" unique_id=430921506 instance=ExtResource("r19_trainer")]
+position = Vector2(1296, 1296)
+trainer_id = "kanto_route_19_swimmer_matthew"
+sight_range_tiles = 2
+npc_id = "kanto_route_19_swimmer_matthew"
+dialogue_id = "kanto_route_19_swimmer_matthew_intro"
+display_name = "Swimmer Matthew"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("r19_m")
+mugshot = ExtResource("r19_m_portrait")
+battle_environment_id = "water"
+
+[node name="swimmer_axle" parent="Entities/NPCs" unique_id=1174510951 instance=ExtResource("r19_trainer")]
+position = Vector2(656, 2096)
+trainer_id = "kanto_route_19_swimmer_axle"
+sight_range_tiles = 2
+npc_id = "kanto_route_19_swimmer_axle"
+dialogue_id = "kanto_route_19_swimmer_axle_intro"
+display_name = "Swimmer Axle"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("r19_m")
+mugshot = ExtResource("r19_m_portrait")
+battle_environment_id = "water"
+
+[node name="swimmer_alice" parent="Entities/NPCs" unique_id=659343 instance=ExtResource("r19_trainer")]
+position = Vector2(1040, 2032)
+trainer_id = "kanto_route_19_swimmer_alice"
+sight_range_tiles = 2
+npc_id = "kanto_route_19_swimmer_alice"
+dialogue_id = "kanto_route_19_swimmer_alice_intro"
+display_name = "Swimmer Alice"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r19_f")
+mugshot = ExtResource("r19_f_portrait")
+battle_environment_id = "water"
+
+[node name="swimmer_connie" parent="Entities/NPCs" unique_id=350915138 instance=ExtResource("r19_trainer")]
+position = Vector2(1200, 1968)
+trainer_id = "kanto_route_19_swimmer_connie"
+sight_range_tiles = 2
+npc_id = "kanto_route_19_swimmer_connie"
+dialogue_id = "kanto_route_19_swimmer_connie_intro"
+display_name = "Swimmer Connie"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("r19_f")
+mugshot = ExtResource("r19_f_portrait")
+battle_environment_id = "water"
+
+[node name="swimmer_anya" parent="Entities/NPCs" unique_id=893792744 instance=ExtResource("r19_trainer")]
+position = Vector2(176, 1904)
+trainer_id = "kanto_route_19_swimmer_anya"
+sight_range_tiles = 2
+npc_id = "kanto_route_19_swimmer_anya"
+dialogue_id = "kanto_route_19_swimmer_anya_intro"
+display_name = "Swimmer Anya"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("r19_f")
+mugshot = ExtResource("r19_f_portrait")
+battle_environment_id = "water"
+
+[node name="sis_and_bro_lia" parent="Entities/NPCs" unique_id=229451085 instance=ExtResource("r19_trainer")]
+position = Vector2(304, 2000)
+trainer_id = "kanto_route_19_sis_and_bro_lia"
+sight_range_tiles = 2
+npc_id = "kanto_route_19_sis_and_bro_lia"
+dialogue_id = "kanto_route_19_sis_and_bro_lia_intro"
+display_name = "Sis and Bro Lia"
+npc_sprite_frames = ExtResource("r19_f")
+mugshot = ExtResource("r19_f_portrait")
+battle_environment_id = "water"
+
+[node name="sis_and_bro_luc" parent="Entities/NPCs" unique_id=1993636087 instance=ExtResource("r19_trainer")]
+position = Vector2(464, 2096)
+trainer_id = "kanto_route_19_sis_and_bro_luc"
+sight_range_tiles = 2
+npc_id = "kanto_route_19_sis_and_bro_luc"
+dialogue_id = "kanto_route_19_sis_and_bro_luc_intro"
+display_name = "Sis and Bro Luc"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r19_m")
+mugshot = ExtResource("r19_m_portrait")
+battle_environment_id = "water"
+
+[node name="lifeguard" parent="Entities/NPCs" unique_id=291937340 instance=ExtResource("r19_dialogue")]
+position = Vector2(912, 1168)
+npc_id = "kanto_route_19_lifeguard"
+dialogue_id = "kanto_route_19_lifeguard_talk"
+display_name = "Lifeguard"
+npc_sprite_frames = ExtResource("r19_worker")
+dialogue_portrait_visible = false
+
+[node name="shell_collector" parent="Entities/NPCs" unique_id=1170914435 instance=ExtResource("r19_dialogue")]
+position = Vector2(1360, 880)
+npc_id = "kanto_route_19_shell_collector"
+dialogue_id = "kanto_route_19_shell_collector_talk"
+display_name = "Shell Collector"
+npc_sprite_frames = ExtResource("r19_collector")
+dialogue_portrait_visible = false
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=2045055250]
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1238315731]
+
+[node name="tentacool_1" parent="Entities/Pokemon" unique_id=295266058 instance=ExtResource("r19_pokemon")]
+position = Vector2(880, 1808)
+overworld_pokemon_id = "kanto_route_19_tentacool_1"
+species_id = "tentacool"
+level = 24
+dialogue_id = "kanto_route_19_tentacool_1_cry"
+display_name = "Tentacool"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 28.0
+movement_wait_jitter_seconds = 0.5
+
+[node name="tentacruel_1" parent="Entities/Pokemon" unique_id=102565860 instance=ExtResource("r19_pokemon")]
+position = Vector2(1200, 1872)
+overworld_pokemon_id = "kanto_route_19_tentacruel_1"
+species_id = "tentacruel"
+level = 35
+dialogue_id = "kanto_route_19_tentacruel_1_cry"
+display_name = "Tentacruel"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 28.0
+movement_wait_jitter_seconds = 0.5
+
+[node name="horsea_1" parent="Entities/Pokemon" unique_id=1090152597 instance=ExtResource("r19_pokemon")]
+position = Vector2(1328, 1456)
+overworld_pokemon_id = "kanto_route_19_horsea_1"
+species_id = "horsea"
+level = 24
+dialogue_id = "kanto_route_19_horsea_1_cry"
+display_name = "Horsea"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 28.0
+movement_wait_jitter_seconds = 0.5
+
+[node name="krabby_1" parent="Entities/Pokemon" unique_id=25955754 instance=ExtResource("r19_pokemon")]
+position = Vector2(464, 1392)
+overworld_pokemon_id = "kanto_route_19_krabby_1"
+species_id = "krabby"
+level = 25
+dialogue_id = "kanto_route_19_krabby_1_cry"
+display_name = "Krabby"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 28.0
+movement_wait_jitter_seconds = 0.5
+
+[node name="kingler_1" parent="Entities/Pokemon" unique_id=1413680302 instance=ExtResource("r19_pokemon")]
+position = Vector2(848, 1616)
+overworld_pokemon_id = "kanto_route_19_kingler_1"
+species_id = "kingler"
+level = 30
+dialogue_id = "kanto_route_19_kingler_1_cry"
+display_name = "Kingler"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 28.0
+movement_wait_jitter_seconds = 0.5
+
+[node name="staryu_1" parent="Entities/Pokemon" unique_id=536097929 instance=ExtResource("r19_pokemon")]
+position = Vector2(336, 2128)
+overworld_pokemon_id = "kanto_route_19_staryu_1"
+species_id = "staryu"
+level = 20
+dialogue_id = "kanto_route_19_staryu_1_cry"
+display_name = "Staryu"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 28.0
+movement_wait_jitter_seconds = 0.5
+
+[node name="corsola_1" parent="Entities/Pokemon" unique_id=313492099 instance=ExtResource("r19_pokemon")]
+position = Vector2(1104, 1648)
+overworld_pokemon_id = "kanto_route_19_corsola_1"
+species_id = "corsola"
+level = 20
+dialogue_id = "kanto_route_19_corsola_1_cry"
+display_name = "Corsola"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 28.0
+movement_wait_jitter_seconds = 0.5
+
+[node name="tentacool_2" parent="Entities/Pokemon" unique_id=1424316961 instance=ExtResource("r19_pokemon")]
+position = Vector2(624, 1936)
+overworld_pokemon_id = "kanto_route_19_tentacool_2"
+species_id = "tentacool"
+level = 28
+dialogue_id = "kanto_route_19_tentacool_2_cry"
+display_name = "Tentacool"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 28.0
+movement_wait_jitter_seconds = 0.5
 
 [node name="Spawns" type="Node2D" parent="." unique_id=745818965]
 
@@ -246,274 +508,5 @@ visible = false
 z_index = 100
 tile_map_data = PackedByteArray("AAAqAAQAAAAIAAEAAAAqAAUAAAAIAAEAAAAqAAYAAAAIAAEAAAAqAAcAAAAIAAEAAAAqAAgAAAAIAAEAAAAqAAkAAAAIAAEAAAAqAAoAAAAIAAEAAAAqAAsAAAAIAAEAAAAqAAwAAAAIAAEAAAAqAA0AAAAIAAEAAAAqAA4AAAAIAAEAAAAqAA8AAAAIAAEAAAAqABAAAAAIAAEAAAAqABEAAAAIAAEAAAAqABIAAAAIAAEAAAAqABMAAAAIAAEAAAAqABQAAAAIAAEAAAAqABUAAAAIAAEAAAAqABYAAAAIAAEAAAAqABcAAAAIAAEAAAAqABgAAAAIAAEAAAAqABkAAAAIAAEAAAAqABoAAAAIAAEAAAAqABsAAAAIAAEAAAAqABwAAAAIAAEAAAArABYAAAAIAAEAAAArABcAAAAIAAEAAAArABgAAAAIAAEAAAArABkAAAAIAAEAAAArABoAAAAIAAEAAAArABsAAAAIAAEAAAAsABYAAAAIAAEAAAAsABcAAAAIAAEAAAAsABgAAAAIAAEAAAAsABkAAAAIAAEAAAAsABoAAAAIAAEAAAAsABsAAAAIAAEAAAArAA0AAAAIAAEAAAArAA4AAAAIAAEAAAArAA8AAAAIAAEAAAArABAAAAAIAAEAAAArABEAAAAIAAEAAAArABIAAAAIAAEAAAArABMAAAAIAAEAAAArABQAAAAIAAEAAAArABUAAAAIAAEAAAAtAAkAAAAIAAEAAAAtAAoAAAAIAAEAAAAtAAsAAAAIAAEAAAAtAAwAAAAIAAEAAAAtAA0AAAAIAAEAAAAtAA4AAAAIAAEAAAArAAQAAAAIAAEAAAArAAUAAAAIAAEAAAArAAYAAAAIAAEAAAArAAcAAAAIAAEAAAArAAgAAAAIAAEAAAArAAkAAAAIAAEAAAArAAoAAAAIAAEAAAArAAsAAAAIAAEAAAArAAwAAAAIAAEAAAAsAAQAAAAIAAEAAAAsAAUAAAAIAAEAAAAsAAYAAAAIAAEAAAAsAAcAAAAIAAEAAAAsAAgAAAAIAAEAAAAsAAkAAAAIAAEAAAAsAAoAAAAIAAEAAAAsAAsAAAAIAAEAAAAsAAwAAAAIAAEAAAAsAA0AAAAIAAEAAAA=")
 tile_set = SubResource("TileSet_0jn5m")
-
-
-[node name="swimmer_richard" parent="Entities/NPCs" instance=ExtResource("r19_trainer")]
-position = Vector2(720, 1232)
-trainer_id = "kanto_route_19_swimmer_richard"
-npc_id = "kanto_route_19_swimmer_richard"
-dialogue_id = "kanto_route_19_swimmer_richard_intro"
-display_name = "Swimmer Richard"
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-npc_sprite_frames = ExtResource("r19_m")
-mugshot = ExtResource("r19_m_portrait")
-battle_environment_id = "water"
-
-[node name="swimmer_reece" parent="Entities/NPCs" instance=ExtResource("r19_trainer")]
-position = Vector2(1008, 1360)
-trainer_id = "kanto_route_19_swimmer_reece"
-npc_id = "kanto_route_19_swimmer_reece"
-dialogue_id = "kanto_route_19_swimmer_reece_intro"
-display_name = "Swimmer Reece"
-sight_range_tiles = 2
-facing_direction = Vector2(-1, 0)
-npc_sprite_frames = ExtResource("r19_m")
-mugshot = ExtResource("r19_m_portrait")
-battle_environment_id = "water"
-
-[node name="swimmer_tony" parent="Entities/NPCs" instance=ExtResource("r19_trainer")]
-position = Vector2(1040, 1840)
-trainer_id = "kanto_route_19_swimmer_tony"
-npc_id = "kanto_route_19_swimmer_tony"
-dialogue_id = "kanto_route_19_swimmer_tony_intro"
-display_name = "Swimmer Tony"
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-npc_sprite_frames = ExtResource("r19_m")
-mugshot = ExtResource("r19_m_portrait")
-battle_environment_id = "water"
-
-[node name="swimmer_david" parent="Entities/NPCs" instance=ExtResource("r19_trainer")]
-position = Vector2(1264, 1712)
-trainer_id = "kanto_route_19_swimmer_david"
-npc_id = "kanto_route_19_swimmer_david"
-dialogue_id = "kanto_route_19_swimmer_david_intro"
-display_name = "Swimmer David"
-sight_range_tiles = 2
-facing_direction = Vector2(-1, 0)
-npc_sprite_frames = ExtResource("r19_m")
-mugshot = ExtResource("r19_m_portrait")
-battle_environment_id = "water"
-
-[node name="swimmer_douglas" parent="Entities/NPCs" instance=ExtResource("r19_trainer")]
-position = Vector2(816, 1904)
-trainer_id = "kanto_route_19_swimmer_douglas"
-npc_id = "kanto_route_19_swimmer_douglas"
-dialogue_id = "kanto_route_19_swimmer_douglas_intro"
-display_name = "Swimmer Douglas"
-sight_range_tiles = 2
-facing_direction = Vector2(-1, 0)
-npc_sprite_frames = ExtResource("r19_m")
-mugshot = ExtResource("r19_m_portrait")
-battle_environment_id = "water"
-
-[node name="swimmer_matthew" parent="Entities/NPCs" instance=ExtResource("r19_trainer")]
-position = Vector2(1296, 1296)
-trainer_id = "kanto_route_19_swimmer_matthew"
-npc_id = "kanto_route_19_swimmer_matthew"
-dialogue_id = "kanto_route_19_swimmer_matthew_intro"
-display_name = "Swimmer Matthew"
-sight_range_tiles = 2
-facing_direction = Vector2(-1, 0)
-npc_sprite_frames = ExtResource("r19_m")
-mugshot = ExtResource("r19_m_portrait")
-battle_environment_id = "water"
-
-[node name="swimmer_axle" parent="Entities/NPCs" instance=ExtResource("r19_trainer")]
-position = Vector2(656, 2096)
-trainer_id = "kanto_route_19_swimmer_axle"
-npc_id = "kanto_route_19_swimmer_axle"
-dialogue_id = "kanto_route_19_swimmer_axle_intro"
-display_name = "Swimmer Axle"
-sight_range_tiles = 2
-facing_direction = Vector2(1, 0)
-npc_sprite_frames = ExtResource("r19_m")
-mugshot = ExtResource("r19_m_portrait")
-battle_environment_id = "water"
-
-[node name="swimmer_alice" parent="Entities/NPCs" instance=ExtResource("r19_trainer")]
-position = Vector2(1040, 2032)
-trainer_id = "kanto_route_19_swimmer_alice"
-npc_id = "kanto_route_19_swimmer_alice"
-dialogue_id = "kanto_route_19_swimmer_alice_intro"
-display_name = "Swimmer Alice"
-sight_range_tiles = 2
-facing_direction = Vector2(0, -1)
-npc_sprite_frames = ExtResource("r19_f")
-mugshot = ExtResource("r19_f_portrait")
-battle_environment_id = "water"
-
-[node name="swimmer_connie" parent="Entities/NPCs" instance=ExtResource("r19_trainer")]
-position = Vector2(1200, 1968)
-trainer_id = "kanto_route_19_swimmer_connie"
-npc_id = "kanto_route_19_swimmer_connie"
-dialogue_id = "kanto_route_19_swimmer_connie_intro"
-display_name = "Swimmer Connie"
-sight_range_tiles = 2
-facing_direction = Vector2(-1, 0)
-npc_sprite_frames = ExtResource("r19_f")
-mugshot = ExtResource("r19_f_portrait")
-battle_environment_id = "water"
-
-[node name="swimmer_anya" parent="Entities/NPCs" instance=ExtResource("r19_trainer")]
-position = Vector2(176, 1904)
-trainer_id = "kanto_route_19_swimmer_anya"
-npc_id = "kanto_route_19_swimmer_anya"
-dialogue_id = "kanto_route_19_swimmer_anya_intro"
-display_name = "Swimmer Anya"
-sight_range_tiles = 2
-facing_direction = Vector2(1, 0)
-npc_sprite_frames = ExtResource("r19_f")
-mugshot = ExtResource("r19_f_portrait")
-battle_environment_id = "water"
-
-[node name="sis_and_bro_lia" parent="Entities/NPCs" instance=ExtResource("r19_trainer")]
-position = Vector2(304, 2000)
-trainer_id = "kanto_route_19_sis_and_bro_lia"
-npc_id = "kanto_route_19_sis_and_bro_lia"
-dialogue_id = "kanto_route_19_sis_and_bro_lia_intro"
-display_name = "Sis and Bro Lia"
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-npc_sprite_frames = ExtResource("r19_f")
-mugshot = ExtResource("r19_f_portrait")
-battle_environment_id = "water"
-
-[node name="sis_and_bro_luc" parent="Entities/NPCs" instance=ExtResource("r19_trainer")]
-position = Vector2(464, 2096)
-trainer_id = "kanto_route_19_sis_and_bro_luc"
-npc_id = "kanto_route_19_sis_and_bro_luc"
-dialogue_id = "kanto_route_19_sis_and_bro_luc_intro"
-display_name = "Sis and Bro Luc"
-sight_range_tiles = 2
-facing_direction = Vector2(0, -1)
-npc_sprite_frames = ExtResource("r19_m")
-mugshot = ExtResource("r19_m_portrait")
-battle_environment_id = "water"
-
-[node name="lifeguard" parent="Entities/NPCs" instance=ExtResource("r19_dialogue")]
-position = Vector2(912, 1168)
-npc_id = "kanto_route_19_lifeguard"
-dialogue_id = "kanto_route_19_lifeguard_talk"
-display_name = "Lifeguard"
-facing_direction = Vector2(0, 1)
-npc_sprite_frames = ExtResource("r19_worker")
-dialogue_portrait_visible = false
-
-[node name="shell_collector" parent="Entities/NPCs" instance=ExtResource("r19_dialogue")]
-position = Vector2(1360, 880)
-npc_id = "kanto_route_19_shell_collector"
-dialogue_id = "kanto_route_19_shell_collector_talk"
-display_name = "Shell Collector"
-facing_direction = Vector2(0, 1)
-npc_sprite_frames = ExtResource("r19_collector")
-dialogue_portrait_visible = false
-
-[node name="Pokemon" type="Node2D" parent="Entities"]
-
-[node name="tentacool_1" parent="Entities/Pokemon" instance=ExtResource("r19_pokemon")]
-position = Vector2(880, 1808)
-overworld_pokemon_id = "kanto_route_19_tentacool_1"
-species_id = "tentacool"
-level = 24
-dialogue_id = "kanto_route_19_tentacool_1_cry"
-display_name = "Tentacool"
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
-movement_speed_pixels = 28.0
-movement_wait_seconds = 1.8
-movement_wait_jitter_seconds = 0.5
-
-[node name="tentacruel_1" parent="Entities/Pokemon" instance=ExtResource("r19_pokemon")]
-position = Vector2(1200, 1872)
-overworld_pokemon_id = "kanto_route_19_tentacruel_1"
-species_id = "tentacruel"
-level = 35
-dialogue_id = "kanto_route_19_tentacruel_1_cry"
-display_name = "Tentacruel"
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
-movement_speed_pixels = 28.0
-movement_wait_seconds = 1.8
-movement_wait_jitter_seconds = 0.5
-
-[node name="horsea_1" parent="Entities/Pokemon" instance=ExtResource("r19_pokemon")]
-position = Vector2(1328, 1456)
-overworld_pokemon_id = "kanto_route_19_horsea_1"
-species_id = "horsea"
-level = 24
-dialogue_id = "kanto_route_19_horsea_1_cry"
-display_name = "Horsea"
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
-movement_speed_pixels = 28.0
-movement_wait_seconds = 1.8
-movement_wait_jitter_seconds = 0.5
-
-[node name="krabby_1" parent="Entities/Pokemon" instance=ExtResource("r19_pokemon")]
-position = Vector2(464, 1392)
-overworld_pokemon_id = "kanto_route_19_krabby_1"
-species_id = "krabby"
-level = 25
-dialogue_id = "kanto_route_19_krabby_1_cry"
-display_name = "Krabby"
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
-movement_speed_pixels = 28.0
-movement_wait_seconds = 1.8
-movement_wait_jitter_seconds = 0.5
-
-[node name="kingler_1" parent="Entities/Pokemon" instance=ExtResource("r19_pokemon")]
-position = Vector2(848, 1616)
-overworld_pokemon_id = "kanto_route_19_kingler_1"
-species_id = "kingler"
-level = 30
-dialogue_id = "kanto_route_19_kingler_1_cry"
-display_name = "Kingler"
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
-movement_speed_pixels = 28.0
-movement_wait_seconds = 1.8
-movement_wait_jitter_seconds = 0.5
-
-[node name="staryu_1" parent="Entities/Pokemon" instance=ExtResource("r19_pokemon")]
-position = Vector2(336, 2128)
-overworld_pokemon_id = "kanto_route_19_staryu_1"
-species_id = "staryu"
-level = 20
-dialogue_id = "kanto_route_19_staryu_1_cry"
-display_name = "Staryu"
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
-movement_speed_pixels = 28.0
-movement_wait_seconds = 1.8
-movement_wait_jitter_seconds = 0.5
-
-[node name="corsola_1" parent="Entities/Pokemon" instance=ExtResource("r19_pokemon")]
-position = Vector2(1104, 1648)
-overworld_pokemon_id = "kanto_route_19_corsola_1"
-species_id = "corsola"
-level = 20
-dialogue_id = "kanto_route_19_corsola_1_cry"
-display_name = "Corsola"
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
-movement_speed_pixels = 28.0
-movement_wait_seconds = 1.8
-movement_wait_jitter_seconds = 0.5
-
-[node name="tentacool_2" parent="Entities/Pokemon" instance=ExtResource("r19_pokemon")]
-position = Vector2(624, 1936)
-overworld_pokemon_id = "kanto_route_19_tentacool_2"
-species_id = "tentacool"
-level = 28
-dialogue_id = "kanto_route_19_tentacool_2_cry"
-display_name = "Tentacool"
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
-movement_speed_pixels = 28.0
-movement_wait_seconds = 1.8
-movement_wait_jitter_seconds = 0.5
 
 [connection signal="body_entered" from="Exits/ToFuchsiaGate" to="Exits/ToFuchsiaGate" method="_on_body_entered"]
