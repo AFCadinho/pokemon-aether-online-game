@@ -943,23 +943,25 @@
     },
     {
       "activation": [
-        10.0,
+        -6.0,
         -8.0,
-        32.0,
+        64.0,
         96.0
       ],
-      "arrivals": [],
+      "arrivals": [
+        "FromRedRoofHouse"
+      ],
       "bounds": [
         358.0,
         944.0,
         52.0,
         40.0
       ],
-      "enabled": false,
-      "exit": "",
+      "enabled": true,
+      "exit": "Exits/ToRedRoofHouse",
       "id": "Door75",
       "kind": "double",
-      "label": "tile_[11, 29]",
+      "label": "ToRedRoofHouse",
       "layers": [
         "Objects",
         "Doors"
