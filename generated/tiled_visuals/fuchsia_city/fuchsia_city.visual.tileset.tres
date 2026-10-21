@@ -1,6 +1,6 @@
-[gd_resource type="TileSet" format=3 uid="uid://ct01dcwpuyw3h"]
+[gd_resource type="TileSet" format=3]
 
-[ext_resource type="Texture2D" uid="uid://cwapoh142w2ad" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_1_0.texture.res" id="1_6v3du"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_1_0.texture.res" id="1_6v3du"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_1025_0.texture.res" id="2_ri4t6"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_10_0.texture.res" id="3_s5l5t"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_11_0.texture.res" id="4_iwewy"]
@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_17_0.texture.res" id="10_dv5nw"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_18_0.texture.res" id="11_wqcyc"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_19_0.texture.res" id="12_2vdmh"]
-[ext_resource type="Texture2D" uid="uid://dk8cxhamwrqam" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_2049_0.texture.res" id="13_rhghv"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_2049_0.texture.res" id="13_rhghv"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_20_0.texture.res" id="14_3kt4w"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_21_0.texture.res" id="15_ypkkg"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_city/assets/fuchsia_city.visual.tileset.compact_source_22_0.texture.res" id="16_hke1c"]
