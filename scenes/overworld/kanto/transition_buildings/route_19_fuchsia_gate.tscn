@@ -12,8 +12,6 @@ location_id = "kanto.route_19.fuchsia.gate"
 location_name = "Route 19–Fuchsia Gate"
 
 [node name="GateNPC" parent="Entities/NPCs" index="0"]
-position = Vector2(464, 528)
-facing_direction = Vector2(0, -1)
 npc_id = "kanto_route_19_fuchsia_gate_attendant"
 npc_definition_id = "kanto_route_19_fuchsia_gate_attendant"
 display_name = "Route 19 Gate Attendant"
