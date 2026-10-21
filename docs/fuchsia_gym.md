@@ -13,7 +13,7 @@ facing up, and city tile (31, 35), facing down. The three-tile southern exit
 returns to `FromGym`; city `ToGym` enters at `FromFuchsiaCity`. City `Door76`
 is enabled and prepares its animation when returning from the Gym.
 
-`Tiles/Collision` is deliberately empty and editable. Static collision remains
+`Tiles/Collision` contains the user-authored room/furniture collision and remains
 owned by the user. This scene introduces no trainers or leader. The invisible-wall puzzle lives
 separately in `Entities/Interactables/InvisibleWalls`.
 
