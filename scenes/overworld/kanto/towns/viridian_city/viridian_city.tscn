@@ -1096,6 +1096,7 @@ access_lock_path = NodePath("../../Entities/Interactables/Locks/PokemonCenterDoo
 position = Vector2(1536, 860)
 z_index = 4
 script = ExtResource("51_house_door")
+animation_seconds = 0.24
 panel_size = Vector2(32, 32)
 activation_rect = Rect2(0, 4, 32, 72)
 movement_sound_id = "sliding_door"

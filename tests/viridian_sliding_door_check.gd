@@ -79,7 +79,7 @@ func _run() -> void:
 	_tick(door,0.5)
 	_check(door.open_amount == 0.0, "Door rests closed away from entrance")
 	local.moving = true; local.target = arrival
-	_tick(door,0.2)
+	_tick(door,door.animation_seconds + 0.02)
 	_check(door.open_amount == 1.0, "Door opens during approach step")
 	_check(sfx.get_child_count() == sounds_before + 1, "Opening plays exactly one sound")
 	var sound := sfx.get_child(sfx.get_child_count() - 1) as AudioStreamPlayer
