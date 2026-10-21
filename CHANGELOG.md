@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Recreate Fuchsia Gym’s FireRed/LeafGreen invisible-wall maze in a separate editable puzzle layer, adapted to the artist hall.
+
 - Open Fuchsia City Gym with its artist interior, animated city doorway and travel in both directions.
 
 - Let the Fuchsia Warden use his waiting and thank-you dialogue as the Gold Teeth quest progresses.
