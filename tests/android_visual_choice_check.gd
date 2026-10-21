@@ -19,7 +19,7 @@ func _run() -> void:
 	var settings := root.get_node("SettingsManager")
 	if OS.has_feature("android") and OS.has_feature("android_3d_experimental"):
 		_check(settings.is_android_3d_experimental() and settings.supports_3d_presentation(), "Native Android build exposes only the explicit experimental capability")
-		_check(RenderingServer.get_current_rendering_method() == "gl_compatibility", "Experimental choice preserves the regular Android renderer")
+		_check(RenderingServer.get_current_rendering_method() == str(ProjectSettings.get_setting_with_override("rendering/renderer/rendering_method.mobile")), "Android choice preserves the configured renderer")
 		# Exercise the real mobile screen-host gate without shaders, downloads or
 		# battle state: it must request the 3D arena instead of revealing 2D first.
 		var original_mode: String = settings.battle_presentation_mode
