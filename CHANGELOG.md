@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Fuchsia City scenery and animations from the latest artist TMX.
+
 - Add localized route information, Surf advice and coastal-wildlife signs with illustrated portraits on Route 19.
 
 - Give transition-building attendants ordinary local dialogue; reserve closure warnings and Saffron gate story conversations for attempted passage.
