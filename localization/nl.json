@@ -7426,5 +7426,10 @@
   "ui.settings.section.sound_game": "Spelgeluiden",
   "ui.settings.section.sound_interface": "Interface",
   "ui.settings.battle_sfx": "Gevechtseffecten",
-  "ui.settings.overworld_sfx": "Wereldgeluiden"
+  "ui.settings.overworld_sfx": "Wereldgeluiden",
+  "story.kanto.bird_research.title": "Vleugels zijn niet alles",
+  "story.kanto.bird_research.summary": "Vang na het aannemen een Spearow en een Doduo op Route 16 East en keer terug naar Bird Keeper Rowan. Je houdt beide Pokémon en krijgt de herbruikbare HM Fly.",
+  "story.kanto.bird_research.spearow": "Vang een Spearow op Route 16 East.",
+  "story.kanto.bird_research.doduo": "Vang een Doduo op Route 16 East.",
+  "story.kanto.bird_research.return": "Keer terug naar Bird Keeper Rowan in het huis op Route 16 East."
 }

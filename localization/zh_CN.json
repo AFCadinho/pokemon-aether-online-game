@@ -7426,5 +7426,10 @@
   "ui.settings.section.sound_game": "游戏音效",
   "ui.settings.section.sound_interface": "界面",
   "ui.settings.battle_sfx": "战斗音效",
-  "ui.settings.overworld_sfx": "世界音效"
+  "ui.settings.overworld_sfx": "世界音效",
+  "story.kanto.bird_research.title": "翅膀并非一切",
+  "story.kanto.bird_research.summary": "接受任务后在 Route 16 East 捕捉烈雀和嘟嘟，再回到养鸟人 Rowan 处。你保留两只宝可梦，并获得可重复使用的 HM Fly。",
+  "story.kanto.bird_research.spearow": "在 Route 16 East 捕捉一只烈雀。",
+  "story.kanto.bird_research.doduo": "在 Route 16 East 捕捉一只嘟嘟。",
+  "story.kanto.bird_research.return": "返回 Route 16 East 房屋里的养鸟人 Rowan 处。"
 }

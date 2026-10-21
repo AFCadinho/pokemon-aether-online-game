@@ -7426,5 +7426,10 @@
   "ui.settings.section.sound_game": "Sons do jogo",
   "ui.settings.section.sound_interface": "Interface",
   "ui.settings.battle_sfx": "Efeitos de batalha",
-  "ui.settings.overworld_sfx": "Sons do mundo"
+  "ui.settings.overworld_sfx": "Sons do mundo",
+  "story.kanto.bird_research.title": "Asas não são tudo",
+  "story.kanto.bird_research.summary": "Capture um Spearow e um Doduo na Route 16 East após aceitar a missão e volte ao Bird Keeper Rowan. Fique com ambos e receba HM Fly reutilizável.",
+  "story.kanto.bird_research.spearow": "Capture um Spearow na Route 16 East.",
+  "story.kanto.bird_research.doduo": "Capture um Doduo na Route 16 East.",
+  "story.kanto.bird_research.return": "Volte ao Bird Keeper Rowan na casa da Route 16 East."
 }
