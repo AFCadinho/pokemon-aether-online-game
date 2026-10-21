@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep animated TreeBottom foliage behind roofs and neighbouring trees as well as the trunk, preserving every wind-animation frame and its timing.
+
 - Include the 2D/3D choice in regular Android builds without an experimental build opt-in, using the existing Mobile/Vulkan renderer.
 
 - Preserve roofs, walls, fences and overlapping tree crowns when sorting tree bases around players and mounts, including Viridian City and Route 2.

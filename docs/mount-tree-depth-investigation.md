@@ -150,27 +150,44 @@ crown. Viridian City and Route 2 exposed both failure modes.
 layers exist. It compares each promoted base with the visible scenery layers
 that its promotion crosses. Pixels covered by those layers remain at their
 original base depth; only uncovered pixels retain the crown depth needed for
-mount occlusion. A partial cell is split into complementary images in one
-compact, map-local atlas per affected base layer. Completely covered cells
+mount occlusion. A partial cell is split into complementary images in compact, map-local
+atlases per affected base layer. Completely covered cells
 return to the original layer without generating a texture. Shared source
 atlases, native foreground animations, crown depth boundaries, actor sorting,
 collision and Tiled files are unchanged.
 
-Coverage includes every animation frame and supports transformed atlas cells.
+Foreground coverage includes every animation frame and supports transformed
+atlas cells.
 The imported visual contract remains aligned 32px layers; coverage is local to
 that visual subtree, excluding gameplay layers. Runtime resources live with
 the map, and repeated normalization does not rebuild or duplicate them.
 
-Validation: the new focused check compares 30,264 evergreen cells across all
-118 current generated visual maps against the scenery before lower-part
-promotion, using the current individual-tree opt-in for Routes 16–18. It also
-checks transparent/animated/flipped foreground, shared resource isolation,
-visible tree occlusion and repeat normalization. Real OpenGL viewport renders
-of Viridian City, two Route 2 locations and Routes 1, 3, 6, 8, 9, 12 and 15
-match the original scenery pixels with animations fixed to the same frame.
-The actual Viridian City and Route 2 gameplay scenes bring the pixel check
-total to 32,002 cells. Rendered spot checks also cover walking, Rayquaza and
-Zekrom at both locations. The existing tree, object, Route 16, mount, forest
-and tall-grass depth checks also pass. This is
-focused regression evidence, not a full release certification or online
-multiplayer playtest.
+The initial validation was incomplete: it excluded animated tree cells,
+including the leafy row above the trunk in `TreeBottom`. The initial native
+render comparison also froze shared atlas resources before constructing later
+views, which concealed that omission. Those results did not establish that the
+whole tree base was fixed.
+
+### Animated TreeBottom follow-up
+
+The lower-tree splitter now handles every native tree frame, including the
+48-frame foliage animation, and retains the original speed, frame durations
+and animation mode on both complementary pieces. Identical animated masks
+share atlas cells; textures are split into chunks no larger than 4096px. Fully
+covered trees retain their original source instead of generating a texture.
+
+The corrected pixel test includes animated tree artwork: 37,266 cells across
+118 generated visuals plus the actual Viridian City and Route 2 scenes, and
+6,862 additional frame comparisons for animated splits. It checks the native
+timelines as well as pixels. The synthetic fixture covers moving silhouettes,
+non-unit speed, unequal durations, translucent/flipped foreground, every frame
+combination and deduplication. Running the revised test against the previous
+helper reproduces the missing-foliage failure in Viridian.
+
+`tests/tree_scenery_animation_render_check.gd` is a manual native-render check
+(requires a real display, not `--headless`). It compares three Viridian/Route 2
+views for 96 samples each, spanning the full 48 x 70ms wind cycle. The reference
+restores only original tree cells, retaining other runtime object handling.
+Neither view freezes or mutates shared source animations, and the test requires
+visible movement as well as equal pixels. All 288 live comparisons pass.
+These are focused regressions, not release certification or an online playtest.

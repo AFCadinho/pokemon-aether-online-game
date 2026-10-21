@@ -16,6 +16,7 @@ static func preserve_scenery(map: Node) -> int:
 	var images := {}
 	var tiles := {}
 	var plans := {}
+	var splits := {}
 	var adjusted := 0
 	for raised: TileMapLayer in layers:
 		if not raised.get_meta(TREE_META, false) or raised.get_meta(DONE_META, false):
@@ -46,7 +47,7 @@ static func preserve_scenery(map: Node) -> int:
 			if foreground_frames.is_empty():
 				continue
 			var tree := _tile_frames(raised, cell, images, tiles)
-			if tree.size() != 1:
+			if tree.is_empty():
 				continue
 			var covered := PackedByteArray()
 			covered.resize(TILE_SIZE * TILE_SIZE)
@@ -57,27 +58,19 @@ static func preserve_scenery(map: Node) -> int:
 				for pixel in range(covered.size()):
 					if rgba[pixel * 4 + 3] > 0:
 						covered[pixel] = 1
-			var front := tree[0].get_data() as PackedByteArray
-			var back := front.duplicate()
-			var has_front := false
-			var has_back := false
-			for pixel in range(covered.size()):
-				if covered[pixel] != 0:
-					has_back = has_back or front[pixel * 4 + 3] > 0
-					front[pixel * 4 + 3] = 0
-				else:
-					has_front = has_front or front[pixel * 4 + 3] > 0
-					back[pixel * 4 + 3] = 0
-			if not has_back:
+			var atlas := raised.tile_set.get_source(raised.get_cell_source_id(cell)) as TileSetAtlasSource
+			var coords := raised.get_cell_atlas_coords(cell)
+			var key := "%d:%s:%d:%s" % [atlas.get_instance_id(), coords, raised.get_cell_alternative_tile(cell), covered.hex_encode()]
+			if not splits.has(key):
+				splits[key] = _split_frames(tree, covered, atlas, coords)
+			var split: Dictionary = splits[key]
+			if not split.has_back:
 				continue
 			if not plans.has(base):
 				plans[base] = []
 			plans[base].append({
-				"raised": raised, "cell": cell, "has_front": has_front,
-				"front": Image.create_from_data(32, 32, false, Image.FORMAT_RGBA8, front),
-				"back": Image.create_from_data(32, 32, false, Image.FORMAT_RGBA8, back),
-				"source": raised.get_cell_source_id(cell),
-				"coords": raised.get_cell_atlas_coords(cell),
+				"raised": raised, "cell": cell, "split": split, "key": key,
+				"source": raised.get_cell_source_id(cell), "coords": coords,
 				"alternative": raised.get_cell_alternative_tile(cell),
 			})
 			adjusted += 1
@@ -88,40 +81,100 @@ static func preserve_scenery(map: Node) -> int:
 	return adjusted
 
 
+static func _split_frames(frames: Array[Image], covered: PackedByteArray, atlas: TileSetAtlasSource, coords: Vector2i) -> Dictionary:
+	var result := {"front": [], "back": [], "has_front": false, "has_back": false,
+		"speed": atlas.get_tile_animation_speed(coords),
+		"mode": atlas.get_tile_animation_mode(coords), "durations": []}
+	for index in range(frames.size()):
+		var front := frames[index].get_data()
+		var back := front.duplicate()
+		for pixel in range(covered.size()):
+			if covered[pixel] != 0:
+				result.has_back = result.has_back or front[pixel * 4 + 3] > 0
+				front[pixel * 4 + 3] = 0
+			else:
+				result.has_front = result.has_front or front[pixel * 4 + 3] > 0
+				back[pixel * 4 + 3] = 0
+		result.front.append(Image.create_from_data(32, 32, false, Image.FORMAT_RGBA8, front))
+		result.back.append(Image.create_from_data(32, 32, false, Image.FORMAT_RGBA8, back))
+		result.durations.append(atlas.get_tile_animation_frame_duration(coords, index))
+	return result
+
+
 static func _apply_splits(base: TileMapLayer, plans: Array) -> void:
-	var partial: Array = plans.filter(func(plan: Dictionary) -> bool: return plan.has_front)
+	var unique := {}
+	for plan: Dictionary in plans:
+		if plan.split.has_front:
+			unique[plan.key] = plan.split
 	var tileset: TileSet = base.tile_set
-	var source_id := -1
-	if not partial.is_empty():
-		# One compact runtime atlas per affected base layer, not one texture per
-		# tree. All unchanged atlas sources and their animation clocks are shared.
+	var locations := {}
+	if not unique.is_empty():
+		# Repeated trees with the same coverage share their entire animation.
+		# Chunk the atlas so native 48-frame foliage never exceeds 4096px.
 		tileset = base.tile_set.duplicate(false) as TileSet
-		var columns := mini(16, partial.size() * 2)
-		var rows := ceili(float(partial.size() * 2) / columns)
-		var pixels := Image.create(columns * 32, rows * 32, false, Image.FORMAT_RGBA8)
-		var atlas := TileSetAtlasSource.new()
-		atlas.texture_region_size = Vector2i(32, 32)
-		for index in range(partial.size()):
-			var plan: Dictionary = partial[index]
-			plan["back_coords"] = Vector2i((index * 2) % columns, (index * 2) / columns)
-			plan["front_coords"] = Vector2i((index * 2 + 1) % columns, (index * 2 + 1) / columns)
-			pixels.blit_rect(plan.back, Rect2i(0, 0, 32, 32), plan.back_coords * 32)
-			pixels.blit_rect(plan.front, Rect2i(0, 0, 32, 32), plan.front_coords * 32)
-		atlas.texture = ImageTexture.create_from_image(pixels)
-		for plan: Dictionary in partial:
-			atlas.create_tile(plan.back_coords)
-			atlas.create_tile(plan.front_coords)
-		source_id = tileset.add_source(atlas)
+		var batch := {}
+		var rows := 0
+		for key: String in unique:
+			var split: Dictionary = unique[key]
+			var height := ceili(float(split.front.size()) / 16) * 2
+			if rows + height > 128 and not batch.is_empty():
+				locations.merge(_build_atlas(tileset, batch))
+				batch.clear()
+				rows = 0
+			batch[key] = split
+			rows += height
+		if not batch.is_empty():
+			locations.merge(_build_atlas(tileset, batch))
 		base.tile_set = tileset
 	for plan: Dictionary in plans:
 		var raised: TileMapLayer = plan.raised
-		if plan.has_front:
+		if plan.split.has_front:
+			var location: Dictionary = locations[plan.key]
 			raised.tile_set = tileset
-			base.set_cell(plan.cell, source_id, plan.back_coords)
-			raised.set_cell(plan.cell, source_id, plan.front_coords)
+			base.set_cell(plan.cell, location.source, location.back)
+			raised.set_cell(plan.cell, location.source, location.front)
 		else:
 			base.set_cell(plan.cell, plan.source, plan.coords, plan.alternative)
 			raised.erase_cell(plan.cell)
+
+
+static func _build_atlas(tileset: TileSet, batch: Dictionary) -> Dictionary:
+	var columns := 1
+	for split: Dictionary in batch.values():
+		columns = maxi(columns, mini(16, split.front.size()))
+	var rows := 0
+	for split: Dictionary in batch.values():
+		rows += ceili(float(split.front.size()) / columns) * 2
+	var pixels := Image.create(columns * 32, rows * 32, false, Image.FORMAT_RGBA8)
+	var locations := {}
+	var row := 0
+	for key: String in batch:
+		var split: Dictionary = batch[key]
+		locations[key] = {}
+		for side: String in ["back", "front"]:
+			locations[key][side] = Vector2i(0, row)
+			for frame in range(split[side].size()):
+				var cell := Vector2i(frame % columns, row + frame / columns)
+				pixels.blit_rect(split[side][frame], Rect2i(0, 0, 32, 32), cell * 32)
+			row += ceili(float(split[side].size()) / columns)
+	var atlas := TileSetAtlasSource.new()
+	atlas.texture_region_size = Vector2i(32, 32)
+	atlas.texture = ImageTexture.create_from_image(pixels)
+	for key: String in batch:
+		var split: Dictionary = batch[key]
+		for side: String in ["back", "front"]:
+			var coords: Vector2i = locations[key][side]
+			atlas.create_tile(coords)
+			atlas.set_tile_animation_columns(coords, columns)
+			atlas.set_tile_animation_frames_count(coords, split[side].size())
+			atlas.set_tile_animation_speed(coords, split.speed)
+			atlas.set_tile_animation_mode(coords, split.mode)
+			for frame in range(split.durations.size()):
+				atlas.set_tile_animation_frame_duration(coords, frame, split.durations[frame])
+	var source := tileset.add_source(atlas)
+	for location: Dictionary in locations.values():
+		location.source = source
+	return locations
 
 
 static func _collect_layers(node: Node, layers: Array[TileMapLayer]) -> void:
