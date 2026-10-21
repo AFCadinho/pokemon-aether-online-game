@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pewter_city/pewter_city.visual.tscn" id="1_kr88e"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="2_jtxgn"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="3_2hpv6"]
-[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="4_metadata"]
+[ext_resource type="Script" path="res://scripts/world/kanto/towns/pewter_city/pewter_city.gd" id="4_metadata"]
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_2mtwu"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="6_frcun"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_kp2ru"]
@@ -27,6 +27,8 @@
 [ext_resource type="SpriteFrames" uid="uid://bgt5h7r4aixq5" path="res://assets/npcs/classes/black_belt_frames.tres" id="31_black_belt"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="32_daily_rock"]
 
+
+[ext_resource type="Script" path="res://scripts/world/double_sliding_map_door.gd" id="33_gym_door"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(64, 36)
@@ -648,3 +650,15 @@ tile_set = SubResource("TileSet_no66e")
 [connection signal="body_entered" from="Exits/ToMuseum" to="Exits/ToMuseum" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse1" to="Exits/ToHouse1" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse2" to="Exits/ToHouse2" method="_on_body_entered"]
+
+[node name="GymDoubleSlidingDoor" type="Node2D" parent="PewterCity"]
+position = Vector2(568, 496)
+z_index = 4
+script = ExtResource("33_gym_door")
+animation_seconds = 0.24
+panel_size = Vector2(48, 38)
+activation_rect = Rect2(8, 16, 32, 72)
+movement_sound_id = "sliding_door"
+source_layers = Array[NodePath]([NodePath("../StructuresBottom"), NodePath("../Doors")])
+players_path = NodePath("../../Entities/Players")
+access_lock_path = NodePath("../../Entities/Interactables/GymDoorLock")
