@@ -8,6 +8,8 @@
 
 [ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="TileSetAtlasSource" id="collision_source"]
 texture = ExtResource("collision")
 texture_region_size = Vector2i(32, 32)
@@ -142,3 +144,6 @@ y_sort_enabled = true
 [connection signal="body_entered" from="Exits/RearStairsDown" to="Exits/RearStairsDown" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/MainStairsDown" to="Exits/MainStairsDown" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/RoofRoomEntrance" to="Exits/RoofRoomEntrance" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

@@ -18,6 +18,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/sleeping_snorlax.tscn" id="r12_snorlax"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r12_trainer"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="shape_lavender"]
 size = Vector2(160, 32)
 
@@ -608,3 +610,6 @@ tile_set = SubResource("TileSet_2m8tt")
 [connection signal="body_entered" from="Exits/ToRoute13" to="Exits/ToRoute13" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute13Water" to="Exits/ToRoute13Water" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToFishingBrotherHouse" to="Exits/ToFishingBrotherHouse" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

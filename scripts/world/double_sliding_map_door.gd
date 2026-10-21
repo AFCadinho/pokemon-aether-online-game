@@ -1,7 +1,11 @@
 extends "res://scripts/world/sliding_map_door.gd"
 ## Two leaves retract behind a fixed curved gym frame.
 
+@export var curved_frame := true
+
 func _column_top(column: int) -> int:
+	if not curved_frame:
+		return 0
 	var edge := mini(column, int(panel_size.x) - 1 - column)
 	return 0 if edge < 2 else (2 if edge < 10 else (4 if edge < 20 else 6))
 
@@ -12,7 +16,7 @@ func _draw() -> void:
 	var offset := roundi(half * open_amount)
 	for x in range(int(panel_size.x)):
 		var top := _column_top(x)
-		var bottom := top + int(panel_size.y) - 6
+		var bottom := top + int(panel_size.y) - (6 if curved_frame else 0)
 		draw_rect(Rect2(x, top, 1, bottom - top), opening_color)
 		var source_x := x + offset if x < half else x - offset
 		if (x < half and source_x >= half) or (x >= half and source_x < half):
@@ -25,7 +29,7 @@ func _draw() -> void:
 			if source_x < region.position.x or source_x >= region.end.x:
 				continue
 			var start := maxf(maxi(top, source_top), region.position.y)
-			var end := minf(mini(bottom, source_top + int(panel_size.y) - 6), region.end.y)
+			var end := minf(mini(bottom, source_top + int(panel_size.y) - (6 if curved_frame else 0)), region.end.y)
 			if end <= start:
 				continue
 			var source: Rect2 = piece.source

@@ -16,6 +16,8 @@
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="rock_tunnel_guard"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="shape_pokecenter_exit"]
 size = Vector2(32, 32)
 
@@ -688,3 +690,6 @@ tile_set = SubResource("TileSet_21d24")
 [connection signal="body_entered" from="Exits/ToRockTunnelNorth" to="Exits/ToRockTunnelNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRockTunnelSouth" to="Exits/ToRockTunnelSouth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToLavenderTown" to="Exits/ToLavenderTown" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

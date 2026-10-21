@@ -21,6 +21,8 @@
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="population_worker"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="gate_shape"]
 size = Vector2(32, 96)
 
@@ -639,3 +641,6 @@ tile_set = SubResource("TileSet_xabhn")
 [connection signal="body_entered" from="Exits/ToSafariZoneGate" to="Exits/ToSafariZoneGate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute19Gate" to="Exits/ToRoute19Gate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute18" to="Exits/ToRoute18" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

@@ -20,6 +20,8 @@
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="16_6cbgw"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="19_k3l4r"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="shape_lavender_exit"]
 size = Vector2(32, 160)
 
@@ -592,3 +594,6 @@ tile_set = SubResource("TileSet_qooaa")
 [connection signal="body_entered" from="Exits/ToLavenderTown" to="Exits/ToLavenderTown" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToSaffronGate" to="Exits/ToSaffronGate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToUndergroundPath" to="Exits/ToUndergroundPath" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

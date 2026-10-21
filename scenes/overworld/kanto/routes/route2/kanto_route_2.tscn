@@ -20,6 +20,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="19_overworld_item"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="20_door_hint"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r7yom"]
 texture = ExtResource("2_yrfmu")
 texture_region_size = Vector2i(32, 32)
@@ -639,3 +641,6 @@ tile_set = SubResource("TileSet_ywtea")
 [connection signal="body_entered" from="Exits/ToRoute2GateSouth" to="Exits/ToRoute2GateSouth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse" to="Exits/ToHouse" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToDiglettCave" to="Exits/ToDiglettCave" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

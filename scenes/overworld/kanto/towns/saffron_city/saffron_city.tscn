@@ -7,6 +7,8 @@
 
 [ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="west_gate_collision_texture"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="shape_gate"]
 size = Vector2(96, 16)
 
@@ -142,3 +144,6 @@ tile_set = SubResource("west_gate_collision_tiles")
 [connection signal="body_entered" from="Exits/ToRoute6Gate" to="Exits/ToRoute6Gate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute8Gate" to="Exits/ToRoute8Gate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute7Gate" to="Exits/ToRoute7Gate" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

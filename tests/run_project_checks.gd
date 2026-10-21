@@ -280,6 +280,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/viridian_house_door_check.gd",
 	"res://tests/viridian_gym_door_check.gd",
 	"res://tests/pewter_gym_door_check.gd",
+	"res://tests/world_door_rollout_check.gd",
 	"res://tests/ss_anne_repeat_exit_check.gd",
 	"res://tests/ss_anne_arena_check.gd",
 	"res://tests/impersonation_account_switch_check.gd",

@@ -16,6 +16,8 @@
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="11_pokemon"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 16)
 
@@ -552,3 +554,6 @@ tile_set = SubResource("TileSet_dp7hi")
 [connection signal="body_entered" from="Exits/ToUndergroundPath" to="Exits/ToUndergroundPath" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToSaffronSouth" to="Exits/ToSaffronSouth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToVermilion" to="Exits/ToVermilion" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

@@ -22,6 +22,8 @@
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="20_story_hook"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="overworld_pickup_extra"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_upper_exit"]
 size = Vector2(32, 128)
 
@@ -584,3 +586,6 @@ tile_set = SubResource("TileSet_8pbi0")
 [connection signal="body_entered" from="Exits/ToBillsHouse" to="Exits/ToBillsHouse" method="_on_body_entered"]
 
 [editable path="Entities/NPCs/MistyDate"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

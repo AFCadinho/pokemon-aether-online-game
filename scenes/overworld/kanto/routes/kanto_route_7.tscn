@@ -20,6 +20,8 @@
 [ext_resource type="Script" path="res://scripts/world/story/story_trigger.gd" id="rocket_trigger"]
 [ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="rocket_hook"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="underground_exit_shape"]
 size = Vector2(32, 32)
 
@@ -458,3 +460,6 @@ entity_id = "kanto_route_7_rocket_trio"
 [connection signal="body_entered" from="Exits/ToUndergroundPath" to="Exits/ToUndergroundPath" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToCeladonCity" to="Exits/ToCeladonCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToSaffronGate" to="Exits/ToSaffronGate" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

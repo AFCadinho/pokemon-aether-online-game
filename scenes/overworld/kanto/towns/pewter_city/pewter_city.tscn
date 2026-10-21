@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://3d63qqv5oiv0" path="res://assets/tilesets/fiver/tiles_env2_pebbles32.png" id="5_2mtwu"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="6_frcun"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_kp2ru"]
-[ext_resource type="Script" uid="uid://babnhtwtaiewv" path="res://scripts/world/map_door_animator.gd" id="7_door_animator"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="12_vw642"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/building_window_light.tscn" id="13_4hm78"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="17_cisdr"]
@@ -29,6 +28,8 @@
 
 
 [ext_resource type="Script" path="res://scripts/world/double_sliding_map_door.gd" id="33_gym_door"]
+
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2mtwu"]
 size = Vector2(64, 36)
@@ -222,18 +223,6 @@ music_track_id = "overworld.kanto.viridian_city"
 
 [node name="PewterCity" parent="." unique_id=1507076430 instance=ExtResource("1_kr88e")]
 
-[node name="DoorAnimator" type="Node" parent="." unique_id=405011358]
-script = ExtResource("7_door_animator")
-visual_root_path = NodePath("../PewterCity")
-door_layer_name = "Doors"
-cell_animated_regions = {
-Vector2i(14, 47): Rect2(4, 0, 24, 32),
-Vector2i(34, 29): Rect2(4, 0, 24, 32)
-}
-cell_opening_regions = {
-Vector2i(14, 47): Rect2(4, 0, 24, 24),
-Vector2i(34, 29): Rect2(4, 0, 24, 24)
-}
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1604106458]
 
@@ -662,3 +651,6 @@ movement_sound_id = "sliding_door"
 source_layers = Array[NodePath]([NodePath("../StructuresBottom"), NodePath("../Doors")])
 players_path = NodePath("../../Entities/Players")
 access_lock_path = NodePath("../../Entities/Interactables/GymDoorLock")
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

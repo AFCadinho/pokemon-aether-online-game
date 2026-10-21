@@ -1799,6 +1799,8 @@ func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position:
 	player.set_idle_frame()
 	if map.has_method("prepare_player_arrival"):
 		map.call("prepare_player_arrival", spawn_name)
+	if map.has_node("MapDoors"):
+		map.get_node("MapDoors").call("prepare_player_arrival", spawn_name)
 	_refresh_map_visual_depth_for_player(map)
 	player.refresh_map_layers()
 	_sync_player_activity_state_for_current_tile()
@@ -1827,6 +1829,8 @@ func _position_player_at_authorized_teleport_state(map: Node, state: Dictionary)
 		player.set_idle_frame()
 		if map.has_method("prepare_player_arrival"):
 			map.call("prepare_player_arrival", spawn_marker)
+		if map.has_node("MapDoors"):
+			map.get_node("MapDoors").call("prepare_player_arrival", spawn_marker)
 		_refresh_map_visual_depth_for_player(map)
 		player.refresh_map_layers()
 		_sync_player_activity_state_for_current_tile()

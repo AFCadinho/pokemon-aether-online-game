@@ -19,6 +19,8 @@
 [ext_resource type="Script" uid="uid://c0rvsvb5ckinb" path="res://scripts/world/story/story_trigger.gd" id="15_story_trigger"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="16_story_hook"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="shape_pokemon_center_door"]
 size = Vector2(32, 32)
 
@@ -672,3 +674,6 @@ position = Vector2(1296, 816)
 [connection signal="body_entered" from="Exits/ToRoute10" to="Exits/ToRoute10" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute8" to="Exits/ToRoute8" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute12" to="Exits/ToRoute12" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")

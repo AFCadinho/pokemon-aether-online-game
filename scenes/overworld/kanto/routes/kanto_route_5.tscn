@@ -19,6 +19,8 @@
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker_frames"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon_scene"]
 
+[ext_resource type="Script" path="res://scripts/world/map_door_set.gd" id="90_map_doors"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(128, 16)
 
@@ -676,3 +678,6 @@ tile_set = SubResource("TileSet_ne4wo")
 [connection signal="body_entered" from="Exits/ToSaffronNorth" to="Exits/ToSaffronNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToUndergroundPath" to="Exits/ToUndergroundPath" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToDaycare" to="Exits/ToDaycare" method="_on_body_entered"]
+
+[node name="MapDoors" type="Node" parent="."]
+script = ExtResource("90_map_doors")
