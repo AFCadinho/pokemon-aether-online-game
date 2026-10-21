@@ -51,3 +51,7 @@ and live edits. The authored Gym route and perimeter were reviewed with a
 one-off runtime probe; they are intentionally not frozen in release assertions.
 
 Reference map.bin SHA-256: `8f465f6950e687f0e56954c55d4571202eee500e3c41b9014db7610a396893f0`.
+
+If the layer is recreated or replaced in Godot, keep
+`scripts/world/invisible_wall_layer.gd` attached to `InvisibleWalls`.
+A plain TileMapLayer draws tiles but does not register a movement blocker.
