@@ -97,7 +97,7 @@ func ensure_ready() -> String:
 				pending_task = -1
 				last_error = work.result
 			else:
-				last_error = "Could not download the experimental 3D battlefield. Choose 2D or retry in Settings."
+				last_error = "Could not download the 3D battlefield. Choose 2D or retry in Settings."
 		else:
 			last_error = "Could not start the 3D battlefield download."
 		request.queue_free()
