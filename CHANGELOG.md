@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add localized route information, Surf advice and coastal-wildlife signs with illustrated portraits on Route 19.
+
 - Restore the enabled Pokémon follower when entering an indoor map from a mount.
 
 - Reimport Route 15 scenery from the latest artist TMX.

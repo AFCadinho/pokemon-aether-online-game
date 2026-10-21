@@ -1,0 +1,18 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-10-21",
+  "assets": [
+    {
+      "path": "assets/sprites/sign_previews/route_19_coast.png",
+      "prompt": "Use case: stylized-concept. Asset type: square dialogue sign portrait for the PokeAether game, readable at 256px. Primary request: a sunny coastal route south of Fuchsia City, looking from pale sandy beach toward a lush coastal town in the distant background. A modest green-roof gatehouse and winding stone steps descend between warm brown rocky cliffs to the beach. Turquoise sea, gentle white surf, a few rounded coastal trees and small pink flowers, distant rocky islands on the horizon. Polished hand-painted anime environment illustration matching illustrated Pokémon location sign portraits, detailed yet clear composition with the beach and coastal journey as focal subject. Warm summer daylight, vivid sea blues and natural greens. Full-bleed square painting with fully opaque sky, sea, land and scenery covering every corner. No people, no Pokémon, no lettering, no UI, no border, no watermark, no transparency, no checkerboard."
+    },
+    {
+      "path": "assets/sprites/sign_previews/route_19_surf.png",
+      "prompt": "Use case: stylized-concept. Asset type: square illustrated game dialogue portrait about ocean travel. Primary request: a friendly Lapras swimming confidently across calm turquoise water off a sunny sandy coastline. Show its recognizable blue long neck, curled ears, cream underside, blue flippers and broad gray shell. No rider, no humans. Gentle waves around the body convey travel out to sea. Distant rocky islands, pale beach, green coastal trees and warm brown cliffs in the background. Polished hand-painted anime environment illustration, detailed but readable at 256px, clear central silhouette and welcoming mood. Full-bleed square opaque painting, bright blue painted sky and sea extend into every corner. No text, no lettering, no UI, no border, no watermark, no transparency, no checkerboard."
+    },
+    {
+      "path": "assets/sprites/sign_previews/route_19_coastal_grass.png",
+      "prompt": "Use case: illustration-story. Asset type: square dialogue sign portrait for the PokeAether game, readable at 256px. Primary request: discover wildlife in tall coastal grass above a sunny Pokémon beach. One recognizable small Oddish with round blue body, red eyes and five green leaves peeks curiously between grass blades, and one small orange Krabby with two claws rests at the edge of the grass beside pale sand. Both Pokémon are friendly and clearly identifiable. Tall windswept green grass, a few small coastal flowers and a sunlit sandy trail in foreground, turquoise ocean and gentle waves in soft background. Polished richly colored hand-painted anime landscape illustration matching Pokémon location-sign portraits, close viewpoint and a clear central wildlife vignette, warm summer daylight. Full-bleed square environment painting, every corner covered by opaque sky, foliage, sand or sea. No humans, no lettering, no UI, no border, no watermark, no transparency, no checkerboard."
+    }
+  ]
+}

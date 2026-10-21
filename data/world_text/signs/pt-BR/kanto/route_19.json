@@ -1,0 +1,33 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_route_19",
+  "signs": [
+    {
+      "id": "kanto_route_19_route_sign",
+      "type": "road",
+      "title": "Rota 19",
+      "lines": [
+        "Rota 19 — da praia ao mar aberto.",
+        "Norte: Fuchsia City. Sul: a rota marítima em direção às Seafoam Islands."
+      ]
+    },
+    {
+      "id": "kanto_route_19_surf_tips",
+      "type": "trainer_tips",
+      "title": "Use Surf com segurança",
+      "lines": [
+        "Você precisa de Surf para seguir além deste ponto.",
+        "Prepare seus Pokémon antes de partir para o mar!"
+      ]
+    },
+    {
+      "id": "kanto_route_19_coastal_grass",
+      "type": "trainer_tips",
+      "title": "Vida na costa",
+      "lines": [
+        "Também há muita vida acima da linha da maré.",
+        "Pokémon selvagens se escondem entre a grama do litoral!"
+      ]
+    }
+  ]
+}
