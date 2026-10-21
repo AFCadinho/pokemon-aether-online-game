@@ -6069,6 +6069,8 @@
   "battle.voice.switch.change_plan": "计划改变。去吧，{to}！",
   "battle.voice.switch.go": "走吧，{to}！",
   "battle.voice.switch.youre_up": "你起来了，{to}！",
+  "ui.transit.search": "搜索目的地…",
+  "ui.transit.no_search_results": "未找到目的地，请尝试其他名称。",
   "ui.transit.title": "以太网",
   "ui.transit.browser_demo.title": "Aethernet 仅在客户端中可用",
   "ui.transit.browser_demo.message": "浏览器演示版不支持 Aethernet 旅行。下载游戏客户端即可体验完整 MMO 内容。你的账号和进度会共享。",

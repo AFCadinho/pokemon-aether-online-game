@@ -6171,6 +6171,8 @@
   "battle.voice.switch.change_plan": "Ander plan. Ga, {to}!",
   "battle.voice.switch.go": "Ga, {to}!",
   "battle.voice.switch.youre_up": "Jouw beurt, {to}!",
+  "ui.transit.search": "Zoek bestemmingen…",
+  "ui.transit.no_search_results": "Geen bestemmingen gevonden. Probeer een andere naam.",
   "ui.transit.title": "Aethernet",
   "ui.transit.browser_demo.title": "Aethernet is beschikbaar in de client",
   "ui.transit.browser_demo.message": "Aethernet-reizen zijn niet beschikbaar in de browserdemo. Download de gameclient voor de volledige MMO-ervaring. Je account en voortgang worden gedeeld.",

@@ -6171,6 +6171,8 @@
   "battle.voice.switch.change_plan": "Change of plan. Go, {to}!",
   "battle.voice.switch.go": "Go, {to}!",
   "battle.voice.switch.youre_up": "You're up, {to}!",
+  "ui.transit.search": "Search destinations…",
+  "ui.transit.no_search_results": "No destinations found. Try another name.",
   "ui.transit.title": "Aethernet",
   "ui.transit.browser_demo.title": "Aethernet is available in the client",
   "ui.transit.browser_demo.message": "Aethernet travel is not available in the browser demo. Download the game client for the full MMO experience. Your account and progress are shared.",
