@@ -272,8 +272,12 @@ func _set_door_group_open(group: Dictionary, open: bool) -> void:
 
 
 func prepare_player_arrival(spawn_name: String) -> void:
-	if spawn_name != "FromPokecenter":
+	var doors := {
+		"FromPokecenter": "ViridianCity/PokemonCenterSlidingDoor",
+		"FromHouse1": "ViridianCity/House1HingedDoor",
+	}
+	if not doors.has(spawn_name):
 		return
-	var center_door := get_node_or_null("ViridianCity/PokemonCenterSlidingDoor")
-	if center_door != null:
-		center_door.call("prepare_for_arrival")
+	var door := get_node_or_null(doors[spawn_name])
+	if door != null:
+		door.call("prepare_for_arrival")

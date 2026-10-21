@@ -53,3 +53,18 @@ and a server-authorized round trip remain manual acceptance checks. In local
 `development`, approach the Viridian Pokémon Center, pause in front, walk away,
 enter, and return. Check the same with a second player staying in front. A live
 session is needed to assess network latency and the transition fade together.
+
+
+## House 1 pilot
+
+House 1 uses `hinged_map_door.gd`, inheriting the Center proximity, access,
+sound and arrival controller. Its 32×32 panel starts at (1536, 860); the
+right jamb stays fixed while four pixel-aligned inward-swing stages project
+the existing map pixels. No new raster assets or generated-map edits are needed.
+The facade, lintel and threshold stay fixed. `FromHouse1` primes this door only.
+
+Run `viridian_house_door_check.gd` headless and
+`viridian_house_door_render_check.gd` with a display through slot-env. These
+reuse the Center behavioral/render contracts with the actual house scene.
+The house render check crops the facade to exclude independently animated trees.
+Live backend transitions and two real clients still need a manual playtest.
