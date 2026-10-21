@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Animate the full door of Fuchsia City’s tall northwest house, including its top edge.
+
 - Reimport Fuchsia City from the supplied Downloads visual, preserving runtime door/depth layer names; the source scenery has no tile animations.
 
 - Open the red-roof house in southern Fuchsia City with its furnished interior and a two-tile doorway in both directions.
