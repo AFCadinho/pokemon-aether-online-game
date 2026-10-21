@@ -3631,8 +3631,8 @@
       "entityId": "kanto_route_19_sis_and_bro_lia",
       "mapId": "kanto_route_19",
       "position": {
-        "x": 304.0,
-        "y": 2000.0
+        "x": 592.0,
+        "y": 2032.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -3654,8 +3654,8 @@
       "entityId": "kanto_route_19_sis_and_bro_luc",
       "mapId": "kanto_route_19",
       "position": {
-        "x": 464.0,
-        "y": 2096.0
+        "x": 816.0,
+        "y": 2160.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -3838,8 +3838,8 @@
       "entityId": "kanto_route_19_swimmer_reece",
       "mapId": "kanto_route_19",
       "position": {
-        "x": 1008.0,
-        "y": 1360.0
+        "x": 912.0,
+        "y": 1776.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -3861,7 +3861,7 @@
       "entityId": "kanto_route_19_swimmer_richard",
       "mapId": "kanto_route_19",
       "position": {
-        "x": 720.0,
+        "x": 1264.0,
         "y": 1232.0
       },
       "radius": 80.0,

@@ -17,6 +17,12 @@
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r19_trainer"]
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="r19_worker"]
 
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/mart_m_frames.tres" id="beach_beach_attendant"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="beach_sandcastle_builder"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/picnicker_frames.tres" id="beach_beachgoer"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_f_frames.tres" id="beach_coast_watcher"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="beach_resting_sailor"]
+
 [sub_resource type="RectangleShape2D" id="GateShape"]
 size = Vector2(96, 32)
 
@@ -202,7 +208,7 @@ y_sort_enabled = true
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1666816289]
 
 [node name="swimmer_richard" parent="Entities/NPCs" unique_id=1479376926 instance=ExtResource("r19_trainer")]
-position = Vector2(720, 1232)
+position = Vector2(1264, 1232)
 trainer_id = "kanto_route_19_swimmer_richard"
 sight_range_tiles = 2
 npc_id = "kanto_route_19_swimmer_richard"
@@ -213,13 +219,13 @@ mugshot = ExtResource("r19_m_portrait")
 battle_environment_id = "water"
 
 [node name="swimmer_reece" parent="Entities/NPCs" unique_id=1994331855 instance=ExtResource("r19_trainer")]
-position = Vector2(1008, 1360)
+position = Vector2(912, 1776)
 trainer_id = "kanto_route_19_swimmer_reece"
 sight_range_tiles = 2
 npc_id = "kanto_route_19_swimmer_reece"
 dialogue_id = "kanto_route_19_swimmer_reece_intro"
 display_name = "Swimmer Reece"
-facing_direction = Vector2(-1, 0)
+facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("r19_m")
 mugshot = ExtResource("r19_m_portrait")
 battle_environment_id = "water"
@@ -320,7 +326,7 @@ mugshot = ExtResource("r19_f_portrait")
 battle_environment_id = "water"
 
 [node name="sis_and_bro_lia" parent="Entities/NPCs" unique_id=229451085 instance=ExtResource("r19_trainer")]
-position = Vector2(304, 2000)
+position = Vector2(592, 2032)
 trainer_id = "kanto_route_19_sis_and_bro_lia"
 sight_range_tiles = 2
 npc_id = "kanto_route_19_sis_and_bro_lia"
@@ -331,7 +337,7 @@ mugshot = ExtResource("r19_f_portrait")
 battle_environment_id = "water"
 
 [node name="sis_and_bro_luc" parent="Entities/NPCs" unique_id=1993636087 instance=ExtResource("r19_trainer")]
-position = Vector2(464, 2096)
+position = Vector2(816, 2160)
 trainer_id = "kanto_route_19_sis_and_bro_luc"
 sight_range_tiles = 2
 npc_id = "kanto_route_19_sis_and_bro_luc"
@@ -508,5 +514,51 @@ visible = false
 z_index = 100
 tile_map_data = PackedByteArray("AAAqAAQAAAAIAAEAAAAqAAUAAAAIAAEAAAAqAAYAAAAIAAEAAAAqAAcAAAAIAAEAAAAqAAgAAAAIAAEAAAAqAAkAAAAIAAEAAAAqAAoAAAAIAAEAAAAqAAsAAAAIAAEAAAAqAAwAAAAIAAEAAAAqAA0AAAAIAAEAAAAqAA4AAAAIAAEAAAAqAA8AAAAIAAEAAAAqABAAAAAIAAEAAAAqABEAAAAIAAEAAAAqABIAAAAIAAEAAAAqABMAAAAIAAEAAAAqABQAAAAIAAEAAAAqABUAAAAIAAEAAAAqABYAAAAIAAEAAAAqABcAAAAIAAEAAAAqABgAAAAIAAEAAAAqABkAAAAIAAEAAAAqABoAAAAIAAEAAAAqABsAAAAIAAEAAAAqABwAAAAIAAEAAAArABYAAAAIAAEAAAArABcAAAAIAAEAAAArABgAAAAIAAEAAAArABkAAAAIAAEAAAArABoAAAAIAAEAAAArABsAAAAIAAEAAAAsABYAAAAIAAEAAAAsABcAAAAIAAEAAAAsABgAAAAIAAEAAAAsABkAAAAIAAEAAAAsABoAAAAIAAEAAAAsABsAAAAIAAEAAAArAA0AAAAIAAEAAAArAA4AAAAIAAEAAAArAA8AAAAIAAEAAAArABAAAAAIAAEAAAArABEAAAAIAAEAAAArABIAAAAIAAEAAAArABMAAAAIAAEAAAArABQAAAAIAAEAAAArABUAAAAIAAEAAAAtAAkAAAAIAAEAAAAtAAoAAAAIAAEAAAAtAAsAAAAIAAEAAAAtAAwAAAAIAAEAAAAtAA0AAAAIAAEAAAAtAA4AAAAIAAEAAAArAAQAAAAIAAEAAAArAAUAAAAIAAEAAAArAAYAAAAIAAEAAAArAAcAAAAIAAEAAAArAAgAAAAIAAEAAAArAAkAAAAIAAEAAAArAAoAAAAIAAEAAAArAAsAAAAIAAEAAAArAAwAAAAIAAEAAAAsAAQAAAAIAAEAAAAsAAUAAAAIAAEAAAAsAAYAAAAIAAEAAAAsAAcAAAAIAAEAAAAsAAgAAAAIAAEAAAAsAAkAAAAIAAEAAAAsAAoAAAAIAAEAAAAsAAsAAAAIAAEAAAAsAAwAAAAIAAEAAAAsAA0AAAAIAAEAAAA=")
 tile_set = SubResource("TileSet_0jn5m")
+
+
+[node name="beach_attendant" parent="Entities/NPCs" instance=ExtResource("r19_dialogue")]
+position = Vector2(272, 1232)
+npc_id = "kanto_route_19_beach_attendant"
+dialogue_id = "kanto_route_19_beach_attendant_talk"
+display_name = "Beach Attendant"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("beach_beach_attendant")
+dialogue_portrait_visible = false
+
+[node name="sandcastle_builder" parent="Entities/NPCs" instance=ExtResource("r19_dialogue")]
+position = Vector2(592, 1456)
+npc_id = "kanto_route_19_sandcastle_builder"
+dialogue_id = "kanto_route_19_sandcastle_builder_talk"
+display_name = "Sandcastle Builder"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("beach_sandcastle_builder")
+dialogue_portrait_visible = false
+
+[node name="beachgoer" parent="Entities/NPCs" instance=ExtResource("r19_dialogue")]
+position = Vector2(816, 1488)
+npc_id = "kanto_route_19_beachgoer"
+dialogue_id = "kanto_route_19_beachgoer_talk"
+display_name = "Beachgoer"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("beach_beachgoer")
+dialogue_portrait_visible = false
+
+[node name="coast_watcher" parent="Entities/NPCs" instance=ExtResource("r19_dialogue")]
+position = Vector2(1104, 1232)
+npc_id = "kanto_route_19_coast_watcher"
+dialogue_id = "kanto_route_19_coast_watcher_talk"
+display_name = "Coast Watcher"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("beach_coast_watcher")
+dialogue_portrait_visible = false
+
+[node name="resting_sailor" parent="Entities/NPCs" instance=ExtResource("r19_dialogue")]
+position = Vector2(1040, 1680)
+npc_id = "kanto_route_19_resting_sailor"
+dialogue_id = "kanto_route_19_resting_sailor_talk"
+display_name = "Sailor"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("beach_resting_sailor")
+dialogue_portrait_visible = false
 
 [connection signal="body_entered" from="Exits/ToFuchsiaGate" to="Exits/ToFuchsiaGate" method="_on_body_entered"]

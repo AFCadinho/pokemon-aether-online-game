@@ -3290,6 +3290,36 @@
 			"scenePath": "res://scenes/overworld/kanto/caves/route_18_mine/route_18_mine.tscn",
 			"trainerId": ""
 		},
+		"kanto_route_19_beach_attendant": {
+			"mapId": "kanto_route_19",
+			"position": {
+				"x": 272.0,
+				"y": 1232.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_19_beachgoer": {
+			"mapId": "kanto_route_19",
+			"position": {
+				"x": 816.0,
+				"y": 1488.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_19_coast_watcher": {
+			"mapId": "kanto_route_19",
+			"position": {
+				"x": 1104.0,
+				"y": 1232.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+			"trainerId": ""
+		},
 		"kanto_route_19_fuchsia_gate_attendant": {
 			"mapId": "kanto_route_19_fuchsia_gate",
 			"position": {
@@ -3310,6 +3340,26 @@
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
 			"trainerId": ""
 		},
+		"kanto_route_19_resting_sailor": {
+			"mapId": "kanto_route_19",
+			"position": {
+				"x": 1040.0,
+				"y": 1680.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+			"trainerId": ""
+		},
+		"kanto_route_19_sandcastle_builder": {
+			"mapId": "kanto_route_19",
+			"position": {
+				"x": 592.0,
+				"y": 1456.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+			"trainerId": ""
+		},
 		"kanto_route_19_shell_collector": {
 			"mapId": "kanto_route_19",
 			"position": {
@@ -3323,8 +3373,8 @@
 		"kanto_route_19_sis_and_bro_lia": {
 			"mapId": "kanto_route_19",
 			"position": {
-				"x": 304.0,
-				"y": 2000.0
+				"x": 592.0,
+				"y": 2032.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
@@ -3333,8 +3383,8 @@
 		"kanto_route_19_sis_and_bro_luc": {
 			"mapId": "kanto_route_19",
 			"position": {
-				"x": 464.0,
-				"y": 2096.0
+				"x": 816.0,
+				"y": 2160.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
@@ -3413,8 +3463,8 @@
 		"kanto_route_19_swimmer_reece": {
 			"mapId": "kanto_route_19",
 			"position": {
-				"x": 1008.0,
-				"y": 1360.0
+				"x": 912.0,
+				"y": 1776.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
@@ -3423,7 +3473,7 @@
 		"kanto_route_19_swimmer_richard": {
 			"mapId": "kanto_route_19",
 			"position": {
-				"x": 720.0,
+				"x": 1264.0,
 				"y": 1232.0
 			},
 			"radius": 80.0,

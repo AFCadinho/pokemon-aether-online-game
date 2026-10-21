@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add ordinary beach visitors with localized dialogue to Route 19 and move dry-land swimmers into the sea.
+
 - Reposition Route 15 trainers, ambient Pokémon and items for the current map, with clear facing directions and arrivals.
 
 - Refresh Route 15 scenery from the latest artist TMX.

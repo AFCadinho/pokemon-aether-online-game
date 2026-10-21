@@ -12,7 +12,7 @@ func _run() -> void:
     _check(map.encounter_area_id == "kanto_route_19" and is_equal_approx(map.surf_encounter_chance, .02), "Surf encounters are registered")
     var actors: Array = map.get_node("Entities/NPCs").get_children()
     actors.append_array(map.get_node("Entities/Pokemon").get_children())
-    _check(map.get_node("Entities/NPCs").get_child_count() == 14, "twelve trainers and two friendly NPCs")
+    _check(map.get_node("Entities/NPCs").get_child_count() == 19, "twelve swimmers and seven friendly NPCs")
     _check(map.get_node("Entities/Pokemon").get_child_count() == 8, "eight ambient Pokemon")
     var occupied := {}
     for actor in actors:
@@ -53,11 +53,16 @@ func _run() -> void:
             _check(not exit_node.contains_world_position(actor.position), "actor avoids exit trigger")
         if actor.name.begins_with("swimmer_") or actor.name.begins_with("sis_and_bro_"):
             trainers += 1
+            _check(map.is_water_tile_for_actor(actor.position,actor), "swimmer trainer stays in the sea: " + actor.name)
             _check(actor.npc_sprite_frames != null and actor.mugshot != null, "trainer has swimmer art")
             _check(actor.trainer_id == actor.npc_id and actor.battle_environment_id == "water", "trainer battle registration")
             for step in range(1,actor.sight_range_tiles+1):
                 var target: Vector2i = cell + Vector2i(actor.facing_direction)*step
                 _check(collision.get_cell_source_id(target) == -1 and not occupied.has(target), "clear trainer approach: " + actor.name)
+        if actor.name in ["beach_attendant","sandcastle_builder","beachgoer","coast_watcher","resting_sailor"]:
+            _check(not map.is_water_tile_for_actor(actor.position,actor), "beach visitor stands on dry land: " + actor.name)
+            _check(actor.npc_sprite_frames != null and actor.dialogue_id.ends_with("_talk"), "beach visitor has ordinary art and dialogue")
+            _check(reached.has(cell+Vector2i(actor.facing_direction)), "beach visitor faces an accessible interaction tile: " + actor.name)
         if actor.get_parent().name == "Pokemon":
             var on_water: bool = map.is_water_tile_for_actor(actor.position, actor)
             for offset in [-1,0,1]:
