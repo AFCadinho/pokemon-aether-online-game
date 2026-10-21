@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Update Route 15 scenery from the latest artist map.
+
 - Refresh the Route 19 scenery from the latest artist visual.
 
 - Add ordinary beach visitors with localized dialogue to Route 19 and move dry-land swimmers into the sea.
