@@ -85,3 +85,18 @@ projected from the map textures at runtime, without new PNG assets.
 Run checks through slot-env; the render check needs a real display. These are
 focused checks, not full development certification. Live server round trips,
 two real clients and live browser playback still need manual playtesting.
+
+
+## Pallet exit geometry regression
+
+`door_entrance_reachability_check.gd` pins Rival's House's trigger center to
+(1136, 384) and Oak's Lab's to (1296, 800), both 32×32. Their visible door/step
+points remain (1136, 400) and (1296, 816). The tests check the real player's
+detection rectangle during approach, the former early-overlap regression,
+actual Godot body-overlap entry dispatch, completed-step detection inside the
+interiors, and each interior's matching return marker. At the two exterior
+thresholds the feet lie on the trigger's excluded bottom edge; the player body
+still overlaps it. These are local geometry/dispatch tests; backend loading
+is stubbed.
+`tools/audit_pallet_door_geometry.gd` reports actual global centers for all
+three Pallet building entrances without confusing parent and child offsets.
