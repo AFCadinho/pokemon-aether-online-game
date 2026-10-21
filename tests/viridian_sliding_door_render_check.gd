@@ -53,7 +53,7 @@ func _run() -> void:
 		else:
 			_check(frame.get_data() != previous.get_data(), "Opening step %d visibly changes" % step)
 		var outside_changes := 0
-		var aperture := (Rect2i(96,28,32,32) if house_door else Rect2i(92,200,40,44))
+		var aperture := (Rect2i(96,22,32,38) if house_door else Rect2i(92,200,40,44))
 		for y in range(frame.get_height()):
 			for x in range(frame.get_width()):
 				if not aperture.has_point(Vector2i(x,y)) and frame.get_pixel(x,y) != reference.get_pixel(x,y):
@@ -61,6 +61,16 @@ func _run() -> void:
 		_check(outside_changes == 0, "Step %d preserves facade, frame, sidelights and threshold" % step)
 		previous = frame
 	_check((previous.get_pixel(112,44) if house_door else previous.get_pixel(112,220)).is_equal_approx(door.opening_color), "Fully open reveals dark doorway")
+	if house_door:
+		# Check the complete original leaf, including its six shaded top rows
+		# and rightmost edge; checking only the center missed both remnants.
+		var remaining_pixels := 0
+		for y in range(22, 60):
+			for x in range(96, 128):
+				if not previous.get_pixel(x, y).is_equal_approx(door.opening_color):
+					remaining_pixels += 1
+		_check(remaining_pixels == 0, "Fully open house door leaves no original top strip or leaf edge")
+
 	door.open_amount = 0.0
 	await process_frame
 	RenderingServer.force_draw(true,0.0)

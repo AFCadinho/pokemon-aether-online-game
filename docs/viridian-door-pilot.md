@@ -58,7 +58,7 @@ session is needed to assess network latency and the transition fade together.
 ## House 1 pilot
 
 House 1 uses `hinged_map_door.gd`, inheriting the Center proximity, access,
-sound and arrival controller. Its 32×32 panel starts at (1536, 860); the
+sound and arrival controller. Its 32×38 panel starts at (1536, 854); the
 right jamb stays fixed while six pixel-aligned inward-swing stages project
 the existing map pixels. No new raster assets or generated-map edits are needed.
 The facade, lintel and threshold stay fixed. `FromHouse1` primes this door only.
@@ -71,3 +71,7 @@ Live backend transitions and two real clients still need a manual playtest.
 
 The house leaf now recedes upward under the lintel around its fixed right hinge,
 with a shaded face and visible edge. Its swing lasts 0.24 seconds.
+
+The complete leaf includes six shaded rows below the lintel. At full opening
+the leaf edge disappears behind the jamb; the render check verifies every pixel
+of the opening, not only its center.

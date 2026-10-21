@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed leftover top pixels and the visible leaf edge on the fully open Viridian house door.
+
 - Refined the Viridian house door with a clearer inward swing, visible leaf edge and six animation stages.
 
 - Viridian City House 1 now has an inward-opening door with classic overworld audio, shared-player proximity, and a silently open door on exit.

@@ -9,6 +9,9 @@ func _draw() -> void:
 	var frame := clampi(ceili(open_amount * 6.0), 1, 6)
 	var angle := frame * PI / 12.0
 	var width := roundi(panel_size.x * cos(angle))
+	# At 90 degrees the leaf and its edge are concealed by the fixed jamb.
+	if width <= 0:
+		return
 	var depth := roundf(panel_size.y * 0.4 * sin(angle))
 	var shade := Color.WHITE.darkened(0.25 * sin(angle))
 	# The free edge travels UP into the building; both corners follow the
@@ -33,4 +36,4 @@ func _draw() -> void:
 	# A visible leaf edge and fixed hinge distinguish rotation from translation.
 	var edge_width := 1.0 if frame < 3 else 2.0
 	var edge_x := panel_size.x - maxf(width, edge_width)
-	draw_rect(Rect2(edge_x, 0, edge_width, panel_size.y - (depth if width > 0 else 0.0)), Color("34444b"))
+	draw_rect(Rect2(edge_x, 0, edge_width, panel_size.y - depth), Color("34444b"))
