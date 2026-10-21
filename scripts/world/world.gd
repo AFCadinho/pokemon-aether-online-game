@@ -2826,6 +2826,8 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 		TreeLowerDepthSortingScript.build_depth_layers(structure_layer, group_root)
 		ObjectLowerDepthSortingScript.build_depth_layers(structure_layer, group_root)
 
+	preload("res://scripts/world/tree_scenery_occlusion.gd").preserve_scenery(map)
+
 func _collect_structure_top_visual_layers_recursive(node: Node, structure_layers: Array[TileMapLayer]) -> void:
 	var tile_map_layer := node as TileMapLayer
 	if tile_map_layer != null:

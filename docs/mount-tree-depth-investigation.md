@@ -137,3 +137,40 @@ The measured extra construction time was approximately 21 ms for Viridian
 City and at most 28 ms across these map checks on this workstation; this work
 runs at map construction, not each frame. These focused checks are not a full
 release certificate. Unknown tree families remain outside this correction.
+
+
+## Scenery overlap correction (21 October 2026)
+
+The original lower-part promotion changed scenery where a roof, wall, fence,
+rock or another crown previously covered the tree base. In particular, a base
+could inherit the depth of a large connected crown group and cover a nearer
+crown. Viridian City and Route 2 exposed both failure modes.
+
+`tree_scenery_occlusion.gd` now runs after all crown, grass and object depth
+layers exist. It compares each promoted base with the visible scenery layers
+that its promotion crosses. Pixels covered by those layers remain at their
+original base depth; only uncovered pixels retain the crown depth needed for
+mount occlusion. A partial cell is split into complementary images in one
+compact, map-local atlas per affected base layer. Completely covered cells
+return to the original layer without generating a texture. Shared source
+atlases, native foreground animations, crown depth boundaries, actor sorting,
+collision and Tiled files are unchanged.
+
+Coverage includes every animation frame and supports transformed atlas cells.
+The imported visual contract remains aligned 32px layers; coverage is local to
+that visual subtree, excluding gameplay layers. Runtime resources live with
+the map, and repeated normalization does not rebuild or duplicate them.
+
+Validation: the new focused check compares 30,264 evergreen cells across all
+118 current generated visual maps against the scenery before lower-part
+promotion, using the current individual-tree opt-in for Routes 16–18. It also
+checks transparent/animated/flipped foreground, shared resource isolation,
+visible tree occlusion and repeat normalization. Real OpenGL viewport renders
+of Viridian City, two Route 2 locations and Routes 1, 3, 6, 8, 9, 12 and 15
+match the original scenery pixels with animations fixed to the same frame.
+The actual Viridian City and Route 2 gameplay scenes bring the pixel check
+total to 32,002 cells. Rendered spot checks also cover walking, Rayquaza and
+Zekrom at both locations. The existing tree, object, Route 16, mount, forest
+and tall-grass depth checks also pass. This is
+focused regression evidence, not a full release certification or online
+multiplayer playtest.
