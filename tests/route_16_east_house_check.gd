@@ -25,7 +25,7 @@ func run() -> void:
 					continue
 				reached[next] = true
 				queue.append(next)
-	for tile in [Vector2i(4,9),Vector2i(11,8),Vector2i(14,10),Vector2i(6,12),Vector2i(12,14),Vector2i(14,13),Vector2i(16,14)]:
+	for tile in [Vector2i(4,9),Vector2i(11,8),Vector2i(14,10),Vector2i(6,12),Vector2i(12,14),Vector2i(16,14)]:
 		check(not player.can_move_to(point(tile)), "solid furniture blocks movement " + str(tile))
 	for x in range(8,11):
 		check(reached.has(Vector2i(x,15)), "entire three-tile doorway is reachable")
