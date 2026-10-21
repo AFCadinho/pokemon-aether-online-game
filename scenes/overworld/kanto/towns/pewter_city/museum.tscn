@@ -9,11 +9,11 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
 [ext_resource type="Script" uid="uid://c3jutuhwsygsi" path="res://scripts/world/npcs/museum_admission_npc.gd" id="museum_admission"]
+[ext_resource type="Script" uid="uid://d155wpbtxistp" path="res://scripts/world/npcs/museum_ore_buyer_npc.gd" id="ore_buyer"]
 [ext_resource type="SpriteFrames" uid="uid://b8fh81or510qb" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="school_kid_m"]
 [ext_resource type="SpriteFrames" uid="uid://ckxh3g37blbkj" path="res://assets/npcs/classes/scientist_f_frames.tres" id="scientist_f"]
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="scientist_m"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/pewter_museum/pewter_museum.visual.tscn" id="visual"]
-[ext_resource type="Script" path="res://scripts/world/npcs/museum_ore_buyer_npc.gd" id="ore_buyer"]
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(64, 32)
@@ -112,7 +112,6 @@ script = ExtResource("ore_buyer")
 npc_id = "kanto_pewter_museum_collector_hugo"
 npc_definition_id = "trainer_class_gentleman"
 display_name = "Collector Hugo"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("gentleman")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=487535147]
