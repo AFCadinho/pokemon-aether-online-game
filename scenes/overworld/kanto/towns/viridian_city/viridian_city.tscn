@@ -1079,6 +1079,7 @@ tile_set = SubResource("TileSet_v4pkh")
 position = Vector2(1116, 1416)
 z_index = 4
 script = ExtResource("50_center_door")
+movement_sound_id = "sliding_door"
 source_layers = Array[NodePath]([NodePath("../StructureBottom"), NodePath("../Doors")])
 players_path = NodePath("../../Entities/Players")
 access_lock_path = NodePath("../../Entities/Interactables/Locks/PokemonCenterDoorLock")

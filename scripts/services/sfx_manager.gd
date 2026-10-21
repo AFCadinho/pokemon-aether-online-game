@@ -13,6 +13,10 @@ const FIELD_MOVE_SOUND_IDS := {
 	"sunny-day": "field_move_sunny_day",
 }
 const SOUND_DATA := {
+	"sliding_door": {
+		"path": "res://assets/audio/sfx/overworld/sliding_door.ogg",
+		"volume_db": -4.0,
+	},
 	"gym_electric_power_off": {
 		"path": "res://assets/audio/sfx/overworld/gym_electric_power_off.ogg",
 		"volume_db": -4.0,

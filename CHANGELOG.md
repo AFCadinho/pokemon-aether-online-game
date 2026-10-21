@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a quiet, nearby opening/closing sound to the Viridian Pokémon Center door pilot, respecting the SFX volume setting.
+
 - Remove the repeated fare from the Aethernet travel button; destination rows and the confirmation dialog still show the price.
 
 - Pilot a pixel-aligned sliding entrance at Viridian City’s Pokémon Center: open for nearby players, keep the frame fixed, and close after the doorway clears.
