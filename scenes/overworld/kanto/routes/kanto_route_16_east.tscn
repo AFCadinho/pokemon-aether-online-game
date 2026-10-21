@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://br47spdmma7dp"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_uvov6"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="6_0l3p0"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_ybaby"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
@@ -21,6 +22,9 @@ size = Vector2(32, 160)
 
 [sub_resource type="RectangleShape2D" id="route16_gate_shape"]
 size = Vector2(32, 128)
+
+[sub_resource type="RectangleShape2D" id="house_door"]
+size = Vector2(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ybaby"]
 texture = ExtResource("markers")
@@ -176,9 +180,6 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_s2jot")
 
-[sub_resource type="RectangleShape2D" id="house_door"]
-size = Vector2(32, 32)
-
 [node name="Route16East" type="Node2D" unique_id=2058030044]
 script = ExtResource("metadata")
 map_id = "kanto_route_16_east"
@@ -204,6 +205,9 @@ position = Vector2(1616, 688)
 
 [node name="FromRoute16Gate" type="Marker2D" parent="Spawns" unique_id=896135761]
 position = Vector2(144, 944)
+
+[node name="FromHouse" type="Marker2D" parent="Spawns" unique_id=534688119]
+position = Vector2(464, 432)
 
 [node name="Exits" type="Node2D" parent="." unique_id=826128744]
 
@@ -242,6 +246,21 @@ position = Vector2(0, -16)
 tile_footprint = Vector2i(1, 4)
 flow_direction = "left"
 
+[node name="ToHouse" type="Area2D" parent="Exits" unique_id=1920087298]
+position = Vector2(464, 400)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/route_16_east_house.tscn"
+target_spawn_name = "FromRoute16East"
+transition_id = "kanto_route_16_east__to_house"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse" unique_id=975691396]
+position = Vector2(0, -16)
+shape = SubResource("house_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToHouse" unique_id=1431231215 instance=ExtResource("5_uvov6")]
+z_as_relative = false
+
 [node name="Entities" type="Node2D" parent="." unique_id=1954935388]
 y_sort_enabled = true
 
@@ -255,7 +274,6 @@ npc_id = "kanto_route_16_east_resident_aya"
 npc_definition_id = "trainer_class_lass"
 dialogue_id = "kanto_route_16_east_resident_aya_default"
 display_name = "Resident Aya"
-movement_behavior = "idle"
 npc_sprite_frames = ExtResource("r16_lass")
 movement_tiles = 1
 movement_wait_seconds = 4.2
@@ -476,22 +494,6 @@ visible = false
 z_index = 100
 tile_map_data = PackedByteArray("AAAnABkAAAAIAAEAAAAnABoAAAAIAAEAAAAnABsAAAAIAAEAAAAnABwAAAAIAAEAAAAnAB0AAAAIAAEAAAAnAB4AAAAIAAEAAAAnAB8AAAAIAAEAAAAnACAAAAAIAAEAAAAnACEAAAAIAAEAAAAnACIAAAAIAAEAAAAnACMAAAAIAAEAAAAnACQAAAAIAAEAAAAnACUAAAAIAAEAAAAnACYAAAAIAAEAAAAoABkAAAAIAAEAAAAoABoAAAAIAAEAAAAoABsAAAAIAAEAAAAoABwAAAAIAAEAAAAoAB0AAAAIAAEAAAAoAB4AAAAIAAEAAAAoAB8AAAAIAAEAAAAoACAAAAAIAAEAAAAoACEAAAAIAAEAAAAoACIAAAAIAAEAAAAoACMAAAAIAAEAAAAoACQAAAAIAAEAAAAoACUAAAAIAAEAAAAoACYAAAAIAAEAAAApABkAAAAIAAEAAAApABoAAAAIAAEAAAApABsAAAAIAAEAAAApABwAAAAIAAEAAAApAB0AAAAIAAEAAAApAB4AAAAIAAEAAAApAB8AAAAIAAEAAAApACAAAAAIAAEAAAApACEAAAAIAAEAAAApACIAAAAIAAEAAAApACMAAAAIAAEAAAApACQAAAAIAAEAAAApACUAAAAIAAEAAAApACYAAAAIAAEAAAAqABkAAAAIAAEAAAAqABoAAAAIAAEAAAAqABsAAAAIAAEAAAAqABwAAAAIAAEAAAAqAB0AAAAIAAEAAAAqAB4AAAAIAAEAAAAqAB8AAAAIAAEAAAAqACAAAAAIAAEAAAAqACEAAAAIAAEAAAAqACIAAAAIAAEAAAAqACMAAAAIAAEAAAAqACQAAAAIAAEAAAAqACUAAAAIAAEAAAAqACYAAAAIAAEAAAArABkAAAAIAAEAAAArABoAAAAIAAEAAAArABsAAAAIAAEAAAArABwAAAAIAAEAAAArAB0AAAAIAAEAAAArAB4AAAAIAAEAAAArAB8AAAAIAAEAAAArACAAAAAIAAEAAAArACEAAAAIAAEAAAArACIAAAAIAAEAAAArACMAAAAIAAEAAAArACQAAAAIAAEAAAArACUAAAAIAAEAAAArACYAAAAIAAEAAAAsABkAAAAIAAEAAAAsABoAAAAIAAEAAAAsABsAAAAIAAEAAAAsABwAAAAIAAEAAAAsAB0AAAAIAAEAAAAsAB4AAAAIAAEAAAAsAB8AAAAIAAEAAAAsACAAAAAIAAEAAAAsACEAAAAIAAEAAAAsACIAAAAIAAEAAAAsACMAAAAIAAEAAAAsACQAAAAIAAEAAAAsACUAAAAIAAEAAAAsACYAAAAIAAEAAAASAAkAAAAIAAEAAAASAAoAAAAIAAEAAAASAAsAAAAIAAEAAAASAAwAAAAIAAEAAAASAA0AAAAIAAEAAAATAAkAAAAIAAEAAAATAAoAAAAIAAEAAAATAAsAAAAIAAEAAAATAAwAAAAIAAEAAAATAA0AAAAIAAEAAAAUAAkAAAAIAAEAAAAUAAoAAAAIAAEAAAAUAAsAAAAIAAEAAAAUAAwAAAAIAAEAAAAUAA0AAAAIAAEAAAAVAAkAAAAIAAEAAAAVAAoAAAAIAAEAAAAVAAsAAAAIAAEAAAAVAAwAAAAIAAEAAAAVAA0AAAAIAAEAAAAWAAkAAAAIAAEAAAAWAAoAAAAIAAEAAAAWAAsAAAAIAAEAAAAWAAwAAAAIAAEAAAAWAA0AAAAIAAEAAAAXAAkAAAAIAAEAAAAXAAoAAAAIAAEAAAAXAAsAAAAIAAEAAAAXAAwAAAAIAAEAAAAXAA0AAAAIAAEAAAAYAAkAAAAIAAEAAAAYAAoAAAAIAAEAAAAYAAsAAAAIAAEAAAAYAAwAAAAIAAEAAAAYAA0AAAAIAAEAAAAZAAkAAAAIAAEAAAAZAAoAAAAIAAEAAAAZAAsAAAAIAAEAAAAZAAwAAAAIAAEAAAAZAA0AAAAIAAEAAAAaAAkAAAAIAAEAAAAaAAoAAAAIAAEAAAAaAAsAAAAIAAEAAAAaAAwAAAAIAAEAAAAaAA0AAAAIAAEAAAAbAAkAAAAIAAEAAAAbAAoAAAAIAAEAAAAbAAsAAAAIAAEAAAAbAAwAAAAIAAEAAAAbAA0AAAAIAAEAAAAcAAkAAAAIAAEAAAAcAAoAAAAIAAEAAAAcAAsAAAAIAAEAAAAcAAwAAAAIAAEAAAAcAA0AAAAIAAEAAAAdAAkAAAAIAAEAAAAdAAoAAAAIAAEAAAAdAAsAAAAIAAEAAAAdAAwAAAAIAAEAAAAdAA0AAAAIAAEAAAAUAAcAAAAIAAEAAAAUAAgAAAAIAAEAAAAVAAcAAAAIAAEAAAAVAAgAAAAIAAEAAAAWAAcAAAAIAAEAAAAWAAgAAAAIAAEAAAAXAAcAAAAIAAEAAAAXAAgAAAAIAAEAAAAYAAcAAAAIAAEAAAAYAAgAAAAIAAEAAAAZAAcAAAAIAAEAAAAZAAgAAAAIAAEAAAAaAAcAAAAIAAEAAAAaAAgAAAAIAAEAAAAbAAcAAAAIAAEAAAAbAAgAAAAIAAEAAAAcAAcAAAAIAAEAAAAcAAgAAAAIAAEAAAAdAAcAAAAIAAEAAAAdAAgAAAAIAAEAAAA=")
 tile_set = SubResource("TileSet_fhx26")
-
-
-[node name="FromHouse" type="Marker2D" parent="Spawns"]
-position = Vector2(464, 464)
-
-[node name="ToHouse" type="Area2D" parent="Exits"]
-position = Vector2(464, 432)
-script = ExtResource("exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/route_16_east_house.tscn"
-target_spawn_name = "FromRoute16East"
-transition_id = "kanto_route_16_east__to_house"
-transition_facing_direction = "up"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse"]
-position = Vector2(0, -16)
-shape = SubResource("house_door")
 
 [connection signal="body_entered" from="Exits/ToCeladonCity" to="Exits/ToCeladonCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute16Gate" to="Exits/ToRoute16Gate" method="_on_body_entered"]
