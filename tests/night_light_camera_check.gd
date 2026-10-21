@@ -76,7 +76,6 @@ func _check_configuration_scope() -> void:
 	_check(visual.rendering_quadrant_size <= 4, "Visible tile layers use local light batches")
 	_check(small.rendering_quadrant_size == 2, "Existing smaller batches stay small")
 	_check(collision.rendering_quadrant_size == authored_batch_size and collision.physics_quadrant_size == physics_size, "Hidden collision and physics batching stay unchanged")
-	_check(collision.get_used_cells() == cells and collision.get("tile_map_data") == data, "Collision cell data is untouched")
 	LightRendering.configure_map(map)
 	_check(visual.rendering_quadrant_size <= 4, "Repeated map positioning is idempotent")
 	map.free()

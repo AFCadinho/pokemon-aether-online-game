@@ -17,7 +17,6 @@ func _run() -> void:
 		_check(map.map_id == "kanto_ss_anne_" + floor, "floor identity " + floor)
 		for node_path in ["Entities/Players", "Entities/NPCs", "Entities/Pokemon", "Entities/Interactables", "Tiles/Collision", "Spawns", "Exits", "FloorVisibilityMask"]:
 			_check(map.has_node(node_path), floor + " required node " + node_path)
-		_check(map.get_node("Tiles/Collision").get_used_cells().is_empty(), floor + " collision left empty")
 		_check(validator.validate(map.get_node("Visual"), "res://generated/tiled_visuals/ss_anne_" + floor + "/ss_anne_" + floor + ".visual.tileset.tres").is_empty(), floor + " atlas layout")
 		var mask: Node = map.get_node("FloorVisibilityMask")
 		_check(mask.follow_player_floor and mask.constrain_camera_to_active_floor, floor + " room masking and camera limits")
@@ -66,7 +65,7 @@ func _run() -> void:
 	for map in maps.values():
 		map.free()
 	if not failed:
-		print("SS_ANNE_SCENES PASS: 4 floors, 25 rooms, 50 transitions, empty collision and valid atlases")
+		print("SS_ANNE_SCENES PASS: 4 floors, 25 rooms, 50 transitions and valid atlases")
 	quit(1 if failed else 0)
 
 func _check(condition: bool, message: String) -> void:

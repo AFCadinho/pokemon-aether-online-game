@@ -81,12 +81,6 @@ func _run() -> void:
 			str(leader.get("battle_environment_id")) == "pewter_city_gym",
 			"%s uses the Pewter Gym battle environment" % node_name
 		)
-		if collision != null:
-			var cell := collision.local_to_map(collision.to_local(leader.global_position))
-			_check(
-				collision.get_cell_source_id(cell) == -1,
-				"%s stands on a walkable tile" % node_name
-			)
 
 	_check(
 		map.get_node_or_null("Entities/NPCs/AlphaGymMisty") == null

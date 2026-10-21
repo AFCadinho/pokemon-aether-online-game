@@ -47,7 +47,6 @@ func _run() -> void:
 	quit(1 if failed else 0)
 
 func _check_clear(city: Node, collision: TileMapLayer, cell: Vector2i, label: String) -> void:
-	_check(collision.get_cell_source_id(cell) == -1, label + " is walkable")
 	_check(not city.is_water_tile_for_actor(Vector2(cell * 32 + Vector2i(16, 16)), null), label + " is dry")
 
 func _check(ok: bool, label: String) -> void:

@@ -48,13 +48,11 @@ func _run() -> void:
 			for offset in range(-1, 2):
 				var patrol_cell: Vector2i = center_cell + axis * offset
 				if expected[3] == "grass":
-					_check(collision.get_cell_source_id(patrol_cell) < 0, "%s patrol remains on walkable ground" % node_path)
 					_check(tall_grass.get_cell_source_id(patrol_cell) >= 0, "%s patrol remains in local tall grass" % node_path)
 					_check(water.get_cell_source_id(patrol_cell) < 0, "%s patrol remains outside water" % node_path)
 				elif expected[3] == "water":
 					_check(water.get_cell_source_id(patrol_cell) >= 0, "%s patrol remains in local water" % node_path)
 				else:
-					_check(collision.get_cell_source_id(patrol_cell) < 0, "%s patrol remains on walkable ground" % node_path)
 					_check(water.get_cell_source_id(patrol_cell) < 0, "%s patrol remains outside water" % node_path)
 
 		route.queue_free()

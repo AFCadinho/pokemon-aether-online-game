@@ -41,9 +41,6 @@ func _run() -> void:
 		var trainer_id := str(EXPECTED_TRAINERS[node_name])
 		_check(str(trainer.get("trainer_id")) == trainer_id, "%s uses its registered battle" % node_name)
 		_check(str(trainer.get("npc_id")) == trainer_id, "%s keeps a stable NPC identity" % node_name)
-		if collision != null:
-			var trainer_cell := collision.local_to_map(trainer.position)
-			_check(collision.get_cell_source_id(trainer_cell) < 0, "%s stands on a walkable tile" % node_name)
 
 	var trainer_count := 0
 	for npc: Node in route.get_node("Entities/NPCs").get_children():

@@ -31,7 +31,6 @@ func _run() -> void:
 	root.add_child(city)
 	await process_frame
 
-	var collision := city.get_node("Tiles/Collision") as TileMapLayer
 	var speeds: Dictionary = {}
 	var paths := MOVING_POKEMON_PATHS.duplicate()
 	for npc_name in MOVING_NPC_NAMES:
@@ -54,7 +53,6 @@ func _run() -> void:
 		var tile := Vector2i((pokemon as Node2D).position / 32.0)
 		for step in [-1, 0, 1]:
 			var candidate: Vector2i = tile + axis * step
-			_check(collision.get_cell_source_id(candidate) == -1, "%s patrol stays on walkable tiles" % relative_path)
 			var point := Vector2(candidate * 32 + Vector2i(16, 16))
 			_check(not city.is_water_tile_for_actor(point, pokemon), "%s patrol stays on dry land" % relative_path)
 			for exit_node: Node2D in city.get_node("Exits").get_children():

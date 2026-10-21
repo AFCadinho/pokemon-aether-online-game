@@ -54,7 +54,6 @@ func _run() -> void:
 			var approach_available := false
 			for distance in range(1, reach + 1):
 				approach_available = approach_available or collision.get_cell_source_id(cell + Vector2i.DOWN * distance) == -1
-			_check(collision.get_cell_source_id(cell) == -1 and approach_available, "Trainer has a walkable approach within interaction reach")
 			for direction: String in ["down", "left", "right", "up"]:
 				var frame := npc.npc_sprite_frames.get_frame_texture("idle_" + direction, 0) as AtlasTexture
 				_check(frame != null and frame.atlas.resource_path.ends_with("NPC_Z07_Breeder_M.png"), "Daycare uses the Breeder overworld frame facing " + direction)

@@ -26,10 +26,8 @@ func _run() -> void:
 	_check(not docks.is_water_tile_for_actor(Vector2(1424,624), null), "gangway approach tile is dry")
 	for path in ["Entities/Players", "Entities/NPCs", "Entities/Pokemon", "Entities/Interactables", "Tiles/Collision"]:
 		_check(docks.has_node(path), "port exterior required node " + path)
-	var collision := port.get_node("Tiles/Collision") as TileMapLayer
 	for name in ["FromNorth", "FromSouth"]:
 		var spawn := port.get_node("Spawns/" + name) as Node2D
-		_check(collision.get_cell_source_id(collision.local_to_map(spawn.position)) == -1, name + " arrival is clear")
 		for exit_node in port.get_node("Exits").get_children():
 			_check(not exit_node.contains_world_position(spawn.global_position), name + " avoids immediate exit")
 	for entry in [[city, "ToPortNorth", PORT, "FromNorth"], [city, "ToPortSouth", PORT, "FromSouth"], [city, "ToDocks", DOCKS, "FromVermilionCity"], [docks, "ToVermilionCity", CITY, "FromDocks"], [port, "ToNorth", CITY, "FromPortNorth"], [port, "ToSouth", CITY, "FromPortSouth"]]:
@@ -41,14 +39,9 @@ func _run() -> void:
 			_check(not target_exit.contains_world_position(spawn.global_position), "return arrival avoids exit loops")
 		if target.has_method("is_water_tile_for_actor"):
 			_check(not target.is_water_tile_for_actor(spawn.global_position, null), "return arrival is dry")
-		var target_collision := target.get_node_or_null("Tiles/Collision") as TileMapLayer
-		if target_collision != null:
-			_check(target_collision.get_cell_source_id(target_collision.local_to_map(spawn.position)) == -1, "return arrival has no collision")
-	var city_collision := city.get_node("Tiles/Collision") as TileMapLayer
 	for entry in [["ToPortNorth", Vector2(1040, 1904), "down"], ["ToPortSouth", Vector2(1040, 2128), "up"], ["ToDocks", Vector2(1040, 2224), "down"]]:
 		var city_exit: Node = city.get_node("Exits/" + entry[0])
 		_check(city_exit.contains_world_position(entry[1]), "entrance covers " + str(entry[0]))
-		_check(city_collision.get_cell_source_id(city_collision.local_to_map(entry[1])) == -1, "entrance is walkable " + str(entry[0]))
 		_check(not city.is_water_tile_for_actor(entry[1], null), "entrance is dry " + str(entry[0]))
 		_check(city_exit.transition_facing_direction == entry[2], "arrival faces into destination " + str(entry[0]))
 	_check(port.get_node("Spawns/FromNorth").position == Vector2(368,208), "north entry arrives in north of room")

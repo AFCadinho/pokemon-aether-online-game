@@ -39,3 +39,15 @@
   risks.
 - Worktrees remain after the task. Delete a feature branch only after its
   integration status has been checked and deletion is explicitly intended.
+
+## Manually authored map collision
+
+- The user owns all static map Collision layers and their walkable layout.
+  Do not change them unless the user explicitly requests a collision change.
+- Do not add release assertions for specific blocked/open map tiles, collision
+  counts, template collision equality, furniture footprints or map flood-fill
+  reachability. Map edits must not require updating a test's collision layout.
+- Keep technical scene/catalog links, rendering/camera tests and general movement,
+  dynamic blocker and collision-code tests using independent fixtures.
+- Tests may verify that runtime code preserves the currently authored layers;
+  capture their initial state rather than prescribing their contents.

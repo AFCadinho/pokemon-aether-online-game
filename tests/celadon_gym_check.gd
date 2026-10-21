@@ -15,42 +15,16 @@ func _init() -> void:
 func _run() -> void:
 	var gym := (load(GYM_PATH) as PackedScene).instantiate()
 	var city := (load(DIRECTORY + "celadon_city.tscn") as PackedScene).instantiate()
-	var collision := gym.get_node("Tiles/Collision") as TileMapLayer
 	var spawn := gym.get_node("Spawns/FromOutside") as Marker2D
-	var reached := _reachable(collision, Vector2i(42, 68), Vector2i(spawn.position / 32.0))
 	_check(gym.map_id == MAP_ID and gym.world_access_group_id == city.map_id, "Gym identity and Celadon access group")
 	_check(gym.world_access_area_type == "interior" and gym.lighting_profile == "indoor" and gym.weather_profile == "disabled", "Indoor lighting and weather")
 	_check(gym.music_profile_id == "gym.interior", "Shared Gym music profile")
-	var leader_cell := Vector2i(gym.get_node("Entities/NPCs/GymLeaderErika").position / 32.0)
-	_check(reached.get(leader_cell + Vector2i.DOWN, -1) > absi(leader_cell.y - int(spawn.position.y / 32.0)), "Garden route reaches Erika by navigating around the hedges")
-	for x: int in [6, 12, 18, 28, 34]:
-		for y: int in [18, 23, 35, 40, 52]:
-			_check(reached.has(Vector2i(x, y)), "Reachable garden room at " + str(Vector2i(x, y)))
-	for gate: Vector2i in [Vector2i(6, 18), Vector2i(6, 30), Vector2i(6, 47), Vector2i(12, 30), Vector2i(12, 47), Vector2i(28, 18), Vector2i(28, 35), Vector2i(34, 18), Vector2i(34, 30), Vector2i(34, 47), Vector2i(20, 54)]:
-		for y in range(gate.y, gate.y + 4):
-			for x in range(gate.x, gate.x + 2):
-				_check(reached.has(Vector2i(x, y)), "Both columns stay open beneath the pergola: " + str(Vector2i(x, y)))
-	for y in range(12, 17):
-		for x in range(19, 22):
-			_check(reached.has(Vector2i(x, y)), "Stair treads and both landings are open")
-	for y in 68:
-		for x in 42:
-			var tile := Vector2i(x, y)
-			if collision.get_cell_source_id(tile) != -1 or reached.has(tile):
-				continue
-			var decorative := (y >= 56 and y <= 63 and (x < 18 or x > 22)) or Rect2i(7, 7, 9, 6).has_point(tile) or Rect2i(26, 7, 9, 6).has_point(tile)
-			_check(decorative, "No unintended stranded floor: " + str(tile))
-	_check(not reached.has(Vector2i(13, 9)) and not reached.has(Vector2i(28, 9)) and not reached.has(Vector2i(3, 56)), "Stage and entrance gardens remain physically enclosed")
-	for tile: Vector2i in [Vector2i(15, 50), Vector2i(16, 50), Vector2i(3, 17)]:
-		_check(collision.get_cell_source_id(tile) != -1, "Flowers and hedges are solid: " + str(tile))
 	var objects := gym.get_node("Visual/Objects") as TileMapLayer
 	var objects_top := gym.get_node("Visual/ObjectsTop") as TileMapLayer
 	for fountain_y: int in [24, 41]:
 		for y in range(fountain_y, fountain_y + 4):
 			for x in range(19, 23):
 				var tile := Vector2i(x, y)
-				if y in [fountain_y + 1, fountain_y + 2]:
-					_check(collision.get_cell_source_id(tile) != -1, "Fountain basin footprint is solid")
 				var layer := objects_top if objects_top.get_cell_source_id(tile) != -1 else objects
 				_check(layer.get_cell_source_id(tile) != -1, "Fountain part is present across the drawing layers")
 				if layer.get_cell_source_id(tile) == -1:
@@ -60,8 +34,6 @@ func _run() -> void:
 				_check(source.get_tile_animation_frames_count(coords) == 24, "All fountain parts retain 24 animation frames")
 				for frame in 24:
 					_check(is_equal_approx(source.get_tile_animation_frame_duration(coords, frame), 0.1), "Fountain animation timing is preserved")
-		for approach: Vector2i in [Vector2i(18, fountain_y + 1), Vector2i(23, fountain_y + 1), Vector2i(20, fountain_y - 1), Vector2i(20, fountain_y + 4)]:
-			_check(reached.has(approach), "Free circulation around both fountains")
 	var entrance := city.get_node("Exits/ToGym")
 	var exit_node := gym.get_node("Exits/ToOutside")
 	var city_spawn := city.get_node("Spawns/FromGym") as Marker2D
@@ -70,10 +42,6 @@ func _run() -> void:
 	_check(entrance.transition_facing_direction == "up" and exit_node.transition_facing_direction == "down", "Arrivals face into their destination")
 	_check(not entrance.contains_world_position(city_spawn.position) and not exit_node.contains_world_position(spawn.position), "Arrivals avoid immediate return")
 	_check(city.get_node("Visual/Doors").get_cell_source_id(Vector2i(11, 48)) != -1 and entrance.contains_world_position(Vector2(368, 1536)), "City trigger aligns with the visible Gym door")
-	for x in range(19, 22):
-		_check(reached.has(Vector2i(x, 64)) and exit_node.contains_world_position(Vector2(x * 32 + 16, 2064)), "Full three-tile south exit is traversable")
-	var city_reached := _reachable(city.get_node("Tiles/Collision"), Vector2i(80, 70), Vector2i(city.get_node("Spawns/FromRoute7").position / 32.0))
-	_check(city_reached.has(Vector2i(11, 48)) and city_reached.has(Vector2i(11, 50)), "Gym door and return can be reached from Route 7")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	_check(catalog.areas.has(MAP_ID) and catalog.areas[MAP_ID].locationGroupId == city.map_id, "Server registers the Gym as a Celadon interior")
 	for pair: Array in [[entrance, gym, spawn], [exit_node, city, city_spawn]]:
@@ -89,22 +57,6 @@ func _run() -> void:
 	city.free()
 	print("CELADON_GYM ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
-
-
-func _reachable(collision: TileMapLayer, size: Vector2i, start: Vector2i) -> Dictionary:
-	var queue: Array[Vector2i] = [start]
-	var reached := {start: 0}
-	var index := 0
-	while index < queue.size():
-		var tile := queue[index]
-		index += 1
-		for offset: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
-			var candidate := tile + offset
-			if not Rect2i(Vector2i.ZERO, size).has_point(candidate) or reached.has(candidate) or collision.get_cell_source_id(candidate) != -1:
-				continue
-			reached[candidate] = int(reached[tile]) + 1
-			queue.append(candidate)
-	return reached
 
 
 func _check(ok: bool, description: String) -> void:

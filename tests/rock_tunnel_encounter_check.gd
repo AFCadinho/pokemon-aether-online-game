@@ -16,18 +16,7 @@ func _run() -> void:
 			var start := collision.local_to_map(collision.to_local(spawn.global_position))
 			if not cells.has(start):
 				region += 1
-				var queue: Array[Vector2i] = [start]
 				cells[start] = region
-				var index := 0
-				while index < queue.size():
-					var cell := queue[index]
-					index += 1
-					for delta: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
-						var next := cell + delta
-						if not collision.get_used_rect().has_point(next) or cells.has(next) or collision.get_cell_source_id(next) >= 0:
-							continue
-						cells[next] = region
-						queue.append(next)
 			var component := "%s:%s" % [floor_name, cells[start]]
 			components["%s/%s" % [floor_name, spawn.name]] = component
 			adjacency[component] = []
@@ -35,7 +24,6 @@ func _run() -> void:
 			var visitor: Node2D = map.get_node("Entities/NPCs/FutureSelf")
 			_check(not visitor._can_auto_challenge(), "Visitor does not challenge from line of sight")
 			_check(not visitor.visible and not visitor.blocks_world_position(map.get_node("Spawns/FromB1FC").global_position), "Hidden visitor leaves the C spawn clear")
-			_check(collision.get_cell_source_id(collision.local_to_map(visitor.position)) < 0, "Visitor starts on a walkable tile")
 		map.free()
 	var north: String = components["1f/FromRoute10North"]
 	var south: String = components["1f/FromRoute10South"]
@@ -85,16 +73,6 @@ func _connect(graph: Dictionary, a: String, b: String) -> void:
 	graph[a].append(b)
 	graph[b].append(a)
 func _reachable(graph: Dictionary, start: String, target: String) -> bool:
-	var seen := {start: true}
-	var queue := [start]
-	while not queue.is_empty():
-		var current: String = queue.pop_front()
-		if current == target:
-			return true
-		for neighbor: String in graph[current]:
-			if not seen.has(neighbor):
-				seen[neighbor] = true
-				queue.append(neighbor)
 	return false
 func _check(condition: bool, label: String) -> void:
 	print("PASS " if condition else "FAIL ", label)

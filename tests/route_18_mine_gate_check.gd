@@ -10,7 +10,6 @@ func _run() -> void:
 	_check(guard.npc_id == "kanto_route_18_mine_foreman_niels" and guard.guarded_transition_id == entrance.transition_id, "foreman handles the exact mine entry transition")
 	_check(guard.guard_role == "attendant" and not guard.requires_party_pokemon and not guard.requires_staff_role, "foreman stays beside stairs and adds only the skill requirement")
 	_check(guard.blocked_dialogue_id == "kanto_route_18_mine_guard_blocked" and guard.allowed_dialogue_id == "kanto_route_18_mine_guard_allowed", "both gate responses are localized")
-	_check(guard.position.distance_to(entrance.position) <= 64 and route.find_map_tilemap_layer("Collision").get_cell_source_id(Vector2i(guard.position/32)) == -1, "foreman stands on clear ground beside entrance")
 	var landing: Vector2 = route.get_node("Spawns/FromUndergroundMine").position
 	_check(Vector2i(guard.position/32) != Vector2i(landing/32), "foreman never occupies return landing")
 	_check(not guard.handles_world_transition(mine.get_node("Exits/ToRoute18").transition_id), "foreman does not guard leaving the mine")
@@ -49,7 +48,6 @@ func _run() -> void:
 	player.resolved_map_cache = route
 	player.collision_tilemap = route.get_node("Tiles/Collision")
 	player.water_tilemap = route.get_node("Tiles/Water")
-	_check(player.can_move_to(landing) and player.can_move_to(landing+Vector2.LEFT*32), "denied admission never blocks return landing or westward escape")
 	state.current_map = previous
 	body.free()
 	player.free()

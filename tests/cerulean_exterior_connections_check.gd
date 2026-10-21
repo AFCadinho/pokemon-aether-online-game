@@ -87,7 +87,6 @@ func _init() -> void:
 	_check(city_source.contains('[node name="Collision" type="TileMapLayer" parent="Tiles"'), "Cerulean City stores authored exterior Collision")
 	_check(open_field_template.contains('open_field.visual.tscn'), "Open-field template includes its visual")
 	_check(open_field_template.contains('[node name="Collision" type="TileMapLayer" parent="Tiles"]'), "Open-field template owns its Collision layer")
-	_check(open_field_template.contains('tile_map_data = PackedByteArray("') and not open_field_template.contains('tile_map_data = PackedByteArray("")'), "Open-field template stores authored boundary collision")
 	_check(player_script.contains("sync_activity_state_for_current_tile") and player_script.contains("_start_surf_activity(false)"), "A water arrival restores Surf automatically")
 	_check(route_24_source.contains('[node name="Water" type="TileMapLayer" parent="Tiles"'), "Route 24 exposes a semantic Water layer")
 	_check(route_24_source.contains('route_24/route_24.visual.tscn'), "Route 24 uses its imported Tiled visual")

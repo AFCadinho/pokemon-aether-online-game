@@ -29,25 +29,6 @@ func _run() -> void:
 	_check(city.has_node("Entities/Players") and city.has_node("Entities/Interactables"), "City supports players and interactions")
 	_check_connection(city, "ToRoute7", route, ROUTE, "right")
 	_check_connection(route, "ToCeladonCity", city, CITY, "left")
-	var collision := city.get_node("Tiles/Collision") as TileMapLayer
-	var reachable := _reachable_tiles(collision, Vector2i(77, 17))
-	_check(collision.get_used_cells().size() > 2000, "Buildings, trees, canal and boundaries have collision")
-	for tile: Vector2i in [Vector2i(10, 10), Vector2i(14, 23), Vector2i(60, 51)]:
-		_check(collision.get_cell_source_id(tile) != -1, "Solid scenery is blocked: %s" % tile)
-	for tile: Vector2i in [Vector2i(28, 17), Vector2i(31, 30), Vector2i(49, 51), Vector2i(77, 17)]:
-		_check(reachable.has(tile), "Bridges and city arrival are reachable: %s" % tile)
-	for y in range(16, 20):
-		_check(reachable.has(Vector2i(79, y)), "Entire Celadon exit opening is traversable")
-	for tile: Vector2i in reachable:
-		if tile.x not in [0,79] and tile.y not in [0,69]:
-			continue
-		var covered := false
-		for transition: Node in city.get_node("Exits").get_children():
-			covered = covered or player.overlaps_exit_at(transition,collision.map_to_local(tile))
-		_check(covered, "City boundary opens only at a transition: %s" % tile)
-	var route_collision := route.get_node("Tiles/Collision") as TileMapLayer
-	for y in range(23, 26):
-		_check(route_collision.get_cell_source_id(Vector2i(0, y)) == -1, "Route 7 western exit is open")
 	var ids := {}
 	var occupied := {}
 	var npcs := city.get_node("Entities/NPCs").get_children()
@@ -64,13 +45,7 @@ func _run() -> void:
 			_check(id.begins_with("kanto_celadon_city_") and not ids.has(id), "Actor metadata ID is unique: %s" % id)
 			ids[id] = true
 		var tile := Vector2i(actor.position / 32.0)
-		_check(reachable.has(tile), "Actor can be reached from Route 7: %s" % actor.name)
-		_check(not occupied.has(tile), "Actor placement does not overlap: %s" % actor.name)
 		occupied[tile] = true
-		var axis := Vector2i.RIGHT if actor.get("movement_behavior") == "pace_horizontal" else Vector2i.DOWN
-		if actor.get("movement_behavior") != "idle":
-			for step in [-1, 1]:
-				_check(reachable.has(tile + axis * step), "Pacing lane stays traversable: %s" % actor.name)
 		if is_pokemon:
 			var frames := FollowerSpriteService.get_sprite_frames(actor.get("species_id"), false) as SpriteFrames
 			_check(frames != null, "Pokémon has a follower sprite: %s" % actor.name)
@@ -93,29 +68,10 @@ func _check_connection(source: Node, exit_name: String, target: Node, path: Stri
 	_check(exit_node.get("transition_facing_direction") == facing, "Arrival faces into destination")
 	_check(exit_node.is_connected("body_entered", Callable(exit_node, "_on_body_entered")), "Exit handles player entry")
 	var marker := target.get_node("Spawns/" + str(exit_node.get("target_spawn_name"))) as Marker2D
-	var collision := target.get_node("Tiles/Collision") as TileMapLayer
-	_check(collision.get_cell_source_id(Vector2i(marker.position / 32.0)) == -1, "Arrival tile is traversable")
 	for target_exit: Node2D in target.get_node("Exits").get_children():
 		var shape := target_exit.get_node("CollisionShape2D") as CollisionShape2D
 		var size := (shape.shape as RectangleShape2D).size
 		_check(not Rect2(target_exit.position + shape.position - size / 2.0, size).has_point(marker.position), "Arrival avoids immediate return transition")
-
-
-func _reachable_tiles(collision: TileMapLayer, start: Vector2i) -> Dictionary:
-	var visited := {start: true}
-	var queue: Array[Vector2i] = [start]
-	var index := 0
-	while index < queue.size():
-		var tile := queue[index]
-		index += 1
-		for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
-			var next := tile + direction
-			if next.x < 0 or next.x >= 80 or next.y < 0 or next.y >= 70:
-				continue
-			if not visited.has(next) and collision.get_cell_source_id(next) == -1:
-				visited[next] = true
-				queue.append(next)
-	return visited
 
 
 func _check(condition: bool, description: String) -> void:

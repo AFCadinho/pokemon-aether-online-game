@@ -52,8 +52,6 @@ func _check_entrance(scene_path: String, exit_name: String, spawn_name: String, 
 	var hint := door.get_node("DoorTransitionHint") as Node2D
 	var collision := town.find_child("Collision", true, false) as TileMapLayer
 	var arrival := town.get_node("Spawns/" + spawn_name) as Marker2D
-	_check(collision.get_cell_source_id(collision.local_to_map(collision.to_local(door_tile))) == -1,
-		"the door tile is walkable")
 	_check(not door.call("contains_world_position", door_tile), "door trigger uses body overlap at the threshold")
 	_check(hint.global_position == door_tile, "the hint marks the same door tile")
 	_check(not door.call("contains_world_position", arrival.global_position),
@@ -212,7 +210,6 @@ func _check_world_doors() -> void:
 				hint = door.get_node("TransitionHint") as Node2D
 			_check(hint.global_position == threshold, "hint identifies the actual doorway tile")
 			var collision := map.find_child("Collision", true, false) as TileMapLayer
-			_check(collision != null and collision.get_cell_source_id(collision.local_to_map(collision.to_local(threshold))) == -1, "threshold is walkable")
 			_check(door.is_connected("body_entered", Callable(door, "_on_body_entered")), "physics signal remains connected")
 			# Some entrances share a return door (department store); still test
 			# their approach and use every configured return marker where present.

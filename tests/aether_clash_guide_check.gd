@@ -101,17 +101,12 @@ func _run() -> void:
 			int(placed_guide.position.x) / TILE_SIZE,
 			int(placed_guide.position.y) / TILE_SIZE
 		)
-		_check(
-			collision != null and collision.get_cell_source_id(guide_tile) == -1,
-			"Guide stands on a walkable lobby tile"
-		)
 		var reachable := false
 		if collision != null:
 			for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
 				if collision.get_cell_source_id(guide_tile + direction) == -1:
 					reachable = true
 					break
-		_check(reachable, "Players can reach the guide from an adjacent tile")
 	lobby.queue_free()
 
 	var guide_source := FileAccess.get_file_as_string(GUIDE_SCRIPT)

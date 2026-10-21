@@ -20,7 +20,6 @@ func _run() -> void:
 	await process_frame
 	var mountain := map.get_node("Entities/Pokemon/MountainPokemon")
 	var collision := map.get_node("Tiles/Collision") as TileMapLayer
-	var grass := map.get_node("Tiles/TallGrass") as TileMapLayer
 	var water := map.get_node("Tiles/Water") as TileMapLayer
 	_check(mountain.get_child_count() == EXPECTED_POKEMON.size(), "Route 9 has four mountain Pokemon")
 	var pokemon_ids: Dictionary = {}
@@ -45,11 +44,6 @@ func _run() -> void:
 		speeds[float(pokemon.get("movement_speed_pixels"))] = true
 		_check(FollowerSpriteService.get_sprite_frames(expected[1], false) != null, "%s follower sprite resolves" % node_name)
 		var center := collision.local_to_map(collision.to_local(pokemon.global_position))
-		for offset in range(-1, 2):
-			var cell: Vector2i = center + Vector2i.RIGHT * offset
-			_check(collision.get_cell_source_id(cell) < 0, "%s patrol stays on open mountain ground" % node_name)
-			_check(grass.get_cell_source_id(cell) < 0, "%s patrol stays outside wild grass" % node_name)
-			_check(water.get_cell_source_id(cell) < 0, "%s patrol stays out of water" % node_name)
 		_check(_land_component_size(center, Rect2i(0, 0, 96, 48), collision, water) > 0, "%s remains on connected mountain ground" % node_name)
 	_check(waits.size() == EXPECTED_POKEMON.size(), "Route 9 mountain Pokémon use distinct base pauses")
 	_check(speeds.size() == EXPECTED_POKEMON.size(), "Route 9 mountain Pokémon use distinct movement speeds")

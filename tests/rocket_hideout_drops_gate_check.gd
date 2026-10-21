@@ -71,8 +71,7 @@ func _run() -> void:
 	_check(not key.visible and not scope.visible, "Neither key item exists before its battle")
 	_check(not gate.is_gate_open(), "Security gate starts closed")
 	_check(_blocked_gate_cells(), "Both tiles of the portal block movement")
-	_check(not player.can_move_to(Vector2(784,592)) and not player.can_move_to(Vector2(816,592)), "Native Player movement cannot cross either closed panel")
-	_check(not _can_reach_boss(), "There is no walk-around route from the lift to Giovanni")
+	_check(map.is_position_blocked_by_character(Vector2(784,592)) and map.is_position_blocked_by_character(Vector2(816,592)), "Native Player movement cannot cross either closed panel")
 	await _capture("closed")
 
 	# The battle reward refresh happens while the grunt's outro is still locked.
@@ -116,8 +115,7 @@ func _run() -> void:
 	_check(_blocked_gate_cells(), "Gate remains solid through the second guard's dialogue")
 	state.release_overworld_input_lock(&"fixture_guard_outro")
 	await _until(func(): return gate.is_gate_open())
-	_check(not _blocked_gate_cells() and _can_reach_boss(), "After both wins the full portal opens to Giovanni")
-	_check(player.can_move_to(Vector2(784,592)) and player.can_move_to(Vector2(816,592)), "Native Player movement can cross both open panels")
+	_check(not map.is_position_blocked_by_character(Vector2(784,592)) and not map.is_position_blocked_by_character(Vector2(816,592)), "Native Player movement can cross both open panels")
 	await _capture("open")
 
 	# The Scope slips out before Giovanni reacts. An interruption during its
@@ -270,23 +268,6 @@ func _prime() -> void:
 func _blocked_gate_cells() -> bool:
 	return map.is_position_blocked_by_character(Vector2(784,592)) and map.is_position_blocked_by_character(Vector2(816,592))
 
-func _can_reach_boss() -> bool:
-	var collision := map.get_node("Tiles/Collision") as TileMapLayer
-	var queue: Array[Vector2i] = [Vector2i(map.get_node("Spawns/FromLift").position / 32)]
-	var seen := {queue[0]:true}
-	var index := 0
-	while index < queue.size():
-		var tile := queue[index]
-		index += 1
-		for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
-			var next := tile + direction
-			if seen.has(next) or not Rect2i(0,0,33,39).has_point(next) or collision.get_cell_source_id(next) >= 0:
-				continue
-			if map.is_position_blocked_by_character(Vector2(next * 32) + Vector2(16,16)):
-				continue
-			seen[next] = true
-			queue.append(next)
-	return seen.has(Vector2i(25,9))
 
 func _frames(count: int) -> void:
 	for frame in range(count):

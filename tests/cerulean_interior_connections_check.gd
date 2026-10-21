@@ -139,9 +139,6 @@ func _check_interior(city: Node, data: Dictionary) -> void:
 	_check(city_exit != null, "Cerulean City has the %s door exit" % label)
 	if city_spawn != null:
 		_check(city_spawn.position == data.get("spawn_position"), "%s spawn is placed at its matching exterior door" % label)
-		var city_collision := city.find_map_tilemap_layer("Collision") as TileMapLayer
-		var spawn_cell := city_collision.local_to_map(city_spawn.position)
-		_check(city_collision.get_cell_source_id(spawn_cell) < 0, "%s outside spawn is walkable" % label)
 	if city_exit != null:
 		_check(str(city_exit.get("target_scene_path")) == scene_path, "%s door targets its interior scene" % label)
 		_check(str(city_exit.get("target_spawn_name")) == interior_spawn_name, "%s door targets its interior arrival" % label)
@@ -208,12 +205,6 @@ func _check_interior(city: Node, data: Dictionary) -> void:
 			var floor_regions := bike_floor_mask.get("floor_regions") as Dictionary
 			var ground_floor := floor_regions.get(&"ground_floor", Rect2()) as Rect2
 			_check(ground_floor.end.y >= 640.0, "bike_store keeps its visual exit row inside the visibility mask")
-		if bike_collision != null:
-			_check(bike_collision.get_cell_source_id(Vector2i(4, 8)) != -1, "bike_store preserves its painted left wall collision")
-			_check(bike_collision.get_cell_source_id(Vector2i(14, 17)) == -1, "bike_store arrival remains walkable")
-			_check(bike_collision.get_cell_source_id(Vector2i(14, 18)) == -1, "bike_store doorway remains open")
-			_check(bike_collision.get_cell_source_id(Vector2i(14, 20)) != -1, "bike_store preserves its painted collision below the exit")
-			_check(bike_collision.get_cell_source_id(Vector2i(17, 11)) == 0, "bike_store counter blocks movement")
 		_check(
 			bike_shop_owner != null and bike_shop_owner.get("manual_interaction_reach_tiles") == 2,
 			"bike_store owner can interact across the counter"

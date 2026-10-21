@@ -95,7 +95,6 @@ func _run() -> void:
 		var water := route.get_node("Tiles/Water") as TileMapLayer
 		for world_position: Vector2 in [date.position, date.position + Vector2(32, 0)]:
 			var standing_cell := collision.local_to_map(world_position)
-			_check(collision.get_cell_source_id(standing_cell) < 0, "the couple stands on walkable ground")
 			var water_is_nearby := false
 			for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
 				for distance: int in range(1, 5):
@@ -138,7 +137,6 @@ func _run() -> void:
 			for _step: int in range(step_count):
 				departure_position += step_direction
 				var departure_cell := collision.local_to_map(departure_position)
-				_check(collision.get_cell_source_id(departure_cell) < 0, "Misty's departure stays on walkable ground")
 				_check(water.get_cell_source_id(departure_cell) < 0, "Misty's departure avoids the water")
 		_check(departure_position.x < misty.global_position.x, "Misty leaves west toward Route 24 and Cerulean Gym")
 

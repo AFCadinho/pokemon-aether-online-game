@@ -56,7 +56,6 @@ func _run() -> void:
 		for offset in range(-1, 2):
 			var cell: Vector2i = center + Vector2i.DOWN * offset
 			_check(ground.get_cell_source_id(cell) >= 0, "%s patrol stays on cave floor" % node_name)
-			_check(collision.get_cell_source_id(cell) < 0, "%s patrol stays walkable" % node_name)
 			_check(water.get_cell_source_id(cell) < 0, "%s patrol stays out of water" % node_name)
 	map.queue_free()
 	await process_frame

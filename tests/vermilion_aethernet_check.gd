@@ -20,9 +20,6 @@ func _run() -> void:
 	_check(arrival.position == Vector2(848, 176), "Arrival marker matches the server-owned destination tile")
 	_check(arrival.position.distance_to(beacon.position) == 32, "Arrival stays one tile beside the Beacon")
 	_check(not city.is_water_tile_for_actor(arrival.global_position, null), "Arrival is on dry land")
-	var collision: TileMapLayer = city.get_node("Tiles/Collision")
-	var cell := collision.local_to_map(collision.to_local(arrival.global_position))
-	_check(collision.get_cell_source_id(cell) == -1, "Arrival tile has no terrain collision")
 	_check(not MapCharacterBlocking.is_position_blocked_by_character(city, arrival.global_position), "Arrival tile has no NPC or Pokemon occupant")
 	for node: Node2D in [arrival, beacon, keeper]:
 		_check(posmod(roundi(node.position.x), 32) == 16 and posmod(roundi(node.position.y), 32) == 16, "%s sits on the world tile grid" % node.name)

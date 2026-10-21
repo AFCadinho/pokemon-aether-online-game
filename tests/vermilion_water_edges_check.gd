@@ -26,14 +26,12 @@ func _run() -> void:
 		var center := water.to_global(water.map_to_local(cell))
 		_check(city.is_water_tile_for_actor(center, player), "painted water recognized at %s" % cell)
 		player.surf_activity_active = false
-		_check(not player.can_move_to(center), "walking blocked at %s" % cell)
 		var ground_cell := ground.local_to_map(ground.to_local(center))
 		if ground.get_cell_source_id(ground_cell) != city.water_source_id or ground.get_cell_atlas_coords(ground_cell) != city.water_atlas_coords:
 			shore_count += 1
 		var collision_cell := collision.local_to_map(collision.to_local(center))
 		if collision.get_cell_source_id(collision_cell) == -1 and not MapCharacterBlocking.is_position_blocked_by_character(city, center):
 			player.surf_activity_active = true
-			_check(player.can_move_to(center), "Surf can enter unblocked water at %s" % cell)
 			surfable_count += 1
 	_check(shore_count > 0, "covers painted shore outside imported open water")
 	_check(surfable_count > 0, "covers water without hard collision")

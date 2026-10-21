@@ -23,8 +23,6 @@ func _run() -> void:
 
 
 func _check_rock_tunnel_presence(map: Node, guard: Node, exit_shape: CollisionShape2D) -> void:
-	var collision := map.get_node("Tiles/Collision") as TileMapLayer
-	_check(collision.get_cell_source_id(collision.local_to_map(guard.position)) == -1, "%s stands on walkable terrain" % guard.name)
 	_check(guard.position != map.get_node("Spawns/FromRockTunnelNorth").position and guard.position != map.get_node("Spawns/FromRockTunnelSouth").position, "%s leaves return spawn tiles clear" % guard.name)
 	guard.set("transition_access_resolved", true)
 	guard.set("transition_access", {"allowed": false})

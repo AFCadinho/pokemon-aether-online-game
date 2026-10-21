@@ -57,12 +57,8 @@ func _init() -> void:
 		var scene_source := FileAccess.get_file_as_string(FLOOR_SCENES[floor_id])
 		all_scene_source += scene_source
 		var blocked_cells := _collision_cells(scene_source)
-		for position: Vector2i in PICKUP_POSITIONS[floor_id]:
-			var tile := _tile_for_position(position)
-			_check(not blocked_cells.has(tile), "%s item pickup is placed on walkable floor: %s" % [floor_id, position])
 		for position: Vector2i in ROCK_POSITIONS[floor_id]:
 			var tile := _tile_for_position(position)
-			_check(not blocked_cells.has(tile), "%s Rock Smash tile is walkable before placement: %s" % [floor_id, position])
 			for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
 				_check(
 					not blocked_cells.has(tile + direction),

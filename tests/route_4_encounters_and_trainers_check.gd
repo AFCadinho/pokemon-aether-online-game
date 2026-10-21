@@ -28,15 +28,12 @@ func _run() -> void:
 		"BirdKeeperHank": "kanto_route_4_bird_keeper_hank",
 		"PicnickerSharon": "kanto_route_4_picnicker_sharon",
 	}
-	var collision := route.get_node("Tiles/Collision") as TileMapLayer
 	for node_name: String in expected_trainers:
 		var trainer := route.get_node_or_null("Entities/NPCs/%s" % node_name)
 		_check(trainer != null, "Route 4 places %s" % node_name)
 		if trainer == null:
 			continue
 		_check(trainer.trainer_id == expected_trainers[node_name], "%s uses the matching trainer metadata" % node_name)
-		var trainer_cell := collision.local_to_map(trainer.position)
-		_check(collision.get_cell_source_id(trainer_cell) < 0, "%s stands on a walkable tile" % node_name)
 
 	route.queue_free()
 	quit(1 if failed else 0)

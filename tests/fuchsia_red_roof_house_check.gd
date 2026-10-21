@@ -23,25 +23,7 @@ func _run() -> void:
 	player.refresh_map_layers()
 	await process_frame
 	await process_frame
-	var reached := {Vector2i(6,15):true}
-	var queue: Array[Vector2i] = [Vector2i(6,15)]
-	var index := 0
-	while index < queue.size():
-		var tile := queue[index]
-		index += 1
-		for delta in [Vector2i.UP,Vector2i.DOWN,Vector2i.LEFT,Vector2i.RIGHT]:
-			var next: Vector2i = tile + delta
-			if reached.has(next) or not player.can_move_to(_point(next)): continue
-			_check(Rect2i(4,7,13,10).has_point(next), "Room cannot escape into black padding")
-			if not Rect2i(0,0,22,21).has_point(next): continue
-			reached[next] = true
-			queue.append(next)
-	for tile in [Vector2i(7,9),Vector2i(4,9),Vector2i(8,10),Vector2i(5,13),Vector2i(11,13),Vector2i(11,10),Vector2i(12,8),Vector2i(14,10),Vector2i(12,13)]:
-		_check(reached.has(tile), "Furniture approach is reachable: " + str(tile))
-	for tile in [Vector2i(4,8),Vector2i(6,8),Vector2i(10,9),Vector2i(14,9),Vector2i(8,12),Vector2i(6,13),Vector2i(10,13),Vector2i(14,13),Vector2i(16,13)]:
-		_check(not player.can_move_to(_point(tile)), "Furniture blocks movement: " + str(tile))
 	for x in range(5,7):
-		_check(reached.has(Vector2i(x,16)), "Both interior doorway tiles are reachable")
 		_check(player.overlaps_exit_at(house.get_node("Exits/ToFuchsiaCity"),_point(Vector2i(x,16))), "Interior exit covers both door tiles")
 	_check(house.lighting_profile == "indoor" and house.weather_profile == "disabled", "Indoor lighting and weather")
 	var mask: Node = house.get_node("FloorVisibilityMask")
@@ -57,7 +39,6 @@ func _run() -> void:
 		_check(exit_node.is_connected("body_entered",Callable(exit_node,"_on_body_entered")), "Doorway signal is connected")
 		player.reparent(leg[2].get_node("Entities/Players"))
 		player.refresh_map_layers()
-		_check(player.can_move_to(arrival.global_position), "Arrival is walkable")
 		for other in leg[2].get_node("Exits").get_children():
 			_check(not player.overlaps_exit_at(other,arrival.global_position), "Arrival avoids immediate return")
 		var entry: Dictionary = catalog.transitions[exit_node.transition_id]
@@ -67,7 +48,6 @@ func _run() -> void:
 	_check(door.access_enabled, "Existing double door is enabled")
 	for x in [11,12]:
 		var threshold: Vector2 = city.to_global(_point(Vector2i(x,30)))
-		_check(player.can_move_to(threshold), "Both exterior doorway cells are walkable")
 		_check(player.overlaps_exit_at(city.get_node("Exits/ToRedRoofHouse"),threshold), "Exterior exit covers the full door width")
 		player.position = _point(Vector2i(x,31))
 		_check(door._actor_needs_door(player), "Door opens from either approach column")

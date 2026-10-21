@@ -73,8 +73,6 @@ func _run() -> void:
 				water.get_cell_source_id(cell) >= 0 if is_water_bound else water.get_cell_source_id(cell) < 0,
 				"%s occupies its intended terrain" % node_path
 			)
-			if not is_water_bound:
-				_check(collision.get_cell_source_id(cell) < 0, "%s occupies a walkable tile" % node_path)
 			var direction := Vector2i(expected.facing)
 			var reachable_sight_cell := Vector2i(-1, -1)
 			for distance: int in range(1, expected.sight_range + 1):

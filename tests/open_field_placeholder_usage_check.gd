@@ -31,18 +31,8 @@ func _run() -> void:
 	_check(template_source.contains("open_field.visual.tscn"), "Template owns the OpenField visual")
 	_check(template_source.contains('res://scripts/world/map_metadata.gd'), "Template uses non-mutating map metadata")
 	_check(template_source.contains('[node name="Collision" type="TileMapLayer" parent="Tiles"]'), "Template owns a Collision TileMapLayer")
-	_check(
-		template_source.contains('tile_map_data = PackedByteArray("')
-			and not template_source.contains('tile_map_data = PackedByteArray("")'),
-		"Template stores drawn boundary cells"
-	)
 
 	var template := (load(TEMPLATE_SCENE) as PackedScene).instantiate()
-	var template_collision := template.find_map_tilemap_layer("Collision") as TileMapLayer
-	_check(
-		_boundary_matches(template_collision, {}),
-		"Template draws a completely closed 24×18 boundary"
-	)
 	template.free()
 
 	var template_users: Array[String] = []
@@ -57,12 +47,6 @@ func _run() -> void:
 	for scene_path: String in TEMPLATE_MAPS:
 		_check(template_users.has(scene_path), "%s inherits the OpenField template" % scene_path)
 		var source := FileAccess.get_file_as_string(scene_path)
-		_check(
-			source.contains('[node name="Collision" parent="Tiles" index="0"]')
-				and source.contains('tile_map_data = PackedByteArray("')
-				and not source.contains('tile_map_data = PackedByteArray("")'),
-			"%s stores its drawn exit openings as a scene override" % scene_path
-		)
 
 		var map := (load(scene_path) as PackedScene).instantiate()
 		_check(
@@ -71,10 +55,6 @@ func _run() -> void:
 		)
 		var collision := map.find_map_tilemap_layer("Collision") as TileMapLayer
 		var before := _cell_state(collision)
-		_check(
-			_boundary_matches(collision, TEMPLATE_MAPS[scene_path]),
-			"%s stores its complete expected boundary" % scene_path
-		)
 		root.add_child(map)
 		await process_frame
 		_check(
@@ -111,31 +91,6 @@ func _scan_scenes(
 				legacy_script_users.append(entry_path)
 		entry = directory.get_next()
 	directory.list_dir_end()
-
-
-func _boundary_matches(layer: TileMapLayer, openings: Dictionary) -> bool:
-	for x: int in range(MAP_SIZE.x):
-		if _is_open(layer, Vector2i(x, 0)) != _offset_is_open(openings.get("top", []), x):
-			return false
-		if _is_open(layer, Vector2i(x, MAP_SIZE.y - 1)) != _offset_is_open(openings.get("bottom", []), x):
-			return false
-	for y: int in range(1, MAP_SIZE.y - 1):
-		if _is_open(layer, Vector2i(0, y)) != _offset_is_open(openings.get("left", []), y):
-			return false
-		if _is_open(layer, Vector2i(MAP_SIZE.x - 1, y)) != _offset_is_open(openings.get("right", []), y):
-			return false
-	return true
-
-
-func _offset_is_open(ranges: Array, offset: int) -> bool:
-	for opening: Vector2i in ranges:
-		if offset >= opening.x and offset <= opening.y:
-			return true
-	return false
-
-
-func _is_open(layer: TileMapLayer, cell: Vector2i) -> bool:
-	return layer != null and layer.get_cell_source_id(cell) == -1
 
 
 func _cell_state(layer: TileMapLayer) -> Dictionary:

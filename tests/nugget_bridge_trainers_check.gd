@@ -80,7 +80,6 @@ func _run() -> void:
 	var collision := route_24.find_map_tilemap_layer("Collision") as TileMapLayer
 	var water := route_24.find_map_tilemap_layer("Water") as TileMapLayer
 	var recruiter_cell := collision.local_to_map(recruiter.position)
-	_check(collision.get_cell_source_id(recruiter_cell) < 0, "Recruiter stands on walkable ground")
 	_check(water == null or water.get_cell_source_id(recruiter_cell) < 0, "Recruiter stands outside water")
 	var recruiter_source := FileAccess.get_file_as_string(RECRUITER_SCRIPT)
 	_check(
@@ -140,7 +139,6 @@ func _check_trainers(map: Node, expected_trainers: Array, map_label: String) -> 
 		)
 		_check_bridge_sight_lane(trainer, expected.node)
 		var cell := collision.local_to_map(trainer.position)
-		_check(collision.get_cell_source_id(cell) < 0, "%s stands on walkable bridge flooring" % expected.node)
 		_check(water == null or water.get_cell_source_id(cell) < 0, "%s stands outside the water mask" % expected.node)
 
 

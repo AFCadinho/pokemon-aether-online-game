@@ -60,7 +60,6 @@ func _run() -> void:
 		)
 
 		var npcs := map.get_node("Entities/NPCs")
-		var collision := map.get_node("Tiles/Collision") as TileMapLayer
 		var scene_text := FileAccess.get_file_as_string(scene_path)
 		var trainers := npcs.get_children()
 		_check(trainers.size() == int(config["trainer_count"]), "%s has the expected trainers" % floor_name)
@@ -74,14 +73,6 @@ func _run() -> void:
 					"%s uses only the fixed C staircase encounter" % exit.name
 				)
 		for trainer: Node2D in trainers:
-			var cell := collision.local_to_map(collision.to_local(trainer.global_position))
-			_check(collision.get_cell_source_id(cell) < 0, "%s stands on a walkable tile" % trainer.name)
-			var direction := Vector2i(Vector2(trainer.get("facing_direction")))
-			for step in range(1, int(trainer.get("sight_range_tiles")) + 1):
-				_check(
-					collision.get_cell_source_id(cell + direction * step) < 0,
-					"%s has a clear trainer sightline at step %s (%s)" % [trainer.name, step, cell + direction * step]
-				)
 			for spawn: Marker2D in map.get_node("Spawns").get_children():
 				if str(trainer.get("trainer_id")) == "kanto_rock_tunnel_future_self":
 					_check(not trainer.visible and not trainer.blocks_world_position(spawn.global_position), "Hidden visitor leaves spawn %s clear" % spawn.name)

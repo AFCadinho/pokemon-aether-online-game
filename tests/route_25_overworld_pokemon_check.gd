@@ -70,7 +70,6 @@ func _run() -> void:
 		var center_cell := collision.local_to_map(collision.to_local(pokemon.global_position))
 		for offset in range(-1, 2):
 			var patrol_cell: Vector2i = center_cell + Vector2i.RIGHT * offset
-			_check(collision.get_cell_source_id(patrol_cell) < 0, "%s patrol remains on open ledge ground" % node_path)
 			_check(tall_grass.get_cell_source_id(patrol_cell) < 0, "%s patrol remains outside wild grass" % node_path)
 			_check(water.get_cell_source_id(patrol_cell) < 0, "%s patrol remains outside water" % node_path)
 		var component_size := _land_component_size(center_cell, collision, water)

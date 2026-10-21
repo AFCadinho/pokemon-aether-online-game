@@ -57,10 +57,6 @@ func _run() -> void:
 				var patrol_cell: Vector2i = center_cell + axis * offset
 				_check(tall_grass.get_cell_source_id(patrol_cell) < 0, "%s patrol remains outside wild grass" % node_path)
 				_check(water.get_cell_source_id(patrol_cell) < 0, "%s patrol remains outside water" % node_path)
-				if expected[5]:
-					_check(collision.get_cell_source_id(patrol_cell) >= 0, "%s flight remains over the marked cliff" % node_path)
-				else:
-					_check(collision.get_cell_source_id(patrol_cell) < 0, "%s patrol remains on open ledge ground" % node_path)
 			if not expected[5]:
 				var component_size := _land_component_size(center_cell, route_data.bounds, collision, water)
 				_check(

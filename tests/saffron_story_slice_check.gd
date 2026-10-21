@@ -98,19 +98,6 @@ func _check_lavender() -> void:
 	_check(town.get_node_or_null("Entities/Pokemon/Meowth") != null, "Meowth appears in Lavender Town")
 	_check(town.get_node_or_null("Entities/Pokemon/Cubone") == null, "Cubone is reserved for Mr. Fuji's future home")
 	_check(town.get_node_or_null("Entities/Pokemon/Clefairy") != null, "Clefairy appears in Lavender Town")
-	var collision_layer := town.get_node("Tiles/Collision") as TileMapLayer
-	for node_path: NodePath in [
-		NodePath("Entities/NPCs/LavenderResident"),
-		NodePath("Entities/NPCs/TowerWatcher"),
-		NodePath("Entities/NPCs/PokecenterVisitor"),
-		NodePath("Entities/Pokemon/Meowth"),
-		NodePath("Entities/Pokemon/Clefairy"),
-	]:
-		var actor := town.get_node_or_null(node_path) as Node2D
-		_check(
-			actor != null and collision_layer.get_cell_source_id(collision_layer.local_to_map(actor.position)) == -1,
-			"%s is placed on an unblocked Lavender tile" % node_path
-		)
 	var center_exit := town.get_node_or_null("Exits/ToPokecenter")
 	_check(
 		center_exit != null
@@ -123,8 +110,6 @@ func _check_lavender() -> void:
 	_check(beacon != null and beacon.get("destination_id") == "kanto_lavender_town", "Lavender Beacon attunes the Aethernet destination")
 	_check(keeper != null and keeper.get("local_destination_id") == "kanto_lavender_town", "Lavender Keeper opens the local Aethernet destination")
 	_check(transit_arrival != null and transit_arrival.position == Vector2(752, 784), "Lavender has the server-owned Aethernet arrival point")
-	if transit_arrival != null:
-		_check(collision_layer.get_cell_source_id(collision_layer.local_to_map(transit_arrival.position)) == -1, "Aethernet arrival point has no terrain collision")
 	if arrival != null:
 		_check(arrival.get("required_quest_id") == "travel_to_lavender_town", "arrival warning is tied to the Lavender quest")
 		var hook := arrival.get_node_or_null("StoryHook")
