@@ -1797,6 +1797,8 @@ func _position_player_at_spawn(map: Node, spawn_name: String, fallback_position:
 	player.move_start_position = spawn_position
 	player.is_moving = false
 	player.set_idle_frame()
+	if map.has_method("prepare_player_arrival"):
+		map.call("prepare_player_arrival", spawn_name)
 	_refresh_map_visual_depth_for_player(map)
 	player.refresh_map_layers()
 	_sync_player_activity_state_for_current_tile()
@@ -1823,6 +1825,8 @@ func _position_player_at_authorized_teleport_state(map: Node, state: Dictionary)
 		player.is_moving = false
 		player.last_direction = _direction_from_name(str(state.get("facingDirection", "down")))
 		player.set_idle_frame()
+		if map.has_method("prepare_player_arrival"):
+			map.call("prepare_player_arrival", spawn_marker)
 		_refresh_map_visual_depth_for_player(map)
 		player.refresh_map_layers()
 		_sync_player_activity_state_for_current_tile()

@@ -269,3 +269,11 @@ func _set_door_group_open(group: Dictionary, open: bool) -> void:
 	tween.tween_property(layer, "position", target_position, DOOR_TWEEN_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_property(layer, "modulate:a", target_alpha, DOOR_TWEEN_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	door_tweens[group_id] = tween
+
+
+func prepare_player_arrival(spawn_name: String) -> void:
+	if spawn_name != "FromPokecenter":
+		return
+	var center_door := get_node_or_null("ViridianCity/PokemonCenterSlidingDoor")
+	if center_door != null:
+		center_door.call("prepare_for_arrival")
