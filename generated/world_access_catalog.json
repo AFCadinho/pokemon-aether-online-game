@@ -3947,6 +3947,16 @@
 						"y": 21
 					}
 				},
+				"from_house": {
+					"facingDirection": "down",
+					"label": "House",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromHouse",
+					"tile": {
+						"x": 14,
+						"y": 14
+					}
+				},
 				"from_route_16_gate": {
 					"facingDirection": "down",
 					"label": "Route 16 Gate",
@@ -3959,6 +3969,29 @@
 				}
 			},
 			"weatherProfile": "outdoor"
+		},
+		"kanto_route_16_east_house": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Route 16 East House",
+			"locationGroupId": "kanto_route_16_east",
+			"locationGroupLabel": "Route 16 East",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/route_16_east_house.tscn",
+			"spawnPoints": {
+				"from_route_16_east": {
+					"facingDirection": "down",
+					"label": "Route 16 East",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute16East",
+					"tile": {
+						"x": 9,
+						"y": 14
+					}
+				}
+			},
+			"weatherProfile": "disabled"
 		},
 		"kanto_route_16_gate": {
 			"areaType": "transition",
@@ -6615,9 +6648,7 @@
 			"regionName": "Kanto",
 			"sceneAliases": [],
 			"scenePath": "",
-			"spawnPoints": {
-
-			}
+			"spawnPoints": {}
 		},
 		"kanto_viridian_city_house_1": {
 			"areaType": "interior",
@@ -10121,6 +10152,20 @@
 			"destinationAreaId": "kanto_celadon_city",
 			"sourceMapId": "kanto_route_16_east"
 		},
+		"kanto_route_16_east__to_house": {
+			"destination": {
+				"mapId": "kanto_route_16_east_house",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route_16_east_house.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromRoute16East"
+			},
+			"destinationAreaId": "kanto_route_16_east_house",
+			"sourceMapId": "kanto_route_16_east"
+		},
 		"kanto_route_16_east__to_route16_gate": {
 			"destination": {
 				"mapId": "kanto_route_16_gate",
@@ -10134,6 +10179,22 @@
 			},
 			"destinationAreaId": "kanto_route_16_gate",
 			"sourceMapId": "kanto_route_16_east"
+		},
+		"kanto_route_16_east_house__to_route16_east": {
+			"destination": {
+				"mapId": "kanto_route_16_east",
+				"mapSceneAliases": [
+					"uid://br47spdmma7dp"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromHouse"
+			},
+			"destinationAreaId": "kanto_route_16_east",
+			"sourceMapId": "kanto_route_16_east_house"
 		},
 		"kanto_route_16_gate__to_route16": {
 			"destination": {

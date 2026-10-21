@@ -1,0 +1,158 @@
+[gd_scene format=4 uid="uid://uennwgb0r2kr"]
+
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_hint"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_kg1o4"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="6_metadata"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_16_east_house/route_16_east_house.visual.tscn" id="7_visual"]
+
+[sub_resource type="RectangleShape2D" id="door_shape"]
+size = Vector2(96, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_akyb1"]
+texture = ExtResource("6_kg1o4")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_k8b0e"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_akyb1")
+
+[node name="Route16EastHouse" type="Node2D" unique_id=293171344]
+script = ExtResource("6_metadata")
+map_id = "kanto_route_16_east_house"
+map_region_name = "Kanto"
+map_display_name = "Route 16 East House"
+world_access_group_id = "kanto_route_16_east"
+world_access_group_label = "Route 16 East"
+world_access_area_type = "interior"
+location_id = "kanto.route16.east.house"
+location_name = "Route 16 East House"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.routes_3_10_16_22"
+
+[node name="Visual" parent="." unique_id=1539588096 instance=ExtResource("7_visual")]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=956532716]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("4_floor_mask")
+floor_regions = {
+&"ground_floor": Rect2(0, 0, 704, 640)
+}
+follow_player_floor = false
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1737991661]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1267185895]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=872473465]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=654814982]
+
+[node name="Entities" type="Node2D" parent="." unique_id=677700703]
+z_index = 5
+
+[node name="Players" type="Node2D" parent="Entities" unique_id=609052544]
+
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=487628317]
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1998533272]
+
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=624254412]
+
+[node name="Spawns" type="Node2D" parent="." unique_id=1720384755]
+
+[node name="FromRoute16East" type="Marker2D" parent="Spawns" unique_id=708146822]
+position = Vector2(304, 464)
+
+[node name="Exits" type="Node2D" parent="." unique_id=129294960]
+
+[node name="ToRoute16East" type="Area2D" parent="Exits" unique_id=2090134914]
+position = Vector2(304, 496)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn"
+target_spawn_name = "FromHouse"
+transition_id = "kanto_route_16_east_house__to_route16_east"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute16East" unique_id=759563183]
+position = Vector2(0, 16)
+shape = SubResource("door_shape")
+
+[node name="DoorTransitionHint" parent="Exits/ToRoute16East" unique_id=989894403 instance=ExtResource("5_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
+
+[node name="Node2D" type="Node2D" parent="." unique_id=1156486350]
+
+[node name="Tiles" type="Node2D" parent="Node2D" unique_id=912100122]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Node2D/Tiles" unique_id=513658069]
+visible = false
+z_index = 4096
+tile_map_data = PackedByteArray("AAADAAUAAAABAAEAAAADAAYAAAABAAEAAAADAAcAAAABAAEAAAADAAgAAAABAAEAAAADAAkAAAABAAEAAAADAAoAAAABAAEAAAADAAsAAAABAAEAAAADAAwAAAABAAEAAAADAA0AAAABAAEAAAADAA4AAAABAAEAAAAEAA4AAAABAAEAAAAEAA8AAAABAAEAAAAFAA8AAAABAAEAAAAGAA8AAAABAAEAAAAHAA8AAAABAAEAAAAHABAAAAABAAEAAAAIABAAAAABAAEAAAAJABAAAAABAAEAAAAKABAAAAABAAEAAAALABAAAAABAAEAAAALAA8AAAABAAEAAAAMAA8AAAABAAEAAAANAA8AAAABAAEAAAAOAA8AAAABAAEAAAAPAA8AAAABAAEAAAAQAA8AAAABAAEAAAAQAA4AAAABAAEAAAARAA4AAAABAAEAAAARAA0AAAABAAEAAAARAAwAAAABAAEAAAARAAsAAAABAAEAAAARAAoAAAABAAEAAAARAAkAAAABAAEAAAARAAgAAAABAAEAAAARAAcAAAABAAEAAAARAAYAAAABAAEAAAAQAAcAAAABAAEAAAAQAAYAAAABAAEAAAAQAAUAAAABAAEAAAAEAAUAAAABAAEAAAAEAAYAAAABAAEAAAAEAAcAAAABAAEAAAAFAAUAAAABAAEAAAAFAAYAAAABAAEAAAAFAAcAAAABAAEAAAAGAAUAAAABAAEAAAAGAAYAAAABAAEAAAAGAAcAAAABAAEAAAAHAAUAAAABAAEAAAAHAAYAAAABAAEAAAAHAAcAAAABAAEAAAAIAAUAAAABAAEAAAAIAAYAAAABAAEAAAAIAAcAAAABAAEAAAAJAAUAAAABAAEAAAAJAAYAAAABAAEAAAAJAAcAAAABAAEAAAAKAAUAAAABAAEAAAAKAAYAAAABAAEAAAAKAAcAAAABAAEAAAALAAUAAAABAAEAAAALAAYAAAABAAEAAAALAAcAAAABAAEAAAAMAAUAAAABAAEAAAAMAAYAAAABAAEAAAAMAAcAAAABAAEAAAANAAUAAAABAAEAAAANAAYAAAABAAEAAAANAAcAAAABAAEAAAAOAAUAAAABAAEAAAAOAAYAAAABAAEAAAAOAAcAAAABAAEAAAAPAAUAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAEAAgAAAABAAEAAAAEAAkAAAABAAEAAAAFAAkAAAABAAEAAAAGAAkAAAABAAEAAAAHAAkAAAABAAEAAAANAAkAAAABAAEAAAANAAoAAAABAAEAAAAOAAkAAAABAAEAAAAOAAoAAAABAAEAAAAPAAkAAAABAAEAAAAPAAoAAAABAAEAAAALAAgAAAABAAEAAAAMAAgAAAABAAEAAAAFAAsAAAABAAEAAAAFAAwAAAABAAEAAAAFAA0AAAABAAEAAAAGAAsAAAABAAEAAAAGAAwAAAABAAEAAAAGAA0AAAABAAEAAAAHAAsAAAABAAEAAAAHAAwAAAABAAEAAAAHAA0AAAABAAEAAAAEAA0AAAABAAEAAAAMAA4AAAABAAEAAAA=")
+tile_set = SubResource("TileSet_k8b0e")
+
+[connection signal="body_entered" from="Exits/ToRoute16East" to="Exits/ToRoute16East" method="_on_body_entered"]

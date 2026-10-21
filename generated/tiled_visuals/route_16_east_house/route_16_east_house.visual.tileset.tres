@@ -1,0 +1,146 @@
+[gd_resource type="TileSet" format=3 uid="uid://tv85j8pbwfm8"]
+
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east_house/assets/route_16_east_house.visual.tileset.compact_source_1_0.texture.res" id="1_bxbc1"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east_house/assets/route_16_east_house.visual.tileset.compact_source_1025_0.texture.res" id="2_tbj3j"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east_house/assets/route_16_east_house.visual.tileset.compact_source_2049_0.texture.res" id="3_e1m28"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east_house/assets/route_16_east_house.visual.tileset.compact_source_3073_0.texture.res" id="4_7026l"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_16_east_house/assets/route_16_east_house.visual.tileset.compact_source_4097_0.texture.res" id="5_5hry5"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p2kx2"]
+texture = ExtResource("1_bxbc1")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x7ya2"]
+texture = ExtResource("2_tbj3j")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_607hq"]
+texture = ExtResource("3_e1m28")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vpprh"]
+texture = ExtResource("4_7026l")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wpkvl"]
+texture = ExtResource("5_5hry5")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_p2kx2")
+sources/1 = SubResource("TileSetAtlasSource_x7ya2")
+sources/2 = SubResource("TileSetAtlasSource_607hq")
+sources/3 = SubResource("TileSetAtlasSource_vpprh")
+sources/4 = SubResource("TileSetAtlasSource_wpkvl")
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/route_16/Route 16 East House.tmx"
+metadata/tiled_compact_atlas_version = 1
