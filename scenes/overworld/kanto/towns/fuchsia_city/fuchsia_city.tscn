@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="7_4tpbt"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="7_bwab0"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="7_door_hint"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="14_nycgr"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="17_p35n4"]
 [ext_resource type="SpriteFrames" uid="uid://cg046cju3kis8" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="population_ace_trainer_f"]
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="population_camper"]
 [ext_resource type="SpriteFrames" uid="uid://ctgjk0yaqmm8o" path="res://assets/npcs/classes/elder_frames.tres" id="population_elder"]
@@ -486,6 +488,10 @@ movement_wait_seconds = 2.2
 movement_speed_pixels = 42.0
 movement_wait_jitter_seconds = 0.8
 
+[node name="TransitKeeperNPC" parent="Entities/NPCs" unique_id=1841746154 instance=ExtResource("14_nycgr")]
+position = Vector2(208, 1008)
+local_destination_id = ""
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=975998895]
 
 [node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=1024789009]
@@ -498,6 +504,10 @@ position = Vector2(1072, 1136)
 
 [node name="FuchsiaCitySign" parent="Entities/Interactables/Signs" unique_id=138014515 instance=ExtResource("7_4tpbt")]
 position = Vector2(880, 656)
+
+[node name="AetherBeacon" parent="Entities/Interactables" unique_id=1079872017 instance=ExtResource("17_p35n4")]
+position = Vector2(144, 1008)
+display_name = "Aether Beacon"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=609006632]
 
