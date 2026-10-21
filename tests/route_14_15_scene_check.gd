@@ -84,15 +84,15 @@ func _check_fuchsia_gate(route: Node2D, gate: Node2D, areas: Dictionary) -> void
 		"Fuchsia gate inherits indoor lighting and weather")
 	var entrance := route.get_node("Exits/ToFuchsiaGate") as Area2D
 	var shape := entrance.get_node("CollisionShape2D").shape as RectangleShape2D
-	_expect(entrance.position == Vector2(208, 944) and shape.size == Vector2(32, 96),
-		"Route 15 doorway matches the west_to_fuchsia TMX connection marker")
+	_expect(entrance.position == Vector2(144, 944) and shape.size == Vector2(48, 128),
+		"Route 15 doorway preserves the authored gate position and covers the open throat")
 	var route_spawn := route.get_node("Spawns/FromFuchsiaGate") as Marker2D
 	var gate_spawn := gate.get_node("Spawns/FromRoute15") as Marker2D
-	_expect(route_spawn.position == Vector2(272, 944), "Route 15 return uses the artist's arrival tile")
+	_expect(route_spawn.position == Vector2(176, 944), "Route 15 return uses the artist's arrival tile")
 	_expect(not entrance.contains_world_position(route_spawn.global_position), "Route 15 arrival avoids an immediate return transition")
 	_expect(not gate.get_node("Exits/ToEast").contains_world_position(gate_spawn.global_position), "Gate arrival avoids an immediate return transition")
-	for y in range(28, 31):
-		_expect(route.get_node("Tiles/Collision").get_cell_source_id(Vector2i(6, y)) == -1,
+	for y in range(27, 31):
+		_expect(route.get_node("Tiles/Collision").get_cell_source_id(Vector2i(3, y)) == -1,
 			"Route 15 gate entrance tiles are walkable")
 	var west := gate.get_node("Exits/ToWest") as Area2D
 	_expect(west.monitoring and not west.get_node("CollisionShape2D").disabled,
@@ -105,7 +105,7 @@ func _check_fuchsia_gate(route: Node2D, gate: Node2D, areas: Dictionary) -> void
 	player.collision_tilemap = player._find_tilemap_layer(gate, COLLISION_LAYER_NAMES)
 	_expect(player.can_move_to(gate_spawn.global_position), "Player can stand at the gate arrival point")
 	_expect(player.can_move_to(gate.get_node("Spawns/FromFuchsiaCity").global_position), "Future Fuchsia arrival point is walkable")
-	_expect(route.get_node("Tiles/Collision").get_cell_source_id(Vector2i(8, 29)) == -1,
+	_expect(route.get_node("Tiles/Collision").get_cell_source_id(Vector2i(5, 29)) == -1,
 		"Return arrival on Route 15 is walkable")
 	for y in range(9, 12):
 		_expect(player.can_move_to(Vector2(80, y * 32 + 16)),

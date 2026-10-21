@@ -70,7 +70,7 @@ func run() -> void:
 		for direction in [Vector2i.UP,Vector2i.DOWN,Vector2i.LEFT,Vector2i.RIGHT]:
 			if reachable.has(pickup_cell+direction): can_collect = true
 		check(can_collect, "Pickup can be approached for collection: " + pickup.name)
-	for leg in [["ToRoute14",71,26,30],["ToFuchsiaGate",6,28,31]]:
+	for leg in [["ToRoute14",71,26,30],["ToFuchsiaGate",3,27,31]]:
 		var exit_node: Node = map.get_node("Exits/" + leg[0])
 		for y in range(leg[2],leg[3]):
 			var point := Vector2(leg[1]*32+16,y*32+16)
