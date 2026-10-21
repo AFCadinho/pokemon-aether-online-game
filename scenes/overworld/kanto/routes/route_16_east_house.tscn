@@ -163,6 +163,7 @@ tile_set = SubResource("TileSet_k8b0e")
 position = Vector2(304, 336)
 script = ExtResource("bird_script")
 npc_id = "kanto_route_16_east_house_bird_keeper"
+preload_quest_markers = true
 display_name = "Bird Keeper Rowan"
 dialogue_id = "kanto_route_16_east_house_bird_keeper_offer"
 npc_sprite_frames = ExtResource("bird_frames")
