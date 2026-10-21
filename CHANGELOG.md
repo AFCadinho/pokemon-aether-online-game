@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make Aethernet destinations more compact, list Anchors first and group undiscovered destinations in a collapsible section that opens for search matches.
+
 - Add destination search to Aethernet Travel, including locked destinations and worldwide hubs, with clear feedback when nothing matches.
 
 - Add Fuchsia City to Aethernet Travel with Beacon attunement, Anchor support and a safe station arrival.

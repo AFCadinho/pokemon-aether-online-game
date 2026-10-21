@@ -40,6 +40,7 @@ var _wide_layout := false
 var _search_input: LineEdit
 var _search_query := ""
 var _current_region_index := 0
+var _locked_expanded := false
 
 
 func open(network: Dictionary) -> void:
@@ -250,6 +251,14 @@ func _show_region(index: int, focus_selection: bool = true) -> void:
 		else:
 			locked.append(destination)
 
+	available.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var a_anchor := bool(a.get("isAnchor", false))
+		var b_anchor := bool(b.get("isAnchor", false))
+		if a_anchor != b_anchor:
+			return a_anchor
+		return str(a.get("name", "")) < str(b.get("name", ""))
+	)
+
 	var matching_hubs := _global_hubs.any(
 		func(destination: Dictionary) -> bool: return not _is_current_destination(destination) and _matches_search(destination)
 	)
@@ -264,21 +273,13 @@ func _show_region(index: int, focus_selection: bool = true) -> void:
 	else:
 		var available_list := VBoxContainer.new()
 		available_list.name = "AvailableDestinations"
-		available_list.add_theme_constant_override("separation", 7)
+		available_list.add_theme_constant_override("separation", 6)
 		_destination_stack.add_child(available_list)
 		for destination: Dictionary in available:
 			available_list.add_child(_available_destination_card(destination))
 
 	if not locked.is_empty():
-		_add_section_heading(_destination_stack, "LockedHeading", _t("ui.transit.locked_destinations"), COLOR_MUTED)
-		var locked_grid := GridContainer.new()
-		locked_grid.name = "LockedDestinations"
-		locked_grid.columns = 2 if _wide_layout else 1
-		locked_grid.add_theme_constant_override("h_separation", 7)
-		locked_grid.add_theme_constant_override("v_separation", 7)
-		_destination_stack.add_child(locked_grid)
-		for destination: Dictionary in locked:
-			locked_grid.add_child(_locked_destination_card(destination))
+		_build_locked_section(_destination_stack, locked)
 
 	_build_global_hub_section(_destination_stack)
 	if not focus_selection and _destination_buttons.has(previous_selection_id):
@@ -287,6 +288,51 @@ func _show_region(index: int, focus_selection: bool = true) -> void:
 				_select_destination(destination, false)
 				return
 	_select_default_destination(focus_selection)
+
+
+func _build_locked_section(parent: VBoxContainer, destinations: Array[Dictionary]) -> void:
+	var expanded := _locked_expanded or not _search_query.is_empty()
+	var toggle := Button.new()
+	toggle.name = "LockedHeading"
+	toggle.toggle_mode = true
+	toggle.button_pressed = expanded
+	toggle.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	toggle.custom_minimum_size.y = 40
+	toggle.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	toggle.add_theme_font_size_override("font_size", 13)
+	toggle.add_theme_color_override("font_color", COLOR_MUTED)
+	toggle.add_theme_color_override("font_pressed_color", COLOR_MUTED)
+	toggle.add_theme_stylebox_override("normal", _style(Color("111b28dc"), Color("24394c99"), 1, 9))
+	toggle.add_theme_stylebox_override("pressed", _style(Color("111b28dc"), COLOR_BORDER, 1, 9))
+	toggle.add_theme_stylebox_override("hover", _style(COLOR_CARD_HOVER, COLOR_BORDER, 1, 9))
+	toggle.add_theme_stylebox_override("focus", _style(Color.TRANSPARENT, COLOR_ACCENT, 2, 9))
+	for state: String in ["normal", "pressed", "hover", "focus"]:
+		var style := toggle.get_theme_stylebox(state) as StyleBoxFlat
+		style.content_margin_left = 12
+		style.content_margin_right = 12
+	_set_locked_toggle_text(toggle, expanded, destinations.size())
+	parent.add_child(toggle)
+	var grid := GridContainer.new()
+	grid.name = "LockedDestinations"
+	grid.columns = 2 if _wide_layout else 1
+	grid.add_theme_constant_override("h_separation", 6)
+	grid.add_theme_constant_override("v_separation", 6)
+	grid.visible = expanded
+	parent.add_child(grid)
+	for destination: Dictionary in destinations:
+		grid.add_child(_locked_destination_card(destination))
+	toggle.toggled.connect(_on_locked_toggled.bind(grid, toggle, destinations.size()))
+
+
+func _on_locked_toggled(expanded: bool, grid: GridContainer, toggle: Button, count: int) -> void:
+	if _search_query.is_empty():
+		_locked_expanded = expanded
+	grid.visible = expanded
+	_set_locked_toggle_text(toggle, expanded, count)
+
+
+func _set_locked_toggle_text(toggle: Button, expanded: bool, count: int) -> void:
+	toggle.text = "%s  %s" % ["▾" if expanded else "▸", _t("ui.transit.undiscovered", {"count": count})]
 
 
 func _current_location_card(destination: Dictionary) -> PanelContainer:
@@ -395,7 +441,7 @@ func _available_destination_card(destination: Dictionary) -> Button:
 	card.name = "Destination_%s" % _node_safe_id(destination_id)
 	card.text = ""
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	card.custom_minimum_size = Vector2(0, 76)
+	card.custom_minimum_size = Vector2(0, 56)
 	card.focus_mode = Control.FOCUS_ALL
 	card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	card.disabled = current
@@ -414,7 +460,7 @@ func _locked_destination_card(destination: Dictionary) -> PanelContainer:
 	var card := PanelContainer.new()
 	card.name = "Locked_%s" % _node_safe_id(destination_id)
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	card.custom_minimum_size = Vector2(0, 62)
+	card.custom_minimum_size = Vector2(0, 54)
 	card.add_theme_stylebox_override("panel", _style(Color("111b28dc"), Color("24394c99"), 1, 10))
 	var margin := MarginContainer.new()
 	_set_margins(margin, 13, 13, 8, 8)
@@ -472,7 +518,7 @@ func _add_card_content(card: Button, destination: Dictionary, is_hub: bool, curr
 	var fare_value := int(destination.get("fare", 0))
 	var margin := MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_set_margins(margin, 16 if is_hub else 15, 16 if is_hub else 15, 10, 10)
+	_set_margins(margin, 16 if is_hub else 15, 16 if is_hub else 15, 10 if is_hub else 6, 10 if is_hub else 6)
 	card.add_child(margin)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)

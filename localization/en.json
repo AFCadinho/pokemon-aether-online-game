@@ -6201,6 +6201,7 @@
   "ui.transit.fare": "{tier}  •  ₽{fare}",
   "ui.transit.destinations": "{region} destinations",
   "ui.transit.available": "Available destinations",
+  "ui.transit.undiscovered": "Undiscovered ({count})",
   "ui.transit.locked_destinations": "Locked destinations",
   "ui.transit.no_available": "No unlocked destinations in this region yet.",
   "ui.transit.empty_region": "No Aethernet destinations are available in this region yet.",

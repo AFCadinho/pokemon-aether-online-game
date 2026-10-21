@@ -6099,6 +6099,7 @@
   "ui.transit.fare": "{tier} • ₽{fare}",
   "ui.transit.destinations": "{region} 目的地",
   "ui.transit.available": "可用目的地",
+  "ui.transit.undiscovered": "尚未发现（{count}）",
   "ui.transit.locked_destinations": "锁定的目的地",
   "ui.transit.no_available": "该地区暂无已解锁的目的地。",
   "ui.transit.empty_region": "该地区尚无可用的以太网目的地。",

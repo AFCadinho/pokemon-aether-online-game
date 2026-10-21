@@ -6,6 +6,7 @@ const REQUIRED_KEYS: Array[String] = [
 	"ui.transit.no_search_results",
 	"ui.transit.available",
 	"ui.transit.locked_destinations",
+	"ui.transit.undiscovered",
 	"ui.transit.no_available",
 	"ui.transit.select_destination",
 	"ui.transit.travel_to",
@@ -42,6 +43,18 @@ func _run() -> void:
 	var travel := menu.find_child("TravelButton", true, false) as Button
 	_check(pallet != null and pewter != null, "unlocked destinations render as full-row buttons")
 	_check(cerulean != null, "locked destinations render as quiet non-interactive rows")
+	var available_list := menu.find_child("AvailableDestinations", true, false) as VBoxContainer
+	_check(available_list.get_child(0) == pallet and available_list.get_child(1).name == "Destination_kanto_celadon_city", "Anchors precede alphabetically sorted regular destinations")
+	_check(pallet.size.y >= 44 and pallet.size.y <= 60, "compact destination rows retain a comfortable click target")
+	var locked_toggle := menu.find_child("LockedHeading", true, false) as Button
+	var locked_grid := menu.find_child("LockedDestinations", true, false) as GridContainer
+	_check(not locked_grid.visible and locked_toggle.text.contains("Undiscovered (2)"), "undiscovered destinations start collapsed with a count")
+	locked_toggle.button_pressed = true
+	_check(locked_grid.visible and cerulean.is_visible_in_tree(), "expanding undiscovered destinations reveals the non-interactive rows")
+	_check(travel.text.contains("Pallet Town"), "expanding the section keeps the travel selection unchanged")
+	locked_toggle.button_pressed = false
+	_check(not locked_grid.visible, "undiscovered destinations can be collapsed again")
+
 	_check(menu.find_child("CurrentLocation", true, false) != null, "the current location is shown in a separate status card")
 	_check(hub == null, "the current worldwide hub is omitted from travel destinations")
 	_check(travel != null and not travel.disabled and travel.text.contains("Pallet Town"), "the first usable destination selects a clear footer action")
@@ -73,6 +86,10 @@ func _run() -> void:
 	search.text_changed.emit(search.text)
 	await process_frame
 	_check(menu.find_child("Locked_kanto_cerulean_city", true, false) != null and travel.disabled, "locked matches stay visible without allowing travel to a hidden selection")
+	var matched_grid := menu.find_child("LockedDestinations", true, false) as GridContainer
+	var matched_toggle := menu.find_child("LockedHeading", true, false) as Button
+	_check(matched_grid.visible and matched_toggle.text.contains("Undiscovered (1)"), "search automatically expands undiscovered matches and updates their count")
+
 	search.text = "no-such-town"
 	search.text_changed.emit(search.text)
 	await process_frame
@@ -83,6 +100,17 @@ func _run() -> void:
 	search.text_changed.emit(search.text)
 	await process_frame
 	_check(menu.find_child("Destination_kanto_pallet_town", true, false) != null and menu.find_child("Locked_kanto_cerulean_city", true, false) != null and not travel.disabled, "clearing search restores available and locked destinations")
+
+	locked_grid = menu.find_child("LockedDestinations", true, false) as GridContainer
+	locked_toggle = menu.find_child("LockedHeading", true, false) as Button
+	_check(not locked_grid.visible and locked_toggle.text.contains("Undiscovered (2)"), "clearing search restores the collapsed preference and full count")
+	locked_toggle.button_pressed = true
+	search.text = "cerulean"
+	search.text_changed.emit(search.text)
+	search.text = ""
+	search.text_changed.emit(search.text)
+	await process_frame
+	_check((menu.find_child("LockedDestinations", true, false) as GridContainer).visible, "a manually expanded section stays expanded after searching")
 
 	menu.queue_free()
 	await process_frame
@@ -171,6 +199,13 @@ func _network_fixture() -> Dictionary:
 		"wallet": {"money": 9999},
 		"membershipDiscountActive": false,
 		"destinations": [
+			{
+				"destinationId": "kanto_celadon_city",
+				"regionId": "kanto",
+				"name": "Celadon City",
+				"attuned": true,
+				"fare": 200,
+			},
 			{
 				"destinationId": "kanto_cerulean_city",
 				"regionId": "kanto",

@@ -6099,6 +6099,7 @@
   "ui.transit.fare": "{tier}  •  ₽{fare}",
   "ui.transit.destinations": "Destinos em {region}",
   "ui.transit.available": "Destinos disponíveis",
+  "ui.transit.undiscovered": "A descobrir ({count})",
   "ui.transit.locked_destinations": "Destinos bloqueados",
   "ui.transit.no_available": "Ainda não há destinos desbloqueados nesta região.",
   "ui.transit.empty_region": "Ainda não há destinos da Aethernet disponíveis nesta região.",
