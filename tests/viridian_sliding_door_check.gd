@@ -22,6 +22,7 @@ class ExitProbe:
 
 var failed := false
 var house_door := false
+var gym_door := false
 
 func _init() -> void:
 	_run.call_deferred()
@@ -30,35 +31,38 @@ func _run() -> void:
 	# Load the real scene, but isolate services/NPCs: this is not a backend test.
 	var city := (load(CITY) as PackedScene).instantiate()
 	var visual := city.get_node("ViridianCity")
-	var door := visual.get_node(("House1HingedDoor" if house_door else "PokemonCenterSlidingDoor"))
+	var door := visual.get_node(("GymDoubleSlidingDoor" if gym_door else ("House1HingedDoor" if house_door else "PokemonCenterSlidingDoor")))
 	city.call("prepare_player_arrival", "FromRoute2")
 	_check(door.open_amount == 0.0, "Other arrivals do not open tested door")
-	city.call("prepare_player_arrival", ("FromHouse1" if house_door else "FromPokecenter"))
+	city.call("prepare_player_arrival", ("FromGym" if gym_door else ("FromHouse1" if house_door else "FromPokecenter")))
 	_check(door.open_amount == 1.0, "Matching return configures an already-open door")
 	var other_door := visual.get_node("PokemonCenterSlidingDoor" if house_door else "House1HingedDoor")
 	_check(other_door.open_amount == 0.0, "Arrival opens only the matching building door")
 	door.open_amount = 0.0; door.arrival_open = false; door.close_delay = 0.0
 	var exit_node := city.get_node(("Exits/ToHouse1" if house_door else "Exits/ToPokecenter"))
 	var collision := city.get_node("Collision") as TileMapLayer
-	var arrival: Vector2 = city.get_node(("Spawns/FromHouse1" if house_door else "Spawns/FromPokecenter")).position
-	_check(exit_node.target_scene_path.ends_with(("viridian_city/house1.tscn" if house_door else "viridian_city/pokemon_center.tscn")) and exit_node.target_spawn_name == ("FromViridianCity" if house_door else "FromOutside"), "Existing destination preserved")
-	_check(exit_node.contains_world_position(_feet(Vector2(1136, 1456))), "Entry trigger covers doorway")
-	_check(not exit_node.contains_world_position(arrival), "Return spawn cannot retrigger entrance")
-	_check(collision.get_cell_source_id((Vector2i(48,27) if house_door else Vector2i(35,45))) == -1 and collision.get_cell_source_id((Vector2i(48,28) if house_door else Vector2i(35,46))) == -1, "Door and approach remain walkable")
+	var arrival: Vector2 = city.get_node(("Spawns/FromGym" if gym_door else ("Spawns/FromHouse1" if house_door else "Spawns/FromPokecenter"))).position
+	if gym_door:
+		_check(city.get_node("Exits/ToGym").get_script() == null, "Unavailable gym entrance remains unconfigured")
+	else:
+		_check(exit_node.target_scene_path.ends_with(("viridian_city/house1.tscn" if house_door else "viridian_city/pokemon_center.tscn")) and exit_node.target_spawn_name == ("FromViridianCity" if house_door else "FromOutside"), "Existing destination preserved")
+		_check(exit_node.contains_world_position(_feet(Vector2(1136, 1456))), "Entry trigger covers doorway")
+		_check(not exit_node.contains_world_position(arrival), "Return spawn cannot retrigger entrance")
+		_check(collision.get_cell_source_id((Vector2i(48,27) if house_door else Vector2i(35,45))) == -1 and collision.get_cell_source_id((Vector2i(48,28) if house_door else Vector2i(35,46))) == -1, "Door and approach remain walkable")
 
-	# Actual player's completed-step exit detection still invokes this exit once.
-	exit_node.set_script(ExitProbe)
-	var player := load("res://scripts/world/player.gd").new() as Node2D
-	player.name = "Player"
-	city.get_node("Entities/Players").add_child(player)
-	var state := root.get_node("GameState")
-	var previous_map: Node = state.current_map
-	state.current_map = city
-	player.position = _feet(Vector2(1136,1456))
-	_check(player.call("check_for_map_exit") and exit_node.entered == 1, "Player still detects the entry transition")
-	player.position = arrival
-	_check(not player.call("check_for_map_exit"), "Returning player stays outside transition")
-	state.current_map = previous_map
+		# Actual player's completed-step exit detection still invokes this exit once.
+		exit_node.set_script(ExitProbe)
+		var player := load("res://scripts/world/player.gd").new() as Node2D
+		player.name = "Player"
+		city.get_node("Entities/Players").add_child(player)
+		var state := root.get_node("GameState")
+		var previous_map: Node = state.current_map
+		state.current_map = city
+		player.position = _feet(Vector2(1136,1456))
+		_check(player.call("check_for_map_exit") and exit_node.entered == 1, "Player still detects the entry transition")
+		player.position = arrival
+		_check(not player.call("check_for_map_exit"), "Returning player stays outside transition")
+		state.current_map = previous_map
 
 	# Retain only the real visuals and the configured pilot, without live APIs.
 	city.remove_child(visual)
@@ -134,7 +138,7 @@ func _run() -> void:
 	_tick(door,0.5)
 	_check(sfx.get_child_count() == before_arrival + 2, "Later approach plays normal opening sound again")
 	map.free()
-	print("Viridian house door: " if house_door else "Viridian sliding door: ", "FAIL" if failed else "PASS")
+	print("Viridian gym door: " if gym_door else ("Viridian house door: " if house_door else "Viridian sliding door: "), "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
 
 func _tick(door: Node, seconds: float) -> void:
@@ -146,4 +150,4 @@ func _check(ok: bool, message: String) -> void:
 	failed = failed or not ok
 
 func _feet(center_position: Vector2) -> Vector2:
-	return center_position + (Vector2(416, -576) if house_door else Vector2.ZERO)
+	return center_position + (Vector2(192, -1056) if gym_door else (Vector2(416, -576) if house_door else Vector2.ZERO))
