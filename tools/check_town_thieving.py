@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check placed town dialogue NPCs against the paired Thieving authority.
+"""Check ordinary outdoor town dialogue NPCs against the paired Thieving authority.
 
 Usage: python tools/check_town_thieving.py ../backend
 New town dialogue placements must join the shared catalog before integration.
@@ -24,19 +24,6 @@ def check(backend):
     targets = json.loads((backend / 'game-content/data/thieving/targets.json').read_text())["targets"]
     npcs = {npc['id']: npc for path in (backend / 'game-content/data/npcs').rglob('*.json')
             for npc in json.loads(path.read_text()).get('npcs', [])}
-    classes = {}
-    for script_path in (frontend / 'scripts').rglob('*.gd'):
-        match = re.search(r'^class_name (\w+)', script_path.read_text(), re.M)
-        if match:
-            classes[match[1]] = 'res://' + str(script_path.relative_to(frontend))
-
-    def is_dialogue_script(resource):
-        if resource == 'res://scripts/world/npcs/dialogue_npc.gd':
-            return True
-        text = (frontend / resource.removeprefix('res://')).read_text()
-        match = re.search(r'^extends (?:"([^"]+)"|(\w+))', text, re.M)
-        parent = (match[1] or classes.get(match[2])) if match else None
-        return bool(parent and is_dialogue_script(parent))
 
     def scene_script(resource):
         text = (frontend / resource.removeprefix('res://')).read_text()
@@ -47,7 +34,9 @@ def check(backend):
 
     placed = set()
     errors = []
-    for path in (frontend / 'scenes/overworld/kanto/towns').rglob('*.tscn'):
+    for path in (frontend / 'scenes/overworld/kanto/towns').glob('*/*.tscn'):
+        if path.stem != path.parent.name:
+            continue  # Only the town's outdoor map, never buildings.
         text = path.read_text()
         refs = resource_paths(text)
         map_id = properties(text).get('map_id', 'kanto_' + path.stem)
@@ -59,11 +48,11 @@ def check(backend):
             script = re.search(r'^script = ExtResource\("([^"]+)"\)', block, re.M)
             instance = re.search(r'instance=ExtResource\("([^"]+)"\)', block.splitlines()[0])
             script_path = refs[script[1]] if script else scene_script(refs[instance[1]]) if instance else ''
-            if not script_path or not is_dialogue_script(script_path):
-                continue  # Battle actors can still use dialogue-type story metadata.
+            if script_path != 'res://scripts/world/npcs/dialogue_npc.gd':
+                continue  # Quest handlers, services and trainers have specialized roles.
             placed.add(npc_id)
             profile = targets.get(npc_id, {})
-            if map_id not in profile.get('mapIds', [profile.get('mapId')]):
+            if map_id != profile.get('mapId'):
                 errors.append(f'{path.name}: {npc_id} missing Thieving map {map_id}')
     for npc_id, profile in targets.items():
         if npc_id not in placed:
@@ -76,7 +65,7 @@ def check(backend):
                     errors.append(f'{locale}: missing {profile[field]}')
     if errors:
         raise SystemExit('\n'.join(errors))
-    print(f'TOWN_THIEVING PASS: {len(placed)} placed dialogue NPCs; four locales complete')
+    print(f'TOWN_THIEVING PASS: {len(placed)} ordinary outdoor dialogue NPCs; four locales complete')
 
 
 if __name__ == '__main__':

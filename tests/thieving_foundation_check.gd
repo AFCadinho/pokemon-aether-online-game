@@ -80,7 +80,7 @@ func _init() -> void:
 		"Viridian has outdoor elderly and Ace Trainer targets with class sprites"
 	)
 	_check("pickpocket_enabled = true" not in pallet, "Pallet targets load Thieving profiles from server metadata")
-	_check("pickpocket_enabled = true" not in players_house, "Player house loads Thieving profiles from server metadata")
+	_check("pickpocket_enabled = true" not in players_house, "Player house has no pickpocket targets")
 	_check("public_service = false" in players_house, "Mom remains a private heal service")
 	_check("use_public_service(\"pokemon_center\")" in heal, "Public heals check Most Wanted")
 	_check("use_public_service(\"market\")" in market, "Markets check Most Wanted")

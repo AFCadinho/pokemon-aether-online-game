@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Enable Thieving for all town dialogue NPCs, including indoor residents, and list them by town and building in the Skills window. Police targets show a guaranteed arrest warning.
+- Enable Thieving for ordinary outdoor dialogue NPCs in every town and list them by town in the Skills window. Police targets show a guaranteed arrest warning.
 
 - Restore the enabled Pokémon follower when entering an indoor map from a mount.
 
