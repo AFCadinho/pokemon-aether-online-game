@@ -5,7 +5,7 @@ on:
     inputs:
       version_name:
         description: Android release version
-        default: "0.3.115"
+        default: "0.3.116"
         required: true
         type: string
       version_code:
