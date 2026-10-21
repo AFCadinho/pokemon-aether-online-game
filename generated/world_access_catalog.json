@@ -1786,6 +1786,16 @@
 						"y": 22
 					}
 				},
+				"from_gym": {
+					"facingDirection": "down",
+					"label": "Gym",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromGym",
+					"tile": {
+						"x": 31,
+						"y": 35
+					}
+				},
 				"from_pokecenter": {
 					"facingDirection": "down",
 					"label": "Pokémon Center",
@@ -1932,7 +1942,9 @@
 			"locationGroupId": "kanto_fuchsia_city",
 			"locationGroupLabel": "Fuchsia City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://dptjb8w52irfp"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/tall_house.tscn",
 			"spawnPoints": {
 				"from_fuchsia_city": {
@@ -1951,8 +1963,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "GroundFloorStairs",
 					"tile": {
-						"x": 13,
-						"y": 31
+						"x": 14,
+						"y": 30
 					}
 				},
 				"upper_floor_stairs": {
@@ -1961,8 +1973,31 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "UpperFloorStairs",
 					"tile": {
-						"x": 13,
+						"x": 16,
 						"y": 13
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"kanto_fuchsia_gym": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Fuchsia City Gym",
+			"locationGroupId": "kanto_fuchsia_city",
+			"locationGroupLabel": "Fuchsia City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+			"spawnPoints": {
+				"from_fuchsia_city": {
+					"facingDirection": "down",
+					"label": "Fuchsia City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromFuchsiaCity",
+					"tile": {
+						"x": 14,
+						"y": 29
 					}
 				}
 			},
@@ -8354,6 +8389,20 @@
 			"destinationAreaId": "kanto_diglett_cave_route_2_entrance",
 			"sourceMapId": "kanto_diglett_cave_tunnel"
 		},
+		"kanto_fuchsia_city__to_gym": {
+			"destination": {
+				"mapId": "kanto_fuchsia_gym",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 944.0
+				},
+				"spawnMarker": "FromFuchsiaCity"
+			},
+			"destinationAreaId": "kanto_fuchsia_gym",
+			"sourceMapId": "kanto_fuchsia_city"
+		},
 		"kanto_fuchsia_city__to_pokemon_center": {
 			"destination": {
 				"mapId": "kanto_fuchsia_city_pokemon_center",
@@ -8443,7 +8492,9 @@
 		"kanto_fuchsia_city__to_tall_house": {
 			"destination": {
 				"mapId": "kanto_fuchsia_city_tall_house",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dptjb8w52irfp"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/tall_house.tscn",
 				"position": {
 					"x": 336.0,
@@ -8501,6 +8552,22 @@
 			},
 			"destinationAreaId": "kanto_fuchsia_city",
 			"sourceMapId": "kanto_fuchsia_city_tall_house"
+		},
+		"kanto_fuchsia_gym__to_fuchsia_city": {
+			"destination": {
+				"mapId": "kanto_fuchsia_city",
+				"mapSceneAliases": [
+					"uid://d4gk1ehf0pv8e"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+				"position": {
+					"x": 1008.0,
+					"y": 1136.0
+				},
+				"spawnMarker": "FromGym"
+			},
+			"destinationAreaId": "kanto_fuchsia_city",
+			"sourceMapId": "kanto_fuchsia_gym"
 		},
 		"kanto_fuchsia_safari_zone_gate__to_fuchsia_city": {
 			"destination": {

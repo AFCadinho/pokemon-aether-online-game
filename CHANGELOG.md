@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Open Fuchsia City Gym with its artist interior, animated city doorway and travel in both directions.
+
 - Let the Fuchsia Warden use his waiting and thank-you dialogue as the Gold Teeth quest progresses.
 
 - Show the Fuchsia Warden’s quest marker as soon as the house loads, without needing to approach him.
