@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Route 19 using its artist visual and connect both directions through Fuchsia’s southern gate.
+
 - Pewter Gym now opens its double door to both sides, with overworld audio and a silently open door when leaving the gym.
 
 - Added a two-sided sliding door visual for the Viridian Gym, respecting its existing access lock.
