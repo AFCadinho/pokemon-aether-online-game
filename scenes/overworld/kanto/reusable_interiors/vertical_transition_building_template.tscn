@@ -172,8 +172,8 @@ y_sort_enabled = true
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1880606859]
 
 [node name="GateNPC" parent="Entities/NPCs" unique_id=2061354104 instance=ExtResource("4_c8c1k")]
-position = Vector2(464, 560)
-facing_direction = Vector2(0, 1)
+position = Vector2(464, 528)
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = SubResource("SpriteFrames_wex85")
 manual_interaction_reach_tiles = 2
 
