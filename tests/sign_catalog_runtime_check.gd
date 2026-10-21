@@ -3,6 +3,12 @@ extends SceneTree
 const SIGN_TEXT_ROOT := "res://data/world_text/signs"
 const SUPPORTED_LOCALES: Array[String] = ["en", "nl", "pt_BR", "zh_CN"]
 const EXPECTED_SIGN_MAPS: Dictionary = {
+	"kanto_fuchsia_city_town_sign": "kanto_fuchsia_city",
+	"kanto_fuchsia_city_gym": "kanto_fuchsia_city",
+	"kanto_fuchsia_city_safari_zone": "kanto_fuchsia_city",
+	"kanto_route_19_route_sign": "kanto_route_19",
+	"kanto_route_19_surf_tips": "kanto_route_19",
+	"kanto_route_19_coastal_grass": "kanto_route_19",
 	"kanto_celadon_city_department_store": "kanto_celadon_city",
 	"kanto_celadon_city_game_corner": "kanto_celadon_city",
 	"kanto_celadon_city_gym": "kanto_celadon_city",

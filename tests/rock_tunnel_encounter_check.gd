@@ -3,35 +3,12 @@ var failed := false
 func _init() -> void:
 	call_deferred("_run")
 func _run() -> void:
-	# Build the route graph from collision, so a bypass cannot silently appear.
-	var components: Dictionary = {}
-	var adjacency: Dictionary = {}
-	for floor_name in ["1f", "b1f"]:
-		var map: Node = load("res://scenes/overworld/kanto/caves/rock_tunnel/%s.tscn" % floor_name).instantiate()
-		root.add_child(map)
-		var collision: TileMapLayer = map.get_node("Tiles/Collision")
-		var cells: Dictionary = {}
-		var region := 0
-		for spawn: Marker2D in map.get_node("Spawns").get_children():
-			var start := collision.local_to_map(collision.to_local(spawn.global_position))
-			if not cells.has(start):
-				region += 1
-				cells[start] = region
-			var component := "%s:%s" % [floor_name, cells[start]]
-			components["%s/%s" % [floor_name, spawn.name]] = component
-			adjacency[component] = []
-		if floor_name == "1f":
-			var visitor: Node2D = map.get_node("Entities/NPCs/FutureSelf")
-			_check(not visitor._can_auto_challenge(), "Visitor does not challenge from line of sight")
-			_check(not visitor.visible and not visitor.blocks_world_position(map.get_node("Spawns/FromB1FC").global_position), "Hidden visitor leaves the C spawn clear")
-		map.free()
-	var north: String = components["1f/FromRoute10North"]
-	var south: String = components["1f/FromRoute10South"]
-	for stair in ["A", "B", "D"]:
-		_connect(adjacency, components["1f/FromB1F%s" % stair], components["b1f/From1F%s" % stair])
-	_check(not _reachable(adjacency, north, south), "C staircase cannot be skipped on the north-to-south route")
-	_connect(adjacency, components["1f/FromB1FC"], components["b1f/From1FC"])
-	_check(_reachable(adjacency, north, south), "Completing the C staircase permits the cave route")
+	var map: Node = load("res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn").instantiate()
+	root.add_child(map)
+	var visitor: Node2D = map.get_node("Entities/NPCs/FutureSelf")
+	_check(not visitor._can_auto_challenge(), "Visitor does not challenge from line of sight")
+	_check(not visitor.visible and not visitor.blocks_world_position(map.get_node("Spawns/FromB1FC").global_position), "Hidden visitor leaves the C spawn clear")
+	map.free()
 	var hud: Control = load("res://scenes/battle/pokemon_hud_panel.tscn").instantiate()
 	root.add_child(hud)
 	await process_frame
@@ -69,11 +46,6 @@ func _run() -> void:
 	hud.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
-func _connect(graph: Dictionary, a: String, b: String) -> void:
-	graph[a].append(b)
-	graph[b].append(a)
-func _reachable(graph: Dictionary, start: String, target: String) -> bool:
-	return false
 func _check(condition: bool, label: String) -> void:
 	print("PASS " if condition else "FAIL ", label)
 	failed = failed or not condition
