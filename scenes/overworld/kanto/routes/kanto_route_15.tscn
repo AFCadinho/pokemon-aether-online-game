@@ -23,10 +23,10 @@
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r15_trainer"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1k0ms"]
-size = Vector2(32, 96)
+size = Vector2(32, 128)
 
 [sub_resource type="RectangleShape2D" id="FuchsiaGateExitShape"]
-size = Vector2(48, 96)
+size = Vector2(48, 128)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tnc64"]
 texture = ExtResource("5_kl2dy")
@@ -444,12 +444,12 @@ transition_id = "kanto_route_15__to_route14"
 transition_facing_direction = "right"
 
 [node name="@CollisionShape2D@4" type="CollisionShape2D" parent="Exits/ToRoute14" unique_id=1027959029]
-position = Vector2(16, 0)
+position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_1k0ms")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute14" unique_id=1179547179 instance=ExtResource("5_px0b4")]
 z_as_relative = false
-tile_footprint = Vector2i(1, 3)
+tile_footprint = Vector2i(1, 4)
 flow_direction = "right"
 
 [node name="ToFuchsiaGate" type="Area2D" parent="Exits" unique_id=750595461]
@@ -461,12 +461,12 @@ transition_id = "kanto_route_15__to_fuchsia_gate"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToFuchsiaGate" unique_id=1475661015]
-position = Vector2(-24, -16)
+position = Vector2(-24, 0)
 shape = SubResource("FuchsiaGateExitShape")
 
 [node name="RouteTransitionHint" parent="Exits/ToFuchsiaGate" unique_id=936401977 instance=ExtResource("5_px0b4")]
 z_as_relative = false
-tile_footprint = Vector2i(1, 2)
+tile_footprint = Vector2i(1, 4)
 flow_direction = "left"
 
 [node name="Entities" type="Node2D" parent="." unique_id=1418383664]
@@ -478,7 +478,7 @@ y_sort_enabled = true
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=842831870]
 
 [node name="Oddish" parent="Entities/Pokemon" unique_id=99390303 instance=ExtResource("r15_overworld_pokemon")]
-position = Vector2(592, 624)
+position = Vector2(560, 880)
 overworld_pokemon_id = "kanto_route_15_oddish_1"
 species_id = "oddish"
 display_name = "Oddish"
@@ -487,13 +487,14 @@ movement_tiles = 1
 movement_wait_seconds = 2.0
 movement_speed_pixels = 32.0
 movement_wait_jitter_seconds = 0.4
+facing_direction = Vector2(0, 1)
 
 [node name="Pidgeotto" parent="Entities/Pokemon" unique_id=1386319940 instance=ExtResource("r15_overworld_pokemon")]
-position = Vector2(1904, 720)
+position = Vector2(1840, 752)
 overworld_pokemon_id = "kanto_route_15_pidgeotto_1"
 species_id = "pidgeotto"
 display_name = "Pidgeotto"
-facing_direction = Vector2(1, 0)
+facing_direction = Vector2(-1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 1.7
@@ -501,7 +502,7 @@ movement_speed_pixels = 36.0
 movement_wait_jitter_seconds = 0.4
 
 [node name="Venonat" parent="Entities/Pokemon" unique_id=1136000548 instance=ExtResource("r15_overworld_pokemon")]
-position = Vector2(2960, 432)
+position = Vector2(1872, 272)
 overworld_pokemon_id = "kanto_route_15_venonat_1"
 species_id = "venonat"
 display_name = "Venonat"
@@ -510,9 +511,10 @@ movement_tiles = 1
 movement_wait_seconds = 2.2
 movement_speed_pixels = 30.0
 movement_wait_jitter_seconds = 0.4
+facing_direction = Vector2(0, 1)
 
 [node name="Gloom" parent="Entities/Pokemon" unique_id=1399784541 instance=ExtResource("r15_overworld_pokemon")]
-position = Vector2(528, 592)
+position = Vector2(848, 400)
 overworld_pokemon_id = "kanto_route_15_gloom_1"
 species_id = "gloom"
 display_name = "Gloom"
@@ -523,28 +525,29 @@ movement_wait_seconds = 2.0
 movement_speed_pixels = 30.0
 
 [node name="Pidgey" parent="Entities/Pokemon" unique_id=1527610586 instance=ExtResource("r15_overworld_pokemon")]
-position = Vector2(656, 656)
+position = Vector2(816, 1072)
 overworld_pokemon_id = "kanto_route_15_pidgey_1"
 species_id = "pidgey"
 display_name = "Pidgey"
-movement_behavior = "pace_vertical"
+movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 1.8
 movement_speed_pixels = 34.0
+facing_direction = Vector2(1, 0)
 
 [node name="Bellsprout" parent="Entities/Pokemon" unique_id=1372984133 instance=ExtResource("r15_overworld_pokemon")]
-position = Vector2(1776, 720)
+position = Vector2(1296, 400)
 overworld_pokemon_id = "kanto_route_15_bellsprout_1"
 species_id = "bellsprout"
 display_name = "Bellsprout"
-facing_direction = Vector2(1, 0)
+facing_direction = Vector2(-1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 2.0
 movement_speed_pixels = 30.0
 
 [node name="Weepinbell" parent="Entities/Pokemon" unique_id=291718025 instance=ExtResource("r15_overworld_pokemon")]
-position = Vector2(2064, 752)
+position = Vector2(1392, 880)
 overworld_pokemon_id = "kanto_route_15_weepinbell_1"
 species_id = "weepinbell"
 display_name = "Weepinbell"
@@ -552,39 +555,43 @@ movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 2.2
 movement_speed_pixels = 28.0
+facing_direction = Vector2(0, -1)
 
 [node name="Venomoth" parent="Entities/Pokemon" unique_id=2126639651 instance=ExtResource("r15_overworld_pokemon")]
-position = Vector2(3088, 464)
+position = Vector2(2064, 1136)
 overworld_pokemon_id = "kanto_route_15_venomoth_1"
 species_id = "venomoth"
 display_name = "Venomoth"
-movement_behavior = "pace_vertical"
+movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 2.1
 movement_speed_pixels = 32.0
+facing_direction = Vector2(-1, 0)
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=558868010]
 
 [node name="picnicker_becky" parent="Entities/NPCs" unique_id=226365550 instance=ExtResource("r15_trainer")]
-position = Vector2(2576, 464)
+position = Vector2(528, 528)
 trainer_id = "kanto_route_15_picnicker_becky"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_picnicker_becky"
 display_name = "Picnicker Becky"
 npc_sprite_frames = ExtResource("r15_picnicker")
 mugshot = ExtResource("r15_portrait_picnicker")
+facing_direction = Vector2(-1, 0)
 
 [node name="crush_kin_ron" parent="Entities/NPCs" unique_id=965284857 instance=ExtResource("r15_trainer")]
-position = Vector2(1840, 464)
+position = Vector2(1872, 720)
 trainer_id = "kanto_route_15_crush_kin_ron"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_crush_kin_ron"
 display_name = "Crush Kin Ron"
 npc_sprite_frames = ExtResource("r15_black_belt")
 mugshot = ExtResource("r15_portrait_blackbelt")
+facing_direction = Vector2(1, 0)
 
 [node name="crush_kin_mya" parent="Entities/NPCs" unique_id=1750676129 instance=ExtResource("r15_trainer")]
-position = Vector2(1808, 432)
+position = Vector2(2000, 784)
 trainer_id = "kanto_route_15_crush_kin_mya"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_crush_kin_mya"
@@ -594,45 +601,47 @@ npc_sprite_frames = ExtResource("r15_ace_trainer_f")
 mugshot = ExtResource("r15_portrait_battlegirl")
 
 [node name="picnicker_celia" parent="Entities/NPCs" unique_id=1384246685 instance=ExtResource("r15_trainer")]
-position = Vector2(976, 464)
+position = Vector2(944, 528)
 trainer_id = "kanto_route_15_picnicker_celia"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_picnicker_celia"
 display_name = "Picnicker Celia"
 npc_sprite_frames = ExtResource("r15_picnicker")
 mugshot = ExtResource("r15_portrait_picnicker")
+facing_direction = Vector2(1, 0)
 
 [node name="biker_ernest" parent="Entities/NPCs" unique_id=1218444832 instance=ExtResource("r15_trainer")]
-position = Vector2(2768, 880)
+position = Vector2(1936, 1040)
 trainer_id = "kanto_route_15_biker_ernest"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_biker_ernest"
 display_name = "Biker Ernest"
-facing_direction = Vector2(0, -1)
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("r15_rocker")
 mugshot = ExtResource("r15_portrait_triathletebiker")
 
 [node name="biker_alex" parent="Entities/NPCs" unique_id=1290170576 instance=ExtResource("r15_trainer")]
-position = Vector2(2416, 880)
+position = Vector2(1200, 1040)
 trainer_id = "kanto_route_15_biker_alex"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_biker_alex"
 display_name = "Biker Alex"
-facing_direction = Vector2(0, -1)
+facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("r15_rocker")
 mugshot = ExtResource("r15_portrait_triathletebiker")
 
 [node name="beauty_grace" parent="Entities/NPCs" unique_id=1135787041 instance=ExtResource("r15_trainer")]
-position = Vector2(2992, 784)
+position = Vector2(1776, 976)
 trainer_id = "kanto_route_15_beauty_grace"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_beauty_grace"
 display_name = "Beauty Grace"
 npc_sprite_frames = ExtResource("r15_lass")
 mugshot = ExtResource("r15_portrait_beauty")
+facing_direction = Vector2(0, 1)
 
 [node name="beauty_olivia" parent="Entities/NPCs" unique_id=281926186 instance=ExtResource("r15_trainer")]
-position = Vector2(2128, 880)
+position = Vector2(1392, 1104)
 trainer_id = "kanto_route_15_beauty_olivia"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_beauty_olivia"
@@ -642,7 +651,7 @@ npc_sprite_frames = ExtResource("r15_lass")
 mugshot = ExtResource("r15_portrait_beauty")
 
 [node name="picnicker_kindra" parent="Entities/NPCs" unique_id=1937086920 instance=ExtResource("r15_trainer")]
-position = Vector2(1456, 880)
+position = Vector2(912, 1104)
 trainer_id = "kanto_route_15_picnicker_kindra"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_picnicker_kindra"
@@ -652,49 +661,49 @@ npc_sprite_frames = ExtResource("r15_picnicker")
 mugshot = ExtResource("r15_portrait_picnicker")
 
 [node name="bird_keeper_chester" parent="Entities/NPCs" unique_id=1128637220 instance=ExtResource("r15_trainer")]
-position = Vector2(1136, 880)
+position = Vector2(1040, 912)
 trainer_id = "kanto_route_15_bird_keeper_chester"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_bird_keeper_chester"
 display_name = "Bird Keeper Chester"
-facing_direction = Vector2(0, -1)
+facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("r15_bird_keeper")
 mugshot = ExtResource("r15_portrait_birdkeeper")
 
 [node name="bird_keeper_edwin" parent="Entities/NPCs" unique_id=955223790 instance=ExtResource("r15_trainer")]
-position = Vector2(816, 880)
+position = Vector2(720, 1104)
 trainer_id = "kanto_route_15_bird_keeper_edwin"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_bird_keeper_edwin"
 display_name = "Bird Keeper Edwin"
-facing_direction = Vector2(0, -1)
+facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("r15_bird_keeper")
 mugshot = ExtResource("r15_portrait_birdkeeper")
 
 [node name="picnicker_yazmin" parent="Entities/NPCs" unique_id=1055074644 instance=ExtResource("r15_trainer")]
-position = Vector2(528, 752)
+position = Vector2(1424, 528)
 trainer_id = "kanto_route_15_picnicker_yazmin"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_picnicker_yazmin"
 display_name = "Picnicker Yazmin"
-facing_direction = Vector2(1, 0)
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("r15_picnicker")
 mugshot = ExtResource("r15_portrait_picnicker")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=945102395]
 
 [node name="RainDance" parent="Entities/Interactables" unique_id=508828601 instance=ExtResource("r15_item")]
-position = Vector2(464, 368)
+position = Vector2(368, 400)
 pickup_id = "kanto_route_15_rain_dance"
 item_id = "tm-rain-dance"
 
 [node name="PPUp" parent="Entities/Interactables" unique_id=414171611 instance=ExtResource("r15_item")]
-position = Vector2(1328, 368)
+position = Vector2(1296, 528)
 pickup_id = "kanto_route_15_pp_up"
 item_id = "pp-up"
 
 [node name="RoseIncense" parent="Entities/Interactables" unique_id=501210147 instance=ExtResource("r15_item")]
-position = Vector2(3152, 368)
+position = Vector2(1008, 848)
 pickup_id = "kanto_route_15_rose_incense"
 item_id = "rose-incense"
 

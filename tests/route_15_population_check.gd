@@ -20,12 +20,19 @@ const PICKUPS := {
   "kanto_route_15_rose_incense": "rose-incense"
 }
 var failed := false
+var movement_probe
 
 func _init() -> void:
 	call_deferred("run")
 
 func run() -> void:
 	var map := (load("res://scenes/overworld/kanto/routes/kanto_route_15.tscn") as PackedScene).instantiate()
+	root.add_child(map)
+	movement_probe = (load("res://scenes/player.tscn") as PackedScene).instantiate()
+	movement_probe.set_script(load("res://tests/support/fuchsia_movement_probe.gd"))
+	map.get_node("Entities/Players").add_child(movement_probe)
+	movement_probe.position = map.get_node("Spawns/FromRoute14").position
+	movement_probe.refresh_map_layers()
 	check(map.encounter_area_id == "kanto_route_15", "Server encounter area is configured")
 	check(is_equal_approx(map.grass_encounter_chance, 0.21), "Grass chance is configured")
 	var grass := map.get_node("Tiles/TallGrass") as TileMapLayer
@@ -58,7 +65,43 @@ func run() -> void:
 	check(map.get_node("Entities/Interactables").get_child_count() == PICKUPS.size(), "All three pickups exist")
 	for pickup in map.get_node("Entities/Interactables").get_children():
 		check(PICKUPS.get(pickup.pickup_id, "") == pickup.item_id, "Route 15 pickup is registered: " + pickup.name)
-		check(reachable.has(Vector2i(pickup.position / 32.0)), "Pickup is reachable: " + pickup.name)
+		var pickup_cell := Vector2i(pickup.position / 32.0)
+		var can_collect := false
+		for direction in [Vector2i.UP,Vector2i.DOWN,Vector2i.LEFT,Vector2i.RIGHT]:
+			if reachable.has(pickup_cell+direction): can_collect = true
+		check(can_collect, "Pickup can be approached for collection: " + pickup.name)
+	for leg in [["ToRoute14",71,26,30],["ToFuchsiaGate",3,27,31]]:
+		var exit_node: Node = map.get_node("Exits/" + leg[0])
+		for y in range(leg[2],leg[3]):
+			var point := Vector2(leg[1]*32+16,y*32+16)
+			check(movement_probe.can_move_to(point), "Exit aperture is walkable: " + leg[0])
+			check(exit_node.contains_world_position(point), "Exit covers its full opening: " + leg[0])
+	for spawn in map.get_node("Spawns").get_children():
+		for exit_node in map.get_node("Exits").get_children():
+			check(not movement_probe.overlaps_exit_at(exit_node,spawn.position), "Arrival body avoids exit trigger: " + spawn.name)
+	var all_occupied := occupied.duplicate()
+	for pokemon in map.get_node("Entities/Pokemon").get_children():
+		var cell := Vector2i(pokemon.position / 32.0)
+		check(not all_occupied.has(cell), "Pokemon does not overlap another actor: " + pokemon.name)
+		all_occupied[cell] = true
+	var bounds := Rect2i(0,0,72,42)
+	for actor in map.get_node("Entities/NPCs").get_children() + map.get_node("Entities/Pokemon").get_children():
+		var cell := Vector2i(actor.position / 32.0)
+		check(bounds.has_point(cell), "Actor is inside current visual: " + actor.name)
+		check(actor.facing_direction in [Vector2.UP,Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT], "Actor faces a cardinal direction")
+	for pokemon in map.get_node("Entities/Pokemon").get_children():
+		var cell := Vector2i(pokemon.position / 32.0)
+		var axis := Vector2i.RIGHT if pokemon.movement_behavior == "pace_horizontal" else Vector2i.DOWN
+		var approachable := false
+		for direction in [Vector2i.UP,Vector2i.DOWN,Vector2i.LEFT,Vector2i.RIGHT]:
+			if reachable.has(cell+direction): approachable = true
+		check(approachable, "Pokemon is reachable: " + pokemon.name)
+		for offset in [-1,0,1]:
+			var target: Vector2i = cell + axis*offset
+			check(bounds.has_point(target) and clear_cell(map,target), "Pokemon patrol avoids obstacles: " + pokemon.name)
+			check(offset == 0 or not all_occupied.has(target), "Pokemon patrol avoids other actors: " + pokemon.name)
+			if pokemon.species_id not in ["pidgey","pidgeotto"]:
+				check(grass.get_cell_source_id(target) != -1, "Plant/insect Pokemon patrol stays in grass: " + pokemon.name)
 	map.free()
 	if not failed:
 		print("PASS Route 15: encounters, twelve trainers, art and three pickups")
@@ -81,7 +124,7 @@ func reachable_cells(map: Node, start: Vector2i, occupied: Dictionary) -> Dictio
 		cursor += 1
 		for direction in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
 			var next: Vector2i = current + direction
-			if next.x >= 0 and next.x < 104 and next.y >= 0 and next.y < 40 and not visited.has(next) and not occupied.has(next) and clear_cell(map, next):
+			if next.x >= 0 and next.x < 72 and next.y >= 0 and next.y < 42 and not visited.has(next) and not occupied.has(next) and movement_probe.can_move_to(Vector2(next)*32+Vector2(16,16)):
 				visited[next] = true
 				pending.append(next)
 	return visited

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Reposition Route 15 trainers, ambient Pokémon and items for the current map, with clear facing directions and arrivals.
+
+- Refresh Route 15 scenery from the latest artist TMX.
+
 - Populate Route 19 with coastal trainers, ambient Pokémon, Surf encounters and fishing tables.
 - Standardize building entrance triggers across Kanto on the Pallet Town layout, preventing premature entry and keeping return spawns clear.
 
