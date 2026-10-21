@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Safari Zone Warden’s optional Gold Teeth return quest in Fuchsia City’s tall house, rewarding one HM Strength.
+
 - Refresh Fuchsia Tall House’s two-floor interior visual from the latest artist TMX.
 
 - Stop small indoor floors, including both Fuchsia Tall House floors, from shifting by a pixel during movement at fractional camera zoom.
