@@ -1796,6 +1796,16 @@
 						"y": 10
 					}
 				},
+				"from_red_roof_house": {
+					"facingDirection": "down",
+					"label": "Red Roof House",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRedRoofHouse",
+					"tile": {
+						"x": 11,
+						"y": 31
+					}
+				},
 				"from_route_15_gate": {
 					"facingDirection": "down",
 					"label": "Route 15 Gate",
@@ -1887,6 +1897,29 @@
 					"tile": {
 						"x": 14,
 						"y": 23
+					}
+				}
+			},
+			"weatherProfile": "disabled"
+		},
+		"kanto_fuchsia_city_red_roof_house": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Fuchsia Red Roof House",
+			"locationGroupId": "kanto_fuchsia_city",
+			"locationGroupLabel": "Fuchsia City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/red_roof_house.tscn",
+			"spawnPoints": {
+				"from_fuchsia_city": {
+					"facingDirection": "down",
+					"label": "Fuchsia City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromFuchsiaCity",
+					"tile": {
+						"x": 6,
+						"y": 15
 					}
 				}
 			},
@@ -8335,6 +8368,20 @@
 			"destinationAreaId": "kanto_fuchsia_city_pokemon_center",
 			"sourceMapId": "kanto_fuchsia_city"
 		},
+		"kanto_fuchsia_city__to_red_roof_house": {
+			"destination": {
+				"mapId": "kanto_fuchsia_city_red_roof_house",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/red_roof_house.tscn",
+				"position": {
+					"x": 208.0,
+					"y": 496.0
+				},
+				"spawnMarker": "FromFuchsiaCity"
+			},
+			"destinationAreaId": "kanto_fuchsia_city_red_roof_house",
+			"sourceMapId": "kanto_fuchsia_city"
+		},
 		"kanto_fuchsia_city__to_route15_gate": {
 			"destination": {
 				"mapId": "kanto_route_15_fuchsia_gate",
@@ -8422,6 +8469,22 @@
 			},
 			"destinationAreaId": "kanto_fuchsia_city",
 			"sourceMapId": "kanto_fuchsia_city_pokemon_center"
+		},
+		"kanto_fuchsia_city_red_roof_house__to_fuchsia_city": {
+			"destination": {
+				"mapId": "kanto_fuchsia_city",
+				"mapSceneAliases": [
+					"uid://d4gk1ehf0pv8e"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromRedRoofHouse"
+			},
+			"destinationAreaId": "kanto_fuchsia_city",
+			"sourceMapId": "kanto_fuchsia_city_red_roof_house"
 		},
 		"kanto_fuchsia_city_tall_house__to_fuchsia_city": {
 			"destination": {

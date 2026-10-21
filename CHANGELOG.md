@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Open the red-roof house in southern Fuchsia City with its furnished interior and a two-tile doorway in both directions.
+
 - Open Fuchsia City’s tall northwest house with two furnished floors, local stair travel and floor-specific camera masking.
 
 - Fix Route 19's duplicate interactables container so the map opens without a node-name collision warning.

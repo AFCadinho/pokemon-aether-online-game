@@ -26,6 +26,9 @@
 [sub_resource type="RectangleShape2D" id="gate_shape"]
 size = Vector2(32, 96)
 
+[sub_resource type="RectangleShape2D" id="red_roof_door_shape"]
+size = Vector2(64, 32)
+
 [sub_resource type="RectangleShape2D" id="center_door_shape"]
 size = Vector2(32, 32)
 
@@ -306,6 +309,9 @@ position = Vector2(48, 720)
 [node name="FromTallHouse" type="Marker2D" parent="Spawns"]
 position = Vector2(720, 336)
 
+[node name="FromRedRoofHouse" type="Marker2D" parent="Spawns"]
+position = Vector2(368, 1008)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1471260928]
 
 [node name="ToRoute15Gate" type="Area2D" parent="Exits" unique_id=707877330]
@@ -324,6 +330,22 @@ shape = SubResource("gate_shape")
 z_as_relative = false
 tile_footprint = Vector2i(1, 3)
 flow_direction = "right"
+
+[node name="ToRedRoofHouse" type="Area2D" parent="Exits"]
+position = Vector2(384, 976)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/fuchsia_city/red_roof_house.tscn"
+target_spawn_name = "FromFuchsiaCity"
+transition_id = "kanto_fuchsia_city__to_red_roof_house"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRedRoofHouse"]
+position = Vector2(0, -16)
+shape = SubResource("red_roof_door_shape")
+
+[node name="DoorTransitionHint" parent="Exits/ToRedRoofHouse" instance=ExtResource("7_door_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(2, 1)
 
 [node name="ToTallHouse" type="Area2D" parent="Exits"]
 position = Vector2(720, 304)
@@ -864,3 +886,5 @@ light_texture_scale = 0.55
 [connection signal="body_entered" from="Exits/ToRoute18" to="Exits/ToRoute18" method="_on_body_entered"]
 
 [connection signal="body_entered" from="Exits/ToTallHouse" to="Exits/ToTallHouse" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToRedRoofHouse" to="Exits/ToRedRoofHouse" method="_on_body_entered"]
