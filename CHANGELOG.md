@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Fuchsia Tall House’s two-floor interior visual from the latest artist TMX.
+
 - Stop small indoor floors, including both Fuchsia Tall House floors, from shifting by a pixel during movement at fractional camera zoom.
 
 - Restore Fuchsia City’s three sign content bindings so their localized text and illustrations appear again.
