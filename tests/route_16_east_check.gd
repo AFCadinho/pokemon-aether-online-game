@@ -75,7 +75,7 @@ func _run() -> void:
 	for y in range(29,34):
 		_check(city_reached.has(Vector2i(0,y)) and player.overlaps_exit_at(city.get_node("Exits/ToRoute16East"),_point(Vector2i(0,y))), "entire five-tile Celadon aperture connects to city streets")
 		_check(not player.can_move_to(_point(Vector2i(-1,y))), "denied transfer cannot walk outside Celadon")
-	_check(route.get_node("Exits").get_child_count() == 2 and route.has_node("Exits/ToRoute16Gate"), "Celadon and the completed Cycling Road gate are the only active transfers")
+	_check(route.get_node("Exits").get_child_count() == 3 and route.has_node("Exits/ToRoute16Gate"), "Celadon, Cycling Road gate and house are active transfers")
 	_check(catalog.areas[route.map_id].areaType == "route", "catalog classifies Route 16 East correctly")
 	var loader = load("res://scripts/services/web_asset_module_service.gd")
 	_check(loader.scene_for_map(route.map_id) == ROUTE and loader.module_for_scene(ROUTE) == loader.EXTENDED_MODULE_NAME, "browser travel can load Route 16 East")
