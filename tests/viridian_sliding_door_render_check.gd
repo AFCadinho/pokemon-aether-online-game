@@ -4,6 +4,7 @@ extends SceneTree
 const CITY := "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
 var house_door := false
 var gym_door := false
+var pewter_gym := false
 var origin := Vector2(1024, 1216)
 var failed := false
 
@@ -18,7 +19,7 @@ func _run() -> void:
 	if house_door:
 		origin = Vector2(1440, 832)
 	if gym_door:
-		origin = Vector2(1216, 336)
+		origin = Vector2(480, 464) if pewter_gym else Vector2(1216, 336)
 	var world: Node = load("res://scripts/world/world.gd").new()
 	var viewport := SubViewport.new()
 	viewport.size = Vector2i(224,128) if house_door or gym_door else Vector2i(224,288)
@@ -26,8 +27,8 @@ func _run() -> void:
 	viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 	root.add_child(viewport)
 	viewport.canvas_transform.origin = -origin
-	var city := (load(CITY) as PackedScene).instantiate()
-	var visual := city.get_node("ViridianCity")
+	var city := (load("res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn" if pewter_gym else CITY) as PackedScene).instantiate()
+	var visual := city.get_node("PewterCity" if pewter_gym else "ViridianCity")
 	city.remove_child(visual)
 	city.free()
 	var map := Node2D.new()
@@ -38,7 +39,7 @@ func _run() -> void:
 	world.call("_normalize_map_depth_layer_z_indices", map)
 	var output := "user://viridian-house-door-review" if house_door else "user://viridian-door-review"
 	if gym_door:
-		output = "user://viridian-gym-door-review"
+		output = "user://pewter-gym-door-review" if pewter_gym else "user://viridian-gym-door-review"
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
 	door.visible = false
 	await process_frame

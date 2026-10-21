@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pewter Gym now opens its double door to both sides, with overworld audio and a silently open door when leaving the gym.
+
 - Added a two-sided sliding door visual for the Viridian Gym, respecting its existing access lock.
 
 - Show Bird Keeper Rowan’s quest marker on entering the Route 16 East house, without having to approach him first.

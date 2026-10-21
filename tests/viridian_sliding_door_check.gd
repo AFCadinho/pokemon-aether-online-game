@@ -23,32 +23,33 @@ class ExitProbe:
 var failed := false
 var house_door := false
 var gym_door := false
+var pewter_gym := false
 
 func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
 	# Load the real scene, but isolate services/NPCs: this is not a backend test.
-	var city := (load(CITY) as PackedScene).instantiate()
-	var visual := city.get_node("ViridianCity")
+	var city := (load("res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn" if pewter_gym else CITY) as PackedScene).instantiate()
+	var visual := city.get_node("PewterCity" if pewter_gym else "ViridianCity")
 	var door := visual.get_node(("GymDoubleSlidingDoor" if gym_door else ("House1HingedDoor" if house_door else "PokemonCenterSlidingDoor")))
 	city.call("prepare_player_arrival", "FromRoute2")
 	_check(door.open_amount == 0.0, "Other arrivals do not open tested door")
 	city.call("prepare_player_arrival", ("FromGym" if gym_door else ("FromHouse1" if house_door else "FromPokecenter")))
 	_check(door.open_amount == 1.0, "Matching return configures an already-open door")
-	var other_door := visual.get_node("PokemonCenterSlidingDoor" if house_door else "House1HingedDoor")
-	_check(other_door.open_amount == 0.0, "Arrival opens only the matching building door")
+	var other_door := visual.get_node_or_null("PokemonCenterSlidingDoor" if house_door else "House1HingedDoor")
+	_check((pewter_gym and other_door == null) or (other_door != null and other_door.open_amount == 0.0), "Arrival opens only the matching building door")
 	door.open_amount = 0.0; door.arrival_open = false; door.close_delay = 0.0
-	var exit_node := city.get_node(("Exits/ToHouse1" if house_door else "Exits/ToPokecenter"))
+	var exit_node := city.get_node(("Exits/ToGym" if pewter_gym else ("Exits/ToHouse1" if house_door else "Exits/ToPokecenter")))
 	var collision := city.get_node("Collision") as TileMapLayer
 	var arrival: Vector2 = city.get_node(("Spawns/FromGym" if gym_door else ("Spawns/FromHouse1" if house_door else "Spawns/FromPokecenter"))).position
-	if gym_door:
+	if gym_door and not pewter_gym:
 		_check(city.get_node("Exits/ToGym").get_script() == null, "Unavailable gym entrance remains unconfigured")
 	else:
-		_check(exit_node.target_scene_path.ends_with(("viridian_city/house1.tscn" if house_door else "viridian_city/pokemon_center.tscn")) and exit_node.target_spawn_name == ("FromViridianCity" if house_door else "FromOutside"), "Existing destination preserved")
+		_check(exit_node.target_scene_path.ends_with(("pewter_city/pewter_gym.tscn" if pewter_gym else ("viridian_city/house1.tscn" if house_door else "viridian_city/pokemon_center.tscn"))) and exit_node.target_spawn_name == ("FromPewterCity" if pewter_gym else ("FromViridianCity" if house_door else "FromOutside")), "Existing destination preserved")
 		_check(exit_node.contains_world_position(_feet(Vector2(1136, 1456))), "Entry trigger covers doorway")
 		_check(not exit_node.contains_world_position(arrival), "Return spawn cannot retrigger entrance")
-		_check(collision.get_cell_source_id((Vector2i(48,27) if house_door else Vector2i(35,45))) == -1 and collision.get_cell_source_id((Vector2i(48,28) if house_door else Vector2i(35,46))) == -1, "Door and approach remain walkable")
+		_check(collision.get_cell_source_id((Vector2i(18,16) if pewter_gym else (Vector2i(48,27) if house_door else Vector2i(35,45)))) == -1 and collision.get_cell_source_id((Vector2i(18,17) if pewter_gym else (Vector2i(48,28) if house_door else Vector2i(35,46)))) == -1, "Door and approach remain walkable")
 
 		# Actual player's completed-step exit detection still invokes this exit once.
 		exit_node.set_script(ExitProbe)
@@ -63,6 +64,12 @@ func _run() -> void:
 		player.position = arrival
 		_check(not player.call("check_for_map_exit"), "Returning player stays outside transition")
 		state.current_map = previous_map
+
+	if pewter_gym:
+		var interior := (load("res://scenes/overworld/kanto/towns/pewter_city/pewter_gym.tscn") as PackedScene).instantiate()
+		var return_exit := interior.get_node("Exits/ToPewterCity")
+		_check(return_exit.target_scene_path.ends_with("pewter_city/pewter_city.tscn") and return_exit.target_spawn_name == "FromGym", "Gym interior returns through the silent-open arrival hook")
+		interior.free()
 
 	# Retain only the real visuals and the configured pilot, without live APIs.
 	city.remove_child(visual)
@@ -150,4 +157,6 @@ func _check(ok: bool, message: String) -> void:
 	failed = failed or not ok
 
 func _feet(center_position: Vector2) -> Vector2:
+	if pewter_gym:
+		return center_position + Vector2(-544, -928)
 	return center_position + (Vector2(192, -1056) if gym_door else (Vector2(416, -576) if house_door else Vector2.ZERO))

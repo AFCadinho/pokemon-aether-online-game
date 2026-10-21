@@ -94,3 +94,18 @@ Run `viridian_gym_door_check.gd` and the native
 `viridian_gym_door_render_check.gd` through slot-env. The latter checks both
 translation directions, the opening center, every fully-open aperture pixel,
 and unchanged surrounding artwork. Live gym entry awaits an interior hookup.
+
+
+## Pewter Gym playable test
+
+Pewter uses the same curved 48×38 double door artwork at (568, 496), with
+`StructuresBottom` and `Doors` as sources. Its existing `ToGym` destination,
+`GymDoorLock`, collision and backend access are preserved. The city script
+extends `map_metadata.gd` and silently primes the door for `FromGym` arrivals.
+The old DoorAnimator remains responsible for its two unrelated house cells.
+
+`pewter_gym_door_check.gd` checks the real entrance, player exit detection,
+interior return destination, arrival behavior, sound, access and nearby actors.
+`pewter_gym_door_render_check.gd` checks opposite leaf directions and the full
+opening while preserving the frame. Run both through slot-env (render with a
+display). A live server round trip and two real clients remain manual checks.
