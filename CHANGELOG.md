@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Fuchsia City to Aethernet Travel with Beacon attunement, Anchor support and a safe station arrival.
+
 - Keep animated TreeBottom foliage behind roofs and neighbouring trees as well as the trunk, preserving every wind-animation frame and its timing.
 
 - Include the 2D/3D choice in regular Android builds without an experimental build opt-in, using the existing Mobile/Vulkan renderer.

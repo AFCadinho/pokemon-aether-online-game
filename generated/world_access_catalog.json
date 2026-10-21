@@ -1835,6 +1835,16 @@
 						"x": 37,
 						"y": 6
 					}
+				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 4,
+						"y": 32
+					}
 				}
 			},
 			"weatherProfile": "outdoor"
