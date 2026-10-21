@@ -288,6 +288,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/ss_anne_arena_check.gd",
 	"res://tests/impersonation_account_switch_check.gd",
 	"res://tests/floor_visibility_mask_camera_check.gd",
+	"res://tests/fuchsia_tall_house_check.gd",
 	"res://tests/lavender_pokemon_tower_check.gd",
 	"res://tests/pokemon_tower_population_check.gd",
 	"res://tests/pokemon_tower_wild_encounter_check.gd",
