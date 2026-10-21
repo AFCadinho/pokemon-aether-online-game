@@ -36,7 +36,7 @@ func _run() -> void:
 			_check(FollowerSpriteService.get_sprite_frames(actor.species_id,false) != null, str(actor.name) + " has follower art")
 		else:
 			_check(actor.npc_sprite_frames != null, str(actor.name) + " has resident art")
-			_check(not actor.pickpocket_enabled, "residents have no unsolicited thieving interaction")
+			_check(not actor.pickpocket_enabled, "resident Thieving profiles load from server metadata")
 		if radius > 0:
 			speeds[actor.movement_speed_pixels] = true
 			waits[actor.movement_wait_seconds] = true
