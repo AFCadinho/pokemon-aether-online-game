@@ -19,8 +19,9 @@ returns via the east door, so its west leaf has no arrival marker.
 
 ## Audit scope
 
-All 113 gameplay scenes referencing generated Tiled visuals were inventoried.
-The exterior candidates and Celadon roof room were visually reviewed. Open
+All 114 gameplay scenes referencing generated Tiled visuals were inventoried.
+The exterior candidates and Celadon roof room were visually reviewed. Route 19,
+added during integration, was re-inventoried and has no closed door cells. Open
 museum/school arches, route gates, cave mouths, stairways, interior exits and
 SS Anne passages have no closed leaf to animate. Guild interior doors/elevator
 retain their separate state/transition behavior. The guild building's exterior
