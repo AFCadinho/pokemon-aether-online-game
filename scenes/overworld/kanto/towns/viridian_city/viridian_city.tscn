@@ -1093,12 +1093,12 @@ access_lock_path = NodePath("../../Entities/Interactables/Locks/PokemonCenterDoo
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
 
 [node name="House1HingedDoor" type="Node2D" parent="ViridianCity"]
-position = Vector2(1536, 860)
+position = Vector2(1536, 854)
 z_index = 4
 script = ExtResource("51_house_door")
 animation_seconds = 0.24
-panel_size = Vector2(32, 32)
-activation_rect = Rect2(0, 4, 32, 72)
+panel_size = Vector2(32, 38)
+activation_rect = Rect2(0, 10, 32, 72)
 movement_sound_id = "sliding_door"
 source_layers = Array[NodePath]([NodePath("../StructureBottom"), NodePath("../Doors")])
 players_path = NodePath("../../Entities/Players")
