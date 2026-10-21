@@ -1987,7 +1987,9 @@
 			"locationGroupId": "kanto_fuchsia_city",
 			"locationGroupLabel": "Fuchsia City",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://b7fhph5sam2w5"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
 			"spawnPoints": {
 				"from_fuchsia_city": {
@@ -8392,7 +8394,9 @@
 		"kanto_fuchsia_city__to_gym": {
 			"destination": {
 				"mapId": "kanto_fuchsia_gym",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://b7fhph5sam2w5"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
 				"position": {
 					"x": 464.0,
