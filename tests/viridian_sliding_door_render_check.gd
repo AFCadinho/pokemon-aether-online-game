@@ -41,8 +41,9 @@ func _run() -> void:
 	var reference := viewport.get_texture().get_image()
 	door.visible = true
 	var previous: Image
-	for step in range(5):
-		door.open_amount = step / 4.0
+	var steps := 6 if house_door else 4
+	for step in range(steps + 1):
+		door.open_amount = float(step) / steps
 		await process_frame
 		RenderingServer.force_draw(true, 0.0)
 		var frame := viewport.get_texture().get_image()
