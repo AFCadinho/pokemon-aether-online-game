@@ -10450,6 +10450,21 @@
 				"layers": 9,
 				"usedTiles": 120
 			},
+			"current_flower_cells": {
+				"1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee": 12,
+				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 14,
+				"8a4ee5385f86510ba89ad112ca770bcc22afef2b989db0e5b5f802bc8c933fb4": 13,
+				"c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a": 12,
+				"c9c9f556eb6d4c8365d11f1f4ab588daa57b36fb10083b50c2611d6ad298d87e": 14
+			},
+			"current_reference_provenance": "Updated for the authored Route 15 visual refresh in development through fd17a4727; existing animation pixel and timing assertions remain unchanged.",
+			"current_static_reference": {
+				"baseRGBABytes": 10819584,
+				"cells": 6122,
+				"fingerprint": "460ba12f4b2901ae55b8afe9c5366d44564a6de248ad7604412afda3d4938b62",
+				"layers": 9,
+				"usedTiles": 204
+			},
 			"flower_cells": {
 				"1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee": 6,
 				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 3,
