@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Place every transition-building guard behind the counter facing forward, while preserving the closed Safari passage.
+
 - Enable day/night tallgrass encounters on Route 19, including co-op grass battles.
 
 - Update Route 15 scenery from the latest artist map.

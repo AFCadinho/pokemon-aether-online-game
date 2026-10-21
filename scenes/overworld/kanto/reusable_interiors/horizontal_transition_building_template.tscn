@@ -164,6 +164,7 @@ y_sort_enabled = true
 
 [node name="GateNPC" parent="Entities/NPCs" unique_id=441392445 instance=ExtResource("5_7oyuy")]
 position = Vector2(496, 208)
+facing_direction = Vector2(0, 1)
 requires_party_pokemon = false
 npc_definition_id = "horizontal_gate_attendant"
 npc_sprite_frames = SubResource("SpriteFrames_vbqux")
