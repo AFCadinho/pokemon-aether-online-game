@@ -6201,6 +6201,7 @@
   "ui.transit.fare": "{tier}  •  ₽{fare}",
   "ui.transit.destinations": "Bestemmingen in {region}",
   "ui.transit.available": "Beschikbare bestemmingen",
+  "ui.transit.undiscovered": "Nog te ontdekken ({count})",
   "ui.transit.locked_destinations": "Vergrendelde bestemmingen",
   "ui.transit.no_available": "In deze regio zijn nog geen bestemmingen ontgrendeld.",
   "ui.transit.empty_region": "In deze regio zijn nog geen Aethernet-bestemmingen beschikbaar.",
