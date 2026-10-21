@@ -374,6 +374,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/route_10_signs_check.gd",
 	"res://tests/cinnabar_signs_check.gd",
 	"res://tests/fuchsia_signs_check.gd",
+	"res://tests/route_19_signs_check.gd",
 	"res://tests/pokemon_storage_service_contract_check.gd",
 	"res://tests/pvp_ranked_banlists_check.gd",
 	"res://tests/pvp_ranked_team_validation_check.gd",

@@ -3,6 +3,10 @@ extends RefCounted
 class_name SignPortraitCatalog
 
 const SIGN_PORTRAIT_PATHS: Dictionary = {
+	"kanto_route_19_route_sign": "res://assets/sprites/sign_previews/route_19_coast.png",
+	"kanto_route_19_surf_tips": "res://assets/sprites/sign_previews/route_19_surf.png",
+	"kanto_route_19_coastal_grass": "res://assets/sprites/sign_previews/route_19_coastal_grass.png",
+
 	"kanto_fuchsia_city_town_sign": "res://assets/sprites/sign_previews/fuchsia_city.png",
 	"kanto_fuchsia_city_gym": "res://assets/sprites/sign_previews/fuchsia_gym.png",
 	"kanto_fuchsia_city_safari_zone": "res://assets/sprites/sign_previews/fuchsia_safari_zone.png",
