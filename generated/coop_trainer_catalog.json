@@ -3627,6 +3627,282 @@
         }
       }
     },
+    "kanto_route_19_sis_and_bro_lia": {
+      "entityId": "kanto_route_19_sis_and_bro_lia",
+      "mapId": "kanto_route_19",
+      "position": {
+        "x": 304.0,
+        "y": 2000.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_19_sis_and_bro_lia"
+      ],
+      "trainers": {
+        "kanto_route_19_sis_and_bro_lia": {
+          "gymBadge": null,
+          "name": "Sis and Bro Lia",
+          "teamSize": 1,
+          "trainerClass": "Sis and Bro"
+        }
+      }
+    },
+    "kanto_route_19_sis_and_bro_luc": {
+      "entityId": "kanto_route_19_sis_and_bro_luc",
+      "mapId": "kanto_route_19",
+      "position": {
+        "x": 464.0,
+        "y": 2096.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_19_sis_and_bro_luc"
+      ],
+      "trainers": {
+        "kanto_route_19_sis_and_bro_luc": {
+          "gymBadge": null,
+          "name": "Sis and Bro Luc",
+          "teamSize": 1,
+          "trainerClass": "Sis and Bro"
+        }
+      }
+    },
+    "kanto_route_19_swimmer_alice": {
+      "entityId": "kanto_route_19_swimmer_alice",
+      "mapId": "kanto_route_19",
+      "position": {
+        "x": 1040.0,
+        "y": 2032.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_19_swimmer_alice"
+      ],
+      "trainers": {
+        "kanto_route_19_swimmer_alice": {
+          "gymBadge": null,
+          "name": "Swimmer Alice",
+          "teamSize": 2,
+          "trainerClass": "Swimmer"
+        }
+      }
+    },
+    "kanto_route_19_swimmer_anya": {
+      "entityId": "kanto_route_19_swimmer_anya",
+      "mapId": "kanto_route_19",
+      "position": {
+        "x": 176.0,
+        "y": 1904.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_19_swimmer_anya"
+      ],
+      "trainers": {
+        "kanto_route_19_swimmer_anya": {
+          "gymBadge": null,
+          "name": "Swimmer Anya",
+          "teamSize": 5,
+          "trainerClass": "Swimmer"
+        }
+      }
+    },
+    "kanto_route_19_swimmer_axle": {
+      "entityId": "kanto_route_19_swimmer_axle",
+      "mapId": "kanto_route_19",
+      "position": {
+        "x": 656.0,
+        "y": 2096.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_19_swimmer_axle"
+      ],
+      "trainers": {
+        "kanto_route_19_swimmer_axle": {
+          "gymBadge": null,
+          "name": "Swimmer Axle",
+          "teamSize": 5,
+          "trainerClass": "Swimmer"
+        }
+      }
+    },
+    "kanto_route_19_swimmer_connie": {
+      "entityId": "kanto_route_19_swimmer_connie",
+      "mapId": "kanto_route_19",
+      "position": {
+        "x": 1200.0,
+        "y": 1968.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_19_swimmer_connie"
+      ],
+      "trainers": {
+        "kanto_route_19_swimmer_connie": {
+          "gymBadge": null,
+          "name": "Swimmer Connie",
+          "teamSize": 3,
+          "trainerClass": "Swimmer"
+        }
+      }
+    },
+    "kanto_route_19_swimmer_david": {
+      "entityId": "kanto_route_19_swimmer_david",
+      "mapId": "kanto_route_19",
+      "position": {
+        "x": 1264.0,
+        "y": 1712.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_19_swimmer_david"
+      ],
+      "trainers": {
+        "kanto_route_19_swimmer_david": {
+          "gymBadge": null,
+          "name": "Swimmer David",
+          "teamSize": 3,
+          "trainerClass": "Swimmer"
+        }
+      }
+    },
+    "kanto_route_19_swimmer_douglas": {
+      "entityId": "kanto_route_19_swimmer_douglas",
+      "mapId": "kanto_route_19",
+      "position": {
+        "x": 816.0,
+        "y": 1904.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_19_swimmer_douglas"
+      ],
+      "trainers": {
+        "kanto_route_19_swimmer_douglas": {
+          "gymBadge": null,
+          "name": "Swimmer Douglas",
+          "teamSize": 4,
+          "trainerClass": "Swimmer"
+        }
+      }
+    },
+    "kanto_route_19_swimmer_matthew": {
+      "entityId": "kanto_route_19_swimmer_matthew",
+      "mapId": "kanto_route_19",
+      "position": {
+        "x": 1296.0,
+        "y": 1296.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_19_swimmer_matthew"
+      ],
+      "trainers": {
+        "kanto_route_19_swimmer_matthew": {
+          "gymBadge": null,
+          "name": "Swimmer Matthew",
+          "teamSize": 2,
+          "trainerClass": "Swimmer"
+        }
+      }
+    },
+    "kanto_route_19_swimmer_reece": {
+      "entityId": "kanto_route_19_swimmer_reece",
+      "mapId": "kanto_route_19",
+      "position": {
+        "x": 1008.0,
+        "y": 1360.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_19_swimmer_reece"
+      ],
+      "trainers": {
+        "kanto_route_19_swimmer_reece": {
+          "gymBadge": null,
+          "name": "Swimmer Reece",
+          "teamSize": 3,
+          "trainerClass": "Swimmer"
+        }
+      }
+    },
+    "kanto_route_19_swimmer_richard": {
+      "entityId": "kanto_route_19_swimmer_richard",
+      "mapId": "kanto_route_19",
+      "position": {
+        "x": 720.0,
+        "y": 1232.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_19_swimmer_richard"
+      ],
+      "trainers": {
+        "kanto_route_19_swimmer_richard": {
+          "gymBadge": null,
+          "name": "Swimmer Richard",
+          "teamSize": 2,
+          "trainerClass": "Swimmer"
+        }
+      }
+    },
+    "kanto_route_19_swimmer_tony": {
+      "entityId": "kanto_route_19_swimmer_tony",
+      "mapId": "kanto_route_19",
+      "position": {
+        "x": 1040.0,
+        "y": 1840.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/routes/kanto_route_19.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_route_19_swimmer_tony"
+      ],
+      "trainers": {
+        "kanto_route_19_swimmer_tony": {
+          "gymBadge": null,
+          "name": "Swimmer Tony",
+          "teamSize": 2,
+          "trainerClass": "Swimmer"
+        }
+      }
+    },
     "kanto_route_1_lass_zoe": {
       "entityId": "kanto_route_1_lass_zoe",
       "mapId": "kanto_route_1",
@@ -5458,6 +5734,18 @@
     "kanto_route_18_bird_keeper_jacob": "kanto_route_18_bird_keeper_jacob",
     "kanto_route_18_bird_keeper_ramiro": "kanto_route_18_bird_keeper_ramiro",
     "kanto_route_18_bird_keeper_wilton": "kanto_route_18_bird_keeper_wilton",
+    "kanto_route_19_sis_and_bro_lia": "kanto_route_19_sis_and_bro_lia",
+    "kanto_route_19_sis_and_bro_luc": "kanto_route_19_sis_and_bro_luc",
+    "kanto_route_19_swimmer_alice": "kanto_route_19_swimmer_alice",
+    "kanto_route_19_swimmer_anya": "kanto_route_19_swimmer_anya",
+    "kanto_route_19_swimmer_axle": "kanto_route_19_swimmer_axle",
+    "kanto_route_19_swimmer_connie": "kanto_route_19_swimmer_connie",
+    "kanto_route_19_swimmer_david": "kanto_route_19_swimmer_david",
+    "kanto_route_19_swimmer_douglas": "kanto_route_19_swimmer_douglas",
+    "kanto_route_19_swimmer_matthew": "kanto_route_19_swimmer_matthew",
+    "kanto_route_19_swimmer_reece": "kanto_route_19_swimmer_reece",
+    "kanto_route_19_swimmer_richard": "kanto_route_19_swimmer_richard",
+    "kanto_route_19_swimmer_tony": "kanto_route_19_swimmer_tony",
     "kanto_route_1_lass_zoe": "kanto_route_1_lass_zoe",
     "kanto_route_1_youngster_liam": "kanto_route_1_youngster_liam",
     "kanto_route_22_gary": "gary_route22",
