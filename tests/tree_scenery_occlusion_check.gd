@@ -6,6 +6,7 @@ var failed := false
 var images := {}
 var tiles := {}
 var compared := 0
+var animation_frames_compared := 0
 
 
 func _init() -> void:
@@ -42,6 +43,7 @@ func _run() -> void:
 	kanto_route_2.free()
 	world.free()
 	print("Tree scenery occlusion: %s; %d visual maps, %d tree cells compared" % ["FAIL" if failed else "PASS", count, compared])
+	print("Animated split frame comparisons: ", animation_frames_compared)
 	quit(1 if failed else 0)
 
 
@@ -58,13 +60,13 @@ func _check_map(world: Node, map: Node, id: String) -> void:
 		originals[layer] = layer.duplicate(0)
 		for cell: Vector2i in layer.get_used_cells():
 			var frames := Occlusion._tile_frames(layer, cell, images, tiles)
-			if frames.size() != 1:
+			if frames.is_empty():
 				continue
 			var hash := HashingContext.new()
 			hash.start(HashingContext.HASH_SHA256)
 			hash.update(frames[0].get_data())
 			if Trees.EVERGREEN_PARTS.values().has(hash.finish().hex_encode()):
-				cells[cell] = true
+				cells[cell] = maxi(cells.get(cell, 1), frames.size())
 	world.call("_normalize_map_depth_layer_z_indices", map)
 	var after: Array[TileMapLayer] = []
 	Occlusion._collect_layers(map, after)
@@ -74,6 +76,20 @@ func _check_map(world: Node, map: Node, id: String) -> void:
 			baseline.append(originals.get(layer, layer))
 	_sort_layers(baseline)
 	_sort_layers(after)
+	var animated_splits := {}
+	for base: TileMapLayer in originals:
+		var original: TileMapLayer = originals[base]
+		for cell: Vector2i in cells:
+			if cells[cell] <= 1 or base.get_cell_source_id(cell) < 0 or original.get_cell_source_id(cell) < 0:
+				continue
+			var source := base.tile_set.get_source(base.get_cell_source_id(cell)) as TileSetAtlasSource
+			var old_source := original.tile_set.get_source(original.get_cell_source_id(cell)) as TileSetAtlasSource
+			if old_source.get_tile_animation_frames_count(original.get_cell_atlas_coords(cell)) > 1 and (base.get_cell_source_id(cell) != original.get_cell_source_id(cell) or base.get_cell_atlas_coords(cell) != original.get_cell_atlas_coords(cell)):
+				animated_splits[cell] = true
+				_check_timeline(source, base.get_cell_atlas_coords(cell), old_source, original.get_cell_atlas_coords(cell), id)
+				for raised: TileMapLayer in after:
+					if raised.get_meta(Occlusion.TREE_META, false) and raised.get_cell_source_id(cell) >= 0 and raised.get_node_or_null(raised.get_meta(Occlusion.SOURCE_META, NodePath())) == base:
+						_check_timeline(raised.tile_set.get_source(raised.get_cell_source_id(cell)), raised.get_cell_atlas_coords(cell), old_source, original.get_cell_atlas_coords(cell), id)
 	var changes := 0
 	for cell: Vector2i in cells:
 		var expected := _compose(baseline, cell)
@@ -82,6 +98,10 @@ func _check_map(world: Node, map: Node, id: String) -> void:
 			changes += 1
 			if changes <= 3:
 				push_error("%s changed scenery at %s" % [id, cell])
+		if animated_splits.has(cell):
+			for frame in range(1, cells[cell]):
+				_check(_compose(baseline, cell, frame).get_data() == _compose(after, cell, frame).get_data(), "%s animated foliage at %s frame %d" % [id, cell, frame])
+				animation_frames_compared += 1
 		compared += 1
 	_check(changes == 0, "%s preserves scenery at every evergreen cell (%d differences)" % [id, changes])
 	var snapshot := _snapshot(map)
@@ -111,6 +131,19 @@ func _check_split_and_animation() -> void:
 	var tileset := TileSet.new()
 	tileset.tile_size = Vector2i(32, 32)
 	tileset.add_source(atlas, 0)
+	var tree_pixels := Image.create(64, 32, false, Image.FORMAT_RGBA8)
+	tree_pixels.blit_rect(pixels, Rect2i(0, 0, 32, 32), Vector2i.ZERO)
+	tree_pixels.fill_rect(Rect2i(32, 0, 32, 16), Color(0.1, 0.3, 0.9, 0.4))
+	var tree_atlas := TileSetAtlasSource.new()
+	tree_atlas.texture_region_size = Vector2i(32, 32)
+	tree_atlas.texture = ImageTexture.create_from_image(tree_pixels)
+	tree_atlas.create_tile(Vector2i.ZERO)
+	tree_atlas.set_tile_animation_columns(Vector2i.ZERO, 2)
+	tree_atlas.set_tile_animation_frames_count(Vector2i.ZERO, 2)
+	tree_atlas.set_tile_animation_speed(Vector2i.ZERO, 1.7)
+	tree_atlas.set_tile_animation_frame_duration(Vector2i.ZERO, 0, 0.11)
+	tree_atlas.set_tile_animation_frame_duration(Vector2i.ZERO, 1, 0.23)
+	tileset.add_source(tree_atlas, 1)
 	var base := TileMapLayer.new()
 	base.name = "TreeBottom"
 	base.z_index = 2
@@ -125,27 +158,35 @@ func _check_split_and_animation() -> void:
 	raised.z_as_relative = false
 	raised.z_index = 100
 	raised.tile_set = tileset
-	raised.set_cell(Vector2i.ZERO, 0, Vector2i.ZERO)
-	raised.set_cell(Vector2i(2, 0), 0, Vector2i.ZERO)
+	raised.set_cell(Vector2i.ZERO, 1, Vector2i.ZERO)
+	raised.set_cell(Vector2i(2, 0), 1, Vector2i.ZERO)
+	raised.set_cell(Vector2i(4, 0), 1, Vector2i.ZERO)
+	foreground.set_cell(Vector2i(4, 0), 0, Vector2i(1, 0), TileSetAtlasSource.TRANSFORM_FLIP_H)
 	raised.set_meta(Occlusion.TREE_META, true)
 	map.add_child(raised)
 	raised.set_meta(Occlusion.SOURCE_META, raised.get_path_to(base))
-	_check(Occlusion.preserve_scenery(map) == 1, "only the overlapped cell is split")
-	_check(tileset.get_source_count() == 1 and foreground.tile_set == tileset, "shared/animated scenery resources remain unchanged")
+	_check(Occlusion.preserve_scenery(map) == 2, "only the two overlapped animated cells are split")
+	_check(tileset.get_source_count() == 2 and foreground.tile_set == tileset, "shared/animated scenery resources remain unchanged")
 	_check(base.tile_set == raised.tile_set and base.tile_set != tileset, "split pieces share one local atlas")
-	_check(raised.get_cell_source_id(Vector2i(2, 0)) == 0, "unobstructed tree art keeps its original source and depth")
-	var low := Occlusion._tile_frames(base, Vector2i.ZERO, images, tiles)[0]
-	var high := Occlusion._tile_frames(raised, Vector2i.ZERO, images, tiles)[0]
-	var tree := pixels.get_region(Rect2i(0, 0, 32, 32))
-	for frame_index in range(2):
-		var frame := pixels.get_region(Rect2i(32 + frame_index * 32, 0, 32, 32))
-		frame.flip_x()
-		var expected := tree.duplicate() as Image
-		expected.blend_rect(frame, Rect2i(0, 0, 32, 32), Vector2i.ZERO)
-		var actual := low.duplicate() as Image
-		actual.blend_rect(frame, Rect2i(0, 0, 32, 32), Vector2i.ZERO)
-		actual.blend_rect(high, Rect2i(0, 0, 32, 32), Vector2i.ZERO)
-		_check(expected.get_data() == actual.get_data(), "flipped, partially transparent foreground preserves every animation frame")
+	_check(raised.get_cell_source_id(Vector2i(2, 0)) == 1, "unobstructed tree art keeps its original source and depth")
+	_check(base.get_cell_atlas_coords(Vector2i.ZERO) == base.get_cell_atlas_coords(Vector2i(4, 0)) and raised.get_cell_atlas_coords(Vector2i.ZERO) == raised.get_cell_atlas_coords(Vector2i(4, 0)), "identical animated masks share their runtime atlas cells")
+	var low_frames := Occlusion._tile_frames(base, Vector2i.ZERO, images, tiles)
+	var high_frames := Occlusion._tile_frames(raised, Vector2i.ZERO, images, tiles)
+	_check_timeline(base.tile_set.get_source(base.get_cell_source_id(Vector2i.ZERO)), base.get_cell_atlas_coords(Vector2i.ZERO), tree_atlas, Vector2i.ZERO, "synthetic base")
+	_check_timeline(raised.tile_set.get_source(raised.get_cell_source_id(Vector2i.ZERO)), raised.get_cell_atlas_coords(Vector2i.ZERO), tree_atlas, Vector2i.ZERO, "synthetic front")
+	for tree_frame in range(2):
+		var tree := tree_pixels.get_region(Rect2i(tree_frame * 32, 0, 32, 32))
+		for frame_index in range(2):
+			var frame := pixels.get_region(Rect2i(32 + frame_index * 32, 0, 32, 32))
+			frame.flip_x()
+			var expected := tree.duplicate() as Image
+			expected.blend_rect(frame, Rect2i(0, 0, 32, 32), Vector2i.ZERO)
+			var actual := low_frames[tree_frame].duplicate() as Image
+			actual.blend_rect(frame, Rect2i(0, 0, 32, 32), Vector2i.ZERO)
+			actual.blend_rect(high_frames[tree_frame], Rect2i(0, 0, 32, 32), Vector2i.ZERO)
+			_check(expected.get_data() == actual.get_data(), "animated tree and transparent/flipped foreground preserve every frame combination")
+	var low: Image = low_frames[0]
+	var high: Image = high_frames[0]
 	# Uncovered pixels still occlude an actor between the original base and
 	# crown depth; covered pixels remain behind the scenery at the old depth.
 	_check(high.get_pixel(0, 0).a > 0 and low.get_pixel(0, 0).a == 0, "visible tree pixels retain mount occlusion without double blending")
@@ -162,12 +203,12 @@ func _sort_layers(layers: Array[TileMapLayer]) -> void:
 		return a.z_index < b.z_index if a.z_index != b.z_index else original_order.find(a) < original_order.find(b))
 
 
-func _compose(layers: Array[TileMapLayer], cell: Vector2i) -> Image:
+func _compose(layers: Array[TileMapLayer], cell: Vector2i, frame: int = 0) -> Image:
 	var image := Image.create(32, 32, false, Image.FORMAT_RGBA8)
 	for layer: TileMapLayer in layers:
 		var frames := Occlusion._tile_frames(layer, cell, images, tiles)
 		if not frames.is_empty():
-			image.blend_rect(frames[0], Rect2i(0, 0, 32, 32), Vector2i.ZERO)
+			image.blend_rect(frames[frame % frames.size()], Rect2i(0, 0, 32, 32), Vector2i.ZERO)
 	return image
 
 
@@ -187,3 +228,12 @@ func _check(condition: bool, message: String) -> void:
 	if not condition:
 		failed = true
 		push_error(message)
+
+
+func _check_timeline(actual: TileSetAtlasSource, coords: Vector2i, original: TileSetAtlasSource, original_coords: Vector2i, context: String) -> void:
+	var count := original.get_tile_animation_frames_count(original_coords)
+	_check(actual.get_tile_animation_frames_count(coords) == count, context + " preserves foliage frame count")
+	_check(actual.get_tile_animation_speed(coords) == original.get_tile_animation_speed(original_coords), context + " preserves foliage speed")
+	_check(actual.get_tile_animation_mode(coords) == original.get_tile_animation_mode(original_coords), context + " preserves native animation mode")
+	for frame in range(count):
+		_check(actual.get_tile_animation_frame_duration(coords, frame) == original.get_tile_animation_frame_duration(original_coords, frame), context + " preserves foliage frame duration")
