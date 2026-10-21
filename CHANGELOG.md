@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Keep co-op trainer admission positions aligned with the latest authored Route 15 layout.
+
+- Keep 3D Mega Evolution effects loadable when battle scenes are preloaded, preserving separate battle sound controls.
+
 - Restore Fuchsia Gym’s invisible-wall blocking after its layer script was detached, preserving the edited maze.
 
 - Recreate Fuchsia Gym’s FireRed/LeafGreen invisible-wall maze in a separate editable puzzle layer, adapted to the artist hall.

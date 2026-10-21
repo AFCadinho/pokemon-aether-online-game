@@ -33,6 +33,7 @@ func _glow(color: Color) -> StandardMaterial3D:
 	return material
 
 func start(playback_speed: float) -> void:
+	var settings := get_node("/root/SettingsManager")
 	speed = maxf(playback_speed, 0.5)
 	var spark_material := _glow(Color("cba4ff"))
 	spark_material.albedo_texture = SPARK
@@ -66,13 +67,13 @@ func start(playback_speed: float) -> void:
 	flash.position.y = 1.2
 	add_child(flash)
 	charge_audio = AudioStreamPlayer.new()
-	charge_audio.bus = SettingsManager.get_audio_output_bus(SettingsManager.BATTLE_SFX_BUS)
+	charge_audio.bus = settings.get_audio_output_bus(settings.BATTLE_SFX_BUS)
 	if not OS.has_feature("web"):
 		charge_audio.stream = load(CHARGE_SOUND)
 	charge_audio.pitch_scale = speed
 	add_child(charge_audio)
 	reveal_audio = AudioStreamPlayer.new()
-	reveal_audio.bus = SettingsManager.get_audio_output_bus(SettingsManager.BATTLE_SFX_BUS)
+	reveal_audio.bus = settings.get_audio_output_bus(settings.BATTLE_SFX_BUS)
 	if not OS.has_feature("web"):
 		reveal_audio.stream = load(REVEAL_SOUND)
 	reveal_audio.pitch_scale = speed
