@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reimport Fuchsia City from the supplied Downloads visual, preserving runtime door/depth layer names; the source scenery has no tile animations.
+
 - Open the red-roof house in southern Fuchsia City with its furnished interior and a two-tile doorway in both directions.
 
 - Open Fuchsia City’s tall northwest house with two furnished floors, local stair travel and floor-specific camera masking.
