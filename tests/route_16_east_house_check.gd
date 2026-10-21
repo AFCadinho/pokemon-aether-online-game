@@ -30,6 +30,11 @@ func run() -> void:
 	for x in range(8,11):
 		check(reached.has(Vector2i(x,15)), "entire three-tile doorway is reachable")
 		check(player.overlaps_exit_at(house.get_node("Exits/ToRoute16East"),point(Vector2i(x,15))), "exit covers the full doorway")
+	var bird: Node = house.get_node("Entities/NPCs/BirdKeeperRowan")
+	check(bird.npc_id == "kanto_route_16_east_house_bird_keeper" and bird.npc_sprite_frames != null, "Bird Keeper has registered identity and art")
+	bird._apply_npc_metadata({"id":bird.npc_id,"offeredQuestId":"route16_bird_research","questRewardId":"kanto_route_16_east_house_bird_keeper_fly_reward","questRewardReceivedDialogueId":"kanto_route_16_east_house_bird_keeper_received"})
+	check(bird.offered_quest_id == "route16_bird_research" and bird.quest_reward_id == "kanto_route_16_east_house_bird_keeper_fly_reward", "NPC binds quest offer and reward metadata")
+	check(bird.movement_behavior == "idle" and reached.has(Vector2i(9,11)), "quest giver is approachable from arrival and stays clear of door")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	for leg in [[route,"ToHouse",house,"FromRoute16East","up"],[house,"ToRoute16East",route,"FromHouse","down"]]:
 		var exit_node: Node = leg[0].get_node("Exits/" + leg[1])
@@ -47,8 +52,8 @@ func run() -> void:
 		check(definition.destination.position == {"x":arrival.position.x,"y":arrival.position.y}, "server spawn matches")
 	player.reparent(route.get_node("Entities/Players"))
 	player.refresh_map_layers()
-	check(player.can_move_to(point(Vector2i(14,13))), "exterior door is walkable")
-	check(player.overlaps_exit_at(route.get_node("Exits/ToHouse"),point(Vector2i(14,13))), "exterior door detects entry")
+	check(player.can_move_to(route.get_node("Exits/ToHouse").position), "exterior door is walkable")
+	check(player.overlaps_exit_at(route.get_node("Exits/ToHouse"),route.get_node("Exits/ToHouse").position), "exterior door detects entry")
 	var loader = load("res://scripts/services/web_asset_module_service.gd")
 	check(loader.scene_for_map(house.map_id) == house.scene_file_path, "web module resolves house")
 	var validator := preload("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd").new()

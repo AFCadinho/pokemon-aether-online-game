@@ -7426,5 +7426,10 @@
   "ui.settings.section.sound_game": "Game sounds",
   "ui.settings.section.sound_interface": "Interface",
   "ui.settings.battle_sfx": "Battle effects",
-  "ui.settings.overworld_sfx": "Overworld sounds"
+  "ui.settings.overworld_sfx": "Overworld sounds",
+  "story.kanto.bird_research.title": "Wings Are Not Everything",
+  "story.kanto.bird_research.summary": "Catch a Spearow and a Doduo on Route 16 East after accepting, then return to Bird Keeper Rowan. Keep both Pokemon and receive the reusable HM Fly.",
+  "story.kanto.bird_research.spearow": "Catch a Spearow on Route 16 East.",
+  "story.kanto.bird_research.doduo": "Catch a Doduo on Route 16 East.",
+  "story.kanto.bird_research.return": "Return to Bird Keeper Rowan in the Route 16 East house."
 }

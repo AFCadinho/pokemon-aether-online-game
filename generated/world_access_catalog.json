@@ -3954,7 +3954,7 @@
 					"spawnMarker": "FromHouse",
 					"tile": {
 						"x": 14,
-						"y": 14
+						"y": 13
 					}
 				},
 				"from_route_16_gate": {
@@ -10189,7 +10189,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
 				"position": {
 					"x": 464.0,
-					"y": 464.0
+					"y": 432.0
 				},
 				"spawnMarker": "FromHouse"
 			},
