@@ -41,15 +41,13 @@ func _run() -> void:
 	for cell in template.get_node("Collision").get_used_cells():
 		_check(collision.get_cell_source_id(cell) != -1, "template collision is preserved")
 	var guard: Node = gate.get_node("Entities/NPCs/GateNPC")
-	_check(guard.visible and guard.passage_closed and not guard.requires_party_pokemon, "visible attendant closes the unfinished Route 19 passage")
-	_check(guard.npc_definition_id == "kanto_route_19_fuchsia_gate_attendant" and guard.blocked_dialogue_id == "area_closed_blocked", "attendant has registered closed-area dialogue")
-	for x in range(8,13):
-		var point := Vector2(x,18)*32+Vector2(16,16)
-		_check(guard.guards_world_position(point), "guard covers the full southern throat")
-		_check(player.call("_is_story_grid_step_blocked",point-Vector2(0,32),point,Vector2.DOWN), "real player cannot bypass the southern guard")
-		_check(not player.can_move_to(Vector2(x,19)*32+Vector2(16,16)), "static cap closes the full southern throat")
+	_check(guard.visible and not guard.passage_closed, "attendant opens the completed Route 19 passage")
 	var south: Area2D = gate.get_node("Exits/ToSouth")
-	_check(not south.monitoring and south.get_node("CollisionShape2D").disabled and south.target_scene_path.is_empty(), "pending Route 19 exit is disabled")
+	_check(south.monitoring and not south.get_node("CollisionShape2D").disabled, "Route 19 exit is enabled")
+	_check(south.target_spawn_name == "FromFuchsiaGate", "south exit targets the route arrival")
+	for x in range(9,12):
+		var point := Vector2(x,19)*32+Vector2(16,16)
+		_check(player.can_move_to(point) and south.contains_world_position(point), "southern exit aperture is open")
 	for spawn in gate.get_node("Spawns").get_children():
 		_check(player.can_move_to(spawn.position) and not guard.guards_world_position(spawn.position), "every gate arrival stays on free ground")
 		_check(gate.get_node("FloorVisibilityMask").floor_regions[&"ground_floor"].has_point(spawn.position), "gate arrivals are inside the visible floor")
@@ -57,8 +55,8 @@ func _run() -> void:
 	for definition in catalog.transitions.values():
 		if definition.sourceMapId == gate.map_id:
 			outgoing += 1
-			_check(definition.destinationAreaId == city.map_id, "only the Fuchsia return is authorized")
-	_check(outgoing == 1, "no transition targets the missing Route 19 scene")
+			_check(definition.destinationAreaId in [city.map_id, "kanto_route_19"], "both gate destinations are authorized")
+	_check(outgoing == 2, "gate has two working exits")
 	for y in range(6,18):
 		_check(player.can_move_to(Vector2(336,y*32+16)), "vertical corridor remains clear")
 	for x in range(9,12):
