@@ -636,6 +636,10 @@ func sync_activity_state_for_current_tile() -> void:
 	if surf_activity_active:
 		_finish_surf_activity("left_water")
 
+	# Map reparenting clears mount activity in _exit_tree, while the follower
+	# survives under World. Reapply its visibility for the arrival state.
+	refresh_pokemon_follower()
+
 func can_fish_here() -> bool:
 	if GameState.selected_fishing_rod_item_id.is_empty():
 		return false
