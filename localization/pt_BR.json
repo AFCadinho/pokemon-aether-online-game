@@ -7467,5 +7467,8 @@
   "ui.skills.thieving.target.kanto_pallet_town_resident_mara": "Pallet Resident Mara",
   "ui.skills.thieving.target.kanto_pallet_town_play_family_father": "Pallet Parent Aaron",
   "ui.skills.thieving.target.kanto_pallet_town_play_family_mother": "Pallet Parent Mina",
-  "ui.skills.thieving.target.police_warning": "Prisão garantida"
+  "ui.skills.thieving.target.police_warning": "Prisão garantida",
+  "story.kanto.fuchsia_gold_teeth.title": "Os Gold Teeth do guarda",
+  "story.kanto.fuchsia_gold_teeth.summary": "Devolva os Gold Teeth ao guarda na casa alta de Fuchsia City. Recompensa: HM Strength.",
+  "story.kanto.fuchsia_gold_teeth.return": "Leve os Gold Teeth ao guarda no térreo da casa alta de Fuchsia City."
 }

@@ -7467,5 +7467,8 @@
   "ui.skills.thieving.target.kanto_pallet_town_resident_mara": "Pallet Resident Mara",
   "ui.skills.thieving.target.kanto_pallet_town_play_family_father": "Ouder Aaron",
   "ui.skills.thieving.target.kanto_pallet_town_play_family_mother": "Ouder Mina",
-  "ui.skills.thieving.target.police_warning": "Gegarandeerde arrestatie"
+  "ui.skills.thieving.target.police_warning": "Gegarandeerde arrestatie",
+  "story.kanto.fuchsia_gold_teeth.title": "De Gold Teeth van de bewaker",
+  "story.kanto.fuchsia_gold_teeth.summary": "Breng de Gold Teeth terug naar de bewaker in het tall house in Fuchsia City. Beloning: HM Strength.",
+  "story.kanto.fuchsia_gold_teeth.return": "Breng de Gold Teeth naar de bewaker op de begane grond van het tall house in Fuchsia City."
 }

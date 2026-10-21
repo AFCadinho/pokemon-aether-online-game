@@ -8,6 +8,10 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_markers"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="7_hint"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="8_warden"]
+[ext_resource type="Script" path="res://scripts/world/npcs/fuchsia_warden.gd" id="9_warden_script"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_frames.tres" id="10_warden_frames"]
+
 [sub_resource type="RectangleShape2D" id="door_shape"]
 size = Vector2(96, 32)
 
@@ -167,6 +171,16 @@ y_sort_enabled = true
 [node name="Players" type="Node2D" parent="Entities" unique_id=569385606]
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1896875211]
+
+[node name="Warden" parent="Entities/NPCs" instance=ExtResource("8_warden")]
+position = Vector2(304, 880)
+script = ExtResource("9_warden_script")
+npc_id = "kanto_fuchsia_city_warden"
+npc_definition_id = "trainer_class_elder"
+dialogue_id = "fuchsia_warden_offer"
+display_name = "Safari Zone Warden"
+npc_sprite_frames = ExtResource("10_warden_frames")
+facing_direction = Vector2(0, 1)
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1324291096]
 

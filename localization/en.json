@@ -7467,5 +7467,8 @@
   "ui.skills.thieving.target.kanto_pallet_town_resident_mara": "Pallet Resident Mara",
   "ui.skills.thieving.target.kanto_pallet_town_play_family_father": "Pallet Parent Aaron",
   "ui.skills.thieving.target.kanto_pallet_town_play_family_mother": "Pallet Parent Mina",
-  "ui.skills.thieving.target.police_warning": "Guaranteed arrest"
+  "ui.skills.thieving.target.police_warning": "Guaranteed arrest",
+  "story.kanto.fuchsia_gold_teeth.title": "The Warden’s Gold Teeth",
+  "story.kanto.fuchsia_gold_teeth.summary": "Return the Warden’s Gold Teeth to him in Fuchsia City’s tall house. Reward: HM Strength.",
+  "story.kanto.fuchsia_gold_teeth.return": "Bring the Gold Teeth to the Warden on the ground floor of Fuchsia City’s tall house."
 }

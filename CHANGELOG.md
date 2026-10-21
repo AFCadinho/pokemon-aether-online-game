@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Safari Zone Warden’s optional Gold Teeth return quest in Fuchsia City’s tall house, rewarding one HM Strength.
+
 - Restore Fuchsia City’s three sign content bindings so their localized text and illustrations appear again.
 
 - Reimport Fuchsia City from the current artist TMX, including its fountain and flower animations and offset gate layers.
