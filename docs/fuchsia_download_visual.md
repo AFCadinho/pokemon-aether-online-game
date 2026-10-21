@@ -1,33 +1,29 @@
-# Fuchsia City Downloads visual
+# Fuchsia City visual import
 
-The current visual is imported from `/home/adinho/Downloads/Fuchsia City.tmx`
-(72 × 50 tiles) and its adjacent `Outside Tileset.tsx` / `5GEN_TILESET.png`.
-The source files are unchanged.
+The current visual comes from
+`/home/adinho/Documents/tiled_pokeaether/kanto/artist/exterior/towns/Fuchsia City.tmx`
+(72 × 50 tiles). Source artwork and TMX files remain unchanged.
 
-Reimport in an assigned slot using `tools/import_fuchsia_download_visual.gd`,
-passing the source TMX after `--`. This wrapper uses the existing visual importer
-and restores the runtime layer contract after reading the older export:
+Reimport in an assigned slot with the standard visual importer:
 
-| Original layer | Runtime layer |
-| --- | --- |
-| Capa de patrones 1 | Ground |
-| Capa de patrones 2 | GroundDetail |
-| Capa de patrones 3 | Objects |
-| Doors | Doors |
-| Capa de patrones 4 | ObjectsTop |
+```sh
+ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend --script res://addons/pokeaether_tiled_importer/import_pokeaether_tmx_cli.gd -- '/home/adinho/Documents/tiled_pokeaether/kanto/artist/exterior/towns/Fuchsia City.tmx' fuchsia_city
+```
 
-Original names are retained as metadata. ObjectsTop receives the normal overlay
-z-index. This preserves the existing door source-layer paths and World depth
-handling without changing tile placement, artwork, collision, NPCs, map exits,
-house scenes or night-light placements.
+This source already uses the runtime layer names: Ground, GroundDetail,
+Objects, GateObjects, Doors, ObjectsTop and GateObjectsTop. Preserve the gate
+layers’ 16-pixel horizontal offsets and explicit depth properties. Its shared
+outside, route-flower and fountain tilesets supply tile animations.
 
-The downloaded TSX declares an outdated PNG height (48,000 rather than the
-actual 50,600 pixels). The importer already derives atlas dimensions from the
-actual image. All used cells and the resulting compact atlas were validated.
-The source has no tile animations: its fountain/flowers are static. Runtime
-nightlights and animated exterior doors remain independent and are preserved.
+The previous Downloads export used Spanish layer names and static scenery.
+`tools/import_fuchsia_download_visual.gd` remains available specifically for
+that older export; it is unnecessary for the current artist source.
 
-Validation included all five source layer cell counts, compact-atlas validation,
-loading the actual city scene and native-Tiled versus Godot overview comparison
-(maximum RGB difference: 1/255 per channel). Both Fuchsia house checks and the
-night-light camera/batch checks cover the retained gameplay/rendering contract.
+The existing gameplay scene, collision, NPCs, signs, exits, nightlights and house
+connections are separate from the generated visual. Preserve the corrected
+Door74 leaf bounds (704, 280, 32, 36), which include the full tall-house door.
+
+Validation: source CSV/atlas audit, all seven imported layer cell counts,
+compact-atlas validation, actual city scene loading, Godot visual review and
+shared door controller checks. Visual import does not certify gameplay
+collision or server-authorized travel.

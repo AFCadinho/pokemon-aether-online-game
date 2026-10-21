@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reimport Fuchsia City from the current artist TMX, including its fountain and flower animations and offset gate layers.
+
 - Animate the full door of Fuchsia City’s tall northwest house, including its top edge.
 
 - Reimport Fuchsia City from the supplied Downloads visual, preserving runtime door/depth layer names; the source scenery has no tile animations.
