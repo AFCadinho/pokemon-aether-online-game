@@ -317,6 +317,9 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_smn6a")
 
+[sub_resource type="RectangleShape2D" id="shape_standard_door"]
+size = Vector2(32, 32)
+
 [node name="VermilionCity" type="Node2D" unique_id=1587146923]
 script = ExtResource("2_metadata")
 water_reference_tile = Vector2i(0, 50)
@@ -488,7 +491,8 @@ transition_id = "kanto_vermilion_city__to_pokemon_center"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=422639044]
-shape = SubResource("shape_center_door")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=245838150 instance=ExtResource("center_door_hint")]
 z_as_relative = false
@@ -517,7 +521,8 @@ transition_id = "kanto_vermilion_city__to_pokemon_fan_club"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToFanClub" unique_id=1006196329]
-shape = SubResource("shape_center_door")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToFanClub" unique_id=124496704 instance=ExtResource("center_door_hint")]
 z_as_relative = false
@@ -531,8 +536,8 @@ transition_id = "kanto_vermilion_city__to_house_1"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1" unique_id=1242285863]
-position = Vector2(0, -8)
-shape = SubResource("shape_center_door")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse1" unique_id=570903684 instance=ExtResource("center_door_hint")]
 z_as_relative = false
@@ -546,7 +551,8 @@ transition_id = "kanto_vermilion_city__to_house_2"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse2" unique_id=1274053681]
-shape = SubResource("shape_center_door")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse2" unique_id=1066027836 instance=ExtResource("center_door_hint")]
 z_as_relative = false
@@ -560,7 +566,8 @@ transition_id = "kanto_vermilion_city__to_house_3"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse3" unique_id=1495354055]
-shape = SubResource("shape_center_door")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse3" unique_id=1802667975 instance=ExtResource("center_door_hint")]
 z_as_relative = false
@@ -1082,7 +1089,8 @@ transition_id = "kanto_vermilion_city__to_guild_base"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGuildBase"]
-shape = SubResource("shape_center_door")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToGuildBase" instance=ExtResource("center_door_hint")]
 z_as_relative = false
@@ -1091,3 +1099,11 @@ z_as_relative = false
 
 [node name="MapDoors" type="Node" parent="."]
 script = ExtResource("90_map_doors")
+
+[connection signal="body_entered" from="Exits/ToFanClub" to="Exits/ToFanClub" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToHouse1" to="Exits/ToHouse1" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToHouse2" to="Exits/ToHouse2" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToHouse3" to="Exits/ToHouse3" method="_on_body_entered"]

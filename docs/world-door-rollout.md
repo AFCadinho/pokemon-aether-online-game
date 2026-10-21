@@ -100,3 +100,30 @@ still overlaps it. These are local geometry/dispatch tests; backend loading
 is stubbed.
 `tools/audit_pallet_door_geometry.gd` reports actual global centers for all
 three Pallet building entrances without confusing parent and child offsets.
+
+
+## Building entrance trigger standard
+
+Use the approved Pallet geometry for every building door: a 32×32 rectangle
+centered 16 pixels above the walkable doorway tile. The bottom edge passes
+through the player's feet at that tile; actual player-body overlap triggers
+entry. A feet-only containment assertion at that edge is incorrect. Keep
+collision resources separate from route borders, stairs, arches and interior
+exits when changing a shared shape.
+
+Align the transition hint to the doorway's 32px movement-grid tile, identified
+by the last row of the door artwork. The raised Celadon roof-room facade
+has its walkable threshold one tile below that row, at (144, 496). Preserve the destination, access checks,
+return markers and animations. New animated doors added to `map_doors.json`
+automatically participate in the geometry/physics check; update its explicit
+coverage count when extending the catalog. The three Viridian building
+entrances and Pewter gym pilots are covered separately. The unavailable
+Viridian gym uses the same geometry but remains without a configured exit.
+
+`door_entrance_reachability_check.gd` covers all 51 configured building door
+entrances on 21 maps: exact shape/center, hint alignment, walkable threshold,
+connected body-entry signal, no early approach overlap, one entry dispatch,
+and no retrigger at every configured return spawn. It retains the independent
+Pallet coordinates and interior return checks. These are local Godot physics
+tests; no live backend round trip is exercised. Interior exits, route borders,
+open arches and stairs keep their own directional transition geometry.

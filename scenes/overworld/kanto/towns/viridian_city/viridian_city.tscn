@@ -511,6 +511,9 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_bddn7")
 
+[sub_resource type="RectangleShape2D" id="shape_standard_door"]
+size = Vector2(32, 32)
+
 [node name="ViridianCity" type="Node2D" unique_id=1723060210]
 script = ExtResource("2_meta")
 
@@ -768,18 +771,18 @@ target_spawn_name = "FromOutside"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=1819054204]
 position = Vector2(0, -16)
-shape = SubResource("RectangleShape2D_pokecenter")
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=1557132228 instance=ExtResource("5_pokecenter_hint")]
+position = Vector2(0, 0)
 z_as_relative = false
-position = Vector2(0, -16)
 
 [node name="ToGym" type="Area2D" parent="Exits" unique_id=1148981725]
 position = Vector2(1328, 400)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGym" unique_id=1048069670]
 position = Vector2(0, -16)
-shape = SubResource("RectangleShape2D_pokecenter")
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToGym" unique_id=636064968 instance=ExtResource("5_pokecenter_hint")]
 z_as_relative = false
@@ -793,11 +796,11 @@ target_spawn_name = "FromViridianCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTrainerSchool" unique_id=1936541123]
 position = Vector2(0, -16)
-shape = SubResource("RectangleShape2D_pokecenter")
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToTrainerSchool" unique_id=365255666 instance=ExtResource("5_pokecenter_hint")]
+position = Vector2(0, 0)
 z_as_relative = false
-position = Vector2(0, -16)
 
 [node name="ToHouse1" type="Area2D" parent="Exits" unique_id=107727932]
 position = Vector2(1552, 880)
@@ -806,12 +809,12 @@ target_scene_path = "res://scenes/overworld/kanto/towns/viridian_city/house1.tsc
 target_spawn_name = "FromViridianCity"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1" unique_id=1913481857]
-position = Vector2(0, -8)
-shape = SubResource("RectangleShape2D_pokecenter")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse1" unique_id=1203691387 instance=ExtResource("5_pokecenter_hint")]
+position = Vector2(0, 0)
 z_as_relative = false
-position = Vector2(0, -8)
 
 [node name="Entities" type="Node2D" parent="." unique_id=1429917979]
 z_index = 5
@@ -1115,3 +1118,7 @@ movement_sound_id = "sliding_door"
 source_layers = Array[NodePath]([NodePath("../StructureBottom"), NodePath("../Doors")])
 players_path = NodePath("../../Entities/Players")
 access_lock_path = NodePath("../../Entities/Interactables/Locks/GymDoorLock")
+
+[connection signal="body_entered" from="Exits/ToHouse1" to="Exits/ToHouse1" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToTrainerSchool" to="Exits/ToTrainerSchool" method="_on_body_entered"]

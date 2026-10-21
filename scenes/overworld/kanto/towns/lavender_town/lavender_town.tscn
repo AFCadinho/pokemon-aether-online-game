@@ -228,8 +228,8 @@ position = Vector2(0, -16)
 shape = SubResource("shape_pokemon_center_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=1811828563 instance=ExtResource("14_door_hint")]
+position = Vector2(0, 0)
 z_as_relative = false
-position = Vector2(0, -16)
 
 [node name="ToPokemonTower" type="Area2D" parent="Exits" unique_id=1888596360]
 position = Vector2(1072, 496)

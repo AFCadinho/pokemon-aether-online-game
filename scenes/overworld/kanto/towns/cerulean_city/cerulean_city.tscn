@@ -368,6 +368,9 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_nf6b6")
 
+[sub_resource type="RectangleShape2D" id="shape_standard_door"]
+size = Vector2(32, 32)
+
 [node name="CeruleanCity" type="Node2D" unique_id=1286302656]
 script = ExtResource("2_city")
 map_id = "kanto_cerulean_city"
@@ -664,8 +667,8 @@ transition_id = "kanto_cerulean_city__to_house_1"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1" unique_id=1891421708]
-position = Vector2(8, -16)
-shape = SubResource("RectangleShape2D_door_exit")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse1" unique_id=909563587 instance=ExtResource("8_door_hint")]
 z_as_relative = false
@@ -682,6 +685,7 @@ transition_facing_direction = "up"
 shape = SubResource("RectangleShape2D_door_exit")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokemonCenter" unique_id=1671865357 instance=ExtResource("8_door_hint")]
+position = Vector2(0, 16)
 z_as_relative = false
 
 [node name="ToGym" type="Area2D" parent="Exits" unique_id=791741072]
@@ -708,7 +712,8 @@ transition_id = "kanto_cerulean_city__to_bike_store"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToBikeStore" unique_id=706782338]
-shape = SubResource("RectangleShape2D_door_exit")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToBikeStore" unique_id=22415696 instance=ExtResource("8_door_hint")]
 z_as_relative = false

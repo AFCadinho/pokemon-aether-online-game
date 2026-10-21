@@ -188,6 +188,9 @@ sources/0 = SubResource("TileSetAtlasSource_jwiik")
 [sub_resource type="RectangleShape2D" id="rocket_sighting_shape"]
 size = Vector2(224, 160)
 
+[sub_resource type="RectangleShape2D" id="shape_standard_door"]
+size = Vector2(32, 32)
+
 [node name="Route7" type="Node2D" unique_id=50296000]
 script = ExtResource("2_metadata")
 map_id = "kanto_route_7"
@@ -225,7 +228,8 @@ transition_id = "kanto_route_7__to_underground_path"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToUndergroundPath" unique_id=259401926]
-shape = SubResource("underground_exit_shape")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToUndergroundPath" unique_id=1278893722 instance=ExtResource("4_door_hint")]
 z_as_relative = false
