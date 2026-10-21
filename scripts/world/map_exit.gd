@@ -339,4 +339,5 @@ func _present_travel_block(player: Node2D, reason: String) -> void:
 				}, player)
 				is_transitioning = false
 				return
-	get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text(reason))
+	var localization := get_node("/root/LocalizationManager")
+	get_tree().call_group("ui_overlay", "add_system_message", localization.call("text", reason))

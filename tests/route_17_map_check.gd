@@ -56,8 +56,14 @@ func _run() -> void:
 	root.add_child(map)
 	state.acquire_overworld_input_lock(&"route17_map_check")
 	for x in range(15,24): _check(not player.can_move_to(_point(Vector2i(x,-1))), "real movement cannot leave map after failed north transfer")
-	for y in range(72):
-		for x in [0,39]: _check(not player.can_move_to(_point(Vector2i(x,y))), "outer east/west edge contained")
+	for surfing in [false,true]:
+		player.surf_activity_active = surfing
+		for y in range(72):
+			for x in [-1,0,39,40]: _check(not player.can_move_to(_point(Vector2i(x,y))), "outer east/west edge contained, including Surf and failed transfers")
+		for x in range(40):
+			for y in [-1,71,72]: _check(not player.can_move_to(_point(Vector2i(x,y))), "north/south outside caps contain Surf and failed transfers")
+		if surfing: _check(player.can_move_to(_point(Vector2i(2,5))), "Surf control remains available on interior water")
+	player.surf_activity_active = false
 	for x in range(40):
 		_check(collision.get_cell_source_id(Vector2i(x,71)) != -1, "south edge contained")
 		if x < 15 or x > 23: _check(not player.can_move_to(_point(Vector2i(x,0))), "northern water edges contained")
