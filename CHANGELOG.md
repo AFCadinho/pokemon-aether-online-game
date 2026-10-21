@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add localized text and illustrated portraits to all three Fuchsia City signs.
+
 - Enable day/night tallgrass encounters on Route 19, including co-op grass battles.
 
 - Update Route 15 scenery from the latest artist map.

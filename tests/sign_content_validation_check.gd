@@ -1,6 +1,7 @@
 extends SceneTree
 
 const OVERWORLD_SCENE_MAP_IDS: Dictionary = {
+	"res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn": "kanto_fuchsia_city",
 	"res://scenes/overworld/kanto/towns/celadon_city/celadon_city.tscn": "kanto_celadon_city",
 	"res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn": "kanto_cinnabar_island",
 	"res://scenes/overworld/kanto/routes/kanto_route_1.tscn": "kanto_route_1",
