@@ -4,6 +4,12 @@
 
 - Enable Thieving for ordinary outdoor dialogue NPCs in every town and list them by town in the Skills window. Police targets show a guaranteed arrest warning.
 
+- Refresh Fuchsia City scenery and animations from the latest artist TMX.
+
+- Add localized route information, Surf advice and coastal-wildlife signs with illustrated portraits on Route 19.
+
+- Give transition-building attendants ordinary local dialogue; reserve closure warnings and Saffron gate story conversations for attempted passage.
+
 - Restore the enabled Pokémon follower when entering an indoor map from a mount.
 
 - Reimport Route 15 scenery from the latest artist TMX.

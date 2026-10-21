@@ -23,6 +23,9 @@
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_f_frames.tres" id="beach_coast_watcher"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="beach_resting_sailor"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/sign_interactable.tscn" id="r19_small_sign"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="r19_large_sign"]
+
 [sub_resource type="RectangleShape2D" id="GateShape"]
 size = Vector2(96, 32)
 
@@ -472,6 +475,31 @@ movement_tiles = 1
 movement_wait_seconds = 1.8
 movement_speed_pixels = 28.0
 movement_wait_jitter_seconds = 0.5
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Signs" type="Node2D" parent="Entities/Interactables"]
+
+[node name="RouteSign" parent="Entities/Interactables/Signs" instance=ExtResource("r19_large_sign")]
+position = Vector2(944, 1136)
+sign_id = "kanto_route_19_route_sign"
+sign_type = "road"
+content_source = "local"
+fallback_lines = Array[String](["Route 19 — from the beach to the open sea.", "North: Fuchsia City. South: the sea route toward the Seafoam Islands."])
+
+[node name="SurfTipsSign" parent="Entities/Interactables/Signs" instance=ExtResource("r19_large_sign")]
+position = Vector2(1072, 1616)
+sign_id = "kanto_route_19_surf_tips"
+sign_type = "trainer_tips"
+content_source = "local"
+fallback_lines = Array[String](["You need Surf to travel beyond this point.", "Prepare your Pokémon before setting out to sea!"])
+
+[node name="CoastalGrassSign" parent="Entities/Interactables/Signs" instance=ExtResource("r19_small_sign")]
+position = Vector2(816, 1392)
+sign_id = "kanto_route_19_coastal_grass"
+sign_type = "trainer_tips"
+content_source = "local"
+fallback_lines = Array[String](["There is plenty of life above the tideline, too.", "Wild Pokémon hide among the coastal grasses!"])
 
 [node name="Spawns" type="Node2D" parent="." unique_id=745818965]
 

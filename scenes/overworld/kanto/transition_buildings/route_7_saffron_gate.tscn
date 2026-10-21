@@ -20,7 +20,7 @@ guarded_transition_id = "kanto_route_7_saffron_gate__to_saffron_city"
 requires_party_pokemon = false
 blocked_dialogue_id = "kanto_route_6_saffron_gate_unsafe"
 story_blocked_dialogue_id = "kanto_route_6_saffron_gate_unsafe"
-allowed_dialogue_id = "kanto_saffron_gate_open"
+allowed_dialogue_id = "kanto_saffron_gate_greeting"
 
 [node name="ToWest" parent="Exits" parent_id_path=PackedInt32Array(651492576) index="0"]
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_7.tscn"

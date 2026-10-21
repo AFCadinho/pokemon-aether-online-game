@@ -169,6 +169,7 @@ requires_party_pokemon = false
 npc_definition_id = "horizontal_gate_attendant"
 npc_sprite_frames = SubResource("SpriteFrames_vbqux")
 manual_interaction_reach_tiles = 2
+separate_passage_dialogue = true
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1026242201]
 

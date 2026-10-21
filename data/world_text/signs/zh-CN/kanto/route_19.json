@@ -1,0 +1,33 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_route_19",
+  "signs": [
+    {
+      "id": "kanto_route_19_route_sign",
+      "type": "road",
+      "title": "19号道路",
+      "lines": [
+        "19号道路——从沙滩通往辽阔大海。",
+        "北方：浅红市。南方：通往双子岛方向的海上道路。"
+      ]
+    },
+    {
+      "id": "kanto_route_19_surf_tips",
+      "type": "trainer_tips",
+      "title": "安全冲浪",
+      "lines": [
+        "继续前进需要使用冲浪。",
+        "出海之前，请先让宝可梦做好准备！"
+      ]
+    },
+    {
+      "id": "kanto_route_19_coastal_grass",
+      "type": "trainer_tips",
+      "title": "海岸生态",
+      "lines": [
+        "潮水线以上的海岸也充满生机。",
+        "海边的高草丛中藏着野生宝可梦！"
+      ]
+    }
+  ]
+}

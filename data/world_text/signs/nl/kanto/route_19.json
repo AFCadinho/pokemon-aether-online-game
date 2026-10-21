@@ -1,0 +1,33 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_route_19",
+  "signs": [
+    {
+      "id": "kanto_route_19_route_sign",
+      "type": "road",
+      "title": "Route 19",
+      "lines": [
+        "Route 19 — van het strand naar de open zee.",
+        "Noord: Fuchsia City. Zuid: de zeeroute richting de Seafoam Islands."
+      ]
+    },
+    {
+      "id": "kanto_route_19_surf_tips",
+      "type": "trainer_tips",
+      "title": "Veilig met Surf",
+      "lines": [
+        "Voorbij dit punt heb je Surf nodig.",
+        "Bereid je Pokémon voor voordat je de zee op gaat!"
+      ]
+    },
+    {
+      "id": "kanto_route_19_coastal_grass",
+      "type": "trainer_tips",
+      "title": "Kustnatuur",
+      "lines": [
+        "Ook boven de vloedlijn zit het vol leven.",
+        "Tussen het kustgras verschuilen zich wilde Pokémon!"
+      ]
+    }
+  ]
+}

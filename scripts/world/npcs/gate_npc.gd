@@ -8,6 +8,8 @@ const GUARD_ROLE_ATTENDANT := "attendant"
 const GUARD_ROLE_TRANSITION := "transition_guard"
 
 @export var gate_id := "route_1"
+## Counter attendants greet visitors; access warnings belong to passage attempts.
+@export var separate_passage_dialogue := false
 @export_enum("attendant", "transition_guard") var guard_role := GUARD_ROLE_ATTENDANT
 @export var guarded_transition_id := ""
 ## Optional guard-owned passage zone, centered at this offset from the NPC or anchor.
@@ -92,13 +94,42 @@ func on_route_gate_blocked(player: Node2D) -> void:
 	if player.has_method("face_world_position"):
 		player.face_world_position(get_feet_position())
 
-	await show_gate_dialogue()
+	if not await _try_passage_story_interaction(player):
+		await show_gate_dialogue()
 	_set_idle_frame(_get_cardinal_direction(facing_direction))
 	GameState.unlock_overworld_input()
 
 
 func interact_with_player(_player: Node2D) -> void:
-	await show_gate_dialogue()
+	if not separate_passage_dialogue:
+		await show_gate_dialogue()
+		return
+	var response := await _load_gate_metadata()
+	if not bool(response.get("success", false)):
+		await GameErrorDialogService.show_report_to_staff_message()
+		return
+	var lines := await _resolve_dialogue_lines(allowed_dialogue_id, allowed_dialogue_lines)
+	if not lines.is_empty():
+		await show_dialogue(lines)
+
+
+func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
+	if separate_passage_dialogue:
+		await interact_with_player(body)
+		return {"success": true, "handled": false, "legacy": true}
+	return await super._run_story_or_legacy_interaction(body, trigger)
+
+
+func _try_passage_story_interaction(player: Node2D) -> bool:
+	if not separate_passage_dialogue:
+		return false
+	var hook := _find_story_hook()
+	if hook == null or not bool(hook.call("is_configured")):
+		return false
+	# Keep the existing server-owned quest interaction and completion protocol,
+	# but start it only when the player actually attempts this passage.
+	var result: Dictionary = await hook.call("try_handle_interaction", self, player, "interact")
+	return not bool(result.get("success", false)) or bool(result.get("handled", false))
 
 
 func show_gate_dialogue() -> void:
@@ -162,7 +193,8 @@ func present_world_transition_denied(access: Dictionary, player: Node2D) -> void
 	_face_body(player)
 	if player.has_method("face_world_position"):
 		player.face_world_position(get_feet_position())
-	await _show_transition_denied_dialogue(transition_access)
+	if not await _try_passage_story_interaction(player):
+		await _show_transition_denied_dialogue(transition_access)
 	_set_idle_frame(_get_cardinal_direction(facing_direction))
 	GameState.unlock_overworld_input()
 
@@ -301,7 +333,8 @@ func _sync_guard_presence() -> void:
 	if guard_role != GUARD_ROLE_TRANSITION:
 		return
 	var should_be_present := (
-		passage_closed
+		separate_passage_dialogue
+		or passage_closed
 		or not transition_access_resolved
 		or not _are_local_gate_requirements_met()
 		or not bool(transition_access.get("allowed", false))
