@@ -293,7 +293,7 @@ func _build_crash_report(previous_state: Dictionary) -> String:
 		"Rendering method: %s" % RenderingServer.get_current_rendering_method(),
 		"Graphics adapter: %s" % _single_line(RenderingServer.get_video_adapter_name()),
 		"Device model: %s" % _single_line(OS.get_model_name()),
-		"Experimental Android 3D: %s" % bool(previous_state.get("experimentalAndroid3D", false)),
+		"Android 3D: %s" % bool(previous_state.get("experimentalAndroid3D", false)),
 		"Previous lifecycle: %s" % lifecycle,
 		"Source log: %s" % source_name,
 	])

@@ -4,6 +4,8 @@
 
 - Preserve roofs, walls, fences and overlapping tree crowns when sorting tree bases around players and mounts, including Viridian City and Route 2.
 
+- Present Android 3D battles as a regular visual option, removing experimental labels from selection, settings and recovery messages in all supported languages.
+
 - Fix overlapping facial surfaces on Android 3D Pokémon models, including Golem and Alakazam, by retaining their required depth prepass.
 
 - Include Routes 16–18, both Cycling Road gates and Route 18 Underground Mine in the browser’s on-demand Kanto map pack.
