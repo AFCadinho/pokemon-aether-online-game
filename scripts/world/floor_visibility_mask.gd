@@ -137,10 +137,16 @@ func _sync_camera_limits_to_active_floor(player: Node2D = null) -> void:
 	)
 	var padded_region := Rect2(global_floor_region.get_center() - padded_size * 0.5, padded_size)
 
-	var new_left := floori(padded_region.position.x)
-	var new_top := floori(padded_region.position.y)
-	var new_right := ceili(padded_region.end.x)
-	var new_bottom := ceili(padded_region.end.y)
+	# Padded axes must have no scrollable slack. Rounding outward creates up
+	# to two world pixels of travel at fractional zoom, making a small room
+	# shift when the player crosses its center. Round those axes inward;
+	# retain outward limits for floors that genuinely need camera scrolling.
+	var lock_x := global_floor_region.size.x <= visible_world_size.x
+	var lock_y := global_floor_region.size.y <= visible_world_size.y
+	var new_left := ceili(padded_region.position.x) if lock_x else floori(padded_region.position.x)
+	var new_top := ceili(padded_region.position.y) if lock_y else floori(padded_region.position.y)
+	var new_right := floori(padded_region.end.x) if lock_x else ceili(padded_region.end.x)
+	var new_bottom := floori(padded_region.end.y) if lock_y else ceili(padded_region.end.y)
 	if (
 		camera.limit_left == new_left
 		and camera.limit_top == new_top
