@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reimport Route 15 scenery from the latest artist TMX.
+
 - Add nighttime lighting to Fuchsia City’s street lamps and building windows, following the shared day/night cycle.
 
 - Add localized text and illustrated portraits to all three Fuchsia City signs.
