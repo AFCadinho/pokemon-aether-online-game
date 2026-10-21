@@ -8,6 +8,8 @@ extends Node2D
 @export var panel_size := Vector2(40, 44)
 @export var activation_rect := Rect2(4, 16, 32, 72)
 @export_range(0.01, 1.0) var animation_seconds := 0.18
+@export var movement_sound_id := ""
+
 @export var opening_color := Color("192c3b")
 
 var open_amount := 0.0:
@@ -17,6 +19,7 @@ var open_amount := 0.0:
 var wants_open := false
 var pieces: Array[Dictionary] = []
 var close_delay := 0.0
+var movement_direction := 0
 
 
 func _ready() -> void:
@@ -31,7 +34,30 @@ func _process(delta: float) -> void:
 		close_delay = 0.15
 	else:
 		close_delay = maxf(0.0, close_delay - delta)
-	open_amount = move_toward(open_amount, 1.0 if wants_open or close_delay > 0.0 else 0.0, delta / animation_seconds)
+	var next_amount := move_toward(open_amount, 1.0 if wants_open or close_delay > 0.0 else 0.0, delta / animation_seconds)
+	var direction := int(signf(next_amount - open_amount))
+	if direction != 0 and direction != movement_direction:
+		_play_movement_sound(direction)
+	movement_direction = direction
+	open_amount = next_amount
+
+
+func _play_movement_sound(direction: int) -> void:
+	if movement_sound_id.is_empty():
+		return
+	var players := get_node_or_null(players_path)
+	var listener := players.get_node_or_null("Player") if players != null else null
+	if listener == null or not listener.has_method("get_feet_position"):
+		return
+	var feet: Vector2 = listener.call("get_feet_position")
+	var distance := feet.distance_to(to_global(Vector2(panel_size.x * 0.5, panel_size.y)))
+	# SfxManager handles native/web routing and user volume. Attenuate against
+	# the local player's feet, so remote doors are not audible across the map.
+	const HEARING_RADIUS := 192.0
+	if distance >= HEARING_RADIUS:
+		return
+	var gain := maxf(0.001, 1.0 - distance / HEARING_RADIUS)
+	SfxManager.play(movement_sound_id, linear_to_db(gain) + (0.0 if direction > 0 else -2.0), 1.0 if direction > 0 else 0.9)
 
 
 func _access_allows_opening() -> bool:
