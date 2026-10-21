@@ -1492,11 +1492,11 @@
   "ui.settings.audio": "Audio",
   "ui.settings.master": "Master",
   "ui.settings.music": "Music",
-  "ui.settings.battle_music": "Battle Music",
+  "ui.settings.battle_music": "Battle music track",
   "ui.settings.sfx": "SFX",
   "ui.settings.pokemon_cries": "Pokémon Cries",
   "ui.settings.anime_pokemon_cries": "Use anime Pokémon cries when available",
-  "ui.settings.ui_volume": "UI",
+  "ui.settings.ui_volume": "Menus and buttons",
   "ui.settings.notifications": "Notifications",
   "ui.settings.account.edit": "Edit Account Details",
   "ui.settings.account.portal": "Manage Account",
@@ -7421,5 +7421,10 @@
   "ui.staff.story_checkpoint.fuji_house_reward": "Mr. Fuji: Poké Flute at home",
   "ui.cycling_road.mount_required": "You must be on a mount to enter Cycling Road.",
   "ui.cycling_road.dismount_blocked": "You cannot dismount on Cycling Road.",
-  "ui.cycling_road.north_blocked": "You cannot travel north on this bridge."
+  "ui.cycling_road.north_blocked": "You cannot travel north on this bridge.",
+  "ui.settings.section.sound_general": "General",
+  "ui.settings.section.sound_game": "Game sounds",
+  "ui.settings.section.sound_interface": "Interface",
+  "ui.settings.battle_sfx": "Battle effects",
+  "ui.settings.overworld_sfx": "Overworld sounds"
 }

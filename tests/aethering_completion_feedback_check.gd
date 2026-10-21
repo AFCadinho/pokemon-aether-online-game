@@ -78,7 +78,7 @@ func _run() -> void:
 	_check(sfx.get_child_count() == players_before + 1, "Successful confirmation plays one existing SFX")
 	var player := sfx.get_child(sfx.get_child_count() - 1) as AudioStreamPlayer
 	_check(player != null and player.stream.resource_path.ends_with("wish/PRSFX- Wish.wav"), "Confirmation uses the mystical Wish move-animation sound")
-	_check(player != null and player.bus == root.get_node("SettingsManager").call("get_audio_output_bus", "SFX"), "Confirmation respects the configured SFX output bus")
+	_check(player != null and player.bus == root.get_node("SettingsManager").call("get_audio_output_bus", "Overworld SFX"), "Confirmation respects the configured SFX output bus")
 	popup._publish_result_feedback()
 	popup._render()
 	popup._render_result()

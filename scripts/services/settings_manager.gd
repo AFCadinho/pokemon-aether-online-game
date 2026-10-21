@@ -22,7 +22,8 @@ const SPRITE_STYLE_PIXEL := "pixel"
 const BATTLE_MUSIC_DEFAULT := "lysandre_remix_pokemon_legends_z_a_zame"
 const MASTER_BUS := "Master"
 const MUSIC_BUS := "Music"
-const SFX_BUS := "SFX"
+const BATTLE_SFX_BUS := "Battle SFX"
+const OVERWORLD_SFX_BUS := "Overworld SFX"
 const POKEMON_CRY_BUS := "Pokemon Cries"
 const UI_BUS := "UI"
 const NOTIFICATION_BUS := "Notifications"
@@ -105,7 +106,8 @@ var ui_scale := DEFAULT_UI_SCALE
 var cursor_scale := DEFAULT_CURSOR_SCALE
 var master_volume := 80.0
 var music_volume := 55.0
-var sfx_volume := 75.0
+var battle_sfx_volume := 75.0
+var overworld_sfx_volume := 75.0
 var pokemon_cry_volume := 75.0
 var ui_volume := 75.0
 var notification_volume := 75.0
@@ -120,7 +122,7 @@ func get_audio_output_bus(preferred_bus: String) -> String:
 	# The browser AudioWorklet mixer reliably exposes the Master bus, while
 	# dynamically created category buses can remain disconnected on some WebGL
 	# builds. Route game playback directly to Master there; desktop keeps its
-	# independent Music/SFX/cry/UI controls unchanged.
+	# independent category controls; browser one-shots apply category gain explicitly.
 	return MASTER_BUS if OS.has_feature("web") else preferred_bus
 
 
@@ -245,7 +247,7 @@ func load_settings() -> void:
 	cursor_scale = _validated_cursor_scale(data.get("cursor_scale", cursor_scale))
 	master_volume = _validated_volume(data.get("master_volume", master_volume))
 	music_volume = _validated_volume(data.get("music_volume", music_volume))
-	sfx_volume = _validated_volume(data.get("sfx_volume", sfx_volume))
+	_load_sfx_volumes(data)
 	pokemon_cry_volume = _validated_volume(data.get("pokemon_cry_volume", pokemon_cry_volume))
 	ui_volume = _validated_volume(data.get("ui_volume", ui_volume))
 	notification_volume = _validated_volume(data.get("notification_volume", notification_volume))
@@ -338,7 +340,8 @@ func save_settings() -> bool:
 		"cursor_scale": cursor_scale,
 		"master_volume": master_volume,
 		"music_volume": music_volume,
-		"sfx_volume": sfx_volume,
+		"battle_sfx_volume": battle_sfx_volume,
+		"overworld_sfx_volume": overworld_sfx_volume,
 		"pokemon_cry_volume": pokemon_cry_volume,
 		"ui_volume": ui_volume,
 		"notification_volume": notification_volume,
@@ -831,14 +834,41 @@ func set_music_volume(volume: float) -> void:
 	_save_and_emit()
 
 
-func set_sfx_volume(volume: float) -> void:
-	var validated_volume: float = _validated_volume(volume)
-	if is_equal_approx(sfx_volume, validated_volume):
-		return
+func _load_sfx_volumes(data: Dictionary) -> void:
+	# Preserve the previous mix on first upgrade, including muted SFX. Each
+	# explicit new preference wins over the legacy value independently.
+	var legacy := _validated_volume(data.get("sfx_volume", 75.0))
+	battle_sfx_volume = _validated_volume(data.get("battle_sfx_volume", legacy))
+	overworld_sfx_volume = _validated_volume(data.get("overworld_sfx_volume", legacy))
 
-	sfx_volume = validated_volume
-	_apply_audio_bus_volume(SFX_BUS, sfx_volume)
+
+func set_battle_sfx_volume(volume: float) -> void:
+	var validated_volume := _validated_volume(volume)
+	if is_equal_approx(battle_sfx_volume, validated_volume):
+		return
+	battle_sfx_volume = validated_volume
+	_apply_audio_bus_volume(BATTLE_SFX_BUS, battle_sfx_volume)
 	_save_and_emit()
+
+
+func set_overworld_sfx_volume(volume: float) -> void:
+	var validated_volume := _validated_volume(volume)
+	if is_equal_approx(overworld_sfx_volume, validated_volume):
+		return
+	overworld_sfx_volume = validated_volume
+	_apply_audio_bus_volume(OVERWORLD_SFX_BUS, overworld_sfx_volume)
+	_save_and_emit()
+
+
+func get_audio_category_volume(bus: String) -> float:
+	match bus:
+		BATTLE_SFX_BUS: return battle_sfx_volume
+		OVERWORLD_SFX_BUS: return overworld_sfx_volume
+		NOTIFICATION_BUS: return notification_volume
+		UI_BUS: return ui_volume
+		POKEMON_CRY_BUS: return pokemon_cry_volume
+		MUSIC_BUS: return music_volume
+	return 100.0
 
 
 func set_pokemon_cry_volume(volume: float) -> void:
@@ -995,7 +1025,8 @@ func _closest_available_resolution(resolution: Vector2i) -> Vector2i:
 
 func _ensure_audio_buses() -> void:
 	_ensure_audio_bus(MUSIC_BUS)
-	_ensure_audio_bus(SFX_BUS)
+	_ensure_audio_bus(BATTLE_SFX_BUS)
+	_ensure_audio_bus(OVERWORLD_SFX_BUS)
 	_ensure_audio_bus(POKEMON_CRY_BUS)
 	_ensure_audio_bus(UI_BUS)
 	_ensure_audio_bus(NOTIFICATION_BUS)
@@ -1047,7 +1078,8 @@ func _apply_pixel_rendering_defaults() -> void:
 func _apply_audio_settings() -> void:
 	_apply_audio_bus_volume(MASTER_BUS, master_volume)
 	_apply_audio_bus_volume(MUSIC_BUS, music_volume)
-	_apply_audio_bus_volume(SFX_BUS, sfx_volume)
+	_apply_audio_bus_volume(BATTLE_SFX_BUS, battle_sfx_volume)
+	_apply_audio_bus_volume(OVERWORLD_SFX_BUS, overworld_sfx_volume)
 	_apply_audio_bus_volume(POKEMON_CRY_BUS, pokemon_cry_volume)
 	_apply_audio_bus_volume(UI_BUS, ui_volume)
 	_apply_audio_bus_volume(NOTIFICATION_BUS, notification_volume)

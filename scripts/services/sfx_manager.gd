@@ -3,7 +3,9 @@ extends Node
 const ContentPacks := preload("res://scripts/services/content_pack_runtime.gd")
 const PokemonCryResolver := preload("res://scripts/services/pokemon_cry_resolver.gd")
 const WebAudioBridge := preload("res://scripts/services/web_audio_bridge.gd")
-const DEFAULT_BUS := SettingsManager.SFX_BUS
+# Shared samples are categorized by use: e.g. a field move remains overworld
+# even when its sample also appears in a battle animation.
+const DEFAULT_BUS := SettingsManager.OVERWORLD_SFX_BUS
 const POKEMON_CRY_VOLUME_DB := -7.0
 const FIELD_MOVE_SOUND_IDS := {
 	"cut": "field_move_cut",
@@ -30,38 +32,47 @@ const SOUND_DATA := {
 		"volume_db": -9.0,
 	},
 	"battle_item_use": {
+		"bus": SettingsManager.BATTLE_SFX_BUS,
 		"path": "res://assets/audio/sfx/battle/battle_item_use.ogg",
 		"volume_db": -4.0,
 	},
 	"capture_throw": {
+		"bus": SettingsManager.BATTLE_SFX_BUS,
 		"path": "res://assets/audio/sfx/battle/capture_throw.ogg",
 		"volume_db": -2.0,
 	},
 	"capture_absorb": {
+		"bus": SettingsManager.BATTLE_SFX_BUS,
 		"path": "res://assets/audio/sfx/battle/capture_absorb.ogg",
 		"volume_db": -1.0,
 	},
 	"capture_shake": {
+		"bus": SettingsManager.BATTLE_SFX_BUS,
 		"path": "res://assets/audio/sfx/battle/capture_shake.ogg",
 		"volume_db": -1.0,
 	},
 	"capture_break": {
+		"bus": SettingsManager.BATTLE_SFX_BUS,
 		"path": "res://assets/audio/sfx/battle/capture_break.ogg",
 		"volume_db": -2.0,
 	},
 	"capture_success": {
+		"bus": SettingsManager.BATTLE_SFX_BUS,
 		"path": "res://assets/audio/sfx/battle/capture_success.ogg",
 		"volume_db": -2.0,
 	},
 	"summon_throw": {
+		"bus": SettingsManager.BATTLE_SFX_BUS,
 		"path": "res://assets/audio/sfx/battle/capture_throw.ogg",
 		"volume_db": -3.0,
 	},
 	"summon_release": {
+		"bus": SettingsManager.BATTLE_SFX_BUS,
 		"path": "res://assets/audio/sfx/battle/capture_absorb.ogg",
 		"volume_db": -8.0,
 	},
 	"ranked_match_found": {
+		"bus": SettingsManager.NOTIFICATION_BUS,
 		"path": "res://assets/audio/sfx/ui/ranked_match_found.ogg",
 		"volume_db": -2.0,
 	},
@@ -90,6 +101,7 @@ const SOUND_DATA := {
 		"volume_db": 0.0,
 	},
 	"global_buff_activated": {
+		"bus": SettingsManager.NOTIFICATION_BUS,
 		"path": "res://assets/audio/sfx/battle/capture_success.ogg",
 		"volume_db": -9.0,
 	},
@@ -144,8 +156,9 @@ func play(sound_id: String, volume_offset_db: float = 0.0, pitch_scale: float = 
 	if sound_data.is_empty():
 		return
 	var sound_path := str(sound_data.get("path", "")).strip_edges()
+	var bus := str(sound_data.get("bus", DEFAULT_BUS))
 	if OS.has_feature("web"):
-		WebAudioBridge.play_sfx(sound_path, _web_sfx_volume(float(sound_data.get("volume_db", 0.0)) + volume_offset_db), pitch_scale)
+		WebAudioBridge.play_sfx(sound_path, _web_sfx_volume(float(sound_data.get("volume_db", 0.0)) + volume_offset_db, bus), pitch_scale)
 		return
 
 	var stream := _get_stream(sound_key, sound_data)
@@ -154,7 +167,7 @@ func play(sound_id: String, volume_offset_db: float = 0.0, pitch_scale: float = 
 
 	var player := AudioStreamPlayer.new()
 	player.stream = stream
-	player.bus = SettingsManager.get_audio_output_bus(DEFAULT_BUS)
+	player.bus = SettingsManager.get_audio_output_bus(bus)
 	player.volume_db = float(sound_data.get("volume_db", 0.0)) + volume_offset_db
 	player.pitch_scale = pitch_scale
 	player.finished.connect(player.queue_free)
@@ -220,9 +233,9 @@ func _get_stream(sound_key: String, sound_data: Dictionary) -> AudioStream:
 	return stream
 
 
-func _web_sfx_volume(volume_db: float) -> float:
+func _web_sfx_volume(volume_db: float, bus: String = DEFAULT_BUS) -> float:
 	return clampf(
-		SettingsManager.master_volume / 100.0 * SettingsManager.sfx_volume / 100.0 * db_to_linear(volume_db),
+		SettingsManager.master_volume / 100.0 * SettingsManager.get_audio_category_volume(bus) / 100.0 * db_to_linear(volume_db),
 		0.0,
 		1.0
 	)

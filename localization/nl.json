@@ -1492,11 +1492,11 @@
   "ui.settings.audio": "Audio",
   "ui.settings.master": "Hoofdvolume",
   "ui.settings.music": "Muziek",
-  "ui.settings.battle_music": "Gevechtsmuziek",
+  "ui.settings.battle_music": "Keuze gevechtsmuziek",
   "ui.settings.sfx": "Geluidseffecten",
   "ui.settings.pokemon_cries": "Pokémon-geluiden",
   "ui.settings.anime_pokemon_cries": "Gebruik anime-Pokémon-geluiden wanneer beschikbaar",
-  "ui.settings.ui_volume": "Interface",
+  "ui.settings.ui_volume": "Menu's en knoppen",
   "ui.settings.notifications": "Meldingen",
   "ui.settings.account.edit": "Accountgegevens bewerken",
   "ui.settings.account.portal": "Account beheren",
@@ -7421,5 +7421,10 @@
   "ui.staff.story_checkpoint.fuji_house_reward": "Mr. Fuji: Poké Flute thuis",
   "ui.cycling_road.mount_required": "Je moet op een mount zitten om Cycling Road te betreden.",
   "ui.cycling_road.dismount_blocked": "Je kunt op Cycling Road niet afstappen.",
-  "ui.cycling_road.north_blocked": "Je kunt op deze brug niet naar het noorden."
+  "ui.cycling_road.north_blocked": "Je kunt op deze brug niet naar het noorden.",
+  "ui.settings.section.sound_general": "Algemeen",
+  "ui.settings.section.sound_game": "Spelgeluiden",
+  "ui.settings.section.sound_interface": "Interface",
+  "ui.settings.battle_sfx": "Gevechtseffecten",
+  "ui.settings.overworld_sfx": "Wereldgeluiden"
 }

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Split sound effects into Battle effects and Overworld sounds, preserving existing volume preferences; group sound settings and route ranked-match alerts through Notifications on native and browser clients.
+
 - Use a classic Game Boy-style entrance sound for the Viridian Center door, and start the door silently open when returning from inside.
 
 - Add a quiet, nearby opening/closing sound to the Viridian Pokémon Center door pilot, respecting the SFX volume setting.

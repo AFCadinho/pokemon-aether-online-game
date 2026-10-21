@@ -566,7 +566,7 @@ func _start_3d_audio(kind: String, key: String, prepared_plan: Dictionary = {}, 
 	var node := preload("res://scripts/battle/animations/battle_audio_player.gd").new()
 	node.plan = plan
 	node.speed = playback_speed * float(plan.get("speed_scale", 1.0))
-	node.bus = SettingsManager.get_audio_output_bus(SettingsManager.SFX_BUS)
+	node.bus = SettingsManager.get_audio_output_bus(SettingsManager.BATTLE_SFX_BUS)
 	node.valid = func(): return generation == render_generation and uses_realtime_3d()
 	for name in plan.sound_paths:
 		var stream := _get_cached_sound_stream(str(plan.sound_paths[name]))
@@ -1784,7 +1784,7 @@ func _play_one_shot_sound(sound_path: String) -> void:
 	if OS.has_feature("web"):
 		WebAudioBridge.play_sfx(
 			sound_path,
-			clampf(SettingsManager.master_volume / 100.0 * SettingsManager.sfx_volume / 100.0, 0.0, 1.0)
+			clampf(SettingsManager.master_volume / 100.0 * SettingsManager.battle_sfx_volume / 100.0, 0.0, 1.0)
 		)
 		return
 
@@ -1800,7 +1800,7 @@ func _play_one_shot_sound(sound_path: String) -> void:
 
 	var player: AudioStreamPlayer = AudioStreamPlayer.new()
 	player.stream = stream
-	player.bus = SettingsManager.get_audio_output_bus(SettingsManager.SFX_BUS)
+	player.bus = SettingsManager.get_audio_output_bus(SettingsManager.BATTLE_SFX_BUS)
 	player.finished.connect(player.queue_free)
 	parent_node.add_child(player)
 	player.play()
