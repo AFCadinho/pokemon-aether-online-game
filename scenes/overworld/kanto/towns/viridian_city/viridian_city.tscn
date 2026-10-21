@@ -34,9 +34,8 @@
 [ext_resource type="Script" uid="uid://dpp0ukwuvwmdl" path="res://scripts/world/kanto/towns/thieving_mentor_rook.gd" id="42_thieving_mentor"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="43_overworld_item"]
 [ext_resource type="Texture2D" uid="uid://dgqoro3uooka7" path="res://assets/npcs/gen4-ow-sprites/Object ball gold.png" id="44_machine_ball"]
-[ext_resource type="Script" path="res://scripts/world/sliding_map_door.gd" id="50_center_door"]
-
-[ext_resource type="Script" path="res://scripts/world/hinged_map_door.gd" id="51_house_door"]
+[ext_resource type="Script" uid="uid://d08uvxb0wi3hd" path="res://scripts/world/sliding_map_door.gd" id="50_center_door"]
+[ext_resource type="Script" uid="uid://vj3760oaowdm" path="res://scripts/world/hinged_map_door.gd" id="51_house_door"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route1"]
 size = Vector2(208, 34)
@@ -514,6 +513,27 @@ sources/0 = SubResource("TileSetAtlasSource_bddn7")
 script = ExtResource("2_meta")
 
 [node name="ViridianCity" parent="." unique_id=76574466 instance=ExtResource("1_leyf6")]
+
+[node name="PokemonCenterSlidingDoor" type="Node2D" parent="ViridianCity" unique_id=2124191836]
+z_index = 4
+position = Vector2(1116, 1416)
+script = ExtResource("50_center_door")
+source_layers = Array[NodePath]([NodePath("../StructureBottom"), NodePath("../Doors")])
+players_path = NodePath("../../Entities/Players")
+access_lock_path = NodePath("../../Entities/Interactables/Locks/PokemonCenterDoorLock")
+movement_sound_id = "sliding_door"
+
+[node name="House1HingedDoor" type="Node2D" parent="ViridianCity" unique_id=358220400]
+z_index = 4
+position = Vector2(1536, 854)
+script = ExtResource("51_house_door")
+source_layers = Array[NodePath]([NodePath("../StructureBottom"), NodePath("../Doors")])
+players_path = NodePath("../../Entities/Players")
+access_lock_path = NodePath("../../Entities/Interactables/Locks/House1DoorLock")
+panel_size = Vector2(32, 38)
+activation_rect = Rect2(0, 10, 32, 72)
+animation_seconds = 0.24
+movement_sound_id = "sliding_door"
 
 [node name="NightLights" type="Node2D" parent="." unique_id=1056282238]
 
@@ -1077,29 +1097,7 @@ z_index = 100
 tile_map_data = PackedByteArray("AAAiABwAAAABAAEAAAAiAB0AAAABAAEAAAAiAB4AAAABAAEAAAAiAB8AAAABAAEAAAA=")
 tile_set = SubResource("TileSet_v4pkh")
 
-[node name="PokemonCenterSlidingDoor" type="Node2D" parent="ViridianCity"]
-position = Vector2(1116, 1416)
-z_index = 4
-script = ExtResource("50_center_door")
-movement_sound_id = "sliding_door"
-source_layers = Array[NodePath]([NodePath("../StructureBottom"), NodePath("../Doors")])
-players_path = NodePath("../../Entities/Players")
-access_lock_path = NodePath("../../Entities/Interactables/Locks/PokemonCenterDoorLock")
-
-
 [connection signal="body_entered" from="Exits/ToRoute1" to="Exits/ToRoute1" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute2" to="Exits/ToRoute2" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute22" to="Exits/ToRoute22" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
-
-[node name="House1HingedDoor" type="Node2D" parent="ViridianCity"]
-position = Vector2(1536, 854)
-z_index = 4
-script = ExtResource("51_house_door")
-animation_seconds = 0.24
-panel_size = Vector2(32, 38)
-activation_rect = Rect2(0, 10, 32, 72)
-movement_sound_id = "sliding_door"
-source_layers = Array[NodePath]([NodePath("../StructureBottom"), NodePath("../Doors")])
-players_path = NodePath("../../Entities/Players")
-access_lock_path = NodePath("../../Entities/Interactables/Locks/House1DoorLock")
