@@ -976,18 +976,20 @@
         32.0,
         96.0
       ],
-      "arrivals": [],
+      "arrivals": [
+        "FromGym"
+      ],
       "bounds": [
         984.0,
         1072.0,
         48.0,
         38.0
       ],
-      "enabled": false,
-      "exit": "",
+      "enabled": true,
+      "exit": "Exits/ToGym",
       "id": "Door76",
       "kind": "gym",
-      "label": "tile_[31, 33]",
+      "label": "ToGym",
       "layers": [
         "Objects",
         "Doors"

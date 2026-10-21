@@ -58,6 +58,7 @@ const EXTENDED_MAP_SCENES := {
 	"kanto_route_19_fuchsia_gate": "res://scenes/overworld/kanto/transition_buildings/route_19_fuchsia_gate.tscn",
 	"kanto_fuchsia_safari_zone_gate": "res://scenes/overworld/kanto/transition_buildings/safari_zone_gate.tscn",
 	"kanto_fuchsia_city": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+	"kanto_fuchsia_gym": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
 	"kanto_fuchsia_city_red_roof_house": "res://scenes/overworld/kanto/towns/fuchsia_city/red_roof_house.tscn",
 	"kanto_fuchsia_city_tall_house": "res://scenes/overworld/kanto/towns/fuchsia_city/tall_house.tscn",
 	"kanto_fuchsia_city_pokemon_center": "res://scenes/overworld/kanto/towns/fuchsia_city/pokemon_center.tscn",
