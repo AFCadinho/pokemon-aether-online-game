@@ -24,13 +24,18 @@ comparing the same stationary world pixels at different screen positions.
 Before the fix, four Celadon light points changed substantially, with a maximum
 RGB-channel difference of 0.459. With local batches, 69 repeatedly sampled
 lights remain pixel-identical. The conservative maximum batch/light overlap is
-11 in Celadon, 7 in Cerulean and 9 in Vermilion.
+11 in Celadon, 7 in Cerulean, 9 in Vermilion and 5 in Fuchsia.
+
+Fuchsia uses the same night-light scene for its 23 existing street lanterns
+and 21 building window light points. Its camera probe covers all 44 points
+across the city; all remain pixel-identical when the camera moves. Window
+lights use lower energy and a smaller radius than the street lanterns.
 
 In the same isolated camera probe, peak 2D draw calls decreased from 402 to 200;
 this is a rendering check, not a whole-game FPS or Android/browser benchmark.
 
 `tests/night_light_camera_check.gd` exercises World’s real depth normalization,
-preserves collision bytes, checks the three city batch budgets and compares
+preserves collision bytes, checks the four city batch budgets and compares
 pixels when a graphics renderer is available. Headless runs perform structural
 and budget checks. `--baseline` intentionally bypasses batching on the real maps
 and must fail, demonstrating the regression without editing project files.

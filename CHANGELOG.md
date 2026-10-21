@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add nighttime lighting to Fuchsia City’s street lamps and building windows, following the shared day/night cycle.
+
 - Add localized text and illustrated portraits to all three Fuchsia City signs.
 
 - Restore Fuchsia City’s Aethernet Beacon, Keeper connection and arrival point.
