@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pilot a pixel-aligned sliding entrance at Viridian City’s Pokémon Center: open for nearby players, keep the frame fixed, and close after the doorway clears.
+
 - Make Aethernet destinations more compact, list Anchors first and group undiscovered destinations in a collapsible section that opens for search matches.
 
 - Add destination search to Aethernet Travel, including locked destinations and worldwide hubs, with clear feedback when nothing matches.
