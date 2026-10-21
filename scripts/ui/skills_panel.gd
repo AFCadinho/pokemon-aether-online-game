@@ -1473,7 +1473,10 @@ func _create_target_row(target: Dictionary) -> Control:
 	))
 	var unlocked := bool(target.get("unlocked", false))
 	var available := bool(target.get("availableToday", false))
-	if attempted:
+	if selected_skill_id == "thieving" and str(target.get("npcType", "")) == "law_enforcement":
+		status.text = _text("ui.skills.thieving.target.police_warning")
+		status.add_theme_color_override("font_color", LOCKED_COLOR)
+	elif attempted:
 		status.text = _text(
 			"ui.skills.rock_smash.rock.completed"
 			if selected_skill_id == "rock_smash"
