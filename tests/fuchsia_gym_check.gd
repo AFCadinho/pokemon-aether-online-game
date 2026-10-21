@@ -27,6 +27,8 @@ func _run() -> void:
 		_check(player.overlaps_exit_at(gym.get_node("Exits/ToFuchsiaCity"),_point(Vector2i(x,30))), "Interior exit covers all three door tiles")
 	_check(gym.music_profile_id == "gym.interior", "Gym music profile")
 	_check(gym.lighting_profile == "indoor" and gym.weather_profile == "disabled", "Indoor lighting and weather")
+	var walls := gym.get_node_or_null("Entities/Interactables/InvisibleWalls")
+	_check(walls != null and walls.has_method("blocks_world_position"), "InvisibleWalls keeps its movement-blocker script attached")
 	var mask: Node = gym.get_node("FloorVisibilityMask")
 	_check(mask.floor_regions.size() == 1, "The supplied Gym stays a single room")
 	var camera: Camera2D = player.get_node("Camera2D")

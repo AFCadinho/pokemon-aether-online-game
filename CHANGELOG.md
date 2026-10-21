@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore Fuchsia Gym’s invisible-wall blocking after its layer script was detached, preserving the edited maze.
+
 - Recreate Fuchsia Gym’s FireRed/LeafGreen invisible-wall maze in a separate editable puzzle layer, adapted to the artist hall.
 
 - Open Fuchsia City Gym with its artist interior, animated city doorway and travel in both directions.
