@@ -28,6 +28,9 @@ size = Vector2(32, 32)
 [sub_resource type="RectangleShape2D" id="shape_RoofRoomEntrance"]
 size = Vector2(32, 32)
 
+[sub_resource type="RectangleShape2D" id="shape_standard_door"]
+size = Vector2(32, 32)
+
 [node name="CeladonCondominiumsRoof" type="Node2D"]
 script = ExtResource("metadata")
 map_id = "kanto_celadon_condominiums_roof"
@@ -122,9 +125,11 @@ transition_id = "kanto_celadon_condominiums_roof__roof_room_entrance"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/RoofRoomEntrance"]
-shape = SubResource("shape_RoofRoomEntrance")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="TransitionHint" parent="Exits/RoofRoomEntrance" instance=ExtResource("hint")]
+position = Vector2(0, 0)
 z_as_relative = false
 tile_footprint = Vector2i(1, 1)
 flow_direction = "up"

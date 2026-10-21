@@ -258,6 +258,9 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_xevep")
 
+[sub_resource type="RectangleShape2D" id="shape_standard_door"]
+size = Vector2(32, 32)
+
 [node name="Route10" type="Node2D" unique_id=1526587499]
 script = ExtResource("2_metadata")
 map_id = "kanto_route_10"
@@ -308,12 +311,12 @@ target_spawn_name = "FromOutside"
 transition_id = "kanto_route_10__to_pokemon_center"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokemonCenter" unique_id=1569100173]
-position = Vector2(0, -32)
-shape = SubResource("shape_pokecenter_exit")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokemonCenter" unique_id=1569100174 instance=ExtResource("4_kkef3")]
+position = Vector2(0, 0)
 z_as_relative = false
-position = Vector2(0, -16)
 
 [node name="ToPowerPlant" type="Area2D" parent="Exits" unique_id=1500086454]
 position = Vector2(1200, 1744)
@@ -324,8 +327,8 @@ transition_id = "kanto_route_10__to_power_plant"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPowerPlant" unique_id=930945931]
-position = Vector2(0, -8)
-shape = SubResource("shape_6")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToPowerPlant" unique_id=1092185579 instance=ExtResource("4_kkef3")]
 z_as_relative = false

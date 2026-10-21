@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Populate Route 19 with coastal trainers, ambient Pokémon, Surf encounters and fishing tables.
+- Standardize building entrance triggers across Kanto on the Pallet Town layout, preventing premature entry and keeping return spawns clear.
 
 - Rolled out opening house, shop, laboratory, Pokémon Center and gym doors across Kanto, with shared overworld audio and silently open doors on return. Closed buildings retain their access restrictions.
 - Refresh the Route 15 artist visual from the current TMX; gameplay layout is unchanged.

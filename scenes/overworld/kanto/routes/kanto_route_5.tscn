@@ -365,6 +365,9 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_fpdbw")
 
+[sub_resource type="RectangleShape2D" id="shape_standard_door"]
+size = Vector2(32, 32)
+
 [node name="Route5" type="Node2D" unique_id=48459963]
 script = ExtResource("2_metadata")
 map_id = "kanto_route_5"
@@ -479,8 +482,8 @@ transition_id = "kanto_route_5__to_underground_path"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToUndergroundPath" unique_id=1359017765]
-position = Vector2(0, -8)
-shape = SubResource("shape_5")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToUndergroundPath" unique_id=1253175302 instance=ExtResource("daycare_door_hint")]
 z_as_relative = false
@@ -494,8 +497,8 @@ transition_id = "kanto_route_5__to_daycare"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDaycare" unique_id=185137539]
-position = Vector2(0, -8)
-shape = SubResource("daycare_exit_shape")
+position = Vector2(0, -16)
+shape = SubResource("shape_standard_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToDaycare" unique_id=478345528 instance=ExtResource("daycare_door_hint")]
 z_as_relative = false
