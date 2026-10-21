@@ -12,6 +12,10 @@ location_id = "kanto.route_15.fuchsia.gate"
 location_name = "Route 15–Fuchsia Gate"
 music_profile_id = "kanto.routes_11_15"
 
+[node name="GateNPC" parent="Entities/NPCs" index="0"]
+npc_id = "kanto_route_15_fuchsia_gate_attendant"
+npc_definition_id = "kanto_route_15_fuchsia_gate_attendant"
+
 [node name="FromRoute15" type="Marker2D" parent="Spawns" index="2"]
 position = Vector2(528, 336)
 
