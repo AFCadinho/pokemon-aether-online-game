@@ -2918,8 +2918,8 @@
       "entityId": "kanto_route_15_beauty_grace",
       "mapId": "kanto_route_15",
       "position": {
-        "x": 2992.0,
-        "y": 784.0
+        "x": 1776.0,
+        "y": 976.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -2941,8 +2941,8 @@
       "entityId": "kanto_route_15_beauty_olivia",
       "mapId": "kanto_route_15",
       "position": {
-        "x": 2128.0,
-        "y": 880.0
+        "x": 1392.0,
+        "y": 1104.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -2964,8 +2964,8 @@
       "entityId": "kanto_route_15_biker_alex",
       "mapId": "kanto_route_15",
       "position": {
-        "x": 2416.0,
-        "y": 880.0
+        "x": 1200.0,
+        "y": 1040.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -2987,8 +2987,8 @@
       "entityId": "kanto_route_15_biker_ernest",
       "mapId": "kanto_route_15",
       "position": {
-        "x": 2768.0,
-        "y": 880.0
+        "x": 1936.0,
+        "y": 1040.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -3010,8 +3010,8 @@
       "entityId": "kanto_route_15_bird_keeper_chester",
       "mapId": "kanto_route_15",
       "position": {
-        "x": 1136.0,
-        "y": 880.0
+        "x": 1040.0,
+        "y": 912.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -3033,8 +3033,8 @@
       "entityId": "kanto_route_15_bird_keeper_edwin",
       "mapId": "kanto_route_15",
       "position": {
-        "x": 816.0,
-        "y": 880.0
+        "x": 720.0,
+        "y": 1104.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -3056,8 +3056,8 @@
       "entityId": "kanto_route_15_crush_kin_mya",
       "mapId": "kanto_route_15",
       "position": {
-        "x": 1808.0,
-        "y": 432.0
+        "x": 2000.0,
+        "y": 784.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -3079,8 +3079,8 @@
       "entityId": "kanto_route_15_crush_kin_ron",
       "mapId": "kanto_route_15",
       "position": {
-        "x": 1840.0,
-        "y": 464.0
+        "x": 1872.0,
+        "y": 720.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -3102,8 +3102,8 @@
       "entityId": "kanto_route_15_picnicker_becky",
       "mapId": "kanto_route_15",
       "position": {
-        "x": 2576.0,
-        "y": 464.0
+        "x": 528.0,
+        "y": 528.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -3125,8 +3125,8 @@
       "entityId": "kanto_route_15_picnicker_celia",
       "mapId": "kanto_route_15",
       "position": {
-        "x": 976.0,
-        "y": 464.0
+        "x": 944.0,
+        "y": 528.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -3148,8 +3148,8 @@
       "entityId": "kanto_route_15_picnicker_kindra",
       "mapId": "kanto_route_15",
       "position": {
-        "x": 1456.0,
-        "y": 880.0
+        "x": 912.0,
+        "y": 1104.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
@@ -3171,8 +3171,8 @@
       "entityId": "kanto_route_15_picnicker_yazmin",
       "mapId": "kanto_route_15",
       "position": {
-        "x": 528.0,
-        "y": 752.0
+        "x": 1424.0,
+        "y": 528.0
       },
       "radius": 80.0,
       "rivalPrefix": "",
