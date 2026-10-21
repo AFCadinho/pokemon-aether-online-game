@@ -36,6 +36,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/mount_nameplate_check.gd",
 	"res://tests/object_lower_depth_check.gd",
 	"res://tests/tree_lower_depth_check.gd",
+	"res://tests/tree_scenery_occlusion_check.gd",
 	"res://tests/battle_api_json_response_check.gd",
 	"res://tests/pokemon_tower_spirit_gate_check.gd",
 	"res://tests/tower_marowak_story_check.gd",

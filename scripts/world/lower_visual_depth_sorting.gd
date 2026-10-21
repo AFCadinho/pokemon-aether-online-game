@@ -85,6 +85,7 @@ static func build_depth_layers(
 			replacement.set_meta(DEPTH_LAYER_META, true)
 			replacement.set_meta(family_depth_meta, true)
 			matching_bottom.get_parent().add_child(replacement)
+			replacement.set_meta(&"pao_lower_visual_source_layer", replacement.get_path_to(matching_bottom))
 			# Preserve upper-over-lower drawing when objects overlap at equal Z.
 			matching_bottom.get_parent().move_child(replacement, group_root.get_index())
 			replacements[key] = replacement
