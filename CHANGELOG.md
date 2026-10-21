@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix overlapping facial surfaces on Android 3D Pokémon models, including Golem and Alakazam, by retaining their required depth prepass.
+
 - Include Routes 16–18, both Cycling Road gates and Route 18 Underground Mine in the browser’s on-demand Kanto map pack.
 
 - Restore Route 18's mine foreman, contain the outer edges of Route 16 East and Route 17, and show Route 16 East and its gate at the correct Town Map location.

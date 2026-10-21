@@ -214,6 +214,8 @@ battle_move_4={
 
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method.mobile="gl_compatibility"
+driver/depth_prepass/enable.android=true
+driver/depth_prepass/disable_for_vendors.android=""
 textures/vram_compression/import_etc2_astc=true
 2d/snap/snap_2d_transforms_to_pixel=true
 2d/snap/snap_2d_vertices_to_pixel=true
