@@ -64,11 +64,13 @@ func _run() -> void:
 	if pewter != null:
 		pewter.pressed.emit()
 		await process_frame
-		_check(travel.text.contains("Pewter City") and travel.text.contains("₽200"), "selecting a row updates the single travel action and fare")
+		_check(travel.text == "Travel to Pewter City", "the travel action names the selected destination without repeating its fare")
 		travel.pressed.emit()
 		await process_frame
 		var confirmation := menu.get("_confirmation") as AetherConfirmationDialog
 		_check(confirmation != null and confirmation.visible, "the footer action retains the travel confirmation safety step")
+		_check(_contains_label(pewter, "₽200"), "the destination row retains its fare")
+		_check(confirmation.message_label.text.contains("200"), "the travel confirmation retains its fare")
 		_check(str(menu.get("_pending_destination_id")) == "kanto_pewter_city", "confirmation targets the selected destination")
 	var confirmation := menu.get("_confirmation") as AetherConfirmationDialog
 	confirmation.hide()
