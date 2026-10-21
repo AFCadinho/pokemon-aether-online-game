@@ -6,15 +6,14 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="hint"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="marker"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
+[ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="mine_guard"]
+[ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="mine_guard_frames"]
+[ext_resource type="Texture2D" uid="uid://bgmeq26ivl36g" path="res://assets/sprites/trainer_cards/showdown/worker-gen6.png" id="mine_guard_portrait"]
 [ext_resource type="SpriteFrames" uid="uid://dpigo0du0tpih" path="res://assets/npcs/classes/bird_keeper_directional_frames.tres" id="population_frames"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
 [ext_resource type="Texture2D" uid="uid://bhrt56m2wqkbv" path="res://assets/sprites/trainer_cards/showdown/birdkeeper-gen6.png" id="population_portrait"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_18/route_18.visual.tscn" id="visual"]
-
-[ext_resource type="PackedScene" path="res://scenes/npcs/gate_npc.tscn" id="mine_guard"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="mine_guard_frames"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/worker-gen6.png" id="mine_guard_portrait"]
 
 [sub_resource type="RectangleShape2D" id="gate_shape"]
 size = Vector2(32, 128)
@@ -268,12 +267,11 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1549005885]
 
-[node name="MineForeman" parent="Entities/NPCs" instance=ExtResource("mine_guard")]
+[node name="MineForeman" parent="Entities/NPCs" unique_id=1191518258 instance=ExtResource("mine_guard")]
 position = Vector2(304, 1200)
 gate_id = "route_18_mine"
 guarded_transition_id = "kanto_route_18__to_underground_mine"
 requires_party_pokemon = false
-requires_staff_role = false
 blocked_dialogue_id = "kanto_route_18_mine_guard_blocked"
 allowed_dialogue_id = "kanto_route_18_mine_guard_allowed"
 npc_id = "kanto_route_18_mine_foreman_niels"
