@@ -331,7 +331,6 @@ position = Vector2(0, -16)
 shape = SubResource("center_door_shape")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=2116646579 instance=ExtResource("7_door_hint")]
-position = Vector2(0, 0)
 z_as_relative = false
 
 [node name="ToSafariZoneGate" type="Area2D" parent="Exits" unique_id=280776705]
