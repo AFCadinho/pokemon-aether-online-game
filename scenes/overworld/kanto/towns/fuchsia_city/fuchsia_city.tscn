@@ -306,7 +306,7 @@ position = Vector2(656, 1520)
 [node name="FromRoute18" type="Marker2D" parent="Spawns" unique_id=1981173712]
 position = Vector2(48, 720)
 
-[node name="FromTallHouse" type="Marker2D" parent="Spawns"]
+[node name="FromTallHouse" type="Marker2D" parent="Spawns" unique_id=1342244700]
 position = Vector2(720, 336)
 
 [node name="FromRedRoofHouse" type="Marker2D" parent="Spawns"]
@@ -347,7 +347,7 @@ shape = SubResource("red_roof_door_shape")
 z_as_relative = false
 tile_footprint = Vector2i(2, 1)
 
-[node name="ToTallHouse" type="Area2D" parent="Exits"]
+[node name="ToTallHouse" type="Area2D" parent="Exits" unique_id=482971517]
 position = Vector2(720, 304)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/fuchsia_city/tall_house.tscn"
@@ -355,11 +355,11 @@ target_spawn_name = "FromFuchsiaCity"
 transition_id = "kanto_fuchsia_city__to_tall_house"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTallHouse"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTallHouse" unique_id=1389664463]
 position = Vector2(0, -16)
 shape = SubResource("center_door_shape")
 
-[node name="DoorTransitionHint" parent="Exits/ToTallHouse" instance=ExtResource("7_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToTallHouse" unique_id=569866696 instance=ExtResource("7_door_hint")]
 z_as_relative = false
 
 [node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=476887202]
@@ -880,6 +880,7 @@ max_energy = 0.55
 light_texture_scale = 0.55
 
 [connection signal="body_entered" from="Exits/ToRoute15Gate" to="Exits/ToRoute15Gate" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToTallHouse" to="Exits/ToTallHouse" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToSafariZoneGate" to="Exits/ToSafariZoneGate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute19Gate" to="Exits/ToRoute19Gate" method="_on_body_entered"]
