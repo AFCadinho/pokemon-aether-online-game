@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Use a classic Game Boy-style entrance sound for the Viridian Center door, and start the door silently open when returning from inside.
+
 - Add a quiet, nearby opening/closing sound to the Viridian Pokémon Center door pilot, respecting the SFX volume setting.
 
 - Remove the repeated fare from the Aethernet travel button; destination rows and the confirmation dialog still show the price.

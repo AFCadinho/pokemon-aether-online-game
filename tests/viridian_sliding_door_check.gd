@@ -30,6 +30,11 @@ func _run() -> void:
 	var city := (load(CITY) as PackedScene).instantiate()
 	var visual := city.get_node("ViridianCity")
 	var door := visual.get_node("PokemonCenterSlidingDoor")
+	city.call("prepare_player_arrival", "FromRoute2")
+	_check(door.open_amount == 0.0, "Other arrivals do not open Center door")
+	city.call("prepare_player_arrival", "FromPokecenter")
+	_check(door.open_amount == 1.0, "Center return configures an already-open door")
+	door.open_amount = 0.0; door.arrival_open = false; door.close_delay = 0.0
 	var exit_node := city.get_node("Exits/ToPokecenter")
 	var collision := city.get_node("Collision") as TileMapLayer
 	var arrival: Vector2 = city.get_node("Spawns/FromPokecenter").position
@@ -75,7 +80,7 @@ func _run() -> void:
 	_check(door.open_amount == 1.0, "Door opens during approach step")
 	_check(sfx.get_child_count() == sounds_before + 1, "Opening plays exactly one sound")
 	var sound := sfx.get_child(sfx.get_child_count() - 1) as AudioStreamPlayer
-	_check(sound != null and sound.stream.get_length() > 0.15 and sound.stream.get_length() < 0.25, "Short door sound loads as audio")
+	_check(sound != null and sound.stream.get_length() > 0.30 and sound.stream.get_length() < 0.35, "Short door sound loads as audio")
 	_check(sound != null and sound.bus == root.get_node("SettingsManager").get_audio_output_bus("SFX"), "Door uses the user's SFX bus")
 	local.moving = false; local.position = arrival
 	_tick(door,0.3)
@@ -113,6 +118,18 @@ func _run() -> void:
 	distant_trigger.free()
 	_tick(door,0.5)
 	_check(sfx.get_child_count() == before_distant, "Distant closing remains silent")
+	var before_arrival := sfx.get_child_count()
+	local.position = arrival; local.target = arrival; access.is_unlocked = false
+	door.prepare_for_arrival()
+	door.prepare_for_arrival()
+	_tick(door,0.5)
+	_check(door.open_amount == 1.0 and sfx.get_child_count() == before_arrival, "Return starts silently open, including repeated placement and pending access")
+	local.position = Vector2(1200,1520)
+	_tick(door,0.5)
+	_check(door.open_amount == 0.0 and sfx.get_child_count() == before_arrival + 1, "Return door closes once after player walks away")
+	access.is_unlocked = true; local.position = arrival
+	_tick(door,0.5)
+	_check(sfx.get_child_count() == before_arrival + 2, "Later approach plays normal opening sound again")
 	map.free()
 	print("Viridian sliding door: ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)

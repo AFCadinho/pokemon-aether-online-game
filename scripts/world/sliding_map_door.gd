@@ -20,6 +20,7 @@ var wants_open := false
 var pieces: Array[Dictionary] = []
 var close_delay := 0.0
 var movement_direction := 0
+var arrival_open := false
 
 
 func _ready() -> void:
@@ -29,7 +30,13 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	wants_open = _has_nearby_player() and _access_allows_opening()
+	if arrival_open:
+		var players := get_node_or_null(players_path)
+		var local_player := players.get_node_or_null("Player") if players != null else null
+		# A completed exit already places the player at this doorway. Keep it
+		# open while access metadata loads, until the player clears the front.
+		arrival_open = local_player != null and _actor_needs_door(local_player)
+	wants_open = arrival_open or (_has_nearby_player() and _access_allows_opening())
 	if wants_open:
 		close_delay = 0.15
 	else:
@@ -40,6 +47,16 @@ func _process(delta: float) -> void:
 		_play_movement_sound(direction)
 	movement_direction = direction
 	open_amount = next_amount
+
+
+func prepare_for_arrival() -> void:
+	# Called synchronously after spawn placement, before the map is revealed.
+	# Idempotent: authorized placement runs again after the physics frame.
+	arrival_open = true
+	wants_open = true
+	close_delay = 0.15
+	movement_direction = 0
+	open_amount = 1.0
 
 
 func _play_movement_sound(direction: int) -> void:
