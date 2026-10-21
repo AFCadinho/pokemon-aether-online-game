@@ -886,6 +886,5 @@ light_texture_scale = 0.55
 [connection signal="body_entered" from="Exits/ToRoute19Gate" to="Exits/ToRoute19Gate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute18" to="Exits/ToRoute18" method="_on_body_entered"]
 
-[connection signal="body_entered" from="Exits/ToTallHouse" to="Exits/ToTallHouse" method="_on_body_entered"]
 
 [connection signal="body_entered" from="Exits/ToRedRoofHouse" to="Exits/ToRedRoofHouse" method="_on_body_entered"]
