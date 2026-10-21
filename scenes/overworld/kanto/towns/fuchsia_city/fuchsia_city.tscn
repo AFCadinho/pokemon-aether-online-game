@@ -22,6 +22,8 @@
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_pokemon"]
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="population_worker"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="night_light"]
+
 [sub_resource type="RectangleShape2D" id="gate_shape"]
 size = Vector2(32, 96)
 
@@ -649,3 +651,197 @@ script = ExtResource("90_map_doors")
 [connection signal="body_entered" from="Exits/ToSafariZoneGate" to="Exits/ToSafariZoneGate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute19Gate" to="Exits/ToRoute19Gate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute18" to="Exits/ToRoute18" method="_on_body_entered"]
+
+[node name="NightLights" type="Node2D" parent="."]
+
+[node name="Lanterns" type="Node2D" parent="NightLights"]
+
+[node name="NightLight1" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(1872, 80)
+
+[node name="NightLight2" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(1104, 176)
+
+[node name="NightLight3" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(1264, 176)
+
+[node name="NightLight4" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(144, 240)
+
+[node name="NightLight5" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(336, 240)
+
+[node name="NightLight6" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(848, 240)
+
+[node name="NightLight7" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(656, 560)
+
+[node name="NightLight8" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(1072, 560)
+
+[node name="NightLight9" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(1616, 560)
+
+[node name="NightLight10" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(1872, 560)
+
+[node name="NightLight11" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(1616, 720)
+
+[node name="NightLight12" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(1872, 720)
+
+[node name="NightLight13" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(624, 784)
+
+[node name="NightLight14" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(752, 784)
+
+[node name="NightLight15" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(112, 912)
+
+[node name="NightLight16" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(528, 912)
+
+[node name="NightLight17" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(944, 1136)
+
+[node name="NightLight18" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(1072, 1136)
+
+[node name="NightLight19" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(624, 1168)
+
+[node name="NightLight20" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(752, 1168)
+
+[node name="NightLight21" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(1264, 1168)
+
+[node name="NightLight22" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(1264, 1328)
+
+[node name="NightLight23" parent="NightLights/Lanterns" instance=ExtResource("night_light")]
+position = Vector2(1808, 1328)
+
+[node name="Buildings" type="Node2D" parent="NightLights"]
+
+[node name="PokemonCenter" type="Node2D" parent="NightLights/Buildings"]
+
+[node name="NightLight1" parent="NightLights/Buildings/PokemonCenter" instance=ExtResource("night_light")]
+position = Vector2(154, 266)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight2" parent="NightLights/Buildings/PokemonCenter" instance=ExtResource("night_light")]
+position = Vector2(314, 266)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NorthHouse" type="Node2D" parent="NightLights/Buildings"]
+
+[node name="NightLight1" parent="NightLights/Buildings/NorthHouse" instance=ExtResource("night_light")]
+position = Vector2(488, 302)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight2" parent="NightLights/Buildings/NorthHouse" instance=ExtResource("night_light")]
+position = Vector2(560, 302)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="ModernHouse" type="Node2D" parent="NightLights/Buildings"]
+
+[node name="NightLight1" parent="NightLights/Buildings/ModernHouse" instance=ExtResource("night_light")]
+position = Vector2(680, 296)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight2" parent="NightLights/Buildings/ModernHouse" instance=ExtResource("night_light")]
+position = Vector2(765, 296)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight3" parent="NightLights/Buildings/ModernHouse" instance=ExtResource("night_light")]
+position = Vector2(676, 198)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight4" parent="NightLights/Buildings/ModernHouse" instance=ExtResource("night_light")]
+position = Vector2(762, 160)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="CentralHouses" type="Node2D" parent="NightLights/Buildings"]
+
+[node name="NightLight1" parent="NightLights/Buildings/CentralHouses" instance=ExtResource("night_light")]
+position = Vector2(712, 592)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight2" parent="NightLights/Buildings/CentralHouses" instance=ExtResource("night_light")]
+position = Vector2(776, 592)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight3" parent="NightLights/Buildings/CentralHouses" instance=ExtResource("night_light")]
+position = Vector2(936, 592)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight4" parent="NightLights/Buildings/CentralHouses" instance=ExtResource("night_light")]
+position = Vector2(1000, 592)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NortheastHouse" type="Node2D" parent="NightLights/Buildings"]
+
+[node name="NightLight1" parent="NightLights/Buildings/NortheastHouse" instance=ExtResource("night_light")]
+position = Vector2(2000, 205)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight2" parent="NightLights/Buildings/NortheastHouse" instance=ExtResource("night_light")]
+position = Vector2(2064, 205)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="SouthwestHouses" type="Node2D" parent="NightLights/Buildings"]
+
+[node name="NightLight1" parent="NightLights/Buildings/SouthwestHouses" instance=ExtResource("night_light")]
+position = Vector2(168, 976)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight2" parent="NightLights/Buildings/SouthwestHouses" instance=ExtResource("night_light")]
+position = Vector2(240, 976)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight3" parent="NightLights/Buildings/SouthwestHouses" instance=ExtResource("night_light")]
+position = Vector2(464, 976)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="Gym" type="Node2D" parent="NightLights/Buildings"]
+
+[node name="NightLight1" parent="NightLights/Buildings/Gym" instance=ExtResource("night_light")]
+position = Vector2(904, 1032)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight2" parent="NightLights/Buildings/Gym" instance=ExtResource("night_light")]
+position = Vector2(1096, 1032)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight3" parent="NightLights/Buildings/Gym" instance=ExtResource("night_light")]
+position = Vector2(904, 1072)
+max_energy = 0.55
+light_texture_scale = 0.55
+
+[node name="NightLight4" parent="NightLights/Buildings/Gym" instance=ExtResource("night_light")]
+position = Vector2(1096, 1072)
+max_energy = 0.55
+light_texture_scale = 0.55

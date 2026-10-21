@@ -14,7 +14,8 @@ func _init() -> void:
 func _run() -> void:
 	_check_configuration_scope()
 	var celadon: Node2D
-	for city: String in ["celadon", "cerulean", "vermilion"]:
+	var fuchsia: Node2D
+	for city: String in ["celadon", "cerulean", "vermilion", "fuchsia"]:
 		var map: Node2D = load("res://scenes/overworld/kanto/towns/%s_city/%s_city.tscn" % [city, city]).instantiate()
 		if not baseline:
 			if city == "celadon":
@@ -36,13 +37,17 @@ func _run() -> void:
 		print("NIGHT_LIGHT_BATCH_BUDGET ", city, " ", maximum)
 		if city == "celadon":
 			celadon = map
+		elif city == "fuchsia":
+			fuchsia = map
 		else:
 			map.free()
 	if DisplayServer.get_name() != "headless":
 		await _check_camera_pixels(celadon)
+		await _check_camera_pixels(fuchsia, "Fuchsia", 44, [-64, 64, 192, 320, 448, 576, 704, 832, 960, 1088, 1216])
 	else:
 		print("Night-light pixel comparison requires a graphics renderer; batch-budget checks ran headlessly.")
 	celadon.free()
+	fuchsia.free()
 	print("NIGHT_LIGHT_CAMERA ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
 
@@ -105,7 +110,7 @@ func _maximum_lights_per_batch(map: Node2D) -> int:
 	return maximum
 
 
-func _check_camera_pixels(map: Node2D) -> void:
+func _check_camera_pixels(map: Node2D, city: String = "Celadon", minimum: int = 60, camera_rows: Array = [64, 192, 320, 448, 576]) -> void:
 	var viewport := SubViewport.new()
 	viewport.size = Vector2i(640, 480)
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
@@ -131,7 +136,7 @@ func _check_camera_pixels(map: Node2D) -> void:
 			lamp.set_night_intensity(1.0)
 			samples.append(Vector2i(lamp.global_position))
 	var observations: Dictionary = {}
-	for y: int in [64, 192, 320, 448, 576]:
+	for y: int in camera_rows:
 		for x in range(0, 1665, 128):
 			viewport.canvas_transform = Transform2D(0.0, -Vector2(x, y))
 			await process_frame
@@ -163,9 +168,9 @@ func _check_camera_pixels(map: Node2D) -> void:
 		worst_delta = maxf(worst_delta, delta)
 		if delta > 0.01:
 			unstable += 1
-	_check(compared >= 60, "The camera comparison covers at least 60 stationary Celadon lights")
+	_check(compared >= minimum, "The camera comparison covers at least %d stationary %s lights" % [minimum, city])
 	_check(unstable == 0, "Camera movement does not alter stationary lights (%d unstable)" % unstable)
-	print("NIGHT_LIGHT_CAMERA_PIXELS ", {"compared": compared, "unstable": unstable, "max_delta": worst_delta})
+	print("NIGHT_LIGHT_CAMERA_PIXELS ", {"city": city, "compared": compared, "unstable": unstable, "max_delta": worst_delta})
 	viewport.queue_free()
 	await process_frame
 
