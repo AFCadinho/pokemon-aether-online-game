@@ -193,7 +193,8 @@ location_id = "kanto.route.19"
 location_name = "Route 19"
 region_id = "kanto"
 encounter_area_id = "kanto_route_19"
-battle_environment_id = "water"
+grass_encounter_chance = 0.21
+battle_environment_id = "grass"
 surf_encounter_chance = 0.02
 music_profile_id = "kanto.routes_3_10_16_22"
 
