@@ -1462,7 +1462,7 @@
   "ui.settings.sfx": "Efeitos sonoros",
   "ui.settings.pokemon_cries": "Sons dos Pokémon",
   "ui.settings.anime_pokemon_cries": "Usar sons de anime dos Pokémon quando disponíveis",
-  "ui.settings.ui_volume": "Interface",
+  "ui.settings.ui_volume": "Menus e botões",
   "ui.settings.notifications": "Notificações",
   "ui.settings.account.edit": "Editar dados da conta",
   "ui.settings.account.portal": "Gerenciar conta",
@@ -7421,5 +7421,10 @@
   "ui.staff.story_checkpoint.fuji_house_reward": "Sr. Fuji: Poké Flute em casa",
   "ui.cycling_road.mount_required": "Você precisa estar em uma montaria para entrar na Cycling Road.",
   "ui.cycling_road.dismount_blocked": "Você não pode desmontar na Cycling Road.",
-  "ui.cycling_road.north_blocked": "Você não pode seguir para o norte nesta ponte."
+  "ui.cycling_road.north_blocked": "Você não pode seguir para o norte nesta ponte.",
+  "ui.settings.section.sound_general": "Geral",
+  "ui.settings.section.sound_game": "Sons do jogo",
+  "ui.settings.section.sound_interface": "Interface",
+  "ui.settings.battle_sfx": "Efeitos de batalha",
+  "ui.settings.overworld_sfx": "Sons do mundo"
 }

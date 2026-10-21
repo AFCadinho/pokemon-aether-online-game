@@ -426,7 +426,7 @@ func _play_counterattack_sound(move: Dictionary) -> void:
 	var sound_path := str(move.get("sound", "")).strip_edges()
 	if OS.has_feature("web"):
 		var bridge := preload("res://scripts/services/web_audio_bridge.gd")
-		bridge.play_sfx(sound_path, SettingsManager.master_volume / 100.0 * SettingsManager.sfx_volume / 100.0)
+		bridge.play_sfx(sound_path, SettingsManager.master_volume / 100.0 * SettingsManager.overworld_sfx_volume / 100.0)
 		return
 	if sound_path.is_empty() or not ResourceLoader.exists(sound_path):
 		return
@@ -435,7 +435,7 @@ func _play_counterattack_sound(move: Dictionary) -> void:
 		return
 	var audio_player := AudioStreamPlayer.new()
 	audio_player.stream = stream
-	audio_player.bus = SettingsManager.get_audio_output_bus(SettingsManager.SFX_BUS)
+	audio_player.bus = SettingsManager.get_audio_output_bus(SettingsManager.OVERWORLD_SFX_BUS)
 	audio_player.finished.connect(audio_player.queue_free)
 	add_child(audio_player)
 	audio_player.play()

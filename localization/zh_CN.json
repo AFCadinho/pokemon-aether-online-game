@@ -1458,11 +1458,11 @@
   "ui.settings.audio": "音频",
   "ui.settings.master": "大师",
   "ui.settings.music": "音乐",
-  "ui.settings.battle_music": "战斗音乐",
+  "ui.settings.battle_music": "战斗音乐选择",
   "ui.settings.sfx": "特效",
   "ui.settings.pokemon_cries": "宝可梦哭泣",
   "ui.settings.anime_pokemon_cries": "可用时使用动画版宝可梦叫声",
-  "ui.settings.ui_volume": "用户界面",
+  "ui.settings.ui_volume": "菜单与按钮音效",
   "ui.settings.notifications": "通知",
   "ui.settings.account.edit": "编辑帐户详细信息",
   "ui.settings.account.portal": "管理帐户",
@@ -7421,5 +7421,10 @@
   "ui.staff.story_checkpoint.fuji_house_reward": "富士老人：家中的宝可梦之笛",
   "ui.cycling_road.mount_required": "必须骑乘坐骑才能进入自行车道。",
   "ui.cycling_road.dismount_blocked": "在自行车道上无法下坐骑。",
-  "ui.cycling_road.north_blocked": "这座桥禁止向北行进。"
+  "ui.cycling_road.north_blocked": "这座桥禁止向北行进。",
+  "ui.settings.section.sound_general": "常规",
+  "ui.settings.section.sound_game": "游戏音效",
+  "ui.settings.section.sound_interface": "界面",
+  "ui.settings.battle_sfx": "战斗音效",
+  "ui.settings.overworld_sfx": "世界音效"
 }

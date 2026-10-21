@@ -304,7 +304,7 @@ func _build_nodes() -> void:
 
 		var player: AudioStreamPlayer = AudioStreamPlayer.new()
 		player.stream = stream
-		player.bus = SettingsManager.get_audio_output_bus(SettingsManager.SFX_BUS)
+		player.bus = SettingsManager.get_audio_output_bus(SettingsManager.BATTLE_SFX_BUS)
 		sound_players[sound_key] = player
 		add_child(player)
 
@@ -3486,7 +3486,7 @@ func _play_sound_event(event: Dictionary) -> void:
 			var web_volume: float = float(event["volume"]) / 100.0
 			WebAudioBridge.play_sfx(
 				sound_path,
-				clampf(SettingsManager.master_volume / 100.0 * SettingsManager.sfx_volume / 100.0 * web_volume, 0.0, 1.0),
+				clampf(SettingsManager.master_volume / 100.0 * SettingsManager.battle_sfx_volume / 100.0 * web_volume, 0.0, 1.0),
 				float(event["pitch"]) / 100.0
 			)
 		return

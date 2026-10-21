@@ -164,23 +164,46 @@ text = "ui.settings.battle_music"
 [node name="BattleMusicOptionsButton" type="OptionButton" parent="MarginContainer/VBoxContainer" unique_id=2036413251]
 layout_mode = 2
 
-[node name="SfxVolumeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1114995022]
+[node name="BattleSfxVolumeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1114995022]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="SfxVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/SfxVolumeRow" unique_id=990709953]
+[node name="BattleSfxVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/BattleSfxVolumeRow" unique_id=990709953]
 custom_minimum_size = Vector2(72, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
-text = "ui.settings.sfx"
+text = "ui.settings.battle_sfx"
 
-[node name="SfxVolumeSlider" type="HSlider" parent="MarginContainer/VBoxContainer/SfxVolumeRow" unique_id=695731732]
+[node name="BattleSfxVolumeSlider" type="HSlider" parent="MarginContainer/VBoxContainer/BattleSfxVolumeRow" unique_id=695731732]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 value = 75.0
 
-[node name="SfxVolumeValueLabel" type="Label" parent="MarginContainer/VBoxContainer/SfxVolumeRow" unique_id=1623798713]
+[node name="BattleSfxVolumeValueLabel" type="Label" parent="MarginContainer/VBoxContainer/BattleSfxVolumeRow" unique_id=1623798713]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "75%"
+horizontal_alignment = 2
+
+[node name="OverworldSfxVolumeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="OverworldSfxVolumeLabel" type="Label" parent="MarginContainer/VBoxContainer/OverworldSfxVolumeRow"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)
+text = "ui.settings.overworld_sfx"
+
+[node name="OverworldSfxVolumeSlider" type="HSlider" parent="MarginContainer/VBoxContainer/OverworldSfxVolumeRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 75.0
+
+[node name="OverworldSfxVolumeValueLabel" type="Label" parent="MarginContainer/VBoxContainer/OverworldSfxVolumeRow"]
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8980392, 0.8627451, 0.8117647, 1)

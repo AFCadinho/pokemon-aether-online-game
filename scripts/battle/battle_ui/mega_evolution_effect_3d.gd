@@ -66,11 +66,13 @@ func start(playback_speed: float) -> void:
 	flash.position.y = 1.2
 	add_child(flash)
 	charge_audio = AudioStreamPlayer.new()
+	charge_audio.bus = SettingsManager.get_audio_output_bus(SettingsManager.BATTLE_SFX_BUS)
 	if not OS.has_feature("web"):
 		charge_audio.stream = load(CHARGE_SOUND)
 	charge_audio.pitch_scale = speed
 	add_child(charge_audio)
 	reveal_audio = AudioStreamPlayer.new()
+	reveal_audio.bus = SettingsManager.get_audio_output_bus(SettingsManager.BATTLE_SFX_BUS)
 	if not OS.has_feature("web"):
 		reveal_audio.stream = load(REVEAL_SOUND)
 	reveal_audio.pitch_scale = speed

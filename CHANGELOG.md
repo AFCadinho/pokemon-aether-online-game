@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Split sound effects into Battle effects and Overworld sounds, preserving existing volume preferences; group sound settings and route ranked-match alerts through Notifications on native and browser clients.
+
 - Add the Route 16 East house interior with two-way travel to Route 16 East.
 
 - Use a classic Game Boy-style entrance sound for the Viridian Center door, and start the door silently open when returning from inside.

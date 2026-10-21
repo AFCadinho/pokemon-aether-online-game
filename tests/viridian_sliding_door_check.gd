@@ -81,7 +81,7 @@ func _run() -> void:
 	_check(sfx.get_child_count() == sounds_before + 1, "Opening plays exactly one sound")
 	var sound := sfx.get_child(sfx.get_child_count() - 1) as AudioStreamPlayer
 	_check(sound != null and sound.stream.get_length() > 0.30 and sound.stream.get_length() < 0.35, "Short door sound loads as audio")
-	_check(sound != null and sound.bus == root.get_node("SettingsManager").get_audio_output_bus("SFX"), "Door uses the user's SFX bus")
+	_check(sound != null and sound.bus == root.get_node("SettingsManager").get_audio_output_bus("Overworld SFX"), "Door uses the user's SFX bus")
 	local.moving = false; local.position = arrival
 	_tick(door,0.3)
 	_check(door.open_amount == 1.0, "Door stays open while standing in front")
