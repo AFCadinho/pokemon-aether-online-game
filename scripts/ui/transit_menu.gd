@@ -37,6 +37,9 @@ var _selected_destination: Dictionary = {}
 var _destination_buttons: Dictionary = {}
 var _selection_order: Array[Dictionary] = []
 var _wide_layout := false
+var _search_input: LineEdit
+var _search_query := ""
+var _current_region_index := 0
 
 
 func open(network: Dictionary) -> void:
@@ -68,6 +71,7 @@ func open(network: Dictionary) -> void:
 	margin.add_child(content)
 	_build_header(content)
 	_build_region_navigation(content)
+	_build_search(content)
 	_build_destination_area(content, viewport_size)
 	_build_footer(content)
 
@@ -145,6 +149,39 @@ func _build_region_navigation(parent: VBoxContainer) -> void:
 	navigation.add_child(_region_select)
 
 
+func _build_search(parent: VBoxContainer) -> void:
+	_search_input = LineEdit.new()
+	_search_input.name = "DestinationSearch"
+	_search_input.placeholder_text = _t("ui.transit.search")
+	_search_input.tooltip_text = _t("ui.transit.search")
+	_search_input.clear_button_enabled = true
+	_search_input.custom_minimum_size.y = 42
+	_search_input.add_theme_color_override("font_color", COLOR_TEXT)
+	_search_input.add_theme_color_override("font_placeholder_color", COLOR_MUTED)
+	_search_input.add_theme_color_override("caret_color", COLOR_ACCENT)
+	var search_style := _style(COLOR_CARD, COLOR_BORDER, 1, 9)
+	search_style.content_margin_left = 12
+	search_style.content_margin_right = 12
+	_search_input.add_theme_stylebox_override("normal", search_style)
+	var focus_style := search_style.duplicate() as StyleBoxFlat
+	focus_style.border_color = COLOR_ACCENT
+	focus_style.set_border_width_all(2)
+	_search_input.add_theme_stylebox_override("focus", focus_style)
+	_search_input.text_changed.connect(_on_search_changed)
+	parent.add_child(_search_input)
+
+
+func _on_search_changed(value: String) -> void:
+	_search_query = value.strip_edges().to_lower()
+	_show_region(_current_region_index, false)
+	var scroll := _destination_stack.get_parent() as ScrollContainer
+	scroll.scroll_vertical = 0
+
+
+func _matches_search(destination: Dictionary) -> bool:
+	return _search_query.is_empty() or str(destination.get("name", "")).to_lower().contains(_search_query)
+
+
 func _build_destination_area(parent: VBoxContainer, viewport_size: Vector2) -> void:
 	_wide_layout = viewport_size.x >= 900.0
 	var scroll := ScrollContainer.new()
@@ -179,7 +216,9 @@ func _build_footer(parent: VBoxContainer) -> void:
 	footer.add_child(_travel_button)
 
 
-func _show_region(index: int) -> void:
+func _show_region(index: int, focus_selection: bool = true) -> void:
+	_current_region_index = index
+	var previous_selection_id := str(_selected_destination.get("destinationId", ""))
 	for child: Node in _destination_stack.get_children():
 		child.free()
 	_destination_buttons.clear()
@@ -188,7 +227,7 @@ func _show_region(index: int) -> void:
 	if _region_ids.is_empty():
 		_add_empty_message(_destination_stack, _t("ui.transit.empty_region"))
 		_build_global_hub_section(_destination_stack)
-		_select_default_destination()
+		_select_default_destination(focus_selection)
 		return
 
 	var safe_index := clampi(index, 0, _region_ids.size() - 1)
@@ -204,12 +243,20 @@ func _show_region(index: int) -> void:
 		if not value is Dictionary:
 			continue
 		var destination := value as Dictionary
-		if _is_current_destination(destination):
+		if _is_current_destination(destination) or not _matches_search(destination):
 			continue
 		if bool(destination.get("attuned", false)) or bool(destination.get("isAnchor", false)):
 			available.append(destination)
 		else:
 			locked.append(destination)
+
+	var matching_hubs := _global_hubs.any(
+		func(destination: Dictionary) -> bool: return not _is_current_destination(destination) and _matches_search(destination)
+	)
+	if not _search_query.is_empty() and available.is_empty() and locked.is_empty() and not matching_hubs:
+		_add_empty_message(_destination_stack, _t("ui.transit.no_search_results"))
+		_refresh_travel_button()
+		return
 
 	_add_section_heading(_destination_stack, "AvailableHeading", _t("ui.transit.available"), COLOR_ACCENT)
 	if available.is_empty():
@@ -234,7 +281,12 @@ func _show_region(index: int) -> void:
 			locked_grid.add_child(_locked_destination_card(destination))
 
 	_build_global_hub_section(_destination_stack)
-	_select_default_destination()
+	if not focus_selection and _destination_buttons.has(previous_selection_id):
+		for destination: Dictionary in _selection_order:
+			if str(destination.get("destinationId", "")) == previous_selection_id:
+				_select_destination(destination, false)
+				return
+	_select_default_destination(focus_selection)
 
 
 func _current_location_card(destination: Dictionary) -> PanelContainer:
@@ -294,7 +346,7 @@ func _build_region_heading(parent: VBoxContainer, region_id: String) -> void:
 func _build_global_hub_section(parent: VBoxContainer) -> void:
 	var available_hubs: Array[Dictionary] = []
 	for destination: Dictionary in _global_hubs:
-		if not _is_current_destination(destination):
+		if not _is_current_destination(destination) and _matches_search(destination):
 			available_hubs.append(destination)
 	if available_hubs.is_empty():
 		return
@@ -474,21 +526,21 @@ func _add_card_content(card: Button, destination: Dictionary, is_hub: bool, curr
 	_set_mouse_filter_recursive(margin)
 
 
-func _select_default_destination() -> void:
+func _select_default_destination(focus_selection: bool = true) -> void:
 	var fallback: Dictionary = {}
 	for destination: Dictionary in _selection_order:
 		if fallback.is_empty():
 			fallback = destination
 		if _can_afford(destination):
-			_select_destination(destination)
+			_select_destination(destination, focus_selection)
 			return
 	if not fallback.is_empty():
-		_select_destination(fallback)
+		_select_destination(fallback, focus_selection)
 	else:
 		_refresh_travel_button()
 
 
-func _select_destination(destination: Dictionary) -> void:
+func _select_destination(destination: Dictionary, focus_selection: bool = true) -> void:
 	_selected_destination = destination.duplicate(true)
 	var selected_id := str(_selected_destination.get("destinationId", ""))
 	for destination_id: Variant in _destination_buttons:
@@ -496,7 +548,7 @@ func _select_destination(destination: Dictionary) -> void:
 		_apply_destination_card_style(button, str(destination_id) == selected_id, bool(button.get_meta("is_hub", false)))
 	_refresh_travel_button()
 	var selected_button := _destination_buttons.get(selected_id) as Button
-	if selected_button != null:
+	if selected_button != null and focus_selection:
 		selected_button.call_deferred("grab_focus")
 
 

@@ -2,6 +2,8 @@ extends SceneTree
 
 const TransitMenuScript := preload("res://scripts/ui/transit_menu.gd")
 const REQUIRED_KEYS: Array[String] = [
+	"ui.transit.search",
+	"ui.transit.no_search_results",
 	"ui.transit.available",
 	"ui.transit.locked_destinations",
 	"ui.transit.no_available",
@@ -55,6 +57,33 @@ func _run() -> void:
 		var confirmation := menu.get("_confirmation") as AetherConfirmationDialog
 		_check(confirmation != null and confirmation.visible, "the footer action retains the travel confirmation safety step")
 		_check(str(menu.get("_pending_destination_id")) == "kanto_pewter_city", "confirmation targets the selected destination")
+	var confirmation := menu.get("_confirmation") as AetherConfirmationDialog
+	confirmation.hide()
+	var search := menu.find_child("DestinationSearch", true, false) as LineEdit
+	_check(search != null and search.clear_button_enabled, "destination search provides a clear action")
+	search.grab_focus()
+	search.text = "  PEw  "
+	search.text_changed.emit(search.text)
+	await process_frame
+	await process_frame
+	_check(menu.find_child("Destination_kanto_pewter_city", true, false) != null and menu.find_child("Destination_kanto_pallet_town", true, false) == null, "search matches partial names regardless of case and outer whitespace")
+	_check(search.has_focus(), "filtering preserves keyboard focus so typing continues")
+	_check(travel.text.contains("Pewter City"), "a matching selection remains selected")
+	search.text = "cerulean"
+	search.text_changed.emit(search.text)
+	await process_frame
+	_check(menu.find_child("Locked_kanto_cerulean_city", true, false) != null and travel.disabled, "locked matches stay visible without allowing travel to a hidden selection")
+	search.text = "no-such-town"
+	search.text_changed.emit(search.text)
+	await process_frame
+	_check(menu.find_child("CurrentLocation", true, false) != null, "current location remains visible while searching")
+	_check(_contains_label(menu, "No destinations found. Try another name."), "an empty search result explains how to recover")
+	_check(travel.disabled and (menu.get("_selected_destination") as Dictionary).is_empty(), "no matches clears selection and disables travel")
+	search.text = ""
+	search.text_changed.emit(search.text)
+	await process_frame
+	_check(menu.find_child("Destination_kanto_pallet_town", true, false) != null and menu.find_child("Locked_kanto_cerulean_city", true, false) != null and not travel.disabled, "clearing search restores available and locked destinations")
+
 	menu.queue_free()
 	await process_frame
 
@@ -73,6 +102,16 @@ func _run() -> void:
 	regional_menu.open(regional_network)
 	await process_frame
 	_check(regional_menu.find_child("RegionSelect", true, false) != null, "worldwide travel keeps region selection when it is useful")
+	var regional_search := regional_menu.find_child("DestinationSearch", true, false) as LineEdit
+	regional_search.text = "new bark"
+	regional_search.text_changed.emit(regional_search.text)
+	var region_select := regional_menu.find_child("RegionSelect", true, false) as OptionButton
+	for index: int in region_select.item_count:
+		if str(region_select.get_item_metadata(index)) == "johto":
+			region_select.select(index)
+			region_select.item_selected.emit(index)
+	await process_frame
+	_check(regional_menu.find_child("Destination_johto_new_bark_town", true, false) != null and regional_search.text == "new bark", "switching regions preserves and applies the search")
 	regional_menu.queue_free()
 	await process_frame
 
@@ -104,6 +143,14 @@ func _run() -> void:
 	var current_button := current_menu.find_child("Destination_kanto_viridian_city", true, false)
 	_check(current_button == null, "the current regional location is omitted from travel destinations")
 	_check(current_menu.find_child("CurrentLocation", true, false) != null, "the current regional location gets its own status card")
+	var hub_search := current_menu.find_child("DestinationSearch", true, false) as LineEdit
+	hub_search.text = "clash"
+	hub_search.text_changed.emit(hub_search.text)
+	await process_frame
+	_check(current_menu.find_child("Destination_aether_clash_lobby", true, false) != null and current_menu.find_child("Destination_kanto_pallet_town", true, false) == null, "search filters worldwide hubs alongside regional destinations")
+	var hub_travel := current_menu.find_child("TravelButton", true, false) as Button
+	_check(not hub_travel.disabled and hub_travel.text.contains("Aether Clash Lobby"), "a matching hub becomes the travel destination")
+
 	current_menu.queue_free()
 
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
@@ -174,3 +221,12 @@ func _check(condition: bool, label: String) -> void:
 		return
 	failed = true
 	push_error("FAIL: %s" % label)
+
+
+func _contains_label(node: Node, value: String) -> bool:
+	if node is Label and node.text == value:
+		return true
+	for child: Node in node.get_children():
+		if _contains_label(child, value):
+			return true
+	return false
