@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Fuchsia City to Aethernet Travel with Beacon attunement, Anchor support and a safe station arrival.
+
 - Include the 2D/3D choice in regular Android builds without an experimental build opt-in, using the existing Mobile/Vulkan renderer.
 
 - Preserve roofs, walls, fences and overlapping tree crowns when sorting tree bases around players and mounts, including Viridian City and Route 2.

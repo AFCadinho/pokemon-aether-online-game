@@ -280,6 +280,9 @@ region_id = "kanto"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=285307146]
 
+[node name="TransitArrival" type="Marker2D" parent="Spawns"]
+position = Vector2(144, 1040)
+
 [node name="FromRoute15Gate" type="Marker2D" parent="Spawns" unique_id=435999146]
 position = Vector2(2192, 720)
 
@@ -490,7 +493,8 @@ movement_wait_jitter_seconds = 0.8
 
 [node name="TransitKeeperNPC" parent="Entities/NPCs" unique_id=1841746154 instance=ExtResource("14_nycgr")]
 position = Vector2(208, 1008)
-local_destination_id = ""
+local_destination_id = "kanto_fuchsia_city"
+npc_id = "kanto_fuchsia_city_transit_keeper"
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=975998895]
 
@@ -507,6 +511,8 @@ position = Vector2(880, 656)
 
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=1079872017 instance=ExtResource("17_p35n4")]
 position = Vector2(144, 1008)
+destination_id = "kanto_fuchsia_city"
+interactable_id = "kanto_fuchsia_city_aether_beacon"
 display_name = "Aether Beacon"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=609006632]
