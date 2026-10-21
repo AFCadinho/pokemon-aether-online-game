@@ -4,6 +4,11 @@ const SCENE := "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tsc
 const PORTRAITS := preload("res://scripts/services/sign_portrait_catalog.gd")
 const LOCALES := ["en", "nl", "pt-BR", "zh-CN"]
 const WARNINGS := ["The Safari Zone is currently closed.", "De Safari Zone is momenteel gesloten.", "A Safari Zone está fechada no momento.", "野生原野区目前暂停开放。"]
+const SIGN_IDS := {
+	"SafariZoneSign": "kanto_fuchsia_city_safari_zone",
+	"GymSign": "kanto_fuchsia_city_gym",
+	"FuchsiaCitySign": "kanto_fuchsia_city_town_sign",
+}
 var failed := false
 
 class DialogueProbe extends Node:
@@ -47,7 +52,7 @@ func _run() -> void:
 			continue
 		count += 1
 		var sign_id: String = actor.get("sign_id")
-		_check(not sign_id.is_empty(), "%s has content assigned" % actor.name)
+		_check(sign_id == SIGN_IDS.get(str(actor.name), "missing"), "%s has its correct content assigned" % actor.name)
 		_check(PORTRAITS.get_portrait(sign_id) != null, "%s portrait loads" % actor.name)
 		_check(collision.get_cell_source_id(collision.local_to_map(actor.position)) == -1, "%s reading tile is walkable" % actor.name)
 		actor.owner = null
@@ -58,9 +63,15 @@ func _run() -> void:
 		_check(actor.get("required_facing_direction") == "up", "%s is read looking toward the sign" % actor.name)
 		for index in range(LOCALES.size()):
 			var locale: String = LOCALES[index]
+			var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/world_text/signs/%s/kanto/fuchsia_city.json" % locale))
+			var expected: Dictionary = {}
+			for entry: Dictionary in catalog.signs:
+				if entry.id == SIGN_IDS.get(str(actor.name), ""):
+					expected = entry
 			actor.set("locale", locale)
 			await actor.call("show_sign_text")
-			_check(not box.lines.is_empty() and not box.speaker.is_empty(), "%s opens localized dialogue in %s" % [actor.name, locale])
+			_check(box.lines == expected.get("lines", []) and not box.lines.is_empty(), "%s shows its exact localized text in %s" % [actor.name, locale])
+			_check(box.speaker == expected.get("title", ""), "%s shows its localized title in %s" % [actor.name, locale])
 			_check(box.portrait != null and box.show_portrait, "%s displays its illustration in %s" % [actor.name, locale])
 			if sign_id == "kanto_fuchsia_city_safari_zone":
 				_check(WARNINGS[index] in box.lines, "Safari sign accurately explains the current closed area in %s" % locale)
