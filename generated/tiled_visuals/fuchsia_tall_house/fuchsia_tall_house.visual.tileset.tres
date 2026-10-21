@@ -1,9 +1,9 @@
-[gd_resource type="TileSet" format=3 uid="uid://cngvp5f3bfrn6"]
+[gd_resource type="TileSet" format=3 uid="uid://dtykhxnwbxnlq"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_tall_house/assets/fuchsia_tall_house.visual.tileset.compact_source_1_0.texture.res" id="1_a52i0"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_tall_house/assets/fuchsia_tall_house.visual.tileset.compact_source_2049_0.texture.res" id="2_b1su0"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_tall_house/assets/fuchsia_tall_house.visual.tileset.compact_source_3073_0.texture.res" id="3_ujfjt"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_tall_house/assets/fuchsia_tall_house.visual.tileset.compact_source_4097_0.texture.res" id="4_nn2fm"]
+[ext_resource type="Texture2D" uid="uid://bn442tjak4iwt" path="res://generated/tiled_visuals/fuchsia_tall_house/assets/fuchsia_tall_house.visual.tileset.compact_source_4097_0.texture.res" id="4_nn2fm"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/fuchsia_tall_house/assets/fuchsia_tall_house.visual.tileset.compact_source_5865_0.texture.res" id="5_a232c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_njwfr"]
