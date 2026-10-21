@@ -476,8 +476,6 @@ movement_wait_seconds = 1.8
 movement_speed_pixels = 28.0
 movement_wait_jitter_seconds = 0.5
 
-[node name="Interactables" type="Node2D" parent="Entities"]
-
 [node name="Signs" type="Node2D" parent="Entities/Interactables"]
 
 [node name="RouteSign" parent="Entities/Interactables/Signs" instance=ExtResource("r19_large_sign")]
