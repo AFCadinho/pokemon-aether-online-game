@@ -41,7 +41,7 @@ def replace_setting(path: Path, section: str, key: str, value: str) -> None:
     raise ValueError(f"Missing [{section}] {key} in {path}")
 
 
-def prepare(project: Path, presets: Path, version: str, code: int, build_id: str, compatible_build_id: str = "", experimental_3d: bool = False) -> None:
+def prepare(project: Path, presets: Path, version: str, code: int, build_id: str, compatible_build_id: str = "", experimental_3d: bool | None = None) -> None:
     if not VERSION.fullmatch(version) or not BUILD_ID.fullmatch(build_id):
         raise ValueError("Invalid Android version or build ID")
     if compatible_build_id and not BUILD_ID.fullmatch(compatible_build_id):
@@ -51,20 +51,15 @@ def prepare(project: Path, presets: Path, version: str, code: int, build_id: str
         raise ValueError(f"Android version code must be greater than {previous}")
     if setting(presets, "preset.7.options", "package/unique_name") != f'"{PACKAGE}"':
         raise ValueError("Unexpected Android package ID")
-    try:
-        features = json.loads(setting(presets, "preset.7", "custom_features")).split(",")
-    except ValueError:
-        if experimental_3d:
-            raise
-    else:
-        features = [feature for feature in features if feature and feature != "android_3d_experimental"]
-        if experimental_3d:
-            features.append("android_3d_experimental")
-        replace_setting(presets, "preset.7", "custom_features", json.dumps(",".join(features)))
-    # Adreno's Compatibility shader linker can crash natively during 3D moves.
-    # Keep Vulkan scoped to builds that explicitly enable the 3D experiment.
-    replace_setting(project, "rendering", "renderer/rendering_method.mobile",
-                    json.dumps("mobile" if experimental_3d else "gl_compatibility"))
+    # 3D is a regular Android capability. Keep the legacy feature name because
+    # runtime services and retained diagnostics use it; it is no longer opt-in.
+    features = json.loads(setting(presets, "preset.7", "custom_features")).split(",")
+    features = [feature for feature in features if feature and feature != "android_3d_experimental"]
+    features.append("android_3d_experimental")
+    replace_setting(presets, "preset.7", "custom_features", json.dumps(",".join(features)))
+    # Preserve the shipping 3D renderer: Adreno's Compatibility shader linker
+    # can crash natively during moves. 2D remains a player preference.
+    replace_setting(project, "rendering", "renderer/rendering_method.mobile", json.dumps("mobile"))
     replace_setting(project, "application", "config/version", json.dumps(version))
     replace_setting(project, "application", "config/build_id", json.dumps(build_id))
     replace_setting(project, "application", "config/android_version_code", str(code))
@@ -120,7 +115,7 @@ def main() -> None:
     stamp = commands.add_parser("prepare")
     stamp.add_argument("--project", type=Path, default=Path("project.godot"))
     stamp.add_argument("--presets", type=Path, default=Path("export_presets.cfg"))
-    stamp.add_argument("--experimental-3d", action="store_true", help="Offer the explicit experimental Android 2D/3D choice")
+    stamp.add_argument("--experimental-3d", action="store_true", help=argparse.SUPPRESS) # Legacy no-op.
     review = commands.add_parser("inspect")
     review.add_argument("--apk", type=Path, required=True)
     review.add_argument("--aapt", type=Path, required=True)
@@ -134,7 +129,7 @@ def main() -> None:
         command.add_argument("--compatible-build-id", default="")
     args = parser.parse_args()
     if args.command == "prepare":
-        prepare(args.project, args.presets, args.version, args.code, args.build_id, args.compatible_build_id, args.experimental_3d)
+        prepare(args.project, args.presets, args.version, args.code, args.build_id, args.compatible_build_id)
     else:
         inspect(args.apk, args.aapt, args.apksigner, args.version, args.code,
                 args.build_id, args.certificate, args.output, args.compatible_build_id)

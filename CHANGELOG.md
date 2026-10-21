@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Include the 2D/3D choice in regular Android builds without an experimental build opt-in, using the existing Mobile/Vulkan renderer.
+
 - Preserve roofs, walls, fences and overlapping tree crowns when sorting tree bases around players and mounts, including Viridian City and Route 2.
 
 - Present Android 3D battles as a regular visual option, removing experimental labels from selection, settings and recovery messages in all supported languages.

@@ -1,31 +1,36 @@
-# Optional experimental 3D on Android
+# 3D on Android
 
 ## Player behavior
 
-An Android build with the custom feature `android_3d_experimental` offers the
-existing login-screen 2D/3D choice. Neither button is preselected. The Android
-copy recommends 2D and explicitly warns that 3D may run slowly or crash.
-`android_visual_choice_version` records consent independently of the desktop
-rollout flag. Choice survives restart and can be changed in Settings; Android
-offers only 2D and 3D. Browser, standard Android and desktop behavior stay as
-before. Android retains its existing Compatibility renderer and immersive UI.
+Regular Android builds offer the login-screen 2D/3D choice automatically.
+Neither button is preselected. The Android copy recommends the lighter 2D option
+and describes 3D as a regular option. `android_visual_choice_version` records the
+choice independently of desktop. Saved choices survive restart and can be changed
+in Settings; Android offers only 2D and 3D. Browser remains sprite-only.
+
+The candidate workflow has no experimental dispatch input. Release preparation
+and the checked-in Android export preset always include the existing runtime
+capability feature. Its legacy internal name, `android_3d_experimental`, remains
+for runtime/diagnostic compatibility; it no longer represents an opt-in build.
+The old Python `experimental_3d` argument and CLI flag are accepted as no-ops.
+Standard builds use Mobile/Vulkan, preserving the shipping 3D renderer and avoiding
+the observed Adreno Compatibility shader-link crash during moves.
 
 Only choosing 3D downloads the optional Android battlefield art. This happens
 during session preparation or when changing to 3D in Settings. SHA-256 and exact
 length checks cover both the downloaded ZIP and its extracted PCK before use.
 The installed PCK is reused, and the ZIP is removed after successful install.
-The current approved v14 model index supplies shared normal/shiny models and
+The current approved v16 model index supplies shared normal/shiny models and
 anticipated battle forms on demand. Team prefetch avoids downloading every
 encounter in a map. There is no separate launcher on Android.
 
-The experiment preserves the existing native-resolution Compatibility renderer
-and full model and texture detail. If a foreground 3D session
+Android preserves native-resolution presentation and full model and texture detail. If a foreground 3D session
 ends unexpectedly, the next launch saves 2D and tells the player they can retry
 3D in Settings. Ordinary Android background termination is not treated as a
 crash. Existing local crash reports include device/renderer/experiment details;
 the player can copy a report to staff. No automatic telemetry was added.
 
-## Publication prerequisites
+## Publication prerequisites and historical rollout
 
 Release 0.3.109 restores the experiment in the signed Android build using the
 same 1,420 approved normal/shiny pairs as desktop. Existing consent and saved
@@ -62,13 +67,10 @@ published. Run the public preflight with:
 python3 tools/verify_android_3d_assets.py --public
 ```
 
-The Android candidate workflow has an `experimental_3d` dispatch input,
-defaulting to false. Setting it to true requires the public preflight to pass
-and stamps the custom feature. A subsequent standard build explicitly removes
-that feature. Use a new valid version code/name for the candidate; the existing
-workflow's default version values are not a proposed release version. The
-workflow produces a signed APK and review manifest under the existing Android
-release procedure. Publishing remains a separate, authorized release action.
+The Android candidate workflow always runs the public asset preflight before
+stamping its 3D-capable build. Use a new valid version code/name for the candidate;
+the workflow's defaults are not a proposed release version. It produces a signed
+APK and review manifest. Publishing remains a separate, authorized release action.
 
 ## Validation and limits
 
@@ -76,8 +78,8 @@ Focused checks cover platform gates, save/reload, separate first-run consent,
 browser exclusion, crash recovery, all four localized dialog layouts, exact
 cached ZIP/PCK install and rejection of a changed PCK hash. Existing login,
 Settings, crash reporting, arena contracts and Mega-form prefetch are retained.
-Python release checks confirm explicit feature stamping/removal and unchanged
-Compatibility renderer. Local archive verification passes.
+Python release checks confirm default capability stamping, idempotent legacy
+argument handling and the Mobile renderer. Local archive verification passes.
 
 The v14 follow-up verifies the actual Android feature guards select all 1,420
 current pairs, without a production diagnostic override. The optional

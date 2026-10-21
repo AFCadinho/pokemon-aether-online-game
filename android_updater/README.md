@@ -118,18 +118,19 @@ This requires no asset publication. Project/export settings and the
 slot's editor settings are restored after export. The helper never installs,
 launches or publishes the APK.
 
-Pass `--experimental-3d` when locally testing the optional Android 3D renderer.
-Experimental Android 3D exports use Mobile/Vulkan to avoid the observed Adreno
-Compatibility shader-link crash. The helper records the feature and renderer
-in the build record. Omitting the flag keeps the ordinary Android 2D export
-on Compatibility. For a local GPU-driver comparison, combine the flag with
+Regular Android builds include the 2D/3D choice automatically. No
+`experimental_3d=true` workflow input or `--experimental-3d` argument is needed.
+Mobile/Vulkan remains the default renderer to avoid the observed Adreno
+Compatibility shader-link crash during 3D moves. The helper records `android3D`
+and the renderer in its build record. For a local GPU-driver comparison, use
 `--android-renderer gl_compatibility`. Project settings are restored afterward.
+The old CLI flag is accepted as a no-op for retained local scripts.
 
 For local performance investigation, add `--performance-probe`. It enables
 numeric per-viewport CPU/GPU timing records in Android logcat, without battle
 identities or automatic telemetry. `--full-response-scene` retains the old
 complete scenery drawing in the irradiance pass as a labeled control. These
-flags are restricted to the local experimental helper. See
+flags are restricted to the local diagnostic helper. See
 [physical phone measurements](../docs/android-phone-performance.md).
 
 Before USB installation, compare the installed package's signing identity
