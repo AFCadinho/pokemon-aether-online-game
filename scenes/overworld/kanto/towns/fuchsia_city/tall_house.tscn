@@ -176,6 +176,7 @@ y_sort_enabled = true
 position = Vector2(304, 880)
 script = ExtResource("9_warden_script")
 npc_id = "kanto_fuchsia_city_warden"
+preload_quest_markers = true
 npc_definition_id = "trainer_class_elder"
 dialogue_id = "fuchsia_warden_offer"
 display_name = "Safari Zone Warden"

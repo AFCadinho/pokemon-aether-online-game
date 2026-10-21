@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show the Fuchsia Warden’s quest marker as soon as the house loads, without needing to approach him.
+
 - Add a transparent pixel-art Gold Teeth icon to the Bag and item rewards.
 
 - Add the Safari Zone Warden’s optional Gold Teeth return quest in Fuchsia City’s tall house, rewarding one HM Strength.
