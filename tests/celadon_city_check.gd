@@ -15,6 +15,8 @@ func _init() -> void:
 func _run() -> void:
 	var city := (load(CITY) as PackedScene).instantiate()
 	var route := (load(ROUTE) as PackedScene).instantiate()
+	var player := (load("res://scenes/player.tscn") as PackedScene).instantiate()
+	player.set_script(load("res://tests/support/fuchsia_movement_probe.gd"))
 	_check(city.get("map_id") == "kanto_celadon_city", "City has a distinct map identity")
 	_check(city.get("world_access_group_id") == "kanto_celadon_city", "City has its own location group")
 	var visual := city.get_node("Visual")
@@ -41,7 +43,7 @@ func _run() -> void:
 			continue
 		var covered := false
 		for transition: Node in city.get_node("Exits").get_children():
-			covered = covered or transition.contains_world_position(collision.map_to_local(tile))
+			covered = covered or player.overlaps_exit_at(transition,collision.map_to_local(tile))
 		_check(covered, "City boundary opens only at a transition: %s" % tile)
 	var route_collision := route.get_node("Tiles/Collision") as TileMapLayer
 	for y in range(23, 26):
@@ -78,6 +80,7 @@ func _run() -> void:
 	_check(catalog.areas.has("kanto_celadon_city"), "City is registered for server-authorized travel")
 	for id: String in ["kanto_celadon_city__to_route7", "kanto_route_7__to_celadon_city"]:
 		_check(catalog.transitions.has(id), "Connection is exported: %s" % id)
+	player.free()
 	city.free()
 	route.free()
 	print("celadon_city_check: %s" % ("PASS" if failures == 0 else "FAIL"))

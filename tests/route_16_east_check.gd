@@ -41,10 +41,13 @@ func _run() -> void:
 	player.surf_activity_active = true
 	_check(player.can_move_to(_point(Vector2i(20,50))), "pond supports Surf")
 	player.surf_activity_active = false
-	for tile in [Vector2i(12,10),Vector2i(14,12),Vector2i(4,30),Vector2i(5,30),Vector2i(32,24),Vector2i(18,38),Vector2i(27,18),Vector2i(29,18),Vector2i(31,25),Vector2i(30,38)]:
+	for tile in [Vector2i(15,11),Vector2i(1,28),Vector2i(5,32),Vector2i(32,24),Vector2i(18,38),Vector2i(26,19),Vector2i(30,19),Vector2i(31,25),Vector2i(30,38)]:
 		_check(not player.can_move_to(_point(tile)), "solid sprite footprint remains blocked: " + str(tile))
 	var reached := _reachable(player,Vector2i(50,21),Rect2i(0,0,52,57))
-	for tile in [Vector2i(6,30),Vector2i(14,13),Vector2i(20,10),Vector2i(42,30),Vector2i(28,18),Vector2i(28,19),Vector2i(28,36),Vector2i(28,37),Vector2i(28,40),Vector2i(28,41),Vector2i(28,43)]:
+	_check(not reached.has(Vector2i(6,29)), "sleeping Snorlax blocks access to Cycling Road")
+	route.get_node("Entities/StaticEncounters/Snorlax").apply_status({"encounterId":"snorlax_route_16","completed":true})
+	reached = _reachable(player,Vector2i(50,21),Rect2i(0,0,52,57))
+	for tile in [Vector2i(6,29),Vector2i(14,13),Vector2i(20,10),Vector2i(42,30),Vector2i(28,18),Vector2i(28,19),Vector2i(28,36),Vector2i(28,37),Vector2i(28,40),Vector2i(28,41),Vector2i(28,43)]:
 		_check(reached.has(tile), "paths, stair runs and landings are reachable: " + str(tile))
 	var grass: TileMapLayer = route.get_node("Tiles/TallGrass")
 	_check(grass.get_used_cells().size() == 164, "both authored grass fields have gameplay markers")
@@ -65,14 +68,14 @@ func _run() -> void:
 		_check(definition.sourceMapId == leg[0].map_id and definition.destinationAreaId == leg[2].map_id, "catalog authorizes the correct endpoint")
 		_check(definition.destination.position == {"x":arrival.position.x,"y":arrival.position.y}, "server arrival matches scene marker")
 	for y in range(19,24):
-		_check(reached.has(Vector2i(51,y)) and route.get_node("Exits/ToCeladonCity").contains_world_position(_point(Vector2i(51,y))), "entire five-tile route aperture is usable")
+		_check(reached.has(Vector2i(51,y)) and player.overlaps_exit_at(route.get_node("Exits/ToCeladonCity"),_point(Vector2i(51,y))), "entire five-tile route aperture is usable")
 	player.reparent(city.get_node("Entities/Players"))
 	player.refresh_map_layers()
 	var city_reached := _reachable(player,Vector2i(78,17),Rect2i(0,0,80,70))
 	for y in range(29,34):
-		_check(city_reached.has(Vector2i(0,y)) and city.get_node("Exits/ToRoute16East").contains_world_position(_point(Vector2i(0,y))), "entire five-tile Celadon aperture connects to city streets")
+		_check(city_reached.has(Vector2i(0,y)) and player.overlaps_exit_at(city.get_node("Exits/ToRoute16East"),_point(Vector2i(0,y))), "entire five-tile Celadon aperture connects to city streets")
 		_check(not player.can_move_to(_point(Vector2i(-1,y))), "denied transfer cannot walk outside Celadon")
-	_check(route.get_node("Exits").get_child_count() == 1, "pending house and Cycling Road have no active transfers")
+	_check(route.get_node("Exits").get_child_count() == 2 and route.has_node("Exits/ToRoute16Gate"), "Celadon and the completed Cycling Road gate are the only active transfers")
 	_check(catalog.areas[route.map_id].areaType == "route", "catalog classifies Route 16 East correctly")
 	var loader = load("res://scripts/services/web_asset_module_service.gd")
 	_check(loader.scene_for_map(route.map_id) == ROUTE and loader.module_for_scene(ROUTE) == loader.EXTENDED_MODULE_NAME, "browser travel can load Route 16 East")

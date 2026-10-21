@@ -7,6 +7,11 @@ class DenialPresenter extends Node:
 	func present_world_transition_denied(access: Dictionary, _player: Node2D) -> void:
 		received = access
 
+class OverlayProbe extends Node:
+	var message := ""
+	func add_system_message(text: String) -> void:
+		message = text
+
 var failed := false
 func _init() -> void:
 	run.call_deferred()
@@ -88,6 +93,14 @@ func run() -> void:
 		check(presenter.received.get("dialogueId") == "cycling_road_mount_required", "road guard explains riding requirement")
 		check(not exit_node.is_transitioning, "guard dialogue leaves gate usable")
 		presenter.received.clear()
+	var overlay := OverlayProbe.new()
+	root.add_child(overlay)
+	overlay.add_to_group("ui_overlay")
+	exit_node.movement_blocked = true
+	await exit_node.call("_on_body_entered",player)
+	check(overlay.message == root.get_node("LocalizationManager").text("ui.cycling_road.north_blocked"), "northbound gate denial shows the localized system message")
+	check(not exit_node.is_transitioning, "local travel denial does not start a transfer")
+	overlay.free()
 	exit_node.free()
 	presenter.free()
 	var resumed := (load("res://scenes/overworld/kanto/routes/kanto_route_16.tscn") as PackedScene).instantiate()

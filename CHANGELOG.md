@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore Route 18's mine foreman, contain the outer edges of Route 16 East and Route 17, and show Route 16 East and its gate at the correct Town Map location.
+
 - Preserve Zekrom’s turbo effect across teleports and map transfers, reset its exhaust on departure, and clean up its nodes when the effect is destroyed.
 
 - Use Zame’s Celadon City remaster in Celadon City and the Johto Game Corner remaster inside Celadon’s Game Corner.

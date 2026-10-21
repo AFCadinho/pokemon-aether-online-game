@@ -113,13 +113,6 @@ func _init() -> void:
 		"stationary Surf players can fish without losing their Surf state"
 	)
 	_check(
-		not _function_source(player_source, "can_fish_here").contains("land_mount_activity_active")
-		and _function_source(player_source, "_finish_fishing_activity").contains(
-			"set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_RIDE)"
-		),
-		"land-mounted players can fish beside water and keep their mount after the cast"
-	)
-	_check(
 		appearance_source.contains('const BODY_MOVEMENT_SURF_FISH := "surf_fish"')
 		and appearance_source.contains("func resolve_layer_movement_style(")
 		and not appearance_source.contains("SURF_FISH_BODY_CUTOFFS")
@@ -338,6 +331,41 @@ func _init() -> void:
 		and world_source.contains('SfxManager.play("item_found")'),
 		"completed Fishing wins and catches report authoritative treasure rewards"
 	)
+	_check_mounted_fishing.call_deferred()
+
+
+func _check_mounted_fishing() -> void:
+	var state := root.get_node("GameState")
+	var previous_rod: String = state.selected_fishing_rod_item_id
+	var previous_unlocked: bool = state.fishing_unlocked
+	var previous_tier: int = state.fishing_tier
+	state.selected_fishing_rod_item_id = "old_rod"
+	state.fishing_unlocked = true
+	state.fishing_tier = 1
+	var map: Node = load("res://scripts/world/map_metadata.gd").new()
+	var player := (load("res://scenes/player.tscn") as PackedScene).instantiate()
+	player.set_script(load("res://tests/fixtures/mounted_fishing_player_probe.gd"))
+	player.test_map = map
+	root.add_child(player)
+	player.land_mount_activity_active = true
+	player.active_mount_id = "cyclizar"
+	_check(player.start_fishing(), "a stationary mounted player can cast beside water on a normal map")
+	player._finish_fishing_activity()
+	_check(
+		player.get_active_land_mount_id() == "cyclizar" and player.rendered_activity_style == "ride"
+		and not player.fishing_activity_active and not state.is_overworld_input_locked(),
+		"finishing a mounted cast restores riding and releases the fishing input lock"
+	)
+	map.land_mount_dismount_blocked = true
+	_check(
+		not player.start_fishing() and player.get_active_land_mount_id() == "cyclizar",
+		"Cycling Road cannot replace its required riding state with fishing"
+	)
+	player.free()
+	map.free()
+	state.selected_fishing_rod_item_id = previous_rod
+	state.fishing_unlocked = previous_unlocked
+	state.fishing_tier = previous_tier
 	quit(1 if failed else 0)
 
 
