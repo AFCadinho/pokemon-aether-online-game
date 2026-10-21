@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give transition-building attendants ordinary local dialogue; reserve closure warnings and Saffron gate story conversations for attempted passage.
+
 - Restore the enabled Pokémon follower when entering an indoor map from a mount.
 
 - Reimport Route 15 scenery from the latest artist TMX.
