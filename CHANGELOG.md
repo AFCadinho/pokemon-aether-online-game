@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Open Fuchsia City’s tall northwest house with two furnished floors, local stair travel and floor-specific camera masking.
+
 - Enable Thieving for ordinary outdoor dialogue NPCs in every town and list them by town in the Skills window. Police targets show a guaranteed arrest warning.
 
 - Refresh Fuchsia City scenery and animations from the latest artist TMX.

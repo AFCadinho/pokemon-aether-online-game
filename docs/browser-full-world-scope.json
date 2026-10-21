@@ -100,6 +100,7 @@
     "kanto_fuchsia_safari_zone_gate",
     "kanto_fuchsia_city",
     "kanto_fuchsia_city_pokemon_center",
+    "kanto_fuchsia_city_tall_house",
     "kanto_celadon_condominiums_1f",
     "kanto_celadon_condominiums_2f",
     "kanto_celadon_condominiums_3f",
@@ -113,6 +114,8 @@
     "kanto_rocket_hideout_b3f",
     "kanto_rocket_hideout_b4f",
     "kanto_rocket_hideout_elevator",
-    "kanto_route_7_saffron_gate"
+    "kanto_route_7_saffron_gate",
+    "kanto_route_16_east_house",
+    "kanto_route_19"
   ]
 }

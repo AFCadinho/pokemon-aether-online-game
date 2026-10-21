@@ -920,18 +920,20 @@
         32.0,
         96.0
       ],
-      "arrivals": [],
+      "arrivals": [
+        "FromTallHouse"
+      ],
       "bounds": [
         704.0,
         284.0,
         32.0,
         34.0
       ],
-      "enabled": false,
-      "exit": "",
+      "enabled": true,
+      "exit": "Exits/ToTallHouse",
       "id": "Door74",
       "kind": "hinge",
-      "label": "tile_[22, 9]",
+      "label": "ToTallHouse",
       "layers": [
         "Objects",
         "Doors"
