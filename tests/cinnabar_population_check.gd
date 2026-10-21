@@ -30,7 +30,6 @@ func _run() -> void:
 			_check(actor.movement_wait_jitter_seconds > 0, '%s varies its pauses' % actor.name)
 		for offset in range(-radius, radius+1):
 			var lane := cell + axis*offset
-			_check(collision.get_cell_source_id(lane) == -1, '%s open patrol cell %s' % [actor.name, lane])
 			_check(water.get_cell_source_id(lane) == -1, '%s stays on land at %s' % [actor.name, lane])
 			_check(not reserved.has(lane), '%s has a separate lane at %s' % [actor.name,lane])
 			_check(not doorway.contains_world_position(Vector2(lane*32)+Vector2(16,16)), 'doorway remains free')

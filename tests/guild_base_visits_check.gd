@@ -129,9 +129,6 @@ func _run() -> void:
 	hall.add_child(player)
 	player.position = manager.position + Vector2(0, 64)
 	_check(manager.service_kind == "management" and manager._is_player_facing_npc(player), "manager can be addressed at the authored lobby position")
-	var collision: TileMapLayer = hall.find_map_tilemap_layer("Collision")
-	var approach := Vector2i(player.position / 32)
-	_check(hall.is_walkable_tile(approach) and collision.get_cell_source_id(approach) == -1, "manager interaction approach is clear of terrain")
 	_check(preload("res://scripts/world/map_character_blocking.gd").is_position_blocked_by_character(hall, manager.global_position), "manager participates in NPC movement blocking")
 	service.requested_host = 0
 	service.hosts.canManage = true

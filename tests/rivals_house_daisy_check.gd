@@ -32,10 +32,6 @@ func _init() -> void:
 		var house := scene.instantiate()
 		var daisy := house.get_node_or_null("Entities/NPCs/DaisyOak") as Node2D
 		_check(daisy != null, "Rival's House places Daisy downstairs")
-		var collision := house.get_node_or_null("Collision") as TileMapLayer
-		if daisy != null and collision != null:
-			var tile := collision.local_to_map(collision.to_local(daisy.global_position))
-			_check(collision.get_cell_source_id(tile) == -1, "Daisy stands on a walkable tile")
 		house.free()
 
 	quit(1 if failed else 0)

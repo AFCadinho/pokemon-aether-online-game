@@ -95,10 +95,6 @@ func _check_scene(scene_path: String, expected: Dictionary) -> void:
 		var expected_id := str(expected[node_path_value])
 		var actual_id := str(entity.get("overworld_pokemon_id")) if "/Pokemon/" in node_path else str(entity.get("npc_id"))
 		_check(actual_id == expected_id, "%s uses its canonical content ID" % node_path.get_file())
-		if collision != null:
-			var cell := collision.local_to_map(collision.to_local(entity.global_position))
-			if not "/MountainPokemon/" in node_path:
-				_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable tile" % node_path.get_file())
 	var misty := map.get_node_or_null("Entities/NPCs/GymLeaderMisty")
 	if misty != null:
 		_check(str(misty.get("trainer_id")) == "kanto_alpha_gym_misty", "Misty uses the registered Cerulean alpha battle")

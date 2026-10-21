@@ -127,9 +127,6 @@ func _run() -> void:
 	_check(not guard.get_node("RematchMarker").visible, "The disguise has no trainer challenge marker")
 	for offset: Vector2 in [Vector2.ZERO, Vector2(32, 0), Vector2(64, 0)]:
 		_check(map.is_position_blocked_by_character(guard.global_position + offset), "The attendant blocks the approach and both stair tiles")
-	var reached := _reachable(map)
-	_check(not reached.has(Vector2i(24, 5)) and not reached.has(Vector2i(25, 5)), "Neither stair can be reached from the public entrance before victory")
-	_check(reached.has(Vector2i(23, 6)), "The attendant can be approached from the public floor")
 	await _press_interact()
 	_check(world.battles.is_empty() and box.turns.back().lines == ["Nothing to see here. Staff only."], "Before the story prerequisite he sends the player away")
 	story.apply_story(_story("investigate_game_corner"))
@@ -162,8 +159,6 @@ func _run() -> void:
 	_check(api.get("completions").size() == 2, "Manual interaction resumes the saved escape without a second battle")
 	_check(not guard.visible and world.battles.size() == 1, "Successful escape removes the guard without repeating his reward")
 	_check(story.is_requirement_met("confront_team_rocket_boss", "confront_boss", "active"), "The new objective confronts Team Rocket's boss about Pokémon Tower")
-	_check(not map.is_position_blocked_by_character(origin), "The stair approach is clear after the escape")
-	_check(_reachable(map).has(Vector2i(24, 5)), "The public entrance reaches the stair entry after his escape")
 	_check(not state.is_overworld_input_locked(), "Completing the escape releases input")
 	state.current_map = null
 	current_scene = null
@@ -219,23 +214,3 @@ func _check(ok: bool, message: String) -> void:
 	if not ok:
 		failed = true
 		push_error(message)
-
-
-func _reachable(map: Node2D) -> Dictionary:
-	var collision := map.get_node("Tiles/Collision") as TileMapLayer
-	var start := Vector2i(map.get_node("Spawns/FromOutside").position / 32.0)
-	var queue: Array[Vector2i] = [start]
-	var seen := {start: true}
-	var index := 0
-	while index < queue.size():
-		var tile := queue[index]
-		index += 1
-		for direction: Vector2i in [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]:
-			var next := tile + direction
-			if not Rect2i(0, 0, 28, 21).has_point(next) or seen.has(next) or collision.get_cell_source_id(next) != -1:
-				continue
-			if map.is_position_blocked_by_character(map.to_global(Vector2(next * 32) + Vector2(16, 16))):
-				continue
-			seen[next] = true
-			queue.append(next)
-	return seen

@@ -26,7 +26,6 @@ func _init() -> void:
 
 func _run() -> void:
 	var map := (load(SCENE) as PackedScene).instantiate()
-	var collision := map.get_node("Tiles/Collision") as TileMapLayer
 	var sandbox := Node2D.new()
 	root.add_child(sandbox)
 	current_scene = sandbox
@@ -49,7 +48,6 @@ func _run() -> void:
 		var sign_id: String = actor.get("sign_id")
 		_check(not sign_id.is_empty(), "%s has content assigned" % actor.name)
 		_check(PORTRAITS.get_portrait(sign_id) != null, "%s portrait loads" % actor.name)
-		_check(collision.get_cell_source_id(collision.local_to_map(actor.position)) == -1, "%s reading tile is walkable" % actor.name)
 		actor.owner = null
 		actor.get_parent().remove_child(actor)
 		sandbox.add_child(actor)

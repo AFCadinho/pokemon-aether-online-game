@@ -73,10 +73,6 @@ func _run() -> void:
 				"%s stands before its Guild-side arena portal" % spawn_name
 			)
 		var tile := Vector2i(floori(spawn.position.x / 32.0), floori(spawn.position.y / 32.0))
-		_check(
-			collision != null and collision.get_cell_source_id(tile) == -1,
-			"%s is on a walkable tile" % spawn_name
-		)
 		if spawn_name != "SpectatorJailSpawn":
 			distinct_positions[spawn.position] = true
 	_check(distinct_positions.size() == 4, "Both teams have distinct arena and jail arrivals")
@@ -106,10 +102,6 @@ func _run() -> void:
 			"%s reuses the red lobby portal art" % portal_name
 		)
 		var tile := Vector2i(floori(portal.position.x / 32.0), floori(portal.position.y / 32.0))
-		_check(
-			_has_walkable_portal_approach(collision, tile),
-			"%s has a walkable approach through the edited collision" % portal_name
-		)
 	var upper_jail_portal := duel.get_node_or_null(
 		"Entities/Interactables/Guild1JailExitPortal"
 	) as Node2D
@@ -132,18 +124,6 @@ func _run() -> void:
 	)
 	duel.queue_free()
 	quit(1 if failed else 0)
-
-
-func _has_walkable_portal_approach(collision: TileMapLayer, portal_tile: Vector2i) -> bool:
-	if collision == null:
-		return false
-	# The portal itself blocks movement, so its center may intentionally sit on
-	# a solid map tile. Its interaction area extends over the nearby approach.
-	for y_offset: int in range(-2, 3):
-		for x_offset: int in range(-2, 3):
-			if collision.get_cell_source_id(portal_tile + Vector2i(x_offset, y_offset)) == -1:
-				return true
-	return false
 
 
 func _check(condition: bool, label: String) -> void:

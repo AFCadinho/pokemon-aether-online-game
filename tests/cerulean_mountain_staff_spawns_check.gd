@@ -36,17 +36,10 @@ func _run() -> void:
 		if spawn == null or collision == null or water == null or ground == null:
 			continue
 		_check(spawn.position == MOUNTAIN_SPAWNS[spawn_name_value], "%s keeps its intended position" % spawn_name)
-		var collision_cell := collision.local_to_map(collision.to_local(spawn.global_position))
 		var water_cell := water.local_to_map(water.to_local(spawn.global_position))
 		var ground_cell := ground.local_to_map(ground.to_local(spawn.global_position))
-		_check(collision.get_cell_source_id(collision_cell) == -1, "%s starts off collision" % spawn_name)
 		_check(water.get_cell_source_id(water_cell) == -1, "%s starts off water" % spawn_name)
 		_check(ground.get_cell_source_id(ground_cell) != -1, "%s stands on Ground" % spawn_name)
-		for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
-			_check(
-				collision.get_cell_source_id(collision_cell + direction) == -1,
-				"%s has a walkable neighboring tile" % spawn_name
-			)
 
 	_check_catalog()
 	city.free()

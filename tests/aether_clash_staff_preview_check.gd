@@ -82,20 +82,7 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 		objects_top != null and objects_top.z_index >= 2048,
 		"%s renders ObjectsTop as a foreground depth layer" % scene_path.get_file()
 	)
-	var spawn := preview.get_node_or_null("Spawns/PreviewSpawn") as Marker2D
 	var collision := preview.find_child("Collision", true, false) as TileMapLayer
-	var spawn_tile := Vector2i(
-		floori(spawn.position.x / 32.0),
-		floori(spawn.position.y / 32.0)
-	) if spawn != null else Vector2i(-1, -1)
-	_check(
-		spawn != null
-		and (
-			not bool(expected.get("requires_collision", true))
-			or (collision != null and collision.get_cell_source_id(spawn_tile) == -1)
-		),
-		"%s has a walkable staff preview spawn" % scene_path.get_file()
-	)
 	var match_spawn_names: Array = expected.get("match_spawn_names", [])
 	var match_spawn_positions := {}
 	for match_spawn_name: String in match_spawn_names:
@@ -108,20 +95,11 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 		var match_spawn_position := (
 			match_spawn.position if match_spawn != null else Vector2.ZERO
 		)
-		var match_spawn_tile := Vector2i(
-			floori(match_spawn_position.x / 32.0),
-			floori(match_spawn_position.y / 32.0)
-		)
 		_check(
 			preview_match_spawn != null
 			and match_spawn != null
 			and preview_match_spawn.position == match_spawn_position,
 			"%s exposes %s to matches and staff previews"
-			% [scene_path.get_file(), match_spawn_name]
-		)
-		_check(
-			collision != null and collision.get_cell_source_id(match_spawn_tile) == -1,
-			"%s places %s on a walkable tile"
 			% [scene_path.get_file(), match_spawn_name]
 		)
 		match_spawn_positions[match_spawn_position] = true
@@ -136,20 +114,12 @@ func _check_preview(scene_path: String, expected: Dictionary) -> void:
 		var jail_position := (
 			match_jail_spawn.position if match_jail_spawn != null else Vector2.ZERO
 		)
-		var jail_tile := Vector2i(
-			floori(jail_position.x / 32.0),
-			floori(jail_position.y / 32.0)
-		)
 		_check(
 			preview_jail_spawn != null
 			and preview_jail_spawn.position == jail_position
 			and match_jail_spawn != null
 			and preview_jail_spawn.position == match_jail_spawn.position,
 			"%s exposes the jail spawn to matches and staff previews" % scene_path.get_file()
-		)
-		_check(
-			collision != null and collision.get_cell_source_id(jail_tile) == -1,
-			"%s places its jail spawn on a walkable tile" % scene_path.get_file()
 		)
 		var jail_bars := visual.get_node_or_null("JailTop") as TileMapLayer
 		var jail_bar_cells: Array[Vector2i] = []

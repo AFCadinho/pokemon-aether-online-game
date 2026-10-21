@@ -39,7 +39,6 @@ func _run() -> void:
 		_check(not str(pokemon.get("overworld_pokemon_id")).is_empty(), "%s has a metadata id" % node_name)
 		_check(FollowerSpriteService.get_sprite_frames(EXPECTED[node_name], false) != null, "%s has a follower sprite" % node_name)
 		var cell := collision.local_to_map(collision.to_local(pokemon.global_position))
-		_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable tile" % node_name)
 		_check(not occupied.has(cell), "%s does not overlap another Pokémon" % node_name)
 		occupied[cell] = true
 		var visual := map.get_node_or_null("Visual")

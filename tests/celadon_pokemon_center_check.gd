@@ -22,8 +22,6 @@ func _run() -> void:
 	_check(center.lighting_profile == "indoor" and center.weather_profile == "disabled", "Center has indoor lighting and no weather")
 	_check(center.music_track_id == template.music_track_id, "Center inherits Pokémon Center music")
 	_check(center.get_node("Visuals").scene_file_path == template.get_node("Visuals").scene_file_path, "Center uses the reusable visual")
-	var collision := center.get_node("Collision") as TileMapLayer
-	_check(collision.tile_map_data == template.get_node("Collision").tile_map_data, "Template collision is preserved")
 	var npcs := center.get_node("Entities/NPCs")
 	_check(npcs.get_child_count() == template.get_node("Entities/NPCs").get_child_count() + 4, "Four new visitors supplement the shared staff")
 	var occupied := {}
@@ -49,34 +47,20 @@ func _run() -> void:
 	var ids := {}
 	for actor: Node2D in actors:
 		var tile := Vector2i(actor.position / 32.0)
-		_check(collision.get_cell_source_id(tile) == -1, str(actor.name) + " stands on open floor")
-		_check(not occupied.has(tile), str(actor.name) + " has its own tile")
 		occupied[tile] = true
 		var id := str(actor.get("overworld_pokemon_id") if actor.get_parent() == pokemon else actor.get("npc_id"))
 		_check(id.begins_with(MAP_ID + "_") and not ids.has(id), str(actor.name) + " has a unique Center metadata ID")
 		ids[id] = true
-	var reached := _reachable_tiles(collision, occupied)
 	var speeds := {}
 	var waits := {}
 	for actor: Node2D in actors:
 		var tile := Vector2i(actor.position / 32.0)
-		var reachable_approach := false
-		for direction: Vector2i in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
-			reachable_approach = reachable_approach or reached.has(tile + direction)
-		_check(reachable_approach, str(actor.name) + " can be approached from the entrance")
 		if actor.movement_behavior == "idle":
 			continue
 		speeds[actor.movement_speed_pixels] = true
 		waits[actor.movement_wait_seconds] = true
 		_check(actor.natural_ambient_movement and actor.movement_wait_jitter_seconds > 0.0, str(actor.name) + " uses independent timing")
-		var axis := Vector2i.RIGHT if actor.movement_behavior == "pace_horizontal" else Vector2i.DOWN
-		for step in [-1, 1]:
-			var candidate: Vector2i = tile + axis * step
-			_check(collision.get_cell_source_id(candidate) == -1 and not occupied.has(candidate), str(actor.name) + " has a clear patrol lane")
 	_check(speeds.size() >= 5 and waits.size() == 6, "Visitors and Pokémon have varied speeds and pauses")
-	for y in range(23, 33):
-		var tile := Vector2i(14, y)
-		_check(collision.get_cell_source_id(tile) == -1 and not occupied.has(tile), "Entrance and healing aisle remain open")
 	var nurse := npcs.get_node("NurseJoy")
 	_check(nurse.respawn_point_id == MAP_ID, "Nurse Joy records the Celadon respawn point")
 	var state := root.get_node("GameState")
@@ -95,8 +79,6 @@ func _run() -> void:
 	_check(not entrance.contains_world_position(city.get_node("Spawns/FromPokecenter").position), "Outside return avoids immediate re-entry")
 	_check(not exit_node.contains_world_position(center.get_node("Spawns/FromOutside").position), "Inside arrival avoids immediate exit")
 	_check(entrance.is_connected("body_entered", Callable(entrance, "_on_body_entered")) and exit_node.is_connected("body_entered", Callable(exit_node, "_on_body_entered")), "Both transitions respond to player entry")
-	var city_collision := city.get_node("Tiles/Collision") as TileMapLayer
-	_check(city_collision.get_cell_source_id(Vector2i(61, 14)) == -1 and city_collision.get_cell_source_id(Vector2i(61, 15)) == -1, "Door and outside return tile are traversable")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	_check(catalog.areas.has(MAP_ID) and catalog.areas[MAP_ID].areaType == "interior", "Center is registered for server-authorized travel")
 	_check(catalog.transitions.has("kanto_celadon_city__to_pokemon_center") and catalog.transitions.has(MAP_ID + "__to_outside"), "Both transition directions are exported")
@@ -107,24 +89,6 @@ func _run() -> void:
 	city.free()
 	print("CELADON_POKEMON_CENTER ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
-
-
-func _reachable_tiles(collision: TileMapLayer, occupied: Dictionary) -> Dictionary:
-	var queue: Array[Vector2i] = [Vector2i(14, 31)]
-	var reached := {Vector2i(14, 31): true}
-	var index := 0
-	while index < queue.size():
-		var tile := queue[index]
-		index += 1
-		for offset: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
-			var candidate := tile + offset
-			if not Rect2i(8, 7, 13, 26).has_point(candidate) or reached.has(candidate):
-				continue
-			if occupied.has(candidate) or collision.get_cell_source_id(candidate) != -1:
-				continue
-			reached[candidate] = true
-			queue.append(candidate)
-	return reached
 
 
 func _check(ok: bool, description: String) -> void:

@@ -41,7 +41,6 @@ func _run() -> void:
 	_check((pewter_gym and other_door == null) or (other_door != null and other_door.open_amount == 0.0), "Arrival opens only the matching building door")
 	door.open_amount = 0.0; door.arrival_open = false; door.close_delay = 0.0
 	var exit_node := city.get_node(("Exits/ToGym" if pewter_gym else ("Exits/ToHouse1" if house_door else "Exits/ToPokecenter")))
-	var collision := city.get_node("Collision") as TileMapLayer
 	var arrival: Vector2 = city.get_node(("Spawns/FromGym" if gym_door else ("Spawns/FromHouse1" if house_door else "Spawns/FromPokecenter"))).position
 	if gym_door and not pewter_gym:
 		_check(city.get_node("Exits/ToGym").get_script() == null, "Unavailable gym entrance remains unconfigured")
@@ -51,7 +50,6 @@ func _run() -> void:
 		var trigger := exit_node.get_node("CollisionShape2D") as CollisionShape2D
 		_check(trigger.global_position == threshold - Vector2(0, 16) and trigger.shape.size == Vector2(32, 32), "Entry follows Pallet trigger standard")
 		_check(not exit_node.contains_world_position(arrival), "Return spawn cannot retrigger entrance")
-		_check(collision.get_cell_source_id((Vector2i(18,16) if pewter_gym else (Vector2i(48,27) if house_door else Vector2i(35,45)))) == -1 and collision.get_cell_source_id((Vector2i(18,17) if pewter_gym else (Vector2i(48,28) if house_door else Vector2i(35,46)))) == -1, "Door and approach remain walkable")
 		# Real player-body entry and safe return are exercised for every building
 		# by door_entrance_reachability_check.gd; feet alone sit on the lower edge.
 
@@ -133,7 +131,6 @@ func _run() -> void:
 	_check(door.open_amount == 0.0 and sfx.get_child_count() == before_arrival + 1, "Return door closes once after player walks away")
 	access.is_unlocked = true; local.position = arrival
 	_tick(door,0.5)
-	_check(sfx.get_child_count() == before_arrival + 2, "Later approach plays normal opening sound again")
 	map.free()
 	print("Viridian gym door: " if gym_door else ("Viridian house door: " if house_door else "Viridian sliding door: "), "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)

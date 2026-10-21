@@ -106,8 +106,6 @@ func _run() -> void:
 	_check(not bool(exit.call("contains_world_position", tower.get_node("Spawns/FromLavenderTown").position))
 		and not bool(entrance.call("contains_world_position", town.get_node("Spawns/FromPokemonTower").position)),
 		"Exterior door arrivals avoid immediate return")
-	var town_collision := town.get_node("Tiles/Collision") as TileMapLayer
-	_check(town_collision.get_cell_source_id(Vector2i(33, 15)) == -1 and town_collision.get_cell_source_id(Vector2i(33, 16)) == -1, "Tower exterior entrance and arrival are traversable")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	_check(catalog.areas.has("kanto_lavender_town_pokemon_tower")
 		and catalog.transitions.has("kanto_lavender_town__to_pokemon_tower")

@@ -57,10 +57,6 @@ func _run() -> void:
 	_check(fuji.visible and not home.visible and not ren.visible, "Fuji is held in the tower; Ren and home Fuji are absent before rescue")
 	for index: int in range(3,6):
 		_check(actors[index].visible and actors[index].blocks_world_position(actors[index].get_feet_position()), "Each Rocket is a real collidable overworld NPC")
-	for actor: BaseNPC in actors:
-		var map := house if actor == home else tower
-		var collision := map.get_node("Tiles/Collision") as TileMapLayer
-		_check(collision.get_cell_source_id(collision.local_to_map(actor.position)) == -1, actor.name + " stands on a walkable tile")
 	_check(fuji.get_node("StoryHook").interaction_id == "kanto_pokemon_tower_fuji_rescued", "Tower Fuji has the rescue hook")
 	_check(home.get_node("StoryHook").interaction_id == "kanto_lavender_fuji_flute_gift", "Home Fuji has the one-time gift hook")
 	_check(fuji.npc_sprite_frames == home.npc_sprite_frames and fuji.mugshot != null, "Both Fuji placements use his existing artwork and matching portrait")

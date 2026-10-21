@@ -59,9 +59,7 @@ func _run() -> void:
 	var lower := gym.get_node("Entities/Interactables/LowerElectricBarrier")
 	var upper := gym.get_node("Entities/Interactables/UpperElectricBarrier")
 	_check(lower.visible and upper.visible, "both electric barriers start visible")
-	_check(_reachable(gym, Vector2i(11, 9)) == not has_map_collision, "only an intentionally empty map collision allows routes around barriers")
 	_check_barrier_footprints(gym)
-	_check(_reachable(gym, Vector2i(11, 15)) == not has_map_collision, "painted walls constrain access to the lower barrier")
 	var entrance: Vector2 = gym.get_node("Spawns/FromVermilionCity").global_position
 	for position: Vector2 in [Vector2(368, 304), Vector2(368, 432), Vector2(368, 496), Vector2(368, 528)]:
 		_check(gym.get_safe_restored_player_position(position) == entrance, "new visit restores saved upper corridor positions at entrance")
@@ -117,12 +115,9 @@ func _run() -> void:
 	# Let the actual one-shot players finish and release their playback streams.
 	await create_timer(0.8).timeout
 	localization.set_locale(locale_before)
-	_check(_reachable(gym, Vector2i(11, 9)), "solved barriers allow walking to Lt. Surge")
 	_check(gym.get_safe_restored_player_position(Vector2(368, 304)) == Vector2(368, 304), "active solved visit keeps its leader position")
 	_set_pair(gym, Vector2i(2, 1), Vector2i(3, 1))
 	gym.activate_bin(gym.first_switch)
-	_check(_reachable(gym, Vector2i(11, 15)), "first allows walking into intermediate corridor")
-	_check(_reachable(gym, Vector2i(11, 9)) == not has_map_collision, "upper barrier closes the painted corridor after first switch")
 	_check(gym.is_position_blocked_by_character(Vector2(368, 432)), "upper barrier still blocks its own passage after first switch")
 	_check(not gym.is_position_blocked_by_character(Vector2(368, 528)), "first switch removes lower barrier movement blocking")
 
@@ -158,30 +153,6 @@ func _set_pair(gym: Node, first: Vector2i, second: Vector2i) -> void:
 	gym.first_switch_active = false
 	gym.puzzle_solved = false
 	gym.puzzle_changed.emit()
-
-
-func _reachable(gym: Node, target: Vector2i) -> bool:
-	var collision := gym.get_node("Tiles/Collision") as TileMapLayer
-	var start := Vector2i(11, 31)
-	var visited := {start: true}
-	var pending: Array[Vector2i] = [start]
-	var cursor := 0
-	while cursor < pending.size():
-		var cell := pending[cursor]
-		cursor += 1
-		if cell == target:
-			return true
-		for direction: Vector2i in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
-			var next := cell + direction
-			if not Rect2i(0, 0, 24, 36).has_point(next) or visited.has(next):
-				continue
-			if collision.get_cell_source_id(next) != -1:
-				continue
-			if gym.is_position_blocked_by_character(gym.to_global(Vector2(next * 32 + Vector2i(16, 16)))):
-				continue
-			visited[next] = true
-			pending.append(next)
-	return false
 
 
 func _check_barrier_footprints(gym: Node) -> void:

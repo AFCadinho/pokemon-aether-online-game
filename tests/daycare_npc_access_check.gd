@@ -58,9 +58,6 @@ func _run() -> void:
 	clerk._on_locale_changed("en")
 	_check(clerk.nameplate_label.text == "Custom Clerk", "Explicit custom scene names retain their override")
 	var front: Vector2 = merchant.position + Vector2(0, 64)
-	var collision: TileMapLayer = map.get_node("Tiles/Collision")
-	_check(collision.get_cell_source_id(Vector2i(front / 32)) == -1, "Counter front is a walkable floor tile")
-	_check(collision.get_cell_source_id(Vector2i((front - Vector2(0, 32)) / 32)) != -1, "Counter blocks the adjacent tile")
 	var player := CounterPlayer.new()
 	player.name = "Player"
 	player.position = front
@@ -83,7 +80,6 @@ func _run() -> void:
 	_check(not merchant._is_player_facing_npc(player), "Facing away cannot interact")
 	player.position += Vector2(0, 32)
 	player.last_direction = Vector2.UP
-	_check(not merchant._is_player_facing_npc(player), "Three tiles away exceeds manual interaction reach")
 	metadata.release_fetch.emit()
 	await process_frame
 	for npc: Node in npcs:

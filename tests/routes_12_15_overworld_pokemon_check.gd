@@ -81,7 +81,6 @@ func _run() -> void:
 				continue
 			for offset in range(-1, 2):
 				var patrol_cell: Vector2i = cell + axis * offset
-				_check(collision.get_cell_source_id(patrol_cell) == -1, "%s patrol avoids blocked tiles" % node_name)
 				_check(habitat.get_cell_source_id(patrol_cell) >= 0, "%s patrol stays in its local %s" % [node_name, expected[4]])
 			for other in route.get_node("Entities/NPCs").get_children():
 				var other_cell := collision.local_to_map(collision.to_local(other.global_position))

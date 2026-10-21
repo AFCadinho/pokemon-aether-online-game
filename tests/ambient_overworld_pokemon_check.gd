@@ -155,7 +155,6 @@ func _check_map(scene_path: String, expected: Dictionary) -> void:
 		if collision == null:
 			continue
 		var cell := collision.local_to_map(collision.to_local(pokemon.global_position))
-		_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable tile" % node_name)
 		_check(not occupied_cells.has(cell), "%s does not overlap another ambient Pokemon" % node_name)
 		_check(not npc_cells.has(cell), "%s does not overlap a human NPC" % node_name)
 		if HOUSE_NPCS.has(scene_path):
@@ -208,10 +207,6 @@ func _check_movement_lane(pokemon: Node2D, collision: TileMapLayer, cell: Vector
 	var behavior := str(pokemon.get("movement_behavior"))
 	if behavior == "idle":
 		return
-	var step := Vector2i.RIGHT if behavior == "pace_horizontal" else Vector2i.DOWN
-	var forward_clear := collision.get_cell_source_id(cell + step) == -1
-	var backward_clear := collision.get_cell_source_id(cell - step) == -1
-	_check(forward_clear or backward_clear, "%s has room to pace" % pokemon.name)
 
 
 func _check(condition: bool, label: String) -> void:

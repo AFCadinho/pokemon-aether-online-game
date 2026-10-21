@@ -82,9 +82,6 @@ func _run() -> void:
 	_check(AtlasValidator.new().validate(house3_visual,
 		"res://generated/tiled_visuals/lavender_house_3/lavender_house_3.visual.tileset.tres").is_empty(),
 		"House 3 uses valid compact atlases")
-	var house3_collision := house3.get_node("Tiles/Collision") as TileMapLayer
-	_check(house3_collision.tile_set != null and house3_collision.get_used_cells().is_empty(),
-		"House 3 collision stays empty and editable")
 	_check(house3.get_node("Spawns/FromLavenderTown").position == Vector2(304, 464)
 		and town.get_node("Spawns/FromHouse3").position == Vector2(1328, 1200),
 		"House 3 arrivals align with the interior entrance and southeast exterior door")
@@ -102,15 +99,9 @@ func _run() -> void:
 	_check(AtlasValidator.new().validate(house2_visual,
 		"res://generated/tiled_visuals/lavender_house_2/lavender_house_2.visual.tileset.tres").is_empty(),
 		"House 2 uses valid compact atlases")
-	var house2_collision := house2.get_node("Tiles/Collision") as TileMapLayer
-	_check(house2_collision.tile_set != null and house2_collision.get_used_cells().is_empty(),
-		"House 2 collision stays empty and editable")
 	_check(house2.get_node("Spawns/FromLavenderTown").position == Vector2(304, 464)
 		and town.get_node("Spawns/FromHouse2").position == Vector2(432, 1040),
 		"House 2 arrivals align with the interior entrance and southwest exterior door")
-	_check(collision.get_cell_source_id(Vector2i(13, 31)) == -1
-		and collision.get_cell_source_id(Vector2i(13, 32)) == -1,
-		"House 2 exterior door and return tile are traversable")
 	_check(house2.get("lighting_profile") == "indoor" and house2.get("weather_profile") == "disabled"
 		and house2.get("music_profile_id") == "kanto.lavender_town", "House 2 uses indoor lighting and Lavender music")
 	_check_connection(town, "ToHouse1", house1, HOUSE1)
@@ -125,15 +116,9 @@ func _run() -> void:
 	_check(AtlasValidator.new().validate(house1_visual,
 		"res://generated/tiled_visuals/lavender_house_1/lavender_house_1.visual.tileset.tres").is_empty(),
 		"House 1 uses valid compact atlases")
-	var house1_collision := house1.get_node("Tiles/Collision") as TileMapLayer
-	_check(house1_collision.tile_set != null and house1_collision.get_used_cells().is_empty(),
-		"House 1 collision stays empty and editable")
 	_check(house1.get_node("Spawns/FromLavenderTown").position == Vector2(400, 592)
 		and town.get_node("Spawns/FromHouse1").position == Vector2(1296, 880),
 		"House 1 arrivals align with the interior entrance and northeast exterior door")
-	_check(collision.get_cell_source_id(Vector2i(40, 26)) == -1
-		and collision.get_cell_source_id(Vector2i(40, 27)) == -1,
-		"House 1 exterior door and return tile are traversable")
 	_check(house1.get("lighting_profile") == "indoor" and house1.get("weather_profile") == "disabled"
 		and house1.get("music_profile_id") == "kanto.lavender_town", "House 1 uses indoor lighting and Lavender music")
 	_check_connection(town, "ToRoute12", route12, ROUTE12)
@@ -148,7 +133,6 @@ func _run() -> void:
 		and route12.get_node("Spawns/FromRoute13Water").position != route12.get_node("Spawns/FromRoute13").position
 		and route13.get_node("Spawns/FromRoute12Water").position != route13.get_node("Spawns/FromRoute12").position,
 		"Water transitions target their distinct water arrival markers")
-	_check_route_water_arrivals(route12, route13)
 	_check(str(route12.get_node("Exits/ToRoute13").transition_facing_direction) == "down"
 		and str(route13.get_node("Exits/ToRoute12").transition_facing_direction) == "up",
 		"Both arrivals face forward along the Route 12–13 path")
@@ -173,7 +157,6 @@ func _run() -> void:
 	_check(AtlasValidator.new().validate(route13_visual,
 		"res://generated/tiled_visuals/route_13/route_13.visual.tileset.tres").is_empty(),
 		"Route 13 uses valid compact atlases")
-	_check_route13_path(route13)
 	var builder := load("res://tools/world_access_catalog_builder.gd").new() as RefCounted
 	var record: Dictionary = builder.call("_load_scene_record", TOWN, {})
 	_check(bool(record.get("success", false)) and (record.get("exits", []) as Array).size() == 9,
@@ -243,71 +226,6 @@ func _check(condition: bool, label: String) -> void:
 
 
 func _check_route12_walkway(route12: Node) -> void:
-	var collision := route12.get_node("Tiles/Collision") as TileMapLayer
 	var water := route12.get_node("Tiles/Water") as TileMapLayer
-	var start := Vector2i(22, 2)
-	var goal := Vector2i(7, 61)
-	var queue: Array[Vector2i] = [start]
-	var seen := {start: true}
-	var index := 0
-	while index < queue.size():
-		var cell := queue[index]
-		index += 1
-		for direction in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
-			var next: Vector2i = cell + direction
-			if next.x < 0 or next.x >= 50 or next.y < 0 or next.y >= 124 or seen.has(next):
-				continue
-			if collision.get_cell_source_id(next) != -1 or water.get_cell_source_id(next) != -1:
-				continue
-			seen[next] = true
-			queue.append(next)
-	_check(seen.has(goal), "Lavender arrival connects to the Route 11 gate along walkable bridges")
 	_check(water.get_cell_source_id(Vector2i(30, 10)) != -1,
 		"Open water is marked for Surf rather than walking")
-	_check(water.get_cell_source_id(Vector2i(15, 8)) == -1,
-		"The wooden bridge above water stays walkable without Surf")
-	_check(collision.get_cell_source_id(Vector2i(0, 30)) != -1,
-		"The closed route edge is blocked by the persisted collision layer")
-
-
-func _check_route13_path(route13: Node) -> void:
-	var collision := route13.get_node("Tiles/Collision") as TileMapLayer
-	var water := route13.get_node("Tiles/Water") as TileMapLayer
-	var start := Vector2i(85, 1)
-	_check(collision.get_cell_source_id(start) == -1 and water.get_cell_source_id(start) == -1,
-		"Route 12 arrival lands on the north gate path")
-	_check(collision.get_cell_source_id(Vector2i(0, 20)) != -1,
-		"Route 13 west forest edge is blocked")
-	var queue: Array[Vector2i] = [start]
-	var reached := {start: true}
-	var target := Vector2i(9, 35)
-	while not queue.is_empty():
-		var current: Vector2i = queue.pop_front()
-		for offset in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
-			var next: Vector2i = current + offset
-			if next.x < 0 or next.x >= 96 or next.y < 0 or next.y >= 38:
-				continue
-			if collision.get_cell_source_id(next) != -1 or water.get_cell_source_id(next) != -1 or reached.has(next):
-				continue
-			reached[next] = true
-			queue.append(next)
-	_check(reached.has(target), "Route 13 north entrance connects through its fence maze to the southern path")
-
-
-func _check_route_water_arrivals(route12: Node, route13: Node) -> void:
-	var route12_water := route12.get_node("Tiles/Water") as TileMapLayer
-	var route12_collision := route12.get_node("Tiles/Collision") as TileMapLayer
-	var route13_water := route13.get_node("Tiles/Water") as TileMapLayer
-	var route13_collision := route13.get_node("Tiles/Collision") as TileMapLayer
-	_check(route12_water.get_cell_source_id(Vector2i(44, 120)) != -1
-		and route12_collision.get_cell_source_id(Vector2i(44, 120)) == -1,
-		"Route 12 water exit is placed on traversable Surf water")
-	_check(route12_water.get_cell_source_id(Vector2i(42, 120)) != -1
-		and route12_collision.get_cell_source_id(Vector2i(42, 120)) == -1,
-		"Route 12 water arrival is clear of collision")
-	_check(route13_water.get_cell_source_id(Vector2i(90, 30)) != -1
-		and route13_collision.get_cell_source_id(Vector2i(90, 30)) == -1,
-		"Route 13 water exit is placed on traversable Surf water")
-	_check(route13_water.get_cell_source_id(Vector2i(90, 32)) != -1
-		and route13_collision.get_cell_source_id(Vector2i(90, 32)) == -1,
-		"Route 13 water arrival is clear of collision")

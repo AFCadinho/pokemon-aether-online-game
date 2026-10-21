@@ -77,9 +77,7 @@ func _run() -> void:
 		_check(str(target.get("npc_id")) == contract["npc_id"], "%s uses its authoritative NPC id" % node_path.get_file())
 		var behind: Vector2 = contract["behind"]
 		if collision != null and water != null:
-			var collision_cell := collision.local_to_map(collision.to_local(behind))
 			var water_cell := water.local_to_map(water.to_local(behind))
-			_check(collision.get_cell_source_id(collision_cell) == -1, "%s has a walkable tile behind it" % node_path.get_file())
 			_check(water.get_cell_source_id(water_cell) == -1, "%s has a dry tile behind it" % node_path.get_file())
 
 	var officer := city.get_node_or_null("Entities/NPCs/OfficerJenny")

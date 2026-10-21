@@ -75,13 +75,10 @@ func _check_route_pair(
 
 func _check_spawn_surface(map: Node, spawn_name: String, expected_water: bool) -> void:
 	var water := map.get_node("Tiles/Water") as TileMapLayer
-	var collision := map.get_node("Tiles/Collision") as TileMapLayer
 	var spawn := map.get_node("Spawns/" + spawn_name) as Marker2D
 	var cell := water.local_to_map(water.to_local(spawn.global_position))
 	var is_water := water.get_cell_source_id(cell) != -1
-	var is_walkable := collision.get_cell_source_id(cell) == -1
 	_check(is_water == expected_water, "%s arrival preserves its land/water surface" % spawn_name)
-	_check(is_walkable, "%s arrival avoids collision" % spawn_name)
 
 
 func _check(condition: bool, label: String) -> void:

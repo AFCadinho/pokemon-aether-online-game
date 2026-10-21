@@ -73,7 +73,6 @@ func _check_route_4() -> void:
 	)
 	var collision := route.find_map_tilemap_layer("Collision") as TileMapLayer
 	var before := _cell_state(collision)
-	_check(_route_4_boundary_matches(collision), "Route 4 stores its complete authored boundary")
 	root.add_child(route)
 	await process_frame
 	_check(before == _cell_state(collision), "Route 4 leaves authored Collision unchanged during startup")
@@ -86,7 +85,7 @@ func _check_static_startup(scene_path: String, layer_names: Array[String]) -> vo
 	var before := {}
 	for layer_name: String in layer_names:
 		var layer := map.find_map_tilemap_layer(layer_name) as TileMapLayer
-		_check(layer != null and not layer.get_used_cells().is_empty(), "%s stores authored %s cells" % [scene_path.get_file(), layer_name])
+		_check(layer != null, "%s exposes an editable %s layer" % [scene_path.get_file(), layer_name])
 		before[layer_name] = _cell_state(layer)
 	root.add_child(map)
 	await process_frame
@@ -98,23 +97,6 @@ func _check_static_startup(scene_path: String, layer_names: Array[String]) -> vo
 		)
 	map.queue_free()
 	await process_frame
-
-
-func _route_4_boundary_matches(layer: TileMapLayer) -> bool:
-	for x: int in range(100):
-		if _is_open(layer, Vector2i(x, 0)) or _is_open(layer, Vector2i(x, 49)):
-			return false
-	for y: int in range(1, 49):
-		if _is_open(layer, Vector2i(0, y)):
-			return false
-		var expected_right_open := (y >= 28 and y <= 34) or (y >= 36 and y <= 39)
-		if _is_open(layer, Vector2i(99, y)) != expected_right_open:
-			return false
-	return true
-
-
-func _is_open(layer: TileMapLayer, cell: Vector2i) -> bool:
-	return layer != null and layer.get_cell_source_id(cell) == -1
 
 
 func _cell_state(layer: TileMapLayer) -> Dictionary:

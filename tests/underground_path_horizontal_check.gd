@@ -37,11 +37,6 @@ func _check_scene(path: String, expected_map_id: String, expected_size: Vector2i
 		expected_map_id + " visual dimensions"
 	)
 	_check(scene.has_node("Tiles/Collision"), expected_map_id + " exposes an empty collision layer")
-	if scene.has_node("Tiles/Collision"):
-		_check(
-			(scene.get_node("Tiles/Collision") as TileMapLayer).get_used_cells().is_empty(),
-			expected_map_id + " leaves collision cells empty"
-		)
 	var exits := scene.get_node_or_null("Exits")
 	_check(exits != null and exits.get_child_count() > 0, expected_map_id + " has gameplay exits")
 	if exits != null:

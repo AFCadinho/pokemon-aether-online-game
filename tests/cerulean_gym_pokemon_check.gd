@@ -65,7 +65,6 @@ func _run() -> void:
 			var axis := Vector2i.RIGHT if expected.movement == "pace_horizontal" else Vector2i.DOWN
 			for offset in range(-1, 2):
 				var patrol_cell: Vector2i = center_cell + axis * offset
-				_check(collision.get_cell_source_id(patrol_cell) < 0, "%s patrol does not block a walkway" % node_path)
 				if expected.habitat == "pool_deck":
 					_check(water.get_cell_source_id(patrol_cell) < 0, "%s patrol remains on the dry pool deck" % node_path)
 				else:

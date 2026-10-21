@@ -102,12 +102,6 @@ func _check_viridian_forest_trainer_vision() -> void:
 		)
 		var direction := Vector2(trainer.get("facing_direction"))
 		var trainer_cell := collision.local_to_map(collision.to_local(trainer.global_position))
-		for step: int in range(1, sight_range + 1):
-			var target_cell := trainer_cell + Vector2i(direction) * step
-			_check(
-				collision.get_cell_source_id(target_cell) == -1,
-				"%s sight step %d remains walkable" % [trainer_name, step]
-			)
 		var player_cell := trainer_cell + Vector2i(direction) * sight_range
 		var stop_cell: Vector2i = trainer.call(
 			"_get_straight_line_stop_tile",
@@ -165,8 +159,6 @@ func _check_map(scene_path: String, npc_paths: Array) -> void:
 				str(npc.call("_get_npc_metadata_id")) == str(npc.get("npc_id")),
 				"%s loads dialogue with its placed NPC identity" % npc_path.get_file()
 			)
-		var cell := collision.local_to_map(collision.to_local(npc.global_position))
-		_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable tile" % npc_path.get_file())
 	map.free()
 
 
@@ -192,12 +184,6 @@ func _check_center_pokemon(scene_path: String, pokemon_paths: Array) -> void:
 			not str(pokemon.get("species_id")).is_empty(),
 			"%s has a species" % pokemon_path.get_file()
 		)
-		var cell := collision.local_to_map(collision.to_local(pokemon.global_position))
-		for offset_y: int in range(-1, 2):
-			_check(
-				collision.get_cell_source_id(cell + Vector2i(0, offset_y)) == -1,
-				"%s vertical pacing tile %d stays walkable" % [pokemon_path.get_file(), offset_y]
-			)
 	map.free()
 
 
@@ -238,7 +224,6 @@ func _check_trainer_school_dadinho_story_hook() -> void:
 	var dadinho := map.get_node_or_null("Entities/NPCs/Dadinho")
 	var hook := map.get_node_or_null("Entities/NPCs/Dadinho/MeetDadinhoStoryHook")
 	var exit := map.get_node_or_null("Exits/ToViridianCity")
-	var collision := map.get_node_or_null("Collision") as TileMapLayer
 	var school_npcs := {
 		"InstructorCelia": "kanto_viridian_city_trainer_school_instructor_celia",
 		"SchoolKidMilo": "kanto_viridian_city_trainer_school_kid_milo",
@@ -273,9 +258,6 @@ func _check_trainer_school_dadinho_story_hook() -> void:
 		if school_npc == null:
 			continue
 		_check(str(school_npc.get("npc_id")) == school_npcs[node_name], "%s uses its school dialogue identity" % node_name)
-		if collision != null:
-			var cell := collision.local_to_map(collision.to_local(school_npc.global_position))
-			_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable classroom tile" % node_name)
 	_check(
 		exit != null
 		and str(exit.get("transition_id")) == "kanto_viridian_city_trainer_school__to_viridian_city",

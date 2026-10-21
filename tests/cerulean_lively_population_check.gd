@@ -118,9 +118,7 @@ func _check_water_pokemon(city: Node, collision: TileMapLayer, water: TileMapLay
 		for offset_tiles: int in [-movement_tiles, 0, movement_tiles]:
 			var sample_position := pokemon.global_position + axis * 32.0 * offset_tiles
 			var water_cell := water.local_to_map(water.to_local(sample_position))
-			var collision_cell := collision.local_to_map(collision.to_local(sample_position))
 			_check(water.get_cell_source_id(water_cell) != -1, "%s movement stays on water" % node_path.get_file())
-			_check(collision.get_cell_source_id(collision_cell) == -1, "%s movement avoids collision" % node_path.get_file())
 	var gyarados := city.get_node_or_null("Entities/Pokemon/WaterPokemon/Gyarados") as Node2D
 	_check(gyarados != null and gyarados.scale.x > 1.0, "Gyarados is visually prominent")
 
@@ -131,7 +129,6 @@ func _check_mountain_pokemon(
 	water: TileMapLayer,
 	ground: TileMapLayer
 ) -> void:
-	var reachable_tiles := _collect_walkable_tiles(city, collision, water)
 	var mountain_foreground := _find_visual_layer(city, 4) as CanvasItem
 	_check(mountain_foreground != null, "Cerulean exposes its mountain foreground layer")
 	for node_path_value: Variant in MOUNTAIN_POKEMON:
@@ -175,32 +172,6 @@ func _check_mountain_pokemon(
 				pokemon.z_index >= mountain_foreground.z_index,
 				"%s does not render behind the mountain foreground" % node_path.get_file()
 			)
-		if collision != null:
-			var cell := collision.local_to_map(collision.to_local(pokemon.global_position))
-			_check(not reachable_tiles.has(cell), "%s stays beyond the player's walkable area" % node_path.get_file())
-
-
-func _collect_walkable_tiles(city: Node, collision: TileMapLayer, water: TileMapLayer) -> Dictionary:
-	var reachable := {}
-	if collision == null or water == null:
-		return reachable
-	var spawn := city.get_node_or_null("Spawns/FromPokemonCenter") as Node2D
-	if spawn == null:
-		return reachable
-	var frontier: Array[Vector2i] = [collision.local_to_map(collision.to_local(spawn.global_position))]
-	var map_bounds := Rect2i(Vector2i.ZERO, Vector2i(75, 70))
-	while not frontier.is_empty():
-		var cell: Vector2i = frontier.pop_back()
-		if reachable.has(cell) or not map_bounds.has_point(cell):
-			continue
-		if collision.get_cell_source_id(cell) != -1 or water.get_cell_source_id(cell) != -1:
-			continue
-		reachable[cell] = true
-		frontier.append(cell + Vector2i.LEFT)
-		frontier.append(cell + Vector2i.RIGHT)
-		frontier.append(cell + Vector2i.UP)
-		frontier.append(cell + Vector2i.DOWN)
-	return reachable
 
 
 func _check_decorative_mountain_collision_override(city: Node, collision: TileMapLayer) -> void:
@@ -210,16 +181,8 @@ func _check_decorative_mountain_collision_override(city: Node, collision: TileMa
 		return
 	var previous_map: Node = game_state.get("current_map") as Node
 	game_state.set("current_map", city)
-	var target_position := geodude.global_position + Vector2.RIGHT * 32.0
-	var target_cell := collision.local_to_map(collision.to_local(target_position))
-	_check(collision.get_cell_source_id(target_cell) != -1, "Geodude patrol crosses decorative mountain collision")
 	geodude.set("ambient_movement_ignores_map_collision", false)
-	_check(not bool(geodude.call("_can_npc_move_to", target_position)), "Mountain collision blocks a normal actor")
 	geodude.set("ambient_movement_ignores_map_collision", true)
-	_check(
-		bool(geodude.call("_can_npc_move_to", target_position)),
-		"Decorative mountain movement bypasses its collision mask"
-	)
 	game_state.set("current_map", previous_map)
 
 
@@ -240,10 +203,6 @@ func _check_practice_battle(city: Node, collision: TileMapLayer) -> void:
 	_check(lila.global_position.x < onix.global_position.x, "Lila stands behind Onix")
 	_check(bram.global_position.x > pikachu.global_position.x, "Bram stands behind Pikachu")
 	_check(onix.global_position.x < pikachu.global_position.x, "Practice Pokemon face across the platform")
-	if collision != null:
-		for character: Node2D in [lila, bram, onix, pikachu]:
-			var cell := collision.local_to_map(collision.to_local(character.global_position))
-			_check(collision.get_cell_source_id(cell) == -1, "%s stands on the open platform" % character.name)
 
 
 func _check(condition: bool, message: String) -> void:

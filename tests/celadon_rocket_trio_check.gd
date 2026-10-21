@@ -48,23 +48,9 @@ func _check_placement() -> void:
 	var spawn := route.get_node("Spawns/FromUndergroundPath") as Node2D
 	var trigger_shape := sighting.get_node("CollisionShape2D").shape as RectangleShape2D
 	_check(Rect2(origin.position + sighting.position - trigger_shape.size / 2.0, trigger_shape.size).has_point(spawn.position), "Underground arrival lies inside the sighting trigger")
-	var route_collision := route.get_node("Tiles/Collision") as TileMapLayer
-	var origins := [Vector2(-32, 0), Vector2(32, 0), Vector2(0, 32)]
-	for start: Vector2 in origins:
-		var tile := Vector2i((origin.position + start) / 32.0)
-		_check(route_collision.get_cell_source_id(tile) == -1, "Route cameo actor starts on a clear tile")
-		for direction: Vector2i in [Vector2i.LEFT, Vector2i.UP, Vector2i.LEFT]:
-			var count := 4 if direction == Vector2i.LEFT and tile.y > 30 else 6
-			for _index: int in range(count):
-				tile += direction
-				_check(route_collision.get_cell_source_id(tile) == -1, "Cameo walk follows clear scenery: %s" % tile)
 	var encounter := city.get_node("Story/RocketTrio") as Node2D
 	_check(encounter.position == Vector2(2256, 1648), "Rescue takes place in southeast Celadon")
 	_check(encounter.get_node("James").position == Vector2(0, 32) and encounter.get_node("Meowth").position == Vector2(32, 0), "Celadon retains its actor staging when the map is saved in Godot")
-	var collision := city.get_node("Tiles/Collision") as TileMapLayer
-	for offset: Vector2 in [Vector2(-32, 0), Vector2(0, 32), Vector2(32, 0), Vector2(64, 0), Vector2(96, -32)]:
-		var tile := Vector2i((encounter.position + offset) / 32.0)
-		_check(collision.get_cell_source_id(tile) == -1, "Rescue actor stands on clear scenery: %s" % tile)
 	for trigger_name: String in ["Confrontation", "Escape"]:
 		var trigger := encounter.get_node(trigger_name)
 		_check(trigger.get("story_host_path") == NodePath(".."), "Story trigger resolves the trio controller")

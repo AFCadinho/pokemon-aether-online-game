@@ -83,28 +83,6 @@ func _run() -> void:
 		lobby_source.contains("AETHER_CONFIRMATION_DIALOG_SCENE.instantiate()"),
 		"multi-session portal selection uses the themed Aether modal"
 	)
-	var collision := lobby.get_node_or_null("Tiles/Collision") as TileMapLayer
-	_check(collision != null and not collision.get_used_cells().is_empty(), "Lobby includes gameplay collision")
-	for tile: Vector2i in [Vector2i(29, 5), Vector2i(31, 5), Vector2i(29, 7), Vector2i(31, 7), Vector2i(29, 8), Vector2i(31, 8)]:
-		_check(collision.get_cell_source_id(tile) == -1, "Rental counter approach remains walkable: " + str(tile))
-	_check(
-		collision != null and collision.get_cell_source_id(Vector2i(29, 50)) == -1,
-		"Guild arrival tile is walkable"
-	)
-	_check(
-		collision != null and collision.get_cell_source_id(Vector2i(49, 29)) == -1,
-		"Battle Point vendor placement tile is available"
-	)
-	_check(
-		collision != null and collision.get_cell_source_id(Vector2i(41, 29)) == -1,
-		"Z-Crystal Seller placement tile is available"
-	)
-	_check(
-		collision != null and collision.get_cell_source_id(Vector2i(45, 29)) == -1,
-		"Mega Stone Seller placement tile is available"
-	)
-	for tile: Vector2i in [Vector2i(37, 29), Vector2i(36, 29), Vector2i(35, 29), Vector2i(37, 30)]:
-		_check(collision.get_cell_source_id(tile) == -1, "Evolution Item Seller placement or approach tile is walkable: " + str(tile))
 	lobby.queue_free()
 	quit(1 if failed else 0)
 

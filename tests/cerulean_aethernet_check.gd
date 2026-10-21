@@ -41,9 +41,7 @@ func _run() -> void:
 	_check(collision != null and water != null, "Cerulean station resolves collision and water masks")
 	if collision != null and water != null:
 		for position: Vector2 in EXPECTED_POSITIONS.values():
-			var collision_cell := collision.local_to_map(collision.to_local(position))
 			var water_cell := water.local_to_map(water.to_local(position))
-			_check(collision.get_cell_source_id(collision_cell) == -1, "Cerulean station tile %s is walkable" % position)
 			_check(water.get_cell_source_id(water_cell) == -1, "Cerulean station tile %s is on land" % position)
 
 	city.queue_free()

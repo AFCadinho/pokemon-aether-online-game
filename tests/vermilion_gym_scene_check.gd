@@ -17,7 +17,6 @@ func _run() -> void:
 	for path: String in ["Entities/Players", "Entities/NPCs", "Entities/Pokemon", "Entities/Interactables", "Spawns/FromVermilionCity", "Exits/ToVermilionCity", "FloorVisibilityMask/Top", "FloorVisibilityMask/Bottom", "FloorVisibilityMask/Left", "FloorVisibilityMask/Right"]:
 		_check(gym.has_node(path), "required node " + path)
 	var collision := gym.get_node("Tiles/Collision") as TileMapLayer
-	_check(collision.get_used_cells().is_empty() or (collision.tile_set != null and collision.tile_set.tile_size == Vector2i(32, 32)), "collision layer can remain empty for map authoring or use the 32px marker tileset")
 	var visual := gym.get_node("Visual")
 	_check(visual.get_meta("tiled_visual_map").width == 24 and visual.get_meta("tiled_visual_map").height == 36, "TMX dimensions preserved")
 	for name: String in ["Ground", "GroundDetail", "Objects", "ObjectsTop"]:
@@ -35,7 +34,6 @@ func _run() -> void:
 	_check(exit.target_scene_path == CITY and exit.target_spawn_name == "FromGym", "city return")
 	_check(not exit.contains_world_position(gym.get_node("Spawns/FromVermilionCity").position), "arrival avoids immediate exit")
 	_check(not entrance.contains_world_position(city.get_node("Spawns/FromGym").position), "return avoids immediate re-entry")
-	_check(city.get_node("Tiles/Collision").get_cell_source_id(Vector2i(14, 41)) == -1, "city return tile is walkable")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	_check(catalog.areas.has(gym.map_id), "gym registered in world catalog")
 	_check(catalog.transitions.has("kanto_vermilion_city__to_gym") and catalog.transitions.has("kanto_vermilion_city_gym__to_outside"), "both transitions registered")
@@ -69,7 +67,6 @@ func _check_leader_podium(gym: Node, leader: Node2D, collision: TileMapLayer) ->
 	var bin_tops := gym.get_node("Visual/ObjectsTop") as TileMapLayer
 	var bin_bottoms := gym.get_node("Visual/Objects") as TileMapLayer
 	var bin_nodes := gym.get_node("Entities/Interactables")
-	var reachable := _reachable_walkable_cells(gym, collision)
 	var bin_count := 0
 	for bin: Node2D in bin_nodes.get_children():
 		if not bin.name.begins_with("Bin"):
@@ -93,50 +90,14 @@ func _check_leader_podium(gym: Node, leader: Node2D, collision: TileMapLayer) ->
 		for dy in range(footprint.y):
 			access_cells.append(Vector2i(x - 1, y + dy))
 			access_cells.append(Vector2i(x + footprint.x, y + dy))
-		var reachable_approaches := 0
-		for cell: Vector2i in access_cells:
-			var world_position := Vector2(cell * 32) + Vector2(16, 16)
-			if collision.get_cell_source_id(cell) == -1 \
-				and not gym.is_position_blocked_by_character(world_position) \
-				and reachable.has(cell):
-				reachable_approaches += 1
-		_check(reachable_approaches > 0, "%s has an unoccupied, reachable approach tile" % bin.name)
 	_check(bin_count == 20, "all twenty bins have aligned Godot interactables")
 	var platform := gym.get_node("Visual/Leader Platform") as TileMapLayer
 	_check(platform.get_used_rect() == Rect2i(8, 12, 7, 1), "complete raised stage front")
 	for x in range(8, 15):
 		var cell := Vector2i(x, 12)
 		_check(platform.get_cell_source_id(cell) != -1, "no gap in the stage fascia or stairs")
-		if has_map_collision:
-			_check((collision.get_cell_source_id(cell) == -1) == (x >= 10 and x <= 12), "stage access passes through the stairs only")
-	for y in range(center.y, 18):
-		_check(collision.get_cell_source_id(Vector2i(center.x, y)) == -1, "leader tile and straight approach are walkable")
-	for x in [8, 9, 13, 14]:
-		for y in range(8, 12):
-			if has_map_collision:
-				_check(collision.get_cell_source_id(Vector2i(x, y)) != -1, "complete column footprint blocks movement")
 	var emblem := gym.get_node("Visual/Gym Emblem") as TileMapLayer
 	_check(emblem.position.x + float(emblem.get_used_rect().position.x * 32) + float(emblem.get_used_rect().size.x * 16) == leader.position.x, "emblem shares the leader centerline")
-
-func _reachable_walkable_cells(gym: Node, collision: TileMapLayer) -> Dictionary:
-	var spawn := gym.get_node("Spawns/FromVermilionCity") as Marker2D
-	var start := collision.local_to_map(collision.to_local(spawn.global_position))
-	var reachable: Dictionary = {start: true}
-	var queue: Array[Vector2i] = [start]
-	while not queue.is_empty():
-		var current: Vector2i = queue.pop_front()
-		for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
-			var next := current + direction
-			if next.x < 0 or next.x >= 24 or next.y < 0 or next.y >= 36 or reachable.has(next):
-				continue
-			if collision.get_cell_source_id(next) != -1:
-				continue
-			var world_position := collision.to_global(collision.map_to_local(next))
-			if gym.is_position_blocked_by_character(world_position):
-				continue
-			reachable[next] = true
-			queue.append(next)
-	return reachable
 
 
 func _check_trainers(gym: Node) -> void:

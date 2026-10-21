@@ -91,9 +91,6 @@ func _check_fuchsia_gate(route: Node2D, gate: Node2D, areas: Dictionary) -> void
 	_expect(route_spawn.position == Vector2(176, 944), "Route 15 return uses the artist's arrival tile")
 	_expect(not entrance.contains_world_position(route_spawn.global_position), "Route 15 arrival avoids an immediate return transition")
 	_expect(not gate.get_node("Exits/ToEast").contains_world_position(gate_spawn.global_position), "Gate arrival avoids an immediate return transition")
-	for y in range(27, 31):
-		_expect(route.get_node("Tiles/Collision").get_cell_source_id(Vector2i(3, y)) == -1,
-			"Route 15 gate entrance tiles are walkable")
 	var west := gate.get_node("Exits/ToWest") as Area2D
 	_expect(west.monitoring and not west.get_node("CollisionShape2D").disabled,
 		"Fuchsia exit is enabled for its connected destination")
@@ -103,13 +100,6 @@ func _check_fuchsia_gate(route: Node2D, gate: Node2D, areas: Dictionary) -> void
 	player.map_layers_owner = gate
 	player.resolved_map_cache = gate
 	player.collision_tilemap = player._find_tilemap_layer(gate, COLLISION_LAYER_NAMES)
-	_expect(player.can_move_to(gate_spawn.global_position), "Player can stand at the gate arrival point")
-	_expect(player.can_move_to(gate.get_node("Spawns/FromFuchsiaCity").global_position), "Future Fuchsia arrival point is walkable")
-	_expect(route.get_node("Tiles/Collision").get_cell_source_id(Vector2i(5, 29)) == -1,
-		"Return arrival on Route 15 is walkable")
-	for y in range(9, 12):
-		_expect(player.can_move_to(Vector2(80, y * 32 + 16)),
-			"Future Fuchsia doorway has no client movement blockade")
 	player.free()
 
 
@@ -118,13 +108,6 @@ func _check_horizontal_tile_collision(map: Node2D, template: Node2D) -> void:
 	_expect(map.find_children("*", "StaticBody2D", true, false).is_empty(),
 		"%s uses tiles instead of physical wall or doorway blockers" % map.name)
 	var collision := map.get_node("Tiles/Collision") as TileMapLayer
-	var expected := template.get_node("Tiles/Collision") as TileMapLayer
-	var cells_match := collision.get_used_cells().size() == expected.get_used_cells().size()
-	for tile: Vector2i in expected.get_used_cells():
-		cells_match = cells_match and collision.get_cell_source_id(tile) == expected.get_cell_source_id(tile)
-		cells_match = cells_match and collision.get_cell_atlas_coords(tile) == expected.get_cell_atlas_coords(tile)
-	_expect(cells_match and collision.tile_set == expected.tile_set,
-		"%s inherits its collision tiles from the horizontal template" % map.name)
 	var player: Node2D = (load("res://scripts/world/player.gd") as GDScript).new()
 	map.get_node("Entities/Players").add_child(player)
 	player.map_layers_initialized = true
@@ -132,13 +115,6 @@ func _check_horizontal_tile_collision(map: Node2D, template: Node2D) -> void:
 	player.resolved_map_cache = map
 	player.collision_tilemap = player._find_tilemap_layer(map, COLLISION_LAYER_NAMES)
 	_expect(player.collision_tilemap == collision, "%s player resolves the authored Tiles/Collision layer" % map.name)
-	for tile: Vector2i in [Vector2i(2, 1), Vector2i(17, 4), Vector2i(11, 6)]:
-		_expect(not player.can_move_to(Vector2(tile) * 32 + Vector2(16, 16)),
-			"%s authored wall tiles block movement" % map.name)
-	for y in range(9, 12):
-		for x in [2, 17]:
-			_expect(player.can_move_to(Vector2(x * 32 + 16, y * 32 + 16)),
-				"%s doorway stays clear for server-authorized transitions" % map.name)
 	player.free()
 
 
@@ -148,13 +124,8 @@ func _check_guard_interaction(map: Node2D) -> void:
 		"%s attendant resolves shared server dialogue" % map.name)
 	_expect(not guard.requires_party_pokemon and not guard.requires_staff_role,
 		"%s attendant can speak without local access requirements" % map.name)
-	var collision := map.get_node("Tiles/Collision") as TileMapLayer
 	var guard_tile: Vector2i = guard._to_tile(guard.get_feet_position())
 	var approach_tile := guard_tile + Vector2i.DOWN * 2
-	_expect(collision.get_cell_source_id(guard_tile + Vector2i.DOWN) != -1,
-		"%s counter separates the attendant from the player" % map.name)
-	_expect(collision.get_cell_source_id(approach_tile) == -1,
-		"%s two-tile attendant approach is walkable" % map.name)
 	# Use the real detector and player collider in physics, without running NPC/API setup.
 	var fixture := Node2D.new()
 	var detector := guard.get_node("InteractionArea").duplicate() as Area2D

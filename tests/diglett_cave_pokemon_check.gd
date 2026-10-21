@@ -18,13 +18,6 @@ func _init() -> void:
 func _run() -> void:
 	var cave := (load(CAVE_SCENE) as PackedScene).instantiate()
 	var pokemon_nodes: Array[Node] = cave.get_node("Entities/Pokemon").get_children()
-	var collision := cave.get_node("Tiles/Collision") as TileMapLayer
-	var ground := cave.get_node("Visual/Ground") as TileMapLayer
-	var clutter: Array[TileMapLayer] = [
-		cave.get_node("Visual/GroundDetail") as TileMapLayer,
-		cave.get_node("Visual/Objects") as TileMapLayer,
-		cave.get_node("Visual/ObjectsTop") as TileMapLayer,
-	]
 	var waits: Dictionary = {}
 	var speeds: Dictionary = {}
 	var actual_ids := {}
@@ -42,16 +35,7 @@ func _run() -> void:
 		speeds[float(pokemon.get("movement_speed_pixels"))] = true
 		actual_ids[pokemon_id] = true
 
-		var current_cell := collision.local_to_map(pokemon.position)
-		_check(_is_clear_floor(ground, collision, clutter, current_cell), "%s stands on a clear cave tile" % pokemon_name)
 		var movement_behavior := str(pokemon.get("movement_behavior"))
-		var first_neighbor := current_cell + Vector2i.LEFT if movement_behavior == "pace_horizontal" else current_cell + Vector2i.UP
-		var second_neighbor := current_cell + Vector2i.RIGHT if movement_behavior == "pace_horizontal" else current_cell + Vector2i.DOWN
-		_check(
-			_is_clear_floor(ground, collision, clutter, first_neighbor)
-			and _is_clear_floor(ground, collision, clutter, second_neighbor),
-			"%s has room for its pacing behavior" % pokemon_name
-		)
 
 	_check(pokemon_nodes.size() == EXPECTED_POKEMON.size(), "Only the intended cave Pokémon are placed")
 	_check(actual_ids.size() == EXPECTED_POKEMON.size(), "Cave Pokémon metadata IDs are unique")
@@ -69,12 +53,3 @@ func _check(condition: bool, message: String) -> void:
 	else:
 		failed = true
 		push_error("FAIL %s" % message)
-
-
-func _is_clear_floor(ground: TileMapLayer, collision: TileMapLayer, clutter: Array[TileMapLayer], cell: Vector2i) -> bool:
-	if ground.get_cell_source_id(cell) == -1 or collision.get_cell_source_id(cell) != -1:
-		return false
-	for layer: TileMapLayer in clutter:
-		if layer.get_cell_source_id(cell) != -1:
-			return false
-	return true

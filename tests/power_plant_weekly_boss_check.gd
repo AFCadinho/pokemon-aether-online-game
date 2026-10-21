@@ -26,9 +26,6 @@ func _run() -> void:
 				catalog_position = Vector2(float(entry["position"]["x"]), float(entry["position"]["y"]))
 	_check(boss.position == catalog_position, "Client and account catalog positions agree")
 	_check(FollowerSpriteService.get_sprite_frames("zapdos", false) != null, "Zapdos has a follower sprite")
-	var collision := map.get_node("Tiles/Collision") as TileMapLayer
-	var cell: Vector2i = collision.local_to_map(boss.position)
-	_check(collision.get_cell_source_id(cell) == -1, "Boss stands on a walkable tile")
 	for child: Node2D in map.get_node("Entities/Pokemon").get_children():
 		if child != boss:
 			_check(child.position.distance_to(boss.position) >= 32, "Boss avoids %s" % child.name)

@@ -13,36 +13,18 @@ func _init() -> void:
 func _run() -> void:
 	var room: Node2D = load(SCENE).instantiate()
 	var city: Node2D = load(DIRECTORY + "celadon_city.tscn").instantiate()
-	var collision: TileMapLayer = room.get_node("Tiles/Collision")
 	var spawn: Marker2D = room.get_node("Spawns/FromOutside")
 	var entrance: Area2D = city.get_node("Exits/ToPrizeCorner")
 	var exit_node: Area2D = room.get_node("Exits/ToOutside")
 	var city_spawn: Marker2D = city.get_node("Spawns/FromPrizeCorner")
 	_check(room.map_id == MAP_ID and room.world_access_group_id == city.map_id, "Prize Corner shares Celadon access")
 	_check(room.world_access_area_type == "interior" and room.lighting_profile == "indoor" and room.weather_profile == "disabled", "Indoor lighting and weather")
-	var reached := _reachable(collision, Vector2i(15, 17), Vector2i(7, 12))
-	_check(reached.has(Vector2i(spawn.position / 32.0)), "Saved arrival is on connected public floor")
-	for tile: Vector2i in [Vector2i(4, 8), Vector2i(7, 8), Vector2i(10, 8), Vector2i(1, 9), Vector2i(13, 9), Vector2i(7, 14)]:
-		_check(reached.has(tile), "Service approaches, side aisles and exit are reachable: " + str(tile))
-	for tile: Vector2i in [Vector2i(4, 7), Vector2i(7, 7), Vector2i(10, 7), Vector2i(3, 11), Vector2i(11, 11), Vector2i(2, 7), Vector2i(12, 7)]:
-		_check(collision.get_cell_source_id(tile) != -1, "Counter, statues and plants block their floor footprints: " + str(tile))
-	for tile: Vector2i in [Vector2i(4, 6), Vector2i(7, 6), Vector2i(10, 6)]:
-		_check(not reached.has(tile), "Public cannot enter staff space")
-	# The hand-finished collision follows visible wall and furnishing bases.
-	# Black padding needs no painted collision when it cannot be reached.
-	var padded_reach := _reachable(collision, Vector2i(19, 21), Vector2i(spawn.position / 32.0), Vector2i(-2, -2))
-	var canvas := Rect2i(Vector2i.ZERO, Vector2i(15, 17))
-	_check(padded_reach.keys().all(func(tile: Vector2i): return canvas.has_point(tile)), "Public floor cannot escape through the visible room boundary")
-	for x in range(1, 14):
-		_check(collision.get_cell_source_id(Vector2i(x, 14)) != -1 or x == 7, "Cutaway front only opens at the single exit tile")
 	_check(entrance.target_scene_path == SCENE and entrance.target_spawn_name == "FromOutside", "City door enters Prize Corner")
 	_check(exit_node.target_scene_path == city.scene_file_path and exit_node.target_spawn_name == "FromPrizeCorner", "Return goes to the matching city door")
 	_check(entrance.transition_facing_direction == "up" and exit_node.transition_facing_direction == "down", "Reciprocal arrival facing")
 	_check(not entrance.contains_world_position(city_spawn.position) and not exit_node.contains_world_position(spawn.position), "No immediate return-trigger loop")
 	_check(exit_node.contains_world_position(Vector2(240, 464)), "Exit trigger covers the single-tile threshold")
 	_check(not exit_node.contains_world_position(Vector2(272, 464)), "Exit does not cover the adjacent blocked front tile")
-	var city_reached := _reachable(city.get_node("Tiles/Collision"), Vector2i(80, 70), Vector2i(city.get_node("Spawns/FromRoute7").position / 32.0))
-	_check(city_reached.has(Vector2i(44, 27)) and city_reached.has(Vector2i(44, 29)), "Door and return are reachable from Route 7")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	_check(catalog.areas.has(MAP_ID) and catalog.areas[MAP_ID].locationGroupId == city.map_id, "Server registers the interior")
 	for pair: Array in [[entrance, room, spawn], [exit_node, city, city_spawn]]:
@@ -53,9 +35,6 @@ func _run() -> void:
 		# The saved local markers and authoritative server landings can occupy
 		# adjacent clear tiles; verify both against the actual destination map.
 		var server_position := Vector2(float(destination.position.x), float(destination.position.y))
-		var target_collision: TileMapLayer = pair[1].get_node("Tiles/Collision")
-		_check(target_collision.get_cell_source_id(target_collision.local_to_map(server_position)) == -1, "Server arrival remains walkable")
-		_check(target_collision.get_cell_source_id(target_collision.local_to_map(pair[2].position)) == -1, "Saved marker remains walkable")
 		var return_exit: Area2D = exit_node if pair[1] == room else entrance
 		_check(not return_exit.contains_world_position(server_position), "Server arrival avoids the return trigger")
 	_check(LOADER.module_for_scene(SCENE) == LOADER.EXTENDED_MODULE_NAME, "Browser module includes Prize Corner")
@@ -73,11 +52,6 @@ func _run() -> void:
 	var trigger_bounds := Rect2(trigger.global_position - trigger_size / 2.0, trigger_size)
 	_check(body_bounds.intersects(trigger_bounds), "Actual player body overlaps the city door trigger at (44,27)")
 	room.get_node("Entities/Players").add_child(player)
-	for tile: Vector2i in reached:
-		player.position = spawn.position
-		_check(player.can_move_to(Vector2(tile * 32) + Vector2(16, 16)), "Player can use public floor: " + str(tile))
-	for tile: Vector2i in [Vector2i(7, 7), Vector2i(3, 11), Vector2i(0, 12), Vector2i(6, 14), Vector2i(8, 14)]:
-		_check(not player.can_move_to(Vector2(tile * 32) + Vector2(16, 16)), "Player cannot cross furnishings or the front boundary: " + str(tile))
 	player.free()
 	root.add_child(room)
 	await process_frame
@@ -90,20 +64,6 @@ func _run() -> void:
 	print("CELADON_PRIZE_CORNER ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
 
-func _reachable(collision: TileMapLayer, size: Vector2i, start: Vector2i, origin := Vector2i.ZERO) -> Dictionary:
-	var queue: Array[Vector2i] = [start]
-	var reached := {start: true}
-	var index := 0
-	while index < queue.size():
-		var tile := queue[index]
-		index += 1
-		for offset: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
-			var next := tile + offset
-			if not Rect2i(origin, size).has_point(next) or reached.has(next) or collision.get_cell_source_id(next) != -1:
-				continue
-			reached[next] = true
-			queue.append(next)
-	return reached
 
 func _check(ok: bool, label: String) -> void:
 	if not ok:

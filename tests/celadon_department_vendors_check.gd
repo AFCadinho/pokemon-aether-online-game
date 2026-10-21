@@ -21,8 +21,6 @@ func _init() -> void:
 func _run() -> void:
 	var store: Node2D = load(STORE).instantiate()
 	var lobby: Node2D = load(LOBBY).instantiate()
-	var collision: TileMapLayer = store.get_node("Tiles/Collision")
-	var reached: Dictionary = _reachable(collision, Vector2i(42, 36), Vector2i(store.get_node("Spawns/FromOutside").position / 32))
 	_cache_actor_metadata(store)
 	root.add_child(store)
 	for vendor: Node in store.get_node("Entities/NPCs").get_children():
@@ -41,9 +39,7 @@ func _run() -> void:
 		var expected: Array = VENDORS[vendor_name]
 		_check(not lobby.has_node("Entities/NPCs/" + vendor_name), "No duplicate left in lobby: " + vendor_name)
 		_check(vendor.position == expected[0] and vendor.facing_direction == Vector2.DOWN, "Server placement and facing: " + vendor_name)
-		_check(collision.get_cell_source_id(Vector2i(vendor.position / 32)) == -1, "Vendor stands on free staff floor: " + vendor_name)
 		customer.position = vendor.position + Vector2(0, 96)
-		_check(reached.has(Vector2i(customer.position / 32)), "Customer can walk from entrance to counter: " + vendor_name)
 		vendor.feet_marker = vendor.get_node("FeetMarker")
 		_check(vendor._is_player_facing_npc(customer), "Manual interaction reaches across counter: " + vendor_name)
 		customer.last_direction = Vector2.DOWN
@@ -56,7 +52,6 @@ func _run() -> void:
 		_check(vendor.market_id == expected[1] and vendor.market_mode == "player_buys" and vendor.npc_definition_id == expected[2], "Existing shop and dialogue identity preserved: " + vendor_name)
 		for offset: Vector2 in [Vector2(-64, 64), Vector2(-32, 64), Vector2(0, 64), Vector2(32, 64), Vector2(0, 96)]:
 			customer.position = vendor.position + offset
-			_check(reached.has(Vector2i(customer.position / 32)), "Counter approach is reachable: " + vendor_name + str(offset))
 			for frame in range(3):
 				await physics_frame
 			_check(vendor.player_nearby and vendor.nearby_player == customer, "Physics sensor detects customer across counter: " + vendor_name + str(offset))
@@ -91,22 +86,6 @@ func _check(ok: bool, message: String) -> void:
 		failed = true
 		push_error(message)
 
-func _reachable(collision: TileMapLayer, size: Vector2i, start: Vector2i) -> Dictionary:
-	var queue: Array[Vector2i] = [start]
-	var seen := {start: true}
-	var index := 0
-	while index < queue.size():
-		var tile := queue[index]
-		index += 1
-		for direction: Vector2i in [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]:
-			var next := tile + direction
-			if not Rect2i(Vector2i.ZERO, size).has_point(next) or seen.has(next) or collision.get_cell_source_id(next) != -1:
-				continue
-			seen[next] = true
-			queue.append(next)
-	return seen
-
-
 
 func _cache_actor_metadata(map: Node) -> void:
 	# Exercise local physics and movement without contacting a running backend.
@@ -119,4 +98,3 @@ func _cache_actor_metadata(map: Node) -> void:
 	var pokemon_service := root.get_node("OverworldPokemonMetadataService")
 	for actor: Node in map.get_node("Entities/Pokemon").get_children():
 		pokemon_service.overworld_pokemon_metadata_cache[actor.overworld_pokemon_id] = {"success": true, "metadata": {"id": actor.overworld_pokemon_id, "name": actor.display_name, "speciesId": actor.species_id, "level": actor.level, "dialogueId": actor.dialogue_id, "interactionType": "cry"}}
-

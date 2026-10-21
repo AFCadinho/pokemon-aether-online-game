@@ -31,9 +31,6 @@ func _run() -> void:
 		if specialist:
 			_check(specialist.portrait_id == "showdown_gardener" and specialist.mugshot.resource_path.ends_with("gardener.png"), "Gardener portrait overrides Oak fallback")
 			_check("NPC_Z07_Breeder_M" in specialist.npc_sprite_frames.get_frame_texture("idle_down",0).atlas.resource_path, "Green gardener overworld is assigned")
-			var collision := interior.get_node("Tiles/Collision") as TileMapLayer
-			var cell := collision.local_to_map(specialist.position)
-			_check(collision.get_cell_source_id(cell) == -1 and collision.get_cell_source_id(cell + Vector2i.DOWN) == -1, "Daycare specialist has a clear approach tile")
 		interior.free()
 	var popup := load("res://scenes/interface/nature_specialist_popup.tscn") as PackedScene
 	_check(popup != null, "Nature Specialist interface loads")

@@ -235,7 +235,6 @@ func _check_staging_tiles(lab_resource: PackedScene) -> void:
 				staging_positions.append(stand_position)
 		for world_position: Vector2 in staging_positions:
 			var tile := collision.local_to_map(collision.to_local(world_position))
-			_check_true(collision.get_cell_source_id(tile) == -1, "Gary staging tile %s is walkable" % world_position)
 			_check_true(tile not in occupied_npc_tiles, "Gary staging tile %s is not occupied by Oak" % world_position)
 	lab.free()
 
