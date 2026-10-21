@@ -1190,6 +1190,16 @@
 			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 			"trainerId": ""
 		},
+		"kanto_fuchsia_city_transit_keeper": {
+			"mapId": "kanto_fuchsia_city",
+			"position": {
+				"x": 208.0,
+				"y": 1008.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
+			"trainerId": ""
+		},
 		"kanto_fuchsia_city_traveler_timo": {
 			"mapId": "kanto_fuchsia_city",
 			"position": {
@@ -1200,11 +1210,21 @@
 			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 			"trainerId": ""
 		},
+		"kanto_fuchsia_city_warden": {
+			"mapId": "kanto_fuchsia_city_tall_house",
+			"position": {
+				"x": 304.0,
+				"y": 880.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/tall_house.tscn",
+			"trainerId": ""
+		},
 		"kanto_fuchsia_safari_zone_gate_attendant": {
 			"mapId": "kanto_fuchsia_safari_zone_gate",
 			"position": {
-				"x": 336.0,
-				"y": 240.0
+				"x": 464.0,
+				"y": 528.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/transition_buildings/safari_zone_gate.tscn",
@@ -2893,8 +2913,8 @@
 		"kanto_route_15_beauty_olivia": {
 			"mapId": "kanto_route_15",
 			"position": {
-				"x": 1392.0,
-				"y": 1104.0
+				"x": 1328.0,
+				"y": 1136.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
@@ -2903,8 +2923,8 @@
 		"kanto_route_15_biker_alex": {
 			"mapId": "kanto_route_15",
 			"position": {
-				"x": 1200.0,
-				"y": 1040.0
+				"x": 1168.0,
+				"y": 1104.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
@@ -2924,7 +2944,7 @@
 			"mapId": "kanto_route_15",
 			"position": {
 				"x": 1040.0,
-				"y": 912.0
+				"y": 816.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
@@ -2933,8 +2953,8 @@
 		"kanto_route_15_bird_keeper_edwin": {
 			"mapId": "kanto_route_15",
 			"position": {
-				"x": 720.0,
-				"y": 1104.0
+				"x": 752.0,
+				"y": 1136.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
@@ -2960,11 +2980,21 @@
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
 			"trainerId": "kanto_route_15_crush_kin_ron"
 		},
+		"kanto_route_15_fuchsia_gate_attendant": {
+			"mapId": "kanto_route_15_fuchsia_gate",
+			"position": {
+				"x": 496.0,
+				"y": 208.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_15_fuchsia_gate.tscn",
+			"trainerId": ""
+		},
 		"kanto_route_15_picnicker_becky": {
 			"mapId": "kanto_route_15",
 			"position": {
-				"x": 528.0,
-				"y": 528.0
+				"x": 656.0,
+				"y": 464.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
@@ -2974,7 +3004,7 @@
 			"mapId": "kanto_route_15",
 			"position": {
 				"x": 944.0,
-				"y": 528.0
+				"y": 464.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
@@ -2993,8 +3023,8 @@
 		"kanto_route_15_picnicker_yazmin": {
 			"mapId": "kanto_route_15",
 			"position": {
-				"x": 1424.0,
-				"y": 528.0
+				"x": 1232.0,
+				"y": 464.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_15.tscn",
@@ -3080,10 +3110,20 @@
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_16_east.tscn",
 			"trainerId": ""
 		},
+		"kanto_route_16_east_house_bird_keeper": {
+			"mapId": "kanto_route_16_east_house",
+			"position": {
+				"x": 304.0,
+				"y": 336.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/routes/route_16_east_house.tscn",
+			"trainerId": ""
+		},
 		"kanto_route_16_east_resident_aya": {
 			"mapId": "kanto_route_16_east",
 			"position": {
-				"x": 464.0,
+				"x": 528.0,
 				"y": 464.0
 			},
 			"radius": 80.0,
@@ -3323,8 +3363,8 @@
 		"kanto_route_19_fuchsia_gate_attendant": {
 			"mapId": "kanto_route_19_fuchsia_gate",
 			"position": {
-				"x": 336.0,
-				"y": 592.0
+				"x": 464.0,
+				"y": 528.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/transition_buildings/route_19_fuchsia_gate.tscn",

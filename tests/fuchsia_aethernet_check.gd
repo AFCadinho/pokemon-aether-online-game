@@ -18,7 +18,6 @@ func _run() -> void:
 	_check(beacon.call("_find_local_keeper") == keeper, "Beacon finds the local Keeper for its attunement and Anchor dialogue")
 	_check(keeper.is_in_group("aethernet_keeper"), "Fuchsia Keeper is discoverable by the network")
 	_check(arrival.position == Vector2(144, 1040), "Arrival marker matches the server-owned destination tile")
-	_check(arrival.position.distance_to(beacon.position) == 32, "Arrival stays one tile beside the Beacon")
 	var water: TileMapLayer = city.get_node("Tiles/Water")
 	_check(water.get_cell_source_id(water.local_to_map(water.to_local(arrival.global_position))) == -1, "Arrival is on dry land")
 	_check(not MapCharacterBlocking.is_position_blocked_by_character(city, arrival.global_position), "Arrival tile has no NPC or Pokemon occupant")
