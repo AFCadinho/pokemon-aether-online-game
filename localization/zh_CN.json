@@ -6111,7 +6111,7 @@
   "ui.transit.locked": "已锁定",
   "ui.transit.travel": "旅行 ₽{fare}",
   "ui.transit.select_destination": "选择一个目的地",
-  "ui.transit.travel_to": "前往{name} · ₽{fare}",
+  "ui.transit.travel_to": "前往{name}",
   "ui.transit.travel_to_free": "免费前往{name}",
   "ui.transit.free": "免费",
   "ui.transit.hubs": "以太网集线器",

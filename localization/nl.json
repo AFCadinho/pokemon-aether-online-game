@@ -6213,7 +6213,7 @@
   "ui.transit.locked": "Vergrendeld",
   "ui.transit.travel": "Reis  ₽{fare}",
   "ui.transit.select_destination": "Kies een bestemming",
-  "ui.transit.travel_to": "Reis naar {name} · ₽{fare}",
+  "ui.transit.travel_to": "Reis naar {name}",
   "ui.transit.travel_to_free": "Reis naar {name} · Gratis",
   "ui.transit.free": "Gratis",
   "ui.transit.hubs": "Aethernet-hubs",

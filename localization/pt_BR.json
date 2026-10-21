@@ -6111,7 +6111,7 @@
   "ui.transit.locked": "Bloqueado",
   "ui.transit.travel": "Viajar  ₽{fare}",
   "ui.transit.select_destination": "Selecione um destino",
-  "ui.transit.travel_to": "Viajar para {name} · ₽{fare}",
+  "ui.transit.travel_to": "Viajar para {name}",
   "ui.transit.travel_to_free": "Viajar para {name} · Grátis",
   "ui.transit.free": "Grátis",
   "ui.transit.hubs": "Centros da Aethernet",
