@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add four Fuchsia Gym trainers and Koga, with source-based positions, official overworld sprites, trainer battles and the Soul Badge.
+
 - Give the Nugget Bridge attendant his own waiting dialogue when the five challengers have not all been defeated.
 
 - Stop the Nugget Bridge attendant from repeatedly claiming a rejected reward or freezing movement; explain when the five bridge trainers still need to be defeated.

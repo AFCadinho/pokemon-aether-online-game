@@ -27,6 +27,24 @@ func _run() -> void:
 		_check(player.overlaps_exit_at(gym.get_node("Exits/ToFuchsiaCity"),_point(Vector2i(x,30))), "Interior exit covers all three door tiles")
 	_check(gym.music_profile_id == "gym.interior", "Gym music profile")
 	_check(gym.lighting_profile == "indoor" and gym.weather_profile == "disabled", "Indoor lighting and weather")
+	var gym_npcs: Node = gym.get_node("Entities/NPCs")
+	var actor_expectations := {
+		"GymLeaderKoga": [Vector2(464, 528), "kanto_fuchsia_city_gym_koga", 0],
+		"JugglerKen": [Vector2(336, 784), "kanto_fuchsia_city_gym_juggler_ken", 1],
+		"JugglerKirk": [Vector2(624, 624), "kanto_fuchsia_city_gym_juggler_kirk", 1],
+		"JugglerShawn": [Vector2(304, 528), "kanto_fuchsia_city_gym_juggler_shawn", 1],
+		"TamerEdgar": [Vector2(656, 368), "kanto_fuchsia_city_gym_tamer_edgar", 1],
+	}
+	_check(gym_npcs.get_child_count() == actor_expectations.size(), "Fuchsia Gym has the four source trainers and Koga")
+	for actor_name in actor_expectations:
+		var actor: Node = gym_npcs.get_node_or_null(actor_name)
+		var expected: Array = actor_expectations[actor_name]
+		_check(actor != null, "%s is placed" % actor_name)
+		if actor != null:
+			_check(actor.position == expected[0], "%s matches the original handoff tile" % actor_name)
+			_check(actor.trainer_id == expected[1], "%s resolves to its battle data" % actor_name)
+			_check(actor.sight_range_tiles == expected[2], "%s only detects along its clear approach" % actor_name)
+	_check(gym.get_node("Entities/NPCs/GymLeaderKoga").badge_id == "soul", "Koga awards the Soul Badge")
 	var walls := gym.get_node_or_null("Entities/Interactables/InvisibleWalls")
 	_check(walls != null and walls.has_method("blocks_world_position"), "InvisibleWalls keeps its movement-blocker script attached")
 	var mask: Node = gym.get_node("FloorVisibilityMask")
