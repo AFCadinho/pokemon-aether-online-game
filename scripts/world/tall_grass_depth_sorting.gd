@@ -49,9 +49,11 @@ static func find_legacy_grass_visual_source(root: Node) -> Dictionary:
 		for candidate: TileMapLayer in layers:
 			if candidate == marker_layer or not candidate.visible or candidate.tile_set == null:
 				continue
-			var match := _match_exact_visual_tile_mask(marker_layer, candidate)
-			if not match.is_empty():
-				return match
+			var visual_match := _match_recognized_grass_mask(marker_layer, candidate)
+			if visual_match.is_empty():
+				visual_match = _match_exact_visual_tile_mask(marker_layer, candidate)
+			if not visual_match.is_empty():
+				return visual_match
 	return {}
 
 
@@ -141,6 +143,27 @@ static func build_depth_rows(
 			if erase_source_cells:
 				grass_layer.erase_cell(cell)
 	return row_group
+
+
+static func _match_recognized_grass_mask(
+	marker_layer: TileMapLayer,
+	candidate: TileMapLayer
+) -> Dictionary:
+	# The importer identifies this artwork explicitly. Extract only marked
+	# grass cells; an extra or missing marker elsewhere must not disable them.
+	var cells: Array[Vector2i] = []
+	for marker_cell: Vector2i in marker_layer.get_used_cells():
+		var center := marker_layer.to_global(marker_layer.map_to_local(marker_cell))
+		var cell := candidate.local_to_map(candidate.to_local(center))
+		var source_id := candidate.get_cell_source_id(cell)
+		if source_id < 0:
+			continue
+		var source := candidate.tile_set.get_source(source_id) as TileSetAtlasSource
+		if source != null and source.has_meta("pao_tall_grass_family") and not cells.has(cell):
+			cells.append(cell)
+	if cells.is_empty():
+		return {}
+	return {"marker_layer": marker_layer, "visual_layer": candidate, "cells": cells}
 
 
 static func _match_exact_visual_tile_mask(
