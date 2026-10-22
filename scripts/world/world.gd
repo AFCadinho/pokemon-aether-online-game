@@ -10,6 +10,7 @@ const MOBILE_CONTROLS_SCENE: PackedScene = preload("res://scenes/interface/mobil
 const REMOTE_PLAYER_AVATAR_SCRIPT: Script = preload("res://scripts/world/remote_player_avatar.gd")
 const AETHERNET_TELEPORT_EFFECT_SCRIPT: Script = preload("res://scripts/world/aethernet_teleport_effect.gd")
 const MAP_TRANSITION_INDICATOR_SCRIPT: Script = preload("res://scripts/ui/map_transition_indicator.gd")
+const OutdoorMapMaskScript := preload("res://scripts/world/outdoor_map_mask.gd")
 const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.gd")
 const BattleEnvironmentResolverScript := preload("res://scripts/battle/battle_environment_resolver.gd")
 const TrainerBattleMusicResolverScript := preload("res://scripts/world/npcs/trainer_battle_music_resolver.gd")
@@ -2499,11 +2500,13 @@ func _clear_current_map() -> void:
 
 
 func _apply_camera_limits_for_map(map: Node) -> void:
+	var bounds := _get_map_visual_bounds(map)
+	if bool(bounds.get("valid", false)):
+		OutdoorMapMaskScript.apply(map, bounds["rect"])
 	var camera := player.get_node_or_null("Camera2D") as Camera2D
 	if camera == null:
 		return
 
-	var bounds := _get_map_visual_bounds(map)
 	if not bool(bounds.get("valid", false)):
 		return
 
