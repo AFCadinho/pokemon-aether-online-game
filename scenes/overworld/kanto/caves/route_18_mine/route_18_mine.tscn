@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://bghbwnbiqv4ym"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="daily_rock"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="hint"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="marker"]
@@ -254,3 +255,45 @@ tile_map_data = PackedByteArray("AAAAAAAAAAABAAEAAAAAAAEAAAABAAEAAAAAAAIAAAABAAE
 tile_set = SubResource("TileSet_y4ygl")
 
 [connection signal="body_entered" from="Exits/ToRoute18" to="Exits/ToRoute18" method="_on_body_entered"]
+
+[node name="RockSmashNorthwest" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(208, 208)
+rock_id = "kanto_route_18_mine_rock_northwest"
+rock_variant = 0
+rock_visual_style = 1
+required_rock_smash_level = 20
+
+[node name="RockSmashNorth" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(624, 176)
+rock_id = "kanto_route_18_mine_rock_north"
+rock_variant = 1
+rock_visual_style = 1
+required_rock_smash_level = 20
+
+[node name="RockSmashEast" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(1200, 464)
+rock_id = "kanto_route_18_mine_rock_east"
+rock_variant = 2
+rock_visual_style = 1
+required_rock_smash_level = 20
+
+[node name="RockSmashSoutheast" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(1168, 848)
+rock_id = "kanto_route_18_mine_rock_southeast"
+rock_variant = 0
+rock_visual_style = 1
+required_rock_smash_level = 50
+
+[node name="RockSmashSouth" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(656, 880)
+rock_id = "kanto_route_18_mine_rock_south"
+rock_variant = 1
+rock_visual_style = 1
+required_rock_smash_level = 50
+
+[node name="RockSmashNortheast" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(1200, 208)
+rock_id = "kanto_route_18_mine_rock_northeast"
+rock_variant = 3
+rock_visual_style = 1
+required_rock_smash_level = 75

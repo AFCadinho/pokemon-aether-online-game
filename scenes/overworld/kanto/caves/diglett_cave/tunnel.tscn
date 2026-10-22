@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://xiledkw6snc2"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="daily_rock"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/diglett_cave_tunnel/diglett_cave_tunnel.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
@@ -233,3 +234,24 @@ tile_set = SubResource("TileSet_4i5iq")
 
 [connection signal="body_entered" from="Exits/ToRoute11Entrance" to="Exits/ToRoute11Entrance" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute2Entrance" to="Exits/ToRoute2Entrance" method="_on_body_entered"]
+
+[node name="RockSmashNorth" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(304, 912)
+rock_id = "kanto_diglett_cave_tunnel_rock_north"
+rock_variant = 0
+rock_visual_style = 1
+required_rock_smash_level = 10
+
+[node name="RockSmashCentral" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(752, 1424)
+rock_id = "kanto_diglett_cave_tunnel_rock_central"
+rock_variant = 1
+rock_visual_style = 1
+required_rock_smash_level = 10
+
+[node name="RockSmashSouth" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(1200, 2320)
+rock_id = "kanto_diglett_cave_tunnel_rock_south"
+rock_variant = 2
+rock_visual_style = 1
+required_rock_smash_level = 10

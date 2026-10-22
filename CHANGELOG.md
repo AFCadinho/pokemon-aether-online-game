@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add 26 daily Rock Smash rocks across Routes 9, 10, 15 and 18, Rock Tunnel, Diglett’s Cave and the Route 18 mine, with localized locations and daily completion tracking in Skills. Keep daily rocks above imported ground details using actor depth sorting.
+
 - Stop the Nugget Bridge attendant from repeatedly claiming a rejected reward or freezing movement; explain when the five bridge trainers still need to be defeated.
 
 - Keep tall-grass depth and step rustling working when a map's grass markers have isolated mismatches, including Route 24.
