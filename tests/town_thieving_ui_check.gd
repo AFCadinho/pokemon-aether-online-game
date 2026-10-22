@@ -26,6 +26,7 @@ func _run() -> void:
 	panel.selected_skill_id = "thieving"
 	panel.call("_render_targets", targets)
 	var groups: Dictionary = panel.targets_by_town
+	_check(not groups.has("ui.skills.thieving.location.pallet_town"), "Pallet Town does not appear in Thieving towns")
 	var count := 0
 	for town_key: String in groups:
 		panel.selected_target_town_key = town_key
