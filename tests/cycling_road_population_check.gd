@@ -45,7 +45,7 @@ func _run() -> void:
 						_check(actor.npc_sprite_frames.has_animation("walk_"+direction) and actor.npc_sprite_frames.has_animation("idle_"+direction), "Biker has directional approach and idle animations")
 			else:
 				_check(FollowerSpriteService.get_sprite_frames(actor.species_id,false) != null, "ambient species has follower artwork")
-		var items := map.get_node("Entities/Interactables").get_children().filter(func(node: Node) -> bool: return node is OverworldItem)
+		var items := map.get_node("Entities/Interactables").get_children().filter(func(node: Node) -> bool: return node.get_script() == load("res://scripts/world/interactables/overworld_item.gd"))
 		_check(items.size() == (5 if number == 17 else 0), "only canonical Route 17 ground rewards are added")
 		for item in items:
 			_check(item.z_index > map.get_node("Visual/Ground").z_index and not item.z_as_relative, "pickup remains visible above the authored ground")
