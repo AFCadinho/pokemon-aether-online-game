@@ -9,6 +9,9 @@ func _init() -> void:
 
 func _run() -> void:
 	var map := (load(ROUTE) as PackedScene).instantiate()
+	var encounter := MapEncounterProvider.resolve_wild_encounter(map, Vector2.ZERO, "grass")
+	_check(encounter.available and encounter.area_id == "kanto_route_7", "Route 7 resolves its wild encounter table")
+	_check(is_equal_approx(float(encounter.chance), 0.21), "Route 7 resolves its grass encounter chance")
 	var visual := (load(VISUAL) as PackedScene).instantiate()
 	var metadata: Dictionary = map.get_node("Visual").get_meta("tiled_visual_map")
 	_check(metadata == visual.get_meta("tiled_visual_map"), "route inherits the current imported map dimensions")
