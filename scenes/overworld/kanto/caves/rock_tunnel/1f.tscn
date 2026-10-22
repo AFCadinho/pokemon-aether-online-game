@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://buo38hu0vgp7w"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="daily_rock"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/rock_tunnel_1f/rock_tunnel_1f.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
@@ -519,3 +520,31 @@ tile_set = SubResource("TileSet_d16m0")
 [connection signal="body_entered" from="Exits/ToB1FB" to="Exits/ToB1FB" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToB1FC" to="Exits/ToB1FC" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToB1FD" to="Exits/ToB1FD" method="_on_body_entered"]
+
+[node name="RockSmashWest" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(272, 304)
+rock_id = "kanto_rock_tunnel_1f_rock_west"
+rock_variant = 0
+rock_visual_style = 1
+required_rock_smash_level = 10
+
+[node name="RockSmashCentral" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(1104, 1328)
+rock_id = "kanto_rock_tunnel_1f_rock_central"
+rock_variant = 1
+rock_visual_style = 1
+required_rock_smash_level = 10
+
+[node name="RockSmashEast" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(2256, 304)
+rock_id = "kanto_rock_tunnel_1f_rock_east"
+rock_variant = 2
+rock_visual_style = 1
+required_rock_smash_level = 10
+
+[node name="RockSmashSouth" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(1840, 1936)
+rock_id = "kanto_rock_tunnel_1f_rock_south"
+rock_variant = 0
+rock_visual_style = 1
+required_rock_smash_level = 20

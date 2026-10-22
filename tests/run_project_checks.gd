@@ -434,6 +434,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/jail_bail_dialog_check.gd",
 	"res://tests/rock_smash_foundation_check.gd",
 	"res://tests/rock_smash_level_colors_check.gd",
+	"res://tests/rock_smash_depth_check.gd",
 	"res://tests/wild_encounter_error_rules_check.gd",
 	"res://tests/wild_encounter_transition_check.gd",
 	"res://tests/wild_entry_before_response_check.gd",

@@ -44,15 +44,15 @@ func _ready() -> void:
 
 
 func _update_sort_z() -> void:
+	# Match actor feet depth so imported ground details cannot cover the rock.
+	# Use absolute depth: Entities may already have a local Z offset.
+	var sort_z := floori(global_position.y)
 	var current_map := _resolve_current_map()
-	if current_map == null or not current_map.has_method("get_actor_sort_z_floor"):
-		return
-	var sort_z_floor := int(current_map.call("get_actor_sort_z_floor", global_position))
-	if sort_z_floor <= z_index:
-		return
+	if current_map != null and current_map.has_method("get_actor_sort_z_floor"):
+		sort_z = maxi(sort_z, int(current_map.call("get_actor_sort_z_floor", global_position)))
 	z_as_relative = false
 	z_index = clampi(
-		sort_z_floor,
+		sort_z,
 		RenderingServer.CANVAS_ITEM_Z_MIN,
 		RenderingServer.CANVAS_ITEM_Z_MAX
 	)

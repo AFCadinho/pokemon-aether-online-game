@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://gwat4c0ln8c2"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="daily_rock"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="1_gwdho"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_15/route_15.visual.tscn" id="2_tnc64"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="4_oxoen"]
@@ -745,3 +746,17 @@ tile_set = SubResource("TileSet_40fli")
 
 [connection signal="body_entered" from="Exits/ToRoute14" to="Exits/ToRoute14" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToFuchsiaGate" to="Exits/ToFuchsiaGate" method="_on_body_entered"]
+
+[node name="RockSmashWest" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(1072, 400)
+rock_id = "kanto_route_15_rock_west"
+rock_variant = 0
+rock_visual_style = 2
+required_rock_smash_level = 20
+
+[node name="RockSmashEast" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(1648, 784)
+rock_id = "kanto_route_15_rock_east"
+rock_variant = 1
+rock_visual_style = 2
+required_rock_smash_level = 20

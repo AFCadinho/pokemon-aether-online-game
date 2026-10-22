@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://cwemdr3lxm8ws"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="daily_rock"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_10/route_10.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
@@ -696,3 +697,17 @@ tile_set = SubResource("TileSet_21d24")
 
 [node name="MapDoors" type="Node" parent="."]
 script = ExtResource("90_map_doors")
+
+[node name="RockSmashNorth" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(944, 1072)
+rock_id = "kanto_route_10_rock_north"
+rock_variant = 0
+rock_visual_style = 2
+required_rock_smash_level = 20
+
+[node name="RockSmashSouth" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
+position = Vector2(720, 2512)
+rock_id = "kanto_route_10_rock_south"
+rock_variant = 1
+rock_visual_style = 2
+required_rock_smash_level = 20
