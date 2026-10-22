@@ -1150,7 +1150,7 @@
 			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 			"trainerId": ""
 		},
-		"kanto_fuchsia_city_gym_juggler_ken": {
+		"kanto_fuchsia_city_gym_juggler_nate": {
 			"mapId": "kanto_fuchsia_gym",
 			"position": {
 				"x": 336.0,
@@ -1158,7 +1158,7 @@
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
-			"trainerId": "kanto_fuchsia_city_gym_juggler_ken"
+			"trainerId": "kanto_fuchsia_city_gym_juggler_nate"
 		},
 		"kanto_fuchsia_city_gym_juggler_kirk": {
 			"mapId": "kanto_fuchsia_gym",
