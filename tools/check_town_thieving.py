@@ -40,6 +40,8 @@ def check(backend):
         text = path.read_text()
         refs = resource_paths(text)
         map_id = properties(text).get('map_id', 'kanto_' + path.stem)
+        if map_id == 'kanto_pallet_town':
+            continue  # Pallet Town does not offer Thieving.
         for block in re.split(r'(?=^\[node )', text, flags=re.M)[1:]:
             props = properties(block)
             npc_id = props.get('npc_id', '')
