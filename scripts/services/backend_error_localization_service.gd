@@ -354,6 +354,8 @@ const CODE_TO_KEY: Dictionary = {
 	"pokemon_nickname_locked_for_pvp": "ui.pokemon_summary.nickname.blocked",
 	"pokemon_nickname_not_allowed": "ui.pokemon_summary.nickname.not_allowed",
 	"npc_reward_not_found": "backend.error.reward_unavailable",
+	"npc_reward_trainer_requirements_incomplete": "backend.error.reward_trainers_incomplete",
+	"npc_reward_context_mismatch": "backend.error.coop_npc_out_of_range",
 	"field_move_charm_not_owned": "backend.error.item_not_owned",
 	"field_move_hm_required": "backend.error.field_move_hm_required",
 	"field_move_badge_required": "backend.error.field_move_badge_required",

@@ -1,4 +1,5 @@
 {
+  "backend.error.reward_trainers_incomplete": "Versla alle vijf trainers op Nugget Bridge voordat je de prijs ophaalt.",
   "ui.rocket_hideout.lift.current_floor": "{floor} (huidige verdieping)",
   "ui.rocket_hideout.lift.title": "Rocket Hideout-lift",
   "ui.rocket_hideout.lift.prompt": "Kies een verdieping.",
