@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep tall-grass depth and step rustling working when a map's grass markers have isolated mismatches, including Route 24.
+
 - Show black borders outside Town and Route map bounds when zooming out on larger screens.
 
 - Restore Route 7 wild grass encounters using its existing encounter table.

@@ -12,6 +12,7 @@ func _init() -> void:
 	_check_depth_row_rustle("TallGrassVisual", false)
 	_check_depth_row_rustle("TreeBottom", true)
 	_check_ordinary_tree_layer_is_ignored()
+	_check_partial_grass_mask()
 	quit(1 if failed else 0)
 
 
@@ -78,6 +79,32 @@ func _check_ordinary_tree_layer_is_ignored() -> void:
 		).is_empty(),
 		"ordinary TreeBottom tiles are not used as rustle sources"
 	)
+	map.free()
+
+
+func _check_partial_grass_mask() -> void:
+	var map := Node2D.new()
+	var mask := _build_test_layer("TallGrass")
+	mask.visible = false
+	map.add_child(mask)
+	var visual := _build_test_layer("GroundDetail")
+	map.add_child(visual)
+	visual.tile_set.get_source(0).set_meta("pao_tall_grass_family", "test_grass")
+	var marked := Vector2i(2, 3)
+	var unmarked := Vector2i(4, 3)
+	mask.set_cell(marked, 0, Vector2i.ZERO)
+	mask.set_cell(Vector2i(8, 3), 0, Vector2i.ZERO)
+	visual.set_cell(marked, 0, Vector2i.ZERO)
+	visual.set_cell(unmarked, 0, Vector2i.ZERO)
+	var match := TallGrassDepthSortingScript.find_legacy_grass_visual_source(map)
+	_check(not match.is_empty(), "isolated marker mismatches preserve recognized grass")
+	if not match.is_empty():
+		var cells: Array[Vector2i] = match.cells
+		_check(cells == [marked], "only marked recognized grass is extracted")
+		TallGrassDepthSortingScript.build_depth_rows(visual, cells, SORT_Z_MIN, SORT_Z_MAX, true, "GrassRows")
+		var position := visual.to_global(visual.map_to_local(marked))
+		_check(not TallGrassDepthSortingScript.find_depth_row_at_global_position(map, position).is_empty(), "marked grass supplies a rustle source")
+		_check(visual.get_cell_source_id(unmarked) == 0, "unmarked visual grass is preserved")
 	map.free()
 
 
