@@ -1,4 +1,4 @@
-> **Upcoming gameplay update:** Legendary Mining Drops and Collector Hugo's museum sale are documented below for the next game update. These new features are not deployed yet.
+> **Upcoming gameplay additions:** This guide includes the planned expansion from **29 to 55 daily rocks**, plus Legendary Mining Drops and Collector Hugo's museum sale. These additions are documented for the next gameplay update. Screenshots labelled **preview** show the updated development build; they do not confirm that a feature is live.
 
 Rock Smash lets you break fixed rocks to earn Skill XP and find useful items. The rocks stay in the same places and return every day.
 
@@ -13,7 +13,7 @@ Rock Smash lets you break fixed rocks to earn Skill XP and find useful items. Th
 
 You do **not** need a Gym Badge to use Rock Smash outside battle.
 
-Completing Kenji's lesson gives you **360 Rock Smash XP** and a **Black Belt**. Together with the XP from the four rocks, this takes the skill to Level 5.
+Completing Kenji's lesson gives you **360 Rock Smash XP** and a **Black Belt**. Together with the XP from the four rocks, this takes the skill to Level 5. The updated quest reward also includes **75 Aetherite**.
 
 ## How to break a rock
 
@@ -52,12 +52,36 @@ Open **Skills → Rock Smash → Rocks** to see the exact locations, level requi
 | Route 4 | 4 | Levels 5, 10, 20 and 50 |
 | Cerulean City East Site | 8 | four at Level 20 and four at Level 50 |
 
-There are currently **29 daily rocks**. Story access, map access and your Rock Smash level can limit which ones you can reach.
+The locations above contain **29 daily rocks**. Story access, map access and your Rock Smash level can limit which ones you can reach.
 
-<!-- pa-guide-screenshot:all-guides-2026-10:59-01-daily-rocks.png -->
-![Daily rocks|784x804](upload://urtWpDSrch7pLjCcSoCksRi82ey.png)
+### Upcoming expansion: 26 more rocks
 
-*Example: Skills → Rock Smash → Rocks lists exact locations, required levels and today's availability.*
+The next expansion adds the following fixed daily rocks, bringing the total to **55**. These new locations use the same once-per-UTC-day reset and award **35 base XP per rock**.
+
+| New location | Added rocks | Required Rock Smash levels |
+|---|---:|---|
+| Route 9 | 3 | two at Level 10 and one at Level 20 |
+| Route 10 | 2 | Level 20 |
+| Rock Tunnel 1F | 4 | three at Level 10 and one at Level 20 |
+| Rock Tunnel B1F | 4 | three at Level 20 and one at Level 50 |
+| Diglett's Cave — tunnel | 3 | Level 10 |
+| Route 15 | 2 | Level 20 |
+| Route 18 — surface | 2 | Level 20 |
+| Route 18 Underground Mine | 6 | three at Level 20, two at Level 50 and one at Level 75 |
+
+**Entering the Route 18 mine requires Rock Smash Level 20.** Mine Foreman Niels stands beside the entrance. Meeting the entry requirement does not unlock the Level 50 or 75 rocks inside; you still need each rock's required skill level.
+
+In **Skills → Rock Smash → Rocks**, choose an area to see its daily completion count. Rock Tunnel groups both floors together. Route 18 groups its two surface rocks and six mine rocks together, with the exact location shown on each card. Cards show the required level, mining tier and whether the rock is available or already smashed today. Successful smashes update the list immediately; the daily reset clears completion without resetting your skill XP.
+
+<!-- pa-guide-screenshot:rock-smash-expansion:route18 -->
+![Preview: Route 18 daily rocks](upload://dtzT7eOzom3cPgyqfvMThDdIO5I.png)
+
+*Preview of the updated Rocks tab at Level 75. Route 18 includes two surface rocks and six mine rocks; two are marked as smashed today. The overall catalog contains 55 rocks.*
+
+<!-- pa-guide-screenshot:rock-smash-expansion:rock-tunnel -->
+![Preview: Rock Tunnel daily rocks](upload://aZnCCNbdBaBULnaKVSxP1LBfnyg.png)
+
+*Preview: Rock Tunnel's area group lists all eight rocks, with separate 1F and B1F location labels.*
 
 ## Pokédollar rewards
 
@@ -80,7 +104,7 @@ Every smashed rock always awards Pokédollars. The rock requirement sets the bas
 | Levels 50–74 | 1.75× |
 | Levels 75–100 | 2.00× |
 
-For example, a Level 50 rock pays 700 Pokédollars at Rock Smash Level 1, or 1,225 Pokédollars at Rock Smash Level 50.
+For example, a Level 50 rock pays **1,225 Pokédollars at Rock Smash Level 50**, or **1,400 Pokédollars at Level 75**. You must meet the rock's required level before you can smash it.
 
 
 ## Items you can find
@@ -90,14 +114,15 @@ Regular treasure is a **30% chance per smashed rock**, not a guaranteed reward. 
 - Pearl, Stardust, Hard Stone and Nugget;
 - Big Pearl and Star Piece at higher levels;
 - Big Nugget and Comet Shard at later milestones;
-- **Resonite Ore** at every reward tier.
+- **Resonite Ore** at every reward tier;
+- **Repel** from Level 1, **Super Repel** from Level 5 and **Max Repel** from Level 25 in the updated reward tables.
 
 Higher levels improve the reward table. Resonite Ore is one of the materials used by the Move Maniac. Items go directly into your Bag.
 
-<!-- pa-guide-screenshot:all-guides-2026-10:59-02-rock-smash-rewards.png -->
-![Rock smash rewards|784x804](upload://o6kwy3k6Bjsgdq6HhdPPaSFYLw7.png)
+<!-- pa-guide-screenshot:rock-smash-expansion:items -->
+![Preview: Rock Smash item rewards](upload://fQTDSh9mZe4ofUHYEcsrvWobKF1.png)
 
-*Check Rock Smash's Rewards tab for money, treasure and fossil information as your level increases.*
+*Preview of the Rewards tab at Level 75, including Repel items. The percentages are the chance per smashed rock, including the regular 30% item roll; these items are not guaranteed.*
 
 ## Legendary Mining Drops — upcoming gameplay update
 
@@ -167,10 +192,10 @@ You receive the complete fossil immediately. There are no fossil fragments to co
 ## Useful milestones
 
 - **Level 1:** training rocks and basic treasure;
-- **Level 5:** more locations and better valuable-item chances;
+- **Level 5:** more locations, Super Repel and better valuable-item chances;
 - **Level 10:** Big Pearl and Star Piece;
 - **Level 20:** complete fossils;
-- **Level 25:** Big Nugget;
+- **Level 25:** Big Nugget and Max Repel;
 - **Level 50:** Old Amber and Comet Shard;
 - **Level 75:** best current treasure table;
 - **Level 100:** maximum current level and fossil chance.
