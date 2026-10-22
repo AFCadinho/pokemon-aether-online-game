@@ -81,10 +81,7 @@ func _check(condition: bool, label: String) -> void:
 
 
 func _check_recruiter_reward_failure() -> void:
-	# The real inventory service rejects an unauthenticated claim immediately,
-	# exercising the production failure branch without a backend or saved session.
-	var auth := root.get_node("AuthService")
-	auth.set("session_token", "")
+	# Responses are controlled; the production recruiter owns all state transitions.
 	var game_state := root.get_node("GameState")
 	var scene := Node.new()
 	root.add_child(scene)
@@ -123,15 +120,34 @@ func _check_recruiter_reward_failure() -> void:
 	dialogue.dialogue_finished.emit()
 	_check(not bool(game_state.call("is_overworld_input_locked")), "failed manual retry also restores movement")
 	_check(not recruiter.revealed, "rejected reward does not reveal Rocket or start a battle")
+	var reward_requests_before: int = recruiter.reward_requests
+	recruiter.progress_response = {"success": false, "error": "Progress temporarily unavailable."}
+	recruiter.trainer_progress_state = "first_encounter"
 	game_state.call("lock_overworld_input")
-	recruiter.triggered = true
-	recruiter.battle_in_progress = true
-	await recruiter._show_reward_failure({"body": {"detail": {"code": "npc_reward_trainer_requirements_incomplete"}}})
-	_check(recruiter.last_dialogue_id == "kanto_route_24_rocket_recruiter_waiting", "unfinished bridge challenge selects the attendant waiting dialogue")
-	_check(recruiter.last_speaker == "Bridge Attendant", "attendant speaks in disguise while the bridge challenge is unfinished")
-	_check(dialogue.shown == 2, "unfinished bridge challenge does not show a System error")
-	_check(not bool(game_state.call("is_overworld_input_locked")), "attendant waiting dialogue restores movement")
-	_check(not recruiter._can_auto_challenge(), "attendant waiting dialogue cannot repeat automatically")
+	recruiter.show_intro_dialogue()
+	_check(recruiter.reward_requests == reward_requests_before, "unknown recruiter progress never attempts another prize claim")
+	_check(not recruiter._can_auto_challenge(), "unavailable recruiter progress blocks automatic first-encounter replay")
+	dialogue.dialogue_finished.emit()
+	_check(not bool(game_state.call("is_overworld_input_locked")), "unavailable recruiter progress restores movement")
+
+	# A retry now learns that this recruiter was already defeated before this map load.
+	recruiter.progress_response = {"success": true, "progress": {"state": "completed", "firstDefeated": true}}
+	await recruiter.interact_with_player(player)
+	_check(recruiter.last_dialogue_id == "kanto_route_24_rocket_recruiter_completed", "saved recruiter victory selects the follow-up dialogue on retry")
+	_check(recruiter.last_speaker == "Team Rocket Recruiter" and recruiter.revealed, "defeated recruiter speaks as Team Rocket without replaying the disguise")
+	_check(recruiter.reward_requests == reward_requests_before, "saved recruiter victory bypasses the prize claim")
+	_check(not recruiter._can_auto_challenge(), "defeated recruiter never automatically challenges again")
+	var error_count: int = dialogue.shown
+	await recruiter.interact_with_player(player)
+	_check(recruiter.last_dialogue_id == "kanto_route_24_rocket_recruiter_completed", "repeat interaction keeps the Rocket follow-up dialogue")
+	_check(dialogue.shown == error_count and recruiter.reward_requests == reward_requests_before, "repeat interaction starts no reward request or System error")
+
+	# Losing a later lookup must preserve completion that was already confirmed.
+	recruiter.progress_response = {"success": false, "error": "Progress temporarily unavailable."}
+	await recruiter._load_trainer_progress()
+	_check(recruiter.trainer_progress_state == "completed" and recruiter.revealed, "failed refresh preserves known recruiter completion and identity")
+	await recruiter.interact_with_player(player)
+	_check(recruiter.reward_requests == reward_requests_before, "failed refresh cannot reopen a completed recruiter prize")
 	current_scene = null
 	scene.queue_free()
 	await process_frame
