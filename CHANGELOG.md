@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Continue the main quest from Mr. Fuji’s home to Fuchsia Gym, with his advice to wait for Saffron City to settle down.
+
 - Add 26 daily Rock Smash rocks across Routes 9, 10, 15 and 18, Rock Tunnel, Diglett’s Cave and the Route 18 mine, with localized locations and daily completion tracking in Skills. Keep daily rocks above imported ground details using actor depth sorting.
 
 - Base Fuchsia Gym trainer parties and Koga’s battle on Pokémon FireRed and LeafGreen.
