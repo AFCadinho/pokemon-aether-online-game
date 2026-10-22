@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore Route 7 wild grass encounters using its existing encounter table.
+
 - Keep regular Android 3D builds working when Godot omits its default Mobile renderer setting.
 
 - Keep co-op trainer admission positions aligned with the latest authored Route 15 layout.
