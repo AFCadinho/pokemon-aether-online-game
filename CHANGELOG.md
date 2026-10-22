@@ -6,6 +6,8 @@
 
 - Give the Nugget Bridge attendant his own waiting dialogue when the five challengers have not all been defeated.
 
+- Show a defeated Nugget Bridge recruiter as Team Rocket with a follow-up dialogue; never replay his prize or reveal when trainer progress cannot be loaded.
+
 - Stop the Nugget Bridge attendant from repeatedly claiming a rejected reward or freezing movement; explain when the five bridge trainers still need to be defeated.
 
 - Keep tall-grass depth and step rustling working when a map's grass markers have isolated mismatches, including Route 24.
