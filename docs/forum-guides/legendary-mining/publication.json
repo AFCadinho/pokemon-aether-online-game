@@ -1,41 +1,59 @@
 {
   "topicId": 59,
   "postId": 66,
-  "version": 5,
+  "version": 6,
   "author": "adinho",
   "categoryId": 20,
   "category": "Exploration & Activities",
-  "contentSha256": "4760b525fcfea2fe03546dd070cec8c03bd4e4fc8695907dc486737204203624",
-  "imageCount": 4,
+  "contentSha256": "444ac5006129662ce6279b41a541426fa0ffa1f0725bc4d20c807a93d7ad6df8",
+  "imageCount": 5,
   "uploadIds": [
-    215,
-    216
+    222,
+    223,
+    224
   ],
-  "upcomingUpdateNotice": true,
-  "url": "https://forums.pokeaether.com/t/official-rock-smash-guide/59",
-  "publishedAt": "2026-10-12T09:07:33.023152+00:00",
-  "gameplayDeployment": "pending; changes are merged locally for the next gameplay release",
-  "publicJsonChecked": true,
-  "publicPageChecked": true,
-  "verifiedAt": "2026-10-12T09:09:01.809065+00:00",
   "images": [
     {
-      "filename": "59-02-sell-all-confirmation.png",
-      "id": 215,
-      "url": "/uploads/default/original/1X/3ea94849e2036fb0ebcce3c9d3a8afb27b83e0ef.png",
-      "shortUrl": "upload://8WkhUS5qGwlUPh1cvuSNlXspqtF.png",
-      "width": 1088,
-      "height": 768,
-      "sha256": "fcf55647689454ed4f16ab144a60e2b59470e1e47fa19819919d4c2d6d8f8764"
+      "id": 222,
+      "filename": "04-daily-rocks-route18.png",
+      "url": "/uploads/default/original/1X/5e74391a769f330bcc889bbeed7ec13f1241d97a.png",
+      "shortUrl": "upload://dtzT7eOzom3cPgyqfvMThDdIO5I.png",
+      "width": 824,
+      "height": 864,
+      "sha256": "950ade392f50da0ae0533c2b8715419602374fac61fe6d2283f747466104e31f",
+      "servedSha256": "5ed903ccfff20a2c72b762199602962c970b4585b7d1a3166d913df0c2155061",
+      "publicPixelsVerified": true
     },
     {
-      "filename": "59-03-legendary-mining-rewards.png",
-      "id": 216,
-      "url": "/uploads/default/original/1X/1abe6adad57ffb7087191cd586a283dcdf0db5a9.png",
-      "shortUrl": "upload://3OAnEZRU6QT19RW8j5amQr7S0pX.png",
-      "width": 668,
-      "height": 690,
-      "sha256": "2289f0682c7f78f6b6941130c633c59be40d57ca2a0aef8c8c3c6e9f8b0dbb6b"
+      "id": 223,
+      "filename": "05-daily-rocks-rock-tunnel.png",
+      "url": "/uploads/default/original/1X/4d0600568f9194a0c2017d3819fc31dfc3291e60.png",
+      "shortUrl": "upload://aZnCCNbdBaBULnaKVSxP1LBfnyg.png",
+      "width": 824,
+      "height": 864,
+      "sha256": "485aca704b855224e80e3ec502324d16dacf4a64070ec9ddc8f157149732ad31",
+      "servedSha256": "b7e7f891c4855dda30c5c050cd36241f072426d76ac03aefae8521db8f23caa0",
+      "publicPixelsVerified": true
+    },
+    {
+      "id": 224,
+      "filename": "06-item-rewards.png",
+      "url": "/uploads/default/original/1X/6f1b5f31fe0b3eb65ea6daee261e0d486afaadcf.png",
+      "shortUrl": "upload://fQTDSh9mZe4ofUHYEcsrvWobKF1.png",
+      "width": 824,
+      "height": 864,
+      "sha256": "bd7960713eb89df30662351fc376e33b8e31d0c1697bc7e8e78696f0414052d6",
+      "servedSha256": "701a10e3f315f0a9355926198c36095b945d9f67a53d967fec2a3754b614dd51",
+      "publicPixelsVerified": true
     }
-  ]
+  ],
+  "url": "https://forums.pokeaether.com/t/official-rock-smash-guide/59",
+  "publishedAt": "2026-10-22T17:26:06Z",
+  "upcomingUpdateNotice": true,
+  "gameplayDeployment": "Unreleased additions remain marked upcoming; no game deployment performed",
+  "publicJsonChecked": true,
+  "publicPageChecked": true,
+  "verification": "Anonymous HTTP requests through the forum web server, with the public Host and HTTPS forwarded scheme",
+  "verifiedAt": "2026-10-22T17:26:37.958612+00:00",
+  "publicUploadsChecked": true
 }

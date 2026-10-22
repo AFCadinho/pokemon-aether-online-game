@@ -1,0 +1,14 @@
+{
+  "kind": "native Godot interface preview; synthetic player state, no account or server login",
+  "frontendCommit": "2085f55a2743067bf7c2fcc060536059d35608b5",
+  "backendCommit": "a7868ed55a3ea64bff9c4b784bd60e0151866d87",
+  "catalogSha256": "a94620d353cf604e90174e861663ee3cdad6564e61a254acbb26dbe322da9b48",
+  "skillLevel": 75,
+  "dailyRockCount": 55,
+  "completedRockIds": [
+    "kanto_route_18_rock_west",
+    "kanto_route_18_mine_rock_northwest"
+  ],
+  "rewardProbabilities": "30 percent regular item roll multiplied by the level-75 table weights",
+  "upcoming": true
+}
