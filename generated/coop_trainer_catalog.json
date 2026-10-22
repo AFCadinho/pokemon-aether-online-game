@@ -383,29 +383,6 @@
         }
       }
     },
-    "kanto_fuchsia_city_gym_juggler_ken": {
-      "entityId": "kanto_fuchsia_city_gym_juggler_ken",
-      "mapId": "kanto_fuchsia_gym",
-      "position": {
-        "x": 336.0,
-        "y": 784.0
-      },
-      "radius": 80.0,
-      "rivalPrefix": "",
-      "scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
-      "story": null,
-      "trainerIds": [
-        "kanto_fuchsia_city_gym_juggler_ken"
-      ],
-      "trainers": {
-        "kanto_fuchsia_city_gym_juggler_ken": {
-          "gymBadge": null,
-          "name": "Juggler Ken",
-          "teamSize": 2,
-          "trainerClass": "Juggler"
-        }
-      }
-    },
     "kanto_fuchsia_city_gym_juggler_kirk": {
       "entityId": "kanto_fuchsia_city_gym_juggler_kirk",
       "mapId": "kanto_fuchsia_gym",
@@ -424,7 +401,30 @@
         "kanto_fuchsia_city_gym_juggler_kirk": {
           "gymBadge": null,
           "name": "Juggler Kirk",
-          "teamSize": 1,
+          "teamSize": 4,
+          "trainerClass": "Juggler"
+        }
+      }
+    },
+    "kanto_fuchsia_city_gym_juggler_nate": {
+      "entityId": "kanto_fuchsia_city_gym_juggler_nate",
+      "mapId": "kanto_fuchsia_gym",
+      "position": {
+        "x": 336.0,
+        "y": 784.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_fuchsia_city_gym_juggler_nate"
+      ],
+      "trainers": {
+        "kanto_fuchsia_city_gym_juggler_nate": {
+          "gymBadge": null,
+          "name": "Juggler Nate",
+          "teamSize": 2,
           "trainerClass": "Juggler"
         }
       }
@@ -447,7 +447,7 @@
         "kanto_fuchsia_city_gym_juggler_shawn": {
           "gymBadge": null,
           "name": "Juggler Shawn",
-          "teamSize": 3,
+          "teamSize": 2,
           "trainerClass": "Juggler"
         }
       }
@@ -5708,8 +5708,8 @@
     "kanto_cerulean_city_gym_picnicker_diana": "kanto_cerulean_city_gym_picnicker_diana",
     "kanto_cerulean_city_gym_swimmer_briana": "kanto_cerulean_city_gym_swimmer_briana",
     "kanto_cerulean_city_gym_swimmer_luis": "kanto_cerulean_city_gym_swimmer_luis",
-    "kanto_fuchsia_city_gym_juggler_ken": "kanto_fuchsia_city_gym_juggler_ken",
     "kanto_fuchsia_city_gym_juggler_kirk": "kanto_fuchsia_city_gym_juggler_kirk",
+    "kanto_fuchsia_city_gym_juggler_nate": "kanto_fuchsia_city_gym_juggler_nate",
     "kanto_fuchsia_city_gym_juggler_shawn": "kanto_fuchsia_city_gym_juggler_shawn",
     "kanto_fuchsia_city_gym_koga": "kanto_fuchsia_city_gym_koga",
     "kanto_fuchsia_city_gym_tamer_edgar": "kanto_fuchsia_city_gym_tamer_edgar",

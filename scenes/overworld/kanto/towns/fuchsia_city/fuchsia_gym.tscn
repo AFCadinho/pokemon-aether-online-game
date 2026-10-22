@@ -182,11 +182,11 @@ npc_sprite_frames = ExtResource("13_koga_frames")
 battle_environment_id = "pvp_stadium"
 sight_range_tiles = 0
 
-[node name="JugglerKen" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
+[node name="JugglerNate" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
 position = Vector2(336, 784)
-trainer_id = "kanto_fuchsia_city_gym_juggler_ken"
-npc_id = "kanto_fuchsia_city_gym_juggler_ken"
-display_name = "Juggler Ken"
+trainer_id = "kanto_fuchsia_city_gym_juggler_nate"
+npc_id = "kanto_fuchsia_city_gym_juggler_nate"
+display_name = "Juggler Nate"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("11_juggler")
 battle_environment_id = "pvp_stadium"

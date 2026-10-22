@@ -30,7 +30,7 @@ func _run() -> void:
 	var gym_npcs: Node = gym.get_node("Entities/NPCs")
 	var actor_expectations := {
 		"GymLeaderKoga": [Vector2(464, 528), "kanto_fuchsia_city_gym_koga", 0],
-		"JugglerKen": [Vector2(336, 784), "kanto_fuchsia_city_gym_juggler_ken", 1],
+		"JugglerNate": [Vector2(336, 784), "kanto_fuchsia_city_gym_juggler_nate", 1],
 		"JugglerKirk": [Vector2(624, 624), "kanto_fuchsia_city_gym_juggler_kirk", 1],
 		"JugglerShawn": [Vector2(304, 528), "kanto_fuchsia_city_gym_juggler_shawn", 1],
 		"TamerEdgar": [Vector2(656, 368), "kanto_fuchsia_city_gym_tamer_edgar", 1],
