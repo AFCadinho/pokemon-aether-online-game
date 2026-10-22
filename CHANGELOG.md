@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show black borders outside Town and Route map bounds when zooming out on larger screens.
+
 - Restore Route 7 wild grass encounters using its existing encounter table.
 
 - Keep regular Android 3D builds working when Godot omits its default Mobile renderer setting.
