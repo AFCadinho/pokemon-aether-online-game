@@ -7,6 +7,12 @@
 [ext_resource type="Script" path="res://scripts/world/invisible_wall_layer.gd" id="maze_walls"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_markers"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="7_hint"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="8_trainer"]
+[ext_resource type="PackedScene" uid="uid://ds0lg7oj5khbm" path="res://scenes/npcs/gym_leader_npc.tscn" id="9_leader"]
+[ext_resource type="Resource" path="res://resources/npcs/gym_leaders/koga.tres" id="10_koga"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/juggler_frames.tres" id="11_juggler"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/tamer_frames.tres" id="12_tamer"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/gym_leaders/koga_frames.tres" id="13_koga_frames"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ajjhy"]
 texture = ExtResource("6_markers")
@@ -165,6 +171,56 @@ y_sort_enabled = true
 [node name="Players" type="Node2D" parent="Entities" unique_id=2076179873]
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1881720729]
+
+[node name="GymLeaderKoga" parent="Entities/NPCs" instance=ExtResource("9_leader")]
+position = Vector2(464, 528)
+trainer_id = "kanto_fuchsia_city_gym_koga"
+npc_profile = ExtResource("10_koga")
+npc_id = "kanto_fuchsia_city_gym_koga"
+display_name = "Koga"
+npc_sprite_frames = ExtResource("13_koga_frames")
+battle_environment_id = "pvp_stadium"
+sight_range_tiles = 0
+
+[node name="JugglerKen" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
+position = Vector2(336, 784)
+trainer_id = "kanto_fuchsia_city_gym_juggler_ken"
+npc_id = "kanto_fuchsia_city_gym_juggler_ken"
+display_name = "Juggler Ken"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("11_juggler")
+battle_environment_id = "pvp_stadium"
+sight_range_tiles = 1
+
+[node name="JugglerKirk" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
+position = Vector2(624, 624)
+trainer_id = "kanto_fuchsia_city_gym_juggler_kirk"
+npc_id = "kanto_fuchsia_city_gym_juggler_kirk"
+display_name = "Juggler Kirk"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("11_juggler")
+battle_environment_id = "pvp_stadium"
+sight_range_tiles = 1
+
+[node name="JugglerShawn" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
+position = Vector2(304, 528)
+trainer_id = "kanto_fuchsia_city_gym_juggler_shawn"
+npc_id = "kanto_fuchsia_city_gym_juggler_shawn"
+display_name = "Juggler Shawn"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("11_juggler")
+battle_environment_id = "pvp_stadium"
+sight_range_tiles = 1
+
+[node name="TamerEdgar" parent="Entities/NPCs" instance=ExtResource("8_trainer")]
+position = Vector2(656, 368)
+trainer_id = "kanto_fuchsia_city_gym_tamer_edgar"
+npc_id = "kanto_fuchsia_city_gym_tamer_edgar"
+display_name = "Tamer Edgar"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("12_tamer")
+battle_environment_id = "pvp_stadium"
+sight_range_tiles = 1
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1188723338]
 
