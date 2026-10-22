@@ -1,5 +1,13 @@
 extends SceneTree
 
+class ErrorDialogueProbe extends Node:
+	signal dialogue_finished
+	var shown := 0
+
+	func start_dialogue(_lines: Array[String], _speaker: String) -> void:
+		shown += 1
+
+
 var failures := 0
 
 
@@ -60,6 +68,7 @@ func _run() -> void:
 
 	vision_candidate.free()
 	trainer.free()
+	await _check_recruiter_reward_failure()
 	quit(1 if failures > 0 else 0)
 
 
@@ -69,3 +78,51 @@ func _check(condition: bool, label: String) -> void:
 		return
 	failures += 1
 	push_error("FAIL: %s" % label)
+
+
+func _check_recruiter_reward_failure() -> void:
+	# The real inventory service rejects an unauthenticated claim immediately,
+	# exercising the production failure branch without a backend or saved session.
+	var auth := root.get_node("AuthService")
+	auth.set("session_token", "")
+	var game_state := root.get_node("GameState")
+	var scene := Node.new()
+	root.add_child(scene)
+	current_scene = scene
+	var dialogue_layer := Node.new()
+	dialogue_layer.name = "DialogueBox"
+	scene.add_child(dialogue_layer)
+	var dialogue := ErrorDialogueProbe.new()
+	dialogue.name = "Box"
+	dialogue_layer.add_child(dialogue)
+	var recruiter_script := load("res://tests/fixtures/nugget_bridge_recruiter_probe.gd") as GDScript
+	var recruiter_scene := load("res://scenes/npcs/trainer_npc.tscn") as PackedScene
+	var recruiter := recruiter_scene.instantiate() as Node2D
+	recruiter.set_script(recruiter_script)
+	scene.add_child(recruiter)
+	recruiter.trainer_progress_loaded = true
+	var player := Node2D.new()
+	player.name = "Player"
+	scene.add_child(player)
+	recruiter.vision_candidate = player
+	recruiter.triggered = true
+	recruiter.battle_in_progress = true
+	game_state.call("lock_overworld_input")
+	recruiter.show_intro_dialogue()
+	_check(dialogue.shown == 1, "recruiter displays a rejected reward once")
+	for frame in range(3):
+		await process_frame
+		_check(not recruiter._can_auto_challenge(), "recruiter suppresses vision retries while reward error is open")
+	dialogue.dialogue_finished.emit()
+	_check(not bool(game_state.call("is_overworld_input_locked")), "closing the reward error restores overworld movement")
+	_check(not recruiter.battle_in_progress and not recruiter.triggered, "reward failure releases recruiter interaction ownership")
+	_check(recruiter.vision_candidate == null, "reward failure clears the recruiter vision candidate")
+	_check(not recruiter._can_auto_challenge(), "reward error stays dismissed while the player remains in sight")
+	recruiter.interact_with_player(player)
+	_check(dialogue.shown == 2, "player can manually retry the recruiter after a reward failure")
+	dialogue.dialogue_finished.emit()
+	_check(not bool(game_state.call("is_overworld_input_locked")), "failed manual retry also restores movement")
+	_check(not recruiter.revealed, "rejected reward does not reveal Rocket or start a battle")
+	current_scene = null
+	scene.queue_free()
+	await process_frame

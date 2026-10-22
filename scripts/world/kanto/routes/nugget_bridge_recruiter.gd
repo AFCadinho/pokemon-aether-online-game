@@ -47,13 +47,12 @@ func show_intro_dialogue() -> void:
 func _run_recruitment_sequence() -> void:
 	var reward_result: Dictionary = await InventoryService.claim_npc_item_reward(REWARD_ID)
 	if not bool(reward_result.get("success", false)):
-		battle_in_progress = false
-		triggered = false
-		_refresh_rematch_marker()
+		_release_failed_battle_start()
 		await GameErrorDialogService.show_response(
 			reward_result,
 			"backend.error.reward_claim"
 		)
+		_recover_overworld_after_failed_battle_start()
 		return
 
 	var first_claim := bool(reward_result.get("claimed", false))
@@ -91,18 +90,17 @@ func _run_recruitment_sequence() -> void:
 
 	var metadata_response: Dictionary = await TrainerMetadataService.get_trainer_metadata(trainer_id)
 	if not bool(metadata_response.get("success", false)):
-		battle_in_progress = false
-		triggered = false
-		_refresh_rematch_marker()
+		_release_failed_battle_start()
 		await GameErrorDialogService.show_response(metadata_response)
+		_recover_overworld_after_failed_battle_start()
 		return
 	var trainer_metadata := metadata_response.get("metadata", {}) as Dictionary
 	trainer_metadata["_is_rematch"] = false
 	var battle_result: Dictionary = await start_trainer_battle(trainer_metadata)
 	if not bool(battle_result.get("success", false)):
-		battle_in_progress = false
-		triggered = false
-		_refresh_rematch_marker()
+		_release_failed_battle_start()
+		await GameErrorDialogService.show_response(battle_result, "backend.error.trainer_battle_start")
+		_recover_overworld_after_failed_battle_start()
 
 
 func _reveal_team_rocket() -> void:

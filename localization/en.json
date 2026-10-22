@@ -1,4 +1,5 @@
 {
+  "backend.error.reward_trainers_incomplete": "Defeat all five Nugget Bridge trainers before claiming the prize.",
   "ui.rocket_hideout.lift.current_floor": "{floor} (current floor)",
   "ui.rocket_hideout.lift.title": "Rocket Hideout lift",
   "ui.rocket_hideout.lift.prompt": "Choose a floor.",

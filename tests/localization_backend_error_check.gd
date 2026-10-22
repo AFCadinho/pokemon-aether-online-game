@@ -45,6 +45,8 @@ func _run() -> void:
 
 	var original_locale := str(localization.get("current_locale"))
 	localization.call("set_locale", "en")
+	_check(str(errors.call("message", {"code": "npc_reward_trainer_requirements_incomplete"})).contains("all five Nugget Bridge trainers"),
+		"rejected bridge prize explains the trainer requirement")
 	var coded_response := {
 		"status": 409,
 		"body": {

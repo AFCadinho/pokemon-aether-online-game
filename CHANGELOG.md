@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Stop the Nugget Bridge attendant from repeatedly claiming a rejected reward or freezing movement; explain when the five bridge trainers still need to be defeated.
+
 - Keep tall-grass depth and step rustling working when a map's grass markers have isolated mismatches, including Route 24.
 
 - Show black borders outside Town and Route map bounds when zooming out on larger screens.

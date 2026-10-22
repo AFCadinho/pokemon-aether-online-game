@@ -1,4 +1,5 @@
 {
+  "backend.error.reward_trainers_incomplete": "请先击败金珠桥上的全部五位训练家，再来领取奖励。",
   "ui.rocket_hideout.lift.current_floor": "{floor}（当前楼层）",
   "ui.rocket_hideout.lift.title": "火箭队电梯",
   "ui.rocket_hideout.lift.prompt": "你想前往哪一层？",
