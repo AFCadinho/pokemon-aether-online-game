@@ -123,6 +123,15 @@ func _check_recruiter_reward_failure() -> void:
 	dialogue.dialogue_finished.emit()
 	_check(not bool(game_state.call("is_overworld_input_locked")), "failed manual retry also restores movement")
 	_check(not recruiter.revealed, "rejected reward does not reveal Rocket or start a battle")
+	game_state.call("lock_overworld_input")
+	recruiter.triggered = true
+	recruiter.battle_in_progress = true
+	await recruiter._show_reward_failure({"body": {"detail": {"code": "npc_reward_trainer_requirements_incomplete"}}})
+	_check(recruiter.last_dialogue_id == "kanto_route_24_rocket_recruiter_waiting", "unfinished bridge challenge selects the attendant waiting dialogue")
+	_check(recruiter.last_speaker == "Bridge Attendant", "attendant speaks in disguise while the bridge challenge is unfinished")
+	_check(dialogue.shown == 2, "unfinished bridge challenge does not show a System error")
+	_check(not bool(game_state.call("is_overworld_input_locked")), "attendant waiting dialogue restores movement")
+	_check(not recruiter._can_auto_challenge(), "attendant waiting dialogue cannot repeat automatically")
 	current_scene = null
 	scene.queue_free()
 	await process_frame

@@ -4,6 +4,7 @@ extends NuggetBridgeTrainer
 class_name NuggetBridgeRecruiter
 
 const REWARD_ID := "kanto_route_24_nugget_bridge_big_nugget"
+const WAITING_DIALOGUE_ID := "kanto_route_24_rocket_recruiter_waiting"
 const PRIZE_DIALOGUE_ID := "kanto_route_24_rocket_recruiter_prize"
 const PITCH_DIALOGUE_ID := "kanto_route_24_rocket_recruiter_pitch"
 const REFUSAL_DIALOGUE_ID := "kanto_route_24_rocket_recruiter_refusal"
@@ -47,12 +48,7 @@ func show_intro_dialogue() -> void:
 func _run_recruitment_sequence() -> void:
 	var reward_result: Dictionary = await InventoryService.claim_npc_item_reward(REWARD_ID)
 	if not bool(reward_result.get("success", false)):
-		_release_failed_battle_start()
-		await GameErrorDialogService.show_response(
-			reward_result,
-			"backend.error.reward_claim"
-		)
-		_recover_overworld_after_failed_battle_start()
+		await _show_reward_failure(reward_result)
 		return
 
 	var first_claim := bool(reward_result.get("claimed", false))
@@ -101,6 +97,19 @@ func _run_recruitment_sequence() -> void:
 		_release_failed_battle_start()
 		await GameErrorDialogService.show_response(battle_result, "backend.error.trainer_battle_start")
 		_recover_overworld_after_failed_battle_start()
+
+
+func _show_reward_failure(reward_result: Dictionary) -> void:
+	_release_failed_battle_start()
+	if BackendErrorLocalizationService.error_code(reward_result) == "npc_reward_trainer_requirements_incomplete":
+		await _show_catalogue_dialogue(
+			WAITING_DIALOGUE_ID,
+			["Welcome to the Big Nugget Challenge! Defeat all five Trainers on this bridge, then come back to me for your prize!"],
+			"Bridge Attendant"
+		)
+	else:
+		await GameErrorDialogService.show_response(reward_result, "backend.error.reward_claim")
+	_recover_overworld_after_failed_battle_start()
 
 
 func _reveal_team_rocket() -> void:
