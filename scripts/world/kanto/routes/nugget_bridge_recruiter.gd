@@ -4,6 +4,7 @@ extends NuggetBridgeTrainer
 class_name NuggetBridgeRecruiter
 
 const REWARD_ID := "kanto_route_24_nugget_bridge_big_nugget"
+const COMPLETED_DIALOGUE_ID := "kanto_route_24_rocket_recruiter_completed"
 const PRIZE_DIALOGUE_ID := "kanto_route_24_rocket_recruiter_prize"
 const PITCH_DIALOGUE_ID := "kanto_route_24_rocket_recruiter_pitch"
 const REFUSAL_DIALOGUE_ID := "kanto_route_24_rocket_recruiter_refusal"
@@ -12,6 +13,8 @@ const CHALLENGE_DIALOGUE_ID := "kanto_route_24_rocket_recruiter_intro"
 @export var rocket_sprite_frames: SpriteFrames
 
 var revealed := false
+var recruiter_progress_verified := false
+var recruiter_progress_response: Dictionary = {}
 
 
 func supports_trainer_rematches() -> bool:
@@ -24,10 +27,48 @@ func _refresh_rematch_marker() -> void:
 		rematch_marker.visible = false
 
 
+func _request_recruiter_progress() -> Dictionary:
+	return await TrainerProgressService.get_progress(trainer_id)
+
+
+func _claim_bridge_reward() -> Dictionary:
+	return await InventoryService.claim_npc_item_reward(REWARD_ID)
+
+
 func _load_trainer_progress() -> void:
-	await super._load_trainer_progress()
+	if trainer_progress_request_active:
+		while trainer_progress_request_active:
+			await get_tree().process_frame
+		return
+	trainer_progress_request_active = true
+	recruiter_progress_response = await _request_recruiter_progress()
+	trainer_progress_request_active = false
+	recruiter_progress_verified = bool(recruiter_progress_response.get("success", false))
+	if recruiter_progress_verified:
+		_apply_trainer_progress(recruiter_progress_response.get("progress", {}) as Dictionary, STATE_FIRST_ENCOUNTER)
+	else:
+		# Unknown progress must not replay this one-time prize and Rocket reveal.
+		# Keep manual interaction available so the player can retry the lookup.
+		auto_trigger_failed = true
+		trainer_progress_loaded = true
+	_refresh_rematch_marker()
+	_configure_vision_area()
+
+
+func _apply_trainer_progress(progress: Dictionary, fallback_state: String) -> void:
+	super._apply_trainer_progress(progress, fallback_state)
+	recruiter_progress_verified = true
 	if trainer_progress_state != STATE_FIRST_ENCOUNTER:
 		_reveal_team_rocket()
+
+
+func _show_post_battle_dialogue() -> void:
+	_reveal_team_rocket()
+	await _show_catalogue_dialogue(
+		COMPLETED_DIALOGUE_ID,
+		["You beat me. You earned that Big Nugget fair and square.", "A shame you won't work for Team Rocket. You could have gone far with us."],
+		"Team Rocket Recruiter"
+	)
 
 
 func interact_with_player(_player: Node2D) -> void:
@@ -45,14 +86,20 @@ func show_intro_dialogue() -> void:
 
 
 func _run_recruitment_sequence() -> void:
-	var reward_result: Dictionary = await InventoryService.claim_npc_item_reward(REWARD_ID)
-	if not bool(reward_result.get("success", false)):
+	await _load_trainer_progress()
+	if not recruiter_progress_verified:
 		_release_failed_battle_start()
-		await GameErrorDialogService.show_response(
-			reward_result,
-			"backend.error.reward_claim"
-		)
+		await GameErrorDialogService.show_response(recruiter_progress_response)
 		_recover_overworld_after_failed_battle_start()
+		return
+	if trainer_progress_state != STATE_FIRST_ENCOUNTER:
+		_release_failed_battle_start()
+		await _show_post_battle_dialogue()
+		_recover_overworld_after_failed_battle_start()
+		return
+	var reward_result: Dictionary = await _claim_bridge_reward()
+	if not bool(reward_result.get("success", false)):
+		await _show_reward_failure(reward_result)
 		return
 
 	var first_claim := bool(reward_result.get("claimed", false))
@@ -101,6 +148,12 @@ func _run_recruitment_sequence() -> void:
 		_release_failed_battle_start()
 		await GameErrorDialogService.show_response(battle_result, "backend.error.trainer_battle_start")
 		_recover_overworld_after_failed_battle_start()
+
+
+func _show_reward_failure(reward_result: Dictionary) -> void:
+	_release_failed_battle_start()
+	await GameErrorDialogService.show_response(reward_result, "backend.error.reward_claim")
+	_recover_overworld_after_failed_battle_start()
 
 
 func _reveal_team_rocket() -> void:
