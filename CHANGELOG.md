@@ -4,6 +4,10 @@
 
 - Add 26 daily Rock Smash rocks across Routes 9, 10, 15 and 18, Rock Tunnel, Diglett’s Cave and the Route 18 mine, with localized locations and daily completion tracking in Skills. Keep daily rocks above imported ground details using actor depth sorting.
 
+- Add four Fuchsia Gym trainers and Koga, with source-based positions, official overworld sprites, trainer battles and the Soul Badge.
+
+- Give the Nugget Bridge attendant his own waiting dialogue when the five challengers have not all been defeated.
+
 - Show a defeated Nugget Bridge recruiter as Team Rocket with a follow-up dialogue; never replay his prize or reveal when trainer progress cannot be loaded.
 
 - Stop the Nugget Bridge attendant from repeatedly claiming a rejected reward or freezing movement; explain when the five bridge trainers still need to be defeated.

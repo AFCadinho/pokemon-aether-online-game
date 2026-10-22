@@ -1150,6 +1150,56 @@
 			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_city.tscn",
 			"trainerId": ""
 		},
+		"kanto_fuchsia_city_gym_juggler_ken": {
+			"mapId": "kanto_fuchsia_gym",
+			"position": {
+				"x": 336.0,
+				"y": 784.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+			"trainerId": "kanto_fuchsia_city_gym_juggler_ken"
+		},
+		"kanto_fuchsia_city_gym_juggler_kirk": {
+			"mapId": "kanto_fuchsia_gym",
+			"position": {
+				"x": 624.0,
+				"y": 624.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+			"trainerId": "kanto_fuchsia_city_gym_juggler_kirk"
+		},
+		"kanto_fuchsia_city_gym_juggler_shawn": {
+			"mapId": "kanto_fuchsia_gym",
+			"position": {
+				"x": 304.0,
+				"y": 528.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+			"trainerId": "kanto_fuchsia_city_gym_juggler_shawn"
+		},
+		"kanto_fuchsia_city_gym_koga": {
+			"mapId": "kanto_fuchsia_gym",
+			"position": {
+				"x": 464.0,
+				"y": 528.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+			"trainerId": "kanto_fuchsia_city_gym_koga"
+		},
+		"kanto_fuchsia_city_gym_tamer_edgar": {
+			"mapId": "kanto_fuchsia_gym",
+			"position": {
+				"x": 656.0,
+				"y": 368.0
+			},
+			"radius": 80.0,
+			"scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+			"trainerId": "kanto_fuchsia_city_gym_tamer_edgar"
+		},
 		"kanto_fuchsia_city_gym_visitor_nina": {
 			"mapId": "kanto_fuchsia_city",
 			"position": {

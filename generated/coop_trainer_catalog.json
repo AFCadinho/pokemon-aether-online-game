@@ -383,6 +383,129 @@
         }
       }
     },
+    "kanto_fuchsia_city_gym_juggler_ken": {
+      "entityId": "kanto_fuchsia_city_gym_juggler_ken",
+      "mapId": "kanto_fuchsia_gym",
+      "position": {
+        "x": 336.0,
+        "y": 784.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_fuchsia_city_gym_juggler_ken"
+      ],
+      "trainers": {
+        "kanto_fuchsia_city_gym_juggler_ken": {
+          "gymBadge": null,
+          "name": "Juggler Ken",
+          "teamSize": 2,
+          "trainerClass": "Juggler"
+        }
+      }
+    },
+    "kanto_fuchsia_city_gym_juggler_kirk": {
+      "entityId": "kanto_fuchsia_city_gym_juggler_kirk",
+      "mapId": "kanto_fuchsia_gym",
+      "position": {
+        "x": 624.0,
+        "y": 624.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_fuchsia_city_gym_juggler_kirk"
+      ],
+      "trainers": {
+        "kanto_fuchsia_city_gym_juggler_kirk": {
+          "gymBadge": null,
+          "name": "Juggler Kirk",
+          "teamSize": 1,
+          "trainerClass": "Juggler"
+        }
+      }
+    },
+    "kanto_fuchsia_city_gym_juggler_shawn": {
+      "entityId": "kanto_fuchsia_city_gym_juggler_shawn",
+      "mapId": "kanto_fuchsia_gym",
+      "position": {
+        "x": 304.0,
+        "y": 528.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_fuchsia_city_gym_juggler_shawn"
+      ],
+      "trainers": {
+        "kanto_fuchsia_city_gym_juggler_shawn": {
+          "gymBadge": null,
+          "name": "Juggler Shawn",
+          "teamSize": 3,
+          "trainerClass": "Juggler"
+        }
+      }
+    },
+    "kanto_fuchsia_city_gym_koga": {
+      "entityId": "kanto_fuchsia_city_gym_koga",
+      "mapId": "kanto_fuchsia_gym",
+      "position": {
+        "x": 464.0,
+        "y": 528.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+      "story": {
+        "eventId": "kanto_fuchsia_city_gym_koga_battle",
+        "eventType": "trainer_battle_won",
+        "questId": "challenge_fuchsia_gym",
+        "stepId": "challenge_koga"
+      },
+      "trainerIds": [
+        "kanto_fuchsia_city_gym_koga"
+      ],
+      "trainers": {
+        "kanto_fuchsia_city_gym_koga": {
+          "gymBadge": {
+            "badgeId": "soul",
+            "region": "kanto"
+          },
+          "name": "Koga",
+          "teamSize": 4,
+          "trainerClass": "gym_leader"
+        }
+      }
+    },
+    "kanto_fuchsia_city_gym_tamer_edgar": {
+      "entityId": "kanto_fuchsia_city_gym_tamer_edgar",
+      "mapId": "kanto_fuchsia_gym",
+      "position": {
+        "x": 656.0,
+        "y": 368.0
+      },
+      "radius": 80.0,
+      "rivalPrefix": "",
+      "scenePath": "res://scenes/overworld/kanto/towns/fuchsia_city/fuchsia_gym.tscn",
+      "story": null,
+      "trainerIds": [
+        "kanto_fuchsia_city_gym_tamer_edgar"
+      ],
+      "trainers": {
+        "kanto_fuchsia_city_gym_tamer_edgar": {
+          "gymBadge": null,
+          "name": "Tamer Edgar",
+          "teamSize": 3,
+          "trainerClass": "Tamer"
+        }
+      }
+    },
     "kanto_mt_moon_1f_bug_catcher_kent": {
       "entityId": "kanto_mt_moon_1f_bug_catcher_kent",
       "mapId": "kanto_mt_moon_1f",
@@ -5585,6 +5708,11 @@
     "kanto_cerulean_city_gym_picnicker_diana": "kanto_cerulean_city_gym_picnicker_diana",
     "kanto_cerulean_city_gym_swimmer_briana": "kanto_cerulean_city_gym_swimmer_briana",
     "kanto_cerulean_city_gym_swimmer_luis": "kanto_cerulean_city_gym_swimmer_luis",
+    "kanto_fuchsia_city_gym_juggler_ken": "kanto_fuchsia_city_gym_juggler_ken",
+    "kanto_fuchsia_city_gym_juggler_kirk": "kanto_fuchsia_city_gym_juggler_kirk",
+    "kanto_fuchsia_city_gym_juggler_shawn": "kanto_fuchsia_city_gym_juggler_shawn",
+    "kanto_fuchsia_city_gym_koga": "kanto_fuchsia_city_gym_koga",
+    "kanto_fuchsia_city_gym_tamer_edgar": "kanto_fuchsia_city_gym_tamer_edgar",
     "kanto_game_corner_attendant": "kanto_celadon_game_corner_rocket_guard",
     "kanto_mt_moon_1f_bug_catcher_kent": "kanto_mt_moon_1f_bug_catcher_kent",
     "kanto_mt_moon_1f_bug_catcher_robby": "kanto_mt_moon_1f_bug_catcher_robby",
