@@ -6,7 +6,7 @@
 
 - Fix Pewter Museum admission failing after accepting payment while the attendant's conversation still held movement and route locks.
 
-- Reduce normal and shiny Pikachu’s 3D battle scale from approximately 3× to 2×, with matching ground and animation placement.
+- Reduce normal and shiny Pikachu’s 3D battle scale from approximately 3× to 1.5×, with matching ground and animation placement.
 
 - Continue the main quest from Mr. Fuji’s home to Fuchsia Gym, with his advice to wait for Saffron City to settle down.
 
