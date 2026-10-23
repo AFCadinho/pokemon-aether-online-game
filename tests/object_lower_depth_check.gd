@@ -45,7 +45,7 @@ func _fixture(name: String, anchor := Vector2i(25, 8)) -> Dictionary:
 	bottom.collision_enabled = false
 	map.add_child(bottom)
 	for row in range(5):
-		var source := artwork.get_node("StructureTop" if row < 3 else "StructureBottom") as TileMapLayer
+		var source := artwork.get_node("JailPosts" if anchor.x in [45, 52] else ("StructureTop" if row < 3 else "StructureBottom")) as TileMapLayer
 		_copy(source, anchor + Vector2i(0, row), top if row < 3 else bottom, Vector2i(0, row))
 	# These two lower-layer details are walkable and not part of the post.
 	_copy(artwork.get_node("StructureBottom"), Vector2i(47, 44), bottom, Vector2i(1, 4))
@@ -142,13 +142,13 @@ func _check_real_visual() -> void:
 	group.z_index = 1443
 	group.set_meta(Lower.STRUCTURE_GROUP_META, true)
 	groups.add_child(group)
-	_check(Lower.build_depth_layers(top, groups) == 36, "Viridian's 18 complete lantern/post assemblies move 36 lower cells")
+	_check(Lower.build_depth_layers(top, groups) == 32, "Viridian's 16 split street posts move 32 lower cells; jail posts are complete assemblies")
 	_check(_cells(top) == top_before and _cells(visual.get_node("Objects")) == objects_before, "Viridian's other object artwork is unchanged")
 	var moved := _replacement(visual)
 	if moved != null:
 		_check(bottom.get_used_cells().size() + moved.get_used_cells().size() == before.size(), "Viridian keeps every lower visual cell exactly once")
 		for cell in [Vector2i(45, 43), Vector2i(45, 44), Vector2i(52, 43), Vector2i(52, 44)]:
-			_check(moved.get_cell_source_id(cell) >= 0 and bottom.get_cell_source_id(cell) == -1, "jail lower post %s is depth sorted" % cell)
+			_check(moved.get_cell_source_id(cell) == -1 and visual.get_node("JailPosts").get_cell_source_id(cell) >= 0, "complete jail post %s remains in its authored assembly" % cell)
 		for cell in [Vector2i(47, 44), Vector2i(47, 45), Vector2i(45, 45), Vector2i(52, 45)]:
 			_check(_cells(bottom)[cell] == before[cell], "jail walkable detail %s is preserved" % cell)
 	visual.free()

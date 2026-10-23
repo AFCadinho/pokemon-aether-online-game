@@ -1,38 +1,91 @@
 extends SceneTree
 
 const VISUAL_SCENE_PATH := "res://generated/tiled_visuals/viridian_city/viridian_city.visual.tscn"
-
+const Builder := preload("res://addons/tiled_tmx_importer/importer/tmx_visual_scene_builder.gd")
 var failed := false
 
 
 func _init() -> void:
-	var packed := load(VISUAL_SCENE_PATH) as PackedScene
-	_check(packed != null, "Viridian visual scene loads")
-	if packed != null:
-		var root := packed.instantiate()
-		var structure_top := _find_layer_by_tiled_id(root, 4)
-		_check(structure_top != null, "Viridian visual exposes StructureTop")
-		if structure_top != null:
-			for cell: Vector2i in [Vector2i(46, 43), Vector2i(51, 44)]:
-				_check(
-					structure_top.get_cell_source_id(cell) >= 0,
-					"Viridian jail lower section keeps tile %s" % cell
-				)
-		root.free()
+	_run.call_deferred()
+
+
+func _run() -> void:
+	var world: Node = load("res://scripts/world/world.gd").new()
+	_check_explicit_sorting(world)
+	var visual: Node2D = load(VISUAL_SCENE_PATH).instantiate()
+	root.add_child(visual)
+	var originals := {}
+	for name in ["JailBack", "JailFront", "JailSides", "JailPosts"]:
+		var layer := visual.get_node(name) as TileMapLayer
+		originals[name] = _cells(layer)
+		_check(layer.get_meta("pao_depth_sort", "") == ("rows" if name == "JailSides" else "groups"), name + " carries the authored sorting mode")
+	world.call("_normalize_map_depth_layer_z_indices", visual)
+	for name: String in originals:
+		var layer := visual.get_node(name) as TileMapLayer
+		var groups := visual.get_node(name + "DepthGroups")
+		var found := {}
+		for group: TileMapLayer in groups.get_children():
+			for cell in _cells(group):
+				_check(not found.has(cell), name + " has no duplicated tiles")
+				found[cell] = _cells(group)[cell]
+		_check(found == originals[name], name + " retains all tile identities and positions")
+		_check(not layer.visible, name + " draws only its runtime groups")
+	var back := visual.get_node("JailBackDepthGroups").get_child(0) as TileMapLayer
+	var front := visual.get_node("JailFrontDepthGroups").get_child(0) as TileMapLayer
+	# These are visual sample positions around the walls, not collision requirements.
+	_check(1232 + 9 < back.z_index and back.z_index < 1264, "rear wall covers every walking/mounted part north of it, and stays behind actors south of it")
+	_check(1424 + 9 < front.z_index and front.z_index < 1456, "front wall covers actors inside and stays behind actors outside")
+	_check(back.z_index < front.z_index, "rear and front wall have independent depth")
+	var sides := visual.get_node("JailSidesDepthGroups")
+	_check(sides.get_child_count() == 3, "side rails have independent row depths")
+	for side: TileMapLayer in sides.get_children():
+		_check(side.z_index > back.z_index and side.z_index < front.z_index, "side rails sort between the two walls")
+	for post: TileMapLayer in visual.get_node("JailPostsDepthGroups").get_children():
+		_check(post.z_index == front.z_index, "complete jail posts sort at their feet")
+	var child_count := visual.get_child_count()
+	world.call("_normalize_map_depth_layer_z_indices", visual)
+	_check(visual.get_child_count() == child_count and _cells(visual.get_node("JailBackDepthGroups").get_child(0)) == originals.JailBack,
+		"repeat normalization preserves the jail without duplicating geometry")
+	visual.free()
+	world.free()
+	print("Viridian jail visual depth checks: ", "FAILED" if failed else "PASS")
 	quit(1 if failed else 0)
 
 
+func _check_explicit_sorting(world: Node) -> void:
+	var map := Node2D.new()
+	map.position = Vector2(-48, 160)
+	root.add_child(map)
+	var layer := TileMapLayer.new()
+	layer.name = "CustomRail"
+	layer.position = Vector2(16, 32)
+	layer.tile_set = TileSet.new()
+	layer.tile_set.tile_size = Vector2i(32, 32)
+	map.add_child(layer)
+	var cells: Array[Vector2i] = [Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2)]
+	layer.set_meta("pao_depth_sort", "rows")
+	var rows: Array = world.call("_build_structure_depth_groups", map, layer, cells)
+	_check(rows.size() == 3, "explicit row mode splits vertically connected artwork")
+	for row: Array[Vector2i] in rows:
+		_check(world.call("_get_tile_group_bottom_z_index", layer, row, 0) == 192 + (row[0].y + 1) * 32, "row depth uses the translated world ground position")
+	layer.set_meta("pao_depth_sort", "groups")
+	_check(world.call("_build_structure_depth_groups", map, layer, cells).size() == 1, "explicit assembly mode keeps a complete object together")
+	layer.remove_meta("pao_depth_sort")
+	_check(world.call("_build_structure_depth_groups", map, layer, cells).size() == 1, "unconfigured layers preserve connected-group behavior")
+	var imported := Builder.new()._create_tile_layer({"name": "UnknownHint", "properties": {"pao_depth_sort": "typo"}}, {}, layer.tile_set, 0, {})
+	_check(not imported.has_meta("pao_depth_sort"), "unknown import hint cannot silently enable sorting")
+	imported.free()
+	map.free()
+
+
+func _cells(layer: TileMapLayer) -> Dictionary:
+	var cells := {}
+	for cell: Vector2i in layer.get_used_cells():
+		cells[cell] = [layer.get_cell_source_id(cell), layer.get_cell_atlas_coords(cell), layer.get_cell_alternative_tile(cell)]
+	return cells
+
+
 func _check(condition: bool, label: String) -> void:
-	if condition:
-		print("PASS ", label)
-		return
-	failed = true
-	push_error("FAIL %s" % label)
-
-
-func _find_layer_by_tiled_id(root: Node, layer_id: int) -> TileMapLayer:
-	for child: Node in root.get_children():
-		var layer := child as TileMapLayer
-		if layer != null and int(layer.get_meta("tiled_layer_id", -1)) == layer_id:
-			return layer
-	return null
+	if not condition:
+		failed = true
+		push_error(label)

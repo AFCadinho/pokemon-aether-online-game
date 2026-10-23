@@ -53,6 +53,10 @@ func _create_tile_layer(
 	var properties: Dictionary = layer.get("properties", {})
 	if properties.has(RAIN_SURFACE_PROPERTY):
 		layer_node.set_meta(RAIN_SURFACE_PROPERTY, str(properties[RAIN_SURFACE_PROPERTY]))
+	# Explicit visual assemblies need not use a reserved StructureTop name.
+	var depth_sort := str(properties.get("pao_depth_sort", ""))
+	if depth_sort in ["groups", "rows"]:
+		layer_node.set_meta("pao_depth_sort", depth_sort)
 	return layer_node
 
 
