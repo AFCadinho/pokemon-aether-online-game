@@ -9,6 +9,8 @@ Scope:
 - tile layer visibility, opacity, and offsets are preserved
 - tile layer property `pao_render_layer=overlay` renders that visual layer above Y-sorted characters
 - tile layer property `pao_z_index=<number>` sets an explicit Godot `z_index`
+- tile layer property `pao_depth_sort=groups` opts a complete visual assembly into runtime ground-depth sorting, independently of its layer name; connected cells share their bottom edge as depth
+- `pao_depth_sort=rows` sorts each occupied row separately, for long side rails; split front/rear walls into separate layers so their boundaries remain independent
 - external TSX tilesets are parsed
 - static image collections, including per-tile source rectangles, preserve their exact pixels and bottom-left alignment when they fit within a map cell
 - CSV layer data is supported

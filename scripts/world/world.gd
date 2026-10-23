@@ -2843,7 +2843,8 @@ func _collect_structure_top_visual_layers_recursive(node: Node, structure_layers
 	var tile_map_layer := node as TileMapLayer
 	if tile_map_layer != null:
 		var tiled_name := str(tile_map_layer.get_meta("tiled_name", tile_map_layer.name))
-		if STRUCTURE_TOP_VISUAL_LAYER_NAMES.has(tiled_name) and not bool(tile_map_layer.get_meta(STRUCTURE_TOP_DEPTH_GROUP_META, false)):
+		var explicit_depth := str(tile_map_layer.get_meta("pao_depth_sort", "")) in ["groups", "rows"]
+		if (explicit_depth or STRUCTURE_TOP_VISUAL_LAYER_NAMES.has(tiled_name)) and not bool(tile_map_layer.get_meta(STRUCTURE_TOP_DEPTH_GROUP_META, false)):
 			structure_layers.append(tile_map_layer)
 
 	for child: Node in node.get_children():
@@ -2851,6 +2852,8 @@ func _collect_structure_top_visual_layers_recursive(node: Node, structure_layers
 
 
 func _get_structure_top_group_z_offset(layer: TileMapLayer) -> int:
+	if str(layer.get_meta("pao_depth_sort", "")) in ["groups", "rows"]:
+		return 0
 	var tiled_name := str(layer.get_meta("tiled_name", layer.name))
 	var jail_depth_offset := AetherClashJailDepthScript.get_depth_boundary_offset(tiled_name)
 	if jail_depth_offset != 0:
@@ -2860,6 +2863,21 @@ func _get_structure_top_group_z_offset(layer: TileMapLayer) -> int:
 	return FOREST_TOP_LAYER_Z_OFFSET if tiled_name in ["StructureTop", "TreeTop"] else 0
 
 func _build_structure_depth_groups(map: Node, layer: TileMapLayer, cells: Array[Vector2i]) -> Array[Array]:
+	var depth_sort := str(layer.get_meta("pao_depth_sort", ""))
+	if depth_sort == "rows":
+		# Long side rails must not pull a rear wall to the front wall's depth.
+		var rows := {}
+		for cell: Vector2i in cells:
+			if not rows.has(cell.y):
+				var row: Array[Vector2i] = []
+				rows[cell.y] = row
+			rows[cell.y].append(cell)
+		var groups: Array[Array] = []
+		for row: Array in rows.values():
+			groups.append(row)
+		return groups
+	if depth_sort == "groups":
+		return _build_connected_tile_groups(cells)
 	if map.get("individual_tree_depth_sorting") != true:
 		return _build_connected_tile_groups(cells)
 	var groups := TreeLowerDepthSortingScript.find_complete_tree_crowns(layer)
