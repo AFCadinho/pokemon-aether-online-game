@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Match all 14 Pikachu cap and costume forms, including shiny appearances, to Pikachu’s 1.5× 3D battle scale with proportional ground and animation placement.
+
 - Refresh Pewter Museum visuals from the latest artist Tiled map.
 
 - Fix Pewter Museum admission failing after accepting payment while the attendant's conversation still held movement and route locks.
