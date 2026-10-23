@@ -57,6 +57,8 @@ func _create_tile_layer(
 	var depth_sort := str(properties.get("pao_depth_sort", ""))
 	if depth_sort in ["groups", "rows"]:
 		layer_node.set_meta("pao_depth_sort", depth_sort)
+		if properties.has("pao_depth_offset_y"):
+			layer_node.set_meta("pao_depth_offset_y", float(properties["pao_depth_offset_y"]))
 	return layer_node
 
 

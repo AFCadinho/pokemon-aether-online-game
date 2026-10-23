@@ -2932,10 +2932,13 @@ func _get_tile_group_bottom_z_index(layer: TileMapLayer, group: Array[Vector2i],
 	var tile_size := Vector2(TILE_SIZE, TILE_SIZE)
 	if layer.tile_set != null:
 		tile_size = Vector2(layer.tile_set.tile_size)
+	# Artwork can extend below its ground contact (e.g. the jail's corner rails).
+	# Author this correction in local pixels, so translated/scaled maps keep it.
+	var depth_offset_y := float(layer.get_meta("pao_depth_offset_y", 0.0))
 
 	var bottom_y := -INF
 	for cell: Vector2i in group:
-		var cell_bottom_y := layer.to_global(layer.map_to_local(cell) + Vector2(0.0, tile_size.y * 0.5)).y
+		var cell_bottom_y := layer.to_global(layer.map_to_local(cell) + Vector2(0.0, tile_size.y * 0.5 + depth_offset_y)).y
 		bottom_y = maxf(bottom_y, cell_bottom_y)
 
 	if is_inf(bottom_y):
