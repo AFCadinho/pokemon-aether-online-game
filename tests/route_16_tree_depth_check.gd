@@ -75,6 +75,10 @@ func _run() -> void:
 		var container := Node2D.new()
 		container.add_child(original)
 		for layer in _layers(original):
+			# Explicit jail assemblies use the authored modes covered by the
+			# Viridian depth checks; only unconfigured layers use the fallback.
+			if str(layer.get_meta("pao_depth_sort", "")) in ["groups", "rows"]:
+				continue
 			var cells := layer.get_used_cells()
 			_check(world.call("_build_structure_depth_groups",container,layer,cells) == world.call("_build_connected_tile_groups",cells), name+" retains its existing grouping by default")
 		container.free()
