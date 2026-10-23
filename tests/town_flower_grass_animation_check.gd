@@ -17,8 +17,9 @@ func _init() -> void:
 		var visual := (ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene).instantiate()
 		var record: Dictionary = report.maps[id]
 		var actual := Fingerprint.new().capture(visual)
+		var reference: Dictionary = record.get("current_static_reference", record.after)
 		for key in ["fingerprint", "cells", "layers", "usedTiles"]:
-			_check(actual[key] == record.after[key], id + " imported layout changed: " + key)
+			_check(actual[key] == reference[key], id + " imported layout changed: " + key)
 		failures.append_array(Validator.new().validate(visual, path.trim_suffix(".tscn") + ".tileset.tres"))
 		var layers: Array[TileMapLayer] = []
 		Compactor.new()._collect(visual, layers)

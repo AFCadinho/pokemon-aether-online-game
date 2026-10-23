@@ -1764,6 +1764,14 @@
 				"layers": 7.0,
 				"usedTiles": 496.0
 			},
+			"current_static_reference": {
+				"baseRGBABytes": 6948864,
+				"cells": 9917,
+				"fingerprint": "736c5f636c12c6e9bb2bc243f559fa2d71adf13d7f62ddd27d8a78da55c393df",
+				"layers": 11,
+				"usedTiles": 496
+			},
+			"current_static_reference_reason": "Viridian jail visual layers were repartitioned into authored depth assemblies; cell count, artwork, used tiles and animation expectations remain unchanged.",
 			"followup_import": "tools/viridian_import_finalize_report.json",
 			"new_animation_cells": {
 				"5ee89669b9e88bd238ad7f489030c02b3b3d0d6fa57689f7002e74eed94d778e": 79,
