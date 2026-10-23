@@ -29,6 +29,7 @@
   <properties>
    <property name="pao_render_layer" value="overlay"/>
    <property name="pao_depth_sort" value="groups"/>
+   <property name="pao_depth_offset_y" type="int" value="-20"/>
   </properties>
   <data encoding="csv">
 2147483649,0,0,0,

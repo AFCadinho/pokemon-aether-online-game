@@ -1,6 +1,6 @@
 # Apply the authored Viridian jail layer split without rebuilding its atlases.
 # The existing Godot visual includes native tree animations absent from the TMX.
-# Run once against the pre-split visual, after applying the paired TMX patch.
+# Applies the split and the rear ground-contact offset from the paired TMX edit.
 extends SceneTree
 
 var failed := false
@@ -10,9 +10,14 @@ const SCENE := "res://generated/tiled_visuals/viridian_city/viridian_city.visual
 func _init() -> void:
 	var visual: Node = load(SCENE).instantiate()
 	if visual.has_node("JailBack"):
-		print("Viridian jail layers already split; nothing to do")
-		visual.free()
-		quit(0)
+		var back := visual.get_node("JailBack") as TileMapLayer
+		if float(back.get_meta("pao_depth_offset_y", 0.0)) == -20.0:
+			print("Viridian jail layers and ground contact already configured")
+			visual.free()
+			quit(0)
+		else:
+			back.set_meta("pao_depth_offset_y", -20.0)
+			_save(visual)
 		return
 	var layers := {}
 	var index := visual.get_node("StructureBottom").get_index() + 1
@@ -25,6 +30,8 @@ func _init() -> void:
 		layer.set_meta("tiled_layer_id", first_id)
 		layer.set_meta("tiled_visual_layer", true)
 		layer.set_meta("pao_depth_sort", "rows" if name == "JailSides" else "groups")
+		if name == "JailBack":
+			layer.set_meta("pao_depth_offset_y", -20.0)
 		visual.add_child(layer)
 		layer.owner = visual
 		visual.move_child(layer, index)
@@ -49,6 +56,10 @@ func _init() -> void:
 		return
 	for layer: TileMapLayer in visual.get_children():
 		layer.z_index = layer.get_index()
+	_save(visual)
+
+
+func _save(visual: Node) -> void:
 	var packed := PackedScene.new()
 	var error := packed.pack(visual)
 	if error == OK:

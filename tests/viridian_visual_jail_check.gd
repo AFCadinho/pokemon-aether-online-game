@@ -32,8 +32,9 @@ func _run() -> void:
 		_check(not layer.visible, name + " draws only its runtime groups")
 	var back := visual.get_node("JailBackDepthGroups").get_child(0) as TileMapLayer
 	var front := visual.get_node("JailFrontDepthGroups").get_child(0) as TileMapLayer
+	_check(back.z_index == 1228, "rear ground contact excludes the 20px corner continuation")
 	# These are visual sample positions around the walls, not collision requirements.
-	_check(1232 + 9 < back.z_index and back.z_index < 1264, "rear wall covers every walking/mounted part north of it, and stays behind actors south of it")
+	_check(1200 + 9 < back.z_index and back.z_index < 1232, "rear wall covers actors north of its visible base, but not the nearest southern tile")
 	_check(1424 + 9 < front.z_index and front.z_index < 1456, "front wall covers actors inside and stays behind actors outside")
 	_check(back.z_index < front.z_index, "rear and front wall have independent depth")
 	var sides := visual.get_node("JailSidesDepthGroups")
@@ -70,6 +71,12 @@ func _check_explicit_sorting(world: Node) -> void:
 		_check(world.call("_get_tile_group_bottom_z_index", layer, row, 0) == 192 + (row[0].y + 1) * 32, "row depth uses the translated world ground position")
 	layer.set_meta("pao_depth_sort", "groups")
 	_check(world.call("_build_structure_depth_groups", map, layer, cells).size() == 1, "explicit assembly mode keeps a complete object together")
+	layer.set_meta("pao_depth_offset_y", -20.0)
+	_check(world.call("_get_tile_group_bottom_z_index", layer, cells, 0) == 268, "authored offset changes the sort boundary without moving the layer")
+	map.scale = Vector2(2.0, 2.0)
+	_check(world.call("_get_tile_group_bottom_z_index", layer, cells, 0) == 376, "ground offset scales with the artwork in world space")
+	_check(layer.position == Vector2(16, 32), "ground offset does not move artwork")
+	layer.remove_meta("pao_depth_offset_y")
 	layer.remove_meta("pao_depth_sort")
 	_check(world.call("_build_structure_depth_groups", map, layer, cells).size() == 1, "unconfigured layers preserve connected-group behavior")
 	var imported := Builder.new()._create_tile_layer({"name": "UnknownHint", "properties": {"pao_depth_sort": "typo"}}, {}, layer.tile_set, 0, {})

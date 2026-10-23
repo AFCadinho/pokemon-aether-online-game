@@ -3,12 +3,13 @@ extends SceneTree
 
 const Appearance := preload("res://scripts/services/character_appearance_service.gd")
 const CASES := [
-	["rear_outside", "JailBack", Vector2(1584, 1232), true],
+	["rear_outside", "JailBack", Vector2(1584, 1200), true],
+	["rear_inside_edge", "JailBack", Vector2(1584, 1232), false],
 	["rear_inside", "JailBack", Vector2(1584, 1264), false],
 	["front_inside", "JailFront", Vector2(1584, 1424), true],
 	["front_outside", "JailFront", Vector2(1584, 1456), false],
 ]
-const OUTPUT := "user://viridian-jail-render"
+const OUTPUT := "user://viridian-jail-boundary-render"
 var failed := false
 var comparisons := 0
 var discriminating := 0

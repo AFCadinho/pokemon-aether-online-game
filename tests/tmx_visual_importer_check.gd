@@ -88,6 +88,8 @@ func _check_visual_scene(root: Node) -> void:
 	_check_equal(hidden.z_index, 1, "hidden z order")
 	_check_equal(str(hidden.get_meta("pao_depth_sort", "")), "rows", "row depth metadata survives import")
 	_check_equal(str(overlay.get_meta("pao_depth_sort", "")), "groups", "assembly depth metadata survives import")
+	_check_equal(float(overlay.get_meta("pao_depth_offset_y", 0.0)), -20.0, "ground contact offset survives import")
+	_check_true(not hidden.has_meta("pao_depth_offset_y"), "row layer has no implicit ground contact adjustment")
 	_check_true(not ground.has_meta("pao_depth_sort"), "unconfigured layers retain legacy sorting")
 	_check_equal(overlay.z_index, 2050, "overlay z order")
 	_check_equal(ground.get_cell_source_id(Vector2i(0, 0)), 0, "ground first cell source id")

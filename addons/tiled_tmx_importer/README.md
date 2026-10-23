@@ -11,6 +11,7 @@ Scope:
 - tile layer property `pao_z_index=<number>` sets an explicit Godot `z_index`
 - tile layer property `pao_depth_sort=groups` opts a complete visual assembly into runtime ground-depth sorting, independently of its layer name; connected cells share their bottom edge as depth
 - `pao_depth_sort=rows` sorts each occupied row separately, for long side rails; split front/rear walls into separate layers so their boundaries remain independent
+- optional `pao_depth_offset_y=<number>` on a depth-sorted layer adjusts that boundary in local pixels when the tile bounds extend below the object's ground contact; it does not move artwork or collision
 - external TSX tilesets are parsed
 - static image collections, including per-tile source rectangles, preserve their exact pixels and bottom-left alignment when they fit within a map cell
 - CSV layer data is supported
