@@ -210,6 +210,7 @@ transition_id = "kanto_pewter_city_museum__to_exhibits"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToExhibits" unique_id=893609290]
+position = Vector2(16, 96)
 shape = SubResource("shape_exit")
 
 [node name="Tiles" type="Node2D" parent="." unique_id=371318950]
