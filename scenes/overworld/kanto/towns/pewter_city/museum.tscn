@@ -70,7 +70,7 @@ y_sort_enabled = true
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=14010959]
 
 [node name="MuseumAttendantIris" parent="Entities/NPCs" unique_id=434805657 instance=ExtResource("gate_npc")]
-position = Vector2(400, 528)
+position = Vector2(400, 592)
 script = ExtResource("museum_admission")
 guard_role = "transition_guard"
 guarded_transition_id = "kanto_pewter_city_museum__to_exhibits"
