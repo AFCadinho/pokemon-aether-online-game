@@ -3132,6 +3132,8 @@ func check_for_map_exit() -> bool:
 			continue
 
 		var exit_area := exit_node as Area2D
+		if exit_area.has_method("can_trigger_automatically") and not bool(exit_area.call("can_trigger_automatically")):
+			continue
 		if _is_inside_exit_area(exit_area):
 			if exit_area.has_method("_on_body_entered"):
 				exit_area.call("_on_body_entered", self)

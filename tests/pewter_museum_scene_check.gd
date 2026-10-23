@@ -52,9 +52,21 @@ func _run() -> void:
 		"payment opens the passage while Iris remains visible")
 	var passage := museum.get_node("Exits/ToExhibits")
 	_check(passage.target_scene_path == MUSEUM and passage.target_spawn_name == "FromAdmission"
+		and not passage.can_trigger_automatically()
 		and not passage.is_connected("body_entered", Callable(passage, "_on_body_entered")),
 		"authorized passage stays within museum and does not auto-teleport returning visitors")
-	_check(museum.get_node("Spawns/FromAdmission").position == Vector2(432, 528), "paid arrival is beyond the blue barriers")
+	var paid_arrival: Vector2 = museum.get_node("Spawns/FromAdmission").position
+	_check(paid_arrival.y < passage.get_node("CollisionShape2D").position.y + passage.position.y,
+		"paid arrival is on the exhibition side of the passage")
+	var returning_player = load("res://tests/fixtures/pewter_museum_admission_lock_probe.gd").ExitMovementProbe.new()
+	returning_player.name = "Player"
+	returning_player.test_map = museum
+	returning_player.position = passage.position + passage.get_node("CollisionShape2D").position
+	_check(not returning_player.check_for_map_exit(), "walking back across paid admission never triggers a map exit")
+	passage._on_body_entered(returning_player)
+	_check(not passage.is_transitioning, "physics entry cannot restart the admission teleport")
+	_check(museum.get_node("Exits/ToPewterCity").can_trigger_automatically(), "the outdoor museum exit remains automatic")
+	returning_player.free()
 	var cancelled = load("res://tests/fixtures/pewter_museum_cancelled_admission.gd").new()
 	await cancelled._offer_admission()
 	_check(cancelled.offered_fee == 100 and cancelled.pending_admission_state.is_empty()
@@ -90,7 +102,7 @@ func _run() -> void:
 	_check(catalog.areas[museum.map_id].scenePath == MUSEUM and catalog.areas[museum.map_id].areaType == "interior", "museum registered as playable interior")
 	for entry in [["kanto_pewter_city__to_museum", museum.map_id, "FromPewterCity", Vector2(432, 624)],
 		["kanto_pewter_city_museum__to_pewter_city", city.map_id, "FromMuseum", Vector2(1392, 432)],
-		["kanto_pewter_city_museum__to_exhibits", museum.map_id, "FromAdmission", Vector2(432, 528)]]:
+		["kanto_pewter_city_museum__to_exhibits", museum.map_id, "FromAdmission", paid_arrival]]:
 		var transition: Dictionary = catalog.transitions.get(entry[0], {})
 		_check(transition.get("destinationAreaId") == entry[1]
 			and transition.get("destination", {}).get("spawnMarker") == entry[2]

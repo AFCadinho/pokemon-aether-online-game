@@ -54,3 +54,11 @@ func _purchase_admission() -> void:
 	purchase_count += 1
 	legacy_lock_at_arrival = get_node("/root/GameState").overworld_input_legacy_locked
 	route_lock_at_purchase = bool(observed_player.get("route_gate_interaction_in_progress"))
+
+
+class ExitMovementProbe:
+	extends "res://scripts/world/player.gd"
+	var test_map: Node
+
+	func _resolve_current_map() -> Node:
+		return test_map

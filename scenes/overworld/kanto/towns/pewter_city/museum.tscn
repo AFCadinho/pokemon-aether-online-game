@@ -208,6 +208,7 @@ target_scene_path = "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn"
 target_spawn_name = "FromAdmission"
 transition_id = "kanto_pewter_city_museum__to_exhibits"
 transition_facing_direction = "up"
+automatic_transition = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToExhibits" unique_id=893609290]
 position = Vector2(16, 96)

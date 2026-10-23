@@ -2951,7 +2951,7 @@
 					"spawnMarker": "FromAdmission",
 					"tile": {
 						"x": 13,
-						"y": 16
+						"y": 14
 					}
 				},
 				"from_pewter_city": {
@@ -9344,7 +9344,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn",
 				"position": {
 					"x": 432.0,
-					"y": 528.0
+					"y": 464.0
 				},
 				"spawnMarker": "FromAdmission"
 			},

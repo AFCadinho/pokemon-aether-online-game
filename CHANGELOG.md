@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Allow paid museum visitors to walk back through admission and leave; synchronize the current admission arrival marker.
+
 - Update Pewter Museum exhibit and foreground visuals from the revised artist map.
 
 - Align Pewter Museum admission markers and the paid-area boundary with the repositioned attendant.
