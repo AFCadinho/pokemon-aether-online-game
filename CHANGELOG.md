@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Pewter Museum visuals from the latest artist Tiled map.
+
 - Fix Pewter Museum admission failing after accepting payment while the attendant's conversation still held movement and route locks.
 
 - Reduce normal and shiny Pikachu’s 3D battle scale from approximately 3× to 2×, with matching ground and animation placement.

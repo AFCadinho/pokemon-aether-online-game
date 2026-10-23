@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3 uid="uid://dl0n76wc0d887"]
+[gd_resource type="TileSet" format=3]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_1_0.texture.res" id="1_v4wf8"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/pewter_museum/assets/pewter_museum.visual.tileset.compact_source_2049_0.texture.res" id="2_uwqbq"]
@@ -57,10 +57,6 @@ texture_region_size = Vector2i(32, 32)
 0:2/0 = 0
 1:2/0 = 0
 2:2/0 = 0
-3:2/0 = 0
-4:2/0 = 0
-5:2/0 = 0
-6:2/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ljl45"]
 texture = ExtResource("4_0hrs0")
