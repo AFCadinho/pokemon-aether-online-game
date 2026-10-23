@@ -1,6 +1,9 @@
 extends "res://scripts/world/npcs/museum_admission_npc.gd"
 
 var legacy_lock_at_arrival := true
+var route_lock_at_purchase := true
+var purchase_count := 0
+var observed_player: Node2D
 
 
 func _init() -> void:
@@ -38,9 +41,16 @@ func _set_idle_frame(_direction: Vector2) -> void:
 	pass
 
 
-func show_gate_dialogue() -> void:
-	pending_admission_state = {"mapId": "kanto_pewter_city_museum"}
+func _refresh_transition_access(_force_refresh := false) -> Dictionary:
+	transition_access = {"allowed": false, "reasonCode": "ENTRY_FEE_REQUIRED", "entryFee": 100}
+	return {"success": true, "access": transition_access}
 
 
-func _apply_pending_admission() -> void:
+func _confirm_admission(_fee: int) -> bool:
+	return true
+
+
+func _purchase_admission() -> void:
+	purchase_count += 1
 	legacy_lock_at_arrival = get_node("/root/GameState").overworld_input_legacy_locked
+	route_lock_at_purchase = bool(observed_player.get("route_gate_interaction_in_progress"))

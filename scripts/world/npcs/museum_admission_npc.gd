@@ -6,17 +6,18 @@ signal admission_choice_resolved(accepted: bool)
 
 var admission_in_flight := false
 var pending_admission_state: Dictionary = {}
+var pending_admission_purchase := false
 
 
 func _start_manual_interaction(body: Node2D) -> void:
 	await super._start_manual_interaction(body)
-	_apply_pending_admission()
+	await _apply_pending_admission()
 
 
 func on_route_gate_blocked(player: Node2D) -> void:
 	await super.on_route_gate_blocked(player)
 	player.set("route_gate_interaction_in_progress", false)
-	_apply_pending_admission()
+	await _apply_pending_admission()
 
 
 func present_world_transition_denied(_access: Dictionary, player: Node2D) -> void:
@@ -24,6 +25,13 @@ func present_world_transition_denied(_access: Dictionary, player: Node2D) -> voi
 
 
 func _apply_pending_admission() -> void:
+	# Both interaction wrappers must release their conversation/route locks
+	# before World can authorize the paid passage.
+	if pending_admission_purchase:
+		pending_admission_purchase = false
+		admission_in_flight = true
+		await _purchase_admission()
+		admission_in_flight = false
 	if pending_admission_state.is_empty():
 		return
 	var state := pending_admission_state
@@ -67,6 +75,10 @@ func _offer_admission() -> void:
 		return
 	if not await _confirm_admission(fee):
 		return
+	pending_admission_purchase = true
+
+
+func _purchase_admission() -> void:
 	var world: Node = GameState.get_world()
 	if world == null or not world.has_method("begin_authorized_teleport"):
 		await GameErrorDialogService.show_report_to_staff_message()
