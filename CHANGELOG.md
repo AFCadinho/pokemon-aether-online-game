@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Update Pewter Museum exhibit and foreground visuals from the revised artist map.
+
 - Align Pewter Museum admission markers and the paid-area boundary with the repositioned attendant.
 
 - Match all 14 Pikachu cap and costume forms, including shiny appearances, to Pikachu’s 1.5× 3D battle scale with proportional ground and animation placement.
