@@ -1784,7 +1784,7 @@
 			"mapId": "kanto_pewter_city_museum",
 			"position": {
 				"x": 400.0,
-				"y": 528.0
+				"y": 592.0
 			},
 			"radius": 80.0,
 			"scenePath": "res://scenes/overworld/kanto/towns/pewter_city/museum.tscn",
