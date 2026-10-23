@@ -57,18 +57,22 @@ func _run() -> void:
 	_check(museum.get_node("Spawns/FromAdmission").position == Vector2(432, 464), "paid arrival is beyond the blue barriers")
 	var cancelled = load("res://tests/fixtures/pewter_museum_cancelled_admission.gd").new()
 	await cancelled._offer_admission()
-	_check(cancelled.offered_fee == 100 and cancelled.pending_admission_state.is_empty(), "cancelling admission never starts paid travel")
+	_check(cancelled.offered_fee == 100 and cancelled.pending_admission_state.is_empty()
+		and not cancelled.pending_admission_purchase, "cancelling admission never starts paid travel")
 	cancelled.free()
 	var lock_probe = load("res://tests/fixtures/pewter_museum_admission_lock_probe.gd").new()
 	var gate_player := GatePlayer.new()
+	lock_probe.observed_player = gate_player
 	root.add_child(lock_probe)
 	await lock_probe.on_route_gate_blocked(gate_player)
-	_check(not lock_probe.legacy_lock_at_arrival and not gate_player.route_gate_interaction_in_progress,
-		"guard releases conversation and route locks before changing maps")
+	_check(lock_probe.purchase_count == 1 and not lock_probe.legacy_lock_at_arrival
+		and not lock_probe.route_lock_at_purchase and not gate_player.route_gate_interaction_in_progress,
+		"accepted guard admission releases conversation and route locks before starting paid travel")
 	lock_probe.legacy_lock_at_arrival = true
 	await lock_probe._start_manual_interaction(gate_player)
-	_check(not lock_probe.legacy_lock_at_arrival and not lock_probe.is_interacting,
-		"manual conversation releases its input lock before changing maps")
+	_check(lock_probe.purchase_count == 2 and not lock_probe.legacy_lock_at_arrival
+		and not lock_probe.route_lock_at_purchase and not lock_probe.is_interacting,
+		"accepted manual admission releases its input lock before starting paid travel")
 	lock_probe.free()
 	gate_player.free()
 	for entry in [[city, "ToMuseum", museum, MUSEUM, "FromPewterCity", Vector2(1392, 368), "up"],
