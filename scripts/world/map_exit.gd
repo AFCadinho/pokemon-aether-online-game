@@ -10,6 +10,7 @@ extends Area2D
 @export var player_node_name := "Player"
 @export var requires_land_mount := false
 @export var movement_blocked := false
+@export var automatic_transition := true
 
 const FACING_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
 const DOOR_POSITION_INPUT_LOCK := &"guild_base_door_position"
@@ -26,6 +27,10 @@ func handles_transition(candidate_transition_id: String) -> bool:
 	]
 
 
+func can_trigger_automatically() -> bool:
+	return automatic_transition
+
+
 func contains_world_position(world_position: Vector2) -> bool:
 	for child: Node in get_children():
 		if not child is CollisionShape2D:
@@ -40,6 +45,8 @@ func contains_world_position(world_position: Vector2) -> bool:
 
 
 func _on_body_entered(body: Node2D) -> void:
+	if not automatic_transition:
+		return
 	if is_transitioning:
 		return
 	if body.name != player_node_name:
