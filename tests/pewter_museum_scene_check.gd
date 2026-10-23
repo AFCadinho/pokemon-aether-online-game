@@ -39,7 +39,7 @@ func _run() -> void:
 	_check(buyer.position == Vector2(464, 464) and buyer.has_method("_offer_sale"), "Hugo buys ores behind the right blue counter")
 	_check(not city.has_node("Entities/NPCs/MuseumAttendantIris"), "outdoor entrance has no payment guard")
 	var attendant := museum.get_node("Entities/NPCs/MuseumAttendantIris")
-	_check(attendant.position == Vector2(400, 528) and attendant.guarded_transition_id == "kanto_pewter_city_museum__to_exhibits"
+	_check(attendant.position == Vector2(400, 592) and attendant.guarded_transition_id == "kanto_pewter_city_museum__to_exhibits"
 		and not attendant.is_gate_open() and not attendant.requires_party_pokemon, "Iris guards the passage at the blue barriers")
 	_check(not attendant.guards_world_position(Vector2(432, 624)), "free lobby arrival is outside the payment gate")
 	var unpaid_occupied := occupied.duplicate()
@@ -48,13 +48,13 @@ func _run() -> void:
 	attendant.transition_access = {"allowed": true}
 	attendant.transition_access_resolved = true
 	attendant._sync_guard_presence()
-	_check(attendant.is_gate_open() and attendant.visible and not attendant.guards_world_position(Vector2(432, 496)),
+	_check(attendant.is_gate_open() and attendant.visible and not attendant.guards_world_position(Vector2(432, 560)),
 		"payment opens the passage while Iris remains visible")
 	var passage := museum.get_node("Exits/ToExhibits")
 	_check(passage.target_scene_path == MUSEUM and passage.target_spawn_name == "FromAdmission"
 		and not passage.is_connected("body_entered", Callable(passage, "_on_body_entered")),
 		"authorized passage stays within museum and does not auto-teleport returning visitors")
-	_check(museum.get_node("Spawns/FromAdmission").position == Vector2(432, 464), "paid arrival is beyond the blue barriers")
+	_check(museum.get_node("Spawns/FromAdmission").position == Vector2(432, 528), "paid arrival is beyond the blue barriers")
 	var cancelled = load("res://tests/fixtures/pewter_museum_cancelled_admission.gd").new()
 	await cancelled._offer_admission()
 	_check(cancelled.offered_fee == 100 and cancelled.pending_admission_state.is_empty()
@@ -90,7 +90,7 @@ func _run() -> void:
 	_check(catalog.areas[museum.map_id].scenePath == MUSEUM and catalog.areas[museum.map_id].areaType == "interior", "museum registered as playable interior")
 	for entry in [["kanto_pewter_city__to_museum", museum.map_id, "FromPewterCity", Vector2(432, 624)],
 		["kanto_pewter_city_museum__to_pewter_city", city.map_id, "FromMuseum", Vector2(1392, 432)],
-		["kanto_pewter_city_museum__to_exhibits", museum.map_id, "FromAdmission", Vector2(432, 464)]]:
+		["kanto_pewter_city_museum__to_exhibits", museum.map_id, "FromAdmission", Vector2(432, 528)]]:
 		var transition: Dictionary = catalog.transitions.get(entry[0], {})
 		_check(transition.get("destinationAreaId") == entry[1]
 			and transition.get("destination", {}).get("spawnMarker") == entry[2]
