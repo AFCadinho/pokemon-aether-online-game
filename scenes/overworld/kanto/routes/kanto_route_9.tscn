@@ -1,6 +1,5 @@
 [gd_scene format=4 uid="uid://cggebav3nmqab"]
 
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="daily_rock"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_9/route_9.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
@@ -10,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="6_8oey7"]
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="bug_catcher"]
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="camper"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="daily_rock"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="overworld_pickup_extra"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
@@ -563,6 +563,26 @@ position = Vector2(2640, 784)
 sign_id = "kanto_route_9_route_sign"
 sign_type = "road"
 
+[node name="RockSmashWest" parent="Entities/Interactables" unique_id=584838527 instance=ExtResource("daily_rock")]
+position = Vector2(112, 592)
+rock_id = "kanto_route_9_rock_west"
+rock_visual_style = 2
+required_rock_smash_level = 10
+
+[node name="RockSmashCentral" parent="Entities/Interactables" unique_id=352608748 instance=ExtResource("daily_rock")]
+position = Vector2(1168, 1104)
+rock_id = "kanto_route_9_rock_central"
+rock_variant = 1
+rock_visual_style = 2
+required_rock_smash_level = 10
+
+[node name="RockSmashEast" parent="Entities/Interactables" unique_id=248464427 instance=ExtResource("daily_rock")]
+position = Vector2(2928, 976)
+rock_id = "kanto_route_9_rock_east"
+rock_variant = 2
+rock_visual_style = 2
+required_rock_smash_level = 20
+
 [node name="Tiles" type="Node2D" parent="." unique_id=1978439623]
 
 [node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=940751028]
@@ -594,24 +614,3 @@ tile_set = SubResource("TileSet_t3cr7")
 [connection signal="body_entered" from="Exits/ToCerulean" to="Exits/ToCerulean" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute10" to="Exits/ToRoute10" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute10River" to="Exits/ToRoute10River" method="_on_body_entered"]
-
-[node name="RockSmashWest" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
-position = Vector2(112, 592)
-rock_id = "kanto_route_9_rock_west"
-rock_variant = 0
-rock_visual_style = 2
-required_rock_smash_level = 10
-
-[node name="RockSmashCentral" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
-position = Vector2(1168, 1104)
-rock_id = "kanto_route_9_rock_central"
-rock_variant = 1
-rock_visual_style = 2
-required_rock_smash_level = 10
-
-[node name="RockSmashEast" parent="Entities/Interactables" instance=ExtResource("daily_rock")]
-position = Vector2(2064, 880)
-rock_id = "kanto_route_9_rock_east"
-rock_variant = 2
-rock_visual_style = 2
-required_rock_smash_level = 20
